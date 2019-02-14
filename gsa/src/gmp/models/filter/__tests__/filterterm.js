@@ -20,7 +20,6 @@
 import FilterTerm from '../filterterm.js';
 
 describe('FilterTerm equals', () => {
-
   test('should not equal object', () => {
     const term = new FilterTerm({});
     expect(term.equals({})).toBe(false);
@@ -92,7 +91,6 @@ describe('FilterTerm equals', () => {
     });
     expect(term1.equals(term2)).toBe(true);
   });
-
 });
 
 describe('FilterTerm fromString', () => {
@@ -128,7 +126,6 @@ describe('FilterTerm fromString', () => {
 });
 
 describe('Compound statement parsing', () => {
-
   test('should parse and', () => {
     const term = FilterTerm.fromString('and');
 
@@ -152,11 +149,9 @@ describe('Compound statement parsing', () => {
     expect(term.value).toBe('not');
     expect(term.relation).toBeUndefined();
   });
-
 });
 
 describe('FilterTerm toString tests', () => {
-
   test('should combine keyword, relation and value', () => {
     const term = FilterTerm.fromString('apply_overrides=22');
 

@@ -36,7 +36,6 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.overrides');
 
 class OverrideCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'override', Override);
   }
@@ -100,7 +99,6 @@ class OverrideCommand extends EntityCommand {
 }
 
 class OverridesCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'override', Override);
     this.setParam('details', 1);
@@ -136,7 +134,7 @@ class OverridesCommand extends EntitiesCommand {
       filter,
     });
   }
-};
+}
 
 registerCommand('override', OverrideCommand);
 registerCommand('overrides', OverridesCommand);

@@ -28,21 +28,11 @@ import MenuEntry from 'web/components/menu/menuentry';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-const NewIconMenu = ({
-  capabilities,
-  onNewClick,
-  onNewContainerClick,
-}) => {
+const NewIconMenu = ({capabilities, onNewClick, onNewContainerClick}) => {
   if (capabilities.mayCreate('task')) {
     return (
-      <IconMenu
-        icon={<NewIcon/>}
-        onClick={onNewClick}
-      >
-        <MenuEntry
-          title={_('New Task')}
-          onClick={onNewClick}
-        />
+      <IconMenu icon={<NewIcon />} onClick={onNewClick}>
+        <MenuEntry title={_('New Task')} onClick={onNewClick} />
         <MenuEntry
           title={_('New Container Task')}
           onClick={onNewContainerClick}

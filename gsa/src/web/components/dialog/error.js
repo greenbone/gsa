@@ -50,8 +50,8 @@ const DialogCloseButton = styled(CloseButton)`
     border: 1px solid ${Theme.darkRed};
     background: 0;
     color: ${Theme.black};
-    opacity: .5;
-  };
+    opacity: 0.5;
+  }
 `;
 
 const DialogError = ({error, onCloseClick}) => {
@@ -59,14 +59,9 @@ const DialogError = ({error, onCloseClick}) => {
     return null;
   }
   return (
-    <StyledLayout
-      align={['space-between', 'center']}
-    >
+    <StyledLayout align={['space-between', 'center']}>
       <span>{error}</span>
-      <DialogCloseButton
-        onClick={onCloseClick}
-        title={_('Close')}
-      />
+      <DialogCloseButton onClick={onCloseClick} title={_('Close')} />
     </StyledLayout>
   );
 };

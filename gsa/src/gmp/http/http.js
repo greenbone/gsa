@@ -40,12 +40,8 @@ function formdata_append(formdata, key, value) {
 }
 
 class Http {
-
   constructor(url, options = {}) {
-    const {
-      timeout = DEFAULT_TIMEOUT,
-      transform = DefaultTransform,
-    } = options;
+    const {timeout = DEFAULT_TIMEOUT, transform = DefaultTransform} = options;
 
     this.url = url;
     this.params = {};
@@ -62,14 +58,14 @@ class Http {
     const formdata = new FormData();
 
     for (const key in data) {
-      if (data.hasOwnProperty(key)) { // don't add undefined and null values to form
+      if (data.hasOwnProperty(key)) {
+        // don't add undefined and null values to form
         const value = data[key];
         if (isArray(value)) {
           for (const val of value) {
             formdata_append(formdata, key, val);
           }
-        }
-        else {
+        } else {
           formdata_append(formdata, key, value);
         }
       }
@@ -82,15 +78,18 @@ class Http {
     return this.params;
   }
 
-  request(method, {
-    args,
-    data,
-    url = this.url,
-    cancel_token,
-    force = false,
-    responseType,
-    ...other
-  }) {
+  request(
+    method,
+    {
+      args,
+      data,
+      url = this.url,
+      cancel_token,
+      force = false,
+      responseType,
+      ...other
+    },
+  ) {
     const self = this;
     let formdata;
 
@@ -128,8 +127,7 @@ class Http {
       xhr.onload = function() {
         if (this.status >= 200 && this.status < 300) {
           self.handleSuccess(resolve, reject, this, options);
-        }
-        else {
+        } else {
           self.handleResponseError(resolve, reject, this, options);
         }
       };
@@ -166,8 +164,7 @@ class Http {
       response = this.transformSuccess(response, options);
 
       resolve(response);
-    }
-    catch (error) {
+    } catch (error) {
       reject(error);
     }
   }
@@ -180,37 +177,42 @@ class Http {
     }
 
     promise.catch(request => {
-
       const rej = new Rejection(request, Rejection.REASON_ERROR);
       try {
         reject(this.transformRejection(rej, options));
-      }
-      catch (error) {
+      } catch (error) {
         reject(error);
       }
     });
   }
 
   handleRequestError(resolve, reject, xhr, options) {
-    const rej = new Rejection(xhr, Rejection.REASON_ERROR,
-      _('An error occurred during making the request. Most likely the web ' +
-        'server does not respond.'));
+    const rej = new Rejection(
+      xhr,
+      Rejection.REASON_ERROR,
+      _(
+        'An error occurred during making the request. Most likely the web ' +
+          'server does not respond.',
+      ),
+    );
     try {
       reject(this.transformRejection(rej, options));
-    }
-    catch (error) {
+    } catch (error) {
       reject(rej);
     }
   }
 
   handleTimeout(resolve, reject, xhr, options) {
-    const rej = new Rejection(xhr, Rejection.REASON_TIMEOUT,
-      _('A timeout for the request to url {{- url}} occurred.',
-        {url: options.url}));
+    const rej = new Rejection(
+      xhr,
+      Rejection.REASON_TIMEOUT,
+      _('A timeout for the request to url {{- url}} occurred.', {
+        url: options.url,
+      }),
+    );
     try {
       reject(this.transformRejection(rej, options));
-    }
-    catch (error) {
+    } catch (error) {
       reject(rej);
     }
   }
@@ -225,8 +227,8 @@ class Http {
 
   addErrorHandler(handler) {
     this.errorHandlers.push(handler);
-    return () => this.errorHandlers = this.errorHandlers.filter(
-      h => h !== handler);
+    return () =>
+      (this.errorHandlers = this.errorHandlers.filter(h => h !== handler));
   }
 }
 

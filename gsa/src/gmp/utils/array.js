@@ -47,7 +47,8 @@ export function map(array, func, empty = []) {
     return array.map(func);
   }
 
-  if (isDefined(array.forEach)) { // support array like objects e.g. Set and Map
+  if (isDefined(array.forEach)) {
+    // support array like objects e.g. Set and Map
     const result = [];
 
     array.forEach(entry => result.push(func(entry)));
@@ -72,11 +73,10 @@ export function filter(array, func, empty = []) {
     array = [array];
   }
   return array.filter(func);
-};
+}
 
 export function first(array, non = {}) {
   if (isArray(array)) {
-
     if (array.length === 0) {
       return non;
     }
@@ -89,7 +89,8 @@ export function first(array, non = {}) {
   }
 
   // support array like objects which have an iterator
-  if (!isDefined(array[Symbol.iterator])) { // not an array like object
+  if (!isDefined(array[Symbol.iterator])) {
+    // not an array like object
     return non;
   }
 

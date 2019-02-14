@@ -57,7 +57,7 @@ const DefaultsPart = ({
 }) => {
   return (
     <React.Fragment>
-      {capabilities.mayAccess('alert') &&
+      {capabilities.mayAccess('alert') && (
         <FormGroup title={_('Default Alert')} titleSize="3">
           <Select
             name="defaultAlert"
@@ -66,8 +66,8 @@ const DefaultsPart = ({
             onChange={onChange}
           />
         </FormGroup>
-      }
-      {capabilities.mayAccess('credential') &&
+      )}
+      {capabilities.mayAccess('credential') && (
         <FormGroup title={_('Default ESXi Credential')} titleSize="3">
           <Select
             name="defaultEsxiCredential"
@@ -76,8 +76,8 @@ const DefaultsPart = ({
             onChange={onChange}
           />
         </FormGroup>
-      }
-      {capabilities.mayAccess('scanconfig') &&
+      )}
+      {capabilities.mayAccess('scanconfig') && (
         <FormGroup title={_('Default OSP Scan Config')} titleSize="3">
           <Select
             name="defaultOspScanConfig"
@@ -86,8 +86,8 @@ const DefaultsPart = ({
             onChange={onChange}
           />
         </FormGroup>
-      }
-      {capabilities.mayAccess('scanner') &&
+      )}
+      {capabilities.mayAccess('scanner') && (
         <FormGroup title={_('Default OSP Scanner')} titleSize="3">
           <Select
             name="defaultOspScanner"
@@ -96,8 +96,8 @@ const DefaultsPart = ({
             onChange={onChange}
           />
         </FormGroup>
-      }
-      {capabilities.mayAccess('scanconfig') &&
+      )}
+      {capabilities.mayAccess('scanconfig') && (
         <FormGroup title={_('Default OpenVAS Scan Config')} titleSize="3">
           <Select
             name="defaultOpenvasScanConfig"
@@ -106,8 +106,8 @@ const DefaultsPart = ({
             onChange={onChange}
           />
         </FormGroup>
-      }
-      {capabilities.mayAccess('scanner') &&
+      )}
+      {capabilities.mayAccess('scanner') && (
         <FormGroup title={_('Default OpenVAS Scanner')} titleSize="3">
           <Select
             name="defaultOpenvasScanner"
@@ -116,8 +116,8 @@ const DefaultsPart = ({
             onChange={onChange}
           />
         </FormGroup>
-      }
-      {capabilities.mayAccess('portlist') &&
+      )}
+      {capabilities.mayAccess('portlist') && (
         <FormGroup title={_('Default Port List')} titleSize="3">
           <Select
             name="defaultPortList"
@@ -126,8 +126,8 @@ const DefaultsPart = ({
             onChange={onChange}
           />
         </FormGroup>
-      }
-      {capabilities.mayAccess('reportformat') &&
+      )}
+      {capabilities.mayAccess('reportformat') && (
         <FormGroup title={_('Default Report Format')} titleSize="3">
           <Select
             name="defaultReportFormat"
@@ -136,8 +136,8 @@ const DefaultsPart = ({
             onChange={onChange}
           />
         </FormGroup>
-      }
-      {capabilities.mayAccess('credential') &&
+      )}
+      {capabilities.mayAccess('credential') && (
         <FormGroup title={_('Default SMB Credential')} titleSize="3">
           <Select
             name="defaultSmbCredential"
@@ -146,8 +146,8 @@ const DefaultsPart = ({
             onChange={onChange}
           />
         </FormGroup>
-      }
-      {capabilities.mayAccess('credential') &&
+      )}
+      {capabilities.mayAccess('credential') && (
         <FormGroup title={_('Default SNMP Credential')} titleSize="3">
           <Select
             name="defaultSnmpCredential"
@@ -156,8 +156,8 @@ const DefaultsPart = ({
             onChange={onChange}
           />
         </FormGroup>
-      }
-      {capabilities.mayAccess('credential') &&
+      )}
+      {capabilities.mayAccess('credential') && (
         <FormGroup title={_('Default SSH Credential')} titleSize="3">
           <Select
             name="defaultSshCredential"
@@ -166,8 +166,8 @@ const DefaultsPart = ({
             onChange={onChange}
           />
         </FormGroup>
-      }
-      {capabilities.mayAccess('schedule') &&
+      )}
+      {capabilities.mayAccess('schedule') && (
         <FormGroup title={_('Default Schedule')} titleSize="3">
           <Select
             name="defaultSchedule"
@@ -176,8 +176,8 @@ const DefaultsPart = ({
             onChange={onChange}
           />
         </FormGroup>
-      }
-      {capabilities.mayAccess('target') &&
+      )}
+      {capabilities.mayAccess('target') && (
         <FormGroup title={_('Default Target')} titleSize="3">
           <Select
             name="defaultTarget"
@@ -186,7 +186,7 @@ const DefaultsPart = ({
             onChange={onChange}
           />
         </FormGroup>
-      }
+      )}
     </React.Fragment>
   );
 };

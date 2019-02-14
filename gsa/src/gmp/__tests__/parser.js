@@ -42,7 +42,6 @@ import {
 } from '../parser';
 
 describe('parseInt tests', () => {
-
   test('should parse int number string', () => {
     expect(parseInt('5')).toBe(5);
   });
@@ -75,11 +74,9 @@ describe('parseInt tests', () => {
     expect(parseInt(Infinity)).toBeUndefined();
     expect(parseInt('Infinity')).toBeUndefined();
   });
-
 });
 
 describe('parseSeverity tests', () => {
-
   test('should parse int number strings', () => {
     expect(parseSeverity('0')).toEqual(0);
     expect(parseSeverity('1')).toEqual(1);
@@ -109,11 +106,9 @@ describe('parseSeverity tests', () => {
     expect(parseSeverity('')).toBeUndefined();
     expect(parseSeverity(' ')).toBeUndefined();
   });
-
 });
 
 describe('parseFloat tests', () => {
-
   test('should parse int number strings', () => {
     expect(parseFloat('0')).toEqual(0);
     expect(parseFloat('1')).toEqual(1);
@@ -143,16 +138,16 @@ describe('parseFloat tests', () => {
     expect(parseFloat('')).toBeUndefined();
     expect(parseFloat(' ')).toBeUndefined();
   });
-
 });
 
 describe('parseTextElement tests', () => {
-
   test('should convert text elements', () => {
-    expect(parseTextElement({
-      __text: 'foo',
-      __excerpt: '1',
-    })).toEqual({
+    expect(
+      parseTextElement({
+        __text: 'foo',
+        __excerpt: '1',
+      }),
+    ).toEqual({
       text: 'foo',
       text_excerpt: '1',
     });
@@ -164,11 +159,9 @@ describe('parseTextElement tests', () => {
       text_excerpt: '0',
     });
   });
-
 });
 
 describe('parseProgressElement tests', () => {
-
   test('should parse progress as float', () => {
     expect(parseProgressElement('0')).toEqual(0);
     expect(parseProgressElement('1')).toEqual(1);
@@ -204,11 +197,9 @@ describe('parseProgressElement tests', () => {
     expect(parseProgressElement({__text: 1.1})).toEqual(1.1);
     expect(parseProgressElement({__text: 5.4})).toEqual(5.4);
   });
-
 });
 
 describe('parseYesNo tests', () => {
-
   test('should parse yes values', () => {
     expect(parseYesNo('1')).toEqual(YES_VALUE);
     expect(parseYesNo(1)).toEqual(YES_VALUE);
@@ -223,11 +214,9 @@ describe('parseYesNo tests', () => {
     expect(parseYesNo(0)).toEqual(NO_VALUE);
     expect(parseYesNo(NO_VALUE)).toEqual(NO_VALUE);
   });
-
 });
 
 describe('parseCsv tests', () => {
-
   test('should parse undefined and empty', () => {
     expect(parseCsv()).toEqual([]);
     expect(parseCsv('')).toEqual([]);
@@ -241,45 +230,47 @@ describe('parseCsv tests', () => {
     expect(parseCsv('foo, bar, ')).toEqual(['foo', 'bar', '']);
     expect(parseCsv('foo, bar,,,,')).toEqual(['foo', 'bar', '', '', '', '']);
   });
-
 });
 
 describe('parseQod tests', () => {
-
   test('should convert value to float', () => {
-    expect(parseQod({
-      value: '55',
-      type: 'remote_vul',
-    })).toEqual({
+    expect(
+      parseQod({
+        value: '55',
+        type: 'remote_vul',
+      }),
+    ).toEqual({
       value: 55,
       type: 'remote_vul',
     });
   });
 
   test('should drop unknown properties', () => {
-    expect(parseQod({
-      value: '55',
-      type: 'remote_vul',
-      foo: 'bar',
-    })).toEqual({
+    expect(
+      parseQod({
+        value: '55',
+        type: 'remote_vul',
+        foo: 'bar',
+      }),
+    ).toEqual({
       value: 55,
       type: 'remote_vul',
     });
   });
-
 });
 
 describe('parseEnvelopeMeta tests', () => {
-
   test('should parse envelope information', () => {
-    expect(parseEnvelopeMeta({
-      version: '1.0',
-      backend_operation: '0.01',
-      vendor_version: '1.1',
-      i18n: 'en',
-      time: 'Fri Sep 14 11:26:40 2018 CEST',
-      timezone: 'Europe/Berlin',
-    })).toEqual({
+    expect(
+      parseEnvelopeMeta({
+        version: '1.0',
+        backend_operation: '0.01',
+        vendor_version: '1.1',
+        i18n: 'en',
+        time: 'Fri Sep 14 11:26:40 2018 CEST',
+        timezone: 'Europe/Berlin',
+      }),
+    ).toEqual({
       version: '1.0',
       backendOperation: '0.01',
       vendorVersion: '1.1',
@@ -290,16 +281,18 @@ describe('parseEnvelopeMeta tests', () => {
   });
 
   test('should drop unknown envelope information', () => {
-    expect(parseEnvelopeMeta({
-      version: '1.0',
-      backend_operation: '0.01',
-      vendor_version: '1.1',
-      i18n: 'en',
-      time: 'Fri Sep 14 11:26:40 2018 CEST',
-      timezone: 'Europe/Berlin',
-      foo: 'bar',
-      lorem: 'ipsum',
-    })).toEqual({
+    expect(
+      parseEnvelopeMeta({
+        version: '1.0',
+        backend_operation: '0.01',
+        vendor_version: '1.1',
+        i18n: 'en',
+        time: 'Fri Sep 14 11:26:40 2018 CEST',
+        timezone: 'Europe/Berlin',
+        foo: 'bar',
+        lorem: 'ipsum',
+      }),
+    ).toEqual({
       version: '1.0',
       backendOperation: '0.01',
       vendorVersion: '1.1',
@@ -311,7 +304,6 @@ describe('parseEnvelopeMeta tests', () => {
 });
 
 describe('setProperties tests', () => {
-
   test('should create new object', () => {
     expect(setProperties()).toEqual({});
   });
@@ -353,10 +345,13 @@ describe('setProperties tests', () => {
 
   test('should set properties on existing object', () => {
     const orig = {foo: 'bar'};
-    const obj = setProperties({
-      bar: 'foo',
-      lorem: 'ipsum',
-    }, orig);
+    const obj = setProperties(
+      {
+        bar: 'foo',
+        lorem: 'ipsum',
+      },
+      orig,
+    );
 
     expect(obj).toBe(orig);
     expect(obj.foo).toEqual('bar');
@@ -364,7 +359,8 @@ describe('setProperties tests', () => {
     expect(obj.lorem).toEqual('ipsum');
 
     expect(Object.keys(obj)).toEqual(
-      expect.arrayContaining(['bar', 'foo', 'lorem']));
+      expect.arrayContaining(['bar', 'foo', 'lorem']),
+    );
 
     expect(() => {
       obj.bar = 'a';
@@ -376,11 +372,9 @@ describe('setProperties tests', () => {
     obj.foo = 1;
     expect(obj.foo).toEqual(1);
   });
-
 });
 
 describe('parseProperties tests', () => {
-
   test('should create new object', () => {
     expect(parseProperties()).toEqual({});
   });
@@ -454,11 +448,9 @@ describe('parseProperties tests', () => {
     expect(parsed.type).toBeUndefined();
     expect(parsed._type).toEqual('foo');
   });
-
 });
 
 describe('parseDate tests', () => {
-
   test('should return undefined', () => {
     expect(parseDate()).toBeUndefined();
   });
@@ -469,11 +461,9 @@ describe('parseDate tests', () => {
     expect(date).toBeDefined();
     expect(isDate(date)).toEqual(true);
   });
-
 });
 
 describe('parseDuration tests', () => {
-
   test('should return undefined', () => {
     expect(parseDuration()).toBeUndefined();
   });
@@ -485,7 +475,6 @@ describe('parseDuration tests', () => {
 });
 
 describe('parseCvssBaseVector tests', () => {
-
   test('should return undefined', () => {
     expect(parseCvssBaseVector()).toBeUndefined();
     expect(parseCvssBaseVector({})).toBeUndefined();
@@ -493,75 +482,97 @@ describe('parseCvssBaseVector tests', () => {
   });
 
   test('should parse accessVector', () => {
-    expect(parseCvssBaseVector({accessVector: 'foo'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
-    expect(parseCvssBaseVector({accessVector: 'LOCAL'}))
-      .toEqual('AV:L/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
-    expect(parseCvssBaseVector({accessVector: 'NETWORK'}))
-      .toEqual('AV:N/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
-    expect(parseCvssBaseVector({accessVector: 'ADJACENT_NETWORK'}))
-      .toEqual('AV:A/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({accessVector: 'foo'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR',
+    );
+    expect(parseCvssBaseVector({accessVector: 'LOCAL'})).toEqual(
+      'AV:L/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR',
+    );
+    expect(parseCvssBaseVector({accessVector: 'NETWORK'})).toEqual(
+      'AV:N/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR',
+    );
+    expect(parseCvssBaseVector({accessVector: 'ADJACENT_NETWORK'})).toEqual(
+      'AV:A/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR',
+    );
   });
 
   test('should parse accessComplexity', () => {
-    expect(parseCvssBaseVector({accessComplexity: 'foo'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
-    expect(parseCvssBaseVector({accessComplexity: 'LOW'}))
-      .toEqual('AV:ERROR/AC:L/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
-    expect(parseCvssBaseVector({accessComplexity: 'MEDIUM'}))
-      .toEqual('AV:ERROR/AC:M/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
-    expect(parseCvssBaseVector({accessComplexity: 'HIGH'}))
-      .toEqual('AV:ERROR/AC:H/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({accessComplexity: 'foo'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR',
+    );
+    expect(parseCvssBaseVector({accessComplexity: 'LOW'})).toEqual(
+      'AV:ERROR/AC:L/Au:ERROR/C:ERROR/I:ERROR/A:ERROR',
+    );
+    expect(parseCvssBaseVector({accessComplexity: 'MEDIUM'})).toEqual(
+      'AV:ERROR/AC:M/Au:ERROR/C:ERROR/I:ERROR/A:ERROR',
+    );
+    expect(parseCvssBaseVector({accessComplexity: 'HIGH'})).toEqual(
+      'AV:ERROR/AC:H/Au:ERROR/C:ERROR/I:ERROR/A:ERROR',
+    );
   });
 
   test('should parse authentication', () => {
-    expect(parseCvssBaseVector({authentication: 'foo'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
-    expect(parseCvssBaseVector({authentication: 'NONE'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:N/C:ERROR/I:ERROR/A:ERROR');
-    expect(parseCvssBaseVector({authentication: 'MULTIPLE_INSTANCES'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:M/C:ERROR/I:ERROR/A:ERROR');
-    expect(parseCvssBaseVector({authentication: 'SINGLE_INSTANCES'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:S/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({authentication: 'foo'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR',
+    );
+    expect(parseCvssBaseVector({authentication: 'NONE'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:N/C:ERROR/I:ERROR/A:ERROR',
+    );
+    expect(parseCvssBaseVector({authentication: 'MULTIPLE_INSTANCES'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:M/C:ERROR/I:ERROR/A:ERROR',
+    );
+    expect(parseCvssBaseVector({authentication: 'SINGLE_INSTANCES'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:S/C:ERROR/I:ERROR/A:ERROR',
+    );
   });
 
   test('should parse confidentialityImpact', () => {
-    expect(parseCvssBaseVector({confidentialityImpact: 'foo'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
-    expect(parseCvssBaseVector({confidentialityImpact: 'NONE'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:N/I:ERROR/A:ERROR');
-    expect(parseCvssBaseVector({confidentialityImpact: 'PARTIAL'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:P/I:ERROR/A:ERROR');
-    expect(parseCvssBaseVector({confidentialityImpact: 'COMPLETE'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:C/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({confidentialityImpact: 'foo'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR',
+    );
+    expect(parseCvssBaseVector({confidentialityImpact: 'NONE'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:N/I:ERROR/A:ERROR',
+    );
+    expect(parseCvssBaseVector({confidentialityImpact: 'PARTIAL'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:P/I:ERROR/A:ERROR',
+    );
+    expect(parseCvssBaseVector({confidentialityImpact: 'COMPLETE'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:C/I:ERROR/A:ERROR',
+    );
   });
 
   test('should parse integrityImpact', () => {
-    expect(parseCvssBaseVector({integrityImpact: 'foo'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
-    expect(parseCvssBaseVector({integrityImpact: 'NONE'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:N/A:ERROR');
-    expect(parseCvssBaseVector({integrityImpact: 'PARTIAL'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:P/A:ERROR');
-    expect(parseCvssBaseVector({integrityImpact: 'COMPLETE'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:C/A:ERROR');
+    expect(parseCvssBaseVector({integrityImpact: 'foo'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR',
+    );
+    expect(parseCvssBaseVector({integrityImpact: 'NONE'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:N/A:ERROR',
+    );
+    expect(parseCvssBaseVector({integrityImpact: 'PARTIAL'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:P/A:ERROR',
+    );
+    expect(parseCvssBaseVector({integrityImpact: 'COMPLETE'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:C/A:ERROR',
+    );
   });
 
   test('should parse availabilityImpact', () => {
-    expect(parseCvssBaseVector({availabilityImpact: 'foo'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
-    expect(parseCvssBaseVector({availabilityImpact: 'NONE'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:N');
-    expect(parseCvssBaseVector({availabilityImpact: 'PARTIAL'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:P');
-    expect(parseCvssBaseVector({availabilityImpact: 'COMPLETE'}))
-      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:C');
+    expect(parseCvssBaseVector({availabilityImpact: 'foo'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR',
+    );
+    expect(parseCvssBaseVector({availabilityImpact: 'NONE'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:N',
+    );
+    expect(parseCvssBaseVector({availabilityImpact: 'PARTIAL'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:P',
+    );
+    expect(parseCvssBaseVector({availabilityImpact: 'COMPLETE'})).toEqual(
+      'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:C',
+    );
   });
-
 });
 
 describe('parseCvssBaseFromVector tests', () => {
-
   test('should return empty object', () => {
     expect(parseCvssBaseFromVector()).toEqual({});
     expect(parseCvssBaseFromVector('')).toEqual({});
@@ -754,7 +765,6 @@ describe('parseCvssBaseFromVector tests', () => {
 });
 
 describe('parseText tests', () => {
-
   test('should return undefined for undefined', () => {
     expect(parseText()).toBeUndefined();
   });
@@ -766,7 +776,6 @@ describe('parseText tests', () => {
   test('should return __text if set', () => {
     expect(parseText({__text: 'foo'})).toEqual('foo');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -31,11 +31,11 @@ import Radio from '../../components/form/radio.js';
 const VALUE = 'Severity at least';
 
 const SeverityLeastConditionPart = ({
-    condition,
-    severity,
-    prefix,
-    onChange,
-  }) => {
+  condition,
+  severity,
+  prefix,
+  onChange,
+}) => {
   return (
     <Divider>
       <Radio
@@ -44,8 +44,7 @@ const SeverityLeastConditionPart = ({
         checked={condition === VALUE}
         name="condition"
         onChange={onChange}
-      >
-      </Radio>
+      />
       <Spinner
         value={severity}
         name={prefix + 'severity'}

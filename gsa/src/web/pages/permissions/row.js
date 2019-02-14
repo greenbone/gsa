@@ -43,45 +43,44 @@ import TrashIcon from 'web/entity/icon/trashicon';
 import PropTypes from 'web/utils/proptypes';
 import {permissionDescription} from 'web/utils/render';
 
-const Actions = withEntitiesActions(({
-  entity,
-  onPermissionDeleteClick,
-  onPermissionDownloadClick,
-  onPermissionCloneClick,
-  onPermissionEditClick,
-}) => (
-  <IconDivider
-    align={['center', 'center']}
-    grow
-  >
-    <TrashIcon
-      displayName={_('Permission')}
-      name="permission"
-      entity={entity}
-      onClick={onPermissionDeleteClick}
-    />
-    <EditIcon
-      displayName={_('Permission')}
-      name="permission"
-      entity={entity}
-      onClick={onPermissionEditClick}
-    />
-    <CloneIcon
-      displayName={_('Permission')}
-      name="permission"
-      entity={entity}
-      title={_('Clone Permission')}
-      value={entity}
-      mayClone={entity.isWritable()}
-      onClick={onPermissionCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export Permission')}
-      onClick={onPermissionDownloadClick}
-    />
-  </IconDivider>
-));
+const Actions = withEntitiesActions(
+  ({
+    entity,
+    onPermissionDeleteClick,
+    onPermissionDownloadClick,
+    onPermissionCloneClick,
+    onPermissionEditClick,
+  }) => (
+    <IconDivider align={['center', 'center']} grow>
+      <TrashIcon
+        displayName={_('Permission')}
+        name="permission"
+        entity={entity}
+        onClick={onPermissionDeleteClick}
+      />
+      <EditIcon
+        displayName={_('Permission')}
+        name="permission"
+        entity={entity}
+        onClick={onPermissionEditClick}
+      />
+      <CloneIcon
+        displayName={_('Permission')}
+        name="permission"
+        entity={entity}
+        title={_('Clone Permission')}
+        value={entity}
+        mayClone={entity.isWritable()}
+        onClick={onPermissionCloneClick}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export Permission')}
+        onClick={onPermissionDownloadClick}
+      />
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -113,22 +112,15 @@ const Row = ({
       {isDefined(entity.resource) && typeName(getEntityType(entity.resource))}
     </TableData>
     <TableData>
-      {isDefined(entity.resource) &&
-        <EntityLink entity={entity.resource}/>
-      }
+      {isDefined(entity.resource) && <EntityLink entity={entity.resource} />}
     </TableData>
     <TableData>
       {isDefined(entity.subject) && typeName(getEntityType(entity.subject))}
     </TableData>
     <TableData>
-      {isDefined(entity.subject) &&
-        <EntityLink entity={entity.subject}/>
-      }
+      {isDefined(entity.subject) && <EntityLink entity={entity.subject} />}
     </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

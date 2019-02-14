@@ -27,11 +27,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import ResumeIcon from 'web/components/icon/resumeicon';
 
-const TaskResumeIcon = ({
-  capabilities,
-  task,
-  onClick,
-}) => {
+const TaskResumeIcon = ({capabilities, task, onClick}) => {
   if (task.isContainer()) {
     return (
       <ResumeIcon
@@ -54,13 +50,7 @@ const TaskResumeIcon = ({
 
   if (task.isStopped() || task.isInterrupted()) {
     if (capabilities.mayOp('resume_task')) {
-      return (
-        <ResumeIcon
-          title={_('Resume')}
-          value={task}
-          onClick={onClick}
-        />
-      );
+      return <ResumeIcon title={_('Resume')} value={task} onClick={onClick} />;
     }
     return (
       <ResumeIcon

@@ -25,7 +25,6 @@ import {createRootState, createState} from '../testing';
 import {createSelector} from '../selectors';
 
 describe('EntitiesSelector isLoadingEntities tests', () => {
-
   test('should be false for undefined state', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
@@ -112,11 +111,9 @@ describe('EntitiesSelector isLoadingEntities tests', () => {
 
     expect(fooSelector.isLoadingEntities()).toBe(false);
   });
-
 });
 
 describe('EntitiesSelector isLoadingEntity tests', () => {
-
   test('should be false for undefined state', () => {
     const id = 'a1';
     const selector = createSelector('foo');
@@ -173,11 +170,9 @@ describe('EntitiesSelector isLoadingEntity tests', () => {
 
     expect(fooSelector.isLoadingEntity(id)).toBe(true);
   });
-
 });
 
 describe('EntitiesSelector getEntities tests', () => {
-
   test('getEntities for undefined state', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
@@ -277,15 +272,16 @@ describe('EntitiesSelector getEntities tests', () => {
     });
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getEntities(filter))
-      .toEqual([{id: 'lorem'}, {id: 'ipsum'}]);
+    expect(fooSelector.getEntities(filter)).toEqual([
+      {id: 'lorem'},
+      {id: 'ipsum'},
+    ]);
   });
 
   test('getEntities should return empty array for undefined entities', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
-      default: {
-      },
+      default: {},
     });
     const fooSelector = selector(rootState);
 
@@ -303,11 +299,9 @@ describe('EntitiesSelector getEntities tests', () => {
 
     expect(fooSelector.getEntities(filter)).toBeUndefined();
   });
-
 });
 
 describe('EntitiesSelector getEntitiesError tests', () => {
-
   test('should return undefined for undefined state', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
@@ -373,8 +367,7 @@ describe('EntitiesSelector getEntitiesError tests', () => {
   test('should return undefined for undefined error', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
-      default: {
-      },
+      default: {},
     });
     const fooSelector = selector(rootState);
 
@@ -395,11 +388,9 @@ describe('EntitiesSelector getEntitiesError tests', () => {
 
     expect(fooSelector.getEntitiesError(filter)).toBeUndefined();
   });
-
 });
 
 describe('EntitiesSelector getEntitiesCounts tests', () => {
-
   test('should return undefined for undefined state', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
@@ -465,11 +456,9 @@ describe('EntitiesSelector getEntitiesCounts tests', () => {
 
     expect(fooSelector.getEntitiesCounts(filter)).toEqual(counts);
   });
-
 });
 
 describe('EntitiesSelector getLoadedFilter tests', () => {
-
   test('should return undefined for undefined state', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
@@ -534,7 +523,6 @@ describe('EntitiesSelector getLoadedFilter tests', () => {
 });
 
 describe('EntitiesSelector getEntity tests', () => {
-
   test('should return undefined for empty state', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
@@ -587,7 +575,6 @@ describe('EntitiesSelector getEntity tests', () => {
 });
 
 describe('EntitiesSelector getEntityError tests', () => {
-
   test('should return undefined for undefined state', () => {
     const id = 'a1';
     const selector = createSelector('foo');
@@ -610,8 +597,7 @@ describe('EntitiesSelector getEntityError tests', () => {
     const id = 'a1';
     const selector = createSelector('foo');
     const rootState = createState('foo', {
-      errors: {
-      },
+      errors: {},
     });
     const fooSelector = selector(rootState);
 
@@ -643,7 +629,6 @@ describe('EntitiesSelector getEntityError tests', () => {
 
     expect(fooSelector.getEntityError(id)).toBeUndefined();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

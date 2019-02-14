@@ -69,7 +69,6 @@ const includes_type = (types, type) => {
 };
 
 class FilterComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -86,11 +85,12 @@ class FilterComponent extends React.Component {
     const {capabilities} = this.props;
 
     let types = FILTER_OPTIONS.filter(option =>
-      filter_types(capabilities, option[0]));
+      filter_types(capabilities, option[0]),
+    );
 
     if (!isDefined(types)) {
       types = [];
-    };
+    }
 
     this.handleInteraction();
 
@@ -112,8 +112,7 @@ class FilterComponent extends React.Component {
         type: filter_type,
         types,
       });
-    }
-    else {
+    } else {
       const type = first(types, [])[0]; // eslint-disable-line prefer-destructuring
 
       this.setState({
@@ -186,17 +185,14 @@ class FilterComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
               create: this.openFilterDialog,
               edit: this.openFilterDialog,
             })}
-            {dialogVisible &&
+            {dialogVisible && (
               <FilterDialog
                 comment={comment}
                 id={id}
@@ -211,13 +207,12 @@ class FilterComponent extends React.Component {
                   return save(d).then(() => this.closeFilterDialog());
                 }}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>
     );
   }
-
 }
 
 FilterComponent.propTypes = {

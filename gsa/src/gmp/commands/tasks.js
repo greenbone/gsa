@@ -36,7 +36,6 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.tasks');
 
 class TaskCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'task', Task);
   }
@@ -48,14 +47,14 @@ class TaskCommand extends EntityCommand {
       cmd: 'start_task',
       id,
     })
-    .then(() => {
-      log.debug('Started task');
-      return this.get({id});
-    })
-    .catch(err => {
-      log.error('An error occurred while starting the task', id, err);
-      throw err;
-    });
+      .then(() => {
+        log.debug('Started task');
+        return this.get({id});
+      })
+      .catch(err => {
+        log.error('An error occurred while starting the task', id, err);
+        throw err;
+      });
   }
 
   stop({id}) {
@@ -65,28 +64,29 @@ class TaskCommand extends EntityCommand {
       cmd: 'stop_task',
       id,
     })
-    .then(() => {
-      log.debug('Stopped task');
-      return this.get({id});
-    })
-    .catch(err => {
-      log.error('An error occurred while stopping the task', id, err);
-      throw err;
-    });
+      .then(() => {
+        log.debug('Stopped task');
+        return this.get({id});
+      })
+      .catch(err => {
+        log.error('An error occurred while stopping the task', id, err);
+        throw err;
+      });
   }
 
   resume({id}) {
     return this.httpPost({
       cmd: 'resume_task',
       id,
-    }).then(() => {
-      log.debug('Resumed task');
-      return this.get({id});
     })
-    .catch(err => {
-      log.error('An error occurred while resuming the task', id, err);
-      throw err;
-    });
+      .then(() => {
+        log.debug('Resumed task');
+        return this.get({id});
+      })
+      .catch(err => {
+        log.error('An error occurred while resuming the task', id, err);
+        throw err;
+      });
   }
 
   newTaskSettings() {
@@ -94,37 +94,57 @@ class TaskCommand extends EntityCommand {
       const {data} = response;
       const settings = {};
       const {new_task} = data;
-      settings.targets = map(new_task.get_targets_response.target,
-        target => new Target(target));
-      settings.scan_configs = map(new_task.get_configs_response.config,
-        config => new ScanConfig(config));
-      settings.alerts = map(new_task.get_alerts_response.alert,
-        alert => new Model(alert, 'alert'));
-      settings.schedules = map(new_task.get_schedules_response.schedule,
-        schedule => new Schedule(schedule));
-      settings.scanners = map(new_task.get_scanners_response.scanner,
-        scanner => new Scanner(scanner));
-      settings.tags = map(new_task.get_tags_response.tag,
-        tag => new Model(tag, 'tag'));
-      settings.alert_id = isEmpty(new_task.alert_id) ?
-        undefined : new_task.alert_id;
-      settings.config_id = isEmpty(new_task.config_id) ?
-        undefined : new_task.config_id;
-      settings.osp_config_id = isEmpty(new_task.osp_config_id) ?
-        undefined : new_task.osp_config_id;
-      settings.osp_scanner_id = isEmpty(new_task.osp_scanner_id) ?
-        undefined : new_task.osp_scanner_id;
-      settings.scanner_id = isEmpty(new_task.scanner_id) ?
-        undefined : new_task.scanner_id;
-      settings.schedule_id = isEmpty(new_task.schedule_id) ?
-        undefined : new_task.schedule_id;
-      settings.target_id = isEmpty(new_task.target_id) ?
-        undefined : new_task.target_id;
+      settings.targets = map(
+        new_task.get_targets_response.target,
+        target => new Target(target),
+      );
+      settings.scan_configs = map(
+        new_task.get_configs_response.config,
+        config => new ScanConfig(config),
+      );
+      settings.alerts = map(
+        new_task.get_alerts_response.alert,
+        alert => new Model(alert, 'alert'),
+      );
+      settings.schedules = map(
+        new_task.get_schedules_response.schedule,
+        schedule => new Schedule(schedule),
+      );
+      settings.scanners = map(
+        new_task.get_scanners_response.scanner,
+        scanner => new Scanner(scanner),
+      );
+      settings.tags = map(
+        new_task.get_tags_response.tag,
+        tag => new Model(tag, 'tag'),
+      );
+      settings.alert_id = isEmpty(new_task.alert_id)
+        ? undefined
+        : new_task.alert_id;
+      settings.config_id = isEmpty(new_task.config_id)
+        ? undefined
+        : new_task.config_id;
+      settings.osp_config_id = isEmpty(new_task.osp_config_id)
+        ? undefined
+        : new_task.osp_config_id;
+      settings.osp_scanner_id = isEmpty(new_task.osp_scanner_id)
+        ? undefined
+        : new_task.osp_scanner_id;
+      settings.scanner_id = isEmpty(new_task.scanner_id)
+        ? undefined
+        : new_task.scanner_id;
+      settings.schedule_id = isEmpty(new_task.schedule_id)
+        ? undefined
+        : new_task.schedule_id;
+      settings.target_id = isEmpty(new_task.target_id)
+        ? undefined
+        : new_task.target_id;
       return response.setData(settings);
     });
   }
 
-  editTaskSettings({id}) { // should be removed after get Alert, Schedule, ... are implemented
+  editTaskSettings({id}) {
+    // should be removed after get Alert, Schedule, ... are implemented
     return this.httpGet({
       cmd: 'edit_task',
       id,
@@ -133,16 +153,26 @@ class TaskCommand extends EntityCommand {
 
       const inst = {};
       const resp = data.edit_task.commands_response;
-      inst.targets = map(resp.get_targets_response.target,
-        target => new Target(target));
-      inst.scan_configs = map(resp.get_configs_response.config,
-        config => new ScanConfig(config));
-      inst.alerts = map(resp.get_alerts_response.alert,
-        alert => new Model(alert, 'alert'));
-      inst.schedules = map(resp.get_schedules_response.schedule,
-        schedule => new Schedule(schedule));
-      inst.scanners = map(resp.get_scanners_response.scanner,
-        scanner => new Scanner(scanner));
+      inst.targets = map(
+        resp.get_targets_response.target,
+        target => new Target(target),
+      );
+      inst.scan_configs = map(
+        resp.get_configs_response.config,
+        config => new ScanConfig(config),
+      );
+      inst.alerts = map(
+        resp.get_alerts_response.alert,
+        alert => new Model(alert, 'alert'),
+      );
+      inst.schedules = map(
+        resp.get_schedules_response.schedule,
+        schedule => new Schedule(schedule),
+      );
+      inst.scanners = map(
+        resp.get_scanners_response.scanner,
+        scanner => new Scanner(scanner),
+      );
       return response.setData(inst);
     });
   }
@@ -289,7 +319,6 @@ class TaskCommand extends EntityCommand {
 }
 
 class TasksCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'task', Task);
   }
@@ -319,20 +348,18 @@ class TasksCommand extends EntitiesCommand {
       filter,
       aggregate_type: 'task',
       group_column: 'uuid',
-      textColumns: [
-        'name',
-        'high_per_host',
-        'severity',
-        'modified',
+      textColumns: ['name', 'high_per_host', 'severity', 'modified'],
+      sort: [
+        {
+          field: 'high_per_host',
+          direction: 'descending',
+          stat: 'max',
+        },
+        {
+          field: 'modified',
+          direction: 'descending',
+        },
       ],
-      sort: [{
-        field: 'high_per_host',
-        direction: 'descending',
-        stat: 'max',
-      }, {
-        field: 'modified',
-        direction: 'descending',
-      }],
       maxGroups: max,
     });
   }

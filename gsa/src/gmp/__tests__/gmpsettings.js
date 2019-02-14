@@ -26,14 +26,13 @@ import GmpSettings, {
 const createStorage = state => {
   const store = {
     ...state,
-    setItem: jest.fn((name, value) => store[name] = value),
+    setItem: jest.fn((name, value) => (store[name] = value)),
     removeItem: jest.fn(name => delete store[name]),
   };
   return store;
 };
 
 describe('GmpSettings tests', () => {
-
   test('should init with defaults', () => {
     const storage = createStorage();
     const settings = new GmpSettings(storage);
@@ -197,7 +196,6 @@ describe('GmpSettings tests', () => {
     settings.loglevel = undefined;
     expect(storage.removeItem).toBeCalledWith('loglevel');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

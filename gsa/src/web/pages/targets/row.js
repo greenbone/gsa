@@ -43,44 +43,43 @@ import TrashIcon from 'web/entity/icon/trashicon';
 import PropTypes from 'web/utils/proptypes';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 
-const Actions = withEntitiesActions(({
-  entity,
-  onTargetEditClick,
-  onTargetCloneClick,
-  onTargetDownloadClick,
-  onTargetDeleteClick,
-}) => (
-  <IconDivider
-    align={['center', 'center']}
-    grow
-  >
-    <TrashIcon
-      displayName={_('Target')}
-      name="target"
-      entity={entity}
-      onClick={onTargetDeleteClick}
-    />
-    <EditIcon
-      displayName={_('Target')}
-      name="target"
-      entity={entity}
-      onClick={onTargetEditClick}
-    />
-    <CloneIcon
-      displayName={_('Target')}
-      name="target"
-      entity={entity}
-      title={_('Clone Target')}
-      value={entity}
-      onClick={onTargetCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export Target')}
-      onClick={onTargetDownloadClick}
-    />
-  </IconDivider>
-));
+const Actions = withEntitiesActions(
+  ({
+    entity,
+    onTargetEditClick,
+    onTargetCloneClick,
+    onTargetDownloadClick,
+    onTargetDeleteClick,
+  }) => (
+    <IconDivider align={['center', 'center']} grow>
+      <TrashIcon
+        displayName={_('Target')}
+        name="target"
+        entity={entity}
+        onClick={onTargetDeleteClick}
+      />
+      <EditIcon
+        displayName={_('Target')}
+        name="target"
+        entity={entity}
+        onClick={onTargetEditClick}
+      />
+      <CloneIcon
+        displayName={_('Target')}
+        name="target"
+        entity={entity}
+        title={_('Clone Target')}
+        value={entity}
+        onClick={onTargetCloneClick}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export Target')}
+        onClick={onTargetDownloadClick}
+      />
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model,
@@ -90,11 +89,7 @@ Actions.propTypes = {
   onTargetEditClick: PropTypes.func.isRequired,
 };
 
-const Cred = ({
-  cred,
-  title,
-  links = true,
-}) => {
+const Cred = ({cred, title, links = true}) => {
   if (!isDefined(cred) || !isDefined(cred.id)) {
     return null;
   }
@@ -102,11 +97,7 @@ const Cred = ({
     <Layout>
       <span>{title}: </span>
       <Layout box>
-        <DetailsLink
-          type="credential"
-          id={cred.id}
-          textOnly={!links}
-        >
+        <DetailsLink type="credential" id={cred.id} textOnly={!links}>
           {cred.name}
         </DetailsLink>
       </Layout>
@@ -135,47 +126,20 @@ const Row = ({
       displayName={_('Target')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
+    <TableData>{shorten(entity.hosts.join(', '), 500)}</TableData>
+    <TableData>{entity.max_hosts}</TableData>
     <TableData>
-      {shorten(entity.hosts.join(', '), 500)}
-    </TableData>
-    <TableData>
-      {entity.max_hosts}
-    </TableData>
-    <TableData>
-      <DetailsLink
-        type="portlist"
-        id={entity.port_list.id}
-        textOnly={!links}
-      >
+      <DetailsLink type="portlist" id={entity.port_list.id} textOnly={!links}>
         {entity.port_list.name}
       </DetailsLink>
     </TableData>
     <TableData flex="column" align="center">
-      <Cred
-        cred={entity.ssh_credential}
-        title={'SSH'}
-        links={links}
-      />
-      <Cred
-        cred={entity.smb_credential}
-        title={'SMB'}
-        links={links}
-      />
-      <Cred
-        cred={entity.esxi_credential}
-        title={'ESXi'}
-        links={links}
-      />
-      <Cred
-        cred={entity.snmp_credential}
-        title={'SNMP'}
-        links={links}
-      />
+      <Cred cred={entity.ssh_credential} title={'SSH'} links={links} />
+      <Cred cred={entity.smb_credential} title={'SMB'} links={links} />
+      <Cred cred={entity.esxi_credential} title={'ESXi'} links={links} />
+      <Cred cred={entity.snmp_credential} title={'SNMP'} links={links} />
     </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

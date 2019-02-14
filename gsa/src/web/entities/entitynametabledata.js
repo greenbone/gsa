@@ -50,24 +50,16 @@ const EntityNameTableData = ({
   <TableData flex="column">
     <Layout align="space-between">
       <Layout flex="column">
-        {entity.isOrphan() &&
-          <b>{_('Orphan')}</b>
-        }
-        {isDefined(onToggleDetailsClick) ?
-          <RowDetailsToggle
-            name={entity.id}
-            onClick={onToggleDetailsClick}
-          >
+        {entity.isOrphan() && <b>{_('Orphan')}</b>}
+        {isDefined(onToggleDetailsClick) ? (
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
             {entity.name}
-          </RowDetailsToggle> :
-          <DetailsLink
-            type={type}
-            id={entity.id}
-            textOnly={!links}
-          >
+          </RowDetailsToggle>
+        ) : (
+          <DetailsLink type={type} id={entity.id} textOnly={!links}>
             {entity.name}
           </DetailsLink>
-        }
+        )}
       </Layout>
       <ObserverIcon
         displayName={displayName}
@@ -75,9 +67,7 @@ const EntityNameTableData = ({
         userName={username}
       />
     </Layout>
-    {isDefined(entity.comment) &&
-      <Comment>({entity.comment})</Comment>
-    }
+    {isDefined(entity.comment) && <Comment>({entity.comment})</Comment>}
     {children}
   </TableData>
 );

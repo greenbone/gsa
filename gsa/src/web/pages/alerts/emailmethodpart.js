@@ -68,13 +68,14 @@ const EmailMethodPart = ({
   const taskEvent = isTaskEvent(event);
   const secinfoEvent = isSecinfoEvent(event);
   const reportFormatItems = renderSelectItems(
-    reportFormats.filter(format =>
-      (taskEvent && format.content_type.startsWith('text/')) || !taskEvent)
+    reportFormats.filter(
+      format =>
+        (taskEvent && format.content_type.startsWith('text/')) || !taskEvent,
+    ),
   );
   credentials = credentials.filter(email_credential_filter);
   return (
     <Layout flex="column" grow="1">
-
       <FormGroup title={_('To Address')}>
         <TextField
           grow="1"
@@ -93,7 +94,7 @@ const EmailMethodPart = ({
         />
       </FormGroup>
 
-      {(taskEvent || secinfoEvent) &&
+      {(taskEvent || secinfoEvent) && (
         <FormGroup title={_('Subject')}>
           <TextField
             grow="1"
@@ -104,7 +105,7 @@ const EmailMethodPart = ({
             onChange={onChange}
           />
         </FormGroup>
-      }
+      )}
 
       <FormGroup title={_('Email Encryption')}>
         <IconDivider>
@@ -123,7 +124,7 @@ const EmailMethodPart = ({
         </IconDivider>
       </FormGroup>
 
-      {(taskEvent || secinfoEvent) &&
+      {(taskEvent || secinfoEvent) && (
         <FormGroup title={_('Content')} flex="column">
           <Divider flex="column" grow="1">
             <Radio
@@ -134,26 +135,28 @@ const EmailMethodPart = ({
               onChange={onChange}
             />
 
-            {capabilities.mayOp('get_report_formats') &&
+            {capabilities.mayOp('get_report_formats') && (
               <Layout flex="column" box>
                 <Divider>
                   <Radio
                     name={prefix + 'notice'}
-                    title={taskEvent ? _('Include report') :
-                      _('Include list of resources with message:')}
+                    title={
+                      taskEvent
+                        ? _('Include report')
+                        : _('Include list of resources with message:')
+                    }
                     checked={notice === '0'}
                     value="0"
                     onChange={onChange}
-                  >
-                  </Radio>
-                  {taskEvent &&
+                  />
+                  {taskEvent && (
                     <Select
                       name={prefix + 'notice_report_format'}
                       value={noticeReportFormat}
                       items={reportFormatItems}
                       onChange={onChange}
                     />
-                  }
+                  )}
                 </Divider>
                 <TextArea
                   name={prefix + 'message'}
@@ -163,29 +166,31 @@ const EmailMethodPart = ({
                   onChange={onChange}
                 />
               </Layout>
-            }
+            )}
 
-            {capabilities.mayOp('get_report_formats') &&
+            {capabilities.mayOp('get_report_formats') && (
               <Layout flex="column">
                 <Layout>
                   <Divider>
                     <Radio
                       name={prefix + 'notice'}
-                      title={taskEvent ? _('Attach report') :
-                        _('Attach list of resources with message:')}
+                      title={
+                        taskEvent
+                          ? _('Attach report')
+                          : _('Attach list of resources with message:')
+                      }
                       checked={notice === '2'}
                       value="2"
                       onChange={onChange}
-                    >
-                    </Radio>
-                    {taskEvent &&
+                    />
+                    {taskEvent && (
                       <Select
                         name={prefix + 'notice_attach_format'}
                         value={noticeAttachFormat}
                         items={renderSelectItems(reportFormats)}
                         onChange={onChange}
                       />
-                    }
+                    )}
                   </Divider>
                 </Layout>
                 <TextArea
@@ -196,11 +201,10 @@ const EmailMethodPart = ({
                   onChange={onChange}
                 />
               </Layout>
-            }
+            )}
           </Divider>
         </FormGroup>
-      }
-
+      )}
     </Layout>
   );
 };

@@ -50,53 +50,51 @@ import withCapabilities from 'web/utils/withCapabilities';
 const Actions = compose(
   withCapabilities,
   withEntitiesActions,
-)(({
-  capabilities,
-  entity,
-  onTargetCreateFromHostClick,
-  onHostEditClick,
-  onHostDeleteClick,
-  onHostDownloadClick,
-}) => {
-  let new_title;
-  const can_create_target = capabilities.mayCreate('target');
-  if (can_create_target) {
-    new_title = _('Create Target from Host');
-  }
-  else {
-    new_title = _('Permission to create Target denied');
-  }
-  return (
-    <IconDivider
-      align={['center', 'center']}
-      grow
-    >
-      <DeleteIcon
-        entity={entity}
-        name="asset"
-        displayName={_('Host')}
-        onClick={onHostDeleteClick}
-      />
-      <EditIcon
-        entity={entity}
-        name="asset"
-        displayName={_('Host')}
-        onClick={onHostEditClick}
-      />
-      <NewIcon
-        value={entity}
-        active={can_create_target}
-        title={new_title}
-        onClick={onTargetCreateFromHostClick}
-      />
-      <ExportIcon
-        value={entity}
-        title={_('Export Host')}
-        onClick={onHostDownloadClick}
-      />
-    </IconDivider>
-  );
-});
+)(
+  ({
+    capabilities,
+    entity,
+    onTargetCreateFromHostClick,
+    onHostEditClick,
+    onHostDeleteClick,
+    onHostDownloadClick,
+  }) => {
+    let new_title;
+    const can_create_target = capabilities.mayCreate('target');
+    if (can_create_target) {
+      new_title = _('Create Target from Host');
+    } else {
+      new_title = _('Permission to create Target denied');
+    }
+    return (
+      <IconDivider align={['center', 'center']} grow>
+        <DeleteIcon
+          entity={entity}
+          name="asset"
+          displayName={_('Host')}
+          onClick={onHostDeleteClick}
+        />
+        <EditIcon
+          entity={entity}
+          name="asset"
+          displayName={_('Host')}
+          onClick={onHostEditClick}
+        />
+        <NewIcon
+          value={entity}
+          active={can_create_target}
+          title={new_title}
+          onClick={onTargetCreateFromHostClick}
+        />
+        <ExportIcon
+          value={entity}
+          title={_('Export Host')}
+          onClick={onHostDownloadClick}
+        />
+      </IconDivider>
+    );
+  },
+);
 
 Actions.propTypes = {
   entity: PropTypes.model,
@@ -114,45 +112,33 @@ const Row = ({
   ...props
 }) => {
   const {details = {}} = entity;
-  const os_cpe = isDefined(details.best_os_cpe) ? details.best_os_cpe.value :
-    undefined;
-  const os_txt = isDefined(details.best_os_txt) ? details.best_os_txt.value :
-    undefined;
+  const os_cpe = isDefined(details.best_os_cpe)
+    ? details.best_os_cpe.value
+    : undefined;
+  const os_txt = isDefined(details.best_os_txt)
+    ? details.best_os_txt.value
+    : undefined;
   return (
     <TableRow>
       <TableData flex="column">
-        <RowDetailsToggle
-          name={entity.id}
-          onClick={onToggleDetailsClick}
-        >
+        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
           {entity.name}
         </RowDetailsToggle>
-        <Comment text={entity.comment}/>
+        <Comment text={entity.comment} />
+      </TableData>
+      <TableData>{entity.hostname}</TableData>
+      <TableData>{entity.ip}</TableData>
+      <TableData>
+        <OsIcon osCpe={os_cpe} osTxt={os_txt} />
       </TableData>
       <TableData>
-        {entity.hostname}
-      </TableData>
-      <TableData>
-        {entity.ip}
-      </TableData>
-      <TableData>
-        <OsIcon
-          osCpe={os_cpe}
-          osTxt={os_txt}
-        />
-      </TableData>
-      <TableData>
-        <SeverityBar severity={entity.severity}/>
+        <SeverityBar severity={entity.severity} />
       </TableData>
       <TableData>
         {isDefined(entity.modificationTime) &&
-          longDate(entity.modificationTime)
-        }
+          longDate(entity.modificationTime)}
       </TableData>
-      <ActionsComponent
-        {...props}
-        entity={entity}
-      />
+      <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );
 };

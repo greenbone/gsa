@@ -28,7 +28,6 @@ import {
 } from '../actions';
 
 describe('action tests', () => {
-
   test('should create an action to request dashboard data', () => {
     const id = 'a1';
 

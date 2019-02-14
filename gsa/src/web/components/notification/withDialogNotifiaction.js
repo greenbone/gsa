@@ -25,9 +25,7 @@ const withDialogNotification = Component => {
   const DialogNoticiationWrapper = props => {
     return (
       <DialogNotifaction>
-        {notificationProps => (
-          <Component {...props} {...notificationProps} />
-        )}
+        {notificationProps => <Component {...props} {...notificationProps} />}
       </DialogNotifaction>
     );
   };

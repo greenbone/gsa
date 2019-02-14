@@ -27,7 +27,6 @@ import ReportReport from './report/report';
 // FIXME the report xml structure is really ugly
 
 class Report extends Model {
-
   static entityType = 'report';
 
   parseProperties(elem) {

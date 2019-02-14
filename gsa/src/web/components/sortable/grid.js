@@ -48,7 +48,6 @@ const createNewRow = item => ({
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
 
 class Grid extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -118,12 +117,10 @@ class Grid extends React.Component {
     if (destrowId === 'empty') {
       // create new row with the removed item
       items = [...items, createNewRow(item)];
-    }
-    else if (destrowId === sourcerowId) {
+    } else if (destrowId === sourcerowId) {
       // add at position destindex
       sourceRowItems.splice(destIndex, 0, item);
-    }
-    else {
+    } else {
       // add to destination row
       const destrowItems = [...destRow.items];
       destrowItems.splice(destIndex, 0, item);
@@ -181,13 +178,14 @@ class Grid extends React.Component {
 
                 const {length: itemCount} = rowItems;
 
-                const isRowFull = isDefined(maxItemsPerRow) &&
-                  maxItemsPerRow <= itemCount;
+                const isRowFull =
+                  isDefined(maxItemsPerRow) && maxItemsPerRow <= itemCount;
                 const disabled = isRowFull && dragSourceRowId !== row.id;
 
-                const itemHeight = height - GRID_ITEM_MARGIN.top -
-                  GRID_ITEM_MARGIN.bottom;
-                const itemWidth = fullWidth / itemCount -
+                const itemHeight =
+                  height - GRID_ITEM_MARGIN.top - GRID_ITEM_MARGIN.bottom;
+                const itemWidth =
+                  fullWidth / itemCount -
                   (GRID_ITEM_MARGIN.left + GRID_ITEM_MARGIN.right);
 
                 const {id: rowId} = row;
@@ -213,15 +211,11 @@ class Grid extends React.Component {
                   </Row>
                 );
               })}
-              {showEmptyRow &&
-                <EmptyRow
-                  active={isDragging}
-                  height={emptyRowHeight}
-                />
-              }
+              {showEmptyRow && (
+                <EmptyRow active={isDragging} height={emptyRowHeight} />
+              )}
             </Layout>
           )}
-
         </AutoSize>
       </DragDropContext>
     );

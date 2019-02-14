@@ -49,13 +49,14 @@ const Header = ({
   currentSortDir,
   onSortChange,
 }) => {
-
   let selectSort = 'ssh_credential';
   const sortBy = filter ? filter.getSortBy() : undefined;
 
-  if (sortBy === 'smb_credential' ||
+  if (
+    sortBy === 'smb_credential' ||
     sortBy === 'esxi_credential' ||
-    sortBy === 'snmp_credential') {
+    sortBy === 'snmp_credential'
+  ) {
     selectSort = sortBy;
   }
   return (
@@ -102,25 +103,30 @@ const Header = ({
             <Sort by={sort ? selectSort : false} onClick={onSortChange}>
               {_('Credentials')}
             </Sort>
-            {sort !== false &&
+            {sort !== false && (
               <Select
-                items={[{
-                  value: 'ssh_credential',
-                  label: _('SSH'),
-                }, {
-                  value: 'smb_credential',
-                  label: _('SMB'),
-                }, {
-                  value: 'esxi_credential',
-                  label: _('ESXi'),
-                }, {
-                  value: 'snmp_credential',
-                  label: _('SNMP'),
-                }]}
+                items={[
+                  {
+                    value: 'ssh_credential',
+                    label: _('SSH'),
+                  },
+                  {
+                    value: 'smb_credential',
+                    label: _('SMB'),
+                  },
+                  {
+                    value: 'esxi_credential',
+                    label: _('ESXi'),
+                  },
+                  {
+                    value: 'snmp_credential',
+                    label: _('SNMP'),
+                  },
+                ]}
                 value={selectSort}
                 onChange={onSortChange}
               />
-            }
+            )}
           </Divider>
         </TableHead>
         {actionsColumn}

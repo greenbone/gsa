@@ -26,7 +26,6 @@ import PropTypes from '../../utils/proptypes.js';
 const log = Logger.getLogger('web.components.provider.subscription');
 
 class SubscriptionProvider extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -59,7 +58,7 @@ class SubscriptionProvider extends React.Component {
       const subscribers = this.getSubscribers(name); // eslint-disable-line no-shadow
       this.setSubscribers(name, subscribers.filter(item => item !== func));
     };
-  };
+  }
 
   handleNotify(name) {
     log.debug('Subscription notifier created', name);

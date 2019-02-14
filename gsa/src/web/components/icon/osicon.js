@@ -40,8 +40,7 @@ const OsIcon = ({
   osCpe,
   ...props
 }) => {
-  const os = isDefined(osCpe) ?
-    OperatingSystems.find(osCpe) : undefined;
+  const os = isDefined(osCpe) ? OperatingSystems.find(osCpe) : undefined;
 
   let title;
   let os_icon;
@@ -53,14 +52,12 @@ const OsIcon = ({
         best_os_txt: osTxt,
         best_os_cpe: osCpe,
       });
-    }
-    else {
+    } else {
       title = _('OS Conflict: {{best_os_txt}}', {
         best_os_txt: osTxt,
       });
     }
-  }
-  else if (isDefined(os)) {
+  } else if (isDefined(os)) {
     os_icon = os.icon;
     title = os.title;
     if (displayOsCpe) {
@@ -72,8 +69,7 @@ const OsIcon = ({
     os_icon = 'os_unknown.svg';
     if (osTxt) {
       title = osTxt;
-    }
-    else {
+    } else {
       title = _('No information about the Operation System');
     }
   }
@@ -81,14 +77,8 @@ const OsIcon = ({
   return (
     <Layout>
       <Divider title={title}>
-        <Img
-          {...props}
-          width="16px"
-          src={os_icon}
-        />
-        {displayOsName && isDefined(os) &&
-          <span>{os.title}</span>
-        }
+        <Img {...props} width="16px" src={os_icon} />
+        {displayOsName && isDefined(os) && <span>{os.title}</span>}
       </Divider>
     </Layout>
   );

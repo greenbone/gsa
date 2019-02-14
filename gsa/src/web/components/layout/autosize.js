@@ -40,10 +40,9 @@ const Container = styled.div`
  * This component uses the render props pattern.
  */
 class AutoSize extends React.Component {
-
   static propTypes = {
     children: PropTypes.func.isRequired,
-  }
+  };
 
   constructor(...args) {
     super(...args);
@@ -86,9 +85,7 @@ class AutoSize extends React.Component {
   componentDidUpdate() {
     const size = this.getSize();
 
-    if (size.width !== this.state.width ||
-      size.height !== this.state.height) {
-
+    if (size.width !== this.state.width || size.height !== this.state.height) {
       this.setState(size);
     }
   }
@@ -101,9 +98,7 @@ class AutoSize extends React.Component {
     // only call children if height and width are defined
     const shouldCallChildren = isDefined(height) && isDefined(width);
     return (
-      <Container
-        innerRef={this.containerRef}
-      >
+      <Container innerRef={this.containerRef}>
         {shouldCallChildren && children({width, height})}
       </Container>
     );

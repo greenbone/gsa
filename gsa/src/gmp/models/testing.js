@@ -46,7 +46,6 @@ const testNvtId = modelClass => {
 
 const testModelProperties = (modelClass, type) => {
   describe(`${type} Model tests`, () => {
-
     test('end_time is parsed correctly', () => {
       const elem = {
         end_time: '2018-10-10T11:41:23.022Z',
@@ -61,10 +60,7 @@ const testModelProperties = (modelClass, type) => {
     test('permissions are parsed correctly', () => {
       const elem = {
         permissions: {
-          permission: [
-            {name: 'everything'},
-            {name: 'may_foo'},
-          ],
+          permission: [{name: 'everything'}, {name: 'may_foo'}],
         },
       };
       const model = new modelClass(elem);
@@ -84,9 +80,7 @@ const testModelProperties = (modelClass, type) => {
     test('user_tags are parsed correctly', () => {
       const elem = {
         user_tags: {
-          tag: [
-            {name: 'foo'},
-          ],
+          tag: [{name: 'foo'}],
         },
       };
       const model = new modelClass(elem);
@@ -139,11 +133,9 @@ const testModelProperties = (modelClass, type) => {
       expect(model.in_use).toEqual(YES_VALUE);
       expect(model.writable).toEqual(NO_VALUE);
     });
-
   });
 
   describe(`${type} Model parse_properties function test`, () => {
-
     test('should parse creation_time as date', () => {
       const model = new modelClass({creation_time: '2018-10-10T08:48:46Z'});
 
@@ -181,51 +173,50 @@ const testModelProperties = (modelClass, type) => {
     test('should not allow to overwrite id', () => {
       const model = new modelClass({_id: 'foo'});
 
-      expect(() => model.id = 'bar').toThrow();
+      expect(() => (model.id = 'bar')).toThrow();
     });
   });
 
   describe(`${type} Model methods tests`, () => {
+    test('isInUse() should return correct true/false', () => {
+      const model1 = new modelClass({in_use: '1'});
+      const model2 = new modelClass({in_use: '0'});
 
-      test('isInUse() should return correct true/false', () => {
-        const model1 = new modelClass({in_use: '1'});
-        const model2 = new modelClass({in_use: '0'});
+      expect(model1.isInUse()).toBe(true);
+      expect(model2.isInUse()).toBe(false);
+    });
 
-        expect(model1.isInUse()).toBe(true);
-        expect(model2.isInUse()).toBe(false);
-      });
+    test('isInTrash() should return correct true/false', () => {
+      const model1 = new modelClass({trash: '1'});
+      const model2 = new modelClass({trash: '0'});
 
-      test('isInTrash() should return correct true/false', () => {
-        const model1 = new modelClass({trash: '1'});
-        const model2 = new modelClass({trash: '0'});
+      expect(model1.isInTrash()).toBe(true);
+      expect(model2.isInTrash()).toBe(false);
+    });
 
-        expect(model1.isInTrash()).toBe(true);
-        expect(model2.isInTrash()).toBe(false);
-      });
+    test('isWritable() should return correct true/false', () => {
+      const model1 = new modelClass({writable: '1'});
+      const model2 = new modelClass({writable: '0'});
 
-      test('isWritable() should return correct true/false', () => {
-        const model1 = new modelClass({writable: '1'});
-        const model2 = new modelClass({writable: '0'});
+      expect(model1.isWritable()).toBe(true);
+      expect(model2.isWritable()).toBe(false);
+    });
 
-        expect(model1.isWritable()).toBe(true);
-        expect(model2.isWritable()).toBe(false);
-      });
+    test('isOrphan() should return correct true/false', () => {
+      const model1 = new modelClass({orphan: '1'});
+      const model2 = new modelClass({orphan: '0'});
 
-      test('isOrphan() should return correct true/false', () => {
-        const model1 = new modelClass({orphan: '1'});
-        const model2 = new modelClass({orphan: '0'});
+      expect(model1.isOrphan()).toBe(true);
+      expect(model2.isOrphan()).toBe(false);
+    });
 
-        expect(model1.isOrphan()).toBe(true);
-        expect(model2.isOrphan()).toBe(false);
-      });
+    test('isActive() should return correct true/false', () => {
+      const model1 = new modelClass({active: '1'});
+      const model2 = new modelClass({active: '0'});
 
-      test('isActive() should return correct true/false', () => {
-        const model1 = new modelClass({active: '1'});
-        const model2 = new modelClass({active: '0'});
-
-        expect(model1.isActive()).toBe(true);
-        expect(model2.isActive()).toBe(false);
-      });
+      expect(model1.isActive()).toBe(true);
+      expect(model2.isActive()).toBe(false);
+    });
   });
 };
 

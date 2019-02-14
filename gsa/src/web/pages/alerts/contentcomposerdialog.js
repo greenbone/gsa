@@ -29,7 +29,9 @@ import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
-import ComposerContent, {COMPOSER_CONTENT_DEFAULTS} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len*/
+import ComposerContent, {
+  COMPOSER_CONTENT_DEFAULTS,
+} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len*/
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -55,9 +57,8 @@ const ContentComposerDialog = ({
   onSave,
   onChange,
 }) => {
-
-  filterId = filterId === NO_VALUE || !isDefined(filterId) ?
-    UNSET_VALUE : filterId;
+  filterId =
+    filterId === NO_VALUE || !isDefined(filterId) ? UNSET_VALUE : filterId;
 
   const controlledValues = {
     filterId,
@@ -75,10 +76,7 @@ const ContentComposerDialog = ({
       onClose={onClose}
       onSave={onSave}
     >
-      {({
-        values,
-        onValueChange,
-      }) => (
+      {({values, onValueChange}) => (
         <Layout flex="column">
           <FormGroup title={_('Report Result Filter')} titleSize="3">
             <Select
@@ -89,8 +87,10 @@ const ContentComposerDialog = ({
             />
           </FormGroup>
           <ComposerContent
-            filterFieldTitle={_('To change the filter, please select a filter' +
-              ' from the dropdown menu.')}
+            filterFieldTitle={_(
+              'To change the filter, please select a filter' +
+                ' from the dropdown menu.',
+            )}
             filterString={values.filterString}
             includeNotes={values.includeNotes}
             includeOverrides={values.includeOverrides}

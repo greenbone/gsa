@@ -69,9 +69,7 @@ const renderSectionTitle = (counts, title) => {
   });
 };
 
-
 class EntitiesPage extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -81,8 +79,9 @@ class EntitiesPage extends React.Component {
 
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
     this.handleFilterEditClick = this.handleFilterEditClick.bind(this);
-    this.handleFilterDialogCloseClick =
-      this.handleFilterDialogCloseClick.bind(this);
+    this.handleFilterDialogCloseClick = this.handleFilterDialogCloseClick.bind(
+      this,
+    );
   }
 
   componentDidMount() {
@@ -121,9 +120,7 @@ class EntitiesPage extends React.Component {
       dashboardControls,
     } = this.props;
 
-    let {
-      section: SectionComponent,
-    } = this.props;
+    let {section: SectionComponent} = this.props;
 
     if (SectionComponent === false) {
       return null;
@@ -133,8 +130,9 @@ class EntitiesPage extends React.Component {
       SectionComponent = Section;
     }
 
-    const extra = isDefined(dashboardControls) ? dashboardControls() :
-      undefined;
+    const extra = isDefined(dashboardControls)
+      ? dashboardControls()
+      : undefined;
     return (
       <SectionComponent
         title={this.getSectionTitle()}
@@ -142,17 +140,11 @@ class EntitiesPage extends React.Component {
         img={sectionIcon}
         extra={extra}
       >
-        <Layout
-          flex="column"
-          grow="1"
-        >
-          {isDefined(dashboard) &&
-            dashboard()
-          }
-          {loading && !isDefined(entities) ?
-            this.renderLoading() :
-            this.renderTable()
-          }
+        <Layout flex="column" grow="1">
+          {isDefined(dashboard) && dashboard()}
+          {loading && !isDefined(entities)
+            ? this.renderLoading()
+            : this.renderTable()}
         </Layout>
       </SectionComponent>
     );
@@ -160,9 +152,7 @@ class EntitiesPage extends React.Component {
 
   renderLoading() {
     const {loading} = this.props;
-    return (
-      <Loading loading={loading}/>
-    );
+    return <Loading loading={loading} />;
   }
 
   renderTable() {
@@ -208,15 +198,12 @@ class EntitiesPage extends React.Component {
 
     const PowerFilterComponent = powerfilter;
 
-    const handler = isDefined(filterEditDialog) ?
-      this.handleFilterEditClick : undefined;
+    const handler = isDefined(filterEditDialog)
+      ? this.handleFilterEditClick
+      : undefined;
 
     return (
-      <Layout
-        flex
-        align="end"
-        grow="1"
-      >
+      <Layout flex align="end" grow="1">
         <PowerFilterComponent
           filter={filter}
           filters={filters}
@@ -323,9 +310,7 @@ EntitiesPage.propTypes = {
 
 export const createEntitiesPage = (options = {}) => {
   const EntitiesPageWrapper = props => {
-    return (
-      <EntitiesPage {...options} {...props}/>
-    );
+    return <EntitiesPage {...options} {...props} />;
   };
   return EntitiesPageWrapper;
 };
@@ -350,7 +335,10 @@ const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
 
 export default compose(
   withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(EntitiesPage);
 
 // vim: set ts=2 sw=2 tw=80:

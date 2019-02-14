@@ -45,10 +45,7 @@ const VulnerabilitiesDashboard = props => (
     id={VULNS_DASHBOARD_ID}
     permittedDisplays={VULNS_DISPLAYS}
     defaultDisplays={[
-      [
-        VulnsCvssDisplay.displayId,
-        VulnsSeverityDisplay.displayId,
-      ],
+      [VulnsCvssDisplay.displayId, VulnsSeverityDisplay.displayId],
     ]}
   />
 );

@@ -38,7 +38,6 @@ const EntityCloneIcon = ({
   onClick,
   ...props
 }) => {
-
   if (!isDefined(name)) {
     name = getEntityType(entity);
   }
@@ -47,16 +46,17 @@ const EntityCloneIcon = ({
     displayName = typeName(name);
   }
 
-  const active = mayClone && capabilities.mayClone(name) &&
+  const active =
+    mayClone &&
+    capabilities.mayClone(name) &&
     entity.userCapabilities.mayClone(name);
   if (!isDefined(title)) {
     if (active) {
       title = _('Clone {{entity}}', {entity: displayName});
-    }
-    else if (!mayClone) { // eslint-disable-line no-negated-condition
+    } else if (!mayClone) {
+      // eslint-disable-line no-negated-condition
       title = _('{{entity}} may not be cloned', {entity: displayName});
-    }
-    else {
+    } else {
       title = _('Permission to clone {{entity}} denied', {entity: displayName});
     }
   }

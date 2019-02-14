@@ -45,22 +45,20 @@ const EntityEditIcon = ({
     displayName = typeName(name);
   }
 
-  const mayEdit = capabilities.mayEdit(name) &&
-    entity.userCapabilities.mayEdit(name);
+  const mayEdit =
+    capabilities.mayEdit(name) && entity.userCapabilities.mayEdit(name);
 
   const active = mayEdit && entity.isWritable();
 
   if (!isDefined(title)) {
     if (active) {
       title = _('Edit {{entity}}', {entity: displayName});
-    }
-    else if (!entity.isWritable()) {
+    } else if (!entity.isWritable()) {
       title = _('{{entity}} is not writable', {entity: displayName});
-    }
-    else if (!mayEdit) {  // eslint-disable-line no-negated-condition
+    } else if (!mayEdit) {
+      // eslint-disable-line no-negated-condition
       title = _('Permission to edit {{entity}} denied', {entity: displayName});
-    }
-    else {
+    } else {
       title = _('Cannot modify {{entity}}', {entity: displayName});
     }
   }

@@ -50,7 +50,6 @@ const getRows = (filter, counts) => {
 };
 
 class ReportEntitiesContainer extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -92,9 +91,7 @@ class ReportEntitiesContainer extends React.Component {
   }
 
   handleLast() {
-    const {
-      counts,
-    } = this.props;
+    const {counts} = this.props;
 
     const {filtered} = counts;
     const rows = this.getRows();
@@ -109,9 +106,7 @@ class ReportEntitiesContainer extends React.Component {
   }
 
   handleNext() {
-    const {
-      page,
-    } = this.state;
+    const {page} = this.state;
 
     this.handleInteraction();
 
@@ -121,9 +116,7 @@ class ReportEntitiesContainer extends React.Component {
   }
 
   handlePrevious() {
-    const {
-      page,
-    } = this.state;
+    const {page} = this.state;
 
     this.handleInteraction();
 
@@ -148,9 +141,7 @@ class ReportEntitiesContainer extends React.Component {
       sortReverse,
       sortField,
     } = this.props;
-    const {
-      page,
-    } = this.state;
+    const {page} = this.state;
 
     if (!isDefined(children) || !isDefined(entities)) {
       return null;
@@ -166,7 +157,9 @@ class ReportEntitiesContainer extends React.Component {
     const rows = this.getRows();
     const entitiesIndex = page * rows;
     const pagedEntities = sortedEntities.slice(
-      entitiesIndex, entitiesIndex + rows);
+      entitiesIndex,
+      entitiesIndex + rows,
+    );
     const pagedCounts = counts.clone({
       first: entitiesIndex + 1,
       length: pagedEntities.length,

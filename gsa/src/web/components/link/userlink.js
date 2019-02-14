@@ -36,19 +36,20 @@ const StyledLink = styled(Link)`
   color: ${Theme.darkGray};
   cursor: pointer;
   font-weight: bold;
-  &:link, &:hover, &:active, &:visited {
+  &:link,
+  &:hover,
+  &:active,
+  &:visited {
     color: ${Theme.darkGray};
-  };
+  }
 `;
 
-const UserLink = ({
-  sessionTimeout,
-  username,
-}) => (
+const UserLink = ({sessionTimeout, username}) => (
   <StyledLink
     to="usersettings"
-    title={_('Your session will end at {{date}}',
-      {date: longDate(sessionTimeout)})}
+    title={_('Your session will end at {{date}}', {
+      date: longDate(sessionTimeout),
+    })}
   >
     {username}
   </StyledLink>

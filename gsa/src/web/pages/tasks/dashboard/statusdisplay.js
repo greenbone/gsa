@@ -26,10 +26,7 @@ import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import {TASK_STATUS} from 'gmp/models/task';
 
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {
-  totalCount,
-  percent,
-} from 'web/components/dashboard/display/utils';
+import {totalCount, percent} from 'web/components/dashboard/display/utils';
 
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTable from 'web/components/dashboard/display/datatable';
@@ -107,10 +104,7 @@ export const TasksStatusTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   loaderComponent: TaskStatusLoader,
   dataTransform: transformStatusData,
-  dataTitles: [
-    _l('Status'),
-    _l('# of Tasks'),
-  ],
+  dataTitles: [_l('Status'), _l('# of Tasks')],
   dataRow: row => [row.label, row.value],
   title: ({data: tdata}) =>
     _('Tasks by Status (Total: {{count}})', {count: tdata.total}),

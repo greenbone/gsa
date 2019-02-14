@@ -24,7 +24,6 @@ import {isString} from 'gmp/utils/identity';
 import Languages, {getLanguageCodes} from '../languages';
 
 describe('Language tests', () => {
-
   test('should contain list of languagegs', () => {
     expect(Object.keys(Languages).length).toEqual(11);
 
@@ -39,11 +38,9 @@ describe('Language tests', () => {
 
     expect(called).toEqual(true);
   });
-
 });
 
 describe('getLanguageCodes test', () => {
-
   test('should return list of language codes', () => {
     const codes = getLanguageCodes();
 
@@ -58,7 +55,6 @@ describe('getLanguageCodes test', () => {
 
     expect(called).toEqual(true);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

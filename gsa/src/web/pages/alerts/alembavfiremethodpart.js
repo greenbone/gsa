@@ -63,12 +63,10 @@ const AlembaVfireMethodPart = ({
   onReportFormatsChange,
 }) => {
   credentials = credentials.filter(
-    cred => cred.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
+    cred => cred.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  );
   return (
-    <Layout
-      flex="column"
-      grow="1"
-    >
+    <Layout flex="column" grow="1">
       <FormGroup title={_('Report Formats')}>
         <MultiSelect
           name={'report_format_ids'}
@@ -193,7 +191,6 @@ const AlembaVfireMethodPart = ({
           onChange={onChange}
         />
       </FormGroup>
-
     </Layout>
   );
 };

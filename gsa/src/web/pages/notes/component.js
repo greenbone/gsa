@@ -45,7 +45,6 @@ import EntityComponent from 'web/entity/component';
 import NoteDialog from './dialog';
 
 class NoteComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -62,8 +61,7 @@ class NoteComponent extends React.Component {
       if (note.isActive()) {
         if (isDefined(note.endTime)) {
           active = ACTIVE_YES_ALWAYS_VALUE;
-        }
-        else {
+        } else {
           active = ACTIVE_YES_UNTIL_VALUE;
         }
       }
@@ -89,8 +87,7 @@ class NoteComponent extends React.Component {
         text: note.text,
         title: _('Edit Note {{name}}', {name: shorten(note.text, 20)}),
       });
-    }
-    else {
+    } else {
       this.setState({
         dialogVisible: true,
         active: undefined,
@@ -199,17 +196,14 @@ class NoteComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
               create: this.openCreateNoteDialog,
               edit: this.openNoteDialog,
             })}
-            {dialogVisible &&
+            {dialogVisible && (
               <NoteDialog
                 active={active}
                 hosts={hosts}
@@ -234,7 +228,7 @@ class NoteComponent extends React.Component {
                 }}
                 {...initial}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>

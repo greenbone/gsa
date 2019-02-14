@@ -55,11 +55,7 @@ export const NvtsCreatedTableDisplay = createDisplay({
   loaderComponent: NvtCreatedLoader,
   displayComponent: DataTableDisplay,
   title: () => _('NVTs by Creation Time'),
-  dataTitles: [
-    _l('Creation Time'),
-    _l('# of NVTs'),
-    _l('Total NVTs'),
-  ],
+  dataTitles: [_l('Creation Time'), _l('# of NVTs'), _l('Total NVTs')],
   dataRow: row => [row.label, row.y, row.y2],
   dataTransform: transformCreated,
   displayId: 'nvt-by-created-table',
@@ -67,16 +63,12 @@ export const NvtsCreatedTableDisplay = createDisplay({
   filtersFilter: NVTS_FILTER_FILTER,
 });
 
-registerDisplay(NvtsCreatedDisplay.displayId,
-  NvtsCreatedDisplay, {
-    title: _l('Chart: NVTs by Creation Time'),
-  },
-);
+registerDisplay(NvtsCreatedDisplay.displayId, NvtsCreatedDisplay, {
+  title: _l('Chart: NVTs by Creation Time'),
+});
 
-registerDisplay(NvtsCreatedTableDisplay.displayId,
-  NvtsCreatedTableDisplay, {
-    title: _l('Table: NVTs by Creation Time'),
-  },
-);
+registerDisplay(NvtsCreatedTableDisplay.displayId, NvtsCreatedTableDisplay, {
+  title: _l('Table: NVTs by Creation Time'),
+});
 
 // vim: set ts=2 sw=2 tw=80:

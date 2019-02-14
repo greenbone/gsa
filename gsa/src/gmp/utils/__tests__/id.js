@@ -16,14 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {
-  includesId,
-  selectSaveId,
-  hasId,
-} from '../id';
+import {includesId, selectSaveId, hasId} from '../id';
 
 describe('includesId function tests', () => {
-
   test('should return true for found id', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
@@ -46,7 +41,6 @@ describe('includesId function tests', () => {
 });
 
 describe('selectSaveId function tests', () => {
-
   test('should return id if id is in list', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
@@ -82,11 +76,9 @@ describe('selectSaveId function tests', () => {
   test('should return empty_default for undefined list', () => {
     expect(selectSaveId(undefined, undefined, 'foo')).toEqual('foo');
   });
-
 });
 
 describe('hasId tests', () => {
-
   test('should return false if model is undefined', () => {
     expect(hasId(undefined)).toBe(false);
   });
@@ -118,4 +110,3 @@ describe('hasId tests', () => {
 });
 
 // vim: set ts=2 sw=2 tw=80:
-

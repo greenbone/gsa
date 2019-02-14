@@ -49,10 +49,11 @@ import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
 class Nvt extends React.Component {
-
   shouldComponentUpdate(nextProps) {
-    return this.props.selected !== nextProps.selected ||
-      this.props.nvt !== nextProps.nvt;
+    return (
+      this.props.selected !== nextProps.selected ||
+      this.props.nvt !== nextProps.nvt
+    );
   }
 
   render() {
@@ -69,38 +70,19 @@ class Nvt extends React.Component {
       pref_count = '';
     }
 
-    const {
-      name,
-      oid,
-      severity,
-      timeout,
-      default_timeout,
-    } = nvt;
+    const {name, oid, severity, timeout, default_timeout} = nvt;
     return (
       <TableRow>
+        <TableData>{name}</TableData>
+        <TableData>{oid}</TableData>
         <TableData>
-          {name}
+          <SeverityBar severity={severity} />
         </TableData>
         <TableData>
-          {oid}
+          {isEmpty(timeout) ? _('default') : timeout}
+          {isEmpty(default_timeout) ? '' : ' (' + default_timeout + ')'}
         </TableData>
-        <TableData>
-          <SeverityBar
-            severity={severity}
-          />
-        </TableData>
-        <TableData>
-          {isEmpty(timeout) ?
-              _('default') :
-              timeout
-          }
-          {isEmpty(default_timeout) ?
-            '' : ' (' + default_timeout + ')'
-          }
-        </TableData>
-        <TableData>
-          {pref_count}
-        </TableData>
+        <TableData>{pref_count}</TableData>
         <TableData align="center">
           {/* wrap in span to allow centering */}
           <div>
@@ -134,7 +116,6 @@ Nvt.propTypes = {
 };
 
 class EditDialogComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -178,30 +159,18 @@ class EditDialogComponent extends React.Component {
         defaultValues={{selected}}
         values={data}
       >
-        {({
-          values: state,
-          onValueChange,
-        }) => {
-
+        {({values: state, onValueChange}) => {
           return (
             <Layout flex="column">
               <SimpleTable>
                 <TableBody>
                   <TableRow>
-                    <TableData>
-                      {_('Config')}
-                    </TableData>
-                    <TableData>
-                      {config_name}
-                    </TableData>
+                    <TableData>{_('Config')}</TableData>
+                    <TableData>{config_name}</TableData>
                   </TableRow>
                   <TableRow>
-                    <TableData>
-                      {_('Family')}
-                    </TableData>
-                    <TableData>
-                      {family_name}
-                    </TableData>
+                    <TableData>{_('Family')}</TableData>
+                    <TableData>{family_name}</TableData>
                   </TableRow>
                 </TableBody>
               </SimpleTable>
@@ -210,45 +179,29 @@ class EditDialogComponent extends React.Component {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>
-                        {_('Name')}
-                      </TableHead>
-                      <TableHead>
-                        {_('OID')}
-                      </TableHead>
-                      <TableHead>
-                        {_('Severity')}
-                      </TableHead>
-                      <TableHead>
-                        {_('Timeout')}
-                      </TableHead>
-                      <TableHead>
-                        {_('Prefs')}
-                      </TableHead>
-                      <TableHead align="center">
-                        {_('Selected')}
-                      </TableHead>
-                      <TableHead align="center">
-                        {_('Actions')}
-                      </TableHead>
+                      <TableHead>{_('Name')}</TableHead>
+                      <TableHead>{_('OID')}</TableHead>
+                      <TableHead>{_('Severity')}</TableHead>
+                      <TableHead>{_('Timeout')}</TableHead>
+                      <TableHead>{_('Prefs')}</TableHead>
+                      <TableHead align="center">{_('Selected')}</TableHead>
+                      <TableHead align="center">{_('Actions')}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {
-                      map(nvts, nvt => {
-                        const {oid} = nvt;
-                        return (
-                          <Nvt
-                            key={oid}
-                            nvt={nvt}
-                            config={config}
-                            selected={selected[oid]}
-                            onSelectedChange={this.handleSelectedChange}
-                            onEditNvtDetailsClick={onEditNvtDetailsClick}
-                          />
-                        );
-                      })
-                    }
+                    {map(nvts, nvt => {
+                      const {oid} = nvt;
+                      return (
+                        <Nvt
+                          key={oid}
+                          nvt={nvt}
+                          config={config}
+                          selected={selected[oid]}
+                          onSelectedChange={this.handleSelectedChange}
+                          onEditNvtDetailsClick={onEditNvtDetailsClick}
+                        />
+                      );
+                    })}
                   </TableBody>
                 </Table>
               </Section>

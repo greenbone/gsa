@@ -25,10 +25,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
-import {
-  permissionDescription,
-  renderSelectItems,
-} from 'web/utils/render';
+import {permissionDescription, renderSelectItems} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -143,18 +140,19 @@ const PermissionDialog = ({
   onClose,
   onSave,
 }) => {
-
-  const permItems = [{
-    value: 'Super',
-    label: _('Super (Has super access)'),
-  }];
+  const permItems = [
+    {
+      value: 'Super',
+      label: _('Super (Has super access)'),
+    },
+  ];
 
   for (const cap of capabilities) {
     permItems.push({
       label: `${cap} ${permissionDescription(cap)}`,
       value: cap,
     });
-  };
+  }
 
   const data = {
     comment,
@@ -178,44 +176,40 @@ const PermissionDialog = ({
       onSave={onSave}
       defaultValues={data}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
+      {({values: state, onValueChange}) => {
         const showResourceId = NEED_RESOURCE_ID.includes(state.name);
 
-        const resource = isDefined(state.resourceType) ? new Model({
-          name: state.resourceName,
-        }, state.resourceType) : undefined;
+        const resource = isDefined(state.resourceType)
+          ? new Model(
+              {
+                name: state.resourceName,
+              },
+              state.resourceType,
+            )
+          : undefined;
 
         let subject;
         if (state.subjectType === 'user') {
           subject = users.find(user => user.id === state.userId);
-        }
-        else if (state.subjectType === 'role') {
+        } else if (state.subjectType === 'role') {
           subject = roles.find(role => role.id === state.roleId);
-        }
-        else {
+        } else {
           subject = groups.find(group => group.id === state.groupId);
         }
 
         let resourceIdTitle;
         if (state.resourceType === 'user') {
           resourceIdTitle = _('User ID');
-        }
-        else if (state.resourceType === 'role') {
+        } else if (state.resourceType === 'role') {
           resourceIdTitle = _('Role ID');
-        }
-        else if (state.resourceType === 'group') {
+        } else if (state.resourceType === 'group') {
           resourceIdTitle = _('Group ID');
-        }
-        else {
+        } else {
           resourceIdTitle = _('Resource ID');
         }
 
         return (
           <Layout flex="column">
-
             <FormGroup title={_('Name')}>
               <Select
                 name="name"
@@ -237,12 +231,9 @@ const PermissionDialog = ({
               />
             </FormGroup>
 
-            <FormGroup
-              title={_('Subject')}
-              flex="column"
-            >
+            <FormGroup title={_('Subject')} flex="column">
               <Divider flex="column">
-                {capabilities.mayAccess('users') &&
+                {capabilities.mayAccess('users') && (
                   <Divider>
                     <Radio
                       name="subjectType"
@@ -250,8 +241,7 @@ const PermissionDialog = ({
                       title={_('User')}
                       value="user"
                       onChange={onValueChange}
-                    >
-                    </Radio>
+                    />
                     <Select
                       name="userId"
                       items={renderSelectItems(users)}
@@ -259,8 +249,8 @@ const PermissionDialog = ({
                       onChange={onValueChange}
                     />
                   </Divider>
-                }
-                {capabilities.mayAccess('roles') &&
+                )}
+                {capabilities.mayAccess('roles') && (
                   <Divider>
                     <Radio
                       name="subjectType"
@@ -268,8 +258,7 @@ const PermissionDialog = ({
                       title={_('Role')}
                       value="role"
                       onChange={onValueChange}
-                    >
-                    </Radio>
+                    />
                     <Select
                       name="roleId"
                       items={renderSelectItems(roles)}
@@ -277,8 +266,8 @@ const PermissionDialog = ({
                       onChange={onValueChange}
                     />
                   </Divider>
-                }
-                {capabilities.mayAccess('groups') &&
+                )}
+                {capabilities.mayAccess('groups') && (
                   <Divider>
                     <Radio
                       name="subjectType"
@@ -286,8 +275,7 @@ const PermissionDialog = ({
                       title={_('Group')}
                       value="group"
                       onChange={onValueChange}
-                    >
-                    </Radio>
+                    />
                     <Select
                       name="groupId"
                       items={renderSelectItems(groups)}
@@ -295,34 +283,38 @@ const PermissionDialog = ({
                       onChange={onValueChange}
                     />
                   </Divider>
-                }
+                )}
               </Divider>
             </FormGroup>
 
-            {state.name === 'Super' &&
+            {state.name === 'Super' && (
               <FormGroup title={_('Resource Type')}>
                 <Select
-                  items={[{
-                    value: '',
-                    label: '--',
-                  }, {
-                    value: 'user',
-                    label: _('User'),
-                  }, {
-                    value: 'role',
-                    label: _('Role'),
-                  }, {
-                    value: 'group',
-                    label: _('Group'),
-                  }]}
+                  items={[
+                    {
+                      value: '',
+                      label: '--',
+                    },
+                    {
+                      value: 'user',
+                      label: _('User'),
+                    },
+                    {
+                      value: 'role',
+                      label: _('Role'),
+                    },
+                    {
+                      value: 'group',
+                      label: _('Group'),
+                    },
+                  ]}
                   name="resourceType"
                   value={state.resourceType}
                   onChange={onValueChange}
-                >
-                </Select>
+                />
               </FormGroup>
-            }
-            {showResourceId &&
+            )}
+            {showResourceId && (
               <FormGroup title={resourceIdTitle}>
                 <TextField
                   name="resourceId"
@@ -333,11 +325,10 @@ const PermissionDialog = ({
                   onChange={onValueChange}
                 />
               </FormGroup>
-            }
+            )}
             <FormGroup title={_('Description')}>
               {permissionDescription(state.name, resource, subject)}
             </FormGroup>
-
           </Layout>
         );
       }}
@@ -359,9 +350,7 @@ PermissionDialog.propTypes = {
   resourceType: PropTypes.string,
   roleId: PropTypes.id,
   roles: PropTypes.array,
-  subjectType: PropTypes.oneOf([
-    'user', 'role', 'group',
-  ]),
+  subjectType: PropTypes.oneOf(['user', 'role', 'group']),
   title: PropTypes.string,
   userId: PropTypes.id,
   users: PropTypes.array,

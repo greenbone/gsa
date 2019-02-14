@@ -45,22 +45,21 @@ import {VulnsHostsLoader} from './loaders';
 const format = d3format('0.1f');
 
 const calculateBins = (minHosts, maxHosts, totalVulns) => {
-
   if (totalVulns === 0) {
     return [];
   }
 
   // calculate number of bins dependent on number of all vulns
   let binQuantity = Math.ceil(Math.log2(totalVulns)) + 1;
-  const binWidth = minHosts === maxHosts ? 1 :
-    Math.ceil((maxHosts - minHosts) / binQuantity);
+  const binWidth =
+    minHosts === maxHosts ? 1 : Math.ceil((maxHosts - minHosts) / binQuantity);
   binQuantity = Math.floor((maxHosts - minHosts) / binWidth) + 1;
 
   // set borders and color of bins
   const bins = [];
   for (let binIndex = 0; binIndex < binQuantity; binIndex++) {
-    const min = minHosts + (binIndex * binWidth);
-    const max = minHosts + ((binIndex + 1) * binWidth) - 1;
+    const min = minHosts + binIndex * binWidth;
+    const max = minHosts + (binIndex + 1) * binWidth - 1;
 
     const perc = binIndex / binQuantity;
     const color = vulnsByHostsColorScale(perc);
@@ -79,49 +78,50 @@ const transformHostsData = (data = {}) => {
   const {groups = []} = data;
 
   // get highest cumulative count of vulns to use as total
-  const totalVulns = groups.length > 0 ?
-    Math.max(...groups.map(val => val.c_count)) : 0;
+  const totalVulns =
+    groups.length > 0 ? Math.max(...groups.map(val => val.c_count)) : 0;
 
   // get lowest and highest count of hosts to specify range
-  const minHosts = groups.length > 0 ?
-    Math.min(...groups.map(val => val.value)) : 0;
-  const maxHosts = groups.length > 0 ?
-    Math.max(...groups.map(val => val.value)) : 0;
+  const minHosts =
+    groups.length > 0 ? Math.min(...groups.map(val => val.value)) : 0;
+  const maxHosts =
+    groups.length > 0 ? Math.max(...groups.map(val => val.value)) : 0;
 
   const bins = calculateBins(minHosts, maxHosts, totalVulns);
 
-  const tdata = bins
-    .map(bin => {
-      const {min, max, color, binWidth} = bin;
-      const binWithAllMembers = groups.filter(group =>
-        group.value >= min && group.value <= max);
-      const sumOfBinMembers = binWithAllMembers.reduce((prev, current) =>
-        prev + parseFloat(current.count), 0);
-      const yValue = sumOfBinMembers;
-      const perc = percent(yValue, totalVulns);
+  const tdata = bins.map(bin => {
+    const {min, max, color, binWidth} = bin;
+    const binWithAllMembers = groups.filter(
+      group => group.value >= min && group.value <= max,
+    );
+    const sumOfBinMembers = binWithAllMembers.reduce(
+      (prev, current) => prev + parseFloat(current.count),
+      0,
+    );
+    const yValue = sumOfBinMembers;
+    const perc = percent(yValue, totalVulns);
 
-      const filterValue = {
-        start: min,
-        end: max,
-      };
+    const filterValue = {
+      start: min,
+      end: max,
+    };
 
-      return {
-        x: binWidth > 1 ? `${min}-${max}` : min,
-        y: yValue,
-        label: 'label',
-        toolTip: `${min} - ${max}: ${yValue} (${format(perc)}%)`,
-        color: color,
-        id: max,
-        filterValue,
-      };
-    });
+    return {
+      x: binWidth > 1 ? `${min}-${max}` : min,
+      y: yValue,
+      label: 'label',
+      toolTip: `${min} - ${max}: ${yValue} (${format(perc)}%)`,
+      color: color,
+      id: max,
+      filterValue,
+    };
+  });
 
   tdata.total = totalVulns;
   return tdata;
 };
 
 export class VulnsHostsDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -144,21 +144,22 @@ export class VulnsHostsDisplay extends React.Component {
       const startTerm = FilterTerm.fromString(`hosts>${start - 1}`);
       const endTerm = FilterTerm.fromString(`hosts<${end + 1}`);
 
-      if (isDefined(filter) && filter.hasTerm(startTerm) &&
-        filter.hasTerm(endTerm)) {
+      if (
+        isDefined(filter) &&
+        filter.hasTerm(startTerm) &&
+        filter.hasTerm(endTerm)
+      ) {
         return;
       }
       hostFilter = Filter.fromTerm(startTerm).and(Filter.fromTerm(endTerm));
-    }
-    else {
+    } else {
       let hostTerm;
 
       if (isDefined(start)) {
         if (start === 0) {
           hostTerm = FilterTerm.fromString(`hosts=${start}`);
         }
-      }
-      else {
+      } else {
         hostTerm = FilterTerm.fromString(`hosts=""`);
       }
 
@@ -169,23 +170,18 @@ export class VulnsHostsDisplay extends React.Component {
       hostFilter = Filter.fromTerm(hostTerm);
     }
 
-    const newFilter = isDefined(filter) ? filter.copy().and(hostFilter) :
-      hostFilter;
+    const newFilter = isDefined(filter)
+      ? filter.copy().and(hostFilter)
+      : hostFilter;
 
     onFilterChanged(newFilter);
   }
 
   render() {
-    const {
-      filter,
-      onFilterChanged,
-      ...props
-    } = this.props;
+    const {filter, onFilterChanged, ...props} = this.props;
 
     return (
-      <VulnsHostsLoader
-        filter={filter}
-      >
+      <VulnsHostsLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
@@ -193,8 +189,10 @@ export class VulnsHostsDisplay extends React.Component {
             filter={filter}
             dataTransform={transformHostsData}
             title={({data: tdata}) =>
-              _('Vulnerabilities by Hosts (Total: {{count}})',
-                {count: tdata.total})}
+              _('Vulnerabilities by Hosts (Total: {{count}})', {
+                count: tdata.total,
+              })
+            }
             showToggleLegend={false}
           >
             {({width, height, data: tdata, svgRef}) => (
@@ -206,8 +204,9 @@ export class VulnsHostsDisplay extends React.Component {
                 width={width}
                 xLabel={_('# of Hosts')}
                 yLabel={_('# of Vulnerabilities')}
-                onDataClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
+                onDataClick={
+                  isDefined(onFilterChanged) ? this.handleDataClick : undefined
+                }
               />
             )}
           </DataDisplay>
@@ -232,13 +231,10 @@ export const VulnsHostsTableDisplay = createDisplay({
   loaderComponent: VulnsHostsLoader,
   displayComponent: DataTableDisplay,
   dataTransform: transformHostsData,
-  dataTitles: [
-    _l('# of Hosts'),
-    _l('# of Vulnerabilities'),
-  ],
+  dataTitles: [_l('# of Hosts'), _l('# of Vulnerabilities')],
   dataRow: row => [row.x, row.y],
-  title: ({data: tdata}) => _('Vulnerabilities by Hosts (Total: {{count}})',
-    {count: tdata.total}),
+  title: ({data: tdata}) =>
+    _('Vulnerabilities by Hosts (Total: {{count}})', {count: tdata.total}),
   displayId: 'vuln-by-hosts-table',
   displayName: 'VulnsHostsTableDisplay',
   filtersFilter: VULNS_FILTER_FILTER,

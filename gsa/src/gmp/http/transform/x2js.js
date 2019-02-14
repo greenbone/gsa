@@ -41,18 +41,22 @@ const transform_xml_data = response => {
 const success = (response, options) => {
   try {
     return transform_xml_data(response);
-  }
-  catch (error) {
-    throw new Rejection(response.xhr, Rejection.REASON_ERROR,
-      _('An error occurred while converting gmp response to js for ' +
-        'url {{- url}}', {url: options.url}),
-      error);
+  } catch (error) {
+    throw new Rejection(
+      response.xhr,
+      Rejection.REASON_ERROR,
+      _(
+        'An error occurred while converting gmp response to js for ' +
+          'url {{- url}}',
+        {url: options.url},
+      ),
+      error,
+    );
   }
 };
 
 const rejection = (rej, options) => {
   if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
-
     const {envelope} = xml2json(rej.xhr.responseXML);
 
     if (isDefined(envelope)) {

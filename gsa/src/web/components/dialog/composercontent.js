@@ -53,8 +53,9 @@ const FilterField = styled.div`
 `;
 
 const ComposerContent = ({
-  filterFieldTitle = _('To change the filter, please filter your results on ' +
-    'the report page.'),
+  filterFieldTitle = _(
+    'To change the filter, please filter your results on ' + 'the report page.',
+  ),
   filterString,
   includeNotes,
   includeOverrides,
@@ -62,11 +63,7 @@ const ComposerContent = ({
 }) => (
   <Layout flex="column">
     <FormGroup title={_('Filter')} titleSize="3">
-      <FilterField
-        title={filterFieldTitle}
-      >
-        {filterString}
-      </FilterField>
+      <FilterField title={filterFieldTitle}>{filterString}</FilterField>
     </FormGroup>
     <FormGroup title={_('Include')} titleSize="3">
       <Divider>
@@ -91,7 +88,6 @@ const ComposerContent = ({
     </FormGroup>
   </Layout>
 );
-
 
 ComposerContent.propTypes = {
   filterFieldTitle: PropTypes.string,

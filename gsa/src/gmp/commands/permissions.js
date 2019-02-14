@@ -30,7 +30,6 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.permissions');
 
 class PermissionCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'permission', Permission);
   }
@@ -94,7 +93,6 @@ class PermissionCommand extends EntityCommand {
 }
 
 class PermissionsCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'permission', Permission);
   }

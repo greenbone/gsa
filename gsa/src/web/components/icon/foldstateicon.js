@@ -27,29 +27,17 @@ import {FoldState} from 'web/components/folding/folding';
 import UnfoldIcon from './unfoldicon';
 import FoldIcon from './foldicon';
 
-const FoldStateIcon = ({
-  foldState,
-  ...props
-}) => {
-  const folded = foldState === FoldState.FOLDED ||
-      foldState === FoldState.FOLDING ||
-      foldState === FoldState.FOLDING_START;
+const FoldStateIcon = ({foldState, ...props}) => {
+  const folded =
+    foldState === FoldState.FOLDED ||
+    foldState === FoldState.FOLDING ||
+    foldState === FoldState.FOLDING_START;
 
   if (folded) {
-    return (
-      <FoldIcon
-        title={_('Fold')}
-        {...props}
-      />
-    );
+    return <FoldIcon title={_('Fold')} {...props} />;
   }
 
-  return (
-    <UnfoldIcon
-      title={_('Unfold')}
-      {...props}
-    />
-  );
+  return <UnfoldIcon title={_('Unfold')} {...props} />;
 };
 
 FoldStateIcon.propTypes = {

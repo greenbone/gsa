@@ -45,22 +45,16 @@ import {
 import AlertComponent from './component.js';
 import AlertTable, {SORT_FIELDS} from './table.js';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onAlertCreateClick,
-}) => (
+const ToolBarIcons = withCapabilities(({capabilities, onAlertCreateClick}) => (
   <IconDivider>
     <ManualIcon
       page="vulnerabilitymanagement"
       anchor="alerts"
       title={_('Help: Alerts')}
     />
-    {capabilities.mayCreate('alert') &&
-      <NewIcon
-        title={_('New Alert')}
-        onClick={onAlertCreateClick}
-      />
-    }
+    {capabilities.mayCreate('alert') && (
+      <NewIcon title={_('New Alert')} onClick={onAlertCreateClick} />
+    )}
   </IconDivider>
 ));
 
@@ -93,37 +87,30 @@ const AlertsPage = ({
     onInteraction={onInteraction}
     onTestSuccess={showSuccess}
     onTestError={showError}
-  >{({
-    clone,
-    create,
-    delete: delete_func,
-    download,
-    edit,
-    save,
-    test,
-  }) => (
-    <EntitiesPage
-      {...props}
-      filterEditDialog={AlertFilterDialog}
-      filtersFilter={ALERTS_FILTER_FILTER}
-      sectionIcon={<AlertIcon size="large"/>}
-      table={AlertTable}
-      title={_('Alerts')}
-      toolBarIcons={ToolBarIcons}
-      onAlertCloneClick={clone}
-      onAlertCreateClick={create}
-      onAlertDeleteClick={delete_func}
-      onAlertDownloadClick={download}
-      onAlertEditClick={edit}
-      onAlertTestClick={test}
-      onAlertSaveClick={save}
-      onError={onError}
-      onInteraction={onInteraction}
-      onPermissionChanged={onChanged}
-      onPermissionDownloaded={onDownloaded}
-      onPermissionDownloadError={onError}
-    />
-  )}
+  >
+    {({clone, create, delete: delete_func, download, edit, save, test}) => (
+      <EntitiesPage
+        {...props}
+        filterEditDialog={AlertFilterDialog}
+        filtersFilter={ALERTS_FILTER_FILTER}
+        sectionIcon={<AlertIcon size="large" />}
+        table={AlertTable}
+        title={_('Alerts')}
+        toolBarIcons={ToolBarIcons}
+        onAlertCloneClick={clone}
+        onAlertCreateClick={create}
+        onAlertDeleteClick={delete_func}
+        onAlertDownloadClick={download}
+        onAlertEditClick={edit}
+        onAlertTestClick={test}
+        onAlertSaveClick={save}
+        onError={onError}
+        onInteraction={onInteraction}
+        onPermissionChanged={onChanged}
+        onPermissionDownloaded={onDownloaded}
+        onPermissionDownloadError={onError}
+      />
+    )}
   </AlertComponent>
 );
 

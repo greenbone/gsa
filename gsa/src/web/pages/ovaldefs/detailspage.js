@@ -58,19 +58,13 @@ import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/ovaldefs';
+import {selector, loadEntity} from 'web/store/entities/ovaldefs';
 
 import PropTypes from 'web/utils/proptypes';
 
 import OvaldefDetails from './details';
 
-const ToolBarIcons = ({
-  entity,
-  onOvaldefDownloadClick,
-}) => (
+const ToolBarIcons = ({entity, onOvaldefDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
@@ -78,10 +72,7 @@ const ToolBarIcons = ({
         anchor="oval"
         title={_('Help: OVAL Definitions')}
       />
-      <ListIcon
-        title={_('OVAL Definitions List')}
-        page="ovaldefs"
-      />
+      <ListIcon title={_('OVAL Definitions List')} page="ovaldefs" />
     </IconDivider>
     <ExportIcon
       value={entity}
@@ -108,23 +99,15 @@ const Criteria = ({criteria}) => {
   return (
     <li>
       <Divider>
-        {isDefined(operator) &&
-          <b>{operator}</b>
-        }
-        {negate &&
-          <b>NOT</b>
-        }
-        {isDefined(comment) &&
-          <span>({comment})</span>
-        }
+        {isDefined(operator) && <b>{operator}</b>}
+        {negate && <b>NOT</b>}
+        {isDefined(comment) && <span>({comment})</span>}
       </Divider>
       <ul>
         {criterions.map((criterion, i) => (
           <li key={i}>
             <Divider>
-              {criterion.negate &&
-                <b>NOT</b>
-              }
+              {criterion.negate && <b>NOT</b>}
               <span>{criterion.comment}</span>
               <i>({criterion.test_ref})</i>
             </Divider>
@@ -133,19 +116,14 @@ const Criteria = ({criteria}) => {
         {extend_definitions.map((extend_definition, i) => (
           <li key={i}>
             <Divider>
-              {extend_definition.negate &&
-                <b>NOT</b>
-              }
+              {extend_definition.negate && <b>NOT</b>}
               <span>{extend_definition.comment}</span>
               <i>({extend_definition.definition_ref})</i>
             </Divider>
           </li>
         ))}
         {subcriterias.map((subcriteria, i) => (
-          <Criteria
-            key={i}
-            criteria={subcriteria}
-          />
+          <Criteria key={i} criteria={subcriteria} />
         ))}
       </ul>
     </li>
@@ -160,124 +138,90 @@ const StyledDivider = styled(Divider)`
   margin-bottom: 1em;
 `;
 
-const Details = ({
-  entity,
-}) => {
-  const {
-    affecteds,
-    criterias,
-    references,
-    repository,
-  } = entity;
+const Details = ({entity}) => {
+  const {affecteds, criterias, references, repository} = entity;
   return (
     <Layout flex="column">
-      <OvaldefDetails
-        entity={entity}
-      />
+      <OvaldefDetails entity={entity} />
 
       <h2>{_('Affected')}</h2>
-      {affecteds.length === 0 ?
-        <p>{_('None')}</p> :
+      {affecteds.length === 0 ? (
+        <p>{_('None')}</p>
+      ) : (
         affecteds.map(affected => (
           <div key={affected.family}>
             <h3>{_('Family {{family}}', affected)}</h3>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>
-                    {_('Type')}
-                  </TableHead>
-                  <TableHead>
-                    {_('Name')}
-                  </TableHead>
+                  <TableHead>{_('Type')}</TableHead>
+                  <TableHead>{_('Name')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {affected.products.map(product => (
                   <TableRow key={product}>
-                    <TableData>
-                      {_('Product')}
-                    </TableData>
-                    <TableData>
-                      {product}
-                    </TableData>
+                    <TableData>{_('Product')}</TableData>
+                    <TableData>{product}</TableData>
                   </TableRow>
                 ))}
                 {affected.platforms.map(platform => (
                   <TableRow key={platform}>
-                    <TableData>
-                      {_('Platform')}
-                    </TableData>
-                    <TableData>
-                      {platform}
-                    </TableData>
+                    <TableData>{_('Platform')}</TableData>
+                    <TableData>{platform}</TableData>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </div>
         ))
-      }
+      )}
 
       <h2>{_('Criteria')}</h2>
-      {criterias.length === 0 ?
-        <p>{_('None')}</p> :
+      {criterias.length === 0 ? (
+        <p>{_('None')}</p>
+      ) : (
         <ul>
           {criterias.map((criteria, i) => (
-            <Criteria
-              key={i}
-              criteria={criteria}
-            />
+            <Criteria key={i} criteria={criteria} />
           ))}
         </ul>
-      }
+      )}
 
       <h2>{_('References')}</h2>
-      {references.length === 0 ?
-        <p>{_('None')}</p> :
+      {references.length === 0 ? (
+        <p>{_('None')}</p>
+      ) : (
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>
-                {_('Source')}
-              </TableHead>
-              <TableHead>
-                {_('Reference ID')}
-              </TableHead>
-              <TableHead>
-                {_('URL')}
-              </TableHead>
+              <TableHead>{_('Source')}</TableHead>
+              <TableHead>{_('Reference ID')}</TableHead>
+              <TableHead>{_('URL')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {references.map(ref => (
               <TableRow key={ref.id}>
+                <TableData>{ref.source}</TableData>
                 <TableData>
-                  {ref.source}
-                </TableData>
-                <TableData>
-                  <DetailsLink
-                    type={ref.type}
-                    id={ref.id}
-                  >
+                  <DetailsLink type={ref.type} id={ref.id}>
                     {ref.id}
                   </DetailsLink>
                 </TableData>
                 <TableData>
-                  {isDefined(ref.url) &&
-                    <ExternalLink to={ref.url}>
-                      {ref.url}
-                    </ExternalLink>
-                  }
+                  {isDefined(ref.url) && (
+                    <ExternalLink to={ref.url}>{ref.url}</ExternalLink>
+                  )}
                 </TableData>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      }
+      )}
 
       <h2>{_('Repository History')}</h2>
-      {isDefined(repository) ?
+      {isDefined(repository) ? (
         <div>
           <StyledDivider>
             <b>{_('Status')}</b>
@@ -286,15 +230,9 @@ const Details = ({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>
-                  {_('Status')}
-                </TableHead>
-                <TableHead>
-                  {_('Date')}
-                </TableHead>
-                <TableHead>
-                  {_('Contributors')}
-                </TableHead>
+                <TableHead>{_('Status')}</TableHead>
+                <TableHead>{_('Date')}</TableHead>
+                <TableHead>{_('Contributors')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -302,27 +240,25 @@ const Details = ({
                 <TableRow key={change.name}>
                   <TableData>
                     <Divider>
-                      <span>
-                        {change.name}
-                      </span>
-                      {isDefined(change.description) &&
-                        <span>(<i>{change.description}</i>)</span>
-                      }
+                      <span>{change.name}</span>
+                      {isDefined(change.description) && (
+                        <span>
+                          (<i>{change.description}</i>)
+                        </span>
+                      )}
                     </Divider>
                   </TableData>
-                  <TableData>
-                    {longDate(change.date)}
-                  </TableData>
+                  <TableData>{longDate(change.date)}</TableData>
                   <TableData>
                     <Divider>
                       {change.contributors.map(contributor => (
                         <Divider key={contributor.name}>
-                          <span>
-                            {contributor.name}
-                          </span>
-                          {isDefined(contributor.organization) &&
-                            <span>(<i>{contributor.organization}</i>)</span>
-                          }
+                          <span>{contributor.name}</span>
+                          {isDefined(contributor.organization) && (
+                            <span>
+                              (<i>{contributor.organization}</i>)
+                            </span>
+                          )}
                         </Divider>
                       ))}
                     </Divider>
@@ -331,9 +267,10 @@ const Details = ({
               ))}
             </TableBody>
           </Table>
-        </div> :
+        </div>
+      ) : (
         <p>{_('None')}</p>
-      }
+      )}
     </Layout>
   );
 };
@@ -360,30 +297,22 @@ const OvaldefPage = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<OvalDefIcon size="large"/>}
+        sectionIcon={<OvalDefIcon size="large" />}
         title={_('OVAL Definition')}
         toolBarIcons={ToolBarIcons}
         onInteraction={onInteraction}
         onOvaldefDownloadClick={download}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
@@ -393,9 +322,7 @@ const OvaldefPage = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <Details
-                      entity={entity}
-                    />
+                    <Details entity={entity} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags

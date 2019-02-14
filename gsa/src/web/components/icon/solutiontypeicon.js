@@ -27,10 +27,7 @@ import Divider from 'web/components/layout/divider';
 
 import Icon from './icon';
 
-const SolutionType = ({
-    type,
-    displayTitleText = false,
-  }) => {
+const SolutionType = ({type, displayTitleText = false}) => {
   let img;
   let title;
 
@@ -66,25 +63,13 @@ const SolutionType = ({
   if (displayTitleText) {
     return (
       <Divider align={['start', 'center']}>
-        <Icon
-          img={img}
-          title={title}
-          alt={title}
-        />
-        <span>
-          {title}
-        </span>
+        <Icon img={img} title={title} alt={title} />
+        <span>{title}</span>
       </Divider>
     );
   }
 
-  return (
-    <Icon
-      img={img}
-      title={title}
-      alt={title}
-    />
-  );
+  return <Icon img={img} title={title} alt={title} />;
 };
 
 SolutionType.propTypes = {

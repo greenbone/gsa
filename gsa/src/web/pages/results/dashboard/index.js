@@ -33,7 +33,7 @@ import {
 import {
   ResultsWordCloudDisplay,
   ResultsWordCloudTableDisplay,
- } from './wordclouddisplay';
+} from './wordclouddisplay';
 
 export const RESULTS_DASHBOARD_ID = '0b8ae70d-d8fc-4418-8a72-e65ac8d2828e';
 

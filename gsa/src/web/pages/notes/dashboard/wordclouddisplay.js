@@ -41,21 +41,19 @@ import {NotesWordCountLoader} from './loaders';
 
 const transformWordCountData = (data = {}) => {
   const {groups = []} = data;
-  const tdata = groups
-    .map(group => {
-      const {count, value} = group;
-      return {
-        value: parseFloat(count),
-        label: value,
-        color: randomColor(),
-        filterValue: value,
-      };
-    });
+  const tdata = groups.map(group => {
+    const {count, value} = group;
+    return {
+      value: parseFloat(count),
+      label: value,
+      color: randomColor(),
+      filterValue: value,
+    };
+  });
   return tdata;
 };
 
 export class NotesWordCloudDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -80,23 +78,18 @@ export class NotesWordCloudDisplay extends React.Component {
       wordFilter = Filter.fromTerm(wordTerm);
     }
 
-    const newFilter = isDefined(filter) ? filter.copy().and(wordFilter) :
-      wordFilter;
+    const newFilter = isDefined(filter)
+      ? filter.copy().and(wordFilter)
+      : wordFilter;
 
     onFilterChanged(newFilter);
   }
 
   render() {
-    const {
-      filter,
-      onFilterChanged,
-      ...props
-    } = this.props;
+    const {filter, onFilterChanged, ...props} = this.props;
 
     return (
-      <NotesWordCountLoader
-        filter={filter}
-      >
+      <NotesWordCountLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
@@ -113,8 +106,9 @@ export class NotesWordCloudDisplay extends React.Component {
                 displayLegend={false}
                 height={height}
                 width={width}
-                onDataClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
+                onDataClick={
+                  isDefined(onFilterChanged) ? this.handleDataClick : undefined
+                }
               />
             )}
           </DataDisplay>
@@ -140,10 +134,7 @@ export const NotesWordCloudTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   dataTransform: transformWordCountData,
   dataRow: row => [row.label, row.value],
-  dataTitles: [
-    _l('Text'),
-    _l('Count'),
-  ],
+  dataTitles: [_l('Text'), _l('Count')],
   title: ({data: tdata}) => _('Notes Text Word Cloud'),
   displayId: 'note-by-text-words-table',
   displayName: 'NotesWordCloudTableDisplay',
@@ -154,8 +145,10 @@ registerDisplay(NotesWordCloudDisplay.displayId, NotesWordCloudDisplay, {
   title: _l('Chart: Notes Text Word Cloud'),
 });
 
-registerDisplay(NotesWordCloudTableDisplay.displayId,
-  NotesWordCloudTableDisplay, {
+registerDisplay(
+  NotesWordCloudTableDisplay.displayId,
+  NotesWordCloudTableDisplay,
+  {
     title: _l('Table: Notes Text Word Cloud'),
   },
 );

@@ -27,9 +27,8 @@ import {isDefined} from 'gmp/utils/identity';
  *
  * @returns {String} A filter identifier to be used in the store
  */
-export const filterIdentifier = filter => isDefined(filter) ?
-  `filter:${filter.toFilterString()}` :
-  'default';
+export const filterIdentifier = filter =>
+  isDefined(filter) ? `filter:${filter.toFilterString()}` : 'default';
 
 /**
  * A combineReducers version to allow to return undefined for a state.

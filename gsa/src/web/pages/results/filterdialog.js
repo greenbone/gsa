@@ -92,32 +92,19 @@ const ResultsFilterDialogComponent = ({
   onValueChange,
 }) => (
   <Layout flex="column">
-
     <FilterStringGroup
       name="filterstring"
       filter={filterstring}
       onChange={onFilterStringChange}
     />
 
-    <ApplyOverridesGroup
-      filter={filter}
-      onChange={onFilterValueChange}
-    />
+    <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange} />
 
-    <AutoFpGroup
-      filter={filter}
-      onChange={onFilterValueChange}
-    />
+    <AutoFpGroup filter={filter} onChange={onFilterValueChange} />
 
-    <SeverityLevelsGroup
-      filter={filter}
-      onChange={onFilterValueChange}
-    />
+    <SeverityLevelsGroup filter={filter} onChange={onFilterValueChange} />
 
-    <SolutionTypeGroup
-      filter={filter}
-      onChange={onFilterChange}
-    />
+    <SolutionTypeGroup filter={filter} onChange={onFilterChange} />
 
     <MinQodGroup
       name="min_qod"
@@ -125,15 +112,9 @@ const ResultsFilterDialogComponent = ({
       onChange={onFilterValueChange}
     />
 
-    <FirstResultGroup
-      filter={filter}
-      onChange={onFilterValueChange}
-    />
+    <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
-    <ResultsPerPageGroup
-      filter={filter}
-      onChange={onFilterValueChange}
-    />
+    <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
 
     <SortByGroup
       filter={filter}
@@ -142,14 +123,14 @@ const ResultsFilterDialogComponent = ({
       onSortByChange={onSortByChange}
     />
 
-    {capabilities.mayCreate('filter') &&
+    {capabilities.mayCreate('filter') && (
       <CreateNamedFilterGroup
         filter={filter}
         filterName={filterName}
         saveNamedFilter={saveNamedFilter}
         onValueChange={onValueChange}
       />
-    }
+    )}
   </Layout>
 );
 

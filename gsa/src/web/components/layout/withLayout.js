@@ -36,31 +36,24 @@ const convertAlign = align => {
 };
 
 const withLayout = (defaults = {}) => Component => {
-  const LayoutComponent = styled(({
-    align,
-    basis,
-    flex,
-    grow,
-    shrink,
-    wrap,
-    ...props
-  }) => <Component {...props} />)`
+  const LayoutComponent = styled(
+    ({align, basis, flex, grow, shrink, wrap, ...props}) => (
+      <Component {...props} />
+    ),
+  )`
     display: flex;
     flex-direction: ${({flex = defaults.flex}) =>
       isDefined(flex) && flex !== true ? flex : 'row'};
     flex-basis: ${({basis = defaults.basis}) => basis};
-    flex-grow: ${({grow = defaults.grow}) => grow === true ? 1 : grow};
-    flex-wrap: ${({wrap = defaults.wrap}) => wrap === true ? 'wrap' : wrap};
+    flex-grow: ${({grow = defaults.grow}) => (grow === true ? 1 : grow)};
+    flex-wrap: ${({wrap = defaults.wrap}) => (wrap === true ? 'wrap' : wrap)};
     flex-shrink: ${({shrink = defaults.shrink}) =>
       shrink === true ? 1 : shrink};
-    ${({
-      flex = defaults.flex,
-      align = defaults.align,
-    }) => {
+    ${({flex = defaults.flex, align = defaults.align}) => {
       if (isDefined(align)) {
         align = map(align, al => convertAlign(al));
-      }
-      else { // use sane defaults for alignment
+      } else {
+        // use sane defaults for alignment
         align = flex === 'column' ? ['center', 'stretch'] : ['start', 'center'];
       }
       return {

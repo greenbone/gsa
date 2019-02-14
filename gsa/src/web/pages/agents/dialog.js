@@ -34,13 +34,7 @@ import PropTypes from 'web/utils/proptypes';
 
 const DEFAULTS = {name: _('Unnamed')};
 
-const AgentDialog = ({
-    agent,
-    title = _('New Agent'),
-    onClose,
-    onSave,
-  }) => {
-
+const AgentDialog = ({agent, title = _('New Agent'), onClose, onSave}) => {
   const is_edit = isDefined(agent);
 
   return (
@@ -50,14 +44,9 @@ const AgentDialog = ({
       onSave={onSave}
       defaultValues={{...DEFAULTS, ...agent}}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
-
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
-
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
@@ -80,23 +69,17 @@ const AgentDialog = ({
               />
             </FormGroup>
 
-            {!is_edit &&
+            {!is_edit && (
               <FormGroup title={_('Installer')}>
-                <FileField
-                  name="installer"
-                  onChange={onValueChange}
-                />
+                <FileField name="installer" onChange={onValueChange} />
               </FormGroup>
-            }
+            )}
 
-            {!is_edit &&
+            {!is_edit && (
               <FormGroup title={_('Installer signature')}>
-                <FileField
-                  name="installer_sig"
-                  onChange={onValueChange}
-                />
+                <FileField name="installer_sig" onChange={onValueChange} />
               </FormGroup>
-            }
+            )}
           </Layout>
         );
       }}
@@ -110,7 +93,6 @@ AgentDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
-
 
 export default AgentDialog;
 

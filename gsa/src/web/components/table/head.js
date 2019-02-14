@@ -46,24 +46,24 @@ const TableHead = ({
   onSortChange,
   ...other
 }) => {
-
   let sortSymbol;
   if (isDefined(sortBy) && currentSortBy === sortBy) {
     if (currentSortDir === Sort.DESC) {
       sortSymbol = ( // triangle pointing down
         <span
-          title={_('Sorted In Descending Order By {{sortBy}}',
-            {sortBy: capitalizeFirstLetter(sortBy)})}
+          title={_('Sorted In Descending Order By {{sortBy}}', {
+            sortBy: capitalizeFirstLetter(sortBy),
+          })}
         >
           &nbsp;&#9660;
         </span>
       );
-    }
-    else if (currentSortDir === Sort.ASC) {
+    } else if (currentSortDir === Sort.ASC) {
       sortSymbol = ( // triangle pointing up
         <span
-          title={_('Sorted In Ascending Order By {{sortBy}}',
-            {sortBy: capitalizeFirstLetter(sortBy)})}
+          title={_('Sorted In Ascending Order By {{sortBy}}', {
+            sortBy: capitalizeFirstLetter(sortBy),
+          })}
         >
           &nbsp;&#9650;
         </span>
@@ -74,22 +74,17 @@ const TableHead = ({
     children = `${title}`;
   }
   return (
-    <th
-      className={className}
-      rowSpan={rowSpan}
-      colSpan={colSpan}
-    >
-      {sort && sortBy && isDefined(onSortChange) ?
+    <th className={className} rowSpan={rowSpan} colSpan={colSpan}>
+      {sort && sortBy && isDefined(onSortChange) ? (
         <Sort by={sortBy} onClick={onSortChange}>
           <Layout {...other}>
             {children}
             {sortSymbol}
           </Layout>
-        </Sort> :
-        <Layout {...other}>
-          {children}
-        </Layout>
-      }
+        </Sort>
+      ) : (
+        <Layout {...other}>{children}</Layout>
+      )}
     </th>
   );
 };
@@ -119,7 +114,7 @@ export default styled(TableHead)`
     font-size: 1.2em;
     background-color: none;
     font-weight: bold;
-  };
+  }
 `;
 
 // vim: set ts=2 sw=2 tw=80:

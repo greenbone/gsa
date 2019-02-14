@@ -43,7 +43,6 @@ import CreateTicketDialog from './createdialog';
 import EditTicketDialog from './editdialog';
 
 class TicketComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -155,11 +154,7 @@ class TicketComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          create,
-          save,
-          ...other
-        }) => (
+        {({create, save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
@@ -168,7 +163,7 @@ class TicketComponent extends React.Component {
               close: this.handleOpenClosedDialog,
               edit: this.handleOpenEditDialog,
             })}
-            {createDialogVisible &&
+            {createDialogVisible && (
               <CreateTicketDialog
                 resultId={result.id}
                 title={_('Create new Ticket for Result {{- name}}', result)}
@@ -181,13 +176,13 @@ class TicketComponent extends React.Component {
                   return create(d).then(this.handleCloseCreateDialog);
                 }}
               />
-            }
-            {editDialogVisible &&
+            )}
+            {editDialogVisible && (
               <EditTicketDialog
                 status={
-                  ticket.status === TICKET_STATUS.verified ?
-                    TICKET_STATUS.closed :
-                    ticket.status
+                  ticket.status === TICKET_STATUS.verified
+                    ? TICKET_STATUS.closed
+                    : ticket.status
                 }
                 openNote={ticket.openNote}
                 fixedNote={ticket.fixedNote}
@@ -216,7 +211,7 @@ class TicketComponent extends React.Component {
                   }).then(this.closeEditDialog);
                 }}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>
@@ -255,7 +250,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(TicketComponent);
 
 // vim: set ts=2 sw=2 tw=80:

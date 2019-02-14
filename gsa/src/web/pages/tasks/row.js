@@ -60,11 +60,7 @@ const render_report = (report, links) => {
   }
   const date = longDate(report.timestamp);
   return (
-    <DetailsLink
-      type="report"
-      id={report.id}
-      textOnly={!links}
-    >
+    <DetailsLink type="report" id={report.id} textOnly={!links}>
       {date}
     </DetailsLink>
   );
@@ -79,8 +75,11 @@ const render_report_total = (entity, links) => {
       <Link
         to={'reports'}
         filter={'task_id=' + entity.id + ' sort-reverse=date&filt_id=-2'}
-        title={_('View list of all reports for Task {{name}},' +
-                 ' including unfinished ones', {name: entity.name})}
+        title={_(
+          'View list of all reports for Task {{name}},' +
+            ' including unfinished ones',
+          {name: entity.name},
+        )}
         textOnly={!links || entity.report_count.total === 0}
       >
         {entity.report_count.total}
@@ -104,8 +103,7 @@ const Row = ({
   if (isDefined(observers)) {
     if (isString(observers)) {
       obs.push(_('User {{name}}', {name: observers}));
-    }
-    else {
+    } else {
       if (isDefined(observers.role)) {
         obs.push(_('Role {{name}}', {name: observers.role.name}));
       }
@@ -118,68 +116,54 @@ const Row = ({
     <TableRow>
       <TableData>
         <Layout align="space-between">
-          <RowDetailsToggle
-            name={entity.id}
-            onClick={onToggleDetailsClick}
-          >
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
             {entity.name}
           </RowDetailsToggle>
           <IconDivider>
-            {entity.alterable === 1 &&
-              <AlterableIcon
-                size="small"
-                title={_('Task is alterable')}
-              />
-            }
-            {isDefined(scanner) && scanner.type === SLAVE_SCANNER_TYPE &&
+            {entity.alterable === 1 && (
+              <AlterableIcon size="small" title={_('Task is alterable')} />
+            )}
+            {isDefined(scanner) && scanner.type === SLAVE_SCANNER_TYPE && (
               <SensorIcon
                 size="small"
-                title={_('Task is configured to run on slave scanner {{name}}',
-                  {name: scanner.name})}
+                title={_(
+                  'Task is configured to run on slave scanner {{name}}',
+                  {name: scanner.name},
+                )}
               />
-            }
+            )}
             <ObserverIcon
               displayName={_('Task')}
               entity={entity}
               userName={username}
             />
-            {isDefined(observers) && observers.length > 0 &&
+            {isDefined(observers) && observers.length > 0 && (
               <ProvideViewIcon
                 size="small"
-                title={_('Task made visible for: {{observers}}',
-                  {observers: obs.join(', ')})}
-              /> // TODO observer roles and groups
+                title={_('Task made visible for: {{observers}}', {
+                  observers: obs.join(', '),
+                })}
+              />
+            ) // TODO observer roles and groups
             }
           </IconDivider>
         </Layout>
-        {entity.comment &&
-          <Comment>({entity.comment})</Comment>
-        }
+        {entity.comment && <Comment>({entity.comment})</Comment>}
       </TableData>
       <TableData>
-        <TaskStatus task={entity} links={links}/>
+        <TaskStatus task={entity} links={links} />
       </TableData>
+      <TableData>{render_report_total(entity, links)}</TableData>
+      <TableData>{render_report(entity.last_report, links)}</TableData>
       <TableData>
-        {render_report_total(entity, links)}
-      </TableData>
-      <TableData>
-        {render_report(entity.last_report, links)}
-      </TableData>
-      <TableData>
-        {!entity.isContainer() && isDefined(entity.last_report) &&
-          <SeverityBar severity={entity.last_report.severity}/>
-        }
+        {!entity.isContainer() && isDefined(entity.last_report) && (
+          <SeverityBar severity={entity.last_report.severity} />
+        )}
       </TableData>
       <TableData align="center">
-        {!entity.isContainer() &&
-          <Trend name={entity.trend} />
-        }
+        {!entity.isContainer() && <Trend name={entity.trend} />}
       </TableData>
-      <ActionsComponent
-        {...props}
-        links={links}
-        entity={entity}
-      />
+      <ActionsComponent {...props} links={links} entity={entity} />
     </TableRow>
   );
 };

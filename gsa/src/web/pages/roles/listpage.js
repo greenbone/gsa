@@ -44,22 +44,16 @@ import {
 import RoleComponent from './component';
 import Table, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onRoleCreateClick,
-}) => (
+const ToolBarIcons = withCapabilities(({capabilities, onRoleCreateClick}) => (
   <IconDivider>
     <ManualIcon
       page="gui_administration"
       anchor="user-roles"
       title={_('Help: Roles')}
     />
-    {capabilities.mayCreate('role') &&
-      <NewIcon
-        title={_('New Role')}
-        onClick={onRoleCreateClick}
-      />
-    }
+    {capabilities.mayCreate('role') && (
+      <NewIcon title={_('New Role')} onClick={onRoleCreateClick} />
+    )}
   </IconDivider>
 ));
 
@@ -88,34 +82,28 @@ const RolesPage = ({
     onDownloaded={onDownloaded}
     onDownloadError={onError}
     onInteraction={onInteraction}
-  >{({
-    clone,
-    create,
-    delete: delete_func,
-    download,
-    edit,
-    save,
-  }) => (
-    <EntitiesPage
-      {...props}
-      filterEditDialog={RolesFilterDialog}
-      filtersFilter={ROLES_FILTER_FILTER}
-      sectionIcon={<RoleIcon size="large"/>}
-      table={Table}
-      title={_('Roles')}
-      toolBarIcons={ToolBarIcons}
-      onChanged={onChanged}
-      onDownloaded={onDownloaded}
-      onError={onError}
-      onInteraction={onInteraction}
-      onRoleCloneClick={clone}
-      onRoleCreateClick={create}
-      onRoleDeleteClick={delete_func}
-      onRoleDownloadClick={download}
-      onRoleEditClick={edit}
-      onRoleSaveClick={save}
-    />
-  )}
+  >
+    {({clone, create, delete: delete_func, download, edit, save}) => (
+      <EntitiesPage
+        {...props}
+        filterEditDialog={RolesFilterDialog}
+        filtersFilter={ROLES_FILTER_FILTER}
+        sectionIcon={<RoleIcon size="large" />}
+        table={Table}
+        title={_('Roles')}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onDownloaded={onDownloaded}
+        onError={onError}
+        onInteraction={onInteraction}
+        onRoleCloneClick={clone}
+        onRoleCreateClick={create}
+        onRoleDeleteClick={delete_func}
+        onRoleDownloadClick={download}
+        onRoleEditClick={edit}
+        onRoleSaveClick={save}
+      />
+    )}
   </RoleComponent>
 );
 

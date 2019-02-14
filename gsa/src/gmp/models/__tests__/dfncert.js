@@ -24,7 +24,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(DfnCertAdv, 'dfncert');
 
 describe('DfnCertAdv model tests', () => {
-
   test('should be instance of Info', () => {
     const dfnCertAdv = new DfnCertAdv({});
 
@@ -84,11 +83,7 @@ describe('DfnCertAdv model tests', () => {
     const elem = {
       raw_data: {
         entry: {
-          cve: [
-            {__text: 'lorem'},
-            {__text: 'ipsum'},
-            {__text: 'dolor'},
-          ],
+          cve: [{__text: 'lorem'}, {__text: 'ipsum'}, {__text: 'dolor'}],
         },
       },
     };
@@ -96,5 +91,4 @@ describe('DfnCertAdv model tests', () => {
 
     expect(dfnCertAdv.cves).toEqual(['lorem', 'ipsum', 'dolor']);
   });
-
 });

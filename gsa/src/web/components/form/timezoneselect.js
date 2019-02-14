@@ -29,9 +29,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import Select from './select';
 
-
 const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
-
   const timezoneItems = [
     {
       label: _('Coordinated Universal Time/UTC'),

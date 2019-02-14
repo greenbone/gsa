@@ -38,78 +38,83 @@ import TableFooter from '../components/table/footer.js';
 import TableRow from '../components/table/row.js';
 
 export const EntitiesFooter = ({
-    actions = true,
-    children,
-    download,
-    selection = true,
-    selectionType,
-    span,
-    tags = true,
-    trash,
-    onDeleteClick,
-    onDownloadClick,
-    onSelectionTypeChange,
-    onTagsClick,
-    onTrashClick,
-    ...props
-  }) => {
+  actions = true,
+  children,
+  download,
+  selection = true,
+  selectionType,
+  span,
+  tags = true,
+  trash,
+  onDeleteClick,
+  onDownloadClick,
+  onSelectionTypeChange,
+  onTagsClick,
+  onTrashClick,
+  ...props
+}) => {
   const deleteEntities = props.delete;
-  const selectItems = [{
-    value: SelectionType.SELECTION_PAGE_CONTENTS,
-    label: _('Apply to page contents'),
-  }, {
-    value: SelectionType.SELECTION_USER,
-    label: _('Apply to selection'),
-  }, {
-     value: SelectionType.SELECTION_FILTER,
-     label: _('Apply to all filtered'),
-  }];
+  const selectItems = [
+    {
+      value: SelectionType.SELECTION_PAGE_CONTENTS,
+      label: _('Apply to page contents'),
+    },
+    {
+      value: SelectionType.SELECTION_USER,
+      label: _('Apply to selection'),
+    },
+    {
+      value: SelectionType.SELECTION_FILTER,
+      label: _('Apply to all filtered'),
+    },
+  ];
   return (
     <TableFooter>
       <TableRow>
         <td colSpan={span}>
-          {actions ?
+          {actions ? (
             <Layout align={['end', 'center']}>
               <Divider>
-                {selection &&
+                {selection && (
                   <Select
                     items={selectItems}
                     value={selectionType}
                     onChange={onSelectionTypeChange}
-                  >
-                  </Select>
-                }
+                  />
+                )}
                 <IconDivider>
-                  {tags &&
+                  {tags && (
                     <TagsIcon
                       onClick={onTagsClick}
                       selectionType={selectionType}
                     />
-                  }
-                  {trash &&
+                  )}
+                  {trash && (
                     <TrashIcon
                       onClick={onTrashClick}
                       selectionType={selectionType}
                     />
-                  }
-                  {deleteEntities &&
+                  )}
+                  {deleteEntities && (
                     <DeleteIcon
                       onClick={onDeleteClick}
                       selectionType={selectionType}
                     />
-                  }
-                  {download &&
+                  )}
+                  {download && (
                     <ExportIcon
                       onClick={onDownloadClick}
                       selectionType={selectionType}
                       value={download}
                     />
-                  }
+                  )}
                   {children}
                 </IconDivider>
               </Divider>
-            </Layout> : children
-          }
+            </Layout>
+          ) : (
+            children
+          )}
         </td>
       </TableRow>
     </TableFooter>
@@ -133,7 +138,6 @@ EntitiesFooter.propTypes = {
 };
 
 export const withEntitiesFooter = (options = {}) => Component => {
-
   const EntitiesFooterWrapper = ({
     onDownloadBulk,
     onDeleteBulk,

@@ -27,16 +27,15 @@ import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
 const Header = ({
-    actions = true,
-    links = true,
-    sort = true,
-    currentSortBy,
-    currentSortDir,
-    onSortChange,
-  }) => {
+  actions = true,
+  links = true,
+  sort = true,
+  currentSortBy,
+  currentSortDir,
+  onSortChange,
+}) => {
   return (
     <TableHeader>
-
       <TableRow>
         <TableHead
           width="72%"
@@ -48,27 +47,17 @@ const Header = ({
         >
           {_('Name')}
         </TableHead>
-        <TableHead
-          width="10%"
-          colSpan="2"
-        >
+        <TableHead width="10%" colSpan="2">
           {_('Family')}
         </TableHead>
-        <TableHead
-          width="10%"
-          colSpan="2"
-        >
+        <TableHead width="10%" colSpan="2">
           {_('NVTs')}
         </TableHead>
-        {actions &&
-          <TableHead
-            rowSpan="2"
-            width="8%"
-            align="center"
-          >
+        {actions && (
+          <TableHead rowSpan="2" width="8%" align="center">
             {_('Actions')}
           </TableHead>
-        }
+        )}
       </TableRow>
 
       <TableRow>

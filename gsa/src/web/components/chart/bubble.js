@@ -36,13 +36,7 @@ const margin = {
   left: 5,
 };
 
-const BubbleChart = ({
-  data = [],
-  width,
-  height,
-  svgRef,
-  onDataClick,
-}) => {
+const BubbleChart = ({data = [], width, height, svgRef, onDataClick}) => {
   const maxWidth = width - margin.left - margin.right;
   const maxHeight = height - margin.top - margin.bottom;
 
@@ -52,28 +46,17 @@ const BubbleChart = ({
     .size([maxWidth, maxHeight])
     .padding(1.5);
 
-  const root = hierarchy({children: data})
-    .sum(d => d.value);
+  const root = hierarchy({children: data}).sum(d => d.value);
 
   const nodes = bubbles(root).leaves();
   return (
-    <Svg
-      width={width}
-      height={height}
-      innerRef={svgRef}
-    >
-      <Group
-        top={margin.top}
-        left={margin.left}
-      >
-        {hasBubbles ?
+    <Svg width={width} height={height} innerRef={svgRef}>
+      <Group top={margin.top} left={margin.left}>
+        {hasBubbles ? (
           nodes.map((node, i) => {
             const {data: d, x, y, r} = node;
             return (
-              <ToolTip
-                key={i}
-                content={d.toolTip}
-              >
+              <ToolTip key={i} content={d.toolTip}>
                 {({targetRef, hide, show}) => {
                   const clippathId = 'clippath-' + i;
                   return (
@@ -82,21 +65,17 @@ const BubbleChart = ({
                       top={y}
                       onMouseEnter={show}
                       onMouseLeave={hide}
-                      onClick={isDefined(onDataClick) ?
-                        () => onDataClick(d) : undefined}
+                      onClick={
+                        isDefined(onDataClick)
+                          ? () => onDataClick(d)
+                          : undefined
+                      }
                     >
-                      <circle
-                        fill={d.color}
-                        r={r}
-                      />
+                      <circle fill={d.color} r={r} />
 
-                      <clipPath
-                        id={clippathId}
-                      >
+                      <clipPath id={clippathId}>
                         {/* cut of text overflowing the circle */}
-                        <circle
-                          r={r}
-                        />
+                        <circle r={r} />
                       </clipPath>
 
                       <text
@@ -114,27 +93,29 @@ const BubbleChart = ({
                 }}
               </ToolTip>
             );
-          }) : (
-            <circle
-              fill={Theme.lightGray}
-              r={maxHeight / 2}
-              cx={maxWidth / 2}
-              cy={maxHeight / 2}
-            />
-          )
-        }
+          })
+        ) : (
+          <circle
+            fill={Theme.lightGray}
+            r={maxHeight / 2}
+            cx={maxWidth / 2}
+            cy={maxHeight / 2}
+          />
+        )}
       </Group>
     </Svg>
   );
 };
 
 BubbleChart.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.number.isRequired,
-    color: PropTypes.toString.isRequired,
-    label: PropTypes.toString.isRequired,
-    toolTip: PropTypes.elementOrString,
-  })),
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.number.isRequired,
+      color: PropTypes.toString.isRequired,
+      label: PropTypes.toString.isRequired,
+      toolTip: PropTypes.elementOrString,
+    }),
+  ),
   height: PropTypes.number.isRequired,
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,

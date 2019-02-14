@@ -30,7 +30,9 @@ import {isDefined, isString} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
-import ComposerContent, {COMPOSER_CONTENT_DEFAULTS} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
+import ComposerContent, {
+  COMPOSER_CONTENT_DEFAULTS,
+} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import CheckBox from 'web/components/form/checkbox';
@@ -60,13 +62,13 @@ const TriggerAlertDialog = ({
   onNewAlertClick,
   onSave,
 }) => {
-
-  const filterString = isString(filter) ?
-    filter : filter.toFilterCriteriaString();
+  const filterString = isString(filter)
+    ? filter
+    : filter.toFilterCriteriaString();
 
   if (!isDefined(alertId)) {
     alertId = selectSaveId(alerts, defaultAlertId);
-  };
+  }
 
   const unControlledValues = {
     applyOverrides,
@@ -88,10 +90,7 @@ const TriggerAlertDialog = ({
       onClose={onClose}
       onSave={onSave}
     >
-      {({
-        values,
-        onValueChange,
-      }) => (
+      {({values, onValueChange}) => (
         <Layout flex="column">
           <ComposerContent
             applyOverrides={values.applyOverrides}
@@ -108,9 +107,7 @@ const TriggerAlertDialog = ({
                 items={renderSelectItems(alerts)}
                 onChange={onAlertChange}
               />
-              <NewIcon
-                onClick={onNewAlertClick}
-              />
+              <NewIcon onClick={onNewAlertClick} />
             </Divider>
           </FormGroup>
           <StyledDiv>

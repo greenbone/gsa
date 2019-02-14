@@ -37,9 +37,9 @@ const StyledTextArea = styled.textarea`
   border: 1px solid ${Theme.inputBorderGray};
   border-radius: 2px;
   padding: 4px 8px;
-  cursor: ${props => props.disabled ? 'not-allowed' : undefined};
-  background-color: ${props => props.disabled ? Theme.dialogGray : undefined};
-  opacity: ${props => props.disabled ? DISABLED_OPACTIY : undefined};
+  cursor: ${props => (props.disabled ? 'not-allowed' : undefined)};
+  background-color: ${props => (props.disabled ? Theme.dialogGray : undefined)};
+  opacity: ${props => (props.disabled ? DISABLED_OPACTIY : undefined)};
 `;
 
 export default compose(

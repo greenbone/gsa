@@ -24,14 +24,13 @@ import PropTypes from 'web/utils/proptypes';
 
 import DetailsLink from './detailslink';
 
-const CertLink = ({
-  id,
-  textOnly = false,
-  type,
-}) => {
+const CertLink = ({id, textOnly = false, type}) => {
   if (type !== 'CERT-Bund' && type !== 'DFN-CERT') {
     return (
-      <span><b>?</b>{id}</span>
+      <span>
+        <b>?</b>
+        {id}
+      </span>
     );
   }
 
@@ -41,18 +40,12 @@ const CertLink = ({
   if (type === 'CERT-Bund') {
     info_type = 'certbund';
     title = _('View details of CERT-Bund Advisory {{name}}', {name: id});
-  }
-  else if (type === 'DFN-CERT') {
+  } else if (type === 'DFN-CERT') {
     title = _('View details of DFN-CERT Advisory {{name}}', {name: id});
     info_type = 'dfncert';
   }
   return (
-    <DetailsLink
-      title={title}
-      id={id}
-      type={info_type}
-      textOnly={textOnly}
-    >
+    <DetailsLink title={title} id={id} type={info_type} textOnly={textOnly}>
       {id}
     </DetailsLink>
   );

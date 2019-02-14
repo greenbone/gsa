@@ -31,12 +31,7 @@ import TableRow from 'web/components/table/row';
 
 import {createEntitiesTable} from 'web/entities/table';
 
-const Header = ({
-  currentSortBy,
-  currentSortDir,
-  sort = true,
-  onSortChange,
-}) => (
+const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
   <TableHeader>
     <TableRow>
       <TableHead
@@ -79,14 +74,10 @@ const Row = ({entity}) => {
   const {hosts, id, severity} = entity;
   return (
     <TableRow>
+      <TableData>{id}</TableData>
+      <TableData>{hosts.count}</TableData>
       <TableData>
-        {id}
-      </TableData>
-      <TableData>
-        {hosts.count}
-      </TableData>
-      <TableData>
-        <SeverityBar severity={severity}/>
+        <SeverityBar severity={severity} />
       </TableData>
     </TableRow>
   );

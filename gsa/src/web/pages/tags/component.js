@@ -71,7 +71,6 @@ const TYPES = [
 ];
 
 class TagComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -107,19 +106,22 @@ class TagComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.tag.create({
-      name,
-      value,
-      active: YES_VALUE,
-      resource_ids: [entity.id],
-      resource_type: getEntityType(entity),
-    }).then(onAdded, onAddError);
+    return gmp.tag
+      .create({
+        name,
+        value,
+        active: YES_VALUE,
+        resource_ids: [entity.id],
+        resource_type: getEntityType(entity),
+      })
+      .then(onAdded, onAddError);
   }
 
   getResourceTypes() {
     const {capabilities} = this.props;
-    return TYPES.map(type => capabilities.mayAccess(type) ?
-      [type, typeName(type)] : undefined).filter(isDefined);
+    return TYPES.map(type =>
+      capabilities.mayAccess(type) ? [type, typeName(type)] : undefined,
+    ).filter(isDefined);
   }
 
   openTagDialog(tag, options = {}) {
@@ -138,31 +140,29 @@ class TagComponent extends React.Component {
           value,
         } = response.data;
         const filter = 'rows=' + SELECT_MAX_RESOURCES + ' tag_id="' + id;
-        gmp[pluralizeType(resourceType)].get({filter})
-          .then(resp => {
-            const resources = resp.data;
-            this.setState({
-              active,
-              comment,
-              dialogVisible: true,
-              id,
-              name,
-              resourceCount,
-              resource_ids: resources.map(res => res.id),
-              resource_type: isDefined(resourceType) ?
-                resourceType :
-                first(resource_types, [])[0],
-              resource_types,
-              resources_action:
-                resourceCount <= SELECT_MAX_RESOURCES ? undefined : 'add',
-              title: _('Edit Tag {{name}}', {name: shorten(name)}),
-              value,
-              ...options,
-            });
+        gmp[pluralizeType(resourceType)].get({filter}).then(resp => {
+          const resources = resp.data;
+          this.setState({
+            active,
+            comment,
+            dialogVisible: true,
+            id,
+            name,
+            resourceCount,
+            resource_ids: resources.map(res => res.id),
+            resource_type: isDefined(resourceType)
+              ? resourceType
+              : first(resource_types, [])[0],
+            resource_types,
+            resources_action:
+              resourceCount <= SELECT_MAX_RESOURCES ? undefined : 'add',
+            title: _('Edit Tag {{name}}', {name: shorten(name)}),
+            value,
+            ...options,
           });
+        });
       });
-    }
-    else {
+    } else {
       this.setState({
         active: undefined,
         comment: undefined,
@@ -200,14 +200,17 @@ class TagComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.tag.get({id: tag_id})
+    return gmp.tag
+      .get({id: tag_id})
       .then(response => response.data)
-      .then(tag => gmp.tag.save({
-        ...tag,
-        resource_id: entity.id,
-        resource_type: tag.resourceType,
-        resources_action: 'remove',
-      }))
+      .then(tag =>
+        gmp.tag.save({
+          ...tag,
+          resource_id: entity.id,
+          resource_type: tag.resourceType,
+          resources_action: 'remove',
+        }),
+      )
       .then(onRemoved, onRemoveError);
   }
 
@@ -265,10 +268,7 @@ class TagComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
@@ -279,7 +279,7 @@ class TagComponent extends React.Component {
               disable: this.handleDisableTag,
               remove: this.handleRemove,
             })}
-            {dialogVisible &&
+            {dialogVisible && (
               <TagDialog
                 active={active}
                 comment={comment}
@@ -298,7 +298,7 @@ class TagComponent extends React.Component {
                 }}
                 {...options}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>

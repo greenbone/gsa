@@ -50,12 +50,7 @@ const ToolBarIcons = () => (
   />
 );
 
-const Page = ({
-  filter,
-  onFilterChanged,
-  onInteraction,
-  ...props
-}) => (
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
   <EntitiesPage
     {...props}
     createFilterType="info"
@@ -75,7 +70,7 @@ const Page = ({
     filter={filter}
     filterEditDialog={OvaldefFilterDialog}
     filtersFilter={OVALDEFS_FILTER_FILTER}
-    sectionIcon={<OvalDefIcon size="large"/>}
+    sectionIcon={<OvalDefIcon size="large" />}
     table={OvaldefsTable}
     title={_('OVAL Definitions')}
     toolBarIcons={ToolBarIcons}

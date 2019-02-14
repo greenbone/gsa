@@ -55,13 +55,13 @@ const EntityCreateIcon = ({
   if (!isDefined(title)) {
     if (active) {
       title = _('Create new {{entity}}', {entity: displayName});
-    }
-    else if (!mayCreate) { // eslint-disable-line no-negated-condition
+    } else if (!mayCreate) {
+      // eslint-disable-line no-negated-condition
       title = _('{{entity}} may not be created', {entity: displayName});
-    }
-    else {
-      title = _('Permission to create {{entity}} denied',
-        {entity: displayName});
+    } else {
+      title = _('Permission to create {{entity}} denied', {
+        entity: displayName,
+      });
     }
   }
   return (

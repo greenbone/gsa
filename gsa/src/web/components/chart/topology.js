@@ -60,8 +60,8 @@ const HOST_RADIUS = 5;
 const Svg = styled.svg`
   & text {
     user-select: 'none';
-  };
-  cursor: ${props => props.dragging ? 'grabbing' : 'grab'};
+  }
+  cursor: ${props => (props.dragging ? 'grabbing' : 'grab')};
 `;
 
 const Circle = styled.circle`
@@ -85,8 +85,8 @@ const severityColorsGradientScale = type => {
       HIGH_VALUE,
     ])
     .range([
-      'grey',    // False Positive
-      'silver',  // Log
+      'grey', // False Positive
+      'silver', // Log
       '#b1cee9', // minimum Low
       '#87CEEB', // middle Low
       '#a5e59d', // maximum Low
@@ -108,17 +108,20 @@ const TEXT_SCALE_THRESHOLD = 1;
 const DEFAULT_STROKE_WIDTH = 1;
 const SCANNER_STROKE_WIDTH = 2;
 
-const copyArray = array => isDefined(array) ? array.map(current => ({
-  ...current,
-})) : undefined;
+const copyArray = array =>
+  isDefined(array)
+    ? array.map(current => ({
+        ...current,
+      }))
+    : undefined;
 
-const copyHosts = hosts => hosts.map(host => ({
-  ...host,
-  links: copyArray(host.links),
-}));
+const copyHosts = hosts =>
+  hosts.map(host => ({
+    ...host,
+    links: copyArray(host.links),
+  }));
 
 class HostsTopologyChart extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -175,8 +178,7 @@ class HostsTopologyChart extends React.Component {
     if (isDefined(simulation)) {
       simulation.nodes(hostsCopy);
       linkForce.links(linksCopy);
-    }
-    else {
+    } else {
       const initSim = HostsTopologyChart.initSimulation(hostsCopy, linksCopy);
       simulation = initSim.simulation;
       linkForce = initSim.linkForce;
@@ -212,7 +214,6 @@ class HostsTopologyChart extends React.Component {
     return {simulation, linkForce};
   }
 
-
   componentDidMount() {
     const {width, height} = this.props;
     const {simulation} = this.state;
@@ -247,7 +248,7 @@ class HostsTopologyChart extends React.Component {
     }
 
     return Theme.lightGray;
-  };
+  }
 
   /**
    * Zoom chart at pixel coordinates to the scale factor
@@ -260,8 +261,8 @@ class HostsTopologyChart extends React.Component {
     const {x, y} = this.toChartCoords(px, py);
 
     // calculate new pixel coords and afterwards diff to previous coords
-    const diffX = (x * scale) - px;
-    const diffY = (y * scale) - py;
+    const diffX = x * scale - px;
+    const diffY = y * scale - py;
 
     this.setState({
       scale,
@@ -440,13 +441,18 @@ class HostsTopologyChart extends React.Component {
     } = this.state;
     return (
       <Layout flex="column">
-        {hostsCount > MAX_HOSTS &&
+        {hostsCount > MAX_HOSTS && (
           <Layout align={['center', 'center']}>
-            <p>{_('The current number of {{hostsCount}} hosts exceeds the ' +
+            <p>
+              {_(
+                'The current number of {{hostsCount}} hosts exceeds the ' +
                   'maximum of {{maxHosts}}. Please apply a more specific ' +
-                  'filter.', {hostsCount, maxHosts: MAX_HOSTS})}</p>
+                  'filter.',
+                {hostsCount, maxHosts: MAX_HOSTS},
+              )}
+            </p>
           </Layout>
-        }
+        )}
         <Svg
           dragging={dragging}
           width={width}
@@ -455,13 +461,9 @@ class HostsTopologyChart extends React.Component {
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMousUp}
           onMouseMove={this.handleMousMove}
-          innerRef={setRef(ref => this.svg = ref, svgRef)}
+          innerRef={setRef(ref => (this.svg = ref), svgRef)}
         >
-          <Group
-            left={translateX}
-            top={translateY}
-            scale={scale}
-          >
+          <Group left={translateX} top={translateY} scale={scale}>
             {links.map(link => {
               return (
                 <line
@@ -477,29 +479,31 @@ class HostsTopologyChart extends React.Component {
             {hosts.map(host => {
               const radius = host.isScanner ? SCANNER_RADIUS : HOST_RADIUS;
               return (
-                <React.Fragment
-                  key={host.id}
-                >
-                  {scale > TEXT_SCALE_THRESHOLD &&
+                <React.Fragment key={host.id}>
+                  {scale > TEXT_SCALE_THRESHOLD && (
                     <text
                       fontWeight="normal"
                       textAnchor="middle"
                       dominantBaseline="hanging"
                       fontSize="6px"
-                      fill={isDefined(host.uuid) ?
-                        Theme.black : Theme.lightGray}
+                      fill={
+                        isDefined(host.uuid) ? Theme.black : Theme.lightGray
+                      }
                       x={host.x}
                       y={host.y + 1 + radius}
                     >
                       {host.name}
                     </text>
-                  }
+                  )}
                   <Circle
                     r={radius}
                     fill={this.hostFillColor(host)}
                     stroke={this.hostStrokeColor(host)}
-                    strokeWidth={host.isScanner ?
-                      SCANNER_STROKE_WIDTH : DEFAULT_STROKE_WIDTH}
+                    strokeWidth={
+                      host.isScanner
+                        ? SCANNER_STROKE_WIDTH
+                        : DEFAULT_STROKE_WIDTH
+                    }
                     cx={host.x}
                     cy={host.y}
                     onMouseDown={event => this.handleHostDragStart(event, host)}

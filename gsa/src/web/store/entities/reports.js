@@ -18,9 +18,7 @@
  */
 import {isDefined} from 'gmp/utils/identity';
 
-import {
-  createEntityActions,
-} from './utils/actions';
+import {createEntityActions} from './utils/actions';
 
 import {createAll} from './utils/main';
 
@@ -39,29 +37,28 @@ const entityType = 'deltaReport';
 const deltaIdentifier = (id, deltaId) => `${id}+${deltaId}`;
 
 class DeltaSelector {
-
   constructor(state = {}) {
     this.state = state;
   }
 
   isLoading(id, deltaId) {
-    return isDefined(this.state.isLoading) ?
-      !!this.state.isLoading[deltaIdentifier(id, deltaId)] :
-      false;
+    return isDefined(this.state.isLoading)
+      ? !!this.state.isLoading[deltaIdentifier(id, deltaId)]
+      : false;
   }
 
   getError(id, deltaId) {
-    return isDefined(this.state.errors) ?
-      this.state.errors[deltaIdentifier(id, deltaId)] :
-      undefined;
+    return isDefined(this.state.errors)
+      ? this.state.errors[deltaIdentifier(id, deltaId)]
+      : undefined;
   }
 
   getEntity(id, deltaId) {
-    return isDefined(this.state.byId) ?
-      this.state.byId[deltaIdentifier(id, deltaId)] :
-      undefined;
+    return isDefined(this.state.byId)
+      ? this.state.byId[deltaIdentifier(id, deltaId)]
+      : undefined;
   }
-};
+}
 
 const deltaReducer = createReducer(entityType);
 const deltaSelector = rootState =>
@@ -80,14 +77,18 @@ const loadEntity = gmp => (id, filter) => (dispatch, getState) => {
 
   dispatch(entityActions.request(id));
 
-  return gmp.report.get({id}, {filter}).then(
-    response => dispatch(entityActions.success(id, response.data)),
-    error => dispatch(entityActions.error(id, error)),
-  );
+  return gmp.report
+    .get({id}, {filter})
+    .then(
+      response => dispatch(entityActions.success(id, response.data)),
+      error => dispatch(entityActions.error(id, error)),
+    );
 };
 
-const loadDeltaReport = gmp => (id, deltaId, filter) =>
-  (dispatch, getState) => {
+const loadDeltaReport = gmp => (id, deltaId, filter) => (
+  dispatch,
+  getState,
+) => {
   const rootState = getState();
   const state = deltaSelector(rootState);
 
@@ -100,10 +101,13 @@ const loadDeltaReport = gmp => (id, deltaId, filter) =>
 
   dispatch(deltaEntityActions.request(identifier));
 
-  return gmp.report.getDelta({id}, {id: deltaId}, {filter}).then(
-    response => dispatch(deltaEntityActions.success(identifier, response.data)),
-    error => dispatch(deltaEntityActions.error(identifier, error)),
-  );
+  return gmp.report
+    .getDelta({id}, {id: deltaId}, {filter})
+    .then(
+      response =>
+        dispatch(deltaEntityActions.success(identifier, response.data)),
+      error => dispatch(deltaEntityActions.error(identifier, error)),
+    );
 };
 
 export {

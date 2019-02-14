@@ -30,7 +30,6 @@ import {
 } from '../sort';
 
 describe('ipToNumber tests', () => {
-
   test('should convert ipv4 to number', () => {
     expect(ipToNumber('192.168.1.1')).toEqual(3232235777);
     expect(ipToNumber('192.168.1.2')).toEqual(3232235778);
@@ -46,18 +45,17 @@ describe('ipToNumber tests', () => {
   });
 
   test('should pass through ipv6 address', () => {
-    expect(ipToNumber('fe80::ccf8:4cc7:a11a:76a'))
-      .toEqual('fe80::ccf8:4cc7:a11a:76a');
+    expect(ipToNumber('fe80::ccf8:4cc7:a11a:76a')).toEqual(
+      'fe80::ccf8:4cc7:a11a:76a',
+    );
   });
 
   test('should return undefined for undefined ip', () => {
     expect(ipToNumber()).toBeUndefined();
   });
-
 });
 
 describe('getProperty tests', () => {
-
   test('should get property by name', () => {
     expect(getProperty({value: 1}, 'value')).toEqual(1);
     expect(getProperty({foo: 'bar'}, 'foo')).toEqual('bar');
@@ -73,11 +71,9 @@ describe('getProperty tests', () => {
     expect(getProperty({value: 1}, obj => obj.foo)).toBeUndefined();
     expect(getProperty(undefined, obj => obj.foo)).toBeUndefined();
   });
-
 });
 
 describe('getValue tests', () => {
-
   test('should return value for property', () => {
     expect(getValue(v => v, {foo: 'bar'}, 'foo')).toEqual('bar');
     expect(getValue(v => v, {foo: 'bar'}, obj => obj.foo)).toEqual('bar');
@@ -95,14 +91,13 @@ describe('getValue tests', () => {
 
   test('should return default for unknown property', () => {
     expect(getValue(v => v, {foo: 'bar'}, 'bar', 'ipsum')).toEqual('ipsum');
-    expect(getValue(v => v, {foo: 'bar'}, obj => obj.bar, 'ipsum'))
-      .toEqual('ipsum');
+    expect(getValue(v => v, {foo: 'bar'}, obj => obj.bar, 'ipsum')).toEqual(
+      'ipsum',
+    );
   });
-
 });
 
 describe('makeCompareString tests', () => {
-
   test('should compare strings asc', () => {
     const objA = {
       value: 'a',
@@ -144,11 +139,9 @@ describe('makeCompareString tests', () => {
     expect(compareValues(objA, objC)).toEqual(0);
     expect(compareValues(objA, objD)).toEqual(-1);
   });
-
 });
 
 describe('makeCompareNumber tests', () => {
-
   test('should compare numbers asc', () => {
     const objA = {
       value: 1,
@@ -190,11 +183,9 @@ describe('makeCompareNumber tests', () => {
     expect(compareValues(objA, objC)).toEqual(0);
     expect(compareValues(objA, objD)).toEqual(0);
   });
-
 });
 
 describe('makeCompareIp tests', () => {
-
   test('should compare IPs asc', () => {
     const objA = {
       value: '192.168.1.1',
@@ -257,11 +248,9 @@ describe('makeCompareIp tests', () => {
     expect(compareValues(objA, objC)).toEqual(0);
     expect(compareValues(objA, objD)).toEqual(-1);
   });
-
 });
 
 describe('makeCompareSeverity tests', () => {
-
   test('should compare severity asc', () => {
     const objA = {
       severity: 1,
@@ -343,11 +332,9 @@ describe('makeCompareSeverity tests', () => {
     expect(compareValues(objA, objC)).toEqual(0);
     expect(compareValues(objA, objD)).toEqual(0);
   });
-
 });
 
 describe('makeCompareDate tests', () => {
-
   test('should compare dates asc', () => {
     const objA = {
       value: moment('2017-01-01'),
@@ -385,7 +372,6 @@ describe('makeCompareDate tests', () => {
     expect(compareValues(objA, objC)).toEqual(0);
     expect(compareValues(objA, objD)).toEqual(0);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

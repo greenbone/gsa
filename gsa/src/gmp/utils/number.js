@@ -30,9 +30,8 @@ import {isDefined} from './identity';
  *
  * @returns {String} Formatted Number
  */
-export const fixedValue = (value, digits) => isDefined(digits) ?
-  value.toFixed(digits) :
-  '' + value;
+export const fixedValue = (value, digits) =>
+  isDefined(digits) ? value.toFixed(digits) : '' + value;
 
 /**
  * Formats a Number to a Severity value

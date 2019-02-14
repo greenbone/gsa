@@ -29,8 +29,8 @@ import PropTypes from 'web/utils/proptypes';
 const Div = styled.div`
   ${props => {
     return {...props.styleProps};
-  }
-}`;
+  }}
+`;
 
 const foldDelay = css.keyframes({
   '0%': {minWidth: '0px'},
@@ -50,8 +50,12 @@ export const FoldState = {
 };
 
 const FoldStatePropType = PropTypes.oneOf([
-  FoldState.UNFOLDED, FoldState.FOLDED, FoldState.FOLDING_START,
-  FoldState.UNFOLDING_START, FoldState.FOLDING, FoldState.UNFOLDING,
+  FoldState.UNFOLDED,
+  FoldState.FOLDED,
+  FoldState.FOLDING_START,
+  FoldState.UNFOLDING_START,
+  FoldState.FOLDING,
+  FoldState.UNFOLDING,
 ]);
 
 /**
@@ -120,9 +124,7 @@ export const withFolding = (Component, defaults = {}) => {
         onTransitionEnd={onFoldStepEnd}
         onAnimationEnd={onFoldStepEnd}
       >
-        <Component
-          {...props}
-        />
+        <Component {...props} />
       </Div>
     );
   };
@@ -143,7 +145,6 @@ export const withFolding = (Component, defaults = {}) => {
 
 export const withFoldToggle = Component => {
   class FoldToggleWrapper extends React.Component {
-
     constructor(...args) {
       super(...args);
 
@@ -227,8 +228,8 @@ export const withFoldToggle = Component => {
           {...other}
         />
       );
-    };
-  };
+    }
+  }
 
   FoldToggleWrapper.propTypes = {
     initialFoldState: FoldStatePropType,

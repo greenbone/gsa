@@ -38,16 +38,15 @@ const Anchor = styled.a`
 `;
 
 const StyledIcon = styled.span`
-  cursor: ${props => isDefined(props.onClick) ? 'pointer' : undefined};
+  cursor: ${props => (isDefined(props.onClick) ? 'pointer' : undefined)};
   @media print {
     & {
-      ${props => isDefined(props.onClick) ? {display: 'none'} : undefined};
-    };
-  };
+      ${props => (isDefined(props.onClick) ? {display: 'none'} : undefined)};
+    }
+  }
 `;
 
 class IconComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -64,21 +63,19 @@ class IconComponent extends React.Component {
       try {
         if (this.svgRef.removeChild(this.state.svgComponent)) {
           this.loadImage();
-        };
-      }
-      catch (e) {
+        }
+      } catch (e) {
         /* Ignore errors here. If the old child couldn't be removed, a new one
         should not be appended. Therefore do nothing instead of crashing the GUI */
-      };
-    };
+      }
+    }
   }
 
   loadImage() {
     const {img} = this.props;
     const iconPath = get_img_url(img);
-    fetch(iconPath)
-      .then(response => response.text()
-      .then(resp => {
+    fetch(iconPath).then(response =>
+      response.text().then(resp => {
         const parser = new window.DOMParser();
         const doc = parser.parseFromString(resp, 'image/svg+xml');
         const svg = doc.documentElement;
@@ -86,8 +83,9 @@ class IconComponent extends React.Component {
         if (this.svgRef !== null) {
           this.svgRef.appendChild(svg);
         }
-      }));
-  };
+      }),
+    );
+  }
 
   handleClick() {
     const {value, onClick} = this.props;
@@ -96,39 +94,32 @@ class IconComponent extends React.Component {
   }
 
   render() {
-    const {
-      className,
-      to,
-      value,
-      onClick,
-      ...other
-    } = this.props;
+    const {className, to, value, onClick, ...other} = this.props;
 
     return (
       <StyledIcon
         {...other}
         onClick={isDefined(onClick) ? this.handleClick : undefined}
       >
-
-        {isDefined(to) ?
-          <Anchor
-            href={to}
-          >
-            <div className={className} ref={ref => this.svgRef = ref}/>
-          </Anchor> :
-          <div className={className} ref={ref => this.svgRef = ref}/>
-        }
+        {isDefined(to) ? (
+          <Anchor href={to}>
+            <div className={className} ref={ref => (this.svgRef = ref)} />
+          </Anchor>
+        ) : (
+          <div className={className} ref={ref => (this.svgRef = ref)} />
+        )}
       </StyledIcon>
     );
   }
-};
+}
 
 IconComponent = styled(IconComponent)`
   & svg path {
     fill: ${props => {
       const {active = true} = props;
       return active ? undefined : Theme.inputBorderGray;
-  }}};
+    }};
+  }
 `;
 
 IconComponent.propTypes = {

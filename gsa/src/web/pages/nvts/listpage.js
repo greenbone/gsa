@@ -50,12 +50,7 @@ const ToolBarIcons = () => (
   />
 );
 
-const Page = ({
-  filter,
-  onFilterChanged,
-  onInteraction,
-  ...props
-}) => (
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
   <EntitiesPage
     {...props}
     createFilterType="info"
@@ -75,7 +70,7 @@ const Page = ({
     filter={filter}
     filterEditDialog={NvtsFilterDialog}
     filtersFilter={NVTS_FILTER_FILTER}
-    sectionIcon={<NvtIcon size="large"/>}
+    sectionIcon={<NvtIcon size="large" />}
     table={NvtsTable}
     title={_('NVTs')}
     toolBarIcons={ToolBarIcons}

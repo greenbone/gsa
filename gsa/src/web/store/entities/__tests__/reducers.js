@@ -21,13 +21,12 @@ import {isFunction} from 'gmp/utils/identity';
 import entitiesReducer from '../reducers';
 
 const initState = {
-    byId: {},
-    errors: {},
-    isLoading: {},
+  byId: {},
+  errors: {},
+  isLoading: {},
 };
 
 describe('entities reducer tests', () => {
-
   test('should be a function', () => {
     expect(isFunction(entitiesReducer)).toEqual(true);
   });
@@ -68,7 +67,6 @@ describe('entities reducer tests', () => {
       vuln: initState,
     });
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

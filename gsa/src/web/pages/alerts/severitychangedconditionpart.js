@@ -31,11 +31,11 @@ import Radio from '../../components/form/radio.js';
 const VALUE = 'Severity changed';
 
 const SeverityChangedConditionPart = ({
-    condition,
-    direction,
-    prefix,
-    onChange,
-  }) => {
+  condition,
+  direction,
+  prefix,
+  onChange,
+}) => {
   return (
     <Divider>
       <Radio
@@ -44,19 +44,22 @@ const SeverityChangedConditionPart = ({
         name="condition"
         checked={condition === VALUE}
         onChange={onChange}
-      >
-      </Radio>
+      />
       <Select
-        items={[{
-          value: 'changed',
-          label: _('changed'),
-        }, {
-          value: 'increased',
-          label: _('increased'),
-        }, {
-          value: 'decreased',
-          label: _('decreased'),
-        }]}
+        items={[
+          {
+            value: 'changed',
+            label: _('changed'),
+          },
+          {
+            value: 'increased',
+            label: _('increased'),
+          },
+          {
+            value: 'decreased',
+            label: _('decreased'),
+          },
+        ]}
         value={direction}
         name={prefix + 'direction'}
         onChange={onChange}

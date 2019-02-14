@@ -28,22 +28,17 @@ export const NOTES_CREATED = 'notes-created';
 export const NOTES_WORDCOUNT = 'notes-wordcount';
 
 export const notesActiveDaysLoader = loadFunc(
-  ({gmp, filter}) => gmp.notes.getActiveDaysAggregates({filter})
-    .then(r => r.data),
-  NOTES_ACTIVE_DAYS);
+  ({gmp, filter}) =>
+    gmp.notes.getActiveDaysAggregates({filter}).then(r => r.data),
+  NOTES_ACTIVE_DAYS,
+);
 
-export const NotesActiveDaysLoader = ({
-  filter,
-  children,
-}) => (
+export const NotesActiveDaysLoader = ({filter, children}) => (
   <Loader
     dataId={NOTES_ACTIVE_DAYS}
     filter={filter}
     load={notesActiveDaysLoader}
-    subscriptions={[
-      'notes.timer',
-      'notes.changed',
-    ]}
+    subscriptions={['notes.timer', 'notes.changed']}
   >
     {children}
   </Loader>
@@ -52,22 +47,16 @@ export const NotesActiveDaysLoader = ({
 NotesActiveDaysLoader.propTypes = loaderPropTypes;
 
 export const notesCreatedLoader = loadFunc(
-  ({gmp, filter}) => gmp.notes.getCreatedAggregates({filter})
-    .then(r => r.data),
-  NOTES_CREATED);
+  ({gmp, filter}) => gmp.notes.getCreatedAggregates({filter}).then(r => r.data),
+  NOTES_CREATED,
+);
 
-export const NotesCreatedLoader = ({
-  filter,
-  children,
-}) => (
+export const NotesCreatedLoader = ({filter, children}) => (
   <Loader
     dataId={NOTES_CREATED}
     filter={filter}
     load={notesCreatedLoader}
-    subscriptions={[
-      'notes.timer',
-      'notes.changed',
-    ]}
+    subscriptions={['notes.timer', 'notes.changed']}
   >
     {children}
   </Loader>
@@ -75,24 +64,18 @@ export const NotesCreatedLoader = ({
 
 NotesCreatedLoader.propTypes = loaderPropTypes;
 
-
 export const notesWordCountLoader = loadFunc(
-  ({gmp, filter}) => gmp.notes.getWordCountsAggregates({filter})
-    .then(r => r.data),
-  NOTES_WORDCOUNT);
+  ({gmp, filter}) =>
+    gmp.notes.getWordCountsAggregates({filter}).then(r => r.data),
+  NOTES_WORDCOUNT,
+);
 
-export const NotesWordCountLoader = ({
-  filter,
-  children,
-}) => (
+export const NotesWordCountLoader = ({filter, children}) => (
   <Loader
     dataId={NOTES_WORDCOUNT}
     filter={filter}
     load={notesWordCountLoader}
-    subscriptions={[
-      'notes.timer',
-      'notes.changed',
-    ]}
+    subscriptions={['notes.timer', 'notes.changed']}
   >
     {children}
   </Loader>

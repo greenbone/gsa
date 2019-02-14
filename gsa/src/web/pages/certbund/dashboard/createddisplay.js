@@ -67,14 +67,16 @@ export const CertBundCreatedTableDisplay = createDisplay({
   filtersFilter: CERTBUND_FILTER_FILTER,
 });
 
-registerDisplay(CertBundCreatedTableDisplay.displayId,
-  CertBundCreatedTableDisplay, {
+registerDisplay(
+  CertBundCreatedTableDisplay.displayId,
+  CertBundCreatedTableDisplay,
+  {
     title: _l('Table: CERT-Bund Advisories by Creation Time'),
-  });
+  },
+);
 
-registerDisplay(CertBundCreatedDisplay.displayId,
-  CertBundCreatedDisplay, {
-    title: _l('Chart: CERT-Bund Advisories by Creation Time'),
-  });
+registerDisplay(CertBundCreatedDisplay.displayId, CertBundCreatedDisplay, {
+  title: _l('Chart: CERT-Bund Advisories by Creation Time'),
+});
 
 // vim: set ts=2 sw=2 tw=80:

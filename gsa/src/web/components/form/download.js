@@ -24,7 +24,6 @@ import React from 'react';
 import PropTypes from '../../utils/proptypes.js';
 
 class Download extends React.Component {
-
   componentWillUnmount() {
     this.release();
   }
@@ -59,7 +58,7 @@ class Download extends React.Component {
       <a
         download={filename}
         aria-hidden
-        ref={ref => this.anchor = ref}
+        ref={ref => (this.anchor = ref)}
         style={{display: 'none'}}
       >
         Download

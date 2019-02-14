@@ -21,7 +21,6 @@ import {isDefined} from 'gmp/utils/identity';
 import {setProperties} from 'gmp/parser';
 
 class OperatingSystem {
-
   constructor(elem) {
     const properties = this.parseProperties(elem);
     setProperties(properties, this);

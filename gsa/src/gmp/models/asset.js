@@ -19,9 +19,7 @@
 import Model from '../model';
 
 class Asset extends Model {
-
   static entityType = 'asset';
-
 }
 
 export default Asset;

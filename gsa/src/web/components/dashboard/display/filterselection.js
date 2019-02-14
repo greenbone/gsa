@@ -38,9 +38,7 @@ import PropTypes from 'web/utils/proptypes';
 import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
 
-
 class FilterSelection extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -81,21 +79,18 @@ class FilterSelection extends React.Component {
   }
 
   render() {
-    const {
-      children,
-      filters = [],
-      filterId,
-    } = this.props;
+    const {children, filters = [], filterId} = this.props;
     const {showDialog} = this.state;
-    const filter = isDefined(filterId) ?
-      filters.find(f => f.id === filterId) : undefined;
+    const filter = isDefined(filterId)
+      ? filters.find(f => f.id === filterId)
+      : undefined;
     return (
       <React.Fragment>
         {children({
           filter,
           selectFilter: this.handleOpenDialog,
         })}
-        {showDialog &&
+        {showDialog && (
           <SaveDialog
             defaultValues={{
               filterId: isDefined(filterId) ? filterId : UNSET_VALUE,
@@ -107,11 +102,10 @@ class FilterSelection extends React.Component {
             onSave={this.handleSaveDialog}
           >
             {({values, onValueChange}) => (
-              <FormGroup
-                title={_('Filter')}
-              >
+              <FormGroup title={_('Filter')}>
                 <Select
-                  items={[{
+                  items={[
+                    {
                       label: UNSET_LABEL,
                       value: UNSET_VALUE,
                     },
@@ -127,7 +121,7 @@ class FilterSelection extends React.Component {
               </FormGroup>
             )}
           </SaveDialog>
-        }
+        )}
       </React.Fragment>
     );
   }
@@ -140,7 +134,7 @@ FilterSelection.propTypes = {
     PropTypes.shape({
       id: PropTypes.id,
       name: PropTypes.string,
-    })
+    }),
   ),
   filtersFilter: PropTypes.filter.isRequired,
   loadFilters: PropTypes.func.isRequired,
@@ -167,7 +161,10 @@ const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
 
 export default compose(
   withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(FilterSelection);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -28,7 +28,6 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.hosts');
 
 class HostCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'asset', Host);
     this.setParam('asset_type', 'host');
@@ -68,7 +67,6 @@ class HostCommand extends EntityCommand {
 }
 
 class HostsCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'asset', Host);
     this.setParam('asset_type', 'host');
@@ -100,21 +98,19 @@ class HostsCommand extends EntitiesCommand {
       filter,
       aggregate_type: 'host',
       group_column: 'uuid',
-      textColumns: [
-        'name',
-        'modified',
+      textColumns: ['name', 'modified'],
+      dataColumns: ['severity'],
+      sort: [
+        {
+          field: 'severity',
+          direction: 'descending',
+          stat: 'max',
+        },
+        {
+          field: 'modified',
+          direction: 'descending',
+        },
       ],
-      dataColumns: [
-        'severity',
-      ],
-      sort: [{
-        field: 'severity',
-        direction: 'descending',
-        stat: 'max',
-      }, {
-        field: 'modified',
-        direction: 'descending',
-      }],
       maxGroups: max,
     });
   }

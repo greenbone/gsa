@@ -21,7 +21,7 @@ import {_, _l} from 'gmp/locale/lang';
 import {OS_FILTER_FILTER} from 'gmp/models/filter';
 
 import CvssDisplay from 'web/components/dashboard/display/cvss/cvssdisplay';
-import CvssTableDisplay from 'web/components/dashboard/display/cvss/cvsstabledisplay';  // eslint-disable-line max-len
+import CvssTableDisplay from 'web/components/dashboard/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
 
@@ -31,8 +31,8 @@ export const OsCvssDisplay = createDisplay({
   loaderComponent: OsAverageSeverityLoader,
   displayComponent: CvssDisplay,
   yLabel: _l('# of Vulnerabilities'),
-  title: ({data: tdata}) => _('Operating Systems by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  title: ({data: tdata}) =>
+    _('Operating Systems by CVSS (Total: {{count}})', {count: tdata.total}),
   filtersFilter: OS_FILTER_FILTER,
   displayId: 'os-by-cvss',
   displayName: 'OsCvssDisplay',
@@ -42,10 +42,7 @@ export const OsCvssTableDisplay = createDisplay({
   loaderComponent: OsAverageSeverityLoader,
   displayComponent: CvssTableDisplay,
   filtersFilter: OS_FILTER_FILTER,
-  dataTitles: [
-    _l('Severity'),
-    _l('# of Operating Systems'),
-  ],
+  dataTitles: [_l('Severity'), _l('# of Operating Systems')],
   title: ({data: tdata = {}}) =>
     _('Operating Systems by CVSS (Total: {{count}})', {count: tdata.total}),
   displayId: 'os-by-cvss-table',

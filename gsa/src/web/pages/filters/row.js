@@ -39,44 +39,43 @@ import TrashIcon from 'web/entity/icon/trashicon';
 
 import PropTypes from 'web/utils/proptypes';
 
-const Actions = withEntitiesActions(({
-  entity,
-  onFilterDeleteClick,
-  onFilterDownloadClick,
-  onFilterCloneClick,
-  onFilterEditClick,
-}) => (
-  <IconDivider
-    grow
-    align={['center', 'center']}
-  >
-    <TrashIcon
-      displayName={_('Filter')}
-      name="filter"
-      entity={entity}
-      onClick={onFilterDeleteClick}
-    />
-    <EditIcon
-      displayName={_('Filter')}
-      name="filter"
-      entity={entity}
-      onClick={onFilterEditClick}
-    />
-    <CloneIcon
-      displayName={_('Filter')}
-      name="filter"
-      entity={entity}
-      title={_('Clone Filter')}
-      value={entity}
-      onClick={onFilterCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export Filter')}
-      onClick={onFilterDownloadClick}
-    />
-  </IconDivider>
-));
+const Actions = withEntitiesActions(
+  ({
+    entity,
+    onFilterDeleteClick,
+    onFilterDownloadClick,
+    onFilterCloneClick,
+    onFilterEditClick,
+  }) => (
+    <IconDivider grow align={['center', 'center']}>
+      <TrashIcon
+        displayName={_('Filter')}
+        name="filter"
+        entity={entity}
+        onClick={onFilterDeleteClick}
+      />
+      <EditIcon
+        displayName={_('Filter')}
+        name="filter"
+        entity={entity}
+        onClick={onFilterEditClick}
+      />
+      <CloneIcon
+        displayName={_('Filter')}
+        name="filter"
+        entity={entity}
+        title={_('Clone Filter')}
+        value={entity}
+        onClick={onFilterCloneClick}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export Filter')}
+        onClick={onFilterDownloadClick}
+      />
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -101,16 +100,9 @@ const Row = ({
       displayName={_('Filter')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
-    <TableData>
-      {entity.toFilterString()}
-    </TableData>
-    <TableData>
-      {typeName(entity.filter_type)}
-    </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <TableData>{entity.toFilterString()}</TableData>
+    <TableData>{typeName(entity.filter_type)}</TableData>
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

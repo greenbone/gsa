@@ -38,7 +38,6 @@ import {YES_VALUE} from 'gmp/parser';
 testModel(Scanner, 'scanner');
 
 describe('Scanner model tests', () => {
-
   test('should parse type', () => {
     const scanner = new Scanner({type: '42'});
 
@@ -95,9 +94,7 @@ describe('Scanner model tests', () => {
   test('should parse tasks', () => {
     const elem = {
       tasks: {
-        task: [
-          {id: '123'},
-        ],
+        task: [{id: '123'}],
       },
     };
     const scanner = new Scanner(elem);
@@ -115,9 +112,7 @@ describe('Scanner model tests', () => {
   test('should parse configs', () => {
     const elem = {
       configs: {
-        config: [
-          {id: '123'},
-        ],
+        config: [{id: '123'}],
       },
     };
     const scanner = new Scanner(elem);
@@ -229,11 +224,9 @@ describe('Scanner model tests', () => {
     expect(scanner2.hasUnixSocket()).toEqual(false);
     expect(scanner3.hasUnixSocket()).toEqual(false);
   });
-
 });
 
 describe('Scanner model function tests', () => {
-
   test('scannerTypeName() should return scanner type', () => {
     const type1 = scannerTypeName(OSP_SCANNER_TYPE);
     const type2 = scannerTypeName(OPENVAS_SCANNER_TYPE);

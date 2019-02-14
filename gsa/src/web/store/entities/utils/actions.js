@@ -84,13 +84,13 @@ export const createLoadEntities = ({
 
   dispatch(actions.request(filter));
 
-  return gmp[pluralizeType(entityType)].get({filter})
-    .then(response => {
-        const {data, meta} = response;
-        const {filter: loadedFilter, counts} = meta;
-        return dispatch(actions.success(data, filter, loadedFilter, counts));
-      },
-      error => dispatch(actions.error(error, filter)),
+  return gmp[pluralizeType(entityType)].get({filter}).then(
+    response => {
+      const {data, meta} = response;
+      const {filter: loadedFilter, counts} = meta;
+      return dispatch(actions.success(data, filter, loadedFilter, counts));
+    },
+    error => dispatch(actions.error(error, filter)),
   );
 };
 
@@ -99,19 +99,21 @@ export const createLoadEntity = ({
   actions,
   entityType,
 }) => gmp => id => (dispatch, getState) => {
-    const rootState = getState();
-    const state = selector(rootState);
+  const rootState = getState();
+  const state = selector(rootState);
 
-    if (state.isLoadingEntity(id)) {
-      // we are already loading data
-      return Promise.resolve();
-    }
+  if (state.isLoadingEntity(id)) {
+    // we are already loading data
+    return Promise.resolve();
+  }
 
-    dispatch(actions.request(id));
+  dispatch(actions.request(id));
 
-    return gmp[entityType].get({id}).then(
+  return gmp[entityType]
+    .get({id})
+    .then(
       response => dispatch(actions.success(id, response.data)),
       error => dispatch(actions.error(id, error)),
     );
-  };
+};
 // vim: set ts=2 sw=2 tw=80:

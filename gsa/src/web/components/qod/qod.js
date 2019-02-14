@@ -27,11 +27,7 @@ const Span = styled.span`
   white-space: nowrap;
 `;
 
-const Qod = ({value}) => (
-  <Span>
-    {value} %
-  </Span>
-);
+const Qod = ({value}) => <Span>{value} %</Span>;
 
 Qod.propTypes = {
   value: PropTypes.numberOrNumberString.isRequired,

@@ -33,12 +33,7 @@ import TableRow from 'web/components/table/row';
 
 import {createEntitiesTable} from 'web/entities/table';
 
-const Header = ({
-  currentSortDir,
-  currentSortBy,
-  sort = true,
-  onSortChange,
-}) => (
+const Header = ({currentSortDir, currentSortBy, sort = true, onSortChange}) => (
   <TableHeader>
     <TableRow>
       <TableHead
@@ -92,43 +87,29 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const Row = ({
-  entity,
-  links = true,
-}) => {
+const Row = ({entity, links = true}) => {
   const {nvt, host, port, description} = entity;
   return (
     <TableRow>
+      <TableData>{description}</TableData>
       <TableData>
-        {description}
-      </TableData>
-      <TableData>
-        {isDefined(host.id) ?
-          <DetailsLink
-            type="host"
-            id={host.id}
-            textOnly={!links}
-          >
+        {isDefined(host.id) ? (
+          <DetailsLink type="host" id={host.id} textOnly={!links}>
             {host.ip}
-          </DetailsLink> :
+          </DetailsLink>
+        ) : (
           host.ip
-        }
+        )}
       </TableData>
       <TableData>
         <i>{host.name}</i>
       </TableData>
       <TableData>
-        <DetailsLink
-          type="nvt"
-          id={nvt.id}
-          textOnly={!links}
-        >
+        <DetailsLink type="nvt" id={nvt.id} textOnly={!links}>
           {nvt.name}
         </DetailsLink>
       </TableData>
-      <TableData>
-        {port}
-      </TableData>
+      <TableData>{port}</TableData>
     </TableRow>
   );
 };

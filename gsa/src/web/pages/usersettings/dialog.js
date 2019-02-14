@@ -47,71 +47,70 @@ const FormGroupSizer = styled.div`
 `;
 
 let UserSettingsDialog = ({
-    alerts,
-    credentials,
-    filters,
-    openVasScanConfigs,
-    ospScanConfigs,
-    openVasScanners,
-    ospScanners,
-    portLists,
-    reportFormats,
-    schedules,
-    targets,
-    timezone,
-    userInterfaceLanguage,
-    rowsPerPage,
-    maxRowsPerPage,
-    detailsExportFileName,
-    listExportFileName,
-    reportExportFileName,
-    autoCacheRebuild,
-    severityClass,
-    dynamicSeverity,
-    defaultSeverity,
-    defaultAlert,
-    defaultEsxiCredential,
-    defaultOspScanConfig,
-    defaultOspScanner,
-    defaultOpenvasScanConfig,
-    defaultOpenvasScanner,
-    defaultPortList,
-    defaultReportFormat,
-    defaultSmbCredential,
-    defaultSnmpCredential,
-    defaultSshCredential,
-    defaultSchedule,
-    defaultTarget,
-    agentsFilter,
-    alertsFilter,
-    assetsFilter,
-    configsFilter,
-    credentialsFilter,
-    filtersFilter,
-    notesFilter,
-    overridesFilter,
-    permissionsFilter,
-    portListsFilter,
-    reportsFilter,
-    reportFormatsFilter,
-    resultsFilter,
-    rolesFilter,
-    schedulesFilter,
-    tagsFilter,
-    targetsFilter,
-    tasksFilter,
-    cpeFilter,
-    cveFilter,
-    nvtFilter,
-    ovalFilter,
-    certBundFilter,
-    dfnCertFilter,
-    secInfoFilter,
-    onClose,
-    onSave,
-    capabilities,
-  }) => {
-
+  alerts,
+  credentials,
+  filters,
+  openVasScanConfigs,
+  ospScanConfigs,
+  openVasScanners,
+  ospScanners,
+  portLists,
+  reportFormats,
+  schedules,
+  targets,
+  timezone,
+  userInterfaceLanguage,
+  rowsPerPage,
+  maxRowsPerPage,
+  detailsExportFileName,
+  listExportFileName,
+  reportExportFileName,
+  autoCacheRebuild,
+  severityClass,
+  dynamicSeverity,
+  defaultSeverity,
+  defaultAlert,
+  defaultEsxiCredential,
+  defaultOspScanConfig,
+  defaultOspScanner,
+  defaultOpenvasScanConfig,
+  defaultOpenvasScanner,
+  defaultPortList,
+  defaultReportFormat,
+  defaultSmbCredential,
+  defaultSnmpCredential,
+  defaultSshCredential,
+  defaultSchedule,
+  defaultTarget,
+  agentsFilter,
+  alertsFilter,
+  assetsFilter,
+  configsFilter,
+  credentialsFilter,
+  filtersFilter,
+  notesFilter,
+  overridesFilter,
+  permissionsFilter,
+  portListsFilter,
+  reportsFilter,
+  reportFormatsFilter,
+  resultsFilter,
+  rolesFilter,
+  schedulesFilter,
+  tagsFilter,
+  targetsFilter,
+  tasksFilter,
+  cpeFilter,
+  cveFilter,
+  nvtFilter,
+  ovalFilter,
+  certBundFilter,
+  dfnCertFilter,
+  secInfoFilter,
+  onClose,
+  onSave,
+  capabilities,
+}) => {
   const settings = {
     timezone,
     oldPassword: '',
@@ -174,10 +173,7 @@ let UserSettingsDialog = ({
       onSave={onSave}
       defaultValues={settings}
     >
-      {({
-        values,
-        onValueChange,
-      }) => {
+      {({values, onValueChange}) => {
         return (
           <React.Fragment>
             <Section title={_('General Settings')} foldable>
@@ -238,7 +234,7 @@ let UserSettingsDialog = ({
                 />
               </FormGroupSizer>
             </Section>
-            {capabilities.mayAccess('filter') &&
+            {capabilities.mayAccess('filter') && (
               <Section title={_('Filter Settings')} foldable>
                 <FormGroupSizer>
                   <FilterPart
@@ -272,7 +268,7 @@ let UserSettingsDialog = ({
                   />
                 </FormGroupSizer>
               </Section>
-            }
+            )}
           </React.Fragment>
         );
       }}
@@ -347,8 +343,7 @@ UserSettingsDialog.propTypes = {
 };
 
 UserSettingsDialog = connect(rootState => {
-  const entities = isDefined(rootState.entities) ?
-    rootState.entities : [];
+  const entities = isDefined(rootState.entities) ? rootState.entities : [];
   return {
     entities,
   };

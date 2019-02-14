@@ -29,13 +29,11 @@ import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 export const VulnsSeverityDisplay = createDisplay({
   loaderComponent: VulnsSeverityLoader,
   displayComponent: SeverityClassDisplay,
-  dataTitles: [
-    _l('Severity Class'),
-    _l('# of Vulnerabilities'),
-  ],
+  dataTitles: [_l('Severity Class'), _l('# of Vulnerabilities')],
   title: ({data: tdata}) =>
-    _('Vulnerabilities by Severity Class (Total: {{count}})',
-      {count: tdata.total}),
+    _('Vulnerabilities by Severity Class (Total: {{count}})', {
+      count: tdata.total,
+    }),
   displayId: 'vuln-by-severity-class',
   displayName: 'VulnsSeverityDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
@@ -44,13 +42,11 @@ export const VulnsSeverityDisplay = createDisplay({
 export const VulnsSeverityTableDisplay = createDisplay({
   loaderComponent: VulnsSeverityLoader,
   displayComponent: SeverityClassTableDisplay,
-  dataTitles: [
-    _l('Severity Class'),
-    _l('# of Vulnerabilities'),
-  ],
+  dataTitles: [_l('Severity Class'), _l('# of Vulnerabilities')],
   title: ({data: tdata}) =>
-    _('Vulnerabilities by Severity Class (Total: {{count}})',
-      {count: tdata.total}),
+    _('Vulnerabilities by Severity Class (Total: {{count}})', {
+      count: tdata.total,
+    }),
   displayId: 'vuln-by-severity-class-table',
   displayName: 'VulnsSeverityTableDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
@@ -60,8 +56,10 @@ registerDisplay(VulnsSeverityDisplay.displayId, VulnsSeverityDisplay, {
   title: _l('Chart: Vulnerabilities by Severity Class'),
 });
 
-registerDisplay(VulnsSeverityTableDisplay.displayId,
-  VulnsSeverityTableDisplay, {
+registerDisplay(
+  VulnsSeverityTableDisplay.displayId,
+  VulnsSeverityTableDisplay,
+  {
     title: _l('Table: Vulnerabilities by Severity Class'),
   },
 );

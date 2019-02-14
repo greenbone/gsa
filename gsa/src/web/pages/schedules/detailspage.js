@@ -50,10 +50,7 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/schedules';
+import {selector, loadEntity} from 'web/store/entities/schedules';
 
 import {
   selector as permissionsSelector,
@@ -80,28 +77,13 @@ const ToolBarIcons = ({
         anhcor="scheduled-scan"
         title={_('Help: Schedules')}
       />
-      <ListIcon
-        title={_('Schedules List')}
-        page="schedules"
-      />
+      <ListIcon title={_('Schedules List')} page="schedules" />
     </IconDivider>
     <IconDivider>
-      <CreateIcon
-        entity={entity}
-        onClick={onScheduleCreateClick}
-      />
-      <CloneIcon
-        entity={entity}
-        onClick={onScheduleCloneClick}
-      />
-      <EditIcon
-        entity={entity}
-        onClick={onScheduleEditClick}
-      />
-      <DeleteIcon
-        entity={entity}
-        onClick={onScheduleDeleteClick}
-      />
+      <CreateIcon entity={entity} onClick={onScheduleCreateClick} />
+      <CloneIcon entity={entity} onClick={onScheduleCloneClick} />
+      <EditIcon entity={entity} onClick={onScheduleEditClick} />
+      <DeleteIcon entity={entity} onClick={onScheduleDeleteClick} />
       <ExportIcon
         value={entity}
         title={_('Export Schedule as XML')}
@@ -140,18 +122,11 @@ const Page = ({
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
-    {({
-      clone,
-      create,
-      delete: delete_func,
-      download,
-      edit,
-      save,
-    }) => (
+    {({clone, create, delete: delete_func, download, edit, save}) => (
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<ScheduleIcon size="large"/>}
+        sectionIcon={<ScheduleIcon size="large" />}
         title={_('Schedule')}
         toolBarIcons={ToolBarIcons}
         onInteraction={onInteraction}
@@ -162,24 +137,16 @@ const Page = ({
         onScheduleEditClick={edit}
         onScheduleSaveClick={save}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
@@ -192,9 +159,7 @@ const Page = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <ScheduleDetails
-                      entity={entity}
-                    />
+                    <ScheduleDetails entity={entity} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags
@@ -236,10 +201,11 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

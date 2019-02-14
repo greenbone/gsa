@@ -44,16 +44,12 @@ const transformScheduleData = (data = [], {endDate}) => {
     .map(task => {
       const {schedule, name} = task;
       const {event = {}} = schedule;
-      const {
-        durationInSeconds: duration,
-        recurrence = {},
-      } = event;
+      const {durationInSeconds: duration, recurrence = {}} = event;
       const {freq, interval = 1} = recurrence;
       let period;
       if (freq === ReccurenceFrequency.MINUTELY) {
         period = interval * 60;
-      }
-      else if (freq === ReccurenceFrequency.SECONDLY) {
+      } else if (freq === ReccurenceFrequency.SECONDLY) {
         period = interval;
       }
       return {
@@ -85,10 +81,7 @@ export const TasksSchedulesTableDisplay = createDisplay({
   loaderComponent: TasksSchedulesLoader,
   displayComponent: DataTableDisplay,
   chartComponent: DataTable,
-  dataTitles: [
-    _l('Task Name'),
-    _l('Next Schedule Time'),
-  ],
+  dataTitles: [_l('Task Name'), _l('Next Schedule Time')],
   dataRow: row => [
     row.label,
     isDefined(row.nextStart) ? longDate(row.nextStart) : '-',
@@ -106,8 +99,10 @@ registerDisplay(TasksSchedulesDisplay.displayId, TasksSchedulesDisplay, {
   title: _l('Chart: Next Scheduled Tasks'),
 });
 
-registerDisplay(TasksSchedulesTableDisplay.displayId,
-  TasksSchedulesTableDisplay, {
+registerDisplay(
+  TasksSchedulesTableDisplay.displayId,
+  TasksSchedulesTableDisplay,
+  {
     title: _l('Table: Next Scheduled Tasks'),
   },
 );

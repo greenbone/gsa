@@ -28,7 +28,6 @@ import {parseDate} from 'gmp/parser';
 testModel(Host, 'host');
 
 describe('Host model tests', () => {
-
   test('should be instance of Asset', () => {
     const host = new Host({});
 

@@ -24,19 +24,10 @@ import PropTypes from 'web/utils/proptypes';
 
 import StopIcon from 'web/components/icon/stopicon';
 
-const TaskStopIcon = ({
-  size,
-  task,
-  onClick,
-}) => {
+const TaskStopIcon = ({size, task, onClick}) => {
   if (task.isRunning() && !task.isContainer()) {
     return (
-      <StopIcon
-        size={size}
-        title={_('Stop')}
-        value={task}
-        onClick={onClick}
-      />
+      <StopIcon size={size} title={_('Stop')} value={task} onClick={onClick} />
     );
   }
   return null;

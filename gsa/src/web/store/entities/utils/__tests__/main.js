@@ -22,7 +22,6 @@ import {createAll} from '../main';
 import {createState} from '../testing';
 
 describe('createAll function tests', () => {
-
   test('should create all functions and objects', () => {
     const {
       entitiesActions,

@@ -22,10 +22,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
-const TabPanels = ({
-  active = 0,
-  children,
-}) => {
+const TabPanels = ({active = 0, children}) => {
   const child = React.Children.toArray(children)[active];
   return isDefined(child) ? child : null;
 };

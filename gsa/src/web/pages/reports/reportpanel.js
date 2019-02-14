@@ -43,24 +43,12 @@ const Content = styled.span`
   }}
 `;
 
-const ReportPanel = ({
-  children,
-  icon,
-  title,
-  onClick,
-}) => {
+const ReportPanel = ({children, icon, title, onClick}) => {
   return (
-    <InfoPanel
-      heading={title}
-    >
-      <Divider
-        margin="1em"
-        align={['start', 'center']}
-      >
+    <InfoPanel heading={title}>
+      <Divider margin="1em" align={['start', 'center']}>
         {icon({size: 'large', onClick})}
-        <Content onClick={onClick}>
-          {children}
-        </Content>
+        <Content onClick={onClick}>{children}</Content>
       </Divider>
     </InfoPanel>
   );

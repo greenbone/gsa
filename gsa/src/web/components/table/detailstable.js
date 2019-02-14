@@ -26,7 +26,7 @@ const Table = styled(SimpleTable)`
     font-weight: bold;
     text-align: right;
     padding-right: 5px;
-  };
+  }
 `;
 
 export default Table;

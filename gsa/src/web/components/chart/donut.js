@@ -80,20 +80,14 @@ const EmptyDonut = ({
     .outerRadiusX(outerRadiusX)
     .outerRadiusY(outerRadiusY);
   return (
-    <Group
-      top={top}
-      left={left}
-    >
+    <Group top={top} left={left}>
       <PieInnerPath
         color={darkEmptyColor}
         donutHeight={donutHeight}
         innerRadiusX={innerRadiusX}
         innerRadiusY={innerRadiusY}
       />
-      <PieTopPath
-        color={emptyColor}
-        path={donutarc.path()}
-      />
+      <PieTopPath color={emptyColor} path={donutarc.path()} />
       <PieOuterPath
         color={darkEmptyColor}
         donutHeight={donutHeight}
@@ -115,7 +109,6 @@ EmptyDonut.propTypes = {
 };
 
 class DonutChart extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -145,9 +138,11 @@ class DonutChart extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return shouldUpdate(nextProps, this.props) ||
+    return (
+      shouldUpdate(nextProps, this.props) ||
       nextState.width !== this.state.width ||
-      nextProps.show3d !== this.props.show3d;
+      nextProps.show3d !== this.props.show3d
+    );
   }
 
   update() {
@@ -168,7 +163,6 @@ class DonutChart extends React.Component {
   }
 
   separateLabels() {
-
     if (!isDefined(this.svg)) {
       return;
     }
@@ -194,7 +188,8 @@ class DonutChart extends React.Component {
       targetY = target.getAttribute('y');
 
       // compare target label with all other labels
-      labels.forEach(label => { // eslint-disable-line no-shadow
+      labels.forEach(label => {
+        // eslint-disable-line no-shadow
         comparison = label;
         if (target === comparison) {
           return;
@@ -204,7 +199,7 @@ class DonutChart extends React.Component {
         comparisonY = comparison.getAttribute('y');
 
         const deltaX = targetX - comparisonX;
-        if (Math.abs(deltaX) * 2 > (targetWidth + comparisonWidth)) {
+        if (Math.abs(deltaX) * 2 > targetWidth + comparisonWidth) {
           return;
         }
 
@@ -222,7 +217,7 @@ class DonutChart extends React.Component {
     if (overlapFound) {
       this.separateLabels();
     }
-  };
+  }
 
   render() {
     const {width} = this.state;
@@ -249,8 +244,7 @@ class DonutChart extends React.Component {
     if (show3d && width / height > MIN_RATIO) {
       // don't allow 3d donut to be stretch horizontally anymore
       donutWidth = height * MIN_RATIO;
-    }
-    else if (!show3d && width > height) {
+    } else if (!show3d && width > height) {
       // don't allow the 2d donut to be stretched horizontally
       donutWidth = height;
     }
@@ -281,9 +275,9 @@ class DonutChart extends React.Component {
         <Svg
           width={width}
           height={height}
-          innerRef={setRef(svgRef, ref => this.svg = ref)}
+          innerRef={setRef(svgRef, ref => (this.svg = ref))}
         >
-          {data.length > 0 ?
+          {data.length > 0 ? (
             <React.Fragment>
               <Pie
                 data={data}
@@ -322,22 +316,23 @@ class DonutChart extends React.Component {
                 centerY={centerY}
                 {...donutProps}
               />
-            </React.Fragment> :
+            </React.Fragment>
+          ) : (
             <EmptyDonut
               left={centerX}
               top={centerY}
               donutHeight={donutThickness}
               {...donutProps}
             />
-          }
+          )}
         </Svg>
-        {data.length > 0 && showLegend &&
+        {data.length > 0 && showLegend && (
           <Legend
             data={data}
             innerRef={this.legendRef}
             onItemClick={onLegendItemClick}
           />
-        }
+        )}
       </StyledLayout>
     );
   }

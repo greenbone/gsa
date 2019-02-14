@@ -21,9 +21,7 @@ import Filter from 'gmp/models/filter';
 import {combineReducers, filterIdentifier} from 'web/store/utils';
 
 describe('store utils module tests', () => {
-
   describe('combineReducer tests', () => {
-
     test('should create a combined reducer', () => {
       const foo = jest.fn();
       const bar = jest.fn();
@@ -59,10 +57,8 @@ describe('store utils module tests', () => {
     });
 
     test('should combine state from reducers', () => {
-      const foo = jest.fn()
-        .mockReturnValue(99);
-      const bar = jest.fn()
-        .mockReturnValue(100);
+      const foo = jest.fn().mockReturnValue(99);
+      const bar = jest.fn().mockReturnValue(100);
       const action = {type: 'ipsum'};
       const state = {
         foo: 1,
@@ -83,10 +79,8 @@ describe('store utils module tests', () => {
     });
 
     test('should drop unknown props from state', () => {
-      const foo = jest.fn()
-        .mockReturnValue(99);
-      const bar = jest.fn()
-        .mockReturnValue(100);
+      const foo = jest.fn().mockReturnValue(99);
+      const bar = jest.fn().mockReturnValue(100);
       const action = {type: 'ipsum'};
       const state = {
         foo: 1,
@@ -108,10 +102,8 @@ describe('store utils module tests', () => {
     });
 
     test('should allow to return undefined from reducers', () => {
-      const foo = jest.fn()
-        .mockReturnValue(undefined);
-      const bar = jest.fn()
-        .mockReturnValue(undefined);
+      const foo = jest.fn().mockReturnValue(undefined);
+      const bar = jest.fn().mockReturnValue(undefined);
       const action = {type: 'ipsum'};
       const state = {
         foo: 1,
@@ -133,7 +125,6 @@ describe('store utils module tests', () => {
   });
 
   describe('filterIdentifier tests', () => {
-
     test('use default for undefined filter', () => {
       expect(filterIdentifier()).toEqual('default');
     });
@@ -143,9 +134,7 @@ describe('store utils module tests', () => {
 
       expect(filterIdentifier(filter)).toEqual('filter:foo=bar');
     });
-
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

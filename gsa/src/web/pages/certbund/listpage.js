@@ -50,12 +50,7 @@ const ToolBarIcons = props => (
   />
 );
 
-const Page = ({
-  filter,
-  onFilterChanged,
-  onInteraction,
-  ...props
-}) => (
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
   <EntitiesPage
     {...props}
     createFilterType="info"
@@ -75,7 +70,7 @@ const Page = ({
     filter={filter}
     filterEditDialog={CertBundFilterDialog}
     filtersFilter={CERTBUND_FILTER_FILTER}
-    sectionIcon={<CertBundAdvIcon size="large"/>}
+    sectionIcon={<CertBundAdvIcon size="large" />}
     table={CertBundTable}
     title={_('CERT-Bund Advisories')}
     toolBarIcons={ToolBarIcons}

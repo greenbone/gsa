@@ -28,11 +28,8 @@ import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 setLocale('en');
 
 describe('YesNoRadio tests', () => {
-
   test('should render', () => {
-    const {element, getAllByTestId} = render(
-      <YesNoRadio />
-    );
+    const {element, getAllByTestId} = render(<YesNoRadio />);
 
     expect(element).toMatchSnapshot();
 
@@ -44,11 +41,7 @@ describe('YesNoRadio tests', () => {
 
   test('should call change handler', () => {
     const onChange = jest.fn();
-    const {getAllByTestId} = render(
-      <YesNoRadio
-        onChange={onChange}
-      />
-    );
+    const {getAllByTestId} = render(<YesNoRadio onChange={onChange} />);
 
     const inputs = getAllByTestId('radio-input');
     expect(inputs.length).toEqual(2);
@@ -65,10 +58,7 @@ describe('YesNoRadio tests', () => {
   test('should call change handler with name', () => {
     const onChange = jest.fn();
     const {getAllByTestId} = render(
-      <YesNoRadio
-        name="foo"
-        onChange={onChange}
-      />
+      <YesNoRadio name="foo" onChange={onChange} />,
     );
 
     const inputs = getAllByTestId('radio-input');
@@ -88,7 +78,7 @@ describe('YesNoRadio tests', () => {
         yesValue="foo"
         noValue="bar"
         onChange={onChange}
-      />
+      />,
     );
 
     const inputs = getAllByTestId('radio-input');
@@ -106,10 +96,7 @@ describe('YesNoRadio tests', () => {
   test('should call change handler only if checked state changes', () => {
     const onChange = jest.fn();
     const {getAllByTestId} = render(
-      <YesNoRadio
-        value={YES_VALUE}
-        onChange={onChange}
-      />
+      <YesNoRadio value={YES_VALUE} onChange={onChange} />,
     );
 
     const inputs = getAllByTestId('radio-input');
@@ -127,11 +114,7 @@ describe('YesNoRadio tests', () => {
   test('should not call change handler if disabled', () => {
     const onChange = jest.fn();
     const {getAllByTestId} = render(
-      <YesNoRadio
-        disabled={true}
-        value={YES_VALUE}
-        onChange={onChange}
-      />
+      <YesNoRadio disabled={true} value={YES_VALUE} onChange={onChange} />,
     );
 
     const inputs = getAllByTestId('radio-input');
@@ -145,7 +128,6 @@ describe('YesNoRadio tests', () => {
 
     expect(onChange).not.toHaveBeenCalled();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

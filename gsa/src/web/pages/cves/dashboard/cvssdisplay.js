@@ -31,8 +31,8 @@ export const CvesCvssDisplay = createDisplay({
   loaderComponent: CvesSeverityLoader,
   displayComponent: CvssDisplay,
   yLabel: _l('# of CVEs'),
-  title: ({data: tdata}) => _('CVEs by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  title: ({data: tdata}) =>
+    _('CVEs by CVSS (Total: {{count}})', {count: tdata.total}),
   filtersFilter: CVES_FILTER_FILTER,
   displayId: 'cve-by-cvss',
   displayName: 'CvesCvssDisplay',
@@ -41,17 +41,13 @@ export const CvesCvssDisplay = createDisplay({
 export const CvesCvssTableDisplay = createDisplay({
   loaderComponent: CvesSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [
-    _l('Severity'),
-    _l('# of CVEs'),
-  ],
-  title: ({data: tdata}) => _('CVEs by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  dataTitles: [_l('Severity'), _l('# of CVEs')],
+  title: ({data: tdata}) =>
+    _('CVEs by CVSS (Total: {{count}})', {count: tdata.total}),
   filtersFilter: CVES_FILTER_FILTER,
   displayId: 'cve-by-cvss-table',
   displayName: 'CvesCvssTableDisplay',
 });
-
 
 registerDisplay(CvesCvssDisplay.displayId, CvesCvssDisplay, {
   title: _l('Chart: CVEs by CVSS'),

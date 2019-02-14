@@ -31,8 +31,8 @@ export const CertBundCvssDisplay = createDisplay({
   loaderComponent: CertBundSeverityLoader,
   displayComponent: CvssDisplay,
   yLabel: _l('# of CERT-Bund Advs'),
-  title: ({data: tdata}) => _('CERT-Bund Advisories by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  title: ({data: tdata}) =>
+    _('CERT-Bund Advisories by CVSS (Total: {{count}})', {count: tdata.total}),
   filtersFilter: CERTBUND_FILTER_FILTER,
   displayId: 'cert_bund_adv-by-cvss',
   displayName: 'CertBundCvssDisplay',
@@ -41,12 +41,9 @@ export const CertBundCvssDisplay = createDisplay({
 export const CertBundCvssTableDisplay = createDisplay({
   loaderComponent: CertBundSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [
-    _l('Severity'),
-    _l('# of CERT-Bund Advisories'),
-  ],
-  title: ({data: tdata}) => _('CERT-Bund Advisories by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  dataTitles: [_l('Severity'), _l('# of CERT-Bund Advisories')],
+  title: ({data: tdata}) =>
+    _('CERT-Bund Advisories by CVSS (Total: {{count}})', {count: tdata.total}),
   filtersFilter: CERTBUND_FILTER_FILTER,
   displayId: 'cert_bund_adv-by-cvss-table',
   displayName: 'CertBundCvssTableDisplay',

@@ -25,17 +25,15 @@ import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 
 const StyledGroup = styled.g`
-  ${props => isDefined(props.onClick) ? {
-    cursor: 'pointer',
-    } : undefined};
+  ${props =>
+    isDefined(props.onClick)
+      ? {
+          cursor: 'pointer',
+        }
+      : undefined};
 `;
 
-const Group = ({
-  left = 0,
-  top = 0,
-  scale = 1,
-  ...props
-}) => (
+const Group = ({left = 0, top = 0, scale = 1, ...props}) => (
   <StyledGroup
     transform={`translate(${left}, ${top}),scale(${scale})`}
     {...props}

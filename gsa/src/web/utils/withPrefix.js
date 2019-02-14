@@ -26,11 +26,10 @@ export const withPrefix = Component => {
   const ComponentPrefixWrapper = ({prefix, ...props}) => {
     if (isDefined(prefix)) {
       prefix += '_';
-    }
-    else {
+    } else {
       prefix = '';
     }
-    return <Component {...props} prefix={prefix}/>;
+    return <Component {...props} prefix={prefix} />;
   };
 
   ComponentPrefixWrapper.propTypes = {

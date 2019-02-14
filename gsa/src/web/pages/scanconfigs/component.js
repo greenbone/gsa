@@ -41,7 +41,6 @@ import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
 
 class ScanConfigComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -57,18 +56,23 @@ class ScanConfigComponent extends React.Component {
     this.handleSaveConfigFamily = this.handleSaveConfigFamily.bind(this);
     this.handleSaveConfigNvt = this.handleSaveConfigNvt.bind(this);
     this.openCreateConfigDialog = this.openCreateConfigDialog.bind(this);
-    this.handleCloseCreateConfigDialog =
-      this.handleCloseCreateConfigDialog.bind(this);
+    this.handleCloseCreateConfigDialog = this.handleCloseCreateConfigDialog.bind(
+      this,
+    );
     this.openEditConfigDialog = this.openEditConfigDialog.bind(this);
-    this.handleCloseEditConfigDialog =
-      this.handleCloseEditConfigDialog.bind(this);
-    this.openEditConfigFamilyDialog =
-      this.openEditConfigFamilyDialog.bind(this);
-    this.handleCloseEditConfigFamilyDialog =
-      this.handleCloseEditConfigFamilyDialog.bind(this);
+    this.handleCloseEditConfigDialog = this.handleCloseEditConfigDialog.bind(
+      this,
+    );
+    this.openEditConfigFamilyDialog = this.openEditConfigFamilyDialog.bind(
+      this,
+    );
+    this.handleCloseEditConfigFamilyDialog = this.handleCloseEditConfigFamilyDialog.bind(
+      this,
+    );
     this.openEditNvtDetailsDialog = this.openEditNvtDetailsDialog.bind(this);
-    this.handleCloseEditNvtDetailsDialog =
-      this.handleCloseEditNvtDetailsDialog.bind(this);
+    this.handleCloseEditNvtDetailsDialog = this.handleCloseEditNvtDetailsDialog.bind(
+      this,
+    );
     this.openImportDialog = this.openImportDialog.bind(this);
     this.handleCloseImportDialog = this.handleCloseImportDialog.bind(this);
   }
@@ -78,13 +82,13 @@ class ScanConfigComponent extends React.Component {
       this.loadEditScanConfigSettings(config),
       this.loadScanners(),
     ]).then(([scanConfigState, scannerState]) => {
-        this.setState({
-          ...scannerState,
-          ...scanConfigState,
-          base: config.base,
-          editConfigDialogVisible: true,
-          title: _('Edit Scan Config {{name}}', {name: shorten(config.name)}),
-        });
+      this.setState({
+        ...scannerState,
+        ...scanConfigState,
+        base: config.base,
+        editConfigDialogVisible: true,
+        title: _('Edit Scan Config {{name}}', {name: shorten(config.name)}),
+      });
     });
 
     this.handleInteraction();
@@ -100,11 +104,12 @@ class ScanConfigComponent extends React.Component {
   }
 
   openCreateConfigDialog() {
-    this.loadScanners()
-      .then(state => this.setState({
+    this.loadScanners().then(state =>
+      this.setState({
         ...state,
         createConfigDialogVisible: true,
-      }));
+      }),
+    );
 
     this.handleInteraction();
   }
@@ -138,8 +143,9 @@ class ScanConfigComponent extends React.Component {
         ...state,
         config,
         editConfigFamilyDialogVisible: true,
-        editConfigFamilyDialogTitle: _('Edit Scan Config Family {{name}}',
-          {name: shorten(name)}),
+        editConfigFamilyDialogTitle: _('Edit Scan Config Family {{name}}', {
+          name: shorten(name),
+        }),
       });
     });
     this.handleInteraction();
@@ -160,8 +166,9 @@ class ScanConfigComponent extends React.Component {
         ...state,
         config,
         editNvtDetailsDialogVisible: true,
-        editNvtDetailsDialogTitle:
-          _('Edit Scan Config NVT {{name}}', {name: shorten(nvt.name)}),
+        editNvtDetailsDialogTitle: _('Edit Scan Config NVT {{name}}', {
+          name: shorten(nvt.name),
+        }),
       });
     });
     this.handleInteraction();
@@ -181,7 +188,8 @@ class ScanConfigComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.scanconfig.import(data)
+    return gmp.scanconfig
+      .import(data)
       .then(onImported, onImportError)
       .then(() => this.closeImportDialog());
   }
@@ -191,7 +199,8 @@ class ScanConfigComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.scanconfig.saveScanConfigFamily(data)
+    return gmp.scanconfig
+      .saveScanConfigFamily(data)
       .then(() => {
         return this.loadEditScanConfigSettings(data.config);
       })
@@ -206,13 +215,16 @@ class ScanConfigComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.scanconfig.saveScanConfigNvt(values)
+    return gmp.scanconfig
+      .saveScanConfigNvt(values)
       .then(response => {
         // update nvt timeouts in nvt family dialog
         this.loadEditScanConfigFamilySettings(
-          values.config, values.family_name).then(state => {
-            this.setState({state});
-          });
+          values.config,
+          values.family_name,
+        ).then(state => {
+          this.setState({state});
+        });
 
         // update nvt preference values in edit dialog
         this.loadEditScanConfigSettings(values.config).then(state => {
@@ -257,10 +269,9 @@ class ScanConfigComponent extends React.Component {
 
         if (isDefined(config_family)) {
           trend[name] = parseYesNo(config_family.trend);
-          select[name] = config_family.nvts.count === family.max ? YES_VALUE :
-            NO_VALUE;
-        }
-        else {
+          select[name] =
+            config_family.nvts.count === family.max ? YES_VALUE : NO_VALUE;
+        } else {
           trend[name] = NO_VALUE;
           select[name] = NO_VALUE;
         }
@@ -290,79 +301,82 @@ class ScanConfigComponent extends React.Component {
     const {gmp} = this.props;
     const {select} = this.state;
 
-    return gmp.scanconfig.editScanConfigFamilySettings({
-      id: config.id,
-      family_name: name,
-      config_name: config.name,
-    }).then(response => {
-      const {data} = response;
-      const {nvts} = data;
-      const selected = {};
-
-      if (select[name]) {
-        forEach(nvts, nvt => {
-          selected[nvt.oid] = YES_VALUE;
-        });
-      }
-      else {
-        forEach(nvts, nvt => {
-          selected[nvt.oid] = nvt.selected;
-        });
-      }
-
-      const state = {
-        config: data.config,
-        config_name: config.name,
-        family_name: name,
+    return gmp.scanconfig
+      .editScanConfigFamilySettings({
         id: config.id,
-        nvts: data.nvts,
-        selected,
-      };
+        family_name: name,
+        config_name: config.name,
+      })
+      .then(response => {
+        const {data} = response;
+        const {nvts} = data;
+        const selected = {};
 
-      return state;
-    });
+        if (select[name]) {
+          forEach(nvts, nvt => {
+            selected[nvt.oid] = YES_VALUE;
+          });
+        } else {
+          forEach(nvts, nvt => {
+            selected[nvt.oid] = nvt.selected;
+          });
+        }
+
+        const state = {
+          config: data.config,
+          config_name: config.name,
+          family_name: name,
+          id: config.id,
+          nvts: data.nvts,
+          selected,
+        };
+
+        return state;
+      });
   }
 
   loadEditScanConfigNvtSettings(config, nvt) {
     const {gmp} = this.props;
 
-    return gmp.scanconfig.editScanConfigNvtSettings({
-      id: config.id,
-      oid: nvt.oid,
-      config_name: config.name,
-      name: nvt.name,
-    }).then(response => {
-      const {data} = response;
-      const preference_values = {};
+    return gmp.scanconfig
+      .editScanConfigNvtSettings({
+        id: config.id,
+        oid: nvt.oid,
+        config_name: config.name,
+        name: nvt.name,
+      })
+      .then(response => {
+        const {data} = response;
+        const preference_values = {};
 
-      forEach(data.nvt.preferences, pref => {
-        let {value, type} = pref;
+        forEach(data.nvt.preferences, pref => {
+          let {value, type} = pref;
 
-        if (type === 'password' || type === 'file') {
-          value = undefined;
-        }
+          if (type === 'password' || type === 'file') {
+            value = undefined;
+          }
 
-        preference_values[pref.name] = {
-          value,
-          type,
+          preference_values[pref.name] = {
+            value,
+            type,
+          };
+        });
+
+        const state = {
+          config: data.config,
+          config_name: data.config.name,
+          family_name: data.nvt.family,
+          id: data.config.id,
+          oid: data.nvt.oid,
+          manual_timeout: data.nvt.timeout,
+          nvt: data.nvt,
+          nvt_name: data.nvt.name,
+          preference_values,
+          timeout: isEmpty(data.nvt.timeout) ? '0' : '1',
         };
+
+        return state;
       });
-
-      const state = {
-        config: data.config,
-        config_name: data.config.name,
-        family_name: data.nvt.family,
-        id: data.config.id,
-        oid: data.nvt.oid,
-        manual_timeout: data.nvt.timeout,
-        nvt: data.nvt,
-        nvt_name: data.nvt.name,
-        preference_values,
-        timeout: isEmpty(data.nvt.timeout) ? '0' : '1',
-      };
-
-      return state;
-    });
   }
 
   render() {
@@ -427,10 +441,7 @@ class ScanConfigComponent extends React.Component {
           onSaved={onSaved}
           onSaveError={onSaveError}
         >
-          {({
-            save,
-            ...other
-          }) => (
+          {({save, ...other}) => (
             <React.Fragment>
               {children({
                 ...other,
@@ -438,7 +449,7 @@ class ScanConfigComponent extends React.Component {
                 edit: this.openEditConfigDialog,
                 import: this.openImportDialog,
               })}
-              {createConfigDialogVisible &&
+              {createConfigDialogVisible && (
                 <ScanConfigDialog
                   scanner_id={scanner_id}
                   scanners={scanners}
@@ -448,8 +459,8 @@ class ScanConfigComponent extends React.Component {
                     return save(d).then(() => this.closeCreateConfigDialog());
                   }}
                 />
-              }
-              {editConfigDialogVisible &&
+              )}
+              {editConfigDialogVisible && (
                 <EditScanConfigDialog
                   base={base}
                   comment={comment}
@@ -470,17 +481,17 @@ class ScanConfigComponent extends React.Component {
                     return save(d).then(() => this.closeEditConfigDialog());
                   }}
                 />
-              }
+              )}
             </React.Fragment>
           )}
         </EntityComponent>
-        {importDialogVisible &&
+        {importDialogVisible && (
           <ImportDialog
             onClose={this.handleCloseImportDialog}
             onSave={this.handleImportConfig}
           />
-        }
-        {editConfigFamilyDialogVisible &&
+        )}
+        {editConfigFamilyDialogVisible && (
           <EditConfigFamilyDialog
             config={config}
             config_name={config_name}
@@ -493,8 +504,8 @@ class ScanConfigComponent extends React.Component {
             onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
             onSave={this.handleSaveConfigFamily}
           />
-        }
-        {editNvtDetailsDialogVisible &&
+        )}
+        {editNvtDetailsDialogVisible && (
           <EditNvtDetailsDialog
             config={config}
             config_name={config_name}
@@ -507,7 +518,7 @@ class ScanConfigComponent extends React.Component {
             onClose={this.handleCloseEditNvtDetailsDialog}
             onSave={this.handleSaveConfigNvt}
           />
-        }
+        )}
       </React.Fragment>
     );
   }

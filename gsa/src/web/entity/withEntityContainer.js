@@ -1,4 +1,3 @@
-
 /* Copyright (C) 2018-2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
@@ -44,15 +43,23 @@ export const permissionsResourceFilter = id =>
   Filter.fromString('resource_uuid=' + id).all();
 
 export const permissionsSubjectFilter = id =>
-  Filter.fromString('subject_uuid=' + id + ' and not resource_uuid=""' +
-    ' or resource_uuid=' + id).all();
+  Filter.fromString(
+    'subject_uuid=' +
+      id +
+      ' and not resource_uuid=""' +
+      ' or resource_uuid=' +
+      id,
+  ).all();
 
-const withEntityContainer = (entityType, {
-  load,
-  entitySelector,
-  mapStateToProps: componentMapStateToProps,
-  reloadInterval,
-}) => Component => {
+const withEntityContainer = (
+  entityType,
+  {
+    load,
+    entitySelector,
+    mapStateToProps: componentMapStateToProps,
+    reloadInterval,
+  },
+) => Component => {
   const EntityContainerWrapper = ({id, ...props}) => (
     <EntityContainer
       {...props}
@@ -77,12 +84,13 @@ const withEntityContainer = (entityType, {
     let {id} = match.params;
     id = decodeURIComponent(id); // needs to be done for CPE IDs
     const entitySel = entitySelector(rootState);
-    const otherProps = isDefined(componentMapStateToProps) ?
-      componentMapStateToProps(rootState, {
-        gmp,
-        id,
-        ...props,
-      }) : undefined;
+    const otherProps = isDefined(componentMapStateToProps)
+      ? componentMapStateToProps(rootState, {
+          gmp,
+          id,
+          ...props,
+        })
+      : undefined;
     return {
       isLoading: entitySel.isLoadingEntity(id),
       defaultReloadInterval: gmp.reloadInterval,
@@ -97,7 +105,10 @@ const withEntityContainer = (entityType, {
     withRouter,
     withDialogNotification,
     withDownload,
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(
+      mapStateToProps,
+      mapDispatchToProps,
+    ),
   )(EntityContainerWrapper);
 };
 

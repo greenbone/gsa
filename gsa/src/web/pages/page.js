@@ -47,7 +47,6 @@ const StyledLayout = styled(Layout)`
 `;
 
 class Page extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -57,15 +56,18 @@ class Page extends React.Component {
   componentDidMount() {
     const {gmp} = this.props;
 
-    gmp.user.currentCapabilities().then(response => {
-      const capabilities = response.data;
-      log.debug('User capabilities', capabilities);
-      this.setState({capabilities});
-    }).catch(rejection => {
-      log.error('An error occurred during fetching capabilities', rejection);
-      // use empty capabilities
-      this.setState({capabilities: new Capabilities()});
-    });
+    gmp.user
+      .currentCapabilities()
+      .then(response => {
+        const capabilities = response.data;
+        log.debug('User capabilities', capabilities);
+        this.setState({capabilities});
+      })
+      .catch(rejection => {
+        log.error('An error occurred during fetching capabilities', rejection);
+        // use empty capabilities
+        this.setState({capabilities: new Capabilities()});
+      });
   }
 
   render() {
@@ -79,19 +81,12 @@ class Page extends React.Component {
     }
 
     return (
-      <CapabilitiesProvider
-        capabilities={capabilities}
-      >
-        <StyledLayout
-          flex="column"
-          align={['start', 'stretch']}
-        >
-          <Header/>
-          <MenuBar/>
-          <Main>
-            {children}
-          </Main>
-          <Footer/>
+      <CapabilitiesProvider capabilities={capabilities}>
+        <StyledLayout flex="column" align={['start', 'stretch']}>
+          <Header />
+          <MenuBar />
+          <Main>{children}</Main>
+          <Footer />
         </StyledLayout>
       </CapabilitiesProvider>
     );

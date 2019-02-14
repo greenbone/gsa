@@ -35,21 +35,20 @@ const EntitiesActions = ({
   onEntitySelected,
   ...props
 }) => {
-  if (!isDefined(children) &&
-    selectionType !== SelectionType.SELECTION_USER) {
+  if (!isDefined(children) && selectionType !== SelectionType.SELECTION_USER) {
     return null;
   }
-  return selectionType === SelectionType.SELECTION_USER ?
+  return selectionType === SelectionType.SELECTION_USER ? (
     <TableData align={['center', 'center']}>
       <EntitySelection
         entity={entity}
         onSelected={onEntitySelected}
         onDeselected={onEntityDeselected}
       />
-    </TableData> :
-    <TableData grow>
-      {children({entity, ...props})}
-    </TableData>;
+    </TableData>
+  ) : (
+    <TableData grow>{children({entity, ...props})}</TableData>
+  );
 };
 
 EntitiesActions.propTypes = {

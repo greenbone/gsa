@@ -16,17 +16,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {
-  isDefined,
-  isArray,
-} from '../utils/identity';
+import {isDefined, isArray} from '../utils/identity';
 
 import HttpCommand from './http.js';
 
 import registerCommand from '../command.js';
 
 class PerformanceCommand extends HttpCommand {
-
   constructor(http) {
     super(http, {cmd: 'get_system_reports'});
   }

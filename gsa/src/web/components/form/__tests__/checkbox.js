@@ -23,15 +23,10 @@ import {render, fireEvent} from 'web/utils/testing';
 import CheckBox from '../checkbox';
 
 describe('CheckBox component tests', () => {
-
   test('should call change handler', () => {
     const change = jest.fn();
     const {element} = render(
-      <CheckBox
-        name="foo"
-        checked={false}
-        onChange={change}
-      />
+      <CheckBox name="foo" checked={false} onChange={change} />,
     );
 
     const input = element.querySelector('input');
@@ -50,7 +45,7 @@ describe('CheckBox component tests', () => {
         checkedValue="ipsum"
         unCheckedValue="lorem"
         onChange={change}
-      />
+      />,
     );
 
     const input = element.querySelector('input');
@@ -69,7 +64,7 @@ describe('CheckBox component tests', () => {
         checkedValue="ipsum"
         unCheckedValue="lorem"
         onChange={change}
-      />
+      />,
     );
 
     const input = element.querySelector('input');
@@ -89,7 +84,7 @@ describe('CheckBox component tests', () => {
         checkedValue="ipsum"
         unCheckedValue="lorem"
         onChange={change}
-      />
+      />,
     );
 
     const input = element.querySelector('input');
@@ -100,12 +95,7 @@ describe('CheckBox component tests', () => {
   });
 
   test('should render title', () => {
-    const {getByTestId} = render(
-      <CheckBox
-        name="foo"
-        title="bar"
-      />
-    );
+    const {getByTestId} = render(<CheckBox name="foo" title="bar" />);
 
     const titleElement = getByTestId('checkbox-title');
     expect(titleElement).toHaveTextContent('bar');
@@ -116,11 +106,10 @@ describe('CheckBox component tests', () => {
       <CheckBox>
         <span>child1</span>
         <span>child2</span>
-      </CheckBox>
+      </CheckBox>,
     );
     expect(element).toMatchSnapshot();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

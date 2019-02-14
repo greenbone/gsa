@@ -58,7 +58,6 @@ const BadgeIcon = styled.span`
 BadgeIcon.displayName = 'BadgeIcon';
 
 class Badge extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -83,9 +82,7 @@ class Badge extends React.Component {
   }
 
   render() {
-    const {
-      margin,
-    } = this.state;
+    const {margin} = this.state;
     const {
       backgroundColor,
       children,
@@ -95,14 +92,12 @@ class Badge extends React.Component {
       position,
     } = this.props;
     return (
-      <BadgeContainer
-        margin={dynamic ? margin : undefined}
-      >
+      <BadgeContainer margin={dynamic ? margin : undefined}>
         {children}
 
-        {isDefined(content) &&
+        {isDefined(content) && (
           <BadgeIcon
-            innerRef={ref => this.icon = ref}
+            innerRef={ref => (this.icon = ref)}
             color={color}
             backgroundColor={backgroundColor}
             position={position}
@@ -110,7 +105,7 @@ class Badge extends React.Component {
           >
             {content}
           </BadgeIcon>
-        }
+        )}
       </BadgeContainer>
     );
   }

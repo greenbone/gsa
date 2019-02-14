@@ -27,7 +27,6 @@ import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 testModel(Note, 'note');
 
 describe('Note model tests', () => {
-
   test('should parse severity', () => {
     const note = new Note({severity: '8.5'});
     const note2 = new Note({severity: '10'});
@@ -133,7 +132,6 @@ describe('Note model tests', () => {
     expect(note.nvt).toBeInstanceOf(Nvt);
     expect(note.name).toEqual('foo');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

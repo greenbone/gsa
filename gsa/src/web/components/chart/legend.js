@@ -48,9 +48,12 @@ export const Item = styled.div`
   flex-direction: row;
   align-items: center;
   margin: 5px 0;
-  ${props => isDefined(props.onClick) ? {
-    cursor: 'pointer',
-  } : undefined};
+  ${props =>
+    isDefined(props.onClick)
+      ? {
+          cursor: 'pointer',
+        }
+      : undefined};
 `;
 
 export const Label = styled.div`
@@ -106,20 +109,12 @@ Line.propTypes = {
   width: PropTypes.number,
 };
 
-const Legend = ({
-  data,
-  children,
-  innerRef,
-  onItemClick,
-}) => (
+const Legend = ({data, children, innerRef, onItemClick}) => (
   <StyledLegend innerRef={innerRef}>
     {data.map((d, i) => (
-      <ToolTip
-        key={i}
-        content={d.toolTip}
-      >
+      <ToolTip key={i} content={d.toolTip}>
         {({targetRef, hide, show}) =>
-          isDefined(children) ?
+          isDefined(children) ? (
             children({
               d,
               toolTipProps: {
@@ -128,17 +123,20 @@ const Legend = ({
                 onMouseLeave: hide,
               },
               onItemClick,
-            }) :
+            })
+          ) : (
             <Item
               innerRef={targetRef}
               onMouseEnter={show}
               onMouseLeave={hide}
-              onClick={isDefined(onItemClick) ?
-                () => onItemClick(d) : undefined}
+              onClick={
+                isDefined(onItemClick) ? () => onItemClick(d) : undefined
+              }
             >
-              <Rect color={d.color}/>
+              <Rect color={d.color} />
               <Label>{d.label}</Label>
             </Item>
+          )
         }
       </ToolTip>
     ))}
@@ -147,11 +145,13 @@ const Legend = ({
 
 Legend.propTypes = {
   children: PropTypes.func,
-  data: PropTypes.arrayOf(PropTypes.shape({
-    color: PropTypes.toString,
-    label: PropTypes.any,
-    toolTip: PropTypes.elementOrString,
-  })).isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      color: PropTypes.toString,
+      label: PropTypes.any,
+      toolTip: PropTypes.elementOrString,
+    }),
+  ).isRequired,
   innerRef: PropTypes.ref,
   onItemClick: PropTypes.func,
 };

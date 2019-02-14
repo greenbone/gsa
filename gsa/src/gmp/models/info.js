@@ -22,13 +22,13 @@ import {isDefined} from '../utils/identity';
 import Model from '../model.js';
 
 class Info extends Model {
-
   static entityType = 'info';
 
   parseProperties(elem, infoType) {
     const info_elem = elem[infoType];
 
-    if (isDefined(info_elem)) { // elem is an info element content is in its child
+    if (isDefined(info_elem)) {
+      // elem is an info element content is in its child
       elem = {
         ...elem,
         ...info_elem,

@@ -24,9 +24,8 @@ import {ReactComponent as Icon} from './svg/details.svg';
 
 const DetailsIcon = props => (
   <SvgIcon {...props}>
-    <Icon/>
+    <Icon />
   </SvgIcon>
-
 );
 
 export default DetailsIcon;

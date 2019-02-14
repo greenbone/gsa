@@ -80,36 +80,33 @@ export const FIELDS = [
   },
 ];
 
-const TicketActions = withEntitiesActions(({
-  entity,
-  onTicketClone,
-  onTicketDelete,
-  onTicketEdit,
-}) => (
-  <Layout align={['center', 'center']}>
-    <IconDivider>
-      <EntityTrashIcon
-        displayName={_('Ticket')}
-        entity={entity}
-        name="ticket"
-        onClick={onTicketDelete}
-      />
-      <EntityEditIcon
-        displayName={_('Ticket')}
-        entity={entity}
-        name="ticket"
-        onClick={onTicketEdit}
-      />
-      <EntityCloneIcon
-        displayName={_('Ticket')}
-        entity={entity}
-        name="ticket"
-        title={_('Clone Ticket')}
-        onClick={onTicketClone}
-      />
-    </IconDivider>
-  </Layout>
-));
+const TicketActions = withEntitiesActions(
+  ({entity, onTicketClone, onTicketDelete, onTicketEdit}) => (
+    <Layout align={['center', 'center']}>
+      <IconDivider>
+        <EntityTrashIcon
+          displayName={_('Ticket')}
+          entity={entity}
+          name="ticket"
+          onClick={onTicketDelete}
+        />
+        <EntityEditIcon
+          displayName={_('Ticket')}
+          entity={entity}
+          name="ticket"
+          onClick={onTicketEdit}
+        />
+        <EntityCloneIcon
+          displayName={_('Ticket')}
+          entity={entity}
+          name="ticket"
+          title={_('Clone Ticket')}
+          onClick={onTicketClone}
+        />
+      </IconDivider>
+    </Layout>
+  ),
+);
 
 TicketActions.displayName = 'TicketActions';
 
@@ -135,31 +132,16 @@ const Row = ({
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData>
-      <SeverityBar
-        severity={entity.severity}
-      />
+      <SeverityBar severity={entity.severity} />
     </TableData>
-    <TableData>
-      {entity.host}
-    </TableData>
+    <TableData>{entity.host}</TableData>
     <TableData align={['center', 'center']}>
-      <SolutionType
-        type={entity.solutionType}
-      />
+      <SolutionType type={entity.solutionType} />
     </TableData>
-    <TableData>
-      {entity.assignedTo.user.name}
-    </TableData>
-    <TableData>
-      {longDate(entity.modificationTime)}
-    </TableData>
-    <TableData>
-      {getTranslatableTicketStatus(entity.status)}
-    </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <TableData>{entity.assignedTo.user.name}</TableData>
+    <TableData>{longDate(entity.modificationTime)}</TableData>
+    <TableData>{getTranslatableTicketStatus(entity.status)}</TableData>
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

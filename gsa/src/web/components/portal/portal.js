@@ -38,7 +38,6 @@ if (!hasValue(portal)) {
 }
 
 class Portal extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -54,10 +53,7 @@ class Portal extends React.Component {
   }
 
   render() {
-    return ReactDOM.createPortal(
-      this.props.children,
-      this.element,
-    );
+    return ReactDOM.createPortal(this.props.children, this.element);
   }
 }
 

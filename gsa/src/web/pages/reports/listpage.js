@@ -64,10 +64,7 @@ const ToolBarIcons = ({onUploadReportClick}) => (
       anchor="reading-of-the-reports"
       title={_('Help: Reports')}
     />
-    <UploadIcon
-      title={_('Upload report')}
-      onClick={onUploadReportClick}
-    />
+    <UploadIcon title={_('Upload report')} onClick={onUploadReportClick} />
   </IconDivider>
 );
 
@@ -76,7 +73,6 @@ ToolBarIcons.propTypes = {
 };
 
 class Page extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -102,9 +98,11 @@ class Page extends React.Component {
     const {filter} = next;
     const {selectedDeltaReport} = this.state;
 
-    if (isDefined(selectedDeltaReport) &&
+    if (
+      isDefined(selectedDeltaReport) &&
       (!isDefined(filter) ||
-        filter.get('task_id') !== selectedDeltaReport.task.id)) {
+        filter.get('task_id') !== selectedDeltaReport.task.id)
+    ) {
       // filter has changed. reset delta report selection
       this.setState({selectedDeltaReport: undefined});
     }
@@ -112,11 +110,10 @@ class Page extends React.Component {
 
   loadTasks() {
     const {gmp} = this.props;
-    return gmp.tasks.get()
-      .then(response => {
-        const {data: tasks} = response;
-        return tasks.filter(task => task.isContainer());
-      });
+    return gmp.tasks.get().then(response => {
+      const {data: tasks} = response;
+      return tasks.filter(task => task.isContainer());
+    });
   }
 
   openCreateTaskDialog() {
@@ -124,17 +121,18 @@ class Page extends React.Component {
   }
 
   openImportDialog(task_id) {
-    this.loadTasks().then(
-      tasks => this.setState({
+    this.loadTasks().then(tasks =>
+      this.setState({
         tasks,
         task_id: selectSaveId(tasks),
         importDialogVisible: true,
-      }));
+      }),
+    );
   }
 
   closeImportDialog() {
     this.setState({importDialogVisible: false});
-  };
+  }
 
   handleCloseImportDialog() {
     this.closeImportDialog();
@@ -142,7 +140,8 @@ class Page extends React.Component {
 
   handleImportReport(data) {
     const {gmp, onChanged, onError} = this.props;
-    return gmp.report.import(data)
+    return gmp.report
+      .import(data)
       .then(onChanged, onError)
       .then(() => this.closeImportDialog());
   }
@@ -154,7 +153,8 @@ class Page extends React.Component {
   handleCreateContainerTask(data) {
     const {gmp} = this.props;
     let task_id;
-    return gmp.task.createContainer(data)
+    return gmp.task
+      .createContainer(data)
       .then(response => {
         const {data: task} = response;
         task_id = task.id;
@@ -177,10 +177,8 @@ class Page extends React.Component {
 
       onFilterChanged(beforeSelectFilter);
 
-      history.push('/report/delta/' + selectedDeltaReport.id + '/' +
-        report.id);
-    }
-    else {
+      history.push('/report/delta/' + selectedDeltaReport.id + '/' + report.id);
+    } else {
       const {filter = new Filter()} = this.props;
 
       onFilterChanged(filter.copy().set('task_id', report.task.id));
@@ -202,11 +200,7 @@ class Page extends React.Component {
   }
 
   render() {
-    const {
-      filter,
-      onFilterChanged,
-      onInteraction,
-    } = this.props;
+    const {filter, onFilterChanged, onInteraction} = this.props;
     const {
       containerTaskDialogVisible,
       importDialogVisible,
@@ -237,13 +231,13 @@ class Page extends React.Component {
           table={ReportsTable}
           toolBarIcons={ToolBarIcons}
           title={_('Reports')}
-          sectionIcon={<ReportIcon size="large"/>}
+          sectionIcon={<ReportIcon size="large" />}
           onInteraction={onInteraction}
           onUploadReportClick={this.openImportDialog}
           onReportDeltaSelect={this.handleReportDeltaSelect}
           onReportDeleteClick={this.handleReportDeleteClick}
         />
-        {importDialogVisible &&
+        {importDialogVisible && (
           <ImportReportDialog
             task_id={task_id}
             tasks={tasks}
@@ -252,13 +246,13 @@ class Page extends React.Component {
             onSave={this.handleImportReport}
             onTaskChange={this.handleTaskChange}
           />
-        }
-        {containerTaskDialogVisible &&
+        )}
+        {containerTaskDialogVisible && (
           <ContainerTaskDialog
             onClose={this.handleCloseContainerTask}
             onSave={this.handleCreateContainerTask}
           />
-        }
+        )}
       </React.Fragment>
     );
   }
@@ -274,12 +268,10 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const reportsReloadInterval = ({
-  entities = [],
-  defaultReloadInterval,
-}) => entities.some(entity => isActive(entity.report.scan_run_status)) ?
-  DEFAULT_RELOAD_INTERVAL_ACTIVE :
-  defaultReloadInterval;
+const reportsReloadInterval = ({entities = [], defaultReloadInterval}) =>
+  entities.some(entity => isActive(entity.report.scan_run_status))
+    ? DEFAULT_RELOAD_INTERVAL_ACTIVE
+    : defaultReloadInterval;
 
 export default compose(
   withGmp,

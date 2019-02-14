@@ -90,24 +90,22 @@ let ToolBarIcons = ({
           anchor="operating-systems-view"
           title={_('Help: Operating Systems')}
         />
-        <ListIcon
-          title={_('Operating System List')}
-          page="operatingsystems"
-        />
+        <ListIcon title={_('Operating System List')} page="operatingsystems" />
       </IconDivider>
       <IconDivider>
-        {capabilities.mayDelete('os') && (
-          entity.isInUse() ?
+        {capabilities.mayDelete('os') &&
+          (entity.isInUse() ? (
             <DeleteIcon
               active={false}
               title={_('Operating System is in use')}
-            /> :
+            />
+          ) : (
             <DeleteIcon
               value={entity}
               title={_('Delete')}
               onClick={onOperatingSystemDeleteClick}
             />
-        )}
+          ))}
         <ExportIcon
           value={entity}
           onClick={onOperatingSystemDownloadClick}
@@ -115,16 +113,14 @@ let ToolBarIcons = ({
         />
       </IconDivider>
       <IconDivider>
-        <Badge
-          content={hosts.length}
-        >
+        <Badge content={hosts.length}>
           <Link
             to="hosts"
             filter={'os~"' + entity.name + '"'}
             textOnly={!links}
             title={_('Hosts with Operating System {{- name}}', entity)}
           >
-            <HostIcon/>
+            <HostIcon />
           </Link>
         </Badge>
       </IconDivider>
@@ -143,56 +139,43 @@ ToolBarIcons.propTypes = {
 ToolBarIcons = withCapabilities(ToolBarIcons);
 
 const Details = ({entity}) => {
-  const {
-    average_severity,
-    highest_severity,
-    latest_severity,
-    name,
-  } = entity;
+  const {average_severity, highest_severity, latest_severity, name} = entity;
   return (
     <Layout flex="column">
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
           <TableRow>
-            <TableData>
-              {_('Name')}
-            </TableData>
+            <TableData>{_('Name')}</TableData>
             <TableData>
               <IconDivider align={['start', 'center']}>
-                <CpeIcon name={name}/>
+                <CpeIcon name={name} />
                 <span>{name}</span>
               </IconDivider>
             </TableData>
           </TableRow>
 
           <TableRow>
+            <TableData>{_('Latest Severity')}</TableData>
             <TableData>
-              {_('Latest Severity')}
-            </TableData>
-            <TableData>
-              <SeverityBar severity={latest_severity}/>
+              <SeverityBar severity={latest_severity} />
             </TableData>
           </TableRow>
 
           <TableRow>
+            <TableData>{_('Highest Severity')}</TableData>
             <TableData>
-              {_('Highest Severity')}
-            </TableData>
-            <TableData>
-              <SeverityBar severity={highest_severity}/>
+              <SeverityBar severity={highest_severity} />
             </TableData>
           </TableRow>
 
           <TableRow>
+            <TableData>{_('Average Severity')}</TableData>
             <TableData>
-              {_('Average Severity')}
-            </TableData>
-            <TableData>
-              <SeverityBar severity={average_severity}/>
+              <SeverityBar severity={average_severity} />
             </TableData>
           </TableRow>
         </TableBody>
@@ -221,14 +204,11 @@ const Page = ({
     onDownloadError={onError}
     onInteraction={onInteraction}
   >
-    {({
-      delete: delete_func,
-      download,
-    }) => (
+    {({delete: delete_func, download}) => (
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<OsSvgIcon size="large"/>}
+        sectionIcon={<OsSvgIcon size="large" />}
         title={_('Operating System')}
         toolBarIcons={ToolBarIcons}
         onInteraction={onInteraction}
@@ -238,24 +218,16 @@ const Page = ({
         onPermissionDownloaded={onDownloaded}
         onPermissionDownloadError={onError}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
@@ -268,9 +240,7 @@ const Page = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <Details
-                      entity={entity}
-                    />
+                    <Details entity={entity} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags
@@ -312,10 +282,11 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

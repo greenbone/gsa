@@ -48,72 +48,70 @@ import withCapabilities from 'web/utils/withCapabilities';
 const Actions = compose(
   withCapabilities,
   withEntitiesActions,
-)(({
-  capabilities,
-  entity,
-  onTagCloneClick,
-  onTagDeleteClick,
-  onTagDownloadClick,
-  onTagEditClick,
-  onTagDisableClick,
-  onTagEnableClick,
-}) => {
-  let endisableable = null;
+)(
+  ({
+    capabilities,
+    entity,
+    onTagCloneClick,
+    onTagDeleteClick,
+    onTagDownloadClick,
+    onTagEditClick,
+    onTagDisableClick,
+    onTagEnableClick,
+  }) => {
+    let endisableable = null;
 
-  if (capabilities.mayEdit('tag')) {
-    if (entity.isActive()) {
-      endisableable = (
-        <DisableIcon
-          value={entity}
-          title={_('Disable Tag')}
-          onClick={onTagDisableClick}
-        />
-      );
+    if (capabilities.mayEdit('tag')) {
+      if (entity.isActive()) {
+        endisableable = (
+          <DisableIcon
+            value={entity}
+            title={_('Disable Tag')}
+            onClick={onTagDisableClick}
+          />
+        );
+      } else {
+        endisableable = (
+          <EnableIcon
+            value={entity}
+            title={_('Enable Tag')}
+            onClick={onTagEnableClick}
+          />
+        );
+      }
     }
-    else {
-      endisableable = (
-        <EnableIcon
-          value={entity}
-          title={_('Enable Tag')}
-          onClick={onTagEnableClick}
+    return (
+      <IconDivider align={['center', 'center']} grow>
+        {endisableable}
+        <TrashIcon
+          displayName={_('Tag')}
+          name="tag"
+          entity={entity}
+          onClick={onTagDeleteClick}
         />
-      );
-    }
-  }
-  return (
-    <IconDivider
-      align={['center', 'center']}
-      grow
-    >
-      {endisableable}
-      <TrashIcon
-        displayName={_('Tag')}
-        name="tag"
-        entity={entity}
-        onClick={onTagDeleteClick}
-      />
-      <EditIcon
-        displayName={_('Tag')}
-        name="tag"
-        entity={entity}
-        onClick={onTagEditClick}
-      />
-      <CloneIcon
-        displayName={_('Tag')}
-        name="tag"
-        entity={entity}
-        title={_('Clone Tag')}
-        value={entity}
-        onClick={onTagCloneClick}
-      />
-      <ExportIcon
-        value={entity}
-        title={_('Export Tag')}
-        onClick={onTagDownloadClick}
-      />
-    </IconDivider>
-  );
-});
+        <EditIcon
+          displayName={_('Tag')}
+          name="tag"
+          entity={entity}
+          onClick={onTagEditClick}
+        />
+        <CloneIcon
+          displayName={_('Tag')}
+          name="tag"
+          entity={entity}
+          title={_('Clone Tag')}
+          value={entity}
+          onClick={onTagCloneClick}
+        />
+        <ExportIcon
+          value={entity}
+          title={_('Export Tag')}
+          onClick={onTagDownloadClick}
+        />
+      </IconDivider>
+    );
+  },
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -142,25 +140,12 @@ const Row = ({
         displayName={_('Tag')}
         onToggleDetailsClick={onToggleDetailsClick}
       />
-      <TableData>
-        {entity.value}
-      </TableData>
-      <TableData>
-        {renderYesNo(entity.isActive())}
-      </TableData>
-      <TableData>
-        {typeName(resourceType)}
-      </TableData>
-      <TableData>
-        {resourceCount}
-      </TableData>
-      <TableData>
-        {shortDate(entity.modificationTime)}
-      </TableData>
-      <ActionsComponent
-        {...props}
-        entity={entity}
-      />
+      <TableData>{entity.value}</TableData>
+      <TableData>{renderYesNo(entity.isActive())}</TableData>
+      <TableData>{typeName(resourceType)}</TableData>
+      <TableData>{resourceCount}</TableData>
+      <TableData>{shortDate(entity.modificationTime)}</TableData>
+      <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );
 };

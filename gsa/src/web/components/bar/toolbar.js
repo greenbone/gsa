@@ -31,8 +31,7 @@ const Toolbar = props => {
         align={['space-between', 'start']}
         {...props}
         className="toolbar"
-      >
-      </Layout>
+      />
     </IconSizeProvider>
   );
 };

@@ -35,7 +35,6 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.reports');
 
 class ReportsCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'report', Report);
   }
@@ -56,17 +55,13 @@ class ReportsCommand extends EntitiesCommand {
     return this.getAggregates({
       aggregate_type: 'report',
       group_column: 'date',
-      dataColumns: [
-        'high',
-        'high_per_host',
-      ],
+      dataColumns: ['high', 'high_per_host'],
       filter,
     });
   }
 }
 
 class ReportCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'report', Report);
   }
@@ -83,13 +78,16 @@ class ReportCommand extends EntityCommand {
   }
 
   download({id}, {reportFormatId, deltaReportId, filter}) {
-    return this.httpGet({
-      cmd: 'get_report',
-      delta_report_id: deltaReportId,
-      report_id: id,
-      report_format_id: reportFormatId,
-      filter: isDefined(filter) ? filter.all() : ALL_FILTER,
-    }, {transform: DefaultTransform, responseType: 'arraybuffer'});
+    return this.httpGet(
+      {
+        cmd: 'get_report',
+        delta_report_id: deltaReportId,
+        report_id: id,
+        report_format_id: reportFormatId,
+        filter: isDefined(filter) ? filter.all() : ALL_FILTER,
+      },
+      {transform: DefaultTransform, responseType: 'arraybuffer'},
+    );
   }
 
   addAssets({id}, {filter = ''}) {
@@ -121,12 +119,15 @@ class ReportCommand extends EntityCommand {
   }
 
   getDelta({id}, {id: delta_report_id}, {filter, ...options} = {}) {
-    return this.httpGet({
-      id,
-      delta_report_id,
-      filter,
-      ignore_pagination: 1,
-    }, {...options, transform: FastXmlTransform}).then(this.transformResponse);
+    return this.httpGet(
+      {
+        id,
+        delta_report_id,
+        filter,
+        ignore_pagination: 1,
+      },
+      {...options, transform: FastXmlTransform},
+    ).then(this.transformResponse);
   }
 
   get({id}, {filter, ...options} = {}) {

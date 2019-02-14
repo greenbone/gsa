@@ -72,13 +72,14 @@ const getFutureRunLabel = runs => {
 
 const cloneSchedule = (d, start) => {
   const {duration = 0} = d;
-  const toolTip = duration === 0 ?
-    _('{{name}} Start: {{date}}', {name: d.label, date: longDate(start)}) :
-    _('{{name}} Start: {{startdate}} End: {{enddate}}', {
-      name: d.label,
-      startdate: longDate(start),
-      enddate: longDate(start.clone().add(duration, 'seconds')),
-    });
+  const toolTip =
+    duration === 0
+      ? _('{{name}} Start: {{date}}', {name: d.label, date: longDate(start)})
+      : _('{{name}} Start: {{startdate}} End: {{enddate}}', {
+          name: d.label,
+          startdate: longDate(start),
+          enddate: longDate(start.clone().add(duration, 'seconds')),
+        });
   return {
     ...d,
     start,
@@ -87,28 +88,10 @@ const cloneSchedule = (d, start) => {
 };
 
 const StrokeGradient = () => (
-  <LinearGradient
-    id={STROKE_GRADIENT_ID}
-    x1="0%"
-    x2="100%"
-    y1="0%"
-    y2="0%"
-  >
-    <stop
-      offset="0%"
-      stopColor={Theme.darkGreen}
-      stopOpacity="1.0"
-    />
-    <stop
-      offset="25%"
-      stopColor={Theme.darkGreen}
-      stopOpacity="1.0"
-    />
-    <stop
-      offset="100%"
-      stopColor={Theme.darkGreen}
-      stopOpacity="0.1"
-    />
+  <LinearGradient id={STROKE_GRADIENT_ID} x1="0%" x2="100%" y1="0%" y2="0%">
+    <stop offset="0%" stopColor={Theme.darkGreen} stopOpacity="1.0" />
+    <stop offset="25%" stopColor={Theme.darkGreen} stopOpacity="1.0" />
+    <stop offset="100%" stopColor={Theme.darkGreen} stopOpacity="0.1" />
   </LinearGradient>
 );
 
@@ -117,28 +100,10 @@ const strokeGradientUrl = `url(#${STROKE_GRADIENT_ID})`;
 const FILL_GRADIENT_ID = 'green_fill_gradient';
 
 const FillGradient = () => (
-  <LinearGradient
-    id={FILL_GRADIENT_ID}
-    x1="0%"
-    x2="100%"
-    y1="0%"
-    y2="0%"
-  >
-    <stop
-      offset="0%"
-      stopColor={Theme.lightGreen}
-      stopOpacity="1.0"
-    />
-    <stop
-      offset="25%"
-      stopColor={Theme.lightGreen}
-      stopOpacity="1.0"
-    />
-    <stop
-      offset="100%"
-      stopColor={Theme.lightGreen}
-      stopOpacity="0.1"
-    />
+  <LinearGradient id={FILL_GRADIENT_ID} x1="0%" x2="100%" y1="0%" y2="0%">
+    <stop offset="0%" stopColor={Theme.lightGreen} stopOpacity="1.0" />
+    <stop offset="25%" stopColor={Theme.lightGreen} stopOpacity="1.0" />
+    <stop offset="100%" stopColor={Theme.lightGreen} stopOpacity="0.1" />
   </LinearGradient>
 );
 
@@ -146,22 +111,14 @@ const fillGradientUrl = `url(#${FILL_GRADIENT_ID})`;
 
 const TRIANGLE_WIDTH = 20;
 
-const Triangle = ({
-  x = 0,
-  y = 0,
-  height,
-  width = TRIANGLE_WIDTH,
-  toolTip,
-}) => {
+const Triangle = ({x = 0, y = 0, height, width = TRIANGLE_WIDTH, toolTip}) => {
   const d = path()
     .move(x, y)
     .line(x, y + height)
     .line(x + width, y + height / 2)
     .close();
   return (
-    <ToolTip
-      content={toolTip}
-    >
+    <ToolTip content={toolTip}>
       {({targetRef, hide, show}) => (
         <path
           d={d}
@@ -186,7 +143,6 @@ Triangle.propTypes = {
 };
 
 class ScheduleChart extends React.Component {
-
   shouldComponentUpdate(nextProps) {
     return shouldUpdate(nextProps, this.props);
   }
@@ -204,13 +160,15 @@ class ScheduleChart extends React.Component {
 
     const yValues = data.map(d => d.label);
 
-    const maxLabelLength = Math.max(...yValues.map(
-      val => val.toString().length), MAX_LABEL_LENGTH);
+    const maxLabelLength = Math.max(
+      ...yValues.map(val => val.toString().length),
+      MAX_LABEL_LENGTH,
+    );
 
     // adjust left margin for label length on horizontal bars
     // 4px for each letter is just a randomly chosen value
-    const marginLeft = margin.left +
-      Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4;
+    const marginLeft =
+      margin.left + Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4;
 
     const maxWidth = width - marginLeft - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
@@ -228,16 +186,9 @@ class ScheduleChart extends React.Component {
     let schedules = [];
 
     for (const d of data) {
-      const {
-        label,
-        isInfinite = false,
-        starts,
-      } = d;
+      const {label, isInfinite = false, starts} = d;
 
-      schedules = [
-        ...schedules,
-        ...starts.map(next => cloneSchedule(d, next)),
-      ];
+      schedules = [...schedules, ...starts.map(next => cloneSchedule(d, next))];
 
       const futureRun = isInfinite ? Number.POSITIVE_INFINITY : starts.length;
 
@@ -252,11 +203,7 @@ class ScheduleChart extends React.Component {
     const bandwidth = yScale.bandwidth();
     return (
       <Layout align={['start', 'start']}>
-        <Svg
-          width={width}
-          height={height}
-          innerRef={svgRef}
-        >
+        <Svg width={width} height={height} innerRef={svgRef}>
           <Group top={margin.top} left={marginLeft}>
             <Axis
               orientation="left"
@@ -275,15 +222,10 @@ class ScheduleChart extends React.Component {
               numTicks={7}
               rangePadding={0}
             />
-            <StrokeGradient/>
-            <FillGradient/>
+            <StrokeGradient />
+            <FillGradient />
             {schedules.map((d, i) => {
-              const {
-                duration = 0,
-                period = 0,
-                start,
-                label,
-              } = d;
+              const {duration = 0, period = 0, start, label} = d;
 
               const startX = xScale(start);
 
@@ -291,11 +233,9 @@ class ScheduleChart extends React.Component {
               const hasDuration = duration > 0;
               if (hasDuration) {
                 end.add(d.duration, 'seconds');
-              }
-              else if (period > 0) {
+              } else if (period > 0) {
                 end.add(Math.min(period, ONE_DAY), 'seconds');
-              }
-              else {
+              } else {
                 end.add(1, 'day');
               }
 
@@ -306,10 +246,7 @@ class ScheduleChart extends React.Component {
               const endX = xScale(end.toDate());
               const rwidth = endX - startX;
               return (
-                <ToolTip
-                  key={i}
-                  content={d.toolTip}
-                >
+                <ToolTip key={i} content={d.toolTip}>
                   {({targetRef, show, hide}) => (
                     <rect
                       ref={targetRef}
@@ -317,22 +254,13 @@ class ScheduleChart extends React.Component {
                       x={startX}
                       height={bandwidth}
                       width={rwidth}
-                      fill={
-                        hasDuration ?
-                          Theme.lightGreen :
-                          fillGradientUrl
-                      }
-                      stroke={
-                        hasDuration ?
-                          Theme.darkGreen :
-                          strokeGradientUrl
-                      }
+                      fill={hasDuration ? Theme.lightGreen : fillGradientUrl}
+                      stroke={hasDuration ? Theme.darkGreen : strokeGradientUrl}
                       onMouseEnter={show}
                       onMouseLeave={hide}
                     />
                   )}
                 </ToolTip>
-
               );
             })}
           </Group>
@@ -356,13 +284,15 @@ class ScheduleChart extends React.Component {
 }
 
 ScheduleChart.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
-    starts: PropTypes.arrayOf(PropTypes.date).isRequired,
-    label: PropTypes.toString.isRequired,
-    isInfinite: PropTypes.bool,
-    duration: PropTypes.number,
-    period: PropTypes.number,
-  })).isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      starts: PropTypes.arrayOf(PropTypes.date).isRequired,
+      label: PropTypes.toString.isRequired,
+      isInfinite: PropTypes.bool,
+      duration: PropTypes.number,
+      period: PropTypes.number,
+    }),
+  ).isRequired,
   endDate: PropTypes.date,
   height: PropTypes.number.isRequired,
   startDate: PropTypes.date,

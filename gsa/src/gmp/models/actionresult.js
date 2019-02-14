@@ -19,13 +19,11 @@
 import {setProperties} from '../parser';
 
 class ActionResult {
-
   constructor(elem) {
     const {action_result: result} = elem;
 
     setProperties(result, this);
   }
-
 }
 
 export default ActionResult;

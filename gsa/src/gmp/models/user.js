@@ -33,7 +33,6 @@ export const ACCESS_ALLOW_ALL = '0';
 export const ACCESS_DENY_ALL = '1';
 
 class User extends Model {
-
   static entityType = 'user';
 
   parseProperties(elem) {
@@ -47,8 +46,7 @@ class User extends Model {
 
     if (isEmpty(elem.groups)) {
       ret.groups = [];
-    }
-    else {
+    } else {
       ret.groups = map(elem.groups.group, group => {
         return new Model(group, 'group');
       });
@@ -59,8 +57,7 @@ class User extends Model {
         addresses: parseCsv(elem.hosts.__text),
         allow: elem.hosts._allow,
       };
-    }
-    else {
+    } else {
       ret.hosts = {
         addresses: [],
       };
@@ -71,8 +68,7 @@ class User extends Model {
         addresses: parseCsv(elem.ifaces.__text),
         allow: elem.ifaces._allow,
       };
-    }
-    else {
+    } else {
       ret.ifaces = {
         addresses: [],
       };
@@ -82,13 +78,11 @@ class User extends Model {
       const {source} = elem.sources;
       if (source === 'ldap_connect') {
         ret.auth_method = AUTH_METHOD_LDAP;
-      }
-      else if (source === 'radius_connect') {
+      } else if (source === 'radius_connect') {
         ret.auth_method = AUTH_METHOD_RADIUS;
       }
       delete ret.sources;
-    }
-    else {
+    } else {
       ret.auth_method = AUTH_METHOD_PASSWORD;
     }
 

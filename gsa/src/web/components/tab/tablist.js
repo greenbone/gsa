@@ -23,12 +23,7 @@ import PropTypes from '../../utils/proptypes.js';
 
 import Layout from '../layout/layout.js';
 
-const TabList = ({
-  active = 0,
-  children,
-  onActivateTab,
-  ...props
-}) => {
+const TabList = ({active = 0, children, onActivateTab, ...props}) => {
   children = React.Children.map(children, (child, index) => {
     if (child !== null) {
       return React.cloneElement(child, {
@@ -39,11 +34,7 @@ const TabList = ({
 
     return child;
   });
-  return (
-    <Layout {...props}>
-      {children}
-    </Layout>
-  );
+  return <Layout {...props}>{children}</Layout>;
 };
 
 TabList.propTypes = {

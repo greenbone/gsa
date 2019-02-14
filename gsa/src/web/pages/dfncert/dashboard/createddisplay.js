@@ -67,14 +67,16 @@ export const DfnCertsCreatedTableDisplay = createDisplay({
   filtersFilter: DFNCERT_FILTER_FILTER,
 });
 
-registerDisplay(DfnCertsCreatedTableDisplay.displayId,
-  DfnCertsCreatedTableDisplay, {
+registerDisplay(
+  DfnCertsCreatedTableDisplay.displayId,
+  DfnCertsCreatedTableDisplay,
+  {
     title: _l('Table: DFN-CERT Advisories by Creation Time'),
-  });
+  },
+);
 
-registerDisplay(DfnCertsCreatedDisplay.displayId,
-  DfnCertsCreatedDisplay, {
-    title: _l('Chart: DFN-CERT Advisories by Creation Time'),
-  });
+registerDisplay(DfnCertsCreatedDisplay.displayId, DfnCertsCreatedDisplay, {
+  title: _l('Chart: DFN-CERT Advisories by Creation Time'),
+});
 
 // vim: set ts=2 sw=2 tw=80:

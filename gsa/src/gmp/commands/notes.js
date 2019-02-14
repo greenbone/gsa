@@ -34,7 +34,6 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.notes');
 
 class NoteCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'note', Note);
   }
@@ -91,7 +90,6 @@ class NoteCommand extends EntityCommand {
 }
 
 class NotesCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'note', Note);
     this.setParam('details', 1);
@@ -127,7 +125,7 @@ class NotesCommand extends EntitiesCommand {
       filter,
     });
   }
-};
+}
 
 registerCommand('note', NoteCommand);
 registerCommand('notes', NotesCommand);

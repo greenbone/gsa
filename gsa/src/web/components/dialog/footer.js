@@ -37,20 +37,9 @@ export const DialogFooterLayout = styled(Layout)`
   padding: 10px 20px 10px 20px;
 `;
 
-const DialogFooter = ({
-  title,
-  onClick,
-  loading = false,
-}) => (
-  <DialogFooterLayout
-    align={['end', 'center']}
-    shrink="0"
-  >
-    <Button
-      onClick={onClick}
-      title={title}
-      loading={loading}
-    >
+const DialogFooter = ({title, onClick, loading = false}) => (
+  <DialogFooterLayout align={['end', 'center']} shrink="0">
+    <Button onClick={onClick} title={title} loading={loading}>
       {title}
     </Button>
   </DialogFooterLayout>

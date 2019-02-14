@@ -47,25 +47,21 @@ import OverrideComponent from './component';
 
 import OverridesDashboard, {OVERRIDES_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onOverrideCreateClick,
-}) => (
-  <IconDivider>
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="overrides-and-false-positives"
-      title={_('Help: Overrides')}
-    />
-
-    {capabilities.mayCreate('override') &&
-      <NewIcon
-        title={_('New Override')}
-        onClick={onOverrideCreateClick}
+const ToolBarIcons = withCapabilities(
+  ({capabilities, onOverrideCreateClick}) => (
+    <IconDivider>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="overrides-and-false-positives"
+        title={_('Help: Overrides')}
       />
-    }
-  </IconDivider>
-));
+
+      {capabilities.mayCreate('override') && (
+        <NewIcon title={_('New Override')} onClick={onOverrideCreateClick} />
+      )}
+    </IconDivider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   onOverrideCreateClick: PropTypes.func.isRequired,
@@ -91,14 +87,7 @@ const Page = ({
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
-    {({
-      clone,
-      create,
-      delete: delete_func,
-      download,
-      edit,
-      save,
-    }) => (
+    {({clone, create, delete: delete_func, download, edit, save}) => (
       <EntitiesPage
         {...props}
         dashboard={() => (
@@ -117,7 +106,7 @@ const Page = ({
         filter={filter}
         filterEditDialog={FilterDialog}
         filtersFilter={OVERRIDES_FILTER_FILTER}
-        sectionIcon={<OverrideIcon size="large"/>}
+        sectionIcon={<OverrideIcon size="large" />}
         table={OverridesTable}
         title={_('Overrides')}
         toolBarIcons={ToolBarIcons}

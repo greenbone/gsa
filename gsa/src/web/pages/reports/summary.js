@@ -25,13 +25,9 @@ import Layout from 'web/components/layout/layout';
 
 import ScanInfo from './scaninfo';
 
-const Summary = ({
-  report,
-}) => (
+const Summary = ({report}) => (
   <Layout flex="column">
-    <ScanInfo
-      report={report}
-    />
+    <ScanInfo report={report} />
   </Layout>
 );
 

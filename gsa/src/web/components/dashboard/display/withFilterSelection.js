@@ -25,19 +25,10 @@ import PropTypes from 'web/utils/proptypes';
 import FilterSelection from './filterselection';
 
 const withFilterSelection = ({filtersFilter}) => Component => {
-  const FilterSelectionWrapper = ({
-    showFilterSelection = false,
-    ...props
-  }) => (
-    showFilterSelection ?
-      <FilterSelection
-        {...props}
-        filtersFilter={filtersFilter}
-      >
-        {({
-          filter,
-          selectFilter,
-        }) => (
+  const FilterSelectionWrapper = ({showFilterSelection = false, ...props}) =>
+    showFilterSelection ? (
+      <FilterSelection {...props} filtersFilter={filtersFilter}>
+        {({filter, selectFilter}) => (
           <Component
             {...props}
             filter={filter}
@@ -45,12 +36,10 @@ const withFilterSelection = ({filtersFilter}) => Component => {
             onSelectFilterClick={selectFilter}
           />
         )}
-      </FilterSelection> :
-      <Component
-        {...props}
-        showFilterSelection={showFilterSelection}
-      />
-  );
+      </FilterSelection>
+    ) : (
+      <Component {...props} showFilterSelection={showFilterSelection} />
+    );
 
   FilterSelectionWrapper.propTypes = {
     showFilterSelection: PropTypes.bool,

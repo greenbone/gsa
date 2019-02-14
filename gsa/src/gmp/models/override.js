@@ -50,7 +50,6 @@ export const RESULT_UUID = '0';
 export const SEVERITY_FALSE_POSITIVE = -1;
 
 class Override extends Model {
-
   static entityType = 'override';
 
   parseProperties(elem) {
@@ -69,15 +68,13 @@ class Override extends Model {
 
     if (isModelElement(ret.task)) {
       ret.task = new Model(ret.task, 'task');
-    }
-    else {
+    } else {
       delete ret.task;
     }
 
     if (isModelElement(ret.result)) {
       ret.result = new Model(ret.result, 'result');
-    }
-    else {
+    } else {
       delete ret.result;
     }
 

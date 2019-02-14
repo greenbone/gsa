@@ -69,10 +69,7 @@ import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 
-import {
-  loadEntity,
-  selector,
-} from 'web/store/entities/results';
+import {loadEntity, selector} from 'web/store/entities/results';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -100,10 +97,7 @@ let ToolBarIcons = ({
         anchor="results"
         title={_('Help: Results')}
       />
-      <ListIcon
-        title={_('Results List')}
-        page="results"
-      />
+      <ListIcon title={_('Results List')} page="results" />
       <ExportIcon
         value={entity}
         title={_('Export Result as XML')}
@@ -111,62 +105,50 @@ let ToolBarIcons = ({
       />
     </IconDivider>
     <IconDivider>
-      {capabilities.mayCreate('note') &&
+      {capabilities.mayCreate('note') && (
         <NewNoteIcon
           title={_('Add new Note')}
           value={entity}
           onClick={onNoteCreateClick}
         />
-      }
-      {capabilities.mayCreate('override') &&
+      )}
+      {capabilities.mayCreate('override') && (
         <NewOverrideIcon
           title={_('Add new Override')}
           value={entity}
           onClick={onOverrideCreateClick}
         />
-      }
-      {capabilities.mayCreate('ticket') &&
+      )}
+      {capabilities.mayCreate('ticket') && (
         <NewTicketIcon
           title={_('Create new Ticket')}
           value={entity}
           onClick={onTicketCreateClick}
         />
-      }
+      )}
     </IconDivider>
     <IconDivider>
-      {capabilities.mayAccess('tasks') && isDefined(entity.task) &&
-        <DetailsLink
-          type="task"
-          id={entity.task.id}
-        >
-          <TaskIcon
-            title={_('Corresponding Task ({{name}})', entity.task)}
-          />
+      {capabilities.mayAccess('tasks') && isDefined(entity.task) && (
+        <DetailsLink type="task" id={entity.task.id}>
+          <TaskIcon title={_('Corresponding Task ({{name}})', entity.task)} />
         </DetailsLink>
-      }
-      {capabilities.mayAccess('reports') && isDefined(entity.report) &&
-        <DetailsLink
-          type="report"
-          id={entity.report.id}
-        >
-          <ReportIcon
-            title={_('Corresponding Report')}
-          />
+      )}
+      {capabilities.mayAccess('reports') && isDefined(entity.report) && (
+        <DetailsLink type="report" id={entity.report.id}>
+          <ReportIcon title={_('Corresponding Report')} />
         </DetailsLink>
-      }
-      {capabilities.mayAccess('tickets') && entity.tickets.length > 0 &&
+      )}
+      {capabilities.mayAccess('tickets') && entity.tickets.length > 0 && (
         <Link
           to="tickets"
           filter={'result_id=' + entity.id}
           title={_('Corresponding Tickets')}
         >
-          <Badge
-            content={entity.tickets.length}
-          >
-            <TicketIcon/>
+          <Badge content={entity.tickets.length}>
+            <TicketIcon />
           </Badge>
         </Link>
-      }
+      )}
     </IconDivider>
   </Divider>
 );
@@ -184,155 +166,94 @@ ToolBarIcons = withCapabilities(ToolBarIcons);
 
 const active_filter = entity => entity.isActive();
 
-const Details = ({
-  entity,
-  ...props
-}) => {
+const Details = ({entity, ...props}) => {
   const {notes, overrides, qod, host, userTags} = entity;
   const active_notes = notes.filter(active_filter);
   const active_overrides = overrides.filter(active_filter);
   return (
     <Layout flex="column">
-      <DetailsBlock
-        title={_('Vulnerability')}
-      >
+      <DetailsBlock title={_('Vulnerability')}>
         <Layout flex="column">
           <InfoTable>
             <colgroup>
-              <Col width="10%"/>
-              <Col width="90%"/>
+              <Col width="10%" />
+              <Col width="90%" />
             </colgroup>
             <TableBody>
               <TableRow>
-                <TableData>
-                  {_('Name')}
-                </TableData>
-                <TableData>
-                  {entity.name}
-                </TableData>
+                <TableData>{_('Name')}</TableData>
+                <TableData>{entity.name}</TableData>
               </TableRow>
               <TableRow>
-                <TableData>
-                  {_('Severity')}
-                </TableData>
+                <TableData>{_('Severity')}</TableData>
                 <TableData align={['center', 'start']}>
                   <Divider>
-                    <SeverityBar severity={entity.severity}/>
-                    {active_overrides.length > 0 &&
-                      <InnerLink
-                        to="overrides"
-                      >
-                        <OverrideIcon
-                          title={_('Overrides are applied')}
-                        />
+                    <SeverityBar severity={entity.severity} />
+                    {active_overrides.length > 0 && (
+                      <InnerLink to="overrides">
+                        <OverrideIcon title={_('Overrides are applied')} />
                       </InnerLink>
-                    }
+                    )}
                   </Divider>
                 </TableData>
               </TableRow>
               <TableRow>
-                <TableData>
-                  {_('QoD')}
-                </TableData>
-                <TableData>
-                  {qod.value} %
-                </TableData>
+                <TableData>{_('QoD')}</TableData>
+                <TableData>{qod.value} %</TableData>
               </TableRow>
               <TableRow>
+                <TableData>{_('Host')}</TableData>
                 <TableData>
-                  {_('Host')}
-                </TableData>
-                <TableData>
-                  <DetailsLink
-                    type="host"
-                    id={host.id}
-                  >
+                  <DetailsLink type="host" id={host.id}>
                     {host.name}
                   </DetailsLink>
                 </TableData>
               </TableRow>
               <TableRow>
-                <TableData>
-                  {_('Location')}
-                </TableData>
-                <TableData>
-                  {entity.port}
-                </TableData>
+                <TableData>{_('Location')}</TableData>
+                <TableData>{entity.port}</TableData>
               </TableRow>
             </TableBody>
           </InfoTable>
         </Layout>
       </DetailsBlock>
 
-      {userTags.length > 0 &&
-        <DetailsBlock
-          title={_('Tags')}
-        >
+      {userTags.length > 0 && (
+        <DetailsBlock title={_('Tags')}>
           <Divider>
             {userTags.map(tag => {
               const valueString = isDefined(tag.value) ? '' : '=' + tag.value;
               return (
-                <DetailsLink
-                  key={tag.id}
-                  id={tag.id}
-                  type="tag"
-                >
+                <DetailsLink key={tag.id} id={tag.id} type="tag">
                   {tag.name + valueString}
                 </DetailsLink>
               );
             })}
           </Divider>
         </DetailsBlock>
-      }
+      )}
 
-      <ResultDetails
-        entity={entity}
-        {...props}
-      />
+      <ResultDetails entity={entity} {...props} />
 
-      {active_overrides.length > 0 &&
-        <DetailsBlock
-          id="overrides"
-          title={_('Overrides')}
-        >
-          <Divider
-            wrap
-            align={['start', 'stretch']}
-            width="15px"
-          >
-            {
-              active_overrides.map(override => (
-                <Override
-                  key={override.id}
-                  override={override}
-                />
-              ))
-            }
+      {active_overrides.length > 0 && (
+        <DetailsBlock id="overrides" title={_('Overrides')}>
+          <Divider wrap align={['start', 'stretch']} width="15px">
+            {active_overrides.map(override => (
+              <Override key={override.id} override={override} />
+            ))}
           </Divider>
         </DetailsBlock>
-      }
+      )}
 
-      {active_notes.length > 0 &&
-        <DetailsBlock
-          id="notes"
-          title={_('Notes')}
-        >
-          <Divider
-            wrap
-            align={['start', 'stretch']}
-            width="15px"
-          >
-            {
-              active_notes.map(note => (
-                <Note
-                  key={note.id}
-                  note={note}
-                />
-              ))
-            }
+      {active_notes.length > 0 && (
+        <DetailsBlock id="notes" title={_('Notes')}>
+          <Divider wrap align={['start', 'stretch']} width="15px">
+            {active_notes.map(note => (
+              <Note key={note.id} note={note} />
+            ))}
           </Divider>
         </DetailsBlock>
-      }
+      )}
     </Layout>
   );
 };
@@ -342,7 +263,6 @@ Details.propTypes = {
 };
 
 class Page extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -355,10 +275,13 @@ class Page extends React.Component {
     const {gmp} = this.props;
 
     const {onError, onDownloaded} = this.props;
-    return gmp.result.export(result).then(response => {
-      const filename = 'result-' + result.id + '.xml';
-      return {filename, data: response.data};
-    }).then(onDownloaded, onError);
+    return gmp.result
+      .export(result)
+      .then(response => {
+        const filename = 'result-' + result.id + '.xml';
+        return {filename, data: response.data};
+      })
+      .then(onDownloaded, onError);
   }
 
   openDialog(result = {}, createfunc) {
@@ -382,17 +305,9 @@ class Page extends React.Component {
   }
 
   render() {
-    const {
-      entity,
-      onChanged,
-      onError,
-      onInteraction,
-    } = this.props;
+    const {entity, onChanged, onError, onInteraction} = this.props;
     return (
-      <NoteComponent
-        onCreated={onChanged}
-        onInteraction={onInteraction}
-      >
+      <NoteComponent onCreated={onChanged} onInteraction={onInteraction}>
         {({create: createnote}) => (
           <OverrideComponent
             onCreated={onChanged}
@@ -407,34 +322,28 @@ class Page extends React.Component {
                   <EntityPage
                     {...this.props}
                     entity={entity}
-                    sectionIcon={<ResultIcon size="large"/>}
+                    sectionIcon={<ResultIcon size="large" />}
                     title={_('Result')}
                     toolBarIcons={ToolBarIcons}
                     onInteraction={onInteraction}
-                    onNoteCreateClick={
-                      result => this.openDialog(result, createnote)}
-                    onOverrideCreateClick={
-                      result => this.openDialog(result, createoverride)}
+                    onNoteCreateClick={result =>
+                      this.openDialog(result, createnote)
+                    }
+                    onOverrideCreateClick={result =>
+                      this.openDialog(result, createoverride)
+                    }
                     onResultDownloadClick={this.handleDownload}
                     onTicketCreateClick={createticket}
                   >
-                    {({
-                      activeTab = 0,
-                      onActivateTab,
-                    }) => (
+                    {({activeTab = 0, onActivateTab}) => (
                       <Layout grow="1" flex="column">
-                        <TabLayout
-                          grow="1"
-                          align={['start', 'end']}
-                        >
+                        <TabLayout grow="1" align={['start', 'end']}>
                           <TabList
                             active={activeTab}
                             align={['start', 'stretch']}
                             onActivateTab={onActivateTab}
                           >
-                            <Tab>
-                              {_('Information')}
-                            </Tab>
+                            <Tab>{_('Information')}</Tab>
                             <EntitiesTab entities={entity.userTags}>
                               {_('User Tags')}
                             </EntitiesTab>
@@ -444,9 +353,7 @@ class Page extends React.Component {
                         <Tabs active={activeTab}>
                           <TabPanels>
                             <TabPanel>
-                              <Details
-                                entity={entity}
-                              />
+                              <Details entity={entity} />
                             </TabPanel>
                             <TabPanel>
                               <EntityTags

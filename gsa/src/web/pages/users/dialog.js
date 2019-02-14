@@ -47,10 +47,10 @@ import TextField from 'web/components/form/textfield';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-class Dialog extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class Dialog extends React.Component {
+  // eslint-disable-line react/prefer-stateless-function
 
   render() {
-
     const {
       accessHosts = '',
       accessIfaces = '',
@@ -109,13 +109,9 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
         onSave={onSave}
         defaultValues={data}
       >
-        {({
-          values: state,
-          onValueChange,
-        }) => {
+        {({values: state, onValueChange}) => {
           return (
             <Layout flex="column">
-
               <FormGroup title={_('Login Name')}>
                 <TextField
                   name="name"
@@ -138,11 +134,8 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                 />
               </FormGroup>
 
-              {!is_edit &&
-                <FormGroup
-                  title={_('Authentication')}
-                  flex="column"
-                >
+              {!is_edit && (
+                <FormGroup title={_('Authentication')} flex="column">
                   <Divider>
                     <Radio
                       title={_('Password')}
@@ -157,7 +150,7 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                       onChange={onValueChange}
                     />
                   </Divider>
-                  {settings.get('method:ldap_connect').enable === 'true' &&
+                  {settings.get('method:ldap_connect').enable === 'true' && (
                     <Divider>
                       <Radio
                         title={_('LDAP Authentication Only')}
@@ -167,8 +160,8 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                         onChange={onValueChange}
                       />
                     </Divider>
-                  }
-                  {settings.get('method:radius_connect').enable === 'true' &&
+                  )}
+                  {settings.get('method:radius_connect').enable === 'true' && (
                     <Divider>
                       <Radio
                         title={_('RADIUS Authentication Only')}
@@ -178,14 +171,11 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                         onChange={onValueChange}
                       />
                     </Divider>
-                  }
+                  )}
                 </FormGroup>
-              }
-              {is_edit &&
-                <FormGroup
-                  title={_('Authentication')}
-                  flex="column"
-                >
+              )}
+              {is_edit && (
+                <FormGroup title={_('Authentication')} flex="column">
                   <Divider>
                     <Radio
                       title={_('Password: Use existing Password')}
@@ -209,7 +199,7 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                       onChange={onValueChange}
                     />
                   </Divider>
-                  {settings.get('method:ldap_connect').enable === 'true' &&
+                  {settings.get('method:ldap_connect').enable === 'true' && (
                     <Divider>
                       <Radio
                         title={_('LDAP Authentication Only')}
@@ -219,8 +209,8 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                         onChange={onValueChange}
                       />
                     </Divider>
-                  }
-                  {settings.get('method:radius_connect').enable === 'true' &&
+                  )}
+                  {settings.get('method:radius_connect').enable === 'true' && (
                     <Divider>
                       <Radio
                         title={_('RADIUS Authentication Only')}
@@ -230,14 +220,12 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                         onChange={onValueChange}
                       />
                     </Divider>
-                  }
+                  )}
                 </FormGroup>
-              }
+              )}
 
-              {capabilities.mayAccess('roles') &&
-                <FormGroup
-                  title={_('Roles')}
-                >
+              {capabilities.mayAccess('roles') && (
+                <FormGroup title={_('Roles')}>
                   <MultiSelect
                     name="role_ids"
                     items={rolesOptions}
@@ -245,12 +233,10 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                     onChange={onValueChange}
                   />
                 </FormGroup>
-              }
+              )}
 
-              {capabilities.mayAccess('groups') &&
-                <FormGroup
-                  title={_('Groups')}
-                >
+              {capabilities.mayAccess('groups') && (
+                <FormGroup title={_('Groups')}>
                   <MultiSelect
                     name="group_ids"
                     items={groupsOptions}
@@ -258,7 +244,7 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                     onChange={onValueChange}
                   />
                 </FormGroup>
-              }
+              )}
 
               <FormGroup title={_('Host Access')}>
                 <Divider flex="column">
@@ -315,7 +301,6 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
                   />
                 </Divider>
               </FormGroup>
-
             </Layout>
           );
         }}
@@ -337,15 +322,9 @@ Dialog.propTypes = {
   comment: PropTypes.string,
   groupIds: PropTypes.array,
   groups: PropTypes.array,
-  hostsAllow: PropTypes.oneOf([
-    ACCESS_ALLOW_ALL,
-    ACCESS_DENY_ALL,
-  ]),
+  hostsAllow: PropTypes.oneOf([ACCESS_ALLOW_ALL, ACCESS_DENY_ALL]),
   id: PropTypes.id,
-  ifacesAllow: PropTypes.oneOf([
-    ACCESS_ALLOW_ALL,
-    ACCESS_DENY_ALL,
-  ]),
+  ifacesAllow: PropTypes.oneOf([ACCESS_ALLOW_ALL, ACCESS_DENY_ALL]),
   name: PropTypes.string,
   oldName: PropTypes.string,
   password: PropTypes.string,

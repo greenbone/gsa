@@ -26,7 +26,6 @@ import {createEntitiesActions, createEntityActions} from '../actions';
 import {createReducer} from '../reducers';
 
 describe('entities reducers test', () => {
-
   test('should create a reducer function', () => {
     const reducer = createReducer('foo');
 
@@ -140,7 +139,6 @@ describe('entities reducers test', () => {
   });
 
   describe('reducing entities loading request actions', () => {
-
     test('should set isLoading with default filter', () => {
       const actions = createEntitiesActions('foo');
       const action = actions.request();
@@ -237,11 +235,9 @@ describe('entities reducers test', () => {
         },
       });
     });
-
   });
 
   describe('reducing entities loading success actions', () => {
-
     test('should set isLoading with default filter', () => {
       const actions = createEntitiesActions('foo');
       const reducer = createReducer('foo');
@@ -308,8 +304,12 @@ describe('entities reducers test', () => {
       const otherFilter = Filter.fromString('name=foo');
       const otherFilterId = filterIdentifier(otherFilter);
       const otherCounts = {last: 22};
-      const action = actions.success([{id: 'foo'}, {id: 'bar'}], filter,
-        filter, counts);
+      const action = actions.success(
+        [{id: 'foo'}, {id: 'bar'}],
+        filter,
+        filter,
+        counts,
+      );
       const state = {
         errors: {
           [otherFilterId]: 'An error',
@@ -352,11 +352,9 @@ describe('entities reducers test', () => {
         },
       });
     });
-
   });
 
   describe('reducing entities loading error actions', () => {
-
     test('should set isLoading and error with default filter', () => {
       const actions = createEntitiesActions('foo');
       const reducer = createReducer('foo');
@@ -455,11 +453,9 @@ describe('entities reducers test', () => {
         [filterId]: {},
       });
     });
-
   });
 
   describe('reducing entity loading requests', () => {
-
     test('should set isLoading', () => {
       const id = 'a1';
       const actions = createEntityActions('foo');
@@ -525,11 +521,9 @@ describe('entities reducers test', () => {
         },
       });
     });
-
   });
 
   describe('reducing entity loading success', () => {
-
     test('should reduce success action', () => {
       const id = 'a1';
       const actions = createEntityActions('foo');
@@ -688,11 +682,9 @@ describe('entities reducers test', () => {
         },
       });
     });
-
   });
 
   describe('reducing entity loading error', () => {
-
     test('should reduce error action', () => {
       const id = 'a1';
       const actions = createEntityActions('foo');
@@ -790,11 +782,8 @@ describe('entities reducers test', () => {
           bar: true,
         },
       });
-
     });
-
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

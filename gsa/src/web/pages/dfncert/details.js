@@ -37,64 +37,38 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-const DfnCertAdvDetails = ({
-  entity,
-  links = true,
-}) => {
-  const {
-    title,
-    severity,
-    advisory_link,
-  } = entity;
+const DfnCertAdvDetails = ({entity, links = true}) => {
+  const {title, severity, advisory_link} = entity;
   return (
-    <Layout
-      flex="column"
-      grow
-    >
-
+    <Layout flex="column" grow>
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
-
-          {isDefined(title) &&
+          {isDefined(title) && (
             <TableRow>
-              <TableData>
-                {_('Title')}
-              </TableData>
-              <TableData>
-                {title}
-              </TableData>
+              <TableData>{_('Title')}</TableData>
+              <TableData>{title}</TableData>
             </TableRow>
-          }
+          )}
 
           <TableRow>
+            <TableData>{_('Severity')}</TableData>
             <TableData>
-              {_('Severity')}
-            </TableData>
-            <TableData>
-              <SeverityBar
-                severity={severity}
-              />
+              <SeverityBar severity={severity} />
             </TableData>
           </TableRow>
 
-          {isDefined(advisory_link) &&
+          {isDefined(advisory_link) && (
             <TableRow>
+              <TableData>{_('Advisory Link')}</TableData>
               <TableData>
-                {_('Advisory Link')}
-              </TableData>
-              <TableData>
-                <ExternalLink
-                  to={advisory_link}
-                >
-                  {advisory_link}
-                </ExternalLink>
+                <ExternalLink to={advisory_link}>{advisory_link}</ExternalLink>
               </TableData>
             </TableRow>
-          }
+          )}
         </TableBody>
       </InfoTable>
     </Layout>

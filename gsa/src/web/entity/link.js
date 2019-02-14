@@ -29,12 +29,7 @@ import DetailsLink from '../components/link/detailslink.js';
 import Link from '../components/link/link.js';
 import {getEntityType} from 'gmp/utils/entitytype.js';
 
-const EntityLink = ({
-  capabilities,
-  entity,
-  textOnly,
-  ...props
-}) => {
+const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
   const {id, name, userCapabilities, deleted} = entity;
   const type = getEntityType(entity);
 
@@ -42,39 +37,28 @@ const EntityLink = ({
     return (
       <span>
         {name} (<span>in </span>
-        <Link
-          textOnly={textOnly}
-          to="trashcan"
-          anchor={type}
-        >
+        <Link textOnly={textOnly} to="trashcan" anchor={type}>
           {_('Trashcan')}
-        </Link>)
+        </Link>
+        )
       </span>
     );
   }
 
-  if (isDefined(deleted) && deleted !== '0') { // FIXME is this still used?
-    return (
-      <b>{_('Orphan')}</b>
-    );
+  if (isDefined(deleted) && deleted !== '0') {
+    // FIXME is this still used?
+    return <b>{_('Orphan')}</b>;
   }
 
-  if ((userCapabilities.areDefined() && !userCapabilities.mayAccess(type)) ||
-    !capabilities.mayAccess(type)) {
-    return (
-      <span>
-        {name}
-      </span>
-    );
+  if (
+    (userCapabilities.areDefined() && !userCapabilities.mayAccess(type)) ||
+    !capabilities.mayAccess(type)
+  ) {
+    return <span>{name}</span>;
   }
 
   return (
-    <DetailsLink
-      {...props}
-      id={id}
-      type={type}
-      textOnly={textOnly}
-    >
+    <DetailsLink {...props} id={id} type={type} textOnly={textOnly}>
       {name}
     </DetailsLink>
   );

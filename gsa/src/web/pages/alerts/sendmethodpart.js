@@ -32,19 +32,15 @@ import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
 
 const SendMethodPart = ({
-    prefix,
-    reportFormats,
-    sendHost,
-    sendPort,
-    sendReportFormat,
-    onChange,
-  }) => {
+  prefix,
+  reportFormats,
+  sendHost,
+  sendPort,
+  sendReportFormat,
+  onChange,
+}) => {
   return (
-    <Layout
-      flex="column"
-      box
-      grow="1"
-    >
+    <Layout flex="column" box grow="1">
       <FormGroup title={_('Send to host')}>
         <Divider>
           <TextField
@@ -54,9 +50,7 @@ const SendMethodPart = ({
             maxLength="256"
             onChange={onChange}
           />
-          <Layout>
-            {_('on port')}
-          </Layout>
+          <Layout>{_('on port')}</Layout>
           <TextField
             name={prefix + 'send_port'}
             value={sendPort}

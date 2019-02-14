@@ -19,9 +19,7 @@
 
 import React from 'react';
 
-const TableFooter = props => (
-  <tfoot {...props} />
-);
+const TableFooter = props => <tfoot {...props} />;
 
 export default TableFooter;
 

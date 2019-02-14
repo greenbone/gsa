@@ -28,22 +28,17 @@ export const OVALDEFS_CREATED = 'ovaldefs-created';
 export const OVALDEFS_SEVERITY = 'ovaldefs-severity';
 
 export const ovaldefCreatedLoader = loadFunc(
-  ({gmp, filter}) => gmp.ovaldefs.getCreatedAggregates({filter})
-    .then(r => r.data),
-  OVALDEFS_CREATED);
+  ({gmp, filter}) =>
+    gmp.ovaldefs.getCreatedAggregates({filter}).then(r => r.data),
+  OVALDEFS_CREATED,
+);
 
-export const OvaldefCreatedLoader = ({
-  filter,
-  children,
-}) => (
+export const OvaldefCreatedLoader = ({filter, children}) => (
   <Loader
     dataId={OVALDEFS_CREATED}
     filter={filter}
     load={ovaldefCreatedLoader}
-    subscriptions={[
-      'ovaldefs.timer',
-      'ovaldefs.changed',
-    ]}
+    subscriptions={['ovaldefs.timer', 'ovaldefs.changed']}
   >
     {children}
   </Loader>
@@ -52,22 +47,17 @@ export const OvaldefCreatedLoader = ({
 OvaldefCreatedLoader.propTypes = loaderPropTypes;
 
 export const ovaldefClassLoader = loadFunc(
-  ({gmp, filter}) => gmp.ovaldefs.getClassAggregates({filter})
-    .then(r => r.data),
-  OVALDEFS_CLASS);
+  ({gmp, filter}) =>
+    gmp.ovaldefs.getClassAggregates({filter}).then(r => r.data),
+  OVALDEFS_CLASS,
+);
 
-export const OvaldefClassLoader = ({
-  filter,
-  children,
-}) => (
+export const OvaldefClassLoader = ({filter, children}) => (
   <Loader
     dataId={OVALDEFS_CLASS}
     filter={filter}
     load={ovaldefClassLoader}
-    subscriptions={[
-      'ovaldefs.timer',
-      'ovaldefs.changed',
-    ]}
+    subscriptions={['ovaldefs.timer', 'ovaldefs.changed']}
   >
     {children}
   </Loader>
@@ -76,22 +66,17 @@ export const OvaldefClassLoader = ({
 OvaldefClassLoader.propTypes = loaderPropTypes;
 
 export const ovaldefSeverityLoader = loadFunc(
-  ({gmp, filter}) => gmp.ovaldefs.getSeverityAggregates({filter})
-    .then(r => r.data),
-  OVALDEFS_SEVERITY);
+  ({gmp, filter}) =>
+    gmp.ovaldefs.getSeverityAggregates({filter}).then(r => r.data),
+  OVALDEFS_SEVERITY,
+);
 
-export const OvaldefSeverityLoader = ({
-  filter,
-  children,
-}) => (
+export const OvaldefSeverityLoader = ({filter, children}) => (
   <Loader
     dataId={OVALDEFS_SEVERITY}
     filter={filter}
     load={ovaldefSeverityLoader}
-    subscriptions={[
-      'ovaldefs.timer',
-      'ovaldefs.changed',
-    ]}
+    subscriptions={['ovaldefs.timer', 'ovaldefs.changed']}
   >
     {children}
   </Loader>

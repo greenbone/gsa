@@ -97,7 +97,7 @@ const TabTitleCounts = styled.span`
 `;
 
 const Span = styled.span`
-   margin-top: 2px;
+  margin-top: 2px;
 `;
 
 const TabTitle = ({title, counts}) => (
@@ -117,7 +117,9 @@ TabTitle.propTypes = {
 const TabTitleForUserTags = ({title, count}) => (
   <Layout flex="column" align={['center', 'center']}>
     <span>{title}</span>
-    <TabTitleCounts>(<i>{count}</i>)</TabTitleCounts>
+    <TabTitleCounts>
+      (<i>{count}</i>)
+    </TabTitleCounts>
   </Layout>
 );
 
@@ -148,12 +150,9 @@ const ToolBarIcons = ({
           anchor="reports-and-vulnerability-management"
           title={_('Help: Reports')}
         />
-        <ListIcon
-          title={_('Reports List')}
-          page="reports"
-        />
+        <ListIcon title={_('Reports List')} page="reports" />
       </IconDivider>
-      {!loading &&
+      {!loading && (
         <React.Fragment>
           <IconDivider>
             <AddToAssetsIcon
@@ -186,30 +185,33 @@ const ToolBarIcons = ({
               filter={'report_id=' + report.id}
               title={_('Corresponding Vulnerabilities')}
             >
-              <VulnerabilityIcon/>
+              <VulnerabilityIcon />
             </Link>
-            {isDefined(task) && !task.isContainer() &&
+            {isDefined(task) && !task.isContainer() && (
               <Link
                 to="performance"
                 query={{
-                  start: isDefined(report.scan_start) ?
-                    report.scan_start.toISOString() : undefined,
-                  end: isDefined(report.scan_end) ?
-                    report.scan_end.toISOString() : undefined,
-                  scanner: isDefined(report.slave) ?
-                    report.slave.id : undefined,
+                  start: isDefined(report.scan_start)
+                    ? report.scan_start.toISOString()
+                    : undefined,
+                  end: isDefined(report.scan_end)
+                    ? report.scan_end.toISOString()
+                    : undefined,
+                  scanner: isDefined(report.slave)
+                    ? report.slave.id
+                    : undefined,
                 }}
               >
-                <PerformanceIcon/>
+                <PerformanceIcon />
               </Link>
-            }
+            )}
           </IconDivider>
           <IconDivider>
             <DownloadIcon
               title={_('Download filtered Report')}
               onClick={onReportDownloadClick}
             />
-            {!delta &&
+            {!delta && (
               <AlertActions
                 filter={filter}
                 report={report}
@@ -218,10 +220,10 @@ const ToolBarIcons = ({
                 showErrorMessage={showErrorMessage}
                 onInteraction={onInteraction}
               />
-            }
+            )}
           </IconDivider>
         </React.Fragment>
-      }
+      )}
     </Divider>
   );
 };
@@ -272,10 +274,7 @@ const PageContent = ({
   onTagSuccess,
   onTargetEditClick,
 }) => {
-
-  const {
-    report = {},
-  } = entity || {};
+  const {report = {}} = entity || {};
 
   const {userTags = {}} = report;
   const userTagsCount = userTags.length;
@@ -297,8 +296,9 @@ const PageContent = ({
 
   const hasReport = isDefined(entity);
 
-  const delta = isDefined(report.isDeltaReport) ?
-    report.isDeltaReport() : undefined;
+  const delta = isDefined(report.isDeltaReport)
+    ? report.isDeltaReport()
+    : undefined;
 
   const isContainer = isDefined(task) && task.isContainer();
   const status = isContainer ? TASK_STATUS.container : scan_run_status;
@@ -306,38 +306,23 @@ const PageContent = ({
 
   const header_title = (
     <Divider>
-      <span>
-        {_('Report:')}
-      </span>
-      {isLoading ?
-        <span>
-          {_('Loading')}
-        </span> :
+      <span>{_('Report:')}</span>
+      {isLoading ? (
+        <span>{_('Loading')}</span>
+      ) : (
         <Divider>
-          <span>
-            {longDate(timestamp)}
-          </span>
+          <span>{longDate(timestamp)}</span>
           <Span>
-            <StatusBar
-              status={status}
-              progress={progress}
-            />
+            <StatusBar status={status} progress={progress} />
           </Span>
         </Divider>
-      }
+      )}
     </Divider>
   );
 
   const header = (
-    <SectionHeader
-      img={<ReportIcon size="large"/>}
-      title={header_title}
-    >
-      {hasReport &&
-        <EntityInfo
-          entity={entity}
-        />
-      }
+    <SectionHeader img={<ReportIcon size="large" />} title={header_title}>
+      {hasReport && <EntityInfo entity={entity} />}
     </SectionHeader>
   );
 
@@ -345,11 +330,7 @@ const PageContent = ({
   const resultCounts = {filtered, all: full};
 
   return (
-    <Layout
-      grow
-      flex="column"
-      align={['start', 'stretch']}
-    >
+    <Layout grow flex="column" align={['start', 'stretch']}>
       <ToolBar>
         <ToolBarIcons
           delta={delta}
@@ -380,94 +361,76 @@ const PageContent = ({
         </Layout>
       </ToolBar>
 
-      <Section
-        header={header}
-      >
-        {isLoading ?
-          <Loading/> :
+      <Section header={header}>
+        {isLoading ? (
+          <Loading />
+        ) : (
           <React.Fragment>
-            <TabLayout
-              grow="1"
-              align={['start', 'end']}
-            >
+            <TabLayout grow="1" align={['start', 'end']}>
               <TabList
                 active={activeTab}
                 align={['start', 'stretch']}
                 onActivateTab={onActivateTab}
               >
+                <Tab>{_('Information')}</Tab>
                 <Tab>
-                  {_('Information')}
+                  <TabTitle title={_('Results')} counts={resultCounts} />
                 </Tab>
-                <Tab>
-                  <TabTitle
-                    title={_('Results')}
-                    counts={resultCounts}
-                  />
-                </Tab>
-                {!delta &&
+                {!delta && (
                   <Tab>
-                    <TabTitle
-                      title={_('Hosts')}
-                      counts={hosts.counts}
-                    />
+                    <TabTitle title={_('Hosts')} counts={hosts.counts} />
                   </Tab>
-                }
-                {!delta &&
+                )}
+                {!delta && (
                   <Tab>
-                    <TabTitle
-                      title={_('Ports')}
-                      counts={ports.counts}
-                    />
+                    <TabTitle title={_('Ports')} counts={ports.counts} />
                   </Tab>
-                }
-                {!delta &&
+                )}
+                {!delta && (
                   <Tab>
                     <TabTitle
                       title={_('Applications')}
                       counts={applications.counts}
                     />
                   </Tab>
-                }
-                {!delta &&
+                )}
+                {!delta && (
                   <Tab>
                     <TabTitle
                       title={_('Operating Systems')}
                       counts={operatingsystems.counts}
                     />
                   </Tab>
-                }
-                {!delta &&
+                )}
+                {!delta && (
                   <Tab>
-                    <TabTitle
-                      title={_('CVEs')}
-                      counts={cves.counts}
-                    />
+                    <TabTitle title={_('CVEs')} counts={cves.counts} />
                   </Tab>
-                }
-                {!delta &&
+                )}
+                {!delta && (
                   <Tab>
                     <TabTitle
                       title={_('Closed CVEs')}
                       counts={closed_cves.counts}
                     />
                   </Tab>
-                }
-                {!delta &&
+                )}
+                {!delta && (
                   <Tab>
                     <TabTitle
                       title={_('TLS Certificates')}
                       counts={tls_certificates.counts}
                     />
                   </Tab>
-                }
-                {!delta &&
+                )}
+                {!delta && (
                   <Tab>
                     <TabTitle
                       title={_('Error Messages')}
                       counts={errors.counts}
                     />
                   </Tab>
-                }
+                )}
                 <Tab>
                   <TabTitleForUserTags
                     title={_('User Tags')}
@@ -476,7 +439,7 @@ const PageContent = ({
                 </Tab>
               </TabList>
             </TabLayout>
-            {isDefined(results) ?
+            {isDefined(results) ? (
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
@@ -505,7 +468,8 @@ const PageContent = ({
                       onFilterRemoveClick={onFilterRemoveClick}
                       onInteraction={onInteraction}
                       onSortChange={sortField =>
-                        onSortChange('results', sortField)}
+                        onSortChange('results', sortField)
+                      }
                       onTargetEditClick={onTargetEditClick}
                     />
                   </TabPanel>
@@ -541,8 +505,9 @@ const PageContent = ({
                           onLastClick={onLastClick}
                           onNextClick={onNextClick}
                           onPreviousClick={onPreviousClick}
-                          onSortChange={
-                            sortField => onSortChange('hosts', sortField)}
+                          onSortChange={sortField =>
+                            onSortChange('hosts', sortField)
+                          }
                         />
                       )}
                     </ReportEntitiesContainer>
@@ -579,8 +544,9 @@ const PageContent = ({
                           onLastClick={onLastClick}
                           onNextClick={onNextClick}
                           onPreviousClick={onPreviousClick}
-                          onSortChange={
-                            sortField => onSortChange('ports', sortField)}
+                          onSortChange={sortField =>
+                            onSortChange('ports', sortField)
+                          }
                         />
                       )}
                     </ReportEntitiesContainer>
@@ -617,8 +583,9 @@ const PageContent = ({
                           onLastClick={onLastClick}
                           onNextClick={onNextClick}
                           onPreviousClick={onPreviousClick}
-                          onSortChange={
-                            sortField => onSortChange('apps', sortField)}
+                          onSortChange={sortField =>
+                            onSortChange('apps', sortField)
+                          }
                         />
                       )}
                     </ReportEntitiesContainer>
@@ -655,8 +622,9 @@ const PageContent = ({
                           onLastClick={onLastClick}
                           onNextClick={onNextClick}
                           onPreviousClick={onPreviousClick}
-                          onSortChange={
-                            sortField => onSortChange('os', sortField)}
+                          onSortChange={sortField =>
+                            onSortChange('os', sortField)
+                          }
                         />
                       )}
                     </ReportEntitiesContainer>
@@ -693,8 +661,9 @@ const PageContent = ({
                           onLastClick={onLastClick}
                           onNextClick={onNextClick}
                           onPreviousClick={onPreviousClick}
-                          onSortChange={
-                            sortField => onSortChange('cves', sortField)}
+                          onSortChange={sortField =>
+                            onSortChange('cves', sortField)
+                          }
                         />
                       )}
                     </ReportEntitiesContainer>
@@ -731,8 +700,9 @@ const PageContent = ({
                           onLastClick={onLastClick}
                           onNextClick={onNextClick}
                           onPreviousClick={onPreviousClick}
-                          onSortChange={
-                            sortField => onSortChange('closedcves', sortField)}
+                          onSortChange={sortField =>
+                            onSortChange('closedcves', sortField)
+                          }
                         />
                       )}
                     </ReportEntitiesContainer>
@@ -769,10 +739,12 @@ const PageContent = ({
                           onLastClick={onLastClick}
                           onNextClick={onNextClick}
                           onPreviousClick={onPreviousClick}
-                          onSortChange={
-                            sortField => onSortChange('tlscerts', sortField)}
+                          onSortChange={sortField =>
+                            onSortChange('tlscerts', sortField)
+                          }
                           onTlsCertificateDownloadClick={
-                            onTlsCertificateDownloadClick}
+                            onTlsCertificateDownloadClick
+                          }
                         />
                       )}
                     </ReportEntitiesContainer>
@@ -809,8 +781,9 @@ const PageContent = ({
                           onLastClick={onLastClick}
                           onNextClick={onNextClick}
                           onPreviousClick={onPreviousClick}
-                          onSortChange={
-                            sortField => onSortChange('errors', sortField)}
+                          onSortChange={sortField =>
+                            onSortChange('errors', sortField)
+                          }
                         />
                       )}
                     </ReportEntitiesContainer>
@@ -824,11 +797,12 @@ const PageContent = ({
                     />
                   </TabPanel>
                 </TabPanels>
-              </Tabs> :
-              <Loading/>
-            }
+              </Tabs>
+            ) : (
+              <Loading />
+            )}
           </React.Fragment>
-        }
+        )}
       </Section>
     </Layout>
   );

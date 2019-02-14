@@ -20,9 +20,10 @@ import {connect} from 'react-redux';
 
 import {getUsername} from 'web/store/usersettings/selectors.js';
 
-const withUsername = Component => connect(rootState => ({
-  username: getUsername(rootState),
-}))(Component);
+const withUsername = Component =>
+  connect(rootState => ({
+    username: getUsername(rootState),
+  }))(Component);
 
 export default withUsername;
 

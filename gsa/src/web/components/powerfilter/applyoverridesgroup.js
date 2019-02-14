@@ -30,11 +30,11 @@ import FormGroup from '../form/formgroup.js';
 import YesNoRadio from '../form/yesnoradio.js';
 
 const ApplyOverridesGroup = ({
-    filter,
-    name = 'apply_overrides',
-    overrides,
-    onChange,
-  }) => {
+  filter,
+  name = 'apply_overrides',
+  overrides,
+  onChange,
+}) => {
   if (isDefined(filter)) {
     overrides = filter.get('apply_overrides');
   }

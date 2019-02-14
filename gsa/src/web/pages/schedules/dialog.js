@@ -56,51 +56,67 @@ const RECURRENCE_YEARLY = ReccurenceFrequency.YEARLY;
 const RECURRENCE_WORKWEEK = 'workweek';
 const RECURRENCE_CUSTOM = 'custom';
 
-const RECURRENCE_TYPE_ITEMS = [{
-  label: _l('Once'),
-  value: RECURRENCE_ONCE,
-}, {
-  label: _l('Hourly'),
-  value: RECURRENCE_HOURLY,
-}, {
-  label: _l('Daily'),
-  value: RECURRENCE_DAILY,
-}, {
-  label: _l('Weekly'),
-  value: RECURRENCE_WEEKLY,
-}, {
-  label: _l('Monthly'),
-  value: RECURRENCE_MONTHLY,
-}, {
-  label: _l('Yearly'),
-  value: RECURRENCE_YEARLY,
-}, {
-  label: _l('Workweek (Monday till Friday)'),
-  value: RECURRENCE_WORKWEEK,
-}, {
-  label: _l('Custom...'),
-  value: RECURRENCE_CUSTOM,
-}];
+const RECURRENCE_TYPE_ITEMS = [
+  {
+    label: _l('Once'),
+    value: RECURRENCE_ONCE,
+  },
+  {
+    label: _l('Hourly'),
+    value: RECURRENCE_HOURLY,
+  },
+  {
+    label: _l('Daily'),
+    value: RECURRENCE_DAILY,
+  },
+  {
+    label: _l('Weekly'),
+    value: RECURRENCE_WEEKLY,
+  },
+  {
+    label: _l('Monthly'),
+    value: RECURRENCE_MONTHLY,
+  },
+  {
+    label: _l('Yearly'),
+    value: RECURRENCE_YEARLY,
+  },
+  {
+    label: _l('Workweek (Monday till Friday)'),
+    value: RECURRENCE_WORKWEEK,
+  },
+  {
+    label: _l('Custom...'),
+    value: RECURRENCE_CUSTOM,
+  },
+];
 
-const NTH_DAY_ITEMS = [{
-  label: _l('The First'),
-  value: '1',
-}, {
-  label: _l('The Second'),
-  value: '2',
-}, {
-  label: _l('The Third'),
-  value: '3',
-}, {
-  label: _l('The Fourth'),
-  value: '4',
-}, {
-  label: _l('The Fifth'),
-  value: '5',
-}, {
-  label: _l('The Last'),
-  value: '-1',
-}];
+const NTH_DAY_ITEMS = [
+  {
+    label: _l('The First'),
+    value: '1',
+  },
+  {
+    label: _l('The Second'),
+    value: '2',
+  },
+  {
+    label: _l('The Third'),
+    value: '3',
+  },
+  {
+    label: _l('The Fourth'),
+    value: '4',
+  },
+  {
+    label: _l('The Fifth'),
+    value: '5',
+  },
+  {
+    label: _l('The Last'),
+    value: '-1',
+  },
+];
 
 const RepeatMonthly = {
   nth: 'nth',
@@ -110,7 +126,6 @@ const RepeatMonthly = {
 const getNthWeekday = cdate => Math.ceil(cdate.date() / 7);
 
 class ScheduleDialog extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -124,35 +139,33 @@ class ScheduleDialog extends React.Component {
     const {
       duration,
       timezone,
-      startDate = date().tz(timezone).startOf('hour').add(1, 'hour'),
+      startDate = date()
+        .tz(timezone)
+        .startOf('hour')
+        .add(1, 'hour'),
     } = props;
-    let {
-      freq,
-      interval = 1,
-      weekdays,
-      monthdays,
-    } = this.props;
+    let {freq, interval = 1, weekdays, monthdays} = this.props;
 
-    const monthly = freq === ReccurenceFrequency.MONTHLY &&
-      !isDefined(weekdays) ? RepeatMonthly.days : RepeatMonthly.nth;
+    const monthly =
+      freq === ReccurenceFrequency.MONTHLY && !isDefined(weekdays)
+        ? RepeatMonthly.days
+        : RepeatMonthly.nth;
 
     let recurrenceType;
     if (isDefined(freq)) {
       if (!isDefined(weekdays) && !isDefined(monthdays) && interval === 1) {
         recurrenceType = freq;
-      }
-      else {
+      } else {
         recurrenceType = RECURRENCE_CUSTOM;
       }
-    }
-    else {
+    } else {
       recurrenceType = RECURRENCE_ONCE;
       freq = ReccurenceFrequency.WEEKLY;
     }
 
-    const endDate = isDefined(duration) ?
-      startDate.clone().add(duration) :
-      startDate.clone().add(1, 'hour');
+    const endDate = isDefined(duration)
+      ? startDate.clone().add(duration)
+      : startDate.clone().add(1, 'hour');
 
     if (!isDefined(weekdays)) {
       weekdays = new WeekDays();
@@ -229,9 +242,14 @@ class ScheduleDialog extends React.Component {
         .minutes(endMinute);
 
       if (endDate.isSameOrBefore(startDate)) {
-        return Promise.reject(new Error(_(
-          'End date is same or before start date. Please adjust you start ' +
-          'and/or end date.')));
+        return Promise.reject(
+          new Error(
+            _(
+              'End date is same or before start date. Please adjust you start ' +
+                'and/or end date.',
+            ),
+          ),
+        );
       }
     }
 
@@ -244,47 +262,52 @@ class ScheduleDialog extends React.Component {
         friday: true,
       });
       freq = ReccurenceFrequency.WEEKLY;
-    }
-    else if (recurrenceType === RECURRENCE_CUSTOM &&
+    } else if (
+      recurrenceType === RECURRENCE_CUSTOM &&
       freq === ReccurenceFrequency.MONTHLY &&
-      monthly === RepeatMonthly.nth) {
-
+      monthly === RepeatMonthly.nth
+    ) {
       weekdays = new WeekDays({
         [monthlyDay]: monthlyNth,
       });
-    }
-    else if (recurrenceType !== RECURRENCE_CUSTOM) {
+    } else if (recurrenceType !== RECURRENCE_CUSTOM) {
       freq = recurrenceType;
     }
 
-    const setWeekdays = recurrenceType === RECURRENCE_WORKWEEK ||
+    const setWeekdays =
+      recurrenceType === RECURRENCE_WORKWEEK ||
       (recurrenceType === RECURRENCE_CUSTOM &&
-         freq === ReccurenceFrequency.WEEKLY) ||
+        freq === ReccurenceFrequency.WEEKLY) ||
       (recurrenceType === RECURRENCE_CUSTOM &&
-         freq === ReccurenceFrequency.MONTHLY &&
-         monthly === RepeatMonthly.nth);
+        freq === ReccurenceFrequency.MONTHLY &&
+        monthly === RepeatMonthly.nth);
 
-    const setMonthydays = recurrenceType === RECURRENCE_CUSTOM &&
-         freq === ReccurenceFrequency.MONTHLY &&
-         monthly === RepeatMonthly.days;
+    const setMonthydays =
+      recurrenceType === RECURRENCE_CUSTOM &&
+      freq === ReccurenceFrequency.MONTHLY &&
+      monthly === RepeatMonthly.days;
 
-    const isPreDefined = recurrenceType === RECURRENCE_HOURLY ||
+    const isPreDefined =
+      recurrenceType === RECURRENCE_HOURLY ||
       recurrenceType === RECURRENCE_DAILY ||
       recurrenceType === RECURRENCE_WEEKLY ||
       recurrenceType === RECURRENCE_MONTHLY ||
       recurrenceType === RECURRENCE_YEARLY ||
       recurrenceType === RECURRENCE_WORKWEEK;
 
-    const event = Event.fromData({
-      duration: endOpen ? undefined : createDuration(endDate.diff(startDate)),
-      description: comment,
-      freq: recurrenceType === RECURRENCE_ONCE ? undefined : freq,
-      interval: isPreDefined ? 1 : interval,
-      monthdays: setMonthydays ? monthdays : undefined,
-      weekdays: setWeekdays ? weekdays : undefined,
-      summary: name,
-      startDate,
-    }, timezone);
+    const event = Event.fromData(
+      {
+        duration: endOpen ? undefined : createDuration(endDate.diff(startDate)),
+        description: comment,
+        freq: recurrenceType === RECURRENCE_ONCE ? undefined : freq,
+        interval: isPreDefined ? 1 : interval,
+        monthdays: setMonthydays ? monthdays : undefined,
+        weekdays: setWeekdays ? weekdays : undefined,
+        summary: name,
+        startDate,
+      },
+      timezone,
+    );
 
     return onSave({
       id,
@@ -330,9 +353,9 @@ class ScheduleDialog extends React.Component {
       timezone,
     };
 
-    const duration = endOpen ?
-      undefined :
-      createDuration(endDate.diff(startDate));
+    const duration = endOpen
+      ? undefined
+      : createDuration(endDate.diff(startDate));
 
     const values = {
       endDate,
@@ -360,10 +383,7 @@ class ScheduleDialog extends React.Component {
         onClose={onClose}
         onSave={this.handleSave}
       >
-        {({
-          values: state,
-          onValueChange,
-        }) => (
+        {({values: state, onValueChange}) => (
           <Layout flex="column">
             <FormGroup title={_('Name')}>
               <TextField
@@ -465,9 +485,7 @@ class ScheduleDialog extends React.Component {
             </FormGroup>
 
             <FormGroup title={_('Duration')}>
-              <span>
-                {renderDuration(duration)}
-              </span>
+              <span>{renderDuration(duration)}</span>
             </FormGroup>
 
             <FormGroup title={_('Recurrence')}>
@@ -479,7 +497,7 @@ class ScheduleDialog extends React.Component {
               />
             </FormGroup>
 
-            {state.recurrenceType === RECURRENCE_CUSTOM &&
+            {state.recurrenceType === RECURRENCE_CUSTOM && (
               <React.Fragment>
                 <FormGroup title={_('Repeat')}>
                   <Divider>
@@ -500,7 +518,7 @@ class ScheduleDialog extends React.Component {
                   </Divider>
                 </FormGroup>
 
-                {state.freq === RECURRENCE_WEEKLY &&
+                {state.freq === RECURRENCE_WEEKLY && (
                   <FormGroup title={_('Repeat at')}>
                     <WeekDaySelect
                       name="weekdays"
@@ -508,9 +526,9 @@ class ScheduleDialog extends React.Component {
                       onChange={this.handleValueChange}
                     />
                   </FormGroup>
-                }
+                )}
 
-                {state.freq === RECURRENCE_MONTHLY &&
+                {state.freq === RECURRENCE_MONTHLY && (
                   <FormGroup title={_('Repeat at')}>
                     <Divider flex="column">
                       <Divider>
@@ -551,9 +569,9 @@ class ScheduleDialog extends React.Component {
                       </Divider>
                     </Divider>
                   </FormGroup>
-                }
+                )}
               </React.Fragment>
-            }
+            )}
           </Layout>
         )}
       </SaveDialog>

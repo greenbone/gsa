@@ -68,13 +68,7 @@ const Page = ({
     onSolved={onChanged}
     onSolveError={onError}
   >
-    {({
-      clone,
-      close,
-      delete: deleteTicket,
-      edit,
-      solve,
-    }) => (
+    {({clone, close, delete: deleteTicket, edit, solve}) => (
       <EntitiesPage
         {...props}
         dashboard={() => (
@@ -93,7 +87,7 @@ const Page = ({
         filter={filter}
         filterEditDialog={FilterDialog}
         filtersFilter={TICKETS_FILTER_FILTER}
-        sectionIcon={<TicketIcon size="large"/>}
+        sectionIcon={<TicketIcon size="large" />}
         table={Table}
         title={_('Tickets')}
         onChanged={onChanged}

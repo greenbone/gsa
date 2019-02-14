@@ -36,7 +36,6 @@ export const UNKNOWN_FILTER_ID = '0';
  * @extends Model
  */
 class Filter extends Model {
-
   static entityType = 'filter';
 
   get length() {
@@ -67,7 +66,6 @@ class Filter extends Model {
 
     if (isDefined(ret.keywords)) {
       forEach(ret.keywords.keyword, keyword => {
-
         const {relation, value, column: key} = keyword;
 
         const converted = convert(key, value, relation);
@@ -75,8 +73,7 @@ class Filter extends Model {
         this._addTerm(new FilterTerm(converted));
       });
       delete ret.keywords;
-    }
-    else if (isDefined(ret.term)) {
+    } else if (isDefined(ret.term)) {
       this.parseString(ret.term);
 
       // ret.term should not be part of the public api
@@ -115,8 +112,7 @@ class Filter extends Model {
 
     if (!isDefined(keyword) || !this.has(keyword)) {
       this._addTerm(term);
-    }
-    else {
+    } else {
       const index = this._getIndex(keyword);
       this.terms[index] = term;
     }
@@ -179,8 +175,7 @@ class Filter extends Model {
     if (isDefined(filter)) {
       filter.forEach(term => {
         const {keyword: key} = term;
-        if (isDefined(key) && EXTRA_KEYWORDS.includes(key) &&
-          !this.has(key)) {
+        if (isDefined(key) && EXTRA_KEYWORDS.includes(key) && !this.has(key)) {
           this._addTerm(term);
         }
       });
@@ -352,14 +347,16 @@ class Filter extends Model {
    *
    * @return {Filter} This filter
    */
-   set(keyword, value, relation = '=') {
-     this._setTerm(new FilterTerm({
-       keyword,
-       value,
-       relation,
-     }));
-     return this;
-   }
+  set(keyword, value, relation = '=') {
+    this._setTerm(
+      new FilterTerm({
+        keyword,
+        value,
+        relation,
+      }),
+    );
+    return this;
+  }
 
   /**
    * Check whether this Filter contains a FilterTerm with the passed keyword
@@ -421,14 +418,16 @@ class Filter extends Model {
           return false;
         }
 
-        const equals = otherterms.reduce((prev, term) =>
-          prev || term.equals(our), false);
+        const equals = otherterms.reduce(
+          (prev, term) => prev || term.equals(our),
+          false,
+        );
 
-        if (!equals) { // same term isn't in other terms
+        if (!equals) {
+          // same term isn't in other terms
           return false;
         }
-      }
-      else if (!our.equals(others[i])) {
+      } else if (!our.equals(others[i])) {
         return false;
       }
     }
@@ -471,8 +470,7 @@ class Filter extends Model {
 
     if (isDefined(first)) {
       first += rows;
-    }
-    else {
+    } else {
       first = 1;
     }
 
@@ -498,8 +496,7 @@ class Filter extends Model {
 
     if (isDefined(first)) {
       first -= rows;
-    }
-    else {
+    } else {
       first = 1;
     }
 
@@ -571,7 +568,8 @@ class Filter extends Model {
    */
   and(filter) {
     const nonExtraTerms = this.getAllTerms().filter(
-      term => !EXTRA_KEYWORDS.includes(term.keyword));
+      term => !EXTRA_KEYWORDS.includes(term.keyword),
+    );
 
     if (nonExtraTerms.length > 0) {
       this._addTerm(AND);
@@ -691,7 +689,6 @@ class Filter extends Model {
     const f = new Filter();
     return f._addTerm(...term);
   }
-
 }
 
 export const ALL_FILTER = new Filter().all();
@@ -713,7 +710,8 @@ export const OVALDEFS_FILTER_FILTER = Filter.fromString('type=info');
 export const OVERRIDES_FILTER_FILTER = Filter.fromString('type=override');
 export const PORTLISTS_FILTER_FILTER = Filter.fromString('type=port_list');
 export const REPORT_FORMATS_FILTER_FILTER = Filter.fromString(
-  'type=report_format');
+  'type=report_format',
+);
 export const REPORTS_FILTER_FILTER = Filter.fromString('type=report');
 export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
 export const ROLES_FILTER_FILTER = Filter.fromString('type=role');

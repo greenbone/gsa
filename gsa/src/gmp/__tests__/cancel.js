@@ -20,7 +20,6 @@
 import CancelToken from '../cancel.js';
 
 describe('CancelToken tests', () => {
-
   test('new CancelToken resolve', () => {
     const token = new CancelToken(cancel => {
       cancel('because of a test');

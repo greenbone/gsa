@@ -31,8 +31,8 @@ export const ReportsCvssDisplay = createDisplay({
   loaderComponent: ReportsSeverityLoader,
   displayComponent: CvssDisplay,
   yLabel: _l('# of Reports'),
-  title: ({data: tdata}) => _('Reports by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  title: ({data: tdata}) =>
+    _('Reports by CVSS (Total: {{count}})', {count: tdata.total}),
   displayId: 'report-by-cvss',
   displayName: 'ReportsCvssDisplay',
   filtersFilter: REPORTS_FILTER_FILTER,
@@ -42,12 +42,9 @@ export const ReportsCvssTableDisplay = createDisplay({
   loaderComponent: ReportsSeverityLoader,
   displayComponent: CvssTableDisplay,
   yLabel: _l('# of Reports'),
-  title: ({data: tdata}) => _('Reports by CVSS (Total: {{count}})',
-    {count: tdata.total}),
-  dataTitles: [
-    _l('Severity'),
-    _l('# of Reports'),
-  ],
+  title: ({data: tdata}) =>
+    _('Reports by CVSS (Total: {{count}})', {count: tdata.total}),
+  dataTitles: [_l('Severity'), _l('# of Reports')],
   displayId: 'report-by-cvss-table',
   displayName: 'ReportsCvssTableDisplay',
   filtersFilter: REPORTS_FILTER_FILTER,

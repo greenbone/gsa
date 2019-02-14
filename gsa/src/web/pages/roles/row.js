@@ -35,44 +35,43 @@ import EditIcon from 'web/entity/icon/editicon';
 
 import PropTypes from 'web/utils/proptypes';
 
-const Actions = withEntitiesActions(({
-  entity,
-  onRoleCloneClick,
-  onRoleDeleteClick,
-  onRoleDownloadClick,
-  onRoleEditClick,
-}) => (
-  <IconDivider
-    align={['center', 'center']}
-    grow
-  >
-    <TrashIcon
-      displayName={_('Role')}
-      name="role"
-      entity={entity}
-      onClick={onRoleDeleteClick}
-    />
-    <EditIcon
-      displayName={_('Role')}
-      name="role"
-      entity={entity}
-      onClick={onRoleEditClick}
-    />
-    <CloneIcon
-      displayName={_('Role')}
-      name="user"
-      entity={entity}
-      title={_('Clone Role')}
-      value={entity}
-      onClick={onRoleCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export Role')}
-      onClick={onRoleDownloadClick}
-    />
-  </IconDivider>
-));
+const Actions = withEntitiesActions(
+  ({
+    entity,
+    onRoleCloneClick,
+    onRoleDeleteClick,
+    onRoleDownloadClick,
+    onRoleEditClick,
+  }) => (
+    <IconDivider align={['center', 'center']} grow>
+      <TrashIcon
+        displayName={_('Role')}
+        name="role"
+        entity={entity}
+        onClick={onRoleDeleteClick}
+      />
+      <EditIcon
+        displayName={_('Role')}
+        name="role"
+        entity={entity}
+        onClick={onRoleEditClick}
+      />
+      <CloneIcon
+        displayName={_('Role')}
+        name="user"
+        entity={entity}
+        title={_('Clone Role')}
+        value={entity}
+        onClick={onRoleCloneClick}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export Role')}
+        onClick={onRoleDownloadClick}
+      />
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model,
@@ -97,10 +96,7 @@ const Row = ({
       displayName={_('Role')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

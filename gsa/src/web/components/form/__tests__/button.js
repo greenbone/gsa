@@ -23,11 +23,10 @@ import {render, fireEvent} from 'web/utils/testing';
 import Button from '../button';
 
 describe('Button tests', () => {
-
   test('should call click handler', () => {
     const handler = jest.fn();
 
-    const {element} = render(<Button onClick={handler}/>);
+    const {element} = render(<Button onClick={handler} />);
 
     fireEvent.click(element);
 
@@ -37,7 +36,7 @@ describe('Button tests', () => {
   test('should call click handler with value', () => {
     const handler = jest.fn();
 
-    const {element} = render(<Button onClick={handler} value="bar"/>);
+    const {element} = render(<Button onClick={handler} value="bar" />);
 
     fireEvent.click(element);
 
@@ -48,11 +47,7 @@ describe('Button tests', () => {
     const handler = jest.fn();
 
     const {element} = render(
-      <Button
-        name="foo"
-        value="bar"
-        onClick={handler}
-      />
+      <Button name="foo" value="bar" onClick={handler} />,
     );
 
     fireEvent.click(element);
@@ -79,7 +74,6 @@ describe('Button tests', () => {
     expect(element).toHaveAttribute('title', 'foo');
     expect(element).toHaveTextContent('bar');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

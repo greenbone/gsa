@@ -57,22 +57,16 @@ const Header = ({
         >
           {_('Name')}
         </TableHead>
-        <TableHead
-          width="33%"
-          colSpan="3"
-        >
+        <TableHead width="33%" colSpan="3">
           {_('Port Counts')}
         </TableHead>
-        {isDefined(actionsColumn) ?
-          actionsColumn :
-          <TableHead
-            rowSpan="2"
-            width="6em"
-            align="center"
-          >
+        {isDefined(actionsColumn) ? (
+          actionsColumn
+        ) : (
+          <TableHead rowSpan="2" width="6em" align="center">
             {_('Actions')}
           </TableHead>
-        }
+        )}
       </TableRow>
       <TableRow>
         <TableHead

@@ -34,15 +34,11 @@ const MSection = styled.ul`
   padding: 0;
 `;
 
-const MenuSection = ({
-  children,
-}) => (
+const MenuSection = ({children}) => (
   <MSection>
-    {React.Children.map(children, child => hasValue(child) ? (
-      <StyledMenuEntry>
-        {child}
-      </StyledMenuEntry>
-    ) : child)}
+    {React.Children.map(children, child =>
+      hasValue(child) ? <StyledMenuEntry>{child}</StyledMenuEntry> : child,
+    )}
   </MSection>
 );
 

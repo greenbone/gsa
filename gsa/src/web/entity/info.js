@@ -32,13 +32,8 @@ import Layout from 'web/components/layout/layout';
 
 import Theme from 'web/utils/theme';
 
-const OwnerInfo = ({
-  owner,
-}) => isDefined(owner) ?
-  <span>{owner.name}</span> :
-  <i>{_('(Global Object)')}</i>
-;
-
+const OwnerInfo = ({owner}) =>
+  isDefined(owner) ? <span>{owner.name}</span> : <i>{_('(Global Object)')}</i>;
 OwnerInfo.propTypes = {
   owner: PropTypes.object,
 };
@@ -50,21 +45,14 @@ export const InfoLayout = styled(Layout)`
 
   & :nth-child(even) {
     margin-left: 3px;
-  };
+  }
   & :nth-child(odd) {
     margin-left: 30px;
-  };
+  }
 `;
 
-const EntityInfo = ({
-  entity,
-}) => {
-  const {
-    id,
-    owner,
-    creationTime,
-    modificationTime,
-  } = entity;
+const EntityInfo = ({entity}) => {
+  const {id, owner, creationTime, modificationTime} = entity;
   return (
     <InfoLayout>
       <div>{_('ID:')}</div>
@@ -74,7 +62,7 @@ const EntityInfo = ({
       <div>{_('Modified:')}</div>
       <div>{dateTimeWithTimeZone(modificationTime)}</div>
       <div>{_('Owner:')}</div>
-      <OwnerInfo owner={owner}/>
+      <OwnerInfo owner={owner} />
     </InfoLayout>
   );
 };

@@ -24,7 +24,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(Tag, 'tag');
 
 describe('Tag model tests', () => {
-
   test('should parse resources', () => {
     const elem = {
       resources: {
@@ -58,7 +57,6 @@ describe('Tag model tests', () => {
 
     expect(tag.value).toEqual('foo');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

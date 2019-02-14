@@ -57,10 +57,7 @@ import {
   loadEntities as loadNotes,
 } from 'web/store/entities/notes';
 
-import {
-  selector as nvtsSelector,
-  loadEntity,
-} from 'web/store/entities/nvts';
+import {selector as nvtsSelector, loadEntity} from 'web/store/entities/nvts';
 
 import {
   selector as overridesSelector,
@@ -89,10 +86,7 @@ let ToolBarIcons = ({
           anchor="network-vulnerability-tests"
           title={_('Help: NVTs')}
         />
-        <ListIcon
-          title={_('NVT List')}
-          page="nvts"
-        />
+        <ListIcon title={_('NVT List')} page="nvts" />
       </IconDivider>
 
       <ExportIcon
@@ -102,43 +96,33 @@ let ToolBarIcons = ({
       />
 
       <IconDivider>
-        {capabilities.mayCreate('note') &&
+        {capabilities.mayCreate('note') && (
           <NewNoteIcon
             title={_('Add new Note')}
             value={entity}
             onClick={onNoteCreateClick}
           />
-        }
-        {capabilities.mayCreate('override') &&
+        )}
+        {capabilities.mayCreate('override') && (
           <NewOverrideIcon
             title={_('Add new Override')}
             value={entity}
             onClick={onOverrideCreateClick}
           />
-        }
+        )}
       </IconDivider>
 
       <IconDivider>
-        {capabilities.mayAccess('results') &&
-          <Link
-            to="results"
-            filter={'nvt=' + entity.id}
-          >
-            <ResultIcon
-              title={_('Corresponding Results')}
-            />
+        {capabilities.mayAccess('results') && (
+          <Link to="results" filter={'nvt=' + entity.id}>
+            <ResultIcon title={_('Corresponding Results')} />
           </Link>
-        }
-        {capabilities.mayAccess('vulns') &&
-          <Link
-            to="vulnerabilities"
-            filter={'uuid=' + entity.id}
-          >
-            <VulnerabilityIcon
-              title={_('Corresponding Vulnerabilities')}
-            />
+        )}
+        {capabilities.mayAccess('vulns') && (
+          <Link to="vulnerabilities" filter={'uuid=' + entity.id}>
+            <VulnerabilityIcon title={_('Corresponding Vulnerabilities')} />
           </Link>
-        }
+        )}
       </IconDivider>
     </Divider>
   );
@@ -154,64 +138,33 @@ ToolBarIcons.propTypes = {
 
 ToolBarIcons = withCapabilities(ToolBarIcons);
 
-const Details = ({
-  entity,
-  notes = [],
-  overrides = [],
-}) => {
+const Details = ({entity, notes = [], overrides = []}) => {
   overrides = overrides.filter(override => override.isActive());
   notes = notes.filter(note => note.isActive());
 
   return (
     <Layout flex="column">
+      <NvtDetails entity={entity} />
 
-      <NvtDetails
-        entity={entity}
-      />
-
-      {overrides.length > 0 &&
-        <DetailsBlock
-          id="overrides"
-          title={_('Overrides')}
-        >
-          <Divider
-            wrap
-            align={['start', 'stretch']}
-            width="15px"
-          >
-            {
-              overrides.map(override => (
-                <Override
-                  key={override.id}
-                  override={override}
-                />
-              ))
-            }
+      {overrides.length > 0 && (
+        <DetailsBlock id="overrides" title={_('Overrides')}>
+          <Divider wrap align={['start', 'stretch']} width="15px">
+            {overrides.map(override => (
+              <Override key={override.id} override={override} />
+            ))}
           </Divider>
         </DetailsBlock>
-      }
+      )}
 
-      {notes.length > 0 &&
-        <DetailsBlock
-          id="notes"
-          title={_('Notes')}
-        >
-          <Divider
-            wrap
-            align={['start', 'stretch']}
-            width="15px"
-          >
-            {
-              notes.map(note => (
-                <Note
-                  key={note.id}
-                  note={note}
-                />
-              ))
-            }
+      {notes.length > 0 && (
+        <DetailsBlock id="notes" title={_('Notes')}>
+          <Divider wrap align={['start', 'stretch']} width="15px">
+            {notes.map(note => (
+              <Note key={note.id} note={note} />
+            ))}
           </Divider>
         </DetailsBlock>
-      }
+      )}
     </Layout>
   );
 };
@@ -240,11 +193,7 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
-  const {
-    default_timeout,
-    preferences = [],
-    userTags,
-  } = entity;
+  const {default_timeout, preferences = [], userTags} = entity;
   const numPreferences = preferences.length;
 
   return (
@@ -254,41 +203,29 @@ const Page = ({
       onDownloadError={onError}
       onInteraction={onInteraction}
     >
-      {({
-        notecreate,
-        overridecreate,
-        download,
-      }) => (
+      {({notecreate, overridecreate, download}) => (
         <EntityPage
           {...props}
           entity={entity}
           toolBarIcons={ToolBarIcons}
           title={_('NVT')}
-          sectionIcon={<NvtIcon size="large"/>}
+          sectionIcon={<NvtIcon size="large" />}
           onChanged={onChanged}
           onInteraction={onInteraction}
           onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
           onNvtDownloadClick={download}
           onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
         >
-          {({
-            activeTab = 0,
-            onActivateTab,
-          }) => {
+          {({activeTab = 0, onActivateTab}) => {
             return (
               <Layout grow="1" flex="column">
-                <TabLayout
-                  grow="1"
-                  align={['start', 'end']}
-                >
+                <TabLayout grow="1" align={['start', 'end']}>
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}
                     onActivateTab={onActivateTab}
                   >
-                    <Tab>
-                      {_('Information')}
-                    </Tab>
+                    <Tab>{_('Information')}</Tab>
                     <EntitiesTab count={numPreferences}>
                       {_('Preferences')}
                     </EntitiesTab>
@@ -357,11 +294,12 @@ const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadNotesFunc = loadNotes(gmp);
   const loadOverridesFunc = loadOverrides(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadNotesFunc(nvtIdFilter(id))),
-    dispatch(loadOverridesFunc(nvtIdFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadNotesFunc(nvtIdFilter(id))),
+      dispatch(loadOverridesFunc(nvtIdFilter(id))),
+    ]);
 };
 
 export default withEntityContainer('task', {

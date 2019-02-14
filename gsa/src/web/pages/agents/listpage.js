@@ -45,22 +45,12 @@ import {
 import AgentComponent from './component';
 import AgentsTable, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onAgentCreateClick,
-}) => (
+const ToolBarIcons = withCapabilities(({capabilities, onAgentCreateClick}) => (
   <IconDivider>
-    <ManualIcon
-      page="search"
-      searchTerm="agent"
-      title={_('Help: Agents')}
-    />
-    {capabilities.mayCreate('agent') &&
-      <NewIcon
-        title={_('New Agent')}
-        onClick={onAgentCreateClick}
-      />
-    }
+    <ManualIcon page="search" searchTerm="agent" title={_('Help: Agents')} />
+    {capabilities.mayCreate('agent') && (
+      <NewIcon title={_('New Agent')} onClick={onAgentCreateClick} />
+    )}
   </IconDivider>
 ));
 
@@ -93,38 +83,39 @@ const AgentsPage = ({
     onInteraction={onInteraction}
     onVerifyError={onError}
     onVerified={onChanged}
-  >{({
-    clone,
-    create,
-    delete: delete_func,
-    download,
-    downloadinstaller,
-    edit,
-    save,
-    verify,
-  }) => (
-    <EntitiesPage
-      {...props}
-      filterEditDialog={AgentsFilterDialog}
-      filtersFilter={AGENTS_FILTER_FILTER}
-      sectionIcon={<AgentIcon size="large"/>}
-      table={AgentsTable}
-      title={_('Agents')}
-      toolBarIcons={ToolBarIcons}
-      onChanged={onChanged}
-      onDownloaded={onDownloaded}
-      onError={onError}
-      onAgentCloneClick={clone}
-      onAgentCreateClick={create}
-      onAgentDeleteClick={delete_func}
-      onAgentDownloadClick={download}
-      onAgentEditClick={edit}
-      onAgentInstallerDownloadClick={downloadinstaller}
-      onAgentSaveClick={save}
-      onAgentVerifyClick={verify}
-      onInteraction={onInteraction}
-    />
-  )}
+  >
+    {({
+      clone,
+      create,
+      delete: delete_func,
+      download,
+      downloadinstaller,
+      edit,
+      save,
+      verify,
+    }) => (
+      <EntitiesPage
+        {...props}
+        filterEditDialog={AgentsFilterDialog}
+        filtersFilter={AGENTS_FILTER_FILTER}
+        sectionIcon={<AgentIcon size="large" />}
+        table={AgentsTable}
+        title={_('Agents')}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onDownloaded={onDownloaded}
+        onError={onError}
+        onAgentCloneClick={clone}
+        onAgentCreateClick={create}
+        onAgentDeleteClick={delete_func}
+        onAgentDownloadClick={download}
+        onAgentEditClick={edit}
+        onAgentInstallerDownloadClick={downloadinstaller}
+        onAgentSaveClick={save}
+        onAgentVerifyClick={verify}
+        onInteraction={onInteraction}
+      />
+    )}
   </AgentComponent>
 );
 
@@ -134,7 +125,6 @@ AgentsPage.propTypes = {
   onError: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
-
 
 export default withEntitiesContainer('agent', {
   entitiesSelector,

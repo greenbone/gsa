@@ -25,33 +25,16 @@ import PropTypes from 'web/utils/proptypes';
 import TrendNoChangeIcon from 'web/components/icon/trendnochangeicon';
 import TrendMoreIcon from 'web/components/icon/trendmoreicon';
 
-const Trend = ({
-    trend,
-    titleDynamic,
-    titleStatic,
-    ...props
-  }) => {
+const Trend = ({trend, titleDynamic, titleStatic, ...props}) => {
   if (trend === '1') {
-    return (
-      <TrendMoreIcon
-        alt={_('Dynamic')}
-        title={titleDynamic}
-        {...props}
-      />
-    );
+    return <TrendMoreIcon alt={_('Dynamic')} title={titleDynamic} {...props} />;
   }
   if (trend === '0') {
     return (
-      <TrendNoChangeIcon
-        alt={_('Static')}
-        title={titleStatic}
-        {...props}
-      />
+      <TrendNoChangeIcon alt={_('Static')} title={titleStatic} {...props} />
     );
   }
-  return (
-    <span>{_('N/A')}</span>
-  );
+  return <span>{_('N/A')}</span>;
 };
 
 Trend.propTypes = {

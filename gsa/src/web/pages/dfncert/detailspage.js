@@ -48,19 +48,13 @@ import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/dfncerts';
+import {selector, loadEntity} from 'web/store/entities/dfncerts';
 
 import PropTypes from 'web/utils/proptypes';
 
 import DfnCertAdvDetails from './details';
 
-const ToolBarIcons = ({
-  entity,
-  onDfnCertAdvDownloadClick,
-}) => (
+const ToolBarIcons = ({entity, onDfnCertAdvDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
@@ -68,10 +62,7 @@ const ToolBarIcons = ({
         anchor="id15"
         title={_('Help: DFN-CERT Advisories')}
       />
-      <ListIcon
-        title={_('DFN-CERT Advisories')}
-        page="dfncerts"
-      />
+      <ListIcon title={_('DFN-CERT Advisories')} page="dfncerts" />
     </IconDivider>
     <ExportIcon
       value={entity}
@@ -86,66 +77,42 @@ ToolBarIcons.propTypes = {
   onDfnCertAdvDownloadClick: PropTypes.func.isRequired,
 };
 
-const Details = ({
-  entity,
-  links = true,
-}) => {
-  const {
-    cves,
-    summary,
-    additional_links,
-  } = entity;
+const Details = ({entity, links = true}) => {
+  const {cves, summary, additional_links} = entity;
   return (
     <Layout flex="column">
-      <DfnCertAdvDetails
-        entity={entity}
-      />
+      <DfnCertAdvDetails entity={entity} />
 
-      <DetailsBlock
-        title={_('Summary')}
-      >
-        {isDefined(summary) ?
-          <p>{summary}</p> :
-          _('None')
-        }
+      <DetailsBlock title={_('Summary')}>
+        {isDefined(summary) ? <p>{summary}</p> : _('None')}
       </DetailsBlock>
 
-      {additional_links.length > 0 &&
-        <DetailsBlock
-          title={_('Other Links')}
-        >
+      {additional_links.length > 0 && (
+        <DetailsBlock title={_('Other Links')}>
           <ul>
             {additional_links.map(link => (
               <li key={link}>
-                <ExternalLink
-                  to={link}
-                >
-                  {link}
-                </ExternalLink>
+                <ExternalLink to={link}>{link}</ExternalLink>
               </li>
             ))}
           </ul>
         </DetailsBlock>
-      }
+      )}
 
-      <DetailsBlock
-        title={_('Referenced CVEs')}
-      >
-        {cves.length > 0 ?
+      <DetailsBlock title={_('Referenced CVEs')}>
+        {cves.length > 0 ? (
           <ul>
             {cves.map(cve => (
               <li key={cve}>
-                <DetailsLink
-                  type="cve"
-                  id={cve}
-                >
+                <DetailsLink type="cve" id={cve}>
                   {cve}
                 </DetailsLink>
               </li>
             ))}
-          </ul> :
+          </ul>
+        ) : (
           _('None')
-        }
+        )}
       </DetailsBlock>
     </Layout>
   );
@@ -174,30 +141,22 @@ const DfnCertAdvPage = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<DfnCertAdvIcon size="large"/>}
+        sectionIcon={<DfnCertAdvIcon size="large" />}
         title={_('DFN-CERT Advisory')}
         toolBarIcons={ToolBarIcons}
         onDfnCertAdvDownloadClick={download}
         onInteraction={onInteraction}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
@@ -207,9 +166,7 @@ const DfnCertAdvPage = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <Details
-                      entity={entity}
-                    />
+                    <Details entity={entity} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags

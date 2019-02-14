@@ -33,11 +33,7 @@ import TableHead from '../../components/table/head.js';
 import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
-const PortRangesTable = ({
-  actions = true,
-  portRanges,
-  onDeleteClick,
-}) => {
+const PortRangesTable = ({actions = true, portRanges, onDeleteClick}) => {
   if (!isDefined(portRanges) || portRanges.length === 0) {
     return _('No Port Ranges available');
   }
@@ -45,37 +41,19 @@ const PortRangesTable = ({
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>
-            {_('Start')}
-          </TableHead>
-          <TableHead>
-            {_('End')}
-          </TableHead>
-          <TableHead>
-            {_('Protocol')}
-          </TableHead>
-          {actions &&
-            <TableHead
-              width="3em"
-            >
-              {_('Actions')}
-            </TableHead>
-          }
+          <TableHead>{_('Start')}</TableHead>
+          <TableHead>{_('End')}</TableHead>
+          <TableHead>{_('Protocol')}</TableHead>
+          {actions && <TableHead width="3em">{_('Actions')}</TableHead>}
         </TableRow>
       </TableHeader>
       <TableBody>
         {portRanges.map(range => (
           <TableRow key={range.start + range.protocol_type}>
-            <TableData>
-              {range.start}
-            </TableData>
-            <TableData>
-              {range.end}
-            </TableData>
-            <TableData>
-              {range.protocol_type}
-            </TableData>
-            {actions &&
+            <TableData>{range.start}</TableData>
+            <TableData>{range.end}</TableData>
+            <TableData>{range.protocol_type}</TableData>
+            {actions && (
               <TableData align={['center', 'center']}>
                 <DeleteIcon
                   title={_('Delete Port Range')}
@@ -83,7 +61,7 @@ const PortRangesTable = ({
                   onClick={onDeleteClick}
                 />
               </TableData>
-            }
+            )}
           </TableRow>
         ))}
       </TableBody>

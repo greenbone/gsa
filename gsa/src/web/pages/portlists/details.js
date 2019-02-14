@@ -34,10 +34,7 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-const PortListDetails = ({
-  entity,
-  ...props
-}) => {
+const PortListDetails = ({entity, ...props}) => {
   const {
     comment,
     port_count = {
@@ -48,72 +45,47 @@ const PortListDetails = ({
     targets = [],
   } = entity;
   return (
-    <Layout
-      flex="column"
-      grow
-    >
+    <Layout flex="column" grow>
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
           <TableRow>
-            <TableData>
-              {_('Comment')}
-            </TableData>
-            <TableData>
-              {comment}
-            </TableData>
+            <TableData>{_('Comment')}</TableData>
+            <TableData>{comment}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Port Count')}
-            </TableData>
-            <TableData>
-              {port_count.all}
-            </TableData>
+            <TableData>{_('Port Count')}</TableData>
+            <TableData>{port_count.all}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('TCP Port Count')}
-            </TableData>
-            <TableData>
-              {port_count.tcp}
-            </TableData>
+            <TableData>{_('TCP Port Count')}</TableData>
+            <TableData>{port_count.tcp}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('UDP Port Count')}
-            </TableData>
-            <TableData>
-              {port_count.udp}
-            </TableData>
+            <TableData>{_('UDP Port Count')}</TableData>
+            <TableData>{port_count.udp}</TableData>
           </TableRow>
 
-          {targets.length > 0 &&
+          {targets.length > 0 && (
             <TableRow>
-              <TableData>
-                {_('Targets using this Port List')}
-              </TableData>
+              <TableData>{_('Targets using this Port List')}</TableData>
               <TableData>
                 <Divider>
                   {targets.map(target => (
-                    <DetailsLink
-                      key={target.id}
-                      id={target.id}
-                      type="target"
-                    >
+                    <DetailsLink key={target.id} id={target.id} type="target">
                       {target.name}
                     </DetailsLink>
                   ))}
                 </Divider>
               </TableData>
             </TableRow>
-          }
+          )}
         </TableBody>
       </InfoTable>
     </Layout>

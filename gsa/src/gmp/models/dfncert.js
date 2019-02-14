@@ -24,7 +24,6 @@ import {parseSeverity} from '../parser';
 import Info from './info';
 
 class DfnCertAdv extends Info {
-
   static entityType = 'dfncert';
 
   parseProperties(elem) {
@@ -45,8 +44,7 @@ class DfnCertAdv extends Info {
         forEach(entry.link, link => {
           if (link._rel === 'alternate') {
             ret.advisory_link = link._href;
-          }
-          else {
+          } else {
             ret.additional_links.push(link._href);
           }
         });

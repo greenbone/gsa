@@ -47,10 +47,7 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/permissions';
+import {selector, loadEntity} from 'web/store/entities/permissions';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -72,28 +69,13 @@ const ToolBarIcons = ({
         anchor="permissions"
         title={_('Help: Permissions')}
       />
-      <ListIcon
-        title={_('Permission List')}
-        page="permissions"
-      />
+      <ListIcon title={_('Permission List')} page="permissions" />
     </IconDivider>
     <IconDivider>
-      <CreateIcon
-        entity={entity}
-        onClick={onPermissionCreateClick}
-      />
-      <CloneIcon
-        entity={entity}
-        onClick={onPermissionCloneClick}
-      />
-      <EditIcon
-        entity={entity}
-        onClick={onPermissionEditClick}
-      />
-      <TrashIcon
-        entity={entity}
-        onClick={onPermissionDeleteClick}
-      />
+      <CreateIcon entity={entity} onClick={onPermissionCreateClick} />
+      <CloneIcon entity={entity} onClick={onPermissionCloneClick} />
+      <EditIcon entity={entity} onClick={onPermissionEditClick} />
+      <TrashIcon entity={entity} onClick={onPermissionDeleteClick} />
       <ExportIcon
         value={entity}
         title={_('Export Permission as XML')}
@@ -132,18 +114,11 @@ const Page = ({
       onInteraction={onInteraction}
       onSaved={onChanged}
     >
-      {({
-        clone,
-        create,
-        delete: delete_func,
-        download,
-        edit,
-        save,
-      }) => (
+      {({clone, create, delete: delete_func, download, edit, save}) => (
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon={<PermissionIcon size="large"/>}
+          sectionIcon={<PermissionIcon size="large" />}
           toolBarIcons={ToolBarIcons}
           title={_('Permission')}
           onInteraction={onInteraction}
@@ -154,24 +129,16 @@ const Page = ({
           onPermissionEditClick={edit}
           onPermissionSaveClick={save}
         >
-          {({
-            activeTab = 0,
-            onActivateTab,
-          }) => {
+          {({activeTab = 0, onActivateTab}) => {
             return (
               <Layout grow="1" flex="column">
-                <TabLayout
-                  grow="1"
-                  align={['start', 'end']}
-                >
+                <TabLayout grow="1" align={['start', 'end']}>
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}
                     onActivateTab={onActivateTab}
                   >
-                    <Tab>
-                      {_('Information')}
-                    </Tab>
+                    <Tab>{_('Information')}</Tab>
                     <EntitiesTab entities={entity.userTags}>
                       {_('User Tags')}
                     </EntitiesTab>
@@ -181,9 +148,7 @@ const Page = ({
                 <Tabs active={activeTab}>
                   <TabPanels>
                     <TabPanel>
-                      <PermissionDetails
-                        entity={entity}
-                      />
+                      <PermissionDetails entity={entity} />
                     </TabPanel>
                     <TabPanel>
                       <EntityTags

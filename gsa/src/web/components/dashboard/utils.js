@@ -25,24 +25,31 @@ import {isDefined, isArray} from 'gmp/utils/identity';
 export const getPermittedDisplayIds = (settings = {}) =>
   settings.permittedDisplays;
 
-export const getRows = ({rows} = {}, defaultRows) => isDefined(rows) ?
-  rows : defaultRows;
+export const getRows = ({rows} = {}, defaultRows) =>
+  isDefined(rows) ? rows : defaultRows;
 
-export const convertDefaultDisplays = (defaultDisplays = [],
-   uuidFunc = uuid) => {
+export const convertDefaultDisplays = (
+  defaultDisplays = [],
+  uuidFunc = uuid,
+) => {
   return {
-    rows: defaultDisplays.map(row => createRow(
-      row.map(displayId => createDisplay(displayId, undefined, uuidFunc)),
-      undefined,
-      uuidFunc
-    )),
+    rows: defaultDisplays.map(row =>
+      createRow(
+        row.map(displayId => createDisplay(displayId, undefined, uuidFunc)),
+        undefined,
+        uuidFunc,
+      ),
+    ),
   };
 };
 
-export const removeDisplay = (rows = [], id) => rows.map(row => ({
-  ...row,
-  items: row.items.filter(item => item.id !== id),
-})).filter(row => row.items.length > 0);
+export const removeDisplay = (rows = [], id) =>
+  rows
+    .map(row => ({
+      ...row,
+      items: row.items.filter(item => item.id !== id),
+    }))
+    .filter(row => row.items.length > 0);
 
 export const filterDisplays = (rows = [], isAllowed = () => true) =>
   rows.map(row => {
@@ -55,36 +62,35 @@ export const filterDisplays = (rows = [], isAllowed = () => true) =>
 
 export const getDisplaysById = (rows = []) => {
   const displaysById = {};
-  rows.forEach(row => row.items.forEach(setting => {
-    displaysById[setting.id] = setting;
-  }));
+  rows.forEach(row =>
+    row.items.forEach(setting => {
+      displaysById[setting.id] = setting;
+    }),
+  );
   return displaysById;
 };
 
-export const convertDisplaysToGridItems = (items = []) => items.map(({
-  id,
-  items: rowItems,
-  height,
-}) => ({
-  height,
-  id,
-  items: rowItems.map(display => display.id),
-}));
+export const convertDisplaysToGridItems = (items = []) =>
+  items.map(({id, items: rowItems, height}) => ({
+    height,
+    id,
+    items: rowItems.map(display => display.id),
+  }));
 
 export const convertGridItemsToDisplays = (gridItems = [], displaysById = {}) =>
-  gridItems.map(({
-    id,
-    height,
-    items,
-  }) => ({
+  gridItems.map(({id, height, items}) => ({
     id,
     height,
     items: items.map(dId => displaysById[dId]).filter(isDefined),
   }));
 
 export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
-  if (isArray(rows) && rows.length > 0 &&
-    isDefined(maxItemsPerRow) && isDefined(maxRows)) {
+  if (
+    isArray(rows) &&
+    rows.length > 0 &&
+    isDefined(maxItemsPerRow) &&
+    isDefined(maxRows)
+  ) {
     const lastRow = rows[rows.length - 1];
     return lastRow.items.length < maxItemsPerRow || rows.length < maxRows;
   }
@@ -94,8 +100,10 @@ export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
 export const addDisplayToSettings = (settings, displayId, uuidFunc) => {
   const {rows: currentRows = [], maxItemsPerRow} = settings || {};
 
-  const lastRow = isArray(currentRows) && currentRows.length > 0 ?
-    currentRows[currentRows.length - 1] : {items: []};
+  const lastRow =
+    isArray(currentRows) && currentRows.length > 0
+      ? currentRows[currentRows.length - 1]
+      : {items: []};
 
   const rows = isArray(currentRows) ? [...currentRows] : [];
   const display = createDisplay(displayId, undefined, uuidFunc);
@@ -104,8 +112,7 @@ export const addDisplayToSettings = (settings, displayId, uuidFunc) => {
   if (isDefined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
     // create new row
     newRow = createRow([display], undefined, uuidFunc);
-  }
-  else {
+  } else {
     // add new display to last row
     newRow = {
       ...lastRow,

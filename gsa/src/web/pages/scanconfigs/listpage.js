@@ -45,31 +45,29 @@ import {
 import ScanConfigComponent from './component';
 import Table, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onScanConfigCreateClick,
-  onScanConfigImportClick,
-}) => (
-  <IconDivider>
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="scan-configuration"
-      title={_('Help: Scan Configs')}
-    />
-    {capabilities.mayCreate('config') &&
-      <NewIcon
-        title={_('New Scan Config')}
-        onClick={onScanConfigCreateClick}
+const ToolBarIcons = withCapabilities(
+  ({capabilities, onScanConfigCreateClick, onScanConfigImportClick}) => (
+    <IconDivider>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="scan-configuration"
+        title={_('Help: Scan Configs')}
       />
-    }
-    {capabilities.mayCreate('config') &&
-      <UploadIcon
-        title={_('Import Scan Config')}
-        onClick={onScanConfigImportClick}
-      />
-    }
-  </IconDivider>
-));
+      {capabilities.mayCreate('config') && (
+        <NewIcon
+          title={_('New Scan Config')}
+          onClick={onScanConfigCreateClick}
+        />
+      )}
+      {capabilities.mayCreate('config') && (
+        <UploadIcon
+          title={_('Import Scan Config')}
+          onClick={onScanConfigImportClick}
+        />
+      )}
+    </IconDivider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   onScanConfigCreateClick: PropTypes.func.isRequired,
@@ -111,7 +109,7 @@ const ScanConfigsPage = ({
         {...props}
         filterEditDialog={ScanConfigFilterDialog}
         filtersFilter={SCANCONFIGS_FILTER_FILTER}
-        sectionIcon={<ScanConfigIcon size="large"/>}
+        sectionIcon={<ScanConfigIcon size="large" />}
         table={Table}
         title={_('Scan Configs')}
         toolBarIcons={ToolBarIcons}

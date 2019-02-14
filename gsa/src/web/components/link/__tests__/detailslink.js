@@ -20,25 +20,17 @@ import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import {
-  fireEvent,
-  rendererWith,
-} from 'web/utils/testing';
+import {fireEvent, rendererWith} from 'web/utils/testing';
 
 import DetailsLink from '../detailslink';
 
 describe('DetailsLink tests', () => {
-
   test('should render DetailsLink', () => {
     const {render} = rendererWith({capabilities: true, router: true});
     const {element} = render(
-      <DetailsLink
-        title="Foo"
-        type="foo"
-        id="bar"
-      >
+      <DetailsLink title="Foo" type="foo" id="bar">
         Foo
-      </DetailsLink>
+      </DetailsLink>,
     );
 
     expect(element).toHaveTextContent('Foo');
@@ -49,13 +41,9 @@ describe('DetailsLink tests', () => {
     const {render, history} = rendererWith({capabilities: true, router: true});
 
     const {element} = render(
-      <DetailsLink
-        title="Foo"
-        type="foo"
-        id="1"
-      >
+      <DetailsLink title="Foo" type="foo" id="1">
         Foo
-      </DetailsLink>
+      </DetailsLink>,
     );
 
     expect(history.location.pathname).toEqual('/');
@@ -69,13 +57,9 @@ describe('DetailsLink tests', () => {
     const {render, history} = rendererWith({capabilities: true, router: true});
 
     const {element} = render(
-      <DetailsLink
-        title="Foo"
-        type="foo"
-        id="cpe:/a:jenkins:jenkins:2.141"
-      >
+      <DetailsLink title="Foo" type="foo" id="cpe:/a:jenkins:jenkins:2.141">
         Foo
-      </DetailsLink>
+      </DetailsLink>,
     );
 
     expect(history.location.pathname).toEqual('/');
@@ -83,21 +67,17 @@ describe('DetailsLink tests', () => {
     fireEvent.click(element);
 
     expect(history.location.pathname).toEqual(
-      '/foo/cpe%3A%2Fa%3Ajenkins%3Ajenkins%3A2.141');
+      '/foo/cpe%3A%2Fa%3Ajenkins%3Ajenkins%3A2.141',
+    );
   });
 
   test('should not route to url in text mode', () => {
     const {render, history} = rendererWith({capabilities: true, router: true});
 
     const {element} = render(
-      <DetailsLink
-        title="Foo"
-        type="foo"
-        id="1"
-        textOnly={true}
-      >
+      <DetailsLink title="Foo" type="foo" id="1" textOnly={true}>
         Foo
-      </DetailsLink>
+      </DetailsLink>,
     );
 
     expect(history.location.pathname).toEqual('/');
@@ -112,13 +92,9 @@ describe('DetailsLink tests', () => {
     const {render, history} = rendererWith({capabilities, router: true});
 
     const {element} = render(
-      <DetailsLink
-        title="Foo"
-        type="foo"
-        id="1"
-      >
+      <DetailsLink title="Foo" type="foo" id="1">
         Foo
-      </DetailsLink>
+      </DetailsLink>,
     );
 
     expect(history.location.pathname).toEqual('/');
@@ -127,7 +103,6 @@ describe('DetailsLink tests', () => {
 
     expect(history.location.pathname).toEqual('/');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

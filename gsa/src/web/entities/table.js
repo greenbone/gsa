@@ -53,7 +53,7 @@ const exclude_props = [
 ];
 
 const UpdatingStripedTable = styled(StripedTable)`
-  opacity: ${props => props.isUpdating ? '0.2' : '1.0'};
+  opacity: ${props => (props.isUpdating ? '0.2' : '1.0')};
 `;
 
 const DetailsIcon = styled(FoldIcon)`
@@ -66,7 +66,6 @@ const TableBox = styled(Layout)`
 `;
 
 class EntitiesTable extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -102,10 +101,9 @@ class EntitiesTable extends React.Component {
     }
 
     if (allToggled) {
-      forEach(entities, entity => details[entity.id] = true);
-    }
-    else {
-      forEach(entities, entity => details[entity.id] = false);
+      forEach(entities, entity => (details[entity.id] = true));
+    } else {
+      forEach(entities, entity => (details[entity.id] = false));
     }
     this.setState({details, allToggled});
   }
@@ -173,35 +171,32 @@ class EntitiesTable extends React.Component {
             onToggleDetailsClick={this.handleToggleShowDetails}
             key={entity.id}
             entity={entity}
-          />
+          />,
         );
         if (isDefined(RowDetailsComponent) && details[entity.id]) {
           if (doubleRow) {
             rows.push(
               <TableBody key={'details-' + entity.id}>
-                <RowDetailsComponent
-                  links={links}
-                  entity={entity}
-                />
-              </TableBody>
+                <RowDetailsComponent links={links} entity={entity} />
+              </TableBody>,
             );
-          }
-          else {
+          } else {
             rows.push(
               <RowDetailsComponent
                 links={links}
                 key={'details-' + entity.id}
                 entity={entity}
-              />
+              />,
             );
           }
         }
       });
     }
 
-    const pagination = PaginationComponent === false ?
-      undefined :
-      (
+    const pagination =
+      PaginationComponent === false ? (
+        undefined
+      ) : (
         <PaginationComponent
           {...other}
           onFirstClick={this.handleFirst}
@@ -212,9 +207,10 @@ class EntitiesTable extends React.Component {
         />
       );
 
-    const header = !isDefined(HeaderComponent) || HeaderComponent === false ?
-      undefined :
-      (
+    const header =
+      !isDefined(HeaderComponent) || HeaderComponent === false ? (
+        undefined
+      ) : (
         <HeaderComponent
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
@@ -222,17 +218,15 @@ class EntitiesTable extends React.Component {
         />
       );
 
-    const footer = !isDefined(FooterComponent) || FooterComponent === false ?
-      undefined :
-      <FooterComponent {...other} />;
-
-    const body = BodyComponent === false ?
-      rows :
-      (
-        <BodyComponent>
-          {rows}
-        </BodyComponent>
+    const footer =
+      !isDefined(FooterComponent) || FooterComponent === false ? (
+        undefined
+      ) : (
+        <FooterComponent {...other} />
       );
+
+    const body =
+      BodyComponent === false ? rows : <BodyComponent>{rows}</BodyComponent>;
 
     const detailsIcon = (
       <DetailsIcon
@@ -243,18 +237,15 @@ class EntitiesTable extends React.Component {
     );
 
     return (
-      <TableBox
-        flex="column"
-        grow="1"
-        className="entities-table"
-      >
-        {toggleDetailsIcon ?
+      <TableBox flex="column" grow="1" className="entities-table">
+        {toggleDetailsIcon ? (
           <Layout align="space-between" grow="1">
             {detailsIcon}
             {pagination}
-          </Layout> :
+          </Layout>
+        ) : (
           pagination
-        }
+        )}
         <UpdatingStripedTable
           header={header}
           footer={footer}
@@ -262,15 +253,16 @@ class EntitiesTable extends React.Component {
         >
           {body}
         </UpdatingStripedTable>
-        {footnote ?
+        {footnote ? (
           <Layout align="space-between">
             <FootNote>
               {_('(Applied filter: {{- filter}})', {filter: filterstring})}
             </FootNote>
             {pagination}
-          </Layout> :
+          </Layout>
+        ) : (
           pagination
-        }
+        )}
       </TableBox>
     );
   }
@@ -303,7 +295,6 @@ EntitiesTable.propTypes = {
 
 export const createEntitiesTable = options =>
   withComponentDefaults(options)(EntitiesTable);
-
 
 export default EntitiesTable;
 

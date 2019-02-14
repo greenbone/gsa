@@ -29,30 +29,22 @@ export const ICON_SIZE_MEDIUM_PIXELS = '24px';
 export const ICON_SIZE_SMALL_PIXELS = '16px';
 
 const withIconSize = (defaultSize = 'small') => Component => {
-
   const IconSizeWrapper = styled(Component)`
     ${props => {
-      const {
-        iconSize = defaultSize,
-        size = iconSize,
-      } = props;
+      const {iconSize = defaultSize, size = iconSize} = props;
 
       let width;
       let height;
 
       if (size === 'small') {
         height = width = ICON_SIZE_SMALL_PIXELS;
-      }
-      else if (size === 'medium') {
+      } else if (size === 'medium') {
         height = width = ICON_SIZE_MEDIUM_PIXELS;
-      }
-      else if (size === 'large') {
+      } else if (size === 'large') {
         height = width = ICON_SIZE_LARGE_PIXELS;
-      }
-      else if (size === 'tiny') {
+      } else if (size === 'tiny') {
         height = width = '11px';
-      }
-      else if (isArray(size)) {
+      } else if (isArray(size)) {
         width = size[0];
         height = size[1];
       }

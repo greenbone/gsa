@@ -35,7 +35,6 @@ const u2 = new User({
 const users = [u1, u2];
 
 describe('CreateTicketDialog component tests', () => {
-
   test('should render dialog', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
@@ -49,7 +48,7 @@ describe('CreateTicketDialog component tests', () => {
         onClose={handleClose}
         onSave={handleSave}
         onUserIdChange={handleUserIdChange}
-      />
+      />,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -68,7 +67,7 @@ describe('CreateTicketDialog component tests', () => {
         onClose={handleClose}
         onSave={handleSave}
         onUserIdChange={handleUserIdChange}
-      />
+      />,
     );
 
     const selectButton = getByTestId('select-open-button');
@@ -95,7 +94,7 @@ describe('CreateTicketDialog component tests', () => {
         onClose={handleClose}
         onSave={handleSave}
         onUserIdChange={handleUserIdChange}
-      />
+      />,
     );
 
     const closeButton = getByTestId('dialog-close-button');
@@ -118,7 +117,7 @@ describe('CreateTicketDialog component tests', () => {
         onClose={handleClose}
         onSave={handleSave}
         onUserIdChange={handleUserIdChange}
-      />
+      />,
     );
 
     const noteInput = baseElement.querySelector('textarea');
@@ -134,5 +133,4 @@ describe('CreateTicketDialog component tests', () => {
       note: 'foobar',
     });
   });
-
 });

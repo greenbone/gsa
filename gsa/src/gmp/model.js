@@ -32,7 +32,6 @@ import {
 import Capabilities from './capabilities/capabilities.js';
 
 class Model {
-
   static entityType = 'unknown';
 
   constructor(element, type) {
@@ -45,8 +44,7 @@ class Model {
     }
   }
 
-  init() {
-  }
+  init() {}
 
   setProperties(properties) {
     return setProperties(properties, this);
@@ -75,8 +73,7 @@ class Model {
       const caps = map(elem.permissions.permission, perm => perm.name);
       copy.userCapabilities = new Capabilities(caps);
       delete copy.permissions;
-    }
-    else {
+    } else {
       copy.userCapabilities = new Capabilities();
     }
 
@@ -85,8 +82,7 @@ class Model {
         return new Model(tag, 'tag');
       });
       delete copy.user_tags;
-    }
-    else {
+    } else {
       copy.userTags = [];
     }
 

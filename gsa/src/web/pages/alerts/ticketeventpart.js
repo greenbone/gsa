@@ -31,10 +31,7 @@ import Radio from 'web/components/form/radio';
 import PropTypes from 'web/utils/proptypes';
 import Divider from 'web/components/layout/divider';
 
-const TicketEventPart = ({
-  event,
-  onEventChange,
-}) => (
+const TicketEventPart = ({event, onEventChange}) => (
   <Divider>
     <Radio
       title={_('Ticket Received')}

@@ -41,57 +41,55 @@ import AgentIcon from 'web/components/icon/agenticon';
 
 import PropTypes from 'web/utils/proptypes';
 
-
-const Actions = withEntitiesActions(({
-  entity,
-  onAgentDeleteClick,
-  onAgentDownloadClick,
-  onAgentCloneClick,
-  onAgentInstallerDownloadClick,
-  onAgentEditClick,
-  onAgentVerifyClick,
-}) => (
-  <IconDivider
-    grow
-    align={['center', 'center']}
-  >
-    <TrashIcon
-      displayName={_('Agent')}
-      name="agent"
-      entity={entity}
-      onClick={onAgentDeleteClick}
-    />
-    <EditIcon
-      displayName={_('Agent')}
-      name="agent"
-      entity={entity}
-      onClick={onAgentEditClick}
-    />
-    <CloneIcon
-      displayName={_('Agent')}
-      name="agent"
-      entity={entity}
-      title={_('Clone Agent')}
-      value={entity}
-      onClick={onAgentCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export Agent')}
-      onClick={onAgentDownloadClick}
-    />
-    <AgentIcon
-      value={entity}
-      title={_('Download Agent Installer Package')}
-      onClick={onAgentInstallerDownloadClick}
-    />
-    <VerifyIcon
-      value={entity}
-      title={_('Verify Agent')}
-      onClick={onAgentVerifyClick}
-    />
-  </IconDivider>
-));
+const Actions = withEntitiesActions(
+  ({
+    entity,
+    onAgentDeleteClick,
+    onAgentDownloadClick,
+    onAgentCloneClick,
+    onAgentInstallerDownloadClick,
+    onAgentEditClick,
+    onAgentVerifyClick,
+  }) => (
+    <IconDivider grow align={['center', 'center']}>
+      <TrashIcon
+        displayName={_('Agent')}
+        name="agent"
+        entity={entity}
+        onClick={onAgentDeleteClick}
+      />
+      <EditIcon
+        displayName={_('Agent')}
+        name="agent"
+        entity={entity}
+        onClick={onAgentEditClick}
+      />
+      <CloneIcon
+        displayName={_('Agent')}
+        name="agent"
+        entity={entity}
+        title={_('Clone Agent')}
+        value={entity}
+        onClick={onAgentCloneClick}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export Agent')}
+        onClick={onAgentDownloadClick}
+      />
+      <AgentIcon
+        value={entity}
+        title={_('Download Agent Installer Package')}
+        onClick={onAgentInstallerDownloadClick}
+      />
+      <VerifyIcon
+        value={entity}
+        title={_('Verify Agent')}
+        onClick={onAgentVerifyClick}
+      />
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -121,10 +119,7 @@ const Row = ({
     <TableData>
       {entity.trust.status} ({shortDate(entity.trust.time)})
     </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

@@ -24,7 +24,6 @@ import EntitiesCommand from './entities';
 import EntityCommand from './entity';
 
 class OperatingSystemCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'asset', OperatingSystem);
     this.setParam('asset_type', 'os');
@@ -36,7 +35,6 @@ class OperatingSystemCommand extends EntityCommand {
 }
 
 class OperatingSystemsCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'asset', OperatingSystem);
     this.setParam('asset_type', 'os');
@@ -59,23 +57,19 @@ class OperatingSystemsCommand extends EntitiesCommand {
       filter,
       aggregate_type: 'os',
       group_column: 'uuid',
-      textColumns: [
-        'name',
-        'hosts',
-        'modified',
+      textColumns: ['name', 'hosts', 'modified'],
+      dataColumns: ['average_severity', 'average_severity_score'],
+      sort: [
+        {
+          field: 'average_severity_score',
+          direction: 'descending',
+          stat: 'max',
+        },
+        {
+          field: 'modified',
+          direction: 'descending',
+        },
       ],
-      dataColumns: [
-        'average_severity',
-        'average_severity_score',
-      ],
-      sort: [{
-        field: 'average_severity_score',
-        direction: 'descending',
-        stat: 'max',
-      }, {
-        field: 'modified',
-        direction: 'descending',
-      }],
       maxGroups: max,
     });
   }

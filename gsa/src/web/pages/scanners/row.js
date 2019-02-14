@@ -44,67 +44,65 @@ import TrashIcon from 'web/entity/icon/trashicon';
 
 import PropTypes from 'web/utils/proptypes';
 
-
-const Actions = withEntitiesActions(({
-  entity,
-  onScannerCertificateDownloadClick,
-  onScannerCloneClick,
-  onScannerCredentialDownloadClick,
-  onScannerDeleteClick,
-  onScannerDownloadClick,
-  onScannerEditClick,
-  onScannerVerifyClick,
-}) => (
-  <IconDivider
-    align={['start', 'center']}
-    grow
-  >
-    <TrashIcon
-      displayName={_('Scanner')}
-      name="permission"
-      entity={entity}
-      onClick={onScannerDeleteClick}
-    />
-    <EditIcon
-      displayName={_('Scanner')}
-      name="permission"
-      entity={entity}
-      onClick={onScannerEditClick}
-    />
-    <CloneIcon
-      displayName={_('Scanner')}
-      name="permission"
-      entity={entity}
-      value={entity}
-      mayClone={entity.isClonable()}
-      onClick={onScannerCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export Scanner')}
-      onClick={onScannerDownloadClick}
-    />
-    <VerifyIcon
-      value={entity}
-      title={_('Verify Scanner')}
-      onClick={onScannerVerifyClick}
-    />
-    {isDefined(entity.credential) &&
-      <DownloadKeyIcon
-        title={_('Download Certificate')}
-        value={entity}
-        onClick={onScannerCredentialDownloadClick}
+const Actions = withEntitiesActions(
+  ({
+    entity,
+    onScannerCertificateDownloadClick,
+    onScannerCloneClick,
+    onScannerCredentialDownloadClick,
+    onScannerDeleteClick,
+    onScannerDownloadClick,
+    onScannerEditClick,
+    onScannerVerifyClick,
+  }) => (
+    <IconDivider align={['start', 'center']} grow>
+      <TrashIcon
+        displayName={_('Scanner')}
+        name="permission"
+        entity={entity}
+        onClick={onScannerDeleteClick}
       />
-    }
-    {isDefined(entity.ca_pub) &&
-      <DownloadKeyIcon
-        title={_('Download CA Certificate')}
-        value={entity}
-        onClick={onScannerCertificateDownloadClick}
+      <EditIcon
+        displayName={_('Scanner')}
+        name="permission"
+        entity={entity}
+        onClick={onScannerEditClick}
       />
-    }
-  </IconDivider>
-));
+      <CloneIcon
+        displayName={_('Scanner')}
+        name="permission"
+        entity={entity}
+        value={entity}
+        mayClone={entity.isClonable()}
+        onClick={onScannerCloneClick}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export Scanner')}
+        onClick={onScannerDownloadClick}
+      />
+      <VerifyIcon
+        value={entity}
+        title={_('Verify Scanner')}
+        onClick={onScannerVerifyClick}
+      />
+      {isDefined(entity.credential) && (
+        <DownloadKeyIcon
+          title={_('Download Certificate')}
+          value={entity}
+          onClick={onScannerCredentialDownloadClick}
+        />
+      )}
+      {isDefined(entity.ca_pub) && (
+        <DownloadKeyIcon
+          title={_('Download CA Certificate')}
+          value={entity}
+          onClick={onScannerCertificateDownloadClick}
+        />
+      )}
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -133,25 +131,22 @@ const Row = ({
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData>
-      {entity.scannerType !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
+      {entity.scannerType !== CVE_SCANNER_TYPE &&
+        !entity.hasUnixSocket() &&
         entity.host}
     </TableData>
     <TableData>
-      {entity.scannerType !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
+      {entity.scannerType !== CVE_SCANNER_TYPE &&
+        !entity.hasUnixSocket() &&
         entity.port}
     </TableData>
+    <TableData>{scannerTypeName(entity.scannerType)}</TableData>
     <TableData>
-      {scannerTypeName(entity.scannerType)}
+      {isDefined(entity.credential) && (
+        <EntityLink entity={entity.credential} />
+      )}
     </TableData>
-    <TableData>
-      {isDefined(entity.credential) &&
-        <EntityLink entity={entity.credential}/>
-      }
-    </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

@@ -35,64 +35,38 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-const TagDetails = ({
-  entity,
-}) => {
-  const {
-    comment,
-    value,
-    resource_type,
-    resources,
-  } = entity;
+const TagDetails = ({entity}) => {
+  const {comment, value, resource_type, resources} = entity;
   return (
-    <Layout
-      grow
-      flex="column"
-    >
+    <Layout grow flex="column">
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(comment) &&
+          {isDefined(comment) && (
             <TableRow>
-              <TableData>
-                {_('Comment')}
-              </TableData>
-              <TableData>
-                {comment}
-              </TableData>
+              <TableData>{_('Comment')}</TableData>
+              <TableData>{comment}</TableData>
             </TableRow>
-          }
+          )}
 
           <TableRow>
-            <TableData>
-              {_('Value')}
-            </TableData>
-            <TableData>
-              {value}
-            </TableData>
+            <TableData>{_('Value')}</TableData>
+            <TableData>{value}</TableData>
           </TableRow>
 
-          {isDefined(resources) &&
+          {isDefined(resources) && (
             <TableRow>
-              <TableData>
-                {_('Resoure Type')}
-              </TableData>
-              <TableData>
-                {typeName(resource_type)}
-              </TableData>
+              <TableData>{_('Resoure Type')}</TableData>
+              <TableData>{typeName(resource_type)}</TableData>
             </TableRow>
-          }
+          )}
 
           <TableRow>
-            <TableData>
-              {_('Active')}
-            </TableData>
-            <TableData>
-              {renderYesNo(entity.isActive())}
-            </TableData>
+            <TableData>{_('Active')}</TableData>
+            <TableData>{renderYesNo(entity.isActive())}</TableData>
           </TableRow>
         </TableBody>
       </InfoTable>

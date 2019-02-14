@@ -46,38 +46,37 @@ import {NvtsFamilyLoader} from './loaders';
 
 const transformFamilyData = (data = {}, {severityClass}) => {
   const {groups = []} = data;
-  const totalNvts = groups.reduce((prev, current) =>
-    prev + parseFloat(current.count), 0);
+  const totalNvts = groups.reduce(
+    (prev, current) => prev + parseFloat(current.count),
+    0,
+  );
 
-  const tdata = groups
-    .map(family => {
-      const {count, value} = family;
-      const severity = parseSeverity(family.stats.severity.mean);
-      const riskFactor = resultSeverityRiskFactor(severity, severityClass);
-      const formattedSeverity = severityFormat(severity);
-      const toolTip = _('{{value}}: {{count}} (severity: {{severity}})',
-        {
-          value: value,
-          count: count,
-          severity: formattedSeverity,
-        });
-
-      return {
-        value: parseFloat(count),
-        color: riskFactorColorScale(riskFactor),
-        label: value,
-        toolTip,
-        severity: formattedSeverity,
-        filterValue: value,
-      };
+  const tdata = groups.map(family => {
+    const {count, value} = family;
+    const severity = parseSeverity(family.stats.severity.mean);
+    const riskFactor = resultSeverityRiskFactor(severity, severityClass);
+    const formattedSeverity = severityFormat(severity);
+    const toolTip = _('{{value}}: {{count}} (severity: {{severity}})', {
+      value: value,
+      count: count,
+      severity: formattedSeverity,
     });
+
+    return {
+      value: parseFloat(count),
+      color: riskFactorColorScale(riskFactor),
+      label: value,
+      toolTip,
+      severity: formattedSeverity,
+      filterValue: value,
+    };
+  });
 
   tdata.total = totalNvts;
   return tdata;
 };
 
 export class NvtsFamilyDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -104,30 +103,26 @@ export class NvtsFamilyDisplay extends React.Component {
       familyFilter = Filter.fromTerm(familyTerm);
     }
 
-    const newFilter = isDefined(filter) ? filter.copy().and(familyFilter) :
-      familyFilter;
+    const newFilter = isDefined(filter)
+      ? filter.copy().and(familyFilter)
+      : familyFilter;
 
     onFilterChanged(newFilter);
   }
 
   render() {
-    const {
-      filter,
-      onFilterChanged,
-      ...props
-    } = this.props;
+    const {filter, onFilterChanged, ...props} = this.props;
 
     return (
-      <NvtsFamilyLoader
-        filter={filter}
-      >
+      <NvtsFamilyLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
             {...loaderProps}
             dataTransform={transformFamilyData}
             title={({data: tdata}) =>
-              _('NVTS by Family (Total: {{count}})', {count: tdata.total})}
+              _('NVTS by Family (Total: {{count}})', {count: tdata.total})
+            }
             showToggleLegend={false}
           >
             {({width, height, data: tdata, svgRef}) => (
@@ -136,8 +131,9 @@ export class NvtsFamilyDisplay extends React.Component {
                 data={tdata}
                 height={height}
                 width={width}
-                onDataClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
+                onDataClick={
+                  isDefined(onFilterChanged) ? this.handleDataClick : undefined
+                }
               />
             )}
           </DataDisplay>
@@ -162,11 +158,7 @@ export const NvtsFamilyTableDisplay = createDisplay({
   loaderComponent: NvtsFamilyLoader,
   displayComponent: DataTableDisplay,
   chartComponent: DataTable,
-  dataTitles: [
-    _l('NVT Family'),
-    _l('# of NVTs'),
-    _l('Severity'),
-  ],
+  dataTitles: [_l('NVT Family'), _l('# of NVTs'), _l('Severity')],
   dataRow: row => [row.label, row.value, row.severity],
   dataTransform: transformFamilyData,
   title: ({data}) =>

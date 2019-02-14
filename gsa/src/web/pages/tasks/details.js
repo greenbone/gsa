@@ -58,7 +58,7 @@ const compareAlerts = (alertA, alertB) => {
   const nameB = alertB.name.toLowerCase();
   if (nameA > nameB) {
     return 1;
-  };
+  }
   if (nameA < nameB) {
     return -1;
   }
@@ -66,7 +66,6 @@ const compareAlerts = (alertA, alertB) => {
 };
 
 class TaskDetails extends React.Component {
-
   componentDidMount() {
     const {entity} = this.props;
 
@@ -76,11 +75,7 @@ class TaskDetails extends React.Component {
   }
 
   render() {
-    const {
-      links = true,
-      entity,
-      schedule,
-    } = this.props;
+    const {links = true, entity, schedule} = this.props;
     const {
       alerts,
       apply_overrides,
@@ -100,76 +95,55 @@ class TaskDetails extends React.Component {
     const {max_checks = {}, iface = {}, max_hosts} = preferences;
 
     let dur;
-    const has_duration = isDefined(last_report) &&
-      isDefined(last_report.scan_start);
+    const has_duration =
+      isDefined(last_report) && isDefined(last_report.scan_start);
     if (has_duration) {
       if (isDefined(last_report.scan_end)) {
         const diff = last_report.scan_end.diff(last_report.scan_start);
         dur = duration(diff).humanize();
-      }
-      else {
+      } else {
         dur = _('Not finished yet');
       }
-    }
-    else {
+    } else {
       dur = _('No scans yet');
     }
 
-    const has_av_duration = isDefined(average_duration) &&
-      average_duration > 0;
+    const has_av_duration = isDefined(average_duration) && average_duration > 0;
     const av_duration = has_av_duration ? average_duration.humanize() : '';
 
     return (
-      <Layout
-        grow="1"
-        flex="column"
-      >
-
-        {isDefined(target) &&
-          <DetailsBlock
-            title={_('Target')}
-          >
-            <DetailsLink
-              textOnly={!links}
-              type="target"
-              id={target.id}
-            >
+      <Layout grow="1" flex="column">
+        {isDefined(target) && (
+          <DetailsBlock title={_('Target')}>
+            <DetailsLink textOnly={!links} type="target" id={target.id}>
               {target.name}
             </DetailsLink>
           </DetailsBlock>
-        }
+        )}
 
-        {isDefined(alerts) &&
-          <DetailsBlock
-            title={_('Alerts')}
-          >
+        {isDefined(alerts) && (
+          <DetailsBlock title={_('Alerts')}>
             <Divider>
-              {
-                alerts.sort(compareAlerts).map(alert => (
-                  <DetailsLink
-                    key={alert.id}
-                    textOnly={!links}
-                    type="alert"
-                    id={alert.id}
-                  >
-                    {alert.name}
-                  </DetailsLink>
-                ))
-              }
+              {alerts.sort(compareAlerts).map(alert => (
+                <DetailsLink
+                  key={alert.id}
+                  textOnly={!links}
+                  type="alert"
+                  id={alert.id}
+                >
+                  {alert.name}
+                </DetailsLink>
+              ))}
             </Divider>
           </DetailsBlock>
-        }
+        )}
 
-        {isDefined(scanner) &&
-          <DetailsBlock
-            title={_('Scanner')}
-          >
+        {isDefined(scanner) && (
+          <DetailsBlock title={_('Scanner')}>
             <InfoTable>
               <TableBody>
                 <TableRow>
-                  <TableData>
-                    {_('Name')}
-                  </TableData>
+                  <TableData>{_('Name')}</TableData>
                   <TableData>
                     <DetailsLink
                       textOnly={!links}
@@ -181,18 +155,12 @@ class TaskDetails extends React.Component {
                   </TableData>
                 </TableRow>
                 <TableRow>
-                  <TableData>
-                    {_('Type')}
-                  </TableData>
-                  <TableData>
-                    {scannerTypeName(scanner.scannerType)}
-                  </TableData>
+                  <TableData>{_('Type')}</TableData>
+                  <TableData>{scannerTypeName(scanner.scannerType)}</TableData>
                 </TableRow>
-                {isDefined(config) &&
+                {isDefined(config) && (
                   <TableRow>
-                    <TableData>
-                      {_('Scan Config')}
-                    </TableData>
+                    <TableData>{_('Scan Config')}</TableData>
                     <TableData>
                       <DetailsLink
                         textOnly={!links}
@@ -203,107 +171,77 @@ class TaskDetails extends React.Component {
                       </DetailsLink>
                     </TableData>
                   </TableRow>
-                }
+                )}
+                {isDefined(config) &&
+                  config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                    <TableRow>
+                      <TableData>{_('Order for target hosts')}</TableData>
+                      <TableData>{hosts_ordering}</TableData>
+                    </TableRow>
+                  )}
+                {isDefined(config) &&
+                  config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                    <TableRow>
+                      <TableData>{_('Network Source Interface')}</TableData>
+                      <TableData>{iface.value}</TableData>
+                    </TableRow>
+                  )}
                 {isDefined(config) &&
                   config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  <TableRow>
-                    <TableData>
-                      {_('Order for target hosts')}
-                    </TableData>
-                    <TableData>
-                      {hosts_ordering}
-                    </TableData>
-                  </TableRow>
-                }
+                  isDefined(max_checks.name) && (
+                    <TableRow>
+                      <TableData>
+                        {_('Maximum concurrently executed NVTs per host')}
+                      </TableData>
+                      <TableData>{max_checks.value}</TableData>
+                    </TableRow>
+                  )}
                 {isDefined(config) &&
                   config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  <TableRow>
-                    <TableData>
-                      {_('Network Source Interface')}
-                    </TableData>
-                    <TableData>
-                      {iface.value}
-                    </TableData>
-                  </TableRow>
-                }
-                {isDefined(config) &&
-                  config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(max_checks.name) &&
-                  <TableRow>
-                    <TableData>
-                      {_('Maximum concurrently executed NVTs per host')}
-                    </TableData>
-                    <TableData>
-                      {max_checks.value}
-                    </TableData>
-                  </TableRow>
-                }
-                {isDefined(config) &&
-                  config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(max_hosts.name) &&
-                  <TableRow>
-                    <TableData>
-                      {_('Maximum concurrently scanned hosts')}
-                    </TableData>
-                    <TableData>
-                      {max_hosts.value}
-                    </TableData>
-                  </TableRow>
-                }
+                  isDefined(max_hosts.name) && (
+                    <TableRow>
+                      <TableData>
+                        {_('Maximum concurrently scanned hosts')}
+                      </TableData>
+                      <TableData>{max_hosts.value}</TableData>
+                    </TableRow>
+                  )}
               </TableBody>
             </InfoTable>
           </DetailsBlock>
-        }
+        )}
 
-        <DetailsBlock
-          title={_('Assets')}
-        >
+        <DetailsBlock title={_('Assets')}>
           <InfoTable>
             <TableBody>
               <TableRow>
-                <TableData>
-                  {_('Add to Assets')}
-                </TableData>
-                <TableData>
-                  {renderYesNo(in_assets)}
-                </TableData>
+                <TableData>{_('Add to Assets')}</TableData>
+                <TableData>{renderYesNo(in_assets)}</TableData>
               </TableRow>
 
-              {in_assets === YES_VALUE &&
+              {in_assets === YES_VALUE && (
                 <TableRow>
-                  <TableData>
-                    {_('Apply to Overrides')}
-                  </TableData>
-                  <TableData>
-                    {renderYesNo(apply_overrides)}
-                  </TableData>
+                  <TableData>{_('Apply to Overrides')}</TableData>
+                  <TableData>{renderYesNo(apply_overrides)}</TableData>
                 </TableRow>
-              }
+              )}
 
-              {in_assets === YES_VALUE &&
+              {in_assets === YES_VALUE && (
                 <TableRow>
-                  <TableData>
-                    {_('Min QoD')}
-                  </TableData>
-                  <TableData>
-                    {min_qod + ' %'}
-                  </TableData>
+                  <TableData>{_('Min QoD')}</TableData>
+                  <TableData>{min_qod + ' %'}</TableData>
                 </TableRow>
-              }
+              )}
             </TableBody>
           </InfoTable>
         </DetailsBlock>
 
-        {isDefined(schedule) &&
-          <DetailsBlock
-            title={_('Schedule')}
-          >
+        {isDefined(schedule) && (
+          <DetailsBlock title={_('Schedule')}>
             <InfoTable>
               <TableBody>
                 <TableRow>
-                  <TableData>
-                    {_('Name')}
-                  </TableData>
+                  <TableData>{_('Name')}</TableData>
                   <TableData>
                     <DetailsLink
                       textOnly={!links}
@@ -314,67 +252,52 @@ class TaskDetails extends React.Component {
                     </DetailsLink>
                   </TableData>
                 </TableRow>
-                {isDefined(schedule.event) &&
+                {isDefined(schedule.event) && (
                   <TableRow>
-                    <TableData>
-                      {_('Next')}
-                    </TableData>
+                    <TableData>{_('Next')}</TableData>
                     <TableData>
                       {dateTimeWithTimeZone(schedule.event.nextDate)}
                     </TableData>
                   </TableRow>
-                }
+                )}
               </TableBody>
             </InfoTable>
           </DetailsBlock>
-        }
+        )}
 
-        <DetailsBlock
-          title={_('Scan')}
-        >
+        <DetailsBlock title={_('Scan')}>
           <InfoTable>
             <TableBody>
               <TableRow>
-                <TableData>
-                  {_('Duration of last Scan')}
-                </TableData>
-                <TableData>
-                  {dur}
-                </TableData>
+                <TableData>{_('Duration of last Scan')}</TableData>
+                <TableData>{dur}</TableData>
               </TableRow>
-              {has_av_duration &&
+              {has_av_duration && (
                 <TableRow>
+                  <TableData>{_('Average Scan duration')}</TableData>
+                  <TableData>{av_duration}</TableData>
+                </TableRow>
+              )}
+              {schedule_periods > 0 && (
+                <TableRow>
+                  <TableData>{_('Period')}</TableData>
                   <TableData>
-                    {_('Average Scan duration')}
-                  </TableData>
-                  <TableData>
-                    {av_duration}
+                    {schedule_periods > 1
+                      ? _('{{nr}} more times', {nr: schedule_periods})
+                      : _('Once')}
                   </TableData>
                 </TableRow>
-              }
-              {schedule_periods > 0 &&
-                <TableRow>
-                  <TableData>
-                    {_('Period')}
-                  </TableData>
-                  <TableData>
-                    {schedule_periods > 1 ?
-                        _('{{nr}} more times', {nr: schedule_periods}) :
-                        _('Once')
-                    }
-                  </TableData>
-                </TableRow>
-              }
+              )}
               <TableRow>
+                <TableData>{_('Auto delete Reports')}</TableData>
                 <TableData>
-                  {_('Auto delete Reports')}
-                </TableData>
-                <TableData>
-                  {auto_delete === 'keep' ?
-                    _('Automatically delete oldest reports but always keep ' +
-                      'newest {{nr}} reports', {nr: auto_delete_data}) :
-                    _('Do not automatically delete reports')
-                  }
+                  {auto_delete === 'keep'
+                    ? _(
+                        'Automatically delete oldest reports but always keep ' +
+                          'newest {{nr}} reports',
+                        {nr: auto_delete_data},
+                      )
+                    : _('Do not automatically delete reports')}
                 </TableData>
               </TableRow>
             </TableBody>
@@ -396,9 +319,9 @@ TaskDetails.propTypes = {
 const mapStateToProps = (rootState, {entity = {}}) => {
   const selector = scheduleSelector(rootState);
   return {
-    schedule: isDefined(entity.schedule) ?
-      selector.getEntity(entity.schedule.id) :
-      undefined,
+    schedule: isDefined(entity.schedule)
+      ? selector.getEntity(entity.schedule.id)
+      : undefined,
   };
 };
 
@@ -408,7 +331,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(TaskDetails);
 
 // vim: set ts=2 sw=2 tw=80:

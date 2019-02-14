@@ -27,7 +27,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(Result, 'result');
 
 describe('Result model tests', () => {
-
   test('should parse host object', () => {
     const elem = {
       host: {
@@ -194,10 +193,7 @@ describe('Result model tests', () => {
   test('should parse notes', () => {
     const elem = {
       notes: {
-        note: [
-          'foo',
-          'bar',
-        ],
+        note: ['foo', 'bar'],
       },
     };
     const result = new Result(elem);
@@ -215,10 +211,7 @@ describe('Result model tests', () => {
   test('should parse overrides', () => {
     const elem = {
       overrides: {
-        override: [
-          'foo',
-          'bar',
-        ],
+        override: ['foo', 'bar'],
       },
     };
     const result = new Result(elem);

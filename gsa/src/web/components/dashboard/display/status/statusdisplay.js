@@ -30,7 +30,6 @@ import DataDisplay from '../datadisplay';
 import {renderDonutChartIcons} from '../datadisplayicons';
 
 class StatusDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -49,19 +48,16 @@ class StatusDisplay extends React.Component {
       }
 
       const statusFilter = Filter.fromTerm(statusTerm);
-      const newFilter = isDefined(filter) ? filter.copy().and(statusFilter) :
-        statusFilter;
+      const newFilter = isDefined(filter)
+        ? filter.copy().and(statusFilter)
+        : statusFilter;
 
       onFilterChanged(newFilter);
     }
   }
 
   render() {
-    const {
-      filter,
-      onFilterChanged,
-      ...props
-    } = this.props;
+    const {filter, onFilterChanged, ...props} = this.props;
     return (
       <DataDisplay
         {...props}
@@ -79,10 +75,12 @@ class StatusDisplay extends React.Component {
             data={tdata}
             show3d={state.show3d}
             showLegend={state.showLegend}
-            onDataClick={isDefined(onFilterChanged) ?
-              this.handleDataClick : undefined}
-            onLegendItemClick={isDefined(onFilterChanged) ?
-              this.handleDataClick : undefined}
+            onDataClick={
+              isDefined(onFilterChanged) ? this.handleDataClick : undefined
+            }
+            onLegendItemClick={
+              isDefined(onFilterChanged) ? this.handleDataClick : undefined
+            }
           />
         )}
       </DataDisplay>

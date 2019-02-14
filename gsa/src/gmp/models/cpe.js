@@ -26,7 +26,6 @@ import Info from './info';
 import {parseSeverity, parseDate} from '../parser';
 
 class Cpe extends Info {
-
   static entityType = 'cpe';
 
   parseProperties(elem) {
@@ -40,8 +39,7 @@ class Cpe extends Info {
         id: cve._id,
         severity: parseSeverity(cve.cvss.base_metrics.score.__text),
       }));
-    }
-    else {
+    } else {
       ret.cves = [];
     }
 
