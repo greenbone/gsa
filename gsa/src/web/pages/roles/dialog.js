@@ -63,13 +63,12 @@ const Dialog = ({
   onErrorClose,
   onSave,
 }) => {
-
   const DEFAULTS = {name: _('Unnamed')};
 
   const is_edit = isDefined(role);
   const has_groups = isDefined(all_groups) && all_groups.length > 0;
-  const has_permissions = isDefined(all_permissions) &&
-    all_permissions.length > 0;
+  const has_permissions =
+    isDefined(all_permissions) && all_permissions.length > 0;
 
   const groupOptions = map(all_groups, group => ({
     label: group.name,
@@ -77,8 +76,8 @@ const Dialog = ({
   }));
 
   const permissionsOptions = map(all_permissions, permission => {
-    const labelString = permission.name + ' (' +
-      permissionDescription(permission.name) + ')';
+    const labelString =
+      permission.name + ' (' + permissionDescription(permission.name) + ')';
     return {
       label: labelString,
       value: permission.name,
@@ -102,10 +101,7 @@ const Dialog = ({
         ...role,
       }}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
             <FormGroup title={_('Name')}>
@@ -119,10 +115,7 @@ const Dialog = ({
               />
             </FormGroup>
 
-            <FormGroup
-              title={_('Comment')}
-              flex="column"
-            >
+            <FormGroup title={_('Comment')} flex="column">
               <TextField
                 name="comment"
                 value={state.comment}
@@ -132,9 +125,7 @@ const Dialog = ({
               />
             </FormGroup>
 
-            <FormGroup
-              title={_('Users')}
-            >
+            <FormGroup title={_('Users')}>
               <MultiSelect
                 name="users"
                 items={usersOptions}
@@ -143,7 +134,7 @@ const Dialog = ({
               />
             </FormGroup>
 
-            {is_edit &&
+            {is_edit && (
               <Layout flex="column">
                 <h2>{_('New Permission')}</h2>
 
@@ -189,51 +180,41 @@ const Dialog = ({
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>
-                        {_('Name')}
-                      </TableHead>
-                      <TableHead>
-                        {_('Description')}
-                      </TableHead>
-                      <TableHead width="2em">
-                        {_('Actions')}
-                      </TableHead>
+                      <TableHead>{_('Name')}</TableHead>
+                      <TableHead>{_('Description')}</TableHead>
+                      <TableHead width="2em">{_('Actions')}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {
-                      map(permissions, permission => {
-                        return (
-                          <TableRow key={permission.id}>
-                            <TableData>
-                              {permission.name}
-                            </TableData>
-                            <TableData>
-                              {
-                                permissionDescription(permission.name,
-                                  permission.resource)
-                              }
-                            </TableData>
-                            <TableData align={['center', 'center']}>
-                              {!permission.isInUse() &&
-                                <TrashIcon
-                                  title={_('Move permission to trashcan')}
-                                  value={{
-                                    role_id: state.id,
-                                    permission_id: permission.id,
-                                  }}
-                                  onClick={onDeletePermission}
-                                />
-                              }
-                            </TableData>
-                          </TableRow>
-                        );
-                      })
-                    }
+                    {map(permissions, permission => {
+                      return (
+                        <TableRow key={permission.id}>
+                          <TableData>{permission.name}</TableData>
+                          <TableData>
+                            {permissionDescription(
+                              permission.name,
+                              permission.resource,
+                            )}
+                          </TableData>
+                          <TableData align={['center', 'center']}>
+                            {!permission.isInUse() && (
+                              <TrashIcon
+                                title={_('Move permission to trashcan')}
+                                value={{
+                                  role_id: state.id,
+                                  permission_id: permission.id,
+                                }}
+                                onClick={onDeletePermission}
+                              />
+                            )}
+                          </TableData>
+                        </TableRow>
+                      );
+                    })}
                   </TableBody>
                 </Table>
               </Layout>
-            }
+            )}
           </Layout>
         );
       }}
@@ -259,7 +240,6 @@ Dialog.propTypes = {
   onErrorClose: PropTypes.func,
   onSave: PropTypes.func.isRequired,
 };
-
 
 export default Dialog;
 

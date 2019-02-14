@@ -31,22 +31,17 @@ export const HOSTS_VULN_SCORE = 'hosts-vuln-score';
 const HOSTS_MAX_GROUPS = 10;
 
 export const hostsModifiedLoader = loadFunc(
-  ({gmp, filter}) => gmp.hosts.getModifiedAggregates({filter})
-    .then(r => r.data),
-  HOSTS_MODIFIED);
+  ({gmp, filter}) =>
+    gmp.hosts.getModifiedAggregates({filter}).then(r => r.data),
+  HOSTS_MODIFIED,
+);
 
-export const HostsModifiedLoader = ({
-  filter,
-  children,
-}) => (
+export const HostsModifiedLoader = ({filter, children}) => (
   <Loader
     dataId={HOSTS_MODIFIED}
     filter={filter}
     load={hostsModifiedLoader}
-    subscriptions={[
-      'hosts.timer',
-      'hosts.changed',
-    ]}
+    subscriptions={['hosts.timer', 'hosts.changed']}
   >
     {children}
   </Loader>
@@ -55,22 +50,17 @@ export const HostsModifiedLoader = ({
 HostsModifiedLoader.propTypes = loaderPropTypes;
 
 export const hostsSeverityLoader = loadFunc(
-  ({gmp, filter}) => gmp.hosts.getSeverityAggregates({filter})
-    .then(r => r.data),
-  HOSTS_SEVERITY);
+  ({gmp, filter}) =>
+    gmp.hosts.getSeverityAggregates({filter}).then(r => r.data),
+  HOSTS_SEVERITY,
+);
 
-export const HostsSeverityLoader = ({
-  filter,
-  children,
-}) => (
+export const HostsSeverityLoader = ({filter, children}) => (
   <Loader
     dataId={HOSTS_SEVERITY}
     filter={filter}
     load={hostsSeverityLoader}
-    subscriptions={[
-      'hosts.timer',
-      'hosts.changed',
-    ]}
+    subscriptions={['hosts.timer', 'hosts.changed']}
   >
     {children}
   </Loader>
@@ -79,22 +69,16 @@ export const HostsSeverityLoader = ({
 HostsSeverityLoader.propTypes = loaderPropTypes;
 
 export const hostsTopologyLoader = loadFunc(
-  ({gmp, filter}) => gmp.hosts.getAll({filter})
-    .then(r => r.data),
-  HOSTS_TOPOLOGY);
+  ({gmp, filter}) => gmp.hosts.getAll({filter}).then(r => r.data),
+  HOSTS_TOPOLOGY,
+);
 
-export const HostsTopologyLoader = ({
-  filter,
-  children,
-}) => (
+export const HostsTopologyLoader = ({filter, children}) => (
   <Loader
     dataId={HOSTS_TOPOLOGY}
     filter={filter}
     load={hostsTopologyLoader}
-    subscriptions={[
-      'hosts.timer',
-      'hosts.changed',
-    ]}
+    subscriptions={['hosts.timer', 'hosts.changed']}
   >
     {children}
   </Loader>
@@ -103,23 +87,19 @@ export const HostsTopologyLoader = ({
 HostsTopologyLoader.propTypes = loaderPropTypes;
 
 export const hostsVulnScoreLoader = loadFunc(
-  ({gmp, filter}) => gmp.hosts.getVulnScoreAggregates(
-    {filter, max: HOSTS_MAX_GROUPS})
-    .then(r => r.data),
-  HOSTS_VULN_SCORE);
+  ({gmp, filter}) =>
+    gmp.hosts
+      .getVulnScoreAggregates({filter, max: HOSTS_MAX_GROUPS})
+      .then(r => r.data),
+  HOSTS_VULN_SCORE,
+);
 
-export const HostsVulnScoreLoader = ({
-  children,
-  filter,
-}) => (
+export const HostsVulnScoreLoader = ({children, filter}) => (
   <Loader
     dataId={HOSTS_VULN_SCORE}
     filter={filter}
     load={hostsVulnScoreLoader}
-    subscripions={[
-      'hosts.timer',
-      'hosts.changed',
-    ]}
+    subscripions={['hosts.timer', 'hosts.changed']}
   >
     {children}
   </Loader>

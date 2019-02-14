@@ -20,19 +20,21 @@ import Asset from './asset';
 import {parseSeverity} from '../parser';
 
 class OperatingSystem extends Asset {
-
   static entityType = 'operatingsystem';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
     if (ret.os) {
-      ret.average_severity = ret.os.average_severity ?
-        parseSeverity(ret.os.average_severity.value) : undefined;
-      ret.latest_severity = ret.os.latest_severity ?
-        parseSeverity(ret.os.latest_severity.value) : undefined;
-      ret.highest_severity = ret.os.highest_severity ?
-        parseSeverity(ret.os.highest_severity.value) : undefined;
+      ret.average_severity = ret.os.average_severity
+        ? parseSeverity(ret.os.average_severity.value)
+        : undefined;
+      ret.latest_severity = ret.os.latest_severity
+        ? parseSeverity(ret.os.latest_severity.value)
+        : undefined;
+      ret.highest_severity = ret.os.highest_severity
+        ? parseSeverity(ret.os.highest_severity.value)
+        : undefined;
 
       ret.title = ret.os.title;
       ret.hosts = {

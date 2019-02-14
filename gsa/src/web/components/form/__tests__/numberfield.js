@@ -25,13 +25,8 @@ import {render, fireEvent} from 'web/utils/testing';
 import NumberField from '../numberfield';
 
 describe('NumberField tests', () => {
-
   test('should render', () => {
-    const {element} = render(
-      <NumberField
-        value={1}
-      />
-    );
+    const {element} = render(<NumberField value={1} />);
 
     expect(element).toHaveAttribute('value', '1');
     expect(element).toMatchSnapshot();
@@ -39,12 +34,7 @@ describe('NumberField tests', () => {
 
   test('should call change handler', () => {
     const onChange = jest.fn();
-    const {element} = render(
-      <NumberField
-        value={1}
-        onChange={onChange}
-      />
-    );
+    const {element} = render(<NumberField value={1} onChange={onChange} />);
 
     fireEvent.change(element, {target: {value: '2'}});
 
@@ -55,11 +45,7 @@ describe('NumberField tests', () => {
   test('should call change handler with value and name', () => {
     const onChange = jest.fn();
     const {element} = render(
-      <NumberField
-        name="foo"
-        value={1}
-        onChange={onChange}
-      />
+      <NumberField name="foo" value={1} onChange={onChange} />,
     );
 
     fireEvent.change(element, {target: {value: '2'}});
@@ -71,11 +57,7 @@ describe('NumberField tests', () => {
   test('should not call change handler if disabled', () => {
     const onChange = jest.fn();
     const {element} = render(
-      <NumberField
-        disabled={true}
-        value={1}
-        onChange={onChange}
-      />
+      <NumberField disabled={true} value={1} onChange={onChange} />,
     );
 
     fireEvent.change(element, {target: {value: '2'}});
@@ -87,10 +69,7 @@ describe('NumberField tests', () => {
   test('should update value', () => {
     const onChange = jest.fn();
     const {element, rerender} = render(
-      <NumberField
-        value={1}
-        onChange={onChange}
-      />
+      <NumberField value={1} onChange={onChange} />,
     );
 
     fireEvent.change(element, {target: {value: '2'}});
@@ -98,21 +77,11 @@ describe('NumberField tests', () => {
     expect(onChange).toHaveBeenCalledWith(2, undefined);
     expect(element).toHaveAttribute('value', '2');
 
-    rerender(
-      <NumberField
-        value={2}
-        onChange={onChange}
-      />
-    );
+    rerender(<NumberField value={2} onChange={onChange} />);
 
     expect(element).toHaveAttribute('value', '2');
 
-    rerender(
-      <NumberField
-        value={3}
-        onChange={onChange}
-      />
-    );
+    rerender(<NumberField value={3} onChange={onChange} />);
 
     expect(element).toHaveAttribute('value', '3');
   });
@@ -120,11 +89,7 @@ describe('NumberField tests', () => {
   test('should not call change handler if value > max', () => {
     const onChange = jest.fn();
     const {element} = render(
-      <NumberField
-        value={1}
-        max={2}
-        onChange={onChange}
-      />
+      <NumberField value={1} max={2} onChange={onChange} />,
     );
 
     fireEvent.change(element, {target: {value: '3'}});
@@ -137,11 +102,7 @@ describe('NumberField tests', () => {
   test('should reset to max', () => {
     const onChange = jest.fn();
     const {element} = render(
-      <NumberField
-        value={1}
-        max={2}
-        onChange={onChange}
-      />
+      <NumberField value={1} max={2} onChange={onChange} />,
     );
 
     fireEvent.change(element, {target: {value: '3'}});
@@ -157,11 +118,7 @@ describe('NumberField tests', () => {
   test('should not call change handler if value < min', () => {
     const onChange = jest.fn();
     const {element} = render(
-      <NumberField
-        value={1}
-        min={1}
-        onChange={onChange}
-      />
+      <NumberField value={1} min={1} onChange={onChange} />,
     );
 
     fireEvent.change(element, {target: {value: '0'}});
@@ -174,11 +131,7 @@ describe('NumberField tests', () => {
   test('should reset to min', () => {
     const onChange = jest.fn();
     const {element} = render(
-      <NumberField
-        value={2}
-        min={1}
-        onChange={onChange}
-      />
+      <NumberField value={2} min={1} onChange={onChange} />,
     );
 
     expect(element).toHaveAttribute('value', '2');
@@ -196,11 +149,7 @@ describe('NumberField tests', () => {
   test('should reset to last valid value', () => {
     const onChange = jest.fn();
     const {element} = render(
-      <NumberField
-        value={2}
-        min={1}
-        onChange={onChange}
-      />
+      <NumberField value={2} min={1} onChange={onChange} />,
     );
 
     expect(element).toHaveAttribute('value', '2');
@@ -217,12 +166,7 @@ describe('NumberField tests', () => {
 
   test('should not allow to add letters', () => {
     const handler = jest.fn();
-    const {element} = render(
-      <NumberField
-        value={1}
-        onKeyDown={handler}
-      />
-    );
+    const {element} = render(<NumberField value={1} onKeyDown={handler} />);
 
     fireEvent.keyDown(element, {key: 'a', keyCode: 65});
 
@@ -231,12 +175,7 @@ describe('NumberField tests', () => {
 
   test('should allow to add numbers', () => {
     const handler = jest.fn();
-    const {element} = render(
-      <NumberField
-        value={1}
-        onKeyDown={handler}
-      />
-    );
+    const {element} = render(<NumberField value={1} onKeyDown={handler} />);
 
     fireEvent.keyDown(element, {key: '1', keyCode: 49});
     fireEvent.keyDown(element, {key: '2', keyCode: 50});
@@ -247,11 +186,7 @@ describe('NumberField tests', () => {
   test('should allow point key for float numbers', () => {
     const handler = jest.fn();
     const {element} = render(
-      <NumberField
-        value={1}
-        type="float"
-        onKeyDown={handler}
-      />
+      <NumberField value={1} type="float" onKeyDown={handler} />,
     );
 
     fireEvent.keyDown(element, {key: '.', keyCode: KeyCode.PERIOD});
@@ -263,11 +198,7 @@ describe('NumberField tests', () => {
   test('should not allow point key for int numbers', () => {
     const handler = jest.fn();
     const {element} = render(
-      <NumberField
-        value={1}
-        type="int"
-        onKeyDown={handler}
-      />
+      <NumberField value={1} type="int" onKeyDown={handler} />,
     );
 
     fireEvent.keyDown(element, {key: '.', keyCode: KeyCode.PERIOD});
@@ -279,10 +210,7 @@ describe('NumberField tests', () => {
   test('should call onDownKeyPressed handler', () => {
     const handler = jest.fn();
     const {element} = render(
-      <NumberField
-        value={1}
-        onDownKeyPressed={handler}
-      />
+      <NumberField value={1} onDownKeyPressed={handler} />,
     );
 
     fireEvent.keyDown(element, {key: '1', keyCode: 49});
@@ -297,10 +225,7 @@ describe('NumberField tests', () => {
   test('should call onUpKeyPressed handler', () => {
     const handler = jest.fn();
     const {element} = render(
-      <NumberField
-        value={1}
-        onUpKeyPressed={handler}
-      />
+      <NumberField value={1} onUpKeyPressed={handler} />,
     );
 
     fireEvent.keyDown(element, {key: '1', keyCode: 49});
@@ -311,7 +236,6 @@ describe('NumberField tests', () => {
 
     expect(handler).toHaveBeenCalledTimes(2);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -28,7 +28,6 @@ const createState = state => ({
 });
 
 describe('dashboard settings selector init tests', () => {
-
   test('should not crash with undefined state', () => {
     const id = 'a1';
     const selector = getDashboardSettings();
@@ -66,7 +65,6 @@ describe('dashboard settings selector init tests', () => {
 });
 
 describe('dashboard setting selector isLoading tests', () => {
-
   test('should return isLoading', () => {
     const id = 'a1';
     const rootState = createState({
@@ -82,7 +80,6 @@ describe('dashboard setting selector isLoading tests', () => {
 });
 
 describe('dashboard setting selector getError tests', () => {
-
   test('should return error', () => {
     const id = 'a1';
     const rootState = createState({
@@ -95,11 +92,9 @@ describe('dashboard setting selector getError tests', () => {
 
     expect(selector.getError(id)).toEqual('An error');
   });
-
 });
 
 describe('dashboard setting selector getById tests', () => {
-
   test('should return settings', () => {
     const id = 'a1';
     const rootState = createState({
@@ -117,8 +112,7 @@ describe('dashboard setting selector getById tests', () => {
 
   test('should return undefined if unknown id is passed', () => {
     const rootState = createState({
-      byId: {
-      },
+      byId: {},
     });
 
     const selector = getDashboardSettings(rootState);
@@ -128,7 +122,6 @@ describe('dashboard setting selector getById tests', () => {
 });
 
 describe('dashboard setting selector getDefaultsById tests', () => {
-
   test('should return defaults', () => {
     const id = 'a1';
     const rootState = createState({
@@ -144,8 +137,7 @@ describe('dashboard setting selector getDefaultsById tests', () => {
 
   test('should return empty object if unknown id is passed', () => {
     const rootState = createState({
-      defaults: {
-      },
+      defaults: {},
     });
 
     const selector = getDashboardSettings(rootState);
@@ -155,7 +147,6 @@ describe('dashboard setting selector getDefaultsById tests', () => {
 });
 
 describe('dashboard setting selector hasSettings tests', () => {
-
   test('should return false for undefined state', () => {
     const selector = getDashboardSettings();
 

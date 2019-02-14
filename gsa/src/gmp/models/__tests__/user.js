@@ -28,7 +28,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(User, 'user');
 
 describe('User model tests', () => {
-
   test('should parse roles', () => {
     const elem = {
       role: [
@@ -124,7 +123,6 @@ describe('User model tests', () => {
     expect(user1.sources).toBeUndefined();
     expect(user3.auth_method).toEqual(AUTH_METHOD_PASSWORD);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

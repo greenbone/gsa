@@ -33,11 +33,7 @@ import TextArea from 'web/components/form/textarea';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
-const STATUS = [
-  TICKET_STATUS.open,
-  TICKET_STATUS.fixed,
-  TICKET_STATUS.closed,
-];
+const STATUS = [TICKET_STATUS.open, TICKET_STATUS.fixed, TICKET_STATUS.closed];
 
 const STATUS_ITEMS = STATUS.map(status => ({
   value: status,
@@ -71,10 +67,7 @@ const EditTicketDialog = ({
       userId,
     }}
   >
-    {({
-      values,
-      onValueChange,
-    }) => (
+    {({values, onValueChange}) => (
       <Layout flex="column">
         <FormGroup title={_('Status')}>
           <Select

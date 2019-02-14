@@ -92,28 +92,13 @@ const ToolBarIcons = ({
         anchor="overrides-and-false-positives"
         title={_('Help: Overrides')}
       />
-      <ListIcon
-        title={_('Override List')}
-        page="overrides"
-      />
+      <ListIcon title={_('Override List')} page="overrides" />
     </IconDivider>
     <IconDivider>
-      <CreateIcon
-        entity={entity}
-        onClick={onOverrideCreateClick}
-      />
-      <CloneIcon
-        entity={entity}
-        onClick={onOverrideCloneClick}
-      />
-      <EditIcon
-        entity={entity}
-        onClick={onOverrideEditClick}
-      />
-      <TrashIcon
-        entity={entity}
-        onClick={onOverrideDeleteClick}
-      />
+      <CreateIcon entity={entity} onClick={onOverrideCreateClick} />
+      <CloneIcon entity={entity} onClick={onOverrideCloneClick} />
+      <EditIcon entity={entity} onClick={onOverrideEditClick} />
+      <TrashIcon entity={entity} onClick={onOverrideDeleteClick} />
       <ExportIcon
         value={entity}
         title={_('Export Override as XML')}
@@ -132,64 +117,48 @@ ToolBarIcons.propTypes = {
   onOverrideEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({
-  entity,
-  ...props
-}) => {
+const Details = ({entity, ...props}) => {
   const {nvt} = entity;
   return (
     <Layout flex="column">
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
           <TableRow>
+            <TableData>{_('NVT Name')}</TableData>
             <TableData>
-              {_('NVT Name')}
-            </TableData>
-            <TableData>
-              {isDefined(nvt) ?
-                <DetailsLink
-                  id={nvt.id}
-                  type="nvt"
-                >
+              {isDefined(nvt) ? (
+                <DetailsLink id={nvt.id} type="nvt">
                   {nvt.name}
-                </DetailsLink> :
+                </DetailsLink>
+              ) : (
                 _('None. Result was an open port.')
-              }
+              )}
             </TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('NVT OID')}
-            </TableData>
-            <TableData>
-              {nvt.id}
-            </TableData>
+            <TableData>{_('NVT OID')}</TableData>
+            <TableData>{nvt.id}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Active')}
-            </TableData>
+            <TableData>{_('Active')}</TableData>
             <TableData>
               {renderYesNo(entity.isActive())}
-              {entity.isActive() && isDefined(entity.endTime) &&
-                ' ' + _('until {{- enddate}}',
-                  {enddate: longDate(entity.endTime)})
-              }
+              {entity.isActive() &&
+                isDefined(entity.endTime) &&
+                ' ' +
+                  _('until {{- enddate}}', {enddate: longDate(entity.endTime)})}
             </TableData>
           </TableRow>
         </TableBody>
       </InfoTable>
 
-      <OverrideDetails
-        entity={entity}
-        {...props}
-      />
+      <OverrideDetails entity={entity} {...props} />
     </Layout>
   );
 };
@@ -218,18 +187,11 @@ const Page = ({
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
-    {({
-      clone,
-      create,
-      delete: delete_func,
-      download,
-      edit,
-      save,
-    }) => (
+    {({clone, create, delete: delete_func, download, edit, save}) => (
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<OverrideIcon size="large"/>}
+        sectionIcon={<OverrideIcon size="large" />}
         title={_('Override')}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}
@@ -243,24 +205,16 @@ const Page = ({
         onOverrideEditClick={edit}
         onOverrideSaveClick={save}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
@@ -273,9 +227,7 @@ const Page = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <Details
-                      entity={entity}
-                    />
+                    <Details entity={entity} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags
@@ -317,10 +269,11 @@ Page.propTypes = {
 const load = gmp => {
   const loadOverride = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadOverride(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadOverride(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

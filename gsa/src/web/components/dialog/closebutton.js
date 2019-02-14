@@ -43,17 +43,11 @@ const StyledCloseButton = styled.div`
   :hover {
     color: ${Theme.white};
     background: ${Theme.darkGreen};
-  };
+  }
 `;
 
-const CloseButton = ({
-  title = _('Close'),
-  ...props
-}) => (
-  <StyledCloseButton
-    {...props}
-    title={title}
-  >
+const CloseButton = ({title = _('Close'), ...props}) => (
+  <StyledCloseButton {...props} title={title}>
     ×{/* Javascript unicode: \u00D7 */}
   </StyledCloseButton>
 );

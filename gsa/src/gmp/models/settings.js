@@ -22,7 +22,6 @@ import 'core-js/fn/object/entries';
 import {isDefined} from '../utils/identity';
 
 class Settings {
-
   constructor() {
     this._settings = {};
   }

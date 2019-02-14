@@ -67,18 +67,17 @@ const SORT_FIELDS = [
 ];
 
 const TaskFilterDialogComponent = ({
-    capabilities,
-    filter,
-    filterName,
-    filterstring,
-    saveNamedFilter,
-    onFilterStringChange,
-    onFilterValueChange,
-    onSortOrderChange,
-    onSortByChange,
-    onValueChange,
-  }) => {
-
+  capabilities,
+  filter,
+  filterName,
+  filterstring,
+  saveNamedFilter,
+  onFilterStringChange,
+  onFilterValueChange,
+  onSortOrderChange,
+  onSortByChange,
+  onValueChange,
+}) => {
   if (!filter) {
     return null;
   }
@@ -91,10 +90,7 @@ const TaskFilterDialogComponent = ({
         onChange={onFilterStringChange}
       />
 
-      <ApplyOverridesGroup
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+      <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange} />
 
       <MinQodGroup
         name="min_qod"
@@ -102,15 +98,9 @@ const TaskFilterDialogComponent = ({
         onChange={onFilterValueChange}
       />
 
-      <FirstResultGroup
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+      <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
-      <ResultsPerPageGroup
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+      <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
 
       <SortByGroup
         filter={filter}
@@ -119,14 +109,14 @@ const TaskFilterDialogComponent = ({
         onSortByChange={onSortByChange}
       />
 
-      {capabilities.mayCreate('filter') &&
+      {capabilities.mayCreate('filter') && (
         <CreateNamedFilterGroup
           filter={filter}
           filterName={filterName}
           saveNamedFilter={saveNamedFilter}
           onValueChange={onValueChange}
         />
-      }
+      )}
     </Layout>
   );
 };

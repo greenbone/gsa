@@ -50,10 +50,7 @@ import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/certbund';
+import {selector, loadEntity} from 'web/store/entities/certbund';
 
 import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
 import ExportIcon from 'web/components/icon/exporticon';
@@ -64,10 +61,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import CertBundAdvDetails from './details';
 
-const ToolBarIcons = ({
-  entity,
-  onCertBundAdvDownloadClick,
-}) => (
+const ToolBarIcons = ({entity, onCertBundAdvDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
@@ -75,10 +69,7 @@ const ToolBarIcons = ({
         anchor="cert-bund"
         title={_('Help:  CERT-Bund Advisories')}
       />
-      <ListIcon
-        title={_('CERT-Bund Advisories')}
-        page="certbunds"
-      />
+      <ListIcon title={_('CERT-Bund Advisories')} page="certbunds" />
     </IconDivider>
     <ExportIcon
       value={entity}
@@ -93,9 +84,7 @@ ToolBarIcons.propTypes = {
   onCertBundAdvDownloadClick: PropTypes.func.isRequired,
 };
 
-const Details = ({
-  entity,
-}) => {
+const Details = ({entity}) => {
   const {
     additional_information,
     categories,
@@ -105,113 +94,79 @@ const Details = ({
   } = entity;
   return (
     <Layout flex="column">
-      <CertBundAdvDetails
-        entity={entity}
-      />
+      <CertBundAdvDetails entity={entity} />
 
-      <DetailsBlock
-        title={_('Revision History')}
-      >
-        {revision_history.length > 0 &&
+      <DetailsBlock title={_('Revision History')}>
+        {revision_history.length > 0 && (
           <InfoTable>
             <TableHeader>
               <TableRow>
-                <TableHead>
-                  {_('Revision')}
-                </TableHead>
-                <TableHead>
-                  {_('Date')}
-                </TableHead>
-                <TableHead>
-                  {_('Description')}
-                </TableHead>
+                <TableHead>{_('Revision')}</TableHead>
+                <TableHead>{_('Date')}</TableHead>
+                <TableHead>{_('Description')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {revision_history.map(rev => (
-                <TableRow
-                  key={rev.revision}
-                >
-                  <TableData>
-                    {rev.revision}
-                  </TableData>
-                  <TableData>
-                    {longDate(rev.date)}
-                  </TableData>
-                  <TableData>
-                    {rev.description}
-                  </TableData>
+                <TableRow key={rev.revision}>
+                  <TableData>{rev.revision}</TableData>
+                  <TableData>{longDate(rev.date)}</TableData>
+                  <TableData>{rev.description}</TableData>
                 </TableRow>
               ))}
             </TableBody>
           </InfoTable>
-        }
+        )}
       </DetailsBlock>
 
-      <DetailsBlock
-        title={_('Categories')}
-      >
-        {categories.length > 0 ?
+      <DetailsBlock title={_('Categories')}>
+        {categories.length > 0 ? (
           <ul>
             {categories.map(category => (
               <li key={category}>{category}</li>
             ))}
-          </ul> :
+          </ul>
+        ) : (
           _('None')
-        }
+        )}
       </DetailsBlock>
 
-      <DetailsBlock
-        title={_('Description')}
-      >
-        {description.length > 0 ?
-          description.map(text => (
-            <p key={text}>{text}</p>
-          )) :
-          _('None')
-        }
+      <DetailsBlock title={_('Description')}>
+        {description.length > 0
+          ? description.map(text => <p key={text}>{text}</p>)
+          : _('None')}
       </DetailsBlock>
 
-      <DetailsBlock
-        title={_('References CVEs')}
-      >
-        {cves.length > 0 ?
+      <DetailsBlock title={_('References CVEs')}>
+        {cves.length > 0 ? (
           <ul>
             {cves.map(cve => (
               <li key={cve}>
-                <DetailsLink
-                  type="cve"
-                  id={cve}
-                >
+                <DetailsLink type="cve" id={cve}>
                   {cve}
                 </DetailsLink>
               </li>
             ))}
-          </ul> :
+          </ul>
+        ) : (
           _('None')
-        }
+        )}
       </DetailsBlock>
 
-      {additional_information.length > 0 &&
-        <DetailsBlock
-          title={_('Other Links')}
-        >
+      {additional_information.length > 0 && (
+        <DetailsBlock title={_('Other Links')}>
           <ul>
             {additional_information.map(info => (
               <li key={info.url}>
                 <Layout flex="column">
                   <b>{info.issuer}</b>
-                  <ExternalLink
-                    to={info.url}
-                  >
-                    {info.url}
-                  </ExternalLink>
+                  <ExternalLink to={info.url}>{info.url}</ExternalLink>
                 </Layout>
               </li>
             ))}
           </ul>
         </DetailsBlock>
-      }
+      )}
     </Layout>
   );
 };
@@ -238,30 +193,22 @@ const CertBundAdvPage = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<CertBundAdvIcon size="large"/>}
+        sectionIcon={<CertBundAdvIcon size="large" />}
         title={_('CERT-Bund Advisory')}
         toolBarIcons={ToolBarIcons}
         onCertBundAdvDownloadClick={download}
         onInteraction={onInteraction}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
@@ -271,9 +218,7 @@ const CertBundAdvPage = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <Details
-                      entity={entity}
-                    />
+                    <Details entity={entity} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags

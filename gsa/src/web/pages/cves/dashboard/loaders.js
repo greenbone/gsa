@@ -26,24 +26,17 @@ import Loader, {
 export const CVES_SEVERITY = 'cves-severity';
 export const CVES_CREATED = 'cves-created';
 
-
 export const cveCreatedLoader = loadFunc(
-  ({gmp, filter}) => gmp.cves.getCreatedAggregates({filter})
-    .then(r => r.data),
-  CVES_CREATED);
+  ({gmp, filter}) => gmp.cves.getCreatedAggregates({filter}).then(r => r.data),
+  CVES_CREATED,
+);
 
-export const CvesCreatedLoader = ({
-  filter,
-  children,
-}) => (
+export const CvesCreatedLoader = ({filter, children}) => (
   <Loader
     dataId={CVES_CREATED}
     filter={filter}
     load={cveCreatedLoader}
-    subscriptions={[
-      'cves.timer',
-      'cves.changed',
-    ]}
+    subscriptions={['cves.timer', 'cves.changed']}
   >
     {children}
   </Loader>
@@ -52,22 +45,16 @@ export const CvesCreatedLoader = ({
 CvesCreatedLoader.propTypes = loaderPropTypes;
 
 export const cveSeverityLoader = loadFunc(
-  ({gmp, filter}) => gmp.cves.getSeverityAggregates({filter})
-    .then(r => r.data),
-  CVES_SEVERITY);
+  ({gmp, filter}) => gmp.cves.getSeverityAggregates({filter}).then(r => r.data),
+  CVES_SEVERITY,
+);
 
-export const CvesSeverityLoader = ({
-  filter,
-  children,
-}) => (
+export const CvesSeverityLoader = ({filter, children}) => (
   <Loader
     dataId={CVES_SEVERITY}
     filter={filter}
     load={cveSeverityLoader}
-    subscriptions={[
-      'cves.timer',
-      'cves.changed',
-    ]}
+    subscriptions={['cves.timer', 'cves.changed']}
   >
     {children}
   </Loader>

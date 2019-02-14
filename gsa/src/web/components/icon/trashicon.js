@@ -28,28 +28,17 @@ import SelectionType from 'web/utils/selectiontype';
 
 import TrashcanIcon from 'web/components/icon/trashcanicon';
 
-const TrashIcon = ({
-  selectionType,
-  title,
-  ...other
-}) => {
+const TrashIcon = ({selectionType, title, ...other}) => {
   if (!isDefined(title)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       title = _('Move page contents to trashcan');
-    }
-    else if (selectionType === SelectionType.SELECTION_USER) {
+    } else if (selectionType === SelectionType.SELECTION_USER) {
       title = _('Move selection to trashcan');
-    }
-    else if (selectionType === SelectionType.SELECTION_FILTER) {
+    } else if (selectionType === SelectionType.SELECTION_FILTER) {
       title = _('Move all filtered to trashcan');
     }
   }
-  return (
-    <TrashcanIcon
-      {...other}
-      title={title}
-    />
-  );
+  return <TrashcanIcon {...other} title={title} />;
 };
 
 TrashIcon.propTypes = {

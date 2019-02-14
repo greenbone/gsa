@@ -28,7 +28,6 @@ const Anchor = styled.a`
 `;
 
 class SortBy extends React.Component {
-
   static ASC = 'asc';
   static DESC = 'desc';
 
@@ -54,7 +53,7 @@ class SortBy extends React.Component {
       </Anchor>
     );
   }
-};
+}
 
 SortBy.propTypes = {
   by: PropTypes.string,

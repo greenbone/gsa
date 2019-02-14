@@ -48,167 +48,113 @@ import Condition from './condition';
 import Event from './event';
 import Method from './method';
 
-const AlertDetails = ({
-  capabilities,
-  entity,
-  links = true,
-}) => {
-  const {
-    comment,
-    condition,
-    event,
-    method,
-    tasks = [],
-    filter,
-  } = entity;
+const AlertDetails = ({capabilities, entity, links = true}) => {
+  const {comment, condition, event, method, tasks = [], filter} = entity;
   return (
-    <Layout
-      flex="column"
-      grow
-    >
+    <Layout flex="column" grow>
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(comment) &&
+          {isDefined(comment) && (
             <TableRow>
-              <TableData>
-                {_('Comment')}
-              </TableData>
-              <TableData>
-                {comment}
-              </TableData>
+              <TableData>{_('Comment')}</TableData>
+              <TableData>{comment}</TableData>
             </TableRow>
-          }
+          )}
 
           <TableRow>
+            <TableData>{_('Condition')}</TableData>
             <TableData>
-              {_('Condition')}
-            </TableData>
-            <TableData>
-              <Condition
-                condition={condition}
-                event={event}
-              />
+              <Condition condition={condition} event={event} />
             </TableData>
           </TableRow>
 
           <TableRow>
+            <TableData>{_('Event')}</TableData>
             <TableData>
-              {_('Event')}
-            </TableData>
-            <TableData>
-              <Event event={event}/>
+              <Event event={event} />
             </TableData>
           </TableRow>
 
           {capabilities.mayAccess('report') &&
             isDefined(method.data.delta_type) &&
-            method.data.delta_type.value === DELTA_TYPE_PREVIOUS &&
-            <TableRow>
-              <TableData>
-                {_('Delta Report')}
-              </TableData>
-              <TableData>
-                {_('Previous completed report of the same task')}
-              </TableData>
-            </TableRow>
-          }
+            method.data.delta_type.value === DELTA_TYPE_PREVIOUS && (
+              <TableRow>
+                <TableData>{_('Delta Report')}</TableData>
+                <TableData>
+                  {_('Previous completed report of the same task')}
+                </TableData>
+              </TableRow>
+            )}
 
           {capabilities.mayAccess('report') &&
             isDefined(method.data.delta_type) &&
             isDefined(method.data.delta_report_id) &&
-            method.data.delta_type.value === DELTA_TYPE_REPORT &&
-            <TableRow>
-              <TableData>
-                {_('Delta Report')}
-              </TableData>
-              <TableData>
-                <DetailsLink
-                  id={method.data.delta_report_id.value}
-                  type="report"
-                >
-                  {_('Report ')} {method.data.delta_report_id.value}
-                </DetailsLink>
-              </TableData>
-            </TableRow>
-          }
+            method.data.delta_type.value === DELTA_TYPE_REPORT && (
+              <TableRow>
+                <TableData>{_('Delta Report')}</TableData>
+                <TableData>
+                  <DetailsLink
+                    id={method.data.delta_report_id.value}
+                    type="report"
+                  >
+                    {_('Report ')} {method.data.delta_report_id.value}
+                  </DetailsLink>
+                </TableData>
+              </TableRow>
+            )}
 
           <TableRow>
+            <TableData>{_('Method')}</TableData>
             <TableData>
-              {_('Method')}
-            </TableData>
-            <TableData>
-              <Method
-                method={method}
-                details={true}
-              />
+              <Method method={method} details={true} />
             </TableData>
           </TableRow>
 
-          {isDefined(method.data) && isDefined(method.data.details_url) &&
+          {isDefined(method.data) &&
+            isDefined(method.data.details_url) &&
             isDefined(method.data.details_url.value) &&
             (event.type === EVENT_TYPE_NEW_SECINFO ||
-            event.type === EVENT_TYPE_UPDATED_SECINFO) &&
-            <TableRow>
-              <TableData>
-                {_('Details URL')}
-              </TableData>
-              <TableData>
-                {method.data.details_url.value}
-              </TableData>
-            </TableRow>
-          }
+              event.type === EVENT_TYPE_UPDATED_SECINFO) && (
+              <TableRow>
+                <TableData>{_('Details URL')}</TableData>
+                <TableData>{method.data.details_url.value}</TableData>
+              </TableRow>
+            )}
 
-          {capabilities.mayAccess('filter') && isDefined(filter) &&
+          {capabilities.mayAccess('filter') && isDefined(filter) && (
             <TableRow>
+              <TableData>{_('Results Filter')}</TableData>
               <TableData>
-                {_('Results Filter')}
-              </TableData>
-              <TableData>
-                <DetailsLink
-                  id={filter.id}
-                  type="filter"
-                >
+                <DetailsLink id={filter.id} type="filter">
                   {filter.name}
                 </DetailsLink>
               </TableData>
             </TableRow>
-          }
+          )}
 
           <TableRow>
-            <TableData>
-              {_('Active')}
-            </TableData>
-            <TableData>
-              {entity.isActive() ?
-                _('Yes') : _('No')
-              }
-            </TableData>
+            <TableData>{_('Active')}</TableData>
+            <TableData>{entity.isActive() ? _('Yes') : _('No')}</TableData>
           </TableRow>
 
-          {tasks.length > 0 &&
+          {tasks.length > 0 && (
             <TableRow>
-              <TableData>
-                {_('Task using this Alert')}
-              </TableData>
+              <TableData>{_('Task using this Alert')}</TableData>
               <TableData>
                 <Divider wrap>
                   {tasks.map(task => (
-                    <DetailsLink
-                      key={task.id}
-                      id={task.id}
-                      type="task"
-                    >
+                    <DetailsLink key={task.id} id={task.id} type="task">
                       {task.name}
                     </DetailsLink>
                   ))}
                 </Divider>
               </TableData>
             </TableRow>
-          }
+          )}
         </TableBody>
       </InfoTable>
     </Layout>

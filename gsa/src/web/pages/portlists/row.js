@@ -43,10 +43,7 @@ const IconActions = ({
   onPortListCloneClick,
   onPortListEditClick,
 }) => (
-  <IconDivider
-    align={['center', 'center']}
-    grow
-  >
+  <IconDivider align={['center', 'center']} grow>
     <TrashIcon
       entity={entity}
       displayName={_('Port List')}
@@ -98,19 +95,10 @@ const Row = ({
       displayName={_('Port List')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
-    <TableData align="start">
-      {entity.port_count.all}
-    </TableData>
-    <TableData align="start">
-      {entity.port_count.tcp}
-    </TableData>
-    <TableData align="start">
-      {entity.port_count.udp}
-    </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <TableData align="start">{entity.port_count.all}</TableData>
+    <TableData align="start">{entity.port_count.tcp}</TableData>
+    <TableData align="start">{entity.port_count.udp}</TableData>
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

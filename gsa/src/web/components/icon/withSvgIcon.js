@@ -24,11 +24,8 @@ import SvgIcon from './svgicon';
 
 const withSvgIcon = (defaults = {}) => Component => {
   const SvgIconWrapper = props => (
-    <SvgIcon
-      {...defaults}
-      {...props}
-    >
-      <Component/>
+    <SvgIcon {...defaults} {...props}>
+      <Component />
     </SvgIcon>
   );
   return hoistStatics(SvgIconWrapper, Component);

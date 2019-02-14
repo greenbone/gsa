@@ -38,51 +38,31 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-const PermissionDetails = ({
-  entity,
-}) => {
-  const {
-    comment,
-    name,
-    resource,
-    subject,
-  } = entity;
+const PermissionDetails = ({entity}) => {
+  const {comment, name, resource, subject} = entity;
   return (
-    <Layout
-      grow
-      flex="column"
-    >
+    <Layout grow flex="column">
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(comment) &&
+          {isDefined(comment) && (
             <TableRow>
-              <TableData>
-                {_('Comment')}
-              </TableData>
-              <TableData>
-                {comment}
-              </TableData>
+              <TableData>{_('Comment')}</TableData>
+              <TableData>{comment}</TableData>
             </TableRow>
-          }
+          )}
 
           <TableRow>
-            <TableData>
-              {_('Description')}
-            </TableData>
-            <TableData>
-              {permissionDescription(name, resource)}
-            </TableData>
+            <TableData>{_('Description')}</TableData>
+            <TableData>{permissionDescription(name, resource)}</TableData>
           </TableRow>
 
-          {isDefined(resource) &&
+          {isDefined(resource) && (
             <TableRow>
-              <TableData>
-                {_('Resource')}
-              </TableData>
+              <TableData>{_('Resource')}</TableData>
               <TableData>
                 <Divider>
                   <span>{typeName(getEntityType(resource))}</span>
@@ -90,13 +70,11 @@ const PermissionDetails = ({
                 </Divider>
               </TableData>
             </TableRow>
-          }
+          )}
 
-          {isDefined(subject) &&
+          {isDefined(subject) && (
             <TableRow>
-              <TableData>
-                {_('Subject')}
-              </TableData>
+              <TableData>{_('Subject')}</TableData>
               <TableData>
                 <Divider>
                   <span>{typeName(getEntityType(subject))}</span>
@@ -104,7 +82,7 @@ const PermissionDetails = ({
                 </Divider>
               </TableData>
             </TableRow>
-          }
+          )}
         </TableBody>
       </InfoTable>
     </Layout>

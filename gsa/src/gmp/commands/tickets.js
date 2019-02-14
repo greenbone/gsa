@@ -34,18 +34,12 @@ const convertNote = note => {
   return note;
 };
 
-
 export class TicketCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'ticket', Ticket);
   }
 
-  create({
-    resultId,
-    userId,
-    note,
-  }) {
+  create({resultId, userId, note}) {
     return this.action({
       cmd: 'create_ticket',
       result_id: resultId,
@@ -54,14 +48,7 @@ export class TicketCommand extends EntityCommand {
     });
   }
 
-  save({
-    id,
-    openNote,
-    fixedNote,
-    closedNote,
-    status,
-    userId,
-  }) {
+  save({id, openNote, fixedNote, closedNote, status, userId}) {
     return this.action({
       cmd: 'save_ticket',
       id,
@@ -76,11 +63,9 @@ export class TicketCommand extends EntityCommand {
   getElementFromRoot(root) {
     return root.get_ticket.get_tickets_response.ticket;
   }
-
 }
 
 export class TicketsCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'ticket', Ticket);
   }

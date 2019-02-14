@@ -118,19 +118,15 @@ const NoteDialog = ({
       onClose={onClose}
       onSave={onSave}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
-
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
-            {state.fixed &&
+            {state.fixed && (
               <FormGroup title={_('NVT')} flex="column">
                 <span>{renderNvtName(oid, nvt_name)}</span>
               </FormGroup>
-            }
-            {is_edit && !state.fixed &&
+            )}
+            {is_edit && !state.fixed && (
               <FormGroup title={_('NVT')} flex="column">
                 <Radio
                   title={renderNvtName(oid, nvt_name)}
@@ -149,14 +145,13 @@ const NoteDialog = ({
                   <TextField
                     name="oid"
                     disabled={state.oid === oid}
-                    value={state.oid === oid ? DEFAULT_OID_VALUE :
-                      state.oid}
+                    value={state.oid === oid ? DEFAULT_OID_VALUE : state.oid}
                     onChange={onValueChange}
                   />
                 </Divider>
               </FormGroup>
-            }
-            {!is_edit && !state.fixed &&
+            )}
+            {!is_edit && !state.fixed && (
               <FormGroup title={_('NVT OID')}>
                 <TextField
                   name="oid"
@@ -164,7 +159,7 @@ const NoteDialog = ({
                   onChange={onValueChange}
                 />
               </FormGroup>
-            }
+            )}
             <FormGroup title={_('Active')} flex="column">
               <Divider flex="column">
                 <Radio
@@ -174,8 +169,7 @@ const NoteDialog = ({
                   value={ACTIVE_YES_ALWAYS_VALUE}
                   onChange={onValueChange}
                 />
-                {is_edit && note.isActive() &&
-                  isDefined(note.endTime) &&
+                {is_edit && note.isActive() && isDefined(note.endTime) && (
                   <Divider>
                     <Radio
                       name="active"
@@ -186,7 +180,7 @@ const NoteDialog = ({
                     />
                     <span>{longDate(note.endTime)}</span>
                   </Divider>
-                }
+                )}
               </Divider>
               <Divider>
                 <Radio
@@ -232,14 +226,14 @@ const NoteDialog = ({
                   value={MANUAL}
                   onChange={onValueChange}
                 />
-                {!state.fixed &&
+                {!state.fixed && (
                   <TextField
                     name="hosts_manual"
                     disabled={state.hosts !== MANUAL}
                     value={state.hosts_manual}
                     onChange={onValueChange}
                   />
-                }
+                )}
               </Divider>
             </FormGroup>
 
@@ -259,14 +253,14 @@ const NoteDialog = ({
                   value={MANUAL}
                   onChange={onValueChange}
                 />
-                {!state.fixed &&
+                {!state.fixed && (
                   <TextField
                     name="port_manual"
                     disabled={state.port !== MANUAL}
                     value={state.port_manual}
                     onChange={onValueChange}
                   />
-                }
+                )}
               </Divider>
             </FormGroup>
 
@@ -278,18 +272,18 @@ const NoteDialog = ({
                 value=""
                 onChange={onValueChange}
               />
-              {isDefined(severity) &&
+              {isDefined(severity) && (
                 <Layout>
-                  {severity > LOG_VALUE ?
+                  {severity > LOG_VALUE ? (
                     <Radio
                       name="severity"
-                      title={' > ' +
-                        severityFormat(severity - 0.1)}
+                      title={' > ' + severityFormat(severity - 0.1)}
                       checked={true}
                       convert={parseFloat}
                       value={severity}
                       onChange={onValueChange}
-                    /> :
+                    />
+                  ) : (
                     <Radio
                       name="severity"
                       title={translatedResultSeverityRiskFactor(severity)}
@@ -298,10 +292,10 @@ const NoteDialog = ({
                       value={severity}
                       onChange={onValueChange}
                     />
-                  }
+                  )}
                 </Layout>
-              }
-              {!isDefined(severity) &&
+              )}
+              {!isDefined(severity) && (
                 <Layout>
                   <Radio
                     name="severity"
@@ -320,7 +314,7 @@ const NoteDialog = ({
                     onChange={onValueChange}
                   />
                 </Layout>
-              }
+              )}
             </FormGroup>
 
             <FormGroup title={_('Task')}>
@@ -339,7 +333,7 @@ const NoteDialog = ({
                   value="0"
                   onChange={onValueChange}
                 />
-                {!state.fixed &&
+                {!state.fixed && (
                   <Select
                     name="task_uuid"
                     value={state.task_uuid}
@@ -347,7 +341,7 @@ const NoteDialog = ({
                     disabled={state.task_id !== '0'}
                     onChange={onValueChange}
                   />
-                }
+                )}
               </Divider>
             </FormGroup>
 
@@ -363,16 +357,17 @@ const NoteDialog = ({
                 <Radio
                   name="result_id"
                   title={
-                    state.fixed ?
-                      _('Only selected result ({{- name}})',
-                        {name: state.result_name}) :
-                      _('UUID')
+                    state.fixed
+                      ? _('Only selected result ({{- name}})', {
+                          name: state.result_name,
+                        })
+                      : _('UUID')
                   }
                   checked={state.result_id === '0'}
                   value="0"
                   onChange={onValueChange}
                 />
-                {!fixed &&
+                {!fixed && (
                   <TextField
                     name="result_uuid"
                     size="34"
@@ -380,7 +375,7 @@ const NoteDialog = ({
                     value={state.result_uuid}
                     onChange={onValueChange}
                   />
-                }
+                )}
               </Divider>
             </FormGroup>
 
@@ -388,7 +383,8 @@ const NoteDialog = ({
               <TextArea
                 name="text"
                 grow="1"
-                rows="10" cols="60"
+                rows="10"
+                cols="60"
                 value={state.text}
                 onChange={onValueChange}
               />

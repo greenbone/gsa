@@ -23,10 +23,7 @@ import {render, fireEvent} from 'web/utils/testing';
 import withDownload from '../withDownload';
 
 const TestComponent = withDownload(({onDownload, filename, data}) => (
-  <button
-    data-testid="button"
-    onClick={() => onDownload({filename, data})}
-  />
+  <button data-testid="button" onClick={() => onDownload({filename, data})} />
 ));
 
 const createObjectURL = jest.fn().mockReturnValue('foo://bar');
@@ -34,22 +31,13 @@ window.URL.createObjectURL = createObjectURL;
 window.URL.revokeObjectURL = jest.fn();
 
 describe('withDownload tests', () => {
-
   test('should render', () => {
     const {rerender, getByTestId} = render(
-      <TestComponent
-        filename="foo"
-        data="bar"
-      />
+      <TestComponent filename="foo" data="bar" />,
     );
 
     // rerender to set reference to Download component
-    rerender(
-      <TestComponent
-        filename="foo"
-        data="bar"
-      />
-    );
+    rerender(<TestComponent filename="foo" data="bar" />);
 
     const button = getByTestId('button');
     fireEvent.click(button);

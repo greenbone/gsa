@@ -65,10 +65,7 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/credentials';
+import {selector, loadEntity} from 'web/store/entities/credentials';
 
 import {
   selector as permissionsSelector,
@@ -97,28 +94,13 @@ const ToolBarIcons = ({
         anchor="credentials"
         title={_('Help: Credentials')}
       />
-      <ListIcon
-        title={_('Credential List')}
-        page="credentials"
-      />
+      <ListIcon title={_('Credential List')} page="credentials" />
     </IconDivider>
     <IconDivider>
-      <CreateIcon
-        entity={entity}
-        onClick={onCredentialCreateClick}
-      />
-      <CloneIcon
-        entity={entity}
-        onClick={onCredentialCloneClick}
-      />
-      <EditIcon
-        entity={entity}
-        onClick={onCredentialEditClick}
-      />
-      <TrashIcon
-        entity={entity}
-        onClick={onCredentialDeleteClick}
-      />
+      <CreateIcon entity={entity} onClick={onCredentialCreateClick} />
+      <CloneIcon entity={entity} onClick={onCredentialCloneClick} />
+      <EditIcon entity={entity} onClick={onCredentialEditClick} />
+      <TrashIcon entity={entity} onClick={onCredentialDeleteClick} />
       <ExportIcon
         value={entity}
         title={_('Export Credential as XML')}
@@ -142,79 +124,52 @@ ToolBarIcons.propTypes = {
   onCredentialInstallerDownloadClick: PropTypes.func.isRequired,
 };
 
-const Details = ({
-  entity,
-  links = true,
-  ...props
-}) => {
-  const {
-    certificate_info: cert,
-  } = entity;
+const Details = ({entity, links = true, ...props}) => {
+  const {certificate_info: cert} = entity;
   return (
     <Layout flex="column">
-      <CredentialDetails
-        entity={entity}
-        links={links}
-      />
-      {isDefined(cert) &&
-        <DetailsBlock
-          title={_('Certificate')}
-        >
+      <CredentialDetails entity={entity} links={links} />
+      {isDefined(cert) && (
+        <DetailsBlock title={_('Certificate')}>
           <InfoTable>
             <TableBody>
               <TableRow>
-                <TableData>
-                  {_('Activation')}
-                </TableData>
+                <TableData>{_('Activation')}</TableData>
                 <TableData>
                   <Divider>
-                    <span>
-                      {longDate(cert.activationTime)}
-                    </span>
-                    {cert.time_status === CERTIFICATE_STATUS_INACTIVE &&
+                    <span>{longDate(cert.activationTime)}</span>
+                    {cert.time_status === CERTIFICATE_STATUS_INACTIVE && (
                       <span>{_('inactive')}</span>
-                    }
+                    )}
                   </Divider>
                 </TableData>
               </TableRow>
 
               <TableRow>
-                <TableData>
-                  {_('Expiration')}
-                </TableData>
+                <TableData>{_('Expiration')}</TableData>
                 <TableData>
                   <Divider>
-                    <span>
-                      {longDate(cert.expirationTime)}
-                    </span>
-                    {cert.time_status === CERTIFICATE_STATUS_EXPIRED &&
+                    <span>{longDate(cert.expirationTime)}</span>
+                    {cert.time_status === CERTIFICATE_STATUS_EXPIRED && (
                       <span>{_('expired')}</span>
-                    }
+                    )}
                   </Divider>
                 </TableData>
               </TableRow>
 
               <TableRow>
-                <TableData>
-                  {_('MD5 Fingerprint')}
-                </TableData>
-                <TableData>
-                  {cert.md5_fingerprint}
-                </TableData>
+                <TableData>{_('MD5 Fingerprint')}</TableData>
+                <TableData>{cert.md5_fingerprint}</TableData>
               </TableRow>
 
               <TableRow>
-                <TableData>
-                  {_('Issued By')}
-                </TableData>
-                <TableData>
-                  {cert.issuer}
-                </TableData>
+                <TableData>{_('Issued By')}</TableData>
+                <TableData>{cert.issuer}</TableData>
               </TableRow>
             </TableBody>
           </InfoTable>
         </DetailsBlock>
-      }
+      )}
     </Layout>
   );
 };
@@ -259,7 +214,7 @@ const Page = ({
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon={<CredentialIcon size="large"/>}
+          sectionIcon={<CredentialIcon size="large" />}
           toolBarIcons={ToolBarIcons}
           title={_('Credential')}
           onCredentialCloneClick={clone}
@@ -271,24 +226,16 @@ const Page = ({
           onCredentialSaveClick={save}
           onInteraction={onInteraction}
         >
-          {({
-            activeTab = 0,
-            onActivateTab,
-          }) => {
+          {({activeTab = 0, onActivateTab}) => {
             return (
               <Layout grow="1" flex="column">
-                <TabLayout
-                  grow="1"
-                  align={['start', 'end']}
-                >
+                <TabLayout grow="1" align={['start', 'end']}>
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}
                     onActivateTab={onActivateTab}
                   >
-                    <Tab>
-                      {_('Information')}
-                    </Tab>
+                    <Tab>{_('Information')}</Tab>
                     <EntitiesTab entities={entity.userTags}>
                       {_('User Tags')}
                     </EntitiesTab>
@@ -301,9 +248,7 @@ const Page = ({
                 <Tabs active={activeTab}>
                   <TabPanels>
                     <TabPanel>
-                      <Details
-                        entity={entity}
-                      />
+                      <Details entity={entity} />
                     </TabPanel>
                     <TabPanel>
                       <EntityTags
@@ -346,10 +291,11 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

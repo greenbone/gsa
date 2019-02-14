@@ -28,30 +28,17 @@ import SelectionType from 'web/utils/selectiontype';
 
 import TagsSvgIcon from './tagssvgicon';
 
-const TagsIcon = ({
-  active = true,
-  selectionType,
-  title,
-  ...other
-}) => {
+const TagsIcon = ({active = true, selectionType, title, ...other}) => {
   if (!isDefined(title)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       title = _('Add tag to page contents');
-    }
-    else if (selectionType === SelectionType.SELECTION_USER) {
+    } else if (selectionType === SelectionType.SELECTION_USER) {
       title = _('Add tag to selection');
-    }
-    else if (selectionType === SelectionType.SELECTION_FILTER) {
+    } else if (selectionType === SelectionType.SELECTION_FILTER) {
       title = _('Add tag to filtered');
     }
   }
-  return (
-    <TagsSvgIcon
-      {...other}
-      active={active}
-      title={title}
-    />
-  );
+  return <TagsSvgIcon {...other} active={active} title={title} />;
 };
 
 TagsIcon.propTypes = {

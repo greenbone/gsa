@@ -19,15 +19,9 @@
 
 import React from 'react';
 
-const TabPanel = ({
-  children,
-}) => {
+const TabPanel = ({children}) => {
   if (React.Children.count(children) > 1) {
-    return (
-      <React.Fragment>
-        {children}
-      </React.Fragment>
-    );
+    return <React.Fragment>{children}</React.Fragment>;
   }
   return children;
 };

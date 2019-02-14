@@ -29,10 +29,7 @@ import {
   TasksSchedulesDisplay,
   TasksSchedulesTableDisplay,
 } from './schedulesdisplay';
-import {
-  TasksCvssDisplay,
-  TasksCvssTableDisplay,
- } from './cvssdisplay';
+import {TasksCvssDisplay, TasksCvssTableDisplay} from './cvssdisplay';
 import {
   TasksMostHighResultsDisplay,
   TasksMostHighResultsTableDisplay,

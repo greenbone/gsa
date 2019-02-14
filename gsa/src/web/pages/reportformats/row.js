@@ -48,57 +48,57 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 const Actions = compose(
   withCapabilities,
   withEntitiesActions,
-)(({
-  capabilities,
-  entity,
-  onReportFormatCloneClick,
-  onReportFormatDeleteClick,
-  onReportFormatDownloadClick,
-  onReportFormatEditClick,
-  onReportFormatVerifyClick,
-}) => (
-  <IconDivider
-    align={['center', 'center']}
-    grow
-  >
-    <TrashIcon
-      displayName={_('Report Format')}
-      name="report_format"
-      entity={entity}
-      onClick={onReportFormatDeleteClick}
-    />
-    <EditIcon
-      displayName={_('Report Format')}
-      name="report_format"
-      entity={entity}
-      onClick={onReportFormatEditClick}
-    />
-    <CloneIcon
-      displayName={_('Report Format')}
-      name="report_format"
-      entity={entity}
-      title={_('Clone Report Format')}
-      value={entity}
-      onClick={onReportFormatCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export Report Format')}
-      onClick={onReportFormatDownloadClick}
-    />
-    {capabilities.mayOp('verify_report_format') ?
-      <VerifyIcon
-        value={entity}
-        title={_('Verify Report Format')}
-        onClick={onReportFormatVerifyClick}
-      /> :
-      <Icon
-        img="verify_inactive.svg"
-        title={_('Permission to verify Report Format denied')}
+)(
+  ({
+    capabilities,
+    entity,
+    onReportFormatCloneClick,
+    onReportFormatDeleteClick,
+    onReportFormatDownloadClick,
+    onReportFormatEditClick,
+    onReportFormatVerifyClick,
+  }) => (
+    <IconDivider align={['center', 'center']} grow>
+      <TrashIcon
+        displayName={_('Report Format')}
+        name="report_format"
+        entity={entity}
+        onClick={onReportFormatDeleteClick}
       />
-    }
-  </IconDivider>
-));
+      <EditIcon
+        displayName={_('Report Format')}
+        name="report_format"
+        entity={entity}
+        onClick={onReportFormatEditClick}
+      />
+      <CloneIcon
+        displayName={_('Report Format')}
+        name="report_format"
+        entity={entity}
+        title={_('Clone Report Format')}
+        value={entity}
+        onClick={onReportFormatCloneClick}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export Report Format')}
+        onClick={onReportFormatDownloadClick}
+      />
+      {capabilities.mayOp('verify_report_format') ? (
+        <VerifyIcon
+          value={entity}
+          title={_('Verify Report Format')}
+          onClick={onReportFormatVerifyClick}
+        />
+      ) : (
+        <Icon
+          img="verify_inactive.svg"
+          title={_('Permission to verify Report Format denied')}
+        />
+      )}
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -124,31 +124,16 @@ const Row = ({
       displayName={_('Report Format')}
       onToggleDetailsClick={onToggleDetailsClick}
     >
-      {entity.summary &&
-        <Comment>({entity.summary})</Comment>
-      }
+      {entity.summary && <Comment>({entity.summary})</Comment>}
     </EntityNameTableData>
-    <TableData>
-      {entity.extension}
-    </TableData>
-    <TableData>
-      {entity.content_type}
-    </TableData>
+    <TableData>{entity.extension}</TableData>
+    <TableData>{entity.content_type}</TableData>
     <TableData flex="column">
-      <span>
-        {renderYesNo(entity.trust.value)}
-      </span>
-      {entity.trust.time &&
-        <span>({shortDate(entity.trust.time)})</span>
-      }
+      <span>{renderYesNo(entity.trust.value)}</span>
+      {entity.trust.time && <span>({shortDate(entity.trust.time)})</span>}
     </TableData>
-    <TableData>
-      {renderYesNo(entity.isActive())}
-    </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <TableData>{renderYesNo(entity.isActive())}</TableData>
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

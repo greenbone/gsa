@@ -35,8 +35,7 @@ const convert_checked = (value, props) => {
 
   if (value && isDefined(checkedValue)) {
     value = checkedValue;
-  }
-  else if (!value && isDefined(unCheckedValue)) {
+  } else if (!value && isDefined(unCheckedValue)) {
     value = unCheckedValue;
   }
   return value;
@@ -52,19 +51,12 @@ const CheckboxComponent = ({
 }) => (
   <StyledElement>
     <Divider>
-      <StyledInput
-        {...other}
-        disabled={disabled}
-        type="checkbox"
-      />
-      {isDefined(title) &&
-        <StyledTitle
-          data-testid="checkbox-title"
-          disabled={disabled}
-        >
+      <StyledInput {...other} disabled={disabled} type="checkbox" />
+      {isDefined(title) && (
+        <StyledTitle data-testid="checkbox-title" disabled={disabled}>
           {title}
         </StyledTitle>
-      }
+      )}
       {children}
     </Divider>
   </StyledElement>

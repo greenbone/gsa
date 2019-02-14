@@ -53,16 +53,14 @@ const SmbMethodPart = ({
 }) => {
   credentials = credentials.filter(smb_credential_filter);
   return (
-    <Layout
-      flex="column"
-      box
-      grow="1"
-    >
+    <Layout flex="column" box grow="1">
       <FormGroup title=" ">
         <span>
-          {_('Security note: The SMB protocol does not offer a ' +
-             'fingerprint to establish complete mutual trust. Thus a ' +
-             'man-in-the-middle attack can not be fully prevented.')}
+          {_(
+            'Security note: The SMB protocol does not offer a ' +
+              'fingerprint to establish complete mutual trust. Thus a ' +
+              'man-in-the-middle attack can not be fully prevented.',
+          )}
         </span>
       </FormGroup>
 

@@ -48,8 +48,7 @@ const AutoDeleteReportsGroup = ({
         name="auto_delete"
         value="keep"
         onChange={onChange}
-        title={_('Automatically delete oldest reports but always' +
-          ' keep newest')}
+        title={_('Automatically delete oldest reports but always keep newest')}
         checked={autoDelete === AUTO_DELETE_KEEP}
       />
       <Spinner
@@ -60,17 +59,13 @@ const AutoDeleteReportsGroup = ({
         disabled={autoDelete !== AUTO_DELETE_KEEP}
         onChange={onChange}
       />
-      <span>
-        {_('reports')}
-      </span>
+      <span>{_('reports')}</span>
     </Divider>
   </FormGroup>
 );
 
 AutoDeleteReportsGroup.propTypes = {
-  autoDelete: PropTypes.oneOf([
-    AUTO_DELETE_KEEP, AUTO_DELETE_NO,
-  ]),
+  autoDelete: PropTypes.oneOf([AUTO_DELETE_KEEP, AUTO_DELETE_NO]),
   autoDeleteData: PropTypes.number,
   onChange: PropTypes.func,
 };

@@ -53,29 +53,22 @@ const FilterDialog = ({
   const result_hosts_only = filter.get('result_hosts_only');
   return (
     <Layout flex="column">
-
       <FilterStringGroup
         name="filterstring"
         filter={filterstring}
         onChange={onFilterStringChange}
       />
 
-      {delta &&
+      {delta && (
         <DeltaResultsFilterGroup
           filter={filter}
           onChange={onFilterValueChange}
         />
-      }
+      )}
 
-      <ApplyOverridesGroup
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+      <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange} />
 
-      <AutoFpGroup
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+      <AutoFpGroup filter={filter} onChange={onFilterValueChange} />
 
       <FormGroup title={_('Only show hosts that have results')}>
         <Checkbox
@@ -93,26 +86,13 @@ const FilterDialog = ({
         onChange={onFilterValueChange}
       />
 
-      <SeverityLevelsGroup
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+      <SeverityLevelsGroup filter={filter} onChange={onFilterValueChange} />
 
-      <SolutionTypeGroup
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+      <SolutionTypeGroup filter={filter} onChange={onFilterValueChange} />
 
-      <FirstResultGroup
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+      <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
-      <ResultsPerPageGroup
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
-
+      <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
     </Layout>
   );
 };

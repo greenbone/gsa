@@ -46,48 +46,26 @@ const Row = ({
 }) => (
   <TableBody>
     <TableRow>
-      <TableData
-        rowSpan="2"
-      >
-        <RowDetailsToggle
-          name={entity.id}
-          onClick={onToggleDetailsClick}
-        >
+      <TableData rowSpan="2">
+        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
           {entity.name}
         </RowDetailsToggle>
         <div>{shorten(entity.file, 45)}</div>
-        <Comment text={entity.comment}/>
+        <Comment text={entity.comment} />
       </TableData>
+      <TableData>{na(entity.version)}</TableData>
+      <TableData>{na(entity.status)}</TableData>
+      <TableData>{na(entity.class)}</TableData>
+      <TableData>{longDate(entity.creationTime)}</TableData>
+      <TableData>{longDate(entity.modificationTime)}</TableData>
+      <TableData>{entity.cve_refs}</TableData>
       <TableData>
-        {na(entity.version)}
+        <SeverityBar severity={entity.severity} />
       </TableData>
-      <TableData>
-        {na(entity.status)}
-      </TableData>
-      <TableData>
-        {na(entity.class)}
-      </TableData>
-      <TableData>
-        {longDate(entity.creationTime)}
-      </TableData>
-      <TableData>
-        {longDate(entity.modificationTime)}
-      </TableData>
-      <TableData>
-        {entity.cve_refs}
-      </TableData>
-      <TableData>
-        <SeverityBar severity={entity.severity}/>
-      </TableData>
-      <ActionsComponent
-        {...props}
-        entity={entity}
-      />
+      <ActionsComponent {...props} entity={entity} />
     </TableRow>
     <TableRow>
-      <TableData colSpan="8">
-        {shorten(entity.title, 250)}
-      </TableData>
+      <TableData colSpan="8">{shorten(entity.title, 250)}</TableData>
     </TableRow>
   </TableBody>
 );

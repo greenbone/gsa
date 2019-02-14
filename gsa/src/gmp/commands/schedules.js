@@ -28,18 +28,12 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.schedules');
 
 class ScheduleCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'schedule', Schedule);
   }
 
   create(args) {
-    const {
-      name,
-      comment = '',
-      icalendar,
-      timezone,
-    } = args;
+    const {name, comment = '', icalendar, timezone} = args;
     log.debug('Creating new schedule', args);
     return this.action({
       cmd: 'create_schedule',
@@ -51,13 +45,7 @@ class ScheduleCommand extends EntityCommand {
   }
 
   save(args) {
-    const {
-      comment = '',
-      icalendar,
-      id,
-      name,
-      timezone,
-    } = args;
+    const {comment = '', icalendar, id, name, timezone} = args;
 
     const data = {
       cmd: 'save_schedule',
@@ -77,7 +65,6 @@ class ScheduleCommand extends EntityCommand {
 }
 
 class SchedulesCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'schedule', Schedule);
   }

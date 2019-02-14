@@ -24,11 +24,10 @@ import Theme from 'web/utils/theme';
 import Button from '../button';
 
 describe('Dialog Button tests', () => {
-
   test('should call click handler', () => {
     const handler = jest.fn();
 
-    const {element} = render(<Button onClick={handler}/>);
+    const {element} = render(<Button onClick={handler} />);
 
     fireEvent.click(element);
 
@@ -47,10 +46,11 @@ describe('Dialog Button tests', () => {
     const {element} = render(<Button loading={true} />);
 
     expect(element).toMatchSnapshot();
-    expect(element).toHaveStyleRule('background',
-      `${Theme.lightGreen} url(/img/loading.gif) center center no-repeat`);
+    expect(element).toHaveStyleRule(
+      'background',
+      `${Theme.lightGreen} url(/img/loading.gif) center center no-repeat`,
+    );
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

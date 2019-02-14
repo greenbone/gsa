@@ -32,7 +32,7 @@ import TextField from 'web/components/form/textfield';
 
 import Layout from 'web/components/layout/layout';
 
-const convertPort = value => value === '' ? value : parseInt(value);
+const convertPort = value => (value === '' ? value : parseInt(value));
 
 const PortRangeDialog = ({
   id,
@@ -41,7 +41,6 @@ const PortRangeDialog = ({
   onClose,
   onSave,
 }) => {
-
   const data = {
     id,
     port_range_start: '',
@@ -56,10 +55,7 @@ const PortRangeDialog = ({
       onSave={onSave}
       defaultValues={data}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
             <FormGroup title={_('Start')}>

@@ -49,42 +49,48 @@ export const renderRecurrence = ({
     case ReccurenceFrequency.MONTHLY:
       if (isDefined(monthdays)) {
         if (interval === 1) {
-          return _('Every month at days {{days}}',
-            {days: monthdays.join(', ')});
+          return _('Every month at days {{days}}', {
+            days: monthdays.join(', '),
+          });
         }
-        return _('Every {{interval}} month at days {{days}}',
-          {interval, days: monthdays.join(', ')});
-      }
-      else if (isDefined(weekdays)) {
+        return _('Every {{interval}} month at days {{days}}', {
+          interval,
+          days: monthdays.join(', '),
+        });
+      } else if (isDefined(weekdays)) {
         const weekday = weekdays.getSelectedWeekDay();
         const nth = weekdays.get(weekday);
         const localeData = _localeData();
         if (interval === 1) {
-          return _('{{nth}} {{weekday}} every month',
-            {nth: localeData.ordinal(nth), weekday: WEEKDAY[weekday]});
+          return _('{{nth}} {{weekday}} every month', {
+            nth: localeData.ordinal(nth),
+            weekday: WEEKDAY[weekday],
+          });
         }
         return _('{{nth}} {{weekday}} every {{interval}} month', {
           nth: localeData.ordinal(nth),
           weekday: WEEKDAY[weekday],
           interval,
         });
-      }
-      else if (interval === 1) {
+      } else if (interval === 1) {
         return _('Every month');
       }
       return _('Every {{interval}} months', {interval});
 
     case ReccurenceFrequency.WEEKLY:
       if (isDefined(weekdays)) {
-        const days = weekdays.entries()
+        const days = weekdays
+          .entries()
           .filter(([, value]) => value)
           .map(([day]) => WEEKDAY[day]);
 
         if (interval === 1) {
           return _('Every week on {{days}}', {days: days.join(', ')});
         }
-        return _('Every {{interval}} weeks on {{days}}',
-          {interval, days: days.join(', ')});
+        return _('Every {{interval}} weeks on {{days}}', {
+          interval,
+          days: days.join(', '),
+        });
       }
       if (interval === 1) {
         return _('Every week');
@@ -121,9 +127,9 @@ export const renderRecurrence = ({
 };
 
 export const renderDuration = duration => {
-  return isDefined(duration) && duration.asSeconds() > 0 ?
-    duration.humanize() :
-    _('Entire Operation');
+  return isDefined(duration) && duration.asSeconds() > 0
+    ? duration.humanize()
+    : _('Entire Operation');
 };
 
 // vim: set ts=2 sw=2 tw=80:

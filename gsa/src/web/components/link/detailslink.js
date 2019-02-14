@@ -23,14 +23,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import Link from './link';
 
-const DetailsLink = ({
-  capabilities,
-  id,
-  type,
-  textOnly = false,
-  ...props
-}) => {
-
+const DetailsLink = ({capabilities, id, type, textOnly = false, ...props}) => {
   textOnly = textOnly || !capabilities.mayAccess(type);
 
   return (

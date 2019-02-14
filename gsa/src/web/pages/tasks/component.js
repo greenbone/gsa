@@ -39,9 +39,7 @@ import {
   filterEmptyScanConfig,
 } from 'gmp/models/scanconfig';
 
-import {
-  OPENVAS_DEFAULT_SCANNER_ID,
-} from 'gmp/models/scanner';
+import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
 
@@ -87,7 +85,6 @@ const sort_scan_configs = (scan_configs = []) => {
 };
 
 class TaskComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -106,28 +103,34 @@ class TaskComponent extends React.Component {
 
     this.handleReportImport = this.handleReportImport.bind(this);
     this.handleTaskResume = this.handleTaskResume.bind(this);
-    this.handleSaveAdvancedTaskWizard =
-      this.handleSaveAdvancedTaskWizard.bind(this);
+    this.handleSaveAdvancedTaskWizard = this.handleSaveAdvancedTaskWizard.bind(
+      this,
+    );
     this.handleSaveContainerTask = this.handleSaveContainerTask.bind(this);
-    this.handleSaveModifyTaskWizard =
-      this.handleSaveModifyTaskWizard.bind(this);
+    this.handleSaveModifyTaskWizard = this.handleSaveModifyTaskWizard.bind(
+      this,
+    );
     this.handleSaveTaskWizard = this.handleSaveTaskWizard.bind(this);
     this.handleTaskStart = this.handleTaskStart.bind(this);
     this.handleTaskStop = this.handleTaskStop.bind(this);
     this.handleTaskWizardNewClick = this.handleTaskWizardNewClick.bind(this);
 
     this.openAdvancedTaskWizard = this.openAdvancedTaskWizard.bind(this);
-    this.handleCloseAdvancedTaskWizard =
-      this.handleCloseAdvancedTaskWizard.bind(this);
+    this.handleCloseAdvancedTaskWizard = this.handleCloseAdvancedTaskWizard.bind(
+      this,
+    );
     this.openContainerTaskDialog = this.openContainerTaskDialog.bind(this);
-    this.handleCloseContainerTaskDialog =
-      this.handleCloseContainerTaskDialog.bind(this);
+    this.handleCloseContainerTaskDialog = this.handleCloseContainerTaskDialog.bind(
+      this,
+    );
     this.openReportImportDialog = this.openReportImportDialog.bind(this);
-    this.handleCloseReportImportDialog =
-      this.handleCloseReportImportDialog.bind(this);
+    this.handleCloseReportImportDialog = this.handleCloseReportImportDialog.bind(
+      this,
+    );
     this.openModifyTaskWizard = this.openModifyTaskWizard.bind(this);
-    this.handleCloseModifyTaskWizard =
-      this.handleCloseModifyTaskWizard.bind(this);
+    this.handleCloseModifyTaskWizard = this.handleCloseModifyTaskWizard.bind(
+      this,
+    );
     this.openStandardTaskDialog = this.openStandardTaskDialog.bind(this);
     this.openTaskDialog = this.openTaskDialog.bind(this);
     this.handleCloseTaskDialog = this.handleCloseTaskDialog.bind(this);
@@ -242,8 +245,9 @@ class TaskComponent extends React.Component {
       in_assets: task ? task.in_assets : undefined,
       auto_delete: task ? task.auto_delete : undefined,
       auto_delete_data: task ? task.auto_delete_data : undefined,
-      title: task ? _('Edit Container Task {{name}}', task) :
-        _('New Container Task'),
+      title: task
+        ? _('Edit Container Task {{name}}', task)
+        : _('New Container Task'),
     });
     this.handleInteraction();
   }
@@ -262,23 +266,23 @@ class TaskComponent extends React.Component {
 
     if (isDefined(data.id)) {
       const {onContainerSaved, onContainerSaveError} = this.props;
-      return this.cmd.saveContainer(data)
+      return this.cmd
+        .saveContainer(data)
         .then(onContainerSaved, onContainerSaveError)
         .then(() => this.closeContainerTaskDialog());
     }
 
     const {onContainerCreated, onContainerCreateError} = this.props;
-    return this.cmd.createContainer(data)
+    return this.cmd
+      .createContainer(data)
       .then(onContainerCreated, onContainerCreateError)
       .then(() => this.closeContainerTaskDialog());
   }
 
-
   openTaskDialog(task) {
     if (isDefined(task) && task.isContainer()) {
       this.openContainerTaskDialog(task);
-    }
-    else {
+    } else {
       this.openStandardTaskDialog(task);
     }
   }
@@ -304,19 +308,19 @@ class TaskComponent extends React.Component {
 
         const sorted_scan_configs = sort_scan_configs(scan_configs);
 
-        const canAccessSchedules = capabilities.mayAccess('schedules') &&
-          isDefined(task.schedule);
+        const canAccessSchedules =
+          capabilities.mayAccess('schedules') && isDefined(task.schedule);
         const schedule_id = canAccessSchedules ? task.schedule.id : UNSET_VALUE;
-        const schedule_periods = canAccessSchedules ? task.schedule_periods :
-          undefined;
+        const schedule_periods = canAccessSchedules
+          ? task.schedule_periods
+          : undefined;
 
         const data = {};
         if (task.isChangeable()) {
           data.config_id = isDefined(task.config) ? task.config.id : undefined;
           data.scanner_id = task.scanner.id;
           data.target_id = task.target.id;
-        }
-        else {
+        } else {
           data.config_id = UNSET_VALUE;
           data.scanner_id = UNSET_VALUE;
           data.target_id = UNSET_VALUE;
@@ -360,8 +364,7 @@ class TaskComponent extends React.Component {
           title: _('Edit Task {{name}}', task),
         });
       });
-    }
-    else {
+    } else {
       gmp.task.newTaskSettings().then(response => {
         const settings = response.data;
         let {
@@ -372,7 +375,8 @@ class TaskComponent extends React.Component {
           scanner_id = OPENVAS_DEFAULT_SCANNER_ID,
           scan_configs,
           config_id = FULL_AND_FAST_SCAN_CONFIG_ID,
-          alerts, scanners,
+          alerts,
+          scanners,
           schedules,
           tags,
         } = settings;
@@ -461,17 +465,14 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.wizard.runQuickFirstScan(data)
+    return gmp.wizard
+      .runQuickFirstScan(data)
       .then(onTaskWizardSaved, onTaskWizardError)
       .then(() => this.closeTaskWizard());
   }
 
-
   openAdvancedTaskWizard() {
-    const {
-      gmp,
-      timezone,
-    } = this.props;
+    const {gmp, timezone} = this.props;
 
     gmp.wizard.advancedTask().then(response => {
       const settings = response.data;
@@ -483,12 +484,21 @@ class TaskComponent extends React.Component {
 
       const {credentials} = settings;
 
-      const ssh_credential = selectSaveId(credentials,
-        settings.get('Default SSH Credential').value, '');
-      const smb_credential = selectSaveId(credentials,
-        settings.get('Default SMB Credential').value, '');
-      const esxi_credential = selectSaveId(credentials,
-        settings.get('Default ESXi Credential').value, '');
+      const ssh_credential = selectSaveId(
+        credentials,
+        settings.get('Default SSH Credential').value,
+        '',
+      );
+      const smb_credential = selectSaveId(
+        credentials,
+        settings.get('Default SMB Credential').value,
+        '',
+      );
+      const esxi_credential = selectSaveId(
+        credentials,
+        settings.get('Default ESXi Credential').value,
+        '',
+      );
 
       const now = date().tz(timezone);
 
@@ -533,16 +543,14 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.wizard.runQuickTask(data)
+    return gmp.wizard
+      .runQuickTask(data)
       .then(onAdvancedTaskWizardSaved, onAdvancedTaskWizardError)
       .then(() => this.closeAdvancedTaskWizard());
   }
 
   openModifyTaskWizard() {
-    const {
-      gmp,
-      timezone,
-    } = this.props;
+    const {gmp, timezone} = this.props;
 
     gmp.wizard.modifyTask().then(response => {
       const settings = response.data;
@@ -576,7 +584,8 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.wizard.runModifyTask(data)
+    return gmp.wizard
+      .runModifyTask(data)
       .then(onModifyTaskWizardSaved, onModifyTaskWizardError)
       .then(() => this.closeModifyTaskWizard());
   }
@@ -604,7 +613,8 @@ class TaskComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.report.import(data)
+    return gmp.report
+      .import(data)
       .then(onReportImported, onReportImportError)
       .then(() => this.closeReportImportDialog());
   }
@@ -695,10 +705,7 @@ class TaskComponent extends React.Component {
           onSaved={onSaved}
           onSaveError={onSaveError}
         >
-          {({
-            save,
-            ...other
-          }) => (
+          {({save, ...other}) => (
             <React.Fragment>
               {children({
                 ...other,
@@ -714,23 +721,15 @@ class TaskComponent extends React.Component {
                 taskwizard: this.openTaskWizard,
               })}
 
-              {taskDialogVisible &&
-                <TargetComponent
-                  onCreated={this.handleTargetCreated}
-                >
+              {taskDialogVisible && (
+                <TargetComponent onCreated={this.handleTargetCreated}>
                   {({create: createtarget}) => (
-                    <AlertComponent
-                      onCreated={this.handleAlertCreated}
-                    >
-                      {({
-                        create: createalert,
-                      }) => (
+                    <AlertComponent onCreated={this.handleAlertCreated}>
+                      {({create: createalert}) => (
                         <ScheduleComponent
                           onCreated={this.handleScheduleCreated}
                         >
-                          {({
-                            create: createschedule,
-                          }) => (
+                          {({create: createschedule}) => (
                             <TaskDialog
                               alerts={alerts}
                               alert_ids={alert_ids}
@@ -769,8 +768,9 @@ class TaskComponent extends React.Component {
                               onClose={this.handleCloseTaskDialog}
                               onSave={d => {
                                 this.handleInteraction();
-                                return save(d)
-                                  .then(() => this.closeTaskDialog());
+                                return save(d).then(() =>
+                                  this.closeTaskDialog(),
+                                );
                               }}
                             />
                           )}
@@ -779,12 +779,12 @@ class TaskComponent extends React.Component {
                     </AlertComponent>
                   )}
                 </TargetComponent>
-              }
+              )}
             </React.Fragment>
           )}
         </EntityComponent>
 
-        {containerTaskDialogVisible &&
+        {containerTaskDialogVisible && (
           <ContainerTaskDialog
             task={task}
             name={name}
@@ -797,9 +797,9 @@ class TaskComponent extends React.Component {
             onClose={this.handleCloseContainerTaskDialog}
             onSave={this.handleSaveContainerTask}
           />
-        }
+        )}
 
-        {taskWizardVisible &&
+        {taskWizardVisible && (
           <TaskWizard
             hosts={hosts}
             port_list_id={port_list_id}
@@ -813,9 +813,9 @@ class TaskComponent extends React.Component {
             onSave={this.handleSaveTaskWizard}
             onNewClick={this.handleTaskWizardNewClick}
           />
-        }
+        )}
 
-        {advancedTaskWizardVisible &&
+        {advancedTaskWizardVisible && (
           <AdvancedTaskWizard
             credentials={credentials}
             scan_configs={scan_configs}
@@ -836,9 +836,9 @@ class TaskComponent extends React.Component {
             onClose={this.handleCloseAdvancedTaskWizard}
             onSave={this.handleSaveAdvancedTaskWizard}
           />
-        }
+        )}
 
-        {modifyTaskWizardVisible &&
+        {modifyTaskWizardVisible && (
           <ModifyTaskWizard
             start_date={start_date}
             tasks={tasks}
@@ -850,9 +850,9 @@ class TaskComponent extends React.Component {
             onClose={this.handleCloseModifyTaskWizard}
             onSave={this.handleSaveModifyTaskWizard}
           />
-        }
+        )}
 
-        {reportImportDialogVisible &&
+        {reportImportDialogVisible && (
           <ImportReportDialog
             newContainerTask={false}
             task_id={task_id}
@@ -860,7 +860,7 @@ class TaskComponent extends React.Component {
             onClose={this.handleCloseReportImportDialog}
             onSave={this.handleReportImport}
           />
-        }
+        )}
       </React.Fragment>
     );
   }

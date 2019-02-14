@@ -55,10 +55,7 @@ const ScpMethodPart = ({
 }) => {
   credentials = credentials.filter(ssh_credential_filter);
   return (
-    <Layout
-      flex="column"
-      grow="1"
-    >
+    <Layout flex="column" grow="1">
       <FormGroup title={_('Credential')}>
         <Divider>
           <Select

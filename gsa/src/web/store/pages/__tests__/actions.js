@@ -19,9 +19,7 @@
 import {pageFilter, CHANGE_PAGE_FILTER} from '../actions';
 
 describe('page actions tests', () => {
-
   describe('changeFilter action tests', () => {
-
     test('should create a page filter action for a page', () => {
       const action = pageFilter('foo', 'name~bar');
 

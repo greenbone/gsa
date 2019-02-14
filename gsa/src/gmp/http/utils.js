@@ -31,8 +31,7 @@ export const buildUrlParams = params => {
       if (argcount++) {
         uri += '&';
       }
-      uri += encodeURIComponent(key) + '=' +
-        encodeURIComponent(value);
+      uri += encodeURIComponent(key) + '=' + encodeURIComponent(value);
     }
   }
   return uri;
@@ -43,8 +42,7 @@ export const buildServerUrl = (server, path = '', protocol) => {
     if (!protocol.endsWith(':')) {
       protocol += ':';
     }
-  }
-  else {
+  } else {
     protocol = window.location.protocol;
   }
   return protocol + '//' + server + '/' + path;

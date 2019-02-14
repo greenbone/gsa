@@ -90,11 +90,11 @@ const FormGroup = ({
   titleSize = parseInt(titleSize);
 
   if (title && !isDefined(size)) {
-      size = 12 - titleSize - titleOffset;
+    size = 12 - titleSize - titleOffset;
   }
   return (
     <FormGroupLayout>
-      {isDefined(title) &&
+      {isDefined(title) && (
         <Title
           data-testid="formgroup-title"
           titleOffset={titleOffset}
@@ -102,7 +102,7 @@ const FormGroup = ({
         >
           {title}
         </Title>
-      }
+      )}
       <FormGroupContent
         {...other}
         data-testid="formgroup-content"

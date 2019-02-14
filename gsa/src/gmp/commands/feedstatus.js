@@ -26,22 +26,15 @@ import date, {duration} from '../models/date';
 
 import HttpCommand from './http';
 
-const convertVersion = version => version.slice(0, 8) + 'T' +
-  version.slice(8, 12);
+const convertVersion = version =>
+  version.slice(0, 8) + 'T' + version.slice(8, 12);
 
 export const NVT_FEED = 'NVT';
 export const CERT_FEED = 'CERT';
 export const SCAP_FEED = 'SCAP';
 
 class Feed {
-
-  constructor({
-    type,
-    name,
-    description,
-    status,
-    version,
-  }) {
+  constructor({type, name, description, status, version}) {
     this.feed_type = type;
     this.name = name;
     this.description = description;
@@ -56,7 +49,6 @@ class Feed {
 }
 
 class FeedStatus extends HttpCommand {
-
   constructor(http) {
     super(http, {cmd: 'get_feeds'});
   }
@@ -64,8 +56,7 @@ class FeedStatus extends HttpCommand {
   readFeedInformation() {
     return this.httpGet().then(response => {
       const {data: envelope} = response;
-      const {get_feeds_response: feedsresponse} =
-        envelope.get_feeds;
+      const {get_feeds_response: feedsresponse} = envelope.get_feeds;
 
       const feeds = map(feedsresponse.feed, feed => new Feed(feed));
 

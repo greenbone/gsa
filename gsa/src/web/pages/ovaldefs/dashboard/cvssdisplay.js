@@ -31,8 +31,8 @@ export const OvaldefCvssDisplay = createDisplay({
   loaderComponent: OvaldefSeverityLoader,
   displayComponent: CvssDisplay,
   yLabel: _l('# of OVAL Defs'),
-  title: ({data: tdata}) => _('OVAL Definitions by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  title: ({data: tdata}) =>
+    _('OVAL Definitions by CVSS (Total: {{count}})', {count: tdata.total}),
   displayId: 'ovaldef-by-cvss',
   displayName: 'OvaldefCvssDisplay',
   filtersFilter: OVALDEFS_FILTER_FILTER,
@@ -41,12 +41,9 @@ export const OvaldefCvssDisplay = createDisplay({
 export const OvaldefCvssTableDisplay = createDisplay({
   loaderComponent: OvaldefSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [
-    _l('Severity'),
-    _l('# of OVAL Defs'),
-  ],
-  title: ({data: tdata}) => _('OVAL Definitions by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  dataTitles: [_l('Severity'), _l('# of OVAL Defs')],
+  title: ({data: tdata}) =>
+    _('OVAL Definitions by CVSS (Total: {{count}})', {count: tdata.total}),
   filtersFilter: OVALDEFS_FILTER_FILTER,
   displayId: 'ovaldef-by-cvss-table',
   displayName: 'OvaldefsCvssTableDisplay',

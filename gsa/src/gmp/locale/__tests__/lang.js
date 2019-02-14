@@ -23,7 +23,6 @@ import {getLocale as getDateLocale} from '../date';
 import {_, setLocale, getLocale, onLanguageChange, _l} from '../lang';
 
 describe('setLocale tests', () => {
-
   test('should change the i18n locale', () => {
     setLocale('en');
     expect(getLocale()).toEqual('en');
@@ -92,21 +91,17 @@ describe('setLocale tests', () => {
     expect(getLocale()).toEqual('de');
     expect(getDateLocale()).toEqual('de');
   });
-
 });
 
 describe('translate tests', () => {
-
   test('should return english "translation"', () => {
     setLocale('en');
 
     expect(_('Foo')).toEqual('Foo');
   });
-
 });
 
 describe('translateLazy tests', () => {
-
   test('should lazy translate', () => {
     setLocale('en');
 
@@ -115,7 +110,6 @@ describe('translateLazy tests', () => {
     expect('' + _l('Foo')).toEqual('Foo');
     expect(`${_l('Foo')}`).toEqual('Foo');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

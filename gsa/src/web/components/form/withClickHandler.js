@@ -26,24 +26,16 @@ import {noop_convert} from './withChangeHandler.js';
 const props_value = (event, props) => props.value;
 
 const withClickHandler = (options = {}) => Component => {
-  const {
-    convert_func = noop_convert,
-    value_func = props_value,
-  } = options;
+  const {convert_func = noop_convert, value_func = props_value} = options;
 
-  const ClickHandler = ({
-    onClick,
-    convert = convert_func,
-    ...props
-  }) => {
-
+  const ClickHandler = ({onClick, convert = convert_func, ...props}) => {
     const handleClick = event => {
       if (onClick) {
         onClick(convert(value_func(event, props), props), props.name);
       }
     };
 
-    return <Component {...props} onClick={handleClick}/>;
+    return <Component {...props} onClick={handleClick} />;
   };
 
   ClickHandler.propTypes = {

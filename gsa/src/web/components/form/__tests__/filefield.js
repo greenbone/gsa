@@ -23,65 +23,43 @@ import {render, fireEvent} from 'web/utils/testing';
 import FileField from '../filefield';
 
 describe('FileField tests', () => {
-
   test('should render', () => {
-    const {element} = render(
-      <FileField/>
-    );
+    const {element} = render(<FileField />);
     expect(element).toMatchSnapshot();
   });
 
   test('should render in disabled state', () => {
-    const {element} = render(
-      <FileField
-        disabled={true}
-      />
-    );
+    const {element} = render(<FileField disabled={true} />);
     expect(element).toMatchSnapshot();
   });
 
   test('should call change handler with file', () => {
     const onChange = jest.fn();
 
-    const {element} = render(
-      <FileField
-        onChange={onChange}
-      />
-     );
+    const {element} = render(<FileField onChange={onChange} />);
 
-     fireEvent.change(element, {target: {files: ['bar']}});
+    fireEvent.change(element, {target: {files: ['bar']}});
 
-     expect(onChange).toHaveBeenCalledWith('bar', undefined);
+    expect(onChange).toHaveBeenCalledWith('bar', undefined);
   });
 
   test('should call change handler with file and name', () => {
     const onChange = jest.fn();
 
-    const {element} = render(
-      <FileField
-        name="foo"
-        onChange={onChange}
-      />
-     );
+    const {element} = render(<FileField name="foo" onChange={onChange} />);
 
-     fireEvent.change(element, {target: {files: ['bar']}});
+    fireEvent.change(element, {target: {files: ['bar']}});
 
-     expect(onChange).toHaveBeenCalledWith('bar', 'foo');
+    expect(onChange).toHaveBeenCalledWith('bar', 'foo');
   });
 
   test('should not call change handler if disabled', () => {
     const onChange = jest.fn();
 
-    const {element} = render(
-      <FileField
-        disabled={true}
-        onChange={onChange}
-      />
-     );
+    const {element} = render(<FileField disabled={true} onChange={onChange} />);
 
-     fireEvent.change(element, {target: {files: ['bar']}});
+    fireEvent.change(element, {target: {files: ['bar']}});
 
-     expect(onChange).not.toHaveBeenCalled();
+    expect(onChange).not.toHaveBeenCalled();
   });
-
 });

@@ -39,8 +39,7 @@ export const DASHBOARD_SETTINGS_RESET_REQUEST =
   'DASHBOARD_SETTINGS_RESET_REQUEST';
 export const DASHBOARD_SETTINGS_RESET_SUCCESS =
   'DASHBOARD_SETTINGS_RESET_SUCCESS';
-export const DASHBOARD_SETTINGS_RESET_ERROR =
-  'DASHBOARD_SETTINGS_RESET_ERROR';
+export const DASHBOARD_SETTINGS_RESET_ERROR = 'DASHBOARD_SETTINGS_RESET_ERROR';
 
 /**
  * Create a load dashboard settings success action
@@ -52,8 +51,11 @@ export const DASHBOARD_SETTINGS_RESET_ERROR =
  *
  * @returns {Object} The action object
  */
-export const loadDashboardSettingsSuccess = (id, settings, defaultSettings) =>
-({
+export const loadDashboardSettingsSuccess = (
+  id,
+  settings,
+  defaultSettings,
+) => ({
   type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
   id,
   settings,
@@ -122,19 +124,23 @@ export const loadSettings = gmp => (id, defaults) => (dispatch, getState) => {
 
   dispatch(loadDashboardSettingsRequest(id));
 
-  return gmp.dashboard.getSetting(id).then(
-    ({data}) => dispatch(loadDashboardSettingsSuccess(id, data, defaults)),
-    error => dispatch(loadDashboardSettingsError(id, error)),
-  );
+  return gmp.dashboard
+    .getSetting(id)
+    .then(
+      ({data}) => dispatch(loadDashboardSettingsSuccess(id, data, defaults)),
+      error => dispatch(loadDashboardSettingsError(id, error)),
+    );
 };
 
 export const saveSettings = gmp => (id, settings) => dispatch => {
   dispatch(saveDashboardSettingsRequest(id, settings));
 
-  return gmp.dashboard.saveSetting(id, settings).then(
-    () => dispatch(saveDashboardSettingsSuccess(id)),
-    error => dispatch(saveDashboardSettingsError(id, error)),
-  );
+  return gmp.dashboard
+    .saveSetting(id, settings)
+    .then(
+      () => dispatch(saveDashboardSettingsSuccess(id)),
+      error => dispatch(saveDashboardSettingsError(id, error)),
+    );
 };
 
 export const resetSettings = gmp => id => (dispatch, getState) => {
@@ -144,10 +150,12 @@ export const resetSettings = gmp => id => (dispatch, getState) => {
 
   dispatch(resetDashboardSettingsRequest(id, defaults));
 
-  return gmp.dashboard.saveSetting(id, defaults).then(
-    () => dispatch(resetDashboardSettingsSuccess(id)),
-    error => dispatch(resetDashboardSettingsError(id, error)),
-  );
+  return gmp.dashboard
+    .saveSetting(id, defaults)
+    .then(
+      () => dispatch(resetDashboardSettingsSuccess(id)),
+      error => dispatch(resetDashboardSettingsError(id, error)),
+    );
 };
 
 // vim: set ts=2 sw=2 tw=80:

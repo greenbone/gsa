@@ -44,48 +44,45 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 
 import PropTypes from 'web/utils/proptypes';
 
-const Actions = withEntitiesActions(({
-  entity,
-  selectedDeltaReport,
-  onReportDeleteClick,
-  onReportDeltaSelect,
-}) => {
-  const {report} = entity;
-  const scanActive = isActive(report.scan_run_status);
+const Actions = withEntitiesActions(
+  ({entity, selectedDeltaReport, onReportDeleteClick, onReportDeltaSelect}) => {
+    const {report} = entity;
+    const scanActive = isActive(report.scan_run_status);
 
-  const title = scanActive ? _('Scan is active') : _('Delete Report');
+    const title = scanActive ? _('Scan is active') : _('Delete Report');
 
-  return (
-    <IconDivider
-      align={['center', 'center']}
-      grow
-    >
-      {isDefined(selectedDeltaReport) ?
-        entity.id === selectedDeltaReport.id ?
-          <DeltaIcon
-            active={false}
-            title={_('Report is selected for delta comparision')}
-          /> :
-          <DeltaSecondIcon
-            title={_('Select Report for delta comparision')}
-            value={entity}
-            onClick={onReportDeltaSelect}
-          /> :
+    return (
+      <IconDivider align={['center', 'center']} grow>
+        {isDefined(selectedDeltaReport) ? (
+          entity.id === selectedDeltaReport.id ? (
+            <DeltaIcon
+              active={false}
+              title={_('Report is selected for delta comparision')}
+            />
+          ) : (
+            <DeltaSecondIcon
+              title={_('Select Report for delta comparision')}
+              value={entity}
+              onClick={onReportDeltaSelect}
+            />
+          )
+        ) : (
           <DeltaIcon
             title={_('Select Report for delta comparision')}
             value={entity}
             onClick={onReportDeltaSelect}
           />
-      }
-      <DeleteIcon
-        active={!scanActive}
-        value={entity}
-        title={title}
-        onClick={scanActive ? undefined : onReportDeleteClick}
-      />
-    </IconDivider>
-  );
-});
+        )}
+        <DeleteIcon
+          active={!scanActive}
+          value={entity}
+          title={title}
+          onClick={scanActive ? undefined : onReportDeleteClick}
+        />
+      </IconDivider>
+    );
+  },
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -108,9 +105,10 @@ const Row = ({
 
   if (isDefined(task)) {
     if (task.isContainer()) {
-      status = status === TASK_STATUS.running ?
-        TASK_STATUS.uploading :
-        TASK_STATUS.container;
+      status =
+        status === TASK_STATUS.running
+          ? TASK_STATUS.uploading
+          : TASK_STATUS.container;
     }
     progress = task.progress;
   }
@@ -118,55 +116,32 @@ const Row = ({
   return (
     <TableRow>
       <TableData>
-        <DetailsLink
-          type="report"
-          id={entity.id}
-          textOnly={!links}
-        >
+        <DetailsLink type="report" id={entity.id} textOnly={!links}>
           {longDate(report.timestamp)}
         </DetailsLink>
       </TableData>
       <TableData>
-        <StatusBar
-          status={status}
-          progress={progress}
-        />
+        <StatusBar status={status} progress={progress} />
       </TableData>
       <TableData>
-        <DetailsLink
-          type="task"
-          id={entity.task.id}
-          textOnly={!links}
-        >
+        <DetailsLink type="task" id={entity.task.id} textOnly={!links}>
           {entity.task.name}
         </DetailsLink>
       </TableData>
       <TableData>
-        <SeverityBar severity={entity.report.severity.filtered}/>
+        <SeverityBar severity={entity.report.severity.filtered} />
       </TableData>
-      <TableData align="end">
-        {report.result_count.hole.filtered}
-      </TableData>
-      <TableData align="end">
-        {report.result_count.warning.filtered}
-      </TableData>
-      <TableData align="end">
-        {report.result_count.info.filtered}
-      </TableData>
-      <TableData align="end">
-        {report.result_count.log.filtered}
-      </TableData>
+      <TableData align="end">{report.result_count.hole.filtered}</TableData>
+      <TableData align="end">{report.result_count.warning.filtered}</TableData>
+      <TableData align="end">{report.result_count.info.filtered}</TableData>
+      <TableData align="end">{report.result_count.log.filtered}</TableData>
       <TableData align="end">
         {report.result_count.false_positive.filtered}
       </TableData>
-      <ActionsComponent
-        {...props}
-        entity={entity}
-      />
+      <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );
 };
-
 
 Row.propTypes = {
   actionsComponent: PropTypes.component,

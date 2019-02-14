@@ -47,23 +47,13 @@ const Labels = ({
     outerRadiusY={outerRadiusY}
     pieValue={d => d.value}
   >
-    {({
-      data: arcData,
-      index,
-      startAngle,
-      endAngle,
-      x,
-      y,
-    }) => {
+    {({data: arcData, index, startAngle, endAngle, x, y}) => {
       const angleAbs = Math.abs(startAngle - endAngle);
       if (angleAbs < MIN_ANGLE_FOR_LABELS) {
         return null;
       }
       return (
-        <ToolTip
-          key={index}
-          content={arcData.toolTip}
-        >
+        <ToolTip key={index} content={arcData.toolTip}>
           {({targetRef, hide, show}) => (
             <Label
               x={x}

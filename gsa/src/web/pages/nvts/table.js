@@ -98,12 +98,13 @@ const Header = ({
         </TableHead>
         <TableHead width="1%">
           <Layout align="center">
-            {sort ?
+            {sort ? (
               <Sort by="solution_type" onClick={onSortChange}>
-                <SolutionTypeSvgIcon title={_('Solution type')}/>
-              </Sort> :
-              <SolutionTypeSvgIcon title={_('Solution type')}/>
-            }
+                <SolutionTypeSvgIcon title={_('Solution type')} />
+              </Sort>
+            ) : (
+              <SolutionTypeSvgIcon title={_('Solution type')} />
+            )}
           </Layout>
         </TableHead>
         <TableHead

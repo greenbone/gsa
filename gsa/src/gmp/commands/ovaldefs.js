@@ -29,14 +29,12 @@ import Ovaldef from '../models/ovaldef.js';
 const info_filter = info => isDefined(info.ovaldef);
 
 class OvaldefCommand extends InfoEntityCommand {
-
   constructor(http) {
     super(http, 'ovaldef', Ovaldef);
   }
 }
 
 class OvaldefsCommand extends InfoEntitiesCommand {
-
   constructor(http) {
     super(http, 'ovaldef', Ovaldef, info_filter);
   }

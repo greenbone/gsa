@@ -57,157 +57,108 @@ const Pre = styled.pre`
   word-wrap: normal;
 `;
 
-const ResultDetails = ({
-    className,
-    links = true,
-    entity,
-  }) => {
-
+const ResultDetails = ({className, links = true, entity}) => {
   const result = entity;
 
   const {nvt} = result;
   const {oid, tags} = nvt;
 
   const is_oval = isDefined(oid) && oid.startsWith('oval:');
-  const has_detection = isDefined(result.detection) &&
-    isDefined(result.detection.result);
+  const has_detection =
+    isDefined(result.detection) && isDefined(result.detection.result);
 
-  const detection_details = has_detection ? result.detection.result.details :
-    undefined;
+  const detection_details = has_detection
+    ? result.detection.result.details
+    : undefined;
 
   return (
-    <Layout
-      flex="column"
-      grow="1"
-      className={className}
-    >
-
-      <DetailsBlock
-        title={_('Summary')}
-      >
-        <P>
-          {tags.summary}
-        </P>
+    <Layout flex="column" grow="1" className={className}>
+      <DetailsBlock title={_('Summary')}>
+        <P>{tags.summary}</P>
       </DetailsBlock>
 
-      <DetailsBlock
-        title={_('Detection Result')}
-      >
-        {!isEmpty(result.description) && result.description.length > 1 ?
-          (
-            <Pre>
-              {result.description}
-            </Pre>
-          ) : _('Vulnerability was detected according to the ' +
-            'Detection Method.')
-        }
+      <DetailsBlock title={_('Detection Result')}>
+        {!isEmpty(result.description) && result.description.length > 1 ? (
+          <Pre>{result.description}</Pre>
+        ) : (
+          _(
+            'Vulnerability was detected according to the ' +
+              'Detection Method.',
+          )
+        )}
       </DetailsBlock>
 
-      {isDefined(tags.impact) && tags.impact !== TAG_NA &&
-        <DetailsBlock
-          title={_('Impact')}
-        >
-          <P>
-            {tags.impact}
-          </P>
+      {isDefined(tags.impact) && tags.impact !== TAG_NA && (
+        <DetailsBlock title={_('Impact')}>
+          <P>{tags.impact}</P>
         </DetailsBlock>
-      }
+      )}
 
-      <Solution
-        solution={tags.solution}
-        solutionType={tags.solution_type}
-      />
+      <Solution solution={tags.solution} solutionType={tags.solution_type} />
 
-      {isDefined(tags.affected) && tags.affected !== TAG_NA &&
-        <DetailsBlock
-          title={_('Affected Software/OS')}
-        >
-          <P>
-            {tags.affected}
-          </P>
+      {isDefined(tags.affected) && tags.affected !== TAG_NA && (
+        <DetailsBlock title={_('Affected Software/OS')}>
+          <P>{tags.affected}</P>
         </DetailsBlock>
-      }
+      )}
 
-      {isDefined(tags.insight) && tags.insight !== TAG_NA &&
-        <DetailsBlock
-          title={_('Insight')}
-        >
-          <P>
-            {tags.insight}
-          </P>
+      {isDefined(tags.insight) && tags.insight !== TAG_NA && (
+        <DetailsBlock title={_('Insight')}>
+          <P>{tags.insight}</P>
         </DetailsBlock>
-      }
+      )}
 
-      <DetailsBlock
-        title={_('Detection Method')}
-      >
+      <DetailsBlock title={_('Detection Method')}>
         <Layout flex="column">
-          <Layout>
-            {tags.vuldetect}
-          </Layout>
+          <Layout>{tags.vuldetect}</Layout>
           <InfoTable>
             <colgroup>
-              <Col width="10%"/>
-              <Col width="90%"/>
+              <Col width="10%" />
+              <Col width="90%" />
             </colgroup>
             <TableBody>
               <TableRow>
-                <TableData>
-                  {_('Details: ')}
-                </TableData>
+                <TableData>{_('Details: ')}</TableData>
                 <TableData>
                   {is_oval && (
                     <DetailsLink
                       type="ovaldef"
                       id={oid}
-                      title={_('View Details of OVAL Definition {{oid}}',
-                        {oid})}
+                      title={_('View Details of OVAL Definition {{oid}}', {
+                        oid,
+                      })}
                       textOnly={!links}
                     >
                       {oid}
                     </DetailsLink>
                   )}
-                  {isDefined(oid) &&
-                      oid.startsWith('1.3.6.1.4.1.25623.1.0.') && (
-                        <DetailsLink
-                          type="nvt"
-                          id={oid}
-                          textOnly={!links}
-                        >
-                          {renderNvtName(oid, nvt.name)}
-                          {' OID: ' + oid}
-                        </DetailsLink>
-                      )}
+                  {isDefined(oid) && oid.startsWith('1.3.6.1.4.1.25623.1.0.') && (
+                    <DetailsLink type="nvt" id={oid} textOnly={!links}>
+                      {renderNvtName(oid, nvt.name)}
+                      {' OID: ' + oid}
+                    </DetailsLink>
+                  )}
                   {!isDefined(oid) &&
-                    _('No details available for this method.')
-                  }
+                    _('No details available for this method.')}
                 </TableData>
               </TableRow>
-              {!isEmpty(result.scan_nvt_version) &&
+              {!isEmpty(result.scan_nvt_version) && (
                 <TableRow>
-                  <TableData>
-                    {_('Version used: ')}
-                  </TableData>
-                  <TableData>
-                    {result.scan_nvt_version}
-                  </TableData>
+                  <TableData>{_('Version used: ')}</TableData>
+                  <TableData>{result.scan_nvt_version}</TableData>
                 </TableRow>
-              }
+              )}
             </TableBody>
           </InfoTable>
         </Layout>
       </DetailsBlock>
 
-      {has_detection &&
-        <DetailsBlock
-          title={_('Product Detection Result')}
-        >
+      {has_detection && (
+        <DetailsBlock title={_('Product Detection Result')}>
           <InfoTable>
             <TableBody>
               <TableRow>
-                <TableData>
-                  {_('Product')}
-                </TableData>
+                <TableData>{_('Product')}</TableData>
                 <TableData>
                   <DetailsLink
                     type="cpe"
@@ -219,29 +170,26 @@ const ResultDetails = ({
                 </TableData>
               </TableRow>
               <TableRow>
-                <TableData>
-                  {_('Method')}
-                </TableData>
+                <TableData>{_('Method')}</TableData>
                 <TableData>
                   <DetailsLink
                     id={detection_details.source_oid}
                     type={
-                      detection_details.source_oid.startsWith('CVE-') ?
-                        'cve' : 'nvt'
+                      detection_details.source_oid.startsWith('CVE-')
+                        ? 'cve'
+                        : 'nvt'
                     }
                     textOnly={!links}
                   >
-                    {
-                      detection_details.source_name + ' (OID: ' +
-                        detection_details.source_oid + ')'
-                    }
+                    {detection_details.source_name +
+                      ' (OID: ' +
+                      detection_details.source_oid +
+                      ')'}
                   </DetailsLink>
                 </TableData>
               </TableRow>
               <TableRow>
-                <TableData>
-                  {_('Log')}
-                </TableData>
+                <TableData>{_('Log')}</TableData>
                 <TableData>
                   <DetailsLink
                     type="result"
@@ -255,13 +203,9 @@ const ResultDetails = ({
             </TableBody>
           </InfoTable>
         </DetailsBlock>
-      }
+      )}
 
-      <References
-        links={links}
-        nvt={nvt}
-      />
-
+      <References links={links} nvt={nvt} />
     </Layout>
   );
 };

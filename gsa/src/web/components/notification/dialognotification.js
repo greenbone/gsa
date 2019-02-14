@@ -31,7 +31,6 @@ import DialogTitle from 'web/components/dialog/title';
 import ScrollableContent from 'web/components/dialog/scrollablecontent';
 
 class DialogNotification extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -87,16 +86,9 @@ class DialogNotification extends React.Component {
           showMessage: this.handleShowMessage,
           showSuccessMessage: this.handleShowSuccessMessage,
         })}
-        {this.isDialogOpen() &&
-          <Dialog
-            width="400px"
-            onClose={this.handleDialogClose}
-          >
-            {({
-              close,
-              moveProps,
-              heightProps,
-            }) => (
+        {this.isDialogOpen() && (
+          <Dialog width="400px" onClose={this.handleDialogClose}>
+            {({close, moveProps, heightProps}) => (
               <DialogContent>
                 <DialogTitle
                   title={title}
@@ -106,14 +98,11 @@ class DialogNotification extends React.Component {
                 <ScrollableContent {...heightProps}>
                   {message}
                 </ScrollableContent>
-                <DialogFooter
-                  title={_('Close')}
-                  onClick={close}
-                />
+                <DialogFooter title={_('Close')} onClick={close} />
               </DialogContent>
             )}
           </Dialog>
-        }
+        )}
       </React.Fragment>
     );
   }

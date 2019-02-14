@@ -54,7 +54,6 @@ const createRootState = (state = {byId: {}}) => ({
 });
 
 describe('loadDashboardSettingsRequest tests', () => {
-
   test('should create a load dashboard settings request action', () => {
     const id = 'a1';
 
@@ -63,11 +62,9 @@ describe('loadDashboardSettingsRequest tests', () => {
       type: DASHBOARD_SETTINGS_LOADING_REQUEST,
     });
   });
-
 });
 
 describe('loadDashboardSettingsSuccess tests', () => {
-
   test('should create an action after receiving dashboard settings', () => {
     const id = 'a1';
     const data = {foo: 'bar'};
@@ -78,18 +75,18 @@ describe('loadDashboardSettingsSuccess tests', () => {
       foo: 'bar',
     };
 
-    expect(loadDashboardSettingsSuccess(id, settings, defaultSettings)).toEqual({
-      settings,
-      id,
-      type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
-      defaultSettings,
-    });
+    expect(loadDashboardSettingsSuccess(id, settings, defaultSettings)).toEqual(
+      {
+        settings,
+        id,
+        type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
+        defaultSettings,
+      },
+    );
   });
-
 });
 
 describe('loadDashboardSettingsError tests', () => {
-
   test('should create an action to receive an error during loading', () => {
     const id = 'a1';
     const error = 'An error occured';
@@ -99,11 +96,9 @@ describe('loadDashboardSettingsError tests', () => {
       type: DASHBOARD_SETTINGS_LOADING_ERROR,
     });
   });
-
 });
 
 describe('saveDashboardSettingsRequest tests', () => {
-
   test('should create a save dashboard settings request action', () => {
     const id = 'a1';
     const items = ['a', 'b'];
@@ -117,11 +112,9 @@ describe('saveDashboardSettingsRequest tests', () => {
       settings,
     });
   });
-
 });
 
 describe('saveDashboardSettingsSuccess tests', () => {
-
   test('should create a save dashboard settings success action', () => {
     const id = 'a1';
     expect(saveDashboardSettingsSuccess(id)).toEqual({
@@ -129,11 +122,9 @@ describe('saveDashboardSettingsSuccess tests', () => {
       id,
     });
   });
-
 });
 
 describe('saveDashboardSettingsError tests', () => {
-
   test('should create a save dashboard setting error action', () => {
     const id = 'a1';
     const error = 'An error';
@@ -144,11 +135,9 @@ describe('saveDashboardSettingsError tests', () => {
       id,
     });
   });
-
 });
 
 describe('setDashboardSettingDefaults', () => {
-
   test('should create an action to set dashboard setting defaults', () => {
     const id = 'a1';
     const defaults = {
@@ -160,11 +149,9 @@ describe('setDashboardSettingDefaults', () => {
       defaults,
     });
   });
-
 });
 
 describe('resetDashboardSettingsRequest tests', () => {
-
   test('should create a reset dashboard settings request action', () => {
     const id = 'a1';
     const settings = {
@@ -176,11 +163,9 @@ describe('resetDashboardSettingsRequest tests', () => {
       settings,
     });
   });
-
 });
 
 describe('resetDashboardSettingsSuccess tests', () => {
-
   test('should create a reset dashboard settings success action', () => {
     const id = 'a1';
     expect(resetDashboardSettingsSuccess(id)).toEqual({
@@ -188,11 +173,9 @@ describe('resetDashboardSettingsSuccess tests', () => {
       id,
     });
   });
-
 });
 
 describe('resetDashboardSettingsError tests', () => {
-
   test('should create a reset dashboard settings error action', () => {
     const id = 'a1';
     const error = 'an error';
@@ -202,26 +185,20 @@ describe('resetDashboardSettingsError tests', () => {
       error,
     });
   });
-
 });
 
 describe('loadSettings tests', () => {
-
   test('should load settings successfully', () => {
     const id = 'a1';
     const dispatch = jest.fn();
     const rootState = createRootState();
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
     const data = {
       foo: 'bar',
     };
 
-    const getSetting = jest
-      .fn()
-      .mockReturnValue(Promise.resolve({data}));
+    const getSetting = jest.fn().mockReturnValue(Promise.resolve({data}));
 
     const gmp = {
       dashboard: {
@@ -233,21 +210,27 @@ describe('loadSettings tests', () => {
     };
 
     expect(isFunction(loadSettings)).toEqual(true);
-    return loadSettings(gmp)(id, defaultSettings)(dispatch, getState).then(() => {
-      expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
-        id,
-        type: DASHBOARD_SETTINGS_LOADING_REQUEST,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
-        id,
-        settings: data,
-        type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
-        defaultSettings,
-      }]);
-      expect(getState).toHaveBeenCalled();
-      expect(getSetting).toHaveBeenCalledWith(id);
-    });
+    return loadSettings(gmp)(id, defaultSettings)(dispatch, getState).then(
+      () => {
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch.mock.calls[0]).toEqual([
+          {
+            id,
+            type: DASHBOARD_SETTINGS_LOADING_REQUEST,
+          },
+        ]);
+        expect(dispatch.mock.calls[1]).toEqual([
+          {
+            id,
+            settings: data,
+            type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
+            defaultSettings,
+          },
+        ]);
+        expect(getState).toHaveBeenCalled();
+        expect(getSetting).toHaveBeenCalledWith(id);
+      },
+    );
   });
 
   test('should not load settings if isLoading is true', () => {
@@ -258,17 +241,13 @@ describe('loadSettings tests', () => {
         [id]: true,
       },
     });
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
     const data = {
       foo: 'bar',
     };
 
-    const getSetting = jest
-      .fn()
-      .mockReturnValue(Promise.resolve({data}));
+    const getSetting = jest.fn().mockReturnValue(Promise.resolve({data}));
 
     const gmp = {
       dashboard: {
@@ -291,15 +270,11 @@ describe('loadSettings tests', () => {
     const id = 'a1';
     const dispatch = jest.fn();
     const rootState = createRootState();
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
     const error = 'An error';
 
-    const getSetting = jest
-      .fn()
-      .mockReturnValue(Promise.reject(error));
+    const getSetting = jest.fn().mockReturnValue(Promise.reject(error));
 
     const gmp = {
       dashboard: {
@@ -313,39 +288,37 @@ describe('loadSettings tests', () => {
     expect(isFunction(loadSettings)).toEqual(true);
     return loadSettings(gmp)(id, defaults)(dispatch, getState).then(() => {
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
-        id,
-        type: DASHBOARD_SETTINGS_LOADING_REQUEST,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
-        id,
-        error,
-        type: DASHBOARD_SETTINGS_LOADING_ERROR,
-      }]);
+      expect(dispatch.mock.calls[0]).toEqual([
+        {
+          id,
+          type: DASHBOARD_SETTINGS_LOADING_REQUEST,
+        },
+      ]);
+      expect(dispatch.mock.calls[1]).toEqual([
+        {
+          id,
+          error,
+          type: DASHBOARD_SETTINGS_LOADING_ERROR,
+        },
+      ]);
       expect(getState).toHaveBeenCalled();
       expect(getSetting).toHaveBeenCalled();
     });
   });
-
 });
 
 describe('saveSettings tests', () => {
-
   test('should save settings successfully', () => {
     const id = 'a1';
     const dispatch = jest.fn();
     const rootState = createRootState();
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
     const settings = {
       foo: 'bar',
     };
 
-    const saveSettingsPromise = jest
-      .fn()
-      .mockReturnValue(Promise.resolve());
+    const saveSettingsPromise = jest.fn().mockReturnValue(Promise.resolve());
 
     const gmp = {
       dashboard: {
@@ -374,9 +347,7 @@ describe('saveSettings tests', () => {
     const id = 'a1';
     const dispatch = jest.fn();
     const rootState = createRootState();
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
     const settings = {
       foo: 'bar',
@@ -410,11 +381,9 @@ describe('saveSettings tests', () => {
       expect(saveSettingsPromise).toHaveBeenCalledWith(id, settings);
     });
   });
-
 });
 
 describe('resetSettings tests', () => {
-
   test('should reset settings successfully', () => {
     const id = 'a1';
     const settings = {
@@ -427,13 +396,9 @@ describe('resetSettings tests', () => {
         [id]: settings,
       },
     });
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
-    const saveSettingsPromise = jest
-      .fn()
-      .mockReturnValue(Promise.resolve());
+    const saveSettingsPromise = jest.fn().mockReturnValue(Promise.resolve());
 
     const gmp = {
       dashboard: {
@@ -470,9 +435,7 @@ describe('resetSettings tests', () => {
         [id]: settings,
       },
     });
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
     const error = 'An error';
     const saveSettingsPromise = jest
@@ -502,7 +465,6 @@ describe('resetSettings tests', () => {
       expect(saveSettingsPromise).toHaveBeenCalledWith(id, settings);
     });
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

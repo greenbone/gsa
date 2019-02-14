@@ -45,10 +45,13 @@ const StyledSpinner = styled.span`
   overflow: hidden;
   padding: 0;
   vertical-align: middle;
-  ${props => props.disabled ? {
-    color: Theme.lightGray,
-    cursor: 'not-allowed',
-  } : undefined};
+  ${props =>
+    props.disabled
+      ? {
+          color: Theme.lightGray,
+          cursor: 'not-allowed',
+        }
+      : undefined};
 `;
 
 const StyledInput = styled(NumberField)`
@@ -61,9 +64,9 @@ const StyledInput = styled(NumberField)`
   background: none;
   color: inherit;
   padding: 0;
-  margin: .2em 0;
+  margin: 0.2em 0;
   vertical-align: middle;
-  margin-left: .4em;
+  margin-left: 0.4em;
   margin-right: 22px;
 `;
 
@@ -73,7 +76,7 @@ const SpinnerButton = styled.span`
   border-left: 1px solid ${Theme.darkGray};
   width: 16px;
   height: 50%;
-  font-size: .6em;
+  font-size: 0.6em;
   padding: 0;
   margin: 0;
   text-align: center;
@@ -87,24 +90,27 @@ const SpinnerButton = styled.span`
   user-select: none; /* don't select icon text on double click */
   &:hover {
     background-color: ${Theme.green};
-    color:${Theme.white};
+    color: ${Theme.white};
     text-decoration: none;
-  };
+  }
   &:active {
     background-color: ${Theme.white};
-    color:${Theme.darkGreen};
+    color: ${Theme.darkGreen};
     text-decoration: none;
-  };
-  ${props => props.disabled ? {
-    color: Theme.lightGray,
-    background: Theme.dialogGray,
-    cursor: 'not-allowed',
-    '&:hover': {
-      color: Theme.mediumGray,
-      background: Theme.lightGray,
-      cursor: 'not-allowed',
-    },
-  } : undefined}
+  }
+  ${props =>
+    props.disabled
+      ? {
+          color: Theme.lightGray,
+          background: Theme.dialogGray,
+          cursor: 'not-allowed',
+          '&:hover': {
+            color: Theme.mediumGray,
+            background: Theme.lightGray,
+            cursor: 'not-allowed',
+          },
+        }
+      : undefined}
 `;
 
 const SpinnerButtonUp = styled(SpinnerButton)`
@@ -118,7 +124,6 @@ const SpinnerButtonDown = styled(SpinnerButton)`
 `;
 
 class SpinnerComponent extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -189,7 +194,7 @@ class SpinnerComponent extends React.Component {
 
     const {value = 0} = this.props;
 
-    this.setAdjustedValue(parseFloat(value) + (step * direction));
+    this.setAdjustedValue(parseFloat(value) + step * direction);
   }
 
   handleDbClick(event) {
@@ -262,21 +267,10 @@ class SpinnerComponent extends React.Component {
 
   render() {
     const {value = 0} = this.props;
-    const {
-      size,
-      type,
-      min,
-      max,
-      disabled,
-      maxLength,
-      name,
-    } = this.props;
+    const {size, type, min, max, disabled, maxLength, name} = this.props;
     const precision = this.getPrecision();
     return (
-      <StyledSpinner
-        disabled={disabled}
-        onWheel={this.handleMouseWheel}
-      >
+      <StyledSpinner disabled={disabled} onWheel={this.handleMouseWheel}>
         <StyledInput
           data-testid="spinner-input"
           type={type}

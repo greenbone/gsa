@@ -28,7 +28,6 @@ import {parseDate} from 'gmp/parser';
 testModel(CertBundAdv, 'certbund');
 
 describe('CertBundAdv model tests', () => {
-
   test('should be instance of Info', () => {
     const certBundAdv = new CertBundAdv({});
 
@@ -84,10 +83,7 @@ describe('CertBundAdv model tests', () => {
       raw_data: {
         Advisory: {
           Description: {
-            Element: [
-              {TextBlock: 'foo'},
-              {TextBlock: 'bar'},
-            ],
+            Element: [{TextBlock: 'foo'}, {TextBlock: 'bar'}],
           },
         },
       },
@@ -270,5 +266,4 @@ describe('CertBundAdv model tests', () => {
 
     expect(certBundAdv.cves).toEqual(['foo']);
   });
-
 });

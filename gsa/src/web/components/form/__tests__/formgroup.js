@@ -23,11 +23,8 @@ import {render} from 'web/utils/testing';
 import FormGroup from '../formgroup';
 
 describe('FormGroup tests', () => {
-
   test('should render', () => {
-    const {element, getByTestId} = render(
-      <FormGroup/>
-    );
+    const {element, getByTestId} = render(<FormGroup />);
 
     expect(element).toHaveStyleRule('display', 'flex');
     expect(element).toHaveStyleRule('padding-bottom', '10px');
@@ -40,9 +37,7 @@ describe('FormGroup tests', () => {
   });
 
   test('should render with title', () => {
-    const {element, getByTestId} = render(
-      <FormGroup title="Foo"/>
-    );
+    const {element, getByTestId} = render(<FormGroup title="Foo" />);
 
     const titleElement = getByTestId('formgroup-title');
     expect(titleElement).toHaveTextContent('Foo');
@@ -54,7 +49,7 @@ describe('FormGroup tests', () => {
     const {getByTestId} = render(
       <FormGroup>
         <div>Foo</div>
-      </FormGroup>
+      </FormGroup>,
     );
 
     const content = getByTestId('formgroup-content');
@@ -62,36 +57,21 @@ describe('FormGroup tests', () => {
   });
 
   test('should allow to set size', () => {
-    const {getByTestId} = render(
-      <FormGroup
-        title="Foo"
-        size="6"
-      />
-    );
+    const {getByTestId} = render(<FormGroup title="Foo" size="6" />);
 
     const content = getByTestId('formgroup-content');
     expect(content).toHaveStyleRule('width', '50%');
   });
 
   test('should allow to set offset', () => {
-    const {getByTestId} = render(
-      <FormGroup
-        title="Foo"
-        offset="3"
-      />
-    );
+    const {getByTestId} = render(<FormGroup title="Foo" offset="3" />);
 
     const content = getByTestId('formgroup-content');
     expect(content).toHaveStyleRule('margin-left', '25%');
   });
 
   test('should allow to set title offset', () => {
-    const {getByTestId} = render(
-      <FormGroup
-        title="Foo"
-        titleOffset="2"
-      />
-    );
+    const {getByTestId} = render(<FormGroup title="Foo" titleOffset="2" />);
 
     const content = getByTestId('formgroup-content');
     expect(content).toHaveStyleRule('width', '66.66666667%');
@@ -102,12 +82,7 @@ describe('FormGroup tests', () => {
   });
 
   test('should allow to set title size', () => {
-    const {getByTestId} = render(
-      <FormGroup
-        title="Foo"
-        titleSize="4"
-      />
-    );
+    const {getByTestId} = render(<FormGroup title="Foo" titleSize="4" />);
 
     const content = getByTestId('formgroup-content');
     expect(content).toHaveStyleRule('width', '66.66666667%');
@@ -116,7 +91,6 @@ describe('FormGroup tests', () => {
     expect(titleElement).toHaveStyleRule('width', '33.33333333%');
     expect(titleElement).toHaveStyleRule('margin-left', '0');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

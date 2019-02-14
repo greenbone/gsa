@@ -16,11 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {
-  RootLogger,
-  DEFAULT_LOG_LEVEL,
-  LogLevels,
-} from '../log.js';
+import {RootLogger, DEFAULT_LOG_LEVEL, LogLevels} from '../log.js';
 import {isFunction} from 'util';
 
 let origConsole;
@@ -29,7 +25,6 @@ let testConsole;
 const getRootLogger = () => new RootLogger();
 
 describe('log tests', () => {
-
   beforeEach(() => {
     origConsole = global.console;
     testConsole = {
@@ -309,7 +304,6 @@ describe('log tests', () => {
     newLogger.error('foo');
     expect(testConsole.error).toHaveBeenCalledTimes(2);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

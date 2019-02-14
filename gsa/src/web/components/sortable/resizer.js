@@ -45,10 +45,9 @@ const ResizeIcon = styled.span`
 `;
 
 class Resizer extends React.Component {
-
   static propTypes = {
     onResize: PropTypes.func,
-  }
+  };
 
   constructor(...args) {
     super(...args);
@@ -61,7 +60,8 @@ class Resizer extends React.Component {
   }
 
   handleMouseDown(event) {
-    if (event.buttons & 1) { // eslint-disable-line no-bitwise
+    // eslint-disable-next-line no-bitwise
+    if (event.buttons & 1) {
       this.startY = event.pageY;
 
       document.addEventListener('mousemove', this.handleMouseMove);
@@ -102,7 +102,7 @@ class Resizer extends React.Component {
   render() {
     return (
       <ResizeContainer onMouseDown={this.handleMouseDown}>
-        <ResizeIcon/>
+        <ResizeIcon />
       </ResizeContainer>
     );
   }

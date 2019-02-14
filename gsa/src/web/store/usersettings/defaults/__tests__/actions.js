@@ -26,9 +26,7 @@ import {
 import {isFunction} from 'gmp/utils/identity';
 
 describe('UserSettings Defaults action tests', () => {
-
   describe('action creator tests', () => {
-
     test('should create a loading request action', () => {
       const action = loadingActions.request();
       expect(action).toEqual({
@@ -51,11 +49,9 @@ describe('UserSettings Defaults action tests', () => {
         error: 'An Error',
       });
     });
-
   });
 
   describe('loadUserSettingDefaults tests', () => {
-
     test('should not dispatch an action if isLoading is true', () => {
       const dispatch = jest.fn();
       const getState = jest.fn().mockReturnValue({
@@ -66,9 +62,11 @@ describe('UserSettings Defaults action tests', () => {
         },
       });
 
-      const currentSettings = jest.fn().mockReturnValue(Promise.resolve({
-        foo: 'bar',
-      }));
+      const currentSettings = jest.fn().mockReturnValue(
+        Promise.resolve({
+          foo: 'bar',
+        }),
+      );
       const gmp = {
         user: {
           currentSettings,
@@ -95,8 +93,9 @@ describe('UserSettings Defaults action tests', () => {
       });
 
       const data = {foo: 'bar'};
-      const currentSettings = jest.fn().mockReturnValue(
-        Promise.resolve({data}));
+      const currentSettings = jest
+        .fn()
+        .mockReturnValue(Promise.resolve({data}));
 
       const gmp = {
         user: {
@@ -110,13 +109,17 @@ describe('UserSettings Defaults action tests', () => {
         expect(getState).toBeCalled();
         expect(currentSettings).toBeCalled();
         expect(dispatch).toHaveBeenCalledTimes(2);
-        expect(dispatch.mock.calls[0]).toEqual([{
-          type: USER_SETTINGS_DEFAULTS_LOADING_REQUEST,
-        }]);
-        expect(dispatch.mock.calls[1]).toEqual([{
-          type: USER_SETTINGS_DEFAULTS_LOADING_SUCCESS,
-          data,
-        }]);
+        expect(dispatch.mock.calls[0]).toEqual([
+          {
+            type: USER_SETTINGS_DEFAULTS_LOADING_REQUEST,
+          },
+        ]);
+        expect(dispatch.mock.calls[1]).toEqual([
+          {
+            type: USER_SETTINGS_DEFAULTS_LOADING_SUCCESS,
+            data,
+          },
+        ]);
       });
     });
 
@@ -130,8 +133,9 @@ describe('UserSettings Defaults action tests', () => {
         },
       });
 
-      const currentSettings = jest.fn().mockReturnValue(
-        Promise.reject('An Error'));
+      const currentSettings = jest
+        .fn()
+        .mockReturnValue(Promise.reject('An Error'));
 
       const gmp = {
         user: {
@@ -145,18 +149,20 @@ describe('UserSettings Defaults action tests', () => {
         expect(getState).toBeCalled();
         expect(currentSettings).toBeCalled();
         expect(dispatch).toHaveBeenCalledTimes(2);
-        expect(dispatch.mock.calls[0]).toEqual([{
-          type: USER_SETTINGS_DEFAULTS_LOADING_REQUEST,
-        }]);
-        expect(dispatch.mock.calls[1]).toEqual([{
-          type: USER_SETTINGS_DEFAULTS_LOADING_ERROR,
-          error: 'An Error',
-        }]);
+        expect(dispatch.mock.calls[0]).toEqual([
+          {
+            type: USER_SETTINGS_DEFAULTS_LOADING_REQUEST,
+          },
+        ]);
+        expect(dispatch.mock.calls[1]).toEqual([
+          {
+            type: USER_SETTINGS_DEFAULTS_LOADING_ERROR,
+            error: 'An Error',
+          },
+        ]);
       });
     });
-
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -24,11 +24,7 @@ import _ from 'gmp/locale';
 import Img from './img';
 
 const GreenboneLogo = props => (
-  <Img
-    alt={_('Greenbone Security Assistant')}
-    {...props}
-    src="greenbone.svg"
-  />
+  <Img alt={_('Greenbone Security Assistant')} {...props} src="greenbone.svg" />
 );
 
 export default GreenboneLogo;

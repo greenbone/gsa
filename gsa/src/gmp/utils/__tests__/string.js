@@ -16,15 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {
-  split,
-  capitalizeFirstLetter,
-  shorten,
-  isEmpty,
-} from '../string';
+import {split, capitalizeFirstLetter, shorten, isEmpty} from '../string';
 
 describe('split function tests', () => {
-
   test('should split a string', () => {
     expect(split('abc_def_hij', '_')).toEqual(['abc', 'def', 'hij']);
     expect(split('abc.def.hij', '.')).toEqual(['abc', 'def', 'hij']);
@@ -46,7 +40,6 @@ describe('split function tests', () => {
 });
 
 describe('capatalizeFirstLetter function tests', () => {
-
   test('should capitalize first letter', () => {
     expect(capitalizeFirstLetter('foo')).toEqual('Foo');
     expect(capitalizeFirstLetter('Foo')).toEqual('Foo');
@@ -55,7 +48,6 @@ describe('capatalizeFirstLetter function tests', () => {
 });
 
 describe('shorten function tests', () => {
-
   test('should shorten string', () => {
     expect(shorten('foo bar', 4)).toEqual('foo ...');
   });
@@ -70,7 +62,6 @@ describe('shorten function tests', () => {
 });
 
 describe('isEmpty function test', () => {
-
   test('should return true for undefined', () => {
     expect(isEmpty()).toBe(true);
   });

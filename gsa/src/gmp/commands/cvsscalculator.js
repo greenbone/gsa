@@ -23,7 +23,6 @@ import {parseSeverity} from '../parser';
 import HttpCommand from './http';
 
 class CvssCalculator extends HttpCommand {
-
   constructor(http) {
     super(http, {cmd: 'cvss_calculator'});
   }

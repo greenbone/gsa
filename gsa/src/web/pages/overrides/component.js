@@ -63,7 +63,6 @@ const SEVERITIES_LIST = [
 ];
 
 class OverrideComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -80,8 +79,7 @@ class OverrideComponent extends React.Component {
       if (override.isActive()) {
         if (isDefined(override.endTime)) {
           active = ACTIVE_YES_UNTIL_VALUE;
-        }
-        else {
+        } else {
           active = ACTIVE_YES_ALWAYS_VALUE;
         }
       }
@@ -92,8 +90,7 @@ class OverrideComponent extends React.Component {
 
       if (SEVERITIES_LIST.includes(override.new_severity)) {
         new_severity_from_list = override.new_severity;
-      }
-      else {
+      } else {
         custom_severity = YES_VALUE;
         new_severity = override.new_severity;
       }
@@ -121,11 +118,11 @@ class OverrideComponent extends React.Component {
         task_id: hasId(task) ? TASK_SELECTED : TASK_ANY,
         task_uuid: hasId(task) ? task.id : undefined,
         text: override.text,
-        title: _('Edit Override {{- name}}',
-          {name: shorten(override.text, 20)}),
+        title: _('Edit Override {{- name}}', {
+          name: shorten(override.text, 20),
+        }),
       });
-    }
-    else {
+    } else {
       this.setState({
         dialogVisible: true,
         active: undefined,
@@ -178,8 +175,7 @@ class OverrideComponent extends React.Component {
   loadTasks() {
     const {gmp} = this.props;
 
-    gmp.tasks.getAll().then(response =>
-      this.setState({tasks: response.data}));
+    gmp.tasks.getAll().then(response => this.setState({tasks: response.data}));
   }
 
   render() {
@@ -239,17 +235,14 @@ class OverrideComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
               create: this.openCreateOverrideDialog,
               edit: this.openOverrideDialog,
             })}
-            {dialogVisible &&
+            {dialogVisible && (
               <OverrideDialog
                 active={active}
                 custom_severity={custom_severity}
@@ -279,7 +272,7 @@ class OverrideComponent extends React.Component {
                 }}
                 {...initial}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>

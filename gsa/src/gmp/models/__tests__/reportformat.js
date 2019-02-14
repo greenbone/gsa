@@ -27,11 +27,9 @@ import {testModel} from 'gmp/models/testing';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-
 testModel(ReportFormat, 'reportformat');
 
 describe('ReportFormat model tests', () => {
-
   test('should parse trust', () => {
     const elem = {
       trust: {
@@ -78,9 +76,7 @@ describe('ReportFormat model tests', () => {
   test('should parse alerts', () => {
     const elem = {
       alerts: {
-        alert: [
-          {id: '12'},
-        ],
+        alert: [{id: '12'}],
       },
     };
     const reportFormat = new ReportFormat(elem);
@@ -150,10 +146,7 @@ describe('ReportFormat model tests', () => {
               max: '1',
               min: '0',
               options: {
-                option: [
-                  'opt1',
-                  'opt2',
-                ],
+                option: ['opt1', 'opt2'],
               },
             },
           },
@@ -218,10 +211,7 @@ describe('ReportFormat model tests', () => {
               min: '0',
             },
             value: {
-              report_format: [
-                {_id: '42'},
-                {_id: '21'},
-              ],
+              report_format: [{_id: '42'}, {_id: '21'}],
             },
           },
         ],
@@ -237,7 +227,6 @@ describe('ReportFormat model tests', () => {
   });
 
   describe('ReportFormat model method tests', () => {
-
     test('isPredefined() returns correct true/false', () => {
       const reportFormat = new ReportFormat({predefined: '0'});
       const reportFormat2 = new ReportFormat({predefined: '1'});

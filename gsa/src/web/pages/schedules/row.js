@@ -39,50 +39,46 @@ import TrashIcon from 'web/entity/icon/trashicon';
 
 import PropTypes from 'web/utils/proptypes';
 
-import {
-  renderDuration,
-  renderRecurrence,
-} from './render';
+import {renderDuration, renderRecurrence} from './render';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 
-const Actions = withEntitiesActions(({
-  entity,
-  onScheduleDeleteClick,
-  onScheduleDownloadClick,
-  onScheduleCloneClick,
-  onScheduleEditClick,
-}) => (
-  <IconDivider
-    grow
-    align={['center', 'center']}
-  >
-    <TrashIcon
-      displayName={_('Schedule')}
-      name="schedule"
-      entity={entity}
-      onClick={onScheduleDeleteClick}
-    />
-    <EditIcon
-      displayName={_('Schedule')}
-      name="schedule"
-      entity={entity}
-      onClick={onScheduleEditClick}
-    />
-    <CloneIcon
-      displayName={_('Schedule')}
-      name="schedule"
-      entity={entity}
-      title={_('Clone Schedule')}
-      value={entity}
-      onClick={onScheduleCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export Schedule')}
-      onClick={onScheduleDownloadClick}
-    />
-  </IconDivider>
-));
+const Actions = withEntitiesActions(
+  ({
+    entity,
+    onScheduleDeleteClick,
+    onScheduleDownloadClick,
+    onScheduleCloneClick,
+    onScheduleEditClick,
+  }) => (
+    <IconDivider grow align={['center', 'center']}>
+      <TrashIcon
+        displayName={_('Schedule')}
+        name="schedule"
+        entity={entity}
+        onClick={onScheduleDeleteClick}
+      />
+      <EditIcon
+        displayName={_('Schedule')}
+        name="schedule"
+        entity={entity}
+        onClick={onScheduleEditClick}
+      />
+      <CloneIcon
+        displayName={_('Schedule')}
+        name="schedule"
+        entity={entity}
+        title={_('Clone Schedule')}
+        value={entity}
+        onClick={onScheduleCloneClick}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export Schedule')}
+        onClick={onScheduleDownloadClick}
+      />
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -110,22 +106,13 @@ const Row = ({
         displayName={_('Schedule')}
         onToggleDetailsClick={onToggleDetailsClick}
       />
-      <TableData>
-        {dateTimeWithTimeZone(startDate)}
-      </TableData>
+      <TableData>{dateTimeWithTimeZone(startDate)}</TableData>
       <TableData>
         {isDefined(nextDate) ? dateTimeWithTimeZone(nextDate) : '-'}
       </TableData>
-      <TableData>
-        {renderRecurrence(recurrence)}
-      </TableData>
-      <TableData>
-        {renderDuration(duration)}
-      </TableData>
-      <ActionsComponent
-        {...props}
-        entity={entity}
-      />
+      <TableData>{renderRecurrence(recurrence)}</TableData>
+      <TableData>{renderDuration(duration)}</TableData>
+      <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );
 };

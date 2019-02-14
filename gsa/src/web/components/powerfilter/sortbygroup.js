@@ -30,7 +30,6 @@ import Radio from '../form/radio.js';
 import Select from '../form/select.js';
 
 class SortByGroup extends React.Component {
-
   renderSortFieldItems() {
     const {fields = []} = this.props;
     return fields.map(({name: value, displayName: label}) => ({
@@ -75,16 +74,17 @@ class SortByGroup extends React.Component {
 
 SortByGroup.propTypes = {
   by: PropTypes.string,
-  fields: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string,
-    displayName: PropTypes.toString,
-  })),
+  fields: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      displayName: PropTypes.toString,
+    }),
+  ),
   filter: PropTypes.filter,
   order: PropTypes.oneOf(['sort', 'sort-reverse']),
   onSortByChange: PropTypes.func,
   onSortOrderChange: PropTypes.func,
 };
-
 
 export default SortByGroup;
 

@@ -26,21 +26,12 @@ import Cpe from 'web/utils/cpe';
 
 import Img from 'web/components/img/img';
 
-const CpeIcon = ({
-  name,
-  ...props
-}) => {
+const CpeIcon = ({name, ...props}) => {
   const cpe = Cpe.find(name);
 
   const icon = isDefined(cpe) ? cpe.icon : 'cpe/other.svg';
 
-  return (
-    <Img
-      {...props}
-      width="16px"
-      src={icon}
-    />
-  );
+  return <Img {...props} width="16px" src={icon} />;
 };
 
 CpeIcon.propTypes = {

@@ -38,12 +38,7 @@ import TableRow from 'web/components/table/row';
 
 import {createEntitiesTable} from 'web/entities/table';
 
-const Header = ({
-  currentSortBy,
-  currentSortDir,
-  sort = true,
-  onSortChange,
-}) => (
+const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
   <TableHeader>
     <TableRow>
       <TableHead
@@ -145,61 +140,36 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const Row = ({
-  entity,
-  links = true,
-}) => {
+const Row = ({entity, links = true}) => {
   const {ip, details = {}, result_counts = {}, severity, asset = {}} = entity;
   const {best_os_cpe, best_os_txt} = details;
   return (
     <TableRow>
       <TableData>
-        {isDefined(asset.id) ?
-          <DetailsLink
-            type="host"
-            id={asset.id}
-            textOnly={!links}
-          >
+        {isDefined(asset.id) ? (
+          <DetailsLink type="host" id={asset.id} textOnly={!links}>
             {ip}
-          </DetailsLink> :
-          <Link
-            to="hosts"
-            filter={'name=' + ip}
-            textOnly={!links}
-          >
+          </DetailsLink>
+        ) : (
+          <Link to="hosts" filter={'name=' + ip} textOnly={!links}>
             {ip}
           </Link>
-        }
+        )}
       </TableData>
       <TableData>
         <i>{entity.hostname}</i>
       </TableData>
       <TableData align="center">
-        <OsIcon
-          osCpe={best_os_cpe}
-          osTxt={best_os_txt}
-        />
+        <OsIcon osCpe={best_os_cpe} osTxt={best_os_txt} />
       </TableData>
+      <TableData>{result_counts.hole}</TableData>
+      <TableData>{result_counts.warning}</TableData>
+      <TableData>{result_counts.info}</TableData>
+      <TableData>{result_counts.log}</TableData>
+      <TableData>{result_counts.false_positive}</TableData>
+      <TableData>{result_counts.total}</TableData>
       <TableData>
-        {result_counts.hole}
-      </TableData>
-      <TableData>
-        {result_counts.warning}
-      </TableData>
-      <TableData>
-        {result_counts.info}
-      </TableData>
-      <TableData>
-        {result_counts.log}
-      </TableData>
-      <TableData>
-        {result_counts.false_positive}
-      </TableData>
-      <TableData>
-        {result_counts.total}
-      </TableData>
-      <TableData>
-        <SeverityBar severity={severity}/>
+        <SeverityBar severity={severity} />
       </TableData>
     </TableRow>
   );

@@ -71,10 +71,7 @@ export const convert_allow = ({addresses, allow}) => {
   return '';
 };
 
-const UserDetails = ({
-  entity,
-  links = true,
-}) => {
+const UserDetails = ({entity, links = true}) => {
   const {
     auth_method,
     comment,
@@ -84,29 +81,20 @@ const UserDetails = ({
     roles = [],
   } = entity;
   return (
-    <Layout
-      grow
-      flex="column"
-    >
+    <Layout grow flex="column">
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
           <TableRow>
-            <TableData>
-              {_('Comment')}
-            </TableData>
-            <TableData>
-              {comment}
-            </TableData>
+            <TableData>{_('Comment')}</TableData>
+            <TableData>{comment}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Roles')}
-            </TableData>
+            <TableData>{_('Roles')}</TableData>
             <TableData>
               <Divider>
                 {roles.map(role => (
@@ -124,9 +112,7 @@ const UserDetails = ({
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Groups')}
-            </TableData>
+            <TableData>{_('Groups')}</TableData>
             <TableData>
               <Divider>
                 {groups.map(group => (
@@ -144,30 +130,18 @@ const UserDetails = ({
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Host Access')}
-            </TableData>
-            <TableData>
-              {convert_allow(hosts)}
-            </TableData>
+            <TableData>{_('Host Access')}</TableData>
+            <TableData>{convert_allow(hosts)}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Interface Access')}
-            </TableData>
-            <TableData>
-              {convert_allow(ifaces)}
-            </TableData>
+            <TableData>{_('Interface Access')}</TableData>
+            <TableData>{convert_allow(ifaces)}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Authentication Type')}
-            </TableData>
-            <TableData>
-              {convert_auth_method(auth_method)}
-            </TableData>
+            <TableData>{_('Authentication Type')}</TableData>
+            <TableData>{convert_auth_method(auth_method)}</TableData>
           </TableRow>
         </TableBody>
       </InfoTable>

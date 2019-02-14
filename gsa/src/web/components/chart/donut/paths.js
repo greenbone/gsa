@@ -27,13 +27,7 @@ const PI2 = 2 * Math.PI;
 export const PieTopPath = ({
   color,
   path, // eslint-disable-line no-shadow
-}) => (
-  <path
-    fill={color}
-    stroke={color}
-    d={path}
-  />
-);
+}) => <path fill={color} stroke={color} d={path} />;
 
 PieTopPath.propTypes = {
   color: PropTypes.toString.isRequired,

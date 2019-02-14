@@ -75,13 +75,7 @@ const Page = ({
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
-    {({
-      clone,
-      create,
-      delete: delete_func,
-      download,
-      edit,
-    }) => (
+    {({clone, create, delete: delete_func, download, edit}) => (
       <EntitiesPage
         {...props}
         createFilterType="os"
@@ -101,7 +95,7 @@ const Page = ({
         filter={filter}
         filtersFilter={OS_FILTER_FILTER}
         filterEditDialog={OsFilterDialog}
-        sectionIcon={<OsSvgIcon size="large"/>}
+        sectionIcon={<OsSvgIcon size="large" />}
         table={OsTable}
         title={_('Operating Systems')}
         toolBarIcons={ToolBarIcons}

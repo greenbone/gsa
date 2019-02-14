@@ -63,7 +63,8 @@ export const hostsSortFunctions = {
   low: makeCompareNumber(entity => entity.result_counts.info),
   log: makeCompareNumber(entity => entity.result_counts.log),
   false_positive: makeCompareNumber(
-    entity => entity.result_counts.false_positive),
+    entity => entity.result_counts.false_positive,
+  ),
   total: makeCompareNumber(entity => entity.result_counts.total),
   severity: makeCompareSeverity(),
 };

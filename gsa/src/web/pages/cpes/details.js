@@ -36,101 +36,65 @@ import TableRow from 'web/components/table/row.js';
 
 import {Col} from 'web/entity/page';
 
-const CpeDetails = ({
-  entity,
-}) => {
-  const {
-    title,
-    nvd_id,
-    deprecated_by,
-    updateTime,
-    status,
-    severity,
-  } = entity;
+const CpeDetails = ({entity}) => {
+  const {title, nvd_id, deprecated_by, updateTime, status, severity} = entity;
   return (
-    <Layout
-      flex="column"
-      grow="1"
-    >
-
-      {!isDefined(title) &&
+    <Layout flex="column" grow="1">
+      {!isDefined(title) && (
         <p>
-          {_('This CPE does not appear in the CPE dictionary but is ' +
-             'referenced by one or more CVE.')}
+          {_(
+            'This CPE does not appear in the CPE dictionary but is ' +
+              'referenced by one or more CVE.',
+          )}
         </p>
-      }
+      )}
 
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(title) &&
+          {isDefined(title) && (
             <TableRow>
+              <TableData>{_('Title')}</TableData>
+              <TableData>{title}</TableData>
+            </TableRow>
+          )}
+          {isDefined(nvd_id) && (
+            <TableRow>
+              <TableData>{_('NVD ID')}</TableData>
+              <TableData>{nvd_id}</TableData>
+            </TableRow>
+          )}
+          {isDefined(deprecated_by) && (
+            <TableRow>
+              <TableData>{_('Deprectated By')}</TableData>
+              <TableData>{deprecated_by}</TableData>
+            </TableRow>
+          )}
+          {isDefined(updateTime) && (
+            <TableRow>
+              <TableData>{_('Last updated')}</TableData>
+              <TableData>{longDate(updateTime)}</TableData>
+            </TableRow>
+          )}
+          {isDefined(status) && (
+            <TableRow>
+              <TableData>{_('Status')}</TableData>
+              <TableData>{status}</TableData>
+            </TableRow>
+          )}
+          {isDefined(severity) && (
+            <TableRow>
+              <TableData>{_('Severity')}</TableData>
               <TableData>
-                {_('Title')}
-              </TableData>
-              <TableData>
-                {title}
+                <SeverityBar severity={severity} />
               </TableData>
             </TableRow>
-          }
-          {isDefined(nvd_id) &&
-            <TableRow>
-              <TableData>
-                {_('NVD ID')}
-              </TableData>
-              <TableData>
-                {nvd_id}
-              </TableData>
-            </TableRow>
-          }
-          {isDefined(deprecated_by) &&
-            <TableRow>
-              <TableData>
-                {_('Deprectated By')}
-              </TableData>
-              <TableData>
-                {deprecated_by}
-              </TableData>
-            </TableRow>
-          }
-          {isDefined(updateTime) &&
-            <TableRow>
-              <TableData>
-                {_('Last updated')}
-              </TableData>
-              <TableData>
-                {longDate(updateTime)}
-              </TableData>
-            </TableRow>
-          }
-          {isDefined(status) &&
-            <TableRow>
-              <TableData>
-                {_('Status')}
-              </TableData>
-              <TableData>
-                {status}
-              </TableData>
-            </TableRow>
-          }
-          {isDefined(severity) &&
-            <TableRow>
-              <TableData>
-                {_('Severity')}
-              </TableData>
-              <TableData>
-                <SeverityBar
-                  severity={severity}
-                />
-              </TableData>
-            </TableRow>
-          }
+          )}
         </TableBody>
       </InfoTable>
-
     </Layout>
   );
 };

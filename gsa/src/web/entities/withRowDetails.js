@@ -49,9 +49,10 @@ const Indent = styled.div`
 Indent.displayName = 'Indent';
 
 const StyledTableRow = styled(TableRow)`
-  &, &:hover {
+  &,
+  &:hover {
     background-color: ${Theme.white} !important;
-  };
+  }
   & td {
     border-bottom: none;
   }
@@ -60,31 +61,20 @@ const StyledTableRow = styled(TableRow)`
 const withRowDetails = (type, colSpan = '10') => Component => {
   const RowDetailsWrapper = ({entity, links = true, ...props}) => (
     <StyledTableRow>
-      <TableData
-        colSpan={colSpan}
-        flex
-        align={['start', 'stretch']}
-      >
-        {links &&
+      <TableData colSpan={colSpan} flex align={['start', 'stretch']}>
+        {links && (
           <Layout align={['start', 'start']}>
             <DetailsLink
               type={isFunction(type) ? type(entity) : type}
               id={entity.id}
             >
-              <DetailsIcon
-                size="small"
-                title={_('Open all details')}
-              />
+              <DetailsIcon size="small" title={_('Open all details')} />
             </DetailsLink>
           </Layout>
-        }
-        <Indent/>
+        )}
+        <Indent />
         <Layout flex="column" grow="1">
-          <Component
-            {...props}
-            links={links}
-            entity={entity}
-          />
+          <Component {...props} links={links} entity={entity} />
         </Layout>
       </TableData>
     </StyledTableRow>

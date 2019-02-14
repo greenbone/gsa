@@ -48,7 +48,6 @@ import TableRow from 'web/components/table/row';
 import NvtPreference from '../nvts/nvtpreference';
 
 class EditDialog extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -97,113 +96,73 @@ class EditDialog extends React.Component {
         }}
         values={controlledData}
       >
-        {({
-          values: state,
-          onValueChange,
-        }) => {
+        {({values: state, onValueChange}) => {
           return (
             <Layout flex="column">
               <SimpleTable>
                 <TableBody>
                   <TableRow>
+                    <TableData>{_('Name')}</TableData>
                     <TableData>
-                      {_('Name')}
-                    </TableData>
-                    <TableData>
-                      <DetailsLink
-                        id={nvt.oid}
-                        type="nvt"
-                      >
+                      <DetailsLink id={nvt.oid} type="nvt">
                         {nvt.name}
                       </DetailsLink>
                     </TableData>
                   </TableRow>
                   <TableRow>
-                    <TableData>
-                      {_('Config')}
-                    </TableData>
-                    <TableData>
-                      {config.name}
-                    </TableData>
+                    <TableData>{_('Config')}</TableData>
+                    <TableData>{config.name}</TableData>
                   </TableRow>
                   <TableRow>
-                    <TableData>
-                      {_('Family')}
-                    </TableData>
-                    <TableData>
-                      {nvt.family}
-                    </TableData>
+                    <TableData>{_('Family')}</TableData>
+                    <TableData>{nvt.family}</TableData>
                   </TableRow>
                   <TableRow>
-                    <TableData>
-                      {_('OID')}
-                    </TableData>
-                    <TableData>
-                      {nvt.oid}
-                    </TableData>
+                    <TableData>{_('OID')}</TableData>
+                    <TableData>{nvt.oid}</TableData>
                   </TableRow>
                   <TableRow>
-                    <TableData>
-                      {_('Version')}
-                    </TableData>
-                    <TableData>
-                      {nvt.version}
-                    </TableData>
+                    <TableData>{_('Version')}</TableData>
+                    <TableData>{nvt.version}</TableData>
                   </TableRow>
                   <TableRow>
-                    <TableData>
-                      {_('Notes')}
-                    </TableData>
-                    <TableData>
-                      {nvt.notes_counts.length}
-                    </TableData>
+                    <TableData>{_('Notes')}</TableData>
+                    <TableData>{nvt.notes_counts.length}</TableData>
                   </TableRow>
                   <TableRow>
-                    <TableData>
-                      {_('Overrides')}
-                    </TableData>
-                    <TableData>
-                      {nvt.overrides_counts.length}
-                    </TableData>
+                    <TableData>{_('Overrides')}</TableData>
+                    <TableData>{nvt.overrides_counts.length}</TableData>
                   </TableRow>
                 </TableBody>
               </SimpleTable>
 
-              {isDefined(nvt.tags.summary) &&
+              {isDefined(nvt.tags.summary) && (
                 <div>
                   <h1>{_('Summary')}</h1>
-                  <p>
-                    {nvt.tags.summary}
-                  </p>
+                  <p>{nvt.tags.summary}</p>
                 </div>
-              }
+              )}
 
-              {isDefined(nvt.tags.affected) &&
+              {isDefined(nvt.tags.affected) && (
                 <div>
                   <h1>{_('Affected Software/OS')}</h1>
-                  <p>
-                    {nvt.tags.affected}
-                  </p>
+                  <p>{nvt.tags.affected}</p>
                 </div>
-              }
+              )}
 
               <div>
                 <h1>{_('Vulnerability Scoring')}</h1>
                 <SimpleTable>
                   <TableBody>
                     <TableRow>
+                      <TableData>{_('CVSS base')}</TableData>
                       <TableData>
-                        {_('CVSS base')}
-                      </TableData>
-                      <TableData>
-                        <SeverityBar severity={nvt.severity}/>
+                        <SeverityBar severity={nvt.severity} />
                       </TableData>
                     </TableRow>
-                    {isDefined(nvt.tags.cvss_base_vector) &&
+                    {isDefined(nvt.tags.cvss_base_vector) && (
                       <TableRow>
-                        <TableData>
-                          {_('CVSS base vector')}
-                        </TableData>
+                        <TableData>{_('CVSS base vector')}</TableData>
                         <TableData>
                           <Link
                             to="cvsscalculator"
@@ -213,7 +172,7 @@ class EditDialog extends React.Component {
                           </Link>
                         </TableData>
                       </TableRow>
-                    }
+                    )}
                   </TableBody>
                 </SimpleTable>
               </div>
@@ -221,22 +180,14 @@ class EditDialog extends React.Component {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>
-                      {_('Name')}
-                    </TableHead>
-                    <TableHead>
-                      {_('New Value')}
-                    </TableHead>
-                    <TableHead>
-                      {_('Default Value')}
-                    </TableHead>
+                    <TableHead>{_('Name')}</TableHead>
+                    <TableHead>{_('New Value')}</TableHead>
+                    <TableHead>{_('Default Value')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   <TableRow>
-                    <TableData>
-                      {_('Timeout')}
-                    </TableData>
+                    <TableData>{_('Timeout')}</TableData>
                     <TableData>
                       <Divider flex="column">
                         <Divider>
@@ -248,11 +199,9 @@ class EditDialog extends React.Component {
                           />
                           <span>
                             {_('Apply default timeout')}
-                            {
-                              isDefined(nvt.default_timeout) ?
-                                  ' (' + nvt.default_timeout + ')' :
-                                  ''
-                            }
+                            {isDefined(nvt.default_timeout)
+                              ? ' (' + nvt.default_timeout + ')'
+                              : ''}
                           </span>
                         </Divider>
                         <Divider>
@@ -273,29 +222,30 @@ class EditDialog extends React.Component {
                       </Divider>
                     </TableData>
                     <TableData>
-                      {
-                        isDefined(nvt.default_timeout) ?
-                            nvt.default_timeout :
-                            ''
-                      }
+                      {isDefined(nvt.default_timeout)
+                        ? nvt.default_timeout
+                        : ''}
                     </TableData>
                   </TableRow>
-                  {
-                    nvt.preferences.map(pref => {
-                      const prefValue =
-                        isDefined(preference_values[pref.name]) ?
-                        preference_values[pref.name].value : undefined;
-                      return (
-                        <NvtPreference
-                          key={pref.name}
-                          preference={pref}
-                          value={prefValue}
-                          onChange={value => this.handlePreferenceChange(
-                            value, pref.name, onValueChange)}
-                        />
-                      );
-                    })
-                  }
+                  {nvt.preferences.map(pref => {
+                    const prefValue = isDefined(preference_values[pref.name])
+                      ? preference_values[pref.name].value
+                      : undefined;
+                    return (
+                      <NvtPreference
+                        key={pref.name}
+                        preference={pref}
+                        value={prefValue}
+                        onChange={value =>
+                          this.handlePreferenceChange(
+                            value,
+                            pref.name,
+                            onValueChange,
+                          )
+                        }
+                      />
+                    );
+                  })}
                 </TableBody>
               </Table>
             </Layout>
@@ -304,7 +254,7 @@ class EditDialog extends React.Component {
       </SaveDialog>
     );
   }
-};
+}
 
 EditDialog.propTypes = {
   config: PropTypes.model.isRequired,

@@ -34,34 +34,23 @@ const Trend = ({name}) => {
   if (name === 'up') {
     title = 'Severity increased';
     IconComponent = TrendUpIcon;
-  }
-  else if (name === 'down') {
+  } else if (name === 'down') {
     title = 'Severity decreased';
     IconComponent = TrendDownIcon;
-  }
-  else if (name === 'more') {
+  } else if (name === 'more') {
     title = 'Vulnerability count increased';
     IconComponent = TrendMoreIcon;
-  }
-  else if (name === 'less') {
+  } else if (name === 'less') {
     title = 'Vulnerability count decreased';
     IconComponent = TrendLessIcon;
-  }
-  else if (name === 'same') {
+  } else if (name === 'same') {
     title = 'Vulnerabilities did not change';
     IconComponent = TrendNoChangeIcon;
-  }
-  else {
-    return <span/>;
+  } else {
+    return <span />;
   }
 
-  return (
-    <IconComponent
-      size="small"
-      alt={title}
-      title={title}
-    />
-  );
+  return <IconComponent size="small" alt={title} title={title} />;
 };
 
 Trend.propTypes = {

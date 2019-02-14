@@ -33,10 +33,7 @@ import IconDivider from '../../components/layout/icondivider.js';
 
 import Pre from './preformatted';
 
-const Solution = ({
-  solution,
-  solutionType,
-}) => {
+const Solution = ({solution, solutionType}) => {
   const has_solution = isDefined(solution) && solution !== TAG_NA;
 
   if (!has_solution) {
@@ -44,19 +41,12 @@ const Solution = ({
   }
 
   return (
-    <DetailsBlock
-      title={_('Solution')}
-    >
+    <DetailsBlock title={_('Solution')}>
       <IconDivider>
         <b>{_('Solution Type: ')}</b>
-        <SolutionTypeIcon
-          displayTitleText
-          type={solutionType}
-        />
+        <SolutionTypeIcon displayTitleText type={solutionType} />
       </IconDivider>
-      <Pre>
-        {solution}
-      </Pre>
+      <Pre>{solution}</Pre>
     </DetailsBlock>
   );
 };

@@ -40,11 +40,7 @@ import Credential, {
 
 import {testModel} from 'gmp/models/testing';
 
-import {
-  parseDate,
-  NO_VALUE,
-  YES_VALUE,
-} from 'gmp/parser';
+import {parseDate, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 const USERNAME_PASSWORD_CREDENTIAL = new Credential({
   type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -68,11 +64,9 @@ const createAllCredentials = () => [
   SMIME_CREDENTIAL,
 ];
 
-
 testModel(Credential, 'credential');
 
 describe('Credential Model tests', () => {
-
   test('should parse certificate_info', () => {
     const elem = {
       certificate_info: {
@@ -82,8 +76,12 @@ describe('Credential Model tests', () => {
     };
     const credential = new Credential(elem);
 
-    expect(credential.certificate_info.activationTime).toEqual(parseDate('2018-10-10T11:41:23.022Z'));
-    expect(credential.certificate_info.expirationTime).toEqual(parseDate('2019-10-10T11:41:23.022Z'));
+    expect(credential.certificate_info.activationTime).toEqual(
+      parseDate('2018-10-10T11:41:23.022Z'),
+    );
+    expect(credential.certificate_info.expirationTime).toEqual(
+      parseDate('2019-10-10T11:41:23.022Z'),
+    );
     expect(credential.certificate_info.activation_time).toBeUndefined();
     expect(credential.certificate_info.expiration_time).toBeUndefined();
   });
@@ -141,9 +139,7 @@ describe('Credential Model tests', () => {
   });
 });
 
-
 describe('Credential model function tests', () => {
-
   test('ssh_credential_filter should return filter with correct true/false', () => {
     expect(ssh_credential_filter(CLIENT_CERTIFICATE_CREDENTIAL)).toEqual(false);
     expect(ssh_credential_filter(USERNAME_SSH_KEY_CREDENTIAL)).toEqual(true);
@@ -161,16 +157,18 @@ describe('Credential model function tests', () => {
   });
 
   test('snmp_credential_filter should return filter with correct true/false', () => {
-    expect(snmp_credential_filter(CLIENT_CERTIFICATE_CREDENTIAL))
-      .toEqual(false);
+    expect(snmp_credential_filter(CLIENT_CERTIFICATE_CREDENTIAL)).toEqual(
+      false,
+    );
     expect(snmp_credential_filter(SNMP_CREDENTIAL)).toEqual(true);
   });
 
   test('email_credential_ilter should return filter with correct true/filter', () => {
     expect(email_credential_filter(PGP_CREDENTIAL)).toEqual(true);
     expect(email_credential_filter(SMIME_CREDENTIAL)).toEqual(true);
-    expect(email_credential_filter(USERNAME_PASSWORD_CREDENTIAL))
-      .toEqual(false);
+    expect(email_credential_filter(USERNAME_PASSWORD_CREDENTIAL)).toEqual(
+      false,
+    );
   });
 
   test('should filter non ssh credentials', () => {
@@ -179,7 +177,8 @@ describe('Credential model function tests', () => {
       expect.arrayContaining([
         USERNAME_PASSWORD_CREDENTIAL,
         USERNAME_SSH_KEY_CREDENTIAL,
-      ]));
+      ]),
+    );
   });
 
   test('should filter non smb credentials', () => {
@@ -210,26 +209,26 @@ describe('Credential model function tests', () => {
       SMIME_CREDENTIAL,
     ]);
   });
-
 });
 
 describe('getCredentialTypeName tests', () => {
-
   setLocale('en');
 
   test('should display full name', () => {
     expect(getCredentialTypeName(USERNAME_PASSWORD_CREDENTIAL_TYPE)).toEqual(
-      'Username + Password');
+      'Username + Password',
+    );
     expect(getCredentialTypeName(USERNAME_SSH_KEY_CREDENTIAL_TYPE)).toEqual(
-      'Username + SSH Key');
+      'Username + SSH Key',
+    );
     expect(getCredentialTypeName(CLIENT_CERTIFICATE_CREDENTIAL_TYPE)).toEqual(
-      'Client Certificate');
-    expect(getCredentialTypeName(SNMP_CREDENTIAL_TYPE)).toEqual(
-      'SNMP');
+      'Client Certificate',
+    );
+    expect(getCredentialTypeName(SNMP_CREDENTIAL_TYPE)).toEqual('SNMP');
     expect(getCredentialTypeName(SMIME_CREDENTIAL_TYPE)).toEqual(
-      'S/MIME Certificate');
-    expect(getCredentialTypeName(PGP_CREDENTIAL_TYPE)).toEqual(
-      'PGP Key');
+      'S/MIME Certificate',
+    );
+    expect(getCredentialTypeName(PGP_CREDENTIAL_TYPE)).toEqual('PGP Key');
   });
 });
 

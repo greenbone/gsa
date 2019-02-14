@@ -67,14 +67,14 @@ export const SecInfosCreatedTableDisplay = createDisplay({
   filtersFilter: SECINFO_FILTER_FILTER,
 });
 
-registerDisplay(SecInfosCreatedDisplay.displayId,
-  SecInfosCreatedDisplay, {
-    title: _l('Chart: SecInfo Items by Creation Time'),
-  },
-);
+registerDisplay(SecInfosCreatedDisplay.displayId, SecInfosCreatedDisplay, {
+  title: _l('Chart: SecInfo Items by Creation Time'),
+});
 
-registerDisplay(SecInfosCreatedTableDisplay.displayId,
-  SecInfosCreatedTableDisplay, {
+registerDisplay(
+  SecInfosCreatedTableDisplay.displayId,
+  SecInfosCreatedTableDisplay,
+  {
     title: _l('Table: SecInfo Items by Creation Time'),
   },
 );

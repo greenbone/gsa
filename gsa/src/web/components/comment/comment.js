@@ -22,10 +22,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
-const Comment = ({
-  text,
-  children,
-}) => {
+const Comment = ({text, children}) => {
   if (!isDefined(text)) {
     text = children;
   }

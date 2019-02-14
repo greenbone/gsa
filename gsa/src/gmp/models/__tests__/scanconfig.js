@@ -30,7 +30,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(ScanConfig, 'scanconfig');
 
 describe('ScanConfig model tests', () => {
-
   test('should parse families', () => {
     const elem = {
       families: {
@@ -250,11 +249,9 @@ describe('ScanConfig model tests', () => {
 
     expect(scanConfig.tasks).toEqual([]);
   });
-
 });
 
 describe('ScanConfigs model function test', () => {
-
   test('filterEmptyScanConfig() should return filter with correct true/false', () => {
     const config1 = {id: '42'};
     const config2 = {id: '085569ce-73ed-11df-83c3-002264764cea'};
@@ -278,7 +275,6 @@ describe('ScanConfigs model function test', () => {
     expect(ospScanConfigsFilter(config1)).toEqual(true);
     expect(ospScanConfigsFilter(config2)).toEqual(false);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

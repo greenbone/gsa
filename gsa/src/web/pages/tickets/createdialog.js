@@ -48,10 +48,7 @@ const CreateTicketDialog = ({
       userId,
     }}
   >
-    {({
-      values,
-      onValueChange,
-    }) => (
+    {({values, onValueChange}) => (
       <Layout flex="column">
         <FormGroup title={_('Assign To User')}>
           <Select

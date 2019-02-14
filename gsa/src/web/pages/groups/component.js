@@ -30,7 +30,6 @@ import EntityComponent from 'web/entity/component';
 import GroupDialog from './dialog';
 
 class GroupComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -52,7 +51,6 @@ class GroupComponent extends React.Component {
     });
 
     if (isDefined(group)) {
-
       const title = _('Edit Group {{name}}', group);
 
       this.setState({
@@ -61,8 +59,7 @@ class GroupComponent extends React.Component {
         group,
         title,
       });
-    }
-    else {
+    } else {
       this.setState({
         allUsers,
         dialogVisible: true,
@@ -103,12 +100,7 @@ class GroupComponent extends React.Component {
       onSaveError,
     } = this.props;
 
-    const {
-      allUsers,
-      dialogVisible,
-      group,
-      title,
-    } = this.state;
+    const {allUsers, dialogVisible, group, title} = this.state;
 
     return (
       <EntityComponent
@@ -125,17 +117,14 @@ class GroupComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
               create: this.openGroupDialog,
               edit: this.openGroupDialog,
             })}
-            {dialogVisible &&
+            {dialogVisible && (
               <GroupDialog
                 allUsers={allUsers}
                 group={group}
@@ -146,7 +135,7 @@ class GroupComponent extends React.Component {
                   return save(d).then(() => this.closeGroupDialog());
                 }}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>

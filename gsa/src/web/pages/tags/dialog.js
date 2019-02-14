@@ -58,7 +58,6 @@ const ScrollableContent = styled.div`
 `;
 
 class TagDialog extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -70,13 +69,10 @@ class TagDialog extends React.Component {
       resourceOptions: [],
       resourceType: this.props.resource_type,
     };
-
   }
 
   componentDidMount() {
-    const {
-      resourceType,
-    } = this.state;
+    const {resourceType} = this.state;
 
     if (isDefined(resourceType)) {
       this.loadResourcesByType(resourceType);
@@ -89,28 +85,26 @@ class TagDialog extends React.Component {
     }
     const {gmp} = this.props;
     const plType = pluralizeType(normalizeType(type));
-    gmp[plType].getAll()
-      .then(response => {
-        const {data} = response;
-        let id = this.state.resourceIdText;
-        const idPresent = data.includes(res => res.id === id);
-        if (!idPresent && !isEmpty(id)) {
-          data.push({
-            name: '----',
-            id: id,
-          });
-        }
-        if (isEmpty(id)) {
-          id = undefined;
-        }
-        this.setState({
-          resourceOptions: data,
+    gmp[plType].getAll().then(response => {
+      const {data} = response;
+      let id = this.state.resourceIdText;
+      const idPresent = data.includes(res => res.id === id);
+      if (!idPresent && !isEmpty(id)) {
+        data.push({
+          name: '----',
+          id: id,
         });
+      }
+      if (isEmpty(id)) {
+        id = undefined;
+      }
+      this.setState({
+        resourceOptions: data,
       });
+    });
   }
 
   handleResourceTypeChange(type, onValueChange) {
-
     onValueChange(type, 'resource_type');
 
     this.loadResourcesByType(type);
@@ -121,7 +115,6 @@ class TagDialog extends React.Component {
   }
 
   handleIdChange(ids, onValueChange) {
-
     onValueChange(ids, 'resource_ids');
 
     this.setState({
@@ -131,23 +124,20 @@ class TagDialog extends React.Component {
 
   handleIdChangeByText(id, onValueChange) {
     const {gmp} = this.props;
-    const {
-      resourceIdsSelected,
-      resourceType,
-    } = this.state;
+    const {resourceIdsSelected, resourceType} = this.state;
 
     gmp[pluralizeType(normalizeType(resourceType))]
       .get({filter: 'uuid=' + id})
       .then(response => {
         const ids = isDefined(resourceIdsSelected) ? resourceIdsSelected : [];
         if (response.data.length === 0) {
-
           let {resourceOptions} = this.state;
           const idPresent = resourceOptions.filter(res => res.id === id);
           if (idPresent.length === 0 && !isEmpty(id)) {
             // if the options already contain '----', remove the old element
             resourceOptions = resourceOptions.filter(
-              res => res.name !== '----');
+              res => res.name !== '----',
+            );
             resourceOptions.push({
               name: '----',
               id: id,
@@ -158,22 +148,17 @@ class TagDialog extends React.Component {
             resourceOptions,
             resourceIdText: id,
           });
-        }
-        else {
+        } else {
           const idSelected = ids.includes(id);
           if (idSelected) {
             this.setState({
               resourceIdText: '',
             });
-          }
-          else {
+          } else {
             this.setState(prevState => {
               const prevResourceIdsSelected = prevState.resourceIdsSelected;
               return {
-                resourceIdsSelected: [
-                  ...prevResourceIdsSelected,
-                  id,
-                ],
+                resourceIdsSelected: [...prevResourceIdsSelected, id],
                 resourceIdText: '',
               };
             });
@@ -226,13 +211,9 @@ class TagDialog extends React.Component {
         defaultValues={data}
         values={controlledData}
       >
-        {({
-          values: state,
-          onValueChange,
-        }) => {
+        {({values: state, onValueChange}) => {
           return (
             <Layout flex="column">
-
               <FormGroup title={_('Name')}>
                 <TextField
                   name="name"
@@ -264,48 +245,51 @@ class TagDialog extends React.Component {
                 />
               </FormGroup>
 
-              {showResourceSelection &&
+              {showResourceSelection && (
                 <FormGroup title={_('Resource Type')}>
                   <Select
                     name="resource_type"
                     items={resourceTypesOptions}
                     value={this.state.resourceType}
                     disabled={fixed || resourceTypesOptions.length === 0}
-                    onChange={type => this.handleResourceTypeChange(
-                      type, onValueChange)}
+                    onChange={type =>
+                      this.handleResourceTypeChange(type, onValueChange)
+                    }
                   />
                 </FormGroup>
-              }
-              {showResourceSelection &&
+              )}
+              {showResourceSelection && (
                 <FormGroup title={_('Resources')}>
                   <ScrollableContent>
                     <MultiSelect
                       name="resource_ids"
                       items={renderSelectItems(this.state.resourceOptions)}
                       value={this.state.resourceIdsSelected}
-                      disabled={!typeIsChosen || fixed ||
-                        resourceTypesOptions.length === 0}
+                      disabled={
+                        !typeIsChosen ||
+                        fixed ||
+                        resourceTypesOptions.length === 0
+                      }
                       onChange={ids => this.handleIdChange(ids, onValueChange)}
                     />
                   </ScrollableContent>
-                  <Divider>
-                    {_('or add by ID:')}
-                  </Divider>
+                  <Divider>{_('or add by ID:')}</Divider>
                   <TextField
                     name="resource_id_text"
                     value={this.state.resourceIdText}
                     grow="1"
                     disabled={!typeIsChosen || fixed}
                     onChange={id =>
-                      this.handleIdChangeByText(id, onValueChange)}
+                      this.handleIdChangeByText(id, onValueChange)
+                    }
                   />
                 </FormGroup>
-              }
-              {!showResourceSelection &&
+              )}
+              {!showResourceSelection && (
                 <FormGroup title={_('Resources')}>
                   <span>{_('Too many resources to list.')}</span>
                 </FormGroup>
-              }
+              )}
               <FormGroup title={_('Active')}>
                 <YesNoRadio
                   name="active"
@@ -313,7 +297,6 @@ class TagDialog extends React.Component {
                   onChange={onValueChange}
                 />
               </FormGroup>
-
             </Layout>
           );
         }}

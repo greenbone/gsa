@@ -35,49 +35,38 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-const References = ({
-  nvt,
-  links = true,
-}) => {
+const References = ({nvt, links = true}) => {
   const {cves = [], bids = [], certs = [], xrefs = []} = nvt;
-  const has_reference = cves.length > 0 || bids.length > 0 ||
-    certs.length > 0 || xrefs.length > 0;
+  const has_reference =
+    cves.length > 0 || bids.length > 0 || certs.length > 0 || xrefs.length > 0;
   if (!has_reference) {
     return null;
   }
   return (
-    <DetailsBlock
-      title={_('References')}
-    >
+    <DetailsBlock title={_('References')}>
       <InfoTable>
         <TableBody>
-          {cves.length > 0 &&
+          {cves.length > 0 && (
             <TableRow>
-              <TableData>
-                {_('CVE')}
-              </TableData>
+              <TableData>{_('CVE')}</TableData>
               <TableData>
                 <Divider wrap>
-                  {
-                    cves.map(cve_id => (
-                      <CveLink
-                        title={_('View Details of {{cve_id}}', {cve_id})}
-                        key={cve_id}
-                        id={cve_id}
-                        textOnly={!links}
-                      />
-                    ))
-                  }
+                  {cves.map(cve_id => (
+                    <CveLink
+                      title={_('View Details of {{cve_id}}', {cve_id})}
+                      key={cve_id}
+                      id={cve_id}
+                      textOnly={!links}
+                    />
+                  ))}
                 </Divider>
               </TableData>
             </TableRow>
-          }
+          )}
 
-          {bids.length > 0 &&
+          {bids.length > 0 && (
             <TableRow>
-              <TableData>
-                {_('BID')}
-              </TableData>
+              <TableData>{_('BID')}</TableData>
               <TableData>
                 <Divider wrap>
                   {bids.map(bid => (
@@ -86,13 +75,11 @@ const References = ({
                 </Divider>
               </TableData>
             </TableRow>
-          }
+          )}
 
-          {certs.length > 0 &&
+          {certs.length > 0 && (
             <TableRow>
-              <TableData>
-                {_('CERT')}
-              </TableData>
+              <TableData>{_('CERT')}</TableData>
               <TableData>
                 <Divider wrap>
                   {certs.map(cert => (
@@ -106,30 +93,26 @@ const References = ({
                 </Divider>
               </TableData>
             </TableRow>
-          }
+          )}
 
-          {xrefs.length > 0 &&
+          {xrefs.length > 0 && (
             <TableRow>
-              <TableData>
-                {_('Other')}
-              </TableData>
+              <TableData>{_('Other')}</TableData>
               <TableData>
                 <Divider wrap>
-                  {
-                    xrefs.map(xref => (
-                      <ExternalLink
-                        key={xref.ref}
-                        textOnly={!links || xref.type !== 'URL'}
-                        to={xref.ref}
-                      >
-                        {xref.ref}
-                      </ExternalLink>
-                    ))
-                  }
+                  {xrefs.map(xref => (
+                    <ExternalLink
+                      key={xref.ref}
+                      textOnly={!links || xref.type !== 'URL'}
+                      to={xref.ref}
+                    >
+                      {xref.ref}
+                    </ExternalLink>
+                  ))}
                 </Divider>
               </TableData>
             </TableRow>
-          }
+          )}
         </TableBody>
       </InfoTable>
     </DetailsBlock>

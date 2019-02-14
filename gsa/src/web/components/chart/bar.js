@@ -61,7 +61,6 @@ const tickFormat = val => {
 };
 
 class BarChart extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -73,8 +72,10 @@ class BarChart extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return shouldUpdate(nextProps, this.props) ||
-      nextState.width !== this.state.width;
+    return (
+      shouldUpdate(nextProps, this.props) ||
+      nextState.width !== this.state.width
+    );
   }
 
   componentDidMount() {
@@ -128,13 +129,16 @@ class BarChart extends React.Component {
     const yValues = data.map(d => d.y);
     const yMax = Math.max(...yValues);
 
-    const maxLabelLength = Math.max(...xValues.map(
-      val => val.toString().length), MAX_LABEL_LENGTH);
+    const maxLabelLength = Math.max(
+      ...xValues.map(val => val.toString().length),
+      MAX_LABEL_LENGTH,
+    );
 
     // adjust left margin for label length on horizontal bars
     // 4px for each letter is just a randomly chosen value
-    const marginLeft = horizontal ? margin.left +
-      Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4 : margin.left;
+    const marginLeft = horizontal
+      ? margin.left + Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4
+      : margin.left;
 
     const maxWidth = width - marginLeft - margin.right;
     let maxHeight = height - margin.top - margin.bottom;
@@ -166,11 +170,7 @@ class BarChart extends React.Component {
     const hideTickLabels = maxWidth / numTicks < MIN_TICK_WIDTH;
     return (
       <StyledLayout align={['start', 'start']}>
-        <Svg
-          innerRef={svgRef}
-          width={width}
-          height={height}
-        >
+        <Svg innerRef={svgRef} width={width} height={height}>
           <Group top={margin.top} left={marginLeft}>
             <Axis
               orientation="left"
@@ -190,14 +190,12 @@ class BarChart extends React.Component {
               hideTickLabels={hideTickLabels}
             />
             {data.map((d, i) => (
-              <ToolTip
-                key={i}
-                content={d.toolTip}
-              >
+              <ToolTip key={i} content={d.toolTip}>
                 {({targetRef, hide, show}) => (
                   <Group
-                    onClick={isDefined(onDataClick) ?
-                      () => onDataClick(d) : undefined}
+                    onClick={
+                      isDefined(onDataClick) ? () => onDataClick(d) : undefined
+                    }
                   >
                     <rect
                       ref={targetRef}
@@ -205,15 +203,11 @@ class BarChart extends React.Component {
                       x={horizontal ? 1 : xScale(d.x)}
                       y={horizontal ? xScale(d.x) : yScale(d.y)}
                       height={
-                        horizontal ?
-                          xScale.bandwidth() :
-                          maxHeight - yScale(d.y)
+                        horizontal
+                          ? xScale.bandwidth()
+                          : maxHeight - yScale(d.y)
                       }
-                      width={
-                        horizontal ?
-                          yScale(d.y) :
-                          xScale.bandwidth()
-                      }
+                      width={horizontal ? yScale(d.y) : xScale.bandwidth()}
                       onMouseEnter={show}
                       onMouseLeave={hide}
                     />
@@ -223,13 +217,13 @@ class BarChart extends React.Component {
             ))}
           </Group>
         </Svg>
-        {showLegend && data.length > 0 &&
+        {showLegend && data.length > 0 && (
           <Legend
             innerRef={this.legendRef}
             data={data}
             onItemClick={onLegendItemClick}
           />
-        }
+        )}
       </StyledLayout>
     );
   }
@@ -247,13 +241,15 @@ BarChart.propTypes = {
       label: ...,
     }]
   */
-  data: PropTypes.arrayOf(PropTypes.shape({
-    x: PropTypes.toString.isRequired,
-    y: PropTypes.number.isRequired,
-    label: PropTypes.any,
-    color: PropTypes.toString.isRequired,
-    toolTip: PropTypes.elementOrString,
-  })).isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      x: PropTypes.toString.isRequired,
+      y: PropTypes.number.isRequired,
+      label: PropTypes.any,
+      color: PropTypes.toString.isRequired,
+      toolTip: PropTypes.elementOrString,
+    }),
+  ).isRequired,
   height: PropTypes.number.isRequired,
   horizontal: PropTypes.bool,
   showLegend: PropTypes.bool,

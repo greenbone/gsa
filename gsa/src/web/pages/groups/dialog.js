@@ -36,13 +36,13 @@ import MultiSelect from 'web/components/form/multiselect';
 import TextField from 'web/components/form/textfield';
 
 const Dialog = ({
-    allUsers,
-    grant_full,
-    group,
-    title = _('New Group'),
-    onClose,
-    onSave,
-  }) => {
+  allUsers,
+  grant_full,
+  group,
+  title = _('New Group'),
+  onClose,
+  onSave,
+}) => {
   const is_edit = isDefined(group);
 
   const userOptions = map(allUsers, user => ({
@@ -62,11 +62,7 @@ const Dialog = ({
         ...group,
       }}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
-
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
             <FormGroup title={_('Name')}>
@@ -80,10 +76,7 @@ const Dialog = ({
               />
             </FormGroup>
 
-            <FormGroup
-              title={_('Comment')}
-              flex="column"
-            >
+            <FormGroup title={_('Comment')} flex="column">
               <TextField
                 name="comment"
                 value={state.comment}
@@ -93,9 +86,7 @@ const Dialog = ({
               />
             </FormGroup>
 
-            <FormGroup
-              title={_('Users')}
-            >
+            <FormGroup title={_('Users')}>
               <MultiSelect
                 name="users"
                 items={userOptions}
@@ -104,21 +95,21 @@ const Dialog = ({
               />
             </FormGroup>
 
-            {!is_edit &&
-              <FormGroup
-                title={_('Special Groups')}
-              >
+            {!is_edit && (
+              <FormGroup title={_('Special Groups')}>
                 <Checkbox
                   name="grant_full"
                   checkedValue="1"
                   unCheckedValue="0"
                   checked={state.grant_full === '1'}
-                  title={_('Create permission to grant full read and write ' +
-                    'access among all group members and across any resources')}
+                  title={_(
+                    'Create permission to grant full read and write ' +
+                      'access among all group members and across any resources',
+                  )}
                   onChange={onValueChange}
                 />
               </FormGroup>
-            }
+            )}
           </Layout>
         );
       }}

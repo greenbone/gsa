@@ -23,16 +23,9 @@ import styled from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes';
 
-const Table = ({
-    children,
-    className,
-    footer,
-    header,
-  }) => {
+const Table = ({children, className, footer, header}) => {
   return (
-    <table
-      className={className}
-    >
+    <table className={className}>
       {header}
       {children}
       {footer}
@@ -52,7 +45,7 @@ export default styled(Table)`
   border-spacing: 0px;
   font-size: 12px;
   text-align: left;
-  table-layout: ${props => props.fixed ? 'fixed' : 'auto'};
+  table-layout: ${props => (props.fixed ? 'fixed' : 'auto')};
   ${props => {
     const {size = 'full'} = props;
     if (size === 'auto') {
@@ -69,7 +62,7 @@ export default styled(Table)`
   }};
   @media print {
     border-collapse: collapse;
-  };
+  }
 `;
 
 // vim: set ts=2 sw=2 tw=80:

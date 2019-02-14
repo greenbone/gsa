@@ -31,7 +31,6 @@ import EntityComponent from 'web/entity/component';
 import RoleDialog from './dialog.js';
 
 class RoleComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -41,8 +40,9 @@ class RoleComponent extends React.Component {
     };
 
     this.handleCreatePermission = this.handleCreatePermission.bind(this);
-    this.handleCreateSuperPermission =
-      this.handleCreateSuperPermission.bind(this);
+    this.handleCreateSuperPermission = this.handleCreateSuperPermission.bind(
+      this,
+    );
     this.handleDeletePermission = this.handleDeletePermission.bind(this);
     this.handleErrorClose = this.handleErrorClose.bind(this);
 
@@ -80,9 +80,7 @@ class RoleComponent extends React.Component {
           permissionName: first(settings.all_permissions).name,
         });
       });
-
-    }
-    else {
+    } else {
       this.setState({
         allUsers,
         dialogVisible: true,
@@ -136,8 +134,10 @@ class RoleComponent extends React.Component {
 
     this.handleInteraction();
 
-    return this.loadSettings(gmp.permission
-      .delete({id: permission_id}), role_id);
+    return this.loadSettings(
+      gmp.permission.delete({id: permission_id}),
+      role_id,
+    );
   }
 
   handleErrorClose() {
@@ -160,7 +160,8 @@ class RoleComponent extends React.Component {
           all_permissions: settings.all_permissions,
           permission_name: first(settings.all_permissions).name,
         });
-      }).catch(error => {
+      })
+      .catch(error => {
         this.setError(error);
       });
   }
@@ -216,17 +217,14 @@ class RoleComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
               create: this.openRoleDialog,
               edit: this.openRoleDialog,
             })}
-            {dialogVisible &&
+            {dialogVisible && (
               <RoleDialog
                 all_users={allUsers}
                 all_groups={allGroups}
@@ -249,7 +247,7 @@ class RoleComponent extends React.Component {
                 onDeletePermission={this.handleDeletePermission}
                 onErrorClose={this.handleErrorClose}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>

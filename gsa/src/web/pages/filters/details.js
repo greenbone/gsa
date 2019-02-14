@@ -36,75 +36,47 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-const FilterDetails = ({
-  entity,
-}) => {
-  const {
-    comment,
-    filter_type,
-    alerts = [],
-  } = entity;
+const FilterDetails = ({entity}) => {
+  const {comment, filter_type, alerts = []} = entity;
   return (
-    <Layout
-      grow
-      flex="column"
-    >
+    <Layout grow flex="column">
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(comment) &&
+          {isDefined(comment) && (
             <TableRow>
-              <TableData>
-                {_('Comment')}
-              </TableData>
-              <TableData>
-                {comment}
-              </TableData>
+              <TableData>{_('Comment')}</TableData>
+              <TableData>{comment}</TableData>
             </TableRow>
-          }
+          )}
 
           <TableRow>
-            <TableData>
-              {_('Term')}
-            </TableData>
-            <TableData>
-              {entity.toFilterString()}
-            </TableData>
+            <TableData>{_('Term')}</TableData>
+            <TableData>{entity.toFilterString()}</TableData>
           </TableRow>
-
 
           <TableRow>
-            <TableData>
-              {_('Type')}
-            </TableData>
-            <TableData>
-              {filter_type}
-            </TableData>
+            <TableData>{_('Type')}</TableData>
+            <TableData>{filter_type}</TableData>
           </TableRow>
 
-          {alerts.length > 0 &&
+          {alerts.length > 0 && (
             <TableRow>
-              <TableData>
-                {_('Alerts using this Filter')}
-              </TableData>
+              <TableData>{_('Alerts using this Filter')}</TableData>
               <TableData>
                 <Divider wrap>
                   {alerts.map(alert => (
-                    <DetailsLink
-                      key={alert.id}
-                      id={alert.id}
-                      type="alert"
-                    >
+                    <DetailsLink key={alert.id} id={alert.id} type="alert">
                       {alert.name}
                     </DetailsLink>
                   ))}
                 </Divider>
               </TableData>
             </TableRow>
-          }
+          )}
         </TableBody>
       </InfoTable>
     </Layout>

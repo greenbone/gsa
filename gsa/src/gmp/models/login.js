@@ -23,7 +23,6 @@ import moment from 'gmp/models/date';
 import {isDefined} from 'gmp/utils/identity';
 
 class Login {
-
   constructor(elem) {
     this.clientAddress = elem.client_address;
     this.guest = elem.guest;
@@ -37,8 +36,9 @@ class Login {
 
     const unixSeconds = parseInt(elem.session);
 
-    this.sessionTimeout = isDefined(unixSeconds) ?
-      moment.unix(unixSeconds) : undefined;
+    this.sessionTimeout = isDefined(unixSeconds)
+      ? moment.unix(unixSeconds)
+      : undefined;
   }
 }
 

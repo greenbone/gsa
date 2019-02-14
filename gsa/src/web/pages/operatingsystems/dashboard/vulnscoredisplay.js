@@ -40,9 +40,7 @@ import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {
-  riskFactorColorScale,
-} from 'web/components/dashboard/display/utils';
+import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 
 import {OsVulnScoreLoader} from './loaders';
 
@@ -69,14 +67,17 @@ const transformVulnScoreData = (data = {}, {severityClass}) => {
       const modifiedDate = longDate(modified);
       const toolTip = (
         <ToolTip>
-          <b>{name}:</b><br/>
-          {average_severity_score.max}<br/>
-          {_('{{hosts}} Host(s) with average severity {{avgSev}}',
-            {
-              hosts: parseFloat(hosts),
-              avgSev: parseFloat(averageSeverity),
-            })}<br/>
-          <b>{_('Updated: ')}</b>{modifiedDate}
+          <b>{name}:</b>
+          <br />
+          {average_severity_score.max}
+          <br />
+          {_('{{hosts}} Host(s) with average severity {{avgSev}}', {
+            hosts: parseFloat(hosts),
+            avgSev: parseFloat(averageSeverity),
+          })}
+          <br />
+          <b>{_('Updated: ')}</b>
+          {modifiedDate}
         </ToolTip>
       );
 
@@ -93,7 +94,6 @@ const transformVulnScoreData = (data = {}, {severityClass}) => {
 };
 
 export class OsVulnScoreDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -107,14 +107,9 @@ export class OsVulnScoreDisplay extends React.Component {
   }
 
   render() {
-    const {
-      filter,
-      ...props
-    } = this.props;
+    const {filter, ...props} = this.props;
     return (
-      <OsVulnScoreLoader
-        filter={filter}
-      >
+      <OsVulnScoreLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
@@ -154,16 +149,13 @@ OsVulnScoreDisplay = compose(
   withRouter,
   withFilterSelection({
     filtersFilter: OS_FILTER_FILTER,
-  })
+  }),
 )(OsVulnScoreDisplay);
 
 export const OsVulnScoreTableDisplay = createDisplay({
   loaderComponent: OsVulnScoreLoader,
   displayComponent: DataTableDisplay,
-  dataTitles: [
-    _l('Operating System Name'),
-    _l('Max. Average Severity Score'),
-  ],
+  dataTitles: [_l('Operating System Name'), _l('Max. Average Severity Score')],
   dataRow: row => [row.x, row.y],
   dataTransform: transformVulnScoreData,
   title: ({data: tdata}) => _('Most Vulnerable Operating Systems'),
@@ -172,17 +164,12 @@ export const OsVulnScoreTableDisplay = createDisplay({
   filtersFilter: OS_FILTER_FILTER,
 });
 
-registerDisplay(
-  OsVulnScoreDisplay.displayId, OsVulnScoreDisplay, {
-    title: _l('Chart: Operating Systems by Vulnerability Score'),
-  },
-);
+registerDisplay(OsVulnScoreDisplay.displayId, OsVulnScoreDisplay, {
+  title: _l('Chart: Operating Systems by Vulnerability Score'),
+});
 
-registerDisplay(
-  OsVulnScoreTableDisplay.displayId,
-  OsVulnScoreTableDisplay, {
-    title: _l('Table: Operating Systems by Vulnerability Score'),
-  }
-);
+registerDisplay(OsVulnScoreTableDisplay.displayId, OsVulnScoreTableDisplay, {
+  title: _l('Table: Operating Systems by Vulnerability Score'),
+});
 
 // vim: set ts=2 sw=2 tw=80:

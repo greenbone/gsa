@@ -38,38 +38,26 @@ import {Col} from 'web/entity/page';
 
 import PropTypes from 'web/utils/proptypes';
 
-const TicketDetails = ({
-  entity,
-  links = true,
-}) => (
+const TicketDetails = ({entity, links = true}) => (
   <React.Fragment>
-    <DetailsBlock
-      title={_('References')}
-    >
+    <DetailsBlock title={_('References')}>
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(entity.task) &&
+          {isDefined(entity.task) && (
             <TableRow>
+              <TableData>{_('Task')}</TableData>
               <TableData>
-                {_('Task')}
-              </TableData>
-              <TableData>
-                <EntityLink
-                  entity={entity.task}
-                  textOnly={!links}
-                />
+                <EntityLink entity={entity.task} textOnly={!links} />
               </TableData>
             </TableRow>
-          }
-          {isDefined(entity.report) &&
+          )}
+          {isDefined(entity.report) && (
             <TableRow>
-              <TableData>
-                {_('Report')}
-              </TableData>
+              <TableData>{_('Report')}</TableData>
               <TableData>
                 <DetailsLink
                   type="report"
@@ -80,12 +68,10 @@ const TicketDetails = ({
                 </DetailsLink>
               </TableData>
             </TableRow>
-          }
-          {isDefined(entity.result) &&
+          )}
+          {isDefined(entity.result) && (
             <TableRow>
-              <TableData>
-                {_('Result')}
-              </TableData>
+              <TableData>{_('Result')}</TableData>
               <TableData>
                 <DetailsLink
                   type="result"
@@ -96,78 +82,54 @@ const TicketDetails = ({
                 </DetailsLink>
               </TableData>
             </TableRow>
-          }
+          )}
         </TableBody>
       </InfoTable>
     </DetailsBlock>
 
-    <DetailsBlock
-      title={_('Status Details')}
-    >
+    <DetailsBlock title={_('Status Details')}>
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(entity.openTime) &&
+          {isDefined(entity.openTime) && (
             <React.Fragment>
               <TableRow>
-                <TableData>
-                  {_('Opened')}
-                </TableData>
-                <TableData>
-                  {longDate(entity.openTime)}
-                </TableData>
+                <TableData>{_('Opened')}</TableData>
+                <TableData>{longDate(entity.openTime)}</TableData>
               </TableRow>
               <TableRow>
+                <TableData>{_('With Note')}</TableData>
                 <TableData>
-                  {_('With Note')}
-                </TableData>
-                <TableData>
-                  <Comment>
-                    {entity.openNote}
-                  </Comment>
+                  <Comment>{entity.openNote}</Comment>
                 </TableData>
               </TableRow>
             </React.Fragment>
-          }
-          {isDefined(entity.fixedTime) &&
+          )}
+          {isDefined(entity.fixedTime) && (
             <React.Fragment>
               <TableRow>
-                <TableData>
-                  {_('Fixed')}
-                </TableData>
-                <TableData>
-                  {longDate(entity.fixedTime)}
-                </TableData>
+                <TableData>{_('Fixed')}</TableData>
+                <TableData>{longDate(entity.fixedTime)}</TableData>
               </TableRow>
               <TableRow>
+                <TableData>{_('With Note')}</TableData>
                 <TableData>
-                  {_('With Note')}
-                </TableData>
-                <TableData>
-                  <Comment>
-                    {entity.fixedNote}
-                  </Comment>
+                  <Comment>{entity.fixedNote}</Comment>
                 </TableData>
               </TableRow>
             </React.Fragment>
-          }
-          {isDefined(entity.fixedVerifiedTime) &&
+          )}
+          {isDefined(entity.fixedVerifiedTime) && (
             <React.Fragment>
               <TableRow>
-                <TableData>
-                  {_('Fix Verified')}
-                </TableData>
-                <TableData>
-                  {longDate(entity.fixedVerifiedTime)}
-                </TableData>
+                <TableData>{_('Fix Verified')}</TableData>
+                <TableData>{longDate(entity.fixedVerifiedTime)}</TableData>
               </TableRow>
               <TableRow>
-                <TableData>
-                  {_('With Report')}
-                </TableData>
+                <TableData>{_('With Report')}</TableData>
                 <TableData>
                   <DetailsLink
                     type="report"
@@ -179,29 +141,21 @@ const TicketDetails = ({
                 </TableData>
               </TableRow>
             </React.Fragment>
-          }
-          {isDefined(entity.closedTime) &&
+          )}
+          {isDefined(entity.closedTime) && (
             <React.Fragment>
               <TableRow>
-                <TableData>
-                  {_('Closed')}
-                </TableData>
-                <TableData>
-                  {longDate(entity.closedTime)}
-                </TableData>
+                <TableData>{_('Closed')}</TableData>
+                <TableData>{longDate(entity.closedTime)}</TableData>
               </TableRow>
               <TableRow>
+                <TableData>{_('With Note')}</TableData>
                 <TableData>
-                  {_('With Note')}
-                </TableData>
-                <TableData>
-                  <Comment>
-                    {entity.closedNote}
-                  </Comment>
+                  <Comment>{entity.closedNote}</Comment>
                 </TableData>
               </TableRow>
             </React.Fragment>
-          }
+          )}
         </TableBody>
       </InfoTable>
     </DetailsBlock>

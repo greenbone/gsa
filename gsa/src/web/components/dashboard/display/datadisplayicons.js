@@ -33,10 +33,7 @@ export const renderDonutChartIcons = ({
   ...iconsProps
 }) => (
   <React.Fragment>
-    <DataDisplayIcons
-      {...iconsProps}
-      setState={setState}
-    />
+    <DataDisplayIcons {...iconsProps} setState={setState} />
     <Toggle3dIcon
       title={_('Toggle 2D/3D view')}
       onClick={() => setState(({show3d}) => ({show3d: !show3d}))}
@@ -55,28 +52,17 @@ const DataDisplayIcons = ({
   onSelectFilterClick,
 }) => (
   <React.Fragment>
-    {showFilterSelection &&
-      <FilterIcon
-        title={_('Select Filter')}
-        onClick={onSelectFilterClick}
-      />
-    }
-    {showSvgDownload &&
-      <DownloadSvgIcon
-        onClick={onDownloadSvgClick}
-      />
-    }
-    {showCsvDownload &&
-      <DownloadCsvIcon
-        onClick={onDownloadCsvClick}
-      />
-    }
-    {showToggleLegend &&
+    {showFilterSelection && (
+      <FilterIcon title={_('Select Filter')} onClick={onSelectFilterClick} />
+    )}
+    {showSvgDownload && <DownloadSvgIcon onClick={onDownloadSvgClick} />}
+    {showCsvDownload && <DownloadCsvIcon onClick={onDownloadCsvClick} />}
+    {showToggleLegend && (
       <LegendIcon
         title={_('Toggle Legend')}
         onClick={() => setState(({showLegend}) => ({showLegend: !showLegend}))}
       />
-    }
+    )}
   </React.Fragment>
 );
 

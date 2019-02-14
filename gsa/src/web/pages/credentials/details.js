@@ -43,9 +43,7 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-const CredentialDetails = ({
-  entity,
-}) => {
+const CredentialDetails = ({entity}) => {
   const {
     comment,
     credential_type,
@@ -58,110 +56,76 @@ const CredentialDetails = ({
     scanners = [],
   } = entity;
   return (
-    <Layout
-      flex="column"
-      grow
-    >
+    <Layout flex="column" grow>
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
           <TableRow>
-            <TableData>
-              {_('Comment')}
-            </TableData>
-            <TableData>
-              {comment}
-            </TableData>
+            <TableData>{_('Comment')}</TableData>
+            <TableData>{comment}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Type')}
-            </TableData>
+            <TableData>{_('Type')}</TableData>
             <TableData>
               <Divider>
-                <span>
-                  {getCredentialTypeName(credential_type)}
-                </span>
-                <Footnote>
-                  ({credential_type})
-                </Footnote>
+                <span>{getCredentialTypeName(credential_type)}</span>
+                <Footnote>({credential_type})</Footnote>
               </Divider>
             </TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Allow Insecure Use')}
-            </TableData>
+            <TableData>{_('Allow Insecure Use')}</TableData>
             <TableData>
               {entity.isAllowInsecure() ? _('Yes') : _('No')}
             </TableData>
           </TableRow>
 
-          {credential_type !== CLIENT_CERTIFICATE_CREDENTIAL_TYPE &&
+          {credential_type !== CLIENT_CERTIFICATE_CREDENTIAL_TYPE && (
             <TableRow>
+              <TableData>{_('Login')}</TableData>
+              <TableData>{login}</TableData>
+            </TableRow>
+          )}
+          {credential_type === SNMP_CREDENTIAL_TYPE && (
+            <TableRow>
+              <TableData>{_('Auth Algorithm')}</TableData>
+              <TableData>{auth_algorithm}</TableData>
+            </TableRow>
+          )}
+          {credential_type === SNMP_CREDENTIAL_TYPE && (
+            <TableRow>
+              <TableData>{_('Privacy Algorithm')}</TableData>
               <TableData>
-                {_('Login')}
-              </TableData>
-              <TableData>
-                {login}
+                {privacy.algorithm === SNMP_PRIVACY_ALOGRITHM_NONE
+                  ? _('None')
+                  : privacy.algorithm}
               </TableData>
             </TableRow>
-          }
-          {credential_type === SNMP_CREDENTIAL_TYPE &&
-            <TableRow>
-              <TableData>
-                {_('Auth Algorithm')}
-              </TableData>
-              <TableData>
-                {auth_algorithm}
-              </TableData>
-            </TableRow>
-          }
-          {credential_type === SNMP_CREDENTIAL_TYPE &&
-            <TableRow>
-              <TableData>
-                {_('Privacy Algorithm')}
-              </TableData>
-              <TableData>
-                {privacy.algorithm === SNMP_PRIVACY_ALOGRITHM_NONE ?
-                  _('None') :
-                  privacy.algorithm
-                }
-              </TableData>
-            </TableRow>
-          }
+          )}
 
-          {targets.length > 0 &&
+          {targets.length > 0 && (
             <TableRow>
-              <TableData>
-                {_('Targets using this Credential')}
-              </TableData>
+              <TableData>{_('Targets using this Credential')}</TableData>
               <TableData>
                 <Divider wrap>
                   {targets.map(target => (
-                    <DetailsLink
-                      key={target.id}
-                      id={target.id}
-                      type="target"
-                    >
+                    <DetailsLink key={target.id} id={target.id} type="target">
                       {target.name}
                     </DetailsLink>
                   ))}
                 </Divider>
               </TableData>
             </TableRow>
-          }
+          )}
 
-          {scanners.length > 0 &&
+          {scanners.length > 0 && (
             <TableRow>
-              <TableData>
-                {_('Sanners using this Credential')}
-              </TableData>
+              <TableData>{_('Sanners using this Credential')}</TableData>
               <TableData>
                 <Divider wrap>
                   {scanners.map(scanner => (
@@ -176,7 +140,7 @@ const CredentialDetails = ({
                 </Divider>
               </TableData>
             </TableRow>
-          }
+          )}
         </TableBody>
       </InfoTable>
     </Layout>

@@ -31,8 +31,8 @@ export const CpesCvssDisplay = createDisplay({
   loaderComponent: CpesSeverityLoader,
   displayComponent: CvssDisplay,
   yLabel: _l('# of CPEs'),
-  title: ({data: tdata}) => _('CPEs by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  title: ({data: tdata}) =>
+    _('CPEs by CVSS (Total: {{count}})', {count: tdata.total}),
   filtersFilter: CPES_FILTER_FILTER,
   displayId: 'cpe-by-cvss',
   displayName: 'CpesCvssDisplay',
@@ -41,12 +41,9 @@ export const CpesCvssDisplay = createDisplay({
 export const CpesCvssTableDisplay = createDisplay({
   loaderComponent: CpesSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [
-    _l('Severity'),
-    _l('# of CPEs'),
-  ],
-  title: ({data: tdata}) => _('CPEs by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  dataTitles: [_l('Severity'), _l('# of CPEs')],
+  title: ({data: tdata}) =>
+    _('CPEs by CVSS (Total: {{count}})', {count: tdata.total}),
   filtersFilter: CPES_FILTER_FILTER,
   displayId: 'cpe-by-cvss-table',
   displayName: 'CpesCvssTableDisplay',

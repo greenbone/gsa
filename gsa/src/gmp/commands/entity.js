@@ -28,7 +28,6 @@ import GmpCommand, {BULK_SELECT_BY_IDS} from './gmp.js';
 const log = logger.getLogger('gmp.commands.entity');
 
 class EntityCommand extends GmpCommand {
-
   constructor(http, name, clazz) {
     super(http, {cmd: 'get_' + name});
 
@@ -70,19 +69,23 @@ class EntityCommand extends GmpCommand {
     const extra_params = {
       id, // we need plain 'id' in the submitted form data not 'xyz_id'
     };
-    return this.action({
-      cmd: 'clone',
-      resource_type: this.name,
-    }, {
-      extra_params,
-    }).then(response => {
-      log.debug('Cloned', this.name, id);
-      return response;
-    })
-    .catch(err => {
-      log.error('An error occurred while cloning', this.name, id, err);
-      throw err;
-    });
+    return this.action(
+      {
+        cmd: 'clone',
+        resource_type: this.name,
+      },
+      {
+        extra_params,
+      },
+    )
+      .then(response => {
+        log.debug('Cloned', this.name, id);
+        return response;
+      })
+      .catch(err => {
+        log.error('An error occurred while cloning', this.name, id, err);
+        throw err;
+      });
   }
 
   delete({id}) {
@@ -106,8 +109,9 @@ class EntityCommand extends GmpCommand {
   }
 
   getElementFromRoot(root) {
-    throw new Error('getElementFromRoot not implemented in ' +
-      this.constructor.name);
+    throw new Error(
+      'getElementFromRoot not implemented in ' + this.constructor.name,
+    );
   }
 }
 

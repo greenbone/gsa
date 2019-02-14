@@ -22,7 +22,6 @@ import {isDefined} from '../utils/identity';
 import {parseInt} from '../parser.js';
 
 class CollectionCounts {
-
   /**
    * Create new CollectionCounts
    *
@@ -38,8 +37,8 @@ class CollectionCounts {
     this.filtered = parseInt(filtered);
     this.length = parseInt(length);
     this.rows = parseInt(rows);
-    this.last = this.first > 0 && this.length > 0 ?
-      this.first + this.length - 1 : 0;
+    this.last =
+      this.first > 0 && this.length > 0 ? this.first + this.length - 1 : 0;
   }
 
   isFirst() {

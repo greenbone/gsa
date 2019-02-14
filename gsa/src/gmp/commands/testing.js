@@ -29,31 +29,43 @@ const createEntitiesCounts = entities => ({
   _page: entities.length,
 });
 
-export const createEntitiesResponse = (name, entities) => new Response({}, {
-  [`get_${name}s`]: {
-    [`get_${name}s_response`]: {
-      [name]: entities,
-      [`${name}s`]: entitiesRange,
-      [`${name}_count`]: createEntitiesCounts(entities),
+export const createEntitiesResponse = (name, entities) =>
+  new Response(
+    {},
+    {
+      [`get_${name}s`]: {
+        [`get_${name}s_response`]: {
+          [name]: entities,
+          [`${name}s`]: entitiesRange,
+          [`${name}_count`]: createEntitiesCounts(entities),
+        },
+      },
     },
-  },
-});
+  );
 
-export const createEntityResponse = (name, entity) => new Response({}, {
-  [`get_${name}`]: {
-    [`get_${name}s_response`]: {
-      [name]: entity,
+export const createEntityResponse = (name, entity) =>
+  new Response(
+    {},
+    {
+      [`get_${name}`]: {
+        [`get_${name}s_response`]: {
+          [name]: entity,
+        },
+      },
     },
-  },
-});
+  );
 
-export const createActionResultResponse = () => new Response({}, {
-  action_result: {
-    action: 'ipsum',
-    id: 'foo',
-    message: 'OK',
-  },
-});
+export const createActionResultResponse = () =>
+  new Response(
+    {},
+    {
+      action_result: {
+        action: 'ipsum',
+        id: 'foo',
+        message: 'OK',
+      },
+    },
+  );
 
 export const createHttp = response => ({
   request: jest.fn().mockReturnValue(Promise.resolve(response)),

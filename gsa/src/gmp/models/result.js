@@ -30,7 +30,6 @@ import Note from './note';
 import Override from './override';
 
 export class Delta {
-
   static TYPE_NEW = 'new';
   static TYPE_SAME = 'same';
   static TYPE_CHANGED = 'changed';
@@ -39,15 +38,13 @@ export class Delta {
   constructor(elem) {
     if (isString(elem)) {
       this.delta_type = elem;
-    }
-    else {
+    } else {
       this.delta_type = elem.__text;
     }
   }
 }
 
 class Result extends Model {
-
   static entityType = 'result';
 
   parseProperties(elem) {
@@ -76,8 +73,7 @@ class Result extends Model {
         id: host,
         hostname: '',
       };
-    }
-    else {
+    } else {
       copy.host = {
         name: host.__text,
         id: isDefined(host.asset) ? host.asset._asset_id : host.__text,
@@ -116,7 +112,6 @@ class Result extends Model {
         id: detection.result._id,
         details: details,
       };
-
     }
 
     if (isDefined(delta)) {
@@ -128,14 +123,17 @@ class Result extends Model {
     }
 
     copy.qod = parseQod(qod);
-    copy.notes = isDefined(notes) ?
-      map(notes.note, note => new Note(note)) : [];
-    copy.overrides = isDefined(overrides) ?
-      map(overrides.override, override => new Override(override)) : [];
+    copy.notes = isDefined(notes)
+      ? map(notes.note, note => new Note(note))
+      : [];
+    copy.overrides = isDefined(overrides)
+      ? map(overrides.override, override => new Override(override))
+      : [];
 
     // parse tickets as models only. we don't have other data then the id here
-    copy.tickets = isDefined(tickets) ?
-      map(tickets.ticket, ticket => new Model(ticket, 'ticket')) : [];
+    copy.tickets = isDefined(tickets)
+      ? map(tickets.ticket, ticket => new Model(ticket, 'ticket'))
+      : [];
 
     return copy;
   }

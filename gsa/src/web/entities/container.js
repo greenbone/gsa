@@ -25,11 +25,7 @@ import logger from 'gmp/log';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-import {
-  getEntityType,
-  typeName,
-  pluralizeType,
-} from 'gmp/utils/entitytype';
+import {getEntityType, typeName, pluralizeType} from 'gmp/utils/entitytype';
 import {debounce} from 'gmp/utils/event';
 
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
@@ -57,7 +53,6 @@ const exclude_props = [
 ];
 
 class EntitiesContainer extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -124,7 +119,7 @@ class EntitiesContainer extends React.Component {
       isUpdating: true,
       loadedFilter: props.filter,
     };
-  };
+  }
 
   componentDidMount() {
     this.isRunning = true;
@@ -135,8 +130,7 @@ class EntitiesContainer extends React.Component {
     if (isDefined(filter)) {
       // use filter from url
       this.load(Filter.fromString(filter));
-    }
-    else {
+    } else {
       // use last filter
       this.load(this.props.filter);
     }
@@ -152,10 +146,7 @@ class EntitiesContainer extends React.Component {
   }
 
   load(filter) {
-    const {
-      updateFilter,
-      loadEntities,
-    } = this.props;
+    const {updateFilter, loadEntities} = this.props;
 
     log.debug('Loading', {filter});
 
@@ -185,13 +176,11 @@ class EntitiesContainer extends React.Component {
   }
 
   getReloadInterval() {
-    const {
-      defaultReloadInterval,
-      reloadInterval,
-    } = this.props;
+    const {defaultReloadInterval, reloadInterval} = this.props;
 
-    return isDefined(reloadInterval) ? reloadInterval(this.props) :
-      defaultReloadInterval;
+    return isDefined(reloadInterval)
+      ? reloadInterval(this.props)
+      : defaultReloadInterval;
   }
 
   startTimer() {
@@ -212,15 +201,25 @@ class EntitiesContainer extends React.Component {
 
     if (interval > 0) {
       this.timer = global.setTimeout(this.handleTimer, interval);
-      log.debug('Started reload timer with id', this.timer, 'and interval of',
-        interval, 'milliseconds for', this.props.gmpname);
+      log.debug(
+        'Started reload timer with id',
+        this.timer,
+        'and interval of',
+        interval,
+        'milliseconds for',
+        this.props.gmpname,
+      );
     }
   }
 
   clearTimer() {
     if (isDefined(this.timer)) {
-      log.debug('Clearing reload timer with id', this.timer, 'for',
-        this.props.gmpname);
+      log.debug(
+        'Clearing reload timer with id',
+        this.timer,
+        'for',
+        this.props.gmpname,
+      );
       global.clearTimeout(this.timer);
     }
   }
@@ -248,8 +247,7 @@ class EntitiesContainer extends React.Component {
 
     if (selectionType === SelectionType.SELECTION_USER) {
       selected = new Set();
-    }
-    else {
+    } else {
       selected = undefined;
     }
 
@@ -259,24 +257,16 @@ class EntitiesContainer extends React.Component {
 
   handleDownloadBulk(filename = 'export.xml') {
     const {entitiesCommand} = this;
-    const {
-      selected,
-      selectionType,
-    } = this.state;
-    const {
-      loadedFilter,
-      onDownload,
-    } = this.props;
+    const {selected, selectionType} = this.state;
+    const {loadedFilter, onDownload} = this.props;
 
     let promise;
 
     if (selectionType === SelectionType.SELECTION_USER) {
       promise = entitiesCommand.export(selected);
-    }
-    else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+    } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       promise = entitiesCommand.exportByFilter(loadedFilter);
-    }
-    else {
+    } else {
       promise = entitiesCommand.exportByFilter(loadedFilter.all());
     }
 
@@ -290,22 +280,15 @@ class EntitiesContainer extends React.Component {
 
   handleDeleteBulk() {
     const {entitiesCommand} = this;
-    const {
-      selected,
-      selectionType,
-    } = this.state;
-    const {
-      loadedFilter,
-    } = this.props;
+    const {selected, selectionType} = this.state;
+    const {loadedFilter} = this.props;
     let promise;
 
     if (selectionType === SelectionType.SELECTION_USER) {
       promise = entitiesCommand.delete(selected);
-    }
-    else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+    } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       promise = entitiesCommand.deleteByFilter(loadedFilter);
-    }
-    else {
+    } else {
       promise = entitiesCommand.deleteByFilter(loadedFilter.all());
     }
 
@@ -386,8 +369,8 @@ class EntitiesContainer extends React.Component {
   handleLast() {
     const {loadedFilter: filter, entitiesCounts: counts} = this.state;
 
-    const last = Math.floor((counts.filtered - 1) / counts.rows) *
-      counts.rows + 1;
+    const last =
+      Math.floor((counts.filtered - 1) / counts.rows) * counts.rows + 1;
 
     this.changeFilter(filter.first(last));
   }
@@ -436,16 +419,14 @@ class EntitiesContainer extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.tag.create(data)
+    return gmp.tag
+      .create(data)
       .then(response => gmp.tag.get(response.data))
       .then(response => {
         this.closeTagDialog();
         this.setState({
           tag: response.data,
-          tags: [
-            ...tags,
-            response.data,
-          ],
+          tags: [...tags, response.data],
         });
       });
   }
@@ -462,21 +443,9 @@ class EntitiesContainer extends React.Component {
     });
   }
 
-  handleAddMultiTag({
-    comment,
-    id,
-    name,
-    value = '',
-  }) {
-    const {
-      gmp,
-      loadedFilter,
-    } = this.props;
-    const {
-      selectionType,
-      selected,
-      entities = [],
-    } = this.state;
+  handleAddMultiTag({comment, id, name, value = ''}) {
+    const {gmp, loadedFilter} = this.props;
+    const {selectionType, selected, entities = []} = this.state;
 
     const entitiesType = getEntityType(entities[0]);
 
@@ -485,27 +454,27 @@ class EntitiesContainer extends React.Component {
     if (selectionType === SelectionType.SELECTION_USER) {
       resource_ids = map(selected, res => res.id);
       filter = undefined;
-    }
-    else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+    } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       filter = loadedFilter;
-    }
-    else {
+    } else {
       filter = loadedFilter.all();
     }
 
     this.handleInteraction();
 
-    return gmp.tag.save({
-      active: YES_VALUE,
-      comment,
-      filter,
-      id,
-      name,
-      resource_ids,
-      resource_type: entitiesType,
-      resources_action: 'add',
-      value,
-    }).then(() => this.closeTagsDialog());
+    return gmp.tag
+      .save({
+        active: YES_VALUE,
+        comment,
+        filter,
+        id,
+        name,
+        resource_ids,
+        resource_type: entitiesType,
+        resources_action: 'add',
+        value,
+      })
+      .then(() => this.closeTagsDialog());
   }
 
   openTagsDialog() {
@@ -541,12 +510,7 @@ class EntitiesContainer extends React.Component {
   }
 
   getMultiTagEntitiesCount() {
-    const {
-      selectionType,
-      selected,
-      entities,
-      entitiesCounts,
-    } = this.state;
+    const {selectionType, selected, entities, entitiesCounts} = this.state;
 
     if (selectionType === SelectionType.SELECTION_USER) {
       return selected.size;
@@ -593,21 +557,22 @@ class EntitiesContainer extends React.Component {
     let title;
     if (selectionType === SelectionType.SELECTION_USER) {
       title = 'Add Tag to Selection';
-    }
-    else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+    } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       title = 'Add Tag to Page Contents';
-    }
-    else {
+    } else {
       title = 'Add Tag to All Filtered';
     }
 
     const other = excludeObjectProps(props, exclude_props);
 
-    const reverseField = isDefined(loadedFilter) ?
-      loadedFilter.get('sort-reverse') : undefined;
+    const reverseField = isDefined(loadedFilter)
+      ? loadedFilter.get('sort-reverse')
+      : undefined;
     const reverse = isDefined(reverseField);
-    const sortBy = reverse || !isDefined(loadedFilter) ? reverseField :
-      loadedFilter.get('sort');
+    const sortBy =
+      reverse || !isDefined(loadedFilter)
+        ? reverseField
+        : loadedFilter.get('sort');
     const sortDir = reverse ? SortBy.DESC : SortBy.ASC;
     return (
       <React.Fragment>
@@ -646,7 +611,7 @@ class EntitiesContainer extends React.Component {
           showError: showErrorMessage,
           showSuccess: showSuccessMessage,
         })}
-        {tagsDialogVisible &&
+        {tagsDialogVisible && (
           <TagsDialog
             comment={tag.comment}
             entitiesCount={multiTagEntitiesCount}
@@ -661,8 +626,8 @@ class EntitiesContainer extends React.Component {
             onNewTagClick={this.openTagDialog}
             onTagChanged={this.handleTagChange}
           />
-        }
-        {tagDialogVisible &&
+        )}
+        {tagDialogVisible && (
           <TagDialog
             fixed={true}
             resources={selected}
@@ -671,7 +636,7 @@ class EntitiesContainer extends React.Component {
             onClose={this.handleCloseTagDialog}
             onSave={this.handleCreateTag}
           />
-        }
+        )}
       </React.Fragment>
     );
   }

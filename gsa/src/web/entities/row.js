@@ -29,10 +29,10 @@ export const RowDetailsToggle = withClickHandler()(styled.span`
   :hover {
     text-decoration: underline;
     color: ${Theme.blue};
-  };
+  }
   @media print {
     color: ${Theme.black};
-  };
+  }
 `);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -66,10 +66,7 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {
-  selector as hostsSelector,
-  loadEntity,
-} from 'web/store/entities/hosts';
+import {selector as hostsSelector, loadEntity} from 'web/store/entities/hosts';
 
 import {
   selector as permissionsSelector,
@@ -97,10 +94,7 @@ const ToolBarIcons = ({
           anchor="host-details"
           title={_('Help: Host Details')}
         />
-        <ListIcon
-          title={_('Host List')}
-          page="hosts"
-        />
+        <ListIcon title={_('Host List')} page="hosts" />
       </IconDivider>
       <IconDivider>
         <CreateIcon
@@ -160,83 +154,58 @@ const Hop = styled.div`
   display: inline-flex;
   &:not(:last-child) > * {
     padding-right: 5px;
-  };
+  }
   &:not(:last-child) {
     padding-right: 5px;
-  };
+  }
   &:not(:last-child)::after {
     content: '►'; /* \u25BA == &#9658; */
-  };
+  }
 `;
 
-const Details = ({
-  entity,
-  ...props
-}) => {
+const Details = ({entity, ...props}) => {
   const {details = {}, routes = [], severity} = entity;
-  const os_cpe = isDefined(details.best_os_cpe) ? details.best_os_cpe.value :
-    undefined;
-  const os_txt = isDefined(details.best_os_txt) ? details.best_os_txt.value :
-    undefined;
+  const os_cpe = isDefined(details.best_os_cpe)
+    ? details.best_os_cpe.value
+    : undefined;
+  const os_txt = isDefined(details.best_os_txt)
+    ? details.best_os_txt.value
+    : undefined;
   return (
     <Layout flex="column">
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
           <TableRow>
-            <TableData>
-              {_('Hostname')}
-            </TableData>
-            <TableData>
-              {entity.hostname}
-            </TableData>
+            <TableData>{_('Hostname')}</TableData>
+            <TableData>{entity.hostname}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('IP Address')}
-            </TableData>
-            <TableData>
-              {entity.ip}
-            </TableData>
+            <TableData>{_('IP Address')}</TableData>
+            <TableData>{entity.ip}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Comment')}
-            </TableData>
-            <TableData>
-              {entity.comment}
-            </TableData>
+            <TableData>{_('Comment')}</TableData>
+            <TableData>{entity.comment}</TableData>
           </TableRow>
 
           <TableRow>
+            <TableData>{_('OS')}</TableData>
             <TableData>
-              {_('OS')}
-            </TableData>
-            <TableData>
-              <DetailsLink
-                type="cpe"
-                textOnly={!isDefined(os_cpe)}
-                id={os_cpe}
-              >
-                <OsIcon
-                  displayOsName
-                  osCpe={os_cpe}
-                  osTxt={os_txt}
-                />
+              <DetailsLink type="cpe" textOnly={!isDefined(os_cpe)} id={os_cpe}>
+                <OsIcon displayOsName osCpe={os_cpe} osTxt={os_txt} />
               </DetailsLink>
             </TableData>
           </TableRow>
 
-          {routes.length > 0 &&
+          {routes.length > 0 && (
             <TableRow>
-              <TableData>
-                {_('Route')}
-              </TableData>
+              <TableData>{_('Route')}</TableData>
               <TableData>
                 <RouteList>
                   {routes.map((route, idx) => (
@@ -257,25 +226,18 @@ const Details = ({
                 </RouteList>
               </TableData>
             </TableRow>
-          }
+          )}
 
           <TableRow>
+            <TableData>{_('Severity')}</TableData>
             <TableData>
-              {_('Severity')}
-            </TableData>
-            <TableData>
-              <SeverityBar
-                severity={severity}
-              />
+              <SeverityBar severity={severity} />
             </TableData>
           </TableRow>
         </TableBody>
       </InfoTable>
 
-      <HostDetails
-        entity={entity}
-        {...props}
-      />
+      <HostDetails entity={entity} {...props} />
     </Layout>
   );
 };
@@ -283,7 +245,6 @@ const Details = ({
 Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
-
 
 const Page = ({
   entity,
@@ -321,7 +282,7 @@ const Page = ({
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon={<HostIcon size="large"/>}
+          sectionIcon={<HostIcon size="large" />}
           toolBarIcons={ToolBarIcons}
           title={_('Host')}
           onChanged={onChanged}
@@ -335,24 +296,16 @@ const Page = ({
           onHostEditClick={edit}
           onHostIdentifierDeleteClick={deleteidentifier}
         >
-          {({
-            activeTab = 0,
-            onActivateTab,
-          }) => {
+          {({activeTab = 0, onActivateTab}) => {
             return (
               <Layout grow="1" flex="column">
-                <TabLayout
-                  grow="1"
-                  align={['start', 'end']}
-                >
+                <TabLayout grow="1" align={['start', 'end']}>
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}
                     onActivateTab={onActivateTab}
                   >
-                    <Tab>
-                      {_('Information')}
-                    </Tab>
+                    <Tab>{_('Information')}</Tab>
                     <EntitiesTab entities={entity.userTags}>
                       {_('User Tags')}
                     </EntitiesTab>
@@ -365,9 +318,7 @@ const Page = ({
                 <Tabs active={activeTab}>
                   <TabPanels>
                     <TabPanel>
-                      <Details
-                        entity={entity}
-                      />
+                      <Details entity={entity} />
                     </TabPanel>
                     <TabPanel>
                       <EntityTags
@@ -410,10 +361,11 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

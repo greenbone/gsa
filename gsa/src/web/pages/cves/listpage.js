@@ -50,12 +50,7 @@ const ToolBarIcons = () => (
   />
 );
 
-const Page = ({
-  filter,
-  onFilterChanged,
-  onInteraction,
-  ...props
-}) => (
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
   <EntitiesPage
     {...props}
     createFilterType="info"
@@ -75,7 +70,7 @@ const Page = ({
     filter={filter}
     filterEditDialog={CveFilterDialog}
     filtersFilter={CVES_FILTER_FILTER}
-    sectionIcon={<CveIcon size="large"/>}
+    sectionIcon={<CveIcon size="large" />}
     table={CvesTable}
     title={_('CVEs')}
     toolBarIcons={ToolBarIcons}

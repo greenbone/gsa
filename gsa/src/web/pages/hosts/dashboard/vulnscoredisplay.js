@@ -37,11 +37,9 @@ import BarChart from 'web/components/chart/bar';
 
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';  // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
-import {
-  riskFactorColorScale,
-} from 'web/components/dashboard/display/utils';
+import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {HostsVulnScoreLoader} from './loaders';
@@ -69,13 +67,15 @@ const transformVulnScoreData = (data = {}, {severityClass}) => {
       const modifiedDate = longDate(modified);
       const toolTip = (
         <ToolTip>
-          <b>{name}:</b><br/>
-          {_('{{sevMax}}: ({{riskFactor}})',
-            {
-              sevMax: severity.max,
-              riskFactor,
-            })}<br/>
-          <b>{_('Updated: ')}</b>{modifiedDate}
+          <b>{name}:</b>
+          <br />
+          {_('{{sevMax}}: ({{riskFactor}})', {
+            sevMax: severity.max,
+            riskFactor,
+          })}
+          <br />
+          <b>{_('Updated: ')}</b>
+          {modifiedDate}
         </ToolTip>
       );
 
@@ -92,7 +92,6 @@ const transformVulnScoreData = (data = {}, {severityClass}) => {
 };
 
 export class HostsVulnScoreDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -106,14 +105,9 @@ export class HostsVulnScoreDisplay extends React.Component {
   }
 
   render() {
-    const {
-      filter,
-      ...props
-    } = this.props;
+    const {filter, ...props} = this.props;
     return (
-      <HostsVulnScoreLoader
-        filter={filter}
-      >
+      <HostsVulnScoreLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
@@ -151,7 +145,7 @@ HostsVulnScoreDisplay = compose(
   withRouter,
   withFilterSelection({
     filtersFilter: HOSTS_FILTER_FILTER,
-  })
+  }),
 )(HostsVulnScoreDisplay);
 
 HostsVulnScoreDisplay.displayId = 'host-by-most-vulnerable';
@@ -160,10 +154,7 @@ export const HostsVulnScoreTableDisplay = createDisplay({
   loaderComponent: HostsVulnScoreLoader,
   displayComponent: DataTableDisplay,
   dataTransform: transformVulnScoreData,
-  dataTitles: [
-    _l('Host Name'),
-    _l('Max. average Severity Score'),
-  ],
+  dataTitles: [_l('Host Name'), _l('Max. average Severity Score')],
   dataRow: row => [row.x, row.y],
   title: () => _('Most Vulnerable Hosts'),
   filtersFilter: HOSTS_FILTER_FILTER,
@@ -172,12 +163,13 @@ export const HostsVulnScoreTableDisplay = createDisplay({
 });
 
 registerDisplay(HostsVulnScoreDisplay.displayId, HostsVulnScoreDisplay, {
-    title: _l('Chart: Hosts by Vulnerability Score'),
-  },
-);
+  title: _l('Chart: Hosts by Vulnerability Score'),
+});
 
-registerDisplay(HostsVulnScoreTableDisplay.displayId,
-  HostsVulnScoreTableDisplay, {
+registerDisplay(
+  HostsVulnScoreTableDisplay.displayId,
+  HostsVulnScoreTableDisplay,
+  {
     title: _l('Table: Hosts by Vulnerability Score'),
   },
 );

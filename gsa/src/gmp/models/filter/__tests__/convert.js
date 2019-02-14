@@ -19,7 +19,6 @@
 import convert from '../convert';
 
 describe('convert tests', () => {
-
   test('should convert apply_overrides keyword', () => {
     expect(convert('apply_overrides', '1', '=')).toEqual({
       keyword: 'apply_overrides',

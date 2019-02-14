@@ -24,17 +24,13 @@ import {longDate, setLocale} from 'gmp/locale/date';
 
 import {setSessionTimeout, setUsername} from 'web/store/usersettings/actions';
 
-import {
-  rendererWith,
-  fireEvent,
-} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import UserLink from '../userlink';
 
 setLocale('en');
 
 describe('UserLink tests', () => {
-
   test('should render username and timeout', () => {
     const timeout = date().add(5, 'minutes');
 
@@ -75,7 +71,6 @@ describe('UserLink tests', () => {
 
     expect(history.location.pathname).toMatch('usersettings');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

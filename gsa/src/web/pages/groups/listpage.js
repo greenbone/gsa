@@ -44,22 +44,16 @@ import {
 import GroupComponent from './component';
 import Table, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onGroupCreateClick,
-}) => (
+const ToolBarIcons = withCapabilities(({capabilities, onGroupCreateClick}) => (
   <IconDivider>
     <ManualIcon
       page="gui_administration"
       anchor="groups"
       title={_('Help: Groups')}
     />
-    {capabilities.mayCreate('group') &&
-      <NewIcon
-        title={_('New Group')}
-        onClick={onGroupCreateClick}
-      />
-    }
+    {capabilities.mayCreate('group') && (
+      <NewIcon title={_('New Group')} onClick={onGroupCreateClick} />
+    )}
   </IconDivider>
 ));
 
@@ -87,19 +81,12 @@ const GroupsPage = ({
     onDownloadError={onError}
     onInteraction={onInteraction}
   >
-    {({
-      clone,
-      create,
-      delete: delete_func,
-      download,
-      edit,
-      save,
-    }) => (
+    {({clone, create, delete: delete_func, download, edit, save}) => (
       <EntitiesPage
         {...props}
         filterEditDialog={GroupsFilterDialog}
         filtersFilter={GROUPS_FILTER_FILTER}
-        sectionIcon={<GroupIcon size="large"/>}
+        sectionIcon={<GroupIcon size="large" />}
         table={Table}
         title={_('Groups')}
         toolBarIcons={ToolBarIcons}

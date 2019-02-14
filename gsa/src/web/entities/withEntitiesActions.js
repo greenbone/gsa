@@ -22,10 +22,8 @@ import EntitiesActions from './actions';
 
 const withEntitiesActions = Component => {
   const EnitiesActionsWrapper = props => (
-    <EntitiesActions
-      {...props}
-    >
-      {actionprops => <Component {...actionprops}/>}
+    <EntitiesActions {...props}>
+      {actionprops => <Component {...actionprops} />}
     </EntitiesActions>
   );
 

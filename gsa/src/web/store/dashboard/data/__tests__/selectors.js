@@ -29,7 +29,6 @@ const createState = state => ({
 });
 
 describe('dashboard data selector init tests', () => {
-
   test('should not crash with undefined data', () => {
     const id = 'a1';
     const selector = getDashboardData();
@@ -57,11 +56,9 @@ describe('dashboard data selector init tests', () => {
     expect(selector.getError(id)).toBeUndefined();
     expect(selector.getIsLoading(id)).toEqual(false);
   });
-
 });
 
 describe('dashboard data selector isLoading tests', () => {
-
   test('should return true for isLoading', () => {
     const id = 'a1';
     const filterString = filterIdentifier();
@@ -90,11 +87,9 @@ describe('dashboard data selector isLoading tests', () => {
     const selector = getDashboardData(rootState);
     expect(selector.getIsLoading(id, filter)).toEqual(true);
   });
-
 });
 
 describe('dashboard data selector error tests', () => {
-
   test('should return error', () => {
     const id = 'a1';
     const filterString = filterIdentifier();
@@ -123,11 +118,9 @@ describe('dashboard data selector error tests', () => {
     const selector = getDashboardData(rootState);
     expect(selector.getError(id, filter)).toEqual('An error');
   });
-
 });
 
 describe('dashboard data selector getData tests', () => {
-
   test('should return data', () => {
     const id = 'a1';
     const filterString = filterIdentifier();
@@ -199,7 +192,6 @@ describe('dashboard data selector getData tests', () => {
     const selector = getDashboardData(rootState);
     expect(selector.getData(id, filter)).toBeUndefined();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -56,13 +56,10 @@ const Table = styled(SimpleTable)`
   width: 100%;
   & td {
     padding: 0;
-  };
+  }
 `;
 
-const Method = ({
-  method,
-  details = false,
-}) => {
+const Method = ({method, details = false}) => {
   let url = '';
   if (method.type === METHOD_TYPE_ALEMBA_VFIRE) {
     const {data = {}} = method;
@@ -72,117 +69,83 @@ const Method = ({
           <div>{_('Alemba vFire')}</div>
           <Table>
             <colgroup>
-              <Col width="12%"/>
-              <Col width="88%"/>
+              <Col width="12%" />
+              <Col width="88%" />
             </colgroup>
             <TableBody>
               {isDefined(data.vfire_base_url) &&
-                isDefined(data.vfire_base_url.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Base URL')}
-                  </TableData>
-                  <TableData>
-                    {data.vfire_base_url.value}
-                  </TableData>
-                </TableRow>
-              }
+                isDefined(data.vfire_base_url.value) && (
+                  <TableRow>
+                    <TableData>{_('Base URL')}</TableData>
+                    <TableData>{data.vfire_base_url.value}</TableData>
+                  </TableRow>
+                )}
 
               {isDefined(data.vfire_call_description) &&
-                isDefined(data.vfire_call_description.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Call Description')}
-                  </TableData>
-                  <TableData>
-                    {data.vfire_call_description.value}
-                  </TableData>
-                </TableRow>
-              }
+                isDefined(data.vfire_call_description.value) && (
+                  <TableRow>
+                    <TableData>{_('Call Description')}</TableData>
+                    <TableData>{data.vfire_call_description.value}</TableData>
+                  </TableRow>
+                )}
 
               {isDefined(data.vfire_call_impact_name) &&
-                isDefined(data.vfire_call_impact_name.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Impact')}
-                  </TableData>
-                  <TableData>
-                    {data.vfire_call_impact_name.value}
-                  </TableData>
-                </TableRow>
-              }
+                isDefined(data.vfire_call_impact_name.value) && (
+                  <TableRow>
+                    <TableData>{_('Impact')}</TableData>
+                    <TableData>{data.vfire_call_impact_name.value}</TableData>
+                  </TableRow>
+                )}
 
               {isDefined(data.vfire_call_partition_name) &&
-                isDefined(data.vfire_call_partition_name.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Partition')}
-                  </TableData>
-                  <TableData>
-                    {data.vfire_call_partition_name.value}
-                  </TableData>
-                </TableRow>
-              }
+                isDefined(data.vfire_call_partition_name.value) && (
+                  <TableRow>
+                    <TableData>{_('Partition')}</TableData>
+                    <TableData>
+                      {data.vfire_call_partition_name.value}
+                    </TableData>
+                  </TableRow>
+                )}
 
               {isDefined(data.vfire_call_template_name) &&
-                isDefined(data.vfire_call_template_name.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Call Template')}
-                  </TableData>
-                  <TableData>
-                    {data.vfire_call_template_name.value}
-                  </TableData>
-                </TableRow>
-              }
+                isDefined(data.vfire_call_template_name.value) && (
+                  <TableRow>
+                    <TableData>{_('Call Template')}</TableData>
+                    <TableData>{data.vfire_call_template_name.value}</TableData>
+                  </TableRow>
+                )}
 
               {isDefined(data.vfire_call_type_name) &&
-                isDefined(data.vfire_call_type_name.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Call Type')}
-                  </TableData>
-                  <TableData>
-                    {data.vfire_call_type_name.value}
-                  </TableData>
-                </TableRow>
-              }
+                isDefined(data.vfire_call_type_name.value) && (
+                  <TableRow>
+                    <TableData>{_('Call Type')}</TableData>
+                    <TableData>{data.vfire_call_type_name.value}</TableData>
+                  </TableRow>
+                )}
 
               {isDefined(data.vfire_call_urgency_name) &&
-                isDefined(data.vfire_call_urgency_name.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Urgency')}
-                  </TableData>
-                  <TableData>
-                    {data.vfire_call_urgency_name.value}
-                  </TableData>
-                </TableRow>
-              }
+                isDefined(data.vfire_call_urgency_name.value) && (
+                  <TableRow>
+                    <TableData>{_('Urgency')}</TableData>
+                    <TableData>{data.vfire_call_urgency_name.value}</TableData>
+                  </TableRow>
+                )}
 
               {isDefined(data.vfire_client_id) &&
-                isDefined(data.vfire_client_id.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Alemba Client ID')}
-                  </TableData>
-                  <TableData>
-                    {data.vfire_client_id.value}
-                  </TableData>
-                </TableRow>
-              }
+                isDefined(data.vfire_client_id.value) && (
+                  <TableRow>
+                    <TableData>{_('Alemba Client ID')}</TableData>
+                    <TableData>{data.vfire_client_id.value}</TableData>
+                  </TableRow>
+                )}
 
               {isDefined(data.vfire_session_type) &&
-                isDefined(data.vfire_session_type.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Session Type')}
-                  </TableData>
-                  <TableData>
-                    {data.vfire_session_type.value}
-                  </TableData>
-                </TableRow>
-              }
+                isDefined(data.vfire_session_type.value) && (
+                  <TableRow>
+                    <TableData>{_('Session Type')}</TableData>
+                    <TableData>{data.vfire_session_type.value}</TableData>
+                  </TableRow>
+                )}
             </TableBody>
           </Table>
         </div>
@@ -202,71 +165,49 @@ const Method = ({
           <div>{_('SCP')}</div>
           <Table>
             <colgroup>
-              <Col width="12%"/>
-              <Col width="88%"/>
+              <Col width="12%" />
+              <Col width="88%" />
             </colgroup>
             <TableBody>
-              {isDefined(data.scp_host) && isDefined(data.scp_host.value) &&
+              {isDefined(data.scp_host) && isDefined(data.scp_host.value) && (
                 <TableRow>
-                  <TableData>
-                    {_('Host')}
-                  </TableData>
-                  <TableData>
-                    {data.scp_host.value}
-                  </TableData>
+                  <TableData>{_('Host')}</TableData>
+                  <TableData>{data.scp_host.value}</TableData>
                 </TableRow>
-              }
+              )}
 
-              {isDefined(credential) && isDefined(credential.id) &&
+              {isDefined(credential) && isDefined(credential.id) && (
                 <TableRow>
+                  <TableData>{_('Credential')}</TableData>
                   <TableData>
-                    {_('Credential')}
-                  </TableData>
-                  <TableData>
-                    <DetailsLink
-                      id={credential.id}
-                      type="credential"
-                    >
+                    <DetailsLink id={credential.id} type="credential">
                       {credential.name}
                     </DetailsLink>
                   </TableData>
                 </TableRow>
-              }
+              )}
 
-              {isDefined(credential) && isDefined(credential.login) &&
+              {isDefined(credential) && isDefined(credential.login) && (
                 <TableRow>
-                  <TableData>
-                    {_('Login')}
-                  </TableData>
-                  <TableData>
-                    {credential.login}
-                  </TableData>
+                  <TableData>{_('Login')}</TableData>
+                  <TableData>{credential.login}</TableData>
                 </TableRow>
-              }
+              )}
 
               {isDefined(data.scp_known_hosts) &&
-                isDefined(data.scp_known_hosts.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Known Hosts')}
-                  </TableData>
-                  <TableData>
-                    {data.scp_known_hosts.value}
-                  </TableData>
-                </TableRow>
-              }
+                isDefined(data.scp_known_hosts.value) && (
+                  <TableRow>
+                    <TableData>{_('Known Hosts')}</TableData>
+                    <TableData>{data.scp_known_hosts.value}</TableData>
+                  </TableRow>
+                )}
 
-              {isDefined(data.scp_path) &&
-                isDefined(data.scp_path.value) &&
+              {isDefined(data.scp_path) && isDefined(data.scp_path.value) && (
                 <TableRow>
-                  <TableData>
-                    {_('Path')}
-                  </TableData>
-                  <TableData>
-                    {data.scp_path.value}
-                  </TableData>
+                  <TableData>{_('Path')}</TableData>
+                  <TableData>{data.scp_path.value}</TableData>
                 </TableRow>
-              }
+              )}
             </TableBody>
           </Table>
         </div>
@@ -275,8 +216,7 @@ const Method = ({
 
     if (isDefined(credential) && isDefined(credential)) {
       url += credential.login;
-    }
-    else {
+    } else {
       url += _('(Credential unavailable)');
     }
 
@@ -296,8 +236,10 @@ const Method = ({
     return _('Send to {{- url}}', {url});
   }
 
-  if (method.type === METHOD_TYPE_SYSLOG &&
-    method.data.submethod.value === METHOD_TYPE_SNMP) {
+  if (
+    method.type === METHOD_TYPE_SYSLOG &&
+    method.data.submethod.value === METHOD_TYPE_SNMP
+  ) {
     return 'SNMP';
   }
 
@@ -309,42 +251,29 @@ const Method = ({
           <div>{_('SNMP')}</div>
           <Table>
             <colgroup>
-              <Col width="12%"/>
-              <Col width="88%"/>
+              <Col width="12%" />
+              <Col width="88%" />
             </colgroup>
             <TableBody>
               <TableRow>
-                <TableData>
-                  {_('Agent')}
-                </TableData>
-                <TableData>
-                  {data.snmp_agent.value}
-                </TableData>
+                <TableData>{_('Agent')}</TableData>
+                <TableData>{data.snmp_agent.value}</TableData>
               </TableRow>
 
               {isDefined(data.snmp_community) &&
-                isDefined(data.snmp_community.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Community')}
-                  </TableData>
-                  <TableData>
-                    {data.snmp_community.value}
-                  </TableData>
-                </TableRow>
-              }
+                isDefined(data.snmp_community.value) && (
+                  <TableRow>
+                    <TableData>{_('Community')}</TableData>
+                    <TableData>{data.snmp_community.value}</TableData>
+                  </TableRow>
+                )}
 
-              {isDefined(data.snmp_agent) &&
-                isDefined(data.snmp_agent.value) &&
+              {isDefined(data.snmp_agent) && isDefined(data.snmp_agent.value) && (
                 <TableRow>
-                  <TableData>
-                    {_('Message {{name}}')}
-                  </TableData>
-                  <TableData>
-                    {data.snmp_message.value}
-                  </TableData>
+                  <TableData>{_('Message {{name}}')}</TableData>
+                  <TableData>{data.snmp_message.value}</TableData>
                 </TableRow>
-              }
+              )}
             </TableBody>
           </Table>
         </div>
@@ -362,33 +291,23 @@ const Method = ({
           <div>{_('Email')}</div>
           <Table>
             <colgroup>
-              <Col width="12%"/>
-              <Col width="88%"/>
+              <Col width="12%" />
+              <Col width="88%" />
             </colgroup>
             <TableBody>
               <TableRow>
-                <TableData>
-                  {_('To address')}
-                </TableData>
-                <TableData>
-                  {data.to_address.value}
-                </TableData>
+                <TableData>{_('To address')}</TableData>
+                <TableData>{data.to_address.value}</TableData>
               </TableRow>
 
               <TableRow>
-                <TableData>
-                  {_('From address')}
-                </TableData>
-                <TableData>
-                  {data.from_address.value}
-                </TableData>
+                <TableData>{_('From address')}</TableData>
+                <TableData>{data.from_address.value}</TableData>
               </TableRow>
 
-              {details && isDefined(data.recipient_credential) &&
+              {details && isDefined(data.recipient_credential) && (
                 <TableRow>
-                  <TableData>
-                    {_('Email Encryption')}
-                  </TableData>
+                  <TableData>{_('Email Encryption')}</TableData>
                   <TableData>
                     <DetailsLink
                       id={data.recipient_credential.value}
@@ -398,57 +317,48 @@ const Method = ({
                     </DetailsLink>
                   </TableData>
                 </TableRow>
-              }
+              )}
 
-              {details && isDefined(data.notice) &&
-                isDefined(data.notice.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Content')}
-                  </TableData>
-                  <TableData>
-                    {data.notice.value === EMAIL_NOTICE_INCLUDE ?
-                      _('Include Content') :
-                      data.notice.value === EMAIL_NOTICE_ATTACH ?
-                      _('Attach Content') :
-                      _('Simple Notice')
-                    }
-                  </TableData>
-                </TableRow>
-              }
+              {details &&
+                isDefined(data.notice) &&
+                isDefined(data.notice.value) && (
+                  <TableRow>
+                    <TableData>{_('Content')}</TableData>
+                    <TableData>
+                      {data.notice.value === EMAIL_NOTICE_INCLUDE
+                        ? _('Include Content')
+                        : data.notice.value === EMAIL_NOTICE_ATTACH
+                        ? _('Attach Content')
+                        : _('Simple Notice')}
+                    </TableData>
+                  </TableRow>
+                )}
 
-              {details && isDefined(data.subject) &&
-                isDefined(data.subject.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Subject')}
-                  </TableData>
-                  <TableData>
-                    {data.subject.value}
-                  </TableData>
-                </TableRow>
-              }
+              {details &&
+                isDefined(data.subject) &&
+                isDefined(data.subject.value) && (
+                  <TableRow>
+                    <TableData>{_('Subject')}</TableData>
+                    <TableData>{data.subject.value}</TableData>
+                  </TableRow>
+                )}
 
-              {details && isDefined(data.message) &&
-                isDefined(data.message.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Message')}
-                  </TableData>
-                  <TableData>
-                    {data.message.value}
-                  </TableData>
-                </TableRow>
-              }
-
+              {details &&
+                isDefined(data.message) &&
+                isDefined(data.message.value) && (
+                  <TableRow>
+                    <TableData>{_('Message')}</TableData>
+                    <TableData>{data.message.value}</TableData>
+                  </TableRow>
+                )}
             </TableBody>
           </Table>
         </div>
       );
     }
-    return isDefined(data.recipient_credential) ?
-      _('Encrypted Email to {{address}}', {address: data.to_address.value}) :
-      _('Email to {{address}}', {address: data.to_address.value});
+    return isDefined(data.recipient_credential)
+      ? _('Encrypted Email to {{address}}', {address: data.to_address.value})
+      : _('Email to {{address}}', {address: data.to_address.value});
   }
 
   if (method.type === METHOD_TYPE_START_TASK) {
@@ -476,32 +386,24 @@ const Method = ({
           <div>{_('Sourcefire Connector')}</div>
           <Table>
             <colgroup>
-              <Col width="12%"/>
-              <Col width="88%"/>
+              <Col width="12%" />
+              <Col width="88%" />
             </colgroup>
             <TableBody>
               {isDefined(data.defense_center_ip) &&
-                isDefined(data.defense_center_ip.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Defense Center IP')}
-                  </TableData>
-                  <TableData>
-                    {data.defense_center_ip.value}
-                  </TableData>
-                </TableRow>
-              }
+                isDefined(data.defense_center_ip.value) && (
+                  <TableRow>
+                    <TableData>{_('Defense Center IP')}</TableData>
+                    <TableData>{data.defense_center_ip.value}</TableData>
+                  </TableRow>
+                )}
               {isDefined(data.defense_center_port) &&
-                isDefined(data.defense_center_port.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('Defense Center Port')}
-                  </TableData>
-                  <TableData>
-                    {data.defense_center_port.value}
-                  </TableData>
-                </TableRow>
-              }
+                isDefined(data.defense_center_port.value) && (
+                  <TableRow>
+                    <TableData>{_('Defense Center Port')}</TableData>
+                    <TableData>{data.defense_center_port.value}</TableData>
+                  </TableRow>
+                )}
             </TableBody>
           </Table>
         </div>
@@ -523,49 +425,35 @@ const Method = ({
           <div>{_('verinice Connector')}</div>
           <Table>
             <colgroup>
-              <Col width="12%"/>
-              <Col width="88%"/>
+              <Col width="12%" />
+              <Col width="88%" />
             </colgroup>
             <TableBody>
-
               {isDefined(data.verinice_server_url) &&
-                isDefined(data.verinice_server_url.value) &&
-                <TableRow>
-                  <TableData>
-                    {_('URL')}
-                  </TableData>
-                  <TableData>
-                    {data.verinice_server_url.value}
-                  </TableData>
-                </TableRow>
-              }
+                isDefined(data.verinice_server_url.value) && (
+                  <TableRow>
+                    <TableData>{_('URL')}</TableData>
+                    <TableData>{data.verinice_server_url.value}</TableData>
+                  </TableRow>
+                )}
 
-              {isDefined(credential) && isDefined(credential.id) &&
+              {isDefined(credential) && isDefined(credential.id) && (
                 <TableRow>
+                  <TableData>{_('Credential')}</TableData>
                   <TableData>
-                    {_('Credential')}
-                  </TableData>
-                  <TableData>
-                    <DetailsLink
-                      id={credential.id}
-                      type="credential"
-                    >
+                    <DetailsLink id={credential.id} type="credential">
                       {credential.name}
                     </DetailsLink>
                   </TableData>
                 </TableRow>
-              }
+              )}
 
-              {isDefined(credential) && isDefined(credential.login) &&
+              {isDefined(credential) && isDefined(credential.login) && (
                 <TableRow>
-                  <TableData>
-                    {_('Userame')}
-                  </TableData>
-                  <TableData>
-                    {credential.login}
-                  </TableData>
+                  <TableData>{_('Userame')}</TableData>
+                  <TableData>{credential.login}</TableData>
                 </TableRow>
-              }
+              )}
             </TableBody>
           </Table>
         </div>

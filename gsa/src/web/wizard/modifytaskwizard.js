@@ -75,42 +75,43 @@ const ModifyTaskWizard = ({
       onClose={onClose}
       onSave={onSave}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => (
+      {({values: state, onValueChange}) => (
         <Layout align={['start', 'start']}>
-          <WizardIcon/>
+          <WizardIcon />
           <Layout basis="40%">
             <WizardContent>
-              <p><b>{_('Quick edit: Modify a task')}</b></p>
+              <p>
+                <b>{_('Quick edit: Modify a task')}</b>
+              </p>
               <div>
-                {_('GSA will modify an existing task for you. The difference ' +
-                  'to the Edit Task dialog is that you can enter ' +
-                  'values for associated objects directly here. GSA will then' +
-                  ' create them for you automatically and assign them to the' +
-                  ' selected task.')}
+                {_(
+                  'GSA will modify an existing task for you. The difference ' +
+                    'to the Edit Task dialog is that you can enter ' +
+                    'values for associated objects directly here. GSA will then' +
+                    ' create them for you automatically and assign them to the' +
+                    ' selected task.',
+                )}
               </div>
               <div>
                 {_('Please be aware that:')}
                 <ul>
                   <li>
-                    {_('Setting a start time overwrites a possibly already ' +
-                      'existing one.')}
+                    {_(
+                      'Setting a start time overwrites a possibly already ' +
+                        'existing one.',
+                    )}
                   </li>
                   <li>
-                    {_('Setting an email Address means adding an additional' +
-                      ' Alert, not replacing an existing one.')}
+                    {_(
+                      'Setting an email Address means adding an additional' +
+                        ' Alert, not replacing an existing one.',
+                    )}
                   </li>
                 </ul>
               </div>
             </WizardContent>
           </Layout>
-          <Layout
-            basis="0"
-            grow="1"
-            flex="column"
-          >
+          <Layout basis="0" grow="1" flex="column">
             <FormGroup title={_('Task')} titleSize="3">
               <Select
                 name="task_id"
@@ -120,11 +121,7 @@ const ModifyTaskWizard = ({
               />
             </FormGroup>
 
-            <FormGroup
-              title={_('Start Time')}
-              titleSize="3"
-              flex="column"
-            >
+            <FormGroup title={_('Start Time')} titleSize="3" flex="column">
               <FormGroup>
                 <Radio
                   title={_('Do not change')}
@@ -170,7 +167,8 @@ const ModifyTaskWizard = ({
                     size="2"
                     name="start_minute"
                     value={state.start_minute}
-                    onChange={onValueChange}i
+                    onChange={onValueChange}
+                    i
                   />
                   <span>{_('m')}</span>
                 </Divider>
@@ -185,18 +183,18 @@ const ModifyTaskWizard = ({
             </FormGroup>
 
             {capabilities.mayCreate('alert') &&
-              capabilities.mayAccess('alerts') &&
-              <FormGroup title={_('Email report to')} titleSize="3">
-                <TextField
-                  grow="1"
-                  name="alert_email"
-                  value={state.alert_email}
-                  size="30"
-                  maxLength="80"
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-            }
+              capabilities.mayAccess('alerts') && (
+                <FormGroup title={_('Email report to')} titleSize="3">
+                  <TextField
+                    grow="1"
+                    name="alert_email"
+                    value={state.alert_email}
+                    size="30"
+                    maxLength="80"
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
+              )}
           </Layout>
         </Layout>
       )}
@@ -207,9 +205,7 @@ const ModifyTaskWizard = ({
 ModifyTaskWizard.propTypes = {
   alert_email: PropTypes.string,
   capabilities: PropTypes.capabilities.isRequired,
-  reschedule: PropTypes.oneOf([
-    NO_VALUE, YES_VALUE,
-  ]),
+  reschedule: PropTypes.oneOf([NO_VALUE, YES_VALUE]),
   start_date: PropTypes.date,
   start_hour: PropTypes.number,
   start_minute: PropTypes.number,
@@ -220,7 +216,6 @@ ModifyTaskWizard.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
-
 
 export default withCapabilities(ModifyTaskWizard);
 

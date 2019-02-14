@@ -41,7 +41,6 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 class NvtPreference extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -61,18 +60,14 @@ class NvtPreference extends React.Component {
   onCheckedChange(value) {
     if (value) {
       this.onPreferenceChange('');
-    }
-    else {
+    } else {
       this.onPreferenceChange(undefined);
     }
     this.setState({checked: value});
   }
 
   render() {
-    const {
-      preference,
-      value,
-    } = this.props;
+    const {preference, value} = this.props;
 
     const {checked} = this.state;
     const {type} = preference;
@@ -88,10 +83,8 @@ class NvtPreference extends React.Component {
           convert={noop_convert}
           onChange={this.onPreferenceChange}
         />
-
       );
-    }
-    else if (type === 'password') {
+    } else if (type === 'password') {
       input = (
         <Divider>
           <Checkbox
@@ -106,27 +99,22 @@ class NvtPreference extends React.Component {
           />
         </Divider>
       );
-    }
-    else if (type === 'file') {
+    } else if (type === 'file') {
       input = (
         <Divider>
           <Checkbox
             title={
-              isEmpty(preference.value) ?
-                _('Upload file') :
-                _('Replace existing file')
+              isEmpty(preference.value)
+                ? _('Upload file')
+                : _('Replace existing file')
             }
             checked={checked}
             onChange={this.onCheckedChange}
           />
-          <FileField
-            disabled={!checked}
-            onChange={this.onPreferenceChange}
-          />
+          <FileField disabled={!checked} onChange={this.onPreferenceChange} />
         </Divider>
       );
-    }
-    else if (type === 'radio') {
+    } else if (type === 'radio') {
       input = (
         <Layout flex="column">
           <Radio
@@ -145,12 +133,10 @@ class NvtPreference extends React.Component {
                 onChange={this.onPreferenceChange}
               />
             );
-          })
-          }
+          })}
         </Layout>
       );
-    }
-    else {
+    } else {
       input = (
         <TextField
           name={preference.name}
@@ -162,15 +148,9 @@ class NvtPreference extends React.Component {
     }
     return (
       <TableRow>
-        <TableData>
-          {preference.hr_name}
-        </TableData>
-        <TableData>
-          {input}
-        </TableData>
-        <TableData>
-          {preference.default}
-        </TableData>
+        <TableData>{preference.hr_name}</TableData>
+        <TableData>{input}</TableData>
+        <TableData>{preference.default}</TableData>
       </TableRow>
     );
   }

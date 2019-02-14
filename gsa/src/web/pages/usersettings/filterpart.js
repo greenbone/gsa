@@ -28,8 +28,8 @@ import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
-const filterFilters =
-  (filters, type) => filters.filter(filter => filter.filter_type === type);
+const filterFilters = (filters, type) =>
+  filters.filter(filter => filter.filter_type === type);
 
 const FilterPart = ({
   agentsFilter,
@@ -67,7 +67,9 @@ const FilterPart = ({
           name="agentsFilter"
           value={agentsFilter}
           items={renderSelectItems(
-            filterFilters(filters, 'agent'), UNSET_VALUE)}
+            filterFilters(filters, 'agent'),
+            UNSET_VALUE,
+          )}
           onChange={onChange}
         />
       </FormGroup>
@@ -76,7 +78,9 @@ const FilterPart = ({
           name="alertsFilter"
           value={alertsFilter}
           items={renderSelectItems(
-            filterFilters(filters, 'alert'), UNSET_VALUE)}
+            filterFilters(filters, 'alert'),
+            UNSET_VALUE,
+          )}
           onChange={onChange}
         />
       </FormGroup>
@@ -85,7 +89,9 @@ const FilterPart = ({
           name="assetsFilter"
           value={assetsFilter}
           items={renderSelectItems(
-            filterFilters(filters, 'asset'), UNSET_VALUE)}
+            filterFilters(filters, 'asset'),
+            UNSET_VALUE,
+          )}
           onChange={onChange}
         />
       </FormGroup>
@@ -94,7 +100,9 @@ const FilterPart = ({
           name="configsFilter"
           value={configsFilter}
           items={renderSelectItems(
-            filterFilters(filters, 'config'), UNSET_VALUE)}
+            filterFilters(filters, 'config'),
+            UNSET_VALUE,
+          )}
           onChange={onChange}
         />
       </FormGroup>
@@ -103,7 +111,9 @@ const FilterPart = ({
           name="credentialsFilter"
           value={credentialsFilter}
           items={renderSelectItems(
-            filterFilters(filters, 'credential'), UNSET_VALUE)}
+            filterFilters(filters, 'credential'),
+            UNSET_VALUE,
+          )}
           onChange={onChange}
         />
       </FormGroup>
@@ -112,7 +122,9 @@ const FilterPart = ({
           name="filtersFilter"
           value={filtersFilter}
           items={renderSelectItems(
-            filterFilters(filters, 'filter'), UNSET_VALUE)}
+            filterFilters(filters, 'filter'),
+            UNSET_VALUE,
+          )}
           onChange={onChange}
         />
       </FormGroup>
@@ -120,8 +132,7 @@ const FilterPart = ({
         <Select
           name="notesFilter"
           value={notesFilter}
-          items={renderSelectItems(
-            filterFilters(filters, 'note'), UNSET_VALUE)}
+          items={renderSelectItems(filterFilters(filters, 'note'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
@@ -130,7 +141,9 @@ const FilterPart = ({
           name="overridesFilter"
           value={overridesFilter}
           items={renderSelectItems(
-            filterFilters(filters, 'override'), UNSET_VALUE)}
+            filterFilters(filters, 'override'),
+            UNSET_VALUE,
+          )}
           onChange={onChange}
         />
       </FormGroup>
@@ -139,7 +152,9 @@ const FilterPart = ({
           name="permissionsFilter"
           value={permissionsFilter}
           items={renderSelectItems(
-            filterFilters(filters, 'permission'), UNSET_VALUE)}
+            filterFilters(filters, 'permission'),
+            UNSET_VALUE,
+          )}
           onChange={onChange}
         />
       </FormGroup>
@@ -148,7 +163,9 @@ const FilterPart = ({
           name="portListsFilter"
           value={portListsFilter}
           items={renderSelectItems(
-            filterFilters(filters, 'port_list'), UNSET_VALUE)}
+            filterFilters(filters, 'port_list'),
+            UNSET_VALUE,
+          )}
           onChange={onChange}
         />
       </FormGroup>
@@ -157,7 +174,9 @@ const FilterPart = ({
           name="reportsFilter"
           value={reportsFilter}
           items={renderSelectItems(
-            filterFilters(filters, 'report'), UNSET_VALUE)}
+            filterFilters(filters, 'report'),
+            UNSET_VALUE,
+          )}
           onChange={onChange}
         />
       </FormGroup>
@@ -166,7 +185,9 @@ const FilterPart = ({
           name="reportFormatsFilter"
           value={reportFormatsFilter}
           items={renderSelectItems(
-            filterFilters(filters, 'report_format'), UNSET_VALUE)}
+            filterFilters(filters, 'report_format'),
+            UNSET_VALUE,
+          )}
           onChange={onChange}
         />
       </FormGroup>
@@ -175,7 +196,9 @@ const FilterPart = ({
           name="resultsFilter"
           value={resultsFilter}
           items={renderSelectItems(
-              filterFilters(filters, 'result'), UNSET_VALUE)}
+            filterFilters(filters, 'result'),
+            UNSET_VALUE,
+          )}
           onChange={onChange}
         />
       </FormGroup>
@@ -183,8 +206,7 @@ const FilterPart = ({
         <Select
           name="rolesFilter"
           value={rolesFilter}
-          items={renderSelectItems(
-              filterFilters(filters, 'role'), UNSET_VALUE)}
+          items={renderSelectItems(filterFilters(filters, 'role'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
@@ -193,7 +215,9 @@ const FilterPart = ({
           name="schedulesFilter"
           value={schedulesFilter}
           items={renderSelectItems(
-              filterFilters(filters, 'schedule'), UNSET_VALUE)}
+            filterFilters(filters, 'schedule'),
+            UNSET_VALUE,
+          )}
           onChange={onChange}
         />
       </FormGroup>
@@ -201,8 +225,7 @@ const FilterPart = ({
         <Select
           name="tagsFilter"
           value={tagsFilter}
-          items={renderSelectItems(
-              filterFilters(filters, 'tag'), UNSET_VALUE)}
+          items={renderSelectItems(filterFilters(filters, 'tag'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
@@ -211,7 +234,9 @@ const FilterPart = ({
           name="targetsFilter"
           value={targetsFilter}
           items={renderSelectItems(
-              filterFilters(filters, 'target'), UNSET_VALUE)}
+            filterFilters(filters, 'target'),
+            UNSET_VALUE,
+          )}
           onChange={onChange}
         />
       </FormGroup>
@@ -219,8 +244,7 @@ const FilterPart = ({
         <Select
           name="tasksFilter"
           value={tasksFilter}
-          items={renderSelectItems(
-            filterFilters(filters, 'task'), UNSET_VALUE)}
+          items={renderSelectItems(filterFilters(filters, 'task'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
@@ -228,8 +252,7 @@ const FilterPart = ({
         <Select
           name="cpeFilter"
           value={cpeFilter}
-          items={renderSelectItems(
-              filterFilters(filters, 'info'), UNSET_VALUE)}
+          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
@@ -237,8 +260,7 @@ const FilterPart = ({
         <Select
           name="cveFilter"
           value={cveFilter}
-          items={renderSelectItems(
-              filterFilters(filters, 'info'), UNSET_VALUE)}
+          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
@@ -246,8 +268,7 @@ const FilterPart = ({
         <Select
           name="nvtFilter"
           value={nvtFilter}
-          items={renderSelectItems(
-              filterFilters(filters, 'info'), UNSET_VALUE)}
+          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
@@ -255,8 +276,7 @@ const FilterPart = ({
         <Select
           name="ovalFilter"
           value={ovalFilter}
-          items={renderSelectItems(
-              filterFilters(filters, 'info'), UNSET_VALUE)}
+          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
@@ -264,8 +284,7 @@ const FilterPart = ({
         <Select
           name="certBundFilter"
           value={certBundFilter}
-          items={renderSelectItems(
-            filterFilters(filters, 'info'), UNSET_VALUE)}
+          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
@@ -273,8 +292,7 @@ const FilterPart = ({
         <Select
           name="dfnCertFilter"
           value={dfnCertFilter}
-          items={renderSelectItems(
-              filterFilters(filters, 'info'), UNSET_VALUE)}
+          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
@@ -282,8 +300,7 @@ const FilterPart = ({
         <Select
           name="secInfoFilter"
           value={secInfoFilter}
-          items={renderSelectItems(
-              filterFilters(filters, 'info'), UNSET_VALUE)}
+          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>

@@ -35,9 +35,7 @@ import Loading from 'web/components/loading/loading';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-import Display, {
-  DISPLAY_HEADER_HEIGHT, DISPLAY_BORDER_WIDTH,
-} from './display';
+import Display, {DISPLAY_HEADER_HEIGHT, DISPLAY_BORDER_WIDTH} from './display';
 import DataDisplayIcons from './datadisplayicons';
 
 const ownProps = [
@@ -62,11 +60,11 @@ const Download = styled.a`
   &:link {
     color: ${Theme.black};
     text-decoration: none;
-  };
+  }
   &:hover {
     color: ${Theme.white};
     text-decoration: none;
-  };
+  }
 `;
 
 const FilterString = styled.div`
@@ -108,7 +106,6 @@ const escapeCsv = value => '"' + `${value}`.replace('"', '""') + '"';
 const renderIcons = props => <DataDisplayIcons {...props} />;
 
 class DataDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -149,8 +146,7 @@ class DataDisplay extends React.Component {
 
     const tprops = excludeObjectProps(other, ownProps);
 
-    return isDefined(dataTransform) ?
-      dataTransform(data, tprops) : data;
+    return isDefined(dataTransform) ? dataTransform(data, tprops) : data;
   }
 
   componentWillUnmount() {
@@ -158,12 +154,14 @@ class DataDisplay extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.height !== this.props.height ||
+    return (
+      nextProps.height !== this.props.height ||
       nextProps.width !== this.props.width ||
       nextState.data !== this.state.data ||
       nextProps.showFilterString !== this.props.showFilterString ||
       nextProps.state !== this.props.state ||
-      this.hasFilterChanged(nextProps);
+      this.hasFilterChanged(nextProps)
+    );
   }
 
   hasFilterChanged(nextProps) {
@@ -186,7 +184,6 @@ class DataDisplay extends React.Component {
        viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
         ${svg.innerHTML}
       </svg>`;
-
 
     const svg_blob = new Blob([svg_data], {type: 'image/svg+xml'});
     return URL.createObjectURL(svg_blob);
@@ -243,7 +240,11 @@ class DataDisplay extends React.Component {
     const csv_data = [
       escapeCsv(title),
       dataTitles.map(t => escapeCsv(t)).join(','),
-      ...data.map(row => dataRow({row}).map(val => escapeCsv(val)).join(',')),
+      ...data.map(row =>
+        dataRow({row})
+          .map(val => escapeCsv(val))
+          .join(','),
+      ),
     ].join('\n');
 
     const csv_blob = new Blob([csv_data], {type: 'text/csv'});
@@ -259,10 +260,7 @@ class DataDisplay extends React.Component {
   }
 
   render() {
-    const {
-      data: transformedData,
-      title,
-    } = this.state;
+    const {data: transformedData, title} = this.state;
     let {
       data: originalData,
       height,
@@ -301,16 +299,13 @@ class DataDisplay extends React.Component {
     const showContent = height > 0 && width > 0; // > 0 also checks for null, undefined and null
     const state = this.getCurrentState();
     return (
-      <Display
-        title={`${title}`}
-        onRemoveClick={onRemoveClick}
-        {...otherProps}
-      >
+      <Display title={`${title}`} onRemoveClick={onRemoveClick} {...otherProps}>
         <DisplayBox>
           <Layout flex="column" grow="1">
-            {isLoading ?
-              <Loading/> :
-              showContent &&
+            {isLoading ? (
+              <Loading />
+            ) : (
+              showContent && (
                 <React.Fragment>
                   {children({
                     id,
@@ -322,33 +317,34 @@ class DataDisplay extends React.Component {
                     setState: this.handleSetState,
                   })}
                 </React.Fragment>
-            }
+              )
+            )}
             <IconBar>
               <IconDivider flex="column">
-                {icons && icons({
-                  state,
-                  setState: this.handleSetState,
-                  showFilterSelection,
-                  showCsvDownload,
-                  showSvgDownload,
-                  showToggleLegend,
-                  onDownloadCsvClick: this.handleDownloadSvg,
-                  onDownloadSvgClick: this.handleDownloadSvg,
-                  onSelectFilterClick,
-                })}
+                {icons &&
+                  icons({
+                    state,
+                    setState: this.handleSetState,
+                    showFilterSelection,
+                    showCsvDownload,
+                    showSvgDownload,
+                    showToggleLegend,
+                    onDownloadCsvClick: this.handleDownloadSvg,
+                    onDownloadSvgClick: this.handleDownloadSvg,
+                    onSelectFilterClick,
+                  })}
               </IconDivider>
             </IconBar>
-            {showFilterString &&
+            {showFilterString && (
               <FilterString>
                 ({_('Applied filter: ')}
                 <b>{filter.name}</b>&nbsp;
                 <i>{filter.simple().toFilterString()}</i>)
               </FilterString>
-            }
+            )}
           </Layout>
         </DisplayBox>
-        <Download innerRef={this.downloadRef}>
-        </Download>
+        <Download innerRef={this.downloadRef} />
       </Display>
     );
   }

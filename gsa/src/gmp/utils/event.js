@@ -79,7 +79,6 @@ export const debounce = (func, wait, immediate = false) => {
 export const throttleAnimation = func => {
   let calling = false;
   return (...args) => {
-
     if (!calling) {
       calling = true;
       window.requestAnimationFrame(() => {

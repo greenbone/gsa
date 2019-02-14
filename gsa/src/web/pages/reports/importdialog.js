@@ -56,16 +56,10 @@ const ImportDialog = ({
       values={{task_id}}
       defaultValues={{in_assets}}
     >
-      {({
-        values,
-        onValueChange,
-      }) => (
+      {({values, onValueChange}) => (
         <Layout flex="column">
           <FormGroup title={_('Report')}>
-            <FileField
-              name="xml_file"
-              onChange={onValueChange}
-            />
+            <FileField name="xml_file" onChange={onValueChange} />
           </FormGroup>
           <FormGroup title={_('Container Task')}>
             <Divider>
@@ -75,12 +69,12 @@ const ImportDialog = ({
                 items={renderSelectItems(tasks)}
                 onChange={onTaskChange}
               />
-              {newContainerTask &&
+              {newContainerTask && (
                 <NewIcon
                   title={_('Create new Container Task')}
                   onClick={onNewContainerTaskClick}
                 />
-              }
+              )}
             </Divider>
           </FormGroup>
           <FormGroup title={_('Add to Assets')}>

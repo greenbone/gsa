@@ -33,48 +33,36 @@ const Anchor = styled.a`
 `;
 
 const Styled = styled.span`
-  cursor: ${props => isDefined(props.onClick) ? 'pointer' : undefined};
+  cursor: ${props => (isDefined(props.onClick) ? 'pointer' : undefined)};
 
   @media print {
     & {
-      ${props => isDefined(props.onClick) ? {display: 'none'} : undefined};
-    };
-  };
+      ${props => (isDefined(props.onClick) ? {display: 'none'} : undefined)};
+    }
+  }
 
   & svg path {
-    fill: ${({active = true}) => active ? undefined : Theme.inputBorderGray};
-  };
+    fill: ${({active = true}) => (active ? undefined : Theme.inputBorderGray)};
+  }
 `;
 
-const SvgIcon = ({
-  active = true,
-  children,
-  to,
-  value,
-  onClick,
-  ...other
-}) => (
+const SvgIcon = ({active = true, children, to, value, onClick, ...other}) => (
   <Styled
     {...other}
     active={active}
-    onClick={isDefined(onClick) ? event => {
-      event.preventDefault();
-      event.stopPropagation();
-      onClick(value);
-    } : undefined}
-  >
-
-    {isDefined(to) ?
-      <Anchor
-        href={to}
-      >
-        {children}
-      </Anchor> :
-      children
+    onClick={
+      isDefined(onClick)
+        ? event => {
+            event.preventDefault();
+            event.stopPropagation();
+            onClick(value);
+          }
+        : undefined
     }
+  >
+    {isDefined(to) ? <Anchor href={to}>{children}</Anchor> : children}
   </Styled>
 );
-
 
 SvgIcon.propTypes = {
   active: PropTypes.bool,

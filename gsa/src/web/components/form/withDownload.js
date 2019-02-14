@@ -21,9 +21,7 @@ import React from 'react';
 import Download from './download.js';
 
 const withDownload = Component => {
-
   class DownloadWrapper extends React.Component {
-
     constructor(...args) {
       super(...args);
 
@@ -39,13 +37,8 @@ const withDownload = Component => {
     render() {
       return (
         <React.Fragment>
-          <Component
-            {...this.props}
-            onDownload={this.handleDownload}
-          />
-          <Download
-            ref={ref => this.download = ref}
-          />
+          <Component {...this.props} onDownload={this.handleDownload} />
+          <Download ref={ref => (this.download = ref)} />
         </React.Fragment>
       );
     }

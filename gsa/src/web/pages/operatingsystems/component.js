@@ -22,10 +22,7 @@ import React from 'react';
 import EntityComponent from '../../entity/component.js';
 
 const OsComponent = props => (
-  <EntityComponent
-    {...props}
-    name="operatingsystem"
-  />
+  <EntityComponent {...props} name="operatingsystem" />
 );
 
 export default OsComponent;

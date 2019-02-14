@@ -44,24 +44,20 @@ import {
 import ScannerComponent from './component';
 import ScannersTable, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onScannerCreateClick,
-}) => (
-  <IconDivider>
-    <ManualIcon
-      page="search"
-      searchTerm="scanner"
-      title={_('Help: Scanners')}
-    />
-    {capabilities.mayCreate('scanner') &&
-      <NewIcon
-        title={_('New Scanner')}
-        onClick={onScannerCreateClick}
+const ToolBarIcons = withCapabilities(
+  ({capabilities, onScannerCreateClick}) => (
+    <IconDivider>
+      <ManualIcon
+        page="search"
+        searchTerm="scanner"
+        title={_('Help: Scanners')}
       />
-    }
-  </IconDivider>
-));
+      {capabilities.mayCreate('scanner') && (
+        <NewIcon title={_('New Scanner')} onClick={onScannerCreateClick} />
+      )}
+    </IconDivider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   onScannerCreateClick: PropTypes.func.isRequired,
@@ -94,40 +90,41 @@ const ScannersPage = ({
     onInteraction={onInteraction}
     onVerified={onChanged}
     onVerifyError={onError}
-  >{({
-    clone,
-    create,
-    delete: delete_func,
-    download,
-    downloadcertificate,
-    downloadcredential,
-    edit,
-    save,
-    verify,
-  }) => (
-    <EntitiesPage
-      {...props}
-      filterEditDialog={ScannersFilterDialog}
-      filtersFilter={SCANNERS_FILTER_FILTER}
-      sectionIcon={<ScannerIcon size="large"/>}
-      table={ScannersTable}
-      title={_('Scanners')}
-      toolBarIcons={ToolBarIcons}
-      onChanged={onChanged}
-      onDownloaded={onDownloaded}
-      onError={onError}
-      onInteraction={onInteraction}
-      onScannerCertificateDownloadClick={downloadcertificate}
-      onScannerCloneClick={clone}
-      onScannerCreateClick={create}
-      onScannerCredentialDownloadClick={downloadcredential}
-      onScannerDeleteClick={delete_func}
-      onScannerDownloadClick={download}
-      onScannerEditClick={edit}
-      onScannerSaveClick={save}
-      onScannerVerifyClick={verify}
-    />
-  )}
+  >
+    {({
+      clone,
+      create,
+      delete: delete_func,
+      download,
+      downloadcertificate,
+      downloadcredential,
+      edit,
+      save,
+      verify,
+    }) => (
+      <EntitiesPage
+        {...props}
+        filterEditDialog={ScannersFilterDialog}
+        filtersFilter={SCANNERS_FILTER_FILTER}
+        sectionIcon={<ScannerIcon size="large" />}
+        table={ScannersTable}
+        title={_('Scanners')}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onDownloaded={onDownloaded}
+        onError={onError}
+        onInteraction={onInteraction}
+        onScannerCertificateDownloadClick={downloadcertificate}
+        onScannerCloneClick={clone}
+        onScannerCreateClick={create}
+        onScannerCredentialDownloadClick={downloadcredential}
+        onScannerDeleteClick={delete_func}
+        onScannerDownloadClick={download}
+        onScannerEditClick={edit}
+        onScannerSaveClick={save}
+        onScannerVerifyClick={verify}
+      />
+    )}
   </ScannerComponent>
 );
 

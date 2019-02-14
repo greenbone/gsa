@@ -43,24 +43,16 @@ const DialogTitleBar = styled(Layout)`
   cursor: grab;
 `;
 
-const DialogTitle = ({
-  showClose = true,
-  title,
-  onCloseClick,
-  onMouseDown,
-}) => {
+const DialogTitle = ({showClose = true, title, onCloseClick, onMouseDown}) => {
   return (
     <DialogTitleBar
       align={['space-between', 'center']}
       onMouseDown={onMouseDown}
     >
       <span>{title}</span>
-      {showClose &&
-        <DialogCloseButton
-          title={_('Close')}
-          onClick={onCloseClick}
-        />
-      }
+      {showClose && (
+        <DialogCloseButton title={_('Close')} onClick={onCloseClick} />
+      )}
     </DialogTitleBar>
   );
 };

@@ -50,10 +50,7 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/portlists';
+import {selector, loadEntity} from 'web/store/entities/portlists';
 
 import {
   selector as permissionsSelector,
@@ -81,28 +78,13 @@ const ToolBarIcons = ({
         searchTerm="port list"
         title={_('Help: PortList Details')}
       />
-      <ListIcon
-        title={_('PortList List')}
-        page="portlists"
-      />
+      <ListIcon title={_('PortList List')} page="portlists" />
     </IconDivider>
     <IconDivider>
-      <CreateIcon
-        entity={entity}
-        onClick={onPortListCreateClick}
-      />
-      <CloneIcon
-        entity={entity}
-        onClick={onPortListCloneClick}
-      />
-      <EditIcon
-        entity={entity}
-        onClick={onPortListEditClick}
-      />
-      <TrashIcon
-        entity={entity}
-        onClick={onPortListDeleteClick}
-      />
+      <CreateIcon entity={entity} onClick={onPortListCreateClick} />
+      <CloneIcon entity={entity} onClick={onPortListCloneClick} />
+      <EditIcon entity={entity} onClick={onPortListEditClick} />
+      <TrashIcon entity={entity} onClick={onPortListDeleteClick} />
       <ExportIcon
         value={entity}
         title={_('Export PortList as XML')}
@@ -121,16 +103,10 @@ ToolBarIcons.propTypes = {
   onPortListEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({
-  entity,
-  links = true,
-}) => {
+const Details = ({entity, links = true}) => {
   return (
     <Layout flex="column">
-      <PortListDetails
-        entity={entity}
-        links={links}
-      />
+      <PortListDetails entity={entity} links={links} />
     </Layout>
   );
 };
@@ -141,23 +117,14 @@ Details.propTypes = {
 };
 
 const PortRanges = ({entity}) => {
-  const {
-    port_ranges = [],
-  } = entity;
+  const {port_ranges = []} = entity;
 
   return (
-    <Layout
-      title={_('Port Ranges ({{count}})', {count: port_ranges.length})}
-    >
-      {port_ranges.length === 0 &&
-        _('No port ranges available')
-      }
-      {port_ranges.length > 0 &&
-        <PortRangesTable
-          actions={false}
-          portRanges={port_ranges}
-        />
-      }
+    <Layout title={_('Port Ranges ({{count}})', {count: port_ranges.length})}>
+      {port_ranges.length === 0 && _('No port ranges available')}
+      {port_ranges.length > 0 && (
+        <PortRangesTable actions={false} portRanges={port_ranges} />
+      )}
     </Layout>
   );
 };
@@ -187,18 +154,11 @@ const Page = ({
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
-    {({
-      clone,
-      create,
-      delete: delete_func,
-      download,
-      edit,
-      save,
-    }) => (
+    {({clone, create, delete: delete_func, download, edit, save}) => (
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<PortListIcon size="large"/>}
+        sectionIcon={<PortListIcon size="large" />}
         title={_('Port List')}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}
@@ -212,24 +172,16 @@ const Page = ({
         onPortListEditClick={edit}
         onPortListSaveClick={save}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={entity.port_ranges}>
                     {_('Port Ranges')}
                   </EntitiesTab>
@@ -245,13 +197,10 @@ const Page = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <PortListDetails
-                      entity={entity}
-                      links={links}
-                    />
+                    <PortListDetails entity={entity} links={links} />
                   </TabPanel>
                   <TabPanel>
-                    <PortRanges entity={entity}/>
+                    <PortRanges entity={entity} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags
@@ -294,10 +243,11 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

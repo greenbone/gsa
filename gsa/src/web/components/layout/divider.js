@@ -30,7 +30,7 @@ const DEFAULT_MARGIN = '5px';
 const DividerComponent = styled(Layout)`
   & > * {
     display: inline-flex;
-  };
+  }
   ${props => {
     const edge = props.flex === 'column' ? 'Top' : 'Left';
     return {
@@ -53,28 +53,17 @@ const DividerContainer = styled(Layout)`
 
 DividerContainer.displayName = 'DividerContainer';
 
-const Divider = ({
-  margin = DEFAULT_MARGIN,
-  grow,
-  ...props
-}) => {
+const Divider = ({margin = DEFAULT_MARGIN, grow, ...props}) => {
   // put Divider into a container div to allow dividers in dividers
   return (
     <DividerContainer grow={grow}>
-      <DividerComponent
-        margin={margin}
-        grow={grow}
-        {...props}
-      />
+      <DividerComponent margin={margin} grow={grow} {...props} />
     </DividerContainer>
   );
 };
 
 Divider.propTypes = {
-  grow: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.numberOrNumberString,
-  ]),
+  grow: PropTypes.oneOfType([PropTypes.bool, PropTypes.numberOrNumberString]),
   margin: PropTypes.string,
 };
 

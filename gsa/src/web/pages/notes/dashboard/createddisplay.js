@@ -51,16 +51,11 @@ export const NotesCreatedDisplay = createDisplay({
   filtersFilter: NOTES_FILTER_FILTER,
 });
 
-
 export const NotesCreatedTableDisplay = createDisplay({
   loaderComponent: NotesCreatedLoader,
   displayComponent: DataTableDisplay,
   title: () => _('Notes by Creation Time'),
-  dataTitles: [
-    _l('Creation Time'),
-    _l('# of Notes'),
-    _l('Total Notes'),
-  ],
+  dataTitles: [_l('Creation Time'), _l('# of Notes'), _l('Total Notes')],
   dataRow: row => [row.label, row.y, row.y2],
   dataTransform: transformCreated,
   displayName: 'NotesCreatedTableDisplay',
@@ -68,16 +63,12 @@ export const NotesCreatedTableDisplay = createDisplay({
   filtersFilter: NOTES_FILTER_FILTER,
 });
 
-registerDisplay(NotesCreatedDisplay.displayId,
-  NotesCreatedDisplay, {
-    title: _l('Chart: Notes by Creation Time'),
-  },
-);
+registerDisplay(NotesCreatedDisplay.displayId, NotesCreatedDisplay, {
+  title: _l('Chart: Notes by Creation Time'),
+});
 
-registerDisplay(NotesCreatedTableDisplay.displayId,
-  NotesCreatedTableDisplay, {
-    title: _l('Table: Notes by Creation Time'),
-  },
-);
+registerDisplay(NotesCreatedTableDisplay.displayId, NotesCreatedTableDisplay, {
+  title: _l('Table: Notes by Creation Time'),
+});
 
 // vim: set ts=2 sw=2 tw=80:

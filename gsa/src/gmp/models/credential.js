@@ -38,26 +38,18 @@ export const SSH_CREDENTIAL_TYPES = [
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 ];
 
-export const SMB_CREDENTIAL_TYPES = [
-  USERNAME_PASSWORD_CREDENTIAL_TYPE,
-];
+export const SMB_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
-export const ESXI_CREDENTIAL_TYPES = [
-  USERNAME_PASSWORD_CREDENTIAL_TYPE,
-];
+export const ESXI_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
-export const SNMP_CREDENTIAL_TYPES = [
-  SNMP_CREDENTIAL_TYPE,
-];
+export const SNMP_CREDENTIAL_TYPES = [SNMP_CREDENTIAL_TYPE];
 
 export const EMAIL_CREDENTIAL_TYPES = [
   SMIME_CREDENTIAL_TYPE,
   PGP_CREDENTIAL_TYPE,
 ];
 
-export const VFIRE_CREDENTIAL_TYPES = [
-  USERNAME_PASSWORD_CREDENTIAL_TYPE,
-];
+export const VFIRE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
 export const ALL_CREDENTIAL_TYPES = [
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -90,7 +82,7 @@ export const password_only_credential_filter = credential =>
   credential.credential_type === PASSWORD_ONLY_CREDENTIAL_TYPE;
 
 export const vFire_credential_filter = credential =>
-credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
+  credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 
 export const SNMP_AUTH_ALGORITHM_MD5 = 'md5';
 export const SNMP_AUTH_ALGORITHM_SHA1 = 'sha1';
@@ -115,7 +107,6 @@ const TYPE_NAMES = {
 export const getCredentialTypeName = type => `${TYPE_NAMES[type]}`;
 
 class Credential extends Model {
-
   static entityType = 'credential';
 
   parseProperties(elem) {
@@ -123,10 +114,10 @@ class Credential extends Model {
 
     if (isDefined(ret.certificate_info)) {
       ret.certificate_info.activationTime = parseDate(
-        ret.certificate_info.activation_time
+        ret.certificate_info.activation_time,
       );
       ret.certificate_info.expirationTime = parseDate(
-        ret.certificate_info.expiration_time
+        ret.certificate_info.expiration_time,
       );
       delete ret.certificate_info.activation_time;
       delete ret.certificate_info.expiration_time;
@@ -137,16 +128,19 @@ class Credential extends Model {
     ret.allow_insecure = parseYesNo(elem.allow_insecure);
 
     if (isDefined(elem.targets)) {
-      ret.targets = map(elem.targets.target,
-        target => new Model(target, 'target'));
-    }
-    else {
+      ret.targets = map(
+        elem.targets.target,
+        target => new Model(target, 'target'),
+      );
+    } else {
       ret.targets = [];
     }
 
     if (isDefined(elem.scanners)) {
-      ret.scanners = map(elem.scanners.scanner,
-        scanner => new Model(scanner, 'scanner'));
+      ret.scanners = map(
+        elem.scanners.scanner,
+        scanner => new Model(scanner, 'scanner'),
+      );
     }
 
     return ret;

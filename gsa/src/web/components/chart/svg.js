@@ -22,7 +22,7 @@ const Svg = styled.svg`
   overflow: visible;
   & text {
     user-select: none;
-  };
+  }
 `;
 
 export default Svg;

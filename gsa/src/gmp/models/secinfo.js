@@ -50,13 +50,13 @@ export const secInfoTypeName = (type, unknown) => {
 export const secInfoType = entity => entity.infoType;
 
 class SecInfo extends Info {
-
   static entityType = 'allinfo';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
 
-    if (elem.allinfo) { // we have an info element
+    if (elem.allinfo) {
+      // we have an info element
       const {type, ...other} = elem.allinfo; // filter out type
       ret = {
         ...ret,

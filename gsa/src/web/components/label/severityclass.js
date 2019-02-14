@@ -38,11 +38,7 @@ const Label = styled.div`
 
 const HighLabel = props => {
   return (
-    <Label
-      {...props}
-      backgroundColor="#C83814"
-      borderColor="#C83814"
-    >
+    <Label {...props} backgroundColor="#C83814" borderColor="#C83814">
       {_('High')}
     </Label>
   );
@@ -50,11 +46,7 @@ const HighLabel = props => {
 
 const MediumLabel = props => {
   return (
-    <Label
-      {...props}
-      backgroundColor="#F0A519"
-      borderColor="#F0A519"
-    >
+    <Label {...props} backgroundColor="#F0A519" borderColor="#F0A519">
       {_('Medium')}
     </Label>
   );
@@ -62,11 +54,7 @@ const MediumLabel = props => {
 
 const LowLabel = props => {
   return (
-    <Label
-      {...props}
-      backgroundColor="#4F91C7"
-      borderColor="#4F91C7"
-    >
+    <Label {...props} backgroundColor="#4F91C7" borderColor="#4F91C7">
       {_('Low')}
     </Label>
   );
@@ -74,11 +62,7 @@ const LowLabel = props => {
 
 const LogLabel = props => {
   return (
-    <Label
-      {...props}
-      backgroundColor="#191919"
-      borderColor="#191919"
-    >
+    <Label {...props} backgroundColor="#191919" borderColor="#191919">
       {_('Log')}
     </Label>
   );
@@ -86,11 +70,7 @@ const LogLabel = props => {
 
 const FalsePositiveLabel = props => {
   return (
-    <Label
-      {...props}
-      backgroundColor="#191919"
-      borderColor="#191919"
-    >
+    <Label {...props} backgroundColor="#191919" borderColor="#191919">
       {_('False Pos.')}
     </Label>
   );

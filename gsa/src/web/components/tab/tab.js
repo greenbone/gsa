@@ -35,28 +35,30 @@ const StyledDiv = styled.div`
   padding-bottom: 2px;
   padding-top: 2px;
 
-  border-left: ${props => props.active ?
-    '1px solid ' + Theme.dialogGray : '1px solid ' + Theme.white};
+  border-left: ${props =>
+    props.active
+      ? '1px solid ' + Theme.dialogGray
+      : '1px solid ' + Theme.white};
   border-right: 1px solid ${Theme.lightGray};
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-  background-color: ${props => props.active ? Theme.dialogGray : undefined};
-  border-bottom: ${props => props.active ?
-    '1px solid ' + Theme.dialogGray : undefined};
-  margin-bottom: ${props => props.active ? '-2px' : undefined};
-  border-top: ${props => props.active ?
-    '2px solid ' + Theme.lightGreen :
-    '2px solid ' + Theme.white
-  };
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+  background-color: ${props => (props.active ? Theme.dialogGray : undefined)};
+  border-bottom: ${props =>
+    props.active ? '1px solid ' + Theme.dialogGray : undefined};
+  margin-bottom: ${props => (props.active ? '-2px' : undefined)};
+  border-top: ${props =>
+    props.active
+      ? '2px solid ' + Theme.lightGreen
+      : '2px solid ' + Theme.white};
   :hover {
-    border-top: ${props => props.active ?
-      undefined : '2px solid ' + Theme.lightGray
-    };
-  };
+    border-top: ${props =>
+      props.active ? undefined : '2px solid ' + Theme.lightGray};
+  }
   :first-child {
-    border-left: ${props => props.active ?
-      '1px solid ' + Theme.lightGray : '1px solid ' + Theme.white
-    };
-  };
+    border-left: ${props =>
+      props.active
+        ? '1px solid ' + Theme.lightGray
+        : '1px solid ' + Theme.white};
+  }
 `;
 
 const Tab = ({

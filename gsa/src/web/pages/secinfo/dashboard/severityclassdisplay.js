@@ -31,8 +31,9 @@ export const SecInfosSeverityClassDisplay = createDisplay({
   loaderComponent: SecInfosSeverityLoader,
   displayComponent: SeverityClassDisplay,
   title: ({data: tdata}) =>
-    _('SecInfo Items by Severity Class (Total: {{count}})',
-      {count: tdata.total}),
+    _('SecInfo Items by Severity Class (Total: {{count}})', {
+      count: tdata.total,
+    }),
   displayId: 'allinfo-by-severity-class',
   displayName: 'SecInfoSeverityClassDisplay',
   filtersFilter: SECINFO_FILTER_FILTER,
@@ -42,12 +43,10 @@ export const SecInfosSeverityClassTableDisplay = createDisplay({
   loaderComponent: SecInfosSeverityLoader,
   displayComponent: SeverityClassTableDisplay,
   title: ({data: tdata}) =>
-    _('SecInfo Items by Severity Class (Total: {{count}})',
-      {count: tdata.total}),
-  dataTitles: [
-    _l('Severity Class'),
-    _l('# of SecInfo Items'),
-  ],
+    _('SecInfo Items by Severity Class (Total: {{count}})', {
+      count: tdata.total,
+    }),
+  dataTitles: [_l('Severity Class'), _l('# of SecInfo Items')],
   displayId: 'allinfo-by-severity-table',
   displayName: 'SecInfoSeverityClassTableDisplay',
   filtersFilter: SECINFO_FILTER_FILTER,
@@ -55,12 +54,16 @@ export const SecInfosSeverityClassTableDisplay = createDisplay({
 
 registerDisplay(
   SecInfosSeverityClassDisplay.displayId,
-  SecInfosSeverityClassDisplay, {
+  SecInfosSeverityClassDisplay,
+  {
     title: _l('Chart: SecInfo Items by Severity Class'),
-});
+  },
+);
 
-registerDisplay(SecInfosSeverityClassTableDisplay.displayId,
-  SecInfosSeverityClassTableDisplay, {
+registerDisplay(
+  SecInfosSeverityClassTableDisplay.displayId,
+  SecInfosSeverityClassTableDisplay,
+  {
     title: _l('Table: SecInfo Items by Severity Class'),
   },
 );

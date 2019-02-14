@@ -23,7 +23,6 @@ import {isDefined} from '../utils/identity';
 import {parseDate} from '../parser';
 
 class Agent extends Model {
-
   static entityType = 'agent';
 
   parseProperties(elem) {

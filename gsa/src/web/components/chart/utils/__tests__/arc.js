@@ -36,8 +36,7 @@ describe('arc class tests', () => {
   });
 
   test('should match paths for full circle', () => {
-    const a = arc()
-      .outerRadiusX(100);
+    const a = arc().outerRadiusX(100);
 
     let path = a.path().toString();
     expect(path).toMatchSnapshot();
@@ -56,8 +55,7 @@ describe('arc class tests', () => {
   });
 
   test('should match paths for arc', () => {
-    const a = arc()
-      .outerRadiusX(100);
+    const a = arc().outerRadiusX(100);
     const tarc = {startAngle: 1, endAngle: 2.5};
 
     let path = a.path(tarc).toString();
@@ -77,8 +75,7 @@ describe('arc class tests', () => {
   });
 
   test('should draw empty path for no angle', () => {
-    const a = arc()
-      .outerRadiusX(100);
+    const a = arc().outerRadiusX(100);
     const tarc = {startAngle: 1, endAngle: 1};
 
     let path = a.path(tarc).toString();

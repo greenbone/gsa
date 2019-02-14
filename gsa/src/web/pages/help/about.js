@@ -50,7 +50,7 @@ const TextBlock = styled.div`
   text-align: left;
   @media screen and (max-width: 800px) {
     margin-right: 0px;
-  };
+  }
 `;
 
 const ImageBlock = styled.div`
@@ -60,19 +60,14 @@ const ImageBlock = styled.div`
 const About = () => (
   <ErrorBoundary errElement={_('page')}>
     <Layout flex="column">
-      <Section
-        img={<HelpIcon size="large"/>}
-        title={_('About GSA')}
-      >
-        <StyledLayout
-          wrap
-          align="center"
-        >
+      <Section img={<HelpIcon size="large" />} title={_('About GSA')}>
+        <StyledLayout wrap align="center">
           <TextBlock>
             <h1>Greenbone Security Assistant</h1>
             <h3>Version 8.0+beta2</h3>
-            <DivP>The Greenbone Security Assistant (GSA) is the web-based
-              user interface of the Greenbone Vulnerability Manager (GVM).
+            <DivP>
+              The Greenbone Security Assistant (GSA) is the web-based user
+              interface of the Greenbone Vulnerability Manager (GVM).
             </DivP>
             <DivP>
               GSA connects to GVM via the Greenbone Management Protocol (GMP)
@@ -98,9 +93,7 @@ const About = () => (
             <DivP>
               License: GNU General Public License version 2 or any later version
               &nbsp;
-              <ExternalLink
-                to="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html"
-              >
+              <ExternalLink to="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">
                 (full license text)
               </ExternalLink>
             </DivP>
@@ -112,16 +105,12 @@ const About = () => (
               where you can examine the content.
             </DivP>
             <DivP>
-              The GMP documentation is
-                available <ProtocolDocLink title="here"/>.
+              The GMP documentation is available{' '}
+              <ProtocolDocLink title="here" />.
             </DivP>
           </TextBlock>
           <ImageBlock>
-            <Img
-              src="gsa_splash.svg"
-              alt="GSA"
-              width="100%"
-            />
+            <Img src="gsa_splash.svg" alt="GSA" width="100%" />
           </ImageBlock>
         </StyledLayout>
       </Section>

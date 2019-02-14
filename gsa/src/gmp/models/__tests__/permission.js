@@ -26,7 +26,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(Permission, 'permission');
 
 describe('Permission model tests', () => {
-
   test('should parse resource as model of their type', () => {
     const elem = {
       resource: {
@@ -60,7 +59,9 @@ describe('Permission model tests', () => {
     };
     const permission = new Permission(elem);
 
-    expect(permission.subject).toEqual(new Model(elem.subject, elem.subject.type));
+    expect(permission.subject).toEqual(
+      new Model(elem.subject, elem.subject.type),
+    );
   });
 
   test('should not parse subject if no id is given', () => {

@@ -50,57 +50,56 @@ const EmptyResultsReport = ({
   const min_qod = filter.get('min_qod');
   const has_severity_filter = isDefined(severity) && severity.relation === '>';
   return (
-    <Layout
-      flex="column"
-      align={['start', 'stretch']}
-      grow
-    >
+    <Layout flex="column" align={['start', 'stretch']} grow>
       <InfoPanel
-        heading={
-          _('The Report is empty. The filter does not match any of the ' +
-            '{{all}} results.', {all})
-        }
+        heading={_(
+          'The Report is empty. The filter does not match any of the ' +
+            '{{all}} results.',
+          {all},
+        )}
       />
 
       <Divider align={['start', 'stretch']} wrap>
-        {!levels.includes('g') &&
+        {!levels.includes('g') && (
           <ReportPanel
-            icon={props => <FilterIcon {...props}/>}
+            icon={props => <FilterIcon {...props} />}
             title={_('Log messages are currently excluded.')}
             onClick={onFilterAddLogLevelClick}
           >
             {_('Include log messages in your filter settings.')}
           </ReportPanel>
-        }
+        )}
 
-        {has_severity_filter &&
+        {has_severity_filter && (
           <ReportPanel
-            icon={props => <FilterIcon {...props}/>}
-            title={
-              _('You are using keywords setting a minimum limit on severity.')
-            }
+            icon={props => <FilterIcon {...props} />}
+            title={_(
+              'You are using keywords setting a minimum limit on severity.',
+            )}
             onClick={onFilterRemoveSeverityClick}
           >
             {_('Remove the severity limit from your filter settings.')}
           </ReportPanel>
-        }
+        )}
 
-        {isDefined(min_qod) && min_qod > 30 &&
+        {isDefined(min_qod) && min_qod > 30 && (
           <ReportPanel
-            icon={props => <FilterIcon {...props}/>}
-            title={
-              _('There may be results below the current minimum Quality of ' +
-                'Detection level.')
-            }
+            icon={props => <FilterIcon {...props} />}
+            title={_(
+              'There may be results below the current minimum Quality of ' +
+                'Detection level.',
+            )}
             onClick={onFilterDecreaseMinQoDClick}
           >
-            {_('Decrease the minimum QoD in the Filter to 30 percent to see ' +
-               'those results.')}
+            {_(
+              'Decrease the minimum QoD in the Filter to 30 percent to see ' +
+                'those results.',
+            )}
           </ReportPanel>
-        }
+        )}
 
         <ReportPanel
-          icon={props => <EditIcon {...props}/>}
+          icon={props => <EditIcon {...props} />}
           title={_('Your filter settings may be too refined.')}
           onClick={onFilterEditClick}
         >
@@ -108,7 +107,7 @@ const EmptyResultsReport = ({
         </ReportPanel>
 
         <ReportPanel
-          icon={props => <DeleteIcon {...props}/>}
+          icon={props => <DeleteIcon {...props} />}
           title={_('Your last filter change may be too restrictive.')}
           onClick={onFilterRemoveClick}
         >

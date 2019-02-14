@@ -35,44 +35,43 @@ import EditIcon from 'web/entity/icon/editicon';
 
 import PropTypes from 'web/utils/proptypes';
 
-const Actions = withEntitiesActions(({
-  entity,
-  onGroupEditClick,
-  onGroupCloneClick,
-  onGroupDeleteClick,
-  onGroupDownloadClick,
-}) => (
-  <IconDivider
-    align={['center', 'center']}
-    grow
-  >
-    <TrashIcon
-      displayName={_('Group')}
-      name="group"
-      entity={entity}
-      onClick={onGroupDeleteClick}
-    />
-    <EditIcon
-      displayName={_('Group')}
-      name="group"
-      entity={entity}
-      onClick={onGroupEditClick}
-    />
-    <CloneIcon
-      displayName={_('Group')}
-      name="user"
-      entity={entity}
-      title={_('Clone Group')}
-      value={entity}
-      onClick={onGroupCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export Group')}
-      onClick={onGroupDownloadClick}
-    />
-  </IconDivider>
-));
+const Actions = withEntitiesActions(
+  ({
+    entity,
+    onGroupEditClick,
+    onGroupCloneClick,
+    onGroupDeleteClick,
+    onGroupDownloadClick,
+  }) => (
+    <IconDivider align={['center', 'center']} grow>
+      <TrashIcon
+        displayName={_('Group')}
+        name="group"
+        entity={entity}
+        onClick={onGroupDeleteClick}
+      />
+      <EditIcon
+        displayName={_('Group')}
+        name="group"
+        entity={entity}
+        onClick={onGroupEditClick}
+      />
+      <CloneIcon
+        displayName={_('Group')}
+        name="user"
+        entity={entity}
+        title={_('Clone Group')}
+        value={entity}
+        onClick={onGroupCloneClick}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export Group')}
+        onClick={onGroupDownloadClick}
+      />
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -97,10 +96,7 @@ const Row = ({
       displayName={_('Group')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

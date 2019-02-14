@@ -37,44 +37,45 @@ import TrashIcon from 'web/entity/icon/trashicon';
 import PropTypes from 'web/utils/proptypes';
 import {na} from 'web/utils/render';
 
-
 import Trend from './trend';
 
-const ScanConfigActions = withEntitiesActions(({
-  entity,
-  onScanConfigDeleteClick,
-  onScanConfigDownloadClick,
-  onScanConfigCloneClick,
-  onScanConfigEditClick,
-}) => (
-  <IconDivider grow align={['center', 'center']}>
-    <TrashIcon
-      displayName={_('Scan Config')}
-      name="config"
-      entity={entity}
-      onClick={onScanConfigDeleteClick}
-    />
-    <EditIcon
-      displayName={_('Scan Config')}
-      name="config"
-      entity={entity}
-      onClick={onScanConfigEditClick}
-    />
-    <CloneIcon
-      displayName={_('Scan Config')}
-      name="config"
-      entity={entity}
-      title={_('Clone Scan Config')}
-      value={entity}
-      onClick={onScanConfigCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export Scan Config')}
-      onClick={onScanConfigDownloadClick}
-    />
-  </IconDivider>
-));
+const ScanConfigActions = withEntitiesActions(
+  ({
+    entity,
+    onScanConfigDeleteClick,
+    onScanConfigDownloadClick,
+    onScanConfigCloneClick,
+    onScanConfigEditClick,
+  }) => (
+    <IconDivider grow align={['center', 'center']}>
+      <TrashIcon
+        displayName={_('Scan Config')}
+        name="config"
+        entity={entity}
+        onClick={onScanConfigDeleteClick}
+      />
+      <EditIcon
+        displayName={_('Scan Config')}
+        name="config"
+        entity={entity}
+        onClick={onScanConfigEditClick}
+      />
+      <CloneIcon
+        displayName={_('Scan Config')}
+        name="config"
+        entity={entity}
+        title={_('Clone Scan Config')}
+        value={entity}
+        onClick={onScanConfigCloneClick}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export Scan Config')}
+        onClick={onScanConfigDownloadClick}
+      />
+    </IconDivider>
+  ),
+);
 
 ScanConfigActions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -99,35 +100,36 @@ const ScanConfigRow = ({
       displayName={_('Scan Config')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
-    <TableData>
-      {na(entity.families.count)}
-    </TableData>
+    <TableData>{na(entity.families.count)}</TableData>
     <TableData>
       <Trend
         trend={entity.families.trend}
-        titleDynamic={_('The family selection is DYNAMIC. New families ' +
-          'will automatically be added and considered.')}
-        titleStatic={_('The family selection is STATIC. New families ' +
-          'will NOT automatically be added and considered.')}
+        titleDynamic={_(
+          'The family selection is DYNAMIC. New families ' +
+            'will automatically be added and considered.',
+        )}
+        titleStatic={_(
+          'The family selection is STATIC. New families ' +
+            'will NOT automatically be added and considered.',
+        )}
       />
     </TableData>
-    <TableData>
-      {na(entity.nvts.count)}
-    </TableData>
+    <TableData>{na(entity.nvts.count)}</TableData>
     <TableData>
       <Trend
         trend={entity.nvts.trend}
-        titleDynamic={_('The NVT selection is DYNAMIC. New NVTs of ' +
-          'selected families will automatically be added and considered.')}
-        titleStatic={_('The NVT selection is DYNAMIC. New NVTS of ' +
-          'selected families will NOT automatically be added and ' +
-          'considered.')}
+        titleDynamic={_(
+          'The NVT selection is DYNAMIC. New NVTs of ' +
+            'selected families will automatically be added and considered.',
+        )}
+        titleStatic={_(
+          'The NVT selection is DYNAMIC. New NVTS of ' +
+            'selected families will NOT automatically be added and ' +
+            'considered.',
+        )}
       />
     </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

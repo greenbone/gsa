@@ -29,7 +29,6 @@ const get_value = val => {
 };
 
 class Param {
-
   constructor({name, type, value, ...other}) {
     this.default = get_value(other.default);
     this.name = name;
@@ -44,22 +43,19 @@ class Param {
           name: opt,
         };
       });
-    }
-    else {
+    } else {
       this.options = [];
     }
 
     if (this.type === 'report_format_list') {
       this.value = map(value.report_format, format => format._id);
-    }
-    else {
+    } else {
       this.value = get_value(value);
     }
   }
 }
 
 class ReportFormat extends Model {
-
   static entityType = 'reportformat';
 
   parseProperties(elem) {
@@ -70,10 +66,8 @@ class ReportFormat extends Model {
         value: ret.trust.__text,
         time: isEmpty(ret.trust.time) ? undefined : parseDate(ret.trust.time),
       };
-    }
-    else {
-      ret.trust = {
-      };
+    } else {
+      ret.trust = {};
     }
 
     ret.params = map(ret.param, param => {
@@ -84,8 +78,7 @@ class ReportFormat extends Model {
 
     if (isDefined(ret.alerts)) {
       ret.alerts = map(ret.alerts.alert, alert => new Model(alert, 'alert'));
-    }
-    else {
+    } else {
       ret.alerts = [];
     }
 

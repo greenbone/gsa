@@ -24,7 +24,6 @@ import PropTypes from '../../utils/proptypes.js';
 import {renderChildren} from '../../utils/render.js';
 
 class GmpProvider extends React.Component {
-
   getChildContext() {
     const {gmp} = this.props;
 

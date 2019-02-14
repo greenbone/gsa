@@ -51,10 +51,7 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/tags';
+import {selector, loadEntity} from 'web/store/entities/tags';
 
 import {
   selector as permissionsSelector,
@@ -69,79 +66,65 @@ import TagComponent from './component';
 import TagDetails from './details';
 import EntityPermissions from 'web/entity/permissions';
 
-const ToolBarIcons = withCapabilties(({
-  capabilities,
-  entity,
-  onTagCloneClick,
-  onTagCreateClick,
-  onTagDeleteClick,
-  onTagDisableClick,
-  onTagDownloadClick,
-  onTagEditClick,
-  onTagEnableClick,
-}) => {
-  let endisableable = null;
+const ToolBarIcons = withCapabilties(
+  ({
+    capabilities,
+    entity,
+    onTagCloneClick,
+    onTagCreateClick,
+    onTagDeleteClick,
+    onTagDisableClick,
+    onTagDownloadClick,
+    onTagEditClick,
+    onTagEnableClick,
+  }) => {
+    let endisableable = null;
 
-  if (capabilities.mayEdit('tag')) {
-    if (entity.isActive()) {
-      endisableable = (
-        <DisableIcon
-          value={entity}
-          title={_('Disable Tag')}
-          onClick={onTagDisableClick}
-        />
-      );
+    if (capabilities.mayEdit('tag')) {
+      if (entity.isActive()) {
+        endisableable = (
+          <DisableIcon
+            value={entity}
+            title={_('Disable Tag')}
+            onClick={onTagDisableClick}
+          />
+        );
+      } else {
+        endisableable = (
+          <EnableIcon
+            value={entity}
+            title={_('Enable Tag')}
+            onClick={onTagEnableClick}
+          />
+        );
+      }
     }
-    else {
-      endisableable = (
-        <EnableIcon
-          value={entity}
-          title={_('Enable Tag')}
-          onClick={onTagEnableClick}
-        />
-      );
-    }
-  }
-  return (
-    <Divider margin="10px">
-      <IconDivider>
-        <ManualIcon
-          page="gui_introduction"
-          anchor="tags"
-          title={_('Help: Tags')}
-        />
-        <ListIcon
-          title={_('Tag List')}
-          page="tags"
-        />
-      </IconDivider>
-      <IconDivider>
-        <CreateIcon
-          entity={entity}
-          onClick={onTagCreateClick}
-        />
-        <CloneIcon
-          entity={entity}
-          onClick={onTagCloneClick}
-        />
-        <EditIcon
-          entity={entity}
-          onClick={onTagEditClick}
-        />
-        <TrashIcon
-          entity={entity}
-          onClick={onTagDeleteClick}
-        />
-        <ExportIcon
-          value={entity}
-          title={_('Export Tag as XML')}
-          onClick={onTagDownloadClick}
-        />
-        {endisableable}
-      </IconDivider>
-    </Divider>
-  );
-});
+    return (
+      <Divider margin="10px">
+        <IconDivider>
+          <ManualIcon
+            page="gui_introduction"
+            anchor="tags"
+            title={_('Help: Tags')}
+          />
+          <ListIcon title={_('Tag List')} page="tags" />
+        </IconDivider>
+        <IconDivider>
+          <CreateIcon entity={entity} onClick={onTagCreateClick} />
+          <CloneIcon entity={entity} onClick={onTagCloneClick} />
+          <EditIcon entity={entity} onClick={onTagEditClick} />
+          <TrashIcon entity={entity} onClick={onTagDeleteClick} />
+          <ExportIcon
+            value={entity}
+            title={_('Export Tag as XML')}
+            onClick={onTagDownloadClick}
+          />
+          {endisableable}
+        </IconDivider>
+      </Divider>
+    );
+  },
+);
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -193,7 +176,7 @@ const Page = ({
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon={<TagIcon size="large"/>}
+          sectionIcon={<TagIcon size="large" />}
           toolBarIcons={ToolBarIcons}
           title={_('Tag')}
           onInteraction={onInteraction}
@@ -207,24 +190,16 @@ const Page = ({
           onTagDisableClick={disable}
           onTagRemoveClick={remove}
         >
-          {({
-            activeTab = 0,
-            onActivateTab,
-          }) => {
+          {({activeTab = 0, onActivateTab}) => {
             return (
               <Layout grow="1" flex="column">
-                <TabLayout
-                  grow="1"
-                  align={['start', 'end']}
-                >
+                <TabLayout grow="1" align={['start', 'end']}>
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}
                     onActivateTab={onActivateTab}
                   >
-                    <Tab>
-                      {_('Information')}
-                    </Tab>
+                    <Tab>{_('Information')}</Tab>
                     <EntitiesTab count={entity.resourceCount}>
                       {_('Assigned Items')}
                     </EntitiesTab>
@@ -237,12 +212,10 @@ const Page = ({
                 <Tabs active={activeTab}>
                   <TabPanels>
                     <TabPanel>
-                      <TagDetails
-                        entity={entity}
-                      />
+                      <TagDetails entity={entity} />
                     </TabPanel>
                     <TabPanel>
-                      <ResourceList entity={entity}/>
+                      <ResourceList entity={entity} />
                     </TabPanel>
                     <TabPanel>
                       <EntityPermissions
@@ -277,10 +250,11 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

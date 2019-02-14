@@ -25,9 +25,8 @@ import {DISABLED_OPACTIY} from '../field';
 import TextArea from '../textarea';
 
 describe('TextArea tests', () => {
-
   test('should render', () => {
-    const {element} = render(<TextArea/>);
+    const {element} = render(<TextArea />);
 
     expect(element).not.toHaveStyleRule('cursor');
     expect(element).not.toHaveStyleRule('opacity');
@@ -37,7 +36,7 @@ describe('TextArea tests', () => {
   });
 
   test('should render in disabled state', () => {
-    const {element} = render(<TextArea disabled={true}/>);
+    const {element} = render(<TextArea disabled={true} />);
 
     expect(element).toHaveStyleRule('cursor', 'not-allowed');
     expect(element).toHaveStyleRule('opacity', `${DISABLED_OPACTIY}`);
@@ -49,50 +48,36 @@ describe('TextArea tests', () => {
   test('should call change handler with value', () => {
     const onChange = jest.fn();
 
-    const {element} = render(
-      <TextArea
-        value="foo"
-        onChange={onChange}
-      />
-     );
+    const {element} = render(<TextArea value="foo" onChange={onChange} />);
 
-     fireEvent.change(element, {target: {value: 'bar'}});
+    fireEvent.change(element, {target: {value: 'bar'}});
 
-     expect(onChange).toHaveBeenCalledWith('bar', undefined);
+    expect(onChange).toHaveBeenCalledWith('bar', undefined);
   });
 
   test('should call change handler with value and name', () => {
     const onChange = jest.fn();
 
     const {element} = render(
-      <TextArea
-        name="foo"
-        value="ipsum"
-        onChange={onChange}
-      />
-     );
+      <TextArea name="foo" value="ipsum" onChange={onChange} />,
+    );
 
-     fireEvent.change(element, {target: {value: 'bar'}});
+    fireEvent.change(element, {target: {value: 'bar'}});
 
-     expect(onChange).toHaveBeenCalledWith('bar', 'foo');
+    expect(onChange).toHaveBeenCalledWith('bar', 'foo');
   });
 
   test('should not call change handler if disabled', () => {
     const onChange = jest.fn();
 
     const {element} = render(
-      <TextArea
-        disabled={true}
-        value="foo"
-        onChange={onChange}
-      />
-     );
+      <TextArea disabled={true} value="foo" onChange={onChange} />,
+    );
 
-     fireEvent.change(element, {target: {value: 'bar'}});
+    fireEvent.change(element, {target: {value: 'bar'}});
 
-     expect(onChange).not.toHaveBeenCalled();
+    expect(onChange).not.toHaveBeenCalled();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

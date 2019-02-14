@@ -24,7 +24,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(Cpe, 'cpe');
 
 describe('CPE model tests', () => {
-
   test('should parse severity correctly', () => {
     const cpe = new Cpe({max_cvss: '5.0'});
     const cpe2 = new Cpe({max_cvss: '10'});
@@ -71,18 +70,16 @@ describe('CPE model tests', () => {
     };
     const cpe = new Cpe(elem);
 
-    expect(cpe.cves).toEqual(
-      [
-        {
-          id: '1337',
-          severity: 9.0,
-        },
-        {
-          id: '42',
-          severity: 9.5,
-        },
-      ]
-    );
+    expect(cpe.cves).toEqual([
+      {
+        id: '1337',
+        severity: 9.0,
+      },
+      {
+        id: '42',
+        severity: 9.5,
+      },
+    ]);
   });
 
   test('should return empty array if no cves are defined', () => {

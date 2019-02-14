@@ -24,8 +24,7 @@ import {parseInt} from '../../parser.js';
 
 const convertBooleanInt = (keyword, value, relation) => ({
   keyword,
-  value:
-  parseInt(value) >= 1 ? 1 : 0,
+  value: parseInt(value) >= 1 ? 1 : 0,
   relation,
 });
 

@@ -39,15 +39,8 @@ const ConfirmRemoveDialog = ({
   onConfirm,
   onDeny,
 }) => (
-  <Dialog
-    width="450px"
-    minHeight={100}
-    minWidth={200}
-    onClose={onDeny}
-  >
-    {({
-      moveProps,
-    }) => (
+  <Dialog width="450px" minHeight={100} minWidth={200} onClose={onDeny}>
+    {({moveProps}) => (
       <DialogContent>
         <DialogTitle
           title={_('Remove Dashboard {{name}}', {name: dashboardTitle})}
@@ -55,8 +48,11 @@ const ConfirmRemoveDialog = ({
           {...moveProps}
         />
         <Content>
-          {_('Do you really want to remove the Dashboard {{name}} and its ' +
-             'configuration?', {name: dashboardTitle})}
+          {_(
+            'Do you really want to remove the Dashboard {{name}} and its ' +
+              'configuration?',
+            {name: dashboardTitle},
+          )}
         </Content>
         <DialogTwoButtonFooter
           rightButtonTitle={_('Remove')}

@@ -23,7 +23,6 @@ import {isEmpty} from '../utils/string';
 import Model from '../model';
 
 class Permission extends Model {
-
   static entityType = 'permission';
 
   parseProperties(elem) {
@@ -31,15 +30,13 @@ class Permission extends Model {
 
     if (isDefined(elem.resource) && !isEmpty(elem.resource._id)) {
       ret.resource = new Model(elem.resource, elem.resource.type);
-    }
-    else {
+    } else {
       delete ret.resource;
     }
 
     if (isDefined(elem.subject) && !isEmpty(elem.subject._id)) {
       ret.subject = new Model(elem.subject, elem.subject.type);
-    }
-    else {
+    } else {
       delete ret.subject;
     }
     return ret;

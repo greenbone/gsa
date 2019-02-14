@@ -51,17 +51,29 @@ export const mayRequire = validator => {
     if (isDefined(props[prop_name])) {
       return validator(props, prop_name, component_name, ...rest);
     }
-    return new Error('Prop `' + prop_name + '` supplied to' +
-      ' `' + component_name + '` is required.');
+    return new Error(
+      'Prop `' +
+        prop_name +
+        '` supplied to' +
+        ' `' +
+        component_name +
+        '` is required.',
+    );
   };
 
   return wrapper;
 };
 
-export const deprecated = (validator, message = '') =>
-  (props, prop_name, component_name, ...rest) => {
-  warning(isDefined(props[prop_name]),
-    `'${prop_name}' is deprecated on ${component_name}. ${message}`);
+export const deprecated = (validator, message = '') => (
+  props,
+  prop_name,
+  component_name,
+  ...rest
+) => {
+  warning(
+    isDefined(props[prop_name]),
+    `'${prop_name}' is deprecated on ${component_name}. ${message}`,
+  );
   return validator(props, prop_name, component_name, ...rest);
 };
 
@@ -97,16 +109,11 @@ const icon = ReactPropTypes.oneOfType([
   ReactPropTypes.element,
 ]);
 
-const yesno = ReactPropTypes.oneOf([
-  1, 0,
-]);
+const yesno = ReactPropTypes.oneOf([1, 0]);
 
 const id = ReactPropTypes.string; // TODO improve checking for uuid
 
-const idOrZero = ReactPropTypes.oneOfType([
-  id,
-  ReactPropTypes.oneOf([0]),
-]);
+const idOrZero = ReactPropTypes.oneOfType([id, ReactPropTypes.oneOf([0])]);
 
 const stringOrFalse = ReactPropTypes.oneOfType([
   ReactPropTypes.string,
@@ -127,33 +134,45 @@ const entitiescommand = ReactPropTypes.instanceOf(EntitiesCommand);
 const capabilities = ReactPropTypes.instanceOf(Capabilities);
 
 // allow to fake gmp in tests without getting proptype warnings
-const gmp = process.env.NODE_ENV === 'test' ?
-  ReactPropTypes.object :
-  ReactPropTypes.instanceOf(Gmp);
+const gmp =
+  process.env.NODE_ENV === 'test'
+    ? ReactPropTypes.object
+    : ReactPropTypes.instanceOf(Gmp);
 
 const settings = ReactPropTypes.instanceOf(Settings);
 
 const dateValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
   if (isDefined(value) && !isDate(value)) {
-    return new Error('Invalid prop `' + prop_name + '` supplied to' +
-      ' `' + component_name + '`. Not a valid moment date. Value is ' + value);
+    return new Error(
+      'Invalid prop `' +
+        prop_name +
+        '` supplied to' +
+        ' `' +
+        component_name +
+        '`. Not a valid moment date. Value is ' +
+        value,
+    );
   }
   return undefined;
 };
 
 const date = mayRequire(dateValidator);
 
-const timeunit = ReactPropTypes.oneOf([
-  'hour', 'day', 'week', 'month',
-]);
+const timeunit = ReactPropTypes.oneOf(['hour', 'day', 'week', 'month']);
 
 const durationValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
   if (isDefined(value) && !isDuration(value)) {
-    return new Error('Invalid prop `' + prop_name + '` supplied to' +
-      ' `' + component_name + '`. Not a valid moment duration. Value is ' +
-      value);
+    return new Error(
+      'Invalid prop `' +
+        prop_name +
+        '` supplied to' +
+        ' `' +
+        component_name +
+        '`. Not a valid moment duration. Value is ' +
+        value,
+    );
   }
   return undefined;
 };
@@ -162,17 +181,25 @@ const duration = mayRequire(durationValidator);
 
 const iconSize = ReactPropTypes.oneOfType([
   ReactPropTypes.array,
-  ReactPropTypes.oneOf([
-    'tiny', 'small', 'medium', 'large', 'default',
-  ]),
+  ReactPropTypes.oneOf(['tiny', 'small', 'medium', 'large', 'default']),
 ]);
 
 const toStringValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
   if (isDefined(value) && !isDefined(value.toString)) {
-    return new Error('Invalid prop `' + prop_name + '` supplied to' +
-      ' `' + component_name + '`. Prop ' + prop_name + ' can not be ' +
-      'converted to String. Value is `' + value + '`.');
+    return new Error(
+      'Invalid prop `' +
+        prop_name +
+        '` supplied to' +
+        ' `' +
+        component_name +
+        '`. Prop ' +
+        prop_name +
+        ' can not be ' +
+        'converted to String. Value is `' +
+        value +
+        '`.',
+    );
   }
 };
 

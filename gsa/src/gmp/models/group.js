@@ -21,7 +21,6 @@ import {parseCsv} from '../parser';
 import Model from '../model';
 
 class Group extends Model {
-
   static entityType = 'group';
 
   parseProperties(elem) {

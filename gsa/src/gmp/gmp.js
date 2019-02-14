@@ -75,7 +75,6 @@ import {BROWSER_LANGUAGE} from './locale/languages';
 const log = logger.getLogger('gmp');
 
 class Gmp {
-
   constructor(settings = {}) {
     this.settings = settings;
 
@@ -108,12 +107,7 @@ class Gmp {
 
   login(username, password) {
     return this._login.login(username, password).then(login => {
-      const {
-        token,
-        timezone,
-        locale,
-        sessionTimeout,
-      } = login;
+      const {token, timezone, locale, sessionTimeout} = login;
 
       this.settings.username = username;
       this.settings.timezone = timezone;
@@ -135,11 +129,13 @@ class Gmp {
       const url = this.buildUrl('logout');
       const args = {token: this.settings.token};
 
-      const promise = this.http.request('get', {
-        url,
-        args,
-        transform: DefaultTransform,
-      }).then(xhr => {
+      const promise = this.http
+        .request('get', {
+          url,
+          args,
+          transform: DefaultTransform,
+        })
+        .then(xhr => {
           this.clearToken();
           log.debug('Logged out successfully');
           return xhr;
@@ -166,13 +162,18 @@ class Gmp {
   subscribeToLogout(listener) {
     this._logoutListeners.push(listener);
 
-    return () => this._logoutListeners = this._logoutListeners.filter(
-      l => l !== listener);
+    return () =>
+      (this._logoutListeners = this._logoutListeners.filter(
+        l => l !== listener,
+      ));
   }
 
   buildUrl(path, params, anchor) {
-    let url = buildServerUrl(this.settings.server, path,
-      this.settings.protocol);
+    let url = buildServerUrl(
+      this.settings.server,
+      path,
+      this.settings.protocol,
+    );
 
     if (isDefined(params)) {
       url += '?' + buildUrlParams(params);

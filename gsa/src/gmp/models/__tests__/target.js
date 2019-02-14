@@ -26,7 +26,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(Target, 'target');
 
 describe('Target model tests', () => {
-
   test('should parse port_list', () => {
     const elem1 = {
       port_list: {
@@ -113,7 +112,6 @@ describe('Target model tests', () => {
     expect(target.tasks[0]).toBeInstanceOf(Model);
     expect(target.tasks[0].entityType).toEqual('task');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

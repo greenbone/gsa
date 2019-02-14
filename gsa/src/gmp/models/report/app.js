@@ -21,7 +21,6 @@ import {isDefined} from 'gmp/utils/identity';
 import {parseSeverity, setProperties} from 'gmp/parser';
 
 class App {
-
   constructor(elem) {
     const properties = this.parseProperties(elem);
     setProperties(properties, this);
@@ -38,8 +37,7 @@ class App {
     if (isDefined(count)) {
       this.occurrences.detail += count;
       this.occurrences.total += count;
-    }
-    else {
+    } else {
       this.occurrences.without_details += 1;
       this.occurrences.total += 1;
     }

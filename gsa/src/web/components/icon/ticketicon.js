@@ -24,9 +24,8 @@ import {ReactComponent as Icon} from './svg/ticket.svg';
 
 const TicketIcon = props => (
   <SvgIcon {...props}>
-    <Icon/>
+    <Icon />
   </SvgIcon>
-
 );
 
 export default TicketIcon;

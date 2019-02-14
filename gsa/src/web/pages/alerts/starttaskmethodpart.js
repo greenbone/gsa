@@ -27,12 +27,7 @@ import withPrefix from '../../utils/withPrefix.js';
 import Select from '../../components/form/select.js';
 import FormGroup from '../../components/form/formgroup.js';
 
-const StartTaskMethodPart = ({
-  prefix,
-  tasks,
-  startTaskTask,
-  onChange,
-}) => (
+const StartTaskMethodPart = ({prefix, tasks, startTaskTask, onChange}) => (
   <FormGroup title={_('Start Task')}>
     <Select
       name={prefix + 'start_task_task'}
@@ -49,7 +44,6 @@ StartTaskMethodPart.propTypes = {
   tasks: PropTypes.array,
   onChange: PropTypes.func,
 };
-
 
 export default withPrefix(StartTaskMethodPart);
 

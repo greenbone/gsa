@@ -39,10 +39,7 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-const ReportFormatDetails = ({
-  entity,
-  links = true,
-}) => {
+const ReportFormatDetails = ({entity, links = true}) => {
   const {
     extension,
     content_type,
@@ -52,98 +49,64 @@ const ReportFormatDetails = ({
     alerts = [],
   } = entity;
   return (
-    <Layout
-      grow
-      flex="column"
-    >
+    <Layout grow flex="column">
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
           <TableRow>
-            <TableData>
-              {_('Extension')}
-            </TableData>
-            <TableData>
-              {extension}
-            </TableData>
+            <TableData>{_('Extension')}</TableData>
+            <TableData>{extension}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Content Type')}
-            </TableData>
-            <TableData>
-              {content_type}
-            </TableData>
+            <TableData>{_('Content Type')}</TableData>
+            <TableData>{content_type}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Trust')}
-            </TableData>
+            <TableData>{_('Trust')}</TableData>
             <TableData>
               <Divider>
-                <span>
-                  {renderYesNo(trust.value)}
-                </span>
-                {isDefined(trust.time) &&
+                <span>{renderYesNo(trust.value)}</span>
+                {isDefined(trust.time) && (
                   <span>({shortDate(trust.time)})</span>
-                }
+                )}
               </Divider>
             </TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Active')}
-            </TableData>
-            <TableData>
-              {renderYesNo(entity.isActive())}
-            </TableData>
+            <TableData>{_('Active')}</TableData>
+            <TableData>{renderYesNo(entity.isActive())}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Predefined')}
-            </TableData>
-            <TableData>
-              {renderYesNo(entity.isPredefined())}
-            </TableData>
+            <TableData>{_('Predefined')}</TableData>
+            <TableData>{renderYesNo(entity.isPredefined())}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Summary')}
-            </TableData>
-            <TableData>
-              {summary}
-            </TableData>
+            <TableData>{_('Summary')}</TableData>
+            <TableData>{summary}</TableData>
           </TableRow>
 
-          {alerts.length > 0 &&
+          {alerts.length > 0 && (
             <TableRow>
-              <TableData>
-                {_('Alerts using this Report Format')}
-              </TableData>
+              <TableData>{_('Alerts using this Report Format')}</TableData>
               <TableData>
                 <Divider>
                   {alerts.map(alert => (
-                    <DetailsLink
-                      key={alert.id}
-                      id={alert.id}
-                      type="alert"
-                    >
+                    <DetailsLink key={alert.id} id={alert.id} type="alert">
                       {alert.name}
                     </DetailsLink>
                   ))}
                 </Divider>
               </TableData>
             </TableRow>
-          }
-
+          )}
         </TableBody>
       </InfoTable>
 

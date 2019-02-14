@@ -44,44 +44,43 @@ import PropTypes from 'web/utils/proptypes';
 
 import {convert_auth_method, convert_allow} from './details';
 
-const Actions = withEntitiesActions(({
-  entity,
-  onUserCloneClick,
-  onUserEditClick,
-  onUserDeleteClick,
-  onUserDownloadClick,
-}) => (
-  <IconDivider
-    grow
-    align="center"
-  >
-    <DeleteIcon
-      displayName={_('User')}
-      name="user"
-      entity={entity}
-      onClick={onUserDeleteClick}
-    />
-    <EditIcon
-      displayName={_('User')}
-      name="user"
-      entity={entity}
-      onClick={onUserEditClick}
-    />
-    <CloneIcon
-      displayName={_('User')}
-      name="user"
-      entity={entity}
-      title={_('Clone User')}
-      value={entity}
-      onClick={onUserCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export User')}
-      onClick={onUserDownloadClick}
-    />
-  </IconDivider>
-));
+const Actions = withEntitiesActions(
+  ({
+    entity,
+    onUserCloneClick,
+    onUserEditClick,
+    onUserDeleteClick,
+    onUserDownloadClick,
+  }) => (
+    <IconDivider grow align="center">
+      <DeleteIcon
+        displayName={_('User')}
+        name="user"
+        entity={entity}
+        onClick={onUserDeleteClick}
+      />
+      <EditIcon
+        displayName={_('User')}
+        name="user"
+        entity={entity}
+        onClick={onUserEditClick}
+      />
+      <CloneIcon
+        displayName={_('User')}
+        name="user"
+        entity={entity}
+        title={_('Clone User')}
+        value={entity}
+        onClick={onUserCloneClick}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export User')}
+        onClick={onUserDownloadClick}
+      />
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -99,23 +98,13 @@ const Row = ({
   ...props
 }) => {
   const roles = map(entity.roles, role => (
-    <DetailsLink
-      textOnly={!links}
-      key={role.id}
-      type="role"
-      id={role.id}
-    >
+    <DetailsLink textOnly={!links} key={role.id} type="role" id={role.id}>
       {role.name}
     </DetailsLink>
   ));
 
   const groups = map(entity.groups, group => (
-    <DetailsLink
-      textOnly={!links}
-      type="group"
-      key={group.id}
-      id={group.id}
-    >
+    <DetailsLink textOnly={!links} type="group" key={group.id} id={group.id}>
       {group.name}
     </DetailsLink>
   ));
@@ -132,25 +121,14 @@ const Row = ({
         onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
-        <Divider>
-          {roles}
-        </Divider>
+        <Divider>{roles}</Divider>
       </TableData>
       <TableData>
-        <Divider>
-          {groups}
-        </Divider>
+        <Divider>{groups}</Divider>
       </TableData>
-      <TableData>
-        {host_allow}
-      </TableData>
-      <TableData>
-        {auth_method}
-      </TableData>
-      <ActionsComponent
-        {...props}
-        entity={entity}
-      />
+      <TableData>{host_allow}</TableData>
+      <TableData>{auth_method}</TableData>
+      <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );
 };

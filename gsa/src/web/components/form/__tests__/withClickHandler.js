@@ -22,25 +22,14 @@ import {render, fireEvent} from 'web/utils/testing';
 
 import withClickHandler from '../withClickHandler';
 
-const TestInput = ({value, ...props}) => (
-  <input
-    {...props}
-    type="text"
-  />
-);
+const TestInput = ({value, ...props}) => <input {...props} type="text" />;
 
 describe('withClickHandler tests', () => {
-
   test('should call click handler with value', () => {
     const Component = withClickHandler()(TestInput);
 
     const onClick = jest.fn();
-    const {element} = render(
-      <Component
-        value="foo"
-        onClick={onClick}
-      />
-    );
+    const {element} = render(<Component value="foo" onClick={onClick} />);
 
     fireEvent.click(element);
 
@@ -52,11 +41,7 @@ describe('withClickHandler tests', () => {
 
     const onClick = jest.fn();
     const {element} = render(
-      <Component
-        name="bar"
-        value="foo"
-        onClick={onClick}
-      />
+      <Component name="bar" value="foo" onClick={onClick} />,
     );
 
     fireEvent.click(element);
@@ -69,11 +54,7 @@ describe('withClickHandler tests', () => {
 
     const onClick = jest.fn();
     const {element} = render(
-      <Component
-        convert={v => v * 2}
-        value={21}
-        onClick={onClick}
-      />
+      <Component convert={v => v * 2} value={21} onClick={onClick} />,
     );
 
     fireEvent.click(element);
@@ -87,12 +68,7 @@ describe('withClickHandler tests', () => {
     })(TestInput);
 
     const onClick = jest.fn();
-    const {element} = render(
-      <Component
-        value={21}
-        onClick={onClick}
-      />
-    );
+    const {element} = render(<Component value={21} onClick={onClick} />);
 
     fireEvent.click(element);
 
@@ -106,16 +82,11 @@ describe('withClickHandler tests', () => {
 
     const onClick = jest.fn();
     const {element} = render(
-      <Component
-        foo="bar"
-        value={21}
-        onClick={onClick}
-      />
+      <Component foo="bar" value={21} onClick={onClick} />,
     );
 
     fireEvent.click(element);
 
     expect(onClick).toHaveBeenCalledWith('bar', undefined);
   });
-
 });

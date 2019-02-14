@@ -23,7 +23,6 @@ import {setProperties, parseSeverity} from '../../parser';
 import Nvt from '../nvt';
 
 class ReportCve {
-
   constructor(elem) {
     this.parseProperties(elem);
 

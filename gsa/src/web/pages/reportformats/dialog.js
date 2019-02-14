@@ -46,13 +46,7 @@ import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
-const ReportFormatListParam = ({
-    formats,
-    idList,
-    name,
-    onValueChange,
-  }) => {
-
+const ReportFormatListParam = ({formats, idList, name, onValueChange}) => {
   const formatOptions = map(formats, format => ({
     label: format.name,
     value: format.id,
@@ -60,9 +54,7 @@ const ReportFormatListParam = ({
 
   return (
     <TableRow>
-      <TableData>
-        {name}
-      </TableData>
+      <TableData>{name}</TableData>
       <TableData>
         <MultiSelect
           name={name}
@@ -82,25 +74,16 @@ ReportFormatListParam.propTypes = {
   onValueChange: PropTypes.func.isRequired,
 };
 
-const Param = ({
-    data,
-    value,
-    onPrefChange,
-  }) => {
+const Param = ({data, value, onPrefChange}) => {
   const {name, type, min, max} = value;
   const field_value = data[name];
 
   let field;
   if (type === 'boolean') {
     field = (
-      <YesNoRadio
-        name={name}
-        value={field_value}
-        onChange={onPrefChange}
-      />
+      <YesNoRadio name={name} value={field_value} onChange={onPrefChange} />
     );
-  }
-  else if (type === 'integer') {
+  } else if (type === 'integer') {
     field = (
       <Spinner
         type="int"
@@ -111,8 +94,7 @@ const Param = ({
         onChange={onPrefChange}
       />
     );
-  }
-  else if (type === 'string') {
+  } else if (type === 'string') {
     field = (
       <TextField
         name={name}
@@ -121,9 +103,7 @@ const Param = ({
         onChange={onPrefChange}
       />
     );
-  }
-  else if (type === 'selection') {
-
+  } else if (type === 'selection') {
     const typeOptions = map(value.options, opt => ({
       label: opt.name,
       value: opt.value,
@@ -137,8 +117,7 @@ const Param = ({
         onChange={onPrefChange}
       />
     );
-  }
-  else {
+  } else {
     field = (
       <TextArea
         cols="80"
@@ -151,12 +130,8 @@ const Param = ({
   }
   return (
     <TableRow>
-      <TableData>
-        {name}
-      </TableData>
-      <TableData>
-        {field}
-      </TableData>
+      <TableData>{name}</TableData>
+      <TableData>{field}</TableData>
     </TableRow>
   );
 };
@@ -168,7 +143,6 @@ Param.propTypes = {
 };
 
 class Dialog extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -219,10 +193,7 @@ class Dialog extends React.Component {
           onSave={onSave}
           defaultValues={reportformat}
         >
-          {({
-            values: state,
-            onValueChange,
-          }) => {
+          {({values: state, onValueChange}) => {
             return (
               <Layout flex="column">
                 <FormGroup title={_('Name')}>
@@ -253,10 +224,8 @@ class Dialog extends React.Component {
                   />
                 </FormGroup>
 
-                {reportformat.params.length > 0 &&
-                  <h2>Parameters</h2>
-                }
-                {reportformat.params.length > 0 &&
+                {reportformat.params.length > 0 && <h2>Parameters</h2>}
+                {reportformat.params.length > 0 && (
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -288,7 +257,7 @@ class Dialog extends React.Component {
                       })}
                     </TableBody>
                   </Table>
-                }
+                )}
               </Layout>
             );
           }}
@@ -296,23 +265,12 @@ class Dialog extends React.Component {
       );
     }
     return (
-      <SaveDialog
-        title={title}
-        onClose={onClose}
-        onSave={onSave}
-      >
-        {({
-          values: state,
-          onValueChange,
-        }) => {
-
+      <SaveDialog title={title} onClose={onClose} onSave={onSave}>
+        {({values: state, onValueChange}) => {
           return (
             <Layout flex="column">
               <FormGroup title={_('Import XML Report Format')} titleSize="3">
-                <FileField
-                  name="xml_file"
-                  onChange={onValueChange}
-                />
+                <FileField name="xml_file" onChange={onValueChange} />
               </FormGroup>
             </Layout>
           );

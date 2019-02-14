@@ -31,8 +31,8 @@ export const TasksCvssDisplay = createDisplay({
   loaderComponent: TasksSeverityLoader,
   displayComponent: CvssDisplay,
   yLabel: _l('# of Tasks'),
-  title: ({data: tdata = {}}) => _('Tasks by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  title: ({data: tdata = {}}) =>
+    _('Tasks by CVSS (Total: {{count}})', {count: tdata.total}),
   displayId: 'task-by-cvss',
   displayName: 'TasksCvssDisplay',
   filtersFilter: TASKS_FILTER_FILTER,
@@ -41,12 +41,9 @@ export const TasksCvssDisplay = createDisplay({
 export const TasksCvssTableDisplay = createDisplay({
   loaderComponent: TasksSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [
-    _l('Severity'),
-    _l('# of Tasks'),
-  ],
-  title: ({data: tdata = {}}) => _('Tasks by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  dataTitles: [_l('Severity'), _l('# of Tasks')],
+  title: ({data: tdata = {}}) =>
+    _('Tasks by CVSS (Total: {{count}})', {count: tdata.total}),
   filtersFilter: TASKS_FILTER_FILTER,
   displayId: 'task-by-cvss-table',
   displayName: 'TasksCvssTableDisplay',

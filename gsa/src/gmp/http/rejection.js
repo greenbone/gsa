@@ -19,7 +19,6 @@
 import {isDefined} from '../utils/identity';
 
 class Rejection {
-
   static REASON_ERROR = 'error';
   static REASON_TIMEOUT = 'timeout';
   static REASON_CANCEL = 'cancel';

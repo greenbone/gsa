@@ -34,18 +34,17 @@ export const LogLevels = {
   silent: 5,
 };
 
-const isValidLogLevel = level => isString(level) &&
-  level.toLowerCase() in LogLevels;
+const isValidLogLevel = level =>
+  isString(level) && level.toLowerCase() in LogLevels;
 
-const getLogLevel = loglevel => isValidLogLevel(loglevel) ?
-  LogLevels[loglevel.toLowerCase()] : undefined;
+const getLogLevel = loglevel =>
+  isValidLogLevel(loglevel) ? LogLevels[loglevel.toLowerCase()] : undefined;
 
-function noop() {};
+function noop() {}
 
 /* eslint-disable no-console */
 
 class Logger {
-
   constructor(name, level = DEFAULT_LOG_LEVEL) {
     this.name = name;
     this.setDefaultLevel(level);
@@ -57,10 +56,17 @@ class Logger {
         continue;
       }
 
-      this[logName] = logValue < newLogValue ? noop : (...args) => { // eslint-disable-line no-loop-func
-        return console[logName]('%c' + this.name, 'color: ' + GREENBONE_GREEN,
-          ...args);
-      };
+      this[logName] =
+        logValue < newLogValue
+          ? noop
+          : (...args) => {
+              // eslint-disable-line no-loop-func
+              return console[logName](
+                '%c' + this.name,
+                'color: ' + GREENBONE_GREEN,
+                ...args,
+              );
+            };
     }
   }
 
@@ -94,7 +100,6 @@ class Logger {
 }
 
 export class RootLogger {
-
   constructor() {
     this.loggers = {};
     this.level = DEFAULT_LOG_LEVEL;

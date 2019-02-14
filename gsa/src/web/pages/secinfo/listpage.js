@@ -40,10 +40,7 @@ import PropTypes from 'web/utils/proptypes';
 import SecInfoFilterDialog from './filterdialog';
 import SecInfosTable from './table';
 
-import {
-  SecInfoDashboard,
-  SECINFO_DASHBOARD_ID,
-} from './dashboard';
+import {SecInfoDashboard, SECINFO_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = () => (
   <ManualIcon
@@ -53,12 +50,7 @@ const ToolBarIcons = () => (
   />
 );
 
-const Page = ({
-  filter,
-  onFilterChanged,
-  onInteraction,
-  ...props
-}) => (
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
   <EntitiesPage
     {...props}
     createFilterType="info"
@@ -78,7 +70,7 @@ const Page = ({
     filter={filter}
     filterEditDialog={SecInfoFilterDialog}
     filtersFilter={SECINFO_FILTER_FILTER}
-    sectionIcon={<AllInfoIcon size="large"/>}
+    sectionIcon={<AllInfoIcon size="large" />}
     table={SecInfosTable}
     title={_('All SecInfo Information')}
     toolBarIcons={ToolBarIcons}

@@ -43,7 +43,6 @@ export const Col = styled.col`
 `;
 
 class EntityPage extends React.Component {
-
   constructor(...args) {
     super(...args);
     this.state = {activeTab: 0};
@@ -58,12 +57,7 @@ class EntityPage extends React.Component {
       return null;
     }
 
-    return (
-      <ToolBarIconsComponent
-        entity={entity}
-        {...other}
-      />
-    );
+    return <ToolBarIconsComponent entity={entity} {...other} />;
   }
 
   handleActivateTab(index) {
@@ -125,38 +119,25 @@ class EntityPage extends React.Component {
 
     return (
       <Layout align="start">
-        <InfoComponent
-          entity={entity}
-        />
+        <InfoComponent entity={entity} />
       </Layout>
     );
   }
 
   render() {
-    const {
-      entity,
-      isLoading = true,
-    } = this.props;
+    const {entity, isLoading = true} = this.props;
 
     if (!isDefined(entity)) {
       if (isLoading) {
-        return (
-          <Loading />
-        );
+        return <Loading />;
       }
       return null;
     }
 
     return (
       <ErrorBoundary errElement={_('page')}>
-        <Layout
-          flex="column"
-          align="start"
-          grow="1"
-        >
-          <Toolbar>
-            {this.renderToolbarIcons()}
-          </Toolbar>
+        <Layout flex="column" align="start" grow="1">
+          <Toolbar>{this.renderToolbarIcons()}</Toolbar>
           {this.renderSection()}
         </Layout>
       </ErrorBoundary>

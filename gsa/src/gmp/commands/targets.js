@@ -30,7 +30,6 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.targets');
 
 class TargetCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'target', Target);
   }
@@ -48,7 +47,8 @@ class TargetCommand extends EntityCommand {
       port_list_id,
       alive_tests,
       ssh_credential_id = 0,
-      port, smb_credential_id = 0,
+      port,
+      smb_credential_id = 0,
       esxi_credential_id = 0,
       snmp_credential_id = 0,
       file,
@@ -90,9 +90,11 @@ class TargetCommand extends EntityCommand {
       exclude_hosts,
       reverse_lookup_only,
       reverse_lookup_unify,
-      port_list_id, alive_tests,
+      port_list_id,
+      alive_tests,
       ssh_credential_id = 0,
-      port, smb_credential_id = 0,
+      port,
+      smb_credential_id = 0,
       esxi_credential_id = 0,
       snmp_credential_id = 0,
       file,
@@ -130,7 +132,6 @@ class TargetCommand extends EntityCommand {
 }
 
 class TargetsCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'target', Target);
   }

@@ -22,13 +22,7 @@ import Theme from 'web/utils/theme';
 
 import PropTypes from '../../utils/proptypes';
 
-const Label = ({
-  x,
-  y,
-  innerRef,
-  children,
-  ...props
-}) => (
+const Label = ({x, y, innerRef, children, ...props}) => (
   <text
     ref={innerRef}
     fill={Theme.dialogGray} // to have labels a bit visible on white background

@@ -33,7 +33,6 @@ import TabList from './tablist.js';
  */
 
 class Tabs extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -67,8 +66,7 @@ class Tabs extends React.Component {
     const children = React.Children.map(this.props.children, child => {
       if (child.type === TabPanels) {
         return React.cloneElement(child, {active});
-      }
-      else if (child.type === TabList) {
+      } else if (child.type === TabList) {
         return React.cloneElement(child, {
           active,
           onActivateTab: this.handleActivateTab,
@@ -76,11 +74,7 @@ class Tabs extends React.Component {
       }
       return child;
     });
-    return (
-      <React.Fragment>
-        {children}
-      </React.Fragment>
-    );
+    return <React.Fragment>{children}</React.Fragment>;
   }
 }
 

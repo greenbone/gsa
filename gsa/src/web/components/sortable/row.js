@@ -36,7 +36,7 @@ const GridRow = styled.div`
   display: flex;
   height: ${props => props.height}px;
   min-height: ${MIN_HEIGHT}px;
-  background: ${props => props.isDraggingOver ? Theme.lightBlue : 'none'};
+  background: ${props => (props.isDraggingOver ? Theme.lightBlue : 'none')};
 `;
 
 class Row extends React.Component {
@@ -60,12 +60,7 @@ class Row extends React.Component {
   }
 
   render() {
-    const {
-      children,
-      dropDisabled,
-      id,
-      height,
-    } = this.props;
+    const {children, dropDisabled, id, height} = this.props;
     return (
       <React.Fragment>
         <Droppable

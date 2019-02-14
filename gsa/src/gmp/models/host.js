@@ -30,14 +30,13 @@ import {
 
 import Asset from './asset';
 
-const get_identifier = (identifiers, name) => identifiers.filter(
-  identifier => identifier.name === name)[0];
+const get_identifier = (identifiers, name) =>
+  identifiers.filter(identifier => identifier.name === name)[0];
 
 const newProperties = (properties, object = {}) =>
   setProperties(parseProperties(properties, object));
 
 class Identifier {
-
   constructor(element) {
     const props = parseProperties(element);
 
@@ -57,7 +56,6 @@ class Identifier {
 }
 
 class Host extends Asset {
-
   static entityType = 'host';
 
   parseProperties(elem) {
@@ -71,8 +69,7 @@ class Host extends Asset {
       ret.identifiers = map(ret.identifiers.identifier, identifier => {
         return new Identifier(identifier);
       });
-    }
-    else {
+    } else {
       ret.identifiers = [];
     }
 
@@ -104,13 +101,12 @@ class Host extends Asset {
             id: isEmpty(host._id) ? undefined : host._id,
             distance: parseInt(host._distance),
             same_source: parseYesNo(host._same_source), // host/hop was found in the same scan
-          }))
+          })),
         );
       }
 
       delete ret.host;
-    }
-    else {
+    } else {
       ret.routes = [];
     }
 

@@ -27,22 +27,17 @@ export const CERTBUNDS_SEVERITY = 'certbunds-severity';
 export const CERTBUNDS_CREATED = 'certbunds-created';
 
 export const certBundCreatedLoader = loadFunc(
-  ({gmp, filter}) => gmp.certbunds.getCreatedAggregates({filter})
-    .then(r => r.data),
-  CERTBUNDS_CREATED);
+  ({gmp, filter}) =>
+    gmp.certbunds.getCreatedAggregates({filter}).then(r => r.data),
+  CERTBUNDS_CREATED,
+);
 
-export const CertBundCreatedLoader = ({
-  filter,
-  children,
-}) => (
+export const CertBundCreatedLoader = ({filter, children}) => (
   <Loader
     dataId={CERTBUNDS_CREATED}
     filter={filter}
     load={certBundCreatedLoader}
-    subscriptions={[
-      'certbunds.timer',
-      'certbunds.changed',
-    ]}
+    subscriptions={['certbunds.timer', 'certbunds.changed']}
   >
     {children}
   </Loader>
@@ -51,22 +46,17 @@ export const CertBundCreatedLoader = ({
 CertBundCreatedLoader.propTypes = loaderPropTypes;
 
 export const certBundSeverityLoader = loadFunc(
-  ({gmp, filter}) => gmp.certbunds.getSeverityAggregates({filter})
-    .then(r => r.data),
-  CERTBUNDS_SEVERITY);
+  ({gmp, filter}) =>
+    gmp.certbunds.getSeverityAggregates({filter}).then(r => r.data),
+  CERTBUNDS_SEVERITY,
+);
 
-export const CertBundSeverityLoader = ({
-  filter,
-  children,
-}) => (
+export const CertBundSeverityLoader = ({filter, children}) => (
   <Loader
     dataId={CERTBUNDS_SEVERITY}
     filter={filter}
     load={certBundSeverityLoader}
-    subscriptions={[
-      'certbunds.timer',
-      'certbunds.changed',
-    ]}
+    subscriptions={['certbunds.timer', 'certbunds.changed']}
   >
     {children}
   </Loader>

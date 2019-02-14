@@ -24,7 +24,6 @@ import PropTypes from '../../utils/proptypes.js';
 import {renderChildren} from '../../utils/render.js';
 
 class CapabilitiesProvider extends React.Component {
-
   getChildContext() {
     const {capabilities} = this.props;
 

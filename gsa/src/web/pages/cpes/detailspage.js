@@ -56,19 +56,13 @@ import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/cpes';
+import {selector, loadEntity} from 'web/store/entities/cpes';
 
 import PropTypes from 'web/utils/proptypes';
 
 import CpeDetails from './details';
 
-const ToolBarIcons = ({
-  entity,
-  onCpeDownloadClick,
-}) => (
+const ToolBarIcons = ({entity, onCpeDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
@@ -76,10 +70,7 @@ const ToolBarIcons = ({
         anchor="cpe"
         title={_('Help: CPEs')}
       />
-      <ListIcon
-        title={_('CPE List')}
-        page="cpes"
-      />
+      <ListIcon title={_('CPE List')} page="cpes" />
     </IconDivider>
     <ExportIcon
       value={entity}
@@ -94,9 +85,7 @@ ToolBarIcons.propTypes = {
   onCpeDownloadClick: PropTypes.func.isRequired,
 };
 
-const EntityInfo = ({
-  entity,
-}) => {
+const EntityInfo = ({entity}) => {
   const {id, modificationTime, creationTime, updateTime} = entity;
   return (
     <InfoLayout>
@@ -116,54 +105,38 @@ EntityInfo.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Details = ({
-  entity,
-  links = true,
-}) => {
+const Details = ({entity, links = true}) => {
   const {cves} = entity;
   return (
     <Layout flex="column">
-      <CpeDetails
-        entity={entity}
-      />
-      <DetailsBlock
-        title={_('Reported Vulnerabilities')}
-      >
-        {cves.length > 0 ?
+      <CpeDetails entity={entity} />
+      <DetailsBlock title={_('Reported Vulnerabilities')}>
+        {cves.length > 0 ? (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>
-                  {_('Name')}
-                </TableHead>
-                <TableHead>
-                  {_('Severity')}
-                </TableHead>
+                <TableHead>{_('Name')}</TableHead>
+                <TableHead>{_('Severity')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {cves.map(cve => (
                 <TableRow key={cve.id}>
                   <TableData>
-                    <DetailsLink
-                      id={cve.id}
-                      type="cve"
-                      textOnly={!links}
-                    >
+                    <DetailsLink id={cve.id} type="cve" textOnly={!links}>
                       {cve.id}
                     </DetailsLink>
                   </TableData>
                   <TableData>
-                    <SeverityBar
-                      severity={cve.severity}
-                    />
+                    <SeverityBar severity={cve.severity} />
                   </TableData>
                 </TableRow>
               ))}
             </TableBody>
-          </Table> :
+          </Table>
+        ) : (
           _('None')
-        }
+        )}
       </DetailsBlock>
     </Layout>
   );
@@ -192,31 +165,23 @@ const CpePage = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<CpeLogoIcon size="large"/>}
+        sectionIcon={<CpeLogoIcon size="large" />}
         title={_('CPE')}
         infoComponent={EntityInfo}
         toolBarIcons={ToolBarIcons}
         onCpeDownloadClick={download}
         onInteraction={onInteraction}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
@@ -226,9 +191,7 @@ const CpePage = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <Details
-                      entity={entity}
-                    />
+                    <Details entity={entity} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags

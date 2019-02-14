@@ -31,27 +31,16 @@ import {ReactComponent as Icon} from './svg/export.svg';
 
 const ExportSvgIcon = withSvgIcon()(Icon);
 
-const ExportIcon = ({
-  selectionType,
-  title,
-  ...other
-}) => {
+const ExportIcon = ({selectionType, title, ...other}) => {
   let download_title = title;
   if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
     download_title = _('Export page contents');
-  }
-  else if (selectionType === SelectionType.SELECTION_USER) {
+  } else if (selectionType === SelectionType.SELECTION_USER) {
     download_title = _('Export selection');
-  }
-  else if (selectionType === SelectionType.SELECTION_FILTER) {
+  } else if (selectionType === SelectionType.SELECTION_FILTER) {
     download_title = _('Export all filtered');
   }
-  return (
-    <ExportSvgIcon
-      {...other}
-      title={download_title}
-    />
-  );
+  return <ExportSvgIcon {...other} title={download_title} />;
 };
 
 ExportIcon.propTypes = {

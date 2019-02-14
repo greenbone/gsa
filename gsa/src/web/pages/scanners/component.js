@@ -24,9 +24,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {hasId} from 'gmp/utils/id';
 
-import {
-  SLAVE_SCANNER_TYPE,
-} from 'gmp/models/scanner';
+import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
@@ -43,7 +41,6 @@ import CredentialsDialog from '../credentials/dialog';
 import ScannerDialog from './dialog';
 
 class ScannerComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -52,8 +49,9 @@ class ScannerComponent extends React.Component {
       scannerDialogVisible: false,
     };
 
-    this.handleCloseCredentialsDialog =
-      this.handleCloseCredentialsDialog.bind(this);
+    this.handleCloseCredentialsDialog = this.handleCloseCredentialsDialog.bind(
+      this,
+    );
     this.handleCloseScannerDialog = this.handleCloseScannerDialog.bind(this);
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
     this.openScannerDialog = this.openScannerDialog.bind(this);
@@ -74,46 +72,51 @@ class ScannerComponent extends React.Component {
       return response.data;
     });
     if (isDefined(scanner)) {
-      Promise.all([credPromise, gmp.scanner.get(scanner)])
-      .then(([credentials, response]) => {
-        scanner = response.data;
+      Promise.all([credPromise, gmp.scanner.get(scanner)]).then(
+        ([credentials, response]) => {
+          scanner = response.data;
 
-        const title = _('Edit Scanner {{name}}', {name: shorten(scanner.name)});
-        this.setState({
-          ca_pub: isDefined(scanner.ca_pub) ?
-            scanner.ca_pub.certificate : undefined,
-          comment: scanner.comment,
-          credentials,
-          credential_id: hasId(scanner.credential) ?
-            scanner.credential.id : undefined,
-          host: scanner.host,
-          id: scanner.id,
-          name: scanner.name,
-          scannerDialogVisible: true,
-          scanner,
-          title,
-          type: scanner.scannerType,
-          which_cert: isDefined(scanner.ca_pub) ? 'existing' : 'default',
-        });
-      });
-    }
-    else {
+          const title = _('Edit Scanner {{name}}', {
+            name: shorten(scanner.name),
+          });
+          this.setState({
+            ca_pub: isDefined(scanner.ca_pub)
+              ? scanner.ca_pub.certificate
+              : undefined,
+            comment: scanner.comment,
+            credentials,
+            credential_id: hasId(scanner.credential)
+              ? scanner.credential.id
+              : undefined,
+            host: scanner.host,
+            id: scanner.id,
+            name: scanner.name,
+            scannerDialogVisible: true,
+            scanner,
+            title,
+            type: scanner.scannerType,
+            which_cert: isDefined(scanner.ca_pub) ? 'existing' : 'default',
+          });
+        },
+      );
+    } else {
       credPromise.then(credentials =>
-      this.setState({
-        ca_pub: undefined,
-        comment: undefined,
-        credential_id: undefined,
-        credentials,
-        host: undefined,
-        id: undefined,
-        name: undefined,
-        port: undefined,
-        scanner: undefined,
-        scannerDialogVisible: true,
-        title: undefined,
-        type: SLAVE_SCANNER_TYPE,
-        which_cert: undefined,
-      }));
+        this.setState({
+          ca_pub: undefined,
+          comment: undefined,
+          credential_id: undefined,
+          credentials,
+          host: undefined,
+          id: undefined,
+          name: undefined,
+          port: undefined,
+          scanner: undefined,
+          scannerDialogVisible: true,
+          title: undefined,
+          type: SLAVE_SCANNER_TYPE,
+          which_cert: undefined,
+        }),
+      );
     }
   }
 
@@ -127,9 +130,10 @@ class ScannerComponent extends React.Component {
   }
 
   openCredentialsDialog(type) {
-    const base = type === SLAVE_SCANNER_TYPE ?
-      USERNAME_PASSWORD_CREDENTIAL_TYPE :
-      CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
+    const base =
+      type === SLAVE_SCANNER_TYPE
+        ? USERNAME_PASSWORD_CREDENTIAL_TYPE
+        : CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
 
     this.handleInteraction();
 
@@ -155,11 +159,12 @@ class ScannerComponent extends React.Component {
     this.handleInteraction();
 
     return gmp.scanner.verify(scanner).then(onVerified, response => {
-      const message = isDefined(response.root) &&
+      const message =
+        isDefined(response.root) &&
         isDefined(response.root.get_scanner) &&
-        isDefined(response.root.get_scanner.verify_scanner_response) ?
-        response.root.get_scanner.verify_scanner_response._status_text :
-        _('Unkown Error');
+        isDefined(response.root.get_scanner.verify_scanner_response)
+          ? response.root.get_scanner.verify_scanner_response._status_text
+          : _('Unkown Error');
 
       if (isDefined(onVerifyError)) {
         onVerifyError(new Error(message));
@@ -173,7 +178,9 @@ class ScannerComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.credential.create(data).then(response => {
+    return gmp.credential
+      .create(data)
+      .then(response => {
         credential = response.data;
       })
       .then(() => gmp.credentials.getAll())
@@ -205,10 +212,13 @@ class ScannerComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.credential.download(credential, 'pem').then(response => {
-      const filename = 'scanner-credential-' + name + '-' + id + '.pem';
-      return {filename, data: response.data};
-    }).then(onCredentialDownloaded, onCredentialDownloadError);
+    return gmp.credential
+      .download(credential, 'pem')
+      .then(response => {
+        const filename = 'scanner-credential-' + name + '-' + id + '.pem';
+        return {filename, data: response.data};
+      })
+      .then(onCredentialDownloaded, onCredentialDownloadError);
   }
 
   handleScannerTypeChange(value, name) {
@@ -269,10 +279,7 @@ class ScannerComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
@@ -282,7 +289,7 @@ class ScannerComponent extends React.Component {
               downloadcertificate: this.handleDownloadCertificate,
               downloadcredential: this.handleDownloadCredential,
             })}
-            {scannerDialogVisible &&
+            {scannerDialogVisible && (
               <ScannerDialog
                 ca_pub={ca_pub}
                 comment={comment}
@@ -303,14 +310,14 @@ class ScannerComponent extends React.Component {
                 }}
                 onScannerTypeChange={this.handleScannerTypeChange}
               />
-            }
-            {credentialDialogVisible &&
+            )}
+            {credentialDialogVisible && (
               <CredentialsDialog
                 types={credentialTypes}
                 onClose={this.handleCloseCredentialsDialog}
                 onSave={this.handleCreateCredential}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>

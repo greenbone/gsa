@@ -43,22 +43,16 @@ import TargetsFilterDialog from './filterdialog';
 import TargetsTable from './table';
 import TargetComponent from './component';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onTargetCreateClick,
-}) => (
+const ToolBarIcons = withCapabilities(({capabilities, onTargetCreateClick}) => (
   <IconDivider>
     <ManualIcon
       page="vulnerabilitymanagement"
       anchor="creating-a-target"
       title={_('Help: Targets')}
     />
-    {capabilities.mayCreate('target') &&
-      <NewIcon
-        title={_('New Target')}
-        onClick={onTargetCreateClick}
-      />
-    }
+    {capabilities.mayCreate('target') && (
+      <NewIcon title={_('New Target')} onClick={onTargetCreateClick} />
+    )}
   </IconDivider>
 ));
 
@@ -83,34 +77,28 @@ const TargetsPage = ({
     onDownloaded={onDownloaded}
     onDownloadError={onError}
     onInteraction={onInteraction}
-  >{({
-    clone,
-    create,
-    delete: delete_func,
-    download,
-    edit,
-    save,
-  }) => (
-    <EntitiesPage
-      {...props}
-      filterEditDialog={TargetsFilterDialog}
-      filtersFilter={TARGETS_FILTER_FILTER}
-      sectionIcon={<TargetIcon size="large"/>}
-      table={TargetsTable}
-      title={_('Targets')}
-      toolBarIcons={ToolBarIcons}
-      onChanged={onChanged}
-      onDownloaded={onDownloaded}
-      onError={onError}
-      onInteraction={onInteraction}
-      onTargetCloneClick={clone}
-      onTargetCreateClick={create}
-      onTargetDeleteClick={delete_func}
-      onTargetDownloadClick={download}
-      onTargetEditClick={edit}
-      onTargetSaveClick={save}
-    />
-  )}
+  >
+    {({clone, create, delete: delete_func, download, edit, save}) => (
+      <EntitiesPage
+        {...props}
+        filterEditDialog={TargetsFilterDialog}
+        filtersFilter={TARGETS_FILTER_FILTER}
+        sectionIcon={<TargetIcon size="large" />}
+        table={TargetsTable}
+        title={_('Targets')}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onDownloaded={onDownloaded}
+        onError={onError}
+        onInteraction={onInteraction}
+        onTargetCloneClick={clone}
+        onTargetCreateClick={create}
+        onTargetDeleteClick={delete_func}
+        onTargetDownloadClick={download}
+        onTargetEditClick={edit}
+        onTargetSaveClick={save}
+      />
+    )}
   </TargetComponent>
 );
 

@@ -37,117 +37,76 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-import {
-  renderDuration,
-  renderRecurrence,
-} from './render';
+import {renderDuration, renderRecurrence} from './render';
 
-const ScheduleDetails = ({
-  entity,
-  links = true,
-}) => {
-  const {
-    comment,
-    tasks = [],
-    timezone,
-    timezone_abbrev,
-    event,
-  } = entity;
+const ScheduleDetails = ({entity, links = true}) => {
+  const {comment, tasks = [], timezone, timezone_abbrev, event} = entity;
   const {startDate, nextDate, duration, recurrence} = event;
   return (
-    <Layout
-      grow
-      flex="column"
-    >
+    <Layout grow flex="column">
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(comment) &&
+          {isDefined(comment) && (
             <TableRow>
-              <TableData>
-                {_('Comment')}
-              </TableData>
-              <TableData>
-                {comment}
-              </TableData>
+              <TableData>{_('Comment')}</TableData>
+              <TableData>{comment}</TableData>
             </TableRow>
-          }
+          )}
 
           <TableRow>
-            <TableData>
-              {_('First Run')}
-            </TableData>
-            <TableData>
-              {longDate(startDate)}
-            </TableData>
+            <TableData>{_('First Run')}</TableData>
+            <TableData>{longDate(startDate)}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Next Run')}
-            </TableData>
+            <TableData>{_('Next Run')}</TableData>
             <TableData>
               {isDefined(nextDate) ? longDate(nextDate) : '-'}
             </TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Timezone')}
-            </TableData>
+            <TableData>{_('Timezone')}</TableData>
             <TableData>
               <Divider>
                 <span>{timezone}</span>
-                {isDefined(timezone_abbrev) && timezone !== timezone_abbrev &&
+                {isDefined(timezone_abbrev) && timezone !== timezone_abbrev && (
                   <span>({timezone_abbrev})</span>
-                }
+                )}
               </Divider>
             </TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Recurrence')}
-            </TableData>
-            <TableData>
-              {renderRecurrence(recurrence)}
-            </TableData>
+            <TableData>{_('Recurrence')}</TableData>
+            <TableData>{renderRecurrence(recurrence)}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Duration')}
-            </TableData>
-            <TableData>
-              {renderDuration(duration)}
-            </TableData>
+            <TableData>{_('Duration')}</TableData>
+            <TableData>{renderDuration(duration)}</TableData>
           </TableRow>
 
           {/* don't show empty tasks because schedules list doesn't provide
            any */}
-          {tasks.length > 0 &&
+          {tasks.length > 0 && (
             <TableRow>
-              <TableData>
-                {_('Tasks using this Schedule')}
-              </TableData>
+              <TableData>{_('Tasks using this Schedule')}</TableData>
               <TableData>
                 <Divider>
                   {tasks.map(task => (
-                    <DetailsLink
-                      key={task.id}
-                      id={task.id}
-                      type="task"
-                    >
+                    <DetailsLink key={task.id} id={task.id} type="task">
                       {task.name}
                     </DetailsLink>
                   ))}
                 </Divider>
               </TableData>
             </TableRow>
-          }
+          )}
         </TableBody>
       </InfoTable>
     </Layout>

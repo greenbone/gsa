@@ -39,9 +39,7 @@ import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {
-  riskFactorColorScale,
-} from 'web/components/dashboard/display/utils';
+import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 
 import {TasksHighResultsLoader} from './loaders';
 
@@ -74,7 +72,6 @@ const transformHighResultsData = (data = {}, {severityClass}) => {
 };
 
 export class TasksMostHighResultsDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -88,14 +85,9 @@ export class TasksMostHighResultsDisplay extends React.Component {
   }
 
   render() {
-    const {
-      filter,
-      ...props
-    } = this.props;
+    const {filter, ...props} = this.props;
     return (
-      <TasksHighResultsLoader
-        filter={filter}
-      >
+      <TasksHighResultsLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
@@ -143,10 +135,7 @@ TasksMostHighResultsDisplay.displayId = 'task-by-most-high-results';
 export const TasksMostHighResultsTableDisplay = createDisplay({
   loaderComponent: TasksHighResultsLoader,
   displayComponent: DataTableDisplay,
-  dataTitles: [
-    _l('Task Name'),
-    _l('Max. High per Host'),
-  ],
+  dataTitles: [_l('Task Name'), _l('Max. High per Host')],
   dataRow: row => [row.x, row.y],
   dataTransform: transformHighResultsData,
   title: () => _('Tasks with most High Results per Host'),
@@ -155,14 +144,18 @@ export const TasksMostHighResultsTableDisplay = createDisplay({
   filtersFilter: TASKS_FILTER_FILTER,
 });
 
-registerDisplay(TasksMostHighResultsDisplay.displayId,
-  TasksMostHighResultsDisplay, {
+registerDisplay(
+  TasksMostHighResultsDisplay.displayId,
+  TasksMostHighResultsDisplay,
+  {
     title: _l('Chart: Tasks with most High Results per Host'),
   },
 );
 
-registerDisplay(TasksMostHighResultsTableDisplay.displayId,
-  TasksMostHighResultsTableDisplay, {
+registerDisplay(
+  TasksMostHighResultsTableDisplay.displayId,
+  TasksMostHighResultsTableDisplay,
+  {
     title: _l('Table: Tasks with most High Results per Host'),
   },
 );

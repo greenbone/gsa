@@ -30,7 +30,6 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.credentials');
 
 class CredentialCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'credential', Credential);
   }
@@ -122,11 +121,14 @@ class CredentialCommand extends EntityCommand {
   }
 
   download({id}, format = 'pem') {
-    return this.httpGet({
-      cmd: 'download_credential',
-      package_format: format,
-      credential_id: id,
-    }, {transform: DefaultTransform, responseType: 'arraybuffer'});
+    return this.httpGet(
+      {
+        cmd: 'download_credential',
+        package_format: format,
+        credential_id: id,
+      },
+      {transform: DefaultTransform, responseType: 'arraybuffer'},
+    );
   }
 
   getElementFromRoot(root) {
@@ -135,7 +137,6 @@ class CredentialCommand extends EntityCommand {
 }
 
 class CredentialsCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'credential', Credential);
   }

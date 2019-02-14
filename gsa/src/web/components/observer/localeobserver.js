@@ -29,7 +29,6 @@ import PropTypes from 'web/utils/proptypes';
 import {setLocale} from 'web/store/usersettings/actions';
 
 class LocaleObserver extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -40,7 +39,8 @@ class LocaleObserver extends React.Component {
 
   componentDidMount() {
     this.unsubscribeFromLanguageChange = onLanguageChange(
-      this.handleLanguageChange);
+      this.handleLanguageChange,
+    );
   }
 
   componentWillUnmount() {
@@ -64,11 +64,7 @@ class LocaleObserver extends React.Component {
       return null;
     }
 
-    return (
-      <React.Fragment key={locale}>
-        {children}
-      </React.Fragment>
-    );
+    return <React.Fragment key={locale}>{children}</React.Fragment>;
   }
 }
 
@@ -76,6 +72,9 @@ LocaleObserver.propTypes = {
   setLocale: PropTypes.func.isRequired,
 };
 
-export default connect(undefined, {
-  setLocale,
-})(LocaleObserver);
+export default connect(
+  undefined,
+  {
+    setLocale,
+  },
+)(LocaleObserver);

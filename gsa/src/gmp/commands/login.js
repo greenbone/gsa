@@ -23,7 +23,6 @@ import HttpCommand from './http';
 import Login from '../models/login';
 
 class LoginCommand extends HttpCommand {
-
   constructor(http) {
     super(http, {
       cmd: 'login',
@@ -34,28 +33,31 @@ class LoginCommand extends HttpCommand {
     return this.httpPost({
       login: username,
       password,
-    }).then(response => new Login(response.data), rej => {
-      if (rej.isError && rej.isError() && rej.xhr) {
-        switch (rej.xhr.status) {
-          case 401:
-            rej.setMessage(_('Bad login information'));
-            break;
-          case 404:
-            // likely the config is wrong for the server address
-            rej.setMessage(_('Could not connect to server'));
-            break;
-          case 500:
-            rej.setMessage(_('GMP error during authentication'));
-            break;
-          case 503:
-            rej.setMessage(_('GMP Service is down'));
-            break;
-          default:
-            break;
+    }).then(
+      response => new Login(response.data),
+      rej => {
+        if (rej.isError && rej.isError() && rej.xhr) {
+          switch (rej.xhr.status) {
+            case 401:
+              rej.setMessage(_('Bad login information'));
+              break;
+            case 404:
+              // likely the config is wrong for the server address
+              rej.setMessage(_('Could not connect to server'));
+              break;
+            case 500:
+              rej.setMessage(_('GMP error during authentication'));
+              break;
+            case 503:
+              rej.setMessage(_('GMP Service is down'));
+              break;
+            default:
+              break;
+          }
         }
-      }
-      throw rej;
-    });
+        throw rej;
+      },
+    );
   }
 }
 

@@ -37,7 +37,6 @@ const DEFAULT_DIALOG_MIN_HEIGHT = 250;
 const DEFAULT_DIALOG_MIN_WIDTH = 450;
 
 class Dialog extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -97,7 +96,8 @@ class Dialog extends React.Component {
 
   onMouseDownMove(event) {
     const {current: dialog} = this.dialogRef;
-    if ((event.buttons & 1) && dialog !== null) { // eslint-disable-line no-bitwise
+    // eslint-disable-next-line no-bitwise
+    if (event.buttons & 1 && dialog !== null) {
       const box = dialog.getBoundingClientRect();
       this.relX = event.pageX - box.left;
       this.relY = event.pageY - box.top;
@@ -111,7 +111,8 @@ class Dialog extends React.Component {
   }
 
   onMouseDownResize(event) {
-    if (event.buttons & 1) { // eslint-disable-line no-bitwise
+    // eslint-disable-next-line no-bitwise
+    if (event.buttons & 1) {
       const {current: dialog} = this.dialogRef;
       const box = dialog.getBoundingClientRect();
 
@@ -171,28 +172,19 @@ class Dialog extends React.Component {
   }
 
   render() {
-    let {
-      height,
-      width,
-    } = this.state;
+    let {height, width} = this.state;
 
-    const {
-      children,
-      resizable = true,
-    } = this.props;
+    const {children, resizable = true} = this.props;
 
     if (!resizable) {
       height = 'auto';
     }
 
-    const maxHeight = isDefined(height) ?
-      undefined : DEFAULT_DIALOG_MAX_HEIGHT;
+    const maxHeight = isDefined(height) ? undefined : DEFAULT_DIALOG_MAX_HEIGHT;
 
     return (
       <Portal>
-        <DialogOverlay
-          onKeyDown={this.onKeyDown}
-        >
+        <DialogOverlay onKeyDown={this.onKeyDown}>
           <DialogContainer
             role="dialog"
             tabIndex="1"
@@ -209,15 +201,13 @@ class Dialog extends React.Component {
                 maxHeight,
               },
             })}
-            {resizable &&
-              <Resizer onMouseDown={this.onMouseDownResize}/>
-            }
+            {resizable && <Resizer onMouseDown={this.onMouseDownResize} />}
           </DialogContainer>
         </DialogOverlay>
       </Portal>
     );
   }
-};
+}
 
 Dialog.propTypes = {
   height: PropTypes.numberOrNumberString,

@@ -29,18 +29,14 @@ import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
 
 const SnmpMethodPart = ({
-    prefix,
-    snmpAgent,
-    snmpCommunity,
-    snmpMessage,
-    onChange,
-  }) => {
+  prefix,
+  snmpAgent,
+  snmpCommunity,
+  snmpMessage,
+  onChange,
+}) => {
   return (
-    <Layout
-      flex="column"
-      grow="1"
-      box
-    >
+    <Layout flex="column" grow="1" box>
       <FormGroup title={_('Community')}>
         <TextField
           size="30"
@@ -81,7 +77,6 @@ SnmpMethodPart.propTypes = {
   snmpMessage: PropTypes.string,
   onChange: PropTypes.func,
 };
-
 
 export default withPrefix(SnmpMethodPart);
 

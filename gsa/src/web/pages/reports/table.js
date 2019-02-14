@@ -89,7 +89,7 @@ const Header = ({
           sortBy={sort ? 'high' : false}
           onSortChange={onSortChange}
         >
-          <SeverityClassLabel.High/>
+          <SeverityClassLabel.High />
         </TableHead>
         <TableHead
           width="3%"
@@ -98,7 +98,7 @@ const Header = ({
           sortBy={sort ? 'medium' : false}
           onSortChange={onSortChange}
         >
-          <SeverityClassLabel.Medium/>
+          <SeverityClassLabel.Medium />
         </TableHead>
         <TableHead
           width="3%"
@@ -107,7 +107,7 @@ const Header = ({
           sortBy={sort ? 'low' : false}
           onSortChange={onSortChange}
         >
-          <SeverityClassLabel.Low/>
+          <SeverityClassLabel.Low />
         </TableHead>
         <TableHead
           width="3%"
@@ -116,7 +116,7 @@ const Header = ({
           sortBy={sort ? 'log' : false}
           onSortChange={onSortChange}
         >
-          <SeverityClassLabel.Log/>
+          <SeverityClassLabel.Log />
         </TableHead>
         <TableHead
           width="3%"
@@ -125,17 +125,15 @@ const Header = ({
           sortBy={sort ? 'false_positive' : false}
           onSortChange={onSortChange}
         >
-          <SeverityClassLabel.FalsePositive/>
+          <SeverityClassLabel.FalsePositive />
         </TableHead>
-        {isDefined(actionsColumn) ?
-          actionsColumn :
-          <TableHead
-            width="8%"
-            align="center"
-          >
+        {isDefined(actionsColumn) ? (
+          actionsColumn
+        ) : (
+          <TableHead width="8%" align="center">
             {_('Actions')}
           </TableHead>
-        }
+        )}
       </TableRow>
     </TableHeader>
   );

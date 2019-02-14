@@ -40,21 +40,19 @@ import {OverridesWordCountLoader} from './loaders';
 
 const transformWordCountData = (data = {}) => {
   const {groups = []} = data;
-  const tdata = groups
-    .map(group => {
-      const {count, value} = group;
-      return {
-        value: parseFloat(count),
-        label: value,
-        color: randomColor(),
-        filterValue: value,
-      };
-    });
+  const tdata = groups.map(group => {
+    const {count, value} = group;
+    return {
+      value: parseFloat(count),
+      label: value,
+      color: randomColor(),
+      filterValue: value,
+    };
+  });
   return tdata;
 };
 
 export class OverridesWordCloudDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -79,23 +77,18 @@ export class OverridesWordCloudDisplay extends React.Component {
       wordFilter = Filter.fromTerm(wordTerm);
     }
 
-    const newFilter = isDefined(filter) ? filter.copy().and(wordFilter) :
-      wordFilter;
+    const newFilter = isDefined(filter)
+      ? filter.copy().and(wordFilter)
+      : wordFilter;
 
     onFilterChanged(newFilter);
   }
 
   render() {
-    const {
-      filter,
-      onFilterChanged,
-      ...props
-    } = this.props;
+    const {filter, onFilterChanged, ...props} = this.props;
 
     return (
-      <OverridesWordCountLoader
-        filter={filter}
-      >
+      <OverridesWordCountLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
@@ -112,8 +105,9 @@ export class OverridesWordCloudDisplay extends React.Component {
                 displayLegend={false}
                 height={height}
                 width={width}
-                onDataClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
+                onDataClick={
+                  isDefined(onFilterChanged) ? this.handleDataClick : undefined
+                }
               />
             )}
           </DataDisplay>
@@ -139,24 +133,25 @@ export const OverridesWordCloudTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   dataTransform: transformWordCountData,
   dataRow: row => [row.label, row.value],
-  dataTitles: [
-    _l('Text'),
-    _l('Count'),
-  ],
+  dataTitles: [_l('Text'), _l('Count')],
   title: () => _('Overrides Text Word Cloud'),
   displayId: 'override-by-text-words-table',
   displayName: 'OverridesWordCloudTableDisplay',
   filtersFilter: OVERRIDES_FILTER_FILTER,
 });
 
-registerDisplay(OverridesWordCloudDisplay.displayId,
-  OverridesWordCloudDisplay, {
+registerDisplay(
+  OverridesWordCloudDisplay.displayId,
+  OverridesWordCloudDisplay,
+  {
     title: _l('Chart: Overrides Text Word Cloud'),
   },
 );
 
-registerDisplay(OverridesWordCloudTableDisplay.displayId,
-  OverridesWordCloudTableDisplay, {
+registerDisplay(
+  OverridesWordCloudTableDisplay.displayId,
+  OverridesWordCloudTableDisplay,
+  {
     title: _l('Table: Overrides Text Word Cloud'),
   },
 );

@@ -23,7 +23,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(Group, 'group');
 
 describe('Group model tests', () => {
-
   test('should parse multiple users', () => {
     const elem = {};
     elem.users = 'foo, bar';
@@ -51,7 +50,6 @@ describe('Group model tests', () => {
 
     expect(group.users).toEqual([]);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

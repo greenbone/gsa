@@ -22,7 +22,6 @@ import {createHttp, createEntitiesResponse} from '../testing';
 import {TicketsCommand} from '../tickets';
 
 describe('TicketsCommand tests', () => {
-
   test('should return all tickets', () => {
     const response = createEntitiesResponse('ticket', [
       {
@@ -48,7 +47,6 @@ describe('TicketsCommand tests', () => {
       const {data} = resp;
       expect(data.length).toEqual(2);
     });
-
   });
 
   test('should return tickets', () => {
@@ -75,6 +73,5 @@ describe('TicketsCommand tests', () => {
       const {data} = resp;
       expect(data.length).toEqual(2);
     });
-
   });
 });

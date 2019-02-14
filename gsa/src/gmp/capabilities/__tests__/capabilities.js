@@ -19,7 +19,6 @@
 import Capabilities from '../capabilities';
 
 describe('Capabilities tests', () => {
-
   test('should not have capabilities', () => {
     const caps = new Capabilities();
 
@@ -98,7 +97,6 @@ describe('Capabilities tests', () => {
     expect(caps.mayDelete('task')).toEqual(false);
     expect(caps.mayEdit('task')).toEqual(false);
   });
-
 
   test('should have only delete task capabilities', () => {
     const caps = new Capabilities(['delete_task']);
@@ -219,16 +217,10 @@ describe('Capabilities tests', () => {
     expect(caps.mayCreate('other')).toEqual(false);
     expect(caps.mayDelete('other')).toEqual(false);
     expect(caps.mayEdit('other')).toEqual(false);
-
   });
 
   test('should allow iterating', () => {
-    const capList = [
-      'get_tasks',
-      'create_task',
-      'delete_task',
-      'modify_task',
-    ];
+    const capList = ['get_tasks', 'create_task', 'delete_task', 'modify_task'];
     const caps = new Capabilities(capList);
 
     expect(caps.length).toEqual(4);
@@ -240,7 +232,6 @@ describe('Capabilities tests', () => {
     }
     expect(i).toEqual(4);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

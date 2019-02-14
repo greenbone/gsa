@@ -16,14 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {
-  DEFAULT_ROW_HEIGHT,
-  createDisplay,
-  createRow,
-} from '../dashboards';
+import {DEFAULT_ROW_HEIGHT, createDisplay, createRow} from '../dashboards';
 
 describe('createRow tests', () => {
-
   test('should create row with default height', () => {
     const uuid = jest.fn().mockReturnValue(1);
     expect(createRow(['foo', 'bar'], undefined, uuid)).toEqual({
@@ -43,11 +38,9 @@ describe('createRow tests', () => {
     });
     expect(uuid).toHaveBeenCalled();
   });
-
 });
 
 describe('createDisplay tests', () => {
-
   test('should create a new item with empty props', () => {
     const uuid = jest.fn().mockReturnValue(1);
     expect(createDisplay('foo1', undefined, uuid)).toEqual({
@@ -66,7 +59,6 @@ describe('createDisplay tests', () => {
     });
     expect(uuid).toHaveBeenCalled();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

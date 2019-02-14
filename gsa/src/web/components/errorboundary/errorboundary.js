@@ -29,7 +29,6 @@ import PropTypes from 'web/utils/proptypes';
 import ErrorContainer from './errorcontainer';
 
 class ErrorBoundary extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -46,16 +45,14 @@ class ErrorBoundary extends React.Component {
 
   render() {
     const {errElement = 'element'} = this.props;
-    const message =
-      _('An error occurred in this {{eElement}}.', {eElement: errElement});
+    const message = _('An error occurred in this {{eElement}}.', {
+      eElement: errElement,
+    });
     if (this.state.hasError) {
       return (
         <ErrorContainer>
           <Divider>
-            <Icon
-              img={'st_nonavailable.svg'}
-              size="medium"
-            />
+            <Icon img={'st_nonavailable.svg'} size="medium" />
             <b>{message}</b>
             <span>{_('Please try again.')}</span>
           </Divider>

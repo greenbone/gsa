@@ -41,7 +41,6 @@ const MIN_FONT_SIZE = 8;
 const MAX_FONT_SIZE = 20;
 
 class WordCloudChart extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -65,17 +64,21 @@ class WordCloudChart extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.state.width !== this.props.width ||
-      this.state.height !== this.props.height) {
+    if (
+      this.state.width !== this.props.width ||
+      this.state.height !== this.props.height
+    ) {
       this.updateSize();
     }
     if (this.state.data !== this.props.data) {
       // data has been changed => recalcuate words
       this.updateWords();
     }
-    if (this.state.width !== this.props.width ||
+    if (
+      this.state.width !== this.props.width ||
       this.state.height !== this.props.height ||
-      this.state.data !== this.props.data) {
+      this.state.data !== this.props.data
+    ) {
       this.cloud.start();
     }
   }
@@ -125,31 +128,20 @@ class WordCloudChart extends React.Component {
   }
 
   render() {
-    const {
-      width,
-      height,
-      svgRef,
-      onDataClick,
-    } = this.props;
+    const {width, height, svgRef, onDataClick} = this.props;
 
-    const {
-      words = [],
-    } = this.state;
+    const {words = []} = this.state;
     return (
-      <Svg
-        width={width}
-        height={height}
-        innerRef={svgRef}
-      >
-        <Group
-          top={height / 2 + margin.top}
-          left={width / 2 + margin.left}
-        >
+      <Svg width={width} height={height} innerRef={svgRef}>
+        <Group top={height / 2 + margin.top} left={width / 2 + margin.left}>
           {words.map(word => (
             <Group
               key={word.text}
-              onClick={isDefined(onDataClick) ?
-                () => onDataClick(word.filterValue) : undefined}
+              onClick={
+                isDefined(onDataClick)
+                  ? () => onDataClick(word.filterValue)
+                  : undefined
+              }
             >
               <text
                 fontSize={word.size + 'px'}
@@ -158,8 +150,12 @@ class WordCloudChart extends React.Component {
                 fill={word.color}
                 textAnchor="middle"
                 transform={
-                  'translate(' + [word.x, word.y] + ')rotate(' +
-                    word.rotate + ')'}
+                  'translate(' +
+                  [word.x, word.y] +
+                  ')rotate(' +
+                  word.rotate +
+                  ')'
+                }
               >
                 {word.text}
               </text>
@@ -172,11 +168,13 @@ class WordCloudChart extends React.Component {
 }
 
 WordCloudChart.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.number.isRequired,
-    color: PropTypes.toString.isRequired,
-    label: PropTypes.toString.isRequired,
-  })),
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.number.isRequired,
+      color: PropTypes.toString.isRequired,
+      label: PropTypes.toString.isRequired,
+    }),
+  ),
   height: PropTypes.number.isRequired,
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,

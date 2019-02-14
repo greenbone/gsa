@@ -34,11 +34,11 @@ import {TicketsListLoader} from './loaders';
 
 const transfromCreated = (tickets = []) => {
   const dates = tickets.reduce((prev, ticket) => {
-      const timestamp = +ticket.creationTime.startOf('day');
-      const count = prev[timestamp] || 0;
-      prev[timestamp] = count + 1;
-      return prev;
-    }, {});
+    const timestamp = +ticket.creationTime.startOf('day');
+    const count = prev[timestamp] || 0;
+    prev[timestamp] = count + 1;
+    return prev;
+  }, {});
 
   let sum = 0;
   return Object.entries(dates)
@@ -77,11 +77,7 @@ export const TicketsCreatedDisplay = createDisplay({
 
 export const TicketsCreatedTableDisplay = createDisplay({
   dataRow: row => [row.y, row.y2, shortDate(row.x)],
-  dataTitles: [
-    _l('Created Tickets'),
-    _l('Total Tickets'),
-    _l('Time'),
-  ],
+  dataTitles: [_l('Created Tickets'), _l('Total Tickets'), _l('Time')],
   dataTransform: transfromCreated,
   displayComponent: DataTableDisplay,
   displayId: 'tickets-by-created-table',
@@ -89,17 +85,17 @@ export const TicketsCreatedTableDisplay = createDisplay({
   filtersFilter: TICKETS_FILTER_FILTER,
   loaderComponent: TicketsListLoader,
   title: ({data: tdata = {}}) =>
-   _('Tickets by Creation Time (Total: {{count}})', {count: tdata.total}),
+    _('Tickets by Creation Time (Total: {{count}})', {count: tdata.total}),
 });
 
-registerDisplay(TicketsCreatedDisplay.displayId,
-  TicketsCreatedDisplay, {
-    title: _l('Chart: Tickets by Creation Time'),
-  },
-);
+registerDisplay(TicketsCreatedDisplay.displayId, TicketsCreatedDisplay, {
+  title: _l('Chart: Tickets by Creation Time'),
+});
 
-registerDisplay(TicketsCreatedTableDisplay.displayId,
-  TicketsCreatedTableDisplay, {
+registerDisplay(
+  TicketsCreatedTableDisplay.displayId,
+  TicketsCreatedTableDisplay,
+  {
     title: _l('Table: Tickets by Creation Time'),
   },
 );

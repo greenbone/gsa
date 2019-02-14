@@ -23,9 +23,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {parseFloat} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
-import {
-  severityFormat,
-} from '../../utils/render.js';
+import {severityFormat} from '../../utils/render.js';
 
 import {
   resultSeverityRiskFactor,
@@ -48,8 +46,7 @@ const SeverityBar = ({severity}) => {
     cvss = parseFloat(severity);
     threat = resultSeverityRiskFactor(cvss);
     title = translateRiskFactor(threat);
-  }
-  else {
+  } else {
     title = `${_NA}`;
   }
 
@@ -58,30 +55,22 @@ const SeverityBar = ({severity}) => {
   let text;
   if (!isDefined(cvss) || cvss < LOG_VALUE) {
     text = title;
-  }
-  else {
+  } else {
     text = severityFormat(cvss) + ' (' + title + ')';
   }
 
   let type;
   if (threat === LOG) {
     type = 'log';
-  }
-  else if (threat === MEDIUM) {
+  } else if (threat === MEDIUM) {
     type = 'warn';
-  }
-  else if (threat === HIGH) {
+  } else if (threat === HIGH) {
     type = 'error';
-  }
-  else {
+  } else {
     type = 'low';
   }
   return (
-    <ProgressBar
-      title={title}
-      progress={fill}
-      background={type}
-    >
+    <ProgressBar title={title} progress={fill} background={type}>
       {text}
     </ProgressBar>
   );

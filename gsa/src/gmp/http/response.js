@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 class Response {
-
   constructor(xhr, data, meta = {}) {
     this._xhr = xhr;
     this._data = data;

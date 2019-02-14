@@ -58,10 +58,7 @@ import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
-const SCANNER_TYPES = [
-  SLAVE_SCANNER_TYPE,
-  OSP_SCANNER_TYPE,
-];
+const SCANNER_TYPES = [SLAVE_SCANNER_TYPE, OSP_SCANNER_TYPE];
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
@@ -72,9 +69,10 @@ const username_password_credentials_filter = credential => {
 };
 
 const filter_credentials = (credentials, type) => {
-  const cred_filter = type === SLAVE_SCANNER_TYPE ?
-    username_password_credentials_filter :
-    client_cert_credentials_filter;
+  const cred_filter =
+    type === SLAVE_SCANNER_TYPE
+      ? username_password_credentials_filter
+      : client_cert_credentials_filter;
   return filter(credentials, cred_filter);
 };
 
@@ -84,28 +82,27 @@ const render_certificate_info = info => {
   }
 
   if (info.time_status === 'expired') {
-    return _('Certificate currently in use expired at {{date}}',
-      {date: longDate(info.expirationTime)});
+    return _('Certificate currently in use expired at {{date}}', {
+      date: longDate(info.expirationTime),
+    });
   }
   if (info.time_status === 'inactive') {
-    return _('Certificate currently in not valid until {{date}}',
-      {date: longDate(info.activationTime)});
+    return _('Certificate currently in not valid until {{date}}', {
+      date: longDate(info.activationTime),
+    });
   }
-  return _('Certificate in use will expire at {{date}}',
-      {date: longDate(info.expirationTime)});
+  return _('Certificate in use will expire at {{date}}', {
+    date: longDate(info.expirationTime),
+  });
 };
 
-const CertStatus = ({
-    info,
-  }) => {
+const CertStatus = ({info}) => {
   return (
     <FootNote>
       <Layout>
-        <KeyIcon/>
+        <KeyIcon />
       </Layout>
-      <span>
-        {render_certificate_info(info)}
-      </span>
+      <span>{render_certificate_info(info)}</span>
     </FootNote>
   );
 };
@@ -114,9 +111,7 @@ CertStatus.propTypes = {
   info: PropTypes.object.isRequired,
 };
 
-
 class ScannerDialog extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -131,8 +126,10 @@ class ScannerDialog extends React.Component {
       const scan_credentials = filter_credentials(credentials, value);
 
       onScannerTypeChange(value, name);
-      onScannerTypeChange(selectSaveId(scan_credentials, credential_id),
-        'credential_id');
+      onScannerTypeChange(
+        selectSaveId(scan_credentials, credential_id),
+        'credential_id',
+      );
     }
   }
 
@@ -174,7 +171,8 @@ class ScannerDialog extends React.Component {
     const scanner_credentials = filter_credentials(credentials, type);
     const is_edit = isDefined(scanner);
     const in_use = isDefined(scanner) && scanner.isInUse();
-    const show_cred_info = isDefined(scanner) &&
+    const show_cred_info =
+      isDefined(scanner) &&
       isDefined(scanner.credential) &&
       scanner.credential.type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
 
@@ -189,13 +187,9 @@ class ScannerDialog extends React.Component {
           type,
         }}
       >
-        {({
-          values: state,
-          onValueChange,
-        }) => {
+        {({values: state, onValueChange}) => {
           return (
             <Layout flex="column">
-
               <FormGroup title={_('Name')}>
                 <TextField
                   name="name"
@@ -251,9 +245,9 @@ class ScannerDialog extends React.Component {
               <FormGroup title={_('CA Certificate')} flex="column">
                 <Layout>
                   <Divider>
-                    {is_edit &&
+                    {is_edit && (
                       <Layout>
-                        {isDefined(state.ca_pub) &&
+                        {isDefined(state.ca_pub) && (
                           <Radio
                             title={_('Existing')}
                             name="which_cert"
@@ -261,7 +255,7 @@ class ScannerDialog extends React.Component {
                             checked={state.which_cert === 'existing'}
                             onChange={onValueChange}
                           />
-                        }
+                        )}
                         <Radio
                           title={_('Default')}
                           name="which_cert"
@@ -277,7 +271,7 @@ class ScannerDialog extends React.Component {
                           onChange={onValueChange}
                         />
                       </Layout>
-                    }
+                    )}
                     <FileField
                       disabled={is_edit && state.which_cert !== 'new'}
                       name="ca_pub"
@@ -285,9 +279,9 @@ class ScannerDialog extends React.Component {
                     />
                   </Divider>
                 </Layout>
-                {is_edit && isDefined(state.ca_pub) &&
-                  <CertStatus info={state.ca_pub.info}/>
-                }
+                {is_edit && isDefined(state.ca_pub) && (
+                  <CertStatus info={state.ca_pub.info} />
+                )}
               </FormGroup>
 
               <FormGroup title={_('Credential')} flex="column">
@@ -306,11 +300,10 @@ class ScannerDialog extends React.Component {
                     />
                   </Layout>
                 </Divider>
-                {show_cred_info &&
-                  <CertStatus info={scanner.credential.certificate_info}/>
-                }
+                {show_cred_info && (
+                  <CertStatus info={scanner.credential.certificate_info} />
+                )}
               </FormGroup>
-
             </Layout>
           );
         }}
@@ -331,9 +324,7 @@ ScannerDialog.propTypes = {
   scanner: PropTypes.model,
   title: PropTypes.string,
   type: PropTypes.oneOf(SCANNER_TYPES),
-  which_cert: PropTypes.oneOf([
-    'default', 'existing', 'new',
-  ]),
+  which_cert: PropTypes.oneOf(['default', 'existing', 'new']),
   onClose: PropTypes.func.isRequired,
   onCredentialChange: PropTypes.func.isRequired,
   onNewCredentialClick: PropTypes.func,

@@ -26,7 +26,7 @@ import {ICON_SIZE_SMALL_PIXELS} from './withIconSize';
 
 export const testIcon = Icon => {
   test('should render', () => {
-    const {element} = render(<Icon/>);
+    const {element} = render(<Icon />);
 
     expect(element).toMatchSnapshot();
 
@@ -36,7 +36,7 @@ export const testIcon = Icon => {
 
   test('should handle click', () => {
     const handler = jest.fn();
-    const {element} = render(<Icon onClick={handler} value="1"/>);
+    const {element} = render(<Icon onClick={handler} value="1" />);
 
     fireEvent.click(element);
 

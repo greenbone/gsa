@@ -39,7 +39,6 @@ import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 
 /* eslint-enable */
 
-
 const SORT_FIELDS = [
   {
     name: 'date',
@@ -80,33 +79,31 @@ const SORT_FIELDS = [
 ];
 
 const ReportFilterDialogComponent = ({
-    capabilities,
-    filter,
-    filterName,
-    filterNameValid,
-    filterstring,
-    saveNamedFilter,
-    onFilterStringChange,
-    onFilterValueChange,
-    onSortByChange,
-    onSortOrderChange,
-    onValueChange,
-  }) => {
-
+  capabilities,
+  filter,
+  filterName,
+  filterNameValid,
+  filterstring,
+  saveNamedFilter,
+  onFilterStringChange,
+  onFilterValueChange,
+  onSortByChange,
+  onSortOrderChange,
+  onValueChange,
+}) => {
   if (!filter) {
     return null;
   }
 
   return (
     <Layout flex="column">
-
       <FilterStringGroup
         name="filterstring"
         filter={filterstring}
         onChange={onFilterStringChange}
       />
 
-      <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange}/>
+      <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange} />
 
       <MinQodGroup
         name="min_qod"
@@ -114,15 +111,9 @@ const ReportFilterDialogComponent = ({
         onChange={onFilterValueChange}
       />
 
-      <FirstResultGroup
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+      <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
-      <ResultsPerPageGroup
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
+      <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
 
       <SortByGroup
         filter={filter}
@@ -131,14 +122,14 @@ const ReportFilterDialogComponent = ({
         onSortByChange={onSortByChange}
       />
 
-      {capabilities.mayCreate('filter') &&
+      {capabilities.mayCreate('filter') && (
         <CreateNamedFilterGroup
           filter={filter}
           filterName={filterName}
           saveNamedFilter={saveNamedFilter}
           onValueChange={onValueChange}
         />
-      }
+      )}
     </Layout>
   );
 };

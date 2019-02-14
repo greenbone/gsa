@@ -28,19 +28,19 @@ import ScheduleIcon from 'web/components/icon/scheduleicon';
 
 import DetailsLink from 'web/components/link/detailslink';
 
-const TaskScheduleIcon = ({
-  size,
-  links = true,
-  schedule,
-}) => {
-  if (schedule.userCapabilities.areDefined() &&
-    schedule.userCapabilities.length === 0) {
+const TaskScheduleIcon = ({size, links = true, schedule}) => {
+  if (
+    schedule.userCapabilities.areDefined() &&
+    schedule.userCapabilities.length === 0
+  ) {
     return (
       <ScheduleIcon
         active={false}
         size={size}
-        title={_('Schedule Unavailable. Name: {{name}}, ID: {{id}}',
-          {name: schedule.name, id: schedule.id})}
+        title={_('Schedule Unavailable. Name: {{name}}, ID: {{id}}', {
+          name: schedule.name,
+          id: schedule.id,
+        })}
       />
     );
   }
@@ -52,22 +52,26 @@ const TaskScheduleIcon = ({
   let title;
   if (!isDefined(nextDate)) {
     title = _('View Details of Schedule {{name}} (Next due: over)', {name});
-  }
-  else if (count === 1) {
-    title = _('View Details of Schedule {{name}} (Next due: {{time}} Once)',
-      {name, time: nextDate});
-  }
-  else if (count > 1) {
-    title = _('View Details of Schedule {{name}} (Next due: ' +
-      '{{time}}, {{periods}} more times )', {
+  } else if (count === 1) {
+    title = _('View Details of Schedule {{name}} (Next due: {{time}} Once)', {
+      name,
+      time: nextDate,
+    });
+  } else if (count > 1) {
+    title = _(
+      'View Details of Schedule {{name}} (Next due: ' +
+        '{{time}}, {{periods}} more times )',
+      {
         name,
         time: nextDate,
         periods: count,
-      });
-  }
-  else {
-    title = _('View Details of Schedule {{name}} (Next due: {{time}})',
-      {name, time: nextDate});
+      },
+    );
+  } else {
+    title = _('View Details of Schedule {{name}} (Next due: {{time}})', {
+      name,
+      time: nextDate,
+    });
   }
 
   return (
@@ -77,10 +81,7 @@ const TaskScheduleIcon = ({
       title={title}
       textOnly={!links}
     >
-      <ScheduleIcon
-        size={size}
-        alt={_('Schedule Details')}
-      />
+      <ScheduleIcon size={size} alt={_('Schedule Details')} />
     </DetailsLink>
   );
 };

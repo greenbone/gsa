@@ -25,21 +25,10 @@ import ManualLink from 'web/components/link/manuallink';
 
 import HelpIcon from './helpicon';
 
-const ManualIcon = ({
-  anchor,
-  page,
-  searchTerm,
-  ...props
-}) => {
+const ManualIcon = ({anchor, page, searchTerm, ...props}) => {
   return (
-    <ManualLink
-      anchor={anchor}
-      page={page}
-      searchTerm={searchTerm}
-    >
-      <HelpIcon
-        {...props}
-      />
+    <ManualLink anchor={anchor} page={page} searchTerm={searchTerm}>
+      <HelpIcon {...props} />
     </ManualLink>
   );
 };

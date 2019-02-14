@@ -28,14 +28,12 @@ import Cpe from '../models/cpe.js';
 const info_filter = info => isDefined(info.cpe);
 
 class CpeCommand extends InfoEntityCommand {
-
   constructor(http) {
     super(http, 'cpe', Cpe);
   }
 }
 
 class CpesCommand extends InfoEntitiesCommand {
-
   constructor(http) {
     super(http, 'cpe', Cpe, info_filter);
   }

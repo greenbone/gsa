@@ -21,12 +21,8 @@ import React from 'react';
 import PropTypes from './proptypes.js';
 
 const withSubscription = Component => {
-
   const SubscriptionWrapper = (props, context) => (
-    <Component
-      {...props}
-      subscribe={context.subscribe}
-    />
+    <Component {...props} subscribe={context.subscribe} />
   );
 
   SubscriptionWrapper.contextTypes = {

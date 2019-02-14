@@ -31,8 +31,9 @@ export const OvaldefSeverityClassDisplay = createDisplay({
   loaderComponent: OvaldefSeverityLoader,
   displayComponent: SeverityClassDisplay,
   title: ({data: tdata}) =>
-    _('OVAL Definitions by Severity Class (Total: {{count}})',
-      {count: tdata.total}),
+    _('OVAL Definitions by Severity Class (Total: {{count}})', {
+      count: tdata.total,
+    }),
   displayId: 'ovaldef-by-severity-class',
   displayName: 'OvaldefsSeverityClassDisplay',
   filtersFilter: OVALDEFS_FILTER_FILTER,
@@ -42,12 +43,10 @@ export const OvaldefSeverityClassTableDisplay = createDisplay({
   loaderComponent: OvaldefSeverityLoader,
   displayComponent: SeverityClassTableDisplay,
   title: ({data: tdata}) =>
-    _('OVAL Definitions by Severity Class (Total: {{count}})',
-      {count: tdata.total}),
-  dataTitles: [
-    _l('Severity Class'),
-    _l('# of OVAL Defs'),
-  ],
+    _('OVAL Definitions by Severity Class (Total: {{count}})', {
+      count: tdata.total,
+    }),
+  dataTitles: [_l('Severity Class'), _l('# of OVAL Defs')],
   displayId: 'ovaldef-by-severity-table',
   displayName: 'OvaldefsSeverityClassTableDisplay',
   filtersFilter: OVALDEFS_FILTER_FILTER,
@@ -55,12 +54,16 @@ export const OvaldefSeverityClassTableDisplay = createDisplay({
 
 registerDisplay(
   OvaldefSeverityClassDisplay.displayId,
-  OvaldefSeverityClassDisplay, {
-  title: _l('Chart: Oval Definitions by Severity Class'),
-});
+  OvaldefSeverityClassDisplay,
+  {
+    title: _l('Chart: Oval Definitions by Severity Class'),
+  },
+);
 
-registerDisplay(OvaldefSeverityClassTableDisplay.displayId,
-  OvaldefSeverityClassTableDisplay, {
+registerDisplay(
+  OvaldefSeverityClassTableDisplay.displayId,
+  OvaldefSeverityClassTableDisplay,
+  {
     title: _l('Table: OVAL Definitions by Severity Class'),
   },
 );

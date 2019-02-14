@@ -42,10 +42,7 @@ export const NvtsSeverityClassTableDisplay = createDisplay({
   displayComponent: SeverityClassTableDisplay,
   title: ({data: tdata}) =>
     _('NVTs by Severity Class (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [
-    _l('Severity Class'),
-    _l('# of NVTs'),
-  ],
+  dataTitles: [_l('Severity Class'), _l('# of NVTs')],
   displayId: 'nvt-by-severity-table',
   displayName: 'NvtsSeverityClassTableDisplay',
   filtersFilter: NVTS_FILTER_FILTER,
@@ -55,8 +52,10 @@ registerDisplay(NvtsSeverityClassDisplay.displayId, NvtsSeverityClassDisplay, {
   title: _l('Chart: NVTs by Severity Class'),
 });
 
-registerDisplay(NvtsSeverityClassTableDisplay.displayId,
-  NvtsSeverityClassTableDisplay, {
+registerDisplay(
+  NvtsSeverityClassTableDisplay.displayId,
+  NvtsSeverityClassTableDisplay,
+  {
     title: _l('Table: NVTs by Severity Class'),
   },
 );

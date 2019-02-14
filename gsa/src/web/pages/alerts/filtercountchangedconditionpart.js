@@ -34,13 +34,13 @@ import Radio from '../../components/form/radio.js';
 const VALUE = 'Filter count changed';
 
 const FilterCountChangedConditionPart = ({
-    condition,
-    count,
-    filterId,
-    filters,
-    prefix,
-    onChange,
-  }) => {
+  condition,
+  count,
+  filterId,
+  filters,
+  prefix,
+  onChange,
+}) => {
   return (
     <Divider>
       <Radio
@@ -56,19 +56,16 @@ const FilterCountChangedConditionPart = ({
         items={renderSelectItems(filters)}
         onChange={onChange}
       />
-      <Layout>
-        {_('matches at least')}
-      </Layout>
+      <Layout>{_('matches at least')}</Layout>
       <Spinner
         value={count}
         name={prefix + 'count'}
         type="int"
-        min="0" size="5"
+        min="0"
+        size="5"
         onChange={onChange}
       />
-      <Layout>
-        {_('result(s) more than previous scan')}
-      </Layout>
+      <Layout>{_('result(s) more than previous scan')}</Layout>
     </Divider>
   );
 };
