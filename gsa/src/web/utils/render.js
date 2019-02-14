@@ -45,9 +45,9 @@ export const renderSelectItems = (
   default_item_value,
   default_item_label = UNSET_LABEL,
 ) => {
-  const items = isDefined(list) ?
-    list.map(item => ({label: item.name, value: item.id})) :
-    undefined;
+  const items = isDefined(list)
+    ? list.map(item => ({label: item.name, value: item.id}))
+    : undefined;
 
   if (!isDefined(default_item_value)) {
     return items;
@@ -71,20 +71,18 @@ export const renderNvtName = (oid, name, length = 70) => {
     return name;
   }
 
-  return (
-    <abbr title={name + ' (' + oid + ')'}>
-      {shorten(name, length)}
-    </abbr>
-  );
+  return <abbr title={name + ' (' + oid + ')'}>{shorten(name, length)}</abbr>;
 };
 
-export const renderComponent = (Component, props = {}) => Component ?
-  <Component {...props}/> :
-  null;
+export const renderComponent = (Component, props = {}) =>
+  Component ? <Component {...props} /> : null;
 
-export const renderChildren = children => React.Children.count(children) > 1 ?
-  <React.Fragment>{children}</React.Fragment> :
-  children;
+export const renderChildren = children =>
+  React.Children.count(children) > 1 ? (
+    <React.Fragment>{children}</React.Fragment>
+  ) : (
+    children
+  );
 
 export const na = value => {
   return isEmpty(value) ? _('N/A') : value;
@@ -197,9 +195,9 @@ const getPermissionTypeName = type => {
 };
 
 export const permissionDescription = (name, resource, subject) =>
-  isDefined(subject) ?
-    permissionDescriptionResourceWithSubject(name, resource, subject) :
-    permissionDescriptionResource(name, resource);
+  isDefined(subject)
+    ? permissionDescriptionResourceWithSubject(name, resource, subject)
+    : permissionDescriptionResource(name, resource);
 
 export const permissionDescriptionResource = (name, resource) => {
   if (isDefined(resource)) {
@@ -210,8 +208,10 @@ export const permissionDescriptionResource = (name, resource) => {
     };
 
     if (name === 'super') {
-      return _('Has super access to all resources of {{type}} {{name}}',
-        resourceType);
+      return _(
+        'Has super access to all resources of {{type}} {{name}}',
+        resourceType,
+      );
     }
 
     const [type] = split(name, '_', 1);
@@ -232,8 +232,11 @@ export const permissionDescriptionResource = (name, resource) => {
   return simplePermissionDescription(name);
 };
 
-export const permissionDescriptionResourceWithSubject = (name, resource,
-  subject) => {
+export const permissionDescriptionResourceWithSubject = (
+  name,
+  resource,
+  subject,
+) => {
   if (isDefined(resource)) {
     name = name.toLowerCase();
     const type = {
@@ -244,24 +247,39 @@ export const permissionDescriptionResourceWithSubject = (name, resource,
     };
 
     if (name === 'super') {
-      return _('{{subjectType}} {{subjectName}} has super access to ' +
-        'all resources of {{resourceType}} {{resourceName}}', type);
+      return _(
+        '{{subjectType}} {{subjectName}} has super access to ' +
+          'all resources of {{resourceType}} {{resourceName}}',
+        type,
+      );
     }
 
     const [commandType] = split(name, '_', 1);
     switch (commandType) {
       case 'create':
-        return _('{{subjectType}} {{subjectName}} may create a new ' +
-          '{{resourceType}}', type);
+        return _(
+          '{{subjectType}} {{subjectName}} may create a new ' +
+            '{{resourceType}}',
+          type,
+        );
       case 'delete':
-        return _('{{subjectType}} {{subjectName}} may delete ' +
-          '{{resourceType}} {{resourceName}}', type);
+        return _(
+          '{{subjectType}} {{subjectName}} may delete ' +
+            '{{resourceType}} {{resourceName}}',
+          type,
+        );
       case 'get':
-        return _('{{subjectType}} {{subjectName}} has read access to ' +
-          '{{resourceType}} {{resourceName}}', type);
+        return _(
+          '{{subjectType}} {{subjectName}} has read access to ' +
+            '{{resourceType}} {{resourceName}}',
+          type,
+        );
       case 'modify':
-        return _('{{subjectType}} {{subjectName}} has write access to ' +
-          '{{resourceType}} {{resourceName}}', type);
+        return _(
+          '{{subjectType}} {{subjectName}} has write access to ' +
+            '{{resourceType}} {{resourceName}}',
+          type,
+        );
       default:
         break;
     }
@@ -308,9 +326,8 @@ export const simplePermissionDescription = name => {
   }
 
   const [commandType, res] = split(name, '_', 1);
-  const entityType = commandType === 'get' ?
-    getPermissionTypeName(res) :
-    typeName(res);
+  const entityType =
+    commandType === 'get' ? getPermissionTypeName(res) : typeName(res);
 
   switch (commandType) {
     case 'create':
@@ -354,27 +371,39 @@ export const simplePermissionDescriptionWithSubject = (name, subject) => {
     case 'authenticate':
       return _('{{subjectType}} {{subjectName}} may login', type);
     case 'commands':
-      return _('{{subjectType}} {{subjectName}} may run multiple GMP ' +
-        'commands in one', type);
+      return _(
+        '{{subjectType}} {{subjectName}} may run multiple GMP ' +
+          'commands in one',
+        type,
+      );
     case 'everything':
       return _('{{subjectType}} {{subjectName}} has all permissions', type);
     case 'empty_trashcan':
-      return _('{{subjectType}} {{subjectName}} may empty the ' +
-        'trashcan', type);
+      return _('{{subjectType}} {{subjectName}} may empty the trashcan', type);
     case 'get_dependencies':
-      return _('{{subjectType}} {{subjectName}} may get the dependencies ' +
-        'of NVTs', type);
+      return _(
+        '{{subjectType}} {{subjectName}} may get the dependencies of NVTs',
+        type,
+      );
     case 'get_version':
-      return _('{{subjectType}} {{subjectName}} may get version ' +
-        'information', type);
+      return _(
+        '{{subjectType}} {{subjectName}} may get version information',
+        type,
+      );
     case 'help':
       return _('{{subjectType}} {{subjectName}} may get the help text', type);
     case 'modify_auth':
-      return _('{{subjectType}} {{subjectName}} has write access to the ' +
-        'authentication configuration', type);
+      return _(
+        '{{subjectType}} {{subjectName}} has write access to the ' +
+          'authentication configuration',
+        type,
+      );
     case 'restore':
-      return _('{{subjectType}} {{subjectName}} may restore items from ' +
-        'the trashcan', type);
+      return _(
+        '{{subjectType}} {{subjectName}} may restore items from ' +
+          'the trashcan',
+        type,
+      );
     case 'resume_task':
       return _('{{subjectType}} {{subjectName}} may resume Task', type);
     case 'start_task':
@@ -393,44 +422,64 @@ export const simplePermissionDescriptionWithSubject = (name, subject) => {
   type = {
     subjectType: typeName(getEntityType(subject)),
     subjectName: subject.name,
-    resourceType: commandType === 'get' ?
-      getPermissionTypeName(res) :
-      typeName(res),
+    resourceType:
+      commandType === 'get' ? getPermissionTypeName(res) : typeName(res),
   };
   switch (commandType) {
     case 'create':
-      return _('{{subjectType}} {{subjectName}} may create a new ' +
-        '{{resourceType}}', type);
+      return _(
+        '{{subjectType}} {{subjectName}} may create a new ' +
+          '{{resourceType}}',
+        type,
+      );
     case 'delete':
-      return _('{{subjectType}} {{subjectName}} may delete an existing ' +
-        '{{resourceType}}', type);
+      return _(
+        '{{subjectType}} {{subjectName}} may delete an existing ' +
+          '{{resourceType}}',
+        type,
+      );
     case 'get':
-      return _('{{subjectType}} {{subjectName}} has read access to ' +
-        '{{resourceType}}', type);
+      return _(
+        '{{subjectType}} {{subjectName}} has read access to ' +
+          '{{resourceType}}',
+        type,
+      );
     case 'modify':
-      return _('{{subjectType}} {{subjectName}} has write access to ' +
-        '{{resourceType}}', type);
+      return _(
+        '{{subjectType}} {{subjectName}} has write access to ' +
+          '{{resourceType}}',
+        type,
+      );
     case 'sync':
       if (res === 'cert') {
-        return _('{{subjectType}} {{subjectName}} may sync the CERT ' +
-          'feed', type);
+        return _(
+          '{{subjectType}} {{subjectName}} may sync the CERT feed',
+          type,
+        );
       }
       if (res === 'feed') {
-        return _('{{subjectType}} {{subjectName}} may sync the NVT ' +
-          'feed', type);
+        return _('{{subjectType}} {{subjectName}} may sync the NVT feed', type);
       }
       if (res === 'scap') {
-        return _('{{subjectType}} {{subjectName}} may sync the SCAP ' +
-          'feed', type);
+        return _(
+          '{{subjectType}} {{subjectName}} may sync the SCAP feed',
+          type,
+        );
       }
-      return _('{{subjectType}} {{subjectName}} may sync ' +
-        '{{resourceType}}', type);
+      return _(
+        '{{subjectType}} {{subjectName}} may sync {{resourceType}}',
+        type,
+      );
     case 'move':
-      return _('{{subjectType}} {{subjectName}} may move ' +
-        '{{resourceType}}', type);
+      return _(
+        '{{subjectType}} {{subjectName}} may move {{resourceType}}',
+        type,
+      );
     case 'verify':
-      return _('{{subjectType}} {{subjectName}} may verify ' +
-        '{{resourceType}}', type);
+      return _(
+        '{{subjectType}} {{subjectName}} may verify {{resourceType}}',
+        type,
+      );
     default:
       return name;
   }
@@ -440,8 +489,7 @@ export const setRef = (...refs) => ref => {
   for (const rf of refs) {
     if (isFunction(rf)) {
       rf(ref);
-    }
-    else if (isObject(rf) && isDefined(rf.current)) {
+    } else if (isObject(rf) && isDefined(rf.current)) {
       rf.current = ref;
     }
   }

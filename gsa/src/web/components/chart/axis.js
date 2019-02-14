@@ -92,8 +92,9 @@ const Axis = ({
   labelOffset = orientation === 'bottom' || orientation === 'top' ? 8 : 36,
   tickLabelProps = TICK_LABEL_PROPS_FUNC[orientation],
   tickLength = DEFAULT_TICK_LENGTH,
-  rangePadding = orientation === 'bottom' || orientation === 'top' ?
-    tickLength : -tickLength,
+  rangePadding = orientation === 'bottom' || orientation === 'top'
+    ? tickLength
+    : -tickLength,
   ...props
 }) => (
   <VxAxis
@@ -106,9 +107,9 @@ const Axis = ({
     rangePadding={rangePadding}
     tickLabelProps={tickLabelProps}
     tickLength={tickLength}
-    tickComponent={({formattedValue, ...tickProps}) => hideTickLabels ? null : (
-      <text {...tickProps}>{formattedValue}</text>
-    )}
+    tickComponent={({formattedValue, ...tickProps}) =>
+      hideTickLabels ? null : <text {...tickProps}>{formattedValue}</text>
+    }
   />
 );
 

@@ -16,16 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {
-  arraysEqual,
-  map,
-  forEach,
-  filter,
-  first,
-} from '../array';
+import {arraysEqual, map, forEach, filter, first} from '../array';
 
 describe('arrayEquals function test', () => {
-
   test('should return true if arrays are equal', () => {
     const array1 = [1, 2, 3];
     const array2 = [1, 2, 3];
@@ -189,7 +182,6 @@ describe('filter function tests', () => {
     expect(filter(undefined, item => true, expected)).toEqual(expected);
     expect(filter(null, item => true, expected)).toEqual(expected);
     expect(filter([1, 2, 3], undefined, expected)).toEqual(expected);
-
   });
 
   test('should always return empty array for empty array', () => {
@@ -207,7 +199,6 @@ describe('filter function tests', () => {
 });
 
 describe('first function tests', () => {
-
   test('should return non for undefined array', () => {
     expect(first()).toEqual({});
     expect(first(undefined, 'foo')).toEqual('foo');
@@ -234,7 +225,6 @@ describe('first function tests', () => {
     expect(first({foo: 1}, {bar: 2})).toEqual({bar: 2});
     expect(first('')).toEqual({});
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

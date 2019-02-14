@@ -43,7 +43,6 @@ const detectLanguageFromNavigator = ({navigator = global.navigator}) => {
 };
 
 class LanguageDetector {
-
   static type = 'languageDetector';
 
   init(services, options = {}, i18nOptions = {}) {
@@ -61,12 +60,8 @@ class LanguageDetector {
     for (const detector of detectors) {
       const lookup = detector(this.options);
       if (isArray(lookup)) {
-        detected = [
-          ...detected,
-          ...lookup,
-        ];
-      }
-      else {
+        detected = [...detected, ...lookup];
+      } else {
         detected.push(lookup);
       }
     }

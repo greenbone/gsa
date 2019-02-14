@@ -37,9 +37,7 @@ import TableRow from '../../components/table/row.js';
 
 import {Col} from 'web/entity/page';
 
-const CertBundAdvDetails = ({
-  entity,
-}) => {
+const CertBundAdvDetails = ({entity}) => {
   const {
     title,
     version,
@@ -53,123 +51,77 @@ const CertBundAdvDetails = ({
     reference_url,
   } = entity;
   return (
-    <Layout
-      flex="column"
-      grow
-    >
-
+    <Layout flex="column" grow>
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(version) &&
+          {isDefined(version) && (
             <TableRow>
+              <TableData>{_('Version')}</TableData>
+              <TableData>{version}</TableData>
+            </TableRow>
+          )}
+          {isDefined(title) && (
+            <TableRow>
+              <TableData>{_('Title')}</TableData>
+              <TableData>{title}</TableData>
+            </TableRow>
+          )}
+          {isDefined(software) && (
+            <TableRow>
+              <TableData>{_('Software')}</TableData>
+              <TableData>{software}</TableData>
+            </TableRow>
+          )}
+          {isDefined(platform) && (
+            <TableRow>
+              <TableData>{_('Platform')}</TableData>
+              <TableData>{platform}</TableData>
+            </TableRow>
+          )}
+          {isDefined(effect) && (
+            <TableRow>
+              <TableData>{_('Effect')}</TableData>
+              <TableData>{effect}</TableData>
+            </TableRow>
+          )}
+          {isDefined(remote_attack) && (
+            <TableRow>
+              <TableData>{_('Remote Attack')}</TableData>
+              <TableData>{remote_attack}</TableData>
+            </TableRow>
+          )}
+          {isDefined(severity) && (
+            <TableRow>
+              <TableData>{_('Severity')}</TableData>
               <TableData>
-                {_('Version')}
-              </TableData>
-              <TableData>
-                {version}
+                <SeverityBar severity={severity} />
               </TableData>
             </TableRow>
-          }
-          {isDefined(title) &&
+          )}
+          {isDefined(risk) && (
             <TableRow>
+              <TableData>{_('CERT-Bund Risk Rating')}</TableData>
+              <TableData>{risk}</TableData>
+            </TableRow>
+          )}
+          {isDefined(reference_source) && (
+            <TableRow>
+              <TableData>{_('Reference Source')}</TableData>
+              <TableData>{reference_source}</TableData>
+            </TableRow>
+          )}
+          {isDefined(reference_url) && (
+            <TableRow>
+              <TableData>{_('Reference URL')}</TableData>
               <TableData>
-                {_('Title')}
-              </TableData>
-              <TableData>
-                {title}
+                <ExternalLink to={reference_url}>{reference_url}</ExternalLink>
               </TableData>
             </TableRow>
-          }
-          {isDefined(software) &&
-            <TableRow>
-              <TableData>
-                {_('Software')}
-              </TableData>
-              <TableData>
-                {software}
-              </TableData>
-            </TableRow>
-          }
-          {isDefined(platform) &&
-            <TableRow>
-              <TableData>
-                {_('Platform')}
-              </TableData>
-              <TableData>
-                {platform}
-              </TableData>
-            </TableRow>
-          }
-          {isDefined(effect) &&
-            <TableRow>
-              <TableData>
-                {_('Effect')}
-              </TableData>
-              <TableData>
-                {effect}
-              </TableData>
-            </TableRow>
-          }
-          {isDefined(remote_attack) &&
-            <TableRow>
-              <TableData>
-                {_('Remote Attack')}
-              </TableData>
-              <TableData>
-                {remote_attack}
-              </TableData>
-            </TableRow>
-          }
-          {isDefined(severity) &&
-            <TableRow>
-              <TableData>
-                {_('Severity')}
-              </TableData>
-              <TableData>
-                <SeverityBar
-                  severity={severity}
-                />
-              </TableData>
-            </TableRow>
-          }
-          {isDefined(risk) &&
-            <TableRow>
-              <TableData>
-                {_('CERT-Bund Risk Rating')}
-              </TableData>
-              <TableData>
-                {risk}
-              </TableData>
-            </TableRow>
-          }
-          {isDefined(reference_source) &&
-            <TableRow>
-              <TableData>
-                {_('Reference Source')}
-              </TableData>
-              <TableData>
-                {reference_source}
-              </TableData>
-            </TableRow>
-          }
-          {isDefined(reference_url) &&
-            <TableRow>
-              <TableData>
-                {_('Reference URL')}
-              </TableData>
-              <TableData>
-                <ExternalLink
-                  to={reference_url}
-                >
-                  {reference_url}
-                </ExternalLink>
-              </TableData>
-            </TableRow>
-          }
+          )}
         </TableBody>
       </InfoTable>
     </Layout>

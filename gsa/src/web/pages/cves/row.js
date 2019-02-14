@@ -46,50 +46,26 @@ const Row = ({
 }) => (
   <TableBody>
     <TableRow>
-      <TableData
-        rowSpan="2"
-      >
-        <RowDetailsToggle
-          name={entity.id}
-          onClick={onToggleDetailsClick}
-        >
+      <TableData rowSpan="2">
+        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
           {entity.name}
         </RowDetailsToggle>
-        <Comment text={entity.comment}/>
+        <Comment text={entity.comment} />
       </TableData>
+      <TableData>{na(entity.cvssAccessVector)}</TableData>
+      <TableData>{na(entity.cvssAccessComplexity)}</TableData>
+      <TableData>{na(entity.cvssAuthentication)}</TableData>
+      <TableData>{na(entity.cvssConfidentialityImpact)}</TableData>
+      <TableData>{na(entity.cvssIntegrityImpact)}</TableData>
+      <TableData>{na(entity.cvssAvailabilityImpact)}</TableData>
+      <TableData>{longDate(entity.creationTime)}</TableData>
       <TableData>
-        {na(entity.cvssAccessVector)}
+        <SeverityBar severity={entity.severity} />
       </TableData>
-      <TableData>
-        {na(entity.cvssAccessComplexity)}
-      </TableData>
-      <TableData>
-        {na(entity.cvssAuthentication)}
-      </TableData>
-      <TableData>
-        {na(entity.cvssConfidentialityImpact)}
-      </TableData>
-      <TableData>
-        {na(entity.cvssIntegrityImpact)}
-      </TableData>
-      <TableData>
-        {na(entity.cvssAvailabilityImpact)}
-      </TableData>
-      <TableData>
-        {longDate(entity.creationTime)}
-      </TableData>
-      <TableData>
-        <SeverityBar severity={entity.severity}/>
-      </TableData>
-      <ActionsComponent
-        {...props}
-        entity={entity}
-      />
+      <ActionsComponent {...props} entity={entity} />
     </TableRow>
     <TableRow>
-      <TableData colSpan="9">
-        {shorten(entity.description, 250)}
-      </TableData>
+      <TableData colSpan="9">{shorten(entity.description, 250)}</TableData>
     </TableRow>
   </TableBody>
 );

@@ -34,7 +34,6 @@ export const NOTE_ACTIVE_UNLIMITED_VALUE = '-2';
 export const NOTE_INACTIVE_VALUE = '-1';
 
 class Note extends Model {
-
   static entityType = 'note';
 
   parseProperties(elem) {
@@ -51,15 +50,13 @@ class Note extends Model {
 
     if (isModelElement(ret.task)) {
       ret.task = new Model(ret.task, 'task');
-    }
-    else {
+    } else {
       delete ret.task;
     }
 
     if (isModelElement(ret.result)) {
       ret.result = new Model(ret.result, 'result');
-    }
-    else {
+    } else {
       delete ret.result;
     }
 

@@ -28,7 +28,6 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.portlists');
 
 class PortListCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'port_list', PortList);
   }
@@ -92,7 +91,6 @@ class PortListCommand extends EntityCommand {
 }
 
 class PortListsCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'port_list', PortList);
   }

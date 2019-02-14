@@ -59,10 +59,7 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import DeleteIcon from 'web/entity/icon/deleteicon';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/reportformats';
+import {selector, loadEntity} from 'web/store/entities/reportformats';
 
 import {
   selector as permissionsSelector,
@@ -75,68 +72,68 @@ import withCapabilities from 'web/utils/withCapabilities';
 import ReportFormatComponent from './component';
 import ReportFormatDetails from './details';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  entity,
-  onReportFormatCloneClick,
-  onReportFormatImportClick,
-  onReportFormatDeleteClick,
-  onReportFormatDownloadClick,
-  onReportFormatEditClick,
-  onReportFormatVerifyClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        page="reports"
-        anchor="report-plugins"
-        title={_('Help: Report Format Details')}
-      />
-      <ListIcon
-        title={_('Report Formats List')}
-        page="reportformats"
-      />
-    </IconDivider>
-    <IconDivider>
-      <CreateIcon
-        displayName={_('Report Format')}
-        entity={entity}
-        onClick={onReportFormatImportClick}
-      />
-      <CloneIcon
-        displayName={_('Report Format')}
-        entity={entity}
-        onClick={onReportFormatCloneClick}
-      />
-      <EditIcon
-        displayName={_('Report Format')}
-        entity={entity}
-        onClick={onReportFormatEditClick}
-      />
-      <DeleteIcon
-        displayName={_('Report Format')}
-        entity={entity}
-        onClick={onReportFormatDeleteClick}
-      />
-      <ExportIcon
-        value={entity}
-        title={_('Export Report Format as XML')}
-        onClick={onReportFormatDownloadClick}
-      />
-      {capabilities.mayOp('verify_report_format') ?
-        <VerifyIcon
-          value={entity}
-          title={_('Verify Report Format')}
-          onClick={onReportFormatVerifyClick}
-        /> :
-        <Icon
-          img="verify_inactive.svg"
-          title={_('Permission to verify Report Format denied')}
+const ToolBarIcons = withCapabilities(
+  ({
+    capabilities,
+    entity,
+    onReportFormatCloneClick,
+    onReportFormatImportClick,
+    onReportFormatDeleteClick,
+    onReportFormatDownloadClick,
+    onReportFormatEditClick,
+    onReportFormatVerifyClick,
+  }) => (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          page="reports"
+          anchor="report-plugins"
+          title={_('Help: Report Format Details')}
         />
-      }
-    </IconDivider>
-  </Divider>
-));
+        <ListIcon title={_('Report Formats List')} page="reportformats" />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon
+          displayName={_('Report Format')}
+          entity={entity}
+          onClick={onReportFormatImportClick}
+        />
+        <CloneIcon
+          displayName={_('Report Format')}
+          entity={entity}
+          onClick={onReportFormatCloneClick}
+        />
+        <EditIcon
+          displayName={_('Report Format')}
+          entity={entity}
+          onClick={onReportFormatEditClick}
+        />
+        <DeleteIcon
+          displayName={_('Report Format')}
+          entity={entity}
+          onClick={onReportFormatDeleteClick}
+        />
+        <ExportIcon
+          value={entity}
+          title={_('Export Report Format as XML')}
+          onClick={onReportFormatDownloadClick}
+        />
+        {capabilities.mayOp('verify_report_format') ? (
+          <VerifyIcon
+            value={entity}
+            title={_('Verify Report Format')}
+            onClick={onReportFormatVerifyClick}
+          />
+        ) : (
+          <Icon
+            img="verify_inactive.svg"
+            title={_('Permission to verify Report Format denied')}
+          />
+        )}
+      </IconDivider>
+    </Divider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -147,16 +144,10 @@ ToolBarIcons.propTypes = {
   onReportFormatImportClick: PropTypes.func.isRequired,
 };
 
-const Details = ({
-  entity,
-  links = true,
-}) => {
+const Details = ({entity, links = true}) => {
   return (
     <Layout flex="column">
-      <ReportFormatDetails
-        entity={entity}
-        links={links}
-      />
+      <ReportFormatDetails entity={entity} links={links} />
     </Layout>
   );
 };
@@ -167,43 +158,29 @@ Details.propTypes = {
 };
 
 const Parameters = ({entity}) => {
-  const {
-    params = [],
-  } = entity;
+  const {params = []} = entity;
 
   return (
     <Layout>
-      {params.length === 0 &&
-        _('No parameters available')
-      }
-      {params.length > 0 &&
+      {params.length === 0 && _('No parameters available')}
+      {params.length > 0 && (
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead width="30%">
-                {_('Name')}
-              </TableHead>
-              <TableHead width="70%">
-                {_('Value')}
-              </TableHead>
+              <TableHead width="30%">{_('Name')}</TableHead>
+              <TableHead width="70%">{_('Value')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {params.map(param => (
-              <TableRow
-                key={param.name}
-              >
-                <TableData>
-                  {param.name}
-                </TableData>
-                <TableData>
-                  {param.value}
-                </TableData>
+              <TableRow key={param.name}>
+                <TableData>{param.name}</TableData>
+                <TableData>{param.value}</TableData>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      }
+      )}
     </Layout>
   );
 };
@@ -247,7 +224,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<ReportFormatIcon size="large"/>}
+        sectionIcon={<ReportFormatIcon size="large" />}
         title={_('Report Format')}
         toolBarIcons={ToolBarIcons}
         onInteraction={onInteraction}
@@ -259,24 +236,16 @@ const Page = ({
         onReportFormatSaveClick={save}
         onReportFormatVerifyClick={verify}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={entity.params}>
                     {_('Parameters')}
                   </EntitiesTab>
@@ -292,13 +261,10 @@ const Page = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <Details
-                      entity={entity}
-                      links={links}
-                    />
+                    <Details entity={entity} links={links} />
                   </TabPanel>
                   <TabPanel>
-                    <Parameters entity={entity}/>
+                    <Parameters entity={entity} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags
@@ -341,10 +307,11 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

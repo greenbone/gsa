@@ -23,35 +23,35 @@ import {render, fireEvent} from 'web/utils/testing';
 import MultiSelect from '../multiselect.js';
 
 const openInputElement = element => {
-    const button = element.querySelector('[type="button"]');
-    fireEvent.click(button);
+  const button = element.querySelector('[type="button"]');
+  fireEvent.click(button);
 };
 
 const getItemElements = baseElement => {
-    const portal = baseElement.querySelector('#portals');
-    return portal.querySelectorAll('span');
+  const portal = baseElement.querySelector('#portals');
+  return portal.querySelectorAll('span');
 };
 
 describe('MultiSelect component tests', () => {
-
   test('should render', () => {
-    const {element} = render(<MultiSelect/>);
+    const {element} = render(<MultiSelect />);
 
     expect(element).toMatchSnapshot();
   });
 
   test('should render with items', () => {
-    const items = [{
-      value: 'bar',
-      label: 'Bar',
-    }, {
-      value: 'foo',
-      label: 'Foo',
-    }];
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
 
-    const {element, baseElement} = render(
-      <MultiSelect items={items}/>
-    );
+    const {element, baseElement} = render(<MultiSelect items={items} />);
 
     let domItems = getItemElements(baseElement);
     expect(domItems.length).toEqual(0);
@@ -65,21 +65,21 @@ describe('MultiSelect component tests', () => {
   });
 
   test('should call onChange handler', () => {
-    const items = [{
-      value: 'bar',
-      label: 'Bar',
-    }, {
-      value: 'foo',
-      label: 'Foo',
-    }];
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
 
     const onChange = jest.fn();
 
     const {element, baseElement} = render(
-      <MultiSelect
-        items={items}
-        onChange={onChange}
-      />
+      <MultiSelect items={items} onChange={onChange} />,
     );
 
     openInputElement(element);
@@ -94,22 +94,21 @@ describe('MultiSelect component tests', () => {
   });
 
   test('should call onChange handler with name', () => {
-    const items = [{
-      value: 'bar',
-      label: 'Bar',
-    }, {
-      value: 'foo',
-      label: 'Foo',
-    }];
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
 
     const onChange = jest.fn();
 
     const {element, baseElement} = render(
-      <MultiSelect
-        name="abc"
-        items={items}
-        onChange={onChange}
-      />
+      <MultiSelect name="abc" items={items} onChange={onChange} />,
     );
 
     openInputElement(element);
@@ -124,42 +123,32 @@ describe('MultiSelect component tests', () => {
   });
 
   test('should change displayed values', () => {
-    const items = [{
-      value: 'bar',
-      label: 'Bar',
-    }, {
-      value: 'foo',
-      label: 'Foo',
-    }];
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
 
     const {rerender, getAllByTestId} = render(
-      <MultiSelect
-        items={items}
-        value={['bar']}
-      />
+      <MultiSelect items={items} value={['bar']} />,
     );
 
     let displayedItems = getAllByTestId('multiselect-selected-label');
     expect(displayedItems.length).toEqual(1);
     expect(displayedItems[0]).toHaveTextContent('Bar');
 
-    rerender(
-      <MultiSelect
-        items={items}
-        value={['foo']}
-      />
-    );
+    rerender(<MultiSelect items={items} value={['foo']} />);
 
     displayedItems = getAllByTestId('multiselect-selected-label');
     expect(displayedItems.length).toEqual(1);
     expect(displayedItems[0]).toHaveTextContent('Foo');
 
-    rerender(
-      <MultiSelect
-        items={items}
-        value={['foo', 'bar']}
-      />
-    );
+    rerender(<MultiSelect items={items} value={['foo', 'bar']} />);
 
     displayedItems = getAllByTestId('multiselect-selected-label');
     expect(displayedItems.length).toEqual(2);
@@ -168,22 +157,23 @@ describe('MultiSelect component tests', () => {
   });
 
   test('should filter items', () => {
-    const items = [{
-      value: 'bar',
-      label: 'Bar',
-    }, {
-      value: 'bat',
-      label: 'Bat',
-    }, {
-      value: 'foo',
-      label: 'Foo',
-    }];
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'bat',
+        label: 'Bat',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
 
     const {element, getByTestId, getAllByTestId} = render(
-      <MultiSelect
-        items={items}
-        value={[]}
-      />
+      <MultiSelect items={items} value={[]} />,
     );
 
     openInputElement(element);
@@ -203,22 +193,21 @@ describe('MultiSelect component tests', () => {
   });
 
   test('should remove selected item', () => {
-    const items = [{
-      value: 'bar',
-      label: 'Bar',
-    }, {
-      value: 'foo',
-      label: 'Foo',
-    }];
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
 
     const onChange = jest.fn();
 
     const {getAllByTestId} = render(
-      <MultiSelect
-        items={items}
-        value={['bar', 'foo']}
-        onChange={onChange}
-      />
+      <MultiSelect items={items} value={['bar', 'foo']} onChange={onChange} />,
     );
 
     let selectedItems = getAllByTestId('multiselect-selected-label');
@@ -233,7 +222,6 @@ describe('MultiSelect component tests', () => {
 
     expect(onChange).toHaveBeenCalledWith(['foo'], undefined);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

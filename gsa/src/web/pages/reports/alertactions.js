@@ -57,7 +57,6 @@ import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 const log = logger.getLogger('web.report.alertactions');
 
 class AlertActions extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -68,8 +67,12 @@ class AlertActions extends React.Component {
     this.handleAlertChange = this.handleAlertChange.bind(this);
     this.handleTriggerAlert = this.handleTriggerAlert.bind(this);
     this.onAlertCreated = this.onAlertCreated.bind(this);
-    this.handleOpenTriggerAlertDialog = this.handleOpenTriggerAlertDialog.bind(this); /* eslint-disable-line max-len */
-    this.handleCloseTriggerAlertDialog = this.handleCloseTriggerAlertDialog.bind(this); /* eslint-disable-line max-len */
+    this.handleOpenTriggerAlertDialog = this.handleOpenTriggerAlertDialog.bind(
+      this,
+    ); /* eslint-disable-line max-len */
+    this.handleCloseTriggerAlertDialog = this.handleCloseTriggerAlertDialog.bind(
+      this,
+    ); /* eslint-disable-line max-len */
   }
 
   componentDidMount() {
@@ -88,12 +91,7 @@ class AlertActions extends React.Component {
   }
 
   handleTriggerAlert(state) {
-    const {
-      alertId,
-      includeNotes,
-      includeOverrides,
-      storeAsDefault,
-    } = state;
+    const {alertId, includeNotes, includeOverrides, storeAsDefault} = state;
     const {
       filter,
       gmp,
@@ -118,22 +116,26 @@ class AlertActions extends React.Component {
       });
     }
 
-    gmp.report.alert({
-      report_id: report.id,
-      alert_id: alertId,
-      filter: newFilter.simple(),
-    }).then(response => {
-      showSuccessMessage(_('Running the alert was successful'));
-      this.setState({
-        alertId: undefined,
-        showTriggerAlertDialog: false,
-      });
-    }, error => {
-        log.error('Failed running alert', error);
-        showErrorMessage(_('Failed to run alert.'));
-        this.setState({showTriggerAlertDialog: false});
-      }
-    );
+    gmp.report
+      .alert({
+        report_id: report.id,
+        alert_id: alertId,
+        filter: newFilter.simple(),
+      })
+      .then(
+        response => {
+          showSuccessMessage(_('Running the alert was successful'));
+          this.setState({
+            alertId: undefined,
+            showTriggerAlertDialog: false,
+          });
+        },
+        error => {
+          log.error('Failed running alert', error);
+          showErrorMessage(_('Failed to run alert.'));
+          this.setState({showTriggerAlertDialog: false});
+        },
+      );
   }
 
   handleOpenTriggerAlertDialog() {
@@ -154,7 +156,7 @@ class AlertActions extends React.Component {
     this.setState({
       alertId: response.data.id,
     });
-  };
+  }
 
   render() {
     const {
@@ -164,11 +166,7 @@ class AlertActions extends React.Component {
       showError,
       onInteraction,
     } = this.props;
-    const {
-      alertId,
-      showTriggerAlertDialog,
-      storeAsDefault,
-    } = this.state;
+    const {alertId, showTriggerAlertDialog, storeAsDefault} = this.state;
     return (
       <AlertComponent
         onCreated={this.onAlertCreated}
@@ -183,7 +181,7 @@ class AlertActions extends React.Component {
                 onClick={this.handleOpenTriggerAlertDialog}
               />
             </IconDivider>
-            {showTriggerAlertDialog &&
+            {showTriggerAlertDialog && (
               <TriggerAlertDialog
                 alertId={alertId}
                 alerts={alerts}
@@ -197,7 +195,7 @@ class AlertActions extends React.Component {
                 onNewAlertClick={create}
                 onSave={this.handleTriggerAlert}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </AlertComponent>
@@ -224,8 +222,8 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
   return {
     onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
     loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
-    loadReportComposerDefaults: () => dispatch(
-      loadReportComposerDefaults(gmp)()),
+    loadReportComposerDefaults: () =>
+      dispatch(loadReportComposerDefaults(gmp)()),
     saveReportComposerDefaults: reportComposerDefaults =>
       dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
   };
@@ -240,7 +238,10 @@ const mapStateToProps = rootState => {
 
 export default compose(
   withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(AlertActions);
 
 // vim: set ts=2 sw=2 tw=80:

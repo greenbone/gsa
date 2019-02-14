@@ -29,9 +29,7 @@ import {
 } from '../actions';
 
 describe('entities actions tests', () => {
-
   describe('createEntitiesActions tests', () => {
-
     test('should create action creators for loading', () => {
       const actions = createEntitiesActions('foo');
 
@@ -94,8 +92,12 @@ describe('entities actions tests', () => {
       const loadedFilter = Filter.fromString('type=abc rows=100');
       const actions = createEntitiesActions('foo');
       const counts = {first: 1};
-      const action = actions.success(['foo', 'bar'], filter, loadedFilter,
-        counts);
+      const action = actions.success(
+        ['foo', 'bar'],
+        filter,
+        loadedFilter,
+        counts,
+      );
 
       expect(action).toEqual({
         type: types.ENTITIES_LOADING_SUCCESS,
@@ -133,7 +135,6 @@ describe('entities actions tests', () => {
   });
 
   describe('createEntityActions tests', () => {
-
     test('should create actions for loading', () => {
       const actions = createEntityActions('foo');
 
@@ -182,18 +183,13 @@ describe('entities actions tests', () => {
   });
 
   describe('createLoadEntities tests', () => {
-
     test('test isLoading true', () => {
       const actions = createEntitiesActions('foo');
 
-      const getState = jest
-        .fn()
-        .mockReturnValue({foo: 'bar'});
+      const getState = jest.fn().mockReturnValue({foo: 'bar'});
 
       const dispatch = jest.fn();
-      const isLoadingEntities = jest
-        .fn()
-        .mockReturnValue(true);
+      const isLoadingEntities = jest.fn().mockReturnValue(true);
       const get = jest.fn();
       const gmp = {
         foos: {
@@ -230,30 +226,26 @@ describe('entities actions tests', () => {
         error: jest.fn(),
       };
 
-      const getState = jest
-        .fn()
-        .mockReturnValue({foo: 'bar'});
+      const getState = jest.fn().mockReturnValue({foo: 'bar'});
 
       const loadedFilter = Filter.fromString('name=abc');
       const counts = {first: 1};
       const dispatch = jest.fn();
-      const get = jest
-        .fn()
-        .mockReturnValue(Promise.resolve({
+      const get = jest.fn().mockReturnValue(
+        Promise.resolve({
           data: 'foo',
           meta: {
             filter: loadedFilter,
             counts,
           },
-        }));
+        }),
+      );
       const gmp = {
         foos: {
           get,
         },
       };
-      const isLoadingEntities = jest
-        .fn()
-        .mockReturnValue(false);
+      const isLoadingEntities = jest.fn().mockReturnValue(false);
 
       const selector = jest.fn(() => ({
         isLoadingEntities,
@@ -276,8 +268,12 @@ describe('entities actions tests', () => {
         expect(isLoadingEntities).toBeCalledWith('myfilter');
         expect(get).toBeCalledWith({filter: 'myfilter'});
         expect(actions.request).toBeCalledWith('myfilter');
-        expect(actions.success).toBeCalledWith('foo', 'myfilter', loadedFilter,
-          counts);
+        expect(actions.success).toBeCalledWith(
+          'foo',
+          'myfilter',
+          loadedFilter,
+          counts,
+        );
         expect(actions.error).not.toBeCalled();
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
@@ -292,22 +288,16 @@ describe('entities actions tests', () => {
         error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
       };
 
-      const getState = jest
-        .fn()
-        .mockReturnValue({foo: 'bar'});
+      const getState = jest.fn().mockReturnValue({foo: 'bar'});
 
       const dispatch = jest.fn();
-      const get = jest
-        .fn()
-        .mockReturnValue(Promise.reject('AnError'));
+      const get = jest.fn().mockReturnValue(Promise.reject('AnError'));
       const gmp = {
         foos: {
           get,
         },
       };
-      const isLoadingEntities = jest
-        .fn()
-        .mockReturnValue(false);
+      const isLoadingEntities = jest.fn().mockReturnValue(false);
 
       const selector = jest.fn(() => ({
         isLoadingEntities,
@@ -340,7 +330,6 @@ describe('entities actions tests', () => {
   });
 
   describe('createLoadEntity tests', () => {
-
     test('test isLoading true', () => {
       const id = 'a1';
       const actions = {
@@ -349,17 +338,11 @@ describe('entities actions tests', () => {
         error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
       };
 
-      const getState = jest
-        .fn()
-        .mockReturnValue({foo: 'bar'});
+      const getState = jest.fn().mockReturnValue({foo: 'bar'});
 
       const dispatch = jest.fn();
-      const isLoadingEntity = jest
-        .fn()
-        .mockReturnValue(true);
-      const get = jest
-        .fn()
-        .mockReturnValue(Promise.resolve({id: 'foo'}));
+      const isLoadingEntity = jest.fn().mockReturnValue(true);
+      const get = jest.fn().mockReturnValue(Promise.resolve({id: 'foo'}));
       const gmp = {
         foo: {
           get,
@@ -399,14 +382,10 @@ describe('entities actions tests', () => {
         error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
       };
 
-      const getState = jest
-        .fn()
-        .mockReturnValue({foo: 'bar'});
+      const getState = jest.fn().mockReturnValue({foo: 'bar'});
 
       const dispatch = jest.fn();
-      const isLoadingEntity = jest
-        .fn()
-        .mockReturnValue(false);
+      const isLoadingEntity = jest.fn().mockReturnValue(false);
       const get = jest
         .fn()
         .mockReturnValue(Promise.resolve({data: {id, name: 'foo'}}));
@@ -451,17 +430,11 @@ describe('entities actions tests', () => {
         error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
       };
 
-      const getState = jest
-        .fn()
-        .mockReturnValue({foo: 'bar'});
+      const getState = jest.fn().mockReturnValue({foo: 'bar'});
 
       const dispatch = jest.fn();
-      const isLoadingEntity = jest
-        .fn()
-        .mockReturnValue(false);
-      const get = jest
-        .fn()
-        .mockReturnValue(Promise.reject('An error'));
+      const isLoadingEntity = jest.fn().mockReturnValue(false);
+      const get = jest.fn().mockReturnValue(Promise.reject('An error'));
       const gmp = {
         foo: {
           get,
@@ -495,6 +468,5 @@ describe('entities actions tests', () => {
       });
     });
   });
-
 });
 // vim: set ts=2 sw=2 tw=80:

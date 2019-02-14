@@ -29,7 +29,6 @@ import {
 } from '../entitytype';
 
 describe('getEntityType function tests', () => {
-
   test('should return undefined for undefined model', () => {
     expect(getEntityType()).toBeUndefined();
   });
@@ -57,11 +56,9 @@ describe('getEntityType function tests', () => {
 
     expect(getEntityType(model)).toEqual('host');
   });
-
 });
 
 describe('pluralizeType function tests', () => {
-
   test('should not pluralize info', () => {
     expect(pluralizeType('info')).toEqual('info');
   });
@@ -75,11 +72,9 @@ describe('pluralizeType function tests', () => {
     expect(pluralizeType('foo')).toEqual('foos');
     expect(pluralizeType('task')).toEqual('tasks');
   });
-
 });
 
 describe('normalizeType function tests', () => {
-
   test('should normalize types', () => {
     expect(normalizeType('os')).toEqual('operatingsystem');
     expect(normalizeType('cert_bund_adv')).toEqual('certbund');
@@ -101,11 +96,9 @@ describe('normalizeType function tests', () => {
   test('should pass through unknown types', () => {
     expect(normalizeType('foo')).toEqual('foo');
   });
-
 });
 
 describe('apiType function tests', () => {
-
   test('should convert entity types', () => {
     expect(apiType('operatingsystem')).toEqual('os');
     expect(apiType('certbund')).toEqual('cert_bund_adv');
@@ -127,11 +120,9 @@ describe('apiType function tests', () => {
   test('should pass through unknown types', () => {
     expect(apiType('foo')).toEqual('foo');
   });
-
 });
 
 describe('typeName function tests', () => {
-
   test('should pass through unknown types', () => {
     expect(typeName('foo')).toEqual('foo');
   });
@@ -148,7 +139,6 @@ describe('typeName function tests', () => {
     expect(typeName('config')).toEqual('Scan Config');
     expect(typeName('vulnerability')).toEqual('Vulnerability');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

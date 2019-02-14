@@ -33,9 +33,7 @@ export function parseInfoEntities(response, name, modelclass, filter_func) {
   if (!isArray(response.info)) {
     return [];
   }
-  return response.info
-    .filter(filter_func)
-    .map(info => new modelclass(info));
+  return response.info.filter(filter_func).map(info => new modelclass(info));
 }
 
 export function parseInfoCounts(response) {
@@ -52,8 +50,10 @@ export function parseInfoCounts(response) {
 
   if (!isDefined(es)) {
     // houston we have a problem ...
-    log.error('No info found in response. Can not get correct counts.',
-      response);
+    log.error(
+      'No info found in response. Can not get correct counts.',
+      response,
+    );
     es = {
       _start: 0,
       _max: 0,
@@ -62,8 +62,10 @@ export function parseInfoCounts(response) {
 
   if (!isDefined(ec)) {
     // houston we have another problem ...
-    log.error('No info_count found in response. Can not get correct counts.',
-      response);
+    log.error(
+      'No info_count found in response. Can not get correct counts.',
+      response,
+    );
     ec = {
       page: 0,
       __text: 0,
@@ -158,8 +160,12 @@ const parseCollectionCounts = (response, name, plural_name) =>
  * @return {Object}  A new object containing the parsed entities, filter and
  *                   counts.
  */
-export const parseCollectionList = (response, name, modelclass,
-    options = {}) => {
+export const parseCollectionList = (
+  response,
+  name,
+  modelclass,
+  options = {},
+) => {
   const {
     plural_name,
     entities_parse_func = parseEntities,

@@ -60,10 +60,7 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/roles';
+import {selector, loadEntity} from 'web/store/entities/roles';
 
 import {
   selector as permissionsSelector,
@@ -92,28 +89,13 @@ const ToolBarIcons = ({
         anchor="user-roles"
         title={_('Help: Roles')}
       />
-      <ListIcon
-        title={_('Roles List')}
-        page="roles"
-      />
+      <ListIcon title={_('Roles List')} page="roles" />
     </IconDivider>
     <IconDivider>
-      <CreateIcon
-        entity={entity}
-        onClick={onRoleCreateClick}
-      />
-      <CloneIcon
-        entity={entity}
-        onClick={onRoleCloneClick}
-      />
-      <EditIcon
-        entity={entity}
-        onClick={onRoleEditClick}
-      />
-      <TrashIcon
-        entity={entity}
-        onClick={onRoleDeleteClick}
-      />
+      <CreateIcon entity={entity} onClick={onRoleCreateClick} />
+      <CloneIcon entity={entity} onClick={onRoleCloneClick} />
+      <EditIcon entity={entity} onClick={onRoleEditClick} />
+      <TrashIcon entity={entity} onClick={onRoleDeleteClick} />
       <ExportIcon
         value={entity}
         title={_('Export Role as XML')}
@@ -132,17 +114,10 @@ ToolBarIcons.propTypes = {
   onRoleEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({
-  entity,
-  general_permissions = [],
-  links,
-}) => {
+const Details = ({entity, general_permissions = [], links}) => {
   return (
     <Layout flex="column">
-      <RoleDetails
-        entity={entity}
-        links={links}
-      />
+      <RoleDetails entity={entity} links={links} />
     </Layout>
   );
 };
@@ -153,24 +128,15 @@ Details.propTypes = {
   links: PropTypes.bool,
 };
 
-const GeneralPermissions = ({
-  permissions = [],
-  links,
-}) => {
+const GeneralPermissions = ({permissions = [], links}) => {
   return (
-    <Layout
-      title={_('General Command Permissions')}
-    >
-      {permissions.length > 0 ?
+    <Layout title={_('General Command Permissions')}>
+      {permissions.length > 0 ? (
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>
-                {_('Name')}
-              </TableHead>
-              <TableHead>
-                {_('Description')}
-              </TableHead>
+              <TableHead>{_('Name')}</TableHead>
+              <TableHead>{_('Description')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -188,9 +154,10 @@ const GeneralPermissions = ({
               </TableRow>
             ))}
           </TableBody>
-        </Table> :
+        </Table>
+      ) : (
         _('None')
-      }
+      )}
     </Layout>
   );
 };
@@ -222,18 +189,11 @@ const Page = ({
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
-    {({
-      clone,
-      create,
-      delete: delete_func,
-      download,
-      edit,
-      save,
-    }) => (
+    {({clone, create, delete: delete_func, download, edit, save}) => (
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<RoleIcon size="large"/>}
+        sectionIcon={<RoleIcon size="large" />}
         title={_('Role')}
         toolBarIcons={ToolBarIcons}
         onInteraction={onInteraction}
@@ -244,24 +204,16 @@ const Page = ({
         onRoleEditClick={edit}
         onRoleSaveClick={save}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={generalPermissions}>
                     {_('General Command Permissions')}
                   </EntitiesTab>
@@ -277,15 +229,10 @@ const Page = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <Details
-                      entity={entity}
-                      links={links}
-                    />
+                    <Details entity={entity} links={links} />
                   </TabPanel>
                   <TabPanel>
-                    <GeneralPermissions
-                      permissions={generalPermissions}
-                    />
+                    <GeneralPermissions permissions={generalPermissions} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags
@@ -332,11 +279,12 @@ const generalPermissionsFilter = id =>
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsSubjectFilter(id))),
-    dispatch(loadPermissionsFunc(generalPermissionsFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsSubjectFilter(id))),
+      dispatch(loadPermissionsFunc(generalPermissionsFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {
@@ -344,7 +292,8 @@ const mapStateToProps = (rootState, {id}) => {
   return {
     permissions: permissionsSel.getEntities(permissionsSubjectFilter(id)),
     generalPermissions: permissionsSel.getEntities(
-      generalPermissionsFilter(id)),
+      generalPermissionsFilter(id),
+    ),
   };
 };
 

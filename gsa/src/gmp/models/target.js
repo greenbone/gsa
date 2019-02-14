@@ -34,7 +34,6 @@ export const TARGET_CREDENTIAL_NAMES = [
 ];
 
 class Target extends Model {
-
   static entityType = 'target';
 
   parseProperties(elem) {
@@ -42,8 +41,7 @@ class Target extends Model {
 
     if (isDefined(elem.port_list) && !isEmpty(elem.port_list._id)) {
       ret.port_list = new PortList(ret.port_list);
-    }
-    else {
+    } else {
       delete ret.port_list;
     }
 
@@ -51,8 +49,7 @@ class Target extends Model {
       const cred = ret[name];
       if (isDefined(cred) && !isEmpty(cred._id)) {
         ret[name] = new Model(cred, 'credential');
-      }
-      else {
+      } else {
         delete ret[name];
       }
     }

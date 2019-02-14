@@ -49,9 +49,7 @@ const CVSS_PROPS = {
   cvssAvailabilityImpact: _l('Availability Impact'),
 };
 
-const CveDetails = ({
-  entity,
-}) => {
+const CveDetails = ({entity}) => {
   const {
     cvssBaseVector,
     cwe_id,
@@ -61,54 +59,36 @@ const CveDetails = ({
   } = entity;
 
   return (
-    <Layout
-      flex="column"
-      grow="1"
-    >
-
-      {isDefined(cwe_id) &&
+    <Layout flex="column" grow="1">
+      {isDefined(cwe_id) && (
         <InfoTable>
           <TableBody>
             <TableRow>
-              <TableData>
-                {_('CWE ID')}
-              </TableData>
-              <TableData>
-                {entity.cwe_id}
-              </TableData>
+              <TableData>{_('CWE ID')}</TableData>
+              <TableData>{entity.cwe_id}</TableData>
             </TableRow>
           </TableBody>
         </InfoTable>
-      }
+      )}
 
-      {isDefined(description) &&
-        <DetailsBlock
-          title={_('Description')}
-        >
+      {isDefined(description) && (
+        <DetailsBlock title={_('Description')}>
           <p>{description}</p>
         </DetailsBlock>
-      }
+      )}
 
-      <DetailsBlock
-        title={_('CVSS')}
-      >
+      <DetailsBlock title={_('CVSS')}>
         <InfoTable>
           <TableBody>
             <TableRow>
+              <TableData>{_('Base Score')}</TableData>
               <TableData>
-                {_('Base Score')}
-              </TableData>
-              <TableData>
-                <SeverityBar
-                  severity={severity}
-                />
+                <SeverityBar severity={severity} />
               </TableData>
             </TableRow>
-            {isDefined(cvssBaseVector) &&
+            {isDefined(cvssBaseVector) && (
               <TableRow>
-                <TableData>
-                  {_('Base Vector')}
-                </TableData>
+                <TableData>{_('Base Vector')}</TableData>
                 <TableData>
                   <Link
                     to="cvsscalculator"
@@ -118,50 +98,35 @@ const CveDetails = ({
                   </Link>
                 </TableData>
               </TableRow>
-            }
+            )}
             {Object.entries(CVSS_PROPS)
               .filter(([name]) => isDefined(entity[name]))
               .map(([name, title]) => (
                 <TableRow key={name}>
-                  <TableData>
-                    {`${title}`}
-                  </TableData>
-                  <TableData>
-                    {entity[name]}
-                  </TableData>
+                  <TableData>{`${title}`}</TableData>
+                  <TableData>{entity[name]}</TableData>
                 </TableRow>
-              )
-            )}
+              ))}
           </TableBody>
         </InfoTable>
       </DetailsBlock>
 
-      {references.length > 0 &&
-        <DetailsBlock
-          title={_('References')}
-        >
+      {references.length > 0 && (
+        <DetailsBlock title={_('References')}>
           <InfoTable>
             <TableBody>
               {references.map(ref => (
-                <TableRow
-                  key={ref.name}
-                >
+                <TableRow key={ref.name}>
+                  <TableData>{ref.source}</TableData>
                   <TableData>
-                    {ref.source}
-                  </TableData>
-                  <TableData>
-                    <ExternalLink
-                      to={ref.href}
-                    >
-                      {ref.name}
-                    </ExternalLink>
+                    <ExternalLink to={ref.href}>{ref.name}</ExternalLink>
                   </TableData>
                 </TableRow>
               ))}
             </TableBody>
           </InfoTable>
         </DetailsBlock>
-      }
+      )}
     </Layout>
   );
 };

@@ -21,7 +21,7 @@ import React from 'react';
 
 import Field from './field.js';
 
-const TextField = props => <Field {...props} type="text"/>;
+const TextField = props => <Field {...props} type="text" />;
 
 export default TextField;
 

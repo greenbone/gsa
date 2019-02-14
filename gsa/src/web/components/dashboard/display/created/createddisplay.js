@@ -31,7 +31,6 @@ import transformCreated from './createdtransform';
 import DataDisplay from '../datadisplay';
 
 class CreatedDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -52,14 +51,14 @@ class CreatedDisplay extends React.Component {
     let newFilter = isDefined(filter) ? filter.copy() : new Filter();
 
     if (isDefined(startDate)) {
-
       if (startDate.isSame(endDate)) {
         startDate = startDate.clone().subtract(1, 'day');
         endDate = endDate.clone().add(1, 'day');
       }
 
       const startTerm = FilterTerm.fromString(
-        `created>${startDate.format(dateFormat)}`);
+        `created>${startDate.format(dateFormat)}`,
+      );
 
       if (!newFilter.hasTerm(startTerm)) {
         newFilter = newFilter.and(Filter.fromTerm(startTerm));
@@ -68,7 +67,8 @@ class CreatedDisplay extends React.Component {
 
     if (isDefined(endDate)) {
       const endTerm = FilterTerm.fromString(
-        `created<${endDate.format(dateFormat)}`);
+        `created<${endDate.format(dateFormat)}`,
+      );
 
       if (!newFilter.hasTerm(endTerm)) {
         newFilter = newFilter.and(Filter.fromTerm(endTerm));
@@ -91,11 +91,7 @@ class CreatedDisplay extends React.Component {
       ...props
     } = this.props;
     return (
-      <DataDisplay
-        {...props}
-        dataTransform={dataTransform}
-        filter={filter}
-      >
+      <DataDisplay {...props} dataTransform={dataTransform} filter={filter}>
         {({width, height, data: tdata, svgRef, state}) => (
           <LineChart
             timeline
@@ -109,8 +105,9 @@ class CreatedDisplay extends React.Component {
             yLine={yLine}
             y2Line={y2Line}
             showLegend={state.showLegend}
-            onRangeSelected={isDefined(onFilterChanged) ?
-              this.handleRangeSelect : undefined}
+            onRangeSelected={
+              isDefined(onFilterChanged) ? this.handleRangeSelect : undefined
+            }
           />
         )}
       </DataDisplay>

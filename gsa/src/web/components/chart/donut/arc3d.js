@@ -48,15 +48,12 @@ const Arc3d = ({
   const {color = Theme.lightGray, toolTip} = data;
   const darker = d3color(color).darker();
   return (
-    <ToolTip
-      content={toolTip}
-    >
+    <ToolTip content={toolTip}>
       {({targetRef, hide, show}) => (
         <Group
           onMouseEnter={show}
           onMouseLeave={hide}
-          onClick={isDefined(onDataClick) ?
-            () => onDataClick(data) : undefined}
+          onClick={isDefined(onDataClick) ? () => onDataClick(data) : undefined}
         >
           <PieInnerPath
             startAngle={startAngle}
@@ -66,10 +63,7 @@ const Arc3d = ({
             innerRadiusX={innerRadiusX}
             innerRadiusY={innerRadiusY}
           />
-          <PieTopPath
-            color={color}
-            path={path}
-          />
+          <PieTopPath color={color} path={path} />
           <PieOuterPath
             startAngle={startAngle}
             endAngle={endAngle}

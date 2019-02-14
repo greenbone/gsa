@@ -44,10 +44,9 @@ const IconContainer = styled.div`
 
 export const WizardIcon = () => (
   <IconContainer>
-    <WizIcon size="large"/>
+    <WizIcon size="large" />
   </IconContainer>
 );
-
 
 const TaskWizard = ({
   hosts,
@@ -63,21 +62,16 @@ const TaskWizard = ({
     onSave={onSave}
     defaultValues={{hosts}}
   >
-    {({
-      values: state,
-      onValueChange,
-    }) => (
+    {({values: state, onValueChange}) => (
       <Layout>
-        <WizardIcon/>
+        <WizardIcon />
         <WizardContent>
           <Divider flex="column">
             <p>
               <b>{_('Quick start: Immediately scan an IP address')}</b>
             </p>
             <Divider>
-              <span>
-                {_('IP address or hostname:')}
-              </span>
+              <span>{_('IP address or hostname:')}</span>
               <TextField
                 value={state.hosts}
                 name="hosts"
@@ -87,8 +81,10 @@ const TaskWizard = ({
               />
             </Divider>
             <div>
-              {_('The default address is either your computer' +
-                ' or your network gateway.')}
+              {_(
+                'The default address is either your computer' +
+                  ' or your network gateway.',
+              )}
             </div>
             <Layout flex="column">
               {_('As a short-cut GSA will do the following for you:')}
@@ -99,25 +95,22 @@ const TaskWizard = ({
               </ol>
             </Layout>
             <p>
-              {_('As soon as the scan progress is beyond 1%, you can already ' +
-                'jump to the scan report via the link in the Reports Total ' +
-                'column and review the results collected so far.')}
+              {_(
+                'As soon as the scan progress is beyond 1%, you can already ' +
+                  'jump to the scan report via the link in the Reports Total ' +
+                  'column and review the results collected so far.',
+              )}
             </p>
             <p>
-              {_('When creating the Target and Task GSA will use the defaults' +
-                ' as configured in "My Settings".')}
+              {_(
+                'When creating the Target and Task GSA will use the defaults' +
+                  ' as configured in "My Settings".',
+              )}
             </p>
             <Divider>
-              <span>
-                {_('By clicking the New Task icon')}
-              </span>
-              <NewIcon
-                title={_('New Task')}
-                onClick={onNewClick}
-              />
-              <span>
-                {_('you can create a new Task yourself.')}
-              </span>
+              <span>{_('By clicking the New Task icon')}</span>
+              <NewIcon title={_('New Task')} onClick={onNewClick} />
+              <span>{_('you can create a new Task yourself.')}</span>
             </Divider>
           </Divider>
         </WizardContent>

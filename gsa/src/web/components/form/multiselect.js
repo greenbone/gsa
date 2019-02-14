@@ -66,7 +66,7 @@ const DeleteButton = styled.div`
   margin-right: 2px;
   &:hover {
     color: ${Theme.black};
-  };
+  }
 `;
 
 const Label = styled.span`
@@ -75,7 +75,6 @@ const Label = styled.span`
 `;
 
 class MultiSelect extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -154,10 +153,7 @@ class MultiSelect extends React.Component {
     const itemLabel = isDefined(item) ? item.label : value;
 
     return (
-      <MultiSelectedValue
-        title={itemLabel}
-        key={value}
-      >
+      <MultiSelectedValue title={itemLabel} key={value}>
         <Layout>
           <DeleteButton
             data-testid="multiselect-selected-delete"
@@ -172,9 +168,7 @@ class MultiSelect extends React.Component {
   }
 
   render() {
-    let {
-      disabled = false,
-    } = this.props;
+    let {disabled = false} = this.props;
     const {
       className,
       items,
@@ -182,15 +176,13 @@ class MultiSelect extends React.Component {
       width = DEFAULT_WIDTH,
     } = this.props;
 
-    const {
-      search,
-      selectedItems,
-    } = this.state;
+    const {search, selectedItems} = this.state;
 
     disabled = disabled || !isDefined(items) || items.length === 0;
 
-    const displayedItems = isDefined(items) ?
-      items.filter(caseInsensitiveFilter(search)) : [];
+    const displayedItems = isDefined(items)
+      ? items.filter(caseInsensitiveFilter(search))
+      : [];
 
     return (
       <Downshift
@@ -218,7 +210,7 @@ class MultiSelect extends React.Component {
               <Box
                 isOpen={isOpen}
                 disabled={disabled}
-                innerRef={ref => this.box = ref}
+                innerRef={ref => (this.box = ref)}
               >
                 <Layout grow="1" wrap>
                   {selectedItems.map(item => this.renderItem(item, items))}
@@ -228,33 +220,33 @@ class MultiSelect extends React.Component {
                     {...getButtonProps({
                       disabled,
                       down: !isOpen,
-                      onClick: isOpen ? undefined : event => {
-                        event.preventDefault(); // don't call default handler from downshift
-                        openMenu(() =>
-                          isDefined(this.input) && this.input.focus()); // set focus to input field after menu is opened
-                      },
+                      onClick: isOpen
+                        ? undefined
+                        : event => {
+                            event.preventDefault(); // don't call default handler from downshift
+                            openMenu(
+                              () => isDefined(this.input) && this.input.focus(),
+                            ); // set focus to input field after menu is opened
+                          },
                     })}
                     size="small"
                   />
                 </Layout>
               </Box>
-              {isOpen && !disabled &&
-                <Menu
-                  position={menuPosition}
-                  target={this.box}
-                >
+              {isOpen && !disabled && (
+                <Menu position={menuPosition} target={this.box}>
                   <Input
                     {...getInputProps({
                       value: search,
                       onChange: this.handleSearch,
                     })}
                     disabled={disabled}
-                    innerRef={ref => this.input = ref}
+                    innerRef={ref => (this.input = ref)}
                     data-testid="multiselect-input"
                   />
                   <ItemContainer>
-                    {displayedItems
-                      .map(({label: itemLabel, value: itemValue}, i) => (
+                    {displayedItems.map(
+                      ({label: itemLabel, value: itemValue}, i) => (
                         <Item
                           {...getItemProps({item: itemValue})}
                           data-testid="multiselect-item-label"
@@ -265,11 +257,11 @@ class MultiSelect extends React.Component {
                         >
                           {itemLabel}
                         </Item>
-                      ))
-                    }
+                      ),
+                    )}
                   </ItemContainer>
                 </Menu>
-              }
+              )}
             </SelectContainer>
           );
         }}

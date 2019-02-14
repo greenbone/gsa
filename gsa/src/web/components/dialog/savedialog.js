@@ -35,7 +35,6 @@ import DialogTitle from '../dialog/title';
 import ScrollableContent from '../dialog/scrollablecontent';
 
 class SaveDialogContent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -75,8 +74,7 @@ class SaveDialogContent extends React.Component {
     const {onErrorClose} = this.props;
     if (isDefined(onErrorClose)) {
       onErrorClose();
-    }
-    else {
+    } else {
       this.setState({error: undefined});
     }
   }
@@ -90,8 +88,7 @@ class SaveDialogContent extends React.Component {
 
     if (onError) {
       onError(error);
-    }
-    else {
+    } else {
       this.setState({
         error: error.message,
       });
@@ -109,33 +106,22 @@ class SaveDialogContent extends React.Component {
       title,
       values,
     } = this.props;
-    const {
-      error,
-    } = this.state;
+    const {error} = this.state;
     return (
       <State {...defaultValues}>
-        {({
-          state,
-          onValueChange,
-        }) => {
+        {({state, onValueChange}) => {
           const childValues = {...state, ...values};
           return (
             <DialogContent>
-              <DialogTitle
-                title={title}
-                onCloseClick={close}
-                {...moveProps}
-              />
-              {error &&
+              <DialogTitle title={title} onCloseClick={close} {...moveProps} />
+              {error && (
                 <DialogError
                   error={error}
                   onCloseClick={this.handleErrorClose}
                 />
-              }
+              )}
               <ErrorBoundary errElement={_('dialog')}>
-                <ScrollableContent
-                  {...heightProps}
-                >
+                <ScrollableContent {...heightProps}>
                   {children({
                     values: childValues,
                     onValueChange,
@@ -150,7 +136,7 @@ class SaveDialogContent extends React.Component {
               />
             </DialogContent>
           );
-         }}
+        }}
       </State>
     );
   }
@@ -193,11 +179,7 @@ const SaveDialog = ({
       minWidth={minWidth}
       onClose={onClose}
     >
-      {({
-        close,
-        moveProps,
-        heightProps,
-      }) => (
+      {({close, moveProps, heightProps}) => (
         <SaveDialogContent
           buttonTitle={buttonTitle}
           close={close}

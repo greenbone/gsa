@@ -25,7 +25,6 @@ import {parseInt} from 'gmp/parser';
 import Model from '../model';
 
 class Tag extends Model {
-
   static entityType = 'tag';
 
   parseProperties(elem) {
@@ -34,8 +33,7 @@ class Tag extends Model {
     if (isDefined(elem.resources)) {
       ret.resourceType = normalizeType(elem.resources.type);
       ret.resourceCount = parseInt(elem.resources.count.total);
-    }
-    else {
+    } else {
       ret.resourceCount = 0;
     }
     ret.value = isEmpty(elem.value) ? undefined : elem.value;

@@ -93,12 +93,15 @@ const TagsDialog = ({
         <FormGroup title={_('Comment')} titleSize="4">
           {comment}
         </FormGroup>
-        {entitiesCount >= ENTITIES_THRESHOLD &&
+        {entitiesCount >= ENTITIES_THRESHOLD && (
           <Notification>
-            {_('Please note that assigning a tag to {{count}} ' +
-               'items may take several minutes.', {count: entitiesCount})}
+            {_(
+              'Please note that assigning a tag to {{count}} ' +
+                'items may take several minutes.',
+              {count: entitiesCount},
+            )}
           </Notification>
-        }
+        )}
       </Layout>
     )}
   </SaveDialog>

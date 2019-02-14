@@ -32,39 +32,23 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-const RoleDetails = ({
-  entity,
-  links = true,
-}) => {
-  const {
-    users = [],
-    comment,
-  } = entity;
+const RoleDetails = ({entity, links = true}) => {
+  const {users = [], comment} = entity;
   return (
-    <Layout
-      flex="column"
-      grow
-    >
+    <Layout flex="column" grow>
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
-
           <TableRow>
-            <TableData>
-              {_('Comment')}
-            </TableData>
-            <TableData>
-              {comment}
-            </TableData>
+            <TableData>{_('Comment')}</TableData>
+            <TableData>{comment}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Users')}
-            </TableData>
+            <TableData>{_('Users')}</TableData>
             <TableData>
               <Divider>
                 {users.map(user => (
@@ -73,7 +57,6 @@ const RoleDetails = ({
               </Divider>
             </TableData>
           </TableRow>
-
         </TableBody>
       </InfoTable>
     </Layout>

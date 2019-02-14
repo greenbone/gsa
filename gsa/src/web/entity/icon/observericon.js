@@ -1,4 +1,3 @@
-
 /* Copyright (C) 2017-2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
@@ -28,11 +27,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import ViewOtherIcon from 'web/components/icon/viewothericon';
 
-const ObserverIcon = ({
-  entity,
-  userName,
-  displayName = _('Entity'),
-}) => {
+const ObserverIcon = ({entity, userName, displayName = _('Entity')}) => {
   const owner = isDefined(entity.owner) ? entity.owner.name : undefined;
 
   if (owner === userName) {
@@ -42,16 +37,10 @@ const ObserverIcon = ({
   let title;
   if (isDefined(owner)) {
     title = _('{{type}} owned by {{owner}}', {type: displayName, owner});
-  }
-  else {
+  } else {
     title = _('Global {{type}}', {type: displayName});
   }
-  return (
-    <ViewOtherIcon
-      alt={title}
-      title={title}
-    />
-  );
+  return <ViewOtherIcon alt={title} title={title} />;
 };
 
 ObserverIcon.propTypes = {

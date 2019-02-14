@@ -23,7 +23,6 @@ import {rendererWith} from 'web/utils/testing';
 import ProtocolDocLink from '../protocoldoclink';
 
 describe('ProtocolDocLink tests', () => {
-
   test('should render ProtocolDocLink', () => {
     const gmp = {
       settings: {
@@ -39,7 +38,6 @@ describe('ProtocolDocLink tests', () => {
     expect(element).toHaveAttribute('target', '_blank');
     expect(element).toHaveAttribute('rel', 'noopener noreferrer');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

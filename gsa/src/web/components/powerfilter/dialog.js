@@ -52,32 +52,23 @@ export const DefaultFilterDialog = ({
   onValueChange,
 }) => (
   <Layout flex="column">
-    <FilterStringGroup
-      filter={filterstring}
-      onChange={onFilterStringChange}
-    />
-    <FirstResultGroup
-      filter={filter}
-      onChange={onFilterValueChange}
-    />
-    <ResultsPerPageGroup
-      filter={filter}
-      onChange={onFilterValueChange}
-    />
+    <FilterStringGroup filter={filterstring} onChange={onFilterStringChange} />
+    <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
+    <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
     <SortByGroup
       fields={sortFields}
       filter={filter}
       onSortByChange={onSortByChange}
       onSortOrderChange={onSortOrderChange}
     />
-    {capabilities.mayCreate('filter') &&
+    {capabilities.mayCreate('filter') && (
       <CreateNamedFilterGroup
         filter={filter}
         filterName={filterName}
         saveNamedFilter={saveNamedFilter}
         onValueChange={onValueChange}
       />
-    }
+    )}
   </Layout>
 );
 
@@ -86,7 +77,7 @@ DefaultFilterDialog.propTypes = DefaultFilterDialogPropTypes;
 export const createFilterDialog = options => {
   return compose(
     withCapabilities,
-    withFilterDialog(options)
+    withFilterDialog(options),
   )(DefaultFilterDialog);
 };
 

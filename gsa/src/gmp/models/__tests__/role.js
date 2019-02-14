@@ -23,7 +23,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(Role, 'role');
 
 describe('Role model tests', () => {
-
   test('should parse multiple users', () => {
     const elem = {users: 'foo, bar'};
     const role = new Role(elem);

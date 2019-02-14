@@ -23,8 +23,7 @@ import {isDefined, isFunction} from 'gmp/utils/identity';
 const genericCompareAsc = (a, b) => {
   if (a > b) {
     return +1;
-  }
-  else if (b > a) {
+  } else if (b > a) {
     return -1;
   }
   return 0;
@@ -33,8 +32,7 @@ const genericCompareAsc = (a, b) => {
 const genericCompareDesc = (a, b) => {
   if (a < b) {
     return +1;
-  }
-  else if (b < a) {
+  } else if (b < a) {
     return -1;
   }
   return 0;
@@ -48,8 +46,7 @@ export const getProperty = (object, property) => {
     }
 
     return object[property];
-  }
-  catch (err) {
+  } catch (err) {
     return undefined;
   }
 };
@@ -61,13 +58,15 @@ export const ipToNumber = original => {
   }
 
   const split = original.split('.');
-  if (split.length === 4) { // should be an ipv4 address
+  if (split.length === 4) {
+    // should be an ipv4 address
     let ret = 0;
     for (const item of split) {
       ret = ret * 256; // same as shift 8 bits left
       const number = parseInt(item);
 
-      if (!isDefined(number)) { // wasn't a number. it's not an ip
+      if (!isDefined(number)) {
+        // wasn't a number. it's not an ip
         return original;
       }
 
@@ -88,14 +87,16 @@ export const getValue = (convertFunc, value, property, undefinedVal) => {
   return isDefined(val) ? val : undefinedVal;
 };
 
-const makeCompare = convertFunc => (property, undefinedVal) =>
- (reverse = false) => {
+const makeCompare = convertFunc => (property, undefinedVal) => (
+  reverse = false,
+) => {
   const valCompare = reverse ? genericCompareDesc : genericCompareAsc;
 
-  return (a, b) => valCompare(
-    getValue(convertFunc, a, property, undefinedVal),
-    getValue(convertFunc, b, property, undefinedVal),
-  );
+  return (a, b) =>
+    valCompare(
+      getValue(convertFunc, a, property, undefinedVal),
+      getValue(convertFunc, b, property, undefinedVal),
+    );
 };
 
 export const makeCompareString = makeCompare(value => '' + value);

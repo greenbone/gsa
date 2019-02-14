@@ -23,21 +23,10 @@ import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../utils/proptypes.js';
 
-const DetailsBlock = ({
-  id,
-  children,
-  className,
-  title,
-}) => (
-  <Layout
-    flex="column"
-    id={id}
-    className={className}
-  >
+const DetailsBlock = ({id, children, className, title}) => (
+  <Layout flex="column" id={id} className={className}>
     <h2>{title}</h2>
-    <div>
-      {children}
-    </div>
+    <div>{children}</div>
   </Layout>
 );
 

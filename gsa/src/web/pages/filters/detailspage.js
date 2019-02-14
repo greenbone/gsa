@@ -49,10 +49,7 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/filters';
+import {selector, loadEntity} from 'web/store/entities/filters';
 
 import {
   selector as permissionsSelector,
@@ -80,28 +77,13 @@ const ToolBarIcons = ({
         searchTerm="filter"
         title={_('Help: Filters')}
       />
-      <ListIcon
-        title={_('Filter List')}
-        page="filters"
-      />
+      <ListIcon title={_('Filter List')} page="filters" />
     </IconDivider>
     <IconDivider>
-      <CreateIcon
-        entity={entity}
-        onClick={onFilterCreateClick}
-      />
-      <CloneIcon
-        entity={entity}
-        onClick={onFilterCloneClick}
-      />
-      <EditIcon
-        entity={entity}
-        onClick={onFilterEditClick}
-      />
-      <TrashIcon
-        entity={entity}
-        onClick={onFilterDeleteClick}
-      />
+      <CreateIcon entity={entity} onClick={onFilterCreateClick} />
+      <CloneIcon entity={entity} onClick={onFilterCloneClick} />
+      <EditIcon entity={entity} onClick={onFilterEditClick} />
+      <TrashIcon entity={entity} onClick={onFilterDeleteClick} />
       <ExportIcon
         value={entity}
         title={_('Export Filter as XML')}
@@ -141,18 +123,11 @@ const Page = ({
       onInteraction={onInteraction}
       onSaved={onChanged}
     >
-      {({
-        clone,
-        create,
-        delete: delete_func,
-        download,
-        edit,
-        save,
-      }) => (
+      {({clone, create, delete: delete_func, download, edit, save}) => (
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon={<FilterIcon size="large"/>}
+          sectionIcon={<FilterIcon size="large" />}
           toolBarIcons={ToolBarIcons}
           title={_('Filter')}
           onFilterCloneClick={clone}
@@ -163,24 +138,16 @@ const Page = ({
           onFilterSaveClick={save}
           onInteraction={onInteraction}
         >
-          {({
-            activeTab = 0,
-            onActivateTab,
-          }) => {
+          {({activeTab = 0, onActivateTab}) => {
             return (
               <Layout grow="1" flex="column">
-                <TabLayout
-                  grow="1"
-                  align={['start', 'end']}
-                >
+                <TabLayout grow="1" align={['start', 'end']}>
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}
                     onActivateTab={onActivateTab}
                   >
-                    <Tab>
-                      {_('Information')}
-                    </Tab>
+                    <Tab>{_('Information')}</Tab>
                     <EntitiesTab entities={entity.userTags}>
                       {_('User Tags')}
                     </EntitiesTab>
@@ -193,9 +160,7 @@ const Page = ({
                 <Tabs active={activeTab}>
                   <TabPanels>
                     <TabPanel>
-                      <FilterDetails
-                        entity={entity}
-                      />
+                      <FilterDetails entity={entity} />
                     </TabPanel>
                     <TabPanel>
                       <EntityTags
@@ -238,10 +203,11 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

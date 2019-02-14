@@ -28,7 +28,7 @@ import arc from 'web/components/chart/utils/arc';
 
 import Group from 'web/components/chart/group';
 
-const sortArcsByStartAngle = (a, b) => a.startAngle > b.startAngle ? -1 : 1;
+const sortArcsByStartAngle = (a, b) => (a.startAngle > b.startAngle ? -1 : 1);
 
 const Pie = ({
   className,
@@ -93,11 +93,7 @@ const Pie = ({
 
   arcs.sort(arcsSort);
   return (
-    <Group
-      className={className}
-      top={top}
-      left={left}
-    >
+    <Group className={className} top={top} left={left}>
       {arcs.map((currentArc, i) => {
         const {x, y} = arcPath.centroid(currentArc);
         return children({

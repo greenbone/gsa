@@ -65,7 +65,6 @@ const transformTypeData = (data = {}) => {
 };
 
 export class SecInfosTypeDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -87,31 +86,28 @@ export class SecInfosTypeDisplay extends React.Component {
     }
     const typeFilter = Filter.fromTerm(typeTerm);
 
-    const newFilter = isDefined(filter) ? filter.copy().and(typeFilter) :
-      typeFilter;
+    const newFilter = isDefined(filter)
+      ? filter.copy().and(typeFilter)
+      : typeFilter;
 
     onFilterChanged(newFilter);
   }
 
   render() {
-    const {
-      filter,
-      onFilterChanged,
-      ...props
-    } = this.props;
+    const {filter, onFilterChanged, ...props} = this.props;
 
     return (
-      <SecInfosTypeLoader
-        filter={filter}
-      >
+      <SecInfosTypeLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
             {...loaderProps}
             dataTransform={transformTypeData}
             title={({data: tdata}) =>
-              _('SecInfo Items by Type (Total: {{count}})',
-              {count: tdata.total})}
+              _('SecInfo Items by Type (Total: {{count}})', {
+                count: tdata.total,
+              })
+            }
             initialState={{
               show3d: true,
             }}
@@ -125,8 +121,9 @@ export class SecInfosTypeDisplay extends React.Component {
                 width={width}
                 show3d={state.show3d}
                 showLegend={state.showLegend}
-                onDataClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
+                onDataClick={
+                  isDefined(onFilterChanged) ? this.handleDataClick : undefined
+                }
               />
             )}
           </DataDisplay>
@@ -152,10 +149,7 @@ export const SecInfosTypeTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   title: ({data: tdata}) =>
     _('SecInfo Items by type (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [
-    _l('Type'),
-    _l('# of SecInfo Items'),
-  ],
+  dataTitles: [_l('Type'), _l('# of SecInfo Items')],
   dataRow: row => [row.label, row.value],
   dataTransform: transformTypeData,
   displayId: 'allinfo-by-type-table',
@@ -167,9 +161,7 @@ registerDisplay(SecInfosTypeDisplay.displayId, SecInfosTypeDisplay, {
   title: _l('Chart: SecInfo Items by Type'),
 });
 
-registerDisplay(
-  SecInfosTypeTableDisplay.displayId,
-  SecInfosTypeTableDisplay, {
+registerDisplay(SecInfosTypeTableDisplay.displayId, SecInfosTypeTableDisplay, {
   title: _l('Table: SecInfo Items by Type'),
 });
 

@@ -26,7 +26,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(Schedule, 'schedule');
 
 describe('Schedule model tests', () => {
-
   test('should delete legacy schedule fields', () => {
     const elem = {
       first_time: 'lorem',
@@ -50,18 +49,16 @@ describe('Schedule model tests', () => {
     expect(schedule.simple_period).toBeUndefined();
   });
 
-    test('should parse tasks', () => {
-      const elem = {
-        tasks: {
-          task: [
-            {id: '123'},
-          ],
-        },
-      };
-      const schedule = new Schedule(elem);
+  test('should parse tasks', () => {
+    const elem = {
+      tasks: {
+        task: [{id: '123'}],
+      },
+    };
+    const schedule = new Schedule(elem);
 
-      expect(schedule.tasks[0]).toBeInstanceOf(Model);
-      expect(schedule.tasks[0].entityType).toEqual('task');
-    });
+    expect(schedule.tasks[0]).toBeInstanceOf(Model);
+    expect(schedule.tasks[0].entityType).toEqual('task');
+  });
 });
 // vim: set ts=2 sw=2 tw=80:

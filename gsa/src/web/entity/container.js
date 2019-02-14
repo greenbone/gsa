@@ -27,7 +27,6 @@ import PropTypes from 'web/utils/proptypes';
 const log = logger.getLogger('web.entity.container');
 
 class EntityContainer extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -78,13 +77,11 @@ class EntityContainer extends React.Component {
   }
 
   getReloadInterval() {
-    const {
-      defaultReloadInterval,
-      reloadInterval,
-    } = this.props;
+    const {defaultReloadInterval, reloadInterval} = this.props;
 
-    return isDefined(reloadInterval) ? reloadInterval(this.props) :
-      defaultReloadInterval;
+    return isDefined(reloadInterval)
+      ? reloadInterval(this.props)
+      : defaultReloadInterval;
   }
 
   startTimer() {
@@ -96,8 +93,13 @@ class EntityContainer extends React.Component {
 
     if (interval > 0) {
       this.timer = global.setTimeout(this.handleTimer, interval);
-      log.debug('Started reload timer with id', this.timer, 'and interval of',
-        interval, 'milliseconds');
+      log.debug(
+        'Started reload timer with id',
+        this.timer,
+        'and interval of',
+        interval,
+        'milliseconds',
+      );
     }
   }
 
@@ -122,10 +124,7 @@ class EntityContainer extends React.Component {
   }
 
   render() {
-    const {
-      children,
-      onDownload,
-    } = this.props;
+    const {children, onDownload} = this.props;
     return children({
       ...this.props,
       onChanged: this.handleChanged,

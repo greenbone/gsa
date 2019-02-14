@@ -18,16 +18,12 @@
  */
 
 import Info from 'gmp/models/info';
-import SecInfo, {
-  secInfoType,
-  secInfoTypeName,
-} from 'gmp/models/secinfo';
+import SecInfo, {secInfoType, secInfoTypeName} from 'gmp/models/secinfo';
 import {testModel} from 'gmp/models/testing';
 
 testModel(SecInfo, 'allinfo');
 
 describe('SecInfo model tests', () => {
-
   test('should be instance of Info', () => {
     const secInfo = new SecInfo({});
 
@@ -54,11 +50,9 @@ describe('SecInfo model tests', () => {
     expect(secInfo.infoType).toEqual('nvt');
     expect(secInfo.other).toEqual({});
   });
-
 });
 
 describe('SecInfo model function tests', () => {
-
   test('secInfoType should return infoType', () => {
     const secInfo1 = new SecInfo({allinfo: {type: 'nvt'}});
     const secInfo2 = new SecInfo({});
@@ -78,7 +72,6 @@ describe('SecInfo model function tests', () => {
     expect(secInfoTypeName('foo')).toEqual('foo');
     expect(secInfoTypeName(undefined, 'other N/A')).toEqual('other N/A');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

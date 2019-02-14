@@ -40,21 +40,19 @@ import {ResultsWordCountLoader} from './loaders';
 
 const transformWordCountData = (data = {}) => {
   const {groups = []} = data;
-  const tdata = groups
-    .map(group => {
-      const {count, value} = group;
-      return {
-        value: parseFloat(count),
-        label: value,
-        color: randomColor(),
-        filterValue: value,
-      };
-    });
+  const tdata = groups.map(group => {
+    const {count, value} = group;
+    return {
+      value: parseFloat(count),
+      label: value,
+      color: randomColor(),
+      filterValue: value,
+    };
+  });
   return tdata;
 };
 
 export class ResultsWordCloudDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -79,23 +77,18 @@ export class ResultsWordCloudDisplay extends React.Component {
       wordFilter = Filter.fromTerm(wordTerm);
     }
 
-    const newFilter = isDefined(filter) ? filter.copy().and(wordFilter) :
-      wordFilter;
+    const newFilter = isDefined(filter)
+      ? filter.copy().and(wordFilter)
+      : wordFilter;
 
     onFilterChanged(newFilter);
   }
 
   render() {
-    const {
-      filter,
-      onFilterChanged,
-      ...props
-    } = this.props;
+    const {filter, onFilterChanged, ...props} = this.props;
 
     return (
-      <ResultsWordCountLoader
-        filter={filter}
-      >
+      <ResultsWordCountLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
@@ -111,8 +104,9 @@ export class ResultsWordCloudDisplay extends React.Component {
                 data={tdata}
                 height={height}
                 width={width}
-                onDataClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
+                onDataClick={
+                  isDefined(onFilterChanged) ? this.handleDataClick : undefined
+                }
               />
             )}
           </DataDisplay>
@@ -137,10 +131,7 @@ export const ResultsWordCloudTableDisplay = createDisplay({
   loaderComponent: ResultsWordCountLoader,
   displayComponent: DataTableDisplay,
   dataTransform: transformWordCountData,
-  dataTitles: [
-    _l('Vulnerability'),
-    _l('Word Count'),
-  ],
+  dataTitles: [_l('Vulnerability'), _l('Word Count')],
   dataRow: row => [row.label, row.value],
   title: () => _('Results Vulnerability Word Cloud'),
   filtersFilter: RESULTS_FILTER_FILTER,
@@ -152,8 +143,10 @@ registerDisplay(ResultsWordCloudDisplay.displayId, ResultsWordCloudDisplay, {
   title: _l('Chart: Results Vulnerability Word Cloud'),
 });
 
-registerDisplay(ResultsWordCloudTableDisplay.displayId,
-  ResultsWordCloudTableDisplay, {
+registerDisplay(
+  ResultsWordCloudTableDisplay.displayId,
+  ResultsWordCloudTableDisplay,
+  {
     title: _l('Table: Results Vulnerability Word Cloud'),
   },
 );

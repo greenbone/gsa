@@ -76,10 +76,11 @@ export const initLocale = ({
   backend = XHRBackend,
   detector = Detector,
   options = I18N_OPTIONS,
-} = {}) => i18next
-  .use(backend)
-  .use(detector)
-  .init(options);
+} = {}) =>
+  i18next
+    .use(backend)
+    .use(detector)
+    .init(options);
 
 /**
  * Subscribe to get notified about locale changes
@@ -91,8 +92,10 @@ export const initLocale = ({
 export const onLanguageChange = listener => {
   languageChangelisteners.push(listener);
 
-  return () => languageChangelisteners = languageChangelisteners.filter(
-    l => l !== listener);
+  return () =>
+    (languageChangelisteners = languageChangelisteners.filter(
+      l => l !== listener,
+    ));
 };
 
 /**
@@ -127,7 +130,6 @@ export const setLocale = lang => {
 };
 
 class LazyTranslate {
-
   constructor(key, options) {
     this.key = key;
     this.options = options;

@@ -24,7 +24,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(PortList, 'portlist');
 
 describe('PortList model tests', () => {
-
   test('should parse port ranges', () => {
     const elem = {
       id: '1337',
@@ -92,10 +91,7 @@ describe('PortList model tests', () => {
   test('should parse targets', () => {
     const elem = {
       targets: {
-        target: [
-          {id: '123'},
-          {id: '456'},
-        ],
+        target: [{id: '123'}, {id: '456'}],
       },
     };
     const portList = new PortList(elem);

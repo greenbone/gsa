@@ -36,9 +36,7 @@ export const StyledElement = styled.label`
   align-items: center;
   font-weight: normal;
   cursor: pointer;
-  ${props => props.disabled ?
-    {cursor: 'not-allowed'} : undefined
-  };
+  ${props => (props.disabled ? {cursor: 'not-allowed'} : undefined)};
 `;
 
 export const StyledInput = styled.input`
@@ -52,24 +50,21 @@ export const StyledInput = styled.input`
   line-height: normal;
   width: auto;
   height: auto;
-  ${props => props.disabled ?
-    {
-      cursor: 'not-allowed',
-      opacity: 0.7,
-    } : undefined
-  };
+  ${props =>
+    props.disabled
+      ? {
+          cursor: 'not-allowed',
+          opacity: 0.7,
+        }
+      : undefined};
 `;
 
 export const StyledTitle = styled.span`
-  cursor: ${props => props.disabled ? 'not-allowed' : ''};
-  opacity: ${props => props.disabled ? '0.5' : '1'};
+  cursor: ${props => (props.disabled ? 'not-allowed' : '')};
+  opacity: ${props => (props.disabled ? '0.5' : '1')};
 `;
 
-const RadioComponent = ({
-  title,
-  disabled,
-  ...other
-}) => (
+const RadioComponent = ({title, disabled, ...other}) => (
   <StyledElement disabled={disabled}>
     <Divider>
       <StyledInput
@@ -78,11 +73,11 @@ const RadioComponent = ({
         type="radio"
         data-testid="radio-input"
       />
-      {isDefined(title) &&
+      {isDefined(title) && (
         <StyledTitle data-testid="radio-title" disabled={disabled}>
           {title}
         </StyledTitle>
-      }
+      )}
     </Divider>
   </StyledElement>
 );

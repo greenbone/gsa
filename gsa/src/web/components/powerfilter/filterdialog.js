@@ -30,7 +30,6 @@ import withGmp from 'web/utils/withGmp';
 import SaveDialog from '../dialog/savedialog';
 
 class FilterDialog extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -60,36 +59,30 @@ class FilterDialog extends React.Component {
 
   createFilter(filter) {
     const {filterName = ''} = this.state;
-    const {
-      createFilterType,
-      gmp,
-      onFilterCreated,
-    } = this.props;
+    const {createFilterType, gmp, onFilterCreated} = this.props;
 
-    return gmp.filter.create({
-      term: filter.toFilterString(),
-      type: createFilterType,
-      name: filterName,
-    }).then(response => {
-      const {data} = response;
-      // load new filter
-      return gmp.filter.get(data);
-    }).then(response => {
-      const {data: f} = response;
+    return gmp.filter
+      .create({
+        term: filter.toFilterString(),
+        type: createFilterType,
+        name: filterName,
+      })
+      .then(response => {
+        const {data} = response;
+        // load new filter
+        return gmp.filter.get(data);
+      })
+      .then(response => {
+        const {data: f} = response;
 
-      if (onFilterCreated) {
-        onFilterCreated(f);
-      }
-    });
+        if (onFilterCreated) {
+          onFilterCreated(f);
+        }
+      });
   }
 
   handleSave() {
-    let {
-      filter,
-      filterName = '',
-      filterstring,
-      saveNamedFilter,
-    } = this.state;
+    let {filter, filterName = '', filterstring, saveNamedFilter} = this.state;
     const {onFilterChanged, onCloseClick} = this.props;
 
     filter = Filter.fromString(filterstring, filter);
@@ -99,7 +92,8 @@ class FilterDialog extends React.Component {
         return this.createFilter(filter).then(onCloseClick);
       }
       return Promise.reject(
-        new Error(_('Please insert a name for the new filter')));
+        new Error(_('Please insert a name for the new filter')),
+      );
     }
 
     if (onFilterChanged && !filter.equals(this.orig_filter)) {
@@ -150,12 +144,7 @@ class FilterDialog extends React.Component {
 
   render() {
     const {children, onCloseClick} = this.props;
-    const {
-      filter,
-      filterName,
-      filterstring,
-      saveNamedFilter,
-    } = this.state;
+    const {filter, filterName, filterstring, saveNamedFilter} = this.state;
 
     if (!isDefined(filter)) {
       return null;
@@ -169,23 +158,25 @@ class FilterDialog extends React.Component {
         onClose={onCloseClick}
         onSave={this.handleSave}
       >
-        {() => children({
-          ...this.props,
-          filterstring: filterstring,
-          filterName: filterName,
-          filter: filter,
-          saveNamedFilter,
-          onFilterChange: this.handleFilterChange,
-          onFilterValueChange: this.onFilterValueChange,
-          onFilterStringChange: this.onFilterStringChange,
-          onSortOrderChange: this.onSortOrderChange,
-          onSortByChange: this.onSortByChange,
-          onValueChange: this.onValueChange,
-        })}
+        {() =>
+          children({
+            ...this.props,
+            filterstring: filterstring,
+            filterName: filterName,
+            filter: filter,
+            saveNamedFilter,
+            onFilterChange: this.handleFilterChange,
+            onFilterValueChange: this.onFilterValueChange,
+            onFilterStringChange: this.onFilterStringChange,
+            onSortOrderChange: this.onSortOrderChange,
+            onSortByChange: this.onSortByChange,
+            onValueChange: this.onValueChange,
+          })
+        }
       </SaveDialog>
     );
   }
-};
+}
 
 FilterDialog.propTypes = {
   children: PropTypes.func.isRequired,

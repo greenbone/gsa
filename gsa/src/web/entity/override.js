@@ -36,19 +36,14 @@ import IconDivider from 'web/components/layout/icondivider';
 
 import DetailsLink from 'web/components/link/detailslink';
 
-const OverrideBox = ({
-  override,
-  detailsLink = true,
-}) => {
+const OverrideBox = ({override, detailsLink = true}) => {
   let severity;
   let new_severity = '';
   if (!isDefined(override.severity)) {
     severity = _('Any');
-  }
-  else if (override.severity > LOG_VALUE) {
+  } else if (override.severity > LOG_VALUE) {
     severity = _('Severity > 0.0');
-  }
-  else {
+  } else {
     severity = translatedResultSeverityRiskFactor(override.severity);
   }
 
@@ -64,14 +59,18 @@ const OverrideBox = ({
         type="override"
         title={_('Override Details')}
       >
-        <DetailsIcon/>
+        <DetailsIcon />
       </DetailsLink>
     </IconDivider>
-  ) : undefined;
+  ) : (
+    undefined
+  );
   return (
     <EntityBox
-      title={_('Override from {{- severity}} to {{- new_severity}}',
-        {severity, new_severity})}
+      title={_('Override from {{- severity}} to {{- new_severity}}', {
+        severity,
+        new_severity,
+      })}
       text={override.text}
       end={override.endTime}
       toolbox={toolbox}

@@ -34,13 +34,13 @@ import Radio from '../../components/form/radio.js';
 const VALUE = 'Filter count at least';
 
 const FilterCountLeastConditionPart = ({
-    condition,
-    atLeastFilterId,
-    atLeastCount,
-    filters,
-    prefix,
-    onChange,
-  }) => {
+  condition,
+  atLeastFilterId,
+  atLeastCount,
+  filters,
+  prefix,
+  onChange,
+}) => {
   return (
     <Divider>
       <Radio
@@ -49,17 +49,14 @@ const FilterCountLeastConditionPart = ({
         name="condition"
         checked={condition === VALUE}
         onChange={onChange}
-      >
-      </Radio>
+      />
       <Select
         value={atLeastFilterId}
         name={prefix + 'at_least_filter_id'}
         items={renderSelectItems(filters)}
         onChange={onChange}
       />
-      <Layout>
-        {_('matches at least')}
-      </Layout>
+      <Layout>{_('matches at least')}</Layout>
       <Spinner
         value={atLeastCount}
         name={prefix + 'at_least_count'}
@@ -68,9 +65,7 @@ const FilterCountLeastConditionPart = ({
         size="5"
         onChange={onChange}
       />
-      <Layout>
-        {_('result(s) NVT(s)')}
-      </Layout>
+      <Layout>{_('result(s) NVT(s)')}</Layout>
     </Divider>
   );
 };

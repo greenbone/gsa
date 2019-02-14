@@ -92,8 +92,7 @@ const transformTopologyData = (data = []) => {
 
         if (isDefined(sourceHost)) {
           sourceHost.links.push(newLink);
-        }
-        else {
+        } else {
           hostsObject[source] = {
             id: source,
             name: source,
@@ -105,8 +104,7 @@ const transformTopologyData = (data = []) => {
 
         if (isDefined(targetHost)) {
           targetHost.links.push(newLink);
-        }
-        else {
+        } else {
           hostsObject[target] = {
             id: target,
             name: target,
@@ -116,7 +114,7 @@ const transformTopologyData = (data = []) => {
 
         links.push(newLink);
       }
-    };
+    }
   });
 
   const hosts = Object.values(hostsObject);
@@ -124,7 +122,6 @@ const transformTopologyData = (data = []) => {
 };
 
 export class HostsTopologyDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -138,14 +135,9 @@ export class HostsTopologyDisplay extends React.Component {
   }
 
   render() {
-    const {
-      filter,
-      ...props
-    } = this.props;
+    const {filter, ...props} = this.props;
     return (
-      <HostsTopologyLoader
-        filter={filter}
-      >
+      <HostsTopologyLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}

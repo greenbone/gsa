@@ -41,8 +41,7 @@ const dateFormat = (date, format) => {
   if (!isDate(date)) {
     if (isString(date) || isJsDate(date)) {
       date = parseDate(date);
-    }
-    else {
+    } else {
       return undefined;
     }
   }

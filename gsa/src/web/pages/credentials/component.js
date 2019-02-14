@@ -23,9 +23,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
-import {
-  ALL_CREDENTIAL_TYPES,
-} from 'gmp/models/credential';
+import {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -35,22 +33,23 @@ import EntityComponent from 'web/entity/component';
 import CredentialsDialog from './dialog';
 
 class CredentialsComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
     this.state = {dialogVisible: false};
 
-    this.handleCloseCredentialDialog =
-      this.handleCloseCredentialDialog.bind(this);
+    this.handleCloseCredentialDialog = this.handleCloseCredentialDialog.bind(
+      this,
+    );
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
     this.handleDownloadInstaller = this.handleDownloadInstaller.bind(this);
   }
 
   openCredentialsDialog(credential) {
     if (isDefined(credential)) {
-      const title = _('Edit Credential {{name}}',
-        {name: shorten(credential.name)});
+      const title = _('Edit Credential {{name}}', {
+        name: shorten(credential.name),
+      });
 
       this.setState({
         allow_insecure: credential.allow_insecure,
@@ -60,14 +59,14 @@ class CredentialsComponent extends React.Component {
         auth_algorithm: credential.auth_algorithm,
         name: credential.name,
         credential_login: credential.login,
-        privacy_algorithm: isDefined(credential.privacy) ?
-          credential.privacy.algorithm : undefined,
+        privacy_algorithm: isDefined(credential.privacy)
+          ? credential.privacy.algorithm
+          : undefined,
         types: [credential.credential_type],
         dialogVisible: true,
         title,
       });
-    }
-    else {
+    } else {
       // reset all values in state to not show values from last edit
       this.setState({
         allow_insecure: undefined,
@@ -97,15 +96,12 @@ class CredentialsComponent extends React.Component {
   }
 
   handleDownloadInstaller(credential, format) {
-    const {
-      gmp,
-      onInstallerDownloaded,
-      onInstallerDownloadError,
-    } = this.props;
+    const {gmp, onInstallerDownloaded, onInstallerDownloadError} = this.props;
 
     this.handleInteraction();
 
-    return gmp.credential.download(credential, format)
+    return gmp.credential
+      .download(credential, format)
       .then(response => {
         const {id, name} = credential;
         const filename = 'credential-' + name + '-' + id + '.' + format;
@@ -137,10 +133,7 @@ class CredentialsComponent extends React.Component {
       onSaveError,
     } = this.props;
 
-    const {
-      dialogVisible,
-      ...dialogProps
-    } = this.state;
+    const {dialogVisible, ...dialogProps} = this.state;
 
     return (
       <EntityComponent
@@ -157,10 +150,7 @@ class CredentialsComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
@@ -169,7 +159,7 @@ class CredentialsComponent extends React.Component {
               downloadinstaller: this.handleDownloadInstaller,
             })}
 
-            {dialogVisible &&
+            {dialogVisible && (
               <CredentialsDialog
                 {...dialogProps}
                 onClose={this.handleCloseCredentialDialog}
@@ -178,7 +168,7 @@ class CredentialsComponent extends React.Component {
                   return save(d).then(() => this.closeCredentialDialog());
                 }}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>

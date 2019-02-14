@@ -30,7 +30,6 @@ import EntityComponent from 'web/entity/component';
 import UserDialog from './dialog';
 
 class UserComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -47,13 +46,13 @@ class UserComponent extends React.Component {
 
     this.handleInteraction();
 
-    gmp.groups.getAll({
-      filter: 'permission=modify_group', //  list only groups current user may modify
-    }).then(resp =>
-      this.setState({groups: resp.data}));
+    gmp.groups
+      .getAll({
+        filter: 'permission=modify_group', //  list only groups current user may modify
+      })
+      .then(resp => this.setState({groups: resp.data}));
 
-    gmp.roles.getAll()
-      .then(resp => this.setState({roles: resp.data}));
+    gmp.roles.getAll().then(resp => this.setState({roles: resp.data}));
 
     gmp.user.currentAuthSettings().then(response => {
       if (isDefined(user)) {
@@ -75,8 +74,7 @@ class UserComponent extends React.Component {
           title: _('Edit User {{name}}', user),
           user,
         });
-      }
-      else {
+      } else {
         this.setState({
           accessHosts: undefined,
           accessIfaces: undefined,
@@ -161,17 +159,14 @@ class UserComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
               create: this.openUserDialog,
               edit: this.openUserDialog,
             })}
-            {dialogVisible &&
+            {dialogVisible && (
               <UserDialog
                 accessHosts={accessHosts}
                 accessIfaces={accessIfaces}
@@ -193,7 +188,7 @@ class UserComponent extends React.Component {
                   return save(d).then(() => this.closeUserDialog());
                 }}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>

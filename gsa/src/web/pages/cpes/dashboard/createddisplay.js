@@ -55,11 +55,7 @@ export const CpesCreatedTableDisplay = createDisplay({
   loaderComponent: CpesCreatedLoader,
   displayComponent: DataTableDisplay,
   title: () => _('CPEs by Creation Time'),
-  dataTitles: [
-    _l('Creation Time'),
-    _l('# of CPEs'),
-    _l('Total CPEs'),
-  ],
+  dataTitles: [_l('Creation Time'), _l('# of CPEs'), _l('Total CPEs')],
   dataRow: row => [row.label, row.y, row.y2],
   dataTransform: transformCreated,
   displayId: 'cpe-by-created-table',
@@ -67,10 +63,12 @@ export const CpesCreatedTableDisplay = createDisplay({
   filtersFilter: CPES_FILTER_FILTER,
 });
 
-registerDisplay(CpesCreatedDisplay.displayId,
-  CpesCreatedDisplay, {title: _l('Chart: CPEs by Creation Time')});
+registerDisplay(CpesCreatedDisplay.displayId, CpesCreatedDisplay, {
+  title: _l('Chart: CPEs by Creation Time'),
+});
 
-registerDisplay(CpesCreatedTableDisplay.displayId,
-  CpesCreatedTableDisplay, {title: _l('Table: CPEs by Creation Time')});
+registerDisplay(CpesCreatedTableDisplay.displayId, CpesCreatedTableDisplay, {
+  title: _l('Table: CPEs by Creation Time'),
+});
 
 // vim: set ts=2 sw=2 tw=80:

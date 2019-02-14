@@ -36,12 +36,7 @@ import TableRow from 'web/components/table/row';
 import {createEntitiesTable} from 'web/entities/table';
 import CpeIcon from 'web/components/icon/cpeicon';
 
-const Header = ({
-  currentSortBy,
-  currentSortDir,
-  sort = true,
-  onSortChange,
-}) => {
+const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => {
   return (
     <TableHeader>
       <TableRow>
@@ -91,35 +86,22 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const Row = ({
-  entity,
-  links = true,
-  onToggleDetailsClick,
-  ...props
-}) => {
+const Row = ({entity, links = true, onToggleDetailsClick, ...props}) => {
   const {name, hosts, occurrences, severity} = entity;
   return (
     <TableRow>
       <TableData>
-        <DetailsLink
-          type="cpe"
-          id={name}
-          textOnly={!links}
-        >
+        <DetailsLink type="cpe" id={name} textOnly={!links}>
           <IconDivider>
-            <CpeIcon name={name}/>
+            <CpeIcon name={name} />
             <span>{name}</span>
           </IconDivider>
         </DetailsLink>
       </TableData>
+      <TableData>{hosts.count}</TableData>
+      <TableData>{occurrences.total}</TableData>
       <TableData>
-        {hosts.count}
-      </TableData>
-      <TableData>
-        {occurrences.total}
-      </TableData>
-      <TableData>
-        <SeverityBar severity={severity}/>
+        <SeverityBar severity={severity} />
       </TableData>
     </TableRow>
   );

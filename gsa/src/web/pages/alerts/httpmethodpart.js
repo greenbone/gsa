@@ -27,11 +27,7 @@ import withPrefix from '../../utils/withPrefix.js';
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
 
-const HttpMethodPart = ({
-    prefix,
-    URL,
-    onChange,
-  }) => {
+const HttpMethodPart = ({prefix, URL, onChange}) => {
   return (
     <FormGroup title={_('HTTP Get URL')}>
       <TextField

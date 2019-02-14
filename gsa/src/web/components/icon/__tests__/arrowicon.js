@@ -25,9 +25,8 @@ import ArrowIcon from '../arrowicon';
 import {ICON_SIZE_SMALL_PIXELS} from '../withIconSize';
 
 describe('ArrowIcon component tests', () => {
-
   test('should render', () => {
-    const {element} = render(<ArrowIcon/>);
+    const {element} = render(<ArrowIcon />);
 
     expect(element).toMatchSnapshot();
 
@@ -36,27 +35,25 @@ describe('ArrowIcon component tests', () => {
   });
 
   test('should render upwards icon', () => {
-    const {element} = render(<ArrowIcon/>);
+    const {element} = render(<ArrowIcon />);
 
     expect(element).toHaveTextContent('▲');
   });
 
   test('should render downwards icon', () => {
-    const {element} = render(<ArrowIcon down={true}/>);
+    const {element} = render(<ArrowIcon down={true} />);
 
     expect(element).toHaveTextContent('▼');
   });
 
   test('should handle click', () => {
     const handler = jest.fn();
-    const {element} = render(<ArrowIcon onClick={handler}/>);
+    const {element} = render(<ArrowIcon onClick={handler} />);
 
     fireEvent.click(element);
 
     expect(handler).toHaveBeenCalled();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:
-

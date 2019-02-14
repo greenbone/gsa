@@ -35,7 +35,6 @@ import {renderDonutChartIcons} from '../datadisplayicons';
 import transformSeverityData from './severityclasstransform';
 
 class SeverityClassDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -45,7 +44,6 @@ class SeverityClassDisplay extends React.Component {
   handleDataClick(data) {
     const {onFilterChanged, filter} = this.props;
     const {filterValue} = data;
-
 
     let severityFilter;
     if (!isDefined(onFilterChanged)) {
@@ -57,23 +55,22 @@ class SeverityClassDisplay extends React.Component {
       const startTerm = FilterTerm.fromString(`severity>${start}`);
       const endTerm = FilterTerm.fromString(`severity<${end}`);
 
-      if (isDefined(filter) && filter.hasTerm(startTerm) &&
-        filter.hasTerm(endTerm)) {
+      if (
+        isDefined(filter) &&
+        filter.hasTerm(startTerm) &&
+        filter.hasTerm(endTerm)
+      ) {
         return;
       }
 
-      severityFilter = Filter.fromTerm(startTerm)
-        .and(Filter.fromTerm(endTerm));
-    }
-    else {
+      severityFilter = Filter.fromTerm(startTerm).and(Filter.fromTerm(endTerm));
+    } else {
       let severityTerm;
       if (start > 0) {
         severityTerm = FilterTerm.fromString(`severity>${start}`);
-      }
-      else if (start === NA_VALUE) {
+      } else if (start === NA_VALUE) {
         severityTerm = FilterTerm.fromString('severity=""');
-      }
-      else {
+      } else {
         severityTerm = FilterTerm.fromString(`severity=${start}`);
       }
 
@@ -84,17 +81,15 @@ class SeverityClassDisplay extends React.Component {
       severityFilter = Filter.fromTerm(severityTerm);
     }
 
-    const newFilter = isDefined(filter) ? filter.copy().and(severityFilter) :
-      severityFilter;
+    const newFilter = isDefined(filter)
+      ? filter.copy().and(severityFilter)
+      : severityFilter;
 
     onFilterChanged(newFilter);
   }
 
   render() {
-    const {
-      onFilterChanged,
-      ...props
-    } = this.props;
+    const {onFilterChanged, ...props} = this.props;
     return (
       <DataDisplay
         {...props}
@@ -112,10 +107,12 @@ class SeverityClassDisplay extends React.Component {
             data={data}
             show3d={state.show3d}
             showLegend={state.showLegend}
-            onDataClick={isDefined(onFilterChanged) ?
-              this.handleDataClick : undefined}
-            onLegendItemClick={isDefined(onFilterChanged) ?
-              this.handleDataClick : undefined}
+            onDataClick={
+              isDefined(onFilterChanged) ? this.handleDataClick : undefined
+            }
+            onLegendItemClick={
+              isDefined(onFilterChanged) ? this.handleDataClick : undefined
+            }
           />
         )}
       </DataDisplay>

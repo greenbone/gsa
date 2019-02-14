@@ -22,7 +22,6 @@ import React from 'react';
 import PropTypes from 'web/utils/proptypes.js';
 
 class IconSizeProvider extends React.Component {
-
   getChildContext() {
     return {
       iconSize: this.props.size,
@@ -32,11 +31,7 @@ class IconSizeProvider extends React.Component {
   render() {
     const {children} = this.props;
     if (React.Children.count(children) > 1) {
-      return (
-        <React.Fragment>
-          {children}
-        </React.Fragment>
-      );
+      return <React.Fragment>{children}</React.Fragment>;
     }
     return children;
   }

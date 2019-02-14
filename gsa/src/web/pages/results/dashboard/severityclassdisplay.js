@@ -30,8 +30,8 @@ import {ResultsSeverityLoader} from './loaders';
 export const ResultsSeverityDisplay = createDisplay({
   loaderComponent: ResultsSeverityLoader,
   displayComponent: SeverityClassDisplay,
-  title: ({data: tdata}) => _('Results by Severity Class (Total: {{count}})',
-    {count: tdata.total}),
+  title: ({data: tdata}) =>
+    _('Results by Severity Class (Total: {{count}})', {count: tdata.total}),
   filtersFilter: RESULTS_FILTER_FILTER,
   displayId: 'result-by-severity-class',
   displayName: 'ResultsSeverityDisplay',
@@ -40,12 +40,9 @@ export const ResultsSeverityDisplay = createDisplay({
 export const ResultsSeverityTableDisplay = createDisplay({
   loaderComponent: ResultsSeverityLoader,
   displayComponent: SeverityClassTableDisplay,
-  title: ({data: tdata}) => _('Results by Severity Class (Total: {{count}})',
-    {count: tdata.total}),
-  dataTitles: [
-    _l('Severity Class'),
-    _l('# of Results'),
-  ],
+  title: ({data: tdata}) =>
+    _('Results by Severity Class (Total: {{count}})', {count: tdata.total}),
+  dataTitles: [_l('Severity Class'), _l('# of Results')],
   filtersFilter: RESULTS_FILTER_FILTER,
   displayId: 'result-by-severity-class-table',
   displayName: 'ResultsSeverityTableDisplay',
@@ -55,8 +52,10 @@ registerDisplay(ResultsSeverityDisplay.displayId, ResultsSeverityDisplay, {
   title: _l('Chart: Results by Severity Class'),
 });
 
-registerDisplay(ResultsSeverityTableDisplay.displayId,
-  ResultsSeverityTableDisplay, {
+registerDisplay(
+  ResultsSeverityTableDisplay.displayId,
+  ResultsSeverityTableDisplay,
+  {
     title: _l('Table: Results by Severity Class'),
   },
 );

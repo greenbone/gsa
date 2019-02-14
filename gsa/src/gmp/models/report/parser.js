@@ -23,11 +23,7 @@ import 'core-js/fn/string/starts-with';
 
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-import {
-  filter as filter_func,
-  forEach,
-  map,
-} from 'gmp/utils/array';
+import {filter as filter_func, forEach, map} from 'gmp/utils/array';
 
 import {parseSeverity, parseDate} from 'gmp/parser';
 
@@ -63,7 +59,6 @@ const get_cert = (certs, fingerprint) => {
   if (!isDefined(cert)) {
     cert = new TLSCertificate(fingerprint);
     certs[fingerprint] = cert;
-
   }
   return cert;
 };
@@ -94,8 +89,7 @@ export const parse_tls_certificates = (report, filter) => {
         cert.ip = host.ip;
 
         cert.addPort(port);
-      }
-      else if (name.startsWith('SSLDetails')) {
+      } else if (name.startsWith('SSLDetails')) {
         const [, fingerprint] = name.split(':');
 
         const cert = get_cert(host_certs, fingerprint);
@@ -110,8 +104,7 @@ export const parse_tls_certificates = (report, filter) => {
         }, cert);
 
         cert.details = value;
-      }
-      else if (name.startsWith('Cert')) {
+      } else if (name.startsWith('Cert')) {
         const [, fingerprint] = name.split(':');
 
         const cert = get_cert(host_certs, fingerprint);
@@ -125,12 +118,10 @@ export const parse_tls_certificates = (report, filter) => {
         if (value.includes(':')) {
           const [, data] = value.split(':');
           cert.data = data;
-        }
-        else {
+        } else {
           cert.data = value;
         }
-      }
-      else if (name === 'hostname') {
+      } else if (name === 'hostname') {
         // collect hostnames
         hostname = value;
       }
@@ -197,8 +188,7 @@ export const parse_ports = (report, filter) => {
         const severity = parseSeverity(port.severity);
 
         tport.setSeverity(severity);
-      }
-      else {
+      } else {
         tport = new Port(port);
         temp_ports[id] = tport;
       }
@@ -245,10 +235,8 @@ export const parse_vulnerabilities = (report, filter) => {
       let vuln = temp_vulns[oid];
 
       if (isDefined(vuln)) {
-
         vuln.addResult(results);
-      }
-      else {
+      } else {
         vuln = new Vulerability(result);
         temp_vulns[oid] = vuln;
       }
@@ -292,10 +280,14 @@ export const parse_apps = (report, filter) => {
   forEach(results.result, result => {
     const result_severity = parseSeverity(result.severity);
 
-    if (isDefined(result.detection) && isDefined(result.detection.result) &&
-      isDefined(result.detection.result.details)) {
-      filter_func(result.detection.result.details.detail,
-        detail => detail.name === 'product'
+    if (
+      isDefined(result.detection) &&
+      isDefined(result.detection.result) &&
+      isDefined(result.detection.result.details)
+    ) {
+      filter_func(
+        result.detection.result.details.detail,
+        detail => detail.name === 'product',
       ).forEach(detail => {
         const {value: cpe} = detail;
 
@@ -306,8 +298,7 @@ export const parse_apps = (report, filter) => {
             if (severity < result_severity) {
               severities[cpe] = result_severity;
             }
-          }
-          else {
+          } else {
             severities[cpe] = result_severity;
           }
         }
@@ -332,14 +323,12 @@ export const parse_apps = (report, filter) => {
         }
 
         app.addHost(host);
-      }
-      else if (name.startsWith('cpe:/a')) {
+      } else if (name.startsWith('cpe:/a')) {
         const details_count_for_cpe = cpe_host_details[name];
 
         if (isDefined(details_count_for_cpe)) {
           cpe_host_details[name] += 1;
-        }
-        else {
+        } else {
           cpe_host_details[name] = 1;
         }
       }
@@ -352,7 +341,7 @@ export const parse_apps = (report, filter) => {
   for (const app of apps_array) {
     const details_count_for_cpe = cpe_host_details[app.id];
     app.addOccurence(details_count_for_cpe);
-  };
+  }
 
   const {length: filtered_count} = apps_array;
 
@@ -387,8 +376,7 @@ export const parse_host_severities = (results = {}) => {
         if (severity < result_severity) {
           severities[ip] = result_severity;
         }
-      }
-      else {
+      } else {
         severities[ip] = result_severity;
       }
     }
@@ -419,8 +407,7 @@ export const parse_operatingsystems = (report, filter) => {
         const {name, value} = detail;
         if (name === 'best_os_cpe') {
           best_os_cpe = value;
-        }
-        else if (name === 'best_os_txt') {
+        } else if (name === 'best_os_txt') {
           best_os_txt = value;
         }
       });
@@ -549,8 +536,9 @@ export const parse_errors = (report, filter) => {
     }
   });
 
-  const errors_array = filter_func(errors.error, error =>
-    isDefined(error.host) && isDefined(error.nvt)
+  const errors_array = filter_func(
+    errors.error,
+    error => isDefined(error.host) && isDefined(error.nvt),
   ).map(error => {
     const {host, description, port, nvt} = error;
     const {__text: ip, asset} = host;
@@ -561,8 +549,10 @@ export const parse_errors = (report, filter) => {
       host: {
         ip,
         name: hostname,
-        id: isDefined(asset) && !isEmpty(asset._asset_id) ?
-          asset._asset_id : undefined,
+        id:
+          isDefined(asset) && !isEmpty(asset._asset_id)
+            ? asset._asset_id
+            : undefined,
       },
       nvt: {
         id: nvt._oid,
@@ -611,19 +601,20 @@ export const parse_closed_cves = (report, filter) => {
 
       if (isDefined(name)) {
         if (name.startsWith('Closed CVE')) {
-          host_cves = host_cves.concat(value.split(',').map(val => {
-            return {
-              id: val.trim(),
-              host: {
-                ip: host.ip,
-                id: isDefined(host.asset) ? host.asset._asset_id : undefined,
-              },
-              source,
-              severity: parseSeverity(extra),
-            };
-          }));
-        }
-        else if (name === 'hostname') {
+          host_cves = host_cves.concat(
+            value.split(',').map(val => {
+              return {
+                id: val.trim(),
+                host: {
+                  ip: host.ip,
+                  id: isDefined(host.asset) ? host.asset._asset_id : undefined,
+                },
+                source,
+                severity: parseSeverity(extra),
+              };
+            }),
+          );
+        } else if (name === 'hostname') {
           // collect hostname
           hostname = value;
         }
@@ -665,8 +656,10 @@ export const parse_cves = (report, filter) => {
 
   const cves = {};
 
-  const results_with_cve = filter_func(results.result,
-    result => result.nvt.cve !== 'NOCVE' && !isEmpty(result.nvt.cve));
+  const results_with_cve = filter_func(
+    results.result,
+    result => result.nvt.cve !== 'NOCVE' && !isEmpty(result.nvt.cve),
+  );
 
   results_with_cve.forEach(result => {
     const {host = {}, nvt = {}} = result;

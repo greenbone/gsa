@@ -51,47 +51,22 @@ const Header = ({
   return (
     <TableHeader>
       <TableRow>
-        <TableHead
-          {...sortProps}
-          sortBy="name"
-          width="41%"
-        >
+        <TableHead {...sortProps} sortBy="name" width="41%">
           {_('Name')}
         </TableHead>
-        <TableHead
-          {...sortProps}
-          width="8%"
-          sortBy="status"
-        >
+        <TableHead {...sortProps} width="8%" sortBy="status">
           {_('Status')}
         </TableHead>
-        <TableHead
-          {...sortProps}
-          sortBy="total"
-          width="6%"
-        >
+        <TableHead {...sortProps} sortBy="total" width="6%">
           {_('Reports')}
         </TableHead>
-        <TableHead
-          {...sortProps}
-          sortBy="last"
-          width="24%"
-        >
+        <TableHead {...sortProps} sortBy="last" width="24%">
           {_('Last Report')}
         </TableHead>
-        <TableHead
-          {...sortProps}
-          width="8%"
-          sortBy="severity"
-        >
+        <TableHead {...sortProps} width="8%" sortBy="severity">
           {_('Severity')}
         </TableHead>
-        <TableHead
-          {...sortProps}
-          align="center"
-          width="5%"
-          sortBy="trend"
-        >
+        <TableHead {...sortProps} align="center" width="5%" sortBy="trend">
           {_('Trend')}
         </TableHead>
         {actionsColumn}
@@ -110,11 +85,7 @@ Header.propTypes = {
 };
 
 const actionsColumn = (
-  <TableHead
-    width="10em"
-    title={_l('Actions')}
-    align="center"
-  />
+  <TableHead width="10em" title={_l('Actions')} align="center" />
 );
 
 export default createEntitiesTable({

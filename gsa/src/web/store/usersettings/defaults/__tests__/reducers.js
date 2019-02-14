@@ -20,7 +20,6 @@ import {loadingActions} from '../actions';
 import reducer from '../reducers';
 
 describe('UserSetting Defaults reducer tests', () => {
-
   test('should create the default state', () => {
     expect(reducer(undefined, {})).toEqual({
       byName: {},
@@ -131,7 +130,6 @@ describe('UserSetting Defaults reducer tests', () => {
       isLoading: false,
     });
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -18,7 +18,6 @@
  */
 
 class HttpCommand {
-
   constructor(http, params = {}) {
     this.http = http;
     this._params = params;

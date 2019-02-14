@@ -44,10 +44,10 @@ const StyledInput = styled.input`
   /* "hack" to overshadow default color in Chrome's autofilled input fields */
   &:-webkit-autofill {
     box-shadow: 0 0 0 1000px white inset;
-  };
-  cursor: ${props => props.disabled ? 'not-allowed' : undefined};
-  background-color: ${props => props.disabled ? Theme.dialogGray : undefined};
-  opacity: ${props => props.disabled ? DISABLED_OPACTIY : undefined};
+  }
+  cursor: ${props => (props.disabled ? 'not-allowed' : undefined)};
+  background-color: ${props => (props.disabled ? Theme.dialogGray : undefined)};
+  opacity: ${props => (props.disabled ? DISABLED_OPACTIY : undefined)};
 `;
 
 export default compose(

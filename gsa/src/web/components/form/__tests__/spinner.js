@@ -25,13 +25,8 @@ import {render, fireEvent} from 'web/utils/testing';
 import Spinner from '../spinner';
 
 describe('Spinner tests', () => {
-
   test('should render', () => {
-    const {element, getByTestId} = render(
-      <Spinner
-        value={1}
-      />
-    );
+    const {element, getByTestId} = render(<Spinner value={1} />);
 
     const input = getByTestId('spinner-input');
     expect(input).toHaveAttribute('value', '1');
@@ -41,12 +36,7 @@ describe('Spinner tests', () => {
 
   test('should call change handler', () => {
     const handler = jest.fn();
-    const {getByTestId} = render(
-      <Spinner
-        value={1}
-        onChange={handler}
-      />
-    );
+    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const input = getByTestId('spinner-input');
     fireEvent.change(input, {target: {value: '2'}});
@@ -57,11 +47,7 @@ describe('Spinner tests', () => {
   test('should call change handler with name', () => {
     const handler = jest.fn();
     const {getByTestId} = render(
-      <Spinner
-        name="foo"
-        value={1}
-        onChange={handler}
-      />
+      <Spinner name="foo" value={1} onChange={handler} />,
     );
 
     const input = getByTestId('spinner-input');
@@ -72,12 +58,7 @@ describe('Spinner tests', () => {
 
   test('should increment value on button click', () => {
     const handler = jest.fn();
-    const {getByTestId} = render(
-      <Spinner
-        value={1}
-        onChange={handler}
-      />
-    );
+    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const button = getByTestId('spinner-up');
     fireEvent.click(button);
@@ -87,12 +68,7 @@ describe('Spinner tests', () => {
 
   test('should decrement value on button click', () => {
     const handler = jest.fn();
-    const {getByTestId} = render(
-      <Spinner
-        value={1}
-        onChange={handler}
-      />
-    );
+    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const button = getByTestId('spinner-down');
     fireEvent.click(button);
@@ -102,12 +78,7 @@ describe('Spinner tests', () => {
 
   test('should increment value on wheel up', () => {
     const handler = jest.fn();
-    const {getByTestId} = render(
-      <Spinner
-        value={1}
-        onChange={handler}
-      />
-    );
+    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const input = getByTestId('spinner-input');
     fireEvent.wheel(input, {deltaY: 2});
@@ -117,12 +88,7 @@ describe('Spinner tests', () => {
 
   test('should decrement value on wheel down', () => {
     const handler = jest.fn();
-    const {getByTestId} = render(
-      <Spinner
-        value={1}
-        onChange={handler}
-      />
-    );
+    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const input = getByTestId('spinner-input');
     fireEvent.wheel(input, {deltaY: -2});
@@ -132,12 +98,7 @@ describe('Spinner tests', () => {
 
   test('should increment on key up', () => {
     const handler = jest.fn();
-    const {getByTestId} = render(
-      <Spinner
-        value={1}
-        onChange={handler}
-      />
-    );
+    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const input = getByTestId('spinner-input');
     fireEvent.keyDown(input, {key: 'ArrowUp', keyCode: KeyCode.UP});
@@ -147,12 +108,7 @@ describe('Spinner tests', () => {
 
   test('should increment on key page up', () => {
     const handler = jest.fn();
-    const {getByTestId} = render(
-      <Spinner
-        value={1}
-        onChange={handler}
-      />
-    );
+    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const input = getByTestId('spinner-input');
     fireEvent.keyDown(input, {key: 'PageUp', keyCode: KeyCode.PAGE_UP});
@@ -162,12 +118,7 @@ describe('Spinner tests', () => {
 
   test('should decrement on key down', () => {
     const handler = jest.fn();
-    const {getByTestId} = render(
-      <Spinner
-        value={1}
-        onChange={handler}
-      />
-    );
+    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const input = getByTestId('spinner-input');
     fireEvent.keyDown(input, {key: 'ArrowDown', keyCode: KeyCode.DOWN});
@@ -177,12 +128,7 @@ describe('Spinner tests', () => {
 
   test('should decrement on key page down', () => {
     const handler = jest.fn();
-    const {getByTestId} = render(
-      <Spinner
-        value={1}
-        onChange={handler}
-      />
-    );
+    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const input = getByTestId('spinner-input');
     fireEvent.keyDown(input, {key: 'PageDown', keyCode: KeyCode.PAGE_DOWN});
@@ -193,11 +139,7 @@ describe('Spinner tests', () => {
   test('should not call event handler if disabled', () => {
     const handler = jest.fn();
     const {getByTestId} = render(
-      <Spinner
-        disabled={true}
-        value={1}
-        onChange={handler}
-      />
+      <Spinner disabled={true} value={1} onChange={handler} />,
     );
 
     const input = getByTestId('spinner-input');
@@ -222,11 +164,7 @@ describe('Spinner tests', () => {
 
     const handler = jest.fn();
     const {getByTestId} = render(
-      <Spinner
-        debounce={200}
-        value={1}
-        onChange={handler}
-      />
+      <Spinner debounce={200} value={1} onChange={handler} />,
     );
 
     const ubutton = getByTestId('spinner-up');
@@ -243,11 +181,7 @@ describe('Spinner tests', () => {
   test('should not increment value beyond max', () => {
     const handler = jest.fn();
     const {getByTestId} = render(
-      <Spinner
-        value={1}
-        max={1}
-        onChange={handler}
-      />
+      <Spinner value={1} max={1} onChange={handler} />,
     );
 
     const button = getByTestId('spinner-up');
@@ -259,11 +193,7 @@ describe('Spinner tests', () => {
   test('should not decrement value below min', () => {
     const handler = jest.fn();
     const {getByTestId} = render(
-      <Spinner
-        value={1}
-        min={1}
-        onChange={handler}
-      />
+      <Spinner value={1} min={1} onChange={handler} />,
     );
 
     const button = getByTestId('spinner-down');
@@ -275,11 +205,7 @@ describe('Spinner tests', () => {
   test('should increment float value', () => {
     const handler = jest.fn();
     const {getByTestId} = render(
-      <Spinner
-        type="float"
-        value={1}
-        onChange={handler}
-      />
+      <Spinner type="float" value={1} onChange={handler} />,
     );
 
     const button = getByTestId('spinner-up');
@@ -291,12 +217,7 @@ describe('Spinner tests', () => {
   test('should increment value with step', () => {
     const handler = jest.fn();
     const {getByTestId} = render(
-      <Spinner
-        step={0.5}
-        type="float"
-        value={1}
-        onChange={handler}
-      />
+      <Spinner step={0.5} type="float" value={1} onChange={handler} />,
     );
 
     const button = getByTestId('spinner-up');
@@ -304,5 +225,4 @@ describe('Spinner tests', () => {
 
     expect(handler).toHaveBeenCalledWith(1.5, undefined);
   });
-
 });

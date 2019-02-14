@@ -29,21 +29,14 @@ import Theme from 'web/utils/theme';
 const EmptyGridRow = styled.div`
   margin: 8px 0px;
   min-height: 50px;
-  display: ${props => props.active ? 'flex' : 'none'};
+  display: ${props => (props.active ? 'flex' : 'none')};
   border: 1px dashed ${Theme.lightGray};
-  background: ${props => props.isDraggingOver ? Theme.lightBlue : 'none'};
+  background: ${props => (props.isDraggingOver ? Theme.lightBlue : 'none')};
   height: ${props => props.height}px;
 `;
 
-const EmptyRow = ({
-  children,
-  active = false,
-  height,
-}) => (
-  <Droppable
-    droppableId="empty"
-    direction="horizontal"
-  >
+const EmptyRow = ({children, active = false, height}) => (
+  <Droppable droppableId="empty" direction="horizontal">
     {(provided, snapshot) => (
       <EmptyGridRow
         active={active}

@@ -40,7 +40,8 @@ const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
         <Spinner
           type="int"
           name={name}
-          min="0" max="100"
+          min="0"
+          max="100"
           step="1"
           value={qod}
           size="1"

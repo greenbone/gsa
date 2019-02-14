@@ -64,10 +64,7 @@ const Header = ({
         >
           {_('Title')}
         </TableHead>
-        <TableHead
-          width="24%"
-          colSpan="3"
-        >
+        <TableHead width="24%" colSpan="3">
           {_('Severity')}
         </TableHead>
         <TableHead
@@ -90,16 +87,13 @@ const Header = ({
         >
           {_('Modified')}
         </TableHead>
-        {isDefined(actionsColumn) ?
-          actionsColumn :
-          <TableHead
-            rowSpan="2"
-            width="5em"
-            align="center"
-          >
+        {isDefined(actionsColumn) ? (
+          actionsColumn
+        ) : (
+          <TableHead rowSpan="2" width="5em" align="center">
             {_('Actions')}
           </TableHead>
-        }
+        )}
       </TableRow>
       <TableRow>
         <TableHead

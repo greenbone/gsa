@@ -43,141 +43,90 @@ import References from './references';
 import Solution from './solution';
 import Pre from './preformatted';
 
-const NvtDetails = ({
-  entity,
-  links = true,
-}) => {
+const NvtDetails = ({entity, links = true}) => {
   const {tags = {}, severity, qod, family} = entity;
   return (
-    <Layout
-      flex="column"
-      grow="1"
-    >
-
-      {isDefined(tags.summary) &&
-        <DetailsBlock
-          title={_('Summary')}
-        >
-          <Pre>
-            {tags.summary}
-          </Pre>
+    <Layout flex="column" grow="1">
+      {isDefined(tags.summary) && (
+        <DetailsBlock title={_('Summary')}>
+          <Pre>{tags.summary}</Pre>
         </DetailsBlock>
-      }
+      )}
 
-      {isDefined(tags.affected) && tags.affected !== TAG_NA &&
-        <DetailsBlock
-          title={_('Affected Software/OS')}
-        >
-          <Pre>
-            {tags.affected}
-          </Pre>
+      {isDefined(tags.affected) && tags.affected !== TAG_NA && (
+        <DetailsBlock title={_('Affected Software/OS')}>
+          <Pre>{tags.affected}</Pre>
         </DetailsBlock>
-      }
+      )}
 
-      <DetailsBlock
-        title={_('Scoring')}
-      >
+      <DetailsBlock title={_('Scoring')}>
         <InfoTable>
           <TableBody>
             <TableRow>
+              <TableData>{_('CVSS Base')}</TableData>
               <TableData>
-                {_('CVSS Base')}
-              </TableData>
-              <TableData>
-                <Severitybar severity={severity}/>
+                <Severitybar severity={severity} />
               </TableData>
             </TableRow>
 
             {isDefined(tags.cvss_base_vector) &&
-              tags.cvss_base_vector !== TAG_NA &&
-              <TableRow>
-                <TableData>
-                  {_('CVSS Base Vector')}
-                </TableData>
-                <TableData>
-                  <Link
-                    to="cvsscalculator"
-                    query={{cvssVector: tags.cvss_base_vector}}
-                  >
-                    {tags.cvss_base_vector}
-                  </Link>
-                </TableData>
-              </TableRow>
-            }
+              tags.cvss_base_vector !== TAG_NA && (
+                <TableRow>
+                  <TableData>{_('CVSS Base Vector')}</TableData>
+                  <TableData>
+                    <Link
+                      to="cvsscalculator"
+                      query={{cvssVector: tags.cvss_base_vector}}
+                    >
+                      {tags.cvss_base_vector}
+                    </Link>
+                  </TableData>
+                </TableRow>
+              )}
           </TableBody>
         </InfoTable>
       </DetailsBlock>
 
-      {isDefined(tags.insight) && tags.insight !== TAG_NA &&
-        <DetailsBlock
-          title={_('Insight')}
-        >
-          <Pre>
-            {tags.insight}
-          </Pre>
+      {isDefined(tags.insight) && tags.insight !== TAG_NA && (
+        <DetailsBlock title={_('Insight')}>
+          <Pre>{tags.insight}</Pre>
         </DetailsBlock>
-      }
+      )}
 
       {(isDefined(qod) ||
-      (isDefined(tags.vuldetect) && tags.vuldetect !== TAG_NA)) &&
-        <DetailsBlock
-          title={_('Detection Method')}
-        >
-          {isDefined(tags.vuldetect) && tags.vuldetect !== TAG_NA &&
-            <Pre>
-              {tags.vuldetect}
-            </Pre>
-          }
-          {isDefined(qod) &&
+        (isDefined(tags.vuldetect) && tags.vuldetect !== TAG_NA)) && (
+        <DetailsBlock title={_('Detection Method')}>
+          {isDefined(tags.vuldetect) && tags.vuldetect !== TAG_NA && (
+            <Pre>{tags.vuldetect}</Pre>
+          )}
+          {isDefined(qod) && (
             <Pre>
               <b>{_('Quality of Detection')}: </b>
 
-              {isDefined(qod.type) ?
-                qod.type :
-                _('N/A')
-              }
-              {isDefined(qod.value) &&
-                ' (' + qod.value + '%)'
-              }
+              {isDefined(qod.type) ? qod.type : _('N/A')}
+              {isDefined(qod.value) && ' (' + qod.value + '%)'}
             </Pre>
-          }
+          )}
         </DetailsBlock>
-      }
+      )}
 
-      {isDefined(tags.impact) && tags.impact !== TAG_NA &&
-        <DetailsBlock
-          title={_('Impact')}
-        >
-          <Pre>
-            {tags.impact}
-          </Pre>
+      {isDefined(tags.impact) && tags.impact !== TAG_NA && (
+        <DetailsBlock title={_('Impact')}>
+          <Pre>{tags.impact}</Pre>
         </DetailsBlock>
-      }
+      )}
 
-      <Solution
-        solution={tags.solution}
-        solutionType={tags.solution_type}
-      />
+      <Solution solution={tags.solution} solutionType={tags.solution_type} />
 
-      {isDefined(family) &&
-        <DetailsBlock
-          title={_('Family')}
-        >
-          <Link
-            to="nvts"
-            filter={'family="' + family + '"'}
-            textOnly={!links}
-          >
+      {isDefined(family) && (
+        <DetailsBlock title={_('Family')}>
+          <Link to="nvts" filter={'family="' + family + '"'} textOnly={!links}>
             {family}
           </Link>
         </DetailsBlock>
-      }
+      )}
 
-      <References
-        links={links}
-        nvt={entity}
-      />
-
+      <References links={links} nvt={entity} />
     </Layout>
   );
 };

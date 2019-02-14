@@ -39,24 +39,50 @@ function convert_data(prefix, data, fields) {
 }
 
 const event_data_quick_first_scan_fields = [
-  'config_id', 'alert_id', 'scanner_id', 'smb_credential', 'ssh_credential',
-  'ssh_port', 'esxi_credential', 'hosts', 'port_list_id',
+  'config_id',
+  'alert_id',
+  'scanner_id',
+  'smb_credential',
+  'ssh_credential',
+  'ssh_port',
+  'esxi_credential',
+  'hosts',
+  'port_list_id',
 ];
 
 const event_data_quick_task_fields = [
-  'config_id', 'alert_email', 'scanner_id', 'auto_start',
-  'start_year', 'start_month', 'start_day', 'start_hour', 'start_minute',
-  'start_timezone', 'smb_credential', 'ssh_credential', 'ssh_port',
-  'esxi_credential', 'task_name', 'target_hosts', 'port_list_id',
+  'config_id',
+  'alert_email',
+  'scanner_id',
+  'auto_start',
+  'start_year',
+  'start_month',
+  'start_day',
+  'start_hour',
+  'start_minute',
+  'start_timezone',
+  'smb_credential',
+  'ssh_credential',
+  'ssh_port',
+  'esxi_credential',
+  'task_name',
+  'target_hosts',
+  'port_list_id',
 ];
 
 const event_data_modify_task_fields = [
-  'task_id', 'alert_email', 'reschedule', 'start_year', 'start_month',
-  'start_day', 'start_hour', 'start_minute', 'start_timezone',
+  'task_id',
+  'alert_email',
+  'reschedule',
+  'start_year',
+  'start_month',
+  'start_day',
+  'start_hour',
+  'start_minute',
+  'start_timezone',
 ];
 
 class WizardCommand extends HttpCommand {
-
   constructor(http) {
     super(http, {cmd: 'wizard'});
   }
@@ -70,15 +96,17 @@ class WizardCommand extends HttpCommand {
 
       settings.client_address = data.client_address;
 
-      forEach(data.wizard.run_wizard_response.response.get_settings_response
-        .setting, setting => {
+      forEach(
+        data.wizard.run_wizard_response.response.get_settings_response.setting,
+        setting => {
           settings.set(setting.name, {
             id: setting._id,
             comment: setting.comment,
             name: setting.name,
             value: setting.value,
           });
-      });
+        },
+      );
 
       return response.setData(settings);
     });
@@ -95,22 +123,24 @@ class WizardCommand extends HttpCommand {
       const settings = new Settings();
 
       forEach(resp.get_settings_response.setting, setting => {
-          settings.set(setting.name, {
-            id: setting._id,
-            comment: setting.comment,
-            name: setting.name,
-            value: setting.value,
-          });
+        settings.set(setting.name, {
+          id: setting._id,
+          comment: setting.comment,
+          name: setting.name,
+          value: setting.value,
+        });
       });
 
       settings.scan_configs = map(resp.get_configs_response.config, config => {
         return new Model(config);
       });
 
-      settings.credentials = map(resp.get_credentials_response.credential,
+      settings.credentials = map(
+        resp.get_credentials_response.credential,
         cred => {
           return new Credential(cred);
-        });
+        },
+      );
 
       settings.client_address = data.client_address;
 
@@ -129,17 +159,18 @@ class WizardCommand extends HttpCommand {
       const settings = new Settings();
 
       forEach(resp.get_settings_response.setting, setting => {
-          settings.set(setting.name, {
-            id: setting._id,
-            comment: setting.comment,
-            name: setting.name,
-            value: setting.value,
-          });
+        settings.set(setting.name, {
+          id: setting._id,
+          comment: setting.comment,
+          name: setting.name,
+          value: setting.value,
+        });
       });
 
-      settings.tasks = map(resp.get_tasks_response.task,
-        task => new Task(task))
-        .filter(task => !task.isContainer());
+      settings.tasks = map(
+        resp.get_tasks_response.task,
+        task => new Task(task),
+      ).filter(task => !task.isContainer());
 
       return response.setData(settings);
     });
@@ -155,8 +186,11 @@ class WizardCommand extends HttpCommand {
 
   runQuickTask(args) {
     const {start_date, ...other} = args;
-    const event_data = convert_data('event_data', other,
-      event_data_quick_task_fields);
+    const event_data = convert_data(
+      'event_data',
+      other,
+      event_data_quick_task_fields,
+    );
 
     event_data['event_data:start_day'] = start_date.day();
     event_data['event_data:start_month'] = start_date.month() + 1;
@@ -172,8 +206,11 @@ class WizardCommand extends HttpCommand {
   runModifyTask(args) {
     const {start_date, ...other} = args;
 
-    const event_data = convert_data('event_data', other,
-      event_data_modify_task_fields);
+    const event_data = convert_data(
+      'event_data',
+      other,
+      event_data_modify_task_fields,
+    );
 
     event_data['event_data:start_day'] = start_date.day();
     event_data['event_data:start_month'] = start_date.month() + 1;

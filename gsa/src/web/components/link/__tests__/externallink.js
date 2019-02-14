@@ -33,16 +33,12 @@ import ExternalLink from '../externallink';
 setLocale('en');
 
 describe('ExternalLink tests', () => {
-
   test('should render ExternalLink', () => {
     const {render} = rendererWith({capabilities: true, router: true});
     const {element} = render(
-      <ExternalLink
-        title="Foo"
-        to="http://foo.bar"
-      >
+      <ExternalLink title="Foo" to="http://foo.bar">
         Bar
-      </ExternalLink>
+      </ExternalLink>,
     );
 
     expect(element).toHaveTextContent('Bar');
@@ -53,12 +49,9 @@ describe('ExternalLink tests', () => {
   test('should open confirmation dialog', () => {
     const {render} = rendererWith({capabilities: true, router: true});
     const {element, baseElement} = render(
-      <ExternalLink
-        title="Foo"
-        to="http://foo.bar"
-      >
+      <ExternalLink title="Foo" to="http://foo.bar">
         Bar
-      </ExternalLink>
+      </ExternalLink>,
     );
 
     expect(queryByRole(baseElement, 'dialog')).toBeNull();
@@ -77,12 +70,9 @@ describe('ExternalLink tests', () => {
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {element, baseElement} = render(
-      <ExternalLink
-        title="Foo"
-        to="http://foo.bar"
-      >
+      <ExternalLink title="Foo" to="http://foo.bar">
         Bar
-      </ExternalLink>
+      </ExternalLink>,
     );
 
     fireEvent.click(element);
@@ -91,12 +81,14 @@ describe('ExternalLink tests', () => {
 
     fireEvent.click(getByText(dialog, 'Follow Link'));
 
-    expect(window.open).toBeCalledWith('http://foo.bar', '_blank',
-      'noopener, scrollbars=1, resizable=1');
+    expect(window.open).toBeCalledWith(
+      'http://foo.bar',
+      '_blank',
+      'noopener, scrollbars=1, resizable=1',
+    );
 
     window.open = oldOpen;
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

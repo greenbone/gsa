@@ -24,4 +24,4 @@ export default {
   rejection: noop,
 };
 
- // vim: set ts=2 sw=2 tw=80:
+// vim: set ts=2 sw=2 tw=80:

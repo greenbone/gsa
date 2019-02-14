@@ -30,14 +30,14 @@ export const getReportComposerDefaultsAction = data => ({
 });
 
 export const loadReportComposerDefaults = gmp => () => dispatch =>
-  gmp.user.getReportComposerDefaults().then(response =>
-    dispatch(getReportComposerDefaultsAction(response.data)),
-  );
+  gmp.user
+    .getReportComposerDefaults()
+    .then(response => dispatch(getReportComposerDefaultsAction(response.data)));
 
 export const saveReportComposerDefaults = gmp => defaults => dispatch =>
-  gmp.user.saveReportComposerDefaults(defaults).then(response =>
-    dispatch(getReportComposerDefaultsAction(defaults)),
-  );
+  gmp.user
+    .saveReportComposerDefaults(defaults)
+    .then(response => dispatch(getReportComposerDefaultsAction(defaults)));
 
 export const setTimezone = timezone => ({
   type: USER_SETTINGS_SET_TIMEZONE,
@@ -60,8 +60,9 @@ export const setSessionTimeout = timeout => ({
 });
 
 export const renewSessionTimeout = gmp => () => dispatch =>
-  gmp.user.renewSession().then(response =>
-    dispatch(setSessionTimeout(response.data)));
+  gmp.user
+    .renewSession()
+    .then(response => dispatch(setSessionTimeout(response.data)));
 
 export const updateTimezone = gmp => timezone => dispatch => {
   gmp.setTimezone(timezone);

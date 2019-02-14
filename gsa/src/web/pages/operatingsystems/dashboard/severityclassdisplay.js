@@ -31,8 +31,9 @@ export const OsSeverityClassDisplay = createDisplay({
   loaderComponent: OsAverageSeverityLoader,
   displayComponent: SeverityClassDisplay,
   title: ({data: tdata}) =>
-    _('Operating Systems by Severity Class (Total: {{count}})',
-      {count: tdata.total}),
+    _('Operating Systems by Severity Class (Total: {{count}})', {
+      count: tdata.total,
+    }),
   displayId: 'os-by-severity-class',
   displayName: 'OsSeverityClassDisplay',
   filtersFilter: OS_FILTER_FILTER,
@@ -42,12 +43,10 @@ export const OsSeverityClassTableDisplay = createDisplay({
   loaderComponent: OsAverageSeverityLoader,
   displayComponent: SeverityClassTableDisplay,
   title: ({data: tdata}) =>
-    _('Operating Systems by Severity Class (Total: {{count}})',
-      {count: tdata.total}),
-  dataTitles: [
-    _l('Severity Class'),
-    _l('# of Operating Systems'),
-  ],
+    _('Operating Systems by Severity Class (Total: {{count}})', {
+      count: tdata.total,
+    }),
+  dataTitles: [_l('Severity Class'), _l('# of Operating Systems')],
   displayId: 'os-by-severity-table',
   displayName: 'OsSeverityClassTableDisplay',
   filtersFilter: OS_FILTER_FILTER,
@@ -57,8 +56,10 @@ registerDisplay(OsSeverityClassDisplay.displayId, OsSeverityClassDisplay, {
   title: _l('Chart: Operating Systems by Severity Class'),
 });
 
-registerDisplay(OsSeverityClassTableDisplay.displayId,
-  OsSeverityClassTableDisplay, {
+registerDisplay(
+  OsSeverityClassTableDisplay.displayId,
+  OsSeverityClassTableDisplay,
+  {
     title: _l('Table: Operating Systems by Severity Class'),
   },
 );

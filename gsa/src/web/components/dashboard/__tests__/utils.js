@@ -32,7 +32,6 @@ import {
 } from '../utils';
 
 describe('getPermittedDisplayIds tests', () => {
-
   test('should return undefined for undefined', () => {
     expect(getPermittedDisplayIds()).toBeUndefined();
   });
@@ -47,11 +46,9 @@ describe('getPermittedDisplayIds tests', () => {
     };
     expect(getPermittedDisplayIds(settings)).toEqual(['foo', 'bar']);
   });
-
 });
 
 describe('getRows tests', () => {
-
   test('should return undefined for undefined', () => {
     expect(getRows()).toBeUndefined();
   });
@@ -70,11 +67,9 @@ describe('getRows tests', () => {
   test('should return default for undefined rows', () => {
     expect(getRows({}, [])).toEqual([]);
   });
-
 });
 
 describe('convertDefaultDisplays test', () => {
-
   test('should return empty array', () => {
     expect(convertDefaultDisplays()).toEqual({
       rows: [],
@@ -85,156 +80,209 @@ describe('convertDefaultDisplays test', () => {
     let i = 1;
     const uuid = jest.fn().mockImplementation(() => i++);
 
-    const rows = [[
-      'foo',
-      'bar',
-    ], [
-      'lorem',
-    ]];
+    const rows = [['foo', 'bar'], ['lorem']];
 
     expect(convertDefaultDisplays(rows, uuid)).toEqual({
-      rows: [{
-        height: DEFAULT_ROW_HEIGHT,
-        id: 3,
-        items: [{
-          id: 1,
-          displayId: 'foo',
-        }, {
-          id: 2,
-          displayId: 'bar',
-        }],
-      }, {
-        height: DEFAULT_ROW_HEIGHT,
-        id: 5,
-        items: [{
-          id: 4,
-          displayId: 'lorem',
-        }],
-      }],
+      rows: [
+        {
+          height: DEFAULT_ROW_HEIGHT,
+          id: 3,
+          items: [
+            {
+              id: 1,
+              displayId: 'foo',
+            },
+            {
+              id: 2,
+              displayId: 'bar',
+            },
+          ],
+        },
+        {
+          height: DEFAULT_ROW_HEIGHT,
+          id: 5,
+          items: [
+            {
+              id: 4,
+              displayId: 'lorem',
+            },
+          ],
+        },
+      ],
     });
   });
-
 });
 
 describe('removeDisplay tests', () => {
-
   test('should not crash for undefined rows', () => {
     expect(removeDisplay()).toEqual([]);
   });
 
   test('should filter empty rows', () => {
-    const rows = [{
-      items: [],
-    }, {
-      items: [{
-        id: 1,
-      }],
-    }];
+    const rows = [
+      {
+        items: [],
+      },
+      {
+        items: [
+          {
+            id: 1,
+          },
+        ],
+      },
+    ];
 
     const filtered = removeDisplay(rows);
     expect(filtered.length).toEqual(1);
-    expect(filtered).toEqual([{
-      items: [{
-        id: 1,
-      }],
-    }]);
+    expect(filtered).toEqual([
+      {
+        items: [
+          {
+            id: 1,
+          },
+        ],
+      },
+    ]);
   });
 
   test('should remove item with id', () => {
-    const rows = [{
-      items: [{
-        id: 1,
-      }, {
-        id: 2,
-      }],
-    }, {
-      items: [{
-        id: 3,
-      }],
-    }];
+    const rows = [
+      {
+        items: [
+          {
+            id: 1,
+          },
+          {
+            id: 2,
+          },
+        ],
+      },
+      {
+        items: [
+          {
+            id: 3,
+          },
+        ],
+      },
+    ];
 
     const filtered = removeDisplay(rows, 1);
     expect(filtered.length).toEqual(2);
-    expect(filtered).toEqual([{
-      items: [{
-        id: 2,
-      }],
-    }, {
-      items: [{
-        id: 3,
-      }],
-    }]);
+    expect(filtered).toEqual([
+      {
+        items: [
+          {
+            id: 2,
+          },
+        ],
+      },
+      {
+        items: [
+          {
+            id: 3,
+          },
+        ],
+      },
+    ]);
   });
-
 });
 
 describe('filterDisplays tests', () => {
-
   test('should not crash for undefined rows', () => {
     expect(filterDisplays()).toEqual([]);
   });
 
   test('should not filter if isAllowed is not provided', () => {
-    const rows = [{
-      items: [{
-        id: 'a1',
-      }, {
-        id: 'a2',
-      }],
-    }, {
-      items: [{
-        id: 'a3',
-      }],
-    }];
+    const rows = [
+      {
+        items: [
+          {
+            id: 'a1',
+          },
+          {
+            id: 'a2',
+          },
+        ],
+      },
+      {
+        items: [
+          {
+            id: 'a3',
+          },
+        ],
+      },
+    ];
     expect(filterDisplays(rows)).toEqual(rows);
   });
 
   test('should filter display', () => {
-    const rows = [{
-      items: [{
-        id: 'a1',
-      }, {
-        id: 'a2',
-      }],
-    }, {
-      items: [{
-        id: 'a3',
-      }],
-    }];
+    const rows = [
+      {
+        items: [
+          {
+            id: 'a1',
+          },
+          {
+            id: 'a2',
+          },
+        ],
+      },
+      {
+        items: [
+          {
+            id: 'a3',
+          },
+        ],
+      },
+    ];
     const isAllowed = id => id !== 'a2';
-    expect(filterDisplays(rows, isAllowed)).toEqual([{
-      items: [{
-        id: 'a1',
-      }],
-    }, {
-      items: [{
-        id: 'a3',
-      }],
-    }]);
+    expect(filterDisplays(rows, isAllowed)).toEqual([
+      {
+        items: [
+          {
+            id: 'a1',
+          },
+        ],
+      },
+      {
+        items: [
+          {
+            id: 'a3',
+          },
+        ],
+      },
+    ]);
   });
 });
 
 describe('getDisplaysById tests', () => {
-
   test('should not crash for empty argument', () => {
     expect(getDisplaysById()).toEqual({});
   });
 
   test('should convert to id mapping', () => {
-    const rows = [{
-      items: [{
-        id: 'a1',
-        value: 1,
-      }, {
-        id: 'a2',
-        value: 2,
-      }],
-    }, {
-      items: [{
-        id: 'a3',
-        value: 3,
-      }],
-    }];
+    const rows = [
+      {
+        items: [
+          {
+            id: 'a1',
+            value: 1,
+          },
+          {
+            id: 'a2',
+            value: 2,
+          },
+        ],
+      },
+      {
+        items: [
+          {
+            id: 'a3',
+            value: 3,
+          },
+        ],
+      },
+    ];
     expect(getDisplaysById(rows)).toEqual({
       a1: {
         id: 'a1',
@@ -250,74 +298,87 @@ describe('getDisplaysById tests', () => {
       },
     });
   });
-
 });
 
 describe('convertDisplaysToGridItems', () => {
-
   test('should return empty array for undefined', () => {
     expect(convertDisplaysToGridItems()).toEqual([]);
   });
 
   test('should convert displays to grid items', () => {
-    const rows = [{
-      id: 'r1',
-      height: 100,
-      foo: 'bar',
-      items: [{
-        id: 'a1',
-        value: 1,
-      }, {
-        id: 'a2',
-        value: 2,
-      }],
-    }, {
-      id: 'r2',
-      height: 200,
-      items: [{
-        id: 'a3',
-        value: 3,
-      }],
-    }];
+    const rows = [
+      {
+        id: 'r1',
+        height: 100,
+        foo: 'bar',
+        items: [
+          {
+            id: 'a1',
+            value: 1,
+          },
+          {
+            id: 'a2',
+            value: 2,
+          },
+        ],
+      },
+      {
+        id: 'r2',
+        height: 200,
+        items: [
+          {
+            id: 'a3',
+            value: 3,
+          },
+        ],
+      },
+    ];
 
-    expect(convertDisplaysToGridItems(rows)).toEqual([{
-      id: 'r1',
-      height: 100,
-      items: ['a1', 'a2'],
-    }, {
-      id: 'r2',
-      height: 200,
-      items: ['a3'],
-    }]);
+    expect(convertDisplaysToGridItems(rows)).toEqual([
+      {
+        id: 'r1',
+        height: 100,
+        items: ['a1', 'a2'],
+      },
+      {
+        id: 'r2',
+        height: 200,
+        items: ['a3'],
+      },
+    ]);
   });
-
 });
 
 describe('convertGridItemsToDisplays tests', () => {
-
   test('should return empty array for undefined arguments', () => {
     expect(convertGridItemsToDisplays()).toEqual([]);
   });
 
   test('should filter displays if displaysById is undefined', () => {
-    const gridItems = [{
-      id: 'r1',
-      height: 100,
-      items: ['a1', 'a2'],
-    }, {
-      id: 'r2',
-      height: 200,
-      items: ['a3'],
-    }];
-    expect(convertGridItemsToDisplays(gridItems)).toEqual([{
-      id: 'r1',
-      height: 100,
-      items: [],
-    }, {
-      id: 'r2',
-      height: 200,
-      items: [],
-    }]);
+    const gridItems = [
+      {
+        id: 'r1',
+        height: 100,
+        items: ['a1', 'a2'],
+      },
+      {
+        id: 'r2',
+        height: 200,
+        items: ['a3'],
+      },
+    ];
+    expect(convertGridItemsToDisplays(gridItems)).toEqual([
+      {
+        id: 'r1',
+        height: 100,
+        items: [],
+      },
+      {
+        id: 'r2',
+        height: 200,
+        items: [],
+      },
+    ]);
   });
 
   test('should return empty array if displaysById is undefined', () => {
@@ -330,29 +391,35 @@ describe('convertGridItemsToDisplays tests', () => {
     const a3 = {
       value: 3,
     };
-    const gridItems = [{
-      id: 'r1',
-      height: 100,
-      items: ['a1', 'a2'],
-    }, {
-      id: 'r2',
-      height: 200,
-      items: ['a3'],
-    }];
+    const gridItems = [
+      {
+        id: 'r1',
+        height: 100,
+        items: ['a1', 'a2'],
+      },
+      {
+        id: 'r2',
+        height: 200,
+        items: ['a3'],
+      },
+    ];
     const displaysById = {
       a1,
       a2,
       a3,
     };
-    expect(convertGridItemsToDisplays(gridItems, displaysById)).toEqual([{
-      id: 'r1',
-      height: 100,
-      items: [a1, a2],
-    }, {
-      id: 'r2',
-      height: 200,
-      items: [a3],
-    }]);
+    expect(convertGridItemsToDisplays(gridItems, displaysById)).toEqual([
+      {
+        id: 'r1',
+        height: 100,
+        items: [a1, a2],
+      },
+      {
+        id: 'r2',
+        height: 200,
+        items: [a3],
+      },
+    ]);
   });
 
   test('should not convert unknown row props', () => {
@@ -365,48 +432,54 @@ describe('convertGridItemsToDisplays tests', () => {
     const a3 = {
       value: 3,
     };
-    const gridItems = [{
-      id: 'r1',
-      foo: 'bar',
-      height: 100,
-      items: ['a1', 'a2'],
-    }, {
-      lorem: 'ipsum',
-      id: 'r2',
-      height: 200,
-      items: ['a3'],
-    }];
+    const gridItems = [
+      {
+        id: 'r1',
+        foo: 'bar',
+        height: 100,
+        items: ['a1', 'a2'],
+      },
+      {
+        lorem: 'ipsum',
+        id: 'r2',
+        height: 200,
+        items: ['a3'],
+      },
+    ];
     const displaysById = {
       a1,
       a2,
       a3,
     };
-    expect(convertGridItemsToDisplays(gridItems, displaysById)).toEqual([{
-      id: 'r1',
-      height: 100,
-      items: [a1, a2],
-    }, {
-      id: 'r2',
-      height: 200,
-      items: [a3],
-    }]);
+    expect(convertGridItemsToDisplays(gridItems, displaysById)).toEqual([
+      {
+        id: 'r1',
+        height: 100,
+        items: [a1, a2],
+      },
+      {
+        id: 'r2',
+        height: 200,
+        items: [a3],
+      },
+    ]);
   });
-
 });
 
 describe('canAddDisplay helper function tests', () => {
-
   test('should allow to add display without settings', () => {
     expect(canAddDisplay()).toEqual(true);
   });
 
   test('should allow to add display without existing rows', () => {
     const rows = [];
-    expect(canAddDisplay({
-      rows,
-      maxItemsPerRow: 3,
-      maxRows: 1,
-    })).toEqual(true);
+    expect(
+      canAddDisplay({
+        rows,
+        maxItemsPerRow: 3,
+        maxRows: 1,
+      }),
+    ).toEqual(true);
   });
 
   test('should allow to add display without maxItemsPerRow', () => {
@@ -415,10 +488,12 @@ describe('canAddDisplay helper function tests', () => {
         items: [1, 2, 3],
       },
     ];
-    expect(canAddDisplay({
-      rows,
-      maxRows: 1,
-    })).toEqual(true);
+    expect(
+      canAddDisplay({
+        rows,
+        maxRows: 1,
+      }),
+    ).toEqual(true);
   });
 
   test('should allow to add display without maxRows', () => {
@@ -427,10 +502,12 @@ describe('canAddDisplay helper function tests', () => {
         items: [1, 2, 3],
       },
     ];
-    expect(canAddDisplay({
-      rows,
-      maxItemsPerRow: 3,
-    })).toEqual(true);
+    expect(
+      canAddDisplay({
+        rows,
+        maxItemsPerRow: 3,
+      }),
+    ).toEqual(true);
   });
 
   test('should allow to add display if last row is not full', () => {
@@ -439,11 +516,13 @@ describe('canAddDisplay helper function tests', () => {
         items: [1, 2],
       },
     ];
-    expect(canAddDisplay({
-      rows,
-      maxItemsPerRow: 3,
-      maxRows: 1,
-    })).toEqual(true);
+    expect(
+      canAddDisplay({
+        rows,
+        maxItemsPerRow: 3,
+        maxRows: 1,
+      }),
+    ).toEqual(true);
   });
 
   test('should allow to add display if another row is possible', () => {
@@ -452,11 +531,13 @@ describe('canAddDisplay helper function tests', () => {
         items: [1, 2, 3],
       },
     ];
-    expect(canAddDisplay({
-      rows,
-      maxItemsPerRow: 3,
-      maxRows: 2,
-    })).toEqual(true);
+    expect(
+      canAddDisplay({
+        rows,
+        maxItemsPerRow: 3,
+        maxRows: 2,
+      }),
+    ).toEqual(true);
   });
 
   test('should not be able to add display if last row is full', () => {
@@ -465,46 +546,58 @@ describe('canAddDisplay helper function tests', () => {
         items: [1, 2, 3],
       },
     ];
-    expect(canAddDisplay({
-      rows,
-      maxItemsPerRow: 3,
-      maxRows: 1,
-    })).toEqual(false);
+    expect(
+      canAddDisplay({
+        rows,
+        maxItemsPerRow: 3,
+        maxRows: 1,
+      }),
+    ).toEqual(false);
   });
-
 });
 
 describe('addDisplayToSettings tests', () => {
-
   test('should create new settings', () => {
     const uuid = 'foo1';
     const uuidFunc = () => uuid;
 
     expect(addDisplayToSettings(undefined, 'a1', uuidFunc)).toEqual({
-      rows: [{
-        items: [{
-          id: uuid,
-          displayId: 'a1',
-        }],
-      }],
+      rows: [
+        {
+          items: [
+            {
+              id: uuid,
+              displayId: 'a1',
+            },
+          ],
+        },
+      ],
     });
 
     expect(addDisplayToSettings({rows: {}}, 'a1', uuidFunc)).toEqual({
-      rows: [{
-        items: [{
-          id: uuid,
-          displayId: 'a1',
-        }],
-      }],
+      rows: [
+        {
+          items: [
+            {
+              id: uuid,
+              displayId: 'a1',
+            },
+          ],
+        },
+      ],
     });
 
     expect(addDisplayToSettings({rows: []}, 'a1', uuidFunc)).toEqual({
-      rows: [{
-        items: [{
-          id: uuid,
-          displayId: 'a1',
-        }],
-      }],
+      rows: [
+        {
+          items: [
+            {
+              id: uuid,
+              displayId: 'a1',
+            },
+          ],
+        },
+      ],
     });
   });
 
@@ -512,32 +605,47 @@ describe('addDisplayToSettings tests', () => {
     const uuid = 'foo1';
     const uuidFunc = () => uuid;
     const settings = {
-      rows: [{
-        items: [{
-          id: 'u1',
-        }],
-      }, {
-        items: [{
-          id: 'u2',
-        }],
-      }],
+      rows: [
+        {
+          items: [
+            {
+              id: 'u1',
+            },
+          ],
+        },
+        {
+          items: [
+            {
+              id: 'u2',
+            },
+          ],
+        },
+      ],
       maxItemsPerRow: 2,
     };
 
     const newSettings = addDisplayToSettings(settings, 'a1', uuidFunc);
     expect(newSettings).toEqual({
-      rows: [{
-        items: [{
-          id: 'u1',
-        }],
-      }, {
-        items: [{
-          id: 'u2',
-        }, {
-          id: uuid,
-          displayId: 'a1',
-        }],
-      }],
+      rows: [
+        {
+          items: [
+            {
+              id: 'u1',
+            },
+          ],
+        },
+        {
+          items: [
+            {
+              id: 'u2',
+            },
+            {
+              id: uuid,
+              displayId: 'a1',
+            },
+          ],
+        },
+      ],
       maxItemsPerRow: 2,
     });
     expect(settings).not.toBe(newSettings);
@@ -552,41 +660,57 @@ describe('addDisplayToSettings tests', () => {
     const uuid = 'foo1';
     const uuidFunc = () => uuid;
     const settings = {
-      rows: [{
-        items: [{
-          id: 'u1',
-        }],
-      }, {
-        items: [{
-          id: 'u2',
-        }],
-      }],
+      rows: [
+        {
+          items: [
+            {
+              id: 'u1',
+            },
+          ],
+        },
+        {
+          items: [
+            {
+              id: 'u2',
+            },
+          ],
+        },
+      ],
       maxItemsPerRow: 1,
     };
 
     const newSettings = addDisplayToSettings(settings, 'a1', uuidFunc);
     expect(newSettings).toEqual({
-      rows: [{
-        items: [{
-          id: 'u1',
-        }],
-      }, {
-        items: [{
-          id: 'u2',
-        }],
-      }, {
-        id: uuid,
-        height: DEFAULT_ROW_HEIGHT,
-        items: [{
+      rows: [
+        {
+          items: [
+            {
+              id: 'u1',
+            },
+          ],
+        },
+        {
+          items: [
+            {
+              id: 'u2',
+            },
+          ],
+        },
+        {
           id: uuid,
-          displayId: 'a1',
-        }],
-      }],
+          height: DEFAULT_ROW_HEIGHT,
+          items: [
+            {
+              id: uuid,
+              displayId: 'a1',
+            },
+          ],
+        },
+      ],
       maxItemsPerRow: 1,
     });
     expect(settings).not.toBe(newSettings);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

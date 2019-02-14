@@ -19,7 +19,6 @@
 import {shouldUpdate} from '../update';
 
 describe('shouldUpdate tests', () => {
-
   test('should update if data identity has changed', () => {
     expect(shouldUpdate({data: {}}, {data: {}})).toEqual(true);
   });
@@ -56,5 +55,4 @@ describe('shouldUpdate tests', () => {
   test('should not update if unknown prop has changed', () => {
     expect(shouldUpdate({foo: false}, {foo: true})).toEqual(false);
   });
-
 });

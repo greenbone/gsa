@@ -40,10 +40,7 @@ const DialogTwoButtonFooter = ({
   onRightButtonClick,
   loading = false,
 }) => (
-  <StyledLayout
-    align={['end', 'center']}
-    shrink="0"
-  >
+  <StyledLayout align={['end', 'center']} shrink="0">
     <Button
       data-testid="dialog-close-button"
       onClick={onLeftButtonClick}

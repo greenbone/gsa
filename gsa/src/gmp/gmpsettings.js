@@ -27,8 +27,7 @@ export const DEFAULT_LOG_LEVEL = 'warn';
 const set = (storage, name, value) => {
   if (isDefined(value)) {
     storage.setItem(name, value);
-  }
-  else {
+  } else {
     storage.removeItem(name);
   }
 };

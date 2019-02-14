@@ -32,17 +32,17 @@ import OvalDefDetails from '../ovaldefs/details.js';
 const SecinfoDetails = props => {
   switch (secInfoType(props.entity)) {
     case 'nvt':
-      return <NvtDetails {...props}/>;
+      return <NvtDetails {...props} />;
     case 'cpe':
-      return <CpeDetails {...props}/>;
+      return <CpeDetails {...props} />;
     case 'cve':
-      return <CveDetails {...props}/>;
+      return <CveDetails {...props} />;
     case 'dfn_cert_adv':
-      return <DfnCertDetails {...props}/>;
+      return <DfnCertDetails {...props} />;
     case 'cert_bund_adv':
-      return <CertBundDetails {...props}/>;
+      return <CertBundDetails {...props} />;
     case 'ovaldef':
-      return <OvalDefDetails {...props}/>;
+      return <OvalDefDetails {...props} />;
     default:
       return null;
   }

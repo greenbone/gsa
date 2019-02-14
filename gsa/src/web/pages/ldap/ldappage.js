@@ -54,7 +54,6 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 class LdapAuthentication extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -76,8 +75,7 @@ class LdapAuthentication extends React.Component {
   }
 
   load() {
-    this.getLdapAuth()
-      .then(this.setState({loading: false}));
+    this.getLdapAuth().then(this.setState({loading: false}));
   }
 
   getLdapAuth() {
@@ -105,12 +103,7 @@ class LdapAuthentication extends React.Component {
   }
 
   handleSaveSettings() {
-    const {
-      authdn,
-      certificateInfo,
-      enable,
-      ldaphost,
-    } = this.state;
+    const {authdn, certificateInfo, enable, ldaphost} = this.state;
 
     const data = {
       authdn,
@@ -135,36 +128,20 @@ class LdapAuthentication extends React.Component {
         <Table>
           <TableBody>
             <TableRow>
-              <TableData>
-                {_('Activation')}
-              </TableData>
-              <TableData>
-                {certificateInfo.activationTime}
-              </TableData>
+              <TableData>{_('Activation')}</TableData>
+              <TableData>{certificateInfo.activationTime}</TableData>
             </TableRow>
             <TableRow>
-              <TableData>
-                {_('Expiration')}
-              </TableData>
-              <TableData>
-                {certificateInfo.expirationTime}
-              </TableData>
+              <TableData>{_('Expiration')}</TableData>
+              <TableData>{certificateInfo.expirationTime}</TableData>
             </TableRow>
             <TableRow>
-              <TableData>
-                {_('MD5 Fingerprint')}
-              </TableData>
-              <TableData>
-                {certificateInfo.md5_fingerprint}
-              </TableData>
+              <TableData>{_('MD5 Fingerprint')}</TableData>
+              <TableData>{certificateInfo.md5_fingerprint}</TableData>
             </TableRow>
             <TableRow>
-              <TableData>
-                {_('Issued by')}
-              </TableData>
-              <TableData>
-                {certificateInfo.issuer}
-              </TableData>
+              <TableData>{_('Issued by')}</TableData>
+              <TableData>{certificateInfo.issuer}</TableData>
             </TableRow>
           </TableBody>
         </Table>
@@ -176,15 +153,10 @@ class LdapAuthentication extends React.Component {
   render() {
     const {loading} = this.state;
     if (loading) {
-      return <Loading/>;
+      return <Loading />;
     }
 
-    const {
-      authdn,
-      certificateInfo,
-      enable,
-      ldaphost,
-    } = this.state;
+    const {authdn, certificateInfo, enable, ldaphost} = this.state;
 
     return (
       <ErrorBoundary errElement={_('page')}>
@@ -196,7 +168,7 @@ class LdapAuthentication extends React.Component {
             title={_('Help: LDAP per-User Authentication')}
           />
           <Section
-            img={<LdapIcon size="large"/>}
+            img={<LdapIcon size="large" />}
             title={_('LDAP per-User Authentication')}
           />
           <Layout flex="column">
@@ -235,10 +207,7 @@ class LdapAuthentication extends React.Component {
               </Layout>
             </FormGroup>
             <FormGroup title=" ">
-              <Button
-                width="auto"
-                onClick={this.handleSaveSettings}
-              >
+              <Button width="auto" onClick={this.handleSaveSettings}>
                 {_('Save')}
               </Button>
             </FormGroup>
@@ -260,7 +229,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(undefined, mapDispatchToProps),
+  connect(
+    undefined,
+    mapDispatchToProps,
+  ),
 )(LdapAuthentication);
 
 // vim: set ts=2 sw=2 tw=80:

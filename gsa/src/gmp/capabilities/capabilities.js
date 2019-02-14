@@ -60,7 +60,6 @@ const convertType = type => {
 };
 
 class Capabilities {
-
   constructor(cap_names) {
     this._has_caps = isDefined(cap_names);
 

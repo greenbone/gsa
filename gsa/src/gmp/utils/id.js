@@ -19,8 +19,8 @@
 import {first} from './array';
 import {isDefined, isString} from './identity';
 
-export const hasId = model => isDefined(model) && isString(model.id) &&
-  model.id.length > 0;
+export const hasId = model =>
+  isDefined(model) && isString(model.id) && model.id.length > 0;
 
 export const includesId = (list, id) => {
   for (const value of list) {
@@ -42,4 +42,3 @@ export const selectSaveId = (list, id, empty_default) => {
 };
 
 // vim: set ts=2 sw=2 tw=80:
-

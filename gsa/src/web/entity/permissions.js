@@ -48,33 +48,31 @@ const SectionElementDivider = styled(IconDivider)`
   margin-bottom: 3px;
 `;
 
-const SectionElements = withCapabilities(({
-  capabilities,
-  onPermissionCreateClick,
-}) => (
-  <Layout grow align="end">
-    <SectionElementDivider>
-      {capabilities.mayCreate('permission') &&
-        <NewIcon
-          title={_('New Permission')}
-          onClick={onPermissionCreateClick}
+const SectionElements = withCapabilities(
+  ({capabilities, onPermissionCreateClick}) => (
+    <Layout grow align="end">
+      <SectionElementDivider>
+        {capabilities.mayCreate('permission') && (
+          <NewIcon
+            title={_('New Permission')}
+            onClick={onPermissionCreateClick}
+          />
+        )}
+        <ManualIcon
+          page="gui_administration"
+          anchor="permissions"
+          title={_('Help: Permissions')}
         />
-      }
-      <ManualIcon
-        page="gui_administration"
-        anchor="permissions"
-        title={_('Help: Permissions')}
-      />
-    </SectionElementDivider>
-  </Layout>
-));
+      </SectionElementDivider>
+    </Layout>
+  ),
+);
 
 SectionElements.propTypes = {
   onPermissionCreateClick: PropTypes.func.isRequired,
 };
 
 class Permissions extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -83,10 +81,12 @@ class Permissions extends React.Component {
     };
 
     this.handleMultipleSave = this.handleMultipleSave.bind(this);
-    this.openMultiplePermissionDialog = this.openMultiplePermissionDialog
-      .bind(this);
-    this.handleCloseMultiplePermissionDialog =
-      this.handleCloseMultiplePermissionDialog.bind(this);
+    this.openMultiplePermissionDialog = this.openMultiplePermissionDialog.bind(
+      this,
+    );
+    this.handleCloseMultiplePermissionDialog = this.handleCloseMultiplePermissionDialog.bind(
+      this,
+    );
     this.openPermissionDialog = this.openPermissionDialog.bind(this);
   }
 
@@ -111,17 +111,19 @@ class Permissions extends React.Component {
       title: _('Create Multiple Permissions'),
     });
 
-    Promise
-      .all(relatedResourcesLoaders.map(func => func({entity, gmp})))
-      .then(loaded => {
+    Promise.all(relatedResourcesLoaders.map(func => func({entity, gmp}))).then(
+      loaded => {
         const related = loaded.reduce((sum, cur) => sum.concat(cur), []);
 
         this.setState({
           related,
-          includeRelated: loaded.length === 0 ?
-            CURRENT_RESOURCE_ONLY : INCLUDE_RELATED_RESOURCES,
+          includeRelated:
+            loaded.length === 0
+              ? CURRENT_RESOURCE_ONLY
+              : INCLUDE_RELATED_RESOURCES,
         });
-      });
+      },
+    );
 
     gmp.groups.getAll().then(response => {
       const {data: groups} = response;
@@ -162,7 +164,8 @@ class Permissions extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.permissions.create(data)
+    return gmp.permissions
+      .create(data)
       .then(onChanged)
       .then(() => this.closeMultiplePermissionDialog());
   }
@@ -175,11 +178,7 @@ class Permissions extends React.Component {
   }
 
   render() {
-    const {
-      entity,
-      permissions,
-      ...props
-    } = this.props;
+    const {entity, permissions, ...props} = this.props;
 
     const {
       multiplePermissionDialogVisible,
@@ -208,15 +207,10 @@ class Permissions extends React.Component {
     const count = hasPermissions ? permissions.length : 0;
 
     return (
-      <Layout
-        flex="column"
-        title={_('Permissions ({{count}})', {count})}
-      >
+      <Layout flex="column" title={_('Permissions ({{count}})', {count})}>
         {extra}
-        {count === 0 &&
-          _('No permissions available')
-        }
-        {count > 0 &&
+        {count === 0 && _('No permissions available')}
+        {count > 0 && (
           <PermissionsTable
             {...props}
             entities={permissions}
@@ -225,8 +219,8 @@ class Permissions extends React.Component {
             footnote={false}
             onPermissionEditClick={this.openPermissionDialog}
           />
-        }
-        {multiplePermissionDialogVisible &&
+        )}
+        {multiplePermissionDialogVisible && (
           <MultiplePermissionDialog
             entityType={entityType}
             entityName={entityName}
@@ -243,7 +237,7 @@ class Permissions extends React.Component {
             onClose={this.handleCloseMultiplePermissionDialog}
             onSave={this.handleMultipleSave}
           />
-        }
+        )}
       </Layout>
     );
   }
@@ -284,13 +278,7 @@ const EntityPermissions = ({
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
-    {({
-      clone,
-      create,
-      delete: delete_func,
-      download,
-      edit,
-    }) => (
+    {({clone, create, delete: delete_func, download, edit}) => (
       <Permissions
         entity={entity}
         permissions={permissions}

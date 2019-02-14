@@ -19,7 +19,6 @@
 import {debounce, throttleAnimation} from '../event';
 
 describe('debounce function tests', () => {
-
   jest.useFakeTimers();
 
   test('should debounce function', () => {
@@ -57,7 +56,6 @@ describe('debounce function tests', () => {
 });
 
 describe('throttleAnimation function tests', () => {
-
   jest.useFakeTimers();
 
   test('should throttle running callback', () => {

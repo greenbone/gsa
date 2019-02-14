@@ -27,7 +27,6 @@ import {parseSeverity, parseYesNo, YES_VALUE, parseDate} from '../parser';
 import Info from './info';
 
 class Criteria {
-
   constructor(elem) {
     const {
       criterion: criterions,
@@ -41,17 +40,20 @@ class Criteria {
     this.criterions = map(criterions, criterion => ({
       applicability_check: criterion._applicability_check,
       comment: isEmpty(criterion._comment) ? undefined : criterion._comment,
-      negate: isDefined(criterion._negate) ?
-        criterion._negate.toLowerCase() === 'true' : false,
+      negate: isDefined(criterion._negate)
+        ? criterion._negate.toLowerCase() === 'true'
+        : false,
       test_ref: criterion._test_ref,
     }));
 
     this.extend_definitions = map(extend_definitions, extend_definition => ({
       applicability_check: extend_definition._applicability_check,
-      comment: isEmpty(extend_definition._comment) ? undefined :
-        extend_definition._comment,
-      negate: isDefined(extend_definition._negate) ?
-        extend_definition._negate.toLowerCase() === 'true' : false,
+      comment: isEmpty(extend_definition._comment)
+        ? undefined
+        : extend_definition._comment,
+      negate: isDefined(extend_definition._negate)
+        ? extend_definition._negate.toLowerCase() === 'true'
+        : false,
       definition_ref: extend_definition._definition_ref,
     }));
 
@@ -69,7 +71,6 @@ class Criteria {
 }
 
 class Ovaldef extends Info {
-
   static entityType = 'ovaldef';
 
   parseProperties(elem) {
@@ -108,15 +109,14 @@ class Ovaldef extends Info {
         ret.references = map(metadata.reference, ref => ({
           id: ref._ref_id,
           source: ref._source,
-          type: isDefined(ref._source) ?
-            ref._source.toLowerCase() : undefined,
+          type: isDefined(ref._source) ? ref._source.toLowerCase() : undefined,
           url: ref._ref_url,
         }));
 
         ret.repository = {
           status: metadata.oval_repository.status,
-          changes: Object.entries(metadata.oval_repository.dates)
-            .map(([key, value]) => ({
+          changes: Object.entries(metadata.oval_repository.dates).map(
+            ([key, value]) => ({
               name: key,
               date: parseDate(value._date),
               description: value.__text,
@@ -124,20 +124,21 @@ class Ovaldef extends Info {
                 name: contributor.__text,
                 organization: contributor._organization,
               })),
-            })),
+            }),
+          ),
         };
 
         delete metadata.reference;
-      }
-      else {
+      } else {
         ret.affecteds = [];
         ret.references = [];
       }
 
-      ret.criterias = map(definition.criteria,
-        criteria => new Criteria(criteria));
-    }
-    else {
+      ret.criterias = map(
+        definition.criteria,
+        criteria => new Criteria(criteria),
+      );
+    } else {
       ret.affecteds = [];
       ret.references = [];
       ret.criterias = [];

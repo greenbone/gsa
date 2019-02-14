@@ -30,10 +30,7 @@ import Radio from '../form/radio.js';
 
 import Divider from '../layout/divider.js';
 
-const AutoFpGroup = ({
-  filter,
-  onChange,
-}) => {
+const AutoFpGroup = ({filter, onChange}) => {
   const autofp = filter.get('autofp');
 
   return (

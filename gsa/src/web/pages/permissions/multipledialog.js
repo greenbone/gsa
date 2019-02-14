@@ -40,191 +40,182 @@ export const CURRENT_RESOURCE_ONLY = '0';
 export const INCLUDE_RELATED_RESOURCES = '1';
 export const RELATED_RESOURCES_ONLY = '2';
 
-const MultiplePermissionDialog = withCapabilities(({
-  capabilities,
-  entityName = '',
-  entityType = '',
-  groupId,
-  groups = [],
-  id,
-  includeRelated = CURRENT_RESOURCE_ONLY,
-  permission = 'read',
-  related = [],
-  roleId,
-  roles = [],
-  subjectType = 'user',
-  title = _('Create Permission'),
-  userId,
-  users = [],
-  onClose,
-  onSave,
-}) => {
-  const hasRelated = related.length > 0;
-
-  const defaultValues = {
+const MultiplePermissionDialog = withCapabilities(
+  ({
+    capabilities,
+    entityName = '',
+    entityType = '',
     groupId,
-    includeRelated,
-    permission,
-    roleId,
-    subjectType,
-    userId,
-  };
-
-  const values = {
+    groups = [],
     id,
-    entityType,
-    related,
-  };
+    includeRelated = CURRENT_RESOURCE_ONLY,
+    permission = 'read',
+    related = [],
+    roleId,
+    roles = [],
+    subjectType = 'user',
+    title = _('Create Permission'),
+    userId,
+    users = [],
+    onClose,
+    onSave,
+  }) => {
+    const hasRelated = related.length > 0;
 
-  const includeRelatedItems = [];
-  if (hasRelated || includeRelated === INCLUDE_RELATED_RESOURCES) {
+    const defaultValues = {
+      groupId,
+      includeRelated,
+      permission,
+      roleId,
+      subjectType,
+      userId,
+    };
+
+    const values = {
+      id,
+      entityType,
+      related,
+    };
+
+    const includeRelatedItems = [];
+    if (hasRelated || includeRelated === INCLUDE_RELATED_RESOURCES) {
+      includeRelatedItems.push({
+        label: _('including related resources'),
+        value: INCLUDE_RELATED_RESOURCES,
+      });
+    }
+
     includeRelatedItems.push({
-      label: _('including related resources'),
-      value: INCLUDE_RELATED_RESOURCES,
+      label: _('for current resource only'),
+      value: CURRENT_RESOURCE_ONLY,
     });
-  }
 
-  includeRelatedItems.push({
-    label: _('for current resource only'),
-    value: CURRENT_RESOURCE_ONLY,
-  });
+    if (hasRelated || includeRelated === RELATED_RESOURCES_ONLY) {
+      includeRelatedItems.push({
+        label: _('for related resources only'),
+        value: RELATED_RESOURCES_ONLY,
+      });
+    }
 
-  if (hasRelated || includeRelated === RELATED_RESOURCES_ONLY) {
-    includeRelatedItems.push({
-      label: _('for related resources only'),
-      value: RELATED_RESOURCES_ONLY,
-    });
-  }
+    return (
+      <SaveDialog
+        title={title}
+        onClose={onClose}
+        onSave={onSave}
+        defaultValues={defaultValues}
+        values={values}
+      >
+        {({values: state, onValueChange}) => {
+          return (
+            <Layout flex="column">
+              <FormGroup title={_('Grant')}>
+                <Divider>
+                  <Select
+                    name="permission"
+                    value={state.permission}
+                    items={[
+                      {
+                        label: _('read'),
+                        value: 'read',
+                      },
+                      {
+                        label: _('write'),
+                        value: 'write',
+                      },
+                    ]}
+                    onChange={onValueChange}
+                  />
+                  <span>{_('Permission')}</span>
+                </Divider>
+              </FormGroup>
+              <FormGroup flex="column" title={_('to')}>
+                <Divider flex="column">
+                  {capabilities.mayAccess('users') && (
+                    <Divider>
+                      <Radio
+                        name="subjectType"
+                        checked={state.subjectType === 'user'}
+                        title={_('User')}
+                        value="user"
+                        onChange={onValueChange}
+                      />
+                      <Select
+                        name="userId"
+                        value={state.userId}
+                        items={renderSelectItems(users)}
+                        onChange={onValueChange}
+                      />
+                    </Divider>
+                  )}
 
-  return (
-    <SaveDialog
-      title={title}
-      onClose={onClose}
-      onSave={onSave}
-      defaultValues={defaultValues}
-      values={values}
-    >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
-        return (
-          <Layout flex="column">
-            <FormGroup
-              title={_('Grant')}
-            >
-              <Divider>
-                <Select
-                  name="permission"
-                  value={state.permission}
-                  items={[{
-                    label: _('read'),
-                    value: 'read',
-                  }, {
-                    label: _('write'),
-                    value: 'write',
-                  }]}
-                  onChange={onValueChange}
-                />
-                <span>{_('Permission')}</span>
-              </Divider>
-            </FormGroup>
-            <FormGroup
-              flex="column"
-              title={_('to')}
-            >
-              <Divider flex="column">
-                {capabilities.mayAccess('users') &&
-                  <Divider>
-                    <Radio
-                      name="subjectType"
-                      checked={state.subjectType === 'user'}
-                      title={_('User')}
-                      value="user"
-                      onChange={onValueChange}
-                    >
-                    </Radio>
-                    <Select
-                      name="userId"
-                      value={state.userId}
-                      items={renderSelectItems(users)}
-                      onChange={onValueChange}
-                    />
-                  </Divider>
-                }
+                  {capabilities.mayAccess('roles') && (
+                    <Divider>
+                      <Radio
+                        name="subjectType"
+                        checked={state.subjectType === 'role'}
+                        title={_('Role')}
+                        value="role"
+                        onChange={onValueChange}
+                      />
+                      <Select
+                        name="roleId"
+                        value={state.roleId}
+                        items={renderSelectItems(roles)}
+                        onChange={onValueChange}
+                      />
+                    </Divider>
+                  )}
 
-                {capabilities.mayAccess('roles') &&
-                  <Divider>
-                    <Radio
-                      name="subjectType"
-                      checked={state.subjectType === 'role'}
-                      title={_('Role')}
-                      value="role"
-                      onChange={onValueChange}
-                    >
-                    </Radio>
-                    <Select
-                      name="roleId"
-                      value={state.roleId}
-                      items={renderSelectItems(roles)}
-                      onChange={onValueChange}
-                    />
-                  </Divider>
-                }
-
-                {capabilities.mayAccess('groups') &&
-                  <Divider>
-                    <Radio
-                      name="subjectType"
-                      checked={state.subjectType === 'group'}
-                      title={_('Group')}
-                      value="group"
-                      onChange={onValueChange}
-                    >
-                    </Radio>
-                    <Select
-                      name="groupId"
-                      value={state.groupId}
-                      items={renderSelectItems(groups)}
-                      onChange={onValueChange}
-                    />
-                  </Divider>
-                }
-              </Divider>
-            </FormGroup>
-            <FormGroup
-              title={_('on')}
-              flex="column"
-            >
-              <Divider>
-                <span>{typeName(getEntityType(state))}</span>
-                <i>{entityName}</i>
-                <Select
-                  name="includeRelated"
-                  value={state.includeRelated}
-                  items={includeRelatedItems}
-                  onChange={onValueChange}
-                />
-              </Divider>
-              {hasRelated &&
-                <ul>
-                  {state.related.map(rentity => (
-                    <li key={rentity.id}>
-                      <Divider>
-                        {typeName(getEntityType(rentity))}
-                        <i>{rentity.name}</i>
-                      </Divider>
-                    </li>
-                  ))}
-                </ul>
-              }
-            </FormGroup>
-          </Layout>
-        );
-      }}
-    </SaveDialog>
-  );
-});
+                  {capabilities.mayAccess('groups') && (
+                    <Divider>
+                      <Radio
+                        name="subjectType"
+                        checked={state.subjectType === 'group'}
+                        title={_('Group')}
+                        value="group"
+                        onChange={onValueChange}
+                      />
+                      <Select
+                        name="groupId"
+                        value={state.groupId}
+                        items={renderSelectItems(groups)}
+                        onChange={onValueChange}
+                      />
+                    </Divider>
+                  )}
+                </Divider>
+              </FormGroup>
+              <FormGroup title={_('on')} flex="column">
+                <Divider>
+                  <span>{typeName(getEntityType(state))}</span>
+                  <i>{entityName}</i>
+                  <Select
+                    name="includeRelated"
+                    value={state.includeRelated}
+                    items={includeRelatedItems}
+                    onChange={onValueChange}
+                  />
+                </Divider>
+                {hasRelated && (
+                  <ul>
+                    {state.related.map(rentity => (
+                      <li key={rentity.id}>
+                        <Divider>
+                          {typeName(getEntityType(rentity))}
+                          <i>{rentity.name}</i>
+                        </Divider>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </FormGroup>
+            </Layout>
+          );
+        }}
+      </SaveDialog>
+    );
+  },
+);
 
 MultiplePermissionDialog.propTypes = {
   entityName: PropTypes.string,
@@ -241,9 +232,7 @@ MultiplePermissionDialog.propTypes = {
   related: PropTypes.array, // array of models
   roleId: PropTypes.id,
   roles: PropTypes.array,
-  subjectType: PropTypes.oneOf([
-    'user', 'role', 'group',
-  ]),
+  subjectType: PropTypes.oneOf(['user', 'role', 'group']),
   title: PropTypes.string,
   userId: PropTypes.id,
   users: PropTypes.array,

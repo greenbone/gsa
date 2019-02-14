@@ -22,12 +22,7 @@ import FilterDialog from './filterdialog';
 
 const withFilterDialog = (options = {}) => FilterDialogComponent => props => (
   <FilterDialog {...props}>
-    {dialogProps => (
-      <FilterDialogComponent
-        {...options}
-        {...dialogProps}
-      />
-    )}
+    {dialogProps => <FilterDialogComponent {...options} {...dialogProps} />}
   </FilterDialog>
 );
 

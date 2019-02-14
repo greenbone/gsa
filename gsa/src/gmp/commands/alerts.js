@@ -91,9 +91,13 @@ const method_data_fields = [
   'vfire_call_urgency_name',
 ];
 const condition_data_fields = [
-  'severity', 'direction', 'at_least_filter_id',
-  'at_least_count', 'filter_direction', // FIXME filter_direction is constant
-  'filter_id', 'count',
+  'severity',
+  'direction',
+  'at_least_filter_id',
+  'at_least_count',
+  'filter_direction', // FIXME filter_direction is constant
+  'filter_id',
+  'count',
 ];
 
 function convert_data(prefix, data, fields) {
@@ -108,7 +112,6 @@ function convert_data(prefix, data, fields) {
 }
 
 class AlertCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'alert', Alert);
   }
@@ -169,28 +172,35 @@ class AlertCommand extends EntityCommand {
       condition,
       method,
       filter_id,
-      'report_format_ids:': report_format_ids.length > 0 ?
-        report_format_ids : undefined,
+      'report_format_ids:':
+        report_format_ids.length > 0 ? report_format_ids : undefined,
     };
     log.debug('Saving alert', args, data);
     return this.action(data);
   }
 
-  newAlertSettings() { // should be removed after all corresponding omp commands are implemented
+  newAlertSettings() {
+    // should be removed after all corresponding omp commands are implemented
     return this.httpGet({
       cmd: 'new_alert',
     }).then(response => {
       const {new_alert} = response.data;
       new_alert.report_formats = map(
         new_alert.get_report_formats_response.report_format,
-        format => new Model(format));
+        format => new Model(format),
+      );
       new_alert.credentials = map(
         new_alert.get_credentials_response.credential,
-        credential => new Credential(credential));
+        credential => new Credential(credential),
+      );
       new_alert.tasks = map(
-        new_alert.get_tasks_response.task, task => new Model(task)); // don't use Task here to avoid cyclic dependencies
+        new_alert.get_tasks_response.task,
+        task => new Model(task),
+      ); // don't use Task here to avoid cyclic dependencies
       new_alert.filters = map(
-        new_alert.get_filters_response.filter, filter => new Filter(filter));
+        new_alert.get_filters_response.filter,
+        filter => new Filter(filter),
+      );
       return response.setData(new_alert);
     });
   }
@@ -207,20 +217,26 @@ class AlertCommand extends EntityCommand {
 
       edit_alert.report_formats = map(
         edit_alert.get_report_formats_response.report_format,
-        format => new Model(format));
+        format => new Model(format),
+      );
       delete edit_alert.get_report_formats_response;
 
       edit_alert.credentials = map(
         edit_alert.get_credentials_response.credential,
-        credential => new Credential(credential));
+        credential => new Credential(credential),
+      );
       delete edit_alert.get_credentials_response;
 
       edit_alert.tasks = map(
-        edit_alert.get_tasks_response.task, task => new Model(task)); // don't use Task here to avoid cyclic dependencies
+        edit_alert.get_tasks_response.task,
+        task => new Model(task),
+      ); // don't use Task here to avoid cyclic dependencies
       delete edit_alert.get_tasks_response;
 
       edit_alert.filters = map(
-        edit_alert.get_filters_response.filter, filter => new Filter(filter));
+        edit_alert.get_filters_response.filter,
+        filter => new Filter(filter),
+      );
       delete edit_alert.get_filters_response;
 
       delete edit_alert.next;
@@ -238,8 +254,7 @@ class AlertCommand extends EntityCommand {
       const {status, details} = action_result;
       return response.setData({
         ...action_result,
-        details: isDefined(details) && details.length > 0 ?
-          details : undefined,
+        details: isDefined(details) && details.length > 0 ? details : undefined,
         success: status[0] === '2',
       });
     });
@@ -248,11 +263,9 @@ class AlertCommand extends EntityCommand {
   getElementFromRoot(root) {
     return root.get_alert.get_alerts_response.alert;
   }
-
 }
 
 class AlertsCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'alert', Alert);
   }

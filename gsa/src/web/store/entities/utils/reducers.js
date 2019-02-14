@@ -27,7 +27,6 @@ const initialState = {
 };
 
 export const createReducer = entityType => {
-
   const isLoading = (state = {}, action) => {
     const filterString = filterIdentifier(action.filter);
     switch (action.type) {
@@ -109,7 +108,7 @@ export const createReducer = entityType => {
         const nextState = {
           ...state,
         };
-        data.forEach(d => nextState[d.id] = d);
+        data.forEach(d => (nextState[d.id] = d));
         return nextState;
       case types.ENTITY_LOADING_SUCCESS:
         return {

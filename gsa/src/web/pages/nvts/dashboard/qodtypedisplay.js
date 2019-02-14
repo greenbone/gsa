@@ -66,7 +66,6 @@ const transformQodTypeData = (data = {}) => {
 };
 
 export class NvtsQodTypeDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -88,30 +87,26 @@ export class NvtsQodTypeDisplay extends React.Component {
     }
     const qodTypeFilter = Filter.fromTerm(qodTypeTerm);
 
-    const newFilter = isDefined(filter) ? filter.copy().and(qodTypeFilter) :
-      qodTypeFilter;
+    const newFilter = isDefined(filter)
+      ? filter.copy().and(qodTypeFilter)
+      : qodTypeFilter;
 
     onFilterChanged(newFilter);
   }
 
   render() {
-    const {
-      filter,
-      onFilterChanged,
-      ...props
-    } = this.props;
+    const {filter, onFilterChanged, ...props} = this.props;
 
     return (
-      <NvtsQodTypeLoader
-        filter={filter}
-      >
+      <NvtsQodTypeLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
             {...loaderProps}
             dataTransform={transformQodTypeData}
-            title={({data: tdata}) => _('NVTs by QoD-Type (Total: {{count}})',
-              {count: tdata.total})}
+            title={({data: tdata}) =>
+              _('NVTs by QoD-Type (Total: {{count}})', {count: tdata.total})
+            }
             initialState={{
               show3d: true,
             }}
@@ -125,8 +120,9 @@ export class NvtsQodTypeDisplay extends React.Component {
                 width={width}
                 show3d={state.show3d}
                 showLegend={state.showLegend}
-                onDataClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
+                onDataClick={
+                  isDefined(onFilterChanged) ? this.handleDataClick : undefined
+                }
               />
             )}
           </DataDisplay>
@@ -152,17 +148,13 @@ export const NvtsQodTypeTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   title: ({data: tdata}) =>
     _('NVTs by QoD-Type (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [
-    _l('QoD-Type'),
-    _l('# of NVTs'),
-  ],
+  dataTitles: [_l('QoD-Type'), _l('# of NVTs')],
   dataRow: row => [row.label, row.value],
   dataTransform: transformQodTypeData,
   displayId: 'nvt-by-qod-type-table',
   displayName: 'NvtsQodTypeTableDisplay',
   filtersFilter: NVTS_FILTER_FILTER,
 });
-
 
 registerDisplay(NvtsQodTypeDisplay.displayId, NvtsQodTypeDisplay, {
   title: _l('Chart: NVTs by QoD-Type'),

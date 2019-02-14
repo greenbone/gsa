@@ -30,7 +30,6 @@ import {parseDate} from 'gmp/parser';
 testModel(Cve, 'cve');
 
 describe('CVE model tests', () => {
-
   test('should be instance of Info', () => {
     const certBundAdv = new Cve({});
 
@@ -269,10 +268,7 @@ describe('CVE model tests', () => {
           'published-datetime': {__text: '2018-10-10T11:41:23.022Z'},
           'last-modified-datetime': {__text: '2018-10-10T11:41:23.022Z'},
           'vulnerable-software-list': {
-            product: [
-              {__text: 'lorem'},
-              {__text: 'ipsum'},
-            ],
+            product: [{__text: 'lorem'}, {__text: 'ipsum'}],
           },
         },
       },

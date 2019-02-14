@@ -77,9 +77,7 @@ const DURATIONS = {
   year: DURATION_YEAR,
 };
 
-const ToolBar = ({
-  onDurationChangeClick,
-}) => {
+const ToolBar = ({onDurationChangeClick}) => {
   return (
     <IconDivider>
       <ManualIcon
@@ -88,10 +86,7 @@ const ToolBar = ({
         size="small"
         title={_('Help: Performance')}
       />
-      <IconMenu
-        icon={<WizardIcon/>}
-        size="small"
-      >
+      <IconMenu icon={<WizardIcon />} size="small">
         <MenuEntry
           title={_('Report for Last Hour')}
           value="hour"
@@ -126,46 +121,42 @@ ToolBar.propTypes = {
   onDurationChangeClick: PropTypes.func.isRequired,
 };
 
-const ReportImage = withGmp(({
-  gmp,
-  name,
-  duration,
-  scannerId,
-  endDate,
-  endHour,
-  endMinute,
-  startDate,
-  startHour,
-  startMinute,
-}) => {
-  const params = {
-    slave_id: scannerId,
-    token: gmp.settings.token,
-  };
+const ReportImage = withGmp(
+  ({
+    gmp,
+    name,
+    duration,
+    scannerId,
+    endDate,
+    endHour,
+    endMinute,
+    startDate,
+    startHour,
+    startMinute,
+  }) => {
+    const params = {
+      slave_id: scannerId,
+      token: gmp.settings.token,
+    };
 
-  if (isDefined(duration)) {
-    params.duration = DURATIONS[duration];
-  }
-  else {
-    params.start_year = startDate.year();
-    params.start_month = startDate.month() + 1; // month is zero indexed
-    params.start_day = startDate.date();
-    params.start_hour = startHour;
-    params.start_minute = startMinute;
-    params.end_year = endDate.year();
-    params.end_month = endDate.month() + 1;
-    params.end_day = endDate.date();
-    params.end_hour = endHour;
-    params.end_minute = endMinute;
-  }
-  const url = gmp.buildUrl('system_report/' + name + '/report.', params);
-  return (
-    <img
-      alt=""
-      src={url}
-    />
-  );
-});
+    if (isDefined(duration)) {
+      params.duration = DURATIONS[duration];
+    } else {
+      params.start_year = startDate.year();
+      params.start_month = startDate.month() + 1; // month is zero indexed
+      params.start_day = startDate.date();
+      params.start_hour = startHour;
+      params.start_minute = startMinute;
+      params.end_year = endDate.year();
+      params.end_month = endDate.month() + 1;
+      params.end_day = endDate.date();
+      params.end_hour = endHour;
+      params.end_minute = endMinute;
+    }
+    const url = gmp.buildUrl('system_report/' + name + '/report.', params);
+    return <img alt="" src={url} />;
+  },
+);
 
 ReportImage.propTypes = {
   duration: PropTypes.string,
@@ -194,9 +185,7 @@ const Selector = withClickHandler()(styled.span`
 
 const SLAVE_SCANNER_FILTER = Filter.fromString('type=' + SLAVE_SCANNER_TYPE);
 
-
 class PerformancePage extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -293,9 +282,7 @@ class PerformancePage extends React.Component {
   }
 
   render() {
-    const {
-      scanners = [],
-    } = this.props;
+    const {scanners = []} = this.props;
     const {
       duration,
       reports,
@@ -309,12 +296,10 @@ class PerformancePage extends React.Component {
     } = this.state;
     const sensorId = selectSaveId(scanners, scannerId, 0);
     return (
-      <Layout
-        flex="column"
-      >
+      <Layout flex="column">
         <ToolBar onDurationChangeClick={this.handleDurationChange} />
         <Section
-          img={<PerformanceIcon size="large"/>}
+          img={<PerformanceIcon size="large" />}
           title={_('Performance')}
         >
           <StartEndTimeSelection
@@ -378,7 +363,7 @@ class PerformancePage extends React.Component {
 
           {reports.map(report => (
             <div key={report.name}>
-              <LinkTarget id={report.name}/>
+              <LinkTarget id={report.name} />
               <h2>{report.title}</h2>
               <ReportImage
                 name={report.name}
@@ -420,7 +405,10 @@ const mapStateToProps = rootState => {
 
 export default compose(
   withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(PerformancePage);
 
 // vim: set ts=2 sw=2 tw=80:

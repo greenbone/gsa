@@ -23,19 +23,9 @@ import PropTypes from '../../utils/proptypes.js';
 
 import {get_img_url} from '../../utils/urls.js';
 
-const Img = ({
-  alt = '',
-  src,
-  ...other
-}) => {
+const Img = ({alt = '', src, ...other}) => {
   const img_path = get_img_url(src);
-  return (
-    <img
-      {...other}
-      alt={alt}
-      src={img_path}
-    />
-  );
+  return <img {...other} alt={alt} src={img_path} />;
 };
 
 Img.propTypes = {

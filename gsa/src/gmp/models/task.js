@@ -59,18 +59,18 @@ export const TASK_STATUS = {
 
 /* eslint-disable quote-props */
 const TASK_STATUS_TRANSLATIONS = {
-  'Running': _l('Running'),
+  Running: _l('Running'),
   'Stop Requested': _l('Stop Requested'),
   'Delete Requested': _l('Delete Requested'),
   'Ultimate Delete Requested': _l('Ultimate Delete Requested'),
   'Resume Requested': _l('Resume Requested'),
-  'Requested': _l('Requested'),
-  'Stopped': _l('Stopped'),
-  'New': _l('New'),
-  'Interrupted': _l('Interrupted'),
-  'Container': _l('Container'),
-  'Uploading': _l('Uploading'),
-  'Done': _l('Done'),
+  Requested: _l('Requested'),
+  Stopped: _l('Stopped'),
+  New: _l('New'),
+  Interrupted: _l('Interrupted'),
+  Container: _l('Container'),
+  Uploading: _l('Uploading'),
+  Done: _l('Done'),
 };
 /* eslint-disable quote-props */
 
@@ -81,7 +81,8 @@ function parse_yes(value) {
 export const getTranslatableTaskStatus = status =>
   `${TASK_STATUS_TRANSLATIONS[status]}`;
 
-export const isActive = status => status === TASK_STATUS.running ||
+export const isActive = status =>
+  status === TASK_STATUS.running ||
   status === TASK_STATUS.stoprequested ||
   status === TASK_STATUS.deleterequested ||
   status === TASK_STATUS.ultimatedeleterequested ||
@@ -89,7 +90,6 @@ export const isActive = status => status === TASK_STATUS.running ||
   status === TASK_STATUS.requested;
 
 class Task extends Model {
-
   static entityType = 'task';
 
   isActive() {
@@ -126,7 +126,7 @@ class Task extends Model {
 
   getTranslatableStatus() {
     return getTranslatableTaskStatus(this.status);
-  };
+  }
 
   parseProperties(elem) {
     elem = super.parseProperties(elem);
@@ -156,19 +156,14 @@ class Task extends Model {
       }
     });
 
-    const models = [
-      'config',
-      'slave',
-      'target',
-    ];
+    const models = ['config', 'slave', 'target'];
     models.forEach(item => {
       const name = item;
 
       const data = elem[name];
       if (isDefined(data) && !isEmpty(data._id)) {
         elem[name] = new Model(data, normalizeType(name));
-      }
-      else {
+      } else {
         delete elem[name];
       }
     });
@@ -180,15 +175,13 @@ class Task extends Model {
 
     if (isDefined(elem.scanner) && !isEmpty(elem.scanner._id)) {
       elem.scanner = new Scanner(elem.scanner);
-    }
-    else {
+    } else {
       delete elem.scanner;
     }
 
     if (isDefined(elem.schedule) && !isEmpty(elem.schedule._id)) {
       elem.schedule = new Schedule(elem.schedule);
-    }
-    else {
+    } else {
       delete elem.schedule;
     }
 
@@ -211,12 +204,16 @@ class Task extends Model {
             elem.min_qod = parseInt(pref.value);
             break;
           case 'auto_delete':
-            elem.auto_delete = pref.value === AUTO_DELETE_KEEP ?
-              AUTO_DELETE_KEEP : AUTO_DELETE_NO;
+            elem.auto_delete =
+              pref.value === AUTO_DELETE_KEEP
+                ? AUTO_DELETE_KEEP
+                : AUTO_DELETE_NO;
             break;
           case 'auto_delete_data':
-            elem.auto_delete_data = pref.value === '0' ?
-              AUTO_DELETE_DEFAULT_VALUE : parseInt(pref.value);
+            elem.auto_delete_data =
+              pref.value === '0'
+                ? AUTO_DELETE_DEFAULT_VALUE
+                : parseInt(pref.value);
             break;
           case 'max_hosts':
           case 'max_checks':

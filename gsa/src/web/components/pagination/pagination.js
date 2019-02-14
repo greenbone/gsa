@@ -49,22 +49,18 @@ const PaginationLayout = styled(Layout)`
 `;
 
 const Pagination = ({
-    counts,
-    onFirstClick,
-    onLastClick,
-    onNextClick,
-    onPreviousClick,
-  }) => {
-
+  counts,
+  onFirstClick,
+  onLastClick,
+  onNextClick,
+  onPreviousClick,
+}) => {
   if (!isDefined(counts)) {
     return null;
   }
 
   return (
-    <PaginationLayout
-      flex
-      align={['end', 'center']}
-    >
+    <PaginationLayout flex align={['end', 'center']}>
       <IconDivider>
         <FirstIcon
           active={counts.hasPrevious()}

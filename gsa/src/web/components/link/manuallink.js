@@ -48,13 +48,7 @@ const get_language_path = () => {
   return isDefined(path) ? path : DEFAULT_LANGUAGE_PATH;
 };
 
-const ManualLink = ({
-  anchor,
-  gmp,
-  page,
-  searchTerm,
-  ...props
-}) => {
+const ManualLink = ({anchor, gmp, page, searchTerm, ...props}) => {
   const {manualurl} = gmp.settings;
 
   let url = manualurl;
@@ -66,13 +60,10 @@ const ManualLink = ({
 
   if (page === 'search' && isDefined(searchTerm)) {
     url += '?q=' + searchTerm;
-  }
-  else if (isDefined(anchor)) {
+  } else if (isDefined(anchor)) {
     url += '#' + anchor;
   }
-  return (
-    <BlankLink {...props} to={url} />
-  );
+  return <BlankLink {...props} to={url} />;
 };
 
 ManualLink.propTypes = {

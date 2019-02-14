@@ -29,7 +29,6 @@ import FormGroup from 'web/components/form/formgroup';
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
 
 class SolutionTypesFilterGroup extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -42,17 +41,13 @@ class SolutionTypesFilterGroup extends React.Component {
 
     if (!value && solutionType === filteredSolutionType) {
       onChange(filter.delete('solution_type'));
-    }
-    else if (value && solutionType !== filteredSolutionType) {
+    } else if (value && solutionType !== filteredSolutionType) {
       onChange(filter.set('solution_type', solutionType));
-    };
-
+    }
   }
 
   render() {
-    const {
-      filter,
-    } = this.props;
+    const {filter} = this.props;
 
     const solutionType = filter.get('solution_type');
 
@@ -63,50 +58,40 @@ class SolutionTypesFilterGroup extends React.Component {
           name="Workaround"
           onChange={this.handleSolutionTypeChange}
         >
-          <SolutionTypeIcon type="Workaround"/>
-          <span>
-            {_('Workaround')}
-          </span>
+          <SolutionTypeIcon type="Workaround" />
+          <span>{_('Workaround')}</span>
         </Checkbox>
         <Checkbox
           checked={solutionType === 'Mitigation'}
           name="Mitigation"
           onChange={this.handleSolutionTypeChange}
         >
-          <SolutionTypeIcon type="Mitigation"/>
-          <span>
-            {_('Mitigation')}
-          </span>
+          <SolutionTypeIcon type="Mitigation" />
+          <span>{_('Mitigation')}</span>
         </Checkbox>
         <Checkbox
           checked={solutionType === 'VendorFix'}
           name="VendorFix"
           onChange={this.handleSolutionTypeChange}
         >
-          <SolutionTypeIcon type="VendorFix"/>
-          <span>
-            {_('Vendor fix')}
-          </span>
+          <SolutionTypeIcon type="VendorFix" />
+          <span>{_('Vendor fix')}</span>
         </Checkbox>
         <Checkbox
           checked={solutionType === 'NoneAvailable'}
           name="NoneAvailable"
           onChange={this.handleSolutionTypeChange}
         >
-          <SolutionTypeIcon type="NoneAvailable"/>
-          <span>
-            {_('None available')}
-          </span>
+          <SolutionTypeIcon type="NoneAvailable" />
+          <span>{_('None available')}</span>
         </Checkbox>
         <Checkbox
           checked={solutionType === 'WillNotFix'}
           name="WillNotFix"
           onChange={this.handleSolutionTypeChange}
         >
-          <SolutionTypeIcon type="WillNotFix"/>
-          <span>
-            {_('Will not fix')}
-          </span>
+          <SolutionTypeIcon type="WillNotFix" />
+          <span>{_('Will not fix')}</span>
         </Checkbox>
       </FormGroup>
     );

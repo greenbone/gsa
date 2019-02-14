@@ -31,7 +31,6 @@ import DialogTwoButtonFooter from 'web/components/dialog/twobuttonfooter';
 const DEFAULT_DIALOG_WIDTH = '400px';
 
 class ConfirmationDialogContent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -39,9 +38,7 @@ class ConfirmationDialogContent extends React.Component {
   }
 
   handleResume() {
-    const {
-      onResumeClick,
-    } = this.props;
+    const {onResumeClick} = this.props;
 
     if (onResumeClick) {
       onResumeClick();
@@ -50,11 +47,7 @@ class ConfirmationDialogContent extends React.Component {
   }
 
   render() {
-    const {
-      moveprops,
-      text,
-      title,
-    } = this.props;
+    const {moveprops, text, title} = this.props;
 
     return (
       <DialogContent>
@@ -63,9 +56,7 @@ class ConfirmationDialogContent extends React.Component {
           onCloseClick={this.props.close}
           {...moveprops}
         />
-        <ScrollableContent>
-          {text}
-        </ScrollableContent>
+        <ScrollableContent>{text}</ScrollableContent>
         <DialogTwoButtonFooter
           rightButtonTitle={_('Follow Link')}
           onLeftButtonClick={this.props.close}
@@ -92,15 +83,8 @@ const LinkConfirmationDialog = ({
   onResumeClick,
 }) => {
   return (
-    <Dialog
-      width={width}
-      onClose={onClose}
-      resizable={false}
-    >
-      {({
-        close,
-        moveProps,
-      }) => (
+    <Dialog width={width} onClose={onClose} resizable={false}>
+      {({close, moveProps}) => (
         <ConfirmationDialogContent
           close={close}
           moveprops={moveProps}

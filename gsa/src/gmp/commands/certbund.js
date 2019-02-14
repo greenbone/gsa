@@ -29,14 +29,12 @@ import CertBundAdv from '../models/certbund.js';
 const info_filter = info => isDefined(info.cert_bund_adv);
 
 class CertBundCommand extends InfoEntityCommand {
-
   constructor(http) {
     super(http, 'cert_bund_adv', CertBundAdv);
   }
 }
 
 class CertBundsCommand extends InfoEntitiesCommand {
-
   constructor(http) {
     super(http, 'cert_bund_adv', CertBundAdv, info_filter);
   }

@@ -27,7 +27,6 @@ import {
 } from '../date';
 
 describe('setLocale tests', () => {
-
   test('should change locale', () => {
     setLocale('en');
     let d = date('2018-01-01');
@@ -39,11 +38,9 @@ describe('setLocale tests', () => {
     expect(locale()).toEqual('de');
     expect(d.format('l')).toEqual('1.1.2018');
   });
-
 });
 
 describe('getLocale tests', () => {
-
   test('should return current locale', () => {
     setLocale('en');
     expect(getLocale()).toEqual('en');
@@ -51,11 +48,9 @@ describe('getLocale tests', () => {
     setLocale('de');
     expect(getLocale()).toEqual('de');
   });
-
 });
 
 describe('shortDate tests', () => {
-
   test('should return undefined', () => {
     expect(shortDate()).toBeUndefined();
   });
@@ -81,11 +76,9 @@ describe('shortDate tests', () => {
     setLocale('en');
     expect(shortDate(d)).toEqual('01/01/2018');
   });
-
 });
 
 describe('longDate tests', () => {
-
   test('should return undefined', () => {
     expect(longDate()).toBeUndefined();
   });
@@ -111,11 +104,9 @@ describe('longDate tests', () => {
     setLocale('en');
     expect(longDate(d)).toEqual('Mon, Jan 1, 2018 12:00 AM');
   });
-
 });
 
 describe('dateTimeWithTimeZone tests', () => {
-
   test('should return undefined', () => {
     expect(dateTimeWithTimeZone()).toBeUndefined();
   });
@@ -130,7 +121,6 @@ describe('dateTimeWithTimeZone tests', () => {
     const d = date('2018-01-01T00:00:00+01:00').tz('CET');
     expect(dateTimeWithTimeZone(d)).toEqual('Mon, Jan 1, 2018 12:00 AM CET');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

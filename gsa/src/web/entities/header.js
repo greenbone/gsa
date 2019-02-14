@@ -29,11 +29,7 @@ import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
 const defaultactions = (
-  <TableHead
-    width="8%"
-    align="center"
-    title={_l('Actions')}
-  />
+  <TableHead width="8%" align="center" title={_l('Actions')} />
 );
 
 /**
@@ -62,7 +58,6 @@ export const withEntitiesHeader = (
   actions_column = defaultactions,
   options = {},
 ) => Component => {
-
   if (actions_column === false) {
     actions_column = null;
   }
@@ -74,18 +69,11 @@ export const withEntitiesHeader = (
     if (actions_column === true) {
       if (selectionType === SelectionType.SELECTION_USER) {
         column = <TableHead width="6em">{_('Actions')}</TableHead>;
-      }
-      else {
+      } else {
         column = null;
       }
     }
-    return (
-      <Component
-        {...options}
-        actionsColumn={column}
-        {...props}
-      />
-    );
+    return <Component {...options} actionsColumn={column} {...props} />;
   };
 
   HeaderWrapper.propTypes = {
@@ -117,11 +105,7 @@ export const withEntitiesHeader = (
  *
  * @return A new EntitiesHeader component
  */
-export const createEntitiesHeader = (
-  columns,
-  actions_column,
-  options = {},
-) => {
+export const createEntitiesHeader = (columns, actions_column, options = {}) => {
   const Header = ({
     actionsColumn,
     links = true,

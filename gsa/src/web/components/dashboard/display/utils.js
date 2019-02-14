@@ -39,12 +39,13 @@ export const totalCount = (groups = []) => {
   if (groups.length === 0) {
     return 0;
   }
-  return groups.map(group => parseInt(group.count))
+  return groups
+    .map(group => parseInt(group.count))
     .reduce((prev, cur) => prev + cur);
 };
 
 export const percent = (count, sum) =>
-  (parseInt(count) / sum * 100).toFixed(1);
+  ((parseInt(count) / sum) * 100).toFixed(1);
 
 export const randomColor = () => {
   return '#' + Math.floor(Math.random() * 0xffffff).toString(16);
@@ -66,16 +67,7 @@ export const activeDaysColorScale = scaleOrdinal()
   ]);
 
 export const riskFactorColorScale = scaleOrdinal()
-  .domain([
-    ERROR,
-    DEBUG,
-    FALSE_POSITIVE,
-    NA,
-    LOG,
-    LOW,
-    MEDIUM,
-    HIGH,
-  ])
+  .domain([ERROR, DEBUG, FALSE_POSITIVE, NA, LOG, LOW, MEDIUM, HIGH])
   .range([
     '#800000',
     '#008080',
@@ -88,7 +80,7 @@ export const riskFactorColorScale = scaleOrdinal()
   ]);
 
 export const vulnsByHostsColorScale = scaleLinear()
-  .domain([0, 0.05, 0.25, 0.50, 0.75, 0.95, 1.00])
+  .domain([0, 0.05, 0.25, 0.5, 0.75, 0.95, 1.0])
   .range([
     '#008644',
     '#55B200',
@@ -135,7 +127,7 @@ export const qodColorScale = scaleOrdinal()
 export const qodTypeColorScale = scaleOrdinal()
   .domain(Object.keys(QOD_TYPES))
   .range([
-    'silver',  // ''
+    'silver', // ''
     '#555555', // general_note
     '#011f4b', // executable_version
     '#596d8a', // package

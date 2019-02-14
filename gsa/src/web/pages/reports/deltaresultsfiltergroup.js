@@ -32,7 +32,6 @@ import FormGroup from '../../components/form/formgroup.js';
 import Divider from '../../components/layout/divider.js';
 
 class DeltaStatesFilterGroup extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -50,17 +49,14 @@ class DeltaStatesFilterGroup extends React.Component {
     if (value && !delta_states.includes(state)) {
       delta_states += state;
       onChange(delta_states, 'delta_states');
-    }
-    else if (!value && delta_states.includes(state)) {
+    } else if (!value && delta_states.includes(state)) {
       delta_states = delta_states.replace(state, '');
       onChange(delta_states, 'delta_states');
     }
   }
 
   render() {
-    const {
-      filter,
-    } = this.props;
+    const {filter} = this.props;
 
     let delta_states = filter.get('delta_states');
 

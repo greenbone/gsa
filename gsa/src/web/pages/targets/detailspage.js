@@ -59,10 +59,7 @@ import EditIcon from 'web/entity/icon/editicon';
 import TargetIcon from 'web/components/icon/targeticon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/targets';
+import {selector, loadEntity} from 'web/store/entities/targets';
 
 import {
   selector as permissionsSelector,
@@ -91,28 +88,13 @@ const ToolBarIcons = ({
           anchor="creating-a-target"
           title={_('Help: Targets')}
         />
-        <ListIcon
-          title={_('Target List')}
-          page="targets"
-        />
+        <ListIcon title={_('Target List')} page="targets" />
       </IconDivider>
       <IconDivider>
-        <CreateIcon
-          entity={entity}
-          onClick={onTargetCreateClick}
-        />
-        <CloneIcon
-          entity={entity}
-          onClick={onTargetCloneClick}
-        />
-        <EditIcon
-          entity={entity}
-          onClick={onTargetEditClick}
-        />
-        <TrashIcon
-          entity={entity}
-          onClick={onTargetDeleteClick}
-        />
+        <CreateIcon entity={entity} onClick={onTargetCreateClick} />
+        <CloneIcon entity={entity} onClick={onTargetCloneClick} />
+        <EditIcon entity={entity} onClick={onTargetEditClick} />
+        <TrashIcon entity={entity} onClick={onTargetDeleteClick} />
         <ExportIcon
           value={entity}
           title={_('Export Target as XML')}
@@ -132,37 +114,23 @@ ToolBarIcons.propTypes = {
   onTargetEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({
-  entity,
-  ...props
-}) => (
+const Details = ({entity, ...props}) => (
   <Layout flex="column">
     <InfoTable>
       <TableBody>
         <TableRow>
-          <TableData>
-            {_('Name')}
-          </TableData>
-          <TableData>
-            {entity.name}
-          </TableData>
+          <TableData>{_('Name')}</TableData>
+          <TableData>{entity.name}</TableData>
         </TableRow>
 
         <TableRow>
-          <TableData>
-            {_('Comment')}
-          </TableData>
-          <TableData>
-            {entity.comment}
-          </TableData>
+          <TableData>{_('Comment')}</TableData>
+          <TableData>{entity.comment}</TableData>
         </TableRow>
       </TableBody>
     </InfoTable>
 
-    <TargetDetails
-      entity={entity}
-      {...props}
-    />
+    <TargetDetails entity={entity} {...props} />
   </Layout>
 );
 
@@ -191,18 +159,11 @@ const Page = ({
       onInteraction={onInteraction}
       onSaved={onChanged}
     >
-      {({
-        clone,
-        create,
-        delete: delete_func,
-        download,
-        edit,
-        save,
-      }) => (
+      {({clone, create, delete: delete_func, download, edit, save}) => (
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon={<TargetIcon size="large"/>}
+          sectionIcon={<TargetIcon size="large" />}
           toolBarIcons={ToolBarIcons}
           title={_('Target')}
           onInteraction={onInteraction}
@@ -213,24 +174,16 @@ const Page = ({
           onTargetEditClick={edit}
           onTargetSaveClick={save}
         >
-          {({
-            activeTab = 0,
-            onActivateTab,
-          }) => {
+          {({activeTab = 0, onActivateTab}) => {
             return (
               <Layout grow="1" flex="column">
-                <TabLayout
-                  grow="1"
-                  align={['start', 'end']}
-                >
+                <TabLayout grow="1" align={['start', 'end']}>
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}
                     onActivateTab={onActivateTab}
                   >
-                    <Tab>
-                      {_('Information')}
-                    </Tab>
+                    <Tab>{_('Information')}</Tab>
                     <EntitiesTab entities={entity.userTags}>
                       {_('User Tags')}
                     </EntitiesTab>
@@ -243,9 +196,7 @@ const Page = ({
                 <Tabs active={activeTab}>
                   <TabPanels>
                     <TabPanel>
-                      <TargetDetails
-                        entity={entity}
-                      />
+                      <TargetDetails entity={entity} />
                     </TabPanel>
                     <TabPanel>
                       <EntityTags
@@ -303,10 +254,11 @@ const TargetPermissions = withComponentDefaults({
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

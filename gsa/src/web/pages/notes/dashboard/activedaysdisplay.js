@@ -65,8 +65,10 @@ const transformActiveDaysData = (data = {}) => {
     // this value
     const {value} = groups[groups.length - 1];
 
-    const count = mostActiveDaysBin.reduce((prev, current) =>
-      prev + parseFloat(current.count), 0);
+    const count = mostActiveDaysBin.reduce(
+      (prev, current) => prev + parseFloat(current.count),
+      0,
+    );
     const reducedMostActiveDaysBin = {
       value,
       count,
@@ -91,8 +93,7 @@ const transformActiveDaysData = (data = {}) => {
       default:
         if (group.bulked) {
           label = _('Active for > {{value}} days', {value});
-        }
-        else {
+        } else {
           label = _('Active for the next {{value}} days', {value});
         }
         break;
@@ -112,7 +113,6 @@ const transformActiveDaysData = (data = {}) => {
 };
 
 export class NotesActiveDaysDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -129,12 +129,9 @@ export class NotesActiveDaysDisplay extends React.Component {
 
     let activeDaysTerm;
     if (bulked) {
-      activeDaysTerm =
-        FilterTerm.fromString(`active_days>"${filterValue}"`);
-    }
-    else {
-      activeDaysTerm =
-        FilterTerm.fromString(`active_days="${filterValue}"`);
+      activeDaysTerm = FilterTerm.fromString(`active_days>"${filterValue}"`);
+    } else {
+      activeDaysTerm = FilterTerm.fromString(`active_days="${filterValue}"`);
     }
 
     if (isDefined(filter) && filter.hasTerm(activeDaysTerm)) {
@@ -142,31 +139,29 @@ export class NotesActiveDaysDisplay extends React.Component {
     }
     const activeDaysFilter = Filter.fromTerm(activeDaysTerm);
 
-    const newFilter = isDefined(filter) ? filter.copy().and(activeDaysFilter) :
-      activeDaysFilter;
+    const newFilter = isDefined(filter)
+      ? filter.copy().and(activeDaysFilter)
+      : activeDaysFilter;
 
     onFilterChanged(newFilter);
   }
 
   render() {
-    const {
-      filter,
-      onFilterChanged,
-      ...props
-    } = this.props;
+    const {filter, onFilterChanged, ...props} = this.props;
 
     return (
-      <NotesActiveDaysLoader
-        filter={filter}
-      >
+      <NotesActiveDaysLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
             {...loaderProps}
             filter={filter}
             dataTransform={transformActiveDaysData}
-            title={({data: tdata}) => _('Notes by Active Days (Total: ' +
-              '{{count}})', {count: tdata.total})}
+            title={({data: tdata}) =>
+              _('Notes by Active Days (Total: {{count}})', {
+                count: tdata.total,
+              })
+            }
             initialState={{
               show3d: true,
             }}
@@ -180,8 +175,9 @@ export class NotesActiveDaysDisplay extends React.Component {
                 width={width}
                 show3d={state.show3d}
                 showLegend={state.showLegend}
-                onDataClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
+                onDataClick={
+                  isDefined(onFilterChanged) ? this.handleDataClick : undefined
+                }
               />
             )}
           </DataDisplay>
@@ -204,14 +200,11 @@ NotesActiveDaysDisplay.displayId = 'note-by-active-days';
 export const NotesActiveDaysTableDisplay = createDisplay({
   loaderComponent: NotesActiveDaysLoader,
   displayComponent: DataTableDisplay,
-  dataTitles: [
-    _l('Active'),
-    _l('# of Notes'),
-  ],
+  dataTitles: [_l('Active'), _l('# of Notes')],
   dataRow: row => [row.label, row.value],
   dataTransform: transformActiveDaysData,
-  title: ({data: tdata}) => _('Notes by Active Days (Total: ' +
-    '{{count}})', {count: tdata.total}),
+  title: ({data: tdata}) =>
+    _('Notes by Active Days (Total: {{count}})', {count: tdata.total}),
   displayId: 'note-by-active-days-table',
   displayName: 'NotesActiveDaysTableDisplay',
   filtersFilter: NOTES_FILTER_FILTER,
@@ -221,8 +214,10 @@ registerDisplay(NotesActiveDaysDisplay.displayId, NotesActiveDaysDisplay, {
   title: _l('Chart: Notes by Active Days'),
 });
 
-registerDisplay(NotesActiveDaysTableDisplay.displayId,
-  NotesActiveDaysTableDisplay, {
+registerDisplay(
+  NotesActiveDaysTableDisplay.displayId,
+  NotesActiveDaysTableDisplay,
+  {
     title: _l('Table: Notes by Active Days'),
   },
 );

@@ -40,10 +40,7 @@ export const TasksSeverityDisplay = createDisplay({
 export const TasksSeverityTableDisplay = createDisplay({
   displayComponent: SeverityClassTableDisplay,
   loaderComponent: TasksSeverityLoader,
-  dataTitles: [
-    _l('Severity'),
-    _l('# of Tasks'),
-  ],
+  dataTitles: [_l('Severity'), _l('# of Tasks')],
   title: ({data: tdata}) =>
     _('Tasks by Severity Class (Total: {{count}})', {count: tdata.total}),
   displayId: 'task-by-severity-class-table',
@@ -51,10 +48,13 @@ export const TasksSeverityTableDisplay = createDisplay({
   filtersFilter: TASKS_FILTER_FILTER,
 });
 
-registerDisplay(TasksSeverityTableDisplay.displayId,
-  TasksSeverityTableDisplay, {
-  title: _l('Table: Tasks by Severity Class'),
-});
+registerDisplay(
+  TasksSeverityTableDisplay.displayId,
+  TasksSeverityTableDisplay,
+  {
+    title: _l('Table: Tasks by Severity Class'),
+  },
+);
 
 registerDisplay(TasksSeverityDisplay.displayId, TasksSeverityDisplay, {
   title: _l('Chart: Tasks by Severity Class'),

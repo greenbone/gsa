@@ -55,7 +55,6 @@ const transformHighResults = (data = {}) => {
 };
 
 export class ReportsHighResultsDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -63,7 +62,6 @@ export class ReportsHighResultsDisplay extends React.Component {
   }
 
   handleRangeSelect(start, end) {
-
     const {filter, onFilterChanged} = this.props;
 
     if (!isDefined(onFilterChanged)) {
@@ -83,7 +81,8 @@ export class ReportsHighResultsDisplay extends React.Component {
       }
 
       const startTerm = FilterTerm.fromString(
-        `date>${startDate.format(dateFormat)}`);
+        `date>${startDate.format(dateFormat)}`,
+      );
 
       if (!newFilter.hasTerm(startTerm)) {
         newFilter = newFilter.and(Filter.fromTerm(startTerm));
@@ -92,7 +91,8 @@ export class ReportsHighResultsDisplay extends React.Component {
 
     if (isDefined(endDate)) {
       const endTerm = FilterTerm.fromString(
-        `date<${endDate.format(dateFormat)}`);
+        `date<${endDate.format(dateFormat)}`,
+      );
 
       if (!newFilter.hasTerm(endTerm)) {
         newFilter = newFilter.and(Filter.fromTerm(endTerm));
@@ -105,9 +105,7 @@ export class ReportsHighResultsDisplay extends React.Component {
   render() {
     const {filter} = this.props;
     return (
-      <ReportsHighResultsLoader
-        filter={filter}
-      >
+      <ReportsHighResultsLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...this.props}
@@ -161,25 +159,25 @@ export const ReportsHighResultsTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   filtersFilter: REPORTS_FILTER_FILTER,
   dataTransform: transformHighResults,
-  dataTitles: [
-    _l('Created Time'),
-    _l('Max High'),
-    _l('Max High per Host'),
-  ],
+  dataTitles: [_l('Created Time'), _l('Max High'), _l('Max High per Host')],
   dataRow: row => [row.label, row.y, row.y2],
   title: () => _('Reports with High Results'),
   displayName: 'ReportsHighResultsTableDisplay',
   displayId: 'report-by-high-results-table',
 });
 
-registerDisplay(ReportsHighResultsDisplay.displayId,
-  ReportsHighResultsDisplay, {
+registerDisplay(
+  ReportsHighResultsDisplay.displayId,
+  ReportsHighResultsDisplay,
+  {
     title: _l('Chart: Reports with high Results'),
   },
 );
 
-registerDisplay(ReportsHighResultsTableDisplay.displayId,
-  ReportsHighResultsTableDisplay, {
+registerDisplay(
+  ReportsHighResultsTableDisplay.displayId,
+  ReportsHighResultsTableDisplay,
+  {
     title: _l('Table: Reports with high Results'),
   },
 );

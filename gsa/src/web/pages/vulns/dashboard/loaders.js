@@ -27,22 +27,17 @@ export const VULNS_SEVERITY = 'vulns-severity';
 export const VULNS_HOSTS = 'vulns-hosts';
 
 export const vulnsSeverityLoader = loadFunc(
-  ({gmp, filter}) => gmp.vulns.getSeverityAggregates({filter})
-    .then(r => r.data),
-  VULNS_SEVERITY);
+  ({gmp, filter}) =>
+    gmp.vulns.getSeverityAggregates({filter}).then(r => r.data),
+  VULNS_SEVERITY,
+);
 
-export const VulnsSeverityLoader = ({
-  filter,
-  children,
-}) => (
+export const VulnsSeverityLoader = ({filter, children}) => (
   <Loader
     dataId={VULNS_SEVERITY}
     filter={filter}
     load={vulnsSeverityLoader}
-    subscriptions={[
-      'vulns.timer',
-      'vulns.changed',
-    ]}
+    subscriptions={['vulns.timer', 'vulns.changed']}
   >
     {children}
   </Loader>
@@ -51,22 +46,16 @@ export const VulnsSeverityLoader = ({
 VulnsSeverityLoader.propTypes = loaderPropTypes;
 
 export const vulnsHostsLoader = loadFunc(
-  ({gmp, filter}) => gmp.vulns.getHostAggregates({filter})
-    .then(r => r.data),
-  VULNS_HOSTS);
+  ({gmp, filter}) => gmp.vulns.getHostAggregates({filter}).then(r => r.data),
+  VULNS_HOSTS,
+);
 
-export const VulnsHostsLoader = ({
-  filter,
-  children,
-}) => (
+export const VulnsHostsLoader = ({filter, children}) => (
   <Loader
     dataId={VULNS_HOSTS}
     filter={filter}
     load={vulnsHostsLoader}
-    subscriptions={[
-      'vulns.timer',
-      'vulns.changed',
-    ]}
+    subscriptions={['vulns.timer', 'vulns.changed']}
   >
     {children}
   </Loader>

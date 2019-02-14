@@ -24,10 +24,10 @@ import SimpleTable from './simpletable.js';
 const Table = styled(SimpleTable)`
   & td {
     padding: 4px 4px 4px 0;
-  };
+  }
   & tr td:first-child {
     padding-right: 1em;
-  };
+  }
 `;
 
 export default Table;

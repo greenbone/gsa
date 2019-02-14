@@ -47,22 +47,16 @@ import NoteComponent from './component';
 import NotesDashboard, {NOTES_DASHBOARD_ID} from './dashboard';
 import NoteIcon from 'web/components/icon/noteicon';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onNoteCreateClick,
-}) => (
+const ToolBarIcons = withCapabilities(({capabilities, onNoteCreateClick}) => (
   <IconDivider>
     <ManualIcon
       page="vulnerabilitymanagement"
       anchor="notes"
       title={_('Help: Notes')}
     />
-    {capabilities.mayCreate('note') &&
-      <NewIcon
-        title={_('New Note')}
-        onClick={onNoteCreateClick}
-      />
-    }
+    {capabilities.mayCreate('note') && (
+      <NewIcon title={_('New Note')} onClick={onNoteCreateClick} />
+    )}
   </IconDivider>
 ));
 
@@ -90,13 +84,7 @@ const Page = ({
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
-    {({
-      clone,
-      create,
-      delete: delete_func,
-      download,
-      edit,
-    }) => (
+    {({clone, create, delete: delete_func, download, edit}) => (
       <EntitiesPage
         {...props}
         dashboard={() => (
@@ -115,7 +103,7 @@ const Page = ({
         filter={filter}
         filterEditDialog={FilterDialog}
         filtersFilter={NOTES_FILTER_FILTER}
-        sectionIcon={<NoteIcon size="large"/>}
+        sectionIcon={<NoteIcon size="large" />}
         table={NotesTable}
         title={_('Notes')}
         toolBarIcons={ToolBarIcons}

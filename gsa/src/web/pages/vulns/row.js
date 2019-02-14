@@ -45,42 +45,25 @@ const Row = ({
   return (
     <TableRow>
       <TableData>
-        <DetailsLink
-          type="nvt"
-          id={entity.id}
-          textOnly={!links}
-        >
+        <DetailsLink type="nvt" id={entity.id} textOnly={!links}>
           {entity.name}
         </DetailsLink>
       </TableData>
+      <TableData>{longDate(results.oldest)}</TableData>
+      <TableData>{longDate(results.newest)}</TableData>
       <TableData>
-        {longDate(results.oldest)}
-      </TableData>
-      <TableData>
-        {longDate(results.newest)}
-      </TableData>
-      <TableData>
-        <SeverityBar severity={entity.severity}/>
+        <SeverityBar severity={entity.severity} />
       </TableData>
       <TableData align="center">
-        <Qod value={entity.qod}/>
+        <Qod value={entity.qod} />
       </TableData>
       <TableData>
-        <Link
-          to="results"
-          filter={'nvt=' + entity.id}
-          textOnly={!links}
-        >
+        <Link to="results" filter={'nvt=' + entity.id} textOnly={!links}>
           {results.count}
         </Link>
       </TableData>
-      <TableData>
-        {hosts.count}
-      </TableData>
-      <ActionsComponent
-        {...props}
-        entity={entity}
-      />
+      <TableData>{hosts.count}</TableData>
+      <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );
 };

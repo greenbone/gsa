@@ -30,43 +30,47 @@ export const TASKS_HIGH_RESULTS = 'tasks-high-results';
 
 export const tasksStatusLoader = loadFunc(
   ({gmp, filter}) => gmp.tasks.getStatusAggregates({filter}).then(r => r.data),
-  TASKS_STATUS);
+  TASKS_STATUS,
+);
 
 export const tasksSeverityLoader = loadFunc(
-  ({gmp, filter}) => gmp.tasks.getSeverityAggregates({filter})
-    .then(r => r.data),
-  TASKS_SEVERITY);
+  ({gmp, filter}) =>
+    gmp.tasks.getSeverityAggregates({filter}).then(r => r.data),
+  TASKS_SEVERITY,
+);
 
 export const tasksSchedulesLoader = loadFunc(
-  ({gmp, filter}) => gmp.tasks.getAll({
-    filter,
-    ignore_pagination: 1,
-    no_filter_history: 1,
-    schedules_only: 1,
-  }).then(r => r.data),
-  TASKS_SCHEDULES);
+  ({gmp, filter}) =>
+    gmp.tasks
+      .getAll({
+        filter,
+        ignore_pagination: 1,
+        no_filter_history: 1,
+        schedules_only: 1,
+      })
+      .then(r => r.data),
+  TASKS_SCHEDULES,
+);
 
 const MAX_HIGH_RESULT_TASKS_COUNT = 10;
 
 export const tasksHighResultsLoader = loadFunc(
-  ({gmp, filter}) => gmp.tasks.getHighResultsAggregates({
-    filter,
-    max: MAX_HIGH_RESULT_TASKS_COUNT,
-  }).then(r => r.data),
-  TASKS_HIGH_RESULTS);
+  ({gmp, filter}) =>
+    gmp.tasks
+      .getHighResultsAggregates({
+        filter,
+        max: MAX_HIGH_RESULT_TASKS_COUNT,
+      })
+      .then(r => r.data),
+  TASKS_HIGH_RESULTS,
+);
 
-export const TaskStatusLoader = ({
-  children,
-  filter,
-}) => (
+export const TaskStatusLoader = ({children, filter}) => (
   <Loader
     dataId={TASKS_STATUS}
     filter={filter}
     load={tasksStatusLoader}
-    subscriptions={[
-      'tasks.timer',
-      'tasks.changed',
-    ]}
+    subscriptions={['tasks.timer', 'tasks.changed']}
   >
     {children}
   </Loader>
@@ -74,18 +78,12 @@ export const TaskStatusLoader = ({
 
 TaskStatusLoader.propTypes = loaderPropTypes;
 
-export const TasksSchedulesLoader = ({
-  children,
-  filter,
-}) => (
+export const TasksSchedulesLoader = ({children, filter}) => (
   <Loader
     dataId={TASKS_SCHEDULES}
     filter={filter}
     load={tasksSchedulesLoader}
-    subscriptions={[
-      'tasks.timer',
-      'tasks.changed',
-    ]}
+    subscriptions={['tasks.timer', 'tasks.changed']}
   >
     {children}
   </Loader>
@@ -93,18 +91,12 @@ export const TasksSchedulesLoader = ({
 
 TasksSchedulesLoader.propTypes = loaderPropTypes;
 
-export const TasksSeverityLoader = ({
-  children,
-  filter,
-}) => (
+export const TasksSeverityLoader = ({children, filter}) => (
   <Loader
     dataId={TASKS_SEVERITY}
     filter={filter}
     load={tasksSeverityLoader}
-    subscriptions={[
-      'tasks.timer',
-      'tasks.changed',
-    ]}
+    subscriptions={['tasks.timer', 'tasks.changed']}
   >
     {children}
   </Loader>
@@ -112,18 +104,12 @@ export const TasksSeverityLoader = ({
 
 TasksSeverityLoader.propTypes = loaderPropTypes;
 
-export const TasksHighResultsLoader = ({
-  children,
-  filter,
-}) => (
+export const TasksHighResultsLoader = ({children, filter}) => (
   <Loader
     dataId={TASKS_HIGH_RESULTS}
     filter={filter}
     load={tasksHighResultsLoader}
-    subscriptions={[
-      'tasks.timer',
-      'tasks.changed',
-    ]}
+    subscriptions={['tasks.timer', 'tasks.changed']}
   >
     {children}
   </Loader>

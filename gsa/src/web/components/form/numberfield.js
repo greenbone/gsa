@@ -28,26 +28,19 @@ import {parseFloat} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 
-
 class NumberField extends React.Component {
-
   constructor(...args) {
     super(...args);
 
     const {value = 0, type, precision} = this.props;
 
-    this.allowed = [
-      KeyCode.SUBTRACT,
-      KeyCode.MINUS,
-    ];
+    this.allowed = [KeyCode.SUBTRACT, KeyCode.MINUS];
 
     if (type === 'float') {
       this.allowed.push(KeyCode.PERIOD);
     }
 
-    this.disallowed = [
-      KeyCode.SPACE,
-    ];
+    this.disallowed = [KeyCode.SPACE];
 
     const displayedValue = fixedValue(value, precision);
 
@@ -74,7 +67,7 @@ class NumberField extends React.Component {
         };
       }
       return {
-          prevValue: value,
+        prevValue: value,
       };
     }
     return null;
@@ -101,8 +94,8 @@ class NumberField extends React.Component {
     min = parseFloat(min);
     max = isDefined(max) ? parseFloat(max) : Number.POSITIVE_INFINITY;
 
-    const update = isDefined(parsedValue) && parsedValue <= max &&
-      parsedValue >= min;
+    const update =
+      isDefined(parsedValue) && parsedValue <= max && parsedValue >= min;
 
     if (update) {
       this.setState({
@@ -111,8 +104,7 @@ class NumberField extends React.Component {
       });
 
       this.notifyChange(parsedValue);
-    }
-    else {
+    } else {
       this.setState({displayedValue: value});
     }
   }
@@ -130,8 +122,7 @@ class NumberField extends React.Component {
     if (isDefined(parsedValue)) {
       if (parsedValue > max) {
         parsedValue = max;
-      }
-      else if (parsedValue < min) {
+      } else if (parsedValue < min) {
         parsedValue = min;
       }
 
@@ -141,8 +132,7 @@ class NumberField extends React.Component {
         displayedValue: newDisplayedValue,
         lastValidValue: parsedValue,
       });
-    }
-    else {
+    } else {
       this.setState({displayedValue: fixedValue(lastValidValue, precision)});
     }
   }
@@ -171,11 +161,16 @@ class NumberField extends React.Component {
     // '9' == keycode 57 and 105 on numpad
     // '0' == keycode 48 and 96 on numpad
     // umlauts seems to have keycode 0
-    if ((keyCode <= 0 || (keyCode > 57 && keyCode < 96) || keyCode > 105 ||
-      this.disallowed.includes(keyCode)) &&
-      !this.allowed.includes(keyCode) && !event.ctrlKey) {
-        event.preventDefault();
-        return;
+    if (
+      (keyCode <= 0 ||
+        (keyCode > 57 && keyCode < 96) ||
+        keyCode > 105 ||
+        this.disallowed.includes(keyCode)) &&
+      !this.allowed.includes(keyCode) &&
+      !event.ctrlKey
+    ) {
+      event.preventDefault();
+      return;
     }
 
     switch (keyCode) {

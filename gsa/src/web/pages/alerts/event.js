@@ -30,9 +30,7 @@ import {
   EVENT_TYPE_OWNED_TICKET_CHANGED,
 } from 'gmp/models/alert';
 
-const Event = ({
-  event,
-}) => {
+const Event = ({event}) => {
   if (event.type === EVENT_TYPE_NEW_SECINFO) {
     const type = secInfoTypeName(event.data.secinfo_type.value, _('SecInfo'));
     return _('New {{secinfo_type}} arrived', {secinfo_type: type});
@@ -43,10 +41,13 @@ const Event = ({
     return _('Updated {{secinfo_type}} arrived', {secinfo_type: type});
   }
 
-  if (event.type === EVENT_TYPE_TASK_RUN_STATUS_CHANGED &&
-    isDefined(event.data.status)) {
-    return _('Task run status changed to {{status}}',
-      {status: event.data.status.value});
+  if (
+    event.type === EVENT_TYPE_TASK_RUN_STATUS_CHANGED &&
+    isDefined(event.data.status)
+  ) {
+    return _('Task run status changed to {{status}}', {
+      status: event.data.status.value,
+    });
   }
   if (event.type === EVENT_TYPE_TICKET_RECEIVED) {
     return _('Ticket received');

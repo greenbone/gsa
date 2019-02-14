@@ -32,11 +32,8 @@ import CloseButton from '../closebutton';
 setLocale('en');
 
 describe('Dialog CloseButton tests', () => {
-
   test('should render', () => {
-    const {element} = render(
-      <CloseButton onClick={() => {}}/>
-    );
+    const {element} = render(<CloseButton onClick={() => {}} />);
 
     expect(element).toMatchSnapshot();
     expect(element).toHaveAttribute('title', 'Close');
@@ -47,9 +44,7 @@ describe('Dialog CloseButton tests', () => {
   test('should call close handler', () => {
     const handler = jest.fn();
 
-    const {element} = render(
-      <CloseButton onClick={handler}/>
-    );
+    const {element} = render(<CloseButton onClick={handler} />);
 
     fireEvent.click(element);
 
@@ -57,14 +52,11 @@ describe('Dialog CloseButton tests', () => {
   });
 
   test('should render a large button', () => {
-    const {element} = render(
-      <CloseButton onClick={() => {}} size="large"/>
-    );
+    const {element} = render(<CloseButton onClick={() => {}} size="large" />);
 
     expect(element).toHaveStyleRule('height', ICON_SIZE_LARGE_PIXELS);
     expect(element).toHaveStyleRule('width', ICON_SIZE_LARGE_PIXELS);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

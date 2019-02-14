@@ -25,16 +25,10 @@ import Layout from 'web/components/layout/layout';
 
 import Identifiers from './identifiers';
 
-const HostDetails = ({
-  entity,
-  onHostIdentifierDeleteClick,
-}) => {
+const HostDetails = ({entity, onHostIdentifierDeleteClick}) => {
   const {identifiers} = entity;
   return (
-    <Layout
-      grow="1"
-      flex="column"
-    >
+    <Layout grow="1" flex="column">
       <Identifiers
         displayActions
         identifiers={identifiers}

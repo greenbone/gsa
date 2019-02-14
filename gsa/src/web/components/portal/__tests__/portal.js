@@ -22,13 +22,9 @@ import {render} from 'web/utils/testing';
 import Portal from '../portal';
 
 describe('Portal component tests', () => {
-
   test('should render portal', () => {
-    const {baseElement} = render(
-      <Portal />
-    );
+    const {baseElement} = render(<Portal />);
 
     expect(baseElement).toMatchSnapshot();
   });
-
 });

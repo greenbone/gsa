@@ -18,16 +18,12 @@
  */
 import React from 'react';
 
-import {
-  rendererWith,
-  fireEvent,
-} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Link from '../link';
 import Filter from 'gmp/models/filter';
 
 describe('Link tests', () => {
-
   test('render Link', () => {
     const {render} = rendererWith({router: true});
 
@@ -65,7 +61,9 @@ describe('Link tests', () => {
     const {render, history} = rendererWith({router: true});
 
     const {element} = render(
-      <Link to="foo" filter={filter}>Foo</Link>
+      <Link to="foo" filter={filter}>
+        Foo
+      </Link>,
     );
 
     expect(history.location.pathname).toEqual('/');
@@ -81,7 +79,9 @@ describe('Link tests', () => {
     const query = {foo: 'bar'};
 
     const {element} = render(
-      <Link to="foo" query={query}>Foo</Link>
+      <Link to="foo" query={query}>
+        Foo
+      </Link>,
     );
 
     expect(history.location.pathname).toEqual('/');
@@ -96,7 +96,9 @@ describe('Link tests', () => {
     const {render, history} = rendererWith({router: true});
 
     const {element} = render(
-      <Link to="foo" anchor="bar">Foo</Link>
+      <Link to="foo" anchor="bar">
+        Foo
+      </Link>,
     );
 
     expect(history.location.pathname).toEqual('/');
@@ -111,7 +113,9 @@ describe('Link tests', () => {
     const {render, history} = rendererWith({router: true});
 
     const {element} = render(
-      <Link to="foo" textOnly={true}>Foo</Link>
+      <Link to="foo" textOnly={true}>
+        Foo
+      </Link>,
     );
 
     fireEvent.click(element);
@@ -122,9 +126,7 @@ describe('Link tests', () => {
   test('should render styles', () => {
     const {render} = rendererWith({router: true});
 
-    const {element} = render(
-      <Link to="foo">Foo</Link>
-    );
+    const {element} = render(<Link to="foo">Foo</Link>);
 
     expect(element).toMatchSnapshot();
   });
@@ -133,12 +135,13 @@ describe('Link tests', () => {
     const {render} = rendererWith({router: true});
 
     const {element} = render(
-      <Link to="foo" textOnly={true}>Foo</Link>
+      <Link to="foo" textOnly={true}>
+        Foo
+      </Link>,
     );
 
     expect(element).toMatchSnapshot();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

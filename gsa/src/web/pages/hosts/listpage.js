@@ -49,22 +49,16 @@ import HostComponent from './component';
 
 import HostsDashboard, {HOSTS_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onHostCreateClick,
-}) => (
+const ToolBarIcons = withCapabilities(({capabilities, onHostCreateClick}) => (
   <IconDivider>
     <ManualIcon
       page="vulnerabilitymanagement"
       anchor="hosts-view"
       title={_('Help: Hosts')}
     />
-    {capabilities.mayCreate('host') &&
-      <NewIcon
-        title={_('New Host')}
-        onClick={onHostCreateClick}
-      />
-    }
+    {capabilities.mayCreate('host') && (
+      <NewIcon title={_('New Host')} onClick={onHostCreateClick} />
+    )}
   </IconDivider>
 ));
 
@@ -118,7 +112,7 @@ const Page = ({
         filter={filter}
         filterEditDialog={HostsFilterDialog}
         filtersFilter={HOSTS_FILTER_FILTER}
-        sectionIcon={<HostIcon size="large"/>}
+        sectionIcon={<HostIcon size="large" />}
         table={HostsTable}
         title={_('Hosts')}
         toolBarIcons={ToolBarIcons}

@@ -30,17 +30,11 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.groups');
 
 class GroupCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'group', Group);
   }
 
-  create({
-    name,
-    comment = '',
-    grant_full,
-    users = [],
-  }) {
+  create({name, comment = '', grant_full, users = []}) {
     const data = {
       cmd: 'create_group',
       name,
@@ -52,13 +46,7 @@ class GroupCommand extends EntityCommand {
     return this.action(data);
   }
 
-  save({
-    id,
-    name,
-    comment = '',
-    grant_full,
-    users = [],
-  }) {
+  save({id, name, comment = '', grant_full, users = []}) {
     const data = {
       cmd: 'save_group',
       id,
@@ -77,7 +65,6 @@ class GroupCommand extends EntityCommand {
 }
 
 class GroupsCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'group', Group);
   }

@@ -50,7 +50,7 @@ const ResizerBox = styled.div`
 const Resizer = props => {
   return (
     <ResizerBox>
-      <ResizerSymbol {...props}/>
+      <ResizerSymbol {...props} />
     </ResizerBox>
   );
 };

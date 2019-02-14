@@ -47,50 +47,49 @@ import Condition from './condition';
 import Event from './event';
 import Method from './method';
 
-const Actions = withEntitiesActions(({
-  entity,
-  onAlertDeleteClick,
-  onAlertDownloadClick,
-  onAlertCloneClick,
-  onAlertEditClick,
-  onAlertTestClick,
-}) => (
-  <IconDivider
-    align={['center', 'center']}
-    grow
-  >
-    <TrashIcon
-      displayName={_('Alert')}
-      name="alert"
-      entity={entity}
-      onClick={onAlertDeleteClick}
-    />
-    <EditIcon
-      displayName={_('Alert')}
-      name="alert"
-      entity={entity}
-      onClick={onAlertEditClick}
-    />
-    <CloneIcon
-      displayName={_('Alert')}
-      name="alert"
-      entity={entity}
-      title={_('Clone Alert')}
-      value={entity}
-      onClick={onAlertCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export Alert')}
-      onClick={onAlertDownloadClick}
-    />
-    <StartIcon
-      value={entity}
-      title={_('Test Alert')}
-      onClick={onAlertTestClick}
-    />
-  </IconDivider>
-));
+const Actions = withEntitiesActions(
+  ({
+    entity,
+    onAlertDeleteClick,
+    onAlertDownloadClick,
+    onAlertCloneClick,
+    onAlertEditClick,
+    onAlertTestClick,
+  }) => (
+    <IconDivider align={['center', 'center']} grow>
+      <TrashIcon
+        displayName={_('Alert')}
+        name="alert"
+        entity={entity}
+        onClick={onAlertDeleteClick}
+      />
+      <EditIcon
+        displayName={_('Alert')}
+        name="alert"
+        entity={entity}
+        onClick={onAlertEditClick}
+      />
+      <CloneIcon
+        displayName={_('Alert')}
+        name="alert"
+        entity={entity}
+        title={_('Clone Alert')}
+        value={entity}
+        onClick={onAlertCloneClick}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export Alert')}
+        onClick={onAlertDownloadClick}
+      />
+      <StartIcon
+        value={entity}
+        title={_('Test Alert')}
+        onClick={onAlertTestClick}
+      />
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model,
@@ -134,27 +133,17 @@ const Row = ({
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData>
-      <Event event={entity.event}/>
+      <Event event={entity.event} />
     </TableData>
     <TableData>
-      <Condition
-        condition={entity.condition}
-        event={entity.event}
-      />
+      <Condition condition={entity.condition} event={entity.event} />
     </TableData>
     <TableData>
-      <Method method={entity.method}/>
+      <Method method={entity.method} />
     </TableData>
-    <TableData>
-      {render_filter(entity.filter, capabilities)}
-    </TableData>
-    <TableData>
-      {renderYesNo(entity.active)}
-    </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <TableData>{render_filter(entity.filter, capabilities)}</TableData>
+    <TableData>{renderYesNo(entity.active)}</TableData>
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

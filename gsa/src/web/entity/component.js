@@ -35,7 +35,6 @@ export const goto_list = (type, props) => () => {
 };
 
 class EntityComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 

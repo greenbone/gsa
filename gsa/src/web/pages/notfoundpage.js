@@ -30,13 +30,9 @@ const StyledLogo = styled(Logo)`
 `;
 
 const PageNotFound = () => (
-  <Divider
-    flex="column"
-    align={['center', 'center']}
-    grow
-  >
+  <Divider flex="column" align={['center', 'center']} grow>
     <h1>{_('Page Not Found.')}</h1>
-    <StyledLogo/>
+    <StyledLogo />
     <p>{_('We are sorry. The page you have requested could not be found.')}</p>
   </Divider>
 );

@@ -21,7 +21,6 @@ import 'core-js/fn/string/starts-with';
 import {initLocale} from 'gmp/locale/lang';
 
 class FakeBackend {
-
   read(language, namespace, callback) {
     if (language.startsWith('en') || language.startsWith('de')) {
       // change language by calling the callback functioon
@@ -30,7 +29,7 @@ class FakeBackend {
     // change language and pass error message
     return callback('Unknown lang');
   }
-};
+}
 
 FakeBackend.type = 'backend';
 

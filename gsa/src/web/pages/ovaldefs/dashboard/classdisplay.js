@@ -67,7 +67,6 @@ const transformClassData = (data = {}) => {
 };
 
 export class OvaldefClassDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -89,23 +88,18 @@ export class OvaldefClassDisplay extends React.Component {
     }
     const classFilter = Filter.fromTerm(classTerm);
 
-    const newFilter = isDefined(filter) ? filter.copy().and(classFilter) :
-      classFilter;
+    const newFilter = isDefined(filter)
+      ? filter.copy().and(classFilter)
+      : classFilter;
 
     onFilterChanged(newFilter);
   }
 
   render() {
-    const {
-      filter,
-      onFilterChanged,
-      ...props
-    } = this.props;
+    const {filter, onFilterChanged, ...props} = this.props;
 
     return (
-      <OvaldefClassLoader
-        filter={filter}
-      >
+      <OvaldefClassLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
@@ -114,8 +108,10 @@ export class OvaldefClassDisplay extends React.Component {
             dataTitles={[_('Class'), _('# of OVAL Definitions')]}
             dataRow={row => [row.label, row.value]}
             title={({data: tdata}) =>
-              _('OVAL Definitions by Class (Total: {{count}})',
-              {count: tdata.total})}
+              _('OVAL Definitions by Class (Total: {{count}})', {
+                count: tdata.total,
+              })
+            }
             initialState={{
               show3d: true,
             }}
@@ -129,8 +125,9 @@ export class OvaldefClassDisplay extends React.Component {
                 width={width}
                 show3d={state.show3d}
                 showLegend={state.showLegend}
-                onDataClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
+                onDataClick={
+                  isDefined(onFilterChanged) ? this.handleDataClick : undefined
+                }
               />
             )}
           </DataDisplay>
@@ -156,10 +153,7 @@ export const OvaldefClassTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   title: ({data: tdata}) =>
     _('OVAL Definitions by Class (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [
-    _l('Class'),
-    _l('# of OVAL Defs'),
-  ],
+  dataTitles: [_l('Class'), _l('# of OVAL Defs')],
   dataRow: row => [row.label, row.value],
   dataTransform: transformClassData,
   displayId: 'ovaldef-by-class-table',

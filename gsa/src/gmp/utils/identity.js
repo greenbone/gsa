@@ -33,7 +33,7 @@ export const isFunction = value => typeof value === 'function';
 export const isJsDate = value =>
   Object.prototype.toString.call(value) === '[object Date]';
 
-export const isModelElement = elem => isDefined(elem) &&
-  isString(elem._id) && elem._id.length > 0;
+export const isModelElement = elem =>
+  isDefined(elem) && isString(elem._id) && elem._id.length > 0;
 
 // vim: set ts=2 sw=2 tw=80:

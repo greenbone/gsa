@@ -41,7 +41,6 @@ const id_or__ = value => {
 };
 
 class TargetComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -52,8 +51,9 @@ class TargetComponent extends React.Component {
     };
 
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
-    this.handleCloseCredentialsDialog =
-      this.handleCloseCredentialsDialog.bind(this);
+    this.handleCloseCredentialsDialog = this.handleCloseCredentialsDialog.bind(
+      this,
+    );
     this.openPortListDialog = this.openPortListDialog.bind(this);
     this.handleClosePortListDialog = this.handleClosePortListDialog.bind(this);
     this.openTargetDialog = this.openTargetDialog.bind(this);
@@ -62,19 +62,17 @@ class TargetComponent extends React.Component {
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleCreatePortList = this.handleCreatePortList.bind(this);
     this.handlePortListChange = this.handlePortListChange.bind(this);
-    this.handleEsxiCredentialChange = this.handleEsxiCredentialChange
-      .bind(this);
+    this.handleEsxiCredentialChange = this.handleEsxiCredentialChange.bind(
+      this,
+    );
     this.handleSshCredentialChange = this.handleSshCredentialChange.bind(this);
     this.handleSmbCredentialChange = this.handleSmbCredentialChange.bind(this);
-    this.handleSnmpCredentialChange = this.handleSnmpCredentialChange
-      .bind(this);
+    this.handleSnmpCredentialChange = this.handleSnmpCredentialChange.bind(
+      this,
+    );
   }
 
-  openCredentialsDialog({
-    id_field,
-    types,
-    title,
-  }) {
+  openCredentialsDialog({id_field, types, title}) {
     this.id_field = id_field;
 
     this.setState({
@@ -103,13 +101,15 @@ class TargetComponent extends React.Component {
         alive_tests: entity.alive_tests,
         comment: entity.comment,
         esxi_credential_id: id_or__(entity.esxi_credential),
-        exclude_hosts: isDefined(entity.exclude_hosts) ?
-          entity.exclude_hosts.join(', ') : '',
+        exclude_hosts: isDefined(entity.exclude_hosts)
+          ? entity.exclude_hosts.join(', ')
+          : '',
         hosts: entity.hosts.join(', '),
         in_use: entity.isInUse(),
         name: entity.name,
-        port: isDefined(entity.ssh_credential) ?
-          entity.ssh_credential.port : '22',
+        port: isDefined(entity.ssh_credential)
+          ? entity.ssh_credential.port
+          : '22',
         reverse_lookup_only: entity.reverse_lookup_only,
         reverse_lookup_unify: entity.reverse_lookup_unify,
         target_source: 'manual',
@@ -126,8 +126,7 @@ class TargetComponent extends React.Component {
           ssh_credential_id: id_or__(entity.ssh_credential),
         });
       });
-    }
-    else {
+    } else {
       this.loadAll();
 
       this.setState({
@@ -210,7 +209,8 @@ class TargetComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.credential.create(data)
+    return gmp.credential
+      .create(data)
       .then(response => {
         const {data: credential} = response;
 
@@ -232,7 +232,8 @@ class TargetComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.portlist.create(data)
+    return gmp.portlist
+      .create(data)
       .then(response => {
         const {data: portlist} = response;
         port_list_id = portlist.id;
@@ -334,17 +335,14 @@ class TargetComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
               create: this.openCreateTargetDialog,
               edit: this.openTargetDialog,
             })}
-            {targetDialogVisible &&
+            {targetDialogVisible && (
               <TargetDialog
                 alive_tests={alive_tests}
                 comment={comment}
@@ -380,8 +378,8 @@ class TargetComponent extends React.Component {
                   return save(d).then(() => this.closeTargetDialog());
                 }}
               />
-            }
-            {credentialsDialogVisible &&
+            )}
+            {credentialsDialogVisible && (
               <CredentialsDialog
                 types={credentialTypes}
                 base={first(credentialTypes)}
@@ -389,21 +387,21 @@ class TargetComponent extends React.Component {
                 onClose={this.handleCloseCredentialsDialog}
                 onSave={this.handleCreateCredential}
               />
-            }
-            {portListDialogVisible &&
+            )}
+            {portListDialogVisible && (
               <PortListDialog
                 title={port_lists_title}
                 visible={portListDialogVisible}
                 onClose={this.handleClosePortListDialog}
                 onSave={this.handleCreatePortList}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>
     );
   }
-};
+}
 
 TargetComponent.propTypes = {
   children: PropTypes.func.isRequired,

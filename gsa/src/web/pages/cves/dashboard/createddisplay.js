@@ -55,11 +55,7 @@ export const CvesCreatedTableDisplay = createDisplay({
   loaderComponent: CvesCreatedLoader,
   displayComponent: DataTableDisplay,
   title: () => _('CVEs by Creation Time'),
-  dataTitles: [
-    _l('Creation Time'),
-    _l('# of CVEs'),
-    _l('Total CVEs'),
-  ],
+  dataTitles: [_l('Creation Time'), _l('# of CVEs'), _l('Total CVEs')],
   dataRow: row => [row.label, row.y, row.y2],
   dataTransform: transformCreated,
   displayId: 'cve-by-created-table',
@@ -67,10 +63,12 @@ export const CvesCreatedTableDisplay = createDisplay({
   filtersFilter: CVES_FILTER_FILTER,
 });
 
-registerDisplay(CvesCreatedTableDisplay.displayId,
-  CvesCreatedTableDisplay, {title: _l('Table: CVEs by Creation Time')});
+registerDisplay(CvesCreatedTableDisplay.displayId, CvesCreatedTableDisplay, {
+  title: _l('Table: CVEs by Creation Time'),
+});
 
-registerDisplay(CvesCreatedDisplay.displayId,
-  CvesCreatedDisplay, {title: _l('Chart: CVEs by Creation Time')});
+registerDisplay(CvesCreatedDisplay.displayId, CvesCreatedDisplay, {
+  title: _l('Chart: CVEs by Creation Time'),
+});
 
 // vim: set ts=2 sw=2 tw=80:

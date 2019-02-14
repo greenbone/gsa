@@ -42,12 +42,11 @@ const ConfirmDeleteDialog = ({
   let headline;
   if (deleteUsers.length === 1) {
     headline = _('User {{name}} will be deleted.', {name: deleteUsers[0].name});
-  }
-  else if (deleteUsers.length > 1) {
-    headline = _('{{count}} users will be deleted',
-      {count: deleteUsers.length});
-  }
-  else {
+  } else if (deleteUsers.length > 1) {
+    headline = _('{{count}} users will be deleted', {
+      count: deleteUsers.length,
+    });
+  } else {
     headline = _('1 user will be deleted');
   }
 
@@ -56,10 +55,12 @@ const ConfirmDeleteDialog = ({
     inheritorId,
   };
 
-  const inheritingUserItems = [{
+  const inheritingUserItems = [
+    {
       label: '--',
       value: '--',
-    }, {
+    },
+    {
       label: _('Current User'),
       value: 'self',
     },
@@ -74,20 +75,17 @@ const ConfirmDeleteDialog = ({
       onSave={onSave}
       defaultValues={data}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
             <h2>{headline}</h2>
             <p>
-              {_('If no inheriting user is selected, all owned resources will' +
-                  ' be deleted as well.')}
+              {_(
+                'If no inheriting user is selected, all owned resources will' +
+                  ' be deleted as well.',
+              )}
             </p>
-            <FormGroup
-              title={_('Inheriting user')}
-            >
+            <FormGroup title={_('Inheriting user')}>
               <Select
                 name="inheritorId"
                 items={inheritingUserItems}

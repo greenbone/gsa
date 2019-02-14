@@ -33,37 +33,23 @@ import TableRow from 'web/components/table/row.js';
 
 import {Col} from 'web/entity/page';
 
-const AgentDetails = ({
-  entity,
-}) => {
-  const {
-    comment,
-    trust,
-  } = entity;
+const AgentDetails = ({entity}) => {
+  const {comment, trust} = entity;
   return (
-    <Layout
-      grow
-      flex="column"
-    >
+    <Layout grow flex="column">
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
           <TableRow>
-            <TableData>
-              {_('Comment')}
-            </TableData>
-            <TableData>
-              {comment}
-            </TableData>
+            <TableData>{_('Comment')}</TableData>
+            <TableData>{comment}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Trust')}
-            </TableData>
+            <TableData>{_('Trust')}</TableData>
             <TableData>
               {trust.status} ({shortDate(trust.time)})
             </TableData>

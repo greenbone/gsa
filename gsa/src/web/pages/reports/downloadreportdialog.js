@@ -30,7 +30,9 @@ import {isString} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
-import ComposerContent, {COMPOSER_CONTENT_DEFAULTS} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
+import ComposerContent, {
+  COMPOSER_CONTENT_DEFAULTS,
+} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -56,8 +58,9 @@ const DownloadReportDialog = ({
   onClose,
   onSave,
 }) => {
-  const filterString = isString(filter) ?
-    filter : filter.toFilterCriteriaString();
+  const filterString = isString(filter)
+    ? filter
+    : filter.toFilterCriteriaString();
 
   reportFormatId = selectSaveId(reportFormats, defaultReportFormatId);
 
@@ -76,10 +79,7 @@ const DownloadReportDialog = ({
       onClose={onClose}
       onSave={onSave}
     >
-      {({
-        values,
-        onValueChange,
-      }) => (
+      {({values, onValueChange}) => (
         <Layout flex="column">
           <ComposerContent
             filterString={filterString}

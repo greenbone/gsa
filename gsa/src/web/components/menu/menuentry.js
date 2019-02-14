@@ -34,21 +34,9 @@ const StyledLink = styled(Link)`
   height: 100%;
 `;
 
-const MenuEntry = ({
-  children,
-  title = children,
-  to,
-  ...props
-}) => (
-  <Layout
-    {...props}
-    grow="1"
-    align={['start', 'center']}
-  >
-    {isDefined(to) ?
-      <StyledLink to={to}>{title}</StyledLink> :
-      title
-    }
+const MenuEntry = ({children, title = children, to, ...props}) => (
+  <Layout {...props} grow="1" align={['start', 'center']}>
+    {isDefined(to) ? <StyledLink to={to}>{title}</StyledLink> : title}
   </Layout>
 );
 

@@ -31,7 +31,6 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 class StartTimeSelection extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -143,7 +142,8 @@ class StartTimeSelection extends React.Component {
                 max="23"
                 type="int"
                 onChange={this.handleValueChange}
-              /> h
+              />{' '}
+              h
               <Spinner
                 name="startMinute"
                 value={startMinute}
@@ -151,7 +151,8 @@ class StartTimeSelection extends React.Component {
                 max="59"
                 type="int"
                 onChange={this.handleValueChange}
-              /> m
+              />{' '}
+              m
             </Divider>
           </Divider>
         </FormGroup>
@@ -172,7 +173,8 @@ class StartTimeSelection extends React.Component {
                 max="23"
                 type="int"
                 onChange={this.handleValueChange}
-              /> h
+              />{' '}
+              h
               <Spinner
                 name="endMinute"
                 value={endMinute}
@@ -180,15 +182,14 @@ class StartTimeSelection extends React.Component {
                 max="59"
                 type="int"
                 onChange={this.handleValueChange}
-              /> m
+              />{' '}
+              m
             </Divider>
           </Divider>
         </FormGroup>
 
         <FormGroup offset="4">
-          <Button onClick={this.handleUpdate}>
-            {_('Update')}
-          </Button>
+          <Button onClick={this.handleUpdate}>{_('Update')}</Button>
         </FormGroup>
       </Layout>
     );

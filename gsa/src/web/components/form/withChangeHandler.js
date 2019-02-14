@@ -1,4 +1,3 @@
-
 /* Copyright (C) 2016-2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
@@ -32,13 +31,9 @@ export const noop_convert = value => value;
 export const target_value = event => event.target.value;
 
 const withChangeHandler = (options = {}) => Component => {
-  const {
-    convert_func = noop_convert,
-    value_func = target_value,
-  } = options;
+  const {convert_func = noop_convert, value_func = target_value} = options;
 
   class ChangeHandler extends React.Component {
-
     constructor(...args) {
       super(...args);
 
@@ -108,11 +103,7 @@ const withChangeHandler = (options = {}) => Component => {
       const props = this.getOtherProps();
       const {value} = this.state;
       return (
-        <Component
-          {...props}
-          value={value}
-          onChange={this.handleChange}
-        />
+        <Component {...props} value={value} onChange={this.handleChange} />
       );
     }
   }

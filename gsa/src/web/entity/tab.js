@@ -39,7 +39,9 @@ const EntitiesTab = ({
   <Tab {...props}>
     <Layout flex="column" align={['center', 'center']}>
       <span>{children}</span>
-      <TabTitleCounts>(<i>{(count)}</i>)</TabTitleCounts>
+      <TabTitleCounts>
+        (<i>{count}</i>)
+      </TabTitleCounts>
     </Layout>
   </Tab>
 );

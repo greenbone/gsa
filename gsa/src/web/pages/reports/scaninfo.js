@@ -68,11 +68,7 @@ const scanDuration = (start, end) => {
   });
 };
 
-const ReportScanInfoTable = ({
-  filterString,
-  links = true,
-  report,
-}) => {
+const ReportScanInfoTable = ({filterString, links = true, report}) => {
   const {
     delta_report,
     filter,
@@ -88,15 +84,17 @@ const ReportScanInfoTable = ({
 
   const {id, name, comment, progress} = task;
 
-  const hosts_count = isDefined(hosts) && isDefined(hosts.counts) ?
-    hosts.counts.all : 0;
+  const hosts_count =
+    isDefined(hosts) && isDefined(hosts.counts) ? hosts.counts.all : 0;
 
   if (!isDefined(filterString)) {
     filterString = filter.simple().toFilterString();
   }
 
-  const status = isDefined(task.isContainer) && task.isContainer() ?
-    _('Container') : scan_run_status;
+  const status =
+    isDefined(task.isContainer) && task.isContainer()
+      ? _('Container')
+      : scan_run_status;
 
   const delta = report.isDeltaReport();
 
@@ -104,51 +102,35 @@ const ReportScanInfoTable = ({
   return (
     <Table>
       <colgroup>
-        <Col width="10%"/>
-        <Col width="90%"/>
+        <Col width="10%" />
+        <Col width="90%" />
       </colgroup>
       <TableBody>
         <TableRow>
+          <TableData>{_('Task Name')}</TableData>
           <TableData>
-            {_('Task Name')}
-          </TableData>
-          <TableData>
-            <DetailsLink
-              textOnly={!links}
-              type="task"
-              id={id}
-            >
+            <DetailsLink textOnly={!links} type="task" id={id}>
               {name}
             </DetailsLink>
           </TableData>
         </TableRow>
-        {isDefined(comment) &&
+        {isDefined(comment) && (
           <TableRow>
-            <TableData>
-              {_('Comment')}
-            </TableData>
-            <TableData>
-              {comment}
-            </TableData>
+            <TableData>{_('Comment')}</TableData>
+            <TableData>{comment}</TableData>
           </TableRow>
-        }
-        {delta &&
+        )}
+        {delta && (
           <TableRow>
+            <TableData>{_('Report 1')}</TableData>
             <TableData>
-              {_('Report 1')}
-            </TableData>
-            <TableData>
-              <DetailsLink
-                textOnly={!links}
-                type="report"
-                id={report.id}
-              >
+              <DetailsLink textOnly={!links} type="report" id={report.id}>
                 {report.id}
               </DetailsLink>
             </TableData>
           </TableRow>
-        }
-        {isDefined(scan_start) &&
+        )}
+        {isDefined(scan_start) && (
           <TableRow>
             <TableData>
               {delta ? _('Scan Time Report 1') : _('Scan Time')}
@@ -158,107 +140,79 @@ const ReportScanInfoTable = ({
               {is_ended ? ' - ' + longDate(scan_end) : ''}
             </TableData>
           </TableRow>
-        }
-        {is_ended &&
+        )}
+        {is_ended && (
           <TableRow>
             <TableData>
               {delta ? _('Scan Duration Report 1') : _('Scan Duration')}
             </TableData>
-            <TableData>
-              {scanDuration(scan_start, scan_end)}
-            </TableData>
+            <TableData>{scanDuration(scan_start, scan_end)}</TableData>
           </TableRow>
-        }
+        )}
         <TableRow>
           <TableData>
             {delta ? _('Scan Status Report 1') : _('Scan Status')}
           </TableData>
           <TableData>
-            <StatusBar
-              status={status}
-              progress={progress}
-            />
+            <StatusBar status={status} progress={progress} />
           </TableData>
         </TableRow>
-        {delta &&
+        {delta && (
           <TableRow>
+            <TableData>{_('Report 2')}</TableData>
             <TableData>
-              {_('Report 2')}
-            </TableData>
-            <TableData>
-              <DetailsLink
-                textOnly={!links}
-                type="report"
-                id={delta_report.id}
-              >
+              <DetailsLink textOnly={!links} type="report" id={delta_report.id}>
                 {delta_report.id}
               </DetailsLink>
             </TableData>
           </TableRow>
-        }
-        {delta &&
+        )}
+        {delta && (
           <TableRow>
-            <TableData>
-              {_('Scan Time Report 2')}
-            </TableData>
+            <TableData>{_('Scan Time Report 2')}</TableData>
             <TableData>
               {longDate(delta_report.scan_start)}
               {isDefined(delta_report.scan_end) &&
-                delta_report.scan_end.isValid() ?
-                ' - ' + longDate(delta_report.scan_end) : ''}
+              delta_report.scan_end.isValid()
+                ? ' - ' + longDate(delta_report.scan_end)
+                : ''}
             </TableData>
           </TableRow>
-        }
-        {delta && delta_report.scan_end.isValid() &&
+        )}
+        {delta && delta_report.scan_end.isValid() && (
           <TableRow>
-            <TableData>
-              {_('Scan Duration Report 2')}
-            </TableData>
+            <TableData>{_('Scan Duration Report 2')}</TableData>
             <TableData>
               {scanDuration(delta_report.scan_start, delta_report.scan_end)}
             </TableData>
           </TableRow>
-        }
-        {delta &&
+        )}
+        {delta && (
           <TableRow>
+            <TableData>{_('Scan Status Report 2')}</TableData>
             <TableData>
-              {_('Scan Status Report 2')}
-            </TableData>
-            <TableData>
-              <StatusBar
-                status={delta_report.scan_run_status}
-              />
+              <StatusBar status={delta_report.scan_run_status} />
             </TableData>
           </TableRow>
-        }
-        {isDefined(slave) &&
+        )}
+        {isDefined(slave) && (
           <TableRow>
-            <TableData>
-              {_('Scan slave')}
-            </TableData>
-            <TableData>
-              {slave.name}
-            </TableData>
+            <TableData>{_('Scan slave')}</TableData>
+            <TableData>{slave.name}</TableData>
           </TableRow>
-        }
-        {hosts_count > 0 &&
+        )}
+        {hosts_count > 0 && (
           <TableRow>
-            <TableData>
-              {_('Hosts scanned')}
-            </TableData>
+            <TableData>{_('Hosts scanned')}</TableData>
             <TableData>{hosts_count}</TableData>
           </TableRow>
-        }
+        )}
         <TableRow>
-          <TableData>
-            {_('Filter')}
-          </TableData>
+          <TableData>{_('Filter')}</TableData>
           <TableData>{filterString}</TableData>
         </TableRow>
         <TableRow>
-          <TableData>
-            {_('Timezone')}
-          </TableData>
+          <TableData>{_('Timezone')}</TableData>
           <TableData>
             {timezone} ({timezone_abbrev})
           </TableData>

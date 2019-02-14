@@ -64,10 +64,7 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/scanconfigs';
+import {selector, loadEntity} from 'web/store/entities/scanconfigs';
 
 import {
   selector as permissionsSelector,
@@ -81,59 +78,46 @@ import ScanConfigDetails from './details';
 import ScanConfigComponent from './component';
 import Trend from './trend';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  entity,
-  onScanConfigCloneClick,
-  onScanConfigCreateClick,
-  onScanConfigDeleteClick,
-  onScanConfigDownloadClick,
-  onScanConfigEditClick,
-  onScanConfigImportClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="scan-configuration"
-        title={_('Help: ScanConfigs')}
-      />
-      <ListIcon
-        title={_('ScanConfig List')}
-        page="scanconfigs"
-      />
-    </IconDivider>
-    <IconDivider>
-      <CreateIcon
-        entity={entity}
-        onClick={onScanConfigCreateClick}
-      />
-      <CloneIcon
-        entity={entity}
-        onClick={onScanConfigCloneClick}
-      />
-      <EditIcon
-        entity={entity}
-        onClick={onScanConfigEditClick}
-      />
-      <TrashIcon
-        entity={entity}
-        onClick={onScanConfigDeleteClick}
-      />
-      <ExportIcon
-        value={entity}
-        title={_('Export Scan Config as XML')}
-        onClick={onScanConfigDownloadClick}
-      />
-      {capabilities.mayCreate('config') &&
-        <UploadIcon
-          title={_('Import Scan Config')}
-          onClick={onScanConfigImportClick}
+const ToolBarIcons = withCapabilities(
+  ({
+    capabilities,
+    entity,
+    onScanConfigCloneClick,
+    onScanConfigCreateClick,
+    onScanConfigDeleteClick,
+    onScanConfigDownloadClick,
+    onScanConfigEditClick,
+    onScanConfigImportClick,
+  }) => (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          page="vulnerabilitymanagement"
+          anchor="scan-configuration"
+          title={_('Help: ScanConfigs')}
         />
-      }
-    </IconDivider>
-  </Divider>
-));
+        <ListIcon title={_('ScanConfig List')} page="scanconfigs" />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon entity={entity} onClick={onScanConfigCreateClick} />
+        <CloneIcon entity={entity} onClick={onScanConfigCloneClick} />
+        <EditIcon entity={entity} onClick={onScanConfigEditClick} />
+        <TrashIcon entity={entity} onClick={onScanConfigDeleteClick} />
+        <ExportIcon
+          value={entity}
+          title={_('Export Scan Config as XML')}
+          onClick={onScanConfigDownloadClick}
+        />
+        {capabilities.mayCreate('config') && (
+          <UploadIcon
+            title={_('Import Scan Config')}
+            onClick={onScanConfigImportClick}
+          />
+        )}
+      </IconDivider>
+    </Divider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -145,35 +129,29 @@ ToolBarIcons.propTypes = {
   onScanConfigImportClick: PropTypes.func.isRequired,
 };
 
-const NvtFamilies = ({
-  entity,
-}) => {
-  const {
-    family_list = [],
-    families,
-  } = entity;
+const NvtFamilies = ({entity}) => {
+  const {family_list = [], families} = entity;
   return (
     <Layout>
-      {family_list.length > 0 &&
+      {family_list.length > 0 && (
         <StripedTable>
           <TableHeader>
             <TableRow>
-              <TableHead>
-                {_('Family')}
-              </TableHead>
-              <TableHead>
-                {_('NVTs selected')}
-              </TableHead>
+              <TableHead>{_('Family')}</TableHead>
+              <TableHead>{_('NVTs selected')}</TableHead>
               <TableHead align={['center', 'center']}>
                 <Divider>
                   {_('Trend')}
                   <Trend
                     trend={families.trend}
-                    titleDynamic={_('The families selection is DYNAMIC. New ' +
-                      'families will automatically be added and considered.')}
-                    titleStatic={_('The families selection is STATIC. New ' +
-                      'families will NOT automatically be added and considered.'
-                      )}
+                    titleDynamic={_(
+                      'The families selection is DYNAMIC. New ' +
+                        'families will automatically be added and considered.',
+                    )}
+                    titleStatic={_(
+                      'The families selection is STATIC. New ' +
+                        'families will NOT automatically be added and considered.',
+                    )}
                   />
                 </Divider>
               </TableHead>
@@ -181,9 +159,7 @@ const NvtFamilies = ({
           </TableHeader>
           <TableBody>
             {family_list.map(family => (
-              <TableRow
-                key={family.name}
-              >
+              <TableRow key={family.name}>
                 <TableData>
                   <Link
                     to="nvts"
@@ -194,24 +170,26 @@ const NvtFamilies = ({
                   </Link>
                 </TableData>
                 <TableData align={['center', 'start']}>
-                  <Layout>
-                    {_('{{count}} of {{max}}', family.nvts)}
-                  </Layout>
+                  <Layout>{_('{{count}} of {{max}}', family.nvts)}</Layout>
                 </TableData>
                 <TableData align={['center', 'center']}>
                   <Trend
                     trend={family.trend}
-                    titleDynamic={_('The NVT selection is DYNAMIC. New ' +
-                      'NVTs will automatically be added and considered.')}
-                    titleStatic={_('The NVT selection is STATIC. New ' +
-                      'NVTs will NOT automatically be added and considered.')}
+                    titleDynamic={_(
+                      'The NVT selection is DYNAMIC. New ' +
+                        'NVTs will automatically be added and considered.',
+                    )}
+                    titleStatic={_(
+                      'The NVT selection is STATIC. New ' +
+                        'NVTs will NOT automatically be added and considered.',
+                    )}
                   />
                 </TableData>
               </TableRow>
             ))}
           </TableBody>
         </StripedTable>
-      }
+      )}
     </Layout>
   );
 };
@@ -220,47 +198,31 @@ NvtFamilies.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const ScannerPreferences = ({
-  entity,
-}) => {
+const ScannerPreferences = ({entity}) => {
   const {preferences} = entity;
 
   return (
     <Layout>
-      {preferences.scanner.length > 0 &&
+      {preferences.scanner.length > 0 && (
         <StripedTable>
           <TableHeader>
             <TableRow>
-              <TableHead>
-                {_('Name')}
-              </TableHead>
-              <TableHead>
-                {_('Value')}
-              </TableHead>
-              <TableHead>
-                {_('Default Value')}
-              </TableHead>
+              <TableHead>{_('Name')}</TableHead>
+              <TableHead>{_('Value')}</TableHead>
+              <TableHead>{_('Default Value')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {preferences.scanner.map(pref => (
-              <TableRow
-                key={pref.name}
-              >
-                <TableData>
-                  {pref.name}
-                </TableData>
-                <TableData>
-                  {pref.value}
-                </TableData>
-                <TableData>
-                  {pref.default}
-                </TableData>
+              <TableRow key={pref.name}>
+                <TableData>{pref.name}</TableData>
+                <TableData>{pref.value}</TableData>
+                <TableData>{pref.default}</TableData>
               </TableRow>
             ))}
           </TableBody>
         </StripedTable>
-      }
+      )}
     </Layout>
   );
 };
@@ -273,58 +235,37 @@ const StyledTableData = styled(TableData)`
   word-break: break-all;
 `;
 
-const NvtPreferences = ({
-  entity,
-}) => {
+const NvtPreferences = ({entity}) => {
   const {preferences} = entity;
 
   return (
     <Layout>
-      {preferences.nvt.length > 0 &&
+      {preferences.nvt.length > 0 && (
         <StripedTable>
           <TableHeader>
             <TableRow>
-              <TableHead width="25%">
-                {_('NVT')}
-              </TableHead>
-              <TableHead width="25%">
-                {_('Name')}
-              </TableHead>
-              <TableHead width="15%">
-                {_('Value')}
-              </TableHead>
-              <TableHead>
-                {_('Default Value')}
-              </TableHead>
+              <TableHead width="25%">{_('NVT')}</TableHead>
+              <TableHead width="25%">{_('Name')}</TableHead>
+              <TableHead width="15%">{_('Value')}</TableHead>
+              <TableHead>{_('Default Value')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {preferences.nvt.map(pref => (
-              <TableRow
-                key={pref.nvt.oid + pref.nvt.name + pref.name}
-              >
+              <TableRow key={pref.nvt.oid + pref.nvt.name + pref.name}>
                 <TableData>
-                  <DetailsLink
-                    id={pref.nvt.oid}
-                    type="nvt"
-                  >
+                  <DetailsLink id={pref.nvt.oid} type="nvt">
                     {pref.nvt.name}
                   </DetailsLink>
                 </TableData>
-                <TableData>
-                  {pref.name}
-                </TableData>
-                <StyledTableData>
-                  {pref.value}
-                </StyledTableData>
-                <StyledTableData>
-                  {pref.default}
-                </StyledTableData>
+                <TableData>{pref.name}</TableData>
+                <StyledTableData>{pref.value}</StyledTableData>
+                <StyledTableData>{pref.default}</StyledTableData>
               </TableRow>
             ))}
           </TableBody>
         </StripedTable>
-      }
+      )}
     </Layout>
   );
 };
@@ -333,16 +274,10 @@ NvtPreferences.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Details = ({
-  entity,
-  ...props
-}) => {
+const Details = ({entity, ...props}) => {
   return (
     <Layout flex="column">
-      <ScanConfigDetails
-        entity={entity}
-        {...props}
-      />
+      <ScanConfigDetails entity={entity} {...props} />
     </Layout>
   );
 };
@@ -360,7 +295,6 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
-
   return (
     <ScanConfigComponent
       onCloned={goto_details('scanconfig', props)}
@@ -386,7 +320,7 @@ const Page = ({
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon={<ScanConfigIcon size="large"/>}
+          sectionIcon={<ScanConfigIcon size="large" />}
           toolBarIcons={ToolBarIcons}
           title={_('Scan Config')}
           onInteraction={onInteraction}
@@ -398,27 +332,17 @@ const Page = ({
           onScanConfigSaveClick={save}
           onScanConfigImportClick={import_func}
         >
-          {({
-            activeTab = 0,
-            onActivateTab,
-          }) => {
-            const {
-              preferences,
-            } = entity;
+          {({activeTab = 0, onActivateTab}) => {
+            const {preferences} = entity;
             return (
               <Layout grow="1" flex="column">
-                <TabLayout
-                  grow="1"
-                  align={['start', 'end']}
-                >
+                <TabLayout grow="1" align={['start', 'end']}>
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}
                     onActivateTab={onActivateTab}
                   >
-                    <Tab>
-                      {_('Information')}
-                    </Tab>
+                    <Tab>{_('Information')}</Tab>
                     <EntitiesTab entities={preferences.scanner}>
                       {_('Scanner Preferences')}
                     </EntitiesTab>
@@ -440,18 +364,16 @@ const Page = ({
                 <Tabs active={activeTab}>
                   <TabPanels>
                     <TabPanel>
-                      <Details
-                        entity={entity}
-                      />
+                      <Details entity={entity} />
                     </TabPanel>
                     <TabPanel>
-                      <ScannerPreferences entity={entity}/>
+                      <ScannerPreferences entity={entity} />
                     </TabPanel>
                     <TabPanel>
-                      <NvtFamilies entity={entity}/>
+                      <NvtFamilies entity={entity} />
                     </TabPanel>
                     <TabPanel>
-                      <NvtPreferences entity={entity}/>
+                      <NvtPreferences entity={entity} />
                     </TabPanel>
                     <TabPanel>
                       <EntityTags
@@ -494,10 +416,11 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

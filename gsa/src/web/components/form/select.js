@@ -48,19 +48,37 @@ const SelectValueValidator = (props, prop_name, component_name) => {
 
   if (isArray(items) && isDefined(value) && !isDefined(item)) {
     if (items.length === 0) {
-      return new Error('Invalid prop ' + prop_name + ' `' + value + '` for ' +
-        component_name + ' component. items prop is empty.');
+      return new Error(
+        'Invalid prop ' +
+          prop_name +
+          ' `' +
+          value +
+          '` for ' +
+          component_name +
+          ' component. items prop is empty.',
+      );
     }
-    return new Error('Invalid prop ' + prop_name + ' `' + value + '` for ' +
-      component_name + ' component. Prop ' + prop_name + ' can not be ' +
-      'found in items `' + items.map(i => i.value) + '`.');
+    return new Error(
+      'Invalid prop ' +
+        prop_name +
+        ' `' +
+        value +
+        '` for ' +
+        component_name +
+        ' component. Prop ' +
+        prop_name +
+        ' can not be ' +
+        'found in items `' +
+        items.map(i => i.value) +
+        '`.',
+    );
   }
 };
 
 const selectValue = mayRequire(SelectValueValidator);
 
-const find_item = (items, value) => isDefined(items) ?
-  items.find(i => i.value === value) : undefined;
+const find_item = (items, value) =>
+  isDefined(items) ? items.find(i => i.value === value) : undefined;
 
 const find_label = (items, value) => {
   const item = find_item(items, value);
@@ -73,7 +91,6 @@ const find_label = (items, value) => {
 const DEFAULT_WIDTH = '180px';
 
 class Select extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -107,9 +124,7 @@ class Select extends React.Component {
   }
 
   render() {
-    let {
-      disabled = false,
-    } = this.props;
+    let {disabled = false} = this.props;
     const {
       className,
       items,
@@ -119,14 +134,13 @@ class Select extends React.Component {
       width = DEFAULT_WIDTH,
     } = this.props;
 
-    const {
-      search,
-    } = this.state;
+    const {search} = this.state;
 
     disabled = disabled || !isDefined(items) || items.length === 0;
 
-    const displayedItems = isDefined(items) ?
-      items.filter(caseInsensitiveFilter(search)) : [];
+    const displayedItems = isDefined(items)
+      ? items.filter(caseInsensitiveFilter(search))
+      : [];
 
     return (
       <Downshift
@@ -157,14 +171,17 @@ class Select extends React.Component {
               <Box
                 {...getButtonProps({
                   disabled,
-                  onClick: isOpen ? undefined : event => {
-                    event.preventDefault(); // don't call default handler from downshift
-                    openMenu(() =>
-                      isDefined(this.input) && this.input.focus()); // set focus to input field after menu is opened
-                  },
+                  onClick: isOpen
+                    ? undefined
+                    : event => {
+                        event.preventDefault(); // don't call default handler from downshift
+                        openMenu(
+                          () => isDefined(this.input) && this.input.focus(),
+                        ); // set focus to input field after menu is opened
+                      },
                 })}
                 isOpen={isOpen}
-                innerRef={ref => this.box = ref}
+                innerRef={ref => (this.box = ref)}
                 data-testid="select-open-button"
               >
                 <SelectedValue
@@ -175,33 +192,25 @@ class Select extends React.Component {
                   {label}
                 </SelectedValue>
                 <Layout align={['center', 'center']}>
-                  <ArrowIcon
-                    disabled={disabled}
-                    down={!isOpen}
-                    size="small"
-                  />
+                  <ArrowIcon disabled={disabled} down={!isOpen} size="small" />
                 </Layout>
               </Box>
-              {isOpen && !disabled &&
-                <Menu
-                  position={menuPosition}
-                  target={this.box}
-                >
+              {isOpen && !disabled && (
+                <Menu position={menuPosition} target={this.box}>
                   <Input
                     {...getInputProps({
                       value: search,
                       onChange: this.handleSearch,
                     })}
                     disabled={disabled}
-                    innerRef={ref => this.input = ref}
+                    innerRef={ref => (this.input = ref)}
                   />
                   <ItemContainer>
-                    {displayedItems
-                      .map(({
-                        label: itemLabel,
-                        value: itemValue,
-                        key = itemValue,
-                      }, i) => (
+                    {displayedItems.map(
+                      (
+                        {label: itemLabel, value: itemValue, key = itemValue},
+                        i,
+                      ) => (
                         <Item
                           {...getItemProps({item: itemValue})}
                           data-testid="select-item"
@@ -210,14 +219,15 @@ class Select extends React.Component {
                           key={key}
                           onMouseDown={() => selectItem(itemValue)}
                         >
-                          {React.isValidElement(itemLabel) ?
-                            itemLabel : `${itemLabel}`}
+                          {React.isValidElement(itemLabel)
+                            ? itemLabel
+                            : `${itemLabel}`}
                         </Item>
-                      ))
-                    }
+                      ),
+                    )}
                   </ItemContainer>
                 </Menu>
-              }
+              )}
             </SelectContainer>
           );
         }}
@@ -229,11 +239,13 @@ class Select extends React.Component {
 Select.propTypes = {
   disabled: PropTypes.bool,
   itemToString: PropTypes.func,
-  items: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-    key: PropTypes.toString,
-  })),
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.any.isRequired,
+      value: PropTypes.any.isRequired,
+      key: PropTypes.toString,
+    }),
+  ),
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
   value: selectValue,

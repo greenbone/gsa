@@ -25,7 +25,6 @@ const createRootState = state => ({
 });
 
 describe('UserSettings Defaults selector tests', () => {
-
   test('should return false for isLoading and undefined state', () => {
     const rootState = createRootState();
     const selector = getUserSettingsDefaults(rootState);
@@ -130,7 +129,6 @@ describe('UserSettings Defaults selector tests', () => {
 
     expect(selector.getValueByName('foo')).toEqual('bar');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

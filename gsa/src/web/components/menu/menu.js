@@ -37,18 +37,21 @@ const StyledMenu = styled.li`
 
   &:hover {
     border-bottom: 3px solid ${Theme.green};
-  };
+  }
 
   & a {
     display: flex;
     flex-grow: 1;
-    align-items: center ${''/* center text vertically*/};
-  };
+    align-items: center ${'' /* center text vertically*/};
+  }
 
-  & a, & a:hover, & a:focus, & a:link {
+  & a,
+  & a:hover,
+  & a:focus,
+  & a:link {
     text-decoration: none;
     color: ${Theme.black};
-  };
+  }
 `;
 
 const DefaultEntry = styled.div`
@@ -56,7 +59,10 @@ const DefaultEntry = styled.div`
   justify-content: center;
   flex-grow: 1;
 
-  & a, & a:hover, & a:focus, & a:link {
+  & a,
+  & a:hover,
+  & a:focus,
+  & a:link {
     color: ${Theme.white};
     display: block;
     height: 35px;
@@ -64,7 +70,7 @@ const DefaultEntry = styled.div`
     font-size: 10px;
     font-weight: bold;
     text-align: center;
-  };
+  }
 `;
 
 export const StyledMenuEntry = styled.li`
@@ -81,7 +87,7 @@ export const StyledMenuEntry = styled.li`
   & a {
     line-height: 22px;
     color: ${Theme.darkGray};
-  };
+  }
 
   & a:hover {
     color: ${Theme.white};
@@ -108,37 +114,25 @@ const MenuList = styled.ul`
   }
 `;
 
-const Menu = ({
-  children,
-  title,
-  to,
-  ...props
-}) => {
+const Menu = ({children, title, to, ...props}) => {
   let link;
   children = React.Children.toArray(children).filter(hasValue);
   if (isDefined(to)) {
     link = <Link to={to}>{title}</Link>;
-  }
-  else if (isDefined(children) && children.length > 0) {
+  } else if (isDefined(children) && children.length > 0) {
     const [child] = children;
     link = React.cloneElement(child, {title});
   }
 
   const menuentries = children.map(child => (
-    <StyledMenuEntry key={child.key}>
-      {child}
-    </StyledMenuEntry>
+    <StyledMenuEntry key={child.key}>{child}</StyledMenuEntry>
   ));
   return (
     <StyledMenu>
-      <DefaultEntry>
-        {link}
-      </DefaultEntry>
-      {isDefined(children) && children.length > 0 &&
-        <MenuList>
-          {menuentries}
-        </MenuList>
-      }
+      <DefaultEntry>{link}</DefaultEntry>
+      {isDefined(children) && children.length > 0 && (
+        <MenuList>{menuentries}</MenuList>
+      )}
     </StyledMenu>
   );
 };

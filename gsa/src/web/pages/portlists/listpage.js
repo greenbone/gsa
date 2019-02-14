@@ -44,29 +44,24 @@ import PortListComponent from './component';
 import PortListsFilterDialog from './filterdialog';
 import PortListsTable from './table';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onPortListCreateClick,
-  onPortListImportClick,
-}) => (
-  <IconDivider>
-    <ManualIcon
-      page="search"
-      searchTerm="port list"
-      title={_('Help: Port Lists')}
-    />
-    {capabilities.mayCreate('port_list') &&
-      <NewIcon
-        title={_('New Port List')}
-        onClick={onPortListCreateClick}
+const ToolBarIcons = withCapabilities(
+  ({capabilities, onPortListCreateClick, onPortListImportClick}) => (
+    <IconDivider>
+      <ManualIcon
+        page="search"
+        searchTerm="port list"
+        title={_('Help: Port Lists')}
       />
-    }
-    <UploadIcon
-      title={_('Import Port List')}
-      onClick={onPortListImportClick}
-    />
-  </IconDivider>
-));
+      {capabilities.mayCreate('port_list') && (
+        <NewIcon title={_('New Port List')} onClick={onPortListCreateClick} />
+      )}
+      <UploadIcon
+        title={_('Import Port List')}
+        onClick={onPortListImportClick}
+      />
+    </IconDivider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   onPortListCreateClick: PropTypes.func.isRequired,
@@ -92,36 +87,37 @@ const PortListsPage = ({
     onImported={onChanged}
     onImportError={onError}
     onInteraction={onInteraction}
-  >{({
-    clone,
-    create,
-    delete: delete_func,
-    download,
-    edit,
-    save,
-    import: import_func,
-  }) => (
-    <EntitiesPage
-      {...props}
-      filterEditDialog={PortListsFilterDialog}
-      filtersFilter={PORTLISTS_FILTER_FILTER}
-      sectionIcon={<PortListIcon size="large"/>}
-      table={PortListsTable}
-      title={_('Portlists')}
-      toolBarIcons={ToolBarIcons}
-      onChanged={onChanged}
-      onDownloaded={onDownloaded}
-      onError={onError}
-      onInteraction={onInteraction}
-      onPortListCloneClick={clone}
-      onPortListCreateClick={create}
-      onPortListDeleteClick={delete_func}
-      onPortListDownloadClick={download}
-      onPortListEditClick={edit}
-      onPortListSaveClick={save}
-      onPortListImportClick={import_func}
-    />
-  )}
+  >
+    {({
+      clone,
+      create,
+      delete: delete_func,
+      download,
+      edit,
+      save,
+      import: import_func,
+    }) => (
+      <EntitiesPage
+        {...props}
+        filterEditDialog={PortListsFilterDialog}
+        filtersFilter={PORTLISTS_FILTER_FILTER}
+        sectionIcon={<PortListIcon size="large" />}
+        table={PortListsTable}
+        title={_('Portlists')}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onDownloaded={onDownloaded}
+        onError={onError}
+        onInteraction={onInteraction}
+        onPortListCloneClick={clone}
+        onPortListCreateClick={create}
+        onPortListDeleteClick={delete_func}
+        onPortListDownloadClick={download}
+        onPortListEditClick={edit}
+        onPortListSaveClick={save}
+        onPortListImportClick={import_func}
+      />
+    )}
   </PortListComponent>
 );
 

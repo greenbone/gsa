@@ -21,33 +21,28 @@ import {isDefined} from 'gmp/utils/identity';
 import {filterIdentifier} from 'web/store/utils';
 
 class EntitiesSelector {
-
   constructor(state = {}) {
     this.state = state;
   }
 
   isLoadingEntities(filter) {
-    return isDefined(this.state.isLoading) ?
-      !!this.state.isLoading[filterIdentifier(filter)] :
-      false;
+    return isDefined(this.state.isLoading)
+      ? !!this.state.isLoading[filterIdentifier(filter)]
+      : false;
   }
 
   isLoadingEntity(id) {
-    return isDefined(this.state.isLoading) ?
-      !!this.state.isLoading[id] :
-      false;
+    return isDefined(this.state.isLoading) ? !!this.state.isLoading[id] : false;
   }
 
   getEntitiesError(filter) {
-    return isDefined(this.state.errors) ?
-      this.state.errors[filterIdentifier(filter)] :
-      undefined;
+    return isDefined(this.state.errors)
+      ? this.state.errors[filterIdentifier(filter)]
+      : undefined;
   }
 
   getEntityError(id) {
-    return isDefined(this.state.errors) ?
-      this.state.errors[id] :
-      undefined;
+    return isDefined(this.state.errors) ? this.state.errors[id] : undefined;
   }
 
   getEntities(filter) {
@@ -71,7 +66,7 @@ class EntitiesSelector {
   getEntity(id) {
     return isDefined(this.state.byId) ? this.state.byId[id] : undefined;
   }
-};
+}
 
 export const createSelector = name => rootState =>
   new EntitiesSelector(rootState.entities[name]);

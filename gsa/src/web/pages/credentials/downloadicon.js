@@ -35,45 +35,42 @@ import DownloadDebIcon from 'web/components/icon/downloaddebicon';
 import DownloadKeyIcon from 'web/components/icon/downloadkeyicon';
 import DownloadRpmIcon from 'web/components/icon/downloadrpmicon';
 
-const CredentialDownloadIcon = ({
-  credential,
-  onDownload,
-}) => {
+const CredentialDownloadIcon = ({credential, onDownload}) => {
   const type = credential.credential_type;
   return (
     <IconDivider align={['center', 'center']}>
-      {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE &&
+      {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE && (
         <DownloadRpmIcon
           value={credential}
           onClick={cred => onDownload(cred, 'rpm')}
         />
-      }
-      {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE &&
+      )}
+      {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE && (
         <DownloadDebIcon
           value={credential}
           onClick={cred => onDownload(cred, 'deb')}
         />
-      }
-      {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE &&
+      )}
+      {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE && (
         <DownloadKeyIcon
           title={_('Download Public Key')}
           value={credential}
           onClick={cred => onDownload(cred, 'key')}
         />
-      }
-      {type === USERNAME_PASSWORD_CREDENTIAL_TYPE &&
+      )}
+      {type === USERNAME_PASSWORD_CREDENTIAL_TYPE && (
         <DownloadExeIcon
           value={credential}
           onClick={cred => onDownload(cred, 'exe')}
         />
-      }
-      {type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE &&
+      )}
+      {type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE && (
         <DownloadKeyIcon
           title={_('Download Certificate (.pem)')}
           value={credential}
           onClick={cred => onDownload(cred, 'pem')}
         />
-      }
+      )}
     </IconDivider>
   );
 };

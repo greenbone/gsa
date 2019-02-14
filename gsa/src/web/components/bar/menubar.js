@@ -63,10 +63,7 @@ const MenuBarPlaceholder = styled.div`
   height: ${MENU_BAR_HEIGHT};
 `;
 
-const MenuBar = ({
-  gmp,
-  capabilities,
-}) => {
+const MenuBar = ({gmp, capabilities}) => {
   if (!gmp.isLoggedIn() || !isDefined(capabilities)) {
     return null;
   }
@@ -95,277 +92,159 @@ const MenuBar = ({
     'permissions',
   ].reduce((sum, cur) => sum || capabilities.mayAccess(cur), false);
 
-  const may_op_admin = [
-    'users',
-    'roles',
-    'groups',
-  ].reduce((sum, cur) => sum || capabilities.mayAccess(cur), false) ||
+  const may_op_admin =
+    ['users', 'roles', 'groups'].reduce(
+      (sum, cur) => sum || capabilities.mayAccess(cur),
+      false,
+    ) ||
     (capabilities.mayOp('describe_auth') && capabilities.mayOp('modify_auth'));
   return (
     <React.Fragment>
-      <MenuBarPlaceholder/>
+      <MenuBarPlaceholder />
       <Wrapper>
         <Ul>
-          <Menu
-            to="/"
-            title={_('Dashboards')}
-          >
-          </Menu>
-          {may_op_scans &&
+          <Menu to="/" title={_('Dashboards')} />
+          {may_op_scans && (
             <Menu title={_('Scans')}>
-              {capabilities.mayAccess('tasks') &&
-                <MenuEntry
-                  title={_('Tasks')}
-                  to="tasks"
-                />
-              }
-              {capabilities.mayAccess('reports') &&
-                <MenuEntry
-                  title={_('Reports')}
-                  to="reports"
-                />
-              }
-              {capabilities.mayAccess('results') &&
-                <MenuEntry
-                  title={_('Results')}
-                  to="results"
-                />
-              }
-              {capabilities.mayAccess('vulns') &&
-                <MenuEntry
-                  title={_('Vulnerabilities')}
-                  to="vulnerabilities"
-                />
-              }
+              {capabilities.mayAccess('tasks') && (
+                <MenuEntry title={_('Tasks')} to="tasks" />
+              )}
+              {capabilities.mayAccess('reports') && (
+                <MenuEntry title={_('Reports')} to="reports" />
+              )}
+              {capabilities.mayAccess('results') && (
+                <MenuEntry title={_('Results')} to="results" />
+              )}
+              {capabilities.mayAccess('vulns') && (
+                <MenuEntry title={_('Vulnerabilities')} to="vulnerabilities" />
+              )}
               <MenuSection>
-                {capabilities.mayAccess('tickets') &&
+                {capabilities.mayAccess('tickets') && (
                   <MenuEntry
                     section
                     title={_('Remediation Tickets')}
                     to="tickets"
                   />
-                }
+                )}
               </MenuSection>
               <MenuSection>
-                {capabilities.mayAccess('notes') &&
-                  <MenuEntry
-                    section
-                    title={_('Notes')}
-                    to="notes"
-                  />
-                }
-                {capabilities.mayAccess('overrides') &&
-                  <MenuEntry
-                    title={_('Overrides')}
-                    to="overrides"
-                  />
-                }
+                {capabilities.mayAccess('notes') && (
+                  <MenuEntry section title={_('Notes')} to="notes" />
+                )}
+                {capabilities.mayAccess('overrides') && (
+                  <MenuEntry title={_('Overrides')} to="overrides" />
+                )}
               </MenuSection>
             </Menu>
-          }
-          {capabilities.mayAccess('assets') &&
+          )}
+          {capabilities.mayAccess('assets') && (
             <Menu title={_('Assets')}>
-              <MenuEntry
-                section
-                title={_('Hosts')}
-                to="hosts"
-              />
-              <MenuEntry
-                title={_('Operating Systems')}
-                to="operatingsystems"
-              />
+              <MenuEntry section title={_('Hosts')} to="hosts" />
+              <MenuEntry title={_('Operating Systems')} to="operatingsystems" />
             </Menu>
-          }
-          {capabilities.mayAccess('info') &&
+          )}
+          {capabilities.mayAccess('info') && (
             <Menu title={_('SecInfo')}>
-              <MenuEntry
-                title={_('NVTs')}
-                to="nvts"
-              />
-              <MenuEntry
-                title={_('CVEs')}
-                to="cves"
-              />
-              <MenuEntry
-                title={_('CPEs')}
-                to="cpes"
-              />
-              <MenuEntry
-                title={_('OVAL Definitions')}
-                to="ovaldefs"
-              />
-              <MenuEntry
-                title={_('CERT-Bund Advisories')}
-                to="certbunds"
-              />
-              <MenuEntry
-                title={_('DFN-CERT Advisories')}
-                to="dfncerts"
-              />
+              <MenuEntry title={_('NVTs')} to="nvts" />
+              <MenuEntry title={_('CVEs')} to="cves" />
+              <MenuEntry title={_('CPEs')} to="cpes" />
+              <MenuEntry title={_('OVAL Definitions')} to="ovaldefs" />
+              <MenuEntry title={_('CERT-Bund Advisories')} to="certbunds" />
+              <MenuEntry title={_('DFN-CERT Advisories')} to="dfncerts" />
               <MenuSection>
-                <MenuEntry
-                  title={_('All SecInfo')}
-                  to="secinfos"
-                />
+                <MenuEntry title={_('All SecInfo')} to="secinfos" />
               </MenuSection>
             </Menu>
-          }
-          {may_op_configuration &&
+          )}
+          {may_op_configuration && (
             <Menu title={_('Configuration')}>
-              {capabilities.mayAccess('targets') &&
-                <MenuEntry
-                  title={_('Targets')}
-                  to="targets"
-                />
-              }
-              {capabilities.mayAccess('port_lists') &&
-                <MenuEntry
-                  title={_('Port Lists')}
-                  to="portlists"
-                />
-              }
-              {capabilities.mayAccess('credentials') &&
-                <MenuEntry
-                  title={_('Credentials')}
-                  to="credentials"
-                />
-              }
-              {capabilities.mayAccess('configs') &&
-                <MenuEntry
-                  title={_('Scan Configs')}
-                  to="scanconfigs"
-                />
-              }
+              {capabilities.mayAccess('targets') && (
+                <MenuEntry title={_('Targets')} to="targets" />
+              )}
+              {capabilities.mayAccess('port_lists') && (
+                <MenuEntry title={_('Port Lists')} to="portlists" />
+              )}
+              {capabilities.mayAccess('credentials') && (
+                <MenuEntry title={_('Credentials')} to="credentials" />
+              )}
+              {capabilities.mayAccess('configs') && (
+                <MenuEntry title={_('Scan Configs')} to="scanconfigs" />
+              )}
               <MenuSection>
-                {capabilities.mayAccess('alerts') &&
-                  <MenuEntry
-                    title={_('Alerts')}
-                    to="alerts"
-                  />
-                }
-                {capabilities.mayAccess('schedules') &&
-                  <MenuEntry
-                    title={_('Schedules')}
-                    to="schedules"
-                  />
-                }
-                {capabilities.mayAccess('report_formats') &&
-                  <MenuEntry
-                    title={_('Report Formats')}
-                    to="reportformats"
-                  />
-                }
-                {capabilities.mayAccess('agents') &&
-                  <MenuEntry
-                    title={_('Agents')}
-                    to="agents"
-                  />
-                }
+                {capabilities.mayAccess('alerts') && (
+                  <MenuEntry title={_('Alerts')} to="alerts" />
+                )}
+                {capabilities.mayAccess('schedules') && (
+                  <MenuEntry title={_('Schedules')} to="schedules" />
+                )}
+                {capabilities.mayAccess('report_formats') && (
+                  <MenuEntry title={_('Report Formats')} to="reportformats" />
+                )}
+                {capabilities.mayAccess('agents') && (
+                  <MenuEntry title={_('Agents')} to="agents" />
+                )}
               </MenuSection>
               <MenuSection>
-                {capabilities.mayAccess('scanners') &&
-                  <MenuEntry
-                    title={_('Scanners')}
-                    to="scanners"
-                  />
-                }
-                {capabilities.mayAccess('filters') &&
-                  <MenuEntry
-                    title={_('Filters')}
-                    to="filters"
-                  />
-                }
-                {capabilities.mayAccess('tags') &&
-                  <MenuEntry
-                    title={_('Tags')}
-                    to="tags"
-                  />
-                }
-                {capabilities.mayAccess('permissions') &&
-                  <MenuEntry
-                    title={_('Permissions')}
-                    to="permissions"
-                  />
-                }
+                {capabilities.mayAccess('scanners') && (
+                  <MenuEntry title={_('Scanners')} to="scanners" />
+                )}
+                {capabilities.mayAccess('filters') && (
+                  <MenuEntry title={_('Filters')} to="filters" />
+                )}
+                {capabilities.mayAccess('tags') && (
+                  <MenuEntry title={_('Tags')} to="tags" />
+                )}
+                {capabilities.mayAccess('permissions') && (
+                  <MenuEntry title={_('Permissions')} to="permissions" />
+                )}
               </MenuSection>
             </Menu>
-          }
+          )}
           <Menu title={_('Extras')}>
-            <MenuEntry
-              title={_('Trashcan')}
-              to="trashcan"
-            />
-            <MenuEntry
-              title={_('My Settings')}
-              to="usersettings"
-            />
-            {capabilities.mayAccess('system_reports') &&
+            <MenuEntry title={_('Trashcan')} to="trashcan" />
+            <MenuEntry title={_('My Settings')} to="usersettings" />
+            {capabilities.mayAccess('system_reports') && (
               <MenuEntry
                 title={_('Performance')}
                 caps="get_system_reports"
                 to="performance"
               />
-            }
-            <MenuEntry
-              title={_('CVSS Calculator')}
-              to="cvsscalculator"
-            />
-            {capabilities.mayAccess('feeds') &&
+            )}
+            <MenuEntry title={_('CVSS Calculator')} to="cvsscalculator" />
+            {capabilities.mayAccess('feeds') && (
               <MenuEntry
                 title={_('Feed Status')}
                 to="feedstatus"
                 caps="get_feeds"
               />
-            }
+            )}
           </Menu>
-          {may_op_admin &&
+          {may_op_admin && (
             <Menu title={_('Administration')}>
-              {capabilities.mayAccess('users') &&
-                <MenuEntry
-                  title={_('Users')}
-                  to="users"
-                />
-              }
-              {capabilities.mayAccess('groups') &&
-                <MenuEntry
-                  title={_('Groups')}
-                  to="groups"
-                />
-              }
-              {capabilities.mayAccess('roles') &&
-                <MenuEntry
-                  title={_('Roles')}
-                  to="roles"
-                />
-              }
+              {capabilities.mayAccess('users') && (
+                <MenuEntry title={_('Users')} to="users" />
+              )}
+              {capabilities.mayAccess('groups') && (
+                <MenuEntry title={_('Groups')} to="groups" />
+              )}
+              {capabilities.mayAccess('roles') && (
+                <MenuEntry title={_('Roles')} to="roles" />
+              )}
               <MenuSection>
                 {capabilities.mayOp('describe_auth') &&
-                  capabilities.mayOp('modify_auth') &&
-                  <MenuEntry
-                    title={_('LDAP')}
-                    to="ldap"
-                  />
-                }
+                  capabilities.mayOp('modify_auth') && (
+                    <MenuEntry title={_('LDAP')} to="ldap" />
+                  )}
                 {capabilities.mayOp('describe_auth') &&
-                  capabilities.mayOp('modify_auth') &&
-                  <MenuEntry
-                    title={_('Radius')}
-                    to="radius"
-                  />
-                }
+                  capabilities.mayOp('modify_auth') && (
+                    <MenuEntry title={_('Radius')} to="radius" />
+                  )}
               </MenuSection>
             </Menu>
-          }
-          <Menu
-            title={_('Help')}
-          >
-            <MenuHelpEntry
-              title={_('Contents')}
-            />
-            <MenuEntry
-              title={_('About')}
-              to="about"
-            />
+          )}
+          <Menu title={_('Help')}>
+            <MenuHelpEntry title={_('Contents')} />
+            <MenuEntry title={_('About')} to="about" />
           </Menu>
         </Ul>
       </Wrapper>

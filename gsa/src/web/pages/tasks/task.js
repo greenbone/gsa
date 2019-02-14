@@ -24,7 +24,6 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 class Task extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {task: {}};

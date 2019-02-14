@@ -31,10 +31,9 @@ const createGmp = () => ({
 });
 
 describe('ManualLink tests', () => {
-
   test('should render ManualLink', () => {
     const {render} = rendererWith({gmp: createGmp()});
-    const {element} = render(<ManualLink title="Foo" page="foo"/>);
+    const {element} = render(<ManualLink title="Foo" page="foo" />);
 
     expect(element).toHaveAttribute('title', 'Foo');
     expect(element).toHaveAttribute('href', 'http://foo.bar/en/foo.html');
@@ -44,12 +43,7 @@ describe('ManualLink tests', () => {
 
   test('should render with anchor', () => {
     const {render} = rendererWith({gmp: createGmp()});
-    const {element} = render(
-      <ManualLink
-        page="foo"
-        anchor="bar"
-      />
-    );
+    const {element} = render(<ManualLink page="foo" anchor="bar" />);
 
     expect(element).toHaveAttribute('href', 'http://foo.bar/en/foo.html#bar');
     expect(element).toHaveAttribute('target', '_blank');
@@ -58,15 +52,12 @@ describe('ManualLink tests', () => {
 
   test('should render search page', () => {
     const {render} = rendererWith({gmp: createGmp()});
-    const {element} = render(
-      <ManualLink
-        page="search"
-        searchTerm="bar"
-      />
-    );
+    const {element} = render(<ManualLink page="search" searchTerm="bar" />);
 
-    expect(element).toHaveAttribute('href',
-      'http://foo.bar/en/search.html?q=bar');
+    expect(element).toHaveAttribute(
+      'href',
+      'http://foo.bar/en/search.html?q=bar',
+    );
     expect(element).toHaveAttribute('target', '_blank');
     expect(element).toHaveAttribute('rel', 'noopener noreferrer');
   });
@@ -75,7 +66,7 @@ describe('ManualLink tests', () => {
     setLocale('de');
 
     const {render} = rendererWith({gmp: createGmp()});
-    const {element} = render(<ManualLink title="Foo" page="foo"/>);
+    const {element} = render(<ManualLink title="Foo" page="foo" />);
 
     expect(element).toHaveAttribute('title', 'Foo');
     expect(element).toHaveAttribute('href', 'http://foo.bar/en/foo.html');
@@ -87,15 +78,13 @@ describe('ManualLink tests', () => {
     setLocale('en');
 
     const {render} = rendererWith({gmp: createGmp()});
-    const {element} = render(<ManualLink title="Foo" page="foo"/>);
+    const {element} = render(<ManualLink title="Foo" page="foo" />);
 
     expect(element).toHaveAttribute('title', 'Foo');
     expect(element).toHaveAttribute('href', 'http://foo.bar/en/foo.html');
     expect(element).toHaveAttribute('target', '_blank');
     expect(element).toHaveAttribute('rel', 'noopener noreferrer');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:
-

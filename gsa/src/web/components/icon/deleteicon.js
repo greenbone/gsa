@@ -32,28 +32,17 @@ import {ReactComponent as Icon} from './svg/delete.svg';
 
 const DeleteSvgIcon = withSvgIcon()(Icon);
 
-const DeleteIcon = ({
-  selectionType,
-  title,
-  ...props
-}) => {
+const DeleteIcon = ({selectionType, title, ...props}) => {
   if (!isDefined(title)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       title = _('Delete page contents');
-    }
-    else if (selectionType === SelectionType.SELECTION_USER) {
+    } else if (selectionType === SelectionType.SELECTION_USER) {
       title = _('Delete selection');
-    }
-    else if (selectionType === SelectionType.SELECTION_FILTER) {
+    } else if (selectionType === SelectionType.SELECTION_FILTER) {
       title = _('Delete all filtered');
     }
   }
-  return (
-    <DeleteSvgIcon
-      {...props}
-      title={title}
-    />
-  );
+  return <DeleteSvgIcon {...props} title={title} />;
 };
 
 DeleteIcon.propTypes = {

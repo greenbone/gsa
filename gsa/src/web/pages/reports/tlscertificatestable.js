@@ -53,63 +53,32 @@ const Header = ({
   return (
     <TableHeader>
       <TableRow>
-        <TableHead
-          {...sortProps}
-          sortBy="dn"
-          width={actions ? '35%' : '40%'}
-        >
+        <TableHead {...sortProps} sortBy="dn" width={actions ? '35%' : '40%'}>
           {_('DN')}
         </TableHead>
-        <TableHead
-          {...sortProps}
-          sortBy="serial"
-          width="10%"
-        >
+        <TableHead {...sortProps} sortBy="serial" width="10%">
           {_('Serial')}
         </TableHead>
-        <TableHead
-          {...sortProps}
-          sortBy="notvalidbefore"
-          width="10%"
-        >
+        <TableHead {...sortProps} sortBy="notvalidbefore" width="10%">
           {_('Not Valid Before')}
         </TableHead>
-        <TableHead
-          {...sortProps}
-          sortBy="notvalidafter"
-          width="10%"
-        >
+        <TableHead {...sortProps} sortBy="notvalidafter" width="10%">
           {_('Not Valid After')}
         </TableHead>
-        <TableHead
-          {...sortProps}
-          sortBy="ip"
-          width="10%"
-        >
+        <TableHead {...sortProps} sortBy="ip" width="10%">
           {_('IP')}
         </TableHead>
-        <TableHead
-          {...sortProps}
-          sortBy="hostname"
-          width="15%"
-        >
+        <TableHead {...sortProps} sortBy="hostname" width="15%">
           {_('Hostname')}
         </TableHead>
-        <TableHead
-          {...sortProps}
-          sortBy="port"
-          width="5%"
-        >
+        <TableHead {...sortProps} sortBy="port" width="5%">
           {_('Port')}
         </TableHead>
-        {actions &&
-          <TableHead
-            width="5%"
-            align="center"
-          >
+        {actions && (
+          <TableHead width="5%" align="center">
             {_('Actions')}
           </TableHead>
-        }
+        )}
       </TableRow>
     </TableHeader>
   );
@@ -137,19 +106,11 @@ const Row = ({
   return (
     <TableRow>
       <TableData>
-        <StyledSpan>
-          {issuer}
-        </StyledSpan>
+        <StyledSpan>{issuer}</StyledSpan>
       </TableData>
-      <TableData>
-        {serial}
-      </TableData>
-      <TableData>
-        {shortDate(notbefore)}
-      </TableData>
-      <TableData>
-        {shortDate(notafter)}
-      </TableData>
+      <TableData>{serial}</TableData>
+      <TableData>{shortDate(notbefore)}</TableData>
+      <TableData>{shortDate(notafter)}</TableData>
       <TableData>
         <Link
           to="hosts"
@@ -160,13 +121,9 @@ const Row = ({
           {ip}
         </Link>
       </TableData>
-      <TableData>
-        {hostname}
-      </TableData>
-      <TableData>
-        {port}
-      </TableData>
-      {actions &&
+      <TableData>{hostname}</TableData>
+      <TableData>{port}</TableData>
+      {actions && (
         <TableData align={['center', 'center']}>
           <DownloadIcon
             title={_('Download TLS Certificate')}
@@ -174,7 +131,7 @@ const Row = ({
             onClick={onTlsCertificateDownloadClick}
           />
         </TableData>
-      }
+      )}
     </TableRow>
   );
 };

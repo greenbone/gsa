@@ -29,24 +29,18 @@ const Styled = styled.div`
   border-radius: 2px;
   padding: 5px;
   user-select: none;
- ${props => {
-    const {
-      checked = false,
-      disabled = false,
-      width = '32px',
-    } = props;
+  ${props => {
+    const {checked = false, disabled = false, width = '32px'} = props;
 
     let color;
     let backgroundColor;
     if (disabled) {
       backgroundColor = Theme.lightGray;
       color = Theme.mediumGray;
-    }
-    else if (checked) {
+    } else if (checked) {
       backgroundColor = Theme.lightGreen;
       color = Theme.white;
-    }
-    else {
+    } else {
       backgroundColor = Theme.lightGray;
       color = Theme.darkGray;
     }
@@ -70,8 +64,11 @@ const ToggleButton = ({
     {...props}
     checked={checked}
     disabled={disabled}
-    onClick={!disabled && isDefined(onToggle) ?
-      () => onToggle(!checked, name) : undefined}
+    onClick={
+      !disabled && isDefined(onToggle)
+        ? () => onToggle(!checked, name)
+        : undefined
+    }
   />
 );
 

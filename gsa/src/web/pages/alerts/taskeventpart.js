@@ -33,13 +33,7 @@ import Divider from 'web/components/layout/divider';
 import PropTypes from 'web/utils/proptypes.js';
 import withPrefix from 'web/utils/withPrefix';
 
-const TaskEventPart = ({
-  prefix,
-  event,
-  status,
-  onChange,
-  onEventChange,
-}) => (
+const TaskEventPart = ({prefix, event, status, onChange, onEventChange}) => (
   <Divider>
     <Radio
       title={_('Task run status changed to')}
@@ -47,29 +41,35 @@ const TaskEventPart = ({
       value={EVENT_TYPE_TASK_RUN_STATUS_CHANGED}
       checked={isTaskEvent(event)}
       onChange={onEventChange}
-    >
-    </Radio>
+    />
     <Select
       disabled={!isTaskEvent(event)}
-      items={[{
-        value: 'Done',
-        label: _('Done'),
-      }, {
-        value: 'New',
-        label: _('New'),
-      }, {
-        value: 'Requested',
-        label: _('Requested'),
-      }, {
-        value: 'Running',
-        label: _('Running'),
-      }, {
-        value: 'Stop Requested',
-        label: _('Stop Requested'),
-      }, {
-        value: 'Stopped',
-        label: _('Stopped'),
-      }]}
+      items={[
+        {
+          value: 'Done',
+          label: _('Done'),
+        },
+        {
+          value: 'New',
+          label: _('New'),
+        },
+        {
+          value: 'Requested',
+          label: _('Requested'),
+        },
+        {
+          value: 'Running',
+          label: _('Running'),
+        },
+        {
+          value: 'Stop Requested',
+          label: _('Stop Requested'),
+        },
+        {
+          value: 'Stopped',
+          label: _('Stopped'),
+        },
+      ]}
       name={prefix + 'status'}
       value={status}
       onChange={onChange}

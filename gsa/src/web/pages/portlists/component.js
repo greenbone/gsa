@@ -35,7 +35,6 @@ import PortListsDialog from './dialog';
 import PortRangeDialog from './portrangedialog';
 
 class PortListComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -50,8 +49,9 @@ class PortListComponent extends React.Component {
 
     this.handleCloseImportDialog = this.handleCloseImportDialog.bind(this);
     this.handleClosePortListDialog = this.handleClosePortListDialog.bind(this);
-    this.handleCloseNewPortRangeDialog =
-      this.handleCloseNewPortRangeDialog.bind(this);
+    this.handleCloseNewPortRangeDialog = this.handleCloseNewPortRangeDialog.bind(
+      this,
+    );
     this.openImportDialog = this.openImportDialog.bind(this);
     this.openNewPortRangeDialog = this.openNewPortRangeDialog.bind(this);
     this.openPortListDialog = this.openPortListDialog.bind(this);
@@ -81,8 +81,7 @@ class PortListComponent extends React.Component {
           title: _('Edit Port List {{name}}', {name: shorten(port_list.name)}),
         });
       });
-    }
-    else {
+    } else {
       this.created_port_ranges = [];
       this.deleted_port_ranges = [];
       this.setState({
@@ -150,20 +149,18 @@ class PortListComponent extends React.Component {
   handleSavePortRange(data) {
     const {gmp} = this.props;
 
-    return gmp.portlist.createPortRange(data)
+    return gmp.portlist
+      .createPortRange(data)
       .then(response => response.data.id);
   }
 
   handleImportPortList(data) {
-    const {
-      gmp,
-      onImported,
-      onImportError,
-    } = this.props;
+    const {gmp, onImported, onImportError} = this.props;
 
     this.handleInteraction();
 
-    return gmp.portlist.import(data)
+    return gmp.portlist
+      .import(data)
       .then(onImported, onImportError)
       .then(() => this.closeImportDialog());
   }
@@ -183,18 +180,22 @@ class PortListComponent extends React.Component {
       return this.handleSavePortRange(saveData).then(id => {
         range.isTmp = false;
         range.id = id;
-        this.created_port_ranges = this.created_port_ranges
-          .filter(prange => prange !== range);
-        }
-      );
+        this.created_port_ranges = this.created_port_ranges.filter(
+          prange => prange !== range,
+        );
+      });
     });
     const deleted_port_ranges_copy = [...this.deleted_port_ranges];
-    promises = [...promises, ...deleted_port_ranges_copy.map(range =>
-      this.handleDeletePortRange(range).then(
-        this.deleted_port_ranges = this.deleted_port_ranges
-          .filter(prange => prange !== range)
-      )
-    )];
+    promises = [
+      ...promises,
+      ...deleted_port_ranges_copy.map(range =>
+        this.handleDeletePortRange(range).then(
+          (this.deleted_port_ranges = this.deleted_port_ranges.filter(
+            prange => prange !== range,
+          )),
+        ),
+      ),
+    ];
     return Promise.all(promises)
       .then(() => save(data))
       .then(() => this.closePortListDialog());
@@ -202,24 +203,24 @@ class PortListComponent extends React.Component {
 
   handleTmpAddPortRange(values) {
     const {port_ranges} = this.state;
-    const {
-      port_range_end,
-      port_range_start,
-      port_type,
-    } = values;
+    const {port_range_end, port_range_start, port_type} = values;
 
     this.handleInteraction();
 
     // reject port ranges with missing values
     if (!port_range_start || !port_range_end) {
-      return Promise.reject(new Error(_('The port range needs numerical ' +
-        'values for start and end!')));
+      return Promise.reject(
+        new Error(
+          _('The port range needs numerical values for start and end!'),
+        ),
+      );
     }
 
     // reject port ranges with start value lower than end value
     if (port_range_start > port_range_end) {
-      return Promise.reject(new Error(_('The end of the port range can\'t ' +
-        'be below its start!')));
+      return Promise.reject(
+        new Error(_('The end of the port range can not be below its start!')),
+      );
     }
 
     // check if new port range overlaps with existing and temporarily existing
@@ -227,19 +228,19 @@ class PortListComponent extends React.Component {
     for (const range of port_ranges) {
       const start = parseInt(range.start);
       const end = parseInt(range.end);
-      if (range.protocol_type === port_type &&
-        (
-          port_range_start === start ||
+      if (
+        range.protocol_type === port_type &&
+        (port_range_start === start ||
           port_range_start === end ||
           (port_range_start > start && port_range_start < end) ||
           port_range_end === start ||
           port_range_end === end ||
           (port_range_end > start && port_range_end < end) ||
-          (port_range_start < start && port_range_end > end)
-        )
+          (port_range_start < start && port_range_end > end))
       ) {
-        return Promise.reject(new Error(_('New port range overlaps with an ' +
-          'existing one!')));
+        return Promise.reject(
+          new Error(_('New port range overlaps with an existing one!')),
+        );
       }
     }
 
@@ -254,10 +255,7 @@ class PortListComponent extends React.Component {
 
     this.created_port_ranges.push(newRange);
     this.setState({
-      port_ranges: [
-        ...port_ranges,
-        newRange,
-      ],
+      port_ranges: [...port_ranges, newRange],
     });
     this.closeNewPortRangeDialog();
   }
@@ -267,10 +265,10 @@ class PortListComponent extends React.Component {
     let new_port_ranges = port_ranges;
 
     if (port_range.isTmp) {
-      this.created_port_ranges = this.created_port_ranges
-        .filter(range => range !== port_range);
-    }
-    else {
+      this.created_port_ranges = this.created_port_ranges.filter(
+        range => range !== port_range,
+      );
+    } else {
       this.deleted_port_ranges.push(port_range);
     }
 
@@ -330,10 +328,7 @@ class PortListComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
@@ -341,7 +336,7 @@ class PortListComponent extends React.Component {
               edit: this.openPortListDialog,
               import: this.openImportDialog,
             })}
-            {portListDialogVisible &&
+            {portListDialogVisible && (
               <PortListsDialog
                 comment={comment}
                 id={id}
@@ -354,20 +349,20 @@ class PortListComponent extends React.Component {
                 onSave={(...args) => this.handleSavePortList(save, ...args)}
                 onTmpDeletePortRange={this.handleTmpDeletePortRange}
               />
-            }
-            {importDialogVisible &&
+            )}
+            {importDialogVisible && (
               <ImportPortListDialog
                 onClose={this.handleCloseImportDialog}
                 onSave={this.handleImportPortList}
               />
-            }
-            {portRangeDialogVisible &&
+            )}
+            {portRangeDialogVisible && (
               <PortRangeDialog
                 id={id}
                 onClose={this.handleCloseNewPortRangeDialog}
                 onSave={this.handleTmpAddPortRange}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>

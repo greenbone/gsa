@@ -34,7 +34,6 @@ import IconDivider from '../layout/icondivider.js';
 import SeverityClassLabel from '../label/severityclass.js';
 
 class SeverityLevelsFilterGroup extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -52,17 +51,14 @@ class SeverityLevelsFilterGroup extends React.Component {
     if (value && !levels.includes(level)) {
       levels += level;
       onChange(levels, 'levels');
-    }
-    else if (!value && levels.includes(level)) {
+    } else if (!value && levels.includes(level)) {
       levels = levels.replace(level, '');
       onChange(levels, 'levels');
     }
   }
 
   render() {
-    const {
-      filter,
-    } = this.props;
+    const {filter} = this.props;
 
     let levels = filter.get('levels');
 
@@ -77,35 +73,35 @@ class SeverityLevelsFilterGroup extends React.Component {
             name="h"
             onChange={this.handleLevelChange}
           >
-            <SeverityClassLabel.High/>
+            <SeverityClassLabel.High />
           </Checkbox>
           <Checkbox
             checked={levels.includes('m')}
             name="m"
             onChange={this.handleLevelChange}
           >
-            <SeverityClassLabel.Medium/>
+            <SeverityClassLabel.Medium />
           </Checkbox>
           <Checkbox
             checked={levels.includes('l')}
             name="l"
             onChange={this.handleLevelChange}
           >
-            <SeverityClassLabel.Low/>
+            <SeverityClassLabel.Low />
           </Checkbox>
           <Checkbox
             checked={levels.includes('g')}
             name="g"
             onChange={this.handleLevelChange}
           >
-            <SeverityClassLabel.Log/>
+            <SeverityClassLabel.Log />
           </Checkbox>
           <Checkbox
             checked={levels.includes('f')}
             name="f"
             onChange={this.handleLevelChange}
           >
-            <SeverityClassLabel.FalsePositive/>
+            <SeverityClassLabel.FalsePositive />
           </Checkbox>
         </IconDivider>
       </FormGroup>

@@ -29,8 +29,11 @@ const log = logger.getLogger('gmp.commands.dashboards');
 
 export const DEFAULT_ROW_HEIGHT = 250;
 
-export const createRow = (items, height = DEFAULT_ROW_HEIGHT,
-  uuidFunc = uuid) => ({
+export const createRow = (
+  items,
+  height = DEFAULT_ROW_HEIGHT,
+  uuidFunc = uuid,
+) => ({
   id: uuidFunc(),
   height,
   items,
@@ -48,9 +51,15 @@ export const createDisplay = (displayId, props, uuidFunc = uuid) => {
 
 const settingsV1toDashboardSettings = ({data: rows} = {}, name) => ({
   rows: rows.map(({height, data}) =>
-    createRow(data.map(item => createDisplay(item.name, {
-      filterId: item.filt_id,
-    })), height)),
+    createRow(
+      data.map(item =>
+        createDisplay(item.name, {
+          filterId: item.filt_id,
+        }),
+      ),
+      height,
+    ),
+  ),
   name,
 });
 
@@ -65,7 +74,6 @@ const convertLoadedSettings = (settings = {}, name) => {
 };
 
 class DashboardCommand extends GmpCommand {
-
   getSetting(id) {
     return this.httpGet({
       cmd: 'get_setting',
@@ -82,8 +90,7 @@ class DashboardCommand extends GmpCommand {
       let config;
       try {
         config = JSON.parse(value);
-      }
-      catch (e) {
+      } catch (e) {
         log.warn('Could not parse dashboard setting', value);
         return;
       }
@@ -100,7 +107,6 @@ class DashboardCommand extends GmpCommand {
       cmd: 'save_setting',
     });
   }
-
 }
 
 registerCommand('dashboard', DashboardCommand);

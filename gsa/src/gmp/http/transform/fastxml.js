@@ -41,8 +41,7 @@ const transform_xml_data = response => {
 const success = (response, options) => {
   try {
     return transform_xml_data(response);
-  }
-  catch (error) {
+  } catch (error) {
     throw new Rejection(
       response.xhr,
       Rejection.REASON_ERROR,

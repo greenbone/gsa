@@ -53,12 +53,7 @@ const ToolBarIcons = () => (
   </Layout>
 );
 
-const Page = ({
-  filter,
-  onFilterChanged,
-  onInteraction,
-  ...props
-}) => (
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
   <EntitiesPage
     {...props}
     dashboard={() => (
@@ -77,7 +72,7 @@ const Page = ({
     filter={filter}
     filtersFilter={RESULTS_FILTER_FILTER}
     filterEditDialog={ResultsFilterDialog}
-    sectionIcon={<ResultIcon size="large"/>}
+    sectionIcon={<ResultIcon size="large" />}
     title={_('Results')}
     toolBarIcons={ToolBarIcons}
     table={ResultsTable}

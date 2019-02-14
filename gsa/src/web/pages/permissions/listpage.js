@@ -30,7 +30,6 @@ import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 import PermissionIcon from 'web/components/icon/permissionicon';
 
-
 import IconDivider from 'web/components/layout/icondivider';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
@@ -44,25 +43,23 @@ import Table, {SORT_FIELDS} from './table';
 
 import PermissionComponent from './component';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onPermissionCreateClick,
-}) => (
-  <IconDivider>
-    <ManualIcon
-      page="gui_administration"
-      anchor="permissions"
-      title={_('Help: Permissions')}
-    />
-    {capabilities.mayCreate('permission') &&
-      <NewIcon
-        title={_('New Permission')}
-        onClick={onPermissionCreateClick}
+const ToolBarIcons = withCapabilities(
+  ({capabilities, onPermissionCreateClick}) => (
+    <IconDivider>
+      <ManualIcon
+        page="gui_administration"
+        anchor="permissions"
+        title={_('Help: Permissions')}
       />
-    }
-
-  </IconDivider>
-));
+      {capabilities.mayCreate('permission') && (
+        <NewIcon
+          title={_('New Permission')}
+          onClick={onPermissionCreateClick}
+        />
+      )}
+    </IconDivider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   onPermissionCreateClick: PropTypes.func,
@@ -72,13 +69,7 @@ const FilterDialog = createFilterDialog({
   sortFields: SORT_FIELDS,
 });
 
-const Page = ({
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
+const Page = ({onChanged, onDownloaded, onError, onInteraction, ...props}) => (
   <PermissionComponent
     onCloned={onChanged}
     onCloneError={onError}
@@ -90,16 +81,10 @@ const Page = ({
     onDownloadError={onError}
     onInteraction={onInteraction}
   >
-    {({
-      clone,
-      create,
-      delete: delete_func,
-      download,
-      edit,
-    }) => (
+    {({clone, create, delete: delete_func, download, edit}) => (
       <EntitiesPage
         {...props}
-        sectionIcon={<PermissionIcon size="large"/>}
+        sectionIcon={<PermissionIcon size="large" />}
         table={Table}
         filterEditDialog={FilterDialog}
         title={_('Permissions')}

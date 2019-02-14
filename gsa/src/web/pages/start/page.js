@@ -84,9 +84,7 @@ const OVERVIEW_DASHBOARD_ID = '84fbe9f5-8ad4-43f0-9712-850182abb003';
 const DEFAULT_OVERVIEW_DISPLAYS = convertDefaultDisplays(DEFAULT_DISPLAYS);
 
 const getDefaults = () => ({
-  dashboards: [
-    OVERVIEW_DASHBOARD_ID,
-  ],
+  dashboards: [OVERVIEW_DASHBOARD_ID],
   byId: {
     [OVERVIEW_DASHBOARD_ID]: {
       ...DEFAULT_OVERVIEW_DISPLAYS,
@@ -112,7 +110,6 @@ const StyledTab = styled(Tab)`
 `;
 
 class StartPage extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -124,37 +121,45 @@ class StartPage extends React.Component {
 
     this.handleActivateTab = this.handleActivateTab.bind(this);
 
-    this.handleOpenConfirmRemoveDashboardDialog =
-      this.handleOpenConfirmRemoveDashboardDialog.bind(this);
-    this.handleCloseConfirmRemoveDashboardDialog =
-      this.handleCloseConfirmRemoveDashboardDialog.bind(this);
+    this.handleOpenConfirmRemoveDashboardDialog = this.handleOpenConfirmRemoveDashboardDialog.bind(
+      this,
+    );
+    this.handleCloseConfirmRemoveDashboardDialog = this.handleCloseConfirmRemoveDashboardDialog.bind(
+      this,
+    );
 
     this.handleRemoveDashboard = this.handleRemoveDashboard.bind(this);
 
-    this.handleLoadDashboardSettings =
-      this.handleLoadDashboardSettings.bind(this);
-    this.handleSaveDashboardSettings =
-      this.handleSaveDashboardSettings.bind(this);
+    this.handleLoadDashboardSettings = this.handleLoadDashboardSettings.bind(
+      this,
+    );
+    this.handleSaveDashboardSettings = this.handleSaveDashboardSettings.bind(
+      this,
+    );
 
     this.handleResetDashboard = this.handleResetDashboard.bind(this);
     this.handleAddNewDisplay = this.handleAddNewDisplay.bind(this);
 
-    this.handleOpenNewDashboardDialog =
-      this.handleOpenNewDashboardDialog.bind(this);
-    this.handleCloseNewDashboardDialog =
-      this.handleCloseNewDashboardDialog.bind(this);
+    this.handleOpenNewDashboardDialog = this.handleOpenNewDashboardDialog.bind(
+      this,
+    );
+    this.handleCloseNewDashboardDialog = this.handleCloseNewDashboardDialog.bind(
+      this,
+    );
 
     this.handleAddNewDashboard = this.handleAddNewDashboard.bind(this);
 
     this.handleResetDashboards = this.handleResetDashboards.bind(this);
     this.handleSetDefaultSettings = this.handleSetDefaultSettings.bind(this);
 
-    this.handleCloseEditDashboardDialog =
-      this.handleCloseEditDashboardDialog.bind(this);
+    this.handleCloseEditDashboardDialog = this.handleCloseEditDashboardDialog.bind(
+      this,
+    );
     this.handleSaveEditDashboard = this.handleSaveEditDashboard.bind(this);
 
-    this.getDashboardSelector = memoize(settings =>
-      new DashboardSetting(settings));
+    this.getDashboardSelector = memoize(
+      settings => new DashboardSetting(settings),
+    );
   }
 
   componentDidMount() {
@@ -278,10 +283,7 @@ class StartPage extends React.Component {
     };
 
     const newSettings = {
-      dashboards: [
-        ...dashboards,
-        id,
-      ],
+      dashboards: [...dashboards, id],
       byId: {
         ...byId,
         [id]: newDashboardSetting,
@@ -304,10 +306,8 @@ class StartPage extends React.Component {
   handleResetDashboards() {
     // reset all dashboards
     // currently not assigned to a handler
-
     // const {byId, defaults} = this.props;
     // const DEFAULTS = getDefaults();
-
     // this.saveSettings({
     //   ...DEFAULTS,
     //   byId: {
@@ -343,7 +343,7 @@ class StartPage extends React.Component {
         [dashboardId]: newDefaults,
       },
     });
-  };
+  }
 
   getDashboards() {
     const {settings = {}} = this.props;
@@ -378,9 +378,7 @@ class StartPage extends React.Component {
   }
 
   render() {
-    const {
-      isLoading,
-    } = this.props;
+    const {isLoading} = this.props;
     const {
       activeTab,
       editDashboardId,
@@ -395,18 +393,12 @@ class StartPage extends React.Component {
     const canAdd = dashboards.length < MAX_DASHBOARDS;
     return (
       <ErrorBoundary errElement={_('page')}>
-        <Section
-          title={_('Dashboards')}
-          img={<DashboardIcon size="large"/>}
-        >
-          {isLoading ?
-            <Loading/> :
+        <Section title={_('Dashboards')} img={<DashboardIcon size="large" />}>
+          {isLoading ? (
+            <Loading />
+          ) : (
             <React.Fragment>
-
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
@@ -415,43 +407,44 @@ class StartPage extends React.Component {
                   {dashboards.map(id => {
                     const title = this.getDashboardTitle(id);
                     return (
-                      <StyledTab
-                        key={id}
-                      >
+                      <StyledTab key={id}>
                         <Divider margin="13px">
                           <span>{title}</span>
-                          {dashboards.length > 1 &&
+                          {dashboards.length > 1 && (
                             <IconDivider margin="3px">
                               <EditIcon
                                 size="tiny"
                                 title={_('Edit Dashboard Title')}
-                                onClick={() => this.handleOpenEditDashboardDialog(id)} // eslint-disable-line max-len
+                                onClick={() =>
+                                  this.handleOpenEditDashboardDialog(id)
+                                } // eslint-disable-line max-len
                               />
                               <DeleteIcon
                                 size="tiny"
                                 title={_('Remove Dashboard')}
-                                onClick={() => this.handleOpenConfirmRemoveDashboardDialog(id)} // eslint-disable-line max-len
+                                onClick={() =>
+                                  this.handleOpenConfirmRemoveDashboardDialog(
+                                    id,
+                                  )
+                                } // eslint-disable-line max-len
                               />
                             </IconDivider>
-                          }
+                          )}
                         </Divider>
                       </StyledTab>
                     );
                   })}
 
-                  <Layout
-                    align={['center', 'center']}
-                    grow
-                  >
+                  <Layout align={['center', 'center']} grow>
                     <StyledNewIcon
-                      title={canAdd ?
-                        _('Add new Dashboard') :
-                        _('Dashboards limit reached')
+                      title={
+                        canAdd
+                          ? _('Add new Dashboard')
+                          : _('Dashboards limit reached')
                       }
                       active={canAdd}
-                      onClick={canAdd ?
-                        this.handleOpenNewDashboardDialog :
-                        undefined
+                      onClick={
+                        canAdd ? this.handleOpenNewDashboardDialog : undefined
                       }
                     />
                   </Layout>
@@ -463,9 +456,7 @@ class StartPage extends React.Component {
                   {dashboards.map(id => {
                     const settings = this.getDashboardSettings(id);
                     return (
-                      <TabPanel
-                        key={id}
-                      >
+                      <TabPanel key={id}>
                         <SubscriptionProvider>
                           {({notify}) => (
                             <Dashboard
@@ -474,8 +465,7 @@ class StartPage extends React.Component {
                               loadSettings={this.handleLoadDashboardSettings}
                               notify={notify}
                               saveSettings={this.handleSaveDashboardSettings}
-                              setDefaultSettings={
-                                this.handleSetDefaultSettings}
+                              setDefaultSettings={this.handleSetDefaultSettings}
                               onInteraction={this.props.renewSessionTimeout}
                               onNewDisplay={this.handleAddNewDisplay}
                               onResetDashboard={this.handleResetDashboard}
@@ -488,17 +478,17 @@ class StartPage extends React.Component {
                 </TabPanels>
               </Tabs>
             </React.Fragment>
-          }
+          )}
         </Section>
-        {showConfirmRemoveDialog &&
+        {showConfirmRemoveDialog && (
           <ConfirmRemoveDialog
             dashboardId={removeDashboardId}
             dashboardTitle={this.getDashboardTitle(removeDashboardId)}
             onDeny={this.handleCloseConfirmRemoveDashboardDialog}
             onConfirm={this.handleRemoveDashboard}
           />
-        }
-        {showNewDashboardDialog &&
+        )}
+        {showNewDashboardDialog && (
           <NewDashboardDialog
             additionalDisplayChoices={dashboards.map(id => ({
               label: this.getDashboardTitle(id),
@@ -508,15 +498,15 @@ class StartPage extends React.Component {
             onClose={this.handleCloseNewDashboardDialog}
             onSave={this.handleAddNewDashboard}
           />
-        }
-        {showEditDashboardDialog &&
+        )}
+        {showEditDashboardDialog && (
           <EditDashboardDialog
             dashboardId={editDashboardId}
             dashboardTitle={this.getDashboardTitle(editDashboardId)}
             onClose={this.handleCloseEditDashboardDialog}
             onSave={this.handleSaveEditDashboard}
           />
-        }
+        )}
       </ErrorBoundary>
     );
   }
@@ -549,10 +539,8 @@ const mapStateToProps = rootState => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadSettings: (id, defaults) =>
-    dispatch(loadSettings(gmp)(id, defaults)),
-  saveSettings: (id, settings) =>
-    dispatch(saveSettings(gmp)(id, settings)),
+  loadSettings: (id, defaults) => dispatch(loadSettings(gmp)(id, defaults)),
+  saveSettings: (id, settings) => dispatch(saveSettings(gmp)(id, settings)),
   renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
   setDefaultSettings: (id, settings) =>
     dispatch(setDashboardSettingDefaults(id, settings)),
@@ -560,7 +548,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(StartPage);
 
 // vim: set ts=2 sw=2 tw=80:

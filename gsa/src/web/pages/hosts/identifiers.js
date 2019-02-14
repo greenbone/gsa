@@ -67,25 +67,13 @@ const Source = ({source}) => {
   if (source_type === 'Report Host Detail') {
     return (
       <div>
-        <span>{_('Report')}</span>
-        {' '}
-        <DetailsLink
-          textOnly={deleted !== '0'}
-          type="report"
-          id={id}
-        >
+        <span>{_('Report')}</span>{' '}
+        <DetailsLink textOnly={deleted !== '0'} type="report" id={id}>
           {id}
-        </DetailsLink>
-        {' '}
+        </DetailsLink>{' '}
         <span>
-          <span>
-            (NVT
-          </span>
-          {' '}
-          <DetailsLink
-            type="nvt"
-            id={data}
-          >
+          <span>(NVT</span>{' '}
+          <DetailsLink type="nvt" id={data}>
             {data}
           </DetailsLink>
           <span>)</span>
@@ -97,19 +85,11 @@ const Source = ({source}) => {
   if (source_type.startsWith('Report')) {
     return (
       <div>
-        <span>{_('Report')}</span>
-        {' '}
-        <DetailsLink
-          textOnly={deleted !== '0'}
-          type="report"
-          id={id}
-        >
+        <span>{_('Report')}</span>{' '}
+        <DetailsLink textOnly={deleted !== '0'} type="report" id={id}>
           {id}
-        </DetailsLink>
-        {' '}
-        <span>
-          {_('(Target Host)')}
-        </span>
+        </DetailsLink>{' '}
+        <span>{_('(Target Host)')}</span>
       </div>
     );
   }
@@ -117,13 +97,8 @@ const Source = ({source}) => {
   if (source_type.startsWith('User')) {
     return (
       <div>
-        <span>{_('User')}</span>
-        {' '}
-        <DetailsLink
-          textOnly={deleted !== '0'}
-          type="user"
-          id={id}
-        >
+        <span>{_('User')}</span>{' '}
+        <DetailsLink textOnly={deleted !== '0'} type="user" id={id}>
           {name}
         </DetailsLink>
       </div>
@@ -143,7 +118,6 @@ Source.propTypes = {
 };
 
 class Identifiers extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -176,7 +150,6 @@ class Identifiers extends React.Component {
     }
   }
 
-
   handleToggleLatest() {
     const {latest} = this.state;
     const {identifiers} = this.props;
@@ -195,85 +168,56 @@ class Identifiers extends React.Component {
     const title = latest ? _('Latest Identifiers') : _('All Identifiers');
     const footer = (
       <TableRow>
-        <TableData
-          flex
-          align={['center', 'center']}
-          colSpan="5"
-        >
-          {!equal &&
-            <Action
-              onClick={this.handleToggleLatest}
-            >
-              {latest ? _('Show all Identifiers') :
-                  _('Show latest Identifiers')}
+        <TableData flex align={['center', 'center']} colSpan="5">
+          {!equal && (
+            <Action onClick={this.handleToggleLatest}>
+              {latest
+                ? _('Show all Identifiers')
+                : _('Show latest Identifiers')}
             </Action>
-          }
+          )}
         </TableData>
       </TableRow>
     );
 
     displayActions = displayActions && isDefined(onDelete);
     return (
-      <DetailsBlock
-        title={title}
-      >
+      <DetailsBlock title={title}>
         <Table footer={footer}>
           <colgroup>
-            <Col width="15%"/>
-            <Col width="40%"/>
-            <Col width="10%"/>
-            <Col width={displayActions ? '30%' : '35%'}/>
-            {displayActions &&
-              <Col width="5%"/>
-            }
+            <Col width="15%" />
+            <Col width="40%" />
+            <Col width="10%" />
+            <Col width={displayActions ? '30%' : '35%'} />
+            {displayActions && <Col width="5%" />}
           </colgroup>
           <TableHeader>
             <TableRow>
-              <TableHead>
-                {_('Name')}
-              </TableHead>
-              <TableHead>
-                {_('Value')}
-              </TableHead>
-              <TableHead>
-                {_('Created')}
-              </TableHead>
-              <TableHead>
-                {_('Source')}
-              </TableHead>
-              {displayActions &&
-                <TableHead>
-                  {_('Actions')}
-                </TableHead>
-              }
+              <TableHead>{_('Name')}</TableHead>
+              <TableHead>{_('Value')}</TableHead>
+              <TableHead>{_('Created')}</TableHead>
+              <TableHead>{_('Source')}</TableHead>
+              {displayActions && <TableHead>{_('Actions')}</TableHead>}
             </TableRow>
           </TableHeader>
           <TableBody>
             {identifiers.map(identifier => (
               <TableRow key={identifier.id}>
-                <TableData>
-                  {identifier.name}
-                </TableData>
+                <TableData>{identifier.name}</TableData>
                 <TableData>
                   <DetailsLink
                     type="operatingsystem"
                     id={isDefined(identifier.os) ? identifier.os.id : ''}
                     textOnly={identifier.name !== 'OS'}
                   >
-                    <Div>
-                      {identifier.value}
-                    </Div>
+                    <Div>{identifier.value}</Div>
                   </DetailsLink>
                 </TableData>
+                <TableData>{longDate(identifier.creationTime)}</TableData>
                 <TableData>
-                  {longDate(identifier.creationTime)}
+                  <Source source={identifier.source} />
                 </TableData>
-                <TableData>
-                  <Source
-                    source={identifier.source}
-                  />
-                </TableData>
-                {displayActions &&
+                {displayActions && (
                   <TableData align={['center', 'center']}>
                     <DeleteIcon
                       title={_('Delete Identifier')}
@@ -281,7 +225,7 @@ class Identifiers extends React.Component {
                       onClick={onDelete}
                     />
                   </TableData>
-                }
+                )}
               </TableRow>
             ))}
           </TableBody>

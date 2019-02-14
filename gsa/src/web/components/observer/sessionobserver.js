@@ -36,7 +36,6 @@ const log = Logger.getLogger('web.observer.sessionobserver');
 const DELAY = 15 * 1000; // 15 seconds in milliseconds
 
 class Ping extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -67,8 +66,13 @@ class Ping extends React.Component {
     if (timeout > 0) {
       this.timer = global.setTimeout(this.handlePing, timeout);
 
-      log.debug('started ping timer', this.timer, 'timeout', timeout,
-        'milliseconds');
+      log.debug(
+        'started ping timer',
+        this.timer,
+        'timeout',
+        timeout,
+        'milliseconds',
+      );
     }
   }
 
@@ -97,12 +101,7 @@ const SessionObserver = ({sessionTimeout}) => {
     return null;
   }
 
-  return (
-    <Ping
-      key={sessionTimeout.unix()}
-      sessionTimeout={sessionTimeout}
-    />
-  );
+  return <Ping key={sessionTimeout.unix()} sessionTimeout={sessionTimeout} />;
 };
 
 SessionObserver.propTypes = {

@@ -29,14 +29,16 @@ import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
 
 const FilterStringGroup = ({filter, onChange, name = 'filter'}) => {
-  const filterstring = isString(filter) ?
-    filter : filter.toFilterCriteriaString();
+  const filterstring = isString(filter)
+    ? filter
+    : filter.toFilterCriteriaString();
   return (
     <FormGroup title={_('Filter')}>
       <TextField
         name={name}
         grow="1"
-        value={filterstring} size="30"
+        value={filterstring}
+        size="30"
         onChange={onChange}
         maxLength="80"
       />
@@ -45,10 +47,7 @@ const FilterStringGroup = ({filter, onChange, name = 'filter'}) => {
 };
 
 FilterStringGroup.propTypes = {
-  filter: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.filter,
-  ]).isRequired,
+  filter: PropTypes.oneOfType([PropTypes.string, PropTypes.filter]).isRequired,
   name: PropTypes.string,
   onChange: PropTypes.func,
 };

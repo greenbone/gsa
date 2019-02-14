@@ -22,10 +22,7 @@ import hoistStatics from 'hoist-non-react-statics';
 
 const withContext = contextTypes => Component => {
   const ContextWrapper = (props, context) => (
-    <Component
-      {...props}
-      {...context}
-    />
+    <Component {...props} {...context} />
   );
 
   ContextWrapper.contextTypes = contextTypes;

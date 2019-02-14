@@ -44,24 +44,23 @@ import {
 import CredentialComponent from './component';
 import CredentialsTable, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onCredentialCreateClick,
-}) => (
-  <IconDivider>
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="credentials"
-      title={_('Help: Credentials')}
-    />
-    {capabilities.mayCreate('credential') &&
-      <NewIcon
-        title={_('New Credential')}
-        onClick={onCredentialCreateClick}
+const ToolBarIcons = withCapabilities(
+  ({capabilities, onCredentialCreateClick}) => (
+    <IconDivider>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="credentials"
+        title={_('Help: Credentials')}
       />
-    }
-  </IconDivider>
-));
+      {capabilities.mayCreate('credential') && (
+        <NewIcon
+          title={_('New Credential')}
+          onClick={onCredentialCreateClick}
+        />
+      )}
+    </IconDivider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   onCredentialCreateClick: PropTypes.func.isRequired,
@@ -90,36 +89,37 @@ const CredentialsPage = ({
     onInstallerDownloaded={onDownloaded}
     onInstallerDownloadError={onError}
     onInteraction={onInteraction}
-  >{({
-    clone,
-    create,
-    delete: delete_func,
-    download,
-    downloadinstaller,
-    edit,
-    save,
-  }) => (
-    <EntitiesPage
-      {...props}
-      filterEditDialog={CredentialsFilterDialog}
-      filtersFilter={CREDENTIALS_FILTER_FILTER}
-      sectionIcon={<CredentialIcon size="large"/>}
-      table={CredentialsTable}
-      title={_('Credentials')}
-      toolBarIcons={ToolBarIcons}
-      onChanged={onChanged}
-      onCredentialCloneClick={clone}
-      onCredentialCreateClick={create}
-      onCredentialDeleteClick={delete_func}
-      onCredentialDownloadClick={download}
-      onCredentialEditClick={edit}
-      onCredentialSaveClick={save}
-      onCredentialInstallerDownloadClick={downloadinstaller}
-      onDownloaded={onDownloaded}
-      onError={onError}
-      onInteraction={onInteraction}
-    />
-  )}
+  >
+    {({
+      clone,
+      create,
+      delete: delete_func,
+      download,
+      downloadinstaller,
+      edit,
+      save,
+    }) => (
+      <EntitiesPage
+        {...props}
+        filterEditDialog={CredentialsFilterDialog}
+        filtersFilter={CREDENTIALS_FILTER_FILTER}
+        sectionIcon={<CredentialIcon size="large" />}
+        table={CredentialsTable}
+        title={_('Credentials')}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onCredentialCloneClick={clone}
+        onCredentialCreateClick={create}
+        onCredentialDeleteClick={delete_func}
+        onCredentialDownloadClick={download}
+        onCredentialEditClick={edit}
+        onCredentialSaveClick={save}
+        onCredentialInstallerDownloadClick={downloadinstaller}
+        onDownloaded={onDownloaded}
+        onError={onError}
+        onInteraction={onInteraction}
+      />
+    )}
   </CredentialComponent>
 );
 

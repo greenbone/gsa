@@ -42,10 +42,7 @@ export const CpesSeverityClassTableDisplay = createDisplay({
   displayComponent: SeverityClassTableDisplay,
   title: ({data: tdata}) =>
     _('CPEs by Severity Class (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [
-    _l('Severity Class'),
-    _l('# of CPEs'),
-  ],
+  dataTitles: [_l('Severity Class'), _l('# of CPEs')],
   displayId: 'cpe-by-severity-table',
   displayName: 'CpesSeverityClassTableDisplay',
   filtersFilter: CPES_FILTER_FILTER,
@@ -55,8 +52,10 @@ registerDisplay(CpesSeverityClassDisplay.displayId, CpesSeverityClassDisplay, {
   title: _l('Chart: CPEs by Severity Class'),
 });
 
-registerDisplay(CpesSeverityClassTableDisplay.displayId,
-  CpesSeverityClassTableDisplay, {
+registerDisplay(
+  CpesSeverityClassTableDisplay.displayId,
+  CpesSeverityClassTableDisplay,
+  {
     title: _l('Table: CPEs by Severity Class'),
   },
 );

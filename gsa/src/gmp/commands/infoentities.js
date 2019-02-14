@@ -26,7 +26,6 @@ import {
 import EntitiesCommand from './entities';
 
 class InfoEntitiesCommand extends EntitiesCommand {
-
   constructor(http, name, clazz, entities_filter_func) {
     super(http, 'info', clazz);
     this.setParam('cmd', 'get_info');
@@ -41,8 +40,12 @@ class InfoEntitiesCommand extends EntitiesCommand {
   }
 
   parseInfoEntities(response, name, modelclass) {
-    return parseInfoEntities(response, name, modelclass,
-      this.entities_filter_func);
+    return parseInfoEntities(
+      response,
+      name,
+      modelclass,
+      this.entities_filter_func,
+    );
   }
 
   getCollectionListFromRoot(root, meta) {

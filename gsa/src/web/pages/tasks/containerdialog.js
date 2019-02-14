@@ -67,10 +67,7 @@ const ContainerTaskDialog = ({
       onClose={onClose}
       onSave={onSave}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
             <FormGroup title={_('Name')}>
@@ -94,7 +91,7 @@ const ContainerTaskDialog = ({
               />
             </FormGroup>
 
-            {isEdit &&
+            {isEdit && (
               <React.Fragment>
                 <AddResultsToAssetsGroup
                   inAssets={state.in_assets}
@@ -106,7 +103,7 @@ const ContainerTaskDialog = ({
                   onChange={onValueChange}
                 />
               </React.Fragment>
-            }
+            )}
           </Layout>
         );
       }}
@@ -115,9 +112,7 @@ const ContainerTaskDialog = ({
 };
 
 ContainerTaskDialog.propTypes = {
-  auto_delete: PropTypes.oneOf([
-    'keep', 'no',
-  ]),
+  auto_delete: PropTypes.oneOf(['keep', 'no']),
   auto_delete_data: PropTypes.number,
   comment: PropTypes.string,
   in_assets: PropTypes.yesno,
@@ -127,7 +122,6 @@ ContainerTaskDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
-
 
 export default ContainerTaskDialog;
 

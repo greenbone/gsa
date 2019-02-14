@@ -19,7 +19,6 @@
 import EverythingCapabilities from '../everything';
 
 describe('EverythingCapabilities tests', () => {
-
   test('should allow everything', () => {
     const caps = new EverythingCapabilities();
 
@@ -38,7 +37,6 @@ describe('EverythingCapabilities tests', () => {
     expect(caps.areDefined()).toEqual(true);
     expect(caps.has('everything')).toEqual(true);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -54,27 +54,25 @@ export const render = ui => {
 };
 
 const withProvider = name => Component => ({children, ...props}) =>
-  isDefined(props[name]) ?
-    <Component {...{[name]: props[name]}}>
-      {children}
-    </Component> :
-    children;
+  isDefined(props[name]) ? (
+    <Component {...{[name]: props[name]}}>{children}</Component>
+  ) : (
+    children
+  );
 
 const TestingGmpPropvider = withProvider('gmp')(GmpProvider);
 const TestingStoreProvider = withProvider('store')(Provider);
 const TestingRouter = withProvider('history')(Router);
 const TestingCapabilitiesProvider = withProvider('capabilities')(
-  CapabilitiesProvider);
+  CapabilitiesProvider,
+);
 
-export const rendererWith = ({
-  capabilities,
-  gmp,
-  store,
-  router,
-} = {
-  store: true,
-  router: true,
-}) => {
+export const rendererWith = (
+  {capabilities, gmp, store, router} = {
+    store: true,
+    router: true,
+  },
+) => {
   if (store === true) {
     store = configureStore();
   }
@@ -88,17 +86,16 @@ export const rendererWith = ({
     capabilities = new EverythingCapabilities();
   }
   return {
-    render: ui => render(
-      <TestingGmpPropvider gmp={gmp}>
-        <TestingCapabilitiesProvider capabilities={capabilities}>
-          <TestingStoreProvider store={store}>
-            <TestingRouter history={history}>
-              {ui}
-            </TestingRouter>
-          </TestingStoreProvider>
-        </TestingCapabilitiesProvider>
-      </TestingGmpPropvider>
-    ),
+    render: ui =>
+      render(
+        <TestingGmpPropvider gmp={gmp}>
+          <TestingCapabilitiesProvider capabilities={capabilities}>
+            <TestingStoreProvider store={store}>
+              <TestingRouter history={history}>{ui}</TestingRouter>
+            </TestingStoreProvider>
+          </TestingCapabilitiesProvider>
+        </TestingGmpPropvider>,
+      ),
     gmp,
     store,
     history,

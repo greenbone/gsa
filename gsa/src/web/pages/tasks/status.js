@@ -40,21 +40,15 @@ const TaskStatus = ({task, links = true}) => {
   let report_id;
   if (isDefined(task.current_report)) {
     report_id = task.current_report.id;
-  }
-  else if (isDefined(task.last_report)) {
+  } else if (isDefined(task.last_report)) {
     report_id = task.last_report.id;
-  }
-  else {
+  } else {
     report_id = '';
     links = false;
   }
 
   return (
-    <StyledDetailsLink
-      type="report"
-      id={report_id}
-      textOnly={!links}
-    >
+    <StyledDetailsLink type="report" id={report_id} textOnly={!links}>
       <StatusBar
         status={task.isContainer() ? TASK_STATUS.container : task.status}
         progress={task.progress}

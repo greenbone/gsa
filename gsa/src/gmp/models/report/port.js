@@ -23,7 +23,6 @@ import {isDefined} from '../../utils/identity';
 import {setProperties, parseInt, parseSeverity} from '../../parser';
 
 class ReportPort {
-
   constructor(elem) {
     this.parseProperties(elem);
   }

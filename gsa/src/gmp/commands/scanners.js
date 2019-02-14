@@ -28,7 +28,6 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.scanners');
 
 class ScannersCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'scanner', Scanner);
   }
@@ -36,11 +35,9 @@ class ScannersCommand extends EntitiesCommand {
   getEntitiesResponse(root) {
     return root.get_scanners.get_scanners_response;
   }
-
 }
 
 class ScannerCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'scanner', Scanner);
   }
@@ -49,15 +46,7 @@ class ScannerCommand extends EntityCommand {
     return root.get_scanner.get_scanners_response.scanner;
   }
 
-  create({
-      name,
-      ca_pub,
-      comment = '',
-      credential_id,
-      host,
-      port,
-      type,
-    }) {
+  create({name, ca_pub, comment = '', credential_id, host, port, type}) {
     const data = {
       cmd: 'create_scanner',
       name,
@@ -73,16 +62,16 @@ class ScannerCommand extends EntityCommand {
   }
 
   save({
-      id,
-      name,
-      ca_pub = '',
-      comment = '',
-      credential_id,
-      host,
-      port,
-      type,
-      which_cert,
-    }) {
+    id,
+    name,
+    ca_pub = '',
+    comment = '',
+    credential_id,
+    host,
+    port,
+    type,
+    which_cert,
+  }) {
     const data = {
       cmd: 'save_scanner',
       ca_pub,

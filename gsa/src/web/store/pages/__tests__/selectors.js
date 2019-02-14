@@ -19,7 +19,6 @@
 import getPage from 'web/store/pages/selectors';
 
 describe('pages selectors tests', () => {
-
   test('should not crash for undefined state', () => {
     const selector = getPage();
 
@@ -53,7 +52,6 @@ describe('pages selectors tests', () => {
 
     expect(selector.getFilter('foo')).toEqual('name=foo');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:
