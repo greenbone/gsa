@@ -9974,8 +9974,8 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
            * must be reset.  This works around the need for the Manager to
            * send the actual password or show the actual file. */
 
-          /* LDAPsearch[entry]:Timeout value */
-          count = sscanf (preference_name, "%*[^[][%n%*[^]]%n]:", &type_start,
+          /* OID:PrefType:PrefName value */
+          count = sscanf (preference_name, "%*[^:]:%n%*[^:]%n:", &type_start,
                           &type_end);
           if (count == 0 && type_start > 0 && type_end > 0)
             {
@@ -13749,9 +13749,9 @@ save_report_format_gmp (gvm_connection_t *connection,
       while (params_iterator_next (&iter, &param_name, &param))
         {
           int type_start, type_end, count;
-          /* LDAPsearch[entry]:Timeout value */
+          /* OID:PrefType:PrefName value */
           count =
-            sscanf (param_name, "%*[^[][%n%*[^]]%n]:", &type_start, &type_end);
+            sscanf (param_name, "%*[^:]:%n%*[^:]%n:", &type_start, &type_end);
           if (count == 0 && type_start > 0 && type_end > 0)
             {
               gchar *value;
