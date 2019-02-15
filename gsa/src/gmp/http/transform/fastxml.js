@@ -30,6 +30,7 @@ const PARSER_OPTIONS = {
   attributeNamePrefix: '_',
   ignoreAttributes: false,
   ignoreNameSpace: true,
+  textNodeName: '__text',
 };
 
 const transform_xml_data = response => {
