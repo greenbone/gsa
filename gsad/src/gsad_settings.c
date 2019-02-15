@@ -140,25 +140,25 @@ label_name_set (const gchar *name)
 }
 
 void
-set_guest_username (const gchar* username)
+set_guest_username (const gchar *username)
 {
-  guest_username = g_strdup(username);
+  guest_username = g_strdup (username);
 }
 
-const
-gchar * get_guest_username ()
+const gchar *
+get_guest_username ()
 {
   return guest_username;
 }
 
 void
-set_guest_password (const gchar* password)
+set_guest_password (const gchar *password)
 {
-  guest_password = g_strdup(password);
+  guest_password = g_strdup (password);
 }
 
-const
-gchar * get_guest_password ()
+const gchar *
+get_guest_password ()
 {
   return guest_password;
 }
@@ -170,7 +170,7 @@ set_session_timeout (int timeout)
 }
 
 int
-get_session_timeout()
+get_session_timeout ()
 {
   return session_timeout;
 }
@@ -182,13 +182,13 @@ set_use_secure_cookie (int secure)
 }
 
 gboolean
-is_use_secure_cookie()
+is_use_secure_cookie ()
 {
   return use_secure_cookie;
 }
 
 void
-set_http_content_security_policy (const gchar * policy)
+set_http_content_security_policy (const gchar *policy)
 {
   http_content_security_policy = policy;
 }
@@ -200,7 +200,7 @@ get_http_content_security_policy ()
 }
 
 void
-set_http_x_frame_options (const gchar * options)
+set_http_x_frame_options (const gchar *options)
 {
   http_x_frame_options = options;
 }
@@ -212,7 +212,7 @@ get_http_x_frame_options ()
 }
 
 void
-set_http_cors_origin (const gchar * origin)
+set_http_cors_origin (const gchar *origin)
 {
   http_cors_origin = origin;
 }
@@ -224,7 +224,7 @@ get_http_cors_origin ()
 }
 
 void
-set_http_guest_chart_x_frame_options (const gchar * options)
+set_http_guest_chart_x_frame_options (const gchar *options)
 {
   http_guest_chart_x_frame_options = options;
 }
@@ -236,7 +236,7 @@ get_http_guest_chart_x_frame_options ()
 }
 
 void
-set_http_guest_chart_content_security_policy (const gchar * policy)
+set_http_guest_chart_content_security_policy (const gchar *policy)
 {
   http_guest_chart_content_security_policy = policy;
 }
@@ -248,7 +248,7 @@ get_http_guest_chart_content_security_policy ()
 }
 
 void
-set_http_strict_transport_security (const gchar * policy)
+set_http_strict_transport_security (const gchar *policy)
 {
   http_strict_transport_security = policy;
 }

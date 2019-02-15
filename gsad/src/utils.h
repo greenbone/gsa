@@ -27,9 +27,10 @@
 
 #include <glib.h> // for gboolean, gchar
 
-gboolean str_equal (const gchar *, const gchar *);
+gboolean
+str_equal (const gchar *, const gchar *);
 
-gchar* capitalize (const char *);
+gchar *
+capitalize (const char *);
 
 #endif /* not _GSAD_UTILS_H */
-

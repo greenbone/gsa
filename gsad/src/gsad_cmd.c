@@ -24,13 +24,14 @@
 
 #include "gsad_cmd.h"
 
-#include <string.h> /* for memset */
 #include <microhttpd.h> /* for MHD_HTTP_OK */
+#include <string.h>     /* for memset */
 
 /**
  * @brief Response information for commands.
  */
-struct cmd_response_data {
+struct cmd_response_data
+{
   gboolean allow_caching;      ///> Whether the response may be cached.
   int http_status_code;        ///> HTTP status code.
   content_type_t content_type; ///> Content type. Default is text/html
@@ -45,7 +46,7 @@ struct cmd_response_data {
  * @param[in]  data  The cmd_response_data_t struct to initialize
  */
 static void
-cmd_response_data_init (cmd_response_data_t* data)
+cmd_response_data_init (cmd_response_data_t *data)
 {
   data->allow_caching = FALSE;
   data->http_status_code = MHD_HTTP_OK;
@@ -77,7 +78,7 @@ cmd_response_data_new ()
  * @param[in] data The cmd_response_data_t struct to free
  */
 void
-cmd_response_data_free (cmd_response_data_t* data)
+cmd_response_data_free (cmd_response_data_t *data)
 {
   if (!data)
     {
@@ -241,7 +242,7 @@ cmd_response_data_set_content_type_string (cmd_response_data_t *data,
                                            gchar *content_type_string)
 {
   data->content_type = GSAD_CONTENT_TYPE_STRING;
-  data->content_type_string = content_type_string;;
+  data->content_type_string = content_type_string;
 }
 
 /**

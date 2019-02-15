@@ -38,6 +38,18 @@ endif (NOT CMAKE_BUILD_TYPE)
 ## Retrieve git revision (at configure time)
 include (GetGit)
 
+## make format
+message (STATUS "Looking for clang-format...")
+find_program (CLANG_FORMAT clang-format)
+
+if (CLANG_FORMAT)
+  message (STATUS "Looking for clang-format... ${CLANG_FORMAT}")
+  add_custom_target(format COMMAND ${CLANG_FORMAT} "-i" "./gsad/src/*.c"
+                    "./gsad/src/*.h" WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+else (CLANG_FORMAT)
+  message (STATUS "clang-format not found...")
+endif (CLANG_FORMAT)
+
 if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
   if (EXISTS "${CMAKE_SOURCE_DIR}/.git/")
     if (GIT_FOUND)

@@ -25,16 +25,25 @@
 #ifndef _GSAD_BASE_H
 #define _GSAD_BASE_H
 
+#include "gsad_cmd.h"  /* for cmd_response_data_t */
+#include "gsad_user.h" /* for credentials_t */
+
 #include <glib.h>
 #include <sys/time.h>
 
-#include "gsad_cmd.h" /* for cmd_response_data_t */
-#include "gsad_user.h" /* for credentials_t */
+int
+gsad_base_init ();
 
-int gsad_base_init ();
-int gsad_base_cleanup ();
-void set_chroot_state (int);
-void set_http_only (int);
-char *ctime_r_strip_newline (time_t *, char *);
+int
+gsad_base_cleanup ();
+
+void
+set_chroot_state (int);
+
+void
+set_http_only (int);
+
+char *
+ctime_r_strip_newline (time_t *, char *);
 
 #endif /* not _GSAD_BASE_H */

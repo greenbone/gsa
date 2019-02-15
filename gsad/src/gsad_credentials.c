@@ -22,10 +22,11 @@
  * @brief GSAD credentials handling
  */
 
-#include <glib.h>
-
 #include "gsad_credentials.h"
+
 #include "gsad_user.h"
+
+#include <glib.h>
 
 /**
  *  @brief Structure of credential related information.
@@ -38,8 +39,7 @@ struct credentials
 };
 
 credentials_t *
-credentials_new (user_t *user,
-                 const gchar *language)
+credentials_new (user_t *user, const gchar *language)
 {
   credentials_t *credentials;
 
@@ -86,6 +86,7 @@ credentials_get_cmd_duration (credentials_t *cred)
 {
   struct timeval tv;
   gettimeofday (&tv, NULL);
-  return ((double) ((tv.tv_sec - cred->cmd_start.tv_sec) * 1000000L
-                    + tv.tv_usec - cred->cmd_start.tv_usec) / 1000000.0);
+  return ((double) ((tv.tv_sec - cred->cmd_start.tv_sec) * 1000000L + tv.tv_usec
+                    - cred->cmd_start.tv_usec)
+          / 1000000.0);
 }
