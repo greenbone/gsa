@@ -13478,7 +13478,7 @@ get_system_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
               cmd_response_data_set_content_type (response_data,
                                                   GSAD_CONTENT_TYPE_IMAGE_PNG);
               //*content_disposition = g_strdup_printf ("attachment;
-              //filename=\"xxx.png\"");
+              // filename=\"xxx.png\"");
 #else
               g_free (content);
               content = g_strdup ("helo");
