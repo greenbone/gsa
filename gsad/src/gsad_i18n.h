@@ -32,6 +32,7 @@
  */
 #define DEFAULT_GSAD_LANGUAGE "en"
 
-gchar* accept_language_to_env_fmt (const char*);
+gchar *
+accept_language_to_env_fmt (const char *);
 
 #endif /* not _GSAD_I18N_H */
