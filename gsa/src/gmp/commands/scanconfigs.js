@@ -61,7 +61,7 @@ const convert_preferences = (values, nvt_name) => {
     const data = values[prop];
     const {type, value} = data;
     if (isDefined(value)) {
-      const typestring = nvt_name + '[' + type + ']:' + prop;
+      const typestring = nvt_name + ':' + type + ':' + prop;
       if (type === 'password') {
         ret['password:' + typestring] = 'yes';
       } else if (type === 'file') {
@@ -102,7 +102,7 @@ class ScanConfigCommand extends EntityCommand {
   save({id, name, comment = '', trend, select, scanner_preference_values}) {
     const data = {
       ...convert(trend, 'trend:'),
-      ...convert(scanner_preference_values, 'preference:scanner[scanner]:'),
+      ...convert(scanner_preference_values, 'preference:scanner:scanner:'),
       ...convert_select(select, 'select:'),
 
       cmd: 'save_config',
@@ -210,7 +210,7 @@ class ScanConfigCommand extends EntityCommand {
       timeout,
     };
 
-    data['preference:scanner[scanner]:timeout.' + oid] = manual_timeout;
+    data['preference:scanner:scanner:timeout.' + oid] = manual_timeout;
 
     log.debug('Saving scanconfignvt', data);
     return this.httpPost(data);

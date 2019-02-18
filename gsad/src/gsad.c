@@ -642,7 +642,7 @@ init_validator ()
   /** @todo Better regex. */
   gvm_validator_add (validator, "preference_name", "^(.*){0,400}$");
   gvm_validator_add (validator, "preference:name",
-                     "^([^[]*\\[[^]]*\\]:.*){0,400}$");
+                     "^([^:]*:[^:]*:.*){0,400}$");
   gvm_validator_add (validator, "preference:value", "(?s)^.*$");
   gvm_validator_add (validator, "prev_action", "(?s)^.*$");
   gvm_validator_add (validator, "privacy_algorithm", "^(aes|des|)$");
