@@ -357,6 +357,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/stopicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/stmitigateicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/stvendorfixicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/stworkaroundicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/svgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/tagicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/tagsicon.js
@@ -425,6 +426,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/legend.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/list.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_mitigate.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/st_workaround.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/my_setting.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/note.svg
