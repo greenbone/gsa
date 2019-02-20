@@ -25,7 +25,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {filter as filter_func, forEach, map} from 'gmp/utils/array';
 
-import {parseSeverity, parseDate} from 'gmp/parser';
+import {parseName, parseSeverity, parseDate} from 'gmp/parser';
 
 import {
   parseCollectionList,
@@ -556,7 +556,7 @@ export const parse_errors = (report, filter) => {
       },
       nvt: {
         id: nvt._oid,
-        name: nvt.name,
+        name: parseName(nvt.name),
       },
       port,
     };
