@@ -359,7 +359,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/stnonavailableicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/stunknownicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/stvendorfixicon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/stwillnotfix.js
+     ${GSA_SRC_DIR}/src/web/components/icon/stwillnotfixicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/stworkaroundicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/svgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/tagicon.js
