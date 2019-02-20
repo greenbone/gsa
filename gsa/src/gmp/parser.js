@@ -123,12 +123,32 @@ export const parseEnvelopeMeta = envelope => {
   return meta;
 };
 
+const esc2xml = {
+  '&quot;': `"`,
+  '&apos;': `'`,
+  '&amp;': `&`,
+  '&lt;': `<`,
+  '&gt;': `>`,
+};
+
+const decodeXml = string =>
+  string.replace(
+    /(&quot;|&lt;|&gt;|&amp;|&apos;)/g,
+    (str, symbol) => esc2xml[symbol],
+  );
+
+export const parseName = name => decodeXml(name);
+
 export const parseProperties = (element = {}, object = {}) => {
   const copy = {...object, ...element}; // create shallow copy
 
   if (isString(element._id) && element._id.length > 0) {
     // only set id if it id defined
     copy.id = element._id;
+  }
+
+  if (isString(element.name) && element.name.length > 0) {
+    copy.name = parseName(element.name);
   }
 
   if (isDefined(element.creation_time)) {
