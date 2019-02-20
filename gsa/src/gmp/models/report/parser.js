@@ -41,7 +41,7 @@ import Host from './host';
 import OperatingSystem from './os';
 import Port from './port';
 import TLSCertificate from './tlscertificate';
-import Vulerability from './vulnerability';
+import Vulnerability from './vulnerability';
 
 import Result from '../result';
 
@@ -237,7 +237,7 @@ export const parse_vulnerabilities = (report, filter) => {
       if (isDefined(vuln)) {
         vuln.addResult(results);
       } else {
-        vuln = new Vulerability(result);
+        vuln = new Vulnerability(result);
         temp_vulns[oid] = vuln;
       }
 
