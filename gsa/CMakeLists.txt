@@ -426,6 +426,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/legend.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/list.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_mitigate.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/st_vendorfix.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_workaround.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/my_setting.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
