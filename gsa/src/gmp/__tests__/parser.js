@@ -22,23 +22,23 @@ import {isDate, isDuration} from 'gmp/models/date';
 
 import {
   parseCsv,
+  parseCvssBaseVector,
+  parseCvssBaseFromVector,
+  parseDate,
+  parseDuration,
   parseEnvelopeMeta,
   parseFloat,
   parseInt,
   parseProgressElement,
+  parseProperties,
   parseQod,
-  parseTextElement,
   parseSeverity,
+  parseText,
+  parseTextElement,
   parseYesNo,
   YES_VALUE,
   NO_VALUE,
-  parseDate,
-  parseDuration,
   setProperties,
-  parseProperties,
-  parseCvssBaseVector,
-  parseCvssBaseFromVector,
-  parseText,
 } from '../parser';
 
 describe('parseInt tests', () => {
