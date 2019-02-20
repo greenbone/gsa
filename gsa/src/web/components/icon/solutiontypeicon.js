@@ -23,53 +23,58 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
+import StMitigateIcon from 'web/components/icon/stmitigateicon';
+import StNonAvailableIcon from 'web/components/icon/stnonavailableicon';
+import StUnknownIcon from 'web/components/icon/stunknownicon';
+import StVendorFixIcon from 'web/components/icon/stvendorfixicon';
+import StWillNotFixIcon from 'web/components/icon/stwillnotfixicon';
+import StWorkaroundIcon from 'web/components/icon/stworkaroundicon';
+
 import Divider from 'web/components/layout/divider';
 
-import Icon from './icon';
-
 const SolutionType = ({type, displayTitleText = false}) => {
-  let img;
+  let IconComponent;
   let title;
 
   switch (type) {
     case 'Workaround':
       title = _('Workaround');
-      img = 'st_workaround.svg';
+      IconComponent = StWorkaroundIcon;
       break;
     case 'Mitigation':
       title = _('Mitigation');
-      img = 'st_mitigate.svg';
+      IconComponent = StMitigateIcon;
       break;
     case 'VendorFix':
       title = _('Vendorfix');
-      img = 'st_vendorfix.svg';
+      IconComponent = StVendorFixIcon;
       break;
     case 'NoneAvailable':
       title = _('None available');
-      img = 'st_nonavailable.svg';
+      IconComponent = StNonAvailableIcon;
       break;
     case 'WillNotFix':
       title = _('Will not fix');
-      img = 'st_willnotfix.svg';
+      IconComponent = StWillNotFixIcon;
       break;
     case '':
       title = '';
-      img = 'os_unknown.svg';
+      IconComponent = StUnknownIcon;
       break;
     default:
-      return null;
+      return <span />;
   }
 
   if (displayTitleText) {
     return (
       <Divider align={['start', 'center']}>
-        <Icon img={img} title={title} alt={title} />
+        <IconComponent size="small" title={title} alt={title} />
         <span>{title}</span>
       </Divider>
     );
   }
 
-  return <Icon img={img} title={title} alt={title} />;
+  return <IconComponent size="small" title={title} alt={title} />;
 };
 
 SolutionType.propTypes = {
