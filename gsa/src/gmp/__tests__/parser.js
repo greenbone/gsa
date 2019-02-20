@@ -29,6 +29,7 @@ import {
   parseEnvelopeMeta,
   parseFloat,
   parseInt,
+  parseName,
   parseProgressElement,
   parseProperties,
   parseQod,
@@ -569,6 +570,17 @@ describe('parseCvssBaseVector tests', () => {
     expect(parseCvssBaseVector({availabilityImpact: 'COMPLETE'})).toEqual(
       'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:C',
     );
+  });
+});
+
+describe('parseName tests', () => {
+  test('should unescape xml entities', () => {
+    expect(parseName('unesc &lt;')).toEqual('unesc <');
+    expect(parseName('unesc &gt;')).toEqual('unesc >');
+    expect(parseName('unesc &amp;')).toEqual('unesc &');
+    expect(parseName('unesc &apos;')).toEqual(`unesc '`);
+    expect(parseName('unesc &quot;')).toEqual('unesc "');
+    expect(parseName(`unesc <>&'" &quot;`)).toEqual(`unesc <>&'" "`);
   });
 });
 
