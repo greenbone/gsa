@@ -1,0 +1,143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SolutionTypeIcon component tests should render correct image 1`] = `
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+<span
+  alt="Workaround"
+  class="c0 "
+  title="Workaround"
+>
+  <svg>
+    st_workaround.svg
+  </svg>
+</span>
+`;
+
+exports[`SolutionTypeIcon component tests should render correct image 2`] = `<span />`;
+
+exports[`SolutionTypeIcon component tests should render correct image 3`] = `
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+<span
+  alt="None available"
+  class="c0 "
+  title="None available"
+>
+  <svg>
+    st_nonavailable.svg
+  </svg>
+</span>
+`;
+
+exports[`SolutionTypeIcon component tests should render correct image 4`] = `
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+<span
+  alt="Vendorfix"
+  class="c0 "
+  title="Vendorfix"
+>
+  <svg>
+    st_vendorfix.svg
+  </svg>
+</span>
+`;
+
+exports[`SolutionTypeIcon component tests should render correct image 5`] = `
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+<span
+  alt="Will not fix"
+  class="c0 "
+  title="Will not fix"
+>
+  <svg>
+    st_willnotfix.svg
+  </svg>
+</span>
+`;
+
+exports[`SolutionTypeIcon component tests should render correct image 6`] = `
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+<span
+  alt="Workaround"
+  class="c0 "
+  title="Workaround"
+>
+  <svg>
+    st_workaround.svg
+  </svg>
+</span>
+`;
+
+exports[`SolutionTypeIcon component tests should render correct image 7`] = `
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+<span
+  alt=""
+  class="c0 "
+  title=""
+>
+  <svg>
+    st_unknown.svg
+  </svg>
+</span>
+`;
+
+exports[`SolutionTypeIcon component tests should render correct image 8`] = `<span />`;
