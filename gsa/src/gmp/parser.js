@@ -131,13 +131,11 @@ const esc2xml = {
   '&gt;': `>`,
 };
 
-const decodeXml = string =>
+export const parseXmlEncodedString = string =>
   string.replace(
     /(&quot;|&lt;|&gt;|&amp;|&apos;)/g,
     (str, symbol) => esc2xml[symbol],
   );
-
-export const parseName = name => decodeXml(name);
 
 export const parseProperties = (element = {}, object = {}) => {
   const copy = {...object, ...element}; // create shallow copy
@@ -148,7 +146,7 @@ export const parseProperties = (element = {}, object = {}) => {
   }
 
   if (isString(element.name) && element.name.length > 0) {
-    copy.name = parseName(element.name);
+    copy.name = parseXmlEncodedString(element.name);
   }
 
   if (isDefined(element.creation_time)) {
