@@ -29,11 +29,11 @@ import {
   parseEnvelopeMeta,
   parseFloat,
   parseInt,
-  parseName,
   parseProgressElement,
   parseProperties,
   parseQod,
   parseSeverity,
+  parseXmlEncodedString,
   parseText,
   parseTextElement,
   parseYesNo,
@@ -573,14 +573,14 @@ describe('parseCvssBaseVector tests', () => {
   });
 });
 
-describe('parseName tests', () => {
+describe('parseXmlEncodedString tests', () => {
   test('should unescape xml entities', () => {
-    expect(parseName('unesc &lt;')).toEqual('unesc <');
-    expect(parseName('unesc &gt;')).toEqual('unesc >');
-    expect(parseName('unesc &amp;')).toEqual('unesc &');
-    expect(parseName('unesc &apos;')).toEqual(`unesc '`);
-    expect(parseName('unesc &quot;')).toEqual('unesc "');
-    expect(parseName(`unesc <>&'" &quot;`)).toEqual(`unesc <>&'" "`);
+    expect(parseXmlEncodedString('unesc &lt;')).toEqual('unesc <');
+    expect(parseXmlEncodedString('unesc &gt;')).toEqual('unesc >');
+    expect(parseXmlEncodedString('unesc &amp;')).toEqual('unesc &');
+    expect(parseXmlEncodedString('unesc &apos;')).toEqual(`unesc '`);
+    expect(parseXmlEncodedString('unesc &quot;')).toEqual('unesc "');
+    expect(parseXmlEncodedString(`unes <>&'" &quot;`)).toEqual(`unes <>&'" "`);
   });
 });
 
