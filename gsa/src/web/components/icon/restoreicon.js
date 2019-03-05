@@ -20,9 +20,7 @@ import withSvgIcon from './withSvgIcon';
 
 import {ReactComponent as Icon} from './svg/restore.svg';
 
-const RestoreIcon = withSvgIcon({
-  active: true,
-})(Icon);
+const RestoreIcon = withSvgIcon()(Icon);
 
 export default RestoreIcon;
 
