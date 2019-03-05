@@ -121,7 +121,7 @@ const Header = ({
           sortBy={sort ? 'average_severity' : false}
           onSortChange={onSortChange}
         >
-          {_('Avarage')}
+          {_('Average')}
         </TableHead>
       </TableRow>
     </TableHeader>
