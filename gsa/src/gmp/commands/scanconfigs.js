@@ -59,9 +59,9 @@ const convert_preferences = (values, nvt_oid) => {
   const ret = {};
   for (const prop in values) {
     const data = values[prop];
-    const {type, value} = data;
+    const {id, type, value} = data;
     if (isDefined(value)) {
-      const typestring = nvt_oid + ':ID:' + type + ':' + prop;
+      const typestring = nvt_oid + ':' + id + ':' + type + ':' + prop;
       if (type === 'password') {
         ret['password:' + typestring] = 'yes';
       } else if (type === 'file') {
