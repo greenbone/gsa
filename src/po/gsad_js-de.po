@@ -3,7 +3,7 @@
 # Description: German user interface translations.
 #
 # Copyright:
-# Copyright (C) 2016-2017 Greenbone Networks GmbH
+# Copyright (C) 2016-2019 Greenbone Networks GmbH
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-08 13:41+0100\n"
-"PO-Revision-Date: 2017-11-08 12:30+0200\n"
+"POT-Creation-Date: 2019-03-08 14:51+0100\n"
+"PO-Revision-Date: 2018-02-06 15:04+0200\n"
 "Last-Translator: Timo <timo.pollmeier@greenbone.net>\n"
 "Language-Team: German <openvas-devel@wald.intevation.org>\n"
 "Language: de\n"
@@ -34,45 +34,49 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.3\n"
-"X-POOTLE-MTIME: 1510140607.106193\n"
+"X-POOTLE-MTIME: 1517925886.182289\n"
 
-#: src/html/classic/js/greenbone.js:623 src/html/classic/js/greenbone.js:1345
+#: src/html/classic/js/greenbone.js:395
+msgid "Details"
+msgstr "Details"
+
+#: src/html/classic/js/greenbone.js:631 src/html/classic/js/greenbone.js:1381
 msgid "Save"
 msgstr "Speichern"
 
-#: src/html/classic/js/greenbone.js:1197 src/html/classic/js/greenbone.js:1198
+#: src/html/classic/js/greenbone.js:1205 src/html/classic/js/greenbone.js:1206
 msgid "Unfold {{name}}"
 msgstr "{{name}} ausklappen"
 
-#: src/html/classic/js/greenbone.js:1203 src/html/classic/js/greenbone.js:1204
+#: src/html/classic/js/greenbone.js:1211 src/html/classic/js/greenbone.js:1212
 msgid "Fold {{name}}"
 msgstr "{{name}} einklappen"
 
-#: src/html/classic/js/greenbone.js:1354 src/html/classic/js/greenbone.js:1362
+#: src/html/classic/js/greenbone.js:1390 src/html/classic/js/greenbone.js:1398
 msgid "Create"
 msgstr "Erstellen"
 
-#: src/html/classic/js/greenbone.js:1370
+#: src/html/classic/js/greenbone.js:1406
 msgid "Delete"
 msgstr "Löschen"
 
-#: src/html/classic/js/greenbone.js:1461
+#: src/html/classic/js/greenbone.js:1497
 msgid "Please wait..."
 msgstr "Bitte warten..."
 
-#: src/html/classic/js/greenbone.js:1557
+#: src/html/classic/js/greenbone.js:1596
 msgid "Update Filter"
 msgstr "Filter aktualisieren"
 
-#: src/html/classic/js/greenbone.js:1574
+#: src/html/classic/js/greenbone.js:1613
 msgid "Select date"
 msgstr "Datum auswählen"
 
-#: src/html/classic/js/greenbone.js:1892
+#: src/html/classic/js/greenbone.js:1929
 msgid "Follow link?"
 msgstr "Link folgen?"
 
-#: src/html/classic/js/greenbone.js:1895
+#: src/html/classic/js/greenbone.js:1932
 msgid ""
 "This dialog will open a new window for <a>{{url}}</a> if you click on follow "
 "link. Following this link is on your own responsibility. Greenbone doesn't "
@@ -82,23 +86,23 @@ msgstr ""
 "den Folgen-Link klicken. Diesem Link zu folgen geschieht auf Ihre eigene "
 "Verantwortung. Greenbone befürwortet nicht die Inhalte, die Sie dort sehen."
 
-#: src/html/classic/js/greenbone.js:1900
+#: src/html/classic/js/greenbone.js:1937
 msgid "Abort"
 msgstr "Abbrechen"
 
-#: src/html/classic/js/greenbone.js:1901
+#: src/html/classic/js/greenbone.js:1938
 msgid "Follow link"
 msgstr "Link folgen"
 
-#: src/html/classic/js/greenbone.js:1974
+#: src/html/classic/js/greenbone.js:2011
 msgid "{{subject}} {{subject_id}} {{description}} to {{resource}} {{id}}"
 msgstr "{{subject}} {{subject_id}} {{description}} nach {{resource}} {{id}}"
 
-#: src/html/classic/js/greenbone.js:1982
+#: src/html/classic/js/greenbone.js:2019
 msgid "{{subject}} {{subject_id}} {{description}}  {{id}}"
 msgstr "{{subject}} {{subject_id}} {{description}}  {{resource}} {{id}}"
 
-#: src/html/classic/js/greenbone.js:1987
+#: src/html/classic/js/greenbone.js:2024
 msgid "{{subject}} {{subject_id}} {{description}}"
 msgstr "{{subject}} {{subject_id}} {{description}}"
 

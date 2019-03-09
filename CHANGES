@@ -18,7 +18,7 @@ set of OpenVAS Manager available in a web browser.
 Many thanks to everyone who has contributed to this release.
 
 Main changes compared to 7.0.3:
-* French translation has been fixed and updated.
+* French and German translation have been fixed and updated.
 * An issue with sorting by multiple columns in detached charts has been fixed.
 * Host lists of targets are abbreviated if they are longer than 500 characters.
 * A new OMP element is used to decide which credential downloads are available.
