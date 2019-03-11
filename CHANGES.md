@@ -23,6 +23,7 @@ $ cd gsa && git log
    performance page.
  * Add link referencing the performance during scan time to the report details
    page.
+ * Renamed "PGP Key" credential to "PGP Encryption Key" #1208
 
 
 ## gsa 8.0+beta2 (2018-12-04)
