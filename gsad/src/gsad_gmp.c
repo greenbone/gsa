@@ -2727,6 +2727,26 @@ create_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
+<<<<<<< HEAD
+=======
+ * @brief Import report, get all reports, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+import_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                   params_t *params, cmd_response_data_t *response_data)
+{
+  return create_report_gmp (connection, credentials, params, response_data);
+}
+
+/**
+>>>>>>> upstream/gsa-8.0
  * @brief Create a container task, serve next page.
  *
  * @param[in]  connection     Connection to manager.

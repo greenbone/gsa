@@ -22,23 +22,24 @@ import {isDate, isDuration} from 'gmp/models/date';
 
 import {
   parseCsv,
+  parseCvssBaseVector,
+  parseCvssBaseFromVector,
+  parseDate,
+  parseDuration,
   parseEnvelopeMeta,
   parseFloat,
   parseInt,
   parseProgressElement,
+  parseProperties,
   parseQod,
-  parseTextElement,
   parseSeverity,
+  parseXmlEncodedString,
+  parseText,
+  parseTextElement,
   parseYesNo,
   YES_VALUE,
   NO_VALUE,
-  parseDate,
-  parseDuration,
   setProperties,
-  parseProperties,
-  parseCvssBaseVector,
-  parseCvssBaseFromVector,
-  parseText,
 } from '../parser';
 
 describe('parseInt tests', () => {
@@ -569,6 +570,17 @@ describe('parseCvssBaseVector tests', () => {
     expect(parseCvssBaseVector({availabilityImpact: 'COMPLETE'})).toEqual(
       'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:C',
     );
+  });
+});
+
+describe('parseXmlEncodedString tests', () => {
+  test('should unescape xml entities', () => {
+    expect(parseXmlEncodedString('unesc &lt;')).toEqual('unesc <');
+    expect(parseXmlEncodedString('unesc &gt;')).toEqual('unesc >');
+    expect(parseXmlEncodedString('unesc &amp;')).toEqual('unesc &');
+    expect(parseXmlEncodedString('unesc &apos;')).toEqual(`unesc '`);
+    expect(parseXmlEncodedString('unesc &quot;')).toEqual('unesc "');
+    expect(parseXmlEncodedString(`unes <>&'" &quot;`)).toEqual(`unes <>&'" "`);
   });
 });
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -18,10 +18,10 @@
  */
 import withSvgIcon from './withSvgIcon';
 
-import {ReactComponent as Icon} from './svg/restore.svg';
+import {ReactComponent as Icon} from './svg/st_workaround.svg';
 
-const RestoreIcon = withSvgIcon()(Icon);
+const StWorkaroundIcon = withSvgIcon()(Icon);
 
-export default RestoreIcon;
+export default StWorkaroundIcon;
 
 // vim: set ts=2 sw=2 tw=80:

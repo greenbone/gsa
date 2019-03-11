@@ -63,12 +63,12 @@ const Pagination = ({
     <PaginationLayout flex align={['end', 'center']}>
       <IconDivider>
         <FirstIcon
-          active={counts.hasPrevious()}
+          disabled={!counts.hasPrevious()}
           title={_('First')}
           onClick={onFirstClick}
         />
         <PreviousIcon
-          active={counts.hasPrevious()}
+          disabled={!counts.hasPrevious()}
           title={_('Previous')}
           onClick={onPreviousClick}
         />
@@ -78,12 +78,12 @@ const Pagination = ({
       </PaginationText>
       <IconDivider>
         <NextIcon
-          active={counts.hasNext()}
+          disabled={!counts.hasNext()}
           title={_('Next')}
           onClick={onNextClick}
         />
         <LastIcon
-          active={counts.hasNext()}
+          disabled={!counts.hasNext()}
           title={_('Last')}
           onClick={onLastClick}
         />

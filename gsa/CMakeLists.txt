@@ -355,6 +355,12 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/solutiontypesvgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/starticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/stopicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/stmitigateicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/stnonavailableicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/stunknownicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/stvendorfixicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/stwillnotfixicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/stworkaroundicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/svgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/tagicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/tagsicon.js
@@ -422,6 +428,12 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/ldap.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/legend.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/list.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/st_mitigate.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/st_nonavailable.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/st_unknown.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/st_vendorfix.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/st_willnotfix.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/st_workaround.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/my_setting.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/note.svg
@@ -449,6 +461,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/resume.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/role.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/scanner.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/st_vendorfix.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/start.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/stop.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/schedule.svg

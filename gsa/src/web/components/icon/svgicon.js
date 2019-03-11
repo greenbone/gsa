@@ -46,12 +46,20 @@ const Styled = styled.span`
   }
 `;
 
-const SvgIcon = ({active = true, children, to, value, onClick, ...other}) => (
+const SvgIcon = ({
+  disabled = false,
+  active = !disabled,
+  children,
+  to,
+  value,
+  onClick,
+  ...other
+}) => (
   <Styled
     {...other}
     active={active}
     onClick={
-      isDefined(onClick)
+      isDefined(onClick) && !disabled
         ? event => {
             event.preventDefault();
             event.stopPropagation();

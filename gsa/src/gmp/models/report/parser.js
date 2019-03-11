@@ -25,7 +25,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {filter as filter_func, forEach, map} from 'gmp/utils/array';
 
-import {parseSeverity, parseDate} from 'gmp/parser';
+import {parseSeverity, parseDate, parseXmlEncodedString} from 'gmp/parser';
 
 import {
   parseCollectionList,
@@ -41,7 +41,7 @@ import Host from './host';
 import OperatingSystem from './os';
 import Port from './port';
 import TLSCertificate from './tlscertificate';
-import Vulerability from './vulnerability';
+import Vulnerability from './vulnerability';
 
 import Result from '../result';
 
@@ -237,7 +237,7 @@ export const parse_vulnerabilities = (report, filter) => {
       if (isDefined(vuln)) {
         vuln.addResult(results);
       } else {
-        vuln = new Vulerability(result);
+        vuln = new Vulnerability(result);
         temp_vulns[oid] = vuln;
       }
 
@@ -556,7 +556,7 @@ export const parse_errors = (report, filter) => {
       },
       nvt: {
         id: nvt._oid,
-        name: nvt.name,
+        name: parseXmlEncodedString(nvt.name),
       },
       port,
     };

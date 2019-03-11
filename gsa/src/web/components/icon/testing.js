@@ -21,6 +21,7 @@
 import React from 'react';
 
 import {render, fireEvent} from 'web/utils/testing';
+import Theme from 'web/utils/theme';
 
 import {ICON_SIZE_SMALL_PIXELS} from './withIconSize';
 
@@ -41,6 +42,23 @@ export const testIcon = Icon => {
     fireEvent.click(element);
 
     expect(handler).toHaveBeenCalledWith('1');
+  });
+
+  test('should change appearance when disabled', () => {
+    const {element} = render(<Icon disabled={true} />);
+
+    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
+      modifier: '& svg path',
+    });
+  });
+
+  test('should not call clickhandler when disabled', () => {
+    const handler = jest.fn();
+    const {element} = render(<Icon disabled={true} onClick={handler} />);
+
+    fireEvent.click(element);
+
+    expect(handler).not.toHaveBeenCalled();
   });
 };
 
