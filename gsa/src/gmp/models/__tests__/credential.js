@@ -228,7 +228,9 @@ describe('getCredentialTypeName tests', () => {
     expect(getCredentialTypeName(SMIME_CREDENTIAL_TYPE)).toEqual(
       'S/MIME Certificate',
     );
-    expect(getCredentialTypeName(PGP_CREDENTIAL_TYPE)).toEqual('PGP Key');
+    expect(getCredentialTypeName(PGP_CREDENTIAL_TYPE)).toEqual(
+      'PGP Encryption Key',
+    );
   });
 });
 
