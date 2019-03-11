@@ -350,13 +350,14 @@ class ScanConfigComponent extends React.Component {
         const preference_values = {};
 
         forEach(data.nvt.preferences, pref => {
-          let {value, type} = pref;
+          let {id, value, type} = pref;
 
           if (type === 'password' || type === 'file') {
             value = undefined;
           }
 
           preference_values[pref.name] = {
+            id,
             value,
             type,
           };

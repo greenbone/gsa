@@ -56,7 +56,7 @@ class EditDialog extends React.Component {
 
   handlePreferenceChange(value, name, onValueChange) {
     const {preference_values} = this.props;
-    preference_values[name] = value;
+    preference_values[name].value = value.value;
 
     onValueChange(preference_values, 'preference_values');
   }
