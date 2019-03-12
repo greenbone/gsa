@@ -28,7 +28,7 @@ import {NO_VALUE} from 'gmp/parser';
 
 import {first, forEach, map} from 'gmp/utils/array';
 import {isArray, isDefined} from 'gmp/utils/identity';
-import {includesId, selectSaveId} from 'gmp/utils/id';
+import {selectSaveId} from 'gmp/utils/id';
 
 import date from 'gmp/models/date';
 
@@ -41,7 +41,15 @@ import {
 
 import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 
+import {
+  loadEntities as loadAlerts,
+  selector as alertSelector,
+} from 'web/store/entities/alerts';
+
 import {getTimezone} from 'web/store/usersettings/selectors';
+
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -148,6 +156,10 @@ class TaskComponent extends React.Component {
     this.handleInteraction = this.handleInteraction.bind(this);
   }
 
+  componentDidMount() {
+    this.props.loadUserSettingsDefaults();
+  }
+
   handleInteraction() {
     const {onInteraction} = this.props;
     if (isDefined(onInteraction)) {
@@ -198,14 +210,10 @@ class TaskComponent extends React.Component {
 
   handleAlertCreated(resp) {
     const {data} = resp;
-    const {alert_ids} = this.state;
 
-    const {gmp} = this.props;
-    gmp.alerts.getAll().then(response => {
-      const {data: alerts} = response;
+    this.props.loadAlerts();
 
-      this.setState({alerts, alert_ids: [...alert_ids, data.id]});
-    });
+    this.setState(({alert_ids}) => ({alert_ids: [data.id, ...alert_ids]}));
   }
 
   handleScheduleCreated(resp) {
@@ -299,10 +307,12 @@ class TaskComponent extends React.Component {
   openStandardTaskDialog(task) {
     const {capabilities, gmp} = this.props;
 
+    this.props.loadAlerts();
+
     if (isDefined(task)) {
       gmp.task.editTaskSettings(task).then(response => {
         const settings = response.data;
-        const {targets, scan_configs, alerts, scanners, schedules} = settings;
+        const {targets, scan_configs, scanners, schedules} = settings;
 
         log.debug('Loaded edit task dialog settings', task, settings);
 
@@ -340,7 +350,6 @@ class TaskComponent extends React.Component {
           taskDialogVisible: true,
           ...data,
           alert_ids: map(task.alerts, alert => alert.id),
-          alerts,
           alterable: task.alterable,
           apply_overrides: task.apply_overrides,
           auto_delete: task.auto_delete,
@@ -365,17 +374,17 @@ class TaskComponent extends React.Component {
         });
       });
     } else {
+      const {defaultAlertId} = this.props;
+
       gmp.task.newTaskSettings().then(response => {
         const settings = response.data;
         let {
           schedule_id,
-          alert_id,
           target_id,
           targets,
           scanner_id = OPENVAS_DEFAULT_SCANNER_ID,
           scan_configs,
           config_id = FULL_AND_FAST_SCAN_CONFIG_ID,
-          alerts,
           scanners,
           schedules,
           tags,
@@ -391,14 +400,11 @@ class TaskComponent extends React.Component {
 
         schedule_id = selectSaveId(schedules, schedule_id, UNSET_VALUE);
 
-        alert_id = includesId(alerts, alert_id) ? alert_id : undefined;
-
-        const alert_ids = isDefined(alert_id) ? [alert_id] : [];
+        const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
         this.setState({
           taskDialogVisible: true,
           alert_ids,
-          alerts,
           alterable: undefined,
           apply_overrides: undefined,
           auto_delete: undefined,
@@ -621,6 +627,7 @@ class TaskComponent extends React.Component {
 
   render() {
     const {
+      alerts,
       children,
       onCloned,
       onCloneError,
@@ -639,7 +646,6 @@ class TaskComponent extends React.Component {
       advancedTaskWizardVisible,
       alert_id,
       alert_ids,
-      alerts,
       alterable,
       apply_overrides,
       auto_delete,
@@ -867,9 +873,13 @@ class TaskComponent extends React.Component {
 }
 
 TaskComponent.propTypes = {
+  alerts: PropTypes.arrayOf(PropTypes.model),
   capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
+  defaultAlertId: PropTypes.id,
   gmp: PropTypes.gmp.isRequired,
+  loadAlerts: PropTypes.func.isRequired,
+  loadUserSettingsDefaults: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
   onAdvancedTaskWizardError: PropTypes.func,
   onAdvancedTaskWizardSaved: PropTypes.func,
@@ -902,10 +912,26 @@ TaskComponent.propTypes = {
   onTaskWizardSaved: PropTypes.func,
 };
 
+const mapStateToProps = rootState => {
+  const alertSel = alertSelector(rootState);
+  const userDefaults = getUserSettingsDefaults(rootState);
+  return {
+    timezone: getTimezone(rootState),
+    alerts: alertSel.getEntities(),
+    defaultAlertId: userDefaults.getValueByName('defaultalert'),
+  };
+};
+
+const mapDispatchToProp = (dispatch, {gmp}) => ({
+  loadAlerts: () => dispatch(loadAlerts(gmp)()),
+  loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
+});
+
 export default compose(
   withGmp,
   withCapabilities,
-  connect(rootState => ({
-    timezone: getTimezone(rootState),
-  })),
+  connect(
+    mapStateToProps,
+    mapDispatchToProp,
+  ),
 )(TaskComponent);
