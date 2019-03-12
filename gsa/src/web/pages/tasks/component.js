@@ -724,12 +724,19 @@ class TaskComponent extends React.Component {
               })}
 
               {taskDialogVisible && (
-                <TargetComponent onCreated={this.handleTargetCreated}>
+                <TargetComponent
+                  onCreated={this.handleTargetCreated}
+                  onInteraction={onInteraction}
+                >
                   {({create: createtarget}) => (
-                    <AlertComponent onCreated={this.handleAlertCreated}>
+                    <AlertComponent
+                      onCreated={this.handleAlertCreated}
+                      onInteraction={onInteraction}
+                    >
                       {({create: createalert}) => (
                         <ScheduleComponent
                           onCreated={this.handleScheduleCreated}
+                          onInteraction={onInteraction}
                         >
                           {({create: createschedule}) => (
                             <TaskDialog
