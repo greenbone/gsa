@@ -92,6 +92,25 @@ const MenuBar = ({gmp, capabilities}) => {
     'permissions',
   ].reduce((sum, cur) => sum || capabilities.mayAccess(cur), false);
 
+  const mayOpNotesOverrides = ['notes', 'overrides'].reduce(
+    (sum, cur) => sum || capabilities.mayAccess(cur),
+    false,
+  );
+
+  const mayOpAlertsSchedulesReportFormatsAgents = [
+    'alerts',
+    'schedules',
+    'report_formats',
+    'agents',
+  ].reduce((sum, cur) => sum || capabilities.mayAccess(cur), false);
+
+  const mayOpScannersFiltersTagsPermissions = [
+    'scanners',
+    'filters',
+    'tags',
+    'permissions',
+  ].reduce((sum, cur) => sum || capabilities.mayAccess(cur), false);
+
   const may_op_admin =
     ['users', 'roles', 'groups'].reduce(
       (sum, cur) => sum || capabilities.mayAccess(cur),
@@ -118,23 +137,25 @@ const MenuBar = ({gmp, capabilities}) => {
               {capabilities.mayAccess('vulns') && (
                 <MenuEntry title={_('Vulnerabilities')} to="vulnerabilities" />
               )}
-              <MenuSection>
-                {capabilities.mayAccess('tickets') && (
+              {capabilities.mayAccess('tickets') && (
+                <MenuSection>
                   <MenuEntry
                     section
                     title={_('Remediation Tickets')}
                     to="tickets"
                   />
-                )}
-              </MenuSection>
-              <MenuSection>
-                {capabilities.mayAccess('notes') && (
-                  <MenuEntry section title={_('Notes')} to="notes" />
-                )}
-                {capabilities.mayAccess('overrides') && (
-                  <MenuEntry title={_('Overrides')} to="overrides" />
-                )}
-              </MenuSection>
+                </MenuSection>
+              )}
+              {mayOpNotesOverrides && (
+                <MenuSection>
+                  {capabilities.mayAccess('notes') && (
+                    <MenuEntry section title={_('Notes')} to="notes" />
+                  )}
+                  {capabilities.mayAccess('overrides') && (
+                    <MenuEntry title={_('Overrides')} to="overrides" />
+                  )}
+                </MenuSection>
+              )}
             </Menu>
           )}
           {capabilities.mayAccess('assets') && (
@@ -170,34 +191,38 @@ const MenuBar = ({gmp, capabilities}) => {
               {capabilities.mayAccess('configs') && (
                 <MenuEntry title={_('Scan Configs')} to="scanconfigs" />
               )}
-              <MenuSection>
-                {capabilities.mayAccess('alerts') && (
-                  <MenuEntry title={_('Alerts')} to="alerts" />
-                )}
-                {capabilities.mayAccess('schedules') && (
-                  <MenuEntry title={_('Schedules')} to="schedules" />
-                )}
-                {capabilities.mayAccess('report_formats') && (
-                  <MenuEntry title={_('Report Formats')} to="reportformats" />
-                )}
-                {capabilities.mayAccess('agents') && (
-                  <MenuEntry title={_('Agents')} to="agents" />
-                )}
-              </MenuSection>
-              <MenuSection>
-                {capabilities.mayAccess('scanners') && (
-                  <MenuEntry title={_('Scanners')} to="scanners" />
-                )}
-                {capabilities.mayAccess('filters') && (
-                  <MenuEntry title={_('Filters')} to="filters" />
-                )}
-                {capabilities.mayAccess('tags') && (
-                  <MenuEntry title={_('Tags')} to="tags" />
-                )}
-                {capabilities.mayAccess('permissions') && (
-                  <MenuEntry title={_('Permissions')} to="permissions" />
-                )}
-              </MenuSection>
+              {mayOpAlertsSchedulesReportFormatsAgents && (
+                <MenuSection>
+                  {capabilities.mayAccess('alerts') && (
+                    <MenuEntry title={_('Alerts')} to="alerts" />
+                  )}
+                  {capabilities.mayAccess('schedules') && (
+                    <MenuEntry title={_('Schedules')} to="schedules" />
+                  )}
+                  {capabilities.mayAccess('report_formats') && (
+                    <MenuEntry title={_('Report Formats')} to="reportformats" />
+                  )}
+                  {capabilities.mayAccess('agents') && (
+                    <MenuEntry title={_('Agents')} to="agents" />
+                  )}
+                </MenuSection>
+              )}
+              {mayOpScannersFiltersTagsPermissions && (
+                <MenuSection>
+                  {capabilities.mayAccess('scanners') && (
+                    <MenuEntry title={_('Scanners')} to="scanners" />
+                  )}
+                  {capabilities.mayAccess('filters') && (
+                    <MenuEntry title={_('Filters')} to="filters" />
+                  )}
+                  {capabilities.mayAccess('tags') && (
+                    <MenuEntry title={_('Tags')} to="tags" />
+                  )}
+                  {capabilities.mayAccess('permissions') && (
+                    <MenuEntry title={_('Permissions')} to="permissions" />
+                  )}
+                </MenuSection>
+              )}
             </Menu>
           )}
           <Menu title={_('Extras')}>
