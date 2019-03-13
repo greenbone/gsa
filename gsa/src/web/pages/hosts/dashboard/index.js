@@ -21,6 +21,7 @@ import React from 'react';
 
 import Dashboard from '../../../components/dashboard/dashboard';
 
+import {BpmDisplay} from './bpmdisplay';
 import {HostsCvssDisplay, HostsCvssTableDisplay} from './cvssdisplay';
 import {
   HostsModifiedDisplay,
@@ -43,6 +44,7 @@ import {
 export const HOSTS_DASHBOARD_ID = 'd3f5f2de-a85b-43f2-a817-b127457cc8ba';
 
 export const HOSTS_DISPLAYS = [
+  BpmDisplay.displayId,
   HostsCvssDisplay.displayId,
   HostsModifiedDisplay.displayId,
   HostsModifiedHighDisplay.displayId,
