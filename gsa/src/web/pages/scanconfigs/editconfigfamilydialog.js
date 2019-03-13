@@ -21,7 +21,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
@@ -40,6 +40,8 @@ import Layout from 'web/components/layout/layout';
 
 import Section from 'web/components/section/section';
 
+import SortBy from 'web/components/sortby/sortby';
+
 import SimpleTable from 'web/components/table/simpletable';
 import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
@@ -47,6 +49,8 @@ import TableData from 'web/components/table/data';
 import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
+
+import {makeCompareSeverity, makeCompareString} from 'web/utils/sort';
 
 class Nvt extends React.Component {
   shouldComponentUpdate(nextProps) {
@@ -115,11 +119,60 @@ Nvt.propTypes = {
   onSelectedChange: PropTypes.func,
 };
 
+const sortFunctions = {
+  name: makeCompareString('name'),
+  oid: makeCompareString('oid'),
+  severity: makeCompareSeverity(),
+  timeout: makeCompareString('timeout'),
+};
+
+const sortNvts = ({nvts = [], sortBy, sortReverse, selected}) => {
+  if (sortBy === 'selected') {
+    return [...nvts].sort((a, b) => {
+      if (selected[a.oid] && !selected[b.oid]) {
+        return sortReverse ? 1 : -1;
+      }
+      if (selected[b.oid] && !selected[a.oid]) {
+        return sortReverse ? -1 : 1;
+      }
+
+      let {name: aname = ''} = a;
+      let {name: bname = ''} = b;
+      aname = aname.toLowerCase();
+      bname = bname.toLowerCase();
+
+      if (aname > bname) {
+        return sortReverse ? -1 : 1;
+      }
+      if (bname > aname) {
+        return sortReverse ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+
+  const compareFunc = sortFunctions[sortBy];
+
+  if (!isDefined(compareFunc)) {
+    return nvts;
+  }
+
+  const compare = compareFunc(sortReverse);
+  return [...nvts].sort(compare);
+};
+
 class EditDialogComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      sortBy: 'name',
+      sortReverse: false,
+      selected: {...this.props.selected},
+    };
+
     this.handleSelectedChange = this.handleSelectedChange.bind(this);
+    this.handleSortChange = this.handleSortChange.bind(this);
   }
 
   handleSelectedChange(value, name) {
@@ -130,14 +183,20 @@ class EditDialogComponent extends React.Component {
     this.setState({selected});
   }
 
+  handleSortChange(sortBy) {
+    this.setState(({sortBy: prevSortBy, sortReverse: prevSortReverse}) => ({
+      sortBy,
+      sortReverse: prevSortBy === sortBy ? !prevSortReverse : false,
+    }));
+  }
+
   render() {
+    const {sortBy, sortReverse, selected} = this.state;
     const {
       config,
       config_name,
       family_name,
       id,
-      nvts,
-      selected,
       title,
       onClose,
       onEditNvtDetailsClick,
@@ -149,65 +208,103 @@ class EditDialogComponent extends React.Component {
       config_name,
       family_name,
       id,
+      selected,
     };
 
-    return (
-      <SaveDialog
-        title={title}
-        onClose={onClose}
-        onSave={onSave}
-        defaultValues={{selected}}
-        values={data}
-      >
-        {({values: state, onValueChange}) => {
-          return (
-            <Layout flex="column">
-              <SimpleTable>
-                <TableBody>
-                  <TableRow>
-                    <TableData>{_('Config')}</TableData>
-                    <TableData>{config_name}</TableData>
-                  </TableRow>
-                  <TableRow>
-                    <TableData>{_('Family')}</TableData>
-                    <TableData>{family_name}</TableData>
-                  </TableRow>
-                </TableBody>
-              </SimpleTable>
+    const sortDir = sortReverse ? SortBy.DESC : SortBy.ASC;
 
-              <Section title={_('Edit Network Vulnerability Tests')}>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>{_('Name')}</TableHead>
-                      <TableHead>{_('OID')}</TableHead>
-                      <TableHead>{_('Severity')}</TableHead>
-                      <TableHead>{_('Timeout')}</TableHead>
-                      <TableHead>{_('Prefs')}</TableHead>
-                      <TableHead align="center">{_('Selected')}</TableHead>
-                      <TableHead align="center">{_('Actions')}</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {map(nvts, nvt => {
-                      const {oid} = nvt;
-                      return (
-                        <Nvt
-                          key={oid}
-                          nvt={nvt}
-                          config={config}
-                          selected={selected[oid]}
-                          onSelectedChange={this.handleSelectedChange}
-                          onEditNvtDetailsClick={onEditNvtDetailsClick}
-                        />
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </Section>
-            </Layout>
-          );
-        }}
+    const nvts = sortNvts({
+      nvts: this.props.nvts,
+      sortBy,
+      sortReverse,
+      selected,
+    });
+
+    return (
+      <SaveDialog title={title} onClose={onClose} onSave={onSave} values={data}>
+        {() => (
+          <Layout flex="column">
+            <SimpleTable>
+              <TableBody>
+                <TableRow>
+                  <TableData>{_('Config')}</TableData>
+                  <TableData>{config_name}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Family')}</TableData>
+                  <TableData>{family_name}</TableData>
+                </TableRow>
+              </TableBody>
+            </SimpleTable>
+
+            <Section title={_('Edit Network Vulnerability Tests')}>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead
+                      currentSortBy={sortBy}
+                      currentSortDir={sortDir}
+                      sortBy="name"
+                      onSortChange={this.handleSortChange}
+                    >
+                      {_('Name')}
+                    </TableHead>
+                    <TableHead
+                      currentSortBy={sortBy}
+                      currentSortDir={sortDir}
+                      sortBy="oid"
+                      onSortChange={this.handleSortChange}
+                    >
+                      {_('OID')}
+                    </TableHead>
+                    <TableHead
+                      currentSortBy={sortBy}
+                      currentSortDir={sortDir}
+                      sortBy="severity"
+                      onSortChange={this.handleSortChange}
+                    >
+                      {_('Severity')}
+                    </TableHead>
+                    <TableHead
+                      currentSortBy={sortBy}
+                      currentSortDir={sortDir}
+                      sortBy="timeout"
+                      onSortChange={this.handleSortChange}
+                    >
+                      {_('Timeout')}
+                    </TableHead>
+                    <TableHead>{_('Prefs')}</TableHead>
+                    <TableHead
+                      currentSortBy={sortBy}
+                      currentSortDir={sortDir}
+                      sortBy="selected"
+                      onSortChange={this.handleSortChange}
+                      align="center"
+                    >
+                      {_('Selected')}
+                    </TableHead>
+                    <TableHead align="center">{_('Actions')}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {nvts.map(nvt => {
+                    const {oid} = nvt;
+                    return (
+                      <Nvt
+                        key={oid}
+                        nvt={nvt}
+                        config={config}
+                        selected={selected[oid]}
+                        onSelectedChange={this.handleSelectedChange}
+                        onEditNvtDetailsClick={onEditNvtDetailsClick}
+                      />
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </Section>
+          </Layout>
+        )}
       </SaveDialog>
     );
   }
