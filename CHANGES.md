@@ -23,6 +23,7 @@ $ cd gsa && git log
    performance page.
  * Add link referencing the performance during scan time to the report details
    page.
+ * Renamed "PGP Key" credential to "PGP Encryption Key" #1208
  * Allow to sort the nvts table at the edit scan config families dialog by
    name, oid, severity, timeout and selected #1210
 
