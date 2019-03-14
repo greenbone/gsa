@@ -35,10 +35,7 @@
 
 import * as d3 from 'd3';
 import * as React from 'react';
-import * as lineIntersect from 'line-intersect';
 import {intersect, shape} from 'svg-intersections';
-import {Point2D, Matrix2D} from 'kld-affine';
-import {Intersection} from 'kld-intersections';
 import GraphUtils from './graph-util';
 
 import PropTypes from 'web/utils/proptypes';
