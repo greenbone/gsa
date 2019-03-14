@@ -20,6 +20,8 @@ import logger from '../log';
 
 import registerCommand from '../command';
 
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+
 import {forEach, map} from '../utils/array';
 import {isDefined} from '../utils/identity';
 import {severityValue} from '../utils/number';
@@ -71,12 +73,15 @@ class UserCommand extends EntityCommand {
           const values = {};
 
           forEach(group.auth_conf_setting, setting => {
-            values[setting.key] = setting.value;
+            if (setting.key === 'enable') {
+              values.enable = setting.value === 'true' ? YES_VALUE : NO_VALUE;
+            } else {
+              values[setting.key] = setting.value;
+            }
             if (isDefined(setting.certificate_info)) {
               values.certificateInfo = setting.certificate_info;
             }
           });
-
           settings.set(group._name, values);
         });
       }
