@@ -47,6 +47,11 @@ import {
 } from 'web/store/entities/alerts';
 
 import {
+  loadEntities as loadSchedules,
+  selector as scheduleSelector,
+} from 'web/store/entities/schedules';
+
+import {
   loadEntities as loadTargets,
   selector as targetSelector,
 } from 'web/store/entities/targets';
@@ -223,16 +228,10 @@ class TaskComponent extends React.Component {
 
   handleScheduleCreated(resp) {
     const {data} = resp;
-    const {gmp} = this.props;
 
-    return gmp.schedules.getAll().then(response => {
-      const {data: schedules} = response;
+    this.props.loadSchedules();
 
-      this.setState({
-        schedules,
-        schedule_id: data.id,
-      });
-    });
+    this.setState({schedule_id: data.id});
   }
 
   handleTargetCreated(resp) {
@@ -308,12 +307,13 @@ class TaskComponent extends React.Component {
     const {capabilities, gmp} = this.props;
 
     this.props.loadAlerts();
+    this.props.loadSchedules();
     this.props.loadTargets();
 
     if (isDefined(task)) {
       gmp.task.editTaskSettings(task).then(response => {
         const settings = response.data;
-        const {targets, scan_configs, scanners, schedules} = settings;
+        const {targets, scan_configs, scanners} = settings;
 
         log.debug('Loaded edit task dialog settings', task, settings);
 
@@ -367,7 +367,6 @@ class TaskComponent extends React.Component {
           scanners,
           schedule_id,
           schedule_periods,
-          schedules,
           source_iface: task.source_iface,
           targets,
           task,
@@ -375,17 +374,15 @@ class TaskComponent extends React.Component {
         });
       });
     } else {
-      const {defaultAlertId, defaultTargetId} = this.props;
+      const {defaultAlertId, defaultScheduleId, defaultTargetId} = this.props;
 
       gmp.task.newTaskSettings().then(response => {
         const settings = response.data;
         let {
-          schedule_id,
           scanner_id = OPENVAS_DEFAULT_SCANNER_ID,
           scan_configs,
           config_id = FULL_AND_FAST_SCAN_CONFIG_ID,
           scanners,
-          schedules,
           tags,
         } = settings;
 
@@ -394,8 +391,6 @@ class TaskComponent extends React.Component {
         const sorted_scan_configs = sort_scan_configs(scan_configs);
 
         scanner_id = selectSaveId(scanners, scanner_id);
-
-        schedule_id = selectSaveId(schedules, schedule_id, UNSET_VALUE);
 
         const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
@@ -418,9 +413,8 @@ class TaskComponent extends React.Component {
           scan_configs: sorted_scan_configs,
           scanners,
           scanner_id,
-          schedule_id,
+          schedule_id: defaultScheduleId,
           schedule_periods: undefined,
-          schedules,
           source_iface: undefined,
           tag_id: first(tags).id,
           tags,
@@ -624,6 +618,7 @@ class TaskComponent extends React.Component {
   render() {
     const {
       alerts,
+      schedules,
       targets,
       children,
       onCloned,
@@ -669,7 +664,6 @@ class TaskComponent extends React.Component {
       scanners,
       schedule_id,
       schedule_periods,
-      schedules,
       slave_id,
       source_iface,
       ssh_credential,
@@ -880,11 +874,14 @@ TaskComponent.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
   defaultAlertId: PropTypes.id,
+  defaultScheduleId: PropTypes.id,
   defaultTargetId: PropTypes.id,
   gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
+  loadSchedules: PropTypes.func.isRequired,
   loadTargets: PropTypes.func.isRequired,
   loadUserSettingsDefaults: PropTypes.func.isRequired,
+  schedules: PropTypes.arrayOf(PropTypes.model),
   targets: PropTypes.arrayOf(PropTypes.model),
   timezone: PropTypes.string.isRequired,
   onAdvancedTaskWizardError: PropTypes.func,
@@ -921,18 +918,22 @@ TaskComponent.propTypes = {
 const mapStateToProps = rootState => {
   const alertSel = alertSelector(rootState);
   const userDefaults = getUserSettingsDefaults(rootState);
+  const scheduleSel = scheduleSelector(rootState);
   const targetSel = targetSelector(rootState);
   return {
     timezone: getTimezone(rootState),
     alerts: alertSel.getEntities(),
     defaultAlertId: userDefaults.getValueByName('defaultalert'),
+    defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
+    schedules: scheduleSel.getEntities(),
     targets: targetSel.getEntities(),
   };
 };
 
 const mapDispatchToProp = (dispatch, {gmp}) => ({
   loadAlerts: () => dispatch(loadAlerts(gmp)()),
+  loadSchedules: () => dispatch(loadSchedules(gmp)()),
   loadTargets: () => dispatch(loadTargets(gmp)()),
   loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
 });
