@@ -814,6 +814,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/portlists/portrangestable.js
      ${GSA_SRC_DIR}/src/web/pages/portlists/row.js
      ${GSA_SRC_DIR}/src/web/pages/portlists/table.js
+     ${GSA_SRC_DIR}/src/web/pages/radius/dialog.js
      ${GSA_SRC_DIR}/src/web/pages/radius/radiuspage.js
      ${GSA_SRC_DIR}/src/web/pages/reportformats/component.js
      ${GSA_SRC_DIR}/src/web/pages/reportformats/details.js
