@@ -719,6 +719,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/hosts/dashboard/severityclassdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/hosts/dashboard/topologydisplay.js
      ${GSA_SRC_DIR}/src/web/pages/hosts/dashboard/vulnscoredisplay.js
+     ${GSA_SRC_DIR}/src/web/pages/ldap/dialog.js
      ${GSA_SRC_DIR}/src/web/pages/ldap/ldappage.js
      ${GSA_SRC_DIR}/src/web/pages/login/loginform.js
      ${GSA_SRC_DIR}/src/web/pages/login/loginpage.js
