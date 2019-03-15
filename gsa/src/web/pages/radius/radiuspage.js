@@ -82,7 +82,6 @@ class RadiusAuthentication extends React.Component {
 
     this.getRadiusAuth = this.getRadiusAuth.bind(this);
     this.handleSaveSettings = this.handleSaveSettings.bind(this);
-    this.handleValueChange = this.handleValueChange.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
     this.openDialog = this.openDialog.bind(this);
   }
