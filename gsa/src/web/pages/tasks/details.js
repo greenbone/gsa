@@ -92,7 +92,7 @@ class TaskDetails extends React.Component {
       schedule_periods,
       target,
     } = entity;
-    const {max_checks = {}, iface = {}, max_hosts} = preferences;
+    const {max_checks = {}, iface = {}, max_hosts = {}} = preferences;
 
     let dur;
     const has_duration =
