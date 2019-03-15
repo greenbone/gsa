@@ -36,6 +36,11 @@ import {
   selector as scheduleSelector,
 } from 'web/store/entities/schedules';
 
+import {
+  loadEntity as loadScanConfig,
+  selector as scanConfigSelector,
+} from 'web/store/entities/scanconfigs';
+
 import PropTypes from 'web/utils/proptypes';
 import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
@@ -69,13 +74,16 @@ class TaskDetails extends React.Component {
   componentDidMount() {
     const {entity} = this.props;
 
+    if (isDefined(entity.config)) {
+      this.props.loadScanConfig(entity.config.id);
+    }
     if (isDefined(entity.schedule)) {
       this.props.loadSchedule(entity.schedule.id);
     }
   }
 
   render() {
-    const {links = true, entity, schedule} = this.props;
+    const {links = true, entity, scanConfig, schedule} = this.props;
     const {
       alerts,
       apply_overrides,
@@ -172,22 +180,22 @@ class TaskDetails extends React.Component {
                     </TableData>
                   </TableRow>
                 )}
-                {isDefined(config) &&
-                  config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                {isDefined(scanConfig) &&
+                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
                     <TableRow>
                       <TableData>{_('Order for target hosts')}</TableData>
                       <TableData>{hosts_ordering}</TableData>
                     </TableRow>
                   )}
-                {isDefined(config) &&
-                  config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                {isDefined(scanConfig) &&
+                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
                     <TableRow>
                       <TableData>{_('Network Source Interface')}</TableData>
                       <TableData>{iface.value}</TableData>
                     </TableRow>
                   )}
-                {isDefined(config) &&
-                  config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+                {isDefined(scanConfig) &&
+                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
                   isDefined(max_checks.name) && (
                     <TableRow>
                       <TableData>
@@ -196,8 +204,8 @@ class TaskDetails extends React.Component {
                       <TableData>{max_checks.value}</TableData>
                     </TableRow>
                   )}
-                {isDefined(config) &&
-                  config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+                {isDefined(scanConfig) &&
+                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
                   isDefined(max_hosts.name) && (
                     <TableRow>
                       <TableData>
@@ -312,20 +320,27 @@ TaskDetails.propTypes = {
   entity: PropTypes.model.isRequired,
   gmp: PropTypes.gmp.isRequired,
   links: PropTypes.bool,
+  loadScanConfig: PropTypes.func.isRequired,
   loadSchedule: PropTypes.func.isRequired,
+  scanConfig: PropTypes.model,
   schedule: PropTypes.model,
 };
 
 const mapStateToProps = (rootState, {entity = {}}) => {
-  const selector = scheduleSelector(rootState);
+  const scheduleSel = scheduleSelector(rootState);
+  const scanConfigSel = scanConfigSelector(rootState);
   return {
+    scanConfig: isDefined(entity.config)
+      ? scanConfigSel.getEntity(entity.config.id)
+      : undefined,
     schedule: isDefined(entity.schedule)
-      ? selector.getEntity(entity.schedule.id)
+      ? scheduleSel.getEntity(entity.schedule.id)
       : undefined,
   };
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadScanConfig: id => dispatch(loadScanConfig(gmp)(id)),
   loadSchedule: id => dispatch(loadSchedule(gmp)(id)),
 });
 
