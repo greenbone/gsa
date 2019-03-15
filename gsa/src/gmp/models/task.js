@@ -42,6 +42,10 @@ export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
 export const AUTO_DELETE_DEFAULT_VALUE = 5;
 
+export const HOST_ORDERING_SEQUENTIAL = 'sequential';
+export const HOST_ORDERING_RANDOM = 'random';
+export const HOST_ORDERING_REVERSE = 'reverse';
+
 export const TASK_STATUS = {
   running: 'Running',
   stoprequested: 'Stop Requested',
@@ -233,6 +237,14 @@ class Task extends Model {
 
     if (isDefined(elem.average_duration)) {
       elem.average_duration = parseDuration(elem.average_duration);
+    }
+
+    if (
+      elem.host_ordering !== HOST_ORDERING_RANDOM &&
+      elem.host_ordering !== HOST_ORDERING_REVERSE &&
+      elem.host_ordering !== HOST_ORDERING_SEQUENTIAL
+    ) {
+      delete elem.host_ordering;
     }
 
     return elem;
