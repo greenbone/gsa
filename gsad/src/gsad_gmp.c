@@ -2955,6 +2955,13 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   CHECK_VARIABLE_INVALID (scanner_id, "Create Task");
   CHECK_VARIABLE_INVALID (schedule_id, "Create Task");
 
+  if (str_equal (target_id, "0"))
+    {
+      /* Don't allow to create container task via create_task */
+      return message_invalid (connection, credentials, params, response_data,
+                              "Given target_id was invalid", "Create Task");
+    }
+
   if (params_given (params, "schedule_periods"))
     {
       CHECK_VARIABLE_INVALID (schedule_periods, "Create Task");
