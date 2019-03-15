@@ -134,7 +134,6 @@ class RadiusAuthentication extends React.Component {
     });
   };
 
-  }
 
   openDialog() {
     this.setState({dialogVisible: true});
