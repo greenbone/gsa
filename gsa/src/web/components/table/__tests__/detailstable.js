@@ -31,7 +31,7 @@ describe('DetailsTable tests', () => {
       <DetailsTable>
         <TableBody>
           <TableRow>
-            <TableData>{'foo'}</TableData>
+            <TableData>foo</TableData>
             <TableData>{'bar'}</TableData>
           </TableRow>
         </TableBody>
