@@ -32,7 +32,7 @@ describe('DetailsTable tests', () => {
         <TableBody>
           <TableRow>
             <TableData>foo</TableData>
-            <TableData>{'bar'}</TableData>
+            <TableData>bar</TableData>
           </TableRow>
         </TableBody>
       </DetailsTable>,
