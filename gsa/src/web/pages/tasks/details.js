@@ -51,7 +51,7 @@ import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
 
-import InfoTable from 'web/components/table/infotable';
+import DetailsTable from 'web/components/table/detailstable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
@@ -148,7 +148,7 @@ class TaskDetails extends React.Component {
 
         {isDefined(scanner) && (
           <DetailsBlock title={_('Scanner')}>
-            <InfoTable>
+            <DetailsTable>
               <TableBody>
                 <TableRow>
                   <TableData>{_('Name')}</TableData>
@@ -215,12 +215,12 @@ class TaskDetails extends React.Component {
                     </TableRow>
                   )}
               </TableBody>
-            </InfoTable>
+            </DetailsTable>
           </DetailsBlock>
         )}
 
         <DetailsBlock title={_('Assets')}>
-          <InfoTable>
+          <DetailsTable>
             <TableBody>
               <TableRow>
                 <TableData>{_('Add to Assets')}</TableData>
@@ -241,12 +241,12 @@ class TaskDetails extends React.Component {
                 </TableRow>
               )}
             </TableBody>
-          </InfoTable>
+          </DetailsTable>
         </DetailsBlock>
 
         {isDefined(schedule) && (
           <DetailsBlock title={_('Schedule')}>
-            <InfoTable>
+            <DetailsTable>
               <TableBody>
                 <TableRow>
                   <TableData>{_('Name')}</TableData>
@@ -269,12 +269,12 @@ class TaskDetails extends React.Component {
                   </TableRow>
                 )}
               </TableBody>
-            </InfoTable>
+            </DetailsTable>
           </DetailsBlock>
         )}
 
         <DetailsBlock title={_('Scan')}>
-          <InfoTable>
+          <DetailsTable>
             <TableBody>
               <TableRow>
                 <TableData>{_('Duration of last Scan')}</TableData>
@@ -309,7 +309,7 @@ class TaskDetails extends React.Component {
                 </TableData>
               </TableRow>
             </TableBody>
-          </InfoTable>
+          </DetailsTable>
         </DetailsBlock>
       </Layout>
     );
