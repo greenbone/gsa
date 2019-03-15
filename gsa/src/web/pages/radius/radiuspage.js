@@ -134,7 +134,6 @@ class RadiusAuthentication extends React.Component {
     });
   };
 
-  handleValueChange(value, name) {
     this.setState({[name]: value});
   }
 
