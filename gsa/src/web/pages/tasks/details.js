@@ -36,6 +36,11 @@ import {
   selector as scheduleSelector,
 } from 'web/store/entities/schedules';
 
+import {
+  loadEntity as loadScanConfig,
+  selector as scanConfigSelector,
+} from 'web/store/entities/scanconfigs';
+
 import PropTypes from 'web/utils/proptypes';
 import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
@@ -46,7 +51,7 @@ import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
 
-import InfoTable from 'web/components/table/infotable';
+import DetailsTable from 'web/components/table/detailstable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
@@ -69,13 +74,16 @@ class TaskDetails extends React.Component {
   componentDidMount() {
     const {entity} = this.props;
 
+    if (isDefined(entity.config)) {
+      this.props.loadScanConfig(entity.config.id);
+    }
     if (isDefined(entity.schedule)) {
       this.props.loadSchedule(entity.schedule.id);
     }
   }
 
   render() {
-    const {links = true, entity, schedule} = this.props;
+    const {links = true, entity, scanConfig, schedule} = this.props;
     const {
       alerts,
       apply_overrides,
@@ -92,7 +100,7 @@ class TaskDetails extends React.Component {
       schedule_periods,
       target,
     } = entity;
-    const {max_checks = {}, iface = {}, max_hosts} = preferences;
+    const {max_checks = {}, iface = {}, max_hosts = {}} = preferences;
 
     let dur;
     const has_duration =
@@ -140,7 +148,7 @@ class TaskDetails extends React.Component {
 
         {isDefined(scanner) && (
           <DetailsBlock title={_('Scanner')}>
-            <InfoTable>
+            <DetailsTable>
               <TableBody>
                 <TableRow>
                   <TableData>{_('Name')}</TableData>
@@ -172,22 +180,22 @@ class TaskDetails extends React.Component {
                     </TableData>
                   </TableRow>
                 )}
-                {isDefined(config) &&
-                  config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                {isDefined(scanConfig) &&
+                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
                     <TableRow>
                       <TableData>{_('Order for target hosts')}</TableData>
                       <TableData>{hosts_ordering}</TableData>
                     </TableRow>
                   )}
-                {isDefined(config) &&
-                  config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                {isDefined(scanConfig) &&
+                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
                     <TableRow>
                       <TableData>{_('Network Source Interface')}</TableData>
                       <TableData>{iface.value}</TableData>
                     </TableRow>
                   )}
-                {isDefined(config) &&
-                  config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+                {isDefined(scanConfig) &&
+                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
                   isDefined(max_checks.name) && (
                     <TableRow>
                       <TableData>
@@ -196,8 +204,8 @@ class TaskDetails extends React.Component {
                       <TableData>{max_checks.value}</TableData>
                     </TableRow>
                   )}
-                {isDefined(config) &&
-                  config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+                {isDefined(scanConfig) &&
+                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
                   isDefined(max_hosts.name) && (
                     <TableRow>
                       <TableData>
@@ -207,12 +215,12 @@ class TaskDetails extends React.Component {
                     </TableRow>
                   )}
               </TableBody>
-            </InfoTable>
+            </DetailsTable>
           </DetailsBlock>
         )}
 
         <DetailsBlock title={_('Assets')}>
-          <InfoTable>
+          <DetailsTable>
             <TableBody>
               <TableRow>
                 <TableData>{_('Add to Assets')}</TableData>
@@ -233,12 +241,12 @@ class TaskDetails extends React.Component {
                 </TableRow>
               )}
             </TableBody>
-          </InfoTable>
+          </DetailsTable>
         </DetailsBlock>
 
         {isDefined(schedule) && (
           <DetailsBlock title={_('Schedule')}>
-            <InfoTable>
+            <DetailsTable>
               <TableBody>
                 <TableRow>
                   <TableData>{_('Name')}</TableData>
@@ -261,12 +269,12 @@ class TaskDetails extends React.Component {
                   </TableRow>
                 )}
               </TableBody>
-            </InfoTable>
+            </DetailsTable>
           </DetailsBlock>
         )}
 
         <DetailsBlock title={_('Scan')}>
-          <InfoTable>
+          <DetailsTable>
             <TableBody>
               <TableRow>
                 <TableData>{_('Duration of last Scan')}</TableData>
@@ -301,7 +309,7 @@ class TaskDetails extends React.Component {
                 </TableData>
               </TableRow>
             </TableBody>
-          </InfoTable>
+          </DetailsTable>
         </DetailsBlock>
       </Layout>
     );
@@ -312,20 +320,27 @@ TaskDetails.propTypes = {
   entity: PropTypes.model.isRequired,
   gmp: PropTypes.gmp.isRequired,
   links: PropTypes.bool,
+  loadScanConfig: PropTypes.func.isRequired,
   loadSchedule: PropTypes.func.isRequired,
+  scanConfig: PropTypes.model,
   schedule: PropTypes.model,
 };
 
 const mapStateToProps = (rootState, {entity = {}}) => {
-  const selector = scheduleSelector(rootState);
+  const scheduleSel = scheduleSelector(rootState);
+  const scanConfigSel = scanConfigSelector(rootState);
   return {
+    scanConfig: isDefined(entity.config)
+      ? scanConfigSel.getEntity(entity.config.id)
+      : undefined,
     schedule: isDefined(entity.schedule)
-      ? selector.getEntity(entity.schedule.id)
+      ? scheduleSel.getEntity(entity.schedule.id)
       : undefined,
   };
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadScanConfig: id => dispatch(loadScanConfig(gmp)(id)),
   loadSchedule: id => dispatch(loadSchedule(gmp)(id)),
 });
 

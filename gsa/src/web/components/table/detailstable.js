@@ -17,18 +17,22 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import styled from 'styled-components';
+import React from 'react';
 
-import SimpleTable from './simpletable.js';
+import {Col} from 'web/entity/page';
 
-const Table = styled(SimpleTable)`
-  & tr td:first-child {
-    font-weight: bold;
-    text-align: right;
-    padding-right: 5px;
-  }
-`;
+import InfoTable from './infotable.js';
 
-export default Table;
+const DetailsTable = ({children, size = 'full', ...props}) => (
+  <InfoTable {...props} size={size}>
+    <colgroup>
+      <Col width="10%" />
+      <Col width="90%" />
+    </colgroup>
+    {children}
+  </InfoTable>
+);
+
+export default DetailsTable;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,23 +16,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import React from 'react';
 
-import styled from 'styled-components';
+import {render} from 'web/utils/testing';
 
-import SimpleTable from './simpletable.js';
+import DetailsTable from '../detailstable';
+import TableBody from '../body';
+import TableData from '../data';
+import TableRow from '../row';
 
-const Table = styled(SimpleTable)`
-  & td {
-    padding: 4px 4px 4px 0;
-  }
-  & tr td:first-child {
-    padding-right: 5px;
-     {
-      /* keep space between columns with low table width */
-    }
-  }
-`;
+describe('DetailsTable tests', () => {
+  test('should render', () => {
+    const {element} = render(
+      <DetailsTable>
+        <TableBody>
+          <TableRow>
+            <TableData>foo</TableData>
+            <TableData>bar</TableData>
+          </TableRow>
+        </TableBody>
+      </DetailsTable>,
+    );
 
-export default Table;
+    expect(element).toMatchSnapshot();
+  });
+});
 
 // vim: set ts=2 sw=2 tw=80:
