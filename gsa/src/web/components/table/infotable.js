@@ -26,7 +26,10 @@ const Table = styled(SimpleTable)`
     padding: 4px 4px 4px 0;
   }
   & tr td:first-child {
-    padding-right: 1em;
+    padding-right: 5px;
+     {
+      /* keep space between columns with low table width */
+    }
   }
 `;
 
