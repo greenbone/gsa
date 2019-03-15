@@ -115,7 +115,7 @@ class RadiusAuthentication extends React.Component {
     }
   }
 
-  handleSaveSettings = state => {
+  handleSaveSettings(state) {
     const {enable, radiushost, radiuskey} = state;
 
     const data = {
