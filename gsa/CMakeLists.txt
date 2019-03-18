@@ -236,6 +236,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/dialog/content.js
      ${GSA_SRC_DIR}/src/web/components/dialog/closebutton.js
      ${GSA_SRC_DIR}/src/web/components/dialog/dialog.js
+     ${GSA_SRC_DIR}/src/web/components/dialog/editprocessdialog.js
      ${GSA_SRC_DIR}/src/web/components/dialog/error.js
      ${GSA_SRC_DIR}/src/web/components/dialog/footer.js
      ${GSA_SRC_DIR}/src/web/components/dialog/linkconfirmationdialog.js
