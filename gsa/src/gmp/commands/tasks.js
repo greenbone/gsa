@@ -28,7 +28,7 @@ import ScanConfig from '../models/scanconfig';
 import Scanner from '../models/scanner';
 import Schedule from '../models/schedule';
 import Target from '../models/target';
-import Task from '../models/task';
+import Task, {HOST_ORDERING_SEQUENTIAL} from '../models/task';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
@@ -261,7 +261,7 @@ class TaskCommand extends EntityCommand {
       slave_id = 0,
       alert_ids = [],
       source_iface = '',
-      hosts_ordering,
+      hosts_ordering = HOST_ORDERING_SEQUENTIAL,
       max_checks,
       max_hosts,
     } = args;
