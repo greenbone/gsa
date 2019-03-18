@@ -125,9 +125,8 @@ const ProcessComment = styled(Layout)`
 `;
 
 const HostList = styled(Layout)`
-  ${'' /* border: 1px solid violet; */}
+  align-items: flex-start;
   overflow: auto;
-  ${'' /* padding-top: 50px; */}
 `;
 
 const Tips = styled.div`
