@@ -25,7 +25,12 @@ import logger from 'gmp/log';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-import {getEntityType, typeName, pluralizeType} from 'gmp/utils/entitytype';
+import {
+  getEntityType,
+  apiType,
+  typeName,
+  pluralizeType,
+} from 'gmp/utils/entitytype';
 import {debounce} from 'gmp/utils/event';
 
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
@@ -500,8 +505,7 @@ class EntitiesContainer extends React.Component {
     const {entities} = this.state;
 
     if (entities.length > 0) {
-      const filter = 'resource_type=' + getEntityType(entities[0]);
-
+      const filter = 'resource_type=' + apiType(getEntityType(entities[0]));
       gmp.tags.getAll({filter}).then(response => {
         const {data: tags} = response;
         this.setState({tags});
