@@ -28,7 +28,11 @@ import {selectSaveId} from 'gmp/utils/id';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-import {AUTO_DELETE_KEEP, AUTO_DELETE_DEFAULT_VALUE} from 'gmp/models/task';
+import {
+  AUTO_DELETE_KEEP,
+  AUTO_DELETE_DEFAULT_VALUE,
+  HOSTS_ORDERING_SEQUENTIAL,
+} from 'gmp/models/task';
 
 import {
   OPENVAS_SCANNER_TYPE,
@@ -142,7 +146,6 @@ ScannerSelect.propTypes = {
 const DEFAULT_MAX_CHECKS = 4;
 const DEFAULT_MAX_HOSTS = 20;
 const DEFAULT_MIN_QOD = 70;
-const DEFAULT_HOSTS_ORDERING = 'sequential';
 
 const TaskDialog = ({
   add_tag = NO_VALUE,
@@ -155,7 +158,7 @@ const TaskDialog = ({
   capabilities,
   comment = '',
   config_id = FULL_AND_FAST_SCAN_CONFIG_ID,
-  hosts_ordering = DEFAULT_HOSTS_ORDERING,
+  hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
   in_assets = YES_VALUE,
   max_checks = DEFAULT_MAX_CHECKS,
   max_hosts = DEFAULT_MAX_HOSTS,
