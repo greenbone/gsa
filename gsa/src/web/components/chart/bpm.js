@@ -25,7 +25,8 @@ import styled from 'styled-components';
 import _ from 'gmp/locale';
 
 import {GraphView, GraphUtils} from 'web/components/directedgraph';
-// import {GraphView, GraphUtils} from 'react-digraph';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
@@ -36,11 +37,14 @@ import {shouldUpdate} from './utils/update';
 import SeverityBar from 'web/components/bar/severitybar';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 
+import EditProcessDialog from 'web/components/dialog/editprocessdialog';
+
 import Layout from 'web/components/layout/layout';
 import Button from 'web/components/form/button';
 
 import EditIcon from 'web/components/icon/editicon';
 import DeleteIcon from 'web/components/icon/deleteicon';
+import HelpIcon from 'web/components/icon/helpicon';
 
 import MultiSelect from 'web/components/form/multiselect';
 
@@ -73,6 +77,10 @@ const LEGEND_MARGIN = 20;
 const MIN_RATIO = 2.0;
 const MIN_WIDTH = 200;
 
+const StyledEditIcon = styled(EditIcon)`
+  margin-right: 10px;
+`;
+
 const Container = styled(Layout)`
   overflow: hidden;
   height: ${props => props.height};
@@ -90,25 +98,48 @@ const GraphBox = styled(Layout)`
 const SideBox = styled(Layout)`
   height: 100%;
   max-width: 20%;
+  justify-content: stretch;
   ${'' /* border: 1px solid blue; */}
 `;
 
 const ProcessBox = styled(Layout)`
   justify-content: flex-start;
+  flex-shrink: 0;
   ${'' /* border: 1px solid #008000; */}
 `;
 
+const ProcessTitleBox = styled(Layout)`
+  justify-content: space-between;
+  align-items: center;
+`;
 const ProcessTitle = styled(Layout)`
   font-weight: bold;
   font-size: 18px;
-  margin: 20px;
+  margin: 20px 20px 10px 20px;
+`;
+
+const ProcessComment = styled(Layout)`
+  height: 14px;
+  font-size: 12px;
+  margin: 0 20px 10px 20px;
 `;
 
 const HostList = styled(Layout)`
   ${'' /* border: 1px solid violet; */}
   overflow: auto;
-  padding-top: 50px;
+  ${'' /* padding-top: 50px; */}
+`;
+
+const Tips = styled.div`
   display: flex;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 5px;
+  align-items: center;
+  opacity: 0.5;
+`;
+
+const StyledHelpIcon = styled(HelpIcon)`
+  margin-right: 5px;
 `;
 
 const sample = {
@@ -116,43 +147,26 @@ const sample = {
     {
       id: '1',
       title: 'Sales',
-      nodeTitle: 'Sales NodeTitle',
-      severity: Theme.warningRed,
+      comment: 'This is a comment about the process',
       x: 258.3976135253906,
       y: 331.9783248901367,
-      type: 'high',
+      type: 'medium',
     },
     {
       id: '2',
       title: 'Order',
-      severity: Theme.lightGreen,
+      comment: 'Just some comment',
       x: 593.9393920898438,
       y: 260.6060791015625,
-      type: 'medium',
+      type: 'high',
     },
     {
       id: '3',
       title: 'Production',
-      severity: Theme.goldYellow,
+      comment: '',
       x: 237.5757598876953,
       y: 61.81818389892578,
-      type: 'high',
-    },
-    // {
-    //   "id": '4',
-    //   "title": "Lunchbreak",
-    //   "severity": Theme.dialogGray,
-    //   "x": 600.5757598876953,
-    //   "y": 600.81818389892578,
-    //   "type": "log"
-    // },
-    {
-      id: '5',
-      title: 'Ganz langer Titel mal fuer einen Test',
-      severity: Theme.dialogGray,
-      x: 500.5757598876953,
-      y: 500.81818389892578,
-      type: 'log',
+      type: 'low',
     },
   ],
   edges: [
@@ -162,16 +176,6 @@ const sample = {
       type: 'emptyEdge',
       title: 'Process Transition for some reason',
     },
-    // {
-    //   "source": '2',
-    //   "target": '4',
-    //   "type": "emptyEdge"
-    // },
-    // {
-    //   source: '4',
-    //   target: '3',
-    //   type: "emptyEdge",
-    // }
   ],
 };
 
@@ -278,22 +282,26 @@ class BpmChart extends React.Component {
     super(...args);
 
     this.state = {
-      graph: sample,
+      nodes: sample.nodes,
+      edges: sample.edges,
       selected: null,
+      editProcessDialogVisible: false,
     };
     this.GraphView = React.createRef();
+    this.handleValueChange = this.handleValueChange.bind(this);
+    this.handleSaveProcess = this.handleSaveProcess.bind(this);
   }
 
   // Helper to find the index of a given node
   getNodeIndex(searchNode) {
-    return this.state.graph.nodes.findIndex(node => {
+    return this.state.nodes.findIndex(node => {
       return node[NODE_KEY] === searchNode[NODE_KEY];
     });
   }
 
   // Helper to find the index of a given edge
   getEdgeIndex(searchEdge) {
-    return this.state.graph.edges.findIndex(edge => {
+    return this.state.edges.findIndex(edge => {
       return (
         edge.source === searchEdge.source && edge.target === searchEdge.target
       );
@@ -305,7 +313,7 @@ class BpmChart extends React.Component {
     const searchNode = {};
     searchNode[NODE_KEY] = nodeKey;
     const i = this.getNodeIndex(searchNode);
-    return this.state.graph.nodes[i];
+    return this.state.nodes[i];
   }
 
   makeItLarge = () => {
@@ -317,10 +325,10 @@ class BpmChart extends React.Component {
   };
 
   addStartNode = () => {
-    const {graph} = this.state;
+    let {nodes} = this.state;
     // using a new array like this creates a new memory reference
     // this will force a re-render
-    graph.nodes = [
+    nodes = [
       {
         id: Date.now(),
         title: 'Node A',
@@ -331,17 +339,18 @@ class BpmChart extends React.Component {
       ...this.state.graph.nodes,
     ];
     this.setState({
-      graph,
+      nodes,
     });
   };
+
   deleteStartNode = () => {
-    const {graph} = this.state;
-    graph.nodes.splice(0, 1);
+    let {nodes} = this.state;
+    nodes.splice(0, 1);
     // using a new array like this creates a new memory reference
     // this will force a re-render
-    graph.nodes = [...this.state.graph.nodes];
+    nodes = [...this.state.nodes];
     this.setState({
-      graph,
+      nodes,
     });
   };
 
@@ -361,24 +370,28 @@ class BpmChart extends React.Component {
   // Called by 'drag' handler, etc..
   // to sync updates from D3 with the graph
   onUpdateNode = viewNode => {
-    const {graph} = this.state;
+    const {nodes} = this.state;
     const i = this.getNodeIndex(viewNode);
 
-    graph.nodes[i] = viewNode;
-    this.setState({graph});
+    nodes[i] = viewNode;
+    this.setState({nodes});
   };
 
   // Node 'mouseUp' handler
   onSelectNode = viewNode => {
     // Deselect events will send Null viewNode
-    // const {graph} = this.state;
-    // if(viewNode !== null) {
-    //   const i = this.getNodeIndex(viewNode);
-    //   viewNode.type = 'selected';
-    //   graph.nodes[i] = viewNode;
-    // }
-    this.setState({selected: viewNode});
-    // this.setState({selected: viewNode, graph});
+    let name;
+    let comment;
+    if (viewNode !== null) {
+      name = isDefined(viewNode.title) ? viewNode.title : _('Unnamed');
+      comment = isDefined(viewNode.comment) ? viewNode.comment : '';
+    }
+
+    this.setState({
+      selected: viewNode,
+      processComment: comment,
+      processName: name,
+    });
   };
 
   // Edge 'mouseUp' handler
@@ -388,7 +401,7 @@ class BpmChart extends React.Component {
 
   // Updates the graph with a new node
   onCreateNode = (x, y) => {
-    const {graph} = this.state;
+    let {nodes} = this.state;
 
     // This is just an example - any sort of logic
     // could be used here to determine node type
@@ -404,28 +417,28 @@ class BpmChart extends React.Component {
       y,
     };
 
-    graph.nodes = [...graph.nodes, viewNode];
-    this.setState({graph});
+    nodes = [...nodes, viewNode];
+    this.setState({nodes});
   };
 
   // Deletes a node from the graph
   onDeleteNode = (viewNode, nodeId, nodeArr) => {
-    const {graph} = this.state;
+    let {edges, nodes} = this.state;
     // Delete any connected edges
-    const newEdges = graph.edges.filter((edge, i) => {
+    const newEdges = edges.filter((edge, i) => {
       return (
         edge.source !== viewNode[NODE_KEY] && edge.target !== viewNode[NODE_KEY]
       );
     });
-    graph.nodes = nodeArr;
-    graph.edges = newEdges;
+    nodes = nodeArr;
+    edges = newEdges;
 
-    this.setState({graph, selected: null});
+    this.setState({nodes, edges, selected: null});
   };
 
   // Creates a new node between two edges
   onCreateEdge = (sourceViewNode, targetViewNode) => {
-    const {graph} = this.state;
+    let {edges} = this.state;
     // This is just an example - any sort of logic
     // could be used here to determine edge type
     const type = 'empty';
@@ -438,9 +451,9 @@ class BpmChart extends React.Component {
 
     // Only add the edge when the source node is not the same as the target
     if (viewEdge.source !== viewEdge.target) {
-      graph.edges = [...graph.edges, viewEdge];
+      edges = [...edges, viewEdge];
       this.setState({
-        graph,
+        edges,
         selected: viewEdge,
       });
     }
@@ -448,28 +461,28 @@ class BpmChart extends React.Component {
 
   // Called when an edge is reattached to a different target.
   onSwapEdge = (sourceViewNode, targetViewNode, viewEdge) => {
-    const {graph} = this.state;
+    let {edges} = this.state;
     const i = this.getEdgeIndex(viewEdge);
-    const edge = JSON.parse(JSON.stringify(graph.edges[i]));
+    const edge = JSON.parse(JSON.stringify(edges[i]));
 
     edge.source = sourceViewNode[NODE_KEY];
     edge.target = targetViewNode[NODE_KEY];
-    graph.edges[i] = edge;
+    edges[i] = edge;
     // reassign the array reference if you want the graph to re-render a swapped edge
-    graph.edges = [...graph.edges];
+    edges = [...edges];
 
     this.setState({
-      graph,
+      edges,
       selected: edge,
     });
   };
 
   // Called when an edge is deleted
   onDeleteEdge = (viewEdge, edges) => {
-    const {graph} = this.state;
-    graph.edges = edges;
+    let {edges: graphEdges} = this.state;
+    graphEdges = edges;
     this.setState({
-      graph,
+      edges: graphEdges,
       selected: null,
     });
   };
@@ -504,301 +517,352 @@ class BpmChart extends React.Component {
     graph.nodes = [...graph.nodes, newNode];
     this.forceUpdate();
   };
+
+  handleValueChange(value, name) {
+    this.setState({[name]: value});
+  }
+
+  handleSaveProcess = () => {
+    const {nodes, selected, processName, processComment} = this.state;
+
+    selected.title = processName;
+    selected.comment = processComment;
+
+    const newNodes = [...nodes];
+
+    const i = this.getNodeIndex(selected);
+    newNodes[i] = selected;
+    this.setState({nodes: newNodes});
+    this.closeEditProcessDialog();
+  };
+
+  openEditProcessDialog = () => {
+    this.setState({editProcessDialogVisible: true});
+  };
+  closeEditProcessDialog = () => {
+    this.setState({editProcessDialogVisible: false});
+  };
+
   render() {
     const {width, height, className} = this.props;
 
-    const {nodes, edges} = this.state.graph;
-    const {selected} = this.state;
+    const {nodes, edges} = this.state;
+    const {
+      editProcessDialogVisible,
+      processComment,
+      processName,
+      selected,
+    } = this.state;
     const {NodeTypes, NodeSubtypes, EdgeTypes} = GraphConfig;
 
     const processTitle =
       selected === null ? _('No process selected') : selected.title;
-    console.log('NODES', nodes);
+
+    const procComment = selected === null ? '' : selected.comment;
+
     return (
-      <Container height={height} grow="1">
-        <GraphBox id="graph">
-          <GraphView
-            ref="GraphView"
-            className={className}
-            nodeKey={NODE_KEY}
-            nodes={nodes}
-            edges={edges}
-            selected={selected}
-            nodeTypes={NodeTypes}
-            nodeSubtypes={NodeSubtypes}
-            edgeTypes={EdgeTypes}
-            width={width}
-            height={height}
-            onSelectNode={this.onSelectNode}
-            onCreateNode={this.onCreateNode}
-            onUpdateNode={this.onUpdateNode}
-            onDeleteNode={this.onDeleteNode}
-            onSelectEdge={this.onSelectEdge}
-            onCreateEdge={this.onCreateEdge}
-            onSwapEdge={this.onSwapEdge}
-            onDeleteEdge={this.onDeleteEdge}
-          />
-        </GraphBox>
-        <SideBox flex="column" grow="1">
-          <ProcessBox grow="1" flex="column">
-            <Layout style={{justifyContent: 'space-between'}}>
-              <ProcessTitle>{processTitle}</ProcessTitle>
-              <EditIcon
-                active={selected !== null}
-                style={{marginRight: '10px'}}
-              />
-            </Layout>
-            <MultiSelect
-              disabled={selected === null}
-              width="100%"
-              items={[
-                {label: 'test', value: 'host'},
-                {label: 'test2', value: 'host2'},
-                {label: 'test3', value: 'host3'},
-                {label: 'test4', value: 'host4'},
-                {label: 'test5', value: 'host5'},
-                {label: 'test6', value: 'host6'},
-                {label: 'test7', value: 'host7'},
-                {label: 'test8', value: 'host8'},
-                {label: 'test9', value: 'host9'},
-                {label: 'test10', value: 'host10'},
-              ]}
+      <Layout flex="column" grow="1">
+        <Container height={height} grow="1">
+          <GraphBox id="graph">
+            <GraphView
+              ref="GraphView"
+              className={className}
+              nodeKey={NODE_KEY}
+              nodes={nodes}
+              edges={edges}
+              selected={selected}
+              nodeTypes={NodeTypes}
+              nodeSubtypes={NodeSubtypes}
+              edgeTypes={EdgeTypes}
+              width={width}
+              height={height}
+              onSelectNode={this.onSelectNode}
+              onCreateNode={this.onCreateNode}
+              onUpdateNode={this.onUpdateNode}
+              onDeleteNode={this.onDeleteNode}
+              onSelectEdge={this.onSelectEdge}
+              onCreateEdge={this.onCreateEdge}
+              onSwapEdge={this.onSwapEdge}
+              onDeleteEdge={this.onDeleteEdge}
             />
-            <Button title="Add hosts" disabled={selected === null} />
-          </ProcessBox>
-          <HostList>
+          </GraphBox>
+          <SideBox flex="column" grow="1">
+            <ProcessBox grow="1" flex="column">
+              <ProcessTitleBox>
+                <ProcessTitle>{processTitle}</ProcessTitle>
+                <StyledEditIcon
+                  disabled={selected === null}
+                  onClick={this.openEditProcessDialog}
+                />
+              </ProcessTitleBox>
+              <ProcessComment>{procComment}</ProcessComment>
+              <MultiSelect
+                disabled={selected === null}
+                width="100%"
+                items={[
+                  {label: 'test', value: 'host'},
+                  {label: 'test2', value: 'host2'},
+                  {label: 'test3', value: 'host3'},
+                  {label: 'test4', value: 'host4'},
+                  {label: 'test5', value: 'host5'},
+                  {label: 'test6', value: 'host6'},
+                  {label: 'test7', value: 'host7'},
+                  {label: 'test8', value: 'host8'},
+                  {label: 'test9', value: 'host9'},
+                  {label: 'test10', value: 'host10'},
+                ]}
+              />
+              <Button title="Add hosts" disabled={selected === null} />
+            </ProcessBox>
             {selected !== null && (
-              <StripedTable>
-                <Header>
-                  <Row>
-                    <Head>{_('Host')}</Head>
-                    <Head>{_('Severity')}</Head>
-                    <Head>{_('Actions')}</Head>
-                  </Row>
-                </Header>
-                <Body>
-                  <Row>
-                    <Data>Host 1</Data>
-                    <Data>
-                      <SeverityBar severity={10} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 2</Data>
-                    <Data>
-                      <SeverityBar severity={10} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 3</Data>
-                    <Data>
-                      <SeverityBar severity={10} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 4</Data>
-                    <Data>
-                      <SeverityBar severity={9.5} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 5</Data>
-                    <Data>
-                      <SeverityBar severity={8} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 6</Data>
-                    <Data>
-                      <SeverityBar severity={8} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 7</Data>
-                    <Data>
-                      <SeverityBar severity={7.5} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 8</Data>
-                    <Data>
-                      <SeverityBar severity={7.5} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 9</Data>
-                    <Data>
-                      <SeverityBar severity={7.5} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 10</Data>
-                    <Data>
-                      <SeverityBar severity={7} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 11</Data>
-                    <Data>
-                      <SeverityBar severity={7} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 12</Data>
-                    <Data>
-                      <SeverityBar severity={5} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 13</Data>
-                    <Data>
-                      <SeverityBar severity={5} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 14</Data>
-                    <Data>
-                      <SeverityBar severity={4.5} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 15</Data>
-                    <Data>
-                      <SeverityBar severity={4.5} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 16</Data>
-                    <Data>
-                      <SeverityBar severity={3} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 17</Data>
-                    <Data>
-                      <SeverityBar severity={3} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 18</Data>
-                    <Data>
-                      <SeverityBar severity={3} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 19</Data>
-                    <Data>
-                      <SeverityBar severity={1} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 20</Data>
-                    <Data>
-                      <SeverityBar severity={0} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 21</Data>
-                    <Data>
-                      <SeverityBar severity={0} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 22</Data>
-                    <Data>
-                      <SeverityBar severity={0} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 23</Data>
-                    <Data>
-                      <SeverityBar severity={0} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                  <Row>
-                    <Data>Host 24</Data>
-                    <Data>
-                      <SeverityBar severity={0} />
-                    </Data>
-                    <Data>
-                      <DeleteIcon title={_('Remove Host from Process')} />
-                    </Data>
-                  </Row>
-                </Body>
-              </StripedTable>
+              <HostList>
+                <StripedTable>
+                  <Header>
+                    <Row>
+                      <Head>{_('Host')}</Head>
+                      <Head>{_('Severity')}</Head>
+                      <Head>{_('Actions')}</Head>
+                    </Row>
+                  </Header>
+                  <Body>
+                    <Row>
+                      <Data>Host 1</Data>
+                      <Data>
+                        <SeverityBar severity={10} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 2</Data>
+                      <Data>
+                        <SeverityBar severity={10} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 3</Data>
+                      <Data>
+                        <SeverityBar severity={10} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 4</Data>
+                      <Data>
+                        <SeverityBar severity={9.5} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 5</Data>
+                      <Data>
+                        <SeverityBar severity={8} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 6</Data>
+                      <Data>
+                        <SeverityBar severity={8} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 7</Data>
+                      <Data>
+                        <SeverityBar severity={7.5} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 8</Data>
+                      <Data>
+                        <SeverityBar severity={7.5} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 9</Data>
+                      <Data>
+                        <SeverityBar severity={7.5} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 10</Data>
+                      <Data>
+                        <SeverityBar severity={7} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 11</Data>
+                      <Data>
+                        <SeverityBar severity={7} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 12</Data>
+                      <Data>
+                        <SeverityBar severity={5} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 13</Data>
+                      <Data>
+                        <SeverityBar severity={5} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 14</Data>
+                      <Data>
+                        <SeverityBar severity={4.5} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 15</Data>
+                      <Data>
+                        <SeverityBar severity={4.5} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 16</Data>
+                      <Data>
+                        <SeverityBar severity={3} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 17</Data>
+                      <Data>
+                        <SeverityBar severity={3} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 18</Data>
+                      <Data>
+                        <SeverityBar severity={3} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 19</Data>
+                      <Data>
+                        <SeverityBar severity={1} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 20</Data>
+                      <Data>
+                        <SeverityBar severity={0} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 21</Data>
+                      <Data>
+                        <SeverityBar severity={0} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 22</Data>
+                      <Data>
+                        <SeverityBar severity={0} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 23</Data>
+                      <Data>
+                        <SeverityBar severity={0} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                    <Row>
+                      <Data>Host 24</Data>
+                      <Data>
+                        <SeverityBar severity={0} />
+                      </Data>
+                      <Data>
+                        <DeleteIcon title={_('Remove Host from Process')} />
+                      </Data>
+                    </Row>
+                  </Body>
+                </StripedTable>
+              </HostList>
             )}
-          </HostList>
-        </SideBox>
-      </Container>
+          </SideBox>
+          {editProcessDialogVisible && (
+            <EditProcessDialog
+              processComment={processComment}
+              processName={processName}
+              onChange={this.handleValueChange}
+              onClose={this.closeEditProcessDialog}
+              onSave={this.handleSaveProcess}
+            />
+          )}
+        </Container>
+        <Tips>
+          <StyledHelpIcon />
+          {_(
+            'To create a new process hold Shift and right click | To create a new connection hold Shift and mouse drag between processes',
+          )}
+        </Tips>
+      </Layout>
     );
   }
 }
