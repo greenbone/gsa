@@ -240,11 +240,11 @@ class Task extends Model {
     }
 
     if (
-      copy.host_ordering !== HOSTS_ORDERING_RANDOM &&
-      copy.host_ordering !== HOSTS_ORDERING_REVERSE &&
-      copy.host_ordering !== HOSTS_ORDERING_SEQUENTIAL
+      copy.hosts_ordering !== HOSTS_ORDERING_RANDOM &&
+      copy.hosts_ordering !== HOSTS_ORDERING_REVERSE &&
+      copy.hosts_ordering !== HOSTS_ORDERING_SEQUENTIAL
     ) {
-      delete copy.host_ordering;
+      delete copy.hosts_ordering;
     }
 
     return copy;

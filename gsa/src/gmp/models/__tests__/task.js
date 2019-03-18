@@ -20,9 +20,9 @@
 import 'core-js/fn/object/entries';
 
 import Task, {
-  HOST_ORDERING_RANDOM,
-  HOST_ORDERING_REVERSE,
-  HOST_ORDERING_SEQUENTIAL,
+  HOSTS_ORDERING_RANDOM,
+  HOSTS_ORDERING_REVERSE,
+  HOSTS_ORDERING_SEQUENTIAL,
   TASK_STATUS,
 } from 'gmp/models/task';
 import {testModelProperties} from '../testing';
@@ -30,30 +30,30 @@ import {testModelProperties} from '../testing';
 testModelProperties(Task, 'task');
 
 describe('Task model tests', () => {
-  test('should parse undefined host_ordering', () => {
-    const obj = {host_ordering: undefined};
+  test('should parse undefined hosts_ordering', () => {
+    const obj = {hosts_ordering: undefined};
     const task = new Task(obj);
-    expect(task.host_ordering).toBeUndefined();
+    expect(task.hosts_ordering).toBeUndefined();
   });
 
-  test('should parse unkonw host_ordering as undefined', () => {
-    const obj = {host_ordering: 'foo'};
+  test('should parse unknown hosts_ordering as undefined', () => {
+    const obj = {hosts_ordering: 'foo'};
     const task = new Task(obj);
-    expect(task.host_ordering).toBeUndefined();
+    expect(task.hosts_ordering).toBeUndefined();
   });
 
-  test('should parse known host_ordering', () => {
-    let obj = {host_ordering: HOST_ORDERING_RANDOM};
+  test('should parse known hosts_ordering', () => {
+    let obj = {hosts_ordering: HOSTS_ORDERING_RANDOM};
     let task = new Task(obj);
-    expect(task.host_ordering).toEqual(HOST_ORDERING_RANDOM);
+    expect(task.hosts_ordering).toEqual(HOSTS_ORDERING_RANDOM);
 
-    obj = {host_ordering: HOST_ORDERING_REVERSE};
+    obj = {hosts_ordering: HOSTS_ORDERING_REVERSE};
     task = new Task(obj);
-    expect(task.host_ordering).toEqual(HOST_ORDERING_REVERSE);
+    expect(task.hosts_ordering).toEqual(HOSTS_ORDERING_REVERSE);
 
-    obj = {host_ordering: HOST_ORDERING_SEQUENTIAL};
+    obj = {hosts_ordering: HOSTS_ORDERING_SEQUENTIAL};
     task = new Task(obj);
-    expect(task.host_ordering).toEqual(HOST_ORDERING_SEQUENTIAL);
+    expect(task.hosts_ordering).toEqual(HOSTS_ORDERING_SEQUENTIAL);
   });
 });
 
