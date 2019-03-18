@@ -42,9 +42,9 @@ export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
 export const AUTO_DELETE_DEFAULT_VALUE = 5;
 
-export const HOST_ORDERING_SEQUENTIAL = 'sequential';
-export const HOST_ORDERING_RANDOM = 'random';
-export const HOST_ORDERING_REVERSE = 'reverse';
+export const HOSTS_ORDERING_SEQUENTIAL = 'sequential';
+export const HOSTS_ORDERING_RANDOM = 'random';
+export const HOSTS_ORDERING_REVERSE = 'reverse';
 
 export const TASK_STATUS = {
   running: 'Running',
@@ -133,18 +133,18 @@ class Task extends Model {
   }
 
   parseProperties(elem) {
-    elem = super.parseProperties(elem);
+    const copy = super.parseProperties(elem);
 
     const {report_count} = elem;
 
     if (isDefined(report_count)) {
-      elem.report_count = {...report_count};
-      elem.report_count.total = parseInt(report_count.__text);
-      elem.report_count.finished = parseInt(report_count.finished);
+      copy.report_count = {...report_count};
+      copy.report_count.total = parseInt(report_count.__text);
+      copy.report_count.finished = parseInt(report_count.finished);
     }
 
-    elem.alterable = parseYesNo(elem.alterable);
-    elem.result_count = parseInt(elem.result_count);
+    copy.alterable = parseYesNo(elem.alterable);
+    copy.result_count = parseInt(elem.result_count);
 
     const reports = [
       'first_report',
@@ -156,7 +156,7 @@ class Task extends Model {
     reports.forEach(name => {
       const report = elem[name];
       if (isDefined(report)) {
-        elem[name] = new Report(report.report);
+        copy[name] = new Report(report.report);
       }
     });
 
@@ -166,65 +166,65 @@ class Task extends Model {
 
       const data = elem[name];
       if (isDefined(data) && !isEmpty(data._id)) {
-        elem[name] = new Model(data, normalizeType(name));
+        copy[name] = new Model(data, normalizeType(name));
       } else {
-        delete elem[name];
+        delete copy[name];
       }
     });
 
     if (isDefined(elem.alert)) {
-      elem.alerts = map(elem.alert, alert => new Model(alert, 'alert'));
-      delete elem.alert;
+      copy.alerts = map(elem.alert, alert => new Model(alert, 'alert'));
+      delete copy.alert;
     }
 
     if (isDefined(elem.scanner) && !isEmpty(elem.scanner._id)) {
-      elem.scanner = new Scanner(elem.scanner);
+      copy.scanner = new Scanner(elem.scanner);
     } else {
-      delete elem.scanner;
+      delete copy.scanner;
     }
 
     if (isDefined(elem.schedule) && !isEmpty(elem.schedule._id)) {
-      elem.schedule = new Schedule(elem.schedule);
+      copy.schedule = new Schedule(elem.schedule);
     } else {
-      delete elem.schedule;
+      delete copy.schedule;
     }
 
-    elem.schedule_periods = parseInt(elem.schedule_periods);
+    copy.schedule_periods = parseInt(elem.schedule_periods);
 
-    elem.progress = parseProgressElement(elem.progress);
+    copy.progress = parseProgressElement(elem.progress);
 
     const prefs = {};
 
-    if (elem.preferences && isArray(elem.preferences.preference)) {
+    if (copy.preferences && isArray(elem.preferences.preference)) {
       for (const pref of elem.preferences.preference) {
         switch (pref.scanner_name) {
           case 'in_assets':
-            elem.in_assets = parse_yes(pref.value);
+            copy.in_assets = parse_yes(pref.value);
             break;
           case 'assets_apply_overrides':
-            elem.apply_overrides = parse_yes(pref.value);
+            copy.apply_overrides = parse_yes(pref.value);
             break;
           case 'assets_min_qod':
-            elem.min_qod = parseInt(pref.value);
+            copy.min_qod = parseInt(pref.value);
             break;
           case 'auto_delete':
-            elem.auto_delete =
+            copy.auto_delete =
               pref.value === AUTO_DELETE_KEEP
                 ? AUTO_DELETE_KEEP
                 : AUTO_DELETE_NO;
             break;
           case 'auto_delete_data':
-            elem.auto_delete_data =
+            copy.auto_delete_data =
               pref.value === '0'
                 ? AUTO_DELETE_DEFAULT_VALUE
                 : parseInt(pref.value);
             break;
           case 'max_hosts':
           case 'max_checks':
-            elem[pref.scanner_name] = parseInt(pref.value);
+            copy[pref.scanner_name] = parseInt(pref.value);
             break;
           case 'source_iface':
-            elem.source_iface = pref.value;
+            copy.source_iface = pref.value;
             break;
           default:
             prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
@@ -233,21 +233,21 @@ class Task extends Model {
       }
     }
 
-    elem.preferences = prefs;
+    copy.preferences = prefs;
 
     if (isDefined(elem.average_duration)) {
-      elem.average_duration = parseDuration(elem.average_duration);
+      copy.average_duration = parseDuration(elem.average_duration);
     }
 
     if (
-      elem.host_ordering !== HOST_ORDERING_RANDOM &&
-      elem.host_ordering !== HOST_ORDERING_REVERSE &&
-      elem.host_ordering !== HOST_ORDERING_SEQUENTIAL
+      copy.host_ordering !== HOSTS_ORDERING_RANDOM &&
+      copy.host_ordering !== HOSTS_ORDERING_REVERSE &&
+      copy.host_ordering !== HOSTS_ORDERING_SEQUENTIAL
     ) {
-      delete elem.host_ordering;
+      delete copy.host_ordering;
     }
 
-    return elem;
+    return copy;
   }
 }
 
