@@ -155,6 +155,9 @@ class TaskComponent extends React.Component {
     this.handleScheduleCreated = this.handleScheduleCreated.bind(this);
 
     this.handleInteraction = this.handleInteraction.bind(this);
+
+    this.handleScanConfigChange = this.handleScanConfigChange.bind(this);
+    this.handleScannerChange = this.handleScannerChange.bind(this);
   }
 
   componentDidMount() {
@@ -590,6 +593,14 @@ class TaskComponent extends React.Component {
       .then(() => this.closeReportImportDialog());
   }
 
+  handleScanConfigChange(config_id) {
+    this.setState({config_id});
+  }
+
+  handleScannerChange(scanner_id) {
+    this.setState({scanner_id});
+  }
+
   render() {
     const {
       alerts,
@@ -736,6 +747,8 @@ class TaskComponent extends React.Component {
                               onNewAlertClick={createalert}
                               onNewTargetClick={createtarget}
                               onNewScheduleClick={createschedule}
+                              onScanConfigChange={this.handleScanConfigChange}
+                              onScannerChange={this.handleScannerChange}
                               onScheduleChange={this.handleScheduleChange}
                               onTargetChange={this.handleTargetChange}
                               onClose={this.handleCloseTaskDialog}

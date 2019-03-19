@@ -109,7 +109,12 @@ class ScannerSelect extends React.Component {
   }
 
   handleScannerChange(value, name) {
-    const {scanners, scanConfigs, onChange} = this.props;
+    const {
+      scanners,
+      scanConfigs,
+      onScanConfigChange,
+      onScannerChange,
+    } = this.props;
     let config_id;
 
     const scanner = get_scanner(scanners, value);
@@ -131,10 +136,11 @@ class ScannerSelect extends React.Component {
 
     log.debug('on scanner change', value, config_id, scanner);
 
-    if (onChange) {
-      onChange(config_id, 'config_id');
-      onChange(value, 'scanner_id');
-      onChange(scanner_type, 'scanner_type');
+    if (isDefined(onScannerChange)) {
+      onScannerChange(value);
+    }
+    if (isDefined(onScanConfigChange)) {
+      onScanConfigChange(config_id);
     }
   }
 
@@ -162,7 +168,8 @@ ScannerSelect.propTypes = {
   }),
   scannerId: PropTypes.id.isRequired,
   scanners: PropTypes.array.isRequired,
-  onChange: PropTypes.func,
+  onScanConfigChange: PropTypes.func.isRequired,
+  onScannerChange: PropTypes.func.isRequired,
 };
 
 const DEFAULT_MAX_CHECKS = 4;
@@ -209,6 +216,8 @@ const TaskDialog = ({
   onNewScheduleClick,
   onNewTargetClick,
   onSave,
+  onScanConfigChange,
+  onScannerChange,
   onScheduleChange,
   onTargetChange,
   ...data
@@ -251,7 +260,6 @@ const TaskDialog = ({
     auto_delete,
     auto_delete_data,
     comment,
-    config_id,
     hosts_ordering,
     in_assets,
     max_checks,
@@ -267,9 +275,12 @@ const TaskDialog = ({
   };
 
   const controlledData = {
-    target_id,
     alert_ids,
+    config_id,
     schedule_id,
+    scanner_id,
+    scanner_type,
+    target_id,
   };
 
   return (
@@ -435,7 +446,8 @@ const TaskDialog = ({
               scanners={scanners}
               scannerId={state.scanner_id}
               changeTask={change_task}
-              onChange={onValueChange}
+              onScanConfigChange={onScanConfigChange}
+              onScannerChange={onScannerChange}
             />
 
             {use_openvas_scan_config && (
@@ -446,7 +458,7 @@ const TaskDialog = ({
                     disabled={!change_task}
                     items={openvas_scan_config_items}
                     value={openvas_config_id}
-                    onChange={onValueChange}
+                    onChange={onScanConfigChange}
                   />
                 </FormGroup>
                 <FormGroup titleSize="4" title={_('Network Source Interface')}>
@@ -513,7 +525,7 @@ const TaskDialog = ({
                   name="config_id"
                   items={osp_scan_config_items}
                   value={osp_config_id}
-                  onChange={onValueChange}
+                  onChange={onScanConfigChange}
                 />
               </FormGroup>
             )}
@@ -586,6 +598,8 @@ TaskDialog.propTypes = {
   onNewScheduleClick: PropTypes.func.isRequired,
   onNewTargetClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  onScanConfigChange: PropTypes.func.isRequired,
+  onScannerChange: PropTypes.func.isRequired,
   onScheduleChange: PropTypes.func.isRequired,
   onTargetChange: PropTypes.func.isRequired,
 };
