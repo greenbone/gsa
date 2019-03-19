@@ -74,7 +74,7 @@ const render_report_total = (entity, links) => {
     <Layout>
       <Link
         to={'reports'}
-        filter={'task_id=' + entity.id + ' sort-reverse=date&filt_id=-2'}
+        filter={'task_id=' + entity.id + ' sort-reverse=date'}
         title={_(
           'View list of all reports for Task {{name}},' +
             ' including unfinished ones',
