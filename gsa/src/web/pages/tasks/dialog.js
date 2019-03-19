@@ -507,6 +507,7 @@ const TaskDialog = ({
                         onChange={onValueChange}
                       />
                       <Select
+                        disabled={state.add_tag !== YES_VALUE}
                         name="tag_id"
                         items={tag_items}
                         value={state.tag_id}
