@@ -42,6 +42,11 @@ import {
 } from 'web/store/entities/alerts';
 
 import {
+  loadEntities as loadCredentials,
+  selector as credentialsSelector,
+} from 'web/store/entities/credentials';
+
+import {
   loadEntities as loadScanConfigs,
   selector as scanConfigsSelector,
 } from 'web/store/entities/scanconfigs';
@@ -467,42 +472,24 @@ class TaskComponent extends React.Component {
       defaultSmbCredential,
     } = this.props;
 
+    this.props.loadCredentials();
     this.props.loadScanConfigs();
 
     gmp.wizard.advancedTask().then(response => {
       const settings = response.data;
 
-      const {credentials} = settings;
-
-      const ssh_credential = selectSaveId(
-        credentials,
-        defaultSshCredential,
-        '',
-      );
-      const smb_credential = selectSaveId(
-        credentials,
-        defaultSmbCredential,
-        '',
-      );
-      const esxi_credential = selectSaveId(
-        credentials,
-        defaultEsxiCredential,
-        '',
-      );
-
       const now = date().tz(timezone);
 
       this.setState({
         advancedTaskWizardVisible: true,
-        credentials,
         task_name: _('New Quick Task'),
         target_hosts: settings.client_address,
         port_list_id: defaultPortListId,
         alert_id: defaultAlertId,
         config_id: defaultScanConfigId,
-        ssh_credential,
-        smb_credential,
-        esxi_credential,
+        ssh_credential: defaultSshCredential,
+        smb_credential: defaultSmbCredential,
+        esxi_credential: defaultEsxiCredential,
         scanner_id: defaultScannerId,
         start_date: now,
         start_minute: now.minutes(),
@@ -618,6 +605,7 @@ class TaskComponent extends React.Component {
   render() {
     const {
       alerts,
+      credentials,
       scanConfigs,
       scanners,
       schedules,
@@ -646,7 +634,6 @@ class TaskComponent extends React.Component {
       config_id,
       containerTaskDialogVisible,
       comment,
-      credentials,
       esxi_credential,
       hosts,
       hosts_ordering,
@@ -863,6 +850,7 @@ TaskComponent.propTypes = {
   alerts: PropTypes.arrayOf(PropTypes.model),
   capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
+  credentials: PropTypes.arrayOf(PropTypes.model).isRequired,
   defaultAlertId: PropTypes.id,
   defaultEsxiCredential: PropTypes.id,
   defaultPortListId: PropTypes.id,
@@ -874,6 +862,7 @@ TaskComponent.propTypes = {
   defaultTargetId: PropTypes.id,
   gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
+  loadCredentials: PropTypes.func.isRequired,
   loadScanConfigs: PropTypes.func.isRequired,
   loadScanners: PropTypes.func.isRequired,
   loadSchedules: PropTypes.func.isRequired,
@@ -921,6 +910,7 @@ const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
 
 const mapStateToProps = rootState => {
   const alertSel = alertSelector(rootState);
+  const credentialsSel = credentialsSelector(rootState);
   const userDefaults = getUserSettingsDefaults(rootState);
   const scanConfigsSel = scanConfigsSelector(rootState);
   const scannersSel = scannerSelector(rootState);
@@ -930,6 +920,7 @@ const mapStateToProps = rootState => {
   return {
     timezone: getTimezone(rootState),
     alerts: alertSel.getEntities(ALL_FILTER),
+    credentials: credentialsSel.getEntities(ALL_FILTER),
     defaultAlertId: userDefaults.getValueByName('defaultalert'),
     defaultEsxiCredential: userDefaults.getValueByName('defaultesxicredential'),
     defaultPortListId: userDefaults.getValueByName('defaultportlist'),
@@ -951,6 +942,7 @@ const mapStateToProps = rootState => {
 
 const mapDispatchToProp = (dispatch, {gmp}) => ({
   loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
+  loadCredentials: () => dispatch(loadCredentials(gmp)(ALL_FILTER)),
   loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
   loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
