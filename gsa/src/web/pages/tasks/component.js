@@ -495,7 +495,6 @@ class TaskComponent extends React.Component {
       this.setState({
         advancedTaskWizardVisible: true,
         credentials,
-        scan_configs: settings.scan_configs,
         task_name: _('New Quick Task'),
         target_hosts: settings.client_address,
         port_list_id: defaultPortListId,
