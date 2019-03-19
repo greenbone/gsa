@@ -22,8 +22,6 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import logger from 'gmp/log';
-
 import {ALL_FILTER} from 'gmp/models/filter';
 
 import {NO_VALUE} from 'gmp/parser';
@@ -93,8 +91,6 @@ import TargetComponent from 'web/pages/targets/component';
 
 import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
-
-const log = logger.getLogger('web.tasks.component');
 
 class TaskComponent extends React.Component {
   constructor(...args) {
@@ -326,7 +322,7 @@ class TaskComponent extends React.Component {
   }
 
   openStandardTaskDialog(task) {
-    const {capabilities, gmp} = this.props;
+    const {capabilities} = this.props;
 
     this.props.loadAlerts();
     this.props.loadScanConfigs();
@@ -336,42 +332,36 @@ class TaskComponent extends React.Component {
     this.props.loadTags();
 
     if (isDefined(task)) {
-      gmp.task.editTaskSettings(task).then(response => {
-        const settings = response.data;
+      const canAccessSchedules =
+        capabilities.mayAccess('schedules') && isDefined(task.schedule);
+      const schedule_id = canAccessSchedules ? task.schedule.id : UNSET_VALUE;
+      const schedule_periods = canAccessSchedules
+        ? task.schedule_periods
+        : undefined;
 
-        log.debug('Loaded edit task dialog settings', task, settings);
-
-        const canAccessSchedules =
-          capabilities.mayAccess('schedules') && isDefined(task.schedule);
-        const schedule_id = canAccessSchedules ? task.schedule.id : UNSET_VALUE;
-        const schedule_periods = canAccessSchedules
-          ? task.schedule_periods
-          : undefined;
-
-        this.setState({
-          taskDialogVisible: true,
-          alert_ids: map(task.alerts, alert => alert.id),
-          alterable: task.alterable,
-          apply_overrides: task.apply_overrides,
-          auto_delete: task.auto_delete,
-          auto_delete_data: task.auto_delete_data,
-          comment: task.comment,
-          config_id: hasId(task.config) ? task.config.id : undefined,
-          hosts_ordering: task.hosts_ordering,
-          id: task.id,
-          in_assets: task.in_assets,
-          max_checks: task.max_checks,
-          max_hosts: task.max_hosts,
-          min_qod: task.min_qod,
-          name: task.name,
-          scanner_id: hasId(task.scanner) ? task.scanner.id : undefined,
-          schedule_id,
-          schedule_periods,
-          source_iface: task.source_iface,
-          target_id: hasId(task.target) ? task.target.id : undefined,
-          task,
-          title: _('Edit Task {{name}}', task),
-        });
+      this.setState({
+        taskDialogVisible: true,
+        alert_ids: map(task.alerts, alert => alert.id),
+        alterable: task.alterable,
+        apply_overrides: task.apply_overrides,
+        auto_delete: task.auto_delete,
+        auto_delete_data: task.auto_delete_data,
+        comment: task.comment,
+        config_id: hasId(task.config) ? task.config.id : undefined,
+        hosts_ordering: task.hosts_ordering,
+        id: task.id,
+        in_assets: task.in_assets,
+        max_checks: task.max_checks,
+        max_hosts: task.max_hosts,
+        min_qod: task.min_qod,
+        name: task.name,
+        scanner_id: hasId(task.scanner) ? task.scanner.id : undefined,
+        schedule_id,
+        schedule_periods,
+        source_iface: task.source_iface,
+        target_id: hasId(task.target) ? task.target.id : undefined,
+        task,
+        title: _('Edit Task {{name}}', task),
       });
     } else {
       const {
@@ -382,37 +372,31 @@ class TaskComponent extends React.Component {
         defaultTargetId,
       } = this.props;
 
-      gmp.task.newTaskSettings().then(response => {
-        const settings = response.data;
+      const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
-        log.debug('Loaded new task dialog settings', settings);
-
-        const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
-
-        this.setState({
-          taskDialogVisible: true,
-          alert_ids,
-          alterable: undefined,
-          apply_overrides: undefined,
-          auto_delete: undefined,
-          auto_delete_data: undefined,
-          comment: undefined,
-          config_id: defaultScanConfigId,
-          hosts_ordering: undefined,
-          id: undefined,
-          in_assets: undefined,
-          max_checks: undefined,
-          max_hosts: undefined,
-          min_qod: undefined,
-          name: undefined,
-          scanner_id: defaultScannerId,
-          schedule_id: defaultScheduleId,
-          schedule_periods: undefined,
-          source_iface: undefined,
-          target_id: defaultTargetId,
-          task: undefined,
-          title: _('New Task'),
-        });
+      this.setState({
+        taskDialogVisible: true,
+        alert_ids,
+        alterable: undefined,
+        apply_overrides: undefined,
+        auto_delete: undefined,
+        auto_delete_data: undefined,
+        comment: undefined,
+        config_id: defaultScanConfigId,
+        hosts_ordering: undefined,
+        id: undefined,
+        in_assets: undefined,
+        max_checks: undefined,
+        max_hosts: undefined,
+        min_qod: undefined,
+        name: undefined,
+        scanner_id: defaultScannerId,
+        schedule_id: defaultScheduleId,
+        schedule_periods: undefined,
+        source_iface: undefined,
+        target_id: defaultTargetId,
+        task: undefined,
+        title: _('New Task'),
       });
     }
     this.handleInteraction();
