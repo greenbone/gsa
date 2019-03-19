@@ -23,6 +23,7 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
+import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 
@@ -179,7 +180,6 @@ const TaskDialog = ({
   schedule_periods = NO_VALUE,
   schedules = [],
   source_iface = '',
-  tag_id,
   tags = [],
   target_id,
   targets,
@@ -220,6 +220,8 @@ const TaskDialog = ({
   const change_task = hasTask ? task.isChangeable() : true;
 
   const showTagSelection = !hasTask && tags.length > 0;
+
+  const tag_id = showTagSelection ? first(tags).id : undefined;
 
   const uncontrolledData = {
     ...data,
