@@ -23,8 +23,8 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
-import {first} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
+import {forEach, first} from 'gmp/utils/array';
+import {isDefined, isArray} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
@@ -40,13 +40,13 @@ import {
   OSP_SCANNER_TYPE,
   GMP_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
-  CVE_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 
 import {
   FULL_AND_FAST_SCAN_CONFIG_ID,
   OPENVAS_SCAN_CONFIG_TYPE,
   OSP_SCAN_CONFIG_TYPE,
+  filterEmptyScanConfig,
 } from 'gmp/models/scanconfig';
 
 import PropTypes from 'web/utils/proptypes';
@@ -72,6 +72,24 @@ import AddResultsToAssetsGroup from './addresultstoassetsgroup';
 import AutoDeleteReportsGroup from './autodeletereportsgroup';
 
 const log = logger.getLogger('web.tasks.dialog');
+
+const sort_scan_configs = (scan_configs = []) => {
+  const sorted_scan_configs = {
+    [OPENVAS_SCAN_CONFIG_TYPE]: [],
+    [OSP_SCAN_CONFIG_TYPE]: [],
+  };
+
+  scan_configs = scan_configs.filter(filterEmptyScanConfig);
+
+  forEach(scan_configs, config => {
+    const type = config.scan_config_type;
+    if (!isArray(sorted_scan_configs[type])) {
+      sorted_scan_configs[type] = [];
+    }
+    sorted_scan_configs[type].push(config);
+  });
+  return sorted_scan_configs;
+};
 
 const get_scanner = (scanners, scanner_id) => {
   if (!isDefined(scanners)) {
@@ -138,7 +156,10 @@ class ScannerSelect extends React.Component {
 
 ScannerSelect.propTypes = {
   changeTask: PropTypes.bool.isRequired,
-  scanConfigs: PropTypes.object.isRequired,
+  scanConfigs: PropTypes.shape({
+    [OPENVAS_SCANNER_TYPE]: PropTypes.array,
+    [OSP_SCANNER_TYPE]: PropTypes.array,
+  }),
   scannerId: PropTypes.id.isRequired,
   scanners: PropTypes.array.isRequired,
   onChange: PropTypes.func,
@@ -165,10 +186,7 @@ const TaskDialog = ({
   max_hosts = DEFAULT_MAX_HOSTS,
   min_qod = DEFAULT_MIN_QOD,
   name = _('Unnamed'),
-  scan_configs = {
-    [OPENVAS_SCAN_CONFIG_TYPE]: [],
-    [OSP_SCAN_CONFIG_TYPE]: [],
-  },
+  scan_configs = [],
   scanner_id = OPENVAS_DEFAULT_SCANNER_ID,
   scanners = [
     {
@@ -204,12 +222,14 @@ const TaskDialog = ({
 
   const schedule_items = renderSelectItems(schedules, UNSET_VALUE);
 
+  const sorted_scan_configs = sort_scan_configs(scan_configs);
+
   const osp_scan_config_items = renderSelectItems(
-    scan_configs[OSP_SCAN_CONFIG_TYPE],
+    sorted_scan_configs[OSP_SCAN_CONFIG_TYPE],
   );
 
   const openvas_scan_config_items = renderSelectItems(
-    scan_configs[OPENVAS_SCAN_CONFIG_TYPE],
+    sorted_scan_configs[OPENVAS_SCAN_CONFIG_TYPE],
   );
 
   const alert_items = renderSelectItems(alerts);
@@ -261,11 +281,11 @@ const TaskDialog = ({
     >
       {({values: state, onValueChange}) => {
         const osp_config_id = selectSaveId(
-          scan_configs[OSP_SCAN_CONFIG_TYPE],
+          sorted_scan_configs[OSP_SCAN_CONFIG_TYPE],
           state.config_id,
         );
         const openvas_config_id = selectSaveId(
-          scan_configs[OPENVAS_SCAN_CONFIG_TYPE],
+          sorted_scan_configs[OPENVAS_SCAN_CONFIG_TYPE],
           state.config_id,
         );
 
@@ -410,7 +430,7 @@ const TaskDialog = ({
             />
 
             <ScannerSelect
-              scanConfigs={scan_configs}
+              scanConfigs={sorted_scan_configs}
               scanners={scanners}
               scannerId={state.scanner_id}
               changeTask={change_task}
@@ -546,11 +566,7 @@ TaskDialog.propTypes = {
   max_hosts: PropTypes.number,
   min_qod: PropTypes.number,
   name: PropTypes.string,
-  scan_configs: PropTypes.shape({
-    [OPENVAS_SCANNER_TYPE]: PropTypes.array,
-    [CVE_SCANNER_TYPE]: PropTypes.array,
-    [OSP_SCANNER_TYPE]: PropTypes.array,
-  }),
+  scan_configs: PropTypes.arrayOf(PropTypes.model),
   scanner_id: PropTypes.idOrZero,
   scanners: PropTypes.array,
   schedule_id: PropTypes.idOrZero,
