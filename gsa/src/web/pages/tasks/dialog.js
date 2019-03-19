@@ -499,7 +499,7 @@ const TaskDialog = ({
                   <FormGroup title={_('Tag')}>
                     <Divider>
                       <Checkbox
-                        title={_('add:')}
+                        title={_('Add:')}
                         name="add_tag"
                         checkedValue={YES_VALUE}
                         unCheckedValue={NO_VALUE}
