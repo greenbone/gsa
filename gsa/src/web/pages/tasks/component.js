@@ -54,6 +54,11 @@ import {
 } from 'web/store/entities/schedules';
 
 import {
+  loadEntities as loadTags,
+  selector as tagsSelector,
+} from 'web/store/entities/tags';
+
+import {
   loadEntities as loadTargets,
   selector as targetSelector,
 } from 'web/store/entities/targets';
@@ -311,6 +316,7 @@ class TaskComponent extends React.Component {
     this.props.loadAlerts();
     this.props.loadSchedules();
     this.props.loadTargets();
+    this.props.loadTags();
 
     if (isDefined(task)) {
       gmp.task.editTaskSettings(task).then(response => {
@@ -385,7 +391,6 @@ class TaskComponent extends React.Component {
           scan_configs,
           config_id = FULL_AND_FAST_SCAN_CONFIG_ID,
           scanners,
-          tags,
         } = settings;
 
         log.debug('Loaded new task dialog settings', settings);
@@ -418,8 +423,6 @@ class TaskComponent extends React.Component {
           schedule_id: defaultScheduleId,
           schedule_periods: undefined,
           source_iface: undefined,
-          tag_id: first(tags).id,
-          tags,
           target_id: defaultTargetId,
           task: undefined,
           title: _('New Task'),
@@ -621,6 +624,7 @@ class TaskComponent extends React.Component {
     const {
       alerts,
       schedules,
+      tags,
       targets,
       children,
       onCloned,
@@ -675,7 +679,6 @@ class TaskComponent extends React.Component {
       start_hour,
       start_timezone,
       tag_id,
-      tags,
       target_id,
       target_hosts,
       task_id,
@@ -881,9 +884,11 @@ TaskComponent.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
   loadSchedules: PropTypes.func.isRequired,
+  loadTags: PropTypes.func.isRequired,
   loadTargets: PropTypes.func.isRequired,
   loadUserSettingsDefaults: PropTypes.func.isRequired,
   schedules: PropTypes.arrayOf(PropTypes.model),
+  tags: PropTypes.arrayOf(PropTypes.model),
   targets: PropTypes.arrayOf(PropTypes.model),
   timezone: PropTypes.string.isRequired,
   onAdvancedTaskWizardError: PropTypes.func,
@@ -917,10 +922,13 @@ TaskComponent.propTypes = {
   onTaskWizardSaved: PropTypes.func,
 };
 
+const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
+
 const mapStateToProps = rootState => {
   const alertSel = alertSelector(rootState);
   const userDefaults = getUserSettingsDefaults(rootState);
   const scheduleSel = scheduleSelector(rootState);
+  const tagsSel = tagsSelector(rootState);
   const targetSel = targetSelector(rootState);
   return {
     timezone: getTimezone(rootState),
@@ -929,6 +937,7 @@ const mapStateToProps = rootState => {
     defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
     schedules: scheduleSel.getEntities(ALL_FILTER),
+    tags: tagsSel.getEntities(TAGS_FILTER),
     targets: targetSel.getEntities(ALL_FILTER),
   };
 };
@@ -936,6 +945,7 @@ const mapStateToProps = rootState => {
 const mapDispatchToProp = (dispatch, {gmp}) => ({
   loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
+  loadTags: () => dispatch(loadTags(gmp)(TAGS_FILTER)),
   loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
   loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
 });
