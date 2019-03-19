@@ -49,6 +49,16 @@ import {
 } from 'web/store/entities/alerts';
 
 import {
+  loadEntities as loadScanConfigs,
+  selector as scanConfigsSelector,
+} from 'web/store/entities/scanconfigs';
+
+import {
+  loadEntities as loadScanners,
+  selector as scannerSelector,
+} from 'web/store/entities/scanners';
+
+import {
   loadEntities as loadSchedules,
   selector as scheduleSelector,
 } from 'web/store/entities/schedules';
@@ -314,6 +324,8 @@ class TaskComponent extends React.Component {
     const {capabilities, gmp} = this.props;
 
     this.props.loadAlerts();
+    this.props.loadScanConfigs();
+    this.props.loadScanners();
     this.props.loadSchedules();
     this.props.loadTargets();
     this.props.loadTags();
@@ -617,6 +629,8 @@ class TaskComponent extends React.Component {
   render() {
     const {
       alerts,
+      scanConfigs,
+      scanners,
       schedules,
       tags,
       targets,
@@ -659,9 +673,7 @@ class TaskComponent extends React.Component {
       port_list_id,
       reportImportDialogVisible,
       reschedule,
-      scan_configs,
       scanner_id,
-      scanners,
       schedule_id,
       schedule_periods,
       slave_id,
@@ -683,7 +695,6 @@ class TaskComponent extends React.Component {
       taskWizardVisible,
       title = _('Edit Task {{name}}', task),
     } = this.state;
-
     return (
       <React.Fragment>
         <EntityComponent
@@ -748,7 +759,7 @@ class TaskComponent extends React.Component {
                               max_hosts={max_hosts}
                               min_qod={min_qod}
                               name={name}
-                              scan_configs={scan_configs}
+                              scan_configs={scanConfigs}
                               scanner_id={scanner_id}
                               scanners={scanners}
                               schedule_id={schedule_id}
@@ -820,7 +831,7 @@ class TaskComponent extends React.Component {
         {advancedTaskWizardVisible && (
           <AdvancedTaskWizard
             credentials={credentials}
-            scan_configs={scan_configs}
+            scan_configs={scanConfigs}
             start_date={start_date}
             task_name={task_name}
             target_hosts={target_hosts}
@@ -877,10 +888,14 @@ TaskComponent.propTypes = {
   defaultTargetId: PropTypes.id,
   gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
+  loadScanConfigs: PropTypes.func.isRequired,
+  loadScanners: PropTypes.func.isRequired,
   loadSchedules: PropTypes.func.isRequired,
   loadTags: PropTypes.func.isRequired,
   loadTargets: PropTypes.func.isRequired,
   loadUserSettingsDefaults: PropTypes.func.isRequired,
+  scanConfigs: PropTypes.arrayOf(PropTypes.model),
+  scanners: PropTypes.arrayOf(PropTypes.model),
   schedules: PropTypes.arrayOf(PropTypes.model),
   tags: PropTypes.arrayOf(PropTypes.model),
   targets: PropTypes.arrayOf(PropTypes.model),
@@ -921,6 +936,8 @@ const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
 const mapStateToProps = rootState => {
   const alertSel = alertSelector(rootState);
   const userDefaults = getUserSettingsDefaults(rootState);
+  const scanConfigsSel = scanConfigsSelector(rootState);
+  const scannersSel = scannerSelector(rootState);
   const scheduleSel = scheduleSelector(rootState);
   const tagsSel = tagsSelector(rootState);
   const targetSel = targetSelector(rootState);
@@ -930,6 +947,8 @@ const mapStateToProps = rootState => {
     defaultAlertId: userDefaults.getValueByName('defaultalert'),
     defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
+    scanConfigs: scanConfigsSel.getEntities(ALL_FILTER),
+    scanners: scannersSel.getEntities(ALL_FILTER),
     schedules: scheduleSel.getEntities(ALL_FILTER),
     tags: tagsSel.getEntities(TAGS_FILTER),
     targets: targetSel.getEntities(ALL_FILTER),
@@ -938,6 +957,8 @@ const mapStateToProps = rootState => {
 
 const mapDispatchToProp = (dispatch, {gmp}) => ({
   loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
+  loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
+  loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
   loadTags: () => dispatch(loadTags(gmp)(TAGS_FILTER)),
   loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
