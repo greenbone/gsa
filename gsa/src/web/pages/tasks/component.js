@@ -321,7 +321,7 @@ class TaskComponent extends React.Component {
     if (isDefined(task)) {
       gmp.task.editTaskSettings(task).then(response => {
         const settings = response.data;
-        const {targets, scan_configs, scanners} = settings;
+        const {scan_configs, scanners} = settings;
 
         log.debug('Loaded edit task dialog settings', task, settings);
 
@@ -338,20 +338,14 @@ class TaskComponent extends React.Component {
         if (task.isChangeable()) {
           data.config_id = isDefined(task.config) ? task.config.id : undefined;
           data.scanner_id = task.scanner.id;
-          data.target_id = task.target.id;
         } else {
           data.config_id = UNSET_VALUE;
           data.scanner_id = UNSET_VALUE;
-          data.target_id = UNSET_VALUE;
 
           // add UNSET_VALUEs to lists to be displayed with name in selects
           scanners.push({
             id: UNSET_VALUE,
             name: task.scanner.name,
-          });
-          targets.push({
-            id: UNSET_VALUE,
-            name: task.target.name,
           });
         }
 
@@ -376,7 +370,7 @@ class TaskComponent extends React.Component {
           schedule_id,
           schedule_periods,
           source_iface: task.source_iface,
-          targets,
+          target_id: hasId(task.target) ? task.target.id : undefined,
           task,
           title: _('Edit Task {{name}}', task),
         });
