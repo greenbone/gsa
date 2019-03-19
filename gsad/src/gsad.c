@@ -319,7 +319,6 @@ init_validator ()
                      "|(edit_config_family)"
                      "|(edit_config_nvt)"
                      "|(edit_role)"
-                     "|(edit_task)"
                      "|(auth_settings)"
                      "|(empty_trashcan)"
                      "|(export_agent)"
@@ -425,7 +424,6 @@ init_validator ()
                      "|(login)"
                      "|(move_task)"
                      "|(new_alert)"
-                     "|(new_task)"
                      "|(ping)"
                      "|(renew_session)"
                      "|(report_alert)"
@@ -1958,7 +1956,6 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   if (!strcmp (cmd, "cvss_calculator"))
     res = cvss_calculator (&connection, credentials, params, response_data);
 
-  ELSE (new_task)
   ELSE (new_alert)
   ELSE (get_task)
   ELSE (get_tasks)
@@ -1967,7 +1964,6 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (edit_config_family)
   ELSE (edit_config_nvt)
   ELSE (edit_role)
-  ELSE (edit_task)
   ELSE (auth_settings)
   ELSE (export_agent)
   ELSE (export_agents)
