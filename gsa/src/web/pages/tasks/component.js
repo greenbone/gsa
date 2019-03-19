@@ -28,18 +28,13 @@ import {ALL_FILTER} from 'gmp/models/filter';
 
 import {NO_VALUE} from 'gmp/parser';
 
-import {first, forEach, map} from 'gmp/utils/array';
-import {isArray, isDefined} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
+import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import {selectSaveId, hasId} from 'gmp/utils/id';
 
 import date from 'gmp/models/date';
 
-import {
-  FULL_AND_FAST_SCAN_CONFIG_ID,
-  OPENVAS_SCAN_CONFIG_TYPE,
-  OSP_SCAN_CONFIG_TYPE,
-  filterEmptyScanConfig,
-} from 'gmp/models/scanconfig';
+import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 
 import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 
@@ -100,24 +95,6 @@ import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
 
 const log = logger.getLogger('web.tasks.component');
-
-const sort_scan_configs = (scan_configs = []) => {
-  const sorted_scan_configs = {
-    [OPENVAS_SCAN_CONFIG_TYPE]: [],
-    [OSP_SCAN_CONFIG_TYPE]: [],
-  };
-
-  scan_configs = scan_configs.filter(filterEmptyScanConfig);
-
-  forEach(scan_configs, config => {
-    const type = config.scan_config_type;
-    if (!isArray(sorted_scan_configs[type])) {
-      sorted_scan_configs[type] = [];
-    }
-    sorted_scan_configs[type].push(config);
-  });
-  return sorted_scan_configs;
-};
 
 class TaskComponent extends React.Component {
   constructor(...args) {
@@ -361,11 +338,8 @@ class TaskComponent extends React.Component {
     if (isDefined(task)) {
       gmp.task.editTaskSettings(task).then(response => {
         const settings = response.data;
-        const {scan_configs, scanners} = settings;
 
         log.debug('Loaded edit task dialog settings', task, settings);
-
-        const sorted_scan_configs = sort_scan_configs(scan_configs);
 
         const canAccessSchedules =
           capabilities.mayAccess('schedules') && isDefined(task.schedule);
@@ -374,30 +348,15 @@ class TaskComponent extends React.Component {
           ? task.schedule_periods
           : undefined;
 
-        const data = {};
-        if (task.isChangeable()) {
-          data.config_id = isDefined(task.config) ? task.config.id : undefined;
-          data.scanner_id = task.scanner.id;
-        } else {
-          data.config_id = UNSET_VALUE;
-          data.scanner_id = UNSET_VALUE;
-
-          // add UNSET_VALUEs to lists to be displayed with name in selects
-          scanners.push({
-            id: UNSET_VALUE,
-            name: task.scanner.name,
-          });
-        }
-
         this.setState({
           taskDialogVisible: true,
-          ...data,
           alert_ids: map(task.alerts, alert => alert.id),
           alterable: task.alterable,
           apply_overrides: task.apply_overrides,
           auto_delete: task.auto_delete,
           auto_delete_data: task.auto_delete_data,
           comment: task.comment,
+          config_id: hasId(task.config) ? task.config.id : undefined,
           hosts_ordering: task.hosts_ordering,
           id: task.id,
           in_assets: task.in_assets,
@@ -405,8 +364,7 @@ class TaskComponent extends React.Component {
           max_hosts: task.max_hosts,
           min_qod: task.min_qod,
           name: task.name,
-          scan_configs: sorted_scan_configs,
-          scanners,
+          scanner_id: hasId(task.scanner) ? task.scanner.id : undefined,
           schedule_id,
           schedule_periods,
           source_iface: task.source_iface,
@@ -416,22 +374,18 @@ class TaskComponent extends React.Component {
         });
       });
     } else {
-      const {defaultAlertId, defaultScheduleId, defaultTargetId} = this.props;
+      const {
+        defaultAlertId,
+        defaultScanConfigId = FULL_AND_FAST_SCAN_CONFIG_ID,
+        defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID,
+        defaultScheduleId,
+        defaultTargetId,
+      } = this.props;
 
       gmp.task.newTaskSettings().then(response => {
         const settings = response.data;
-        let {
-          scanner_id = OPENVAS_DEFAULT_SCANNER_ID,
-          scan_configs,
-          config_id = FULL_AND_FAST_SCAN_CONFIG_ID,
-          scanners,
-        } = settings;
 
         log.debug('Loaded new task dialog settings', settings);
-
-        const sorted_scan_configs = sort_scan_configs(scan_configs);
-
-        scanner_id = selectSaveId(scanners, scanner_id);
 
         const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
@@ -443,7 +397,7 @@ class TaskComponent extends React.Component {
           auto_delete: undefined,
           auto_delete_data: undefined,
           comment: undefined,
-          config_id,
+          config_id: defaultScanConfigId,
           hosts_ordering: undefined,
           id: undefined,
           in_assets: undefined,
@@ -451,9 +405,7 @@ class TaskComponent extends React.Component {
           max_hosts: undefined,
           min_qod: undefined,
           name: undefined,
-          scan_configs: sorted_scan_configs,
-          scanners,
-          scanner_id,
+          scanner_id: defaultScannerId,
           schedule_id: defaultScheduleId,
           schedule_periods: undefined,
           source_iface: undefined,
@@ -903,6 +855,8 @@ TaskComponent.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
   defaultAlertId: PropTypes.id,
+  defaultScanConfigId: PropTypes.id,
+  defaultScannerId: PropTypes.id,
   defaultScheduleId: PropTypes.id,
   defaultTargetId: PropTypes.id,
   gmp: PropTypes.gmp.isRequired,
@@ -964,6 +918,10 @@ const mapStateToProps = rootState => {
     timezone: getTimezone(rootState),
     alerts: alertSel.getEntities(ALL_FILTER),
     defaultAlertId: userDefaults.getValueByName('defaultalert'),
+    defaultScanConfigId: userDefaults.getValueByName(
+      'defaultopenvasscanconfig',
+    ),
+    defaultScannerId: userDefaults.getValueByName('defaultopenvasscanner'),
     defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
     scanConfigs: scanConfigsSel.getEntities(ALL_FILTER),
