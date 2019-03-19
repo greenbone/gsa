@@ -504,7 +504,6 @@ class TaskComponent extends React.Component {
         smb_credential,
         esxi_credential,
         scanner_id: defaultScannerId,
-        slave_id: settings.get('Default Slave').value,
         start_date: now,
         start_minute: now.minutes(),
         start_hour: now.hours(),
@@ -664,7 +663,6 @@ class TaskComponent extends React.Component {
       scanner_id,
       schedule_id,
       schedule_periods,
-      slave_id,
       source_iface,
       ssh_credential,
       smb_credential,
@@ -825,7 +823,6 @@ class TaskComponent extends React.Component {
             smb_credential={smb_credential}
             esxi_credential={esxi_credential}
             scanner_id={scanner_id}
-            slave_id={slave_id}
             start_minute={start_minute}
             start_hour={start_hour}
             start_timezone={start_timezone}
