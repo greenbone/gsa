@@ -384,7 +384,7 @@ const TaskDialog = ({
                 value={state.min_qod}
                 onChange={onValueChange}
               />
-              <Layout box>%</Layout>
+              <Layout>%</Layout>
             </FormGroup>
 
             {change_task && (
