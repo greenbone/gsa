@@ -141,6 +141,7 @@ class TaskComponent extends React.Component {
     this.handleSaveAdvancedTaskWizard = this.handleSaveAdvancedTaskWizard.bind(
       this,
     );
+    this.handleSaveTask = this.handleSaveTask.bind(this);
     this.handleSaveContainerTask = this.handleSaveContainerTask.bind(this);
     this.handleSaveModifyTaskWizard = this.handleSaveModifyTaskWizard.bind(
       this,
@@ -301,6 +302,33 @@ class TaskComponent extends React.Component {
       .createContainer(data)
       .then(onContainerCreated, onContainerCreateError)
       .then(() => this.closeContainerTaskDialog());
+  }
+
+  handleSaveTask(data) {
+    const {gmp} = this.props;
+
+    this.handleInteraction();
+
+    if (isDefined(data.id)) {
+      // save edit part
+      let {task, target_id, scanner_id, config_id} = data;
+      if (isDefined(task) && !task.isChangeable()) {
+        target_id = UNSET_VALUE;
+        scanner_id = UNSET_VALUE;
+        config_id = UNSET_VALUE;
+      }
+      const {onSaved, onSaveError} = this.props;
+      return gmp.task
+        .save({...data, target_id, scanner_id, config_id})
+        .then(onSaved, onSaveError)
+        .then(() => this.closeTaskDialog());
+    }
+
+    const {onCreated, onCreateError} = this.props;
+    return gmp.task
+      .create(data)
+      .then(onCreated, onCreateError)
+      .then(() => this.closeTaskDialog());
   }
 
   openTaskDialog(task) {
@@ -644,8 +672,6 @@ class TaskComponent extends React.Component {
       onDownloaded,
       onDownloadError,
       onInteraction,
-      onSaved,
-      onSaveError,
     } = this.props;
 
     const {
@@ -708,10 +734,8 @@ class TaskComponent extends React.Component {
           onDownloaded={onDownloaded}
           onDownloadError={onDownloadError}
           onInteraction={onInteraction}
-          onSaved={onSaved}
-          onSaveError={onSaveError}
         >
-          {({save, ...other}) => (
+          {other => (
             <React.Fragment>
               {children({
                 ...other,
@@ -779,12 +803,7 @@ class TaskComponent extends React.Component {
                               onScheduleChange={this.handleScheduleChange}
                               onTargetChange={this.handleTargetChange}
                               onClose={this.handleCloseTaskDialog}
-                              onSave={d => {
-                                this.handleInteraction();
-                                return save(d).then(() =>
-                                  this.closeTaskDialog(),
-                                );
-                              }}
+                              onSave={this.handleSaveTask}
                             />
                           )}
                         </ScheduleComponent>

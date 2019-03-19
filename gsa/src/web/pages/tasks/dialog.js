@@ -263,6 +263,7 @@ const TaskDialog = ({
     source_iface,
     tag_id,
     tags,
+    task,
   };
 
   const controlledData = {
