@@ -18,16 +18,8 @@
  */
 import logger from '../log';
 
-import {map} from '../utils/array';
-import {isEmpty} from '../utils/string';
-
 import registerCommand from '../command';
-import Model from '../model';
 
-import ScanConfig from '../models/scanconfig';
-import Scanner from '../models/scanner';
-import Schedule from '../models/schedule';
-import Target from '../models/target';
 import Task, {HOSTS_ORDERING_SEQUENTIAL} from '../models/task';
 
 import EntitiesCommand from './entities';
@@ -87,94 +79,6 @@ class TaskCommand extends EntityCommand {
         log.error('An error occurred while resuming the task', id, err);
         throw err;
       });
-  }
-
-  newTaskSettings() {
-    return this.httpGet({cmd: 'new_task'}).then(response => {
-      const {data} = response;
-      const settings = {};
-      const {new_task} = data;
-      settings.targets = map(
-        new_task.get_targets_response.target,
-        target => new Target(target),
-      );
-      settings.scan_configs = map(
-        new_task.get_configs_response.config,
-        config => new ScanConfig(config),
-      );
-      settings.alerts = map(
-        new_task.get_alerts_response.alert,
-        alert => new Model(alert, 'alert'),
-      );
-      settings.schedules = map(
-        new_task.get_schedules_response.schedule,
-        schedule => new Schedule(schedule),
-      );
-      settings.scanners = map(
-        new_task.get_scanners_response.scanner,
-        scanner => new Scanner(scanner),
-      );
-      settings.tags = map(
-        new_task.get_tags_response.tag,
-        tag => new Model(tag, 'tag'),
-      );
-      settings.alert_id = isEmpty(new_task.alert_id)
-        ? undefined
-        : new_task.alert_id;
-      settings.config_id = isEmpty(new_task.config_id)
-        ? undefined
-        : new_task.config_id;
-      settings.osp_config_id = isEmpty(new_task.osp_config_id)
-        ? undefined
-        : new_task.osp_config_id;
-      settings.osp_scanner_id = isEmpty(new_task.osp_scanner_id)
-        ? undefined
-        : new_task.osp_scanner_id;
-      settings.scanner_id = isEmpty(new_task.scanner_id)
-        ? undefined
-        : new_task.scanner_id;
-      settings.schedule_id = isEmpty(new_task.schedule_id)
-        ? undefined
-        : new_task.schedule_id;
-      settings.target_id = isEmpty(new_task.target_id)
-        ? undefined
-        : new_task.target_id;
-      return response.setData(settings);
-    });
-  }
-
-  editTaskSettings({id}) {
-    // should be removed after get Alert, Schedule, ... are implemented
-    return this.httpGet({
-      cmd: 'edit_task',
-      id,
-    }).then(response => {
-      const {data} = response;
-
-      const inst = {};
-      const resp = data.edit_task.commands_response;
-      inst.targets = map(
-        resp.get_targets_response.target,
-        target => new Target(target),
-      );
-      inst.scan_configs = map(
-        resp.get_configs_response.config,
-        config => new ScanConfig(config),
-      );
-      inst.alerts = map(
-        resp.get_alerts_response.alert,
-        alert => new Model(alert, 'alert'),
-      );
-      inst.schedules = map(
-        resp.get_schedules_response.schedule,
-        schedule => new Schedule(schedule),
-      );
-      inst.scanners = map(
-        resp.get_scanners_response.scanner,
-        scanner => new Scanner(scanner),
-      );
-      return response.setData(inst);
-    });
   }
 
   create(args) {
