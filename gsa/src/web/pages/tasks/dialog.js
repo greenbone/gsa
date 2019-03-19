@@ -214,9 +214,12 @@ const TaskDialog = ({
 
   const alert_items = renderSelectItems(alerts);
 
-  const change_task = task ? task.isChangeable() : true;
+  // having a task means we are editing a task
+  const hasTask = isDefined(task);
 
-  const has_tags = tags.length > 0;
+  const change_task = hasTask ? task.isChangeable() : true;
+
+  const showTagSelection = !hasTask && tags.length > 0;
 
   const uncontrolledData = {
     ...data,
@@ -494,7 +497,7 @@ const TaskDialog = ({
 
             {capabilities.mayAccess('tags') &&
               capabilities.mayCreate('tag') &&
-              has_tags && (
+              showTagSelection && (
                 <React.Fragment>
                   <FormGroup title={_('Tag')}>
                     <Divider>
