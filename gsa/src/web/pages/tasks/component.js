@@ -406,20 +406,29 @@ class TaskComponent extends React.Component {
   }
 
   openTaskWizard() {
-    const {gmp} = this.props;
+    const {
+      gmp,
+      defaultAlertId,
+      defaultEsxiCredential,
+      defaultPortListId,
+      defaultScanConfigId,
+      defaultScannerId,
+      defaultSshCredential,
+      defaultSmbCredential,
+    } = this.props;
 
     gmp.wizard.task().then(response => {
       const settings = response.data;
       this.setState({
         taskWizardVisible: true,
         hosts: settings.client_address,
-        port_list_id: settings.get('Default Port List').value,
-        alert_id: settings.get('Default Alert').value,
-        config_id: settings.get('Default OpenVAS Scan Config').value,
-        ssh_credential: settings.get('Default SSH Credential').value,
-        smb_credential: settings.get('Default SMB Credential').value,
-        esxi_credential: settings.get('Default ESXi Credential').value,
-        scanner_id: settings.get('Default OpenVAS Scanner').value,
+        port_list_id: defaultPortListId,
+        alert_id: defaultAlertId,
+        config_id: defaultScanConfigId,
+        ssh_credential: defaultSshCredential,
+        smb_credential: defaultSmbCredential,
+        esxi_credential: defaultEsxiCredential,
+        scanner_id: defaultScannerId,
       });
     });
     this.handleInteraction();
@@ -446,31 +455,38 @@ class TaskComponent extends React.Component {
   }
 
   openAdvancedTaskWizard() {
-    const {gmp, timezone} = this.props;
+    const {
+      gmp,
+      timezone,
+      defaultAlertId,
+      defaultEsxiCredential,
+      defaultPortListId,
+      defaultScanConfigId = FULL_AND_FAST_SCAN_CONFIG_ID,
+      defaultScannerId,
+      defaultSshCredential,
+      defaultSmbCredential,
+    } = this.props;
+
+    this.props.loadScanConfigs();
 
     gmp.wizard.advancedTask().then(response => {
       const settings = response.data;
-      let config_id = settings.get('Default OpenVAS Scan Config').value;
-
-      if (!isDefined(config_id) || config_id.length === 0) {
-        config_id = FULL_AND_FAST_SCAN_CONFIG_ID;
-      }
 
       const {credentials} = settings;
 
       const ssh_credential = selectSaveId(
         credentials,
-        settings.get('Default SSH Credential').value,
+        defaultSshCredential,
         '',
       );
       const smb_credential = selectSaveId(
         credentials,
-        settings.get('Default SMB Credential').value,
+        defaultSmbCredential,
         '',
       );
       const esxi_credential = selectSaveId(
         credentials,
-        settings.get('Default ESXi Credential').value,
+        defaultEsxiCredential,
         '',
       );
 
@@ -482,13 +498,13 @@ class TaskComponent extends React.Component {
         scan_configs: settings.scan_configs,
         task_name: _('New Quick Task'),
         target_hosts: settings.client_address,
-        port_list_id: settings.get('Default Port List').value,
-        alert_id: settings.get('Default Alert').value,
-        config_id,
+        port_list_id: defaultPortListId,
+        alert_id: defaultAlertId,
+        config_id: defaultScanConfigId,
         ssh_credential,
         smb_credential,
         esxi_credential,
-        scanner_id: settings.get('Default OpenVAS Scanner').value,
+        scanner_id: defaultScannerId,
         slave_id: settings.get('Default Slave').value,
         start_date: now,
         start_minute: now.minutes(),
@@ -852,9 +868,13 @@ TaskComponent.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
   defaultAlertId: PropTypes.id,
+  defaultEsxiCredential: PropTypes.id,
+  defaultPortListId: PropTypes.id,
   defaultScanConfigId: PropTypes.id,
   defaultScannerId: PropTypes.id,
   defaultScheduleId: PropTypes.id,
+  defaultSmbCredential: PropTypes.id,
+  defaultSshCredential: PropTypes.id,
   defaultTargetId: PropTypes.id,
   gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
@@ -915,11 +935,15 @@ const mapStateToProps = rootState => {
     timezone: getTimezone(rootState),
     alerts: alertSel.getEntities(ALL_FILTER),
     defaultAlertId: userDefaults.getValueByName('defaultalert'),
+    defaultEsxiCredential: userDefaults.getValueByName('defaultesxicredential'),
+    defaultPortListId: userDefaults.getValueByName('defaultportlist'),
     defaultScanConfigId: userDefaults.getValueByName(
       'defaultopenvasscanconfig',
     ),
     defaultScannerId: userDefaults.getValueByName('defaultopenvasscanner'),
     defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
+    defaultSshCredential: userDefaults.getValueByName('defaultsshcredential'),
+    defaultSmbCredential: userDefaults.getValueByName('defaultsmbcredential'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
     scanConfigs: scanConfigsSel.getEntities(ALL_FILTER),
     scanners: scannersSel.getEntities(ALL_FILTER),
