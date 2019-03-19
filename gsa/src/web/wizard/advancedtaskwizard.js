@@ -229,7 +229,7 @@ const AdvancedTaskWizard = ({
                   onChange={onValueChange}
                 />
               </FormGroup>
-              <FormGroup offset="1" box>
+              <FormGroup offset="1">
                 <Datepicker
                   name="start_date"
                   value={state.start_date}
