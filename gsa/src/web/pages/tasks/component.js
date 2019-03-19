@@ -24,6 +24,8 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
+import {ALL_FILTER} from 'gmp/models/filter';
+
 import {NO_VALUE} from 'gmp/parser';
 
 import {first, forEach, map} from 'gmp/utils/array';
@@ -922,19 +924,19 @@ const mapStateToProps = rootState => {
   const targetSel = targetSelector(rootState);
   return {
     timezone: getTimezone(rootState),
-    alerts: alertSel.getEntities(),
+    alerts: alertSel.getEntities(ALL_FILTER),
     defaultAlertId: userDefaults.getValueByName('defaultalert'),
     defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
-    schedules: scheduleSel.getEntities(),
-    targets: targetSel.getEntities(),
+    schedules: scheduleSel.getEntities(ALL_FILTER),
+    targets: targetSel.getEntities(ALL_FILTER),
   };
 };
 
 const mapDispatchToProp = (dispatch, {gmp}) => ({
-  loadAlerts: () => dispatch(loadAlerts(gmp)()),
-  loadSchedules: () => dispatch(loadSchedules(gmp)()),
-  loadTargets: () => dispatch(loadTargets(gmp)()),
+  loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
+  loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
+  loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
   loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
 });
 
