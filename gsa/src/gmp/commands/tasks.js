@@ -20,6 +20,8 @@ import logger from '../log';
 
 import registerCommand from '../command';
 
+import {NO_VALUE} from '../parser';
+
 import Task, {HOSTS_ORDERING_SEQUENTIAL} from '../models/task';
 
 import EntitiesCommand from './entities';
@@ -99,9 +101,9 @@ class TaskCommand extends EntityCommand {
       name,
       scanner_type,
       scanner_id,
-      schedule_id = 0,
+      schedule_id,
       schedule_periods,
-      source_iface = '',
+      source_iface,
       tag_id,
       target_id,
     } = args;
@@ -152,7 +154,7 @@ class TaskCommand extends EntityCommand {
       auto_delete_data,
       apply_overrides,
       comment = '',
-      config_id,
+      config_id = NO_VALUE,
       hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
       id,
       in_assets,
@@ -160,11 +162,11 @@ class TaskCommand extends EntityCommand {
       max_hosts,
       min_qod,
       name,
-      scanner_id,
+      scanner_id = NO_VALUE,
       scanner_type,
-      schedule_id = 0,
-      target_id,
-      source_iface = '',
+      schedule_id = NO_VALUE,
+      target_id = NO_VALUE,
+      source_iface,
     } = args;
     const data = {
       alterable,

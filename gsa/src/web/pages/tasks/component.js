@@ -317,9 +317,10 @@ class TaskComponent extends React.Component {
     if (isDefined(id)) {
       // save edit part
       if (isDefined(task) && !task.isChangeable()) {
-        target_id = UNSET_VALUE;
-        scanner_id = UNSET_VALUE;
-        config_id = UNSET_VALUE;
+        // arguments need to be undefined if the task is not changeable
+        target_id = undefined;
+        scanner_id = undefined;
+        config_id = undefined;
       }
       const {onSaved, onSaveError} = this.props;
       return gmp.task
