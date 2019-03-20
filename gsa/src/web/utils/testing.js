@@ -23,7 +23,12 @@ import 'jest-dom/extend-expect';
 
 import React from 'react';
 
-import {render as reactTestingRender, cleanup} from 'react-testing-library';
+import {
+  render as reactTestingRender,
+  cleanup,
+  queryAllByAttribute,
+  getElementError,
+} from 'react-testing-library';
 
 import {Router} from 'react-router-dom';
 
@@ -44,11 +49,28 @@ export * from 'react-testing-library';
 
 afterEach(cleanup);
 
+const queryAllByName = (container, name) =>
+  queryAllByAttribute('name', container, name);
+
+const getByName = (container, name) => {
+  const els = queryAllByName(container, name);
+  if (!els.length) {
+    throw getElementError(
+      `Unable to find an element with the name: ${name}.`,
+      container,
+    );
+  }
+  return els[0];
+};
+
 export const render = ui => {
-  const {container, ...other} = reactTestingRender(ui);
+  const {container, baseElement, ...other} = reactTestingRender(ui);
   return {
+    baseElement,
     container,
     element: hasValue(container) ? container.firstChild : undefined,
+    getByName: name => getByName(baseElement, name),
+    queryAllByName: name => queryAllByName(baseElement, name),
     ...other,
   };
 };
