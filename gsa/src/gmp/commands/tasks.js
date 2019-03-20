@@ -83,26 +83,26 @@ class TaskCommand extends EntityCommand {
 
   create(args) {
     const {
-      name,
-      comment = '',
-      target_id,
-      schedule_id = 0,
-      in_assets,
-      apply_overrides,
-      min_qod,
+      add_tag,
+      alert_ids = [],
       alterable,
+      apply_overrides,
       auto_delete,
       auto_delete_data,
-      scanner_type,
-      scanner_id,
+      comment = '',
       config_id,
-      alert_ids = [],
-      source_iface = '',
       hosts_ordering,
+      in_assets,
       max_checks,
       max_hosts,
+      min_qod,
+      name,
+      scanner_type,
+      scanner_id,
+      schedule_id = 0,
+      source_iface = '',
       tag_id,
-      add_tag,
+      target_id,
     } = args;
 
     const data = {
