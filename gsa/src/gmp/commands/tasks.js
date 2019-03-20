@@ -29,7 +29,7 @@ import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.tasks');
 
-class TaskCommand extends EntityCommand {
+export class TaskCommand extends EntityCommand {
   constructor(http) {
     super(http, 'task', Task);
   }
