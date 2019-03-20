@@ -24,7 +24,10 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {YES_VALUE} from 'gmp/parser';
 
-import {AUTO_DELETE_KEEP} from 'gmp/models/task';
+import {
+  AUTO_DELETE_KEEP,
+  AUTO_DELETE_KEEP_DEFAULT_VALUE,
+} from 'gmp/models/task';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -40,7 +43,7 @@ import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
 
 const ContainerTaskDialog = ({
   auto_delete = AUTO_DELETE_KEEP,
-  auto_delete_data = 5,
+  auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   comment,
   in_assets = YES_VALUE,
   name,
