@@ -285,14 +285,37 @@ class TaskComponent extends React.Component {
       .then(() => this.closeContainerTaskDialog());
   }
 
-  handleSaveTask(data) {
+  handleSaveTask({
+    add_tag,
+    alert_ids,
+    alterable,
+    auto_delete,
+    auto_delete_data,
+    apply_overrides,
+    comment,
+    config_id,
+    hosts_ordering,
+    id,
+    in_assets,
+    min_qod,
+    max_checks,
+    max_hosts,
+    name,
+    scanner_id,
+    scanner_type,
+    schedule_id,
+    schedule_periods,
+    source_iface,
+    tag_id,
+    target_id,
+    task,
+  }) {
     const {gmp} = this.props;
 
     this.handleInteraction();
 
-    if (isDefined(data.id)) {
+    if (isDefined(id)) {
       // save edit part
-      let {task, target_id, scanner_id, config_id} = data;
       if (isDefined(task) && !task.isChangeable()) {
         target_id = UNSET_VALUE;
         scanner_id = UNSET_VALUE;
@@ -300,14 +323,57 @@ class TaskComponent extends React.Component {
       }
       const {onSaved, onSaveError} = this.props;
       return gmp.task
-        .save({...data, target_id, scanner_id, config_id})
+        .save({
+          alert_ids,
+          alterable,
+          auto_delete,
+          auto_delete_data,
+          apply_overrides,
+          comment,
+          config_id,
+          hosts_ordering,
+          id,
+          in_assets,
+          max_checks,
+          max_hosts,
+          min_qod,
+          name,
+          scanner_id,
+          scanner_type,
+          schedule_id,
+          schedule_periods,
+          target_id,
+          source_iface,
+        })
         .then(onSaved, onSaveError)
         .then(() => this.closeTaskDialog());
     }
 
     const {onCreated, onCreateError} = this.props;
     return gmp.task
-      .create(data)
+      .create({
+        add_tag,
+        alert_ids,
+        alterable,
+        apply_overrides,
+        auto_delete,
+        auto_delete_data,
+        comment,
+        config_id,
+        hosts_ordering,
+        in_assets,
+        max_checks,
+        max_hosts,
+        min_qod,
+        name,
+        scanner_type,
+        scanner_id,
+        schedule_id,
+        schedule_periods,
+        source_iface,
+        tag_id,
+        target_id,
+      })
       .then(onCreated, onCreateError)
       .then(() => this.closeTaskDialog());
   }
