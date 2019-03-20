@@ -101,7 +101,6 @@ class TaskCommand extends EntityCommand {
       hosts_ordering,
       max_checks,
       max_hosts,
-      cve_scanner_id,
       tag_id,
       add_tag,
     } = args;
@@ -116,7 +115,6 @@ class TaskCommand extends EntityCommand {
       auto_delete_data,
       comment,
       config_id,
-      cve_scanner_id,
       hosts_ordering,
       in_assets,
       max_checks,
