@@ -2483,26 +2483,26 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   params_t *alerts;
   GString *alert_element;
 
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
-  target_id = params_value (params, "target_id");
-  scanner_type = params_value (params, "scanner_type");
-  hosts_ordering = params_value (params, "hosts_ordering");
-  schedule_id = params_value (params, "schedule_id");
-  schedule_periods = params_value (params, "schedule_periods");
-  scanner_id = params_value (params, "scanner_id");
-  config_id = params_value (params, "config_id");
-  in_assets = params_value (params, "in_assets");
+  add_tag = params_value (params, "add_tag");
+  alterable = params_value (params, "alterable");
   apply_overrides = params_value (params, "apply_overrides");
-  min_qod = params_value (params, "min_qod");
-  max_checks = params_value (params, "max_checks");
-  source_iface = params_value (params, "source_iface");
   auto_delete = params_value (params, "auto_delete");
   auto_delete_data = params_value (params, "auto_delete_data");
+  comment = params_value (params, "comment");
+  config_id = params_value (params, "config_id");
+  hosts_ordering = params_value (params, "hosts_ordering");
+  in_assets = params_value (params, "in_assets");
+  max_checks = params_value (params, "max_checks");
   max_hosts = params_value (params, "max_hosts");
-  alterable = params_value (params, "alterable");
-  add_tag = params_value (params, "add_tag");
+  min_qod = params_value (params, "min_qod");
+  name = params_value (params, "name");
+  scanner_id = params_value (params, "scanner_id");
+  scanner_type = params_value (params, "scanner_type");
+  schedule_id = params_value (params, "schedule_id");
+  schedule_periods = params_value (params, "schedule_periods");
+  source_iface = params_value (params, "source_iface");
   tag_id = params_value (params, "tag_id");
+  target_id = params_value (params, "target_id");
 
   CHECK_VARIABLE_INVALID (scanner_type, "Create Task");
   if (!strcmp (scanner_type, "1"))
