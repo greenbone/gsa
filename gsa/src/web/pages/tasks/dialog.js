@@ -31,7 +31,7 @@ import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {
   AUTO_DELETE_KEEP,
-  AUTO_DELETE_DEFAULT_VALUE,
+  AUTO_DELETE_KEEP_DEFAULT_VALUE,
   HOSTS_ORDERING_SEQUENTIAL,
 } from 'gmp/models/task';
 
@@ -183,7 +183,7 @@ const TaskDialog = ({
   alterable = NO_VALUE,
   apply_overrides = YES_VALUE,
   auto_delete = AUTO_DELETE_KEEP,
-  auto_delete_data = AUTO_DELETE_DEFAULT_VALUE,
+  auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   capabilities,
   comment = '',
   config_id = FULL_AND_FAST_SCAN_CONFIG_ID,

@@ -40,7 +40,7 @@ import Scanner from './scanner';
 
 export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
-export const AUTO_DELETE_DEFAULT_VALUE = 5;
+export const AUTO_DELETE_KEEP_DEFAULT_VALUE = 5;
 
 export const HOSTS_ORDERING_SEQUENTIAL = 'sequential';
 export const HOSTS_ORDERING_RANDOM = 'random';
@@ -216,7 +216,7 @@ class Task extends Model {
           case 'auto_delete_data':
             copy.auto_delete_data =
               pref.value === '0'
-                ? AUTO_DELETE_DEFAULT_VALUE
+                ? AUTO_DELETE_KEEP_DEFAULT_VALUE
                 : parseInt(pref.value);
             break;
           case 'max_hosts':
