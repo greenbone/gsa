@@ -2827,25 +2827,25 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   GString *alert_element;
   entity_t entity;
 
-  comment = params_value (params, "comment");
-  name = params_value (params, "name");
-  task_id = params_value (params, "task_id");
-  in_assets = params_value (params, "in_assets");
+  alterable = params_value (params, "alterable");
   apply_overrides = params_value (params, "apply_overrides");
-  min_qod = params_value (params, "min_qod");
-  target_id = params_value (params, "target_id");
-  scanner_type = params_value (params, "scanner_type");
-  hosts_ordering = params_value (params, "hosts_ordering");
-  config_id = params_value (params, "config_id");
-  schedule_id = params_value (params, "schedule_id");
-  schedule_periods = params_value (params, "schedule_periods");
-  scanner_id = params_value (params, "scanner_id");
-  max_checks = params_value (params, "max_checks");
-  source_iface = params_value (params, "source_iface");
   auto_delete = params_value (params, "auto_delete");
   auto_delete_data = params_value (params, "auto_delete_data");
+  comment = params_value (params, "comment");
+  config_id = params_value (params, "config_id");
+  hosts_ordering = params_value (params, "hosts_ordering");
+  in_assets = params_value (params, "in_assets");
+  max_checks = params_value (params, "max_checks");
   max_hosts = params_value (params, "max_hosts");
-  alterable = params_value (params, "alterable");
+  min_qod = params_value (params, "min_qod");
+  name = params_value (params, "name");
+  scanner_id = params_value (params, "scanner_id");
+  scanner_type = params_value (params, "scanner_type");
+  schedule_id = params_value (params, "schedule_id");
+  schedule_periods = params_value (params, "schedule_periods");
+  source_iface = params_value (params, "source_iface");
+  target_id = params_value (params, "target_id");
+  task_id = params_value (params, "task_id");
 
   if (scanner_type != NULL)
     {
