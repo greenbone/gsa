@@ -27,7 +27,15 @@ $ cd gsa && git log
  * Sort alerts at task details alphanumerically #1094
  * Add Alemba vFire alert to GUI #1100
  * Add Sourcefire PKCS12 password support #1150
-
+ * Fix crash of Task dialog without user having get_config, get_scanner,
+   get_tags and get_targets permissions #1220
+ * Ensure host ordering is valid in task dialog #1220
+ * Disable tag selection if not task should be added in create task dialog #1220
+ * Don't allow to add when editing a task #1220
+ * Fix race condition resulting in not displaying scan config details at task
+   dialog when opening the dialog for the first time #1220
+ * Fix saving run schedule once setting from Task dialog #1220
+ * Don't create a container task from the task dialog accidentially #1220
 
 
 ## gsa 8.0+beta2 (2018-12-04)
