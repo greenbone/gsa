@@ -165,6 +165,7 @@ class TaskCommand extends EntityCommand {
       scanner_id = NO_VALUE,
       scanner_type,
       schedule_id = NO_VALUE,
+      schedule_periods,
       target_id = NO_VALUE,
       source_iface,
     } = args;
@@ -186,6 +187,7 @@ class TaskCommand extends EntityCommand {
       scanner_id,
       scanner_type,
       schedule_id,
+      schedule_periods,
       source_iface,
       target_id,
       task_id: id,
