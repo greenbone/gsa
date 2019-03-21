@@ -30,9 +30,9 @@ import {selectSaveId} from 'gmp/utils/id';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {
-  AUTO_DELETE_KEEP,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   HOSTS_ORDERING_SEQUENTIAL,
+  AUTO_DELETE_NO,
 } from 'gmp/models/task';
 
 import {
@@ -182,7 +182,7 @@ const TaskDialog = ({
   alerts = [],
   alterable = NO_VALUE,
   apply_overrides = YES_VALUE,
-  auto_delete = AUTO_DELETE_KEEP,
+  auto_delete = AUTO_DELETE_NO,
   auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   capabilities,
   comment = '',

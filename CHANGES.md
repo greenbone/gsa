@@ -36,6 +36,8 @@ $ cd gsa && git log
    dialog when opening the dialog for the first time #1220
  * Fix saving run schedule once setting from Task dialog #1220
  * Don't create a container task from the task dialog accidentially #1220
+ * Use "Do not automatically delete reports" as default again in task dialog
+   #1220
 
 
 ## gsa 8.0+beta2 (2018-12-04)
