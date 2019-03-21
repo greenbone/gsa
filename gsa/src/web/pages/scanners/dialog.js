@@ -49,7 +49,7 @@ import Layout from 'web/components/layout/layout';
 
 import {
   OSP_SCANNER_TYPE,
-  SLAVE_SCANNER_TYPE,
+  GMP_SCANNER_TYPE,
   scannerTypeName,
 } from 'gmp/models/scanner';
 
@@ -58,7 +58,7 @@ import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
-const SCANNER_TYPES = [SLAVE_SCANNER_TYPE, OSP_SCANNER_TYPE];
+const SCANNER_TYPES = [GMP_SCANNER_TYPE, OSP_SCANNER_TYPE];
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
@@ -70,7 +70,7 @@ const username_password_credentials_filter = credential => {
 
 const filter_credentials = (credentials, type) => {
   const cred_filter =
-    type === SLAVE_SCANNER_TYPE
+    type === GMP_SCANNER_TYPE
       ? username_password_credentials_filter
       : client_cert_credentials_filter;
   return filter(credentials, cred_filter);

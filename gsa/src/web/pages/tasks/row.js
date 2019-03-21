@@ -52,7 +52,7 @@ import Actions from './actions';
 import TaskStatus from './status';
 import Trend from './trend';
 
-import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner';
+import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
 const render_report = (report, links) => {
   if (!isDefined(report)) {
@@ -123,7 +123,7 @@ const Row = ({
             {entity.alterable === 1 && (
               <AlterableIcon size="small" title={_('Task is alterable')} />
             )}
-            {isDefined(scanner) && scanner.type === SLAVE_SCANNER_TYPE && (
+            {isDefined(scanner) && scanner.type === GMP_SCANNER_TYPE && (
               <SensorIcon
                 size="small"
                 title={_(

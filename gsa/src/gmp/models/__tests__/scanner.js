@@ -29,7 +29,7 @@ import Scanner, {
   CVE_SCANNER_TYPE,
   OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
-  SLAVE_SCANNER_TYPE,
+  GMP_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {testModel} from 'gmp/models/testing';
 
@@ -184,7 +184,7 @@ describe('Scanner model tests', () => {
   test('isClonable() should return correct true/false', () => {
     const elem1 = {type: CVE_SCANNER_TYPE};
     const elem2 = {type: OPENVAS_SCANNER_TYPE};
-    const elem3 = {type: SLAVE_SCANNER_TYPE};
+    const elem3 = {type: GMP_SCANNER_TYPE};
     const elem4 = {type: OSP_SCANNER_TYPE};
 
     const scanner1 = new Scanner(elem1);
@@ -201,7 +201,7 @@ describe('Scanner model tests', () => {
   test('isWritable() should return correct true/false', () => {
     const elem1 = {type: CVE_SCANNER_TYPE};
     const elem2 = {type: OPENVAS_SCANNER_TYPE};
-    const elem3 = {type: SLAVE_SCANNER_TYPE};
+    const elem3 = {type: GMP_SCANNER_TYPE};
     const elem4 = {type: OSP_SCANNER_TYPE};
 
     const scanner1 = new Scanner(elem1);
@@ -231,7 +231,7 @@ describe('Scanner model function tests', () => {
     const type1 = scannerTypeName(OSP_SCANNER_TYPE);
     const type2 = scannerTypeName(OPENVAS_SCANNER_TYPE);
     const type3 = scannerTypeName(CVE_SCANNER_TYPE);
-    const type4 = scannerTypeName(SLAVE_SCANNER_TYPE);
+    const type4 = scannerTypeName(GMP_SCANNER_TYPE);
     const type5 = scannerTypeName(42);
 
     expect(type1).toEqual('OSP Scanner');
