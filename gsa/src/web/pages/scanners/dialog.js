@@ -175,6 +175,7 @@ class ScannerDialog extends React.Component {
       isDefined(scanner) &&
       isDefined(scanner.credential) &&
       scanner.credential.type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
+    const isGmpScannerType = type === GMP_SCANNER_TYPE;
 
     return (
       <SaveDialog
@@ -232,57 +233,61 @@ class ScannerDialog extends React.Component {
                 />
               </FormGroup>
 
-              <FormGroup title={_('Port')}>
-                <TextField
-                  name="port"
-                  value={state.port}
-                  disabled={in_use}
-                  grow="1"
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-
-              <FormGroup title={_('CA Certificate')} flex="column">
-                <Layout>
-                  <Divider>
-                    {is_edit && (
-                      <Layout>
-                        {isDefined(state.ca_pub) && (
-                          <Radio
-                            title={_('Existing')}
-                            name="which_cert"
-                            value="existing"
-                            checked={state.which_cert === 'existing'}
-                            onChange={onValueChange}
-                          />
-                        )}
-                        <Radio
-                          title={_('Default')}
-                          name="which_cert"
-                          value="default"
-                          checked={state.which_cert === 'default'}
-                          onChange={onValueChange}
-                        />
-                        <Radio
-                          title={_('New:')}
-                          name="which_cert"
-                          value="new"
-                          checked={state.which_cert === 'new'}
-                          onChange={onValueChange}
-                        />
-                      </Layout>
-                    )}
-                    <FileField
-                      disabled={is_edit && state.which_cert !== 'new'}
-                      name="ca_pub"
+              {!isGmpScannerType && (
+                <React.Fragment>
+                  <FormGroup title={_('Port')}>
+                    <TextField
+                      name="port"
+                      value={state.port}
+                      disabled={in_use}
+                      grow="1"
                       onChange={onValueChange}
                     />
-                  </Divider>
-                </Layout>
-                {is_edit && isDefined(state.ca_pub) && (
-                  <CertStatus info={state.ca_pub.info} />
-                )}
-              </FormGroup>
+                  </FormGroup>
+
+                  <FormGroup title={_('CA Certificate')} flex="column">
+                    <Layout>
+                      <Divider>
+                        {is_edit && (
+                          <Layout>
+                            {isDefined(state.ca_pub) && (
+                              <Radio
+                                title={_('Existing')}
+                                name="which_cert"
+                                value="existing"
+                                checked={state.which_cert === 'existing'}
+                                onChange={onValueChange}
+                              />
+                            )}
+                            <Radio
+                              title={_('Default')}
+                              name="which_cert"
+                              value="default"
+                              checked={state.which_cert === 'default'}
+                              onChange={onValueChange}
+                            />
+                            <Radio
+                              title={_('New:')}
+                              name="which_cert"
+                              value="new"
+                              checked={state.which_cert === 'new'}
+                              onChange={onValueChange}
+                            />
+                          </Layout>
+                        )}
+                        <FileField
+                          disabled={is_edit && state.which_cert !== 'new'}
+                          name="ca_pub"
+                          onChange={onValueChange}
+                        />
+                      </Divider>
+                    </Layout>
+                    {is_edit && isDefined(state.ca_pub) && (
+                      <CertStatus info={state.ca_pub.info} />
+                    )}
+                  </FormGroup>
+                </React.Fragment>
+              )}
 
               <FormGroup title={_('Credential')} flex="column">
                 <Divider>
