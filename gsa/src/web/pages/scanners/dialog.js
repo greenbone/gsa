@@ -212,6 +212,16 @@ class ScannerDialog extends React.Component {
                 />
               </FormGroup>
 
+              <FormGroup title={_('Type')}>
+                <Select
+                  name="type"
+                  value={state.type}
+                  items={scannerTypesOptions}
+                  disabled={in_use}
+                  onChange={this.handleTypeChange}
+                />
+              </FormGroup>
+
               <FormGroup title={_('Host')}>
                 <TextField
                   name="host"
@@ -229,16 +239,6 @@ class ScannerDialog extends React.Component {
                   disabled={in_use}
                   grow="1"
                   onChange={onValueChange}
-                />
-              </FormGroup>
-
-              <FormGroup title={_('Type')}>
-                <Select
-                  name="type"
-                  value={state.type}
-                  items={scannerTypesOptions}
-                  disabled={in_use}
-                  onChange={this.handleTypeChange}
                 />
               </FormGroup>
 
