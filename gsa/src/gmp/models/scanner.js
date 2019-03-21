@@ -31,7 +31,7 @@ import Credential from './credential';
 export const OSP_SCANNER_TYPE = 1;
 export const OPENVAS_SCANNER_TYPE = 2;
 export const CVE_SCANNER_TYPE = 3;
-export const SLAVE_SCANNER_TYPE = 4;
+export const GMP_SCANNER_TYPE = 4;
 
 export const OPENVAS_DEFAULT_SCANNER_ID =
   '08b69003-5fc2-4037-a479-93b440211c73';
@@ -53,7 +53,7 @@ export function scannerTypeName(scannerType) {
     return _('OpenVAS Scanner');
   } else if (scannerType === CVE_SCANNER_TYPE) {
     return _('CVE Scanner');
-  } else if (scannerType === SLAVE_SCANNER_TYPE) {
+  } else if (scannerType === GMP_SCANNER_TYPE) {
     return _('GMP Scanner');
   }
   return _('Unknown type ({{type}})', {type: scannerType});

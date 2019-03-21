@@ -33,7 +33,7 @@ import {AUTO_DELETE_KEEP, AUTO_DELETE_DEFAULT_VALUE} from 'gmp/models/task';
 import {
   OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
-  SLAVE_SCANNER_TYPE,
+  GMP_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
   CVE_SCANNER_TYPE,
 } from 'gmp/models/scanner';
@@ -94,7 +94,7 @@ class ScannerSelect extends React.Component {
 
     if (
       scanner_type === OPENVAS_SCANNER_TYPE ||
-      scanner_type === SLAVE_SCANNER_TYPE
+      scanner_type === GMP_SCANNER_TYPE
     ) {
       config_id = selectSaveId(
         scanConfigs[OPENVAS_SCAN_CONFIG_TYPE],
@@ -265,7 +265,7 @@ const TaskDialog = ({
 
         const use_openvas_scan_config =
           state.scanner_type === OPENVAS_SCANNER_TYPE ||
-          state.scanner_type === SLAVE_SCANNER_TYPE;
+          state.scanner_type === GMP_SCANNER_TYPE;
         return (
           <Layout flex="column">
             <FormGroup title={_('Name')}>

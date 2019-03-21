@@ -24,7 +24,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {hasId} from 'gmp/utils/id';
 
-import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner';
+import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
@@ -113,7 +113,7 @@ class ScannerComponent extends React.Component {
           scanner: undefined,
           scannerDialogVisible: true,
           title: undefined,
-          type: SLAVE_SCANNER_TYPE,
+          type: GMP_SCANNER_TYPE,
           which_cert: undefined,
         }),
       );
@@ -131,7 +131,7 @@ class ScannerComponent extends React.Component {
 
   openCredentialsDialog(type) {
     const base =
-      type === SLAVE_SCANNER_TYPE
+      type === GMP_SCANNER_TYPE
         ? USERNAME_PASSWORD_CREDENTIAL_TYPE
         : CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
 
