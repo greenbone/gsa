@@ -110,7 +110,7 @@ const Row = ({
       </TableData>
       <TableData>
         {host.hostname.length > 0 && (
-          <span title={host.hostname}>({shorten(host.hostname, 40)})</span>
+          <span title={host.hostname}>{shorten(host.hostname, 40)}</span>
         )}
       </TableData>
       <TableData>{entity.port}</TableData>
