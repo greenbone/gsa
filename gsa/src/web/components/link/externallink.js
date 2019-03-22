@@ -81,6 +81,7 @@ class ExternalLink extends React.Component {
             onResumeClick={this.handleOpenLink}
             text={dialogtext}
             title={dialogtitle}
+            rightButtonTitle={_('Follow Link')}
             to={to}
             width="500px"
           />
