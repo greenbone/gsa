@@ -47,7 +47,7 @@ class ConfirmationDialogContent extends React.Component {
   }
 
   render() {
-    const {moveprops, text, title} = this.props;
+    const {moveprops, text, title, rightButtonTitle} = this.props;
 
     return (
       <DialogContent>
@@ -58,7 +58,7 @@ class ConfirmationDialogContent extends React.Component {
         />
         <ScrollableContent>{text}</ScrollableContent>
         <DialogTwoButtonFooter
-          rightButtonTitle={_('Follow Link')}
+          rightButtonTitle={rightButtonTitle}
           onLeftButtonClick={this.props.close}
           onRightButtonClick={this.handleResume}
         />
@@ -79,6 +79,7 @@ const ConfirmationDialog = ({
   width = DEFAULT_DIALOG_WIDTH,
   text,
   title,
+  rightButtonTitle = _('OK'),
   onClose,
   onResumeClick,
 }) => {
@@ -90,6 +91,7 @@ const ConfirmationDialog = ({
           moveprops={moveProps}
           text={text}
           title={title}
+          rightButtonTitle={rightButtonTitle}
           onResumeClick={onResumeClick}
         />
       )}
@@ -98,6 +100,7 @@ const ConfirmationDialog = ({
 };
 
 ConfirmationDialog.propTypes = {
+  rightButtonTitle: PropTypes.string,
   text: PropTypes.string,
   title: PropTypes.string.isRequired,
   width: PropTypes.string,
