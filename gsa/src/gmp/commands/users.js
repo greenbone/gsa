@@ -106,7 +106,7 @@ class UserCommand extends EntityCommand {
           id: setting._id,
           comment: setting.comment === '(null)' ? undefined : setting.comment,
           name: setting.name,
-          value: setting.value,
+          value: setting.value === '0' ? undefined : setting.value,
         };
       });
       return response.setData(settings);

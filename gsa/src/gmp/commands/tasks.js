@@ -18,24 +18,18 @@
  */
 import logger from '../log';
 
-import {map} from '../utils/array';
-import {isEmpty} from '../utils/string';
-
 import registerCommand from '../command';
-import Model from '../model';
 
-import ScanConfig from '../models/scanconfig';
-import Scanner from '../models/scanner';
-import Schedule from '../models/schedule';
-import Target from '../models/target';
-import Task from '../models/task';
+import {NO_VALUE} from '../parser';
+
+import Task, {HOSTS_ORDERING_SEQUENTIAL} from '../models/task';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.tasks');
 
-class TaskCommand extends EntityCommand {
+export class TaskCommand extends EntityCommand {
   constructor(http) {
     super(http, 'task', Task);
   }
@@ -89,118 +83,29 @@ class TaskCommand extends EntityCommand {
       });
   }
 
-  newTaskSettings() {
-    return this.httpGet({cmd: 'new_task'}).then(response => {
-      const {data} = response;
-      const settings = {};
-      const {new_task} = data;
-      settings.targets = map(
-        new_task.get_targets_response.target,
-        target => new Target(target),
-      );
-      settings.scan_configs = map(
-        new_task.get_configs_response.config,
-        config => new ScanConfig(config),
-      );
-      settings.alerts = map(
-        new_task.get_alerts_response.alert,
-        alert => new Model(alert, 'alert'),
-      );
-      settings.schedules = map(
-        new_task.get_schedules_response.schedule,
-        schedule => new Schedule(schedule),
-      );
-      settings.scanners = map(
-        new_task.get_scanners_response.scanner,
-        scanner => new Scanner(scanner),
-      );
-      settings.tags = map(
-        new_task.get_tags_response.tag,
-        tag => new Model(tag, 'tag'),
-      );
-      settings.alert_id = isEmpty(new_task.alert_id)
-        ? undefined
-        : new_task.alert_id;
-      settings.config_id = isEmpty(new_task.config_id)
-        ? undefined
-        : new_task.config_id;
-      settings.osp_config_id = isEmpty(new_task.osp_config_id)
-        ? undefined
-        : new_task.osp_config_id;
-      settings.osp_scanner_id = isEmpty(new_task.osp_scanner_id)
-        ? undefined
-        : new_task.osp_scanner_id;
-      settings.scanner_id = isEmpty(new_task.scanner_id)
-        ? undefined
-        : new_task.scanner_id;
-      settings.schedule_id = isEmpty(new_task.schedule_id)
-        ? undefined
-        : new_task.schedule_id;
-      settings.target_id = isEmpty(new_task.target_id)
-        ? undefined
-        : new_task.target_id;
-      return response.setData(settings);
-    });
-  }
-
-  editTaskSettings({id}) {
-    // should be removed after get Alert, Schedule, ... are implemented
-    return this.httpGet({
-      cmd: 'edit_task',
-      id,
-    }).then(response => {
-      const {data} = response;
-
-      const inst = {};
-      const resp = data.edit_task.commands_response;
-      inst.targets = map(
-        resp.get_targets_response.target,
-        target => new Target(target),
-      );
-      inst.scan_configs = map(
-        resp.get_configs_response.config,
-        config => new ScanConfig(config),
-      );
-      inst.alerts = map(
-        resp.get_alerts_response.alert,
-        alert => new Model(alert, 'alert'),
-      );
-      inst.schedules = map(
-        resp.get_schedules_response.schedule,
-        schedule => new Schedule(schedule),
-      );
-      inst.scanners = map(
-        resp.get_scanners_response.scanner,
-        scanner => new Scanner(scanner),
-      );
-      return response.setData(inst);
-    });
-  }
-
   create(args) {
     const {
-      name,
-      comment = '',
-      target_id,
-      schedule_id = 0,
-      in_assets,
-      apply_overrides,
-      min_qod,
+      add_tag,
+      alert_ids = [],
       alterable,
+      apply_overrides,
       auto_delete,
       auto_delete_data,
-      scanner_type,
-      scanner_id,
+      comment = '',
       config_id,
-      slave_id = 0,
-      alert_ids = [],
-      source_iface = '',
       hosts_ordering,
+      in_assets,
       max_checks,
       max_hosts,
-      cve_scanner_id,
+      min_qod,
+      name,
+      scanner_type,
+      scanner_id,
+      schedule_id,
+      schedule_periods,
+      source_iface,
       tag_id,
-      add_tag,
+      target_id,
     } = args;
 
     const data = {
@@ -213,7 +118,6 @@ class TaskCommand extends EntityCommand {
       auto_delete_data,
       comment,
       config_id,
-      cve_scanner_id,
       hosts_ordering,
       in_assets,
       max_checks,
@@ -223,7 +127,7 @@ class TaskCommand extends EntityCommand {
       scanner_id,
       scanner_type,
       schedule_id,
-      slave_id,
+      schedule_periods,
       source_iface,
       tag_id,
       target_id,
@@ -244,29 +148,28 @@ class TaskCommand extends EntityCommand {
 
   save(args) {
     const {
-      id,
-      name,
-      comment = '',
-      target_id,
-      schedule_id = 0,
-      in_assets,
-      apply_overrides,
-      min_qod,
+      alert_ids = [],
       alterable,
       auto_delete,
       auto_delete_data,
-      scanner_type,
-      scanner_id,
-      config_id,
-      slave_id = 0,
-      alert_ids = [],
-      source_iface = '',
-      hosts_ordering,
+      apply_overrides,
+      comment = '',
+      config_id = NO_VALUE,
+      hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
+      id,
+      in_assets,
       max_checks,
       max_hosts,
+      min_qod,
+      name,
+      scanner_id = NO_VALUE,
+      scanner_type,
+      schedule_id = NO_VALUE,
+      schedule_periods,
+      target_id = NO_VALUE,
+      source_iface,
     } = args;
     const data = {
-      cmd: 'save_task',
       alterable,
       'alert_ids:': alert_ids,
       apply_overrides,
@@ -274,6 +177,7 @@ class TaskCommand extends EntityCommand {
       auto_delete_data,
       comment,
       config_id,
+      cmd: 'save_task',
       hosts_ordering,
       in_assets,
       max_checks,
@@ -283,7 +187,7 @@ class TaskCommand extends EntityCommand {
       scanner_id,
       scanner_type,
       schedule_id,
-      slave_id,
+      schedule_periods,
       source_iface,
       target_id,
       task_id: id,
