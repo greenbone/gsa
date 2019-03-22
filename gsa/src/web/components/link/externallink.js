@@ -20,7 +20,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import LinkConfirmationDialog from '../dialog/linkconfirmationdialog';
+import ConfirmationDialog from '../dialog/confirmationdialog';
 
 import PropTypes from 'web/utils/proptypes.js';
 
@@ -76,7 +76,7 @@ class ExternalLink extends React.Component {
           {children}
         </a>
         {dialogvisible && (
-          <LinkConfirmationDialog
+          <ConfirmationDialog
             onClose={this.handleCloseDialog}
             onResumeClick={this.handleOpenLink}
             text={dialogtext}

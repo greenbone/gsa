@@ -75,7 +75,7 @@ ConfirmationDialogContent.propTypes = {
   onResumeClick: PropTypes.func.isRequired,
 };
 
-const LinkConfirmationDialog = ({
+const ConfirmationDialog = ({
   width = DEFAULT_DIALOG_WIDTH,
   text,
   title,
@@ -97,7 +97,7 @@ const LinkConfirmationDialog = ({
   );
 };
 
-LinkConfirmationDialog.propTypes = {
+ConfirmationDialog.propTypes = {
   text: PropTypes.string,
   title: PropTypes.string.isRequired,
   width: PropTypes.string,
@@ -105,6 +105,6 @@ LinkConfirmationDialog.propTypes = {
   onResumeClick: PropTypes.func.isRequired,
 };
 
-export default LinkConfirmationDialog;
+export default ConfirmationDialog;
 
 // vim: set ts=2 sw=2 tw=80:
