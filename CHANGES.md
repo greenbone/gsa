@@ -31,7 +31,7 @@ $ cd gsa && git log
    get_tags and get_targets permissions #1220
  * Ensure host ordering is valid in task dialog #1220
  * Disable tag selection if not task should be added in create task dialog #1220
- * Don't allow to add when editing a task #1220
+ * Don't show add tag fields when editing a task #1220
  * Fix race condition resulting in not displaying scan config details at task
    dialog when opening the dialog for the first time #1220
  * Fix saving run schedule once setting from Task dialog #1220
