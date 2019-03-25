@@ -433,12 +433,14 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
           >
             <div
               class="c3 c4"
+              data-testid="dialog-title-bar"
             >
               <span>
                 New Container Task
               </span>
               <div
                 class="c5 c6"
+                data-testid="dialog-close-button"
                 title="Close"
               >
                 ×
@@ -1116,12 +1118,14 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
           >
             <div
               class="c3 c4"
+              data-testid="dialog-title-bar"
             >
               <span>
                 New Container Task
               </span>
               <div
                 class="c5 c6"
+                data-testid="dialog-close-button"
                 title="Close"
               >
                 ×
