@@ -56,7 +56,9 @@ class ConfirmationDialogContent extends React.Component {
           onCloseClick={this.props.close}
           {...moveprops}
         />
-        <ScrollableContent>{text}</ScrollableContent>
+        <ScrollableContent data-testid="confirmationdialog-content">
+          {text}
+        </ScrollableContent>
         <DialogTwoButtonFooter
           rightButtonTitle={rightButtonTitle}
           onLeftButtonClick={this.props.close}
