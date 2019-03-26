@@ -312,7 +312,7 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
               </span>
               <div
                 class="c5 c6"
-                data-testid="dialog-close-button"
+                data-testid="dialog-title-close-button"
                 title="Close"
               >
                 ×

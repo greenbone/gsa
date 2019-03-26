@@ -546,12 +546,14 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
           >
             <div
               class="c3 c4"
+              data-testid="dialog-title-bar"
             >
               <span>
                 Add Tag
               </span>
               <div
                 class="c5 c6"
+                data-testid="dialog-title-close-button"
                 title="Close"
               >
                 ×
@@ -1243,12 +1245,14 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
           >
             <div
               class="c3 c4"
+              data-testid="dialog-title-bar"
             >
               <span>
                 Add Tag
               </span>
               <div
                 class="c5 c6"
+                data-testid="dialog-title-close-button"
                 title="Close"
               >
                 ×
