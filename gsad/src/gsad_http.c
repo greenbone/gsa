@@ -738,6 +738,18 @@ file_content_response (http_connection_t *connection, const char *url,
   FILE *file;
   struct stat buf;
 
+  cmd_response_data_set_status_code (response_data, MHD_HTTP_OK);
+
+  if (!g_file_test (path, (G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
+    {
+      /* path does not exists or is not a file */
+      /* return index.html to show page not found via js */
+      g_debug ("File %s not found. Return index.html", path);
+
+      path = "index.html";
+      cmd_response_data_set_status_code (response_data, MHD_HTTP_NOT_FOUND);
+    }
+
   file = fopen (path, "r"); /* this file is just read and sent */
 
   if (file == NULL)
@@ -749,15 +761,12 @@ file_content_response (http_connection_t *connection, const char *url,
   /* Guess content type. */
   cmd_response_data_set_content_type (response_data, guess_content_type (path));
 
-  /** @todo Set content disposition? */
-
-  g_debug ("Default file successful.\n");
   if (stat (path, &buf))
     {
       /* File information could not be retrieved. */
       g_critical ("%s: file <%s> can not be stat'ed.\n", __FUNCTION__, path);
       fclose (file);
-      return NULL;
+      return create_not_found_response (url, response_data);
     }
 
   /* Make sure the requested path really is a file. */
@@ -785,8 +794,6 @@ file_content_response (http_connection_t *connection, const char *url,
     {
       MHD_add_response_header (response, "Expires", date_2822);
     }
-
-  cmd_response_data_set_status_code (response_data, MHD_HTTP_OK);
 
   return response;
 }
