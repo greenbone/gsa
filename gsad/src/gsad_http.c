@@ -398,59 +398,22 @@ create_not_found_response (const gchar *url, cmd_response_data_t *response_data)
   cmd_response_data_set_status_code (response_data, MHD_HTTP_NOT_FOUND);
 
   gchar *msg = g_strdup_printf (
-    "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "
-    "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
-    "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"\">"
+    "<!DOCTYPE html>"
+    "<html>"
     "<head>"
-    "<meta http-equiv=\"Content-Type\" content=\"text/html; "
-    "charset=UTF-8\"></meta>"
+    "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />"
     "<link rel=\"icon\" href=\"/img/favicon.gif\" type=\"image/gif\"></link>"
     "<title>Greenbone Security Assistant</title>"
-    "<link rel=\"stylesheet\" type=\"text/css\" "
-    "href=\"/css/gsa-base.css\"></link>"
-    "<link rel=\"stylesheet\" type=\"text/css\" "
-    "href=\"/css/gsa-style.css\"></link>"
     "</head>"
     "<body>"
-    "<div class=\"gsa-main\"><div>"
-    "<div class=\"panel panel-error\">"
-    "<div class=\"panel-heading\">"
-    "<h3 class=\"panel-title\">Error Message</h3>"
-    "</div>"
-    "<div class=\"panel-body\">"
-    "<div class=\"row\">"
-    "<div class=\"pull-right\">"
-    "<a href=\"/help/error_messages.html?token=\" class=\"icon icon-sm\" "
-    "title=\"Help: Error Message\">"
-    "<img src=\"/img/help.svg\" class=\"icon icon-sm\"></img>"
-    "</a>"
-    "</div>"
-    "<img src=\"/img/alert_sign.svg\" alt=\"\" title=\"%s (GSA %s)\" "
-    "class=\"pull-left icon icon-lg\"></img>"
-    "<h4>%s (GSA %s)</h4>"
-    "</div>"
-    "<p style=\"margin-top: 10px; font-size: 16px;\">%s</p>"
-    "</div>"
-    "<div class=\"panel-footer\">"
-    "    Your options (not all may work):"
-    "    'Back' button of browser"
-    "    "
-    "        | <a href=\"/logout\">Logout</a></div>"
-    "</div>"
-    "<div class=\"gsa-footer\">"
-    "<div class=\"pull-left\">"
-    "<span id=\"gsa-token\" style=\"display: none;\"></span>"
-    "</div>"
-    "Greenbone Security Assistant (GSA) Copyright 2009-2017 by Greenbone "
-    "Networks"
-    " GmbH, <a href=\"http://www.greenbone.net\" "
-    "target=\"_blank\">www.greenbone.net</a>"
-    "</div>"
-    "</div>"
-    "</div>"
-    "</body></html>",
-    NOT_FOUND_TITLE, GSAD_VERSION, NOT_FOUND_TITLE, GSAD_VERSION,
-    NOT_FOUND_MESSAGE);
+    "<h1>URL not found</h1>"
+    "<p>"
+    "The requested URL %s is not available"
+    "</p>"
+    "</body>"
+    "</html>",
+    url
+  );
 
   cmd_response_data_set_content_type (response_data,
                                       GSAD_CONTENT_TYPE_TEXT_HTML);
@@ -738,6 +701,18 @@ file_content_response (http_connection_t *connection, const char *url,
   FILE *file;
   struct stat buf;
 
+  cmd_response_data_set_status_code (response_data, MHD_HTTP_OK);
+
+  if (!g_file_test (path, (G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
+    {
+      /* path does not exists or is not a file */
+      /* return index.html to show page not found via js */
+      g_debug ("File %s not found. Return index.html", path);
+
+      path = "index.html";
+      cmd_response_data_set_status_code (response_data, MHD_HTTP_NOT_FOUND);
+    }
+
   file = fopen (path, "r"); /* this file is just read and sent */
 
   if (file == NULL)
@@ -749,15 +724,12 @@ file_content_response (http_connection_t *connection, const char *url,
   /* Guess content type. */
   cmd_response_data_set_content_type (response_data, guess_content_type (path));
 
-  /** @todo Set content disposition? */
-
-  g_debug ("Default file successful.\n");
   if (stat (path, &buf))
     {
       /* File information could not be retrieved. */
       g_critical ("%s: file <%s> can not be stat'ed.\n", __FUNCTION__, path);
       fclose (file);
-      return NULL;
+      return create_not_found_response (url, response_data);
     }
 
   /* Make sure the requested path really is a file. */
@@ -785,8 +757,6 @@ file_content_response (http_connection_t *connection, const char *url,
     {
       MHD_add_response_header (response, "Expires", date_2822);
     }
-
-  cmd_response_data_set_status_code (response_data, MHD_HTTP_OK);
 
   return response;
 }
