@@ -21,7 +21,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Icon from 'web/components/icon/icon';
+import StNonAvailableIcon from 'web/components/icon/stnonavailableicon';
 import Divider from 'web/components/layout/divider';
 
 import PropTypes from 'web/utils/proptypes';
@@ -52,7 +52,7 @@ class ErrorBoundary extends React.Component {
       return (
         <ErrorContainer>
           <Divider>
-            <Icon img={'st_nonavailable.svg'} size="medium" />
+            <StNonAvailableIcon size="medium" />
             <b>{message}</b>
             <span>{_('Please try again.')}</span>
           </Divider>
