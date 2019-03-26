@@ -240,17 +240,15 @@ class PowerFilter extends React.Component {
               )}
             </IconDivider>
           </LeftDivider>
-          <Divider align={['end', 'center']}>
-            {capabilities.mayAccess('filters') && (
-              <Select
-                width="150px"
-                items={filter_items}
-                value={namedfilterid}
-                menuPosition="right"
-                onChange={this.handleNamedFilterChange}
-              />
-            )}
-          </Divider>
+          {capabilities.mayAccess('filters') && (
+            <Select
+              width="150px"
+              items={filter_items}
+              value={namedfilterid}
+              menuPosition="right"
+              onChange={this.handleNamedFilterChange}
+            />
+          )}
         </Layout>
       </Layout>
     );
