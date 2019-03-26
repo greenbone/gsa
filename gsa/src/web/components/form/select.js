@@ -131,6 +131,7 @@ class Select extends React.Component {
       itemToString,
       menuPosition,
       value,
+      toolTipTitle,
       width = DEFAULT_WIDTH,
     } = this.props;
 
@@ -181,13 +182,14 @@ class Select extends React.Component {
                       },
                 })}
                 isOpen={isOpen}
+                title={toolTipTitle}
                 innerRef={ref => (this.box = ref)}
                 data-testid="select-open-button"
               >
                 <SelectedValue
                   data-testid="select-selected-value"
                   disabled={disabled}
-                  title={label}
+                  title={toolTipTitle ? toolTipTitle : label}
                 >
                   {label}
                 </SelectedValue>
@@ -248,6 +250,7 @@ Select.propTypes = {
   ),
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
+  toolTipTitle: PropTypes.string,
   value: selectValue,
   width: PropTypes.string,
   onChange: PropTypes.func,
