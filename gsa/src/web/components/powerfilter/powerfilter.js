@@ -242,10 +242,11 @@ class PowerFilter extends React.Component {
           </LeftDivider>
           {capabilities.mayAccess('filters') && (
             <Select
-              width="150px"
               items={filter_items}
-              value={namedfilterid}
               menuPosition="right"
+              toolTipTitle={_('Loaded filter')}
+              value={namedfilterid}
+              width="150px"
               onChange={this.handleNamedFilterChange}
             />
           )}
