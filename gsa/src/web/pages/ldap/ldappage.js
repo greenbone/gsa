@@ -157,7 +157,7 @@ class LdapAuthentication extends React.Component {
 
     const {
       authdn,
-      certificateInfo,
+      certificateInfo = {},
       dialogVisible,
       enable,
       ldaphost,
