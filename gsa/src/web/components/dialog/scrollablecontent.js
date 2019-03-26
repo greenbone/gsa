@@ -38,9 +38,11 @@ const StyledLayout = styled(Layout)`
   height: 100%; /* needs to be set for Chrome */
 `;
 
-const ScrollableContentLayout = ({children, maxHeight}) => (
+const ScrollableContentLayout = ({children, maxHeight, ...props}) => (
   <StyledLayout flex="column" align={['center', 'start']} grow="1">
-    <ScrollableContent maxHeight={maxHeight}>{children}</ScrollableContent>
+    <ScrollableContent maxHeight={maxHeight} {...props}>
+      {children}
+    </ScrollableContent>
   </StyledLayout>
 );
 

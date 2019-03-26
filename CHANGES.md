@@ -8,6 +8,7 @@ $ cd gsa && git log
 
 ## gsa 8.0 unreleased
 
+ * Add confirmation dialog when creating a user without a role #1224
  * Use dialogs to edit LDAP and RADIUS authentification #1212 #1213
  * Renamed "PGP Key" credential to "PGP Encryption Key" #1208
  * Add link referencing the performance during scan time to the report details

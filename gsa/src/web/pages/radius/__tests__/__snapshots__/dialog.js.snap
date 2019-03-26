@@ -496,12 +496,14 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
           >
             <div
               class="c3 c4"
+              data-testid="dialog-title-bar"
             >
               <span>
                 Edit Authentication
               </span>
               <div
                 class="c5 c6"
+                data-testid="dialog-title-close-button"
                 title="Close"
               >
                 ×
