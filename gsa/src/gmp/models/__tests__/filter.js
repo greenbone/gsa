@@ -260,6 +260,15 @@ describe('Filter set', () => {
     expect(filter.has('sort')).toEqual(false);
     expect(filter.has('sort-reverse')).toEqual(true);
   });
+
+  test('should convert 0 or negative values for first to 1', () => {
+    const filter = new Filter();
+    filter.set('first', '0');
+    expect(filter.get('first')).toEqual(1);
+
+    filter.set('first', '-666');
+    expect(filter.get('first')).toEqual(1);
+  });
 });
 
 describe('Filter has', () => {
