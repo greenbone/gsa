@@ -8,6 +8,8 @@ $ cd gsa && git log
 
 ## gsa 8.0 unreleased
 
+ * Convert first filter keyword values less then one to one #1228
+ * Always use equal relation for first and rows filter keywords #1228
  * Add confirmation dialog when creating a user without a role #1224
  * Use dialogs to edit LDAP and RADIUS authentification #1212 #1213
  * Renamed "PGP Key" credential to "PGP Encryption Key" #1208
@@ -36,11 +38,9 @@ $ cd gsa && git log
  * Fix race condition resulting in not displaying scan config details at task
    dialog when opening the dialog for the first time #1220
  * Fix saving run schedule once setting from Task dialog #1220
- * Don't create a container task from the task dialog accidentially #1220
+ * Don't create a container task from the task dialog accidentally #1220
  * Use "Do not automatically delete reports" as default again in task dialog
    #1220
- * Convert first filter keyword values less then one to one #1228
- * Always use equal relation for first and rows filter keywords #1228
 
 
 ## gsa 8.0+beta2 (2018-12-04)
