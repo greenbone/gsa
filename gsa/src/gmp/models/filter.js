@@ -348,13 +348,8 @@ class Filter extends Model {
    * @return {Filter} This filter
    */
   set(keyword, value, relation = '=') {
-    this._setTerm(
-      new FilterTerm({
-        keyword,
-        value,
-        relation,
-      }),
-    );
+    const converted = convert(keyword, value, relation);
+    this._setTerm(new FilterTerm(converted));
     return this;
   }
 

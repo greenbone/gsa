@@ -34,6 +34,18 @@ const convertInt = (keyword, value, relation) => ({
   relation,
 });
 
+const convertFirst = (keyword, value, relation) => {
+  const intValue = parseInt(value);
+  return {
+    keyword,
+    value: intValue > 0 ? intValue : 1,
+    relation: '=',
+  };
+};
+
+const convertRows = (keyword, value, relation) =>
+  convertInt(keyword, value, '=');
+
 const convertNoRelation = (keyword, value, relation) => ({
   keyword,
   value,
@@ -44,12 +56,12 @@ const convertNoRelationAndKeyword = (keyword, value, relation) => ({value});
 const KEYWORD_CONVERTERS = {
   apply_overrides: convertBooleanInt,
   autofp: convertInt,
-  first: convertInt,
+  first: convertFirst,
   min_qod: convertInt,
   notes: convertBooleanInt,
   overrides: convertBooleanInt,
   result_hosts_only: convertBooleanInt,
-  rows: convertInt,
+  rows: convertRows,
 };
 
 const VALUE_CONVERTERS = {
