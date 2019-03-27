@@ -71,6 +71,17 @@ describe('Filter parse from string tests', () => {
       expect(Filter.fromString(fstring).toFilterString()).toEqual(fstring);
     });
   });
+
+  test('should convert first if less then 1', () => {
+    let filter = Filter.fromString('first=0');
+    expect(filter.toFilterString()).toEqual('first=1');
+
+    filter = Filter.fromString('first=-1');
+    expect(filter.toFilterString()).toEqual('first=1');
+
+    filter = Filter.fromString('first=-666');
+    expect(filter.toFilterString()).toEqual('first=1');
+  });
 });
 
 describe('Filter parse from keywords', () => {

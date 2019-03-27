@@ -64,12 +64,22 @@ describe('convert tests', () => {
     expect(convert('first', '0', '=')).toEqual({
       keyword: 'first',
       relation: '=',
-      value: 0,
+      value: 1,
     });
     expect(convert('first', '666', '=')).toEqual({
       keyword: 'first',
       relation: '=',
       value: 666,
+    });
+    expect(convert('first', '-1', '=')).toEqual({
+      keyword: 'first',
+      relation: '=',
+      value: 1,
+    });
+    expect(convert('first', '-9999999', '=')).toEqual({
+      keyword: 'first',
+      relation: '=',
+      value: 1,
     });
   });
 
