@@ -39,6 +39,8 @@ $ cd gsa && git log
  * Don't create a container task from the task dialog accidentially #1220
  * Use "Do not automatically delete reports" as default again in task dialog
    #1220
+ * Convert first filter keyword values less then one to one #1228
+ * Always use equal relation for first and rows filter keywords #1228
 
 
 ## gsa 8.0+beta2 (2018-12-04)
