@@ -139,17 +139,13 @@ const MenuBar = ({gmp, capabilities}) => {
               )}
               {capabilities.mayAccess('tickets') && (
                 <MenuSection>
-                  <MenuEntry
-                    section
-                    title={_('Remediation Tickets')}
-                    to="tickets"
-                  />
+                  <MenuEntry title={_('Remediation Tickets')} to="tickets" />
                 </MenuSection>
               )}
               {mayOpNotesOverrides && (
                 <MenuSection>
                   {capabilities.mayAccess('notes') && (
-                    <MenuEntry section title={_('Notes')} to="notes" />
+                    <MenuEntry title={_('Notes')} to="notes" />
                   )}
                   {capabilities.mayAccess('overrides') && (
                     <MenuEntry title={_('Overrides')} to="overrides" />
@@ -160,7 +156,7 @@ const MenuBar = ({gmp, capabilities}) => {
           )}
           {capabilities.mayAccess('assets') && (
             <Menu title={_('Assets')}>
-              <MenuEntry section title={_('Hosts')} to="hosts" />
+              <MenuEntry title={_('Hosts')} to="hosts" />
               <MenuEntry title={_('Operating Systems')} to="operatingsystems" />
             </Menu>
           )}
