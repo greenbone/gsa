@@ -81,6 +81,16 @@ describe('convert tests', () => {
       relation: '=',
       value: 1,
     });
+    expect(convert('first', '1', '>')).toEqual({
+      keyword: 'first',
+      relation: '=',
+      value: 1,
+    });
+    expect(convert('first', '1', 'foo')).toEqual({
+      keyword: 'first',
+      relation: '=',
+      value: 1,
+    });
   });
 
   test('should convert min_qod keyword', () => {
@@ -116,6 +126,21 @@ describe('convert tests', () => {
       keyword: 'rows',
       relation: '=',
       value: 99,
+    });
+    expect(convert('rows', '-1', '=')).toEqual({
+      keyword: 'rows',
+      relation: '=',
+      value: -1,
+    });
+    expect(convert('rows', '1', '>')).toEqual({
+      keyword: 'rows',
+      relation: '=',
+      value: 1,
+    });
+    expect(convert('rows', '1', 'foo')).toEqual({
+      keyword: 'rows',
+      relation: '=',
+      value: 1,
     });
   });
 

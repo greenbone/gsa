@@ -39,9 +39,12 @@ const convertFirst = (keyword, value, relation) => {
   return {
     keyword,
     value: intValue > 0 ? intValue : 1,
-    relation,
+    relation: '=',
   };
 };
+
+const convertRows = (keyword, value, relation) =>
+  convertInt(keyword, value, '=');
 
 const convertNoRelation = (keyword, value, relation) => ({
   keyword,
@@ -58,7 +61,7 @@ const KEYWORD_CONVERTERS = {
   notes: convertBooleanInt,
   overrides: convertBooleanInt,
   result_hosts_only: convertBooleanInt,
-  rows: convertInt,
+  rows: convertRows,
 };
 
 const VALUE_CONVERTERS = {

@@ -82,6 +82,28 @@ describe('Filter parse from string tests', () => {
     filter = Filter.fromString('first=-666');
     expect(filter.toFilterString()).toEqual('first=1');
   });
+
+  test('should always use equal relation for first keyword', () => {
+    let filter = Filter.fromString('first>1');
+    expect(filter.toFilterString()).toEqual('first=1');
+
+    filter = Filter.fromString('first<1');
+    expect(filter.toFilterString()).toEqual('first=1');
+
+    filter = Filter.fromString('first>1');
+    expect(filter.toFilterString()).toEqual('first=1');
+  });
+
+  test('should always use equal relation for rows keyword', () => {
+    let filter = Filter.fromString('rows>1');
+    expect(filter.toFilterString()).toEqual('rows=1');
+
+    filter = Filter.fromString('rows<1');
+    expect(filter.toFilterString()).toEqual('rows=1');
+
+    filter = Filter.fromString('rows>1');
+    expect(filter.toFilterString()).toEqual('rows=1');
+  });
 });
 
 describe('Filter parse from keywords', () => {
