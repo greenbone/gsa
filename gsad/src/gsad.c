@@ -512,7 +512,7 @@ init_validator ()
   gvm_validator_add (validator, "setting_value", "^.*$");
   gvm_validator_add (validator, "setting_name", "^.*$");
   gvm_validator_add (validator, "comment",
-                     "^[-_;':()@[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
+                     "^[-_;':()@[:alnum:]äüöÄÜÖß, \\./]*$");
   gvm_validator_add (validator, "config_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "osp_config_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "condition", "^[[:alnum:] ]*$");
@@ -557,11 +557,11 @@ init_validator ()
   gvm_validator_add (validator, "family_page", "^[-_[:alnum:] :.]+$");
   gvm_validator_add (validator, "exclude_file", "(?s)^.*$");
   gvm_validator_add (validator, "exclude_file:name",
-                     "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
+                     "^.*[[0-9abcdefABCDEF\\-]*]:.*$");
   gvm_validator_add (validator, "exclude_file:value", "^yes$");
   gvm_validator_add (validator, "file", "(?s)^.*$");
   gvm_validator_add (validator, "file:name",
-                     "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
+                     "^.*[[0-9abcdefABCDEF\\-]*]:.*$");
   gvm_validator_add (validator, "file:value", "^yes$");
   gvm_validator_add (validator, "settings_changed:name", "^.*$");
   gvm_validator_add (validator, "settings_changed:value", "^[a-z0-9\\-]+$");
@@ -636,7 +636,7 @@ init_validator ()
   gvm_validator_add (validator, "password:value", "(?s)^.*$");
   gvm_validator_add (validator, "port", "^.*$");
   gvm_validator_add (validator, "port_range",
-                     "^((default)|([-0-9, TU:]{1,400}))$");
+                     "^((default)|([-0-9, TU:]+))$");
   gvm_validator_add (validator, "port_type", "^(tcp|udp)$");
   /** @todo Better regex. */
   gvm_validator_add (validator, "preference_name", "^.*$");
@@ -702,7 +702,7 @@ init_validator ()
   gvm_validator_add (validator, "subject_type", "^(group|role|user)$");
   gvm_validator_add (validator, "summary", "^.*$");
   gvm_validator_add (validator, "tag_id", "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "tag_name", "^[\\:\\-_[:alnum:], \\./]{1,80}$");
+  gvm_validator_add (validator, "tag_name", "^[\\:\\-_[:alnum:], \\./]+$");
   gvm_validator_add (validator, "tag_value",
                      "^[\\-_@%[:alnum:], \\.\\/\\\\]*$");
   gvm_validator_add (validator, "target_id", "^[a-z0-9\\-]+$");

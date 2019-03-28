@@ -166,7 +166,6 @@ class Dialog extends React.Component {
                       value={state.name}
                       size="30"
                       onChange={onValueChange}
-                      maxLength="80"
                     />
                   </FormGroup>
 
@@ -176,7 +175,6 @@ class Dialog extends React.Component {
                       value={state.comment}
                       grow="1"
                       size="30"
-                      maxLength="400"
                       onChange={onValueChange}
                     />
                   </FormGroup>
@@ -321,7 +319,6 @@ class Dialog extends React.Component {
                       <TextField
                         name="access_hosts"
                         size="30"
-                        maxLength="2000"
                         value={state.access_hosts}
                         onChange={onValueChange}
                       />
@@ -349,7 +346,6 @@ class Dialog extends React.Component {
                       <TextField
                         name="access_ifaces"
                         size="30"
-                        maxLength="2000"
                         value={state.access_ifaces}
                         onChange={onValueChange}
                       />

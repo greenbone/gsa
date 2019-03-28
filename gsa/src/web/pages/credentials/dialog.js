@@ -210,7 +210,6 @@ class CredentialsDialog extends React.Component {
                   name="name"
                   grow="1"
                   size="30"
-                  maxLength="80"
                   value={state.name}
                   onChange={onValueChange}
                 />
@@ -221,7 +220,6 @@ class CredentialsDialog extends React.Component {
                   name="comment"
                   grow="1"
                   size="30"
-                  maxLength="400"
                   value={state.comment}
                   onChange={onValueChange}
                 />

@@ -69,7 +69,6 @@ const FilterDialog = ({
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"
               />
             </FormGroup>
 
@@ -79,7 +78,6 @@ const FilterDialog = ({
                 grow="1"
                 value={state.comment}
                 size="30"
-                maxLength="400"
                 onChange={onValueChange}
               />
             </FormGroup>

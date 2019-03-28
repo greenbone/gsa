@@ -100,7 +100,6 @@ const EmailMethodPart = ({
             grow="1"
             name={prefix + 'subject'}
             size="30"
-            maxLength="80"
             value={subject}
             onChange={onChange}
           />

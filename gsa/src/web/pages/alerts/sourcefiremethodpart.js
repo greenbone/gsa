@@ -56,7 +56,6 @@ const SourcefireMethodPart = ({
       <FormGroup title={_('Defense Center IP')}>
         <TextField
           size="30"
-          maxLength="40"
           name={prefix + 'defense_center_ip'}
           value={defenseCenterIp}
           onChange={onChange}

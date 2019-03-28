@@ -392,7 +392,6 @@ class ScheduleDialog extends React.Component {
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"
               />
             </FormGroup>
 
@@ -402,7 +401,6 @@ class ScheduleDialog extends React.Component {
                 value={state.comment}
                 grow="1"
                 size="30"
-                maxLength="400"
                 onChange={onValueChange}
               />
             </FormGroup>
