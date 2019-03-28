@@ -497,32 +497,32 @@ init_validator ()
   /* Defined in RFC 2253. */
   gvm_validator_add (validator, "authdn", "^.{0,200}%s.{0,200}$");
   gvm_validator_add (validator, "auto_delete", "^(no|keep)$");
-  gvm_validator_add (validator, "auto_delete_data", "^(.*){0,10}$");
+  gvm_validator_add (validator, "auto_delete_data", "^.*$");
   gvm_validator_add (validator, "autofp", "^(0|1|2)$");
   gvm_validator_add (validator, "autofp_value", "^(1|2)$");
   gvm_validator_add (validator, "boolean", "^(0|1)$");
-  gvm_validator_add (validator, "bulk_selected:name", "^(.*){0,400}$");
+  gvm_validator_add (validator, "bulk_selected:name", "^.*$");
   gvm_validator_add (validator, "bulk_selected:value", "(?s)^.*$");
   gvm_validator_add (validator, "caller", "^.*$");
   gvm_validator_add (validator, "certificate", "(?s)^.*$");
-  gvm_validator_add (validator, "chart_gen:name", "^(.*){0,400}$");
+  gvm_validator_add (validator, "chart_gen:name", "^.*$");
   gvm_validator_add (validator, "chart_gen:value", "(?s)^.*$");
-  gvm_validator_add (validator, "chart_init:name", "^(.*){0,400}$");
+  gvm_validator_add (validator, "chart_init:name", "^.*$");
   gvm_validator_add (validator, "chart_init:value", "(?s)^.*$");
   gvm_validator_add (validator, "setting_value", "^.*$");
-  gvm_validator_add (validator, "setting_name", "^(.*){0,1000}$");
+  gvm_validator_add (validator, "setting_name", "^.*$");
   gvm_validator_add (validator, "comment",
                      "^[-_;':()@[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
   gvm_validator_add (validator, "config_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "osp_config_id", "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "condition", "^[[:alnum:] ]{0,100}$");
+  gvm_validator_add (validator, "condition", "^[[:alnum:] ]*$");
   gvm_validator_add (validator, "credential_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
   gvm_validator_add (validator, "credential_type",
                      "^(cc|up|usk|smime|pgp|snmp|pw)$");
   gvm_validator_add (validator, "credential_login",
-                     "^[-_[:alnum:]\\.@\\\\]{0,40}$");
-  gvm_validator_add (validator, "condition_data:name", "^(.*){0,400}$");
+                     "^[-_[:alnum:]\\.@\\\\]*$");
+  gvm_validator_add (validator, "condition_data:name", "^.*$");
   gvm_validator_add (validator, "condition_data:value", "(?s)^.*$");
   gvm_validator_add (validator, "cvss_av", "^(L|A|N)$");
   gvm_validator_add (validator, "cvss_ac", "^(H|M|L)$");
@@ -536,25 +536,25 @@ init_validator ()
   gvm_validator_add (validator, "min_qod", "^(|100|[1-9]?[0-9]|)$");
   gvm_validator_add (validator, "day_of_month", "^(0??[1-9]|[12][0-9]|30|31)$");
   gvm_validator_add (validator, "days", "^(-1|[0-9]+)$");
-  gvm_validator_add (validator, "data_column", "^[_[:alnum:]]{1,80}$");
+  gvm_validator_add (validator, "data_column", "^[_[:alnum:]]+$");
   gvm_validator_add (validator, "data_columns:name", "^[0123456789]{1,5}$");
-  gvm_validator_add (validator, "data_columns:value", "^[_[:alnum:]]{1,80}$");
+  gvm_validator_add (validator, "data_columns:value", "^[_[:alnum:]]+$");
   gvm_validator_add (validator, "default_severity",
                      "^(|10\\.0|[0-9]\\.[0-9])$");
   gvm_validator_add (validator, "delta_states", "^(c|g|n|s){0,4}$");
   gvm_validator_add (validator, "details_fname",
                      "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
-  gvm_validator_add (validator, "domain", "^[-[:alnum:]\\.]{1,80}$");
+  gvm_validator_add (validator, "domain", "^[-[:alnum:]\\.]+$");
   gvm_validator_add (validator, "email", "^[^@ ]{1,150}@[^@ ]{1,150}$");
   gvm_validator_add (
     validator, "email_list",
     "^[^@ ]{1,150}@[^@ ]{1,150}(, *[^@ ]{1,150}@[^@ ]{1,150})*$");
   gvm_validator_add (validator, "alert_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "alert_id_optional", "^(--|[a-z0-9\\-]+)$");
-  gvm_validator_add (validator, "event_data:name", "^(.*){0,400}$");
+  gvm_validator_add (validator, "event_data:name", "^.*$");
   gvm_validator_add (validator, "event_data:value", "(?s)^.*$");
-  gvm_validator_add (validator, "family", "^[-_[:alnum:] :.]{1,200}$");
-  gvm_validator_add (validator, "family_page", "^[-_[:alnum:] :.]{1,200}$");
+  gvm_validator_add (validator, "family", "^[-_[:alnum:] :.]+$");
+  gvm_validator_add (validator, "family_page", "^[-_[:alnum:] :.]+$");
   gvm_validator_add (validator, "exclude_file", "(?s)^.*$");
   gvm_validator_add (validator, "exclude_file:name",
                      "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
@@ -563,27 +563,27 @@ init_validator ()
   gvm_validator_add (validator, "file:name",
                      "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
   gvm_validator_add (validator, "file:value", "^yes$");
-  gvm_validator_add (validator, "settings_changed:name", "^(.*){0,400}$");
+  gvm_validator_add (validator, "settings_changed:name", "^.*$");
   gvm_validator_add (validator, "settings_changed:value", "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "settings_default:name", "^(.*){0,400}$");
+  gvm_validator_add (validator, "settings_default:name", "^.*$");
   gvm_validator_add (validator, "settings_default:value", "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "settings_filter:name", "^(.*){0,400}$");
+  gvm_validator_add (validator, "settings_filter:name", "^.*$");
   gvm_validator_add (validator, "settings_filter:value", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "first", "^[0-9]+$");
   gvm_validator_add (validator, "first_group", "^[0-9]+$");
   gvm_validator_add (validator, "first_result", "^[0-9]+$");
-  gvm_validator_add (validator, "filter", "^(.*){0,1000}$");
+  gvm_validator_add (validator, "filter", "^.*$");
   gvm_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
   /* Validator for  save_auth group, e.g. "method:ldap_connect". */
   gvm_validator_add (validator, "group",
                      "^method:(ldap_connect|radius_connect)$");
-  gvm_validator_add (validator, "group_column", "^[_[:alnum:]]{1,80}$");
+  gvm_validator_add (validator, "group_column", "^[_[:alnum:]]+$");
   gvm_validator_add (validator, "max", "^(-?[0-9]+|)$");
   gvm_validator_add (validator, "max_results", "^[0-9]+$");
-  gvm_validator_add (validator, "format", "^[-[:alnum:]]{1,15}$");
-  gvm_validator_add (validator, "host", "^[[:alnum:]:\\.]{1,80}$");
-  gvm_validator_add (validator, "hostport", "^[-[:alnum:]\\. :]{1,80}$");
-  gvm_validator_add (validator, "hostpath", "^[-[:alnum:]\\. :/]{1,80}$");
+  gvm_validator_add (validator, "format", "^[-[:alnum:]]+$");
+  gvm_validator_add (validator, "host", "^[[:alnum:]:\\.]+$");
+  gvm_validator_add (validator, "hostport", "^[-[:alnum:]\\. :]+$");
+  gvm_validator_add (validator, "hostpath", "^[-[:alnum:]\\. :/]+$");
   gvm_validator_add (validator, "hosts", "^[-[:alnum:],: \\./]+$");
   gvm_validator_add (validator, "hosts_allow", "^(0|1)$");
   gvm_validator_add (validator, "hosts_opt", "^[-[:alnum:],: \\./]*$");
@@ -612,16 +612,16 @@ init_validator ()
                      "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
   /* Used for users, credentials, and scanner login name. */
   gvm_validator_add (validator, "login", "^[[:alnum:]-_@.]+$");
-  gvm_validator_add (validator, "lsc_password", "^.{0,40}$");
+  gvm_validator_add (validator, "lsc_password", "^.*$");
   gvm_validator_add (validator, "max_result", "^[0-9]+$");
   gvm_validator_add (validator, "max_groups", "^-?[0-9]+$");
   gvm_validator_add (validator, "minute", "^[0-5]{0,1}[0-9]{1,1}$");
   gvm_validator_add (validator, "month", "^((0??[1-9])|1[012])$");
-  gvm_validator_add (validator, "note_optional", "(?s)^(.){0,1000}$");
-  gvm_validator_add (validator, "note_required", "(?s)^(.){1,1000}$");
+  gvm_validator_add (validator, "note_optional", "(?s)^(.)*$");
+  gvm_validator_add (validator, "note_required", "(?s)^(.)+$");
   gvm_validator_add (validator, "note_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "override_id", "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "name", "^[#-_[:alnum:], \\./]{1,80}$");
+  gvm_validator_add (validator, "name", "^[#-_[:alnum:], \\./]*$");
   gvm_validator_add (validator, "info_name", "(?s)^.*$");
   gvm_validator_add (validator, "info_type", "(?s)^.*$");
   gvm_validator_add (validator, "info_id", "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
@@ -630,16 +630,16 @@ init_validator ()
   gvm_validator_add (validator, "number", "^ *[0-9]+ *$");
   gvm_validator_add (validator, "optional_number", "^[0-9]*$");
   gvm_validator_add (validator, "oid", "^([0-9.]{1,80}|CVE-[-0-9]{1,14})$");
-  gvm_validator_add (validator, "page", "^[_[:alnum:] ]{1,40}$");
+  gvm_validator_add (validator, "page", "^[_[:alnum:] ]+$");
   gvm_validator_add (validator, "package_format", "^(pem|key|rpm|deb|exe)$");
-  gvm_validator_add (validator, "password", "^.{0,40}$");
+  gvm_validator_add (validator, "password", "^.*$");
   gvm_validator_add (validator, "password:value", "(?s)^.*$");
-  gvm_validator_add (validator, "port", "^.{1,60}$");
+  gvm_validator_add (validator, "port", "^.*$");
   gvm_validator_add (validator, "port_range",
                      "^((default)|([-0-9, TU:]{1,400}))$");
   gvm_validator_add (validator, "port_type", "^(tcp|udp)$");
   /** @todo Better regex. */
-  gvm_validator_add (validator, "preference_name", "^(.*){0,400}$");
+  gvm_validator_add (validator, "preference_name", "^.*$");
   gvm_validator_add (validator, "preference:name",
                      "^([^[]*\\[[^]]*\\]:.*){0,400}$");
   gvm_validator_add (validator, "preference:value", "(?s)^.*$");
@@ -647,18 +647,18 @@ init_validator ()
   gvm_validator_add (validator, "privacy_algorithm", "^(aes|des|)$");
   gvm_validator_add (validator, "private_key", "(?s)^.*$");
   gvm_validator_add (validator, "public_key", "(?s)^.*$");
-  gvm_validator_add (validator, "pw", "^[[:alnum:]]{1,10}$");
+  gvm_validator_add (validator, "pw", "^[[:alnum:]]+$");
   gvm_validator_add (validator, "xml_file", "(?s)^.*$");
   gvm_validator_add (validator, "definitions_file", "(?s)^.*$");
   gvm_validator_add (validator, "ca_pub", "(?s)^.*$");
   gvm_validator_add (validator, "which_cert", "^(default|existing|new)$");
   gvm_validator_add (validator, "key_pub", "(?s)^.*$");
   gvm_validator_add (validator, "key_priv", "(?s)^.*$");
-  gvm_validator_add (validator, "radiuskey", "^.{0,40}$");
+  gvm_validator_add (validator, "radiuskey", "^.*$");
   gvm_validator_add (validator, "range_type",
                      "^(duration|until_end|from_start|start_to_end)$");
-  gvm_validator_add (validator, "related:name", "^(.*){0,400}$");
-  gvm_validator_add (validator, "related:value", "^(.*){0,400}$");
+  gvm_validator_add (validator, "related:name", "^.*$");
+  gvm_validator_add (validator, "related:value", "^.*$");
   gvm_validator_add (validator, "report_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "report_fname",
                      "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
@@ -668,8 +668,8 @@ init_validator ()
                      "|closed_cves|os|apps|errors"
                      "|topology|ssl_certs|cves)$");
   gvm_validator_add (validator, "result_id", "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "role", "^[[:alnum:] ]{1,40}$");
-  gvm_validator_add (validator, "permission", "^([_a-z]{1,1000}|Super)$");
+  gvm_validator_add (validator, "role", "^[[:alnum:] ]+$");
+  gvm_validator_add (validator, "permission", "^([_a-z]+|Super)$");
   gvm_validator_add (validator, "port_list_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "port_range_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (
@@ -693,24 +693,24 @@ init_validator ()
     "System|Override|Permission|Port List|Report|Report "
     "Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|"
     "Vulnerability)?$");
-  gvm_validator_add (validator, "select:value", "^(.*){0,400}$");
-  gvm_validator_add (validator, "ssl_cert", "^(.*){0,2000}$");
-  gvm_validator_add (validator, "method_data:name", "^(.*){0,400}$");
+  gvm_validator_add (validator, "select:value", "^.*$");
+  gvm_validator_add (validator, "ssl_cert", "^.*$");
+  gvm_validator_add (validator, "method_data:name", "^.*$");
   gvm_validator_add (validator, "method_data:value", "(?s)^.*$");
   gvm_validator_add (validator, "nvt:name", "(?s)^.*$");
   gvm_validator_add (validator, "restrict_credential_type", "^[a-z0-9\\_|]+$");
   gvm_validator_add (validator, "subject_type", "^(group|role|user)$");
-  gvm_validator_add (validator, "summary", "^.{0,400}$");
+  gvm_validator_add (validator, "summary", "^.*$");
   gvm_validator_add (validator, "tag_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "tag_name", "^[\\:\\-_[:alnum:], \\./]{1,80}$");
   gvm_validator_add (validator, "tag_value",
-                     "^[\\-_@%[:alnum:], \\.\\/\\\\]{0,200}$");
+                     "^[\\-_@%[:alnum:], \\.\\/\\\\]*$");
   gvm_validator_add (validator, "target_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "task_id", "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "term", "^.{0,1000}");
-  gvm_validator_add (validator, "text", "^.{0,1000}");
-  gvm_validator_add (validator, "text_columns:name", "^[0123456789]{1,5}$");
-  gvm_validator_add (validator, "text_columns:value", "^[_[:alnum:]]{1,80}$");
+  gvm_validator_add (validator, "term", "^.*");
+  gvm_validator_add (validator, "text", "^.*");
+  gvm_validator_add (validator, "text_columns:name", "^[0123456789]+$");
+  gvm_validator_add (validator, "text_columns:value", "^[_[:alnum:]]+$");
   gvm_validator_add (validator, "threat",
                      "^(High|Medium|Low|Alarm|Log|False Positive|)$");
   gvm_validator_add (validator, "ticket_status", "^(Open|Fixed|Closed)$");
@@ -718,21 +718,21 @@ init_validator ()
   gvm_validator_add (validator, "trend:value", "^(0|1)$");
   gvm_validator_add (validator, "type", "^(assets)$");
   gvm_validator_add (validator, "search_phrase",
-                     "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
-  gvm_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,40}$");
+                     "^[[:alnum:][:punct:] äöüÄÖÜß]*$");
+  gvm_validator_add (validator, "sort_field", "^[_[:alnum:] ]+$");
   gvm_validator_add (validator, "sort_order", "^(ascending|descending)$");
-  gvm_validator_add (validator, "sort_stat", "^[_[:alnum:] ]{1,40}$");
-  gvm_validator_add (validator, "sort_fields:name", "^[0123456789]{1,5}$");
-  gvm_validator_add (validator, "sort_fields:value", "^[_[:alnum:] ]{1,40}$");
-  gvm_validator_add (validator, "sort_orders:name", "^[0123456789]{1,5}$");
+  gvm_validator_add (validator, "sort_stat", "^[_[:alnum:] ]+$");
+  gvm_validator_add (validator, "sort_fields:name", "^[0123456789]+$");
+  gvm_validator_add (validator, "sort_fields:value", "^[_[:alnum:] ]+$");
+  gvm_validator_add (validator, "sort_orders:name", "^[0123456789]+$");
   gvm_validator_add (validator, "sort_orders:value",
                      "^(ascending|descending)$");
-  gvm_validator_add (validator, "sort_stats:name", "^[0123456789]{1,5}$");
-  gvm_validator_add (validator, "sort_stats:value", "^[_[:alnum:] ]{1,40}$");
+  gvm_validator_add (validator, "sort_stats:name", "^[0123456789]+$");
+  gvm_validator_add (validator, "sort_stats:value", "^[_[:alnum:] ]+$");
   gvm_validator_add (validator, "target_source",
                      "^(asset_hosts|file|import|manual)$");
   gvm_validator_add (validator, "target_exclude_source", "^(file|manual)$");
-  gvm_validator_add (validator, "timezone", "^.{0,1000}$");
+  gvm_validator_add (validator, "timezone", "^.*$");
   gvm_validator_add (validator, "token", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "scanner_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "cve_scanner_id", "^[a-z0-9\\-]+$");
@@ -747,12 +747,12 @@ init_validator ()
   gvm_validator_add (validator, "uuid", "^[0-9abcdefABCDEF\\-]{1,40}$");
   /* This must be "login" with space and comma. */
   gvm_validator_add (validator, "users", "^[[:alnum:]-_@., ]*$");
-  gvm_validator_add (validator, "x_field", "^[\\[\\]_[:alnum:]]{1,80}$");
-  gvm_validator_add (validator, "y_fields:name", "^[0-9]{1,5}$");
-  gvm_validator_add (validator, "y_fields:value", "^[\\[\\]_[:alnum:]]{1,80}$");
+  gvm_validator_add (validator, "x_field", "^[\\[\\]_[:alnum:]]+$");
+  gvm_validator_add (validator, "y_fields:name", "^[0-9]+$");
+  gvm_validator_add (validator, "y_fields:value", "^[\\[\\]_[:alnum:]]+$");
   gvm_validator_add (validator, "year", "^[0-9]+$");
-  gvm_validator_add (validator, "z_fields:name", "^[0-9]{1,5}$");
-  gvm_validator_add (validator, "z_fields:value", "^[\\[\\]_[:alnum:]]{1,80}$");
+  gvm_validator_add (validator, "z_fields:name", "^[0-9]+$");
+  gvm_validator_add (validator, "z_fields:value", "^[\\[\\]_[:alnum:]]+$");
   gvm_validator_add (validator, "calendar_unit",
                      "^(second|minute|hour|day|week|month|year|decade)$");
   gvm_validator_add (validator, "chart_title", "(?s)^.*$");
