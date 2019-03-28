@@ -46,6 +46,13 @@ const testNvtId = modelClass => {
 
 export const testModelProperties = (modelClass, type) => {
   describe(`${type} Model tests`, () => {
+    test('should unescape name when parsing', () => {
+      const elem = {name: `foo&quot;&lt;&gt;&amp;&apos;&#x2F;&#x5C;`};
+      const model = new modelClass(elem);
+
+      expect(model.name).toEqual(`foo"<>&'/\\`);
+    });
+
     test('end_time is parsed correctly', () => {
       const elem = {
         end_time: '2018-10-10T11:41:23.022Z',
