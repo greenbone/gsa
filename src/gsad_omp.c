@@ -26480,6 +26480,19 @@ process_bulk_omp (openvas_connection_t *connection, credentials_t *credentials,
                                "/omp?cmd=get_tasks", response_data);
         }
     }
+  if (strcmp (type, "asset") == 0)
+    {
+      subtype = params_value (params, "asset_type");
+      if (subtype == NULL)
+        {
+          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while performing a bulk action. "
+                               "Diagnostics: Required parameter 'asset_type' was NULL.",
+                               "/omp?cmd=get_tasks", response_data);
+        }
+    }
   else
     subtype = NULL;
 
@@ -26574,11 +26587,20 @@ process_bulk_omp (openvas_connection_t *connection, credentials_t *credentials,
 
   bulk_string = g_string_new ("<process_bulk>");
 
-  g_string_append_printf (bulk_string,
-                          "<type>%s</type>"
-                          "<action>%s</action>",
-                          type,
-                          action);
+  if (subtype && strcmp (subtype, ""))
+    g_string_append_printf (bulk_string,
+                            "<type>%s</type>"
+                            "<subtype>%s</subtype>"
+                            "<action>%s</action>",
+                            type,
+                            subtype,
+                            action);
+  else
+    g_string_append_printf (bulk_string,
+                            "<type>%s</type>"
+                            "<action>%s</action>",
+                            type,
+                            action);
 
   g_string_append (bulk_string, "<selections>");
 
@@ -26589,10 +26611,17 @@ process_bulk_omp (openvas_connection_t *connection, credentials_t *credentials,
       entity_t entity;
       gchar *response;
 
-      ret = ompf (connection, credentials, &response, &entity, response_data,
-                  "<get_%ss filter=\"first=1 rows=-1 %s\"/>",
-                  type,
-                  params_value (params, "filter") ? : "");
+      if (subtype && strcmp (subtype, ""))
+        ret = ompf (connection, credentials, &response, &entity, response_data,
+                    "<get_%ss type=\"%s\" filter=\"first=1 rows=-1 %s\"/>",
+                    type,
+                    subtype,
+                    params_value (params, "filter") ? : "");
+      else
+        ret = ompf (connection, credentials, &response, &entity, response_data,
+                    "<get_%ss filter=\"first=1 rows=-1 %s\"/>",
+                    type,
+                    params_value (params, "filter") ? : "");
 
       if (ret)
         {
