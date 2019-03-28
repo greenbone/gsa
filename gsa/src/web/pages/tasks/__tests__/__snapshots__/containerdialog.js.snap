@@ -471,7 +471,6 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
                     >
                       <input
                         class="c15 c16"
-                        maxlength="80"
                         name="name"
                         size="30"
                         type="text"
@@ -495,7 +494,6 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
                     >
                       <input
                         class="c15 c16"
-                        maxlength="400"
                         name="comment"
                         size="30"
                         type="text"
@@ -1156,7 +1154,6 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                     >
                       <input
                         class="c15 c16"
-                        maxlength="80"
                         name="name"
                         size="30"
                         type="text"
@@ -1180,7 +1177,6 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                     >
                       <input
                         class="c15 c16"
-                        maxlength="400"
                         name="comment"
                         size="30"
                         type="text"
