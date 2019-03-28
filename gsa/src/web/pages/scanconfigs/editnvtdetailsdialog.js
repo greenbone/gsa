@@ -217,7 +217,6 @@ class EditDialog extends React.Component {
                             name="manual_timeout"
                             value={state.manual_timeout}
                             onChange={onValueChange}
-                            maxLength="400"
                           />
                         </Divider>
                       </Divider>

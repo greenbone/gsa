@@ -54,7 +54,6 @@ const AgentDialog = ({agent, title = _('New Agent'), onClose, onSave}) => {
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"
               />
             </FormGroup>
 
@@ -64,7 +63,6 @@ const AgentDialog = ({agent, title = _('New Agent'), onClose, onSave}) => {
                 value={state.comment}
                 grow="1"
                 size="30"
-                maxLength="400"
                 onChange={onValueChange}
               />
             </FormGroup>

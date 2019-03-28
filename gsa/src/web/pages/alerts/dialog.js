@@ -510,7 +510,6 @@ class AlertDialog extends React.Component {
                   value={values.name}
                   size="30"
                   onChange={onValueChange}
-                  maxLength="80"
                 />
               </FormGroup>
 
@@ -520,7 +519,6 @@ class AlertDialog extends React.Component {
                   value={values.comment}
                   grow="1"
                   size="30"
-                  maxLength="400"
                   onChange={onValueChange}
                 />
               </FormGroup>

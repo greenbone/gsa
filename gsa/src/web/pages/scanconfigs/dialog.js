@@ -73,7 +73,6 @@ const Dialog = ({
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"
               />
             </FormGroup>
 
@@ -83,7 +82,6 @@ const Dialog = ({
                 value={state.comment}
                 grow="1"
                 size="30"
-                maxLength="400"
                 onChange={onValueChange}
               />
             </FormGroup>

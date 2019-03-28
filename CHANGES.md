@@ -8,6 +8,7 @@ $ cd gsa && git log
 
 ## gsa 8.0 unreleased
 
+ * Don't limit the input field lengths anymore #1232
  * Convert first filter keyword values less then one to one #1228
  * Always use equal relation for first and rows filter keywords #1228
  * Add confirmation dialog when creating a user without a role #1224

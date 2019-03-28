@@ -47,7 +47,6 @@ const SendMethodPart = ({
             name={prefix + 'send_host'}
             value={sendHost}
             size="30"
-            maxLength="256"
             onChange={onChange}
           />
           <Layout>{_('on port')}</Layout>

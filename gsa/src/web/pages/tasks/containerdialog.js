@@ -80,7 +80,6 @@ const ContainerTaskDialog = ({
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"
               />
             </FormGroup>
             <FormGroup title={_('Comment')}>
@@ -89,7 +88,6 @@ const ContainerTaskDialog = ({
                 value={state.comment}
                 grow="1"
                 size="30"
-                maxLength="400"
                 onChange={onValueChange}
               />
             </FormGroup>

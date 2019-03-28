@@ -187,7 +187,6 @@ const TargetDialog = ({
                 name="name"
                 grow="1"
                 size="30"
-                maxLength="80"
                 value={state.name}
                 onChange={onValueChange}
               />
@@ -197,7 +196,6 @@ const TargetDialog = ({
               <TextField
                 name="comment"
                 size="30"
-                maxLength="400"
                 value={state.comment}
                 onChange={onValueChange}
               />

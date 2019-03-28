@@ -201,7 +201,6 @@ class Dialog extends React.Component {
                     grow="1"
                     name="name"
                     value={state.name}
-                    maxLength="80"
                     onChange={onValueChange}
                   />
                 </FormGroup>
@@ -211,7 +210,6 @@ class Dialog extends React.Component {
                     grow="1"
                     name="summary"
                     value={state.summary}
-                    maxLength="400"
                     onChange={onValueChange}
                   />
                 </FormGroup>
