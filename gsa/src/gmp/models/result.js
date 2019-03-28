@@ -21,7 +21,7 @@ import {isDefined, isString} from '../utils/identity';
 import {forEach, map} from '../utils/array';
 
 import Model from '../model';
-import {parseSeverity, parseQod} from '../parser';
+import {parseSeverity, parseQod, parseXmlEncodedString} from '../parser';
 
 import Nvt from './nvt';
 
@@ -51,6 +51,7 @@ class Result extends Model {
     const copy = super.parseProperties(elem);
 
     const {
+      description,
       detection,
       host = {},
       name,
@@ -82,6 +83,10 @@ class Result extends Model {
     }
 
     copy.nvt = new Nvt(nvt);
+
+    if (isDefined(description)) {
+      copy.description = parseXmlEncodedString(description);
+    }
 
     if (isDefined(severity)) {
       copy.severity = parseSeverity(severity);

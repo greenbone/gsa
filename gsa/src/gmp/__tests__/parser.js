@@ -580,6 +580,8 @@ describe('parseXmlEncodedString tests', () => {
     expect(parseXmlEncodedString('unesc &amp;')).toEqual('unesc &');
     expect(parseXmlEncodedString('unesc &apos;')).toEqual(`unesc '`);
     expect(parseXmlEncodedString('unesc &quot;')).toEqual('unesc "');
+    expect(parseXmlEncodedString('unesc &#x2F;')).toEqual('unesc /');
+    expect(parseXmlEncodedString('unesc &#x5C;')).toEqual('unesc \\');
     expect(parseXmlEncodedString(`unes <>&'" &quot;`)).toEqual(`unes <>&'" "`);
   });
 });
