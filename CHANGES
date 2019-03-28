@@ -55,6 +55,7 @@ Main changes compared to 7.0.3:
 * A credential can be selected for the PKCS12 file of Sourcefire Alerts.
 * The OID of the VT sending the SNMP Host Detail for Authentication failure /
   success was updated.
+* The bulk delete not working for assets was fixed.
 
 
 gsa 7.0.3 (2018-03-28)
