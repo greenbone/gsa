@@ -180,7 +180,7 @@ const ToolBarIcons = ({
             <DetailsLink
               type="report"
               id={entity.current_report.id}
-              title={_('Current Report for Task {{name}} from {{- date}}', {
+              title={_('Current Report for Task {{- name}} from {{- date}}', {
                 name: entity.name,
                 date: shortDate(entity.current_report.scan_start),
               })}
@@ -193,7 +193,7 @@ const ToolBarIcons = ({
             <DetailsLink
               type="report"
               id={entity.last_report.id}
-              title={_('Last Report for Task {{name}} from {{- date}}', {
+              title={_('Last Report for Task {{- name}} from {{- date}}', {
                 name: entity.name,
                 date: shortDate(entity.last_report.scan_start),
               })}
@@ -205,7 +205,7 @@ const ToolBarIcons = ({
           <Link
             to="reports"
             filter={'task_id=' + entity.id}
-            title={_('Total Reports for Task {{name}}', entity)}
+            title={_('Total Reports for Task {{- name}}', entity)}
           >
             <Badge content={entity.report_count.total}>
               <ReportIcon />
@@ -216,7 +216,7 @@ const ToolBarIcons = ({
         <Link
           to="results"
           filter={'task_id=' + entity.id}
-          title={_('Results for Task {{name}}', entity)}
+          title={_('Results for Task {{- name}}', entity)}
         >
           <Badge content={entity.result_count}>
             <ResultIcon />
@@ -227,7 +227,7 @@ const ToolBarIcons = ({
           <Link
             to="notes"
             filter={'task_id=' + entity.id}
-            title={_('Notes for Task {{name}}', entity)}
+            title={_('Notes for Task {{- name}}', entity)}
           >
             <Badge content={notes.length}>
               <NoteIcon />
@@ -237,7 +237,7 @@ const ToolBarIcons = ({
           <Link
             to="overrides"
             filter={'task_id=' + entity.id}
-            title={_('Overrides for Task {{name}}', entity)}
+            title={_('Overrides for Task {{- name}}', entity)}
           >
             <Badge content={overrides.length}>
               <OverrideIcon />
