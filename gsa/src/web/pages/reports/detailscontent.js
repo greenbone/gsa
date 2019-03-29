@@ -190,6 +190,7 @@ const ToolBarIcons = ({
             {isDefined(task) && !task.isContainer() && (
               <Link
                 to="performance"
+                title={_('Corresponding Performance')}
                 query={{
                   start: isDefined(report.scan_start)
                     ? report.scan_start.toISOString()
