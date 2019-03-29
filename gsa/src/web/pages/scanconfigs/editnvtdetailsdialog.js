@@ -46,6 +46,7 @@ import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
 import NvtPreference from '../nvts/nvtpreference';
+import Preformatted from '../nvts/preformatted';
 
 class EditDialog extends React.Component {
   constructor(...args) {
@@ -139,14 +140,14 @@ class EditDialog extends React.Component {
               {isDefined(nvt.tags.summary) && (
                 <div>
                   <h1>{_('Summary')}</h1>
-                  <p>{nvt.tags.summary}</p>
+                  <Preformatted>{nvt.tags.summary}</Preformatted>
                 </div>
               )}
 
               {isDefined(nvt.tags.affected) && (
                 <div>
                   <h1>{_('Affected Software/OS')}</h1>
-                  <p>{nvt.tags.affected}</p>
+                  <Preformatted>{nvt.tags.affected}</Preformatted>
                 </div>
               )}
 
@@ -216,7 +217,6 @@ class EditDialog extends React.Component {
                             name="manual_timeout"
                             value={state.manual_timeout}
                             onChange={onValueChange}
-                            maxLength="400"
                           />
                         </Divider>
                       </Divider>

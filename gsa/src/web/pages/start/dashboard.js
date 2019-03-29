@@ -106,6 +106,7 @@ StartDashboard.propTypes = {
   id: PropTypes.id.isRequired,
   loadSettings: PropTypes.func.isRequired,
   saveSettings: PropTypes.func.isRequired,
+  settings: PropTypes.object,
   onInteraction: PropTypes.func.isRequired,
   onNewDisplay: PropTypes.func.isRequired,
   onResetDashboard: PropTypes.func.isRequired,

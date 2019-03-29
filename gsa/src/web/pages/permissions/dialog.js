@@ -226,7 +226,6 @@ const PermissionDialog = ({
                 value={state.comment}
                 grow="1"
                 size="30"
-                maxLength="400"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -321,7 +320,6 @@ const PermissionDialog = ({
                   value={state.resourceId}
                   disabled={fixedResource}
                   size="50"
-                  maxLength="100"
                   onChange={onValueChange}
                 />
               </FormGroup>

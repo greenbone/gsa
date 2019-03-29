@@ -116,6 +116,7 @@ class CreatedDisplay extends React.Component {
 }
 
 CreatedDisplay.propTypes = {
+  dataTransform: PropTypes.func,
   filter: PropTypes.filter,
   xAxisLabel: PropTypes.toString,
   y2AxisLabel: PropTypes.toString,

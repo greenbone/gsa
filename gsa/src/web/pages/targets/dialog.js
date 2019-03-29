@@ -187,7 +187,6 @@ const TargetDialog = ({
                 name="name"
                 grow="1"
                 size="30"
-                maxLength="80"
                 value={state.name}
                 onChange={onValueChange}
               />
@@ -197,7 +196,6 @@ const TargetDialog = ({
               <TextField
                 name="comment"
                 size="30"
-                maxLength="400"
                 value={state.comment}
                 onChange={onValueChange}
               />
@@ -294,24 +292,6 @@ const TargetDialog = ({
                   />
                 </Divider>
               </Divider>
-            </FormGroup>
-
-            <FormGroup title={_('Reverse Lookup Only')}>
-              <YesNoRadio
-                name="reverse_lookup_only"
-                disabled={state.in_use}
-                value={state.reverse_lookup_only}
-                onChange={onValueChange}
-              />
-            </FormGroup>
-
-            <FormGroup title={_('Reverse Lookup Unify')}>
-              <YesNoRadio
-                name="reverse_lookup_unify"
-                disabled={state.in_use}
-                value={state.reverse_lookup_unify}
-                onChange={onValueChange}
-              />
             </FormGroup>
 
             {capabilities.mayOp('get_port_lists') && (
@@ -449,6 +429,24 @@ const TargetDialog = ({
                 </Divider>
               </FormGroup>
             )}
+
+            <FormGroup title={_('Reverse Lookup Only')}>
+              <YesNoRadio
+                name="reverse_lookup_only"
+                disabled={state.in_use}
+                value={state.reverse_lookup_only}
+                onChange={onValueChange}
+              />
+            </FormGroup>
+
+            <FormGroup title={_('Reverse Lookup Unify')}>
+              <YesNoRadio
+                name="reverse_lookup_unify"
+                disabled={state.in_use}
+                value={state.reverse_lookup_unify}
+                onChange={onValueChange}
+              />
+            </FormGroup>
           </Layout>
         );
       }}

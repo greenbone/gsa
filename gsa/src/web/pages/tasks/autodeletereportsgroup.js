@@ -31,7 +31,7 @@ import Spinner from '../../components/form/spinner.js';
 import Divider from '../../components/layout/divider.js';
 
 const AutoDeleteReportsGroup = ({
-  autoDelete = AUTO_DELETE_KEEP,
+  autoDelete = AUTO_DELETE_NO,
   autoDeleteData,
   onChange,
 }) => (

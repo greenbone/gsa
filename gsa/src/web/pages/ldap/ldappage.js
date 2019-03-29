@@ -22,22 +22,16 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 
-import Button from 'web/components/form/button';
-import CheckBox from 'web/components/form/checkbox';
-import FileField from 'web/components/form/filefield';
-import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
-
+import EditIcon from 'web/components/icon/editicon';
 import LdapIcon from 'web/components/icon/ldapicon';
 import ManualIcon from 'web/components/icon/manualicon';
 
 import Layout from 'web/components/layout/layout';
+import IconDivider from 'web/components/layout/icondivider';
 import Section from 'web/components/section/section';
 
 import Table from 'web/components/table/simpletable';
@@ -47,11 +41,32 @@ import TableRow from 'web/components/table/row';
 
 import Loading from 'web/components/loading/loading';
 
+import {Col} from 'web/entity/page';
+
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
+
+import LdapDialog from './dialog';
+
+const ToolBarIcons = ({onOpenDialogClick}) => (
+  <IconDivider>
+    <ManualIcon
+      page="gui_administration"
+      anchor="ldap"
+      size="small"
+      title={_('Help: LDAP per-User Authentication')}
+    />
+    <EditIcon onClick={onOpenDialogClick} />
+  </IconDivider>
+);
+
+ToolBarIcons.propTypes = {
+  onOpenDialogClick: PropTypes.func,
+};
 
 class LdapAuthentication extends React.Component {
   constructor(...args) {
@@ -63,11 +78,14 @@ class LdapAuthentication extends React.Component {
       enable: '',
       certificateInfo: {},
       loading: 'true',
+      dialogVisible: false,
     };
 
     this.getLdapAuth = this.getLdapAuth.bind(this);
     this.handleSaveSettings = this.handleSaveSettings.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
+    this.closeDialog = this.closeDialog.bind(this);
+    this.openDialog = this.openDialog.bind(this);
   }
 
   componentDidMount() {
@@ -82,9 +100,7 @@ class LdapAuthentication extends React.Component {
     const {gmp} = this.props;
     const authData = gmp.user.currentAuthSettings().then(response => {
       const data = response.data.get('method:ldap_connect');
-      let {authdn, certificateInfo, enable, ldaphost} = data;
-      // handle getting enable as "true" but posting it as 1
-      enable = enable === 'true' ? YES_VALUE : NO_VALUE;
+      const {authdn, certificateInfo, enable, ldaphost} = data;
       this.setState({
         authdn,
         certificateInfo,
@@ -102,12 +118,12 @@ class LdapAuthentication extends React.Component {
     }
   }
 
-  handleSaveSettings() {
-    const {authdn, certificateInfo, enable, ldaphost} = this.state;
+  handleSaveSettings(state) {
+    const {authdn, certificate, enable, ldaphost} = state;
 
     const data = {
       authdn,
-      certificateInfo,
+      certificate,
       enable,
       ldaphost,
     };
@@ -115,39 +131,22 @@ class LdapAuthentication extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.auth.saveLdap(data);
+    return gmp.auth.saveLdap(data).then(() => {
+      this.getLdapAuth();
+      this.setState({dialogVisible: false});
+    });
   }
 
   handleValueChange(value, name) {
     this.setState({[name]: value});
   }
 
-  showCertfificateInfo(certificateInfo) {
-    if (isDefined(certificateInfo)) {
-      return (
-        <Table>
-          <TableBody>
-            <TableRow>
-              <TableData>{_('Activation')}</TableData>
-              <TableData>{certificateInfo.activationTime}</TableData>
-            </TableRow>
-            <TableRow>
-              <TableData>{_('Expiration')}</TableData>
-              <TableData>{certificateInfo.expirationTime}</TableData>
-            </TableRow>
-            <TableRow>
-              <TableData>{_('MD5 Fingerprint')}</TableData>
-              <TableData>{certificateInfo.md5_fingerprint}</TableData>
-            </TableRow>
-            <TableRow>
-              <TableData>{_('Issued by')}</TableData>
-              <TableData>{certificateInfo.issuer}</TableData>
-            </TableRow>
-          </TableBody>
-        </Table>
-      );
-    }
-    return [];
+  openDialog() {
+    this.setState({dialogVisible: true});
+  }
+
+  closeDialog() {
+    this.setState({dialogVisible: false});
   }
 
   render() {
@@ -156,63 +155,68 @@ class LdapAuthentication extends React.Component {
       return <Loading />;
     }
 
-    const {authdn, certificateInfo, enable, ldaphost} = this.state;
+    const {
+      authdn,
+      certificateInfo = {},
+      dialogVisible,
+      enable,
+      ldaphost,
+    } = this.state;
 
     return (
       <ErrorBoundary errElement={_('page')}>
         <Layout flex="column">
-          <ManualIcon
-            page="gui_administration"
-            anchor="ldap"
-            size="small"
-            title={_('Help: LDAP per-User Authentication')}
-          />
+          <ToolBarIcons onOpenDialogClick={this.openDialog} />
           <Section
             img={<LdapIcon size="large" />}
             title={_('LDAP per-User Authentication')}
           />
-          <Layout flex="column">
-            <FormGroup title={_('Enable')} titlesize="5">
-              <CheckBox
-                name="enable"
-                checked={enable === YES_VALUE}
-                checkedValue={YES_VALUE}
-                unCheckedValue={NO_VALUE}
-                onChange={this.handleValueChange}
-              />
-            </FormGroup>
-            <FormGroup title={_('LDAP Host')} titlesize="5">
-              <TextField
-                name="ldaphost"
-                value={ldaphost}
-                size="30"
-                onChange={this.handleValueChange}
-              />
-            </FormGroup>
-            <FormGroup title={_('Auth. DN')} titlesize="5">
-              <TextField
-                name="authdn"
-                value={authdn}
-                size="30"
-                onChange={this.handleValueChange}
-              />
-            </FormGroup>
-            <FormGroup title={_('CA Certificate')} titlesize="5">
-              <Layout flex="column">
-                {this.showCertfificateInfo(certificateInfo)}
-                <FileField
-                  name="certificate"
-                  onChange={this.handleValueChange}
-                />
-              </Layout>
-            </FormGroup>
-            <FormGroup title=" ">
-              <Button width="auto" onClick={this.handleSaveSettings}>
-                {_('Save')}
-              </Button>
-            </FormGroup>
-          </Layout>
+          <Table>
+            <colgroup>
+              <Col width="10%" />
+              <Col width="90%" />
+            </colgroup>
+            <TableBody>
+              <TableRow>
+                <TableData>{_('Enabled')}</TableData>
+                <TableData>{renderYesNo(enable)}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('LDAP Host')}</TableData>
+                <TableData>{ldaphost}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('Auth. DN')}</TableData>
+                <TableData>{authdn}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('Activation')}</TableData>
+                <TableData>{certificateInfo.activation_time}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('Expiration')}</TableData>
+                <TableData>{certificateInfo.expiration_time}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('MD5 Fingerprint')}</TableData>
+                <TableData>{certificateInfo.md5_fingerprint}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('Issued by')}</TableData>
+                <TableData>{certificateInfo.issuer}</TableData>
+              </TableRow>
+            </TableBody>
+          </Table>
         </Layout>
+        {dialogVisible && (
+          <LdapDialog
+            authdn={authdn}
+            enable={enable}
+            ldaphost={ldaphost}
+            onClose={this.closeDialog}
+            onSave={this.handleSaveSettings}
+          />
+        )}
       </ErrorBoundary>
     );
   }

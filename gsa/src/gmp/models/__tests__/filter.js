@@ -71,6 +71,39 @@ describe('Filter parse from string tests', () => {
       expect(Filter.fromString(fstring).toFilterString()).toEqual(fstring);
     });
   });
+
+  test('should convert first if less then 1', () => {
+    let filter = Filter.fromString('first=0');
+    expect(filter.toFilterString()).toEqual('first=1');
+
+    filter = Filter.fromString('first=-1');
+    expect(filter.toFilterString()).toEqual('first=1');
+
+    filter = Filter.fromString('first=-666');
+    expect(filter.toFilterString()).toEqual('first=1');
+  });
+
+  test('should always use equal relation for first keyword', () => {
+    let filter = Filter.fromString('first>1');
+    expect(filter.toFilterString()).toEqual('first=1');
+
+    filter = Filter.fromString('first<1');
+    expect(filter.toFilterString()).toEqual('first=1');
+
+    filter = Filter.fromString('first>1');
+    expect(filter.toFilterString()).toEqual('first=1');
+  });
+
+  test('should always use equal relation for rows keyword', () => {
+    let filter = Filter.fromString('rows>1');
+    expect(filter.toFilterString()).toEqual('rows=1');
+
+    filter = Filter.fromString('rows<1');
+    expect(filter.toFilterString()).toEqual('rows=1');
+
+    filter = Filter.fromString('rows>1');
+    expect(filter.toFilterString()).toEqual('rows=1');
+  });
 });
 
 describe('Filter parse from keywords', () => {
@@ -248,6 +281,15 @@ describe('Filter set', () => {
     filter.set('sort-reverse', 'foo', '=');
     expect(filter.has('sort')).toEqual(false);
     expect(filter.has('sort-reverse')).toEqual(true);
+  });
+
+  test('should convert 0 or negative values for first to 1', () => {
+    const filter = new Filter();
+    filter.set('first', '0');
+    expect(filter.get('first')).toEqual(1);
+
+    filter.set('first', '-666');
+    expect(filter.get('first')).toEqual(1);
   });
 });
 

@@ -1,0 +1,1410 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContainerDialog tests should render create dialog 1`] = `
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c8 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c10 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c14 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c19 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c1 {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin: 10% auto;
+  border: 0;
+  outline: 0;
+  width: 800px;
+  height: px;
+}
+
+.c0 {
+  position: fixed;
+  font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+  font-size: 1.1em;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  background: rgba(102,102,102,0.5);
+  z-index: 100;
+  -webkit-transition: opacity 1s ease-in;
+  transition: opacity 1s ease-in;
+  width: 100%;
+  height: 100%;
+}
+
+.c24 {
+  width: 0;
+  height: 0;
+  cursor: nwse-resize;
+  border-right: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-top: 20px solid #fff;
+}
+
+.c23 {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+  background: repeating-linear-gradient( -45deg, transparent, transparent 2px, #000 2px, #000 3px );
+}
+
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: inherit;
+  padding: 0;
+  background: #fff;
+  box-shadow: 5px 5px 10px #787878;
+  border-radius: 3px;
+  border: 1px solid #787878;
+}
+
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  border: 1px solid #519032;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: Verdana,sans-serif;
+  color: #519032;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+.c6:hover {
+  color: #fff;
+  background: #519032;
+}
+
+.c5 {
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+}
+
+.c5 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c22 {
+  display: inline-block;
+  padding: 0 15px;
+  color: #393637;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 30px;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: #fff;
+  border-radius: 2px;
+  border: 1px solid #aaaaaa;
+  cursor: pointer;
+  overflow: visible;
+  z-index: 1;
+}
+
+.c22:focus,
+.c22:hover {
+  border: 1px solid #393637;
+}
+
+.c22:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background: #66c430;
+  font-weight: bold;
+  color: #fff;
+}
+
+.c22[disabled] {
+  cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+.c22 img {
+  height: 32px;
+  width: 32px;
+  margin-top: 5px 10px 5px -10px;
+  vertical-align: middle;
+}
+
+.c22:link {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #393637;
+}
+
+.c21 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c20 {
+  border: 1px solid #787878;
+  color: #519032;
+  background: #87d050;
+}
+
+.c20:hover {
+  color: #fff;
+  background: #519032;
+}
+
+.c18 {
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: #c8d3d9;
+  margin-top: 15px;
+  padding: 10px 20px 10px 20px;
+}
+
+.c17 {
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c3 {
+  padding: 5px 5px 5px 10px;
+  margin-bottom: 15px;
+  border-radius: 2px 2px 0 0;
+  border-bottom: 1px solid #787878;
+  color: #fff;
+  font-weight: bold;
+  background: #66c430;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+}
+
+.c9 {
+  overflow: auto;
+  padding: 0 15px;
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
+}
+
+.c7 {
+  overflow: hidden;
+  height: 100%;
+}
+
+.c11 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  padding-bottom: 10px;
+}
+
+.c12 {
+  display: inline-block;
+  max-width: 100%;
+  font-weight: bold;
+  text-align: right;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 16.66666667%;
+  margin-left: 0;
+}
+
+.c13 {
+  width: 83.33333333%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.c16 {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  display: block;
+  height: 22px;
+  color: #393637;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #aaaaaa;
+  border-radius: 2px;
+  padding: 1px 8px;
+}
+
+.c16:-webkit-autofill {
+  box-shadow: 0 0 0 1000px white inset;
+}
+
+.c15 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+<body>
+  <div
+    id="portals"
+  >
+    <div>
+      <div
+        class="c0"
+      >
+        <div
+          class="c1"
+          height="px"
+          role="dialog"
+          tabindex="1"
+          width="800px"
+        >
+          <div
+            class="c2"
+          >
+            <div
+              class="c3 c4"
+              data-testid="dialog-title-bar"
+            >
+              <span>
+                New Container Task
+              </span>
+              <div
+                class="c5 c6"
+                data-testid="dialog-title-close-button"
+                title="Close"
+              >
+                ×
+              </div>
+            </div>
+            <div
+              class="c7 c8"
+            >
+              <div
+                class="c9"
+              >
+                <div
+                  class="c10"
+                >
+                  <div
+                    class="c11"
+                  >
+                    <label
+                      class="c12"
+                      data-testid="formgroup-title"
+                    >
+                      Name
+                    </label>
+                    <div
+                      class="c13 c14"
+                      data-testid="formgroup-content"
+                      size="10"
+                    >
+                      <input
+                        class="c15 c16"
+                        name="name"
+                        size="30"
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="c11"
+                  >
+                    <label
+                      class="c12"
+                      data-testid="formgroup-title"
+                    >
+                      Comment
+                    </label>
+                    <div
+                      class="c13 c14"
+                      data-testid="formgroup-content"
+                      size="10"
+                    >
+                      <input
+                        class="c15 c16"
+                        name="comment"
+                        size="30"
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c17 c18 c19"
+            >
+              <button
+                class="c20 c21 c22"
+                data-testid="dialog-close-button"
+                title="Cancel"
+              >
+                Cancel
+              </button>
+              <button
+                class="c20 c21 c22"
+                data-testid="dialog-save-button"
+                title="Save"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+          <div
+            class="c23"
+          >
+            <div
+              class="c24"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div />
+</body>
+`;
+
+exports[`ContainerDialog tests should render edit dialog 1`] = `
+<body>
+  <div
+    id="portals"
+  >
+    .c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c8 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c10 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c14 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c30 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c18 {
+  margin-left: -5px;
+}
+
+.c18 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c18 > * {
+  margin-left: 5px;
+}
+
+.c17 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c1 {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin: 10% auto;
+  border: 0;
+  outline: 0;
+  width: 800px;
+  height: px;
+}
+
+.c0 {
+  position: fixed;
+  font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+  font-size: 1.1em;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  background: rgba(102,102,102,0.5);
+  z-index: 100;
+  -webkit-transition: opacity 1s ease-in;
+  transition: opacity 1s ease-in;
+  width: 100%;
+  height: 100%;
+}
+
+.c35 {
+  width: 0;
+  height: 0;
+  cursor: nwse-resize;
+  border-right: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-top: 20px solid #fff;
+}
+
+.c34 {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+  background: repeating-linear-gradient( -45deg, transparent, transparent 2px, #000 2px, #000 3px );
+}
+
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: inherit;
+  padding: 0;
+  background: #fff;
+  box-shadow: 5px 5px 10px #787878;
+  border-radius: 3px;
+  border: 1px solid #787878;
+}
+
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  border: 1px solid #519032;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: Verdana,sans-serif;
+  color: #519032;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+.c6:hover {
+  color: #fff;
+  background: #519032;
+}
+
+.c5 {
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+}
+
+.c5 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c33 {
+  display: inline-block;
+  padding: 0 15px;
+  color: #393637;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 30px;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: #fff;
+  border-radius: 2px;
+  border: 1px solid #aaaaaa;
+  cursor: pointer;
+  overflow: visible;
+  z-index: 1;
+}
+
+.c33:focus,
+.c33:hover {
+  border: 1px solid #393637;
+}
+
+.c33:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background: #66c430;
+  font-weight: bold;
+  color: #fff;
+}
+
+.c33[disabled] {
+  cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+.c33 img {
+  height: 32px;
+  width: 32px;
+  margin-top: 5px 10px 5px -10px;
+  vertical-align: middle;
+}
+
+.c33:link {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #393637;
+}
+
+.c32 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c31 {
+  border: 1px solid #787878;
+  color: #519032;
+  background: #87d050;
+}
+
+.c31:hover {
+  color: #fff;
+  background: #519032;
+}
+
+.c29 {
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: #c8d3d9;
+  margin-top: 15px;
+  padding: 10px 20px 10px 20px;
+}
+
+.c28 {
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c3 {
+  padding: 5px 5px 5px 10px;
+  margin-bottom: 15px;
+  border-radius: 2px 2px 0 0;
+  border-bottom: 1px solid #787878;
+  color: #fff;
+  font-weight: bold;
+  background: #66c430;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+}
+
+.c9 {
+  overflow: auto;
+  padding: 0 15px;
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
+}
+
+.c7 {
+  overflow: hidden;
+  height: 100%;
+}
+
+.c11 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  padding-bottom: 10px;
+}
+
+.c12 {
+  display: inline-block;
+  max-width: 100%;
+  font-weight: bold;
+  text-align: right;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 16.66666667%;
+  margin-left: 0;
+}
+
+.c13 {
+  width: 83.33333333%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.c16 {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  display: block;
+  height: 22px;
+  color: #393637;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #aaaaaa;
+  border-radius: 2px;
+  padding: 1px 8px;
+}
+
+.c16:-webkit-autofill {
+  box-shadow: 0 0 0 1000px white inset;
+}
+
+.c15 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c19 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.c21 {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  margin-left: 10px;
+  line-height: normal;
+  width: auto;
+  height: auto;
+}
+
+.c22 {
+  opacity: 1;
+}
+
+.c20 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c23 {
+  border-radius: 2px;
+  border: 1px solid #c8d3d9;
+  background-color: #fff;
+  font-size: 1.1em;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0;
+  vertical-align: middle;
+}
+
+.c24 {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  border: none;
+  background: none;
+  color: inherit;
+  padding: 0;
+  margin: 0.2em 0;
+  vertical-align: middle;
+  margin-left: 0.4em;
+  margin-right: 22px;
+}
+
+.c26 {
+  background-color: #c8d3d9;
+  color: #787878;
+  border-left: 1px solid #393637;
+  width: 16px;
+  height: 50%;
+  font-size: 0.6em;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  vertical-align: middle;
+  position: absolute;
+  right: 0;
+  cursor: default;
+  display: block;
+  overflow: hidden;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.c26:hover {
+  background-color: #66c430;
+  color: #fff;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c26:active {
+  background-color: #fff;
+  color: #519032;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c25 {
+  border-top-right-radius: 1px;
+  top: 0;
+}
+
+.c27 {
+  border-bottom-right-radius: 1px;
+  bottom: 0;
+}
+
+<div>
+      <div
+        class="c0"
+      >
+        <div
+          class="c1"
+          height="px"
+          role="dialog"
+          tabindex="1"
+          width="800px"
+        >
+          <div
+            class="c2"
+          >
+            <div
+              class="c3 c4"
+              data-testid="dialog-title-bar"
+            >
+              <span>
+                New Container Task
+              </span>
+              <div
+                class="c5 c6"
+                data-testid="dialog-title-close-button"
+                title="Close"
+              >
+                ×
+              </div>
+            </div>
+            <div
+              class="c7 c8"
+            >
+              <div
+                class="c9"
+              >
+                <div
+                  class="c10"
+                >
+                  <div
+                    class="c11"
+                  >
+                    <label
+                      class="c12"
+                      data-testid="formgroup-title"
+                    >
+                      Name
+                    </label>
+                    <div
+                      class="c13 c14"
+                      data-testid="formgroup-content"
+                      size="10"
+                    >
+                      <input
+                        class="c15 c16"
+                        name="name"
+                        size="30"
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="c11"
+                  >
+                    <label
+                      class="c12"
+                      data-testid="formgroup-title"
+                    >
+                      Comment
+                    </label>
+                    <div
+                      class="c13 c14"
+                      data-testid="formgroup-content"
+                      size="10"
+                    >
+                      <input
+                        class="c15 c16"
+                        name="comment"
+                        size="30"
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="c11"
+                  >
+                    <label
+                      class="c12"
+                      data-testid="formgroup-title"
+                    >
+                      Add results to Assets
+                    </label>
+                    <div
+                      class="c13 c14"
+                      data-testid="formgroup-content"
+                      size="10"
+                    >
+                      <div
+                        class="c14"
+                      >
+                        <div
+                          class="c17 c14"
+                        >
+                          <div
+                            class="c18 c14"
+                            margin="5px"
+                          >
+                            <label
+                              class="c19"
+                            >
+                              <div
+                                class="c17 c14"
+                              >
+                                <div
+                                  class="c18 c14"
+                                  margin="5px"
+                                >
+                                  <input
+                                    checked=""
+                                    class="c20 c21"
+                                    data-testid="radio-input"
+                                    name="in_assets"
+                                    type="radio"
+                                    value="1"
+                                  />
+                                  <span
+                                    class="c22"
+                                    data-testid="radio-title"
+                                  >
+                                    Yes
+                                  </span>
+                                </div>
+                              </div>
+                            </label>
+                            <label
+                              class="c19"
+                            >
+                              <div
+                                class="c17 c14"
+                              >
+                                <div
+                                  class="c18 c14"
+                                  margin="5px"
+                                >
+                                  <input
+                                    class="c20 c21"
+                                    data-testid="radio-input"
+                                    name="in_assets"
+                                    type="radio"
+                                    value="0"
+                                  />
+                                  <span
+                                    class="c22"
+                                    data-testid="radio-title"
+                                  >
+                                    No
+                                  </span>
+                                </div>
+                              </div>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="c11"
+                  >
+                    <label
+                      class="c12"
+                      data-testid="formgroup-title"
+                    >
+                      Auto Delete Reports
+                    </label>
+                    <div
+                      class="c13 c10"
+                      data-testid="formgroup-content"
+                      size="10"
+                    >
+                      <label
+                        class="c19"
+                      >
+                        <div
+                          class="c17 c14"
+                        >
+                          <div
+                            class="c18 c14"
+                            margin="5px"
+                          >
+                            <input
+                              class="c20 c21"
+                              data-testid="radio-input"
+                              name="auto_delete"
+                              type="radio"
+                              value="no"
+                            />
+                            <span
+                              class="c22"
+                              data-testid="radio-title"
+                            >
+                              Do not automatically delete reports
+                            </span>
+                          </div>
+                        </div>
+                      </label>
+                      <div
+                        class="c17 c14"
+                      >
+                        <div
+                          class="c18 c14"
+                          margin="5px"
+                        >
+                          <label
+                            class="c19"
+                          >
+                            <div
+                              class="c17 c14"
+                            >
+                              <div
+                                class="c18 c14"
+                                margin="5px"
+                              >
+                                <input
+                                  checked=""
+                                  class="c20 c21"
+                                  data-testid="radio-input"
+                                  name="auto_delete"
+                                  type="radio"
+                                  value="keep"
+                                />
+                                <span
+                                  class="c22"
+                                  data-testid="radio-title"
+                                >
+                                  Automatically delete oldest reports but always keep newest
+                                </span>
+                              </div>
+                            </div>
+                          </label>
+                          <span
+                            class="c23"
+                          >
+                            <input
+                              class="c24"
+                              data-testid="spinner-input"
+                              maxlength="5"
+                              min="1"
+                              name="auto_delete_data"
+                              size="4"
+                              value="5"
+                            />
+                            <span
+                              class="c25 c26"
+                              data-testid="spinner-up"
+                            >
+                              ▲
+                            </span>
+                            <span
+                              class="c27 c26"
+                              data-testid="spinner-down"
+                            >
+                              ▼
+                            </span>
+                          </span>
+                          <span>
+                            reports
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c28 c29 c30"
+            >
+              <button
+                class="c31 c32 c33"
+                data-testid="dialog-close-button"
+                title="Cancel"
+              >
+                Cancel
+              </button>
+              <button
+                class="c31 c32 c33"
+                data-testid="dialog-save-button"
+                title="Save"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+          <div
+            class="c34"
+          >
+            <div
+              class="c35"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div />
+</body>
+`;

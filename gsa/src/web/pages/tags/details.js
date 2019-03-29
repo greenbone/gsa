@@ -36,7 +36,7 @@ import TableRow from 'web/components/table/row';
 import {Col} from 'web/entity/page';
 
 const TagDetails = ({entity}) => {
-  const {comment, value, resource_type, resources} = entity;
+  const {comment, value, resourceType, resources} = entity;
   return (
     <Layout grow flex="column">
       <InfoTable>
@@ -59,8 +59,8 @@ const TagDetails = ({entity}) => {
 
           {isDefined(resources) && (
             <TableRow>
-              <TableData>{_('Resoure Type')}</TableData>
-              <TableData>{typeName(resource_type)}</TableData>
+              <TableData>{_('Resource Type')}</TableData>
+              <TableData>{typeName(resourceType)}</TableData>
             </TableRow>
           )}
 

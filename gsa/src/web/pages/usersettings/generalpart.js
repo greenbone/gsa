@@ -97,7 +97,6 @@ const GeneralPart = ({
               value={oldPassword}
               grow="1"
               size="30"
-              maxLength="400"
               autoComplete="off"
               onChange={onChange}
             />
@@ -108,7 +107,6 @@ const GeneralPart = ({
               value={newPassword}
               grow="1"
               size="30"
-              maxLength="400"
               color="red"
               autoComplete="off"
               onChange={onChange}
@@ -120,7 +118,6 @@ const GeneralPart = ({
               value={confPassword}
               grow="1"
               size="30"
-              maxLength="400"
               autoComplete="off"
               border="red"
               onChange={onChange}
@@ -148,7 +145,6 @@ const GeneralPart = ({
           name="rowsPerPage"
           value={rowsPerPage}
           size="19"
-          maxLength="400"
           onChange={onChange}
         />
       </FormGroup>
@@ -157,7 +153,6 @@ const GeneralPart = ({
           name="detailsExportFileName"
           value={detailsExportFileName}
           size="19"
-          maxLength="400"
           onChange={onChange}
         />
       </FormGroup>
@@ -166,7 +161,6 @@ const GeneralPart = ({
           name="listExportFileName"
           value={listExportFileName}
           size="19"
-          maxLength="400"
           onChange={onChange}
         />
       </FormGroup>
@@ -175,7 +169,6 @@ const GeneralPart = ({
           name="reportExportFileName"
           value={reportExportFileName}
           size="19"
-          maxLength="400"
           onChange={onChange}
         />
       </FormGroup>

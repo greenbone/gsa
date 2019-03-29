@@ -28,6 +28,8 @@ import Theme from 'web/utils/theme.js';
 
 import Link from 'web/components/link/link.js';
 
+import MenuSection from 'web/components/menu/menusection';
+
 const StyledMenu = styled.li`
   flex-grow: 1;
   flex-shrink: 1;
@@ -114,13 +116,23 @@ const MenuList = styled.ul`
   }
 `;
 
+const getFirstMenuEntry = child => {
+  // return menu entries without the MenuSection
+  if (child.type === MenuSection) {
+    return React.Children.toArray(child.props.children).find(chil => !!chil);
+  }
+  return child;
+};
+
 const Menu = ({children, title, to, ...props}) => {
   let link;
   children = React.Children.toArray(children).filter(hasValue);
+
   if (isDefined(to)) {
     link = <Link to={to}>{title}</Link>;
   } else if (isDefined(children) && children.length > 0) {
-    const [child] = children;
+    let [child] = children;
+    child = getFirstMenuEntry(child);
     link = React.cloneElement(child, {title});
   }
 

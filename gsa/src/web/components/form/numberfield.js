@@ -192,7 +192,7 @@ class NumberField extends React.Component {
         break;
     }
 
-    const {onKeyDown} = this.props;
+    const {onKeyDown} = this.props; // eslint-disable-line react/prop-types
     if (isDefined(onKeyDown)) {
       // should only be used for testing
       onKeyDown(event);

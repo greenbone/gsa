@@ -64,12 +64,32 @@ describe('convert tests', () => {
     expect(convert('first', '0', '=')).toEqual({
       keyword: 'first',
       relation: '=',
-      value: 0,
+      value: 1,
     });
     expect(convert('first', '666', '=')).toEqual({
       keyword: 'first',
       relation: '=',
       value: 666,
+    });
+    expect(convert('first', '-1', '=')).toEqual({
+      keyword: 'first',
+      relation: '=',
+      value: 1,
+    });
+    expect(convert('first', '-9999999', '=')).toEqual({
+      keyword: 'first',
+      relation: '=',
+      value: 1,
+    });
+    expect(convert('first', '1', '>')).toEqual({
+      keyword: 'first',
+      relation: '=',
+      value: 1,
+    });
+    expect(convert('first', '1', 'foo')).toEqual({
+      keyword: 'first',
+      relation: '=',
+      value: 1,
     });
   });
 
@@ -106,6 +126,21 @@ describe('convert tests', () => {
       keyword: 'rows',
       relation: '=',
       value: 99,
+    });
+    expect(convert('rows', '-1', '=')).toEqual({
+      keyword: 'rows',
+      relation: '=',
+      value: -1,
+    });
+    expect(convert('rows', '1', '>')).toEqual({
+      keyword: 'rows',
+      relation: '=',
+      value: 1,
+    });
+    expect(convert('rows', '1', 'foo')).toEqual({
+      keyword: 'rows',
+      relation: '=',
+      value: 1,
     });
   });
 

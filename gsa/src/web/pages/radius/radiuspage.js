@@ -22,31 +22,51 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 
-import Button from 'web/components/form/button';
-import CheckBox from 'web/components/form/checkbox';
-import FormGroup from 'web/components/form/formgroup';
-import PasswordField from 'web/components/form/passwordfield';
-import TextField from 'web/components/form/textfield';
-
+import EditIcon from 'web/components/icon/editicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import RadiusIcon from 'web/components/icon/radiusicon';
 
+import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 
 import Section from 'web/components/section/section';
 
 import Loading from 'web/components/loading/loading';
 
+import Table from 'web/components/table/simpletable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
+
+import {Col} from 'web/entity/page';
+
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 import compose from 'web/utils/compose';
+import {renderYesNo} from 'web/utils/render';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
+
+import RadiusDialog from './dialog';
+
+const ToolBarIcons = ({onOpenDialogClick}) => (
+  <IconDivider>
+    <ManualIcon
+      page="gui_administration"
+      anchor="radius"
+      size="small"
+      title={_('Help: RADIUS Authentication')}
+    />
+    <EditIcon onClick={onOpenDialogClick} />
+  </IconDivider>
+);
+
+ToolBarIcons.propTypes = {
+  onOpenDialogClick: PropTypes.func,
+};
 
 class RadiusAuthentication extends React.Component {
   constructor(...args) {
@@ -56,12 +76,14 @@ class RadiusAuthentication extends React.Component {
       enable: '',
       radiushost: '',
       radiuskey: '',
-      loading: 'true',
+      loading: true,
+      dialogVisible: false,
     };
 
     this.getRadiusAuth = this.getRadiusAuth.bind(this);
     this.handleSaveSettings = this.handleSaveSettings.bind(this);
-    this.handleValueChange = this.handleValueChange.bind(this);
+    this.closeDialog = this.closeDialog.bind(this);
+    this.openDialog = this.openDialog.bind(this);
   }
 
   componentDidMount() {
@@ -76,9 +98,7 @@ class RadiusAuthentication extends React.Component {
     const {gmp} = this.props;
     const authData = gmp.user.currentAuthSettings().then(response => {
       const data = response.data.get('method:radius_connect');
-      let {enable, radiushost, radiuskey} = data;
-      // handle getting enable as "true" but posting it as 1
-      enable = enable === 'true' ? YES_VALUE : NO_VALUE;
+      const {enable, radiushost, radiuskey} = data;
       this.setState({
         enable,
         radiushost,
@@ -95,8 +115,8 @@ class RadiusAuthentication extends React.Component {
     }
   }
 
-  handleSaveSettings() {
-    const {enable, radiushost, radiuskey} = this.state;
+  handleSaveSettings(state) {
+    const {enable, radiushost, radiuskey} = state;
 
     const data = {
       enable,
@@ -108,11 +128,18 @@ class RadiusAuthentication extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.auth.saveRadius(data);
+    return gmp.auth.saveRadius(data).then(() => {
+      this.getRadiusAuth();
+      this.setState({dialogVisible: false});
+    });
   }
 
-  handleValueChange(value, name) {
-    this.setState({[name]: value});
+  openDialog() {
+    this.setState({dialogVisible: true});
+  }
+
+  closeDialog() {
+    this.setState({dialogVisible: false});
   }
 
   render() {
@@ -121,54 +148,46 @@ class RadiusAuthentication extends React.Component {
       return <Loading />;
     }
 
-    const {enable, radiushost, radiuskey} = this.state;
+    const {dialogVisible, enable, radiushost, radiuskey} = this.state;
 
     return (
       <ErrorBoundary errElement={_('page')}>
         <Layout flex="column">
-          <ManualIcon
-            page="gui_administration"
-            anchor="radius"
-            size="small"
-            title={_('Help: RADIUS Authentication')}
-          />
+          <ToolBarIcons onOpenDialogClick={this.openDialog} />
           <Section
             img={<RadiusIcon size="large" />}
             title={_('RADIUS Authentication')}
           />
-          <Layout flex="column">
-            <FormGroup title={_('Enable')} titlesize="5">
-              <CheckBox
-                name="enable"
-                checked={enable === YES_VALUE}
-                checkedValue={YES_VALUE}
-                unCheckedValue={NO_VALUE}
-                onChange={this.handleValueChange}
-              />
-            </FormGroup>
-            <FormGroup title={_('RADIUS Host')} titlesize="5">
-              <TextField
-                name="radiushost"
-                value={radiushost}
-                size="30"
-                onChange={this.handleValueChange}
-              />
-            </FormGroup>
-            <FormGroup title={_('Secret Key')} titlesize="5">
-              <PasswordField
-                name="radiuskey"
-                value={radiuskey}
-                size="30"
-                onChange={this.handleValueChange}
-              />
-            </FormGroup>
-          </Layout>
-          <FormGroup title=" ">
-            <Button width="auto" onClick={this.handleSaveSettings}>
-              {_('Save')}
-            </Button>
-          </FormGroup>
+          <Table>
+            <colgroup>
+              <Col width="10%" />
+              <Col width="90%" />
+            </colgroup>
+            <TableBody>
+              <TableRow>
+                <TableData>{_('Enabled')}</TableData>
+                <TableData>{renderYesNo(enable)}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('RADIUS Host')}</TableData>
+                <TableData>{radiushost}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('Secret Key')}</TableData>
+                <TableData>********</TableData>
+              </TableRow>
+            </TableBody>
+          </Table>
         </Layout>
+        {dialogVisible && (
+          <RadiusDialog
+            enable={enable}
+            radiushost={radiushost}
+            radiuskey={radiuskey}
+            onClose={this.closeDialog}
+            onSave={this.handleSaveSettings}
+          />
+        )}
       </ErrorBoundary>
     );
   }

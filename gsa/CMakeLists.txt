@@ -238,7 +238,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/dialog/dialog.js
      ${GSA_SRC_DIR}/src/web/components/dialog/error.js
      ${GSA_SRC_DIR}/src/web/components/dialog/footer.js
-     ${GSA_SRC_DIR}/src/web/components/dialog/linkconfirmationdialog.js
+     ${GSA_SRC_DIR}/src/web/components/dialog/confirmationdialog.js
      ${GSA_SRC_DIR}/src/web/components/dialog/overlay.js
      ${GSA_SRC_DIR}/src/web/components/dialog/resizer.js
      ${GSA_SRC_DIR}/src/web/components/dialog/savedialog.js
@@ -719,6 +719,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/hosts/dashboard/severityclassdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/hosts/dashboard/topologydisplay.js
      ${GSA_SRC_DIR}/src/web/pages/hosts/dashboard/vulnscoredisplay.js
+     ${GSA_SRC_DIR}/src/web/pages/ldap/dialog.js
      ${GSA_SRC_DIR}/src/web/pages/ldap/ldappage.js
      ${GSA_SRC_DIR}/src/web/pages/login/loginform.js
      ${GSA_SRC_DIR}/src/web/pages/login/loginpage.js
@@ -814,6 +815,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/portlists/portrangestable.js
      ${GSA_SRC_DIR}/src/web/pages/portlists/row.js
      ${GSA_SRC_DIR}/src/web/pages/portlists/table.js
+     ${GSA_SRC_DIR}/src/web/pages/radius/dialog.js
      ${GSA_SRC_DIR}/src/web/pages/radius/radiuspage.js
      ${GSA_SRC_DIR}/src/web/pages/reportformats/component.js
      ${GSA_SRC_DIR}/src/web/pages/reportformats/details.js

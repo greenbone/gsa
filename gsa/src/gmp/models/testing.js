@@ -44,8 +44,15 @@ const testNvtId = modelClass => {
   });
 };
 
-const testModelProperties = (modelClass, type) => {
+export const testModelProperties = (modelClass, type) => {
   describe(`${type} Model tests`, () => {
+    test('should unescape name when parsing', () => {
+      const elem = {name: `foo&quot;&lt;&gt;&amp;&apos;&#x2F;&#x5C;`};
+      const model = new modelClass(elem);
+
+      expect(model.name).toEqual(`foo"<>&'/\\`);
+    });
+
     test('end_time is parsed correctly', () => {
       const elem = {
         end_time: '2018-10-10T11:41:23.022Z',
@@ -176,7 +183,9 @@ const testModelProperties = (modelClass, type) => {
       expect(() => (model.id = 'bar')).toThrow();
     });
   });
+};
 
+export const testModelMethods = (modelClass, type) => {
   describe(`${type} Model methods tests`, () => {
     test('isInUse() should return correct true/false', () => {
       const model1 = new modelClass({in_use: '1'});
@@ -222,11 +231,13 @@ const testModelProperties = (modelClass, type) => {
 
 export const testModel = (modelClass, type) => {
   testModelProperties(modelClass, type);
+  testModelMethods(modelClass, type);
   testId(modelClass);
 };
 
 export const testNvtModel = modelClass => {
   testModelProperties(modelClass, 'nvt');
+  testModelMethods(modelClass, 'nvt');
   testNvtId(modelClass);
 };
 

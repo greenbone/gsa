@@ -47,7 +47,7 @@ class ConfirmationDialogContent extends React.Component {
   }
 
   render() {
-    const {moveprops, text, title} = this.props;
+    const {moveprops, text, title, rightButtonTitle} = this.props;
 
     return (
       <DialogContent>
@@ -56,9 +56,11 @@ class ConfirmationDialogContent extends React.Component {
           onCloseClick={this.props.close}
           {...moveprops}
         />
-        <ScrollableContent>{text}</ScrollableContent>
+        <ScrollableContent data-testid="confirmationdialog-content">
+          {text}
+        </ScrollableContent>
         <DialogTwoButtonFooter
-          rightButtonTitle={_('Follow Link')}
+          rightButtonTitle={rightButtonTitle}
           onLeftButtonClick={this.props.close}
           onRightButtonClick={this.handleResume}
         />
@@ -70,15 +72,17 @@ class ConfirmationDialogContent extends React.Component {
 ConfirmationDialogContent.propTypes = {
   close: PropTypes.func.isRequired,
   moveprops: PropTypes.object,
+  rightButtonTitle: PropTypes.string,
   text: PropTypes.string,
   title: PropTypes.string.isRequired,
   onResumeClick: PropTypes.func.isRequired,
 };
 
-const LinkConfirmationDialog = ({
+const ConfirmationDialog = ({
   width = DEFAULT_DIALOG_WIDTH,
   text,
   title,
+  rightButtonTitle = _('OK'),
   onClose,
   onResumeClick,
 }) => {
@@ -90,6 +94,7 @@ const LinkConfirmationDialog = ({
           moveprops={moveProps}
           text={text}
           title={title}
+          rightButtonTitle={rightButtonTitle}
           onResumeClick={onResumeClick}
         />
       )}
@@ -97,7 +102,8 @@ const LinkConfirmationDialog = ({
   );
 };
 
-LinkConfirmationDialog.propTypes = {
+ConfirmationDialog.propTypes = {
+  rightButtonTitle: PropTypes.string,
   text: PropTypes.string,
   title: PropTypes.string.isRequired,
   width: PropTypes.string,
@@ -105,6 +111,6 @@ LinkConfirmationDialog.propTypes = {
   onResumeClick: PropTypes.func.isRequired,
 };
 
-export default LinkConfirmationDialog;
+export default ConfirmationDialog;
 
 // vim: set ts=2 sw=2 tw=80:

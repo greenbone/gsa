@@ -36,6 +36,8 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/tickets';
 
+import PropTypes from 'web/utils/proptypes';
+
 import TicketComponent from './component';
 import TicketsDashboard, {TICKETS_DASHBOARD_ID} from './dashboard';
 import Table, {FIELDS} from './table';
@@ -103,6 +105,15 @@ const Page = ({
     )}
   </TicketComponent>
 );
+
+Page.propTypes = {
+  filter: PropTypes.model,
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('ticket', {
   entitiesSelector,

@@ -52,7 +52,7 @@ import Actions from './actions';
 import TaskStatus from './status';
 import Trend from './trend';
 
-import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner';
+import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
 const render_report = (report, links) => {
   if (!isDefined(report)) {
@@ -74,7 +74,7 @@ const render_report_total = (entity, links) => {
     <Layout>
       <Link
         to={'reports'}
-        filter={'task_id=' + entity.id + ' sort-reverse=date&filt_id=-2'}
+        filter={'task_id=' + entity.id + ' sort-reverse=date'}
         title={_(
           'View list of all reports for Task {{name}},' +
             ' including unfinished ones',
@@ -92,7 +92,6 @@ const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
-  actions,
   username,
   onToggleDetailsClick,
   ...props
@@ -123,7 +122,7 @@ const Row = ({
             {entity.alterable === 1 && (
               <AlterableIcon size="small" title={_('Task is alterable')} />
             )}
-            {isDefined(scanner) && scanner.type === SLAVE_SCANNER_TYPE && (
+            {isDefined(scanner) && scanner.type === GMP_SCANNER_TYPE && (
               <SensorIcon
                 size="small"
                 title={_(

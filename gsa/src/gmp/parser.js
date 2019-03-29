@@ -129,11 +129,13 @@ const esc2xml = {
   '&amp;': `&`,
   '&lt;': `<`,
   '&gt;': `>`,
+  '&#x2F;': `/`,
+  '&#x5C;': `\\`,
 };
 
 export const parseXmlEncodedString = string =>
   string.replace(
-    /(&quot;|&lt;|&gt;|&amp;|&apos;)/g,
+    /(&quot;|&lt;|&gt;|&amp;|&apos;|&#x2F;|&#x5C;)/g,
     (str, symbol) => esc2xml[symbol],
   );
 

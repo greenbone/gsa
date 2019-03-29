@@ -66,7 +66,6 @@ const PortRangeDialog = ({
                 size="30"
                 convert={convertPort}
                 onChange={onValueChange}
-                maxLength="80"
               />
             </FormGroup>
 
@@ -76,7 +75,6 @@ const PortRangeDialog = ({
                 value={state.port_range_end}
                 grow="1"
                 size="30"
-                maxLength="80"
                 convert={convertPort}
                 onChange={onValueChange}
               />

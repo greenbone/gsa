@@ -12,21 +12,41 @@ $ cd gsa && git log
 
 ## gsa 8.0 unreleased
 
- * Add Sourcefire PKCS12 password support #1150
- * Add Alemba vFire alert to GUI #1100
- * Sort alerts at task details alphanumerically #1094
- * Add solution type to report details powerfilter #1091
- * Add feature: Scan Report Content Composer #1073 #1084 #1086 #1090
- * Tags can now contain backslashes, forward slashes and percent signs in the
-   value as well as hyphens in the name to allow using the special task tag
-   "smb-alert:file_path". #1107 #1142 #1145
- * Fix issues with updating user authentication and logging out active
-   sessions after changing the password of a user #1159
- * New feature: Remediation Tickets #1126
- * Allow to pass start time, end time and sensor/slave id as url parameters to
-   performance page.
+ * Change order of options in target dialog #1233
+ * Don't limit the input field lengths anymore #1232
+ * Convert first filter keyword values less then one to one #1228
+ * Always use equal relation for first and rows filter keywords #1228
+ * Add confirmation dialog when creating a user without a role #1224
+ * Use dialogs to edit LDAP and RADIUS authentification #1212 #1213
+ * Renamed "PGP Key" credential to "PGP Encryption Key" #1208
  * Add link referencing the performance during scan time to the report details
-   page.
+ * Allow to pass start time, end time and sensor/slave id as url parameters to
+ performance page.
+ page.
+ * New feature: Remediation Tickets #1126
+ * Fix issues with updating user authentication and logging out active
+ sessions after changing the password of a user #1159
+ * Tags can now contain backslashes, forward slashes and percent signs in the
+ value as well as hyphens in the name to allow using the special task tag
+ "smb-alert:file_path". #1107 #1142 #1145
+ * Allow to sort the nvts table at the edit scan config families dialog by
+ name, oid, severity, timeout and selected #1210
+ * Add feature: Scan Report Content Composer #1073 #1084 #1086 #1090
+ * Add solution type to report details powerfilter #1091
+ * Sort alerts at task details alphanumerically #1094
+ * Add Alemba vFire alert to GUI #1100
+ * Add Sourcefire PKCS12 password support #1150
+ * Fix crash of Task dialog without user having get_config, get_scanner,
+   get_tags and get_targets permissions #1220
+ * Ensure host ordering is valid in task dialog #1220
+ * Disable tag selection if not task should be added in create task dialog #1220
+ * Don't show add tag fields when editing a task #1220
+ * Fix race condition resulting in not displaying scan config details at task
+   dialog when opening the dialog for the first time #1220
+ * Fix saving run schedule once setting from Task dialog #1220
+ * Don't create a container task from the task dialog accidentally #1220
+ * Use "Do not automatically delete reports" as default again in task dialog
+   #1220
 
 
 ## gsa 8.0+beta2 (2018-12-04)

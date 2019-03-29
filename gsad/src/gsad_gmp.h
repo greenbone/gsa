@@ -56,12 +56,6 @@ char *
 delete_task_gmp (gvm_connection_t *, credentials_t *, params_t *,
                  cmd_response_data_t *);
 char *
-edit_task_gmp (gvm_connection_t *, credentials_t *, params_t *,
-               cmd_response_data_t *);
-char *
-new_task_gmp (gvm_connection_t *, credentials_t *, params_t *,
-              cmd_response_data_t *);
-char *
 save_task_gmp (gvm_connection_t *, credentials_t *, params_t *,
                cmd_response_data_t *);
 char *

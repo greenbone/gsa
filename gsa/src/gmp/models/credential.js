@@ -99,7 +99,7 @@ const TYPE_NAMES = {
   usk: _l('Username + SSH Key'),
   cc: _l('Client Certificate'),
   snmp: _l('SNMP'),
-  pgp: _l('PGP Key'),
+  pgp: _l('PGP Encryption Key'),
   pw: _l('Password only'),
   smime: _l('S/MIME Certificate'),
 };

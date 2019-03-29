@@ -60,9 +60,9 @@ class NoteComponent extends React.Component {
       let active = ACTIVE_NO_VALUE;
       if (note.isActive()) {
         if (isDefined(note.endTime)) {
-          active = ACTIVE_YES_ALWAYS_VALUE;
-        } else {
           active = ACTIVE_YES_UNTIL_VALUE;
+        } else {
+          active = ACTIVE_YES_ALWAYS_VALUE;
         }
       }
 

@@ -97,7 +97,6 @@ const PortListsDialog = ({
                 grow="1"
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"
               />
             </FormGroup>
 
@@ -107,7 +106,6 @@ const PortListsDialog = ({
                 value={state.comment}
                 grow="1"
                 size="30"
-                maxLength="400"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -130,7 +128,6 @@ const PortListsDialog = ({
                       disabled={from_file === FROM_FILE}
                       onChange={onValueChange}
                       size="30"
-                      maxLength="400"
                     />
                   </Divider>
                   <Divider>

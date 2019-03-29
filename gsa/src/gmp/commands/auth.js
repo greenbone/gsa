@@ -21,12 +21,12 @@ import registerCommand from '../command';
 import HttpCommand from './http';
 
 class AuthenticationCommand extends HttpCommand {
-  saveLdap({authdn, certificate_info, enable, group, ldaphost}) {
+  saveLdap({authdn, certificate, enable, group, ldaphost}) {
     return this.httpPost({
       cmd: 'save_auth',
       group: 'method:ldap_connect',
       authdn,
-      certificate_info,
+      certificate,
       enable,
       ldaphost,
     });
