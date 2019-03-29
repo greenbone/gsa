@@ -141,7 +141,6 @@ class NvtPreference extends React.Component {
         <TextField
           name={preference.name}
           value={value}
-          maxLength="400"
           onChange={this.onPreferenceChange}
         />
       );

@@ -33,7 +33,6 @@ const HttpMethodPart = ({prefix, URL, onChange}) => {
       <TextField
         grow="1"
         name={prefix + 'URL'}
-        maxLength="301"
         value={URL}
         onChange={onChange}
       />

@@ -58,7 +58,6 @@ const VeriniceMethodPart = ({
         <TextField
           grow="1"
           size="30"
-          maxLength="256"
           name={prefix + 'verinice_server_url'}
           value={veriniceServerUrl}
           onChange={onChange}

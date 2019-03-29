@@ -79,7 +79,6 @@ const AlembaVfireMethodPart = ({
       <FormGroup title={_('Base URL')}>
         <TextField
           grow="1"
-          maxLength="256"
           name={prefix + 'vfire_base_url'}
           value={vFireBaseUrl}
           onChange={onChange}
@@ -125,7 +124,6 @@ const AlembaVfireMethodPart = ({
       <FormGroup title={_('Alemba Client ID')}>
         <TextField
           grow="1"
-          maxLength="256"
           name={prefix + 'vfire_client_id'}
           value={vFireClientId}
           onChange={onChange}
@@ -135,7 +133,6 @@ const AlembaVfireMethodPart = ({
       <FormGroup title={_('Partition')}>
         <TextField
           grow="1"
-          maxLength="256"
           name={prefix + 'vfire_call_partition_name'}
           value={vFireCallPartitionName}
           onChange={onChange}
@@ -155,7 +152,6 @@ const AlembaVfireMethodPart = ({
       <FormGroup title={_('Call Template')}>
         <TextField
           grow="1"
-          maxLength="256"
           name={prefix + 'vfire_call_template_name'}
           value={vFireCallTemplateName}
           onChange={onChange}
@@ -165,7 +161,6 @@ const AlembaVfireMethodPart = ({
       <FormGroup title={_('Call Type')}>
         <TextField
           grow="1"
-          maxLength="256"
           name={prefix + 'vfire_call_type_name'}
           value={vFireCallTypeName}
           onChange={onChange}
@@ -175,7 +170,6 @@ const AlembaVfireMethodPart = ({
       <FormGroup title={_('Impact')}>
         <TextField
           grow="1"
-          maxLength="256"
           name={prefix + 'vfire_call_impact_name'}
           value={vFireCallImpactName}
           onChange={onChange}
@@ -185,7 +179,6 @@ const AlembaVfireMethodPart = ({
       <FormGroup title={_('Urgency')}>
         <TextField
           grow="1"
-          maxLength="256"
           name={prefix + 'vfire_call_urgency_name'}
           value={vFireCallUrgencyName}
           onChange={onChange}

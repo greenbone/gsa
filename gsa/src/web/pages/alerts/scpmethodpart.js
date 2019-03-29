@@ -80,7 +80,6 @@ const ScpMethodPart = ({
           grow="1"
           name={prefix + 'scp_host'}
           value={scpHost}
-          maxLength="256"
           onChange={onChange}
         />
       </FormGroup>

@@ -87,7 +87,6 @@ const SmbMethodPart = ({
         <TextField
           grow="1"
           name={prefix + 'smb_share_path'}
-          maxLength="256"
           value={smbSharePath}
           onChange={onChange}
         />
@@ -97,7 +96,6 @@ const SmbMethodPart = ({
         <TextField
           grow="1"
           name={prefix + 'smb_file_path'}
-          maxLength="256"
           value={smbFilePath}
           onChange={onChange}
         />

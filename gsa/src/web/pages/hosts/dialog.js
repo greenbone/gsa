@@ -52,7 +52,6 @@ const HostsDialog = ({host, title = _('New Host'), onClose, onSave}) => {
                 size="30"
                 disabled={isDefined(host)}
                 onChange={onValueChange}
-                maxLength="80"
               />
             </FormGroup>
 
@@ -62,7 +61,6 @@ const HostsDialog = ({host, title = _('New Host'), onClose, onSave}) => {
                 value={state.comment}
                 grow="1"
                 size="30"
-                maxLength="400"
                 onChange={onValueChange}
               />
             </FormGroup>
