@@ -72,6 +72,7 @@ class ConfirmationDialogContent extends React.Component {
 ConfirmationDialogContent.propTypes = {
   close: PropTypes.func.isRequired,
   moveprops: PropTypes.object,
+  rightButtonTitle: PropTypes.string,
   text: PropTypes.string,
   title: PropTypes.string.isRequired,
   onResumeClick: PropTypes.func.isRequired,

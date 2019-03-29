@@ -92,7 +92,6 @@ const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
-  actions,
   username,
   onToggleDetailsClick,
   ...props
