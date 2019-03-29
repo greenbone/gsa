@@ -296,24 +296,6 @@ const TargetDialog = ({
               </Divider>
             </FormGroup>
 
-            <FormGroup title={_('Reverse Lookup Only')}>
-              <YesNoRadio
-                name="reverse_lookup_only"
-                disabled={state.in_use}
-                value={state.reverse_lookup_only}
-                onChange={onValueChange}
-              />
-            </FormGroup>
-
-            <FormGroup title={_('Reverse Lookup Unify')}>
-              <YesNoRadio
-                name="reverse_lookup_unify"
-                disabled={state.in_use}
-                value={state.reverse_lookup_unify}
-                onChange={onValueChange}
-              />
-            </FormGroup>
-
             {capabilities.mayOp('get_port_lists') && (
               <FormGroup title={_('Port List')}>
                 <Divider>
@@ -449,6 +431,24 @@ const TargetDialog = ({
                 </Divider>
               </FormGroup>
             )}
+
+            <FormGroup title={_('Reverse Lookup Only')}>
+              <YesNoRadio
+                name="reverse_lookup_only"
+                disabled={state.in_use}
+                value={state.reverse_lookup_only}
+                onChange={onValueChange}
+              />
+            </FormGroup>
+
+            <FormGroup title={_('Reverse Lookup Unify')}>
+              <YesNoRadio
+                name="reverse_lookup_unify"
+                disabled={state.in_use}
+                value={state.reverse_lookup_unify}
+                onChange={onValueChange}
+              />
+            </FormGroup>
           </Layout>
         );
       }}
