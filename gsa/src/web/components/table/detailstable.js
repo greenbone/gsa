@@ -21,7 +21,9 @@ import React from 'react';
 
 import {Col} from 'web/entity/page';
 
-import InfoTable from './infotable.js';
+import PropTypes from 'web/utils/proptypes';
+
+import InfoTable from './infotable';
 
 const DetailsTable = ({children, size = 'full', ...props}) => (
   <InfoTable {...props} size={size}>
@@ -32,6 +34,10 @@ const DetailsTable = ({children, size = 'full', ...props}) => (
     {children}
   </InfoTable>
 );
+
+DetailsTable.propTypes = {
+  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+};
 
 export default DetailsTable;
 

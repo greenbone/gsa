@@ -243,6 +243,14 @@ const Page = ({
   </TicketComponent>
 );
 
+Page.propTypes = {
+  entity: PropTypes.model,
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
+};
+
 export default withEntityContainer('ticket', {
   load: loadTicket,
   entitySelector: ticketSelector,

@@ -74,6 +74,7 @@ const SvgIcon = ({
 
 SvgIcon.propTypes = {
   active: PropTypes.bool,
+  disabled: PropTypes.bool,
   to: PropTypes.string,
   value: PropTypes.any,
   onClick: PropTypes.func,
