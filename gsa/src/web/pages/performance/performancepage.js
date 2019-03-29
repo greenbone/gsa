@@ -221,8 +221,16 @@ class PerformancePage extends React.Component {
     this.props.loadScanners();
 
     if (isDefined(start) && isDefined(end)) {
-      const startDate = date(start);
-      const endDate = date(end);
+      let startDate = date(start);
+
+      if (!startDate.isValid()) {
+        startDate = date();
+      }
+
+      let endDate = date(end);
+      if (!endDate.isValid()) {
+        endDate = date();
+      }
 
       this.setState({
         duration: undefined,
