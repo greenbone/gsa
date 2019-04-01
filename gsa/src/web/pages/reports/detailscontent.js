@@ -114,7 +114,7 @@ TabTitle.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-const TabTitleForUserTags = ({title, count}) => (
+const TabTitleWithSingleCount = ({title, count}) => (
   <Layout flex="column" align={['center', 'center']}>
     <span>{title}</span>
     <TabTitleCounts>
@@ -123,7 +123,7 @@ const TabTitleForUserTags = ({title, count}) => (
   </Layout>
 );
 
-TabTitleForUserTags.propTypes = {
+TabTitleWithSingleCount.propTypes = {
   count: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
 };
@@ -374,9 +374,18 @@ const PageContent = ({
                 onActivateTab={onActivateTab}
               >
                 <Tab>{_('Information')}</Tab>
-                <Tab>
-                  <TabTitle title={_('Results')} counts={resultCounts} />
-                </Tab>
+                {delta ? (
+                  <Tab>
+                    <TabTitleWithSingleCount
+                      title={_('Results')}
+                      count={filtered}
+                    />
+                  </Tab>
+                ) : (
+                  <Tab>
+                    <TabTitle title={_('Results')} counts={resultCounts} />
+                  </Tab>
+                )}
                 {!delta && (
                   <Tab>
                     <TabTitle title={_('Hosts')} counts={hosts.counts} />
@@ -433,7 +442,7 @@ const PageContent = ({
                   </Tab>
                 )}
                 <Tab>
-                  <TabTitleForUserTags
+                  <TabTitleWithSingleCount
                     title={_('User Tags')}
                     count={userTagsCount}
                   />
