@@ -24,10 +24,10 @@ import {createLogger} from 'redux-logger';
 
 import rootReducer from './reducers';
 
-const configureStore = () => {
+const configureStore = (debug = false) => {
   const middlewares = [thunk];
 
-  if (process.env.NODE_ENV === 'development') {
+  if (debug) {
     middlewares.push(createLogger());
   }
 
