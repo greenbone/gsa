@@ -316,7 +316,7 @@ UserSettingsDialog.propTypes = {
   notesFilter: PropTypes.string,
   nvtFilter: PropTypes.string,
   openVasScanConfigs: PropTypes.array,
-  openVasScanners: PropTypes.string,
+  openVasScanners: PropTypes.array,
   operatingSystemsFilter: PropTypes.string,
   ospScanConfigs: PropTypes.array,
   ospScanners: PropTypes.array,
