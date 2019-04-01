@@ -29,6 +29,7 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
+import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 import compose from 'web/utils/compose';
@@ -88,11 +89,6 @@ const MenuSpacer = styled.div`
   z-index: ${Theme.Layers.menu};
 `;
 
-const Wrapper = styled.div`
-  border: 1px solid #ddd;
-  padding: 10px;
-`;
-
 class LoginPage extends React.Component {
   constructor(props) {
     super(props);
@@ -102,9 +98,19 @@ class LoginPage extends React.Component {
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleGuestLogin = this.handleGuestLogin.bind(this);
   }
 
   handleSubmit(username, password) {
+    this.login(username, password);
+  }
+
+  handleGuestLogin() {
+    const {gmp} = this.props;
+    this.login(gmp.settings.guestUsername, gmp.settings.guestPassword);
+  }
+
+  login(username, password) {
     const {gmp} = this.props;
 
     gmp.login(username, password).then(
@@ -143,6 +149,8 @@ class LoginPage extends React.Component {
 
   render() {
     const {error} = this.state;
+    const {gmp} = this.props;
+
     let message;
 
     if (error) {
@@ -153,15 +161,22 @@ class LoginPage extends React.Component {
       }
     }
 
+    const showGuestLogin =
+      isDefined(gmp.settings.guestUsername) &&
+      isDefined(gmp.settings.guestPassword);
+
     return (
       <StyledLayout>
         <LoginHeader />
         <MenuSpacer />
         <LoginLayout flex="column" className="login">
           <GreenboneLogo />
-          <Wrapper>
-            <LoginForm error={message} onSubmit={this.handleSubmit} />
-          </Wrapper>
+          <LoginForm
+            error={message}
+            showGuestLogin={showGuestLogin}
+            onGuestLoginClick={this.handleGuestLogin}
+            onSubmit={this.handleSubmit}
+          />
         </LoginLayout>
         <Footer />
       </StyledLayout>
