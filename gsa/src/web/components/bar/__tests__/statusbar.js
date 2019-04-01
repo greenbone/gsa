@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,23 +16,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {createStore, applyMiddleware} from 'redux';
+import React from 'react';
 
-import thunk from 'redux-thunk';
+import {render} from 'web/utils/testing';
 
-import {createLogger} from 'redux-logger';
+import StatusBar from '../statusbar';
 
-import rootReducer from './reducers';
+describe('StatusBar tests', () => {
+  test('should render', () => {
+    const {element} = render(<StatusBar progress="90" status="Unknown" />);
 
-const configureStore = (debug = false) => {
-  const middlewares = [thunk];
+    expect(element).toMatchSnapshot();
+  });
+});
 
-  if (debug) {
-    middlewares.push(createLogger());
-  }
-
-  return createStore(rootReducer, applyMiddleware(...middlewares));
-};
-
-export default configureStore;
 // vim: set ts=2 sw=2 tw=80:
