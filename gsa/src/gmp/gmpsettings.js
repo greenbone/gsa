@@ -35,6 +35,7 @@ const set = (storage, name, value) => {
 class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
+      disableLoginForm = false,
       loglevel = storage.loglevel,
       manualurl = DEFAULT_MANUAL_URL,
       protocol = global.location.protocol,
@@ -56,6 +57,7 @@ class GmpSettings {
     this.timeout = timeout;
     this.guestUsername = guestUsername;
     this.guestPassword = guestPassword;
+    this.disableLoginForm = disableLoginForm;
   }
 
   set token(value) {

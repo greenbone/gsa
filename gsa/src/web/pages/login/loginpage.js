@@ -165,6 +165,8 @@ class LoginPage extends React.Component {
       isDefined(gmp.settings.guestUsername) &&
       isDefined(gmp.settings.guestPassword);
 
+    const showLogin = !gmp.settings.disableLoginForm;
+
     return (
       <StyledLayout>
         <LoginHeader />
@@ -174,6 +176,7 @@ class LoginPage extends React.Component {
           <LoginForm
             error={message}
             showGuestLogin={showGuestLogin}
+            showLogin={showLogin}
             onGuestLoginClick={this.handleGuestLogin}
             onSubmit={this.handleSubmit}
           />
