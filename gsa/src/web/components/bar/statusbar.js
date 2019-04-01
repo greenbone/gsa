@@ -20,13 +20,19 @@ import 'core-js/fn/string/includes';
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 
 import {getTranslatableTaskStatus, TASK_STATUS} from 'gmp/models/task';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes.js';
 
-import ProgressBar from './progressbar.js';
+import ProgressBar from './progressbar';
+
+const Span = styled.span`
+  white-space: nowrap;
+`;
 
 const StatusBar = ({status = 'Unknown', progress = '0'}) => {
   let text = getTranslatableTaskStatus(status);
@@ -79,7 +85,7 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
       progress={progress}
       background={background}
     >
-      {text}
+      <Span>{text}</Span>
     </ProgressBar>
   );
 };
