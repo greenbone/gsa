@@ -42,6 +42,8 @@ class GmpSettings {
       reloadinterval = DEFAULT_RELOAD_INTERVAL,
       server = global.location.host,
       timeout,
+      guestUsername,
+      guestPassword,
     } = {...options};
     this.storage = storage;
 
@@ -52,6 +54,8 @@ class GmpSettings {
     this.reloadinterval = reloadinterval;
     this.server = server;
     this.timeout = timeout;
+    this.guestUsername = guestUsername;
+    this.guestPassword = guestPassword;
   }
 
   set token(value) {
