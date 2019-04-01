@@ -84,11 +84,12 @@ let UserSettingsDialog = ({
   defaultTarget,
   agentsFilter,
   alertsFilter,
-  assetsFilter,
   configsFilter,
   credentialsFilter,
   filtersFilter,
+  hostsFilter,
   notesFilter,
+  operatingSystemsFilter,
   overridesFilter,
   permissionsFilter,
   portListsFilter,
@@ -141,11 +142,12 @@ let UserSettingsDialog = ({
     defaultTarget,
     agentsFilter,
     alertsFilter,
-    assetsFilter,
     configsFilter,
     credentialsFilter,
     filtersFilter,
+    hostsFilter,
     notesFilter,
+    operatingSystemsFilter,
     overridesFilter,
     permissionsFilter,
     portListsFilter,
@@ -240,11 +242,12 @@ let UserSettingsDialog = ({
                   <FilterPart
                     agentsFilter={values.agentsFilter}
                     alertsFilter={values.alertsFilter}
-                    assetsFilter={values.assetsFilter}
                     configsFilter={values.configsFilter}
                     credentialsFilter={values.credentialsFilter}
                     filtersFilter={values.filtersFilter}
+                    hostsFilter={values.hostsFilter}
                     notesFilter={values.notesFilter}
+                    operatingSystemsFilter={values.operatingSystemsFilter}
                     overridesFilter={values.overridesFilter}
                     permissionsFilter={values.permissionsFilter}
                     portListsFilter={values.portListsFilter}
@@ -280,7 +283,6 @@ UserSettingsDialog.propTypes = {
   agentsFilter: PropTypes.string,
   alerts: PropTypes.array,
   alertsFilter: PropTypes.string,
-  assetsFilter: PropTypes.string,
   autoCacheRebuild: PropTypes.string,
   capabilities: PropTypes.capabilities.isRequired,
   certBundFilter: PropTypes.string,
@@ -308,12 +310,14 @@ UserSettingsDialog.propTypes = {
   dynamicSeverity: PropTypes.string,
   filters: PropTypes.array,
   filtersFilter: PropTypes.string,
+  hostsFilter: PropTypes.string,
   listExportFileName: PropTypes.string,
   maxRowsPerPage: PropTypes.string,
   notesFilter: PropTypes.string,
   nvtFilter: PropTypes.string,
   openVasScanConfigs: PropTypes.array,
-  openVasScanners: PropTypes.array,
+  openVasScanners: PropTypes.string,
+  operatingSystemsFilter: PropTypes.string,
   ospScanConfigs: PropTypes.array,
   ospScanners: PropTypes.array,
   ovalFilter: PropTypes.string,
