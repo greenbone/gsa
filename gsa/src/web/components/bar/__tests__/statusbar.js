@@ -24,7 +24,7 @@ import StatusBar from '../statusbar';
 
 describe('StatusBar tests', () => {
   test('should render', () => {
-    const {element} = render(<StatusBar progress={'90'} status={'Unknown'} />);
+    const {element} = render(<StatusBar progress="90" status="Unknown" />);
 
     expect(element).toMatchSnapshot();
   });
