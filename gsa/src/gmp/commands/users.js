@@ -264,7 +264,10 @@ class UserCommand extends EntityCommand {
         data.credentialsFilter,
       'settings_filter:f9691163-976c-47e7-ad9a-38f2d5c81649':
         data.filtersFilter,
+      'settings_filter:37562dfe-1f7e-4cae-a7c0-fa95e6f194c5': data.hostsFilter,
       'settings_filter:96abcd5a-9b6d-456c-80b8-c3221bfa499d': data.notesFilter,
+      'settings_filter:f608c3ec-ce73-4ff6-8e04-7532749783af':
+        data.operatingSystemsFilter,
       'settings_filter:eaaaebf1-01ef-4c49-b7bb-955461c78e0a':
         data.overidesFilter,
       'settings_filter:ffb16b28-538c-11e3-b8f9-406186ea4fc5':
