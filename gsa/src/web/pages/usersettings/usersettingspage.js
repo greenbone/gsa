@@ -311,11 +311,12 @@ class UserSettings extends React.Component {
       defaultTarget = {},
       agentsFilter = {},
       alertsFilter = {},
-      assetsFilter = {},
       configsFilter = {},
       credentialsFilter = {},
       filtersFilter = {},
+      hostsFilter = {},
       notesFilter = {},
+      operatingSystemsFilter = {},
       overridesFilter = {},
       permissionsFilter = {},
       portListsFilter = {},
@@ -567,11 +568,6 @@ class UserSettings extends React.Component {
                             type="filter"
                           />
                           <SettingTableRow
-                            setting={assetsFilter}
-                            title={_('Assets Filter')}
-                            type="filter"
-                          />
-                          <SettingTableRow
                             setting={configsFilter}
                             title={_('Configs Filter')}
                             type="filter"
@@ -587,8 +583,18 @@ class UserSettings extends React.Component {
                             type="filter"
                           />
                           <SettingTableRow
+                            setting={hostsFilter}
+                            title={_('Hosts Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
                             setting={notesFilter}
                             title={_('Notes Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={operatingSystemsFilter}
+                            title={_('Operating Systems Filter')}
                             type="filter"
                           />
                           <SettingTableRow
@@ -730,11 +736,12 @@ class UserSettings extends React.Component {
               defaultTarget={defaultTarget.id}
               agentsFilter={agentsFilter.id}
               alertsFilter={alertsFilter.id}
-              assetsFilter={assetsFilter.id}
               configsFilter={configsFilter.id}
               credentialsFilter={credentialsFilter.id}
               filtersFilter={filtersFilter.id}
+              hostsFilter={hostsFilter.id}
               notesFilter={notesFilter.id}
+              operatingSystemsFilter={operatingSystemsFilter.id}
               overridesFilter={overridesFilter.id}
               permissionsFilter={permissionsFilter.id}
               portListsFilter={portListsFilter.id}
@@ -768,7 +775,6 @@ UserSettings.propTypes = {
   agentsFilter: PropTypes.object,
   alerts: PropTypes.array,
   alertsFilter: PropTypes.object,
-  assetsFilter: PropTypes.object,
   autoCacheRebuild: PropTypes.object,
   capabilities: PropTypes.capabilities.isRequired,
   certBundFilter: PropTypes.object,
@@ -797,6 +803,7 @@ UserSettings.propTypes = {
   filters: PropTypes.array,
   filtersFilter: PropTypes.object,
   gmp: PropTypes.gmp.isRequired,
+  hostsFilter: PropTypes.object,
   isLoading: PropTypes.bool,
   listExportFileName: PropTypes.object,
   loadAlerts: PropTypes.func.isRequired,
@@ -812,6 +819,7 @@ UserSettings.propTypes = {
   maxRowsPerPage: PropTypes.object,
   notesFilter: PropTypes.object,
   nvtFilter: PropTypes.object,
+  operatingSystemsFilter: PropTypes.object,
   ovalFilter: PropTypes.object,
   overridesFilter: PropTypes.object,
   permissionsFilter: PropTypes.object,
@@ -903,13 +911,16 @@ const mapStateToProps = rootState => {
 
   const agentsFilterId = userDefaultsSelector.getValueByName('agentsfilter');
   const alertsFilterId = userDefaultsSelector.getValueByName('alertsfilter');
-  const assetsFilterId = userDefaultsSelector.getValueByName('assetsfilter');
+  const hostsFilterId = userDefaultsSelector.getValueByName('hostsfilter');
   const configsFilterId = userDefaultsSelector.getValueByName('configsfilter');
   const credentialsFilterId = userDefaultsSelector.getValueByName(
     'credentialsfilter',
   );
   const filtersFilterId = userDefaultsSelector.getValueByName('filtersfilter');
   const notesFilterId = userDefaultsSelector.getValueByName('notesfilter');
+  const operatingSystemsFilterId = userDefaultsSelector.getValueByName(
+    'operatingsystemsfilter',
+  );
   const overridesFilterId = userDefaultsSelector.getValueByName(
     'overridesfilter',
   );
@@ -977,11 +988,12 @@ const mapStateToProps = rootState => {
   const defaultTarget = targetsSel.getEntity(defaultTargetId);
   const agentsFilter = filtersSel.getEntity(agentsFilterId);
   const alertsFilter = filtersSel.getEntity(alertsFilterId);
-  const assetsFilter = filtersSel.getEntity(assetsFilterId);
   const configsFilter = filtersSel.getEntity(configsFilterId);
   const credentialsFilter = filtersSel.getEntity(credentialsFilterId);
   const filtersFilter = filtersSel.getEntity(filtersFilterId);
+  const hostsFilter = filtersSel.getEntity(hostsFilterId);
   const notesFilter = filtersSel.getEntity(notesFilterId);
+  const operatingSystemsFilter = filtersSel.getEntity(operatingSystemsFilterId);
   const overridesFilter = filtersSel.getEntity(overridesFilterId);
   const permissionsFilter = filtersSel.getEntity(permissionsFilterId);
   const portListsFilter = filtersSel.getEntity(portListsFilterId);
@@ -1042,11 +1054,12 @@ const mapStateToProps = rootState => {
     defaultTarget,
     agentsFilter,
     alertsFilter,
-    assetsFilter,
     configsFilter,
     credentialsFilter,
     filtersFilter,
+    hostsFilter,
     notesFilter,
+    operatingSystemsFilter,
     overridesFilter,
     permissionsFilter,
     portListsFilter,
