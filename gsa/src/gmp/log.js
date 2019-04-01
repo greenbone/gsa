@@ -22,6 +22,7 @@ import 'core-js/fn/object/values';
 import {isDefined, isString} from './utils/identity';
 
 export const DEFAULT_LOG_LEVEL = 'error';
+export const LOG_LEVEL_DEBUG = 'debug';
 
 const GREENBONE_GREEN = '#66c430';
 

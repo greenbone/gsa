@@ -23,6 +23,8 @@ import {Provider as StoreProvider} from 'react-redux';
 import Gmp from 'gmp';
 import GmpSettings from 'gmp/gmpsettings';
 
+import {LOG_LEVEL_DEBUG} from 'gmp/log';
+
 import {initLocale} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -48,7 +50,7 @@ initLocale();
 const settings = new GmpSettings(global.localStorage, global.config);
 const gmp = new Gmp(settings);
 
-const store = configureStore();
+const store = configureStore(settings.loglevel === LOG_LEVEL_DEBUG);
 
 window.gmp = gmp;
 
