@@ -8,6 +8,7 @@ $ cd gsa && git log
 
 ## gsa 8.0 unreleased
 
+ * Add guest user login support #1246
  * Allow to set default host and operating system filters #1243
  * Don't crash if start or end date for performance page are invalid #1237
  * Change order of options in target dialog #1233
