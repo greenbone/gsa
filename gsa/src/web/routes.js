@@ -241,6 +241,7 @@ class Routes extends React.Component {
                     path="/scanconfig/:id"
                     component={ScanConfigDetailsPage}
                   />
+                  <Route path="/notfound" component={PageNotFound} />
                   <Route component={PageNotFound} />
                 </Switch>
               </Page>
