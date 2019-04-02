@@ -52,15 +52,23 @@ afterEach(cleanup);
 const queryAllByName = (container, name) =>
   queryAllByAttribute('name', container, name);
 
+const queryByName = (container, name) => {
+  const elements = queryAllByName(container, name);
+  if (!elements.length) {
+    return null;
+  }
+  return elements[0];
+};
+
 const getByName = (container, name) => {
-  const els = queryAllByName(container, name);
-  if (!els.length) {
+  const elements = queryAllByName(container, name);
+  if (!elements.length) {
     throw getElementError(
       `Unable to find an element with the name: ${name}.`,
       container,
     );
   }
-  return els[0];
+  return elements[0];
 };
 
 export const render = ui => {
@@ -70,6 +78,7 @@ export const render = ui => {
     container,
     element: hasValue(container) ? container.firstChild : undefined,
     getByName: name => getByName(baseElement, name),
+    queryByName: name => queryByName(baseElement, name),
     queryAllByName: name => queryAllByName(baseElement, name),
     ...other,
   };

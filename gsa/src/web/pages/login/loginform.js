@@ -57,6 +57,14 @@ const Error = styled.p`
   margin: 10px;
 `;
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 1px solid ${Theme.lightGray};
+  padding: 10px;
+  margin-bottom: 10px;
+`;
+
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
@@ -93,62 +101,92 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    const {error} = this.props;
+    const {
+      error,
+      showGuestLogin = false,
+      showLogin = true,
+      showProtocolInsecure = false,
+      onGuestLoginClick,
+    } = this.props;
     const {username, password} = this.state;
-    const protocol_insecure = window.location.protocol !== 'https:';
     return (
       <React.Fragment>
-        {protocol_insecure && (
-          <Panel>
-            <Error>{_('Warning: Connection unencrypted')}</Error>
-            <p>
-              {_(
-                'The connection to this GSA is not encrypted, allowing ' +
-                  'anyone listening to the traffic to steal your credentials.',
-              )}
-            </p>
-            <p>
-              {_(
-                'Please configure a TLS certificate for the HTTPS service ' +
-                  'or ask your administrator to do so as soon as possible.',
-              )}
-            </p>
-          </Panel>
-        )}
+        <Wrapper>
+          {showProtocolInsecure && (
+            <Panel data-testid="protocol-insecure">
+              <Error>{_('Warning: Connection unencrypted')}</Error>
+              <p>
+                {_(
+                  'The connection to this GSA is not encrypted, allowing ' +
+                    'anyone listening to the traffic to steal your credentials.',
+                )}
+              </p>
+              <p>
+                {_(
+                  'Please configure a TLS certificate for the HTTPS service ' +
+                    'or ask your administrator to do so as soon as possible.',
+                )}
+              </p>
+            </Panel>
+          )}
 
-        <LoginPanel>
-          <ProductImage />
-          <Layout flex="column">
-            <FormGroup title={_('Username')} titleSize="4">
-              <TextField
-                name="username"
-                placeholder={_('e.g. johndoe')}
-                value={username}
-                autoFocus="autofocus"
-                tabIndex="1"
-                onChange={this.handleValueChange}
-              />
-            </FormGroup>
-            <FormGroup title={_('Password')} titleSize="4">
-              <PasswordField
-                name="password"
-                grow="1"
-                placeholder={_('Password')}
-                value={password}
-                onKeyDown={this.handleKeyDown}
-                onChange={this.handleValueChange}
-              />
-            </FormGroup>
-            <FormGroup size="4" offset="4">
-              <Button title={_('Login')} onClick={this.handleSubmit} />
-            </FormGroup>
-          </Layout>
-        </LoginPanel>
+          <LoginPanel>
+            <ProductImage />
 
-        {isDefined(error) && (
-          <Panel>
-            <Error>{error}</Error>
-          </Panel>
+            {showLogin && (
+              <Layout flex="column">
+                <FormGroup title={_('Username')} titleSize="4">
+                  <TextField
+                    autoComplete="username"
+                    name="username"
+                    placeholder={_('e.g. johndoe')}
+                    value={username}
+                    autoFocus="autofocus"
+                    tabIndex="1"
+                    onChange={this.handleValueChange}
+                  />
+                </FormGroup>
+                <FormGroup title={_('Password')} titleSize="4">
+                  <PasswordField
+                    autoComplete="current-password"
+                    name="password"
+                    grow="1"
+                    placeholder={_('Password')}
+                    value={password}
+                    onKeyDown={this.handleKeyDown}
+                    onChange={this.handleValueChange}
+                  />
+                </FormGroup>
+                <FormGroup size="4" offset="4">
+                  <Button
+                    data-testid="login-button"
+                    title={_('Login')}
+                    onClick={this.handleSubmit}
+                  />
+                </FormGroup>
+              </Layout>
+            )}
+          </LoginPanel>
+
+          {isDefined(error) && (
+            <Panel>
+              <Error data-testid="error">{error}</Error>
+            </Panel>
+          )}
+        </Wrapper>
+
+        {showGuestLogin && (
+          <Wrapper data-testid="guest-login">
+            <LoginPanel>
+              <Layout align={['center', 'center']}>
+                <Button
+                  data-testid="guest-login-button"
+                  title={_('Login as Guest')}
+                  onClick={onGuestLoginClick}
+                />
+              </Layout>
+            </LoginPanel>
+          </Wrapper>
         )}
       </React.Fragment>
     );
@@ -157,7 +195,11 @@ class LoginForm extends React.Component {
 
 LoginForm.propTypes = {
   error: PropTypes.string,
-  onSubmit: PropTypes.func,
+  showGuestLogin: PropTypes.bool,
+  showLogin: PropTypes.bool,
+  showProtocolInsecure: PropTypes.bool,
+  onGuestLoginClick: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

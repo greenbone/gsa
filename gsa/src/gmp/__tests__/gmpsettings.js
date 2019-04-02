@@ -47,6 +47,9 @@ describe('GmpSettings tests', () => {
     expect(settings.timeout).toBeUndefined();
     expect(settings.timezone).toBeUndefined();
     expect(settings.username).toBeUndefined();
+    expect(settings.guestUsername).toBeUndefined();
+    expect(settings.guestPassword).toBeUndefined();
+    expect(settings.disableLoginForm).toEqual(false);
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('loglevel', DEFAULT_LOG_LEVEL);
@@ -66,6 +69,9 @@ describe('GmpSettings tests', () => {
       timeout: 30000,
       timezone: 'cet',
       username: 'foo',
+      guestUsername: 'guest',
+      guestPassword: 'pass',
+      disableLoginForm: true,
     });
 
     expect(settings.reloadinterval).toEqual(10);
@@ -79,6 +85,10 @@ describe('GmpSettings tests', () => {
     expect(settings.timezone).toBeUndefined();
     expect(settings.username).toBeUndefined();
     expect(settings.loglevel).toEqual('error');
+
+    expect(settings.guestUsername).toEqual('guest');
+    expect(settings.guestPassword).toEqual('pass');
+    expect(settings.disableLoginForm).toEqual(true);
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'error');
