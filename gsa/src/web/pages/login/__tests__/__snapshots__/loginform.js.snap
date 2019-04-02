@@ -1,0 +1,409 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LoginForm tests should render full LoginForm 1`] = `
+.c5 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c9 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c16 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  padding-bottom: 10px;
+}
+
+.c7 {
+  display: inline-block;
+  max-width: 100%;
+  font-weight: bold;
+  text-align: right;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 33.33333333%;
+  margin-left: 0;
+}
+
+.c8 {
+  width: 66.66666667%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.c13 {
+  width: 33.33333333%;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: 33.33333333%;
+}
+
+.c11 {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  display: block;
+  height: 22px;
+  color: #393637;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #aaaaaa;
+  border-radius: 2px;
+  padding: 1px 8px;
+}
+
+.c11:-webkit-autofill {
+  box-shadow: 0 0 0 1000px white inset;
+}
+
+.c10 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c12 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c15 {
+  display: inline-block;
+  padding: 0 15px;
+  color: #393637;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 30px;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: #fff;
+  border-radius: 2px;
+  border: 1px solid #aaaaaa;
+  cursor: pointer;
+  overflow: visible;
+  z-index: 1;
+}
+
+.c15:focus,
+.c15:hover {
+  border: 1px solid #393637;
+}
+
+.c15:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background: #66c430;
+  font-weight: bold;
+  color: #fff;
+}
+
+.c15[disabled] {
+  cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+.c15 img {
+  height: 32px;
+  width: 32px;
+  margin-top: 5px 10px 5px -10px;
+  vertical-align: middle;
+}
+
+.c15:link {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #393637;
+}
+
+.c14 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 95px;
+}
+
+.c1 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-bottom: 10px;
+  font-size: 9pt;
+}
+
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.c2 {
+  color: #d83636;
+  font-weight: bold;
+  text-align: center;
+  margin: 10px;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  border: 1px solid #c8d3d9;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+<body>
+  <div>
+    <div
+      class="c0"
+    >
+      <div
+        class="c1"
+        data-testid="protocol-insecure"
+      >
+        <p
+          class="c2"
+        >
+          Warning: Connection unencrypted
+        </p>
+        <p>
+          The connection to this GSA is not encrypted, allowing anyone listening to the traffic to steal your credentials.
+        </p>
+        <p>
+          Please configure a TLS certificate for the HTTPS service or ask your administrator to do so as soon as possible.
+        </p>
+      </div>
+      <div
+        class="c3"
+      >
+        <img
+          alt="Greenbone Security Assistant"
+          class="c4"
+          src="/img/login-label.png"
+        />
+        <div
+          class="c5"
+        >
+          <div
+            class="c6"
+          >
+            <label
+              class="c7"
+              data-testid="formgroup-title"
+            >
+              Username
+            </label>
+            <div
+              class="c8 c9"
+              data-testid="formgroup-content"
+              size="8"
+            >
+              <input
+                autocomplete="username"
+                class="c10 c11"
+                name="username"
+                placeholder="e.g. johndoe"
+                tabindex="1"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="c6"
+          >
+            <label
+              class="c7"
+              data-testid="formgroup-title"
+            >
+              Password
+            </label>
+            <div
+              class="c8 c9"
+              data-testid="formgroup-content"
+              size="8"
+            >
+              <input
+                autocomplete="current-password"
+                class="c12 c11"
+                name="password"
+                placeholder="Password"
+                type="password"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="c6"
+          >
+            <div
+              class="c13 c9"
+              data-testid="formgroup-content"
+              offset="4"
+              size="4"
+            >
+              <button
+                class="c14 c15"
+                data-testid="login-button"
+                title="Login"
+              >
+                Login
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="c1"
+      >
+        <p
+          class="c2"
+          data-testid="error"
+        >
+          An Error Occurred
+        </p>
+      </div>
+    </div>
+    <div
+      class="c0"
+      data-testid="guest-login"
+    >
+      <div
+        class="c3"
+      >
+        <div
+          class="c16"
+        >
+          <button
+            class="c14 c15"
+            data-testid="guest-login-button"
+            title="Login as Guest"
+          >
+            Login as Guest
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;
