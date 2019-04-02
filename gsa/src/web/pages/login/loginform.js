@@ -113,7 +113,7 @@ class LoginForm extends React.Component {
       <React.Fragment>
         <Wrapper>
           {showProtocolInsecure && (
-            <Panel>
+            <Panel data-testid="protocol-insecure">
               <Error>{_('Warning: Connection unencrypted')}</Error>
               <p>
                 {_(
@@ -156,7 +156,11 @@ class LoginForm extends React.Component {
                   />
                 </FormGroup>
                 <FormGroup size="4" offset="4">
-                  <Button title={_('Login')} onClick={this.handleSubmit} />
+                  <Button
+                    data-testid="login-button"
+                    title={_('Login')}
+                    onClick={this.handleSubmit}
+                  />
                 </FormGroup>
               </Layout>
             )}
@@ -164,16 +168,17 @@ class LoginForm extends React.Component {
 
           {isDefined(error) && (
             <Panel>
-              <Error>{error}</Error>
+              <Error data-testid="error">{error}</Error>
             </Panel>
           )}
         </Wrapper>
 
         {showGuestLogin && (
-          <Wrapper>
+          <Wrapper data-testid="guest-login">
             <LoginPanel>
               <Layout align={['center', 'center']}>
                 <Button
+                  data-testid="guest-login-button"
                   title={_('Login as Guest')}
                   onClick={onGuestLoginClick}
                 />
