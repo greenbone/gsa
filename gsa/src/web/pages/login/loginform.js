@@ -137,6 +137,7 @@ class LoginForm extends React.Component {
               <Layout flex="column">
                 <FormGroup title={_('Username')} titleSize="4">
                   <TextField
+                    autoComplete="username"
                     name="username"
                     placeholder={_('e.g. johndoe')}
                     value={username}
@@ -147,6 +148,7 @@ class LoginForm extends React.Component {
                 </FormGroup>
                 <FormGroup title={_('Password')} titleSize="4">
                   <PasswordField
+                    autoComplete="current-password"
                     name="password"
                     grow="1"
                     placeholder={_('Password')}
