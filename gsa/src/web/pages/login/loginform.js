@@ -196,8 +196,8 @@ LoginForm.propTypes = {
   showGuestLogin: PropTypes.bool,
   showLogin: PropTypes.bool,
   showProtocolInsecure: PropTypes.bool,
-  onGuestLoginClick: PropTypes.func,
-  onSubmit: PropTypes.func,
+  onGuestLoginClick: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
