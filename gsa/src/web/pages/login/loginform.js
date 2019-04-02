@@ -104,7 +104,7 @@ class LoginForm extends React.Component {
     const {
       error,
       showGuestLogin = false,
-      showLogin = false,
+      showLogin = true,
       showProtocolInsecure = false,
       onGuestLoginClick,
     } = this.props;
