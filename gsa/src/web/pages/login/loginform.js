@@ -105,14 +105,14 @@ class LoginForm extends React.Component {
       error,
       showGuestLogin = false,
       showLogin = false,
+      showProtocolInsecure = false,
       onGuestLoginClick,
     } = this.props;
     const {username, password} = this.state;
-    const protocol_insecure = window.location.protocol !== 'https:';
     return (
       <React.Fragment>
         <Wrapper>
-          {protocol_insecure && (
+          {showProtocolInsecure && (
             <Panel>
               <Error>{_('Warning: Connection unencrypted')}</Error>
               <p>
@@ -190,6 +190,7 @@ LoginForm.propTypes = {
   error: PropTypes.string,
   showGuestLogin: PropTypes.bool,
   showLogin: PropTypes.bool,
+  showProtocolInsecure: PropTypes.bool,
   onGuestLoginClick: PropTypes.func,
   onSubmit: PropTypes.func,
 };
