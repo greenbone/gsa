@@ -52,6 +52,14 @@ afterEach(cleanup);
 const queryAllByName = (container, name) =>
   queryAllByAttribute('name', container, name);
 
+const queryByName = (container, name) => {
+  const els = queryAllByName(container, name);
+  if (!els.length) {
+    return null;
+  }
+  return els[0];
+};
+
 const getByName = (container, name) => {
   const els = queryAllByName(container, name);
   if (!els.length) {
@@ -70,6 +78,7 @@ export const render = ui => {
     container,
     element: hasValue(container) ? container.firstChild : undefined,
     getByName: name => getByName(baseElement, name),
+    queryByName: name => queryByName(baseElement, name),
     queryAllByName: name => queryAllByName(baseElement, name),
     ...other,
   };
