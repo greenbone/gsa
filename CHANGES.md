@@ -8,6 +8,7 @@ $ cd gsa && git log
 
 ## gsa 8.0 unreleased
 
+ * Support old secinfo URLs and redirect to replacement pages #1247
  * Add guest user login support #1246
  * Allow to set default host and operating system filters #1243
  * Don't crash if start or end date for performance page are invalid #1237
