@@ -59,15 +59,27 @@ export const renderRecurrence = ({
         });
       } else if (isDefined(weekdays)) {
         const weekday = weekdays.getSelectedWeekDay();
-        const nth = weekdays.get(weekday);
+        let nth = weekdays.get(weekday);
         const localeData = _localeData();
+        if (nth === '-1') {
+          nth = _('The last');
+          if (interval === 1) {
+            return _('The last {{weekday}} every month', {
+              weekday: WEEKDAY[weekday],
+            });
+          }
+          return _('The last {{weekday}} every {{interval}} months', {
+            weekday: WEEKDAY[weekday],
+            interval,
+          });
+        }
         if (interval === 1) {
           return _('{{nth}} {{weekday}} every month', {
             nth: localeData.ordinal(nth),
             weekday: WEEKDAY[weekday],
           });
         }
-        return _('{{nth}} {{weekday}} every {{interval}} month', {
+        return _('{{nth}} {{weekday}} every {{interval}} months', {
           nth: localeData.ordinal(nth),
           weekday: WEEKDAY[weekday],
           interval,
