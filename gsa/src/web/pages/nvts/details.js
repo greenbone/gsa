@@ -53,12 +53,6 @@ const NvtDetails = ({entity, links = true}) => {
         </DetailsBlock>
       )}
 
-      {isDefined(tags.affected) && tags.affected !== TAG_NA && (
-        <DetailsBlock title={_('Affected Software/OS')}>
-          <Pre>{tags.affected}</Pre>
-        </DetailsBlock>
-      )}
-
       <DetailsBlock title={_('Scoring')}>
         <InfoTable>
           <TableBody>
@@ -107,6 +101,12 @@ const NvtDetails = ({entity, links = true}) => {
               {isDefined(qod.value) && ' (' + qod.value + '%)'}
             </Pre>
           )}
+        </DetailsBlock>
+      )}
+
+      {isDefined(tags.affected) && tags.affected !== TAG_NA && (
+        <DetailsBlock title={_('Affected Software/OS')}>
+          <Pre>{tags.affected}</Pre>
         </DetailsBlock>
       )}
 

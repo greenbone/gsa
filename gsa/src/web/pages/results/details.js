@@ -88,17 +88,55 @@ const ResultDetails = ({className, links = true, entity}) => {
         )}
       </DetailsBlock>
 
-      {isDefined(tags.impact) && tags.impact !== TAG_NA && (
-        <DetailsBlock title={_('Impact')}>
-          <P>{tags.impact}</P>
-        </DetailsBlock>
-      )}
-
-      <Solution solution={tags.solution} solutionType={tags.solution_type} />
-
-      {isDefined(tags.affected) && tags.affected !== TAG_NA && (
-        <DetailsBlock title={_('Affected Software/OS')}>
-          <P>{tags.affected}</P>
+      {has_detection && (
+        <DetailsBlock title={_('Product Detection Result')}>
+          <InfoTable>
+            <TableBody>
+              <TableRow>
+                <TableData>{_('Product')}</TableData>
+                <TableData>
+                  <DetailsLink
+                    type="cpe"
+                    id={detection_details.product}
+                    textOnly={!links}
+                  >
+                    {detection_details.product}
+                  </DetailsLink>
+                </TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('Method')}</TableData>
+                <TableData>
+                  <DetailsLink
+                    id={detection_details.source_oid}
+                    type={
+                      detection_details.source_oid.startsWith('CVE-')
+                        ? 'cve'
+                        : 'nvt'
+                    }
+                    textOnly={!links}
+                  >
+                    {detection_details.source_name +
+                      ' (OID: ' +
+                      detection_details.source_oid +
+                      ')'}
+                  </DetailsLink>
+                </TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('Log')}</TableData>
+                <TableData>
+                  <DetailsLink
+                    type="result"
+                    id={result.detection.result.id}
+                    textOnly={!links}
+                  >
+                    {_('View details of product detection')}
+                  </DetailsLink>
+                </TableData>
+              </TableRow>
+            </TableBody>
+          </InfoTable>
         </DetailsBlock>
       )}
 
@@ -153,57 +191,19 @@ const ResultDetails = ({className, links = true, entity}) => {
         </Layout>
       </DetailsBlock>
 
-      {has_detection && (
-        <DetailsBlock title={_('Product Detection Result')}>
-          <InfoTable>
-            <TableBody>
-              <TableRow>
-                <TableData>{_('Product')}</TableData>
-                <TableData>
-                  <DetailsLink
-                    type="cpe"
-                    id={detection_details.product}
-                    textOnly={!links}
-                  >
-                    {detection_details.product}
-                  </DetailsLink>
-                </TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('Method')}</TableData>
-                <TableData>
-                  <DetailsLink
-                    id={detection_details.source_oid}
-                    type={
-                      detection_details.source_oid.startsWith('CVE-')
-                        ? 'cve'
-                        : 'nvt'
-                    }
-                    textOnly={!links}
-                  >
-                    {detection_details.source_name +
-                      ' (OID: ' +
-                      detection_details.source_oid +
-                      ')'}
-                  </DetailsLink>
-                </TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('Log')}</TableData>
-                <TableData>
-                  <DetailsLink
-                    type="result"
-                    id={result.detection.result.id}
-                    textOnly={!links}
-                  >
-                    {_('View details of product detection')}
-                  </DetailsLink>
-                </TableData>
-              </TableRow>
-            </TableBody>
-          </InfoTable>
+      {isDefined(tags.affected) && tags.affected !== TAG_NA && (
+        <DetailsBlock title={_('Affected Software/OS')}>
+          <P>{tags.affected}</P>
         </DetailsBlock>
       )}
+
+      {isDefined(tags.impact) && tags.impact !== TAG_NA && (
+        <DetailsBlock title={_('Impact')}>
+          <P>{tags.impact}</P>
+        </DetailsBlock>
+      )}
+
+      <Solution solution={tags.solution} solutionType={tags.solution_type} />
 
       <References links={links} nvt={nvt} />
     </Layout>
