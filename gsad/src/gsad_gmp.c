@@ -1064,6 +1064,7 @@ get_one (gvm_connection_t *connection, const char *type,
   GString *xml;
   gchar *id_name;
   const char *id;
+  entity_t entity;
 
   id_name = g_strdup_printf ("%s_id", type);
   id = params_value (params, id_name);
@@ -1098,7 +1099,7 @@ get_one (gvm_connection_t *connection, const char *type,
         response_data);
     }
 
-  if (read_string_c (connection, &xml))
+  if (read_entity_and_string_c (connection, &entity, &xml))
     {
       g_string_free (xml, TRUE);
       cmd_response_data_set_status_code (response_data,
@@ -1111,7 +1112,23 @@ get_one (gvm_connection_t *connection, const char *type,
         response_data);
     }
 
+  if (gmp_success (entity) != 1)
+    {
+      gchar *message;
+
+      set_http_status_from_entity (entity, response_data);
+
+      message =
+        gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
+                      entity_attribute (entity, "status_text"), response_data);
+
+      g_string_free (xml, TRUE);
+      free_entity (entity);
+      return message;
+    }
+
   /* Cleanup, and return transformed XML. */
+  free_entity (entity);
 
   g_string_append_printf (xml, "</get_%s>", type);
   return envelope_gmp (connection, credentials, params,
