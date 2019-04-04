@@ -22,6 +22,8 @@ import Divider from 'web/components/layout/divider';
 
 import StNonAvailableIcon from 'web/components/icon/stnonavailableicon';
 
+import PropTypes from 'web/utils/proptypes';
+
 import ErrorContainer from './errorcontainer';
 
 const ErrorMessage = ({message, children}) => (
@@ -33,5 +35,9 @@ const ErrorMessage = ({message, children}) => (
     </Divider>
   </ErrorContainer>
 );
+
+ErrorMessage.propTypes = {
+  message: PropTypes.string,
+};
 
 export default ErrorMessage;
