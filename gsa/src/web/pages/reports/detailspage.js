@@ -263,7 +263,7 @@ class ReportDetails extends React.Component {
 
   getReloadInterval() {
     const {entity} = this.props;
-    return isActive(entity.report.scan_run_status)
+    return isDefined(entity) && isActive(entity.report.scan_run_status)
       ? DEFAULT_RELOAD_INTERVAL_ACTIVE
       : 0; // report doesn't change anymore. no need to reload
   }
