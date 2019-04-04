@@ -31,6 +31,8 @@ import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/statusbar';
 import ToolBar from 'web/components/bar/toolbar';
 
+import ErrorMessage from 'web/components/errorboundary/errormessage';
+
 import AddToAssetsIcon from 'web/components/icon/addtoassetsicon';
 import DownloadIcon from 'web/components/icon/downloadicon';
 import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
@@ -247,6 +249,7 @@ ToolBarIcons.propTypes = {
 const PageContent = ({
   activeTab,
   entity,
+  entityError,
   filter,
   filters,
   isLoading = true,
@@ -296,6 +299,10 @@ const PageContent = ({
   } = report;
 
   const hasReport = isDefined(entity);
+
+  if (!hasReport && isDefined(entityError)) {
+    return <ErrorMessage message={entityError.message} />;
+  }
 
   const delta = isDefined(report.isDeltaReport)
     ? report.isDeltaReport()
@@ -821,6 +828,7 @@ const PageContent = ({
 PageContent.propTypes = {
   activeTab: PropTypes.number,
   entity: PropTypes.model,
+  entityError: PropTypes.object,
   filter: PropTypes.filter,
   filters: PropTypes.array,
   isLoading: PropTypes.bool,
