@@ -499,7 +499,9 @@ export default withEntityContainer('task', {
   entitySelector: taskSelector,
   mapStateToProps,
   reloadInterval: ({defaultReloadInterval, entity}) =>
-    entity.isActive() ? DEFAULT_RELOAD_INTERVAL_ACTIVE : defaultReloadInterval,
+    isDefined(entity) && entity.isActive()
+      ? DEFAULT_RELOAD_INTERVAL_ACTIVE
+      : defaultReloadInterval,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
