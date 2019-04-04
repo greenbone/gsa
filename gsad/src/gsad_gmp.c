@@ -178,10 +178,6 @@ get_assets (gvm_connection_t *, credentials_t *, params_t *, const char *,
             cmd_response_data_t *);
 
 static char *
-get_task (gvm_connection_t *, credentials_t *, params_t *, const char *,
-          cmd_response_data_t *);
-
-static char *
 get_tasks (gvm_connection_t *, credentials_t *, params_t *, const char *,
            cmd_response_data_t *);
 
@@ -1068,6 +1064,7 @@ get_one (gvm_connection_t *connection, const char *type,
   GString *xml;
   gchar *id_name;
   const char *id;
+  entity_t entity;
 
   id_name = g_strdup_printf ("%s_id", type);
   id = params_value (params, id_name);
@@ -1102,7 +1099,7 @@ get_one (gvm_connection_t *connection, const char *type,
         response_data);
     }
 
-  if (read_string_c (connection, &xml))
+  if (read_entity_and_string_c (connection, &entity, &xml))
     {
       g_string_free (xml, TRUE);
       cmd_response_data_set_status_code (response_data,
@@ -1115,7 +1112,23 @@ get_one (gvm_connection_t *connection, const char *type,
         response_data);
     }
 
+  if (gmp_success (entity) != 1)
+    {
+      gchar *message;
+
+      set_http_status_from_entity (entity, response_data);
+
+      message =
+        gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
+                      entity_attribute (entity, "status_text"), response_data);
+
+      g_string_free (xml, TRUE);
+      free_entity (entity);
+      return message;
+    }
+
   /* Cleanup, and return transformed XML. */
+  free_entity (entity);
 
   g_string_append_printf (xml, "</get_%s>", type);
   return envelope_gmp (connection, credentials, params,
@@ -2181,7 +2194,6 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
  * and also wraps the response in a unique page tag to convey the context to
  * the enveloped XML.  This is probably the way to go.
  */
-
 
 /**
  * @brief Get a value from a param or fall back to a setting
@@ -3542,348 +3554,6 @@ get_tasks_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get single task, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  params         Request parameters.
- * @param[in]  extra_xml      Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_task (gvm_connection_t *connection, credentials_t *credentials,
-          params_t *params, const char *extra_xml,
-          cmd_response_data_t *response_data)
-{
-  GString *xml = NULL;
-  GString *commands_xml = NULL;
-  entity_t commands_entity = NULL;
-  entity_t task_entity = NULL;
-  int notes, get_overrides, apply_overrides;
-  int get_target, get_alerts;
-  const char *overrides, *task_id;
-
-  task_id = params_value (params, "task_id");
-  if (task_id == NULL)
-    return get_tasks (connection, credentials, params, extra_xml,
-                      response_data);
-
-  overrides = params_value (params, "overrides");
-  apply_overrides = overrides ? strcmp (overrides, "0") : 1;
-
-  notes = command_enabled (credentials, "GET_NOTES");
-  get_overrides = command_enabled (credentials, "GET_OVERRIDES");
-  if (gvm_connection_sendf (
-        connection,
-        "<commands>"
-        "<get_tasks"
-        " task_id=\"%s\""
-        " filter=\"apply_overrides=%i\""
-        " details=\"1\"/>"
-        "%s%s%s"
-        "%s%s%s"
-        "</commands>",
-        task_id, apply_overrides,
-        notes ? "<get_notes"
-                " sort_field=\"notes_nvt_name, notes.text\""
-                " task_id=\""
-              : "",
-        notes ? task_id : "", notes ? "\"/>" : "",
-        get_overrides ? "<get_overrides"
-                        " sort_field=\"overrides_nvt_name, overrides.text\""
-                        " task_id=\""
-                      : "",
-        get_overrides ? task_id : "", get_overrides ? "\"/>" : "")
-      == -1)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the status. "
-        "No update on the requested task can be retrieved. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  commands_xml = g_string_new ("");
-  xml = g_string_new ("<get_task>");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  g_string_append_printf (xml,
-                          "<apply_overrides>%i</apply_overrides>"
-                          "<delta>%s</delta>",
-                          apply_overrides,
-                          params_value (params, "delta_report_id")
-                            ? params_value (params, "delta_report_id")
-                            : "");
-  if (read_string_c (connection, &commands_xml))
-    {
-      g_string_free (commands_xml, TRUE);
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the status. "
-        "No update of the status can be retrieved. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-  g_string_append (xml, commands_xml->str);
-
-  if (parse_entity (commands_xml->str, &commands_entity))
-    {
-      g_string_free (commands_xml, TRUE);
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the status. "
-        "No update of the status can be retrieved. "
-        "Diagnostics: Failure to parse response from manager daemon.",
-        response_data);
-    }
-
-  get_target = command_enabled (credentials, "GET_TARGETS");
-  get_alerts = command_enabled (credentials, "GET_ALERTS");
-  task_entity = entity_child (commands_entity, "get_tasks_response");
-  if (task_entity == NULL)
-    {
-      g_warning ("%s: No get_tasks_response found in manager response.",
-                 __FUNCTION__);
-    }
-  else
-    {
-      task_entity = entity_child (task_entity, "task");
-      if (task_entity == NULL)
-        g_message ("%s: No task found in manager response.", __FUNCTION__);
-      else if (get_target || get_alerts)
-        {
-          entities_t child_entities;
-          entity_t child_entity;
-          child_entities = task_entity->entities;
-
-          while ((child_entity = first_entity (child_entities)))
-            {
-              if (get_alerts
-                  && strcmp (entity_name (child_entity), "alert") == 0)
-                {
-                  const char *resource_id =
-                    entity_attribute (child_entity, "id");
-
-                  if (resource_id != NULL && strcmp (resource_id, ""))
-                    {
-                      if (gvm_connection_sendf (connection,
-                                                "<get_alerts"
-                                                " alert_id=\"%s\"/>",
-                                                resource_id))
-                        {
-                          g_string_free (xml, TRUE);
-                          g_string_free (commands_xml, TRUE);
-                          free_entity (commands_entity);
-                          cmd_response_data_set_status_code (
-                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
-                          return gsad_message (
-                            credentials, "Internal error", __FUNCTION__,
-                            __LINE__,
-                            "An internal error occurred while getting an alert "
-                            "of a task. "
-                            "Diagnostics: Failure to send command to manager "
-                            "daemon.",
-                            response_data);
-                        }
-                      if (read_string_c (connection, &xml))
-                        {
-                          g_string_free (commands_xml, TRUE);
-                          g_string_free (xml, TRUE);
-                          free_entity (commands_entity);
-                          cmd_response_data_set_status_code (
-                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
-                          return gsad_message (
-                            credentials, "Internal error", __FUNCTION__,
-                            __LINE__,
-                            "An internal error occurred while getting an alert "
-                            "of a task. "
-                            "Diagnostics: Failure to receive response from "
-                            "manager daemon.",
-                            response_data);
-                        }
-                    }
-                }
-
-              if (get_target
-                  && strcmp (entity_name (child_entity), "target") == 0)
-                {
-                  const char *resource_id =
-                    entity_attribute (child_entity, "id");
-
-                  if (resource_id != NULL && strcmp (resource_id, ""))
-                    {
-                      if (gvm_connection_sendf (connection,
-                                                "<get_targets"
-                                                " target_id=\"%s\"/>",
-                                                resource_id))
-                        {
-                          g_string_free (xml, TRUE);
-                          g_string_free (commands_xml, TRUE);
-                          free_entity (commands_entity);
-                          cmd_response_data_set_status_code (
-                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
-                          return gsad_message (
-                            credentials, "Internal error", __FUNCTION__,
-                            __LINE__,
-                            "An internal error occurred while getting the "
-                            "target of a task. "
-                            "Diagnostics: Failure to send command to manager "
-                            "daemon.",
-                            response_data);
-                        }
-                      if (read_string_c (connection, &xml))
-                        {
-                          g_string_free (commands_xml, TRUE);
-                          g_string_free (xml, TRUE);
-                          free_entity (commands_entity);
-                          cmd_response_data_set_status_code (
-                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
-                          return gsad_message (
-                            credentials, "Internal error", __FUNCTION__,
-                            __LINE__,
-                            "An internal error occurred while getting the "
-                            "target of a task. "
-                            "Diagnostics: Failure to receive response from "
-                            "manager daemon.",
-                            response_data);
-                        }
-                    }
-                }
-
-              child_entities = next_entities (child_entities);
-            }
-        }
-    }
-
-  g_string_free (commands_xml, TRUE);
-  free_entity (commands_entity);
-
-  /* Get slave scanners. */
-
-  if (command_enabled (credentials, "GET_SCANNERS"))
-    {
-      if (gvm_connection_sendf (connection,
-                                "<get_scanners"
-                                " filter=\"first=1 rows=-1 type=4\"/>")
-          == -1)
-        {
-          g_string_free (xml, TRUE);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting slaves list. "
-            "The current list of resources is not available. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        }
-
-      if (read_string_c (connection, &xml))
-        {
-          g_string_free (xml, TRUE);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting slaves list. "
-            "The current list of resources is not available. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        }
-    }
-
-  /* Get tag names */
-
-  if (gvm_connection_sendf (connection, "<get_tags"
-                                        " filter=\"resource_type=task"
-                                        "          first=1"
-                                        "          rows=-1\""
-                                        " names_only=\"1\""
-                                        "/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting tag names list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting tag names list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  /* Get permissions */
-
-  g_string_append (xml, "<permissions>");
-
-  if (gvm_connection_sendf (connection,
-                            "<get_permissions"
-                            " filter=\"name:^.*(task)s?$"
-                            "          and resource_uuid=%s"
-                            "          first=1 rows=-1\"/>",
-                            task_id)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting permissions list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting permissions list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  g_string_append (xml, "</permissions>");
-
-  g_string_append (xml, "</get_task>");
-
-  return envelope_gmp (connection, credentials, params,
-                       g_string_free (xml, FALSE), response_data);
-}
-
-/**
  * @brief Get a task, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -3897,7 +3567,8 @@ char *
 get_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, cmd_response_data_t *response_data)
 {
-  return get_task (connection, credentials, params, NULL, response_data);
+  return get_one (connection, "task", credentials, params, NULL, NULL,
+                  response_data);
 }
 
 /**
@@ -10009,7 +9680,7 @@ delete_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
  */
 char *
 get_report (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *extra_xml, int *error,
+            params_t *params, const char *extra_xml,
             cmd_response_data_t *response_data)
 {
   GString *xml;
@@ -10227,8 +9898,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
     {
       g_string_free (delta_states, TRUE);
       g_string_free (levels, TRUE);
-      if (error)
-        *error = 1;
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
@@ -10353,8 +10022,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
     {
       g_string_free (delta_states, TRUE);
       g_string_free (levels, TRUE);
-      if (error)
-        *error = 1;
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
@@ -10377,8 +10044,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
 
           if (read_entity_c (connection, &entity))
             {
-              if (error)
-                *error = 1;
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
@@ -10392,8 +10057,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
           if (report == NULL)
             {
               free_entity (entity);
-              if (error)
-                *error = 1;
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
@@ -10472,8 +10135,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
           xml = g_string_new ("");
           print_entity_to_string (report, xml);
           free_entity (entity);
-          if (error)
-            *error = 1;
           return g_string_free (xml, FALSE);
         }
       else
@@ -10483,8 +10144,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
           entity = NULL;
           if (read_entity_c (connection, &entity))
             {
-              if (error)
-                *error = 1;
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
@@ -10591,8 +10250,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
                 }
 
               free_entity (entity);
-              if (error)
-                *error = 1;
 
               cmd_response_data_set_content_length (response_data, report_len);
               return report_decoded;
@@ -10600,8 +10257,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
           else
             {
               free_entity (entity);
-              if (error)
-                *error = 1;
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
@@ -10646,8 +10301,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
       entity = NULL;
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
-          if (error)
-            *error = 1;
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
@@ -10657,6 +10310,21 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
             "Diagnostics: Failure to receive response from manager daemon.",
             response_data);
         }
+
+    if (gmp_success (entity) != 1)
+      {
+        gchar *message;
+
+        set_http_status_from_entity (entity, response_data);
+
+        message =
+          gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
+                        entity_attribute (entity, "status_text"), response_data);
+
+        g_string_free (xml, TRUE);
+        free_entity (entity);
+        return message;
+      }
 
       if ((filt_id == NULL) && (params_value (params, "filter") == NULL))
         {
@@ -10728,15 +10396,7 @@ char *
 get_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t *response_data)
 {
-  char *result;
-  int error = 0;
-
-  result =
-    get_report (connection, credentials, params, NULL, &error, response_data);
-
-  return error ? result
-               : envelope_gmp (connection, credentials, params, result,
-                               response_data);
+  return get_report (connection, credentials, params, NULL, response_data);
 }
 
 /**
@@ -11082,134 +10742,6 @@ get_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @brief Get one result, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
- * @param[in]  credentials      Username and password for authentication.
- * @param[in]  params           HTTP request params
- * @param[in]  result_id        Result UUID.
- * @param[in]  task_id          Result task UUID.
- * @param[in]  apply_overrides  Whether to apply overrides.
- * @param[in]  commands         Extra commands to run before the others.
- * @param[in]  report_id        ID of report.
- * @param[in]  autofp           Auto FP filter flag.
- * @param[in]  extra_xml        Extra XML to insert inside page element.
- * @param[out] response_data    Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_result (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *result_id, const char *task_id,
-            const char *task_name, const char *apply_overrides,
-            const char *commands, const char *report_id, const char *autofp,
-            const char *extra_xml, cmd_response_data_t *response_data)
-{
-  GString *xml;
-
-  if (apply_overrides == NULL)
-    apply_overrides = "1";
-
-  if (autofp == NULL)
-    autofp = "0";
-
-  xml = g_string_new ("<get_result>");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  xml_string_append (xml,
-                     "<task id=\"%s\"><name>%s</name></task>"
-                     "<report id=\"%s\"/>",
-                     task_id, task_name, report_id);
-
-  /* Get the result. */
-
-  if (gvm_connection_sendf (connection,
-                            "<commands>"
-                            "%s"
-                            "<get_results"
-                            " get_counts=\"0\""
-                            " result_id=\"%s\""
-                            "%s%s%s"
-                            " filter=\"autofp=%s"
-                            " apply_overrides=%s"
-                            " overrides=%s"
-                            " notes=1\""
-                            " overrides_details=\"1\""
-                            " notes_details=\"1\""
-                            " details=\"1\"/>"
-                            "</commands>",
-                            commands ? commands : "", result_id,
-                            task_id ? " task_id=\"" : "",
-                            task_id ? task_id : "", task_id ? "\"" : "", autofp,
-                            apply_overrides, apply_overrides)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting a result. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting a result. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  /* Get tag names */
-
-  if (gvm_connection_sendf (connection, "<get_tags"
-                                        " filter=\"resource_type=result"
-                                        "          first=1"
-                                        "          rows=-1\""
-                                        " names_only=\"1\""
-                                        "/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting tag names list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting tag names list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_result>");
-  return envelope_gmp (connection, credentials, params,
-                       g_string_free (xml, FALSE), response_data);
-}
-
-/**
- * @brief Get one result, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -11220,12 +10752,8 @@ char *
 get_result_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t *response_data)
 {
-  return get_result (
-    connection, credentials, params, params_value (params, "result_id"),
-    params_value (params, "task_id"), params_value (params, "name"),
-    params_value (params, "apply_overrides"), NULL,
-    params_value (params, "report_id"), params_value (params, "autofp"), NULL,
-    response_data);
+  return get_one (connection, "result", credentials, params, NULL, NULL,
+                  response_data);
 }
 
 /**

@@ -29,6 +29,7 @@ import PropTypes from 'web/utils/proptypes';
 import Toolbar from 'web/components/bar/toolbar';
 
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+import ErrorMessage from 'web/components/errorboundary/errormessage';
 
 import Layout from 'web/components/layout/layout';
 
@@ -125,11 +126,14 @@ class EntityPage extends React.Component {
   }
 
   render() {
-    const {entity, isLoading = true} = this.props;
+    const {entity, entityError, isLoading = true} = this.props;
 
     if (!isDefined(entity)) {
       if (isLoading) {
         return <Loading />;
+      }
+      if (isDefined(entityError)) {
+        return <ErrorMessage message={entityError.message} />;
       }
       return null;
     }
@@ -147,6 +151,7 @@ class EntityPage extends React.Component {
 
 EntityPage.propTypes = {
   entity: PropTypes.model,
+  entityError: PropTypes.object,
   infoComponent: PropTypes.componentOrFalse,
   isLoading: PropTypes.bool,
   sectionComponent: PropTypes.componentOrFalse,

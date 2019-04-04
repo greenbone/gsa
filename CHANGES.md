@@ -8,6 +8,7 @@ $ cd gsa && git log
 
 ## gsa 8.0 unreleased
 
+ * Display error message if an entity couldn't be loaded #1252
  * Support old secinfo URLs and redirect to replacement pages #1247
  * Add guest user login support #1246
  * Allow to set default host and operating system filters #1243

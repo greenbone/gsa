@@ -21,12 +21,9 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import StNonAvailableIcon from 'web/components/icon/stnonavailableicon';
-import Divider from 'web/components/layout/divider';
-
 import PropTypes from 'web/utils/proptypes';
 
-import ErrorContainer from './errorcontainer';
+import ErrorMessage from './errormessage';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -50,13 +47,9 @@ class ErrorBoundary extends React.Component {
     });
     if (this.state.hasError) {
       return (
-        <ErrorContainer>
-          <Divider>
-            <StNonAvailableIcon size="medium" />
-            <b>{message}</b>
-            <span>{_('Please try again.')}</span>
-          </Divider>
-        </ErrorContainer>
+        <ErrorMessage message={message}>
+          <span>{_('Please try again.')}</span>
+        </ErrorMessage>
       );
     }
     return this.props.children;

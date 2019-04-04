@@ -5,22 +5,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   <div
     id="portals"
   >
-    .c24 {
-  cursor: pointer;
-}
-
-.c23 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c23 * {
-  height: inherit;
-  width: inherit;
-}
-
-.c4 {
+    .c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -155,6 +140,21 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
+}
+
+.c24 {
+  cursor: pointer;
+}
+
+.c23 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c23 * {
+  height: inherit;
+  width: inherit;
 }
 
 .c1 {
@@ -701,21 +701,6 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
 `;
 
 exports[`TagsDialog dialog component tests should render dialog 1`] = `
-.c24 {
-  cursor: pointer;
-}
-
-.c23 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c23 * {
-  height: inherit;
-  width: inherit;
-}
-
 .c4 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -851,6 +836,21 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
+}
+
+.c24 {
+  cursor: pointer;
+}
+
+.c23 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c23 * {
+  height: inherit;
+  width: inherit;
 }
 
 .c1 {
