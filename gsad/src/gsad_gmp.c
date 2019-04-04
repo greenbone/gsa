@@ -178,10 +178,6 @@ get_assets (gvm_connection_t *, credentials_t *, params_t *, const char *,
             cmd_response_data_t *);
 
 static char *
-get_task (gvm_connection_t *, credentials_t *, params_t *, const char *,
-          cmd_response_data_t *);
-
-static char *
 get_tasks (gvm_connection_t *, credentials_t *, params_t *, const char *,
            cmd_response_data_t *);
 
@@ -3542,106 +3538,6 @@ get_tasks_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get single task, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  params         Request parameters.
- * @param[in]  extra_xml      Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_task (gvm_connection_t *connection, credentials_t *credentials,
-          params_t *params, const char *extra_xml,
-          cmd_response_data_t *response_data)
-{
-  GString *xml = NULL;
-  GString *commands_xml = NULL;
-  entity_t commands_entity = NULL;
-  int apply_overrides;
-  const char *overrides, *task_id;
-
-  task_id = params_value (params, "task_id");
-
-  CHECK_VARIABLE_INVALID (task_id, "Get Task")
-
-  overrides = params_value (params, "overrides");
-  apply_overrides = overrides ? strcmp (overrides, "0") : 1;
-
-  if (gvm_connection_sendf (
-        connection,
-        "<get_tasks"
-        " task_id=\"%s\""
-        " filter=\"apply_overrides=%i\""
-        " details=\"1\"/>",
-        task_id, apply_overrides
-  )
-      == -1)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the status. "
-        "No update on the requested task can be retrieved. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  commands_xml = g_string_new ("");
-  xml = g_string_new ("<get_task>");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  g_string_append_printf (xml,
-                          "<apply_overrides>%i</apply_overrides>"
-                          "<delta>%s</delta>",
-                          apply_overrides,
-                          params_value (params, "delta_report_id")
-                            ? params_value (params, "delta_report_id")
-                            : "");
-  if (read_string_c (connection, &commands_xml))
-    {
-      g_string_free (commands_xml, TRUE);
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the status. "
-        "No update of the status can be retrieved. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-  g_string_append (xml, commands_xml->str);
-
-  if (parse_entity (commands_xml->str, &commands_entity))
-    {
-      g_string_free (commands_xml, TRUE);
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the status. "
-        "No update of the status can be retrieved. "
-        "Diagnostics: Failure to parse response from manager daemon.",
-        response_data);
-    }
-
-  g_string_free (commands_xml, TRUE);
-  free_entity (commands_entity);
-
-  g_string_append (xml, "</get_task>");
-
-  return envelope_gmp (connection, credentials, params,
-                       g_string_free (xml, FALSE), response_data);
-}
-
-/**
  * @brief Get a task, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -3655,7 +3551,8 @@ char *
 get_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, cmd_response_data_t *response_data)
 {
-  return get_task (connection, credentials, params, NULL, response_data);
+  return get_one (connection, "task", credentials, params, NULL, NULL,
+                  response_data);
 }
 
 /**
