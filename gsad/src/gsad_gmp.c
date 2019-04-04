@@ -2195,7 +2195,6 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
  * the enveloped XML.  This is probably the way to go.
  */
 
-
 /**
  * @brief Get a value from a param or fall back to a setting
  *
@@ -10329,6 +10328,21 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
             "Diagnostics: Failure to receive response from manager daemon.",
             response_data);
         }
+
+    if (gmp_success (entity) != 1)
+      {
+        gchar *message;
+
+        set_http_status_from_entity (entity, response_data);
+
+        message =
+          gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
+                        entity_attribute (entity, "status_text"), response_data);
+
+        g_string_free (xml, TRUE);
+        free_entity (entity);
+        return message;
+      }
 
       if ((filt_id == NULL) && (params_value (params, "filter") == NULL))
         {
