@@ -97,6 +97,7 @@ const withEntityContainer = (
       ...otherProps,
       id,
       entity: entitySel.getEntity(id),
+      entityError: entitySel.getEntityError(id),
     };
   };
 

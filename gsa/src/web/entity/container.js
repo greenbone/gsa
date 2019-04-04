@@ -26,6 +26,9 @@ import PropTypes from 'web/utils/proptypes';
 
 const log = logger.getLogger('web.entity.container');
 
+const defaultReloadIntervalFunc = ({defaultReloadInterval, entity}) =>
+  isDefined(entity) ? defaultReloadInterval : 0;
+
 class EntityContainer extends React.Component {
   constructor(...args) {
     super(...args);
@@ -77,11 +80,9 @@ class EntityContainer extends React.Component {
   }
 
   getReloadInterval() {
-    const {defaultReloadInterval, reloadInterval} = this.props;
+    const {reloadInterval = defaultReloadIntervalFunc} = this.props;
 
-    return isDefined(reloadInterval)
-      ? reloadInterval(this.props)
-      : defaultReloadInterval;
+    return reloadInterval(this.props);
   }
 
   startTimer() {

@@ -263,7 +263,7 @@ class ReportDetails extends React.Component {
 
   getReloadInterval() {
     const {entity} = this.props;
-    return isActive(entity.report.scan_run_status)
+    return isDefined(entity) && isActive(entity.report.scan_run_status)
       ? DEFAULT_RELOAD_INTERVAL_ACTIVE
       : 0; // report doesn't change anymore. no need to reload
   }
@@ -537,6 +537,7 @@ class ReportDetails extends React.Component {
   render() {
     const {
       entity,
+      entityError,
       filter,
       filters = [],
       isLoading,
@@ -567,6 +568,7 @@ class ReportDetails extends React.Component {
             <Page
               activeTab={activeTab}
               entity={entity}
+              entityError={entityError}
               filter={filter}
               filters={filters}
               isLoading={isLoading}
@@ -627,6 +629,7 @@ class ReportDetails extends React.Component {
 ReportDetails.propTypes = {
   deltaReportId: PropTypes.id,
   entity: PropTypes.model,
+  entityError: PropTypes.object,
   filter: PropTypes.filter,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
@@ -677,11 +680,20 @@ const mapStateToProps = (rootState, {match}) => {
   const deltaSel = deltaSelector(rootState);
   const reportFormatsSel = reportFormatsSelector(rootState);
 
-  const entity = isDefined(deltaid)
-    ? deltaSel.getEntity(id, deltaid)
-    : reportSel.getEntity(id);
+  let entity;
+  let entityError;
+
+  if (isDefined(deltaid)) {
+    entity = deltaSel.getEntity(id, deltaid);
+    entityError = deltaSel.getError(id, deltaid);
+  } else {
+    entity = reportSel.getEntity(id);
+    entityError = reportSel.getEntityError(id);
+  }
+
   return {
     entity,
+    entityError,
     filter: getFilter(entity),
     isLoading: !isDefined(entity),
     filters: filterSel.getEntities(RESULTS_FILTER_FILTER),
