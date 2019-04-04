@@ -494,14 +494,20 @@ const load = gmp => {
     ]);
 };
 
+const reloadInterval = ({defaultReloadInterval, entity}) => {
+  if (!isDefined(entity)) {
+    return 0;
+  }
+  return entity.isActive()
+    ? DEFAULT_RELOAD_INTERVAL_ACTIVE
+    : defaultReloadInterval;
+};
+
 export default withEntityContainer('task', {
   load,
   entitySelector: taskSelector,
   mapStateToProps,
-  reloadInterval: ({defaultReloadInterval, entity}) =>
-    isDefined(entity) && entity.isActive()
-      ? DEFAULT_RELOAD_INTERVAL_ACTIVE
-      : defaultReloadInterval,
+  reloadInterval,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
