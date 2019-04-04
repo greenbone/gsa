@@ -3560,42 +3560,24 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
   GString *xml = NULL;
   GString *commands_xml = NULL;
   entity_t commands_entity = NULL;
-  entity_t task_entity = NULL;
-  int notes, get_overrides, apply_overrides;
-  int get_target, get_alerts;
+  int apply_overrides;
   const char *overrides, *task_id;
 
   task_id = params_value (params, "task_id");
-  if (task_id == NULL)
-    return get_tasks (connection, credentials, params, extra_xml,
-                      response_data);
+
+  CHECK_VARIABLE_INVALID (task_id, "Get Task")
 
   overrides = params_value (params, "overrides");
   apply_overrides = overrides ? strcmp (overrides, "0") : 1;
 
-  notes = command_enabled (credentials, "GET_NOTES");
-  get_overrides = command_enabled (credentials, "GET_OVERRIDES");
   if (gvm_connection_sendf (
         connection,
-        "<commands>"
         "<get_tasks"
         " task_id=\"%s\""
         " filter=\"apply_overrides=%i\""
-        " details=\"1\"/>"
-        "%s%s%s"
-        "%s%s%s"
-        "</commands>",
-        task_id, apply_overrides,
-        notes ? "<get_notes"
-                " sort_field=\"notes_nvt_name, notes.text\""
-                " task_id=\""
-              : "",
-        notes ? task_id : "", notes ? "\"/>" : "",
-        get_overrides ? "<get_overrides"
-                        " sort_field=\"overrides_nvt_name, overrides.text\""
-                        " task_id=\""
-                      : "",
-        get_overrides ? task_id : "", get_overrides ? "\"/>" : "")
+        " details=\"1\"/>",
+        task_id, apply_overrides
+  )
       == -1)
     {
       cmd_response_data_set_status_code (response_data,
@@ -3650,232 +3632,8 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
         response_data);
     }
 
-  get_target = command_enabled (credentials, "GET_TARGETS");
-  get_alerts = command_enabled (credentials, "GET_ALERTS");
-  task_entity = entity_child (commands_entity, "get_tasks_response");
-  if (task_entity == NULL)
-    {
-      g_warning ("%s: No get_tasks_response found in manager response.",
-                 __FUNCTION__);
-    }
-  else
-    {
-      task_entity = entity_child (task_entity, "task");
-      if (task_entity == NULL)
-        g_message ("%s: No task found in manager response.", __FUNCTION__);
-      else if (get_target || get_alerts)
-        {
-          entities_t child_entities;
-          entity_t child_entity;
-          child_entities = task_entity->entities;
-
-          while ((child_entity = first_entity (child_entities)))
-            {
-              if (get_alerts
-                  && strcmp (entity_name (child_entity), "alert") == 0)
-                {
-                  const char *resource_id =
-                    entity_attribute (child_entity, "id");
-
-                  if (resource_id != NULL && strcmp (resource_id, ""))
-                    {
-                      if (gvm_connection_sendf (connection,
-                                                "<get_alerts"
-                                                " alert_id=\"%s\"/>",
-                                                resource_id))
-                        {
-                          g_string_free (xml, TRUE);
-                          g_string_free (commands_xml, TRUE);
-                          free_entity (commands_entity);
-                          cmd_response_data_set_status_code (
-                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
-                          return gsad_message (
-                            credentials, "Internal error", __FUNCTION__,
-                            __LINE__,
-                            "An internal error occurred while getting an alert "
-                            "of a task. "
-                            "Diagnostics: Failure to send command to manager "
-                            "daemon.",
-                            response_data);
-                        }
-                      if (read_string_c (connection, &xml))
-                        {
-                          g_string_free (commands_xml, TRUE);
-                          g_string_free (xml, TRUE);
-                          free_entity (commands_entity);
-                          cmd_response_data_set_status_code (
-                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
-                          return gsad_message (
-                            credentials, "Internal error", __FUNCTION__,
-                            __LINE__,
-                            "An internal error occurred while getting an alert "
-                            "of a task. "
-                            "Diagnostics: Failure to receive response from "
-                            "manager daemon.",
-                            response_data);
-                        }
-                    }
-                }
-
-              if (get_target
-                  && strcmp (entity_name (child_entity), "target") == 0)
-                {
-                  const char *resource_id =
-                    entity_attribute (child_entity, "id");
-
-                  if (resource_id != NULL && strcmp (resource_id, ""))
-                    {
-                      if (gvm_connection_sendf (connection,
-                                                "<get_targets"
-                                                " target_id=\"%s\"/>",
-                                                resource_id))
-                        {
-                          g_string_free (xml, TRUE);
-                          g_string_free (commands_xml, TRUE);
-                          free_entity (commands_entity);
-                          cmd_response_data_set_status_code (
-                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
-                          return gsad_message (
-                            credentials, "Internal error", __FUNCTION__,
-                            __LINE__,
-                            "An internal error occurred while getting the "
-                            "target of a task. "
-                            "Diagnostics: Failure to send command to manager "
-                            "daemon.",
-                            response_data);
-                        }
-                      if (read_string_c (connection, &xml))
-                        {
-                          g_string_free (commands_xml, TRUE);
-                          g_string_free (xml, TRUE);
-                          free_entity (commands_entity);
-                          cmd_response_data_set_status_code (
-                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
-                          return gsad_message (
-                            credentials, "Internal error", __FUNCTION__,
-                            __LINE__,
-                            "An internal error occurred while getting the "
-                            "target of a task. "
-                            "Diagnostics: Failure to receive response from "
-                            "manager daemon.",
-                            response_data);
-                        }
-                    }
-                }
-
-              child_entities = next_entities (child_entities);
-            }
-        }
-    }
-
   g_string_free (commands_xml, TRUE);
   free_entity (commands_entity);
-
-  /* Get slave scanners. */
-
-  if (command_enabled (credentials, "GET_SCANNERS"))
-    {
-      if (gvm_connection_sendf (connection,
-                                "<get_scanners"
-                                " filter=\"first=1 rows=-1 type=4\"/>")
-          == -1)
-        {
-          g_string_free (xml, TRUE);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting slaves list. "
-            "The current list of resources is not available. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        }
-
-      if (read_string_c (connection, &xml))
-        {
-          g_string_free (xml, TRUE);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting slaves list. "
-            "The current list of resources is not available. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        }
-    }
-
-  /* Get tag names */
-
-  if (gvm_connection_sendf (connection, "<get_tags"
-                                        " filter=\"resource_type=task"
-                                        "          first=1"
-                                        "          rows=-1\""
-                                        " names_only=\"1\""
-                                        "/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting tag names list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting tag names list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  /* Get permissions */
-
-  g_string_append (xml, "<permissions>");
-
-  if (gvm_connection_sendf (connection,
-                            "<get_permissions"
-                            " filter=\"name:^.*(task)s?$"
-                            "          and resource_uuid=%s"
-                            "          first=1 rows=-1\"/>",
-                            task_id)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting permissions list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting permissions list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  g_string_append (xml, "</permissions>");
 
   g_string_append (xml, "</get_task>");
 
