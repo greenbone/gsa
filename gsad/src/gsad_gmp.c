@@ -10737,134 +10737,6 @@ get_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @brief Get one result, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
- * @param[in]  credentials      Username and password for authentication.
- * @param[in]  params           HTTP request params
- * @param[in]  result_id        Result UUID.
- * @param[in]  task_id          Result task UUID.
- * @param[in]  apply_overrides  Whether to apply overrides.
- * @param[in]  commands         Extra commands to run before the others.
- * @param[in]  report_id        ID of report.
- * @param[in]  autofp           Auto FP filter flag.
- * @param[in]  extra_xml        Extra XML to insert inside page element.
- * @param[out] response_data    Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_result (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *result_id, const char *task_id,
-            const char *task_name, const char *apply_overrides,
-            const char *commands, const char *report_id, const char *autofp,
-            const char *extra_xml, cmd_response_data_t *response_data)
-{
-  GString *xml;
-
-  if (apply_overrides == NULL)
-    apply_overrides = "1";
-
-  if (autofp == NULL)
-    autofp = "0";
-
-  xml = g_string_new ("<get_result>");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  xml_string_append (xml,
-                     "<task id=\"%s\"><name>%s</name></task>"
-                     "<report id=\"%s\"/>",
-                     task_id, task_name, report_id);
-
-  /* Get the result. */
-
-  if (gvm_connection_sendf (connection,
-                            "<commands>"
-                            "%s"
-                            "<get_results"
-                            " get_counts=\"0\""
-                            " result_id=\"%s\""
-                            "%s%s%s"
-                            " filter=\"autofp=%s"
-                            " apply_overrides=%s"
-                            " overrides=%s"
-                            " notes=1\""
-                            " overrides_details=\"1\""
-                            " notes_details=\"1\""
-                            " details=\"1\"/>"
-                            "</commands>",
-                            commands ? commands : "", result_id,
-                            task_id ? " task_id=\"" : "",
-                            task_id ? task_id : "", task_id ? "\"" : "", autofp,
-                            apply_overrides, apply_overrides)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting a result. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting a result. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  /* Get tag names */
-
-  if (gvm_connection_sendf (connection, "<get_tags"
-                                        " filter=\"resource_type=result"
-                                        "          first=1"
-                                        "          rows=-1\""
-                                        " names_only=\"1\""
-                                        "/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting tag names list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting tag names list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_result>");
-  return envelope_gmp (connection, credentials, params,
-                       g_string_free (xml, FALSE), response_data);
-}
-
-/**
- * @brief Get one result, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10875,12 +10747,8 @@ char *
 get_result_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t *response_data)
 {
-  return get_result (
-    connection, credentials, params, params_value (params, "result_id"),
-    params_value (params, "task_id"), params_value (params, "name"),
-    params_value (params, "apply_overrides"), NULL,
-    params_value (params, "report_id"), params_value (params, "autofp"), NULL,
-    response_data);
+  return get_one (connection, "result", credentials, params, NULL, NULL,
+                  response_data);
 }
 
 /**
