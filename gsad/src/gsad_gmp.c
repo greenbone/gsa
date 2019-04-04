@@ -9680,7 +9680,7 @@ delete_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
  */
 char *
 get_report (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *extra_xml, int *error,
+            params_t *params, const char *extra_xml,
             cmd_response_data_t *response_data)
 {
   GString *xml;
@@ -9898,8 +9898,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
     {
       g_string_free (delta_states, TRUE);
       g_string_free (levels, TRUE);
-      if (error)
-        *error = 1;
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
@@ -10024,8 +10022,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
     {
       g_string_free (delta_states, TRUE);
       g_string_free (levels, TRUE);
-      if (error)
-        *error = 1;
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
@@ -10048,8 +10044,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
 
           if (read_entity_c (connection, &entity))
             {
-              if (error)
-                *error = 1;
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
@@ -10063,8 +10057,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
           if (report == NULL)
             {
               free_entity (entity);
-              if (error)
-                *error = 1;
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
@@ -10143,8 +10135,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
           xml = g_string_new ("");
           print_entity_to_string (report, xml);
           free_entity (entity);
-          if (error)
-            *error = 1;
           return g_string_free (xml, FALSE);
         }
       else
@@ -10154,8 +10144,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
           entity = NULL;
           if (read_entity_c (connection, &entity))
             {
-              if (error)
-                *error = 1;
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
@@ -10262,8 +10250,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
                 }
 
               free_entity (entity);
-              if (error)
-                *error = 1;
 
               cmd_response_data_set_content_length (response_data, report_len);
               return report_decoded;
@@ -10271,8 +10257,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
           else
             {
               free_entity (entity);
-              if (error)
-                *error = 1;
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
@@ -10317,8 +10301,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
       entity = NULL;
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
-          if (error)
-            *error = 1;
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
@@ -10414,15 +10396,7 @@ char *
 get_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t *response_data)
 {
-  char *result;
-  int error = 0;
-
-  result =
-    get_report (connection, credentials, params, NULL, &error, response_data);
-
-  return error ? result
-               : envelope_gmp (connection, credentials, params, result,
-                               response_data);
+  return get_report (connection, credentials, params, NULL, response_data);
 }
 
 /**
