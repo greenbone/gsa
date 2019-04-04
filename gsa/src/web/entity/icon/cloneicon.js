@@ -49,7 +49,7 @@ const EntityCloneIcon = ({
   const active =
     mayClone &&
     capabilities.mayClone(name) &&
-    entity.userCapabilities.mayClone(name);
+    entity.userCapabilities.mayAccess(name);
   if (!isDefined(title)) {
     if (active) {
       title = _('Clone {{entity}}', {entity: displayName});
