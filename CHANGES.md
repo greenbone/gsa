@@ -4,9 +4,26 @@ For detailed code changes, please visit
  https://github.com/greenbone/gsa/commits/master
 or get the entire source code repository and view log history:
 $ git clone https://github.com/greenbone/gsa.git
-$ cd gsa && git log
+$ cd gsa && git checkout gsa-8.0 && git log
 
 ## gsa 8.0.0 (2018-04-05)
+
+This is the first release of the gsa module 8.0 for the Greenbone
+Vulnerability Management (GVM) framework.
+
+This release introduces an entirely re-written version of GSA with an overhauled
+new user interface technology, switching from XSLT-generated web pages per
+request to a single page JavaScript application. The XSLT got removed
+completely and was replaced by a modern JS application allowing to add features
+and usability improvements faster and easier in future.
+
+The web server daemon (gsad) got a big code cleanup and improvements. Due to
+changing to a JS application it doesn't generate any HTML code anymore. Now gsad
+only ships static files and acts as some kind of http proxy between the JS
+based GSA and gvmd.
+
+Apart from this, the module covers a number of significant advances
+and clean-ups compared to the previous gsa module.
 
  * Display error message if an entity couldn't be loaded #1252
  * Support old secinfo URLs and redirect to replacement pages #1247
@@ -23,7 +40,6 @@ $ cd gsa && git log
  * Add link referencing the performance during scan time to the report details
  * Allow to pass start time, end time and sensor/slave id as URL parameters to
  performance page.
- page.
  * New feature: Remediation Tickets #1126
  * Fix issues with updating user authentication and logging out active
  sessions after changing the password of a user #1159
