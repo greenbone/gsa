@@ -18,10 +18,10 @@ $ cd gsa && git log
  * Convert first filter keyword values less then one to one #1228
  * Always use equal relation for first and rows filter keywords #1228
  * Add confirmation dialog when creating a user without a role #1224
- * Use dialogs to edit LDAP and RADIUS authentification #1212 #1213
+ * Use dialogs to edit LDAP and RADIUS authentication #1212 #1213
  * Renamed "PGP Key" credential to "PGP Encryption Key" #1208
  * Add link referencing the performance during scan time to the report details
- * Allow to pass start time, end time and sensor/slave id as url parameters to
+ * Allow to pass start time, end time and sensor/slave id as URL parameters to
  performance page.
  page.
  * New feature: Remediation Tickets #1126
