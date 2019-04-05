@@ -72,6 +72,7 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
     filtersFilter={SECINFO_FILTER_FILTER}
     sectionIcon={<AllInfoIcon size="large" />}
     table={SecInfosTable}
+    tags={false}
     title={_('All SecInfo Information')}
     toolBarIcons={ToolBarIcons}
     onFilterChanged={onFilterChanged}
