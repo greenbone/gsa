@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Entity ObserverIcon component tests should render if the owner is not the current user 1`] = `
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+<span
+  alt="Entity owned by foo"
+  class="c0 "
+  title="Entity owned by foo"
+>
+  <svg>
+    view_other.svg
+  </svg>
+</span>
+`;
