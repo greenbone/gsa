@@ -6,7 +6,7 @@ or get the entire source code repository and view log history:
 $ git clone https://github.com/greenbone/gsa.git
 $ cd gsa && git log
 
-## gsa 8.0 unreleased
+## gsa 8.0.0 (2018-04-05)
 
  * Display error message if an entity couldn't be loaded #1252
  * Support old secinfo URLs and redirect to replacement pages #1247
