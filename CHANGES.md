@@ -6,7 +6,7 @@ or get the entire source code repository and view log history:
 $ git clone https://github.com/greenbone/gsa.git
 $ cd gsa && git log
 
-## gsa 8.0 unreleased
+## gsa 8.0.0 (2018-04-05)
 
  * Display error message if an entity couldn't be loaded #1252
  * Support old secinfo URLs and redirect to replacement pages #1247
@@ -18,10 +18,10 @@ $ cd gsa && git log
  * Convert first filter keyword values less then one to one #1228
  * Always use equal relation for first and rows filter keywords #1228
  * Add confirmation dialog when creating a user without a role #1224
- * Use dialogs to edit LDAP and RADIUS authentification #1212 #1213
+ * Use dialogs to edit LDAP and RADIUS authentication #1212 #1213
  * Renamed "PGP Key" credential to "PGP Encryption Key" #1208
  * Add link referencing the performance during scan time to the report details
- * Allow to pass start time, end time and sensor/slave id as url parameters to
+ * Allow to pass start time, end time and sensor/slave id as URL parameters to
  performance page.
  page.
  * New feature: Remediation Tickets #1126
