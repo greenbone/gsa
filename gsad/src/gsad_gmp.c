@@ -10378,7 +10378,8 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
         }
 
       g_string_append (xml, "</get_report>");
-      return g_string_free (xml, FALSE);
+      return envelope_gmp (connection, credentials, params,
+                           g_string_free (xml, FALSE), response_data);
     }
 }
 
