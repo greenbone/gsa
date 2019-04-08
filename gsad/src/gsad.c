@@ -88,7 +88,7 @@
 #include <gvm/util/fileutils.h>
 #include <microhttpd.h>
 
-#ifdef GIT_REV_AVAILABLE
+#ifdef GIT_REVISION
 #include "gitrevision.h"
 #endif
 
