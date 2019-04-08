@@ -6,6 +6,10 @@ or get the entire source code repository and view log history:
 $ git clone https://github.com/greenbone/gsa.git
 $ cd gsa && git checkout gsa-8.0 && git log
 
+## gsa 8.0.1 (unreleased)
+
+ * Fix release build #1259
+
 ## gsa 8.0.0 (2018-04-05)
 
 This is the first release of the gsa module 8.0 for the Greenbone
