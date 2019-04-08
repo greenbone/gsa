@@ -18,7 +18,6 @@
  */
 import logger from '../log';
 
-import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
 import registerCommand from '../command';
@@ -249,14 +248,6 @@ class AlertCommand extends EntityCommand {
     return this.httpPost({
       cmd: 'test_alert',
       id,
-    }).then(response => {
-      const {action_result} = response.data;
-      const {status, details} = action_result;
-      return response.setData({
-        ...action_result,
-        details: isDefined(details) && details.length > 0 ? details : undefined,
-        success: status[0] === '2',
-      });
     });
   }
 

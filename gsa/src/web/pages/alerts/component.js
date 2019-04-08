@@ -812,46 +812,47 @@ class AlertComponent extends React.Component {
 
     this.handleInteraction();
 
-    gmp.alert.test(alert).then(
-      response => {
-        const {success, details, message} = response.data;
-        if (success) {
-          if (isDefined(onTestSuccess)) {
-            onTestSuccess(
-              _('Testing the alert {{name}} was successful.', alert),
+    gmp.alert
+      .test(alert)
+      .then(response => {
+        if (isDefined(onTestSuccess)) {
+          onTestSuccess(_('Testing the alert {{name}} was successful.', alert));
+        }
+      })
+      .catch(
+        response => {
+          const {details, message} = response;
+          if (isDefined(onTestError)) {
+            if (isDefined(details)) {
+              onTestError(
+                <React.Fragment>
+                  <p>
+                    {_('Testing the alert {{name}} failed. {{message}}.', {
+                      name: alert.name,
+                      message,
+                    })}
+                  </p>
+                  <FootNote>{details}</FootNote>
+                </React.Fragment>,
+              );
+            } else {
+              onTestError(
+                _('Testing the alert {{name}} failed. {{message}}.', {
+                  name: alert.name,
+                  message,
+                }),
+              );
+            }
+          }
+        },
+        () => {
+          if (isDefined(onTestError)) {
+            onTestError(
+              _('An error occurred during Testing the alert {{name}}', alert),
             );
           }
-        } else if (isDefined(onTestError)) {
-          if (isDefined(details)) {
-            onTestError(
-              <React.Fragment>
-                <p>
-                  {_('Testing the alert {{name}} failed. {{message}}.', {
-                    name: alert.name,
-                    message,
-                  })}
-                </p>
-                <FootNote>{details}</FootNote>
-              </React.Fragment>,
-            );
-          } else {
-            onTestError(
-              _('Testing the alert {{name}} failed. {{message}}.', {
-                name: alert.name,
-                message,
-              }),
-            );
-          }
-        }
-      },
-      () => {
-        if (isDefined(onTestError)) {
-          onTestError(
-            _('An error occurred during Testing the alert {{name}}', alert),
-          );
-        }
-      },
-    );
+        },
+      );
   }
 
   handlePasswordOnlyCredentialChange(credential) {
