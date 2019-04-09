@@ -176,6 +176,12 @@
  */
 #define DEFAULT_GSAD_PER_IP_CONNECTION_LIMIT 30
 
+#define COPYRIGHT \
+  "Copyright (C) 2010-2016 Greenbone Networks GmbH\n" \
+  "License GPLv2+: GNU GPL version 2 or later\n" \
+  "This is free software: you are free to change and redistribute it.\n" \
+  "There is NO WARRANTY, to the extent permitted by law.\n\n"
+
 /**
  * @brief Flag for signal handler.
  */
@@ -2881,11 +2887,7 @@ main (int argc, char **argv)
           printf ("gnutls %s\n", gnutls_check_version (NULL));
           printf ("libmicrohttpd %s\n", MHD_get_version ());
         }
-      printf ("Copyright (C) 2010-2016 Greenbone Networks GmbH\n");
-      printf ("License GPLv2+: GNU GPL version 2 or later\n");
-      printf (
-        "This is free software: you are free to change and redistribute it.\n"
-        "There is NO WARRANTY, to the extent permitted by law.\n\n");
+      printf (COPYRIGHT);
       exit (EXIT_SUCCESS);
     }
 
