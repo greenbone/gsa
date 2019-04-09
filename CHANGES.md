@@ -8,6 +8,7 @@ $ cd gsa && git checkout gsa-8.0 && git log
 
 ## gsa 8.0.1 (unreleased)
 
+ * Fix testing alerts #1260
  * Fix release build #1259
 
 ## gsa 8.0.0 (2018-04-05)
