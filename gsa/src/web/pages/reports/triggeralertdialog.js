@@ -64,7 +64,7 @@ const TriggerAlertDialog = ({
 }) => {
   const filterString = isString(filter)
     ? filter
-    : filter.toFilterCriteriaString();
+    : filter.simple().toFilterString();
 
   if (!isDefined(alertId)) {
     alertId = selectSaveId(alerts, defaultAlertId);
