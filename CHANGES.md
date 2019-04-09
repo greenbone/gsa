@@ -8,6 +8,7 @@ $ cd gsa && git checkout gsa-8.0 && git log
 
 ## gsa 8.0.1 (unreleased)
 
+ * Cleanup get_report function in gsad #1263
  * Fix testing alerts #1260
  * Fix release build #1259
 
