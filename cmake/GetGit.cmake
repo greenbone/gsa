@@ -16,8 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
-# This script attempts to determine the Git commit ID and writes or updates
-# a "gitrevision.h" file if successful.
+# This script attempts to determine the Git commit ID
 
 find_package (Git)
 
@@ -33,16 +32,3 @@ macro (Git_GET_REVISION dir variable)
   string (REPLACE "/" "_" GIT_BRANCH ${GIT_BRANCH})
   set (${variable} "${GIT_COMMIT_HASH}-${GIT_BRANCH}")
 endmacro (Git_GET_REVISION)
-
-if (EXISTS "${SOURCE_DIR}/.git/")
-  if (GIT_FOUND)
-    Git_GET_REVISION (${SOURCE_DIR} GIT_REVISION)
-  endif (GIT_FOUND)
-endif (EXISTS "${SOURCE_DIR}/.git/")
-
-if (GIT_REVISION)
-  file (WRITE gitrevision.h.in "#define GSAD_GIT_REVISION \"${GIT_REVISION}\"\n")
-  execute_process (COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                   gitrevision.h.in gitrevision.h)
-  file (REMOVE gitrevision.h.in)
-endif (GIT_REVISION)

@@ -8,11 +8,17 @@ $ cd gsa && git checkout gsa-8.0 && git log
 
 ## gsa 8.0.1 (unreleased)
 
+ * Removed obsolete CLI arguments #1265
+   * --login-label
+   * --http-guest-chart-frame-opts
+   * --http-guest-chart-csp
+   * --guest-username
+   * --guest-password
  * Fix GSA version at about page #1264
  * Fix link to protocol documentation at about page #1264
  * Cleanup get_report function in gsad #1263
  * Fix testing alerts #1260
- * Fix release build #1259
+ * Fix release build #1259, #1265
 
 ## gsa 8.0.0 (2018-04-05)
 
