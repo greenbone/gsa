@@ -219,7 +219,7 @@ class Select extends React.Component {
                           isSelected={itemValue === selectedItem}
                           isActive={i === highlightedIndex}
                           key={key}
-                          onMouseDown={() => selectItem(itemValue)}
+                          onMouseUp={() => selectItem(itemValue)}
                         >
                           {React.isValidElement(itemLabel)
                             ? itemLabel
