@@ -410,16 +410,11 @@ handle_setup_user (http_connection_t *connection, const char *method,
 
   ret = get_user_from_connection (connection, &user);
 
-  if (ret == USER_GUEST_LOGIN_FAILED || ret == USER_GMP_DOWN
-      || ret == USER_GUEST_LOGIN_ERROR)
+  if (ret == USER_GMP_DOWN)
     {
-      auth_reason =
-        ret == USER_GMP_DOWN
-          ? GMP_SERVICE_DOWN
-          : (ret == USER_GUEST_LOGIN_ERROR ? LOGIN_ERROR : LOGIN_FAILED);
 
       return handler_send_reauthentication (
-        connection, MHD_HTTP_SERVICE_UNAVAILABLE, auth_reason);
+        connection, MHD_HTTP_SERVICE_UNAVAILABLE, GMP_SERVICE_DOWN);
     }
 
   if ((ret == USER_EXPIRED_TOKEN) || (ret == USER_BAD_MISSING_COOKIE)
