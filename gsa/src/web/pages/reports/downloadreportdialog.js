@@ -105,6 +105,9 @@ const DownloadReportDialog = ({
               checkedValue={YES_VALUE}
               unCheckedValue={NO_VALUE}
               title={_('Store as default')}
+              toolTipTitle={_(
+                'Store indicated settings (without filter) as default',
+              )}
               onChange={onValueChange}
             />
           </StyledDiv>
