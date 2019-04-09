@@ -94,7 +94,6 @@ class ReportCommand extends EntityCommand {
     return this.httpPost({
       cmd: 'create_asset',
       report_id: id,
-      no_redirect: '1',
       filter,
     });
   }
@@ -103,9 +102,7 @@ class ReportCommand extends EntityCommand {
     return this.httpPost({
       cmd: 'delete_asset',
       report_id: id,
-      no_redirect: '1',
       filter,
-      next: 'get_report', // seems not to work without next param
     });
   }
 

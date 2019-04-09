@@ -133,12 +133,17 @@ class ScheduleDialog extends React.Component {
 
     this.handleSave = this.handleSave.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
+    this.handleStartHoursChange = this.handleStartHoursChange.bind(this);
+    this.handleStartMinutesChange = this.handleStartMinutesChange.bind(this);
+    this.handleEndHoursChange = this.handleEndHoursChange.bind(this);
+    this.handleEndMinutesChange = this.handleEndMinutesChange.bind(this);
+    this.handleTimezoneChange = this.handleTimezoneChange.bind(this);
   }
 
   initialState(props) {
     const {
       duration,
-      timezone,
+      timezone = 'UTC',
       startDate = date()
         .tz(timezone)
         .startOf('hour')
@@ -180,8 +185,6 @@ class ScheduleDialog extends React.Component {
 
     return {
       endDate,
-      endHour: endDate.hours(),
-      endMinute: endDate.minutes(),
       endOpen: !isDefined(duration),
       freq,
       interval,
@@ -191,8 +194,7 @@ class ScheduleDialog extends React.Component {
       monthlyDay,
       monthlyNth,
       startDate,
-      startHour: startDate.hours(),
-      startMinute: startDate.minutes(),
+      timezone,
       weekdays,
     };
   }
@@ -201,11 +203,41 @@ class ScheduleDialog extends React.Component {
     this.setState({[name]: value});
   }
 
+  handleStartHoursChange(value) {
+    this.setState(state => ({
+      startDate: state.startDate.hours(value),
+    }));
+  }
+
+  handleStartMinutesChange(value) {
+    this.setState(state => ({
+      startDate: state.startDate.minutes(value),
+    }));
+  }
+
+  handleEndHoursChange(value) {
+    this.setState(state => ({
+      endDate: state.endDate.hours(value),
+    }));
+  }
+
+  handleEndMinutesChange(value) {
+    this.setState(state => ({
+      endDate: state.endDate.minutes(value),
+    }));
+  }
+
+  handleTimezoneChange(value) {
+    this.setState(state => ({
+      endDate: state.endDate.tz(value),
+      startDate: state.startDate.tz(value),
+      timezone: value,
+    }));
+  }
+
   handleSave({
     comment,
     endDate,
-    endHour,
-    endMinute,
     endOpen = false,
     freq,
     id,
@@ -217,8 +249,6 @@ class ScheduleDialog extends React.Component {
     name,
     recurrenceType,
     startDate,
-    startHour,
-    startMinute,
     timezone,
     weekdays,
   }) {
@@ -228,18 +258,10 @@ class ScheduleDialog extends React.Component {
       return Promise.resolve();
     }
 
-    startDate = date(startDate)
-      .tz(timezone)
-      .seconds(0)
-      .hours(startHour)
-      .minutes(startMinute);
+    startDate = date(startDate).seconds(0);
 
     if (!endOpen) {
-      endDate = date(endDate)
-        .tz(timezone)
-        .seconds(0)
-        .hours(endHour)
-        .minutes(endMinute);
+      endDate = date(endDate).seconds(0);
 
       if (endDate.isSameOrBefore(startDate)) {
         return Promise.reject(
@@ -323,15 +345,12 @@ class ScheduleDialog extends React.Component {
       comment = '',
       id,
       name = _('Unnamed'),
-      timezone = 'UTC',
       title = _('New Schedule'),
       onClose,
     } = this.props;
 
     const {
       endDate,
-      endHour,
-      endMinute,
       endOpen,
       freq,
       interval,
@@ -341,8 +360,7 @@ class ScheduleDialog extends React.Component {
       monthlyDay,
       monthlyNth,
       startDate,
-      startHour,
-      startMinute,
+      timezone,
       weekdays,
     } = this.state;
 
@@ -350,7 +368,6 @@ class ScheduleDialog extends React.Component {
       comment,
       id,
       name,
-      timezone,
     };
 
     const duration = endOpen
@@ -359,8 +376,6 @@ class ScheduleDialog extends React.Component {
 
     const values = {
       endDate,
-      endHour,
-      endMinute,
       endOpen,
       freq,
       interval,
@@ -370,8 +385,7 @@ class ScheduleDialog extends React.Component {
       monthlyNth,
       recurrenceType,
       startDate,
-      startHour,
-      startMinute,
+      timezone,
       weekdays,
     };
 
@@ -408,15 +422,15 @@ class ScheduleDialog extends React.Component {
             <FormGroup title={_('Timezone')}>
               <TimeZoneSelect
                 name="timezone"
-                value={state.timezone}
-                onChange={onValueChange}
+                value={timezone}
+                onChange={this.handleTimezoneChange}
               />
             </FormGroup>
 
             <FormGroup title={_('Start')}>
               <DatePicker
                 name="startDate"
-                value={state.startDate}
+                value={startDate}
                 onChange={this.handleValueChange}
               />
               <Divider>
@@ -426,8 +440,8 @@ class ScheduleDialog extends React.Component {
                   min="0"
                   max="23"
                   size="2"
-                  value={state.startHour}
-                  onChange={this.handleValueChange}
+                  value={startDate.hours()}
+                  onChange={this.handleStartHoursChange}
                 />
                 <span>h</span>
                 <Spinner
@@ -436,8 +450,8 @@ class ScheduleDialog extends React.Component {
                   min="0"
                   max="59"
                   size="2"
-                  value={state.startMinute}
-                  onChange={this.handleValueChange}
+                  value={startDate.minutes()}
+                  onChange={this.handleStartMinutesChange}
                 />
                 <span>m</span>
               </Divider>
@@ -458,8 +472,8 @@ class ScheduleDialog extends React.Component {
                   min="0"
                   max="23"
                   size="2"
-                  value={state.endHour}
-                  onChange={this.handleValueChange}
+                  value={endDate.hour()}
+                  onChange={this.handleEndHoursChange}
                 />
                 <span>h</span>
                 <Spinner
@@ -469,8 +483,8 @@ class ScheduleDialog extends React.Component {
                   min="0"
                   max="59"
                   size="2"
-                  value={state.endMinute}
-                  onChange={this.handleValueChange}
+                  value={endDate.minute()}
+                  onChange={this.handleEndMinutesChange}
                 />
                 <span>m</span>
                 <CheckBox

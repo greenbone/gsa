@@ -34,11 +34,12 @@ const filterFilters = (filters, type) =>
 const FilterPart = ({
   agentsFilter,
   alertsFilter,
-  assetsFilter,
   configsFilter,
   credentialsFilter,
   filtersFilter,
+  hostsFilter,
   notesFilter,
+  operatingSystemsFilter,
   overridesFilter,
   permissionsFilter,
   portListsFilter,
@@ -84,17 +85,6 @@ const FilterPart = ({
           onChange={onChange}
         />
       </FormGroup>
-      <FormGroup title={_('Assets Filter')} titleSize="3">
-        <Select
-          name="assetsFilter"
-          value={assetsFilter}
-          items={renderSelectItems(
-            filterFilters(filters, 'asset'),
-            UNSET_VALUE,
-          )}
-          onChange={onChange}
-        />
-      </FormGroup>
       <FormGroup title={_('Scan Configs Filter')} titleSize="3">
         <Select
           name="configsFilter"
@@ -128,11 +118,27 @@ const FilterPart = ({
           onChange={onChange}
         />
       </FormGroup>
+      <FormGroup title={_('Hosts Filter')} titleSize="3">
+        <Select
+          name="hostsFilter"
+          value={hostsFilter}
+          items={renderSelectItems(filterFilters(filters, 'host'), UNSET_VALUE)}
+          onChange={onChange}
+        />
+      </FormGroup>
       <FormGroup title={_('Notes Filter')} titleSize="3">
         <Select
           name="notesFilter"
           value={notesFilter}
           items={renderSelectItems(filterFilters(filters, 'note'), UNSET_VALUE)}
+          onChange={onChange}
+        />
+      </FormGroup>
+      <FormGroup title={_('Operating Systems Filter')} titleSize="3">
+        <Select
+          name="operatingSystemsFilter"
+          value={operatingSystemsFilter}
+          items={renderSelectItems(filterFilters(filters, 'os'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
@@ -311,7 +317,6 @@ const FilterPart = ({
 FilterPart.propTypes = {
   agentsFilter: PropTypes.string,
   alertsFilter: PropTypes.string,
-  assetsFilter: PropTypes.string,
   certBundFilter: PropTypes.string,
   configsFilter: PropTypes.string,
   cpeFilter: PropTypes.string,
@@ -320,8 +325,10 @@ FilterPart.propTypes = {
   dfnCertFilter: PropTypes.string,
   filters: PropTypes.array,
   filtersFilter: PropTypes.string,
+  hostsFilter: PropTypes.string,
   notesFilter: PropTypes.string,
   nvtFilter: PropTypes.string,
+  operatingSystemsFilter: PropTypes.string,
   ovalFilter: PropTypes.string,
   overridesFilter: PropTypes.string,
   permissionsFilter: PropTypes.string,

@@ -27,6 +27,7 @@ import qhistory from 'qhistory';
 import LocationObserver from 'web/components/observer/locationobserver';
 import SessionObserver from 'web/components/observer/sessionobserver';
 
+import LegacyOmpPage from './pages/omp';
 import Page from './pages/page';
 import PageNotFound from './pages/notfoundpage';
 import StartPage from './pages/start/page';
@@ -139,6 +140,7 @@ class Routes extends React.Component {
       <Router history={HISTORY}>
         <Switch>
           <Route path="/login" component={LoginPage} />
+          <Route path="/omp" component={LegacyOmpPage} />
           <Authorized>
             <SessionObserver />
             <LocationObserver>
@@ -241,6 +243,7 @@ class Routes extends React.Component {
                     path="/scanconfig/:id"
                     component={ScanConfigDetailsPage}
                   />
+                  <Route path="/notfound" component={PageNotFound} />
                   <Route component={PageNotFound} />
                 </Switch>
               </Page>

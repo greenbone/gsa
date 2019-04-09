@@ -53,7 +53,6 @@ struct user
   gchar *pw_warning;   ///< Password policy warning.
   gchar *address;      ///< Client's IP address.
   time_t time;         ///< Login time.
-  gboolean guest;      ///< Whether the user is a guest.
 };
 
 void
@@ -74,7 +73,7 @@ user_new_with_data (const gchar *username, const gchar *password,
                     const gchar *timezone, const gchar *severity,
                     const gchar *role, const gchar *capabilities,
                     const gchar *language, const gchar *pw_warning,
-                    const gchar *address, const gboolean guest)
+                    const gchar *address)
 {
   user_t *user = user_new ();
 
@@ -90,7 +89,6 @@ user_new_with_data (const gchar *username, const gchar *password,
   user->language = g_strdup (language);
   user->pw_warning = g_strdup (pw_warning);
   user->address = g_strdup (address);
-  user->guest = guest;
 
   user_set_language (user, language);
   user_renew_session (user);
@@ -142,7 +140,6 @@ user_copy (user_t *user)
   copy->pw_warning = g_strdup (user->pw_warning);
   copy->address = g_strdup (user->address);
   copy->time = user->time;
-  copy->guest = user->guest;
 
   return copy;
 }
@@ -217,12 +214,6 @@ const gchar *
 user_get_password (user_t *user)
 {
   return user->password;
-}
-
-gboolean
-user_get_guest (user_t *user)
-{
-  return user->guest;
 }
 
 const time_t
@@ -360,8 +351,6 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
           const gchar *severity, const gchar *role, const gchar *capabilities,
           const gchar *language, const gchar *pw_warning, const char *address)
 {
-  const gchar *guest_username = get_guest_username ();
-
   user_t *user = session_get_user_by_username (username);
 
   if (user && user_session_expired (user))
@@ -370,16 +359,9 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user_free (user);
     }
 
-  gboolean guest = 0;
-
-  if (guest_username)
-    {
-      guest = str_equal (username, guest_username) ? 1 : 0;
-    }
-
   user =
     user_new_with_data (username, password, timezone, severity, role,
-                        capabilities, language, pw_warning, address, guest);
+                        capabilities, language, pw_warning, address);
 
   session_add_user (user->token, user);
 
@@ -402,10 +384,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
  *         2 expired token,
  *         3 bad/missing cookie,
  *         4 bad/missing token,
- *         5 guest login failed,
- *         6 GMP down for guest login,
  *         7 IP address mismatch,
- *        -1 error during guest login.
  */
 int
 user_find (const gchar *cookie, const gchar *token, const char *address,

@@ -19,6 +19,8 @@
 
 import 'core-js/library/fn/array/find';
 
+import memoize from 'memoize-one';
+
 import React from 'react';
 
 import {css} from 'glamor';
@@ -78,6 +80,79 @@ const LabelTitle = styled.text`
   fill: ${Theme.white};
   font-family: monospace;
 `;
+
+const xValue = (d, timeline = false) => (timeline ? d.x.toDate() : d.x);
+
+const maxWidth = memoize(width => width - margin.left - margin.right);
+
+const maxHeight = memoize(height => height - margin.top - margin.bottom);
+
+const getXAxisTicks = memoize((width, numTicks = 10) => {
+  while (width / numTicks < MIN_TICK_WIDTH) {
+    numTicks--;
+  }
+  return numTicks;
+});
+
+const getXValues = memoize((data = [], timeline = false) =>
+  data.map(d => xValue(d, timeline)),
+);
+
+const getXMin = memoize(xValues => Math.min(...xValues));
+const getXMax = memoize(xValues => Math.max(...xValues));
+
+const getXScale = memoize((data = [], timeline = false, width) => {
+  const xValues = getXValues(data, timeline);
+
+  const xMin = getXMin(xValues);
+  const xMax = getXMax(xValues);
+
+  let xDomain;
+  if (timeline) {
+    xDomain =
+      data.length === 1
+        ? [
+            date(data[0].x)
+              .subtract(1, 'day')
+              .toDate(),
+            date(data[0].x)
+              .add(1, 'day')
+              .toDate(),
+          ]
+        : [date(xMin).toDate(), date(xMax).toDate()];
+  } else {
+    xDomain = data.length > 1 ? [xMin, xMax] : [xMin - 1, xMax + 1];
+  }
+
+  return timeline
+    ? scaleUtc()
+        .range([0, maxWidth(width)])
+        .domain(xDomain)
+    : scaleLinear()
+        .range([0, maxWidth(width)])
+        .domain(xDomain);
+});
+
+const getYScale = memoize((data = [], height) => {
+  const yValues = data.map(d => d.y);
+  const yMax = Math.max(...yValues);
+  const yDomain = data.length > 1 ? [0, yMax] : [0, yMax * 2];
+  return scaleLinear()
+    .range([maxHeight(height), 0])
+    .domain(yDomain)
+    .nice();
+});
+
+const getY2Scale = memoize((data = [], height) => {
+  const y2Values = data.map(d => d.y2);
+  const y2Max = Math.max(...y2Values);
+
+  const y2Domain = data.length > 1 ? [0, y2Max] : [0, y2Max * 2];
+  return scaleLinear()
+    .range([maxHeight(height), 0])
+    .domain(y2Domain)
+    .nice();
+});
 
 export const lineDataPropType = PropTypes.shape({
   label: PropTypes.any.isRequired,
@@ -152,7 +227,7 @@ class LineChart extends React.Component {
 
     this.state = {
       displayInfo: false,
-      ...this.stateFromWidth(this.getWidth()),
+      width: this.getWidth(),
     };
   }
 
@@ -227,22 +302,26 @@ class LineChart extends React.Component {
   }
 
   getXValueForPixel(px) {
-    const {maxWidth, xMax, xMin, xValues, xScale} = this.state;
+    const {data = [], timeline = false} = this.props;
+    const {width} = this.state;
+
+    const xValues = getXValues(data, timeline);
 
     if (xValues.length === 1) {
       return xValues[0];
     }
 
-    if (px >= maxWidth) {
-      return xMax;
+    if (px >= maxWidth(width)) {
+      return getXMax(xValues);
     }
 
     if (px <= 0) {
-      return xMin;
+      return getXMin(xValues);
     }
 
     const values = [...xValues].sort((a, b) => a - b); // sort copy of x values
 
+    const xScale = getXScale(data, timeline, width);
     const xV = xScale.invert(px); // x value for pixel position
 
     const index = values.findIndex(x => xV <= x); // get index of the first x value bigger then xV
@@ -251,15 +330,6 @@ class LineChart extends React.Component {
     const xV2 = values[index - 1]; // get the x value before
 
     return xV1 - xV < xV - xV2 ? xV1 : xV2; // return nearest value
-  }
-
-  getXAxisTicks() {
-    const {width} = this.state;
-    let {numTicks = 10} = this.props;
-    while (width / numTicks < MIN_TICK_WIDTH) {
-      numTicks--;
-    }
-    return numTicks;
   }
 
   getWidth() {
@@ -282,86 +352,14 @@ class LineChart extends React.Component {
 
   update() {
     const width = this.getWidth();
-    if (
-      width !== this.state.width ||
-      this.props.data !== this.state.data ||
-      this.props.height !== this.state.height
-    ) {
-      // update state if width, data or height has changed since last render
-      this.setState(this.stateFromWidth(width));
+    if (width !== this.state.width) {
+      this.setState({width});
     }
-  }
-
-  stateFromWidth(width) {
-    const {data = [], height, timeline = false} = this.props;
-
-    const maxWidth = width - margin.left - margin.right;
-    const maxHeight = height - margin.top - margin.bottom;
-
-    const xValues = data.map(d => (timeline ? d.x.toDate() : d.x));
-    const yValues = data.map(d => d.y);
-    const y2Values = data.map(d => d.y2);
-    const yMax = Math.max(...yValues);
-    const y2Max = Math.max(...y2Values);
-    const xMin = Math.min(...xValues);
-    const xMax = Math.max(...xValues);
-
-    let xDomain;
-    if (timeline) {
-      xDomain =
-        data.length > 1
-          ? [xMin, xMax]
-          : [
-              date(xMin)
-                .subtract(1, 'day')
-                .toDate(),
-              date(xMax)
-                .add(1, 'day')
-                .toDate(),
-            ];
-    } else {
-      xDomain = data.length > 1 ? [xMin, xMax] : [xMin - 1, xMax + 1];
-    }
-
-    const xScale = timeline
-      ? scaleUtc()
-          .range([0, maxWidth])
-          .domain(xDomain)
-      : scaleLinear()
-          .range([0, maxWidth])
-          .domain(xDomain);
-
-    const yDomain = data.length > 1 ? [0, yMax] : [0, yMax * 2];
-
-    const yScale = scaleLinear()
-      .range([maxHeight, 0])
-      .domain(yDomain)
-      .nice();
-
-    const y2Domain = data.length > 1 ? [0, y2Max] : [0, y2Max * 2];
-    const y2Scale = scaleLinear()
-      .range([maxHeight, 0])
-      .domain(y2Domain)
-      .nice();
-
-    return {
-      data,
-      xScale,
-      yScale,
-      y2Scale,
-      maxHeight,
-      maxWidth,
-      xValues,
-      xMin,
-      xMax,
-      width,
-      height,
-    };
   }
 
   renderInfo() {
-    const {data, timeline, yLine, y2Line} = this.props;
-    const {displayInfo, infoX, mouseY, maxHeight, xScale} = this.state;
+    const {data, height, timeline, yLine, y2Line} = this.props;
+    const {displayInfo, infoX, mouseY, width} = this.state;
 
     const lines = (isDefined(yLine) ? 1 : 0) + (isDefined(y2Line) ? 1 : 0);
 
@@ -376,6 +374,8 @@ class LineChart extends React.Component {
 
     const {label = '', y, y2} = value;
 
+    const xScale = getXScale(data, timeline, width);
+
     const x = xScale(infoX);
     const infoWidth = Math.max(label.length * 8 + 20, 100); // 8px per letter is just an assumption
     const infoHeight = LINE_HEIGHT + lines * LINE_HEIGHT;
@@ -387,7 +387,7 @@ class LineChart extends React.Component {
       <Group>
         <Line
           from={{x, y: 0}}
-          to={{x, y: maxHeight}}
+          to={{x, y: maxHeight(height)}}
           className={`${lineCss}`}
         />
         <Group left={x + infoMargin} top={mouseY}>
@@ -441,12 +441,14 @@ class LineChart extends React.Component {
   }
 
   renderRange() {
-    const {rangeX, infoX, xScale, maxHeight, xValues} = this.state;
+    const {height, data, timeline} = this.props;
+    const {rangeX, infoX, width} = this.state;
 
-    if (!isDefined(rangeX) || !isDefined(infoX) || xValues.length <= 1) {
+    if (!isDefined(rangeX) || !isDefined(infoX) || data.length <= 1) {
       return null;
     }
 
+    const xScale = getXScale(data, timeline, width);
     const startX = xScale(rangeX);
     const endX = xScale(infoX);
 
@@ -456,7 +458,7 @@ class LineChart extends React.Component {
       <Group>
         <Line
           from={{x: startX, y: 0}}
-          to={{x: startX, y: maxHeight}}
+          to={{x: startX, y: maxHeight(height)}}
           stroke={Theme.green}
           className={`${lineCss}`}
         />
@@ -464,7 +466,7 @@ class LineChart extends React.Component {
           x={rightDirection ? startX : endX}
           fill={Theme.green}
           opacity={0.125}
-          height={maxHeight}
+          height={maxHeight(height)}
           width={rangeWidth}
         />
       </Group>
@@ -472,19 +474,14 @@ class LineChart extends React.Component {
   }
 
   render() {
-    const {
-      xScale,
-      yScale,
-      y2Scale,
-      maxHeight,
-      maxWidth,
-      height,
-      width,
-    } = this.state;
+    const {width} = this.state;
     const {
       data = [],
+      height,
+      numTicks,
       showLegend = true,
       svgRef,
+      timeline = false,
       xAxisLabel,
       yAxisLabel,
       y2AxisLabel,
@@ -492,12 +489,15 @@ class LineChart extends React.Component {
       y2Line,
       onRangeSelected,
     } = this.props;
+    const xScale = getXScale(data, timeline, width);
+    const yScale = getYScale(data, height);
+    const y2Scale = getY2Scale(data, height);
     const hasValue = data.length > 0;
     const hasValues = data.length > 1;
     const hasOneValue = data.length === 1;
     const hasLines = isDefined(yLine) && isDefined(y2Line);
     const showRange = hasValues && isDefined(onRangeSelected);
-    const xAxisTicks = this.getXAxisTicks();
+    const xAxisTicks = getXAxisTicks(width, numTicks);
     return (
       <Layout align={['start', 'start']}>
         <Svg
@@ -524,7 +524,7 @@ class LineChart extends React.Component {
             <Axis
               orientation="bottom"
               scale={xScale}
-              top={maxHeight}
+              top={maxHeight(height)}
               label={`${xAxisLabel}`}
               numTicks={xAxisTicks}
             />
@@ -533,7 +533,7 @@ class LineChart extends React.Component {
                 orientation="right"
                 scale={y2Scale}
                 top={0}
-                left={maxWidth}
+                left={maxWidth(width)}
                 label={`${y2AxisLabel}`}
                 numTicks={10}
               />
@@ -542,7 +542,7 @@ class LineChart extends React.Component {
               <Group>
                 <LinePath
                   data={data}
-                  x={d => d.x}
+                  x={d => xValue(d, timeline)}
                   y={d => d.y}
                   stroke={yLine.color}
                   strokeWidth={isDefined(yLine.lineWidth) ? yLine.lineWidth : 1}
@@ -552,7 +552,7 @@ class LineChart extends React.Component {
                 />
                 <LinePath
                   data={data}
-                  x={d => d.x}
+                  x={d => xValue(d, timeline)}
                   y={d => d.y2}
                   stroke={y2Line.color}
                   strokeWidth={
@@ -568,7 +568,7 @@ class LineChart extends React.Component {
               <Group>
                 {isDefined(yLine) && (
                   <Cross
-                    x={xScale(data[0].x)}
+                    x={xScale(xValue(data[0], timeline))}
                     y={yScale(data[0].y)}
                     color={yLine.color}
                     dashArray={yLine.dashArray}
@@ -577,7 +577,7 @@ class LineChart extends React.Component {
                 )}
                 {isDefined(y2Line) && (
                   <CrossY2
-                    x={xScale(data[0].x)}
+                    x={xScale(xValue(data[0], timeline))}
                     y={y2Scale(data[0].y2)}
                     color={y2Line.color}
                     dashArray={y2Line.dashArray}

@@ -34,11 +34,12 @@ import FilterDialog from 'web/pages/filters/dialog';
 const FILTER_OPTIONS = [
   ['agent', _l('Agent')],
   ['alert', _l('Alert')],
-  ['asset', _l('Asset')],
   ['credential', _l('Credential')],
   ['filter', _l('Filter')],
   ['group', _l('Group')],
+  ['host', _l('Host')],
   ['note', _l('Note')],
+  ['os', _l('Operating System')],
   ['override', _l('Override')],
   ['permission', _l('Permission')],
   ['port_list', _l('Port List')],

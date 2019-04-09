@@ -10,19 +10,54 @@ $ cd gsa && git log
 
  * Use HTTPS for documentation links
 
-## gsa 8.0 unreleased
+## gsa 8.0.1 (unreleased)
 
+ * Removed obsolete CLI arguments #1265
+   * --login-label
+   * --http-guest-chart-frame-opts
+   * --http-guest-chart-csp
+   * --guest-username
+   * --guest-password
+ * Fix GSA version at about page #1264
+ * Fix link to protocol documentation at about page #1264
+ * Cleanup get_report function in gsad #1263
+ * Fix testing alerts #1260
+ * Fix release build #1259, #1265
+
+## gsa 8.0.0 (2018-04-05)
+
+This is the first release of the gsa module 8.0 for the Greenbone
+Vulnerability Management (GVM) framework.
+
+This release introduces an entirely re-written version of GSA with an overhauled
+new user interface technology, switching from XSLT-generated web pages per
+request to a single page JavaScript application. The XSLT got removed
+completely and was replaced by a modern JS application allowing to add features
+and usability improvements faster and easier in future.
+
+The web server daemon (gsad) got a big code cleanup and improvements. Due to
+changing to a JS application it doesn't generate any HTML code anymore. Now gsad
+only ships static files and acts as some kind of http proxy between the JS
+based GSA and gvmd.
+
+Apart from this, the module covers a number of significant advances
+and clean-ups compared to the previous gsa module.
+
+ * Display error message if an entity couldn't be loaded #1252
+ * Support old secinfo URLs and redirect to replacement pages #1247
+ * Add guest user login support #1246
+ * Allow to set default host and operating system filters #1243
+ * Don't crash if start or end date for performance page are invalid #1237
  * Change order of options in target dialog #1233
  * Don't limit the input field lengths anymore #1232
  * Convert first filter keyword values less then one to one #1228
  * Always use equal relation for first and rows filter keywords #1228
  * Add confirmation dialog when creating a user without a role #1224
- * Use dialogs to edit LDAP and RADIUS authentification #1212 #1213
+ * Use dialogs to edit LDAP and RADIUS authentication #1212 #1213
  * Renamed "PGP Key" credential to "PGP Encryption Key" #1208
  * Add link referencing the performance during scan time to the report details
- * Allow to pass start time, end time and sensor/slave id as url parameters to
+ * Allow to pass start time, end time and sensor/slave id as URL parameters to
  performance page.
- page.
  * New feature: Remediation Tickets #1126
  * Fix issues with updating user authentication and logging out active
  sessions after changing the password of a user #1159

@@ -58,7 +58,7 @@ const success = (response, options) => {
 
 const rejection = (rej, options) => {
   if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
-    const {envelope} = parse(rej.xhr.responseXML);
+    const {envelope} = parse(rej.xhr.response);
 
     if (isDefined(envelope)) {
       rej.root = envelope;

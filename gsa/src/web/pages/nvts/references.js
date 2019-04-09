@@ -18,13 +18,13 @@
  */
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 
 import DetailsBlock from 'web/entity/block';
 
 import PropTypes from 'web/utils/proptypes';
-
-import Divider from 'web/components/layout/divider';
 
 import CertLink from 'web/components/link/certlink';
 import CveLink from 'web/components/link/cvelink';
@@ -34,6 +34,10 @@ import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+
+const TableDataAlignTop = styled(TableData)`
+  vertical-align: top;
+`;
 
 const References = ({nvt, links = true}) => {
   const {cves = [], bids = [], certs = [], xrefs = []} = nvt;
@@ -48,68 +52,60 @@ const References = ({nvt, links = true}) => {
         <TableBody>
           {cves.length > 0 && (
             <TableRow>
-              <TableData>{_('CVE')}</TableData>
+              <TableDataAlignTop>{_('CVE')}</TableDataAlignTop>
               <TableData>
-                <Divider wrap>
-                  {cves.map(cve_id => (
-                    <CveLink
-                      title={_('View Details of {{cve_id}}', {cve_id})}
-                      key={cve_id}
-                      id={cve_id}
-                      textOnly={!links}
-                    />
-                  ))}
-                </Divider>
+                {cves.map(cve_id => (
+                  <CveLink
+                    title={_('View Details of {{cve_id}}', {cve_id})}
+                    key={cve_id}
+                    id={cve_id}
+                    textOnly={!links}
+                  />
+                ))}
               </TableData>
             </TableRow>
           )}
 
           {bids.length > 0 && (
             <TableRow>
-              <TableData>{_('BID')}</TableData>
+              <TableDataAlignTop>{_('BID')}</TableDataAlignTop>
               <TableData>
-                <Divider wrap>
-                  {bids.map(bid => (
-                    <span key={bid}>{bid}</span>
-                  ))}
-                </Divider>
+                {bids.map(bid => (
+                  <span key={bid}>{bid}</span>
+                ))}
               </TableData>
             </TableRow>
           )}
 
           {certs.length > 0 && (
             <TableRow>
-              <TableData>{_('CERT')}</TableData>
+              <TableDataAlignTop>{_('CERT')}</TableDataAlignTop>
               <TableData>
-                <Divider wrap>
-                  {certs.map(cert => (
-                    <CertLink
-                      key={cert.id}
-                      type={cert.type}
-                      id={cert.id}
-                      textOnly={!links}
-                    />
-                  ))}
-                </Divider>
+                {certs.map(cert => (
+                  <CertLink
+                    key={cert.id}
+                    type={cert.type}
+                    id={cert.id}
+                    textOnly={!links}
+                  />
+                ))}
               </TableData>
             </TableRow>
           )}
 
           {xrefs.length > 0 && (
             <TableRow>
-              <TableData>{_('Other')}</TableData>
+              <TableDataAlignTop>{_('Other')}</TableDataAlignTop>
               <TableData>
-                <Divider wrap>
-                  {xrefs.map(xref => (
-                    <ExternalLink
-                      key={xref.ref}
-                      textOnly={!links || xref.type !== 'URL'}
-                      to={xref.ref}
-                    >
-                      {xref.ref}
-                    </ExternalLink>
-                  ))}
-                </Divider>
+                {xrefs.map(xref => (
+                  <ExternalLink
+                    key={xref.ref}
+                    textOnly={!links || xref.type !== 'URL'}
+                    to={xref.ref}
+                  >
+                    {xref.ref}
+                  </ExternalLink>
+                ))}
               </TableData>
             </TableRow>
           )}

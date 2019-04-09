@@ -218,7 +218,7 @@ export class TaskCommand extends EntityCommand {
   }
 
   getElementFromRoot(root) {
-    return root.get_task.commands_response.get_tasks_response.task;
+    return root.get_task.get_tasks_response.task;
   }
 }
 

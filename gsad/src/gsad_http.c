@@ -1023,7 +1023,8 @@ gsad_message (credentials_t *credentials, const char *title,
                              "</gsad_response>"
                              "<capabilities>%s</capabilities>"
                              "</envelope>",
-                             pre, xmltitle, msg, user_get_capabilities (user));
+                             pre, xmltitle, msg ? msg : "",
+                             user_get_capabilities (user));
 
       g_free (pre);
     }
@@ -1039,7 +1040,8 @@ gsad_message (credentials_t *credentials, const char *title,
                          "<token></token>"
                          "</gsad_response>"
                          "</envelope>",
-                         GSAD_VERSION, vendor_version_get (), xmltitle, msg);
+                         GSAD_VERSION, vendor_version_get (),
+                         xmltitle, msg ? msg : "");
     }
 
   g_free (xmltitle);

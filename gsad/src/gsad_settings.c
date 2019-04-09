@@ -29,8 +29,6 @@
  */
 gchar *vendor_version = NULL;
 
-gchar *label_name = NULL;
-
 /**
  * @brief Guest username.
  */
@@ -119,24 +117,6 @@ const gchar *
 vendor_version_get ()
 {
   return vendor_version ? vendor_version : "";
-}
-
-/**
- * @brief Set the login label.
- *
- * @param[in]  name  New login label name.
- *
- * @return 0 on success -1 if name contains invalid characters
- */
-int
-label_name_set (const gchar *name)
-{
-  if (!g_regex_match_simple ("^[a-zA-Z0-9\\-_\\.\\:]+$", name, 0, 0))
-    return -1;
-
-  g_free (label_name);
-  label_name = g_strdup (name);
-  return 0;
 }
 
 void

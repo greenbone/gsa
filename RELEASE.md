@@ -15,6 +15,8 @@ version number for the new release. We are following
   and increment the version number and check PROJECT_BETA_RELEASE.
   PROJECT_BETA_RELEASE must be unset for a non pre-release.
 
+* Check gsa version at the [about page](https://github.com/greenbone/gsa/blob/master/gsa/src/web/pages/help/about.js).
+
 * Test the build
 
   ```sh

@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -24,13 +24,13 @@ import {_localeData} from 'gmp/models/date';
 import {ReccurenceFrequency} from 'gmp/models/event';
 
 const WEEKDAY = {
-  monday: _('Monday'),
-  tuesday: _('Tuesday'),
-  wednesday: _('Wednesday'),
-  thursday: _('Thursday'),
-  friday: _('Friday'),
-  saturday: _('Saturday'),
-  sunday: _('Sunday'),
+  monday: _l('Monday'),
+  tuesday: _l('Tuesday'),
+  wednesday: _l('Wednesday'),
+  thursday: _l('Thursday'),
+  friday: _l('Friday'),
+  saturday: _l('Saturday'),
+  sunday: _l('Sunday'),
 };
 
 export const renderRecurrence = ({
@@ -59,15 +59,27 @@ export const renderRecurrence = ({
         });
       } else if (isDefined(weekdays)) {
         const weekday = weekdays.getSelectedWeekDay();
-        const nth = weekdays.get(weekday);
+        let nth = weekdays.get(weekday);
         const localeData = _localeData();
+        if (nth === '-1') {
+          nth = _('The last');
+          if (interval === 1) {
+            return _('The last {{weekday}} every month', {
+              weekday: WEEKDAY[weekday],
+            });
+          }
+          return _('The last {{weekday}} every {{interval}} months', {
+            weekday: WEEKDAY[weekday],
+            interval,
+          });
+        }
         if (interval === 1) {
           return _('{{nth}} {{weekday}} every month', {
             nth: localeData.ordinal(nth),
             weekday: WEEKDAY[weekday],
           });
         }
-        return _('{{nth}} {{weekday}} every {{interval}} month', {
+        return _('{{nth}} {{weekday}} every {{interval}} months', {
           nth: localeData.ordinal(nth),
           weekday: WEEKDAY[weekday],
           interval,

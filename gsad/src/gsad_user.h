@@ -34,10 +34,8 @@
 #define USER_EXPIRED_TOKEN 2
 #define USER_BAD_MISSING_COOKIE 3
 #define USER_BAD_MISSING_TOKEN 4
-#define USER_GUEST_LOGIN_FAILED 5
 #define USER_GMP_DOWN 6
 #define USER_IP_ADDRESS_MISSMATCH 7
-#define USER_GUEST_LOGIN_ERROR -1
 
 /**
  * @brief User information type, for sessions.
@@ -91,9 +89,6 @@ user_get_token (user_t *user);
 
 const gchar *
 user_get_timezone (user_t *user);
-
-gboolean
-user_get_guest (user_t *user);
 
 const gchar *
 user_get_client_address (user_t *user);

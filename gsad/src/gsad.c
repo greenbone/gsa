@@ -88,10 +88,6 @@
 #include <gvm/util/fileutils.h>
 #include <microhttpd.h>
 
-#ifdef GIT_REV_AVAILABLE
-#include "gitrevision.h"
-#endif
-
 #undef G_LOG_DOMAIN
 /**
  * @brief GLib log domain.
@@ -167,19 +163,6 @@
   " frame-ancestors 'self'"
 
 /**
- * @brief Default value for HTTP header "X-Frame-Options" for guest charts
- */
-#define DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS "SAMEORIGIN"
-
-/**
- * @brief Default guest charts value for HTTP header "Content-Security-Policy"
- */
-#define DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY \
-  "default-src 'self' 'unsafe-inline';"                  \
-  " img-src 'self' blob:;"                               \
-  " frame-ancestors *"
-
-/**
  * @brief Default "max-age" for HTTP header "Strict-Transport-Security"
  */
 #define DEFAULT_GSAD_HSTS_MAX_AGE 31536000
@@ -188,6 +171,12 @@
  * @brief Default value for the maximum number of connection per IP address.
  */
 #define DEFAULT_GSAD_PER_IP_CONNECTION_LIMIT 30
+
+#define COPYRIGHT \
+  "Copyright (C) 2010 - 2019 Greenbone Networks GmbH\n" \
+  "License GPLv2+: GNU GPL version 2 or later\n" \
+  "This is free software: you are free to change and redistribute it.\n" \
+  "There is NO WARRANTY, to the extent permitted by law.\n\n"
 
 /**
  * @brief Flag for signal handler.
@@ -1327,7 +1316,6 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   credentials_t *credentials = NULL;
   gchar *res = NULL, *new_sid = NULL;
   const gchar *cmd, *caller, *language;
-  authentication_reason_t auth_reason;
   gvm_connection_t connection;
   cmd_response_data_t *response_data = cmd_response_data_new ();
 
@@ -1409,18 +1397,12 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
                                             BAD_MISSING_COOKIE);
     }
 
-  if (ret == USER_GUEST_LOGIN_FAILED || ret == USER_GMP_DOWN
-      || ret == USER_GUEST_LOGIN_ERROR)
+  if (ret == USER_GMP_DOWN)
     {
-      auth_reason =
-        ret == USER_GMP_DOWN
-          ? GMP_SERVICE_DOWN
-          : (ret == USER_GUEST_LOGIN_ERROR ? LOGIN_ERROR : LOGIN_FAILED);
-
       cmd_response_data_free (response_data);
 
       return handler_send_reauthentication (con, MHD_HTTP_SERVICE_UNAVAILABLE,
-                                            auth_reason);
+                                            GMP_SERVICE_DOWN);
     }
 
   /* From here, the user is authenticated. */
@@ -2161,12 +2143,6 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
 
   response = MHD_create_response_from_buffer (res_len, (void *) res,
                                               MHD_RESPMEM_MUST_FREE);
-  if (get_guest_password ()
-      && str_equal (user_get_username (user), get_guest_username ()) && cmd
-      && str_equal (cmd, "get_aggregate"))
-    {
-      add_guest_chart_content_security_headers (response);
-    }
 
   if (watcher_data)
     {
@@ -2760,21 +2736,14 @@ main (int argc, char **argv)
   static gchar *gsad_redirect_port_string = NULL;
   static gchar *gsad_manager_port_string = NULL;
   static gchar *gsad_vendor_version_string = NULL;
-  static gchar *gsad_login_label_name = NULL;
   static gchar *ssl_private_key_filename = GVM_SERVER_KEY;
   static gchar *ssl_certificate_filename = GVM_SERVER_CERTIFICATE;
   static gchar *dh_params_filename = NULL;
   static gchar *unix_socket_path = NULL;
   static gchar *gnutls_priorities = "NORMAL";
   static int debug_tls = 0;
-  static gchar *guest_user = NULL;
-  static gchar *guest_pass = NULL;
   static gchar *http_frame_opts = DEFAULT_GSAD_X_FRAME_OPTIONS;
   static gchar *http_csp = DEFAULT_GSAD_CONTENT_SECURITY_POLICY;
-  static gchar *http_guest_chart_frame_opts =
-    DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS;
-  static gchar *http_guest_chart_csp =
-    DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY;
   static int hsts_enabled = FALSE;
   static int hsts_max_age = DEFAULT_GSAD_HSTS_MAX_AGE;
   static gchar *http_cors = "";
@@ -2810,8 +2779,6 @@ main (int argc, char **argv)
     {"vendor-version", '\0', 0, G_OPTION_ARG_STRING,
      &gsad_vendor_version_string, "Use <string> as version in interface.",
      "<string>"},
-    {"login-label", '\0', 0, G_OPTION_ARG_STRING, &gsad_login_label_name,
-     "Use <string> as login label.", "<string>"},
     {"ssl-private-key", 'k', 0, G_OPTION_ARG_FILENAME,
      &ssl_private_key_filename, "Use <file> as the private key for HTTPS",
      "<file>"},
@@ -2836,10 +2803,6 @@ main (int argc, char **argv)
      "Enable TLS debugging at <level>", "<level>"},
     {"gnutls-priorities", '\0', 0, G_OPTION_ARG_STRING, &gnutls_priorities,
      "GnuTLS priorities string.", "<string>"},
-    {"guest-username", 0, 0, G_OPTION_ARG_STRING, &guest_user,
-     "Username for guest user.  Enables guest logins.", "<name>"},
-    {"guest-password", 0, 0, G_OPTION_ARG_STRING, &guest_pass,
-     "Password for guest user.  Defaults to guest username.", "<password>"},
     {"http-frame-opts", 0, 0, G_OPTION_ARG_STRING, &http_frame_opts,
      "X-Frame-Options HTTP header.  Defaults to \"" DEFAULT_GSAD_X_FRAME_OPTIONS
      "\".",
@@ -2847,15 +2810,6 @@ main (int argc, char **argv)
     {"http-csp", 0, 0, G_OPTION_ARG_STRING, &http_csp,
      "Content-Security-Policy HTTP header.  Defaults to "
      "\"" DEFAULT_GSAD_CONTENT_SECURITY_POLICY "\".",
-     "<csp>"},
-    {"http-guest-chart-frame-opts", 0, 0, G_OPTION_ARG_STRING,
-     &http_guest_chart_frame_opts,
-     "X-Frame-Options HTTP header for guest charts.  Defaults to "
-     "\"" DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS "\".",
-     "<frame-opts>"},
-    {"http-guest-chart-csp", 0, 0, G_OPTION_ARG_STRING, &http_guest_chart_csp,
-     "Content-Security-Policy HTTP header.  Defaults to "
-     "\"" DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY "\".",
      "<csp>"},
     {"http-sts", 0, 0, G_OPTION_ARG_NONE, &hsts_enabled,
      "Enable HTTP Strict-Tranport-Security header.", NULL},
@@ -2890,8 +2844,6 @@ main (int argc, char **argv)
 
   set_http_x_frame_options (http_frame_opts);
   set_http_content_security_policy (http_csp);
-  set_http_guest_chart_x_frame_options (http_guest_chart_frame_opts);
-  set_http_guest_chart_content_security_policy (http_guest_chart_csp);
   set_http_cors_origin (http_cors);
 
   set_http_only (!!http_only);
@@ -2921,19 +2873,12 @@ main (int argc, char **argv)
   if (print_version)
     {
       printf ("Greenbone Security Assistant %s\n", GSAD_VERSION);
-#ifdef GSAD_GIT_REVISION
-      printf ("GIT revision %s\n", GSAD_GIT_REVISION);
-#endif
       if (debug_tls)
         {
           printf ("gnutls %s\n", gnutls_check_version (NULL));
           printf ("libmicrohttpd %s\n", MHD_get_version ());
         }
-      printf ("Copyright (C) 2010-2016 Greenbone Networks GmbH\n");
-      printf ("License GPLv2+: GNU GPL version 2 or later\n");
-      printf (
-        "This is free software: you are free to change and redistribute it.\n"
-        "There is NO WARRANTY, to the extent permitted by law.\n\n");
+      printf (COPYRIGHT);
       exit (EXIT_SUCCESS);
     }
 
@@ -2953,15 +2898,6 @@ main (int argc, char **argv)
 
   if (gsad_vendor_version_string)
     vendor_version_set (gsad_vendor_version_string);
-
-  if (gsad_login_label_name)
-    {
-      if (label_name_set (gsad_login_label_name))
-        {
-          g_critical ("Invalid character in login label name\n");
-          exit (EXIT_FAILURE);
-        }
-    }
 
   if (no_redirect && gsad_redirect_port_string)
     {
@@ -2998,12 +2934,7 @@ main (int argc, char **argv)
       }
   }
 
-#ifdef GSAD_GIT_REVISION
-  g_message ("Starting GSAD version %s (GIT revision %s)\n", GSAD_VERSION,
-             GSAD_GIT_REVISION);
-#else
   g_message ("Starting GSAD version %s\n", GSAD_VERSION);
-#endif
 
   /* Finish processing the command line options. */
 
@@ -3021,12 +2952,6 @@ main (int argc, char **argv)
   if (client_watch_interval < 0)
     {
       client_watch_interval = 0;
-    }
-
-  if (guest_user)
-    {
-      set_guest_username (guest_user);
-      set_guest_password (guest_pass ? guest_pass : guest_user);
     }
 
   gsad_port = http_only ? DEFAULT_GSAD_HTTP_PORT : DEFAULT_GSAD_HTTPS_PORT;

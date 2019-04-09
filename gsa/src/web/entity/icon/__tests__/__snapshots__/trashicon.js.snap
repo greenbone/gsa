@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Entity TrashIcon component tests should deactivate if wrong command level permissions are given 1`] = `
+.c1 svg path {
+  fill: #aaaaaa;
+}
+
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+<span
+  class="c0 c1"
+  title="Permission to move Task to trashcan denied"
+>
+  <svg>
+    trashcan.svg
+  </svg>
+</span>
+`;
+
+exports[`Entity TrashIcon component tests should deactivate if wrong resource level permissions are given 1`] = `
+.c1 svg path {
+  fill: #aaaaaa;
+}
+
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+<span
+  class="c0 c1"
+  title="Permission to move Task to trashcan denied"
+>
+  <svg>
+    trashcan.svg
+  </svg>
+</span>
+`;
+
+exports[`Entity TrashIcon component tests should render in active state with correct permissions 1`] = `
+.c1 {
+  cursor: pointer;
+}
+
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+@media print {
+  .c1 {
+    display: none;
+  }
+}
+
+<span
+  class="c0 c1"
+  title="Move Task to trashcan"
+>
+  <svg>
+    trashcan.svg
+  </svg>
+</span>
+`;

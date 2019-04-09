@@ -31,6 +31,8 @@ import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/statusbar';
 import ToolBar from 'web/components/bar/toolbar';
 
+import ErrorMessage from 'web/components/errorboundary/errormessage';
+
 import AddToAssetsIcon from 'web/components/icon/addtoassetsicon';
 import DownloadIcon from 'web/components/icon/downloadicon';
 import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
@@ -114,7 +116,7 @@ TabTitle.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-const TabTitleForUserTags = ({title, count}) => (
+const TabTitleWithSingleCount = ({title, count}) => (
   <Layout flex="column" align={['center', 'center']}>
     <span>{title}</span>
     <TabTitleCounts>
@@ -123,7 +125,7 @@ const TabTitleForUserTags = ({title, count}) => (
   </Layout>
 );
 
-TabTitleForUserTags.propTypes = {
+TabTitleWithSingleCount.propTypes = {
   count: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
 };
@@ -190,6 +192,7 @@ const ToolBarIcons = ({
             {isDefined(task) && !task.isContainer() && (
               <Link
                 to="performance"
+                title={_('Corresponding Performance')}
                 query={{
                   start: isDefined(report.scan_start)
                     ? report.scan_start.toISOString()
@@ -246,6 +249,7 @@ ToolBarIcons.propTypes = {
 const PageContent = ({
   activeTab,
   entity,
+  entityError,
   filter,
   filters,
   isLoading = true,
@@ -295,6 +299,10 @@ const PageContent = ({
   } = report;
 
   const hasReport = isDefined(entity);
+
+  if (!hasReport && isDefined(entityError)) {
+    return <ErrorMessage message={entityError.message} />;
+  }
 
   const delta = isDefined(report.isDeltaReport)
     ? report.isDeltaReport()
@@ -373,9 +381,18 @@ const PageContent = ({
                 onActivateTab={onActivateTab}
               >
                 <Tab>{_('Information')}</Tab>
-                <Tab>
-                  <TabTitle title={_('Results')} counts={resultCounts} />
-                </Tab>
+                {delta ? (
+                  <Tab>
+                    <TabTitleWithSingleCount
+                      title={_('Results')}
+                      count={filtered}
+                    />
+                  </Tab>
+                ) : (
+                  <Tab>
+                    <TabTitle title={_('Results')} counts={resultCounts} />
+                  </Tab>
+                )}
                 {!delta && (
                   <Tab>
                     <TabTitle title={_('Hosts')} counts={hosts.counts} />
@@ -432,7 +449,7 @@ const PageContent = ({
                   </Tab>
                 )}
                 <Tab>
-                  <TabTitleForUserTags
+                  <TabTitleWithSingleCount
                     title={_('User Tags')}
                     count={userTagsCount}
                   />
@@ -811,6 +828,7 @@ const PageContent = ({
 PageContent.propTypes = {
   activeTab: PropTypes.number,
   entity: PropTypes.model,
+  entityError: PropTypes.object,
   filter: PropTypes.filter,
   filters: PropTypes.array,
   isLoading: PropTypes.bool,
