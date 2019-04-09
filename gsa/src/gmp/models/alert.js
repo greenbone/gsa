@@ -56,6 +56,7 @@ export const METHOD_TYPE_VERINICE = 'verinice Connector';
 export const METHOD_TYPE_TIPPING_POINT = 'TippingPoint SMS';
 
 export const EMAIL_NOTICE_INCLUDE = '0';
+export const EMAIL_NOTICE_SIMPLE = '1';
 export const EMAIL_NOTICE_ATTACH = '2';
 
 export const DELTA_TYPE_NONE = 'None';

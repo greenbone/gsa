@@ -8,6 +8,8 @@ $ cd gsa && git checkout gsa-8.0 && git log
 
 ## gsa 8.0.1 (unreleased)
 
+ * Disable inputs for improper option selection in EmailMethodPart of
+   AlertDialog #1266
  * Removed obsolete CLI arguments #1265
    * --login-label
    * --http-guest-chart-frame-opts
