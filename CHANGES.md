@@ -8,6 +8,8 @@ $ cd gsa && git checkout gsa-8.0 && git log
 
 ## gsa 8.0.1 (unreleased)
 
+ * Fix GSA version at about page #1264
+ * Fix link to protocol documentation at about page #1264
  * Fix testing alerts #1260
  * Fix release build #1259
 
