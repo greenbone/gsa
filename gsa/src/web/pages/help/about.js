@@ -34,6 +34,8 @@ import ProtocolDocLink from 'web/components/link/protocoldoclink';
 import Layout from 'web/components/layout/layout';
 import Section from 'web/components/section/section';
 
+const GSA_VERSION = '8.0';
+
 const StyledLayout = styled(Layout)`
   margin: 0 auto;
   max-width: 1100px;
@@ -64,7 +66,7 @@ const About = () => (
         <StyledLayout wrap align="center">
           <TextBlock>
             <h1>Greenbone Security Assistant</h1>
-            <h3>Version 8.0+beta2</h3>
+            <h3>Version {GSA_VERSION}</h3>
             <DivP>
               The Greenbone Security Assistant (GSA) is the web-based user
               interface of the Greenbone Vulnerability Manager (GVM).
