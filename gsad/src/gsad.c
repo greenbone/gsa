@@ -177,7 +177,7 @@
 #define DEFAULT_GSAD_PER_IP_CONNECTION_LIMIT 30
 
 #define COPYRIGHT \
-  "Copyright (C) 2010-2016 Greenbone Networks GmbH\n" \
+  "Copyright (C) 2010 - 2019 Greenbone Networks GmbH\n" \
   "License GPLv2+: GNU GPL version 2 or later\n" \
   "This is free software: you are free to change and redistribute it.\n" \
   "There is NO WARRANTY, to the extent permitted by law.\n\n"
