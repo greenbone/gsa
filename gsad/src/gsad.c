@@ -88,10 +88,6 @@
 #include <gvm/util/fileutils.h>
 #include <microhttpd.h>
 
-#ifdef GIT_REVISION
-#include "gitrevision.h"
-#endif
-
 #undef G_LOG_DOMAIN
 /**
  * @brief GLib log domain.
@@ -2879,9 +2875,6 @@ main (int argc, char **argv)
   if (print_version)
     {
       printf ("Greenbone Security Assistant %s\n", GSAD_VERSION);
-#ifdef GSAD_GIT_REVISION
-      printf ("GIT revision %s\n", GSAD_GIT_REVISION);
-#endif
       if (debug_tls)
         {
           printf ("gnutls %s\n", gnutls_check_version (NULL));
@@ -2943,12 +2936,7 @@ main (int argc, char **argv)
       }
   }
 
-#ifdef GSAD_GIT_REVISION
-  g_message ("Starting GSAD version %s (GIT revision %s)\n", GSAD_VERSION,
-             GSAD_GIT_REVISION);
-#else
   g_message ("Starting GSAD version %s\n", GSAD_VERSION);
-#endif
 
   /* Finish processing the command line options. */
 
