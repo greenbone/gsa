@@ -68,9 +68,9 @@ class ReportCommand extends EntityCommand {
 
   import(args) {
     const {task_id, in_assets = 1, xml_file} = args;
-    log.debug('Importing report', args);
+    log.debug('Creating report', args);
     return this.httpPost({
-      cmd: 'import_report',
+      cmd: 'create_report',
       task_id,
       in_assets,
       xml_file,

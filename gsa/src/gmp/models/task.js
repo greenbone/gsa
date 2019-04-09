@@ -146,12 +146,7 @@ class Task extends Model {
     copy.alterable = parseYesNo(elem.alterable);
     copy.result_count = parseInt(elem.result_count);
 
-    const reports = [
-      'first_report',
-      'last_report',
-      'second_last_report',
-      'current_report',
-    ];
+    const reports = ['last_report', 'current_report'];
 
     reports.forEach(name => {
       const report = elem[name];

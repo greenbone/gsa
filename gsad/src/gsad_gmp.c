@@ -2256,81 +2256,36 @@ create_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   entity_t entity;
   int ret;
+  gchar **xml_file_array, *xml_file_escaped;
   gchar *command, *html, *response;
-  const char *task_id, *name, *comment, *xml_file;
-  const char *in_assets;
+  const char *task_id = params_value (params, "task_id"),
+             *xml_file = params_value (params, "xml_file"),
+             *in_assets = params_value (params, "in_assets");
 
-  task_id = params_value (params, "task_id");
-  xml_file = params_value (params, "xml_file");
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
-  in_assets = params_value (params, "in_assets");
-
-  if (task_id == NULL)
-    {
-      CHECK_VARIABLE_INVALID (name, "Create Report");
-      CHECK_VARIABLE_INVALID (comment, "Create Report");
-    }
+  CHECK_VARIABLE_INVALID (task_id, "Create Report");
   CHECK_VARIABLE_INVALID (xml_file, "Create Report");
-
-  if (params_given (params, "in_assets"))
-    CHECK_VARIABLE_INVALID (xml_file, "Create Report");
 
   if (strlen (xml_file) == 0)
     {
-      if (task_id)
-        return message_invalid (connection, credentials, params, response_data,
-                                "Report required", "Create Report");
-
-      /* Create only the container task. */
-
-      command = g_markup_printf_escaped ("<create_task>"
-                                         "<target id=\"0\"/>"
-                                         "<name>%s</name>"
-                                         "<comment>%s</comment>"
-                                         "</create_task>",
-                                         name, comment);
+      return message_invalid (connection, credentials, params, response_data,
+                              "Report required", "Create Report");
     }
+
+  xml_file_array = g_strsplit (xml_file, "%", -1);
+  if (xml_file_array != NULL && xml_file_array[0] != NULL)
+    xml_file_escaped = g_strjoinv ("%%", xml_file_array);
   else
-    {
-      gchar **xml_file_array, *xml_file_escaped;
+    xml_file_escaped = g_strdup (xml_file);
+  g_strfreev (xml_file_array);
 
-      xml_file_array = g_strsplit (xml_file, "%", -1);
-      if (xml_file_array != NULL && xml_file_array[0] != NULL)
-        xml_file_escaped = g_strjoinv ("%%", xml_file_array);
-      else
-        xml_file_escaped = g_strdup (xml_file);
-      g_strfreev (xml_file_array);
-
-      if (task_id)
-        command =
-          g_strdup_printf ("<create_report>"
-                           "<in_assets>%s</in_assets>"
-                           "<task id=\"%s\"/>"
-                           "%s"
-                           "</create_report>",
-                           in_assets ? in_assets : "0", task_id ? task_id : "0",
-                           xml_file_escaped ? xml_file_escaped : "");
-      else
-        {
-          gchar *name_escaped, *comment_escaped;
-          name_escaped = name ? g_markup_escape_text (name, -1) : NULL;
-          comment_escaped = comment ? g_markup_escape_text (comment, -1) : NULL;
-          command = g_strdup_printf ("<create_report>"
-                                     "<in_assets>%s</in_assets>"
-                                     "<task>"
-                                     "<name>%s</name>"
-                                     "<comment>%s</comment>"
-                                     "</task>"
-                                     "%s"
-                                     "</create_report>",
-                                     in_assets ? in_assets : "", name_escaped,
-                                     comment_escaped, xml_file_escaped);
-          g_free (name_escaped);
-          g_free (comment_escaped);
-        }
-      g_free (xml_file_escaped);
-    }
+  command = g_strdup_printf ("<create_report>"
+                             "<in_assets>%s</in_assets>"
+                             "<task id=\"%s\"/>"
+                             "%s"
+                             "</create_report>",
+                             in_assets ? in_assets : "0", task_id,
+                             xml_file_escaped ? xml_file_escaped : "");
+  g_free (xml_file_escaped);
 
   ret =
     gmp (connection, credentials, &response, &entity, response_data, command);
@@ -2380,6 +2335,8 @@ create_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
+<<<<<<< HEAD
+=======
  * @brief Import report, get all reports, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -2397,6 +2354,7 @@ import_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
+>>>>>>> upstream/gsa-8.0
  * @brief Create a container task, serve next page.
  *
  * @param[in]  connection     Connection to manager.
@@ -9171,8 +9129,8 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
       params_iterator_init (&iter, preferences);
       while (params_iterator_next (&iter, &preference_name, &preference))
         {
-          int type_start, type_end, count, ret, is_timeout = 0;
-          gchar *value;
+          int ret, is_timeout = 0;
+          gchar *value, **splits;
 
           g_free (modify_config_ret);
           modify_config_ret = NULL;
@@ -9181,14 +9139,11 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
            * must be reset.  This works around the need for the Manager to
            * send the actual password or show the actual file. */
 
-          /* LDAPsearch[entry]:Timeout value */
-          count = sscanf (preference_name, "%*[^[][%n%*[^]]%n]:", &type_start,
-                          &type_end);
-          if (count == 0 && type_start > 0 && type_end > 0)
+          /* OID:PrefID:PrefType:PrefName value */
+          splits = g_strsplit (preference_name, ":", 4);
+          if (splits && splits[0] && splits[1] && splits[2] && splits[3])
             {
-              if (strncmp (preference_name + type_start, "password",
-                           type_end - type_start)
-                  == 0)
+              if (!strcmp (splits[2], "password"))
                 {
                   int found = 0;
                   params_t *passwords;
@@ -9210,12 +9165,13 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
                           }
                     }
                   if (found == 0)
-                    /* Skip modifying the password preference. */
-                    continue;
+                    {
+                      /* Skip modifying the password preference. */
+                      g_strfreev (splits);
+                      continue;
+                    }
                 }
-              else if (strncmp (preference_name + type_start, "file",
-                                type_end - type_start)
-                       == 0)
+              else if (!strcmp (splits[2], "file"))
                 {
                   int found = 0;
                   params_t *files;
@@ -9237,17 +9193,19 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
                           }
                     }
                   if (found == 0)
-                    /* Skip modifying the file preference. */
-                    continue;
+                    {
+                      /* Skip modifying the file preference. */
+                      g_strfreev (splits);
+                      continue;
+                    }
                 }
-              else if (strncmp (preference_name + type_start, "scanner",
-                                type_end - type_start)
-                       == 0)
+              else if (!strcmp (splits[2], "scanner"))
                 {
                   /* Presume it's the timeout. */
                   is_timeout = 1;
                 }
             }
+          g_strfreev (splits);
 
           value = preference->value_size
                     ? g_base64_encode ((guchar *) preference->value,
@@ -12473,11 +12431,10 @@ save_report_format_gmp (gvm_connection_t *connection,
       params_iterator_init (&iter, preferences);
       while (params_iterator_next (&iter, &param_name, &param))
         {
-          int type_start, type_end, count;
-          /* LDAPsearch[entry]:Timeout value */
-          count =
-            sscanf (param_name, "%*[^[][%n%*[^]]%n]:", &type_start, &type_end);
-          if (count == 0 && type_start > 0 && type_end > 0)
+          char **splits;
+          /* OID:PrefID:PrefType:PrefName value */
+          splits = g_strsplit (param_name, ":", 4);
+          if (splits && splits[0] && splits[1] && splits[2] && splits[3])
             {
               gchar *value;
 
@@ -12497,7 +12454,7 @@ save_report_format_gmp (gvm_connection_t *connection,
                           "<value>%s</value>"
                           "</param>"
                           "</modify_report_format>",
-                          report_format_id, param_name + type_end + 2, value);
+                          report_format_id, splits[3], value);
               g_free (value);
               switch (ret)
                 {
@@ -12506,6 +12463,7 @@ save_report_format_gmp (gvm_connection_t *connection,
                 case 1:
                   cmd_response_data_set_status_code (
                     response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
+                  g_strfreev (splits);
                   return gsad_message (
                     credentials, "Internal error", __FUNCTION__, __LINE__,
                     "An internal error occurred while saving a Report Format. "
@@ -12515,6 +12473,7 @@ save_report_format_gmp (gvm_connection_t *connection,
                 case 2:
                   cmd_response_data_set_status_code (
                     response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
+                  g_strfreev (splits);
                   return gsad_message (
                     credentials, "Internal error", __FUNCTION__, __LINE__,
                     "An internal error occurred while saving a Report Format. "
@@ -12527,6 +12486,7 @@ save_report_format_gmp (gvm_connection_t *connection,
                 default:
                   cmd_response_data_set_status_code (
                     response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
+                  g_strfreev (splits);
                   return gsad_message (
                     credentials, "Internal error", __FUNCTION__, __LINE__,
                     "An internal error occurred while saving a Report Format. "
@@ -12538,6 +12498,7 @@ save_report_format_gmp (gvm_connection_t *connection,
 
               /* TODO Check if succeeded.  response_from_entity_if_failed? */
             }
+          g_strfreev (splits);
         }
     }
 

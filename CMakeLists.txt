@@ -20,8 +20,10 @@ cmake_minimum_required (VERSION 3.0)
 
 message ("-- Configuring Greenbone Security Assistant...")
 
+# VERSION: Set patch version for stable releases, e.g. "9.0.0",
+#          unset patch version for prereleases, e.g. "9.0"
 project (greenbone-security-assistant
-         VERSION 8.0.0
+         VERSION 9.0
          LANGUAGES C)
 
 
@@ -61,9 +63,9 @@ if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
   endif (EXISTS "${CMAKE_SOURCE_DIR}/.git/")
 endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
 
-# Set beta version if this is a beta release series,
+# set if this is in prerelease status, starting at 0 before first beta release,
 # unset if this is a stable release series.
-# set (PROJECT_BETA_RELEASE 1)
+set (PROJECT_BETA_RELEASE 0)
 
 if (GIT_REVISION)
   set (PROJECT_VERSION_GIT "${GIT_REVISION}")
@@ -71,15 +73,21 @@ else (GIT_REVISION)
   set (PROJECT_VERSION_GIT "")
 endif (GIT_REVISION)
 
-# If PROJECT_BETA_RELEASE is set, the version string will be set to:
+# If PROJECT_BETA_RELEASE is set to "0", the version string will be set to:
+#   "major.minor+alpha"
+# If PROJECT_BETA_RELEASE is set otherwise, the version string will be set to:
 #   "major.minor+beta${PROJECT_BETA_RELEASE}"
 # If PROJECT_BETA_RELEASE is NOT set, the version string will be set to:
 #   "major.minor.patch"
-if (PROJECT_BETA_RELEASE)
-  set (PROJECT_VERSION_SUFFIX "+beta${PROJECT_BETA_RELEASE}")
+if (DEFINED PROJECT_BETA_RELEASE AND NOT PROJECT_BETA_RELEASE STREQUAL "")
+  if (PROJECT_BETA_RELEASE STREQUAL "0")
+    set (PROJECT_VERSION_SUFFIX "+alpha")
+  else (PROJECT_BETA_RELEASE STREQUAL "0")
+    set (PROJECT_VERSION_SUFFIX "+beta${PROJECT_BETA_RELEASE}")
+  endif (PROJECT_BETA_RELEASE STREQUAL "0")
 elseif (DEFINED PROJECT_VERSION_PATCH AND NOT PROJECT_VERSION_PATCH STREQUAL "")
   set (PROJECT_VERSION_SUFFIX ".${PROJECT_VERSION_PATCH}")
-endif (PROJECT_BETA_RELEASE)
+endif (DEFINED PROJECT_BETA_RELEASE AND NOT PROJECT_BETA_RELEASE STREQUAL "")
 
 set (PROJECT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}${PROJECT_VERSION_SUFFIX}${PROJECT_VERSION_GIT}")
 

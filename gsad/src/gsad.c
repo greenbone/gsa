@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2018 Greenbone Networks GmbH
+/* Copyright (C) 2009-2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -408,7 +408,6 @@ init_validator ()
                      "|(get_vulns)"
                      "|(import_config)"
                      "|(import_port_list)"
-                     "|(import_report)"
                      "|(import_report_format)"
                      "|(login)"
                      "|(move_task)"
@@ -630,7 +629,7 @@ init_validator ()
   /** @todo Better regex. */
   gvm_validator_add (validator, "preference_name", "^.*$");
   gvm_validator_add (validator, "preference:name",
-                     "^([^[]*\\[[^]]*\\]:.*){0,400}$");
+                     "^([^:]*:[^:]*:.*){0,400}$");
   gvm_validator_add (validator, "preference:value", "(?s)^.*$");
   gvm_validator_add (validator, "prev_action", "(?s)^.*$");
   gvm_validator_add (validator, "privacy_algorithm", "^(aes|des|)$");
@@ -1522,7 +1521,6 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (empty_trashcan)
   ELSE (import_config)
   ELSE (import_port_list)
-  ELSE (import_report)
   ELSE (import_report_format)
   ELSE (move_task)
   ELSE (renew_session)

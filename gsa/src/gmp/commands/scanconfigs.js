@@ -55,13 +55,13 @@ const convert_select = (values, prefix) => {
   return ret;
 };
 
-const convert_preferences = (values, nvt_name) => {
+const convert_preferences = (values, nvt_oid) => {
   const ret = {};
   for (const prop in values) {
     const data = values[prop];
-    const {type, value} = data;
+    const {id, type, value} = data;
     if (isDefined(value)) {
-      const typestring = nvt_name + '[' + type + ']:' + prop;
+      const typestring = nvt_oid + ':' + id + ':' + type + ':' + prop;
       if (type === 'password') {
         ret['password:' + typestring] = 'yes';
       } else if (type === 'file') {
@@ -102,7 +102,10 @@ class ScanConfigCommand extends EntityCommand {
   save({id, name, comment = '', trend, select, scanner_preference_values}) {
     const data = {
       ...convert(trend, 'trend:'),
-      ...convert(scanner_preference_values, 'preference:scanner[scanner]:'),
+      ...convert(
+        scanner_preference_values,
+        'preference:scanner:scanner:scanner:',
+      ),
       ...convert_select(select, 'select:'),
 
       cmd: 'save_config',
@@ -200,7 +203,7 @@ class ScanConfigCommand extends EntityCommand {
     timeout,
   }) {
     const data = {
-      ...convert_preferences(preference_values, nvt_name),
+      ...convert_preferences(preference_values, oid),
       cmd: 'save_config_nvt',
       no_redirect: '1',
       id,
@@ -210,7 +213,7 @@ class ScanConfigCommand extends EntityCommand {
       timeout,
     };
 
-    data['preference:scanner[scanner]:timeout.' + oid] = manual_timeout;
+    data['preference:scanner:0:scanner:timeout.' + oid] = manual_timeout;
 
     log.debug('Saving scanconfignvt', data);
     return this.httpPost(data);
