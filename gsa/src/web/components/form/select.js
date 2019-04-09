@@ -149,8 +149,9 @@ class Select extends React.Component {
         itemToString={itemToString}
         onChange={this.handleChange}
         onSelect={this.handleSelect}
-        render={({
-          getButtonProps,
+      >
+        {({
+          getToggleButtonProps,
           getInputProps,
           getItemProps,
           getRootProps,
@@ -170,7 +171,7 @@ class Select extends React.Component {
               width={width}
             >
               <Box
-                {...getButtonProps({
+                {...getToggleButtonProps({
                   disabled,
                   onClick: isOpen
                     ? undefined
@@ -233,7 +234,7 @@ class Select extends React.Component {
             </SelectContainer>
           );
         }}
-      />
+      </Downshift>
     );
   }
 }
