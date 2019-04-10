@@ -169,6 +169,11 @@ const EmailMethodPart = ({
                   name={prefix + 'message'}
                   rows="8"
                   cols="50"
+                  title={
+                    notice === EMAIL_NOTICE_INCLUDE
+                      ? undefined
+                      : _('Activate the "include" option to make changes here.')
+                  }
                   value={message}
                   onChange={onChange}
                 />
@@ -206,6 +211,11 @@ const EmailMethodPart = ({
                   name={prefix + 'message_attach'}
                   rows="8"
                   cols="50"
+                  title={
+                    notice === EMAIL_NOTICE_ATTACH
+                      ? undefined
+                      : _('Activate the "attach" option to allow changes here.')
+                  }
                   value={messageAttach}
                   onChange={onChange}
                 />
