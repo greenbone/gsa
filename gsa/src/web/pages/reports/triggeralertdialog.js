@@ -64,7 +64,7 @@ const TriggerAlertDialog = ({
 }) => {
   const filterString = isString(filter)
     ? filter
-    : filter.toFilterCriteriaString();
+    : filter.simple().toFilterString();
 
   if (!isDefined(alertId)) {
     alertId = selectSaveId(alerts, defaultAlertId);
@@ -116,6 +116,9 @@ const TriggerAlertDialog = ({
               checked={storeAsDefault}
               checkedValue={YES_VALUE}
               unCheckedValue={NO_VALUE}
+              toolTipTitle={_(
+                'Store indicated settings (without filter) as default',
+              )}
               title={_('Store as default')}
               onChange={onValueChange}
             />

@@ -46,11 +46,12 @@ const CheckboxComponent = ({
   children,
   disabled,
   checkedValue,
+  toolTipTitle,
   unCheckedValue,
   ...other
 }) => (
   <StyledElement>
-    <Divider>
+    <Divider title={toolTipTitle}>
       <StyledInput {...other} disabled={disabled} type="checkbox" />
       {isDefined(title) && (
         <StyledTitle data-testid="checkbox-title" disabled={disabled}>
@@ -67,6 +68,7 @@ CheckboxComponent.propTypes = {
   disabled: PropTypes.bool,
   name: PropTypes.string,
   title: PropTypes.string,
+  toolTipTitle: PropTypes.string,
   unCheckedValue: PropTypes.any,
   onChange: PropTypes.func,
 };
