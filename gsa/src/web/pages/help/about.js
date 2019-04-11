@@ -34,7 +34,7 @@ import ProtocolDocLink from 'web/components/link/protocoldoclink';
 import Layout from 'web/components/layout/layout';
 import Section from 'web/components/section/section';
 
-const GSA_VERSION = '8.0';
+const GSA_VERSION = process.env.REACT_APP_VERSION || '8.0';
 
 const StyledLayout = styled(Layout)`
   margin: 0 auto;
