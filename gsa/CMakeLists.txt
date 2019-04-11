@@ -1101,7 +1101,7 @@ add_custom_command (OUTPUT node-modules.stamp
 
 
 add_custom_command (OUTPUT bundle.stamp
-                    COMMAND ${INSTALLER} "${INSTALLER_ARGS}" run build
+                    COMMAND ${CMAKE_COMMAND} -E env REACT_APP_VERSION=${PROJECT_VERSION_STRING} ${INSTALLER} "${INSTALLER_ARGS}" run build
                     COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/bundle.stamp
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/node-modules.stamp

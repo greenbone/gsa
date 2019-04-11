@@ -129,7 +129,10 @@ class Titlebar extends React.Component {
               </Divider>
             </React.Fragment>
           ) : (
-            <Greenbone />
+            <React.Fragment>
+              <Greenbone />
+              <div>{gmp.settings.vendorVersion}</div>
+            </React.Fragment>
           )}
         </TitlebarLayout>
       </React.Fragment>

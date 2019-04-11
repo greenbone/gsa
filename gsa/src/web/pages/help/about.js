@@ -22,6 +22,8 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 
 import HelpIcon from 'web/components/icon/helpicon';
@@ -34,7 +36,10 @@ import ProtocolDocLink from 'web/components/link/protocoldoclink';
 import Layout from 'web/components/layout/layout';
 import Section from 'web/components/section/section';
 
-const GSA_VERSION = '8.0';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
+
+const GSA_VERSION = process.env.REACT_APP_VERSION || '8.0';
 
 const StyledLayout = styled(Layout)`
   margin: 0 auto;
@@ -59,14 +64,18 @@ const ImageBlock = styled.div`
   max-width: 400px;
 `;
 
-const About = () => (
+const About = ({gmp}) => (
   <ErrorBoundary errElement={_('page')}>
     <Layout flex="column">
       <Section img={<HelpIcon size="large" />} title={_('About GSA')}>
         <StyledLayout wrap align="center">
           <TextBlock>
             <h1>Greenbone Security Assistant</h1>
-            <h3>Version {GSA_VERSION}</h3>
+            <h3>
+              {isDefined(gmp.settings.vendorVersion)
+                ? gmp.settings.vendorVersion
+                : _('Version {{version}}', {version: GSA_VERSION})}
+            </h3>
             <DivP>
               The Greenbone Security Assistant (GSA) is the web-based user
               interface of the Greenbone Vulnerability Manager (GVM).
@@ -120,6 +129,10 @@ const About = () => (
   </ErrorBoundary>
 );
 
-export default About;
+About.propTypes = {
+  gmp: PropTypes.gmp.isRequired,
+};
+
+export default withGmp(About);
 
 // vim: set ts=2 sw=2 tw=80:
