@@ -52,6 +52,7 @@ class GmpSettings {
       timeout,
       guestUsername,
       guestPassword,
+      vendorVersion,
     } = {...options};
     this.storage = storage;
 
@@ -66,6 +67,7 @@ class GmpSettings {
     setAndFreeze(this, 'guestUsername', guestUsername);
     setAndFreeze(this, 'guestPassword', guestPassword);
     setAndFreeze(this, 'disableLoginForm', disableLoginForm);
+    setAndFreeze(this, 'vendorVersion', vendorVersion);
   }
 
   set token(value) {

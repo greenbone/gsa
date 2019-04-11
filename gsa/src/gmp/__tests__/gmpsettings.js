@@ -50,6 +50,7 @@ describe('GmpSettings tests', () => {
     expect(settings.guestUsername).toBeUndefined();
     expect(settings.guestPassword).toBeUndefined();
     expect(settings.disableLoginForm).toEqual(false);
+    expect(settings.vendorVersion).toBeUndefined();
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('loglevel', DEFAULT_LOG_LEVEL);
@@ -72,6 +73,7 @@ describe('GmpSettings tests', () => {
       guestUsername: 'guest',
       guestPassword: 'pass',
       disableLoginForm: true,
+      vendorVersion: 'foo',
     });
 
     expect(settings.reloadinterval).toEqual(10);
@@ -89,6 +91,7 @@ describe('GmpSettings tests', () => {
     expect(settings.guestUsername).toEqual('guest');
     expect(settings.guestPassword).toEqual('pass');
     expect(settings.disableLoginForm).toEqual(true);
+    expect(settings.vendorVersion).toEqual('foo');
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'error');
@@ -139,6 +142,7 @@ describe('GmpSettings tests', () => {
       timezone: 'cest',
       username: 'bar',
       loglevel: 'error',
+      vendorVersion: 'foo',
     });
 
     const settings = new GmpSettings(storage, {
@@ -153,6 +157,7 @@ describe('GmpSettings tests', () => {
       timezone: 'cet',
       username: 'foo',
       loglevel: 'debug',
+      vendorVersion: 'bar',
     });
 
     expect(settings.reloadinterval).toEqual(10);
@@ -166,6 +171,7 @@ describe('GmpSettings tests', () => {
     expect(settings.timezone).toEqual('cest');
     expect(settings.username).toEqual('bar');
     expect(settings.loglevel).toEqual('debug');
+    expect(settings.vendorVersion).toEqual('bar');
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'debug');
@@ -224,6 +230,7 @@ describe('GmpSettings tests', () => {
       guestUsername: 'guest',
       guestPassword: 'pass',
       disableLoginForm: true,
+      vendorVersion: 'foobar',
     });
 
     expect(() => {
@@ -254,6 +261,10 @@ describe('GmpSettings tests', () => {
       settings.disableLoginForm = false;
     }).toThrow();
     expect(settings.disableLoginForm).toEqual(true);
+    expect(() => {
+      settings.vendorVersion = 'barfoo';
+    }).toThrow();
+    expect(settings.vendorVersion).toEqual('foobar');
   });
 });
 
