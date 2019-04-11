@@ -24,7 +24,7 @@ import React from 'react';
 
 import {_} from 'gmp/locale/lang';
 
-import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
+import {hasValue, isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
@@ -485,11 +485,13 @@ export const simplePermissionDescriptionWithSubject = (name, subject) => {
   }
 };
 
+export const hasRef = ref => isObject(ref) && hasValue(ref.current);
+
 export const setRef = (...refs) => ref => {
   for (const rf of refs) {
     if (isFunction(rf)) {
       rf(ref);
-    } else if (isObject(rf) && isDefined(rf.current)) {
+    } else if (hasRef(rf)) {
       rf.current = ref;
     }
   }
