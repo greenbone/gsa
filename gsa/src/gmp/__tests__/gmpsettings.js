@@ -206,6 +206,55 @@ describe('GmpSettings tests', () => {
     settings.loglevel = undefined;
     expect(storage.removeItem).toBeCalledWith('loglevel');
   });
+
+  test('should freeze properties', () => {
+    const storage = createStorage();
+    const settings = new GmpSettings(storage, {
+      reloadinterval: 10,
+      locale: 'en',
+      loglevel: 'error',
+      manualurl: 'http://manual',
+      protocol: 'http',
+      protocoldocurl: 'http://protocol',
+      server: 'localhost',
+      token: 'atoken',
+      timeout: 30000,
+      timezone: 'cet',
+      username: 'foo',
+      guestUsername: 'guest',
+      guestPassword: 'pass',
+      disableLoginForm: true,
+    });
+
+    expect(() => {
+      settings.manualurl = 'foo';
+    }).toThrow();
+    expect(settings.manualurl).toEqual('http://manual');
+    expect(() => {
+      settings.protocoldocurl = 'foo';
+    }).toThrow();
+    expect(settings.protocoldocurl).toEqual('http://protocol');
+    expect(() => {
+      settings.server = 'foo';
+    }).toThrow();
+    expect(settings.server).toEqual('localhost');
+    expect(() => {
+      settings.protocol = 'foo';
+    }).toThrow();
+    expect(settings.protocol).toEqual('http');
+    expect(() => {
+      settings.guestUsername = 'foo';
+    }).toThrow();
+    expect(settings.guestUsername).toEqual('guest');
+    expect(() => {
+      settings.guestPassword = 'foo';
+    }).toThrow();
+    expect(settings.guestPassword).toEqual('pass');
+    expect(() => {
+      settings.disableLoginForm = false;
+    }).toThrow();
+    expect(settings.disableLoginForm).toEqual(true);
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
