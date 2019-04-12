@@ -8,6 +8,7 @@ $ cd gsa && git checkout gsa-8.0 && git log
 
 ## gsa 8.0.1 (unreleased)
 
+ * Fix Result details page #1275
  * Add tooltips to deactivated text fields in AlertDialog #1269
  * Fix displaying reserved filter keywords in content composer #1268
  * Disable inputs for improper option selection in EmailMethodPart of
