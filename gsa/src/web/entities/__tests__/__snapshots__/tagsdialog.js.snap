@@ -183,7 +183,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   left: 0;
   margin: 0;
   background: rgba(102,102,102,0.5);
-  z-index: 100;
+  z-index: 600;
   -webkit-transition: opacity 1s ease-in;
   transition: opacity 1s ease-in;
   width: 100%;
@@ -879,7 +879,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   left: 0;
   margin: 0;
   background: rgba(102,102,102,0.5);
-  z-index: 100;
+  z-index: 600;
   -webkit-transition: opacity 1s ease-in;
   transition: opacity 1s ease-in;
   width: 100%;
