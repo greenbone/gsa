@@ -43,7 +43,6 @@ class ConfirmationDialogContent extends React.Component {
     if (onResumeClick) {
       onResumeClick();
     }
-    this.props.close();
   }
 
   render() {
