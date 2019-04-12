@@ -102,6 +102,9 @@ const ContentComposerDialog = ({
               checked={values.storeAsDefault}
               checkedValue={YES_VALUE}
               unCheckedValue={NO_VALUE}
+              toolTipTitle={_(
+                'Store indicated settings (without filter) as default',
+              )}
               title={_('Store as default')}
               onChange={onChange}
             />

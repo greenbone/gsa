@@ -33,6 +33,13 @@ const set = (storage, name, value) => {
   }
 };
 
+const setAndFreeze = (obj, name, value) => {
+  Object.defineProperty(obj, name, {
+    value: value,
+    writable: false,
+  });
+};
+
 class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
@@ -46,19 +53,22 @@ class GmpSettings {
       timeout,
       guestUsername,
       guestPassword,
+      vendorVersion,
     } = {...options};
     this.storage = storage;
 
     this.loglevel = isDefined(loglevel) ? loglevel : DEFAULT_LOG_LEVEL;
-    this.manualurl = manualurl;
-    this.protocol = protocol;
-    this.protocoldocurl = protocoldocurl;
     this.reloadinterval = reloadinterval;
-    this.server = server;
     this.timeout = timeout;
-    this.guestUsername = guestUsername;
-    this.guestPassword = guestPassword;
-    this.disableLoginForm = disableLoginForm;
+
+    setAndFreeze(this, 'manualurl', manualurl);
+    setAndFreeze(this, 'protocoldocurl', protocoldocurl);
+    setAndFreeze(this, 'server', server);
+    setAndFreeze(this, 'protocol', protocol);
+    setAndFreeze(this, 'guestUsername', guestUsername);
+    setAndFreeze(this, 'guestPassword', guestPassword);
+    setAndFreeze(this, 'disableLoginForm', disableLoginForm);
+    setAndFreeze(this, 'vendorVersion', vendorVersion);
   }
 
   set token(value) {
