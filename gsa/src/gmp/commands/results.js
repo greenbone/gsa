@@ -67,7 +67,7 @@ class ResultCommand extends EntityCommand {
   }
 
   getElementFromRoot(root) {
-    return root.get_result.commands_response.get_results_response.result;
+    return root.get_result.get_results_response.result;
   }
 }
 
