@@ -8,6 +8,7 @@ $ cd gsa && git checkout gsa-8.0 && git log
 
 ## gsa 8.0.1 (unreleased)
 
+ * Fix showing authentication methods in user dialog #1278
  * Fix Result details page #1275
  * Add tooltips to deactivated text fields in AlertDialog #1269
  * Fix displaying reserved filter keywords in content composer #1268
