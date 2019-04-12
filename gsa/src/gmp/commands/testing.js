@@ -67,6 +67,18 @@ export const createActionResultResponse = () =>
     },
   );
 
+export const createAggregatesResponse = (data = {}) =>
+  new Response(
+    {},
+    {
+      get_aggregate: {
+        get_aggregates_response: {
+          aggregate: data,
+        },
+      },
+    },
+  );
+
 export const createHttp = response => ({
   request: jest.fn().mockReturnValue(Promise.resolve(response)),
 });
