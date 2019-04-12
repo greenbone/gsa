@@ -50,6 +50,7 @@ describe('GmpSettings tests', () => {
     expect(settings.guestUsername).toBeUndefined();
     expect(settings.guestPassword).toBeUndefined();
     expect(settings.disableLoginForm).toEqual(false);
+    expect(settings.vendorVersion).toBeUndefined();
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('loglevel', DEFAULT_LOG_LEVEL);
@@ -72,6 +73,7 @@ describe('GmpSettings tests', () => {
       guestUsername: 'guest',
       guestPassword: 'pass',
       disableLoginForm: true,
+      vendorVersion: 'foo',
     });
 
     expect(settings.reloadinterval).toEqual(10);
@@ -89,6 +91,7 @@ describe('GmpSettings tests', () => {
     expect(settings.guestUsername).toEqual('guest');
     expect(settings.guestPassword).toEqual('pass');
     expect(settings.disableLoginForm).toEqual(true);
+    expect(settings.vendorVersion).toEqual('foo');
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'error');
@@ -139,6 +142,7 @@ describe('GmpSettings tests', () => {
       timezone: 'cest',
       username: 'bar',
       loglevel: 'error',
+      vendorVersion: 'foo',
     });
 
     const settings = new GmpSettings(storage, {
@@ -153,6 +157,7 @@ describe('GmpSettings tests', () => {
       timezone: 'cet',
       username: 'foo',
       loglevel: 'debug',
+      vendorVersion: 'bar',
     });
 
     expect(settings.reloadinterval).toEqual(10);
@@ -166,6 +171,7 @@ describe('GmpSettings tests', () => {
     expect(settings.timezone).toEqual('cest');
     expect(settings.username).toEqual('bar');
     expect(settings.loglevel).toEqual('debug');
+    expect(settings.vendorVersion).toEqual('bar');
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'debug');
@@ -205,6 +211,60 @@ describe('GmpSettings tests', () => {
 
     settings.loglevel = undefined;
     expect(storage.removeItem).toBeCalledWith('loglevel');
+  });
+
+  test('should freeze properties', () => {
+    const storage = createStorage();
+    const settings = new GmpSettings(storage, {
+      reloadinterval: 10,
+      locale: 'en',
+      loglevel: 'error',
+      manualurl: 'http://manual',
+      protocol: 'http',
+      protocoldocurl: 'http://protocol',
+      server: 'localhost',
+      token: 'atoken',
+      timeout: 30000,
+      timezone: 'cet',
+      username: 'foo',
+      guestUsername: 'guest',
+      guestPassword: 'pass',
+      disableLoginForm: true,
+      vendorVersion: 'foobar',
+    });
+
+    expect(() => {
+      settings.manualurl = 'foo';
+    }).toThrow();
+    expect(settings.manualurl).toEqual('http://manual');
+    expect(() => {
+      settings.protocoldocurl = 'foo';
+    }).toThrow();
+    expect(settings.protocoldocurl).toEqual('http://protocol');
+    expect(() => {
+      settings.server = 'foo';
+    }).toThrow();
+    expect(settings.server).toEqual('localhost');
+    expect(() => {
+      settings.protocol = 'foo';
+    }).toThrow();
+    expect(settings.protocol).toEqual('http');
+    expect(() => {
+      settings.guestUsername = 'foo';
+    }).toThrow();
+    expect(settings.guestUsername).toEqual('guest');
+    expect(() => {
+      settings.guestPassword = 'foo';
+    }).toThrow();
+    expect(settings.guestPassword).toEqual('pass');
+    expect(() => {
+      settings.disableLoginForm = false;
+    }).toThrow();
+    expect(settings.disableLoginForm).toEqual(true);
+    expect(() => {
+      settings.vendorVersion = 'barfoo';
+    }).toThrow();
+    expect(settings.vendorVersion).toEqual('foobar');
   });
 });
 
