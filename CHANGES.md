@@ -8,6 +8,7 @@ $ cd gsa && git log
 
 ## gsa 9.0 unreleased
 
+ * Add storybook #1272
  * Use HTTPS for documentation links
 
 ## gsa 8.0.1 (unreleased)
