@@ -198,7 +198,7 @@ exports[`Menu tests should render 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   position: absolute;
-  z-index: 100;
+  z-index: 600;
   margin-top: -1px;
   box-sizing: border-box;
   top: 0px;
@@ -232,7 +232,7 @@ exports[`Menu tests should render with position adjust 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   position: absolute;
-  z-index: 100;
+  z-index: 600;
   margin-top: -1px;
   box-sizing: border-box;
   top: 0px;
@@ -266,7 +266,7 @@ exports[`Menu tests should render with position right 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   position: absolute;
-  z-index: 100;
+  z-index: 600;
   margin-top: -1px;
   box-sizing: border-box;
   top: 0px;
