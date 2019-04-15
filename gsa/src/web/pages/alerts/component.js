@@ -140,7 +140,6 @@ class AlertComponent extends React.Component {
     this.handleOpenContentComposerDialog = this.handleOpenContentComposerDialog.bind(
       this,
     );
-    this.openContentComposerDialog = this.openContentComposerDialog.bind(this);
     this.closeContentComposerDialog = this.closeContentComposerDialog.bind(
       this,
     );
