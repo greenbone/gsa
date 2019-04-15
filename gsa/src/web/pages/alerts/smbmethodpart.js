@@ -53,7 +53,7 @@ const SmbMethodPart = ({
 }) => {
   credentials = credentials.filter(smb_credential_filter);
   return (
-    <Layout flex="column" box grow="1">
+    <Layout flex="column" grow="1">
       <FormGroup title=" ">
         <span>
           {_(
