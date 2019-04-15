@@ -8,6 +8,7 @@ $ cd gsa && git checkout gsa-8.0 && git log
 
 ## gsa 8.0.1 (unreleased)
 
+ * Remove fifth from schedule #1279
  * Fix showing authentication methods in user dialog #1278
  * Fix Result details page #1275
  * Add tooltips to deactivated text fields in AlertDialog #1269
