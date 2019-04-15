@@ -40,7 +40,7 @@ const SendMethodPart = ({
   onChange,
 }) => {
   return (
-    <Layout flex="column" box grow="1">
+    <Layout flex="column" grow="1">
       <FormGroup title={_('Send to host')}>
         <Divider>
           <TextField

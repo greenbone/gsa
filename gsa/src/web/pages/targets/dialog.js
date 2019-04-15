@@ -333,7 +333,6 @@ const TargetDialog = ({
               <FormGroup title={_('SSH')}>
                 <Divider>
                   <Select
-                    box
                     name="ssh_credential_id"
                     disabled={state.in_use}
                     items={renderSelectItems(ssh_credentials, UNSET_VALUE)}

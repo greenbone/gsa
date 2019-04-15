@@ -36,7 +36,7 @@ const SnmpMethodPart = ({
   onChange,
 }) => {
   return (
-    <Layout flex="column" grow="1" box>
+    <Layout flex="column" grow="1">
       <FormGroup title={_('Community')}>
         <TextField
           size="30"

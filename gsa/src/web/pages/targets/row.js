@@ -96,7 +96,7 @@ const Cred = ({cred, title, links = true}) => {
   return (
     <Layout>
       <span>{title}: </span>
-      <Layout box>
+      <Layout>
         <DetailsLink type="credential" id={cred.id} textOnly={!links}>
           {cred.name}
         </DetailsLink>
