@@ -134,6 +134,7 @@ class TargetComponent extends React.Component {
         alive_tests: undefined,
         comment: undefined,
         esxi_credential_id: undefined,
+        exclude_hosts: undefined,
         hosts: undefined,
         id: undefined,
         in_use: undefined,
