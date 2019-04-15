@@ -56,7 +56,7 @@ const UserLink = ({sessionTimeout, username}) => (
 );
 
 UserLink.propTypes = {
-  sessionTimeout: PropTypes.date.isRequired,
+  sessionTimeout: PropTypes.date,
   username: PropTypes.string.isRequired,
 };
 
