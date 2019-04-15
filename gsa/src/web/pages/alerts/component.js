@@ -265,14 +265,13 @@ class AlertComponent extends React.Component {
     includeNotes,
     includeOverrides,
     filterId,
-    filterString,
     storeAsDefault,
   }) {
     if (storeAsDefault) {
       const {reportComposerDefaults} = this.props;
       const defaults = {
         ...reportComposerDefaults,
-        reportResultFilterId: filterId,
+        reportResultFilterId: filterId === UNSET_VALUE ? undefined : filterId,
         includeNotes,
         includeOverrides,
       };
@@ -443,10 +442,10 @@ class AlertComponent extends React.Component {
             name: alert.name,
             comment: alert.comment,
             filters,
-            filter_id: isDefined(alert.filter) ? alert.filter.id : NO_VALUE,
+            filter_id: isDefined(alert.filter) ? alert.filter.id : undefined,
             composerFilterId: isDefined(alert.filter)
               ? alert.filter.id
-              : NO_VALUE,
+              : undefined,
             composerIncludeNotes: getValue(method.data.composer_include_notes),
             composerIncludeOverrides: getValue(
               method.data.composer_include_overrides,
@@ -679,7 +678,7 @@ class AlertComponent extends React.Component {
             reportComposerDefaults.reportResultFilterId,
           )
             ? reportComposerDefaults.reportResultFilterId
-            : UNSET_VALUE;
+            : undefined;
 
           this.setState({
             active: undefined,
@@ -890,7 +889,7 @@ class AlertComponent extends React.Component {
 
   handleFilterIdChange(value) {
     this.setState({
-      composerFilterId: value,
+      composerFilterId: value === UNSET_VALUE ? undefined : value,
     });
 
     this.handleInteraction();
