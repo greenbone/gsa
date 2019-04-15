@@ -77,16 +77,33 @@ const ResultDetails = ({className, links = true, entity}) => {
         <P>{tags.summary}</P>
       </DetailsBlock>
 
-      <DetailsBlock title={_('Detection Result')}>
-        {!isEmpty(result.description) && result.description.length > 1 ? (
-          <Pre>{result.description}</Pre>
-        ) : (
-          _(
-            'Vulnerability was detected according to the ' +
-              'Detection Method.',
-          )
-        )}
-      </DetailsBlock>
+      {result.hasDelta() ? (
+        <DetailsBlock title={_('Detection Results')}>
+          <div>
+            <h3>Result 1</h3>
+            <Pre>{result.description}</Pre>
+          </div>
+          <div>
+            <h3>Result 2</h3>
+            <Pre>{result.delta.result.description}</Pre>
+          </div>
+          <div>
+            <h3>Different Lines</h3>
+            <Pre>{result.delta.diff}</Pre>
+          </div>
+        </DetailsBlock>
+      ) : (
+        <DetailsBlock title={_('Detection Result')}>
+          {!isEmpty(result.description) && result.description.length > 1 ? (
+            <Pre>{result.description}</Pre>
+          ) : (
+            _(
+              'Vulnerability was detected according to the ' +
+                'Detection Method.',
+            )
+          )}
+        </DetailsBlock>
+      )}
 
       {has_detection && (
         <DetailsBlock title={_('Product Detection Result')}>
