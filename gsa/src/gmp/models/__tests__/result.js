@@ -165,7 +165,27 @@ describe('Result model tests', () => {
     const result = new Result(elem);
 
     expect(result.delta).toBeInstanceOf(Delta);
-    expect(result.delta).toEqual({delta_type: 'foo'});
+    expect(result.delta.delta_type).toEqual('foo');
+  });
+
+  test('should parse changed delta object', () => {
+    const elem = {
+      delta: {
+        __text: Delta.TYPE_CHANGED,
+        diff: 'some foobar diff',
+        result: {
+          _id: 'r1',
+          description: 'some result description',
+        },
+      },
+    };
+    const result = new Result(elem);
+
+    expect(result.delta).toBeInstanceOf(Delta);
+    expect(result.delta.delta_type).toEqual(Delta.TYPE_CHANGED);
+    expect(result.delta.diff).toEqual('some foobar diff');
+    expect(result.delta.result).toBeInstanceOf(Model);
+    expect(result.delta.result.description).toEqual('some result description');
   });
 
   test('should parse original severity', () => {
