@@ -46,9 +46,8 @@ const StyledDiv = styled.div`
 `;
 
 const ContentComposerDialog = ({
-  filterId,
-  filters,
-  filterString = '',
+  filterId = UNSET_VALUE,
+  filters = [],
   includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
   includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
   storeAsDefault,
@@ -57,12 +56,11 @@ const ContentComposerDialog = ({
   onSave,
   onChange,
 }) => {
-  filterId =
-    filterId === NO_VALUE || !isDefined(filterId) ? UNSET_VALUE : filterId;
+  const filter =
+    filterId === UNSET_VALUE ? undefined : filters.find(f => f.id === filterId);
 
   const controlledValues = {
     filterId,
-    filterString,
     includeNotes,
     includeOverrides,
     storeAsDefault,
@@ -81,7 +79,7 @@ const ContentComposerDialog = ({
           <FormGroup title={_('Report Result Filter')} titleSize="3">
             <Select
               name="filterId"
-              value={values.filterId}
+              value={filterId}
               items={renderSelectItems(filters, UNSET_VALUE)}
               onChange={onFilterIdChange}
             />
@@ -91,7 +89,7 @@ const ContentComposerDialog = ({
               'To change the filter, please select a filter' +
                 ' from the dropdown menu.',
             )}
-            filterString={values.filterString}
+            filterString={isDefined(filter) ? filter.toFilterString() : ''}
             includeNotes={values.includeNotes}
             includeOverrides={values.includeOverrides}
             onValueChange={onChange}
