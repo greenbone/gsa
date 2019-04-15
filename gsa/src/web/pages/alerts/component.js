@@ -243,15 +243,17 @@ class AlertComponent extends React.Component {
   handleOpenContentComposerDialog() {
     const {gmp} = this.props;
     const {composerFilterId = NO_VALUE} = this.state;
+
     gmp.filter.get({id: composerFilterId}).then(response => {
       this.setState({
         composerFilterString: isDefined(response.data)
           ? response.data.toFilterCriteriaString()
           : undefined,
       });
-      this.openContentComposerDialog();
-      this.handleInteraction();
     });
+
+    this.openContentComposerDialog();
+    this.handleInteraction();
   }
 
   closeContentComposerDialog() {
