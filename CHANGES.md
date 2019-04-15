@@ -8,6 +8,7 @@ $ cd gsa && git checkout gsa-8.0 && git log
 
 ## gsa 8.0.1 (unreleased)
 
+ * Fix New Target dialog contains value from Edit Target #1281
  * Remove fifth from schedule #1279
  * Fix showing authentication methods in user dialog #1278
  * Fix Result details page #1275
