@@ -109,10 +109,6 @@ const NTH_DAY_ITEMS = [
     value: '4',
   },
   {
-    label: _l('The Fifth'),
-    value: '5',
-  },
-  {
     label: _l('The Last'),
     value: '-1',
   },
