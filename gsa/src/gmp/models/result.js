@@ -40,6 +40,8 @@ export class Delta {
       this.delta_type = elem;
     } else {
       this.delta_type = elem.__text;
+      this.diff = elem.diff;
+      this.result = new Model(elem.result, 'result');
     }
   }
 }
