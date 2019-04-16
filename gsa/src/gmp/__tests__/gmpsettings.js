@@ -51,6 +51,7 @@ describe('GmpSettings tests', () => {
     expect(settings.guestPassword).toBeUndefined();
     expect(settings.disableLoginForm).toEqual(false);
     expect(settings.vendorVersion).toBeUndefined();
+    expect(settings.vendorLabel).toBeUndefined();
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('loglevel', DEFAULT_LOG_LEVEL);
@@ -74,6 +75,7 @@ describe('GmpSettings tests', () => {
       guestPassword: 'pass',
       disableLoginForm: true,
       vendorVersion: 'foo',
+      vendorLabel: 'foo.bar',
     });
 
     expect(settings.reloadinterval).toEqual(10);
@@ -92,6 +94,7 @@ describe('GmpSettings tests', () => {
     expect(settings.guestPassword).toEqual('pass');
     expect(settings.disableLoginForm).toEqual(true);
     expect(settings.vendorVersion).toEqual('foo');
+    expect(settings.vendorLabel).toEqual('foo.bar');
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'error');
@@ -143,6 +146,7 @@ describe('GmpSettings tests', () => {
       username: 'bar',
       loglevel: 'error',
       vendorVersion: 'foo',
+      vendorLabel: 'foo.bar',
     });
 
     const settings = new GmpSettings(storage, {
@@ -158,6 +162,7 @@ describe('GmpSettings tests', () => {
       username: 'foo',
       loglevel: 'debug',
       vendorVersion: 'bar',
+      vendorLabel: 'bar.foo',
     });
 
     expect(settings.reloadinterval).toEqual(10);
@@ -172,6 +177,7 @@ describe('GmpSettings tests', () => {
     expect(settings.username).toEqual('bar');
     expect(settings.loglevel).toEqual('debug');
     expect(settings.vendorVersion).toEqual('bar');
+    expect(settings.vendorLabel).toEqual('bar.foo');
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'debug');
@@ -231,6 +237,7 @@ describe('GmpSettings tests', () => {
       guestPassword: 'pass',
       disableLoginForm: true,
       vendorVersion: 'foobar',
+      vendorLabel: 'foo.bar',
     });
 
     expect(() => {
@@ -265,6 +272,10 @@ describe('GmpSettings tests', () => {
       settings.vendorVersion = 'barfoo';
     }).toThrow();
     expect(settings.vendorVersion).toEqual('foobar');
+    expect(() => {
+      settings.vendorLabel = 'bar.foo';
+    }).toThrow();
+    expect(settings.vendorLabel).toEqual('foo.bar');
   });
 });
 
