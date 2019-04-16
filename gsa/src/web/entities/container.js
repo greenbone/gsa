@@ -141,6 +141,19 @@ class EntitiesContainer extends React.Component {
     }
   }
 
+  componentDidUpdate() {
+    const {entities = [], loadedFilter: filter} = this.state;
+
+    if (
+      entities.length === 0 &&
+      isDefined(filter) &&
+      filter.get('first') !== 1
+    ) {
+      // goto first page if first exceeds the last page
+      this.load(filter.first());
+    }
+  }
+
   componentWillUnmount() {
     this.isRunning = false;
     this.clearTimer(); // remove possible running timer
