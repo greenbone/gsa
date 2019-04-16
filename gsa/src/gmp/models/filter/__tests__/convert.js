@@ -265,6 +265,26 @@ describe('convert tests', () => {
       value: 'regexp',
     });
   });
+
+  test('should convert xml encoded values', () => {
+    expect(convert('foo', '&amp;bar&amp;', '=')).toEqual({
+      keyword: 'foo',
+      value: '&bar&',
+      relation: '=',
+    });
+
+    expect(convert('foo', '&quot;bar&quot;', '=')).toEqual({
+      keyword: 'foo',
+      value: '"bar"',
+      relation: '=',
+    });
+
+    expect(convert('foo', '&apos;bar&apos;', '=')).toEqual({
+      keyword: 'foo',
+      value: "'bar'",
+      relation: '=',
+    });
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
