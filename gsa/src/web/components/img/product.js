@@ -23,19 +23,34 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
+import {isDefined} from 'gmp/utils/identity';
+
+import withGmp from 'web/utils/withGmp';
+import PropTypes from 'web/utils/proptypes';
+
 import Img from './img';
 
-const ProductImage = props => (
-  <Img
-    alt={_('Greenbone Security Assistant')}
-    {...props}
-    src="login-label.png"
-  />
-);
-
-export default styled(ProductImage)`
+const Image = styled(Img)`
   display: flex;
   height: 95px;
 `;
+
+const ProductImage = ({gmp, ...props}) => (
+  <Image
+    alt={_('Greenbone Security Assistant')}
+    {...props}
+    src={
+      isDefined(gmp.settings) && isDefined(gmp.settings.vendorLabel)
+        ? gmp.settings.vendorLabel
+        : 'login-label.png'
+    }
+  />
+);
+
+ProductImage.propTypes = {
+  gmp: PropTypes.gmp.isRequired,
+};
+
+export default withGmp(ProductImage);
 
 // vim: set ts=2 sw=2 tw=80:
