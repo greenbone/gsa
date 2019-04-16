@@ -315,7 +315,7 @@ class Trashcan extends React.Component {
           {error && (
             <ErrorDialog
               text={error.message}
-              title="Error"
+              title={_('Error')}
               onClose={this.handleErrorClose}
             />
           )}

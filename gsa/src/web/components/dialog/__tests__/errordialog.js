@@ -50,23 +50,6 @@ describe('ErrorDialog component tests', () => {
     expect(handleClose).toHaveBeenCalled();
   });
 
-  /*  test('should close ErrorDialog with cancel button', () => {
-    const handleClose = jest.fn();
-    const handleResumeClick = jest.fn();
-
-    const {baseElement} = render(
-      <ConfirmationDialog
-        title="bar"
-        onClose={handleClose}
-        onResumeClick={handleResumeClick}
-      />,
-    );
-
-    const buttons = baseElement.querySelectorAll('button');
-    fireEvent.click(buttons[0]);
-    expect(handleClose).toHaveBeenCalled();
-  }); */
-
   test('should close ErrorDialog with resume button', () => {
     const handleClose = jest.fn();
 
