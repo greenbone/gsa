@@ -82,6 +82,8 @@ class PowerFilter extends React.Component {
     this.handleUpdateFilter = this.handleUpdateFilter.bind(this);
     this.handleUserFilterKeyPress = this.handleUserFilterKeyPress.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
+    this.handleRemoveClick = this.handleRemoveClick.bind(this);
+    this.handleResetClick = this.handleResetClick.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -118,6 +120,14 @@ class PowerFilter extends React.Component {
     this.updateFilter(Filter.fromString(userFilterString, filter));
   }
 
+  resetUserFilterString() {
+    const {filter} = this.props;
+
+    this.setState({
+      userFilterString: getUserFilterString(filter),
+    });
+  }
+
   handleValueChange(value, name) {
     this.setState({[name]: value});
   }
@@ -140,6 +150,26 @@ class PowerFilter extends React.Component {
       filter = RESET_FILTER;
     }
     this.updateFilter(filter);
+  }
+
+  handleRemoveClick() {
+    const {onRemoveClick} = this.props;
+
+    if (isDefined(onRemoveClick)) {
+      onRemoveClick();
+    }
+
+    this.resetUserFilterString();
+  }
+
+  handleResetClick() {
+    const {onResetClick} = this.props;
+
+    if (isDefined(onResetClick)) {
+      onResetClick();
+    }
+
+    this.resetUserFilterString();
   }
 
   render() {
@@ -179,14 +209,18 @@ class PowerFilter extends React.Component {
                 <DeleteIcon
                   title={_('Remove Filter')}
                   active={isDefined(filter)}
-                  onClick={isDefined(filter) ? onRemoveClick : undefined}
+                  onClick={
+                    isDefined(filter) ? this.handleRemoveClick : undefined
+                  }
                 />
               )}
               {onResetClick && (
                 <ResetIcon
                   title={_('Reset to Default Filter')}
                   active={isDefined(filter)}
-                  onClick={isDefined(filter) ? onResetClick : undefined}
+                  onClick={
+                    isDefined(filter) ? this.handleResetClick : undefined
+                  }
                 />
               )}
 
