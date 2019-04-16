@@ -181,7 +181,12 @@ class Page extends React.Component {
     } else {
       const {filter = new Filter()} = this.props;
 
-      onFilterChanged(filter.copy().set('task_id', report.task.id));
+      onFilterChanged(
+        filter
+          .copy()
+          .set('first', 1) // reset to first page
+          .set('task_id', report.task.id),
+      );
 
       this.setState({
         beforeSelectFilter: filter,
