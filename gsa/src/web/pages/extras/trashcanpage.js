@@ -27,7 +27,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
-import ErrorContainer from 'web/components/errorboundary/errorcontainer';
+import ErrorDialog from 'web/components/dialog/errordialog';
 
 import Button from 'web/components/form/button';
 
@@ -110,6 +110,7 @@ class Trashcan extends React.Component {
     this.handleEmpty = this.handleEmpty.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleRestore = this.handleRestore.bind(this);
+    this.handleErrorClose = this.handleErrorClose.bind(this);
   }
 
   componentDidMount() {
@@ -142,7 +143,14 @@ class Trashcan extends React.Component {
 
     this.handleInteraction();
 
-    gmp.trashcan.restore(entity).then(this.getTrash);
+    gmp.trashcan
+      .restore(entity)
+      .then(this.getTrash)
+      .catch(error => {
+        this.setState({
+          error: error,
+        });
+      });
   }
 
   handleDelete(entity) {
@@ -150,7 +158,14 @@ class Trashcan extends React.Component {
 
     this.handleInteraction();
 
-    gmp.trashcan.delete(entity).then(this.getTrash);
+    gmp.trashcan
+      .delete(entity)
+      .then(this.getTrash)
+      .catch(error => {
+        this.setState({
+          error: error,
+        });
+      });
   }
 
   handleEmpty() {
@@ -158,7 +173,20 @@ class Trashcan extends React.Component {
 
     this.handleInteraction();
 
-    gmp.trashcan.empty().then(this.getTrash);
+    gmp.trashcan
+      .empty()
+      .then(this.getTrash)
+      .catch(error => {
+        this.setState({
+          error: error,
+        });
+      });
+  }
+
+  handleErrorClose() {
+    this.setState({
+      error: undefined,
+    });
   }
 
   createContentRow(type, title, count) {
@@ -265,10 +293,7 @@ class Trashcan extends React.Component {
   render() {
     const {error, trash} = this.state;
 
-    if (isDefined(error)) {
-      return <ErrorContainer>{error.message}</ErrorContainer>;
-    }
-    if (!isDefined(trash)) {
+    if (!isDefined(trash) && !isDefined(error)) {
       return <Loading />;
     }
 
@@ -287,6 +312,13 @@ class Trashcan extends React.Component {
       <ErrorBoundary errElement={_('page')}>
         <Layout flex="column">
           <ToolBarIcons />
+          {error && (
+            <ErrorDialog
+              text={error.message}
+              title="Error"
+              onClose={this.handleErrorClose}
+            />
+          )}
           <Section img={<TrashcanIcon size="large" />} title={_('Trashcan')} />
           <EmptyTrashButton onClick={this.handleEmpty} />
 
