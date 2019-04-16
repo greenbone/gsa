@@ -9,3 +9,4 @@ node_modules/
 .directory
 coverage/
 /gsa/public/locales/
+/gsa/storybook-static/

@@ -78,7 +78,7 @@ describe('ConfirmationDialog component tests', () => {
     expect(handleClose).toHaveBeenCalled();
   });
 
-  test('should close ConfirmationDialog with resume button', () => {
+  test('should resume ConfirmationDialog with resume button', () => {
     const handleClose = jest.fn();
     const handleResumeClick = jest.fn();
 
@@ -92,7 +92,7 @@ describe('ConfirmationDialog component tests', () => {
 
     const buttons = baseElement.querySelectorAll('button');
     fireEvent.click(buttons[1]);
-    expect(handleClose).toHaveBeenCalled();
+    expect(handleResumeClick).toHaveBeenCalled();
   });
 
   test('should close ConfirmationDialog on escape key', () => {
