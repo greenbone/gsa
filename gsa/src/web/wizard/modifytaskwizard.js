@@ -85,10 +85,10 @@ const ModifyTaskWizard = ({
               </p>
               <div>
                 {_(
-                  'GSA will modify an existing task for you. The difference ' +
+                  'This wizard will modify an existing task for you. The difference ' +
                     'to the Edit Task dialog is that you can enter ' +
-                    'values for associated objects directly here. GSA will then' +
-                    ' create them for you automatically and assign them to the' +
+                    'values for associated objects directly here. The objects will then' +
+                    ' be created for you automatically and assigned to the' +
                     ' selected task.',
                 )}
               </div>
