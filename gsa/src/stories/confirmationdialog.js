@@ -74,7 +74,7 @@ class TestButton extends React.Component {
 
   render() {
     let dialog;
-    if (this.state.dialog === true && this.state.notification === 'Light on') {
+    if (this.state.dialog && this.state.notification === 'Light on') {
       dialog = (
         <ConfirmationDialog
           title="Light Switch Alarm"
@@ -84,7 +84,7 @@ class TestButton extends React.Component {
         />
       );
     } else if (
-      this.state.dialog === true &&
+      this.state.dialog &&
       this.state.notification === 'Light off'
     ) {
       dialog = (

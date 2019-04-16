@@ -35,7 +35,7 @@ class TestTimeZoneSelect extends React.Component {
 
   handleChange(value, name) {
     this.setState({
-      value: value,
+      value,
     });
   }
 

@@ -54,13 +54,13 @@ class TestCheckbox extends React.Component {
 
   render() {
     let text = 'You chose ';
-    if (this.state.check1 === true) {
+    if (this.state.check1) {
       text = text + ' ' + this.state.value1;
     }
-    if (this.state.check2 === true) {
+    if (this.state.check2) {
       text = text + ' ' + this.state.value2;
     }
-    if (this.state.check3 === true) {
+    if (this.state.check3) {
       text = text + ' ' + this.state.value3;
     }
     return (

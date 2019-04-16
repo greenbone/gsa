@@ -79,7 +79,6 @@ class MyDialogContent extends React.Component {
     if (onResumeClick) {
       onResumeClick();
     }
-    // this.props.close();
   }
 
   render() {

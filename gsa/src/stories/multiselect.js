@@ -37,18 +37,18 @@ class TestSelect extends React.Component {
 
   handleChange(value, name) {
     this.setState({
-      value: value,
+      value,
     });
   }
 
   render() {
-    const text = this.state.value;
+    const {value: text} = this.state;
     return (
       <div>
         <MultiSelect
           name={this.state.name}
           disabled={this.state.disabled}
-          value={this.state.value}
+          value={text}
           onChange={this.handleChange}
           items={[
             {label: 'Deutsch', value: 'Guten Morgen! '},

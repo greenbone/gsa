@@ -51,7 +51,7 @@ class SaveButton extends React.Component {
     });
   }
 
-  handleClose(value, name) {
+  handleClose() {
     this.setState({
       dialog: false,
     });
@@ -59,7 +59,7 @@ class SaveButton extends React.Component {
 
   render() {
     let dialog;
-    if (this.state.dialog === true) {
+    if (this.state.dialog) {
       dialog = (
         <ContainerTaskDialog
           comment=""
