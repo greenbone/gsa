@@ -291,6 +291,15 @@ describe('Filter set', () => {
     filter.set('first', '-666');
     expect(filter.get('first')).toEqual(1);
   });
+
+  test('should reset filter id', () => {
+    const filter = new Filter({_id: 'foo'});
+
+    expect(filter.id).toEqual('foo');
+
+    filter.set('first', '0');
+    expect(filter.id).toBeUndefined();
+  });
 });
 
 describe('Filter has', () => {
@@ -332,6 +341,14 @@ describe('Filter delete', () => {
     const filter = Filter.fromString('abc=1 ~def');
     expect(filter.delete('def').toFilterString()).toEqual('abc=1 ~def');
     expect(filter.delete('~def').toFilterString()).toEqual('abc=1 ~def');
+  });
+
+  test('should reset filter id', () => {
+    const filter = Filter.fromString('abc=1');
+    filter.id = 'foo';
+    filter.delete('abc');
+
+    expect(filter.id).toBeUndefined();
   });
 });
 
@@ -660,8 +677,17 @@ describe('Filter next', () => {
     expect(filter.get('first')).toBe(11);
     expect(filter.get('rows')).toBe(10);
   });
-});
 
+  test('should reset filter id', () => {
+    let filter = Filter.fromString('first=1 rows=10');
+    filter.id = 'foo';
+
+    expect(filter.id).toEqual('foo');
+
+    filter = filter.next();
+    expect(filter.id).toBeUndefined();
+  });
+});
 describe('Filter first', () => {
   test('should set first if undefined', () => {
     let filter = Filter.fromString('');
@@ -680,6 +706,16 @@ describe('Filter first', () => {
     filter = filter.first();
 
     expect(filter.get('first')).toBe(1);
+  });
+
+  test('should reset filter id', () => {
+    let filter = Filter.fromString('first=1 rows=10');
+    filter.id = 'foo';
+
+    expect(filter.id).toEqual('foo');
+
+    filter = filter.first();
+    expect(filter.id).toBeUndefined();
   });
 });
 
@@ -705,6 +741,16 @@ describe('Filter previous', () => {
 
     expect(filter.get('first')).toBe(1);
     expect(filter.get('rows')).toBe(10);
+  });
+
+  test('should reset filter id', () => {
+    let filter = Filter.fromString('first=1 rows=10');
+    filter.id = 'foo';
+
+    expect(filter.id).toEqual('foo');
+
+    filter = filter.previous();
+    expect(filter.id).toBeUndefined();
   });
 });
 
@@ -766,6 +812,16 @@ describe('Filter setSortOrder', () => {
     expect(filter.has('sort-reverse')).toEqual(false);
     expect(filter.get('sort')).toEqual('foo');
   });
+
+  test('should reset filter id', () => {
+    const filter = Filter.fromString('sort-reverse=foo');
+    filter.id = 'foo';
+
+    expect(filter.id).toEqual('foo');
+
+    filter.setSortOrder('foo');
+    expect(filter.id).toBeUndefined();
+  });
 });
 
 describe('Filter setSortBy', () => {
@@ -792,6 +848,16 @@ describe('Filter setSortBy', () => {
     filter.setSortBy('foo');
 
     expect(filter.get('sort-reverse')).toEqual('foo');
+  });
+
+  test('should reset filter id', () => {
+    const filter = Filter.fromString('sort-reverse=bar');
+    filter.id = 'foo';
+
+    expect(filter.id).toEqual('foo');
+
+    filter.setSortBy('foo');
+    expect(filter.id).toBeUndefined();
   });
 });
 
@@ -828,6 +894,16 @@ describe('Filter simple', () => {
 
     expect(filter).not.toBe(simple);
     expect(simple.has('sort-reverse')).toEqual(false);
+  });
+
+  test('should reset filter id', () => {
+    const filter = Filter.fromString('sort-reverse=foo foo=bar');
+    filter.id = 'foo';
+
+    expect(filter.id).toEqual('foo');
+
+    const simple = filter.simple();
+    expect(simple.id).toBeUndefined();
   });
 });
 
@@ -878,6 +954,20 @@ describe('Filter merge extra keywords', () => {
     expect(filter3.get('apply_overrides')).toBe(1);
     expect(filter3.get('min_qod')).toBe(80);
   });
+
+  test('should reset filter id', () => {
+    const filter1 = Filter.fromString('abc=1');
+    filter1.id = 'f1';
+    const filter2 = Filter.fromString(
+      'apply_overrides=1 overrides=1 ' +
+        'autofp=1 delta_states=1 first=1 levels=hml min_qod=70 notes=1 ' +
+        'result_hosts_only=1 rows=10 sort=name timezone=CET',
+    );
+    filter2.id = 'f2';
+
+    const filter3 = filter1.mergeExtraKeywords(filter2);
+    expect(filter3.id).toBeUndefined();
+  });
 });
 
 describe('filter and', () => {
@@ -899,6 +989,16 @@ describe('filter and', () => {
     expect(filter1.and(filter2).toFilterString()).toBe(
       'apply_overrides=1 min_qod=70 bar=2',
     );
+  });
+
+  test('should reset filter id', () => {
+    const filter1 = Filter.fromString('foo=1');
+    filter1.id = 'f1';
+    const filter2 = Filter.fromString('bar=2');
+    filter2.id = 'f2';
+    const filter3 = filter1.and(filter2);
+
+    expect(filter3.id).toBeUndefined();
   });
 });
 

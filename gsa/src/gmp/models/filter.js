@@ -24,6 +24,8 @@ import {forEach, map} from '../utils/array';
 
 import Model from '../model.js';
 
+import {setProperties} from '../parser';
+
 import convert from './filter/convert.js';
 import FilterTerm, {AND} from './filter/filterterm.js';
 import {EXTRA_KEYWORDS} from './filter/keywords.js';
@@ -49,6 +51,12 @@ class Filter extends Model {
    */
   init() {
     this.terms = [];
+  }
+
+  setProperties({id, ...properties}) {
+    // override setProperties to allow changing the id
+    setProperties(properties, this);
+    this.id = id;
   }
 
   /**
@@ -201,6 +209,18 @@ class Filter extends Model {
   }
 
   /**
+   * Reset filter id of the current filter
+   *
+   * @private
+   *
+   * @return {Filter} This filter.
+   */
+  _resetFilterId() {
+    this.id = undefined;
+    return this;
+  }
+
+  /**
    * Calls passed function for each FilterTerm in this Filter
    *
    * @param {function} func  Function to call for each FilterTerm.
@@ -348,6 +368,7 @@ class Filter extends Model {
    * @return {Filter} This filter
    */
   set(keyword, value, relation = '=') {
+    this._resetFilterId(); // reset id because the filter has changed
     const converted = convert(keyword, value, relation);
     this._setTerm(new FilterTerm(converted));
     return this;
@@ -380,6 +401,7 @@ class Filter extends Model {
     const index = this._getIndex(key);
     if (index !== -1) {
       this.terms.splice(index, 1);
+      this._resetFilterId(); // filter has changed
     }
     return this;
   }
@@ -569,6 +591,8 @@ class Filter extends Model {
     if (nonExtraTerms.length > 0) {
       this._addTerm(AND);
     }
+
+    this._resetFilterId(); // filter has changed
     return this._merge(filter);
   }
 
@@ -631,6 +655,7 @@ class Filter extends Model {
    */
   mergeExtraKeywords(filter) {
     const f = this.copy();
+    f._resetFilterId();
     return f._mergeExtraKeywords(filter);
   }
 
