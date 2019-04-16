@@ -82,7 +82,7 @@ class Filter extends Model {
       });
       delete ret.keywords;
     } else if (isDefined(ret.term)) {
-      this.parseString(ret.term);
+      this._parseString(ret.term);
 
       // ret.term should not be part of the public api
       // but it's helpful for debug purposes
@@ -662,11 +662,13 @@ class Filter extends Model {
   /**
    * Parses FilterTerms from filterstring and adds them to this Filter
    *
+   * @private
+   *
    * @param {String} filterstring  Filter representation as a string
    *
    * @return {Filter} This filter.
    */
-  parseString(filterstring) {
+  _parseString(filterstring) {
     if (isString(filterstring)) {
       const fterms = filterstring.split(' ');
       for (let fterm of fterms) {
@@ -692,7 +694,7 @@ class Filter extends Model {
   static fromString(filterstring, filter) {
     const f = new Filter();
 
-    f.parseString(filterstring);
+    f._parseString(filterstring);
     f._mergeExtraKeywords(filter);
 
     return f;
