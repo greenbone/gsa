@@ -87,7 +87,7 @@ const TaskWizard = ({
               )}
             </div>
             <Layout flex="column">
-              {_('As a short-cut GSA will do the following for you:')}
+              {_('As a short-cut the following steps will be done for you:')}
               <ol>
                 <li>{_('Create a new Target')}</li>
                 <li>{_('Create a new Task')}</li>
@@ -97,13 +97,13 @@ const TaskWizard = ({
             <p>
               {_(
                 'As soon as the scan progress is beyond 1%, you can already ' +
-                  'jump to the scan report via the link in the Reports Total ' +
-                  'column and review the results collected so far.',
+                  'jump to the scan report by clicking on the progress bar in ' +
+                  'the "Status" column and review the results collected so far.',
               )}
             </p>
             <p>
               {_(
-                'When creating the Target and Task GSA will use the defaults' +
+                'The Target and Task will be created using the defaults' +
                   ' as configured in "My Settings".',
               )}
             </p>

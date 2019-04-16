@@ -8,6 +8,8 @@ $ cd gsa && git checkout gsa-8.0 && git log
 
 ## gsa 8.0.1 (unreleased)
 
+ * Update dialog for Task Wizard, Advanced Task Wizard and Modify Task Wizard #1287
+ * Add errordialog to fix missing error messages in trashcan #1286
  * Display current result, comparable result and diff between results for delta
    reports and their results in delta state "changed" #1284
  * Fix New Target dialog contains value from Edit Target #1281
