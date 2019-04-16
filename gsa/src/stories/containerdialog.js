@@ -58,24 +58,18 @@ class SaveButton extends React.Component {
   }
 
   render() {
-    let dialog;
-    if (this.state.dialog) {
-      dialog = (
-        <ContainerTaskDialog
-          comment=""
-          name=""
-          onSave={this.handleSave}
-          onClose={this.handleClose}
-        />
-      );
-    } else {
-      dialog = '';
-    }
     return (
       <div>
         <Button title={this.state.title} onClick={this.handleClick} />
         <p>{this.state.result}</p>
-        {dialog}
+        {this.state.dialog && (
+          <ContainerTaskDialog
+            comment=""
+            name=""
+            onSave={this.handleSave}
+            onClose={this.handleClose}
+          />
+        )}
       </div>
     );
   }

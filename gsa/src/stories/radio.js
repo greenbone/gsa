@@ -32,19 +32,9 @@ class TestRadio extends React.Component {
   }
 
   handleChange(value, name) {
-    if (value === '1') {
-      this.setState(state => ({
-        value: 'coffee',
-      }));
-    } else if (value === '2') {
-      this.setState(state => ({
-        value: 'tea',
-      }));
-    } else if (value === '3') {
-      this.setState(state => ({
-        value: 'water',
-      }));
-    }
+    this.setState({
+      value,
+    });
   }
 
   render() {
@@ -56,7 +46,7 @@ class TestRadio extends React.Component {
             Coffee
             <RadioComponent
               name="radio1"
-              value="1"
+              value="coffee"
               onChange={this.handleChange}
             />
           </li>
@@ -64,7 +54,7 @@ class TestRadio extends React.Component {
             Tea
             <RadioComponent
               name="radio1"
-              value="2"
+              value="tea"
               onChange={this.handleChange}
             />
           </li>
@@ -72,7 +62,7 @@ class TestRadio extends React.Component {
             Water
             <RadioComponent
               name="radio1"
-              value="3"
+              value="water"
               onChange={this.handleChange}
             />
           </li>

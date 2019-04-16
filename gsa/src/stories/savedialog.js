@@ -46,10 +46,6 @@ class SaveButton extends React.Component {
     this.setState({
       dialog: true,
     });
-
-    /* setTimeout(() => {
-      this.setState({input: 'bar'});
-    }, 2000); */
   }
 
   handleChange(value, name) {
@@ -92,46 +88,38 @@ class SaveButton extends React.Component {
   }
 
   render() {
-    let dialog;
-    if (this.state.dialog === true) {
-      dialog = (
-        <SaveDialog
-          values={{input: this.state.input}}
-          defaultValues={{input: this.state.input, input2: 'foo'}}
-          error={this.state.error}
-          minHeight="100px"
-          minWidth="400px"
-          title="Save"
-          width="400px"
-          onSave={this.handleSave}
-          onClose={this.handleClose}
-          onError={this.handleError}
-          onErrorClose={this.handleErrorClose}
-        >
-          {({values, onValueChange}) => {
-            return (
-              <div>
-                Do you want to save the changes?
-                <TextField value={values.input} onChange={this.handleChange} />
-                {/* <TextField
-                  name="input2"
-                  value={values.input2}
-                  onChange={onValueChange}
-                /> */}
-              </div>
-            );
-          }}
-        </SaveDialog>
-      );
-    } else {
-      dialog = '';
-    }
     return (
       <div>
         <TextField value={this.state.input} onChange={this.handleChange} />
         <Button title={this.state.title} onClick={this.handleClick} />
         <p>{this.state.result}</p>
-        {dialog}
+        {this.state.dialog && (
+          <SaveDialog
+            values={{input: this.state.input}}
+            defaultValues={{input: this.state.input, input2: 'foo'}}
+            error={this.state.error}
+            minHeight="100px"
+            minWidth="400px"
+            title="Save"
+            width="400px"
+            onSave={this.handleSave}
+            onClose={this.handleClose}
+            onError={this.handleError}
+            onErrorClose={this.handleErrorClose}
+          >
+            {({values, onValueChange}) => {
+              return (
+                <div>
+                  Do you want to save the changes?
+                  <TextField
+                    value={values.input}
+                    onChange={this.handleChange}
+                  />
+                </div>
+              );
+            }}
+          </SaveDialog>
+        )}
       </div>
     );
   }

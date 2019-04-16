@@ -176,36 +176,22 @@ class TestButton extends React.Component {
   }
 
   render() {
-    let dialog;
-    if (this.state.dialog === true && this.state.notification === 'Light on') {
-      dialog = (
-        <MyDialog
-          title="Light Switch Alarm"
-          onResumeClick={this.handleResumeClick}
-          onClose={this.handleClose}
-          text="Are you sure you want to turn on the light?"
-        />
-      );
-    } else if (
-      this.state.dialog === true &&
-      this.state.notification === 'Light off'
-    ) {
-      dialog = (
-        <MyDialog
-          title="Light Switch Alarm"
-          onResumeClick={this.handleResumeClick}
-          onClose={this.handleClose}
-          text="Are you sure you want to turn off the light?"
-        />
-      );
-    } else {
-      dialog = '';
-    }
     return (
       <div>
         <Button title={this.state.title} onClick={this.handleClick} />
         <h3>{this.state.notification}</h3>
-        {dialog}
+        {this.state.dialog && (
+          <MyDialog
+            title="Light Switch Alarm"
+            onResumeClick={this.handleResumeClick}
+            onClose={this.handleClose}
+            text={
+              this.state.notification === 'Light on'
+                ? 'Are you sure you want to turn on the light?'
+                : 'Are you sure you want to turn off the light?'
+            }
+          />
+        )}
       </div>
     );
   }

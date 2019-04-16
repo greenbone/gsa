@@ -28,23 +28,14 @@ class TestYesNoRadio extends React.Component {
     this.state = {
       name: this.props.name,
       disabled: this.props.disabled,
-      value: '',
       text: '',
     };
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(value, name) {
-    let text = '';
-    if (value === 1) {
-      text = 'yes';
-    } else {
-      text = 'no';
-    }
-
     this.setState({
-      value: value,
-      text: text,
+      text: value,
     });
   }
 
@@ -57,6 +48,8 @@ class TestYesNoRadio extends React.Component {
           disabled={this.state.disabled}
           value={this.state.value}
           onChange={this.handleChange}
+          yesValue="yes"
+          noValue="no"
         />
         <h3>{text}</h3>
       </div>

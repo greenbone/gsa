@@ -34,7 +34,6 @@ class TestNumberField extends React.Component {
     if (value > 10) {
       this.setState(state => ({
         notification: 'No numbers > 10 allowed!',
-        color: 'red',
       }));
     } else {
       this.setState(state => ({
