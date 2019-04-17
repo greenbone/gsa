@@ -7,7 +7,8 @@ $ git clone https://github.com/greenbone/gsa.git
 $ cd gsa && git checkout gsa-8.0 && git log
 
 ## gsa 8.0.1 (unreleased)
-
+ 
+ * Fix port ranges from file radio button #1291
  * Update dialog for Task Wizard, Advanced Task Wizard and Modify Task Wizard #1287
  * Add errordialog to fix missing error messages in trashcan #1286
  * Display current result, comparable result and diff between results for delta
