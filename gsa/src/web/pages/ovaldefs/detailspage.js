@@ -213,7 +213,9 @@ const Details = ({entity}) => {
                 </TableData>
                 <TableData>
                   {isDefined(ref.url) && (
-                    <ExternalLink to={ref.url}>{ref.url}</ExternalLink>
+                    <span>
+                      <ExternalLink to={ref.url}>{ref.url}</ExternalLink>
+                    </span>
                   )}
                 </TableData>
               </TableRow>

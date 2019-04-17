@@ -22,18 +22,18 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import ExternalLink from '../../components/link/externallink.js';
+import ExternalLink from 'web/components/link/externallink';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import InfoTable from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
@@ -118,7 +118,11 @@ const CertBundAdvDetails = ({entity}) => {
             <TableRow>
               <TableData>{_('Reference URL')}</TableData>
               <TableData>
-                <ExternalLink to={reference_url}>{reference_url}</ExternalLink>
+                <span>
+                  <ExternalLink to={reference_url}>
+                    {reference_url}
+                  </ExternalLink>
+                </span>
               </TableData>
             </TableRow>
           )}

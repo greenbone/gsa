@@ -96,13 +96,14 @@ const References = ({nvt, links = true}) => {
               <TableDataAlignTop>{_('Other')}</TableDataAlignTop>
               <TableData>
                 {xrefs.map(xref => (
-                  <ExternalLink
-                    key={xref.ref}
-                    textOnly={!links || xref.type !== 'URL'}
-                    to={xref.ref}
-                  >
-                    {xref.ref}
-                  </ExternalLink>
+                  <span key={xref.ref}>
+                    <ExternalLink
+                      textOnly={!links || xref.type !== 'URL'}
+                      to={xref.ref}
+                    >
+                      {xref.ref}
+                    </ExternalLink>
+                  </span>
                 ))}
               </TableData>
             </TableRow>

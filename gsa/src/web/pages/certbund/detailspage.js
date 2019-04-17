@@ -160,7 +160,9 @@ const Details = ({entity}) => {
               <li key={info.url}>
                 <Layout flex="column">
                   <b>{info.issuer}</b>
-                  <ExternalLink to={info.url}>{info.url}</ExternalLink>
+                  <span>
+                    <ExternalLink to={info.url}>{info.url}</ExternalLink>
+                  </span>
                 </Layout>
               </li>
             ))}
