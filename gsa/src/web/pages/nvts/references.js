@@ -55,12 +55,13 @@ const References = ({nvt, links = true}) => {
               <TableDataAlignTop>{_('CVE')}</TableDataAlignTop>
               <TableData>
                 {cves.map(cve_id => (
-                  <CveLink
-                    title={_('View Details of {{cve_id}}', {cve_id})}
-                    key={cve_id}
-                    id={cve_id}
-                    textOnly={!links}
-                  />
+                  <span key={cve_id}>
+                    <CveLink
+                      title={_('View Details of {{cve_id}}', {cve_id})}
+                      id={cve_id}
+                      textOnly={!links}
+                    />
+                  </span>
                 ))}
               </TableData>
             </TableRow>
