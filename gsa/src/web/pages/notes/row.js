@@ -88,9 +88,11 @@ const Row = ({
   return (
     <TableRow>
       <TableData>
-        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-          {text}
-        </RowDetailsToggle>
+        <span>
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+            {text}
+          </RowDetailsToggle>
+        </span>
       </TableData>
       <TableData>{entity.nvt ? entity.nvt.name : ''}</TableData>
       <TableData title={entity.hosts}>

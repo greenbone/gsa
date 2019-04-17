@@ -52,13 +52,17 @@ const EntityNameTableData = ({
       <Layout flex="column">
         {entity.isOrphan() && <b>{_('Orphan')}</b>}
         {isDefined(onToggleDetailsClick) ? (
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-            {entity.name}
-          </RowDetailsToggle>
+          <span>
+            <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+              {entity.name}
+            </RowDetailsToggle>
+          </span>
         ) : (
-          <DetailsLink type={type} id={entity.id} textOnly={!links}>
-            {entity.name}
-          </DetailsLink>
+          <span>
+            <DetailsLink type={type} id={entity.id} textOnly={!links}>
+              {entity.name}
+            </DetailsLink>
+          </span>
         )}
       </Layout>
       <ObserverIcon

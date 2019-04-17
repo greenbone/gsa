@@ -49,9 +49,11 @@ const Row = ({
 }) => (
   <TableRow>
     <TableData>
-      <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-        {entity.name}
-      </RowDetailsToggle>
+      <span>
+        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+          {entity.name}
+        </RowDetailsToggle>
+      </span>
     </TableData>
     <TableData>
       <Link

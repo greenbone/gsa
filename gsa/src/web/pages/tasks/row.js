@@ -60,9 +60,11 @@ const render_report = (report, links) => {
   }
   const date = longDate(report.timestamp);
   return (
-    <DetailsLink type="report" id={report.id} textOnly={!links}>
-      {date}
-    </DetailsLink>
+    <span>
+      <DetailsLink type="report" id={report.id} textOnly={!links}>
+        {date}
+      </DetailsLink>
+    </span>
   );
 };
 

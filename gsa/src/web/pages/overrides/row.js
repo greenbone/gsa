@@ -104,9 +104,11 @@ const Row = ({
 }) => (
   <TableRow>
     <TableData>
-      <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-        {shorten(entity.text)}
-      </RowDetailsToggle>
+      <span>
+        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+          {shorten(entity.text)}
+        </RowDetailsToggle>
+      </span>
     </TableData>
     <TableData>{entity.nvt ? entity.nvt.name : ''}</TableData>
     <TableData title={entity.hosts}>

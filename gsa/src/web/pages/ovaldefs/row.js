@@ -47,9 +47,11 @@ const Row = ({
   <TableBody>
     <TableRow>
       <TableData rowSpan="2">
-        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-          {entity.name}
-        </RowDetailsToggle>
+        <span>
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+            {entity.name}
+          </RowDetailsToggle>
+        </span>
         <div>{shorten(entity.file, 45)}</div>
         <Comment text={entity.comment} />
       </TableData>
