@@ -269,7 +269,7 @@ class ReportDetails extends React.Component {
   }
 
   startTimer() {
-    if (!this.isRunning) {
+    if (!this.isRunning || isDefined(this.timer)) {
       return;
     }
 
