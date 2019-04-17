@@ -9,6 +9,10 @@ $ cd gsa && git checkout gsa-8.0 && git log
 ## gsa 8.0.1 (unreleased)
 
  * Don't run more then one reload timer for a page #1289
+ * Set first=1 when starting delta report selection #1288
+ * Fix pagination with default filter (reset filter.id if filter is changed) #1288
+ * Fix setting filters at report details page with less and greater then relations
+   and quotes in the value #1288
  * Update dialog for Task Wizard, Advanced Task Wizard and Modify Task Wizard #1287
  * Add errordialog to fix missing error messages in trashcan #1286
  * Display current result, comparable result and diff between results for delta
