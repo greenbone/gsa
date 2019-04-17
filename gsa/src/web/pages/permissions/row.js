@@ -112,13 +112,21 @@ const Row = ({
       {isDefined(entity.resource) && typeName(getEntityType(entity.resource))}
     </TableData>
     <TableData>
-      {isDefined(entity.resource) && <EntityLink entity={entity.resource} />}
+      {isDefined(entity.resource) && (
+        <span>
+          <EntityLink entity={entity.resource} />
+        </span>
+      )}
     </TableData>
     <TableData>
       {isDefined(entity.subject) && typeName(getEntityType(entity.subject))}
     </TableData>
     <TableData>
-      {isDefined(entity.subject) && <EntityLink entity={entity.subject} />}
+      {isDefined(entity.subject) && (
+        <span>
+          <EntityLink entity={entity.subject} />
+        </span>
+      )}
     </TableData>
     <ActionsComponent {...props} entity={entity} />
   </TableRow>

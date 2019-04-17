@@ -143,7 +143,9 @@ const Row = ({
     <TableData>{scannerTypeName(entity.scannerType)}</TableData>
     <TableData>
       {isDefined(entity.credential) && (
-        <EntityLink entity={entity.credential} />
+        <span>
+          <EntityLink entity={entity.credential} />
+        </span>
       )}
     </TableData>
     <ActionsComponent {...props} entity={entity} />

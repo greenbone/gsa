@@ -51,7 +51,9 @@ const TicketDetails = ({entity, links = true}) => (
             <TableRow>
               <TableData>{_('Task')}</TableData>
               <TableData>
-                <EntityLink entity={entity.task} textOnly={!links} />
+                <span>
+                  <EntityLink entity={entity.task} textOnly={!links} />
+                </span>
               </TableData>
             </TableRow>
           )}
