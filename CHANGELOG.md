@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix dialog can be moved outside browser frame [#1294](https://github.com/greenbone/gsa/pull/1294)
 - Fix permission description [#1292](https://github.com/greenbone/gsa/pull/1292)
 - Fix port ranges from file radio button [#1291](https://github.com/greenbone/gsa/pull/1291)
 - Don't run more then one reload timer for a page [#1289](https://github.com/greenbone/gsa/pull/1289)
