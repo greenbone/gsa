@@ -60,9 +60,11 @@ const Row = ({
         <Qod value={entity.qod} />
       </TableData>
       <TableData>
-        <Link to="results" filter={'nvt=' + entity.id} textOnly={!links}>
-          {results.count}
-        </Link>
+        <span>
+          <Link to="results" filter={'nvt=' + entity.id} textOnly={!links}>
+            {results.count}
+          </Link>
+        </span>
       </TableData>
       <TableData>{hosts.count}</TableData>
       <ActionsComponent {...props} entity={entity} />

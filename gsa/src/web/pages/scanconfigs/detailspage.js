@@ -161,13 +161,15 @@ const NvtFamilies = ({entity}) => {
             {family_list.map(family => (
               <TableRow key={family.name}>
                 <TableData>
-                  <Link
-                    to="nvts"
-                    filter={'family="' + family.name + '"'}
-                    title={_('NVTs of family {{name}}', {name: family.name})}
-                  >
-                    {family.name}
-                  </Link>
+                  <span>
+                    <Link
+                      to="nvts"
+                      filter={'family="' + family.name + '"'}
+                      title={_('NVTs of family {{name}}', {name: family.name})}
+                    >
+                      {family.name}
+                    </Link>
+                  </span>
                 </TableData>
                 <TableData align={['center', 'start']}>
                   <Layout>{_('{{count}} of {{max}}', family.nvts)}</Layout>

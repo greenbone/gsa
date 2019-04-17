@@ -56,13 +56,15 @@ const Row = ({
       </span>
     </TableData>
     <TableData>
-      <Link
-        to="nvts"
-        filter={'family="' + entity.family + '"'}
-        textOnly={!links}
-      >
-        {entity.family}
-      </Link>
+      <span>
+        <Link
+          to="nvts"
+          filter={'family="' + entity.family + '"'}
+          textOnly={!links}
+        >
+          {entity.family}
+        </Link>
+      </span>
     </TableData>
     <TableData>{longDate(entity.creationTime)}</TableData>
     <TableData>{longDate(entity.modificationTime)}</TableData>
