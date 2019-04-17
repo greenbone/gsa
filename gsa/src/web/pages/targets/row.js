@@ -129,9 +129,11 @@ const Row = ({
     <TableData>{shorten(entity.hosts.join(', '), 500)}</TableData>
     <TableData>{entity.max_hosts}</TableData>
     <TableData>
-      <DetailsLink type="portlist" id={entity.port_list.id} textOnly={!links}>
-        {entity.port_list.name}
-      </DetailsLink>
+      <span>
+        <DetailsLink type="portlist" id={entity.port_list.id} textOnly={!links}>
+          {entity.port_list.name}
+        </DetailsLink>
+      </span>
     </TableData>
     <TableData flex="column" align="center">
       <Cred cred={entity.ssh_credential} title={'SSH'} links={links} />

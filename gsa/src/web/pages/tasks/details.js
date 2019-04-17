@@ -153,13 +153,15 @@ class TaskDetails extends React.Component {
                 <TableRow>
                   <TableData>{_('Name')}</TableData>
                   <TableData>
-                    <DetailsLink
-                      textOnly={!links}
-                      type="scanner"
-                      id={scanner.id}
-                    >
-                      {scanner.name}
-                    </DetailsLink>
+                    <span>
+                      <DetailsLink
+                        textOnly={!links}
+                        type="scanner"
+                        id={scanner.id}
+                      >
+                        {scanner.name}
+                      </DetailsLink>
+                    </span>
                   </TableData>
                 </TableRow>
                 <TableRow>
@@ -170,13 +172,15 @@ class TaskDetails extends React.Component {
                   <TableRow>
                     <TableData>{_('Scan Config')}</TableData>
                     <TableData>
-                      <DetailsLink
-                        textOnly={!links}
-                        type="scanconfig"
-                        id={config.id}
-                      >
-                        {config.name}
-                      </DetailsLink>
+                      <span>
+                        <DetailsLink
+                          textOnly={!links}
+                          type="scanconfig"
+                          id={config.id}
+                        >
+                          {config.name}
+                        </DetailsLink>
+                      </span>
                     </TableData>
                   </TableRow>
                 )}
@@ -251,13 +255,15 @@ class TaskDetails extends React.Component {
                 <TableRow>
                   <TableData>{_('Name')}</TableData>
                   <TableData>
-                    <DetailsLink
-                      textOnly={!links}
-                      type="schedule"
-                      id={schedule.id}
-                    >
-                      {schedule.name}
-                    </DetailsLink>
+                    <span>
+                      <DetailsLink
+                        textOnly={!links}
+                        type="schedule"
+                        id={schedule.id}
+                      >
+                        {schedule.name}
+                      </DetailsLink>
+                    </span>
                   </TableData>
                 </TableRow>
                 {isDefined(schedule.event) && (

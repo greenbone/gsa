@@ -105,9 +105,11 @@ class EditDialog extends React.Component {
                   <TableRow>
                     <TableData>{_('Name')}</TableData>
                     <TableData>
-                      <DetailsLink id={nvt.oid} type="nvt">
-                        {nvt.name}
-                      </DetailsLink>
+                      <span>
+                        <DetailsLink id={nvt.oid} type="nvt">
+                          {nvt.name}
+                        </DetailsLink>
+                      </span>
                     </TableData>
                   </TableRow>
                   <TableRow>

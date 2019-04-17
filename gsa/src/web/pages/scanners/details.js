@@ -19,6 +19,8 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
@@ -52,6 +54,10 @@ import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
+
+const TableDataAlignTop = styled(TableData)`
+  vertical-align: top;
+`;
 
 const CertInfo = ({info}) => {
   const {activationTime, expirationTime, issuer, md5_fingerprint} = info;
@@ -252,15 +258,17 @@ const ScannerDetails = ({entity}) => {
 
           {tasks.length > 0 && (
             <TableRow>
-              <TableData>{_('Tasks using this Scanner')}</TableData>
+              <TableDataAlignTop>
+                {_('Tasks using this Scanner')}
+              </TableDataAlignTop>
               <TableData>
-                <Divider wrap>
-                  {tasks.map(task => (
-                    <DetailsLink key={task.id} id={task.id} type="task">
+                {tasks.map(task => (
+                  <span key={task.id}>
+                    <DetailsLink id={task.id} type="task">
                       {task.name}
                     </DetailsLink>
-                  ))}
-                </Divider>
+                  </span>
+                ))}
               </TableData>
             </TableRow>
           )}
@@ -269,17 +277,13 @@ const ScannerDetails = ({entity}) => {
             <TableRow>
               <TableData>{_('Scan Configs using this Scanner')}</TableData>
               <TableData>
-                <Divider wrap>
-                  {configs.map(config => (
-                    <DetailsLink
-                      key={config.id}
-                      id={config.id}
-                      type="scanconfig"
-                    >
+                {configs.map(config => (
+                  <span key={config.id}>
+                    <DetailsLink id={config.id} type="scanconfig">
                       {config.name}
                     </DetailsLink>
-                  ))}
-                </Divider>
+                  </span>
+                ))}
               </TableData>
             </TableRow>
           )}

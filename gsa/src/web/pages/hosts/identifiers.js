@@ -205,13 +205,15 @@ class Identifiers extends React.Component {
               <TableRow key={identifier.id}>
                 <TableData>{identifier.name}</TableData>
                 <TableData>
-                  <DetailsLink
-                    type="operatingsystem"
-                    id={isDefined(identifier.os) ? identifier.os.id : ''}
-                    textOnly={identifier.name !== 'OS'}
-                  >
-                    <Div>{identifier.value}</Div>
-                  </DetailsLink>
+                  <span>
+                    <DetailsLink
+                      type="operatingsystem"
+                      id={isDefined(identifier.os) ? identifier.os.id : ''}
+                      textOnly={identifier.name !== 'OS'}
+                    >
+                      <Div>{identifier.value}</Div>
+                    </DetailsLink>
+                  </span>
                 </TableData>
                 <TableData>{longDate(identifier.creationTime)}</TableData>
                 <TableData>

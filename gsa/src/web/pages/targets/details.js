@@ -116,9 +116,11 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
             <TableRow>
               <TableData>{_('Port List')}</TableData>
               <TableData>
-                <DetailsLink id={port_list.id} type="portlist">
-                  {port_list.name}
-                </DetailsLink>
+                <span>
+                  <DetailsLink id={port_list.id} type="portlist">
+                    {port_list.name}
+                  </DetailsLink>
+                </span>
               </TableData>
             </TableRow>
           </TableBody>
@@ -137,9 +139,11 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
                   <TableRow>
                     <TableData>{_('SSH')}</TableData>
                     <TableData>
-                      <DetailsLink id={ssh_credential.id} type="credential">
-                        {ssh_credential.name}
-                      </DetailsLink>
+                      <span>
+                        <DetailsLink id={ssh_credential.id} type="credential">
+                          {ssh_credential.name}
+                        </DetailsLink>
+                      </span>
                       {_(' on Port {{port}}', {port: ssh_credential.port})}
                     </TableData>
                   </TableRow>
@@ -149,9 +153,11 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
                   <TableRow>
                     <TableData>{_('SMB')}</TableData>
                     <TableData>
-                      <DetailsLink id={smb_credential.id} type="credential">
-                        {smb_credential.name}
-                      </DetailsLink>
+                      <span>
+                        <DetailsLink id={smb_credential.id} type="credential">
+                          {smb_credential.name}
+                        </DetailsLink>
+                      </span>
                     </TableData>
                   </TableRow>
                 )}
@@ -160,9 +166,11 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
                   <TableRow>
                     <TableData>{_('ESXi')}</TableData>
                     <TableData>
-                      <DetailsLink id={esxi_credential.id} type="credential">
-                        {esxi_credential.name}
-                      </DetailsLink>
+                      <span>
+                        <DetailsLink id={esxi_credential.id} type="credential">
+                          {esxi_credential.name}
+                        </DetailsLink>
+                      </span>
                     </TableData>
                   </TableRow>
                 )}
@@ -171,9 +179,11 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
                   <TableRow>
                     <TableData>{_('SNMP')}</TableData>
                     <TableData>
-                      <DetailsLink id={snmp_credential.id} type="credential">
-                        {snmp_credential.name}
-                      </DetailsLink>
+                      <span>
+                        <DetailsLink id={snmp_credential.id} type="credential">
+                          {snmp_credential.name}
+                        </DetailsLink>
+                      </span>
                     </TableData>
                   </TableRow>
                 )}

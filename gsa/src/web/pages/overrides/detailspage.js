@@ -131,9 +131,11 @@ const Details = ({entity, ...props}) => {
             <TableData>{_('NVT Name')}</TableData>
             <TableData>
               {isDefined(nvt) ? (
-                <DetailsLink id={nvt.id} type="nvt">
-                  {nvt.name}
-                </DetailsLink>
+                <span>
+                  <DetailsLink id={nvt.id} type="nvt">
+                    {nvt.name}
+                  </DetailsLink>
+                </span>
               ) : (
                 _('None. Result was an open port.')
               )}

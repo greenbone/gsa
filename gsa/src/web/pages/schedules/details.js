@@ -18,6 +18,8 @@
  */
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
@@ -38,6 +40,10 @@ import TableRow from 'web/components/table/row';
 import {Col} from 'web/entity/page';
 
 import {renderDuration, renderRecurrence} from './render';
+
+const TableDataAlignTop = styled(TableData)`
+  vertical-align: top;
+`;
 
 const ScheduleDetails = ({entity, links = true}) => {
   const {comment, tasks = [], timezone, timezone_abbrev, event} = entity;
@@ -95,15 +101,17 @@ const ScheduleDetails = ({entity, links = true}) => {
            any */}
           {tasks.length > 0 && (
             <TableRow>
-              <TableData>{_('Tasks using this Schedule')}</TableData>
+              <TableDataAlignTop>
+                {_('Tasks using this Schedule')}
+              </TableDataAlignTop>
               <TableData>
-                <Divider>
-                  {tasks.map(task => (
-                    <DetailsLink key={task.id} id={task.id} type="task">
+                {tasks.map(task => (
+                  <span key={task.id}>
+                    <DetailsLink id={task.id} type="task">
                       {task.name}
                     </DetailsLink>
-                  ))}
-                </Divider>
+                  </span>
+                ))}
               </TableData>
             </TableRow>
           )}

@@ -112,44 +112,50 @@ const ResultDetails = ({className, links = true, entity}) => {
               <TableRow>
                 <TableData>{_('Product')}</TableData>
                 <TableData>
-                  <DetailsLink
-                    type="cpe"
-                    id={detection_details.product}
-                    textOnly={!links}
-                  >
-                    {detection_details.product}
-                  </DetailsLink>
+                  <span>
+                    <DetailsLink
+                      type="cpe"
+                      id={detection_details.product}
+                      textOnly={!links}
+                    >
+                      {detection_details.product}
+                    </DetailsLink>
+                  </span>
                 </TableData>
               </TableRow>
               <TableRow>
                 <TableData>{_('Method')}</TableData>
                 <TableData>
-                  <DetailsLink
-                    id={detection_details.source_oid}
-                    type={
-                      detection_details.source_oid.startsWith('CVE-')
-                        ? 'cve'
-                        : 'nvt'
-                    }
-                    textOnly={!links}
-                  >
-                    {detection_details.source_name +
-                      ' (OID: ' +
-                      detection_details.source_oid +
-                      ')'}
-                  </DetailsLink>
+                  <span>
+                    <DetailsLink
+                      id={detection_details.source_oid}
+                      type={
+                        detection_details.source_oid.startsWith('CVE-')
+                          ? 'cve'
+                          : 'nvt'
+                      }
+                      textOnly={!links}
+                    >
+                      {detection_details.source_name +
+                        ' (OID: ' +
+                        detection_details.source_oid +
+                        ')'}
+                    </DetailsLink>
+                  </span>
                 </TableData>
               </TableRow>
               <TableRow>
                 <TableData>{_('Log')}</TableData>
                 <TableData>
-                  <DetailsLink
-                    type="result"
-                    id={result.detection.result.id}
-                    textOnly={!links}
-                  >
-                    {_('View details of product detection')}
-                  </DetailsLink>
+                  <span>
+                    <DetailsLink
+                      type="result"
+                      id={result.detection.result.id}
+                      textOnly={!links}
+                    >
+                      {_('View details of product detection')}
+                    </DetailsLink>
+                  </span>
                 </TableData>
               </TableRow>
             </TableBody>
@@ -188,10 +194,12 @@ const ResultDetails = ({className, links = true, entity}) => {
                     </DetailsLink>
                   )}
                   {isDefined(oid) && oid.startsWith('1.3.6.1.4.1.25623.1.0.') && (
-                    <DetailsLink type="nvt" id={oid} textOnly={!links}>
-                      {renderNvtName(oid, nvt.name)}
-                      {' OID: ' + oid}
-                    </DetailsLink>
+                    <span>
+                      <DetailsLink type="nvt" id={oid} textOnly={!links}>
+                        {renderNvtName(oid, nvt.name)}
+                        {' OID: ' + oid}
+                      </DetailsLink>
+                    </span>
                   )}
                   {!isDefined(oid) &&
                     _('No details available for this method.')}

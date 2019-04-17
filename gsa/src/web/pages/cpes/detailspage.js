@@ -123,9 +123,11 @@ const Details = ({entity, links = true}) => {
               {cves.map(cve => (
                 <TableRow key={cve.id}>
                   <TableData>
-                    <DetailsLink id={cve.id} type="cve" textOnly={!links}>
-                      {cve.id}
-                    </DetailsLink>
+                    <span>
+                      <DetailsLink id={cve.id} type="cve" textOnly={!links}>
+                        {cve.id}
+                      </DetailsLink>
+                    </span>
                   </TableData>
                   <TableData>
                     <SeverityBar severity={cve.severity} />

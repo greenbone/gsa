@@ -147,9 +147,11 @@ const Row = ({entity, links = true}) => {
     <TableRow>
       <TableData>
         {isDefined(asset.id) ? (
-          <DetailsLink type="host" id={asset.id} textOnly={!links}>
-            {ip}
-          </DetailsLink>
+          <span>
+            <DetailsLink type="host" id={asset.id} textOnly={!links}>
+              {ip}
+            </DetailsLink>
+          </span>
         ) : (
           <Link to="hosts" filter={'name=' + ip} textOnly={!links}>
             {ip}

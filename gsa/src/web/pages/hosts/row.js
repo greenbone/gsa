@@ -121,9 +121,11 @@ const Row = ({
   return (
     <TableRow>
       <TableData flex="column">
-        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-          {entity.name}
-        </RowDetailsToggle>
+        <span>
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+            {entity.name}
+          </RowDetailsToggle>
+        </span>
         <Comment text={entity.comment} />
       </TableData>
       <TableData>{entity.hostname}</TableData>

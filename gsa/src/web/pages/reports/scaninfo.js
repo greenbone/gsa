@@ -109,9 +109,11 @@ const ReportScanInfoTable = ({filterString, links = true, report}) => {
         <TableRow>
           <TableData>{_('Task Name')}</TableData>
           <TableData>
-            <DetailsLink textOnly={!links} type="task" id={id}>
-              {name}
-            </DetailsLink>
+            <span>
+              <DetailsLink textOnly={!links} type="task" id={id}>
+                {name}
+              </DetailsLink>
+            </span>
           </TableData>
         </TableRow>
         {isDefined(comment) && (
@@ -124,9 +126,11 @@ const ReportScanInfoTable = ({filterString, links = true, report}) => {
           <TableRow>
             <TableData>{_('Report 1')}</TableData>
             <TableData>
-              <DetailsLink textOnly={!links} type="report" id={report.id}>
-                {report.id}
-              </DetailsLink>
+              <span>
+                <DetailsLink textOnly={!links} type="report" id={report.id}>
+                  {report.id}
+                </DetailsLink>
+              </span>
             </TableData>
           </TableRow>
         )}
@@ -161,9 +165,15 @@ const ReportScanInfoTable = ({filterString, links = true, report}) => {
           <TableRow>
             <TableData>{_('Report 2')}</TableData>
             <TableData>
-              <DetailsLink textOnly={!links} type="report" id={delta_report.id}>
-                {delta_report.id}
-              </DetailsLink>
+              <span>
+                <DetailsLink
+                  textOnly={!links}
+                  type="report"
+                  id={delta_report.id}
+                >
+                  {delta_report.id}
+                </DetailsLink>
+              </span>
             </TableData>
           </TableRow>
         )}

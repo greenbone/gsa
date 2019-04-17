@@ -197,9 +197,15 @@ const Details = ({entity, ...props}) => {
           <TableRow>
             <TableData>{_('OS')}</TableData>
             <TableData>
-              <DetailsLink type="cpe" textOnly={!isDefined(os_cpe)} id={os_cpe}>
-                <OsIcon displayOsName osCpe={os_cpe} osTxt={os_txt} />
-              </DetailsLink>
+              <span>
+                <DetailsLink
+                  type="cpe"
+                  textOnly={!isDefined(os_cpe)}
+                  id={os_cpe}
+                >
+                  <OsIcon displayOsName osCpe={os_cpe} osTxt={os_txt} />
+                </DetailsLink>
+              </span>
             </TableData>
           </TableRow>
 

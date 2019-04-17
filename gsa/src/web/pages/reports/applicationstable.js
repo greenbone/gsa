@@ -91,12 +91,14 @@ const Row = ({entity, links = true, onToggleDetailsClick, ...props}) => {
   return (
     <TableRow>
       <TableData>
-        <DetailsLink type="cpe" id={name} textOnly={!links}>
-          <IconDivider>
-            <CpeIcon name={name} />
-            <span>{name}</span>
-          </IconDivider>
-        </DetailsLink>
+        <span>
+          <DetailsLink type="cpe" id={name} textOnly={!links}>
+            <IconDivider>
+              <CpeIcon name={name} />
+              <span>{name}</span>
+            </IconDivider>
+          </DetailsLink>
+        </span>
       </TableData>
       <TableData>{hosts.count}</TableData>
       <TableData>{occurrences.total}</TableData>

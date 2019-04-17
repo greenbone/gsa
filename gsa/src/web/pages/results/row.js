@@ -75,24 +75,22 @@ const Row = ({
         </TableData>
       )}
       <TableData>
-        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-          <Layout align="space-between">
+        <Layout align="space-between">
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
             <span>{shown_name}</span>
-            <IconDivider>
-              {hasActiveNotes && (
-                <NoteIcon title={_('There are notes for this result')} />
-              )}
-              {hasActiveOverrides && (
-                <OverrideIcon
-                  title={_('There are overrides for this result')}
-                />
-              )}
-              {hasTickets && (
-                <TicketIcon title={_('There are tickets for this result')} />
-              )}
-            </IconDivider>
-          </Layout>
-        </RowDetailsToggle>
+          </RowDetailsToggle>
+          <IconDivider>
+            {hasActiveNotes && (
+              <NoteIcon title={_('There are notes for this result')} />
+            )}
+            {hasActiveOverrides && (
+              <OverrideIcon title={_('There are overrides for this result')} />
+            )}
+            {hasTickets && (
+              <TicketIcon title={_('There are tickets for this result')} />
+            )}
+          </IconDivider>
+        </Layout>
       </TableData>
       <TableData>
         {has_tags && <SolutionTypeIcon type={entity.nvt.tags.solution_type} />}
@@ -104,9 +102,11 @@ const Row = ({
         <Qod value={entity.qod.value} />
       </TableData>
       <TableData>
-        <DetailsLink type="host" id={host.id} textOnly={!links}>
-          {host.name}
-        </DetailsLink>
+        <span>
+          <DetailsLink type="host" id={host.id} textOnly={!links}>
+            {host.name}
+          </DetailsLink>
+        </span>
       </TableData>
       <TableData>
         {host.hostname.length > 0 && (

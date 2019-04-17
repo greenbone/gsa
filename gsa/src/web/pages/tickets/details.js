@@ -59,13 +59,15 @@ const TicketDetails = ({entity, links = true}) => (
             <TableRow>
               <TableData>{_('Report')}</TableData>
               <TableData>
-                <DetailsLink
-                  type="report"
-                  id={entity.report.id}
-                  textOnly={!links}
-                >
-                  {longDate(entity.report.timestamp)}
-                </DetailsLink>
+                <span>
+                  <DetailsLink
+                    type="report"
+                    id={entity.report.id}
+                    textOnly={!links}
+                  >
+                    {longDate(entity.report.timestamp)}
+                  </DetailsLink>
+                </span>
               </TableData>
             </TableRow>
           )}
@@ -73,13 +75,15 @@ const TicketDetails = ({entity, links = true}) => (
             <TableRow>
               <TableData>{_('Result')}</TableData>
               <TableData>
-                <DetailsLink
-                  type="result"
-                  id={entity.result.id}
-                  textOnly={!links}
-                >
-                  {entity.name}
-                </DetailsLink>
+                <span>
+                  <DetailsLink
+                    type="result"
+                    id={entity.result.id}
+                    textOnly={!links}
+                  >
+                    {entity.name}
+                  </DetailsLink>
+                </span>
               </TableData>
             </TableRow>
           )}
@@ -131,13 +135,15 @@ const TicketDetails = ({entity, links = true}) => (
               <TableRow>
                 <TableData>{_('With Report')}</TableData>
                 <TableData>
-                  <DetailsLink
-                    type="report"
-                    id={entity.fixedVerifiedReport.id}
-                    textOnly={!links}
-                  >
-                    {longDate(entity.fixedVerifiedReport.timestamp)}
-                  </DetailsLink>
+                  <span>
+                    <DetailsLink
+                      type="report"
+                      id={entity.fixedVerifiedReport.id}
+                      textOnly={!links}
+                    >
+                      {longDate(entity.fixedVerifiedReport.timestamp)}
+                    </DetailsLink>
+                  </span>
                 </TableData>
               </TableRow>
             </React.Fragment>

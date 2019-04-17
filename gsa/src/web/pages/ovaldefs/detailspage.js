@@ -205,9 +205,11 @@ const Details = ({entity}) => {
               <TableRow key={ref.id}>
                 <TableData>{ref.source}</TableData>
                 <TableData>
-                  <DetailsLink type={ref.type} id={ref.id}>
-                    {ref.id}
-                  </DetailsLink>
+                  <span>
+                    <DetailsLink type={ref.type} id={ref.id}>
+                      {ref.id}
+                    </DetailsLink>
+                  </span>
                 </TableData>
                 <TableData>
                   {isDefined(ref.url) && (

@@ -45,9 +45,11 @@ const Row = ({
   return (
     <TableRow>
       <TableData>
-        <DetailsLink type="nvt" id={entity.id} textOnly={!links}>
-          {entity.name}
-        </DetailsLink>
+        <span>
+          <DetailsLink type="nvt" id={entity.id} textOnly={!links}>
+            {entity.name}
+          </DetailsLink>
+        </span>
       </TableData>
       <TableData>{longDate(results.oldest)}</TableData>
       <TableData>{longDate(results.newest)}</TableData>

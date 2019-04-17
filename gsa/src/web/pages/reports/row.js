@@ -116,17 +116,21 @@ const Row = ({
   return (
     <TableRow>
       <TableData>
-        <DetailsLink type="report" id={entity.id} textOnly={!links}>
-          {longDate(report.timestamp)}
-        </DetailsLink>
+        <span>
+          <DetailsLink type="report" id={entity.id} textOnly={!links}>
+            {longDate(report.timestamp)}
+          </DetailsLink>
+        </span>
       </TableData>
       <TableData>
         <StatusBar status={status} progress={progress} />
       </TableData>
       <TableData>
-        <DetailsLink type="task" id={entity.task.id} textOnly={!links}>
-          {entity.task.name}
-        </DetailsLink>
+        <span>
+          <DetailsLink type="task" id={entity.task.id} textOnly={!links}>
+            {entity.task.name}
+          </DetailsLink>
+        </span>
       </TableData>
       <TableData>
         <SeverityBar severity={entity.report.severity.filtered} />

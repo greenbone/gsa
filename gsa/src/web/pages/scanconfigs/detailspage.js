@@ -254,9 +254,11 @@ const NvtPreferences = ({entity}) => {
             {preferences.nvt.map(pref => (
               <TableRow key={pref.nvt.oid + pref.nvt.name + pref.name}>
                 <TableData>
-                  <DetailsLink id={pref.nvt.oid} type="nvt">
-                    {pref.nvt.name}
-                  </DetailsLink>
+                  <span>
+                    <DetailsLink id={pref.nvt.oid} type="nvt">
+                      {pref.nvt.name}
+                    </DetailsLink>
+                  </span>
                 </TableData>
                 <TableData>{pref.name}</TableData>
                 <StyledTableData>{pref.value}</StyledTableData>
