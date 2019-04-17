@@ -82,12 +82,9 @@ const References = ({nvt, links = true}) => {
               <TableDataAlignTop>{_('CERT')}</TableDataAlignTop>
               <TableData>
                 {certs.map(cert => (
-                  <CertLink
-                    key={cert.id}
-                    type={cert.type}
-                    id={cert.id}
-                    textOnly={!links}
-                  />
+                  <span key={cert.id}>
+                    <CertLink type={cert.type} id={cert.id} textOnly={!links} />
+                  </span>
                 ))}
               </TableData>
             </TableRow>

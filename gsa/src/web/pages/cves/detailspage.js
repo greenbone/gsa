@@ -105,11 +105,13 @@ const Details = ({entity, links = true}) => {
               {certs.map(cert => (
                 <TableRow key={cert.name}>
                   <TableData>
-                    <CertLink
-                      id={cert.name}
-                      type={cert.cert_type}
-                      textOnly={!links}
-                    />
+                    <span>
+                      <CertLink
+                        id={cert.name}
+                        type={cert.cert_type}
+                        textOnly={!links}
+                      />
+                    </span>
                   </TableData>
                   <TableData>{cert.title}</TableData>
                 </TableRow>
