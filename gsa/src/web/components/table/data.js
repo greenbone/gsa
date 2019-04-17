@@ -19,6 +19,8 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import PropTypes from 'web/utils/proptypes';
 
 import Layout from '../layout/layout';
@@ -36,6 +38,10 @@ TableData.propTypes = {
   colSpan: PropTypes.numberOrNumberString,
   rowSpan: PropTypes.numberOrNumberString,
 };
+
+export const TableDataAlignTop = styled(TableData)`
+  vertical-align: top;
+`;
 
 export default TableData;
 
