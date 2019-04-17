@@ -18,8 +18,6 @@
  */
 import React from 'react';
 
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
 
 import DetailsBlock from 'web/entity/block';
@@ -32,12 +30,8 @@ import ExternalLink from 'web/components/link/externallink';
 
 import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
+import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
-const TableDataAlignTop = styled(TableData)`
-  vertical-align: top;
-`;
 
 const References = ({nvt, links = true}) => {
   const {cves = [], bids = [], certs = [], xrefs = []} = nvt;

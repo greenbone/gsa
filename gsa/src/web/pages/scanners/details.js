@@ -19,8 +19,6 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
@@ -47,16 +45,12 @@ import DetailsLink from 'web/components/link/detailslink';
 import InfoTable from 'web/components/table/infotable';
 import SimpleTable from 'web/components/table/simpletable';
 import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
+import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
-
-const TableDataAlignTop = styled(TableData)`
-  vertical-align: top;
-`;
 
 const CertInfo = ({info}) => {
   const {activationTime, expirationTime, issuer, md5_fingerprint} = info;

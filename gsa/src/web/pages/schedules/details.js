@@ -18,8 +18,6 @@
  */
 import React from 'react';
 
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
@@ -34,16 +32,12 @@ import DetailsLink from 'web/components/link/detailslink';
 
 import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
+import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
 import {renderDuration, renderRecurrence} from './render';
-
-const TableDataAlignTop = styled(TableData)`
-  vertical-align: top;
-`;
 
 const ScheduleDetails = ({entity, links = true}) => {
   const {comment, tasks = [], timezone, timezone_abbrev, event} = entity;
