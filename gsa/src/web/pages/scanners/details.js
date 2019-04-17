@@ -40,7 +40,6 @@ import {renderYesNo} from 'web/utils/render';
 
 import DetailsBlock from 'web/entity/block';
 
-import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
