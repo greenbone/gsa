@@ -268,6 +268,28 @@ describe('Filter parse from keywords', () => {
     const filter = new Filter(elem);
     expect(filter.toFilterString()).toEqual('foo="bar" bar=\'foo\'');
   });
+
+  test('should parse keywords with xml encoded relations', () => {
+    const elem = {
+      keywords: {
+        keyword: [
+          {
+            column: 'foo',
+            relation: '&lt;',
+            value: 'bar',
+          },
+          {
+            column: 'bar',
+            relation: '&gt;',
+            value: 'foo',
+          },
+        ],
+      },
+    };
+
+    const filter = new Filter(elem);
+    expect(filter.toFilterString()).toEqual('foo<bar bar>foo');
+  });
 });
 
 describe('Filter set', () => {

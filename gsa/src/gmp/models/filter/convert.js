@@ -80,6 +80,7 @@ const convert = (keyword, value, relation) => {
   let converter = KEYWORD_CONVERTERS[keyword];
 
   value = convertXmlEncoding(value);
+  relation = convertXmlEncoding(relation);
 
   if (isDefined(converter)) {
     return converter(keyword, value, relation);

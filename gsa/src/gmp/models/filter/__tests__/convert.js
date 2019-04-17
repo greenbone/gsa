@@ -285,6 +285,20 @@ describe('convert tests', () => {
       relation: '=',
     });
   });
+
+  test('should convert xml encoded relations', () => {
+    expect(convert('foo', 'bar', '&gt;')).toEqual({
+      keyword: 'foo',
+      value: 'bar',
+      relation: '>',
+    });
+
+    expect(convert('foo', 'bar', '&lt;')).toEqual({
+      keyword: 'foo',
+      value: 'bar',
+      relation: '<',
+    });
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
