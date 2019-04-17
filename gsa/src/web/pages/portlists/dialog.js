@@ -20,7 +20,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE, parseYesNo} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -119,13 +119,13 @@ const PortListsDialog = ({
                       name="from_file"
                       value={NOT_FROM_FILE}
                       onChange={onValueChange}
-                      checked={from_file !== FROM_FILE}
+                      checked={parseYesNo(state.from_file) !== FROM_FILE}
                     />
                     <TextField
                       grow="1"
                       name="port_range"
                       value={state.port_range}
-                      disabled={from_file === FROM_FILE}
+                      disabled={parseYesNo(state.from_file) === FROM_FILE}
                       onChange={onValueChange}
                       size="30"
                     />
@@ -136,7 +136,7 @@ const PortListsDialog = ({
                       name="from_file"
                       value={FROM_FILE}
                       onChange={onValueChange}
-                      checked={from_file === FROM_FILE}
+                      checked={parseYesNo(state.from_file) === FROM_FILE}
                     />
                     <FileField name="file" onChange={onValueChange} />
                   </Divider>
