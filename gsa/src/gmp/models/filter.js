@@ -24,6 +24,8 @@ import {forEach, map} from '../utils/array';
 
 import Model from '../model.js';
 
+import {setProperties} from '../parser';
+
 import convert from './filter/convert.js';
 import FilterTerm, {AND} from './filter/filterterm.js';
 import {EXTRA_KEYWORDS} from './filter/keywords.js';
@@ -51,6 +53,12 @@ class Filter extends Model {
     this.terms = [];
   }
 
+  setProperties({id, ...properties}) {
+    // override setProperties to allow changing the id
+    setProperties(properties, this);
+    this.id = id;
+  }
+
   /**
    * Parse properties from the passed element object for being set in this
    * Filter model.
@@ -74,7 +82,7 @@ class Filter extends Model {
       });
       delete ret.keywords;
     } else if (isDefined(ret.term)) {
-      this.parseString(ret.term);
+      this._parseString(ret.term);
 
       // ret.term should not be part of the public api
       // but it's helpful for debug purposes
@@ -197,6 +205,18 @@ class Filter extends Model {
     if (isDefined(filter)) {
       this._addTerm(...filter.getAllTerms());
     }
+    return this;
+  }
+
+  /**
+   * Reset filter id of the current filter
+   *
+   * @private
+   *
+   * @return {Filter} This filter.
+   */
+  _resetFilterId() {
+    this.id = undefined;
     return this;
   }
 
@@ -348,6 +368,7 @@ class Filter extends Model {
    * @return {Filter} This filter
    */
   set(keyword, value, relation = '=') {
+    this._resetFilterId(); // reset id because the filter has changed
     const converted = convert(keyword, value, relation);
     this._setTerm(new FilterTerm(converted));
     return this;
@@ -380,6 +401,7 @@ class Filter extends Model {
     const index = this._getIndex(key);
     if (index !== -1) {
       this.terms.splice(index, 1);
+      this._resetFilterId(); // filter has changed
     }
     return this;
   }
@@ -569,6 +591,8 @@ class Filter extends Model {
     if (nonExtraTerms.length > 0) {
       this._addTerm(AND);
     }
+
+    this._resetFilterId(); // filter has changed
     return this._merge(filter);
   }
 
@@ -631,17 +655,20 @@ class Filter extends Model {
    */
   mergeExtraKeywords(filter) {
     const f = this.copy();
+    f._resetFilterId();
     return f._mergeExtraKeywords(filter);
   }
 
   /**
    * Parses FilterTerms from filterstring and adds them to this Filter
    *
+   * @private
+   *
    * @param {String} filterstring  Filter representation as a string
    *
    * @return {Filter} This filter.
    */
-  parseString(filterstring) {
+  _parseString(filterstring) {
     if (isString(filterstring)) {
       const fterms = filterstring.split(' ');
       for (let fterm of fterms) {
@@ -667,7 +694,7 @@ class Filter extends Model {
   static fromString(filterstring, filter) {
     const f = new Filter();
 
-    f.parseString(filterstring);
+    f._parseString(filterstring);
     f._mergeExtraKeywords(filter);
 
     return f;
