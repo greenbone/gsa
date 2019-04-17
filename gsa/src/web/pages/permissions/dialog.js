@@ -39,6 +39,8 @@ import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 import Model from 'gmp/model';
 
+import {split} from 'gmp/utils/string';
+
 const NEED_RESOURCE_ID = [
   'Super',
   'delete_agent',
@@ -128,9 +130,9 @@ const PermissionDialog = ({
   id,
   name = 'Super',
   permission,
-  resourceId,
-  resourceName = '',
-  resourceType = '',
+  resourceId = '',
+  resourceName,
+  resourceType,
   roleId,
   roles = [],
   subjectType,
@@ -179,12 +181,15 @@ const PermissionDialog = ({
       {({values: state, onValueChange}) => {
         const showResourceId = NEED_RESOURCE_ID.includes(state.name);
 
+        const [type] = split(name, '_', 1);
         const resource = isDefined(state.resourceType)
           ? new Model(
               {
-                name: state.resourceName,
+                name: isDefined(state.resourceName)
+                  ? state.resourceName
+                  : state.resourceId,
               },
-              state.resourceType,
+              isDefined(state.resourceType) ? state.resourceType : type,
             )
           : undefined;
 

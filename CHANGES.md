@@ -8,7 +8,8 @@ $ cd gsa && git checkout gsa-8.0 && git log
 
 ## gsa 8.0.1 (unreleased)
 
-* Fix port ranges from file radio button #1291
+ * Fix permission description #1292
+ * Fix port ranges from file radio button #1291
  * Don't run more then one reload timer for a page #1289
  * Set first=1 when starting delta report selection #1288
  * Fix pagination with default filter (reset filter.id if filter is changed) #1288
