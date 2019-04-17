@@ -5676,7 +5676,6 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
   CHECK_VARIABLE_INVALID (condition, "Create Alert");
   CHECK_VARIABLE_INVALID (event, "Create Alert");
   CHECK_VARIABLE_INVALID (method, "Create Alert");
-  CHECK_VARIABLE_INVALID (filter_id, "Create Alert");
 
   /* Create the alert. */
 
@@ -5710,7 +5709,8 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
                      "<active>%s</active>"
                      "<comment>%s</comment>"
                      "<event>%s",
-                     name, filter_id, active, comment ? comment : "", event);
+                     name, filter_id ? filter_id : "", active,
+                     comment ? comment : "", event);
 
   append_alert_event_data (xml, event_data, event);
 

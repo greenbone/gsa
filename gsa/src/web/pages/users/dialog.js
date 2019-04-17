@@ -21,6 +21,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {YES_VALUE} from 'gmp/parser';
+
 import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
@@ -196,7 +198,7 @@ class Dialog extends React.Component {
                         />
                       </Divider>
                       {settings.get('method:ldap_connect').enable ===
-                        'true' && (
+                        YES_VALUE && (
                         <Divider>
                           <Radio
                             title={_('LDAP Authentication Only')}
@@ -208,7 +210,7 @@ class Dialog extends React.Component {
                         </Divider>
                       )}
                       {settings.get('method:radius_connect').enable ===
-                        'true' && (
+                        YES_VALUE && (
                         <Divider>
                           <Radio
                             title={_('RADIUS Authentication Only')}
@@ -250,7 +252,7 @@ class Dialog extends React.Component {
                         />
                       </Divider>
                       {settings.get('method:ldap_connect').enable ===
-                        'true' && (
+                        YES_VALUE && (
                         <Divider>
                           <Radio
                             title={_('LDAP Authentication Only')}
@@ -262,7 +264,7 @@ class Dialog extends React.Component {
                         </Divider>
                       )}
                       {settings.get('method:radius_connect').enable ===
-                        'true' && (
+                        YES_VALUE && (
                         <Divider>
                           <Radio
                             title={_('RADIUS Authentication Only')}

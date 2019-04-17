@@ -65,6 +65,11 @@ const TableBox = styled(Layout)`
   margin-top: 20px;
 `;
 
+const EmptyTitle = styled(Layout)`
+  margin-top: 20px;
+  margin-bottom: 20px;
+`;
+
 class EntitiesTable extends React.Component {
   constructor(...args) {
     super(...args);
@@ -128,11 +133,27 @@ class EntitiesTable extends React.Component {
     this.handleToggleAllDetails(true);
   }
 
+  renderEmpty() {
+    const {emptyTitle, filter, footnote = true} = this.props;
+    const filterstring = isDefined(filter) ? filter.toFilterString() : '';
+    return (
+      <React.Fragment>
+        <EmptyTitle>{`${emptyTitle}`}</EmptyTitle>
+        {footnote && (
+          <Layout align="space-between">
+            <FootNote>
+              {_('(Applied filter: {{- filter}})', {filter: filterstring})}
+            </FootNote>
+          </Layout>
+        )}
+      </React.Fragment>
+    );
+  }
+
   render() {
     const {details, allToggled} = this.state;
     const {
       doubleRow = false,
-      emptyTitle,
       entities,
       entitiesCounts,
       filter,
@@ -159,7 +180,7 @@ class EntitiesTable extends React.Component {
     const filterstring = isDefined(filter) ? filter.toFilterString() : '';
 
     if (entities.length === 0) {
-      return <div className="entities-table">{`${emptyTitle}`}</div>;
+      return this.renderEmpty();
     }
 
     const rows = [];

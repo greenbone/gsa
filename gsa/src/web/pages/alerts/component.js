@@ -140,7 +140,6 @@ class AlertComponent extends React.Component {
     this.handleOpenContentComposerDialog = this.handleOpenContentComposerDialog.bind(
       this,
     );
-    this.openContentComposerDialog = this.openContentComposerDialog.bind(this);
     this.closeContentComposerDialog = this.closeContentComposerDialog.bind(
       this,
     );
@@ -242,17 +241,9 @@ class AlertComponent extends React.Component {
   }
 
   handleOpenContentComposerDialog() {
-    const {gmp} = this.props;
-    const {composerFilterId = NO_VALUE} = this.state;
-    gmp.filter.get({id: composerFilterId}).then(response => {
-      this.setState({
-        composerFilterString: isDefined(response.data)
-          ? response.data.toFilterCriteriaString()
-          : undefined,
-      });
-      this.openContentComposerDialog();
-      this.handleInteraction();
-    });
+    this.openContentComposerDialog();
+
+    this.handleInteraction();
   }
 
   closeContentComposerDialog() {
@@ -260,13 +251,11 @@ class AlertComponent extends React.Component {
       method_data_composer_include_notes,
       method_data_composer_include_overrides,
       filter_id,
-      filter_string,
     } = this.state;
     this.setState({
       composerIncludeNotes: method_data_composer_include_notes,
       composerIncludeOverrides: method_data_composer_include_overrides,
       composerFilterId: filter_id,
-      composerFilterString: filter_string,
       composerStoreAsDefault: NO_VALUE,
       contentComposerDialogVisible: false,
     });
@@ -276,14 +265,13 @@ class AlertComponent extends React.Component {
     includeNotes,
     includeOverrides,
     filterId,
-    filterString,
     storeAsDefault,
   }) {
     if (storeAsDefault) {
       const {reportComposerDefaults} = this.props;
       const defaults = {
         ...reportComposerDefaults,
-        reportResultFilterId: filterId,
+        reportResultFilterId: filterId === UNSET_VALUE ? undefined : filterId,
         includeNotes,
         includeOverrides,
       };
@@ -291,7 +279,6 @@ class AlertComponent extends React.Component {
     }
     this.setState({
       filter_id: filterId,
-      filter_string: filterString,
       method_data_composer_include_notes: includeNotes,
       method_data_composer_include_overrides: includeOverrides,
       composerStoreAsDefault: NO_VALUE,
@@ -455,10 +442,10 @@ class AlertComponent extends React.Component {
             name: alert.name,
             comment: alert.comment,
             filters,
-            filter_id: isDefined(alert.filter) ? alert.filter.id : NO_VALUE,
+            filter_id: isDefined(alert.filter) ? alert.filter.id : undefined,
             composerFilterId: isDefined(alert.filter)
               ? alert.filter.id
-              : NO_VALUE,
+              : undefined,
             composerIncludeNotes: getValue(method.data.composer_include_notes),
             composerIncludeOverrides: getValue(
               method.data.composer_include_overrides,
@@ -691,7 +678,7 @@ class AlertComponent extends React.Component {
             reportComposerDefaults.reportResultFilterId,
           )
             ? reportComposerDefaults.reportResultFilterId
-            : UNSET_VALUE;
+            : undefined;
 
           this.setState({
             active: undefined,
@@ -901,16 +888,10 @@ class AlertComponent extends React.Component {
   }
 
   handleFilterIdChange(value) {
-    const {gmp} = this.props;
-    gmp.filter.get({id: value}).then(response => {
-      const composerFilterString = isDefined(response.data)
-        ? response.data.toFilterCriteriaString()
-        : undefined;
-      this.setState({
-        composerFilterId: value,
-        composerFilterString,
-      });
+    this.setState({
+      composerFilterId: value === UNSET_VALUE ? undefined : value,
     });
+
     this.handleInteraction();
   }
 
@@ -946,7 +927,6 @@ class AlertComponent extends React.Component {
       filters,
       filter_id,
       composerFilterId,
-      composerFilterString,
       composerIncludeNotes,
       composerIncludeOverrides,
       credentials,
@@ -1205,7 +1185,6 @@ class AlertComponent extends React.Component {
                 includeOverrides={parseYesNo(composerIncludeOverrides)}
                 filterId={composerFilterId}
                 filters={result_filters}
-                filterString={composerFilterString}
                 storeAsDefault={parseYesNo(composerStoreAsDefault)}
                 title={_('Compose Content for Scan Report')}
                 onChange={this.handleValueChange}

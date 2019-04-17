@@ -31,7 +31,7 @@ const DialogOverlay = styled.div`
   left: 0;
   margin: 0;
   background: rgba(102, 102, 102, 0.5);
-  z-index: ${Theme.Layers.onTop};
+  z-index: ${Theme.Layers.menu};
   transition: opacity 1s ease-in;
   width: 100%;
   height: 100%;

@@ -57,6 +57,16 @@ const LeftDivider = styled(Divider)`
   margin-right: 5px;
 `;
 
+const getUserFilterString = filter => {
+  if (isDefined(filter) && isDefined(filter.toFilterCriteriaString)) {
+    return filter.toFilterCriteriaString();
+  }
+  if (isString(filter)) {
+    return filter;
+  }
+  return '';
+};
+
 class PowerFilter extends React.Component {
   constructor(...args) {
     super(...args);
@@ -64,52 +74,58 @@ class PowerFilter extends React.Component {
     const {filter} = this.props;
 
     this.state = {
-      filter: filter,
-      userfilter: filter ? filter.toFilterCriteriaString() : '',
       filtername: '',
+      userFilterString: getUserFilterString(filter),
     };
 
-    this.handleCreateFilter = this.handleCreateFilter.bind(this);
     this.handleNamedFilterChange = this.handleNamedFilterChange.bind(this);
     this.handleUpdateFilter = this.handleUpdateFilter.bind(this);
     this.handleUserFilterKeyPress = this.handleUserFilterKeyPress.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
+    this.handleRemoveClick = this.handleRemoveClick.bind(this);
+    this.handleResetClick = this.handleResetClick.bind(this);
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const {filter} = props;
+    const {prevFilter} = state;
+    if (filter !== prevFilter) {
+      if (
+        !isDefined(filter) ||
+        (isDefined(filter) && !isDefined(prevFilter)) ||
+        (isDefined(filter) && filter.id !== prevFilter.id) ||
+        (isDefined(filter) && !filter.equals(prevFilter))
+      ) {
+        return {
+          userFilterString: getUserFilterString(props.filter),
+          prevFilter: props.filter,
+        };
+      }
+    }
+    return null;
   }
 
   updateFilter(filter) {
     const {onUpdate} = this.props;
 
-    if (!isDefined(this.state.filter)) {
-      // filter hasn't been loaded yet
-      return;
-    }
-
     if (onUpdate) {
       onUpdate(filter);
     }
-
-    let userfilter;
-
-    if (isDefined(filter) && isDefined(filter.toFilterCriteriaString)) {
-      userfilter = filter.toFilterCriteriaString();
-    } else if (isString(filter)) {
-      userfilter = filter;
-    } else {
-      userfilter = '';
-    }
-
-    this.setState({
-      filter,
-      userfilter,
-    });
   }
 
   updateFromUserFilter() {
-    let {userfilter, filter} = this.state;
+    const {filter} = this.props;
+    const {userFilterString} = this.state;
 
-    filter = Filter.fromString(userfilter, filter);
+    this.updateFilter(Filter.fromString(userFilterString, filter));
+  }
 
-    this.updateFilter(filter);
+  resetUserFilterString() {
+    const {filter} = this.props;
+
+    this.setState({
+      userFilterString: getUserFilterString(filter),
+    });
   }
 
   handleValueChange(value, name) {
@@ -136,57 +152,36 @@ class PowerFilter extends React.Component {
     this.updateFilter(filter);
   }
 
-  handleCreateFilter() {
-    let {filter, userfilter = '', filtername = ''} = this.state;
+  handleRemoveClick() {
+    const {onRemoveClick} = this.props;
 
-    if (filtername.trim().length === 0) {
-      return;
+    if (isDefined(onRemoveClick)) {
+      onRemoveClick();
     }
 
-    filter = Filter.fromString(userfilter, filter);
-
-    this.createFilter(filter);
+    this.resetUserFilterString();
   }
 
-  componentWillReceiveProps(props) {
-    const {filter, filters} = props;
-    const {filter: state_filter} = this.state;
+  handleResetClick() {
+    const {onResetClick} = this.props;
 
-    this.setState({
-      filters,
-    });
-
-    if (!isDefined(filter)) {
-      this.setState({
-        filter,
-        userfilter: '',
-      });
-    } else if (
-      !isDefined(state_filter) ||
-      filter.id !== state_filter.id ||
-      !filter.equals(this.state.filter)
-    ) {
-      this.setState({
-        filter,
-        userfilter: filter.toFilterCriteriaString(),
-      });
+    if (isDefined(onResetClick)) {
+      onResetClick();
     }
+
+    this.resetUserFilterString();
   }
 
   render() {
-    const {userfilter = '', filter} = this.state;
+    const {userFilterString = ''} = this.state;
     const {
       capabilities,
+      filter,
       filters,
       onEditClick,
       onRemoveClick,
       onResetClick,
     } = this.props;
-    const namedfilterid =
-      isDefined(filter) && isDefined(filter.id) ? filter.id : DEFAULT_FILTER_ID;
-
-    const filter_items = renderSelectItems(filters, DEFAULT_FILTER_ID);
-
     return (
       <Layout flex="column" align={['start', 'stetch']} className="powerfilter">
         <Layout align={['space-between', 'center']}>
@@ -196,10 +191,10 @@ class PowerFilter extends React.Component {
                 <b>{_('Filter')}</b>
               </Label>
               <TextField
-                name="userfilter"
+                name="userFilterString"
                 size="53"
                 maxLength="1000"
-                value={userfilter}
+                value={userFilterString}
                 onKeyDown={this.handleUserFilterKeyPress}
                 onChange={this.handleValueChange}
               />
@@ -214,14 +209,18 @@ class PowerFilter extends React.Component {
                 <DeleteIcon
                   title={_('Remove Filter')}
                   active={isDefined(filter)}
-                  onClick={isDefined(filter) ? onRemoveClick : undefined}
+                  onClick={
+                    isDefined(filter) ? this.handleRemoveClick : undefined
+                  }
                 />
               )}
               {onResetClick && (
                 <ResetIcon
                   title={_('Reset to Default Filter')}
                   active={isDefined(filter)}
-                  onClick={isDefined(filter) ? onResetClick : undefined}
+                  onClick={
+                    isDefined(filter) ? this.handleResetClick : undefined
+                  }
                 />
               )}
 
@@ -242,10 +241,14 @@ class PowerFilter extends React.Component {
           </LeftDivider>
           {capabilities.mayAccess('filters') && (
             <Select
-              items={filter_items}
+              items={renderSelectItems(filters, DEFAULT_FILTER_ID)}
               menuPosition="right"
               toolTipTitle={_('Loaded filter')}
-              value={namedfilterid}
+              value={
+                isDefined(filter) && isDefined(filter.id)
+                  ? filter.id
+                  : DEFAULT_FILTER_ID
+              }
               width="150px"
               onChange={this.handleNamedFilterChange}
             />

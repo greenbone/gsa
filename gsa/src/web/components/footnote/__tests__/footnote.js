@@ -19,38 +19,20 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
+import {render} from 'web/utils/testing';
 
-import _ from 'gmp/locale';
+import FootNote from '../footnote';
 
-import {isDefined} from 'gmp/utils/identity';
+describe('Footnote tests', () => {
+  test('should render footnote', () => {
+    const {element} = render(<FootNote />);
 
-import withGmp from 'web/utils/withGmp';
-import PropTypes from 'web/utils/proptypes';
+    expect(element).toMatchSnapshot();
+  });
 
-import Img from './img';
+  test('should render children', () => {
+    const {element} = render(<FootNote>Hello World</FootNote>);
 
-const Image = styled(Img)`
-  display: flex;
-  height: 95px;
-`;
-
-const ProductImage = ({gmp, ...props}) => (
-  <Image
-    alt={_('Greenbone Security Assistant')}
-    {...props}
-    src={
-      isDefined(gmp.settings) && isDefined(gmp.settings.vendorLabel)
-        ? gmp.settings.vendorLabel
-        : 'login-label.png'
-    }
-  />
-);
-
-ProductImage.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default withGmp(ProductImage);
-
-// vim: set ts=2 sw=2 tw=80:
+    expect(element).toHaveTextContent('Hello World');
+  });
+});

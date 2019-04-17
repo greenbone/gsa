@@ -16,41 +16,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {ResultCommand} from '../results';
 
-import React from 'react';
+import {createEntityResponse, createHttp} from '../testing';
 
-import styled from 'styled-components';
+describe('ResultCommand tests', () => {
+  test('should return single result', () => {
+    const response = createEntityResponse('result', {_id: 'foo'});
+    const fakeHttp = createHttp(response);
 
-import _ from 'gmp/locale';
+    expect.hasAssertions();
 
-import {isDefined} from 'gmp/utils/identity';
+    const cmd = new ResultCommand(fakeHttp);
+    return cmd.get({id: 'foo'}).then(resp => {
+      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+        args: {
+          cmd: 'get_result',
+          result_id: 'foo',
+        },
+      });
 
-import withGmp from 'web/utils/withGmp';
-import PropTypes from 'web/utils/proptypes';
-
-import Img from './img';
-
-const Image = styled(Img)`
-  display: flex;
-  height: 95px;
-`;
-
-const ProductImage = ({gmp, ...props}) => (
-  <Image
-    alt={_('Greenbone Security Assistant')}
-    {...props}
-    src={
-      isDefined(gmp.settings) && isDefined(gmp.settings.vendorLabel)
-        ? gmp.settings.vendorLabel
-        : 'login-label.png'
-    }
-  />
-);
-
-ProductImage.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default withGmp(ProductImage);
-
-// vim: set ts=2 sw=2 tw=80:
+      const {data} = resp;
+      expect(data.id).toEqual('foo');
+    });
+  });
+});

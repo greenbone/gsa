@@ -90,7 +90,7 @@ const MenuContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
-  z-index: ${Theme.Layers.onTop};
+  z-index: ${Theme.Layers.menu};
   margin-top: -1px; /* collapse top border */
   box-sizing: border-box;
   top: ${props => props.y}px;
