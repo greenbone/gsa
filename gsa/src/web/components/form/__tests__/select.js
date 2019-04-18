@@ -18,13 +18,18 @@
  */
 import React from 'react';
 
-import {render, fireEvent, queryAllByTestId} from 'web/utils/testing';
+import {
+  render,
+  fireEvent,
+  queryAllByTestId,
+  getByTestId,
+} from 'web/utils/testing';
 
 import Select from '../select.js';
 
 const openSelectElement = element => {
-  const button = element.querySelector('[type="button"]');
-  fireEvent.click(button);
+  const openButton = getByTestId(element, 'select-open-button');
+  fireEvent.click(openButton);
 };
 
 const getItemElements = baseElement => {
@@ -140,12 +145,12 @@ describe('Select component tests', () => {
 
     const onChange = jest.fn();
 
-    const {baseElement, element} = render(
+    // eslint-disable-next-line no-shadow
+    const {baseElement, element, getByTestId} = render(
       <Select items={items} value="bar" onChange={onChange} />,
     );
 
-    const displayedValue = element.querySelector('[type="button"]').firstChild;
-
+    const displayedValue = getByTestId('select-selected-value');
     expect(displayedValue).toHaveTextContent('Bar');
 
     openSelectElement(element);

@@ -179,7 +179,6 @@ class Select extends React.Component {
                 isOpen={isOpen}
                 title={toolTipTitle}
                 innerRef={ref => (this.box = ref)}
-                data-testid="select-open-button"
               >
                 <SingleSelectedValue
                   data-testid="select-selected-value"
@@ -201,6 +200,7 @@ class Select extends React.Component {
                             ); // set focus to input field after menu is opened
                           },
                     })}
+                    data-testid="select-open-button"
                     disabled={disabled}
                     down={!isOpen}
                     size="small"
