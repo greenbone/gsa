@@ -2585,6 +2585,7 @@ start_http_daemon (int port,
                    http_handler_t *http_handlers,
                    struct sockaddr_storage *address)
 {
+  unsigned int flags;
   int ipv6_flag;
 
   if (address->ss_family == AF_INET6)
@@ -2596,12 +2597,17 @@ start_http_daemon (int port,
 #endif
   else
     ipv6_flag = MHD_NO_FLAG;
+
+  flags =
+    MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD | ipv6_flag;
+#ifndef NDEBUG
+  flags = flags | MHD_USE_DEBUG;
+#endif
+
   return MHD_start_daemon (
-    MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
-      | MHD_USE_DEBUG | ipv6_flag,
-    port, NULL, NULL, handler, http_handlers, MHD_OPTION_NOTIFY_COMPLETED,
-    free_resources, NULL, MHD_OPTION_SOCK_ADDR, address,
-    MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
+    flags, port, NULL, NULL, handler, http_handlers,
+    MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL, MHD_OPTION_SOCK_ADDR,
+    address, MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
     MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
 }
 
@@ -2611,6 +2617,7 @@ start_https_daemon (int port, const char *key, const char *cert,
                     http_handler_t *http_handlers,
                     struct sockaddr_storage *address)
 {
+  unsigned int flags;
   int ipv6_flag;
 
   if (address->ss_family == AF_INET6)
@@ -2622,13 +2629,18 @@ start_https_daemon (int port, const char *key, const char *cert,
 #endif
   else
     ipv6_flag = MHD_NO_FLAG;
+
+  flags = MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
+          | MHD_USE_SSL | ipv6_flag;
+#ifndef NDEBUG
+  flags = flags | MHD_USE_DEBUG;
+#endif
+
   return MHD_start_daemon (
-    MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
-      | MHD_USE_DEBUG | MHD_USE_SSL | ipv6_flag,
-    port, NULL, NULL, &handle_request, http_handlers, MHD_OPTION_HTTPS_MEM_KEY,
-    key, MHD_OPTION_HTTPS_MEM_CERT, cert, MHD_OPTION_NOTIFY_COMPLETED,
-    free_resources, NULL, MHD_OPTION_SOCK_ADDR, address,
-    MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
+    flags, port, NULL, NULL, &handle_request, http_handlers,
+    MHD_OPTION_HTTPS_MEM_KEY, key, MHD_OPTION_HTTPS_MEM_CERT, cert,
+    MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL, MHD_OPTION_SOCK_ADDR,
+    address, MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
     MHD_OPTION_HTTPS_PRIORITIES, priorities, MHD_OPTION_EXTERNAL_LOGGER,
     mhd_logger, NULL,
 /* LibmicroHTTPD 0.9.35 and higher. */
