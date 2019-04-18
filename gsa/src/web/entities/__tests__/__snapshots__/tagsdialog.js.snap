@@ -81,7 +81,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   align-items: center;
 }
 
-.c20 {
+.c21 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -99,7 +99,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   align-items: center;
 }
 
-.c27 {
+.c28 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -142,17 +142,17 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   display: inline-flex;
 }
 
-.c24 {
+.c25 {
   cursor: pointer;
 }
 
-.c23 {
+.c24 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c23 * {
+.c24 * {
   height: inherit;
   width: inherit;
 }
@@ -190,7 +190,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   height: 100%;
 }
 
-.c32 {
+.c33 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -199,7 +199,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   border-top: 20px solid #fff;
 }
 
-.c31 {
+.c32 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -266,7 +266,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   width: inherit;
 }
 
-.c30 {
+.c31 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -286,12 +286,12 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   z-index: 1;
 }
 
-.c30:focus,
-.c30:hover {
+.c31:focus,
+.c31:hover {
   border: 1px solid #393637;
 }
 
-.c30:hover {
+.c31:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -299,26 +299,26 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   color: #fff;
 }
 
-.c30[disabled] {
+.c31[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c30 img {
+.c31 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c30:link {
+.c31:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c29 {
+.c30 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -336,18 +336,18 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   align-items: center;
 }
 
-.c28 {
+.c29 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c28:hover {
+.c29:hover {
   color: #fff;
   background: #519032;
 }
 
-.c26 {
+.c27 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c8d3d9;
@@ -355,7 +355,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   padding: 10px 20px 10px 20px;
 }
 
-.c25 {
+.c26 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
@@ -432,7 +432,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   padding-right: 10px;
 }
 
-.c22 {
+.c23 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -457,13 +457,13 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   cursor: not-allowed;
 }
 
-.c21 {
+.c22 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c21 * {
+.c22 * {
   height: inherit;
   width: inherit;
 }
@@ -490,7 +490,6 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   background-color: #fff;
   color: #000;
   font-weight: normal;
-  background-color: #eeeeee;
 }
 
 .c17 {
@@ -505,7 +504,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   width: 230px;
 }
 
-.c19 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -524,8 +523,12 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   cursor: default;
 }
 
+.c19 {
+  cursor: default;
+}
+
 @media print {
-  .c24 {
+  .c25 {
     display: none;
   }
 }
@@ -594,27 +597,26 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
                             width="230px"
                           >
                             <div
-                              aria-expanded="false"
-                              aria-haspopup="true"
-                              aria-label="open menu"
                               class="c18"
-                              data-testid="select-open-button"
-                              data-toggle="true"
-                              disabled=""
-                              role="button"
-                              type="button"
                             >
                               <div
-                                class="c19"
+                                class="c19 c20"
                                 data-testid="select-selected-value"
                                 disabled=""
                               />
                               <div
-                                class="c20"
+                                class="c21"
                               >
                                 <span
-                                  class="c21 c22"
+                                  aria-expanded="false"
+                                  aria-haspopup="true"
+                                  aria-label="open menu"
+                                  class="c22 c23"
+                                  data-testid="select-open-button"
+                                  data-toggle="true"
                                   disabled=""
+                                  role="button"
+                                  type="button"
                                 >
                                   ▼
                                 </span>
@@ -622,7 +624,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
                             </div>
                           </div>
                           <span
-                            class="c23 c24"
+                            class="c24 c25"
                             title="Create a new Tag"
                           >
                             <svg>
@@ -667,17 +669,17 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
               </div>
             </div>
             <div
-              class="c25 c26 c27"
+              class="c26 c27 c28"
             >
               <button
-                class="c28 c29 c30"
+                class="c29 c30 c31"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c28 c29 c30"
+                class="c29 c30 c31"
                 data-testid="dialog-save-button"
                 title="Add Tag"
               >
@@ -686,10 +688,10 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
             </div>
           </div>
           <div
-            class="c31"
+            class="c32"
           >
             <div
-              class="c32"
+              class="c33"
             />
           </div>
         </div>
@@ -777,7 +779,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c20 {
+.c21 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -795,7 +797,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c27 {
+.c28 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -838,17 +840,17 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   display: inline-flex;
 }
 
-.c24 {
+.c25 {
   cursor: pointer;
 }
 
-.c23 {
+.c24 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c23 * {
+.c24 * {
   height: inherit;
   width: inherit;
 }
@@ -886,7 +888,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   height: 100%;
 }
 
-.c32 {
+.c33 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -895,7 +897,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c31 {
+.c32 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -962,7 +964,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   width: inherit;
 }
 
-.c30 {
+.c31 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -982,12 +984,12 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c30:focus,
-.c30:hover {
+.c31:focus,
+.c31:hover {
   border: 1px solid #393637;
 }
 
-.c30:hover {
+.c31:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -995,26 +997,26 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c30[disabled] {
+.c31[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c30 img {
+.c31 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c30:link {
+.c31:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c29 {
+.c30 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1032,18 +1034,18 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c28 {
+.c29 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c28:hover {
+.c29:hover {
   color: #fff;
   background: #519032;
 }
 
-.c26 {
+.c27 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c8d3d9;
@@ -1051,7 +1053,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   padding: 10px 20px 10px 20px;
 }
 
-.c25 {
+.c26 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
@@ -1128,7 +1130,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   padding-right: 10px;
 }
 
-.c22 {
+.c23 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -1153,13 +1155,13 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   cursor: pointer;
 }
 
-.c21 {
+.c22 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c21 * {
+.c22 * {
   height: inherit;
   width: inherit;
 }
@@ -1200,7 +1202,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   width: 230px;
 }
 
-.c19 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1219,8 +1221,12 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   cursor: pointer;
 }
 
+.c19 {
+  cursor: default;
+}
+
 @media print {
-  .c24 {
+  .c25 {
     display: none;
   }
 }
@@ -1293,24 +1299,24 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
                             width="230px"
                           >
                             <div
-                              aria-expanded="false"
-                              aria-haspopup="true"
-                              aria-label="open menu"
                               class="c18"
-                              data-testid="select-open-button"
-                              data-toggle="true"
-                              role="button"
-                              type="button"
                             >
                               <div
-                                class="c19"
+                                class="c19 c20"
                                 data-testid="select-selected-value"
                               />
                               <div
-                                class="c20"
+                                class="c21"
                               >
                                 <span
-                                  class="c21 c22"
+                                  aria-expanded="false"
+                                  aria-haspopup="true"
+                                  aria-label="open menu"
+                                  class="c22 c23"
+                                  data-testid="select-open-button"
+                                  data-toggle="true"
+                                  role="button"
+                                  type="button"
                                 >
                                   ▼
                                 </span>
@@ -1318,7 +1324,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
                             </div>
                           </div>
                           <span
-                            class="c23 c24"
+                            class="c24 c25"
                             title="Create a new Tag"
                           >
                             <svg>
@@ -1363,17 +1369,17 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c25 c26 c27"
+              class="c26 c27 c28"
             >
               <button
-                class="c28 c29 c30"
+                class="c29 c30 c31"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c28 c29 c30"
+                class="c29 c30 c31"
                 data-testid="dialog-save-button"
                 title="Add Tag"
               >
@@ -1382,10 +1388,10 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c31"
+            class="c32"
           >
             <div
-              class="c32"
+              class="c33"
             />
           </div>
         </div>

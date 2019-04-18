@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add tooltips to deactivated text fields in AlertDialog [#1269](https://github.com/greenbone/gsa/pull/1269)
 
 ### Changed
+- Adjust clickable area of Select [#1296](https://github.com/greenbone/gsa/pull/1296)
 - Update dialog for Task Wizard, Advanced Task Wizard and Modify Task Wizard [#1287](https://github.com/greenbone/gsa/pull/1287)
 - Disable inputs for improper option selection in EmailMethodPart of
   AlertDialog [#1266](https://github.com/greenbone/gsa/pull/1266)
