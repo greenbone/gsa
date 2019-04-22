@@ -149,7 +149,6 @@ class ScannerPreference extends React.Component {
       name === 'reverse_lookup' ||
       name === 'unscanned_closed' ||
       name === 'nasl_no_signature_check' ||
-      name === 'ping_hosts' ||
       name === 'reverse_lookup' ||
       name === 'unscanned_closed_udp' ||
       name === 'auto_enable_dependencies' ||
