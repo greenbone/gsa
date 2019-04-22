@@ -167,7 +167,6 @@ class ScannerPreference extends React.Component {
       name === 'save_knowledge_base' ||
       name === 'silent_dependencies' ||
       name === 'slice_network_addresses' ||
-      name === 'use_mac_addr' ||
       name === 'drop_privileges' ||
       name === 'network_scan' ||
       name === 'report_host_details';
