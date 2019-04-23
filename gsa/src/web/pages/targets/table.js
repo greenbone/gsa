@@ -27,12 +27,6 @@ import {withEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
 import withRowDetails from 'web/entities/withRowDetails';
 
-import Select from 'web/components/form/select';
-
-import Divider from 'web/components/layout/divider';
-
-import Sort from 'web/components/sortby/sortby';
-
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
@@ -49,16 +43,6 @@ const Header = ({
   currentSortDir,
   onSortChange,
 }) => {
-  let selectSort = 'ssh_credential';
-  const sortBy = filter ? filter.getSortBy() : undefined;
-
-  if (
-    sortBy === 'smb_credential' ||
-    sortBy === 'esxi_credential' ||
-    sortBy === 'snmp_credential'
-  ) {
-    selectSort = sortBy;
-  }
   return (
     <TableHeader>
       <TableRow>
@@ -98,37 +82,7 @@ const Header = ({
         >
           {_('Port List')}
         </TableHead>
-        <TableHead width="22%">
-          <Divider>
-            <Sort by={sort ? selectSort : false} onClick={onSortChange}>
-              {_('Credentials')}
-            </Sort>
-            {sort !== false && (
-              <Select
-                items={[
-                  {
-                    value: 'ssh_credential',
-                    label: _('SSH'),
-                  },
-                  {
-                    value: 'smb_credential',
-                    label: _('SMB'),
-                  },
-                  {
-                    value: 'esxi_credential',
-                    label: _('ESXi'),
-                  },
-                  {
-                    value: 'snmp_credential',
-                    label: _('SNMP'),
-                  },
-                ]}
-                value={selectSort}
-                onChange={onSortChange}
-              />
-            )}
-          </Divider>
-        </TableHead>
+        <TableHead width="15%">{_('Credentials')}</TableHead>
         {actionsColumn}
       </TableRow>
     </TableHeader>
