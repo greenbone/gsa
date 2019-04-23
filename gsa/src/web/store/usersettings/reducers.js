@@ -20,6 +20,7 @@
 import {combineReducers} from 'web/store/utils';
 
 import defaults from './defaults/reducers';
+import defaultFilters from './defaultfilters/reducers';
 
 import {
   USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
@@ -79,6 +80,7 @@ export const username = (state, action) => {
 
 const userSettings = combineReducers({
   defaults,
+  defaultFilters,
   locale,
   reportComposerDefaults,
   sessionTimeout,
