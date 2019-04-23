@@ -41,6 +41,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix release build [#1259](https://github.com/greenbone/gsa/pull/1259), [#1265](https://github.com/greenbone/gsa/pull/1265)
 
 ### Removed
+- Remove sort by credential from Target view [1300](https://github.com/greenbone/gsa/pull/1300)
 - Remove fifth from schedule [#1279](https://github.com/greenbone/gsa/pull/1279)
 - Removed obsolete CLI arguments [#1265](https://github.com/greenbone/gsa/pull/1265)
   - --login-label
