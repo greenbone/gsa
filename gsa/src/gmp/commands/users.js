@@ -91,6 +91,19 @@ class UserCommand extends EntityCommand {
     });
   }
 
+  getSetting(id) {
+    return this.httpGet({
+      cmd: 'get_setting',
+      setting_id: id,
+    }).then(response => {
+      const {data} = response;
+      const {setting} = data.get_settings.get_settings_response;
+      return response.setData(
+        isDefined(setting) ? new Setting(setting) : undefined,
+      );
+    });
+  }
+
   currentSettings(options = {}) {
     return this.httpGet(
       {
