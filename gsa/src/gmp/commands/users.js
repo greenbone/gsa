@@ -35,6 +35,7 @@ import User, {
   AUTH_METHOD_NEW_PASSWORD,
   AUTH_METHOD_RADIUS,
 } from '../models/user';
+import Setting from '../models/setting';
 import Settings from '../models/settings';
 
 import {parseInt} from '../parser';
@@ -102,12 +103,7 @@ class UserCommand extends EntityCommand {
       forEach(data.get_settings.get_settings_response.setting, setting => {
         // set setting keys to lowercase and remove '-'
         const keyName = setting.name.toLowerCase().replace(/ |-/g, '');
-        settings[keyName] = {
-          id: setting._id,
-          comment: setting.comment === '(null)' ? undefined : setting.comment,
-          name: setting.name,
-          value: setting.value === '0' ? undefined : setting.value,
-        };
+        settings[keyName] = new Setting(setting);
       });
       return response.setData(settings);
     });
