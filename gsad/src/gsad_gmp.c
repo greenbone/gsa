@@ -14240,152 +14240,63 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   /* Create the permission(s). */
 
-  if (strcmp (name, "task_proxy") == 0)
+  response = NULL;
+  entity = NULL;
+  ret = gmpf (connection, credentials, &response, &entity, response_data,
+              "<create_permission>"
+              "<name>%s</name>"
+              "<comment>%s</comment>"
+              "<resource id=\"%s\">"
+              "<type>%s</type>"
+              "</resource>"
+              "<subject id=\"%s\"><type>%s</type></subject>"
+              "</create_permission>",
+              name, comment ? comment : "", resource_id ? resource_id : "",
+              resource_type ? resource_type : "", subject_id, subject_type);
+
+  if (get_subject_entity)
+    free_entity (get_subject_entity);
+
+  switch (ret)
     {
-      response = NULL;
-      entity = NULL;
-      ret = gmpf (connection, credentials, &response, &entity, response_data,
-                  "<commands>"
-                  "<create_permission>"
-                  "<name>get_tasks</name>"
-                  "<comment>%s</comment>"
-                  "<resource id=\"%s\"/>"
-                  "<subject id=\"%s\"><type>%s</type></subject>"
-                  "</create_permission>"
-                  "<create_permission>"
-                  "<name>modify_task</name>"
-                  "<comment>%s</comment>"
-                  "<resource id=\"%s\"/>"
-                  "<subject id=\"%s\"><type>%s</type></subject>"
-                  "</create_permission>"
-                  "<create_permission>"
-                  "<name>start_task</name>"
-                  "<comment>%s</comment>"
-                  "<resource id=\"%s\"/>"
-                  "<subject id=\"%s\"><type>%s</type></subject>"
-                  "</create_permission>"
-                  "<create_permission>"
-                  "<name>stop_task</name>"
-                  "<comment>%s</comment>"
-                  "<resource id=\"%s\"/>"
-                  "<subject id=\"%s\"><type>%s</type></subject>"
-                  "</create_permission>"
-                  "<create_permission>"
-                  "<name>resume_task</name>"
-                  "<comment>%s</comment>"
-                  "<resource id=\"%s\"/>"
-                  "<subject id=\"%s\"><type>%s</type></subject>"
-                  "</create_permission>"
-                  "</commands>",
-                  comment ? comment : "", resource_id ? resource_id : "",
-                  subject_id, subject_type, comment ? comment : "",
-                  resource_id ? resource_id : "", subject_id, subject_type,
-                  comment ? comment : "", resource_id ? resource_id : "",
-                  subject_id, subject_type, comment ? comment : "",
-                  resource_id ? resource_id : "", subject_id, subject_type,
-                  comment ? comment : "", resource_id ? resource_id : "",
-                  subject_id, subject_type);
-
-      if (get_subject_entity)
-        free_entity (get_subject_entity);
-
-      switch (ret)
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while creating a permission. "
-            "The permission was not created. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while creating a permission. "
-            "It is unclear whether the permission has been created or not. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while creating a permission. "
-            "It is unclear whether the permission has been created or not. "
-            "Diagnostics: Internal Error.",
-            response_data);
-        }
-
-      if (entity_attribute (entity, "id"))
-        params_add (params, "permission_id", entity_attribute (entity, "id"));
-      html = response_from_entity (connection, credentials, params, entity,
-                                   "Create Permission", response_data);
+    case 0:
+    case -1:
+      break;
+    case 1:
+      cmd_response_data_set_status_code (response_data,
+                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __FUNCTION__, __LINE__,
+        "An internal error occurred while creating a permission. "
+        "The permission was not created. "
+        "Diagnostics: Failure to send command to manager daemon.",
+        response_data);
+    case 2:
+      cmd_response_data_set_status_code (response_data,
+                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __FUNCTION__, __LINE__,
+        "An internal error occurred while creating a permission. "
+        "It is unclear whether the permission has been created or not. "
+        "Diagnostics: Failure to receive response from manager daemon.",
+        response_data);
+    default:
+      cmd_response_data_set_status_code (response_data,
+                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __FUNCTION__, __LINE__,
+        "An internal error occurred while creating a permission. "
+        "It is unclear whether the permission has been created or not. "
+        "Diagnostics: Internal Error.",
+        response_data);
     }
-  else
-    {
-      response = NULL;
-      entity = NULL;
-      ret = gmpf (connection, credentials, &response, &entity, response_data,
-                  "<create_permission>"
-                  "<name>%s</name>"
-                  "<comment>%s</comment>"
-                  "<resource id=\"%s\">"
-                  "<type>%s</type>"
-                  "</resource>"
-                  "<subject id=\"%s\"><type>%s</type></subject>"
-                  "</create_permission>",
-                  name, comment ? comment : "", resource_id ? resource_id : "",
-                  resource_type ? resource_type : "", subject_id, subject_type);
 
-      if (get_subject_entity)
-        free_entity (get_subject_entity);
+  if (entity_attribute (entity, "id"))
+    params_add (params, "permission_id", entity_attribute (entity, "id"));
 
-      switch (ret)
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while creating a permission. "
-            "The permission was not created. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while creating a permission. "
-            "It is unclear whether the permission has been created or not. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while creating a permission. "
-            "It is unclear whether the permission has been created or not. "
-            "Diagnostics: Internal Error.",
-            response_data);
-        }
+  html = response_from_entity (connection, credentials, params, entity,
+                                "Create Permission", response_data);
 
-      if (entity_attribute (entity, "id"))
-        params_add (params, "permission_id", entity_attribute (entity, "id"));
-      html = response_from_entity (connection, credentials, params, entity,
-                                   "Create Permission", response_data);
-    }
   free_entity (entity);
   g_free (response);
   return html;
