@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix filter in Report Results view cannot be saved & Fix error for create filter with no available results [#1303](https://github.com/greenbone/gsa/pull/1303)
 - Fix detailslinks in AllSecInfo [#1299](https://github.com/greenbone/gsa/pull/1299)
 - Only run libmicrohttp in debug mode if gsad build type is debug [#1295](https://github.com/greenbone/gsa/pull/1295)
 - Fix dialog can be moved outside browser frame [#1294](https://github.com/greenbone/gsa/pull/1294)
