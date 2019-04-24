@@ -916,7 +916,6 @@ init_validator ()
   gvm_validator_alias (validator, "subgroup_column", "group_column");
   gvm_validator_alias (validator, "subject_id", "id");
   gvm_validator_alias (validator, "subject_id_optional", "id_optional");
-  gvm_validator_alias (validator, "subject_name", "name");
   gvm_validator_alias (validator, "subtype", "asset_type");
   gvm_validator_alias (validator, "task_filter", "filter");
   gvm_validator_alias (validator, "task_filt_id", "filt_id");

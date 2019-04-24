@@ -14138,19 +14138,14 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
   int ret;
   gchar *html, *response;
   const char *name, *comment, *resource_id, *resource_type;
-  const char *subject_id, *subject_type, *subject_name;
+  const char *subject_id, *subject_type;
   entity_t entity;
-
-  gchar *subject_response;
-  entity_t get_subject_entity = NULL;
-  entity_t subject_entity;
 
   name = params_value (params, "permission");
   comment = params_value (params, "comment");
   resource_id = params_value (params, "id_or_empty");
   resource_type = params_value (params, "optional_resource_type");
   subject_type = params_value (params, "subject_type");
-  subject_name = params_value (params, "subject_name");
 
   CHECK_VARIABLE_INVALID (name, "Create Permission");
   CHECK_VARIABLE_INVALID (comment, "Create Permission");
@@ -14160,74 +14155,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
   if (params_given (params, "optional_resource_type"))
     CHECK_VARIABLE_INVALID (resource_type, "Create Permission");
 
-  if (params_given (params, "subject_name"))
-    {
-      CHECK_VARIABLE_INVALID (subject_name, "Create Permission");
-      subject_id = NULL;
-      ret = gmpf (connection, credentials, &subject_response,
-                  &get_subject_entity, response_data,
-                  "<get_%ss filter=\"rows=1 name=%s\">"
-                  "</get_%ss>",
-                  subject_type, subject_name, subject_type);
-
-      switch (ret)
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while getting"
-                               " the subject for a permission. "
-                               "The permission was not created. "
-                               "Diagnostics: Failure to send command"
-                               " to manager daemon.",
-                               response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while getting"
-                               " the subject for a permission. "
-                               "The permission was not created. "
-                               "Diagnostics: Failure to receive response"
-                               " from manager daemon.",
-                               response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while getting"
-                               " the subject for a permission. "
-                               "The permission was not created. "
-                               "Diagnostics: Internal Error.",
-                               response_data);
-        }
-
-      subject_entity = entity_child (get_subject_entity, subject_type);
-
-      if (subject_entity)
-        subject_id = entity_attribute (subject_entity, "id");
-
-      if (subject_id == NULL)
-        {
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while creating a "
-                               "permission. Could not find Subject."
-                               "The permission was not created. "
-                               "Diagnostics: Internal Error.",
-                               response_data);
-        }
-    }
-  else if (strcmp (subject_type, "user") == 0)
+  if (strcmp (subject_type, "user") == 0)
     subject_id = params_value (params, "permission_user_id");
   else if (strcmp (subject_type, "group") == 0)
     subject_id = params_value (params, "permission_group_id");
@@ -14253,9 +14181,6 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
               "</create_permission>",
               name, comment ? comment : "", resource_id ? resource_id : "",
               resource_type ? resource_type : "", subject_id, subject_type);
-
-  if (get_subject_entity)
-    free_entity (get_subject_entity);
 
   switch (ret)
     {
@@ -14374,22 +14299,17 @@ create_permissions_gmp (gvm_connection_t *connection,
   gchar *html, *response, *summary_response;
   int successes;
   const char *permission, *comment, *resource_id, *resource_type;
-  const char *subject_id, *subject_type, *subject_name;
+  const char *subject_id, *subject_type;
   const char *permission_resource_type;
   int include_related;
 
   entity_t entity;
-
-  gchar *subject_response;
-  entity_t get_subject_entity = NULL;
-  entity_t subject_entity;
 
   permission = params_value (params, "permission");
   comment = params_value (params, "comment");
   resource_id = params_value (params, "resource_id");
   resource_type = params_value (params, "resource_type");
   subject_type = params_value (params, "subject_type");
-  subject_name = params_value (params, "subject_name");
 
   CHECK_VARIABLE_INVALID (params_value (params, "include_related"),
                           "Create Permission");
@@ -14408,74 +14328,7 @@ create_permissions_gmp (gvm_connection_t *connection,
 
   include_related = atoi (params_value (params, "include_related"));
 
-  if (params_given (params, "subject_name"))
-    {
-      CHECK_VARIABLE_INVALID (subject_name, "Create Permission");
-      subject_id = NULL;
-      ret = gmpf (connection, credentials, &subject_response,
-                  &get_subject_entity, response_data,
-                  "<get_%ss filter=\"rows=1 name=%s\">"
-                  "</get_%ss>",
-                  subject_type, subject_name, subject_type);
-
-      switch (ret)
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while getting"
-                               " the subject for a permission. "
-                               "The permission was not created. "
-                               "Diagnostics: Failure to send command"
-                               " to manager daemon.",
-                               response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while getting"
-                               " the subject for a permission. "
-                               "The permission was not created. "
-                               "Diagnostics: Failure to receive response"
-                               " from manager daemon.",
-                               response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while getting"
-                               " the subject for a permission. "
-                               "The permission was not created. "
-                               "Diagnostics: Internal Error.",
-                               response_data);
-        }
-
-      subject_entity = entity_child (get_subject_entity, subject_type);
-
-      if (subject_entity)
-        subject_id = entity_attribute (subject_entity, "id");
-
-      if (subject_id == NULL)
-        {
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while creating a "
-                               "permission. Could not find Subject."
-                               "The permission was not created. "
-                               "Diagnostics: Internal Error.",
-                               response_data);
-        }
-    }
-  else if (str_equal (subject_type, "user"))
+  if (str_equal (subject_type, "user"))
     subject_id = params_value (params, "permission_user_id");
   else if (str_equal (subject_type, "group"))
     subject_id = params_value (params, "permission_group_id");
@@ -14784,9 +14637,6 @@ create_permissions_gmp (gvm_connection_t *connection,
             }
         }
     }
-
-  if (get_subject_entity)
-    free_entity (get_subject_entity);
 
   summary_response =
     g_strdup_printf ("Successfully created %i permissions", successes);
