@@ -9697,7 +9697,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   entity_t report_entity;
   const char *report_id, *delta_report_id;
   const char *format_id;
-  const char *filter;
+  const char *filter, *filt_id;
   int ret;
   int ignore_pagination;
   gchar *fname_format;
@@ -9713,20 +9713,26 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   format_id = params_value (params, "report_format_id");
 
   filter = params_value (params, "filter");
+  filt_id = params_value (params, "filt_id");
 
   if (filter == NULL)
     filter = "";
+
+  if (filt_id == NULL)
+    filt_id = FILT_ID_USER_SETTING;
 
   ret = gvm_connection_sendf_xml (
     connection,
     "<get_reports"
     " ignore_pagination=\"%d\""
     " filter=\"%s\""
+    " filt_id=\"%s\""
     " report_id=\"%s\""
     " delta_report_id=\"%s\""
     " format_id=\"%s\"/>",
     ignore_pagination,
     filter,
+    filt_id,
     report_id,
     delta_report_id ? delta_report_id : "0",
     format_id ? format_id : ""
