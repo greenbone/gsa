@@ -43,6 +43,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix link to protocol documentation at about page [#1264](https://github.com/greenbone/gsa/pull/1264)
 - Fix testing alerts [#1260](https://github.com/greenbone/gsa/pull/1260)
 - Fix release build [#1259](https://github.com/greenbone/gsa/pull/1259), [#1265](https://github.com/greenbone/gsa/pull/1265)
+- Fix filtering on get_report page [#1307](https://github.com/greenbone/gsa/pull/1307)
 
 ### Removed
 - Remove sort by credential from Target view [1300](https://github.com/greenbone/gsa/pull/1300)
