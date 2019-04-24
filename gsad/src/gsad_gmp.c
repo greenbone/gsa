@@ -14346,7 +14346,7 @@ create_permissions_gmp (gvm_connection_t *connection,
   // Main resource permissions
   if (include_related != INCLUDE_RELATED_RESOURCES_ONLY)
     {
-      if (strcmp (permission, "read") == 0 || strcmp (permission, "proxy") == 0)
+      if (str_equal (permission, "read") || str_equal (permission, "write"))
         {
           response = NULL;
           entity = NULL;
@@ -14365,7 +14365,7 @@ create_permissions_gmp (gvm_connection_t *connection,
           CHECK_GMPF_RET
         }
 
-      if ((strcmp (permission, "proxy") == 0)
+      if ((str_equal (permission, "write"))
           && strcmp (permission_resource_type, "result")
           && strcmp (permission_resource_type, "report"))
         {
@@ -14503,8 +14503,8 @@ create_permissions_gmp (gvm_connection_t *connection,
               else
                 related_type = param->value;
 
-              if (strcmp (permission, "read") == 0
-                  || strcmp (permission, "proxy") == 0)
+              if (str_equal (permission, "read") == 0
+                  || str_equal (permission, "write") == 0)
                 {
                   response = NULL;
                   entity = NULL;
@@ -14523,7 +14523,7 @@ create_permissions_gmp (gvm_connection_t *connection,
                   CHECK_GMPF_RET
                 }
 
-              if ((strcmp (permission, "proxy") == 0)
+              if ((str_equal (permission, "write"))
                   && strcmp (related_type, "result")
                   && strcmp (related_type, "report"))
                 {
