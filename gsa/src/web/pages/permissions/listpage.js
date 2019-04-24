@@ -20,6 +20,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {PERMISSIONS_FILTER_FILTER} from 'gmp/models/filter';
+
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
@@ -87,6 +89,7 @@ const Page = ({onChanged, onDownloaded, onError, onInteraction, ...props}) => (
         sectionIcon={<PermissionIcon size="large" />}
         table={Table}
         filterEditDialog={FilterDialog}
+        filtersFilter={PERMISSIONS_FILTER_FILTER}
         title={_('Permissions')}
         toolBarIcons={ToolBarIcons}
         onError={onError}
