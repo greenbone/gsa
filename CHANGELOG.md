@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix creating permissions via the create multiple permissions dialog [#1302](https://github.com/greenbone/gsa/pull/1302)
 - Fix showing host in Scanner dialog [#1301](https://github.com/greenbone/gsa/pull/1301)
 - Fix detailslinks in AllSecInfo [#1299](https://github.com/greenbone/gsa/pull/1299)
 - Only run libmicrohttp in debug mode if gsad build type is debug [#1295](https://github.com/greenbone/gsa/pull/1295)
