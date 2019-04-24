@@ -35,7 +35,7 @@ const StyledLayout = styled(Layout)`
 `;
 
 const CreateNamedFilterGroup = ({
-  filterName,
+  filterName = '',
   saveNamedFilter = false,
   onValueChange,
 }) => (
