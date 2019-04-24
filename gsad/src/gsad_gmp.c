@@ -14351,6 +14351,10 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
       return html;                                                          \
     }
 
+#define INCLUDE_RELATED_CURRENT_RESOURCE_ONLY 0
+#define INCLUDE_RELATED_ALL_RESOURCES 1
+#define INCLUDE_RELATED_RESOURCES_ONLY 2
+
 /**
  * @brief Create multiple permission, get next page, envelope the result.
  *
@@ -14487,7 +14491,7 @@ create_permissions_gmp (gvm_connection_t *connection,
   /* Create the permission(s). */
 
   // Main resource permissions
-  if (include_related != 2)
+  if (include_related != INCLUDE_RELATED_RESOURCES_ONLY)
     {
       if (strcmp (permission, "read") == 0 || strcmp (permission, "proxy") == 0)
         {
@@ -14622,7 +14626,7 @@ create_permissions_gmp (gvm_connection_t *connection,
     }
 
   // Related permissions
-  if (include_related)
+  if (include_related != INCLUDE_RELATED_CURRENT_RESOURCE_ONLY)
     {
       params_t *related;
       related = params_values (params, "related:");
