@@ -458,7 +458,6 @@ class ReportDetails extends React.Component {
 
   handleFilterCreated(filter) {
     this.handleInteraction();
-
     this.load(filter);
     this.props.loadFilters();
   }
@@ -607,6 +606,8 @@ class ReportDetails extends React.Component {
             delta={isDefined(report) && report.isDeltaReport()}
             onFilterChanged={this.handleFilterChange}
             onCloseClick={this.handleFilterDialogClose}
+            createFilterType="result"
+            onFilterCreated={this.handleFilterCreated}
           />
         )}
         {showDownloadReportDialog && (

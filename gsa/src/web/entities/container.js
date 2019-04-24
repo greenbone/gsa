@@ -595,7 +595,7 @@ class EntitiesContainer extends React.Component {
       <React.Fragment>
         {children({
           ...other,
-          createFilterType: entitiesType,
+          createFilterType: this.props.gmpname,
           entities,
           entitiesCounts,
           entitiesSelected: selected,
