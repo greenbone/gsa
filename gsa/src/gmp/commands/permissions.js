@@ -99,7 +99,7 @@ class PermissionsCommand extends EntitiesCommand {
 
   create({
     id,
-    permission,
+    permission, // permission is read or write here
     entityType,
     comment = '',
     groupId,
@@ -112,7 +112,7 @@ class PermissionsCommand extends EntitiesCommand {
     const data = {
       cmd: 'create_permissions',
       comment,
-      permission,
+      permission_type: permission,
       permission_group_id: groupId,
       permission_role_id: roleId,
       permission_user_id: userId,
