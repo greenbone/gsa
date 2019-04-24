@@ -14155,11 +14155,11 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
   if (params_given (params, "optional_resource_type"))
     CHECK_VARIABLE_INVALID (resource_type, "Create Permission");
 
-  if (strcmp (subject_type, "user") == 0)
+  if (str_equal (subject_type, "user"))
     subject_id = params_value (params, "permission_user_id");
-  else if (strcmp (subject_type, "group") == 0)
+  else if (str_equal (subject_type, "group"))
     subject_id = params_value (params, "permission_group_id");
-  else if (strcmp (subject_type, "role") == 0)
+  else if (str_equal (subject_type, "role"))
     subject_id = params_value (params, "permission_role_id");
   else
     subject_id = NULL;
@@ -14366,9 +14366,10 @@ create_permissions_gmp (gvm_connection_t *connection,
         }
 
       if ((str_equal (permission, "write"))
-          && strcmp (permission_resource_type, "result")
-          && strcmp (permission_resource_type, "report"))
+          && !str_equal (permission_resource_type, "result")
+          && !str_equal (permission_resource_type, "report"))
         {
+          // create modify permission for resource
           response = NULL;
           entity = NULL;
           ret =
@@ -14385,8 +14386,9 @@ create_permissions_gmp (gvm_connection_t *connection,
 
           CHECK_GMPF_RET
 
-          if (strcmp (permission_resource_type, "task") == 0)
+          if (str_equal (permission_resource_type, "task"))
             {
+              // create start_task, stop_task and resume_task permission
               response = NULL;
               entity = NULL;
               ret = gmpf (connection, credentials, &response, &entity,
@@ -14436,8 +14438,9 @@ create_permissions_gmp (gvm_connection_t *connection,
               CHECK_GMPF_RET
             }
 
-          if (strcmp (permission_resource_type, "alert") == 0)
+          if (str_equal (permission_resource_type, "alert"))
             {
+              // create test permission
               response = NULL;
               entity = NULL;
               ret = gmpf (connection, credentials, &response, &entity,
@@ -14455,10 +14458,11 @@ create_permissions_gmp (gvm_connection_t *connection,
               CHECK_GMPF_RET
             }
 
-          if (strcmp (permission_resource_type, "agent") == 0
-              || strcmp (permission_resource_type, "report_format") == 0
-              || strcmp (permission_resource_type, "scanner") == 0)
+          if (str_equal (permission_resource_type, "agent")
+              || str_equal (permission_resource_type, "report_format")
+              || str_equal (permission_resource_type, "scanner"))
             {
+              // create verify permission
               response = NULL;
               entity = NULL;
               ret = gmpf (connection, credentials, &response, &entity,
@@ -14524,8 +14528,8 @@ create_permissions_gmp (gvm_connection_t *connection,
                 }
 
               if ((str_equal (permission, "write"))
-                  && strcmp (related_type, "result")
-                  && strcmp (related_type, "report"))
+                  && !str_equal (related_type, "result")
+                  && !str_equal (related_type, "report"))
                 {
                   response = NULL;
                   entity = NULL;
@@ -14543,7 +14547,7 @@ create_permissions_gmp (gvm_connection_t *connection,
 
                   CHECK_GMPF_RET
 
-                  if (strcmp (related_type, "task") == 0)
+                  if (str_equal (related_type, "task"))
                     {
                       response = NULL;
                       entity = NULL;
@@ -14594,7 +14598,7 @@ create_permissions_gmp (gvm_connection_t *connection,
                       CHECK_GMPF_RET
                     }
 
-                  if (strcmp (related_type, "alert") == 0)
+                  if (str_equal (related_type, "alert"))
                     {
                       response = NULL;
                       entity = NULL;
@@ -14613,9 +14617,9 @@ create_permissions_gmp (gvm_connection_t *connection,
                       CHECK_GMPF_RET
                     }
 
-                  if (strcmp (related_type, "agent") == 0
-                      || strcmp (related_type, "report_format") == 0
-                      || strcmp (related_type, "scanner") == 0)
+                  if (str_equal (related_type, "agent")
+                      || str_equal (related_type, "report_format")
+                      || str_equal (related_type, "scanner"))
                     {
                       response = NULL;
                       entity = NULL;
