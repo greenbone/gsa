@@ -659,6 +659,7 @@ init_validator ()
   gvm_validator_add (validator, "result_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "role", "^[[:alnum:] ]+$");
   gvm_validator_add (validator, "permission", "^([_a-z]+|Super)$");
+  gvm_validator_add (validator, "permission_type", "^(read|write)$");
   gvm_validator_add (validator, "port_list_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "port_range_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (

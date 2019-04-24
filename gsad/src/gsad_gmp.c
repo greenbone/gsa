@@ -14305,7 +14305,7 @@ create_permissions_gmp (gvm_connection_t *connection,
 
   entity_t entity;
 
-  permission = params_value (params, "permission");
+  permission = params_value (params, "permission_type");
   comment = params_value (params, "comment");
   resource_id = params_value (params, "resource_id");
   resource_type = params_value (params, "resource_type");
