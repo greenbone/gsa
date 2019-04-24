@@ -3456,55 +3456,6 @@ get_info_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Toggle overrides.
- *
- * @param[in]  params     Request parameters.
- * @param[in]  overrides  New overrides value.
- */
-static void
-params_toggle_overrides (params_t *params, const char *overrides)
-{
-  param_t *filt_id, *build_filter;
-  const char *new_filt_id;
-
-  build_filter = params_get (params, "build_filter");
-
-  if (build_filter)
-    new_filt_id = "";
-  else
-    new_filt_id = "0";
-
-  filt_id = params_get (params, "filt_id");
-  if (filt_id)
-    {
-      filt_id->value = g_strdup (new_filt_id);
-      filt_id->value_size = strlen (filt_id->value);
-      filt_id->valid = 1;
-      filt_id->valid_utf8 = 1;
-    }
-  else
-    params_add (params, "filt_id", new_filt_id);
-
-  if (build_filter == NULL)
-    {
-      param_t *filter;
-      filter = params_get (params, "filter");
-      if (filter && filter->value)
-        {
-          gchar *old;
-          old = filter->value;
-          filter->value =
-            g_strdup_printf ("apply_overrides=%s %s", overrides, old);
-          g_free (old);
-        }
-      else if (strcmp (overrides, "0"))
-        params_add (params, "filter", "apply_overrides=1 rows=-2");
-      else
-        params_add (params, "filter", "apply_overrides=0 rows=-2");
-    }
-}
-
-/**
  * @brief Get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -3523,13 +3474,8 @@ get_tasks (gvm_connection_t *connection, credentials_t *credentials,
   const char *overrides, *schedules_only, *ignore_pagination;
   gchar *extra_attribs, *ret;
 
-  overrides = params_value (params, "overrides");
   schedules_only = params_value (params, "schedules_only");
   ignore_pagination = params_value (params, "ignore_pagination");
-
-  if (overrides)
-    /* User toggled overrides.  Set the overrides value in the filter. */
-    params_toggle_overrides (params, overrides);
 
   extra_attribs = g_strdup_printf (
     "%s%s%s"
@@ -10191,13 +10137,6 @@ get_reports (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t *response_data)
 {
-  const char *overrides;
-
-  overrides = params_value (params, "overrides");
-  if (overrides)
-    /* User toggled overrides.  Set the overrides value in the filter. */
-    params_toggle_overrides (params, overrides);
-
   return get_many (connection, "report", credentials, params, extra_xml, NULL,
                    response_data);
 }
@@ -10380,13 +10319,6 @@ get_results (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t *response_data)
 {
-  const char *overrides;
-  overrides = params_value (params, "overrides");
-
-  if (overrides)
-    /* User toggled overrides.  Set the overrides value in the filter. */
-    params_toggle_overrides (params, overrides);
-
   return get_many (connection, "result", credentials, params, extra_xml, NULL,
                    response_data);
 }

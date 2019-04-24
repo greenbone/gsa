@@ -863,7 +863,6 @@ init_validator ()
   gvm_validator_alias (validator, "old_password", "password");
   gvm_validator_alias (validator, "open_note", "note_optional");
   gvm_validator_alias (validator, "original_overrides", "boolean");
-  gvm_validator_alias (validator, "overrides", "boolean");
   gvm_validator_alias (validator, "owner", "name");
   gvm_validator_alias (validator, "passphrase", "lsc_password");
   gvm_validator_alias (validator, "password:name", "preference_name");
