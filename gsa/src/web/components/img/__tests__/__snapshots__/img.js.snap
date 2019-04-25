@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Img tests should render 1`] = `
+<img
+  alt="Greenbone Security Assistant"
+  src="/img/greenbone.svg"
+/>
+`;
