@@ -35,6 +35,7 @@ import User, {
   AUTH_METHOD_NEW_PASSWORD,
   AUTH_METHOD_RADIUS,
 } from '../models/user';
+import Setting from '../models/setting';
 import Settings from '../models/settings';
 
 import {parseInt} from '../parser';
@@ -46,6 +47,44 @@ const log = logger.getLogger('gmp.commands.users');
 
 const REPORT_COMPOSER_DEFAULTS_SETTING_ID =
   'b6b449ee-5d90-4ff0-af20-7e838c389d39';
+
+export const DEFAULT_FILTER_SETTINGS = {
+  agent: '4a1334c1-cb93-4a79-8634-103b0a50bdcd',
+  alert: 'b833a6f2-dcdc-4535-bfb0-a5154b5b5092',
+  allinfo: 'feefe56b-e2da-4913-81cc-1a6ae3b36e64',
+  asset: '0f040d06-abf9-43a2-8f94-9de178b0e978',
+  certbund: 'e4cf514a-17e2-4ab9-9c90-336f15e24750',
+  cpe: '3414a107-ae46-4dea-872d-5c4479a48e8f',
+  credential: '186a5ac8-fe5a-4fb1-aa22-44031fb339f3',
+  cve: 'def63b5a-41ef-43f4-b9ef-03ef1665db5d',
+  dfncert: '312350ed-bc06-44f3-8b3f-ab9eb828b80b',
+  filter: 'f9691163-976c-47e7-ad9a-38f2d5c81649',
+  group: 'f722e5a4-88d8-475f-95b9-e4dcafbc075b',
+  host: '37562dfe-1f7e-4cae-a7c0-fa95e6f194c5',
+  operatingsystem: 'f608c3ec-ce73-4ff6-8e04-7532749783af',
+  ovaldef: 'adb6ffc8-e50e-4aab-9c31-13c741eb8a16',
+  override: 'eaaaebf1-01ef-4c49-b7bb-955461c78e0a',
+  note: '96abcd5a-9b6d-456c-80b8-c3221bfa499d',
+  nvt: 'bef08b33-075c-4f8c-84f5-51f6137e40a3',
+  permission: 'ffb16b28-538c-11e3-b8f9-406186ea4fc5',
+  portlist: '7d52d575-baeb-4d98-bb68-e1730dbc6236',
+  report: '48ae588e-9085-41bc-abcb-3d6389cf7237',
+  reportformat: '249c7a55-065c-47fb-b453-78e11a665565',
+  result: '739ab810-163d-11e3-9af6-406186ea4fc5',
+  role: 'f38e673a-bcd1-11e2-a19a-406186ea4fc5',
+  scanconfig: '1a9fbd91-0182-44cd-bc88-a13a9b3b1bef',
+  scanner: 'ba00fe91-bdce-483c-b8df-2372e9774ad6',
+  schedule: 'a83e321b-d994-4ae8-beec-bfb5fe3e7336',
+  tag: '108eea3b-fc61-483c-9da9-046762f137a8',
+  target: '236e2e41-9771-4e7a-8124-c432045985e0',
+  task: '1c981851-8244-466c-92c4-865ffe05e721',
+  ticket: '801544de-f06d-4377-bb77-bbb23369bad4',
+  user: 'a33635be-7263-4549-bd80-c04d2dba89b4',
+  vulnerability: '17c9d269-95e7-4bfa-b1b2-bc106a2175c7',
+};
+
+const saveDefaultFilterSettingId = entityType =>
+  `settings_filter:${DEFAULT_FILTER_SETTINGS[entityType]}`;
 
 class UserCommand extends EntityCommand {
   constructor(http) {
@@ -90,6 +129,19 @@ class UserCommand extends EntityCommand {
     });
   }
 
+  getSetting(id) {
+    return this.httpGet({
+      cmd: 'get_setting',
+      setting_id: id,
+    }).then(response => {
+      const {data} = response;
+      const {setting} = data.get_settings.get_settings_response;
+      return response.setData(
+        isDefined(setting) ? new Setting(setting) : undefined,
+      );
+    });
+  }
+
   currentSettings(options = {}) {
     return this.httpGet(
       {
@@ -102,12 +154,7 @@ class UserCommand extends EntityCommand {
       forEach(data.get_settings.get_settings_response.setting, setting => {
         // set setting keys to lowercase and remove '-'
         const keyName = setting.name.toLowerCase().replace(/ |-/g, '');
-        settings[keyName] = {
-          id: setting._id,
-          comment: setting.comment === '(null)' ? undefined : setting.comment,
-          name: setting.name,
-          value: setting.value === '0' ? undefined : setting.value,
-        };
+        settings[keyName] = new Setting(setting);
       });
       return response.setData(settings);
     });
@@ -230,7 +277,6 @@ class UserCommand extends EntityCommand {
       severity_class: data.severityClass,
       dynamic_severity: data.dynamicSeverity,
       default_severity: severityValue(data.defaultSeverity),
-      /* eslint-disable max-len */
       'settings_default:f9f5a546-8018-48d0-bef5-5ad4926ea899':
         data.defaultAlert,
       'settings_default:83545bcf-0c49-4b4c-abbf-63baf82cc2a7':
@@ -255,49 +301,35 @@ class UserCommand extends EntityCommand {
         data.defaultSchedule,
       'settings_default:23409203-940a-4b4a-b70c-447475f18323':
         data.defaultTarget,
-      'settings_filter:4a1334c1-cb93-4a79-8634-103b0a50bdcd': data.agentsFilter,
-      'settings_filter:b833a6f2-dcdc-4535-bfb0-a5154b5b5092': data.alertsFilter,
-      'settings_filter:0f040d06-abf9-43a2-8f94-9de178b0e978': data.assetsFilter,
-      'settings_filter:1a9fbd91-0182-44cd-bc88-a13a9b3b1bef':
-        data.configsFilter,
-      'settings_filter:186a5ac8-fe5a-4fb1-aa22-44031fb339f3':
-        data.credentialsFilter,
-      'settings_filter:f9691163-976c-47e7-ad9a-38f2d5c81649':
-        data.filtersFilter,
-      'settings_filter:37562dfe-1f7e-4cae-a7c0-fa95e6f194c5': data.hostsFilter,
-      'settings_filter:96abcd5a-9b6d-456c-80b8-c3221bfa499d': data.notesFilter,
-      'settings_filter:f608c3ec-ce73-4ff6-8e04-7532749783af':
-        data.operatingSystemsFilter,
-      'settings_filter:eaaaebf1-01ef-4c49-b7bb-955461c78e0a':
-        data.overidesFilter,
-      'settings_filter:ffb16b28-538c-11e3-b8f9-406186ea4fc5':
-        data.permissionsFilter,
-      'settings_filter:7d52d575-baeb-4d98-bb68-e1730dbc6236':
-        data.portListsFilter,
-      'settings_filter:48ae588e-9085-41bc-abcb-3d6389cf7237':
-        data.reportsFilter,
-      'settings_filter:249c7a55-065c-47fb-b453-78e11a665565':
-        data.reportFormatsFilter,
-      'settings_filter:739ab810-163d-11e3-9af6-406186ea4fc5':
-        data.resultsFilter,
-      'settings_filter:f38e673a-bcd1-11e2-a19a-406186ea4fc5': data.rolesFilter,
-      'settings_filter:a83e321b-d994-4ae8-beec-bfb5fe3e7336':
-        data.schedulesFilter,
-      'settings_filter:108eea3b-fc61-483c-9da9-046762f137a8': data.tagsFilter,
-      'settings_filter:236e2e41-9771-4e7a-8124-c432045985e0':
-        data.targetsFilter,
-      'settings_filter:1c981851-8244-466c-92c4-865ffe05e721': data.tasksFilter,
-      'settings_filter:3414a107-ae46-4dea-872d-5c4479a48e8f': data.cpeFilter,
-      'settings_filter:def63b5a-41ef-43f4-b9ef-03ef1665db5d': data.cveFilter,
-      'settings_filter:bef08b33-075c-4f8c-84f5-51f6137e40a3': data.nvtFilter,
-      'settings_filter:adb6ffc8-e50e-4aab-9c31-13c741eb8a16': data.ovalFilter,
-      'settings_filter:e4cf514a-17e2-4ab9-9c90-336f15e24750':
-        data.certBundFilter,
-      'settings_filter:312350ed-bc06-44f3-8b3f-ab9eb828b80b':
-        data.dfnCertFilter,
-      'settings_filter:feefe56b-e2da-4913-81cc-1a6ae3b36e64':
-        data.secInfoFilter,
-      /* eslint-enable max-len */
+      [saveDefaultFilterSettingId('agent')]: data.agentsFilter,
+      [saveDefaultFilterSettingId('alert')]: data.alertsFilter,
+      [saveDefaultFilterSettingId('asset')]: data.assetsFilter,
+      [saveDefaultFilterSettingId('scanconfig')]: data.configsFilter,
+      [saveDefaultFilterSettingId('credential')]: data.credentialsFilter,
+      [saveDefaultFilterSettingId('filter')]: data.filtersFilter,
+      [saveDefaultFilterSettingId('host')]: data.hostsFilter,
+      [saveDefaultFilterSettingId('note')]: data.notesFilter,
+      [saveDefaultFilterSettingId(
+        'operatingsystem',
+      )]: data.operatingSystemsFilter,
+      [saveDefaultFilterSettingId('override')]: data.overridesFilter,
+      [saveDefaultFilterSettingId('permission')]: data.permissionsFilter,
+      [saveDefaultFilterSettingId('portlist')]: data.portListsFilter,
+      [saveDefaultFilterSettingId('report')]: data.reportsFilter,
+      [saveDefaultFilterSettingId('reportformat')]: data.reportFormatsFilter,
+      [saveDefaultFilterSettingId('result')]: data.resultsFilter,
+      [saveDefaultFilterSettingId('role')]: data.rolesFilter,
+      [saveDefaultFilterSettingId('schedule')]: data.schedulesFilter,
+      [saveDefaultFilterSettingId('tag')]: data.tagsFilter,
+      [saveDefaultFilterSettingId('target')]: data.targetsFilter,
+      [saveDefaultFilterSettingId('task')]: data.tasksFilter,
+      [saveDefaultFilterSettingId('cpe')]: data.cpeFilter,
+      [saveDefaultFilterSettingId('cve')]: data.cveFilter,
+      [saveDefaultFilterSettingId('nvt')]: data.nvtFilter,
+      [saveDefaultFilterSettingId('ovaldef')]: data.ovalFilter,
+      [saveDefaultFilterSettingId('certbund')]: data.certBundFilter,
+      [saveDefaultFilterSettingId('dfncert')]: data.dfnCertFilter,
+      [saveDefaultFilterSettingId('allinfo')]: data.secInfoFilter,
       auto_cache_rebuild: data.autoCacheRebuild,
     });
   }

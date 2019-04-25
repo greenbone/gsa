@@ -1,6 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Badge tests should render badge 1`] = `
+.c1 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c1 * {
+  height: inherit;
+  width: inherit;
+}
+
 .c0 {
   position: relative;
   display: -webkit-inline-box;
@@ -44,17 +55,6 @@ exports[`Badge tests should render badge 1`] = `
   color: #fff;
   bottom: -8px;
   right: 0px;
-}
-
-.c1 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c1 * {
-  height: inherit;
-  width: inherit;
 }
 
 <div

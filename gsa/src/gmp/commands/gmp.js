@@ -28,12 +28,16 @@ export const BULK_SELECT_BY_IDS = 1;
 export const BULK_SELECT_BY_FILTER = 0;
 
 class GmpCommand extends HttpCommand {
-  getParams(params, extra_params = {}) {
+  getParams(params = {}, extra_params = {}) {
     const {filter, ...other} = params;
     const rparams = super.getParams(other, extra_params);
 
     if (isDefined(filter)) {
-      rparams.filter = filter_string(filter);
+      if (isDefined(filter.id)) {
+        rparams.filter_id = filter.id;
+      } else {
+        rparams.filter = filter_string(filter);
+      }
     }
 
     return rparams;

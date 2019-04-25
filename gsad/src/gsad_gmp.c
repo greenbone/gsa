@@ -400,39 +400,6 @@ typedef struct
 } find_by_value_t;
 
 /**
- * @brief Check whether a filter exists
- *
- * @param[in] connection  Connection to manager.
- * @param[in] entity      Response entity.
- *
- * @return 1 success, 0 fail, -1 error, -2 could not send command to server,
- *         -3 could not read entity from server.
- */
-static int
-filter_exists (gvm_connection_t *connection, const char *filt_id)
-{
-  entity_t entity;
-
-  if (filt_id == NULL || str_equal (filt_id, FILT_ID_NONE)
-      || str_equal (filt_id, FILT_ID_USER_SETTING))
-    return 1;
-
-  /* check if filter still exists */
-  if (gvm_connection_sendf (connection, "<get_filters filter_id='%s'/>",
-                            filt_id))
-    {
-      return -2;
-    }
-
-  if (read_entity_c (connection, &entity))
-    {
-      return -3;
-    }
-
-  return gmp_success (entity);
-}
-
-/**
  * @brief Wrap some XML in an envelope.
  *
  * @param[in]  connection     Connection to manager
@@ -1165,7 +1132,7 @@ get_many (gvm_connection_t *connection, const char *type,
   GString *xml;
   GString *type_many; /* The plural form of type */
   gchar *request, *built_filter;
-  const char *build_filter, *filt_id, *filter, *filter_extra;
+  const char *build_filter, *filter_id, *filter, *filter_extra;
   const char *first, *max, *sort_field, *sort_order, *owner, *permission;
   const char *replace_task_id;
   const char *overrides, *autofp, *autofp_value, *min_qod;
@@ -1174,7 +1141,7 @@ get_many (gvm_connection_t *connection, const char *type,
   const char *details;
 
   build_filter = params_value (params, "build_filter");
-  filt_id = params_value (params, "filt_id");
+  filter_id = params_value (params, "filter_id");
   filter = params_value (params, "filter");
   filter_extra = params_value (params, "filter_extra");
   first = params_value (params, "first");
@@ -1199,31 +1166,6 @@ get_many (gvm_connection_t *connection, const char *type,
     details = "0";
 
   /* check if filter still exists */
-  switch (filter_exists (connection, filt_id))
-    {
-    case 1:
-      break;
-    case 0:
-      g_debug ("%s filter doesn't exist anymore %s!\n", __FUNCTION__, filt_id);
-      filt_id = NULL;
-      break;
-    case -1:
-      g_debug ("%s filter response didn't contain a status!\n", __FUNCTION__);
-      filt_id = NULL;
-      break;
-    case -2:
-      g_debug ("%s could not send filter request!\n", __FUNCTION__);
-      filt_id = NULL;
-      break;
-    case -3:
-      g_debug ("%s could not read entity from filter response!\n",
-               __FUNCTION__);
-      filt_id = NULL;
-      break;
-    default:
-      filt_id = NULL;
-    }
-
   xml = g_string_new ("");
   type_many = g_string_new (type);
 
@@ -1237,7 +1179,8 @@ get_many (gvm_connection_t *connection, const char *type,
     g_string_append (xml, extra_xml);
 
   built_filter = NULL;
-  if (filt_id == NULL || str_equal (filt_id, "") || str_equal (filt_id, "--"))
+  if (filter_id == NULL || str_equal (filter_id, "")
+      || str_equal (filter_id, "--"))
     {
       if ((build_filter && str_equal (build_filter, "1"))
           || ((filter == NULL || str_equal (filter, ""))
@@ -1290,7 +1233,8 @@ get_many (gvm_connection_t *connection, const char *type,
                 owner ? owner : "", owner ? " " : "",
                 (filter && search_phrase) ? " " : "", filter ? filter : "",
                 search_phrase ? " " : "", search_phrase ? search_phrase : "");
-              filt_id = FILT_ID_USER_SETTING;
+
+              filter_id = FILT_ID_USER_SETTING;
               g_free (task);
             }
           else if (strcmp (type, "info") == 0
@@ -1332,18 +1276,18 @@ get_many (gvm_connection_t *connection, const char *type,
             filter = "rows=-2";
           else
             filter = "apply_overrides=1 rows=-2";
-          if (filt_id && !str_equal (filt_id, ""))
+          if (filter_id && !str_equal (filter_id, ""))
             /* Request to use "filter" instead. */
-            filt_id = FILT_ID_NONE;
+            filter_id = FILT_ID_NONE;
           else
-            filt_id = FILT_ID_USER_SETTING;
+            filter_id = FILT_ID_USER_SETTING;
         }
       else if (str_equal (filter, "sort=nvt")
                && (str_equal (type, "note") || str_equal (type, "override")))
-        filt_id = FILT_ID_USER_SETTING;
+        filter_id = FILT_ID_USER_SETTING;
       else if (str_equal (filter, "apply_overrides=1")
                && str_equal (type, "task"))
-        filt_id = FILT_ID_USER_SETTING;
+        filter_id = FILT_ID_USER_SETTING;
     }
   else if (replace_task_id)
     {
@@ -1364,7 +1308,8 @@ get_many (gvm_connection_t *connection, const char *type,
     " max=\"%s\""
     " sort_field=\"%s\""
     " sort_order=\"%s\"",
-    strcmp (type, "report") ? "" : "report_", filt_id ? filt_id : "0",
+    strcmp (type, "report") ? "" : "report_",
+    filter_id ? filter_id : FILT_ID_NONE,
     strcmp (type, "report") ? "" : "report_",
     built_filter ? built_filter : (filter ? filter : ""),
     filter_extra ? " " : "", filter_extra ? filter_extra : "",
@@ -3456,55 +3401,6 @@ get_info_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Toggle overrides.
- *
- * @param[in]  params     Request parameters.
- * @param[in]  overrides  New overrides value.
- */
-static void
-params_toggle_overrides (params_t *params, const char *overrides)
-{
-  param_t *filt_id, *build_filter;
-  const char *new_filt_id;
-
-  build_filter = params_get (params, "build_filter");
-
-  if (build_filter)
-    new_filt_id = "";
-  else
-    new_filt_id = "0";
-
-  filt_id = params_get (params, "filt_id");
-  if (filt_id)
-    {
-      filt_id->value = g_strdup (new_filt_id);
-      filt_id->value_size = strlen (filt_id->value);
-      filt_id->valid = 1;
-      filt_id->valid_utf8 = 1;
-    }
-  else
-    params_add (params, "filt_id", new_filt_id);
-
-  if (build_filter == NULL)
-    {
-      param_t *filter;
-      filter = params_get (params, "filter");
-      if (filter && filter->value)
-        {
-          gchar *old;
-          old = filter->value;
-          filter->value =
-            g_strdup_printf ("apply_overrides=%s %s", overrides, old);
-          g_free (old);
-        }
-      else if (strcmp (overrides, "0"))
-        params_add (params, "filter", "apply_overrides=1 rows=-2");
-      else
-        params_add (params, "filter", "apply_overrides=0 rows=-2");
-    }
-}
-
-/**
  * @brief Get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -3523,13 +3419,8 @@ get_tasks (gvm_connection_t *connection, credentials_t *credentials,
   const char *overrides, *schedules_only, *ignore_pagination;
   gchar *extra_attribs, *ret;
 
-  overrides = params_value (params, "overrides");
   schedules_only = params_value (params, "schedules_only");
   ignore_pagination = params_value (params, "ignore_pagination");
-
-  if (overrides)
-    /* User toggled overrides.  Set the overrides value in the filter. */
-    params_toggle_overrides (params, overrides);
 
   extra_attribs = g_strdup_printf (
     "%s%s%s"
@@ -5035,7 +4926,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
   param_t *param;
 
   const char *data_column, *group_column, *subgroup_column, *type;
-  const char *filter, *filt_id;
+  const char *filter, *filter_id;
   const char *first_group, *max_groups;
   const char *mode;
   gchar *filter_escaped, *command_escaped, *response;
@@ -5050,19 +4941,20 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
   subgroup_column = params_value (params, "subgroup_column");
   type = params_value (params, "aggregate_type");
   filter = params_value (params, "filter");
-  filt_id = params_value (params, "filt_id");
+  filter_id = params_value (params, "filter_id");
   sort_fields = params_values (params, "sort_fields:");
   sort_stats = params_values (params, "sort_stats:");
   sort_orders = params_values (params, "sort_orders:");
   first_group = params_value (params, "first_group");
   max_groups = params_value (params, "max_groups");
   mode = params_value (params, "aggregate_mode");
-  if (filter && strcmp (filter, ""))
+
+  if (filter && !str_equal (filter, ""))
     filter_escaped = g_markup_escape_text (filter, -1);
   else
     {
-      if (filt_id == NULL || strcmp (filt_id, "") == 0
-          || strcmp (filt_id, "0") == 0)
+      if (filter_id == NULL || str_equal (filter_id, "")
+          || str_equal (filter_id, FILT_ID_NONE))
         filter_escaped = g_strdup ("rows=-2");
       else
         filter_escaped = NULL;
@@ -5074,21 +4966,28 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append_printf (command, " type=\"%s\"", type);
   if (data_column)
     g_string_append_printf (command, " data_column=\"%s\"", data_column);
+
   if (group_column)
     g_string_append_printf (command, " group_column=\"%s\"", group_column);
+
   if (subgroup_column)
     g_string_append_printf (command, " subgroup_column=\"%s\"",
                             subgroup_column);
   if (filter_escaped && strcmp (filter_escaped, ""))
     g_string_append_printf (command, " filter=\"%s\"", filter_escaped);
-  if (filt_id && strcmp (filt_id, ""))
-    g_string_append_printf (command, " filt_id=\"%s\"", filt_id);
+
+  if (filter_id && !str_equal (filter_id, ""))
+    g_string_append_printf (command, " filt_id=\"%s\"", filter_id);
+
   if (first_group && strcmp (first_group, ""))
     g_string_append_printf (command, " first_group=\"%s\"", first_group);
+
   if (max_groups && strcmp (max_groups, ""))
     g_string_append_printf (command, " max_groups=\"%s\"", max_groups);
+
   if (mode && strcmp (mode, ""))
     g_string_append_printf (command, " mode=\"%s\"", mode);
+
   g_string_append (command, ">");
 
   if (sort_fields && sort_stats && sort_orders)
@@ -5195,6 +5094,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   if (gmp_success (entity) == 0)
     set_http_status_from_entity (entity, response_data);
+
   g_string_append (xml, response);
 
   g_string_append (xml, "</get_aggregate>");
@@ -9698,6 +9598,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   const char *report_id, *delta_report_id;
   const char *format_id;
   const char *filter;
+  const char *filter_id;
   int ret;
   int ignore_pagination;
   gchar *fname_format;
@@ -9713,8 +9614,9 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   format_id = params_value (params, "report_format_id");
 
   filter = params_value (params, "filter");
+  filter_id = params_value (params, "filter_id");
 
-  if (filter == NULL)
+  if (filter == NULL || filter_id)
     filter = "";
 
   ret = gvm_connection_sendf_xml (
@@ -9722,11 +9624,13 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
     "<get_reports"
     " ignore_pagination=\"%d\""
     " filter=\"%s\""
+    " filt_id=\"%s\""
     " report_id=\"%s\""
     " delta_report_id=\"%s\""
     " format_id=\"%s\"/>",
     ignore_pagination,
     filter,
+    filter_id ? filter_id : "",
     report_id,
     delta_report_id ? delta_report_id : "0",
     format_id ? format_id : ""
@@ -10191,13 +10095,6 @@ get_reports (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t *response_data)
 {
-  const char *overrides;
-
-  overrides = params_value (params, "overrides");
-  if (overrides)
-    /* User toggled overrides.  Set the overrides value in the filter. */
-    params_toggle_overrides (params, overrides);
-
   return get_many (connection, "report", credentials, params, extra_xml, NULL,
                    response_data);
 }
@@ -10380,13 +10277,6 @@ get_results (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t *response_data)
 {
-  const char *overrides;
-  overrides = params_value (params, "overrides");
-
-  if (overrides)
-    /* User toggled overrides.  Set the overrides value in the filter. */
-    params_toggle_overrides (params, overrides);
-
   return get_many (connection, "result", credentials, params, extra_xml, NULL,
                    response_data);
 }
@@ -15979,22 +15869,6 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
         response_data);
     }
 
-  if (gmp_success (entity))
-    {
-      const char *filter_id;
-
-      filter_id = entity_attribute (entity, "id");
-      if (filter_id && strlen (filter_id))
-        {
-          param_t *param;
-          param = params_add (params, "filt_id", filter_id);
-          param->valid = 1;
-          param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
-        }
-    }
-
-  if (entity_attribute (entity, "id"))
-    params_add (params, "filter_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
                                "Create Filter", response_data);
   free_entity (entity);

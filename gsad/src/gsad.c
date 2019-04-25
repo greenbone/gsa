@@ -806,7 +806,6 @@ init_validator ()
   gvm_validator_alias (validator, "end_month", "month");
   gvm_validator_alias (validator, "end_year", "year");
   gvm_validator_alias (validator, "esxi_credential_id", "credential_id");
-  gvm_validator_alias (validator, "filt_id", "id");
   gvm_validator_alias (validator, "filter_extra", "filter");
   gvm_validator_alias (validator, "filter_id", "id");
   gvm_validator_alias (validator, "filterbox", "boolean");
@@ -863,7 +862,6 @@ init_validator ()
   gvm_validator_alias (validator, "old_password", "password");
   gvm_validator_alias (validator, "open_note", "note_optional");
   gvm_validator_alias (validator, "original_overrides", "boolean");
-  gvm_validator_alias (validator, "overrides", "boolean");
   gvm_validator_alias (validator, "owner", "name");
   gvm_validator_alias (validator, "passphrase", "lsc_password");
   gvm_validator_alias (validator, "password:name", "preference_name");
@@ -918,8 +916,6 @@ init_validator ()
   gvm_validator_alias (validator, "subject_id", "id");
   gvm_validator_alias (validator, "subject_id_optional", "id_optional");
   gvm_validator_alias (validator, "subtype", "asset_type");
-  gvm_validator_alias (validator, "task_filter", "filter");
-  gvm_validator_alias (validator, "task_filt_id", "filt_id");
   gvm_validator_alias (validator, "task_uuid", "optional_id");
   gvm_validator_alias (validator, "ticket_id", "id");
   gvm_validator_alias (validator, "timeout", "boolean");
