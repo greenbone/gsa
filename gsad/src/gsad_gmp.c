@@ -15853,22 +15853,6 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
         response_data);
     }
 
-  if (gmp_success (entity))
-    {
-      const char *filter_id;
-
-      filter_id = entity_attribute (entity, "id");
-      if (filter_id && strlen (filter_id))
-        {
-          param_t *param;
-          param = params_add (params, "filt_id", filter_id);
-          param->valid = 1;
-          param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
-        }
-    }
-
-  if (entity_attribute (entity, "id"))
-    params_add (params, "filter_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
                                "Create Filter", response_data);
   free_entity (entity);
