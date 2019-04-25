@@ -400,39 +400,6 @@ typedef struct
 } find_by_value_t;
 
 /**
- * @brief Check whether a filter exists
- *
- * @param[in] connection  Connection to manager.
- * @param[in] entity      Response entity.
- *
- * @return 1 success, 0 fail, -1 error, -2 could not send command to server,
- *         -3 could not read entity from server.
- */
-static int
-filter_exists (gvm_connection_t *connection, const char *filt_id)
-{
-  entity_t entity;
-
-  if (filt_id == NULL || str_equal (filt_id, FILT_ID_NONE)
-      || str_equal (filt_id, FILT_ID_USER_SETTING))
-    return 1;
-
-  /* check if filter still exists */
-  if (gvm_connection_sendf (connection, "<get_filters filter_id='%s'/>",
-                            filt_id))
-    {
-      return -2;
-    }
-
-  if (read_entity_c (connection, &entity))
-    {
-      return -3;
-    }
-
-  return gmp_success (entity);
-}
-
-/**
  * @brief Wrap some XML in an envelope.
  *
  * @param[in]  connection     Connection to manager
@@ -1199,31 +1166,6 @@ get_many (gvm_connection_t *connection, const char *type,
     details = "0";
 
   /* check if filter still exists */
-  switch (filter_exists (connection, filt_id))
-    {
-    case 1:
-      break;
-    case 0:
-      g_debug ("%s filter doesn't exist anymore %s!\n", __FUNCTION__, filt_id);
-      filt_id = NULL;
-      break;
-    case -1:
-      g_debug ("%s filter response didn't contain a status!\n", __FUNCTION__);
-      filt_id = NULL;
-      break;
-    case -2:
-      g_debug ("%s could not send filter request!\n", __FUNCTION__);
-      filt_id = NULL;
-      break;
-    case -3:
-      g_debug ("%s could not read entity from filter response!\n",
-               __FUNCTION__);
-      filt_id = NULL;
-      break;
-    default:
-      filt_id = NULL;
-    }
-
   xml = g_string_new ("");
   type_many = g_string_new (type);
 
