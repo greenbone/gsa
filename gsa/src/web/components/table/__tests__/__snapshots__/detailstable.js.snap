@@ -19,14 +19,6 @@ exports[`DetailsTable tests should render 1`] = `
   align-items: stretch;
 }
 
-.c2 {
-  width: 10%;
-}
-
-.c3 {
-  width: 90%;
-}
-
 .c1 {
   border: 0;
   border-spacing: 0px;
@@ -42,6 +34,14 @@ exports[`DetailsTable tests should render 1`] = `
 
 .c0 tr td:first-child {
   padding-right: 5px;
+}
+
+.c2 {
+  width: 10%;
+}
+
+.c3 {
+  width: 90%;
 }
 
 @media print {
