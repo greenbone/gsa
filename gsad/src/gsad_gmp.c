@@ -5651,7 +5651,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
                      "<active>%s</active>"
                      "<comment>%s</comment>"
                      "<event>%s",
-                     name, filter_id ? filter_id : "", active,
+                     name, filter_id ? filter_id : FILT_ID_NONE, active,
                      comment ? comment : "", event);
 
   append_alert_event_data (xml, event_data, event);
