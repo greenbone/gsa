@@ -15894,15 +15894,6 @@ char *
 delete_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
                    params_t *params, cmd_response_data_t *response_data)
 {
-  param_t *filt_id, *id;
-
-  filt_id = params_get (params, "filt_id");
-  id = params_get (params, "filter_id");
-  if (id && id->value && filt_id && filt_id->value
-      && (strcmp (id->value, filt_id->value) == 0))
-    // TODO: Add params_remove.
-    filt_id->value = NULL;
-
   return move_resource_to_trash (connection, "filter", credentials, params,
                                  response_data);
 }
