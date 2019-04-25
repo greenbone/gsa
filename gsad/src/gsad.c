@@ -806,7 +806,6 @@ init_validator ()
   gvm_validator_alias (validator, "end_month", "month");
   gvm_validator_alias (validator, "end_year", "year");
   gvm_validator_alias (validator, "esxi_credential_id", "credential_id");
-  gvm_validator_alias (validator, "filt_id", "id");
   gvm_validator_alias (validator, "filter_extra", "filter");
   gvm_validator_alias (validator, "filter_id", "id");
   gvm_validator_alias (validator, "filterbox", "boolean");

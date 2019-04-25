@@ -1132,7 +1132,7 @@ get_many (gvm_connection_t *connection, const char *type,
   GString *xml;
   GString *type_many; /* The plural form of type */
   gchar *request, *built_filter;
-  const char *build_filter, *filt_id, *filter, *filter_extra;
+  const char *build_filter, *filter_id, *filter, *filter_extra;
   const char *first, *max, *sort_field, *sort_order, *owner, *permission;
   const char *replace_task_id;
   const char *overrides, *autofp, *autofp_value, *min_qod;
@@ -1141,7 +1141,7 @@ get_many (gvm_connection_t *connection, const char *type,
   const char *details;
 
   build_filter = params_value (params, "build_filter");
-  filt_id = params_value (params, "filt_id");
+  filter_id = params_value (params, "filter_id");
   filter = params_value (params, "filter");
   filter_extra = params_value (params, "filter_extra");
   first = params_value (params, "first");
@@ -1179,7 +1179,8 @@ get_many (gvm_connection_t *connection, const char *type,
     g_string_append (xml, extra_xml);
 
   built_filter = NULL;
-  if (filt_id == NULL || str_equal (filt_id, "") || str_equal (filt_id, "--"))
+  if (filter_id == NULL || str_equal (filter_id, "")
+      || str_equal (filter_id, "--"))
     {
       if ((build_filter && str_equal (build_filter, "1"))
           || ((filter == NULL || str_equal (filter, ""))
@@ -1232,7 +1233,8 @@ get_many (gvm_connection_t *connection, const char *type,
                 owner ? owner : "", owner ? " " : "",
                 (filter && search_phrase) ? " " : "", filter ? filter : "",
                 search_phrase ? " " : "", search_phrase ? search_phrase : "");
-              filt_id = FILT_ID_USER_SETTING;
+
+              filter_id = FILT_ID_USER_SETTING;
               g_free (task);
             }
           else if (strcmp (type, "info") == 0
@@ -1274,18 +1276,18 @@ get_many (gvm_connection_t *connection, const char *type,
             filter = "rows=-2";
           else
             filter = "apply_overrides=1 rows=-2";
-          if (filt_id && !str_equal (filt_id, ""))
+          if (filter_id && !str_equal (filter_id, ""))
             /* Request to use "filter" instead. */
-            filt_id = FILT_ID_NONE;
+            filter_id = FILT_ID_NONE;
           else
-            filt_id = FILT_ID_USER_SETTING;
+            filter_id = FILT_ID_USER_SETTING;
         }
       else if (str_equal (filter, "sort=nvt")
                && (str_equal (type, "note") || str_equal (type, "override")))
-        filt_id = FILT_ID_USER_SETTING;
+        filter_id = FILT_ID_USER_SETTING;
       else if (str_equal (filter, "apply_overrides=1")
                && str_equal (type, "task"))
-        filt_id = FILT_ID_USER_SETTING;
+        filter_id = FILT_ID_USER_SETTING;
     }
   else if (replace_task_id)
     {
@@ -1306,7 +1308,8 @@ get_many (gvm_connection_t *connection, const char *type,
     " max=\"%s\""
     " sort_field=\"%s\""
     " sort_order=\"%s\"",
-    strcmp (type, "report") ? "" : "report_", filt_id ? filt_id : "0",
+    strcmp (type, "report") ? "" : "report_",
+    filter_id ? filter_id : FILT_ID_NONE,
     strcmp (type, "report") ? "" : "report_",
     built_filter ? built_filter : (filter ? filter : ""),
     filter_extra ? " " : "", filter_extra ? filter_extra : "",
@@ -4923,7 +4926,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
   param_t *param;
 
   const char *data_column, *group_column, *subgroup_column, *type;
-  const char *filter, *filt_id;
+  const char *filter, *filter_id;
   const char *first_group, *max_groups;
   const char *mode;
   gchar *filter_escaped, *command_escaped, *response;
@@ -4938,19 +4941,20 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
   subgroup_column = params_value (params, "subgroup_column");
   type = params_value (params, "aggregate_type");
   filter = params_value (params, "filter");
-  filt_id = params_value (params, "filt_id");
+  filter_id = params_value (params, "filter_id");
   sort_fields = params_values (params, "sort_fields:");
   sort_stats = params_values (params, "sort_stats:");
   sort_orders = params_values (params, "sort_orders:");
   first_group = params_value (params, "first_group");
   max_groups = params_value (params, "max_groups");
   mode = params_value (params, "aggregate_mode");
-  if (filter && strcmp (filter, ""))
+
+  if (filter && !str_equal (filter, ""))
     filter_escaped = g_markup_escape_text (filter, -1);
   else
     {
-      if (filt_id == NULL || strcmp (filt_id, "") == 0
-          || strcmp (filt_id, "0") == 0)
+      if (filter_id == NULL || str_equal (filter_id, "")
+          || str_equal (filter_id, FILT_ID_NONE))
         filter_escaped = g_strdup ("rows=-2");
       else
         filter_escaped = NULL;
@@ -4962,21 +4966,28 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append_printf (command, " type=\"%s\"", type);
   if (data_column)
     g_string_append_printf (command, " data_column=\"%s\"", data_column);
+
   if (group_column)
     g_string_append_printf (command, " group_column=\"%s\"", group_column);
+
   if (subgroup_column)
     g_string_append_printf (command, " subgroup_column=\"%s\"",
                             subgroup_column);
   if (filter_escaped && strcmp (filter_escaped, ""))
     g_string_append_printf (command, " filter=\"%s\"", filter_escaped);
-  if (filt_id && strcmp (filt_id, ""))
-    g_string_append_printf (command, " filt_id=\"%s\"", filt_id);
+
+  if (filter_id && !str_equal (filter_id, ""))
+    g_string_append_printf (command, " filt_id=\"%s\"", filter_id);
+
   if (first_group && strcmp (first_group, ""))
     g_string_append_printf (command, " first_group=\"%s\"", first_group);
+
   if (max_groups && strcmp (max_groups, ""))
     g_string_append_printf (command, " max_groups=\"%s\"", max_groups);
+
   if (mode && strcmp (mode, ""))
     g_string_append_printf (command, " mode=\"%s\"", mode);
+
   g_string_append (command, ">");
 
   if (sort_fields && sort_stats && sort_orders)
@@ -5083,6 +5094,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   if (gmp_success (entity) == 0)
     set_http_status_from_entity (entity, response_data);
+
   g_string_append (xml, response);
 
   g_string_append (xml, "</get_aggregate>");
