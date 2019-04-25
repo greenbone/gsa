@@ -59,7 +59,7 @@ export const DEFAULT_FILTER_SETTINGS = {
   cve: 'def63b5a-41ef-43f4-b9ef-03ef1665db5d',
   dfncert: '312350ed-bc06-44f3-8b3f-ab9eb828b80b',
   filter: 'f9691163-976c-47e7-ad9a-38f2d5c81649',
-  group: '',
+  group: 'f722e5a4-88d8-475f-95b9-e4dcafbc075b',
   host: '37562dfe-1f7e-4cae-a7c0-fa95e6f194c5',
   operatingsystem: 'f608c3ec-ce73-4ff6-8e04-7532749783af',
   ovaldef: 'adb6ffc8-e50e-4aab-9c31-13c741eb8a16',
@@ -73,14 +73,14 @@ export const DEFAULT_FILTER_SETTINGS = {
   result: '739ab810-163d-11e3-9af6-406186ea4fc5',
   role: 'f38e673a-bcd1-11e2-a19a-406186ea4fc5',
   scanconfig: '1a9fbd91-0182-44cd-bc88-a13a9b3b1bef',
-  scanner: '',
+  scanner: 'ba00fe91-bdce-483c-b8df-2372e9774ad6',
   schedule: 'a83e321b-d994-4ae8-beec-bfb5fe3e7336',
   tag: '108eea3b-fc61-483c-9da9-046762f137a8',
   target: '236e2e41-9771-4e7a-8124-c432045985e0',
   task: '1c981851-8244-466c-92c4-865ffe05e721',
-  ticket: '',
-  user: '',
-  vulnerability: '',
+  ticket: '801544de-f06d-4377-bb77-bbb23369bad4',
+  user: 'a33635be-7263-4549-bd80-c04d2dba89b4',
+  vulnerability: '17c9d269-95e7-4bfa-b1b2-bc106a2175c7',
 };
 
 const saveDefaultFilterSettingId = entityType =>
