@@ -110,8 +110,8 @@ import Authorized from './authorized';
 // create an own history for location.query support
 // see https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/guides/migrating.md#query-strings
 // for details
-const createQueryHistory = options =>
-  qhistory(createBrowserHistory(options), stringify, parse);
+export const createQueryHistory = (history = createBrowserHistory()) =>
+  qhistory(history, stringify, parse);
 
 const HISTORY = createQueryHistory();
 
