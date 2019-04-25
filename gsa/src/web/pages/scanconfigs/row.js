@@ -123,7 +123,7 @@ const ScanConfigRow = ({
             'selected families will automatically be added and considered.',
         )}
         titleStatic={_(
-          'The NVT selection is DYNAMIC. New NVTS of ' +
+          'The NVT selection is STATIC. New NVTs of ' +
             'selected families will NOT automatically be added and ' +
             'considered.',
         )}
