@@ -24,34 +24,19 @@ import {map, forEach} from '../utils/array';
 import {parseCollectionList} from '../collection/parser.js';
 
 import Filter, {ALL_FILTER} from '../models/filter.js';
-import {filter_string} from '../models/filter/utils.js';
 
 import DefaultTransform from '../http/transform/default.js';
 
-import HttpCommand from './http.js';
-import {BULK_SELECT_BY_IDS, BULK_SELECT_BY_FILTER} from './gmp.js';
+import GmpCommand, {BULK_SELECT_BY_IDS, BULK_SELECT_BY_FILTER} from './gmp.js';
 
 const log = logger.getLogger('gmp.commands.entities');
 
-class EntitiesCommand extends HttpCommand {
+class EntitiesCommand extends GmpCommand {
   constructor(http, name, clazz) {
     super(http, {cmd: 'get_' + name + 's'});
 
     this.clazz = clazz;
     this.name = name;
-  }
-
-  getParams(params = {}, extra_params = {}) {
-    const {filter, ...other} = params;
-    const rparams = super.getParams(other, extra_params);
-
-    if (isDefined(filter)) {
-      if (isDefined(filter.id)) {
-        rparams.filt_id = filter.id;
-      }
-      rparams.filter = filter_string(filter);
-    }
-    return rparams;
   }
 
   getCollectionListFromRoot(root) {
