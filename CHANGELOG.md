@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.1] - (unreleased)
 
 ### Added
+- German translation [#1311](https://github.com/greenbone/gsa/pull/1311)
 - Add tests for comment and badge [#1309](https://github.com/greenbone/gsa/pull/1309)
 - Add error dialog to fix missing error messages in trashcan [#1286](https://github.com/greenbone/gsa/pull/1286)
 - Display current result, comparable result and diff between results for delta
