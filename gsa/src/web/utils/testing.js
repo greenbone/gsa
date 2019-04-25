@@ -43,6 +43,7 @@ import {hasValue, isDefined} from 'gmp/utils/identity';
 import GmpProvider from 'web/components/provider/gmpprovider';
 import CapabilitiesProvider from 'web/components/provider/capabilitiesprovider';
 
+import {createQueryHistory} from 'web/routes';
 import configureStore from 'web/store';
 
 export * from 'react-testing-library';
@@ -110,7 +111,7 @@ export const rendererWith = (
 
   let history;
   if (router === true) {
-    history = createMemoryHistory({initialEntries: ['/']});
+    history = createQueryHistory(createMemoryHistory({initialEntries: ['/']}));
   }
 
   if (capabilities === true) {
