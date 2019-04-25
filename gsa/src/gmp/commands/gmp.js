@@ -33,7 +33,11 @@ class GmpCommand extends HttpCommand {
     const rparams = super.getParams(other, extra_params);
 
     if (isDefined(filter)) {
-      rparams.filter = filter_string(filter);
+      if (isDefined(filter.id)) {
+        rparams.filter_id = filter.id;
+      } else {
+        rparams.filter = filter_string(filter);
+      }
     }
 
     return rparams;
