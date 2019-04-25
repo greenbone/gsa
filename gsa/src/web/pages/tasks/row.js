@@ -127,10 +127,9 @@ const Row = ({
             {isDefined(scanner) && scanner.type === GMP_SCANNER_TYPE && (
               <SensorIcon
                 size="small"
-                title={_(
-                  'Task is configured to run on slave scanner {{name}}',
-                  {name: scanner.name},
-                )}
+                title={_('Task is configured to run on sensor {{name}}', {
+                  name: scanner.name,
+                })}
               />
             )}
             <ObserverIcon

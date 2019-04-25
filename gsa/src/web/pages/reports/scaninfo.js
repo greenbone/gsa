@@ -207,7 +207,7 @@ const ReportScanInfoTable = ({filterString, links = true, report}) => {
         )}
         {isDefined(slave) && (
           <TableRow>
-            <TableData>{_('Scan slave')}</TableData>
+            <TableData>{_('Scan sensor')}</TableData>
             <TableData>{slave.name}</TableData>
           </TableRow>
         )}

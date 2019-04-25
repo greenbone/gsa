@@ -167,14 +167,14 @@ const AdvancedTaskWizard = ({
                 {capabilities.mayAccess('slaves') && <br />}
                 {capabilities.mayAccess('slaves') &&
                   _(
-                    'Finally, you can select a slave which will run the ' +
+                    'Finally, you can select a sensor which will run the ' +
                       'scan.',
                   )}
               </p>
               <p>
                 {_(
-                  'For any other setting I will apply the defaults from ' +
-                    '"My Settings".',
+                  'For any other setting the defaults from ' +
+                    '"My Settings" will be applied.',
                 )}
               </p>
             </WizardContent>

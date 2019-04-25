@@ -456,7 +456,7 @@ const Method = ({method, details = false}) => {
 
               {isDefined(credential) && isDefined(credential.login) && (
                 <TableRow>
-                  <TableData>{_('Userame')}</TableData>
+                  <TableData>{_('Username')}</TableData>
                   <TableData>{credential.login}</TableData>
                 </TableRow>
               )}

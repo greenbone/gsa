@@ -87,7 +87,7 @@ const render_certificate_info = info => {
     });
   }
   if (info.time_status === 'inactive') {
-    return _('Certificate currently in not valid until {{date}}', {
+    return _('Certificate currently not valid until {{date}}', {
       date: longDate(info.activationTime),
     });
   }
