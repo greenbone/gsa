@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SeverityClassLabel tests should render 1`] = `
+.c0 {
+  text-align: center;
+  font-weight: normal;
+  font-style: normal;
+  color: white;
+  padding: 1px;
+  display: inline-block;
+  width: 60px;
+  height: 1.5em;
+  font-size: 0.8em;
+  background-color: #C83814;
+  border-color: #C83814;
+}
+
+<div
+  class="c0"
+>
+  High
+</div>
+`;

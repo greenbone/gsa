@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.1] - (unreleased)
 
 ### Added
+- Add tests for label and img [#1313](https://github.com/greenbone/gsa/pull/1313)
 - German translation [#1311](https://github.com/greenbone/gsa/pull/1311)
 - Add tests for comment and badge [#1309](https://github.com/greenbone/gsa/pull/1309)
 - Add error dialog to fix missing error messages in trashcan [#1286](https://github.com/greenbone/gsa/pull/1286)
@@ -15,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add tooltips to deactivated text fields in AlertDialog [#1269](https://github.com/greenbone/gsa/pull/1269)
 
 ### Changed
+- Update dependencies of react, react-dom, react-redux and create-react-app [#1312](https://github.com/greenbone/gsa/pull/1312)
 - Adjust clickable area of Select [#1296](https://github.com/greenbone/gsa/pull/1296)
 - Update dialog for Task Wizard, Advanced Task Wizard and Modify Task Wizard [#1287](https://github.com/greenbone/gsa/pull/1287)
 - Disable inputs for improper option selection in EmailMethodPart of
