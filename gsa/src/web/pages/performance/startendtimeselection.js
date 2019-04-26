@@ -87,10 +87,11 @@ class StartTimeSelection extends React.Component {
   }
 
   render() {
-    const {endDate, startDate} = this.props;
+    const {endDate, startDate, timezone} = this.props;
     const {startHour, startMinute, endHour, endMinute} = this.state;
     return (
       <Layout flex="column">
+        <FormGroup title={_('Timezone')}>{timezone}</FormGroup>
         <FormGroup title={_('Start Time')}>
           <Divider flex="column">
             <Datepicker
@@ -164,6 +165,7 @@ class StartTimeSelection extends React.Component {
 StartTimeSelection.propTypes = {
   endDate: PropTypes.date,
   startDate: PropTypes.date,
+  timezone: PropTypes.string.isRequired,
   onChanged: PropTypes.func.isRequired,
 };
 
