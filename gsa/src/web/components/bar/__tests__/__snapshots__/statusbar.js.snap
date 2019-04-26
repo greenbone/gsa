@@ -52,10 +52,12 @@ exports[`StatusBar tests should render 1`] = `
 
 <div
   class="c0"
+  data-testid="progressbar-box"
   title="undefined"
 >
   <div
     class="c1"
+    data-testid="progress"
   />
   <div
     class="c2"

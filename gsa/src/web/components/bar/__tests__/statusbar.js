@@ -22,11 +22,47 @@ import {render} from 'web/utils/testing';
 
 import StatusBar from '../statusbar';
 
+import {TASK_STATUS} from 'gmp/models/task';
+
 describe('StatusBar tests', () => {
   test('should render', () => {
     const {element} = render(<StatusBar progress="90" status="Unknown" />);
 
     expect(element).toMatchSnapshot();
+  });
+
+  test('should render text content', () => {
+    const {element} = render(
+      <StatusBar progress="90" status={TASK_STATUS.stopped} />,
+    );
+    expect(element).toHaveTextContent('Stopped at 90 %');
+  });
+
+  test('should render title', () => {
+    const {getByTestId} = render(
+      <StatusBar progress="90" status={TASK_STATUS.stopped} />,
+    );
+    const progressbarBox = getByTestId('progressbar-box');
+
+    expect(progressbarBox).toHaveAttribute('title', 'Stopped');
+  });
+
+  test('should render progress', () => {
+    const {getByTestId} = render(
+      <StatusBar progress="90" status={TASK_STATUS.stopped} />,
+    );
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('width', '90%');
+  });
+
+  test('should render background', () => {
+    const {getByTestId} = render(
+      <StatusBar progress="90" status={TASK_STATUS.stopped} />,
+    );
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('background', '#F0A519');
   });
 });
 
