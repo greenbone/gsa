@@ -51,6 +51,7 @@ import MenuEntry from 'web/components/menu/menuentry';
 import Section from 'web/components/section/section';
 
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {getTimezone} from 'web/store/usersettings/selectors';
 import {
   loadEntities as loadScanners,
   selector as scannerSelector,
@@ -185,7 +186,7 @@ class PerformancePage extends React.Component {
 
   componentDidMount() {
     const {start, end, scanner} = this.props.location.query;
-    const {gmp} = this.props;
+    const {gmp, timezone} = this.props;
 
     gmp.performance.get().then(response => {
       this.setState({reports: response.data});
@@ -205,8 +206,18 @@ class PerformancePage extends React.Component {
         endDate = date();
       }
 
+      endDate.tz(timezone);
+      startDate.tz(timezone);
+
       this.setState({
         duration: undefined,
+        endDate,
+        startDate,
+      });
+    } else {
+      const endDate = date().tz(timezone);
+      const startDate = endDate.clone().subtract(1, 'day');
+      this.setState({
         endDate,
         startDate,
       });
@@ -268,6 +279,7 @@ class PerformancePage extends React.Component {
         >
           <StartEndTimeSelection
             endDate={endDate}
+            timezone={this.props.timezone}
             startDate={startDate}
             onChanged={this.handleStartEndChange}
           />
@@ -344,6 +356,7 @@ PerformancePage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   loadScanners: PropTypes.func.isRequired,
   scanners: PropTypes.arrayOf(PropTypes.model),
+  timezone: PropTypes.string.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
 
@@ -356,6 +369,7 @@ const mapStateToProps = rootState => {
   const select = scannerSelector(rootState);
   return {
     scanners: select.getEntities(SLAVE_SCANNER_FILTER),
+    timezone: getTimezone(rootState),
   };
 };
 
