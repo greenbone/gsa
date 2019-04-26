@@ -106,6 +106,7 @@ class LoginForm extends React.Component {
       showGuestLogin = false,
       showLogin = true,
       showProtocolInsecure = false,
+      isIE11,
       onGuestLoginClick,
     } = this.props;
     const {username, password} = this.state;
@@ -125,6 +126,17 @@ class LoginForm extends React.Component {
                 {_(
                   'Please configure a TLS certificate for the HTTPS service ' +
                     'or ask your administrator to do so as soon as possible.',
+                )}
+              </p>
+            </Panel>
+          )}
+
+          {isIE11() && (
+            <Panel data-testid="IE11">
+              <Error>{_('Warning: You are using IE11')}</Error>
+              <p>
+                {_(
+                  'You are using Internet Explorer 11. You might encounter appearance and performance issues.',
                 )}
               </p>
             </Panel>
@@ -195,6 +207,7 @@ class LoginForm extends React.Component {
 
 LoginForm.propTypes = {
   error: PropTypes.string,
+  isIE11: PropTypes.func.isRequired,
   showGuestLogin: PropTypes.bool,
   showLogin: PropTypes.bool,
   showProtocolInsecure: PropTypes.bool,
