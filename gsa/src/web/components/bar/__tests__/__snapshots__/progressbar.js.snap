@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProgressBar tests should render 1`] = `
+.c0 {
+  height: 13px;
+  box-sizing: content-box;
+  display: inline-block;
+  width: 100px;
+  background: #393637;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.c2 {
+  z-index: 1;
+  font-weight: bold;
+  color: #fff;
+  font-size: 9px;
+  margin: 0;
+  position: relative;
+  top: -13px;
+  padding-top: 1px;
+}
+
+.c1 {
+  height: 13px;
+  width: 10%;
+  background: #4F91C7;
+}
+
+@media print {
+  .c0 {
+    background: none;
+    border: 0;
+  }
+}
+
+@media print {
+  .c2 {
+    color: black;
+  }
+}
+
+@media print {
+  .c1 {
+    background: none;
+  }
+}
+
+<div
+  class="c0"
+  data-testid="progressbar-box"
+  title="Progress"
+>
+  <div
+    class="c1"
+    data-testid="progress"
+  />
+  <div
+    class="c2"
+  />
+</div>
+`;

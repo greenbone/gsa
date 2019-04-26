@@ -89,8 +89,12 @@ const Progress = styled.div`
 
 const ProgressBar = ({background, children, progress, title}) => {
   return (
-    <ProgressBarBox title={title}>
-      <Progress progress={progress} background={background} />
+    <ProgressBarBox data-testid="progressbar-box" title={title}>
+      <Progress
+        data-testid="progress"
+        progress={progress}
+        background={background}
+      />
       <Content>{children}</Content>
     </ProgressBarBox>
   );
