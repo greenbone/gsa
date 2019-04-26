@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Add warning for IE11 [#1322](https://github.com/greenbone/gsa/pull/1322)
 - Add tests for label and img [#1313](https://github.com/greenbone/gsa/pull/1313)
-- German translation [#1311](https://github.com/greenbone/gsa/pull/1311)
+- German translation [#1311](https://github.com/greenbone/gsa/pull/1311)[#1323](https://github.com/greenbone/gsa/pull/1323)
 - Add tests for comment and badge [#1309](https://github.com/greenbone/gsa/pull/1309)
 - Add error dialog to fix missing error messages in trashcan [#1286](https://github.com/greenbone/gsa/pull/1286)
 - Display current result, comparable result and diff between results for delta
