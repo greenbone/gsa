@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix timezone handling at performance page [#1235](https://github.com/greenbone/gsa/pull/1325)
 - Fix creating and editing alerts without a result filter [#1315](https://github.com/greenbone/gsa/pull/1315)
 - Fix filter selection at report details page [#1314](https://github.com/greenbone/gsa/pull/1314)
 - Fix using default results filter at report details page [#1314](https://github.com/greenbone/gsa/pull/1314)
