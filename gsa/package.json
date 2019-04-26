@@ -66,12 +66,12 @@
     "x2js": "^3.2.6"
   },
   "scripts": {
-    "test": "NODE_PATH=src react-scripts test",
-    "test:coverage": "NODE_PATH=src react-scripts test --coverage --maxWorkers 2",
-    "lint": "NODE_PATH=src eslint --max-warnings 0 src",
-    "start": "NODE_PATH=src react-scripts start",
-    "build": "NODE_PATH=src react-scripts build",
-    "eject": "NODE_PATH=src react-scripts eject"
+    "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage --maxWorkers 2",
+    "lint": "eslint --max-warnings 0 src",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject"
   },
   "devDependencies": {
     "eslint-config-prettier": "^4.0.0",
