@@ -3416,7 +3416,7 @@ get_tasks (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t *response_data)
 {
-  const char *overrides, *schedules_only, *ignore_pagination;
+  const char *schedules_only, *ignore_pagination;
   gchar *extra_attribs, *ret;
 
   schedules_only = params_value (params, "schedules_only");
@@ -5651,7 +5651,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
                      "<active>%s</active>"
                      "<comment>%s</comment>"
                      "<event>%s",
-                     name, filter_id ? filter_id : "", active,
+                     name, filter_id ? filter_id : FILT_ID_NONE, active,
                      comment ? comment : "", event);
 
   append_alert_event_data (xml, event_data, event);
@@ -6354,13 +6354,17 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
   filter_id = params_value (params, "filter_id");
   active = params_value (params, "active");
 
+  if (filter_id == NULL || str_equal (filter_id, ""))
+    {
+      filter_id = FILT_ID_NONE;
+    }
+
   CHECK_VARIABLE_INVALID (name, "Save Alert");
   CHECK_VARIABLE_INVALID (comment, "Save Alert");
   CHECK_VARIABLE_INVALID (alert_id, "Save Alert");
   CHECK_VARIABLE_INVALID (condition, "Save Alert");
   CHECK_VARIABLE_INVALID (event, "Save Alert");
   CHECK_VARIABLE_INVALID (method, "Save Alert");
-  CHECK_VARIABLE_INVALID (filter_id, "Save Alert");
   CHECK_VARIABLE_INVALID (active, "Save Alert");
 
   xml = g_string_new ("");
