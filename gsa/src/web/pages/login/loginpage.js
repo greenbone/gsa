@@ -89,6 +89,11 @@ const MenuSpacer = styled.div`
   z-index: ${Theme.Layers.menu};
 `;
 
+const isIE11 = () =>
+  navigator.userAgent.match(/Trident\/([\d.]+)/)
+    ? +navigator.userAgent.match(/Trident\/([\d.]+)/)[1] >= 7
+    : false;
+
 class LoginPage extends React.Component {
   constructor(props) {
     super(props);
@@ -167,10 +172,6 @@ class LoginPage extends React.Component {
 
     const showLogin = !gmp.settings.disableLoginForm;
     const showProtocolInsecure = window.location.protocol !== 'https:';
-    const isIE11 = () =>
-      navigator.userAgent.match(/Trident\/([\d.]+)/)
-        ? +navigator.userAgent.match(/Trident\/([\d.]+)/)[1] >= 7
-        : false;
 
     return (
       <StyledLayout>
@@ -183,7 +184,7 @@ class LoginPage extends React.Component {
             showGuestLogin={showGuestLogin}
             showLogin={showLogin}
             showProtocolInsecure={showProtocolInsecure}
-            isIE11={isIE11}
+            isIE11={isIE11()}
             onGuestLoginClick={this.handleGuestLogin}
             onSubmit={this.handleSubmit}
           />

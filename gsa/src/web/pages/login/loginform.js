@@ -106,7 +106,7 @@ class LoginForm extends React.Component {
       showGuestLogin = false,
       showLogin = true,
       showProtocolInsecure = false,
-      isIE11,
+      isIE11 = false,
       onGuestLoginClick,
     } = this.props;
     const {username, password} = this.state;
@@ -131,7 +131,7 @@ class LoginForm extends React.Component {
             </Panel>
           )}
 
-          {isIE11() && (
+          {isIE11 && (
             <Panel data-testid="IE11">
               <Error>{_('Warning: You are using IE11')}</Error>
               <p>
@@ -207,7 +207,7 @@ class LoginForm extends React.Component {
 
 LoginForm.propTypes = {
   error: PropTypes.string,
-  isIE11: PropTypes.func.isRequired,
+  isIE11: PropTypes.bool,
   showGuestLogin: PropTypes.bool,
   showLogin: PropTypes.bool,
   showProtocolInsecure: PropTypes.bool,
