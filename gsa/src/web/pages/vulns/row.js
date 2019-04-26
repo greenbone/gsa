@@ -19,7 +19,7 @@
 
 import React from 'react';
 
-import {longDate} from 'gmp/locale/date';
+import DateTime from 'web/components/date/datetime';
 
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
@@ -51,8 +51,12 @@ const Row = ({
           </DetailsLink>
         </span>
       </TableData>
-      <TableData>{longDate(results.oldest)}</TableData>
-      <TableData>{longDate(results.newest)}</TableData>
+      <TableData>
+        <DateTime date={results.oldest} />
+      </TableData>
+      <TableData>
+        <DateTime date={results.newest} />
+      </TableData>
       <TableData>
         <SeverityBar severity={entity.severity} />
       </TableData>

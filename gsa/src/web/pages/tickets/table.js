@@ -18,12 +18,13 @@
  */
 import React from 'react';
 
-import {longDate} from 'gmp/locale/date';
 import {_l, _} from 'gmp/locale/lang';
 
 import {getTranslatableTicketStatus} from 'gmp/models/ticket';
 
 import SeverityBar from 'web/components/bar/severitybar';
+
+import DateTime from 'web/components/date/datetime';
 
 import SolutionType from 'web/components/icon/solutiontypeicon';
 
@@ -139,7 +140,9 @@ const Row = ({
       <SolutionType type={entity.solutionType} />
     </TableData>
     <TableData>{entity.assignedTo.user.name}</TableData>
-    <TableData>{longDate(entity.modificationTime)}</TableData>
+    <TableData>
+      <DateTime date={entity.modificationTime} />
+    </TableData>
     <TableData>{getTranslatableTicketStatus(entity.status)}</TableData>
     <ActionsComponent {...props} entity={entity} />
   </TableRow>

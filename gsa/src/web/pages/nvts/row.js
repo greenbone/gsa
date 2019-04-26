@@ -19,9 +19,9 @@
 
 import React from 'react';
 
-import {longDate} from 'gmp/locale/date';
-
 import SeverityBar from 'web/components/bar/severitybar';
+
+import DateTime from 'web/components/date/datetime';
 
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
 
@@ -66,8 +66,12 @@ const Row = ({
         </Link>
       </span>
     </TableData>
-    <TableData>{longDate(entity.creationTime)}</TableData>
-    <TableData>{longDate(entity.modificationTime)}</TableData>
+    <TableData>
+      <DateTime date={entity.creationTime} />
+    </TableData>
+    <TableData>
+      <DateTime date={entity.modificationTime} />
+    </TableData>
     <TableData>
       <Divider wrap>
         {entity.cves.map(id => (

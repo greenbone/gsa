@@ -21,13 +21,13 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {longDate} from 'gmp/locale/date';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import {shorten} from 'gmp/utils/string';
 
 import SeverityBar from 'web/components/bar/severitybar';
+
+import DateTime from 'web/components/date/datetime';
 
 import NoteIcon from 'web/components/icon/noteicon';
 import OverrideIcon from 'web/components/icon/overrideicon';
@@ -114,7 +114,9 @@ const Row = ({
         )}
       </TableData>
       <TableData>{entity.port}</TableData>
-      <TableData>{longDate(entity.modificationTime)}</TableData>
+      <TableData>
+        <DateTime date={entity.modificationTime} />
+      </TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );

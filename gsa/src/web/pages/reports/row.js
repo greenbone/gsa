@@ -20,7 +20,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -28,6 +27,8 @@ import {TASK_STATUS, isActive} from 'gmp/models/task';
 
 import SeverityBar from 'web/components/bar/severitybar';
 import StatusBar from 'web/components/bar/statusbar';
+
+import DateTime from 'web/components/date/datetime';
 
 import DeleteIcon from 'web/components/icon/deleteicon';
 import DeltaIcon from 'web/components/icon/deltaicon';
@@ -118,7 +119,7 @@ const Row = ({
       <TableData>
         <span>
           <DetailsLink type="report" id={entity.id} textOnly={!links}>
-            {longDate(report.timestamp)}
+            <DateTime date={report.timestamp} />
           </DetailsLink>
         </span>
       </TableData>
