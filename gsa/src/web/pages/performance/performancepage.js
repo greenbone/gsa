@@ -122,18 +122,7 @@ ToolBar.propTypes = {
 };
 
 const ReportImage = withGmp(
-  ({
-    gmp,
-    name,
-    duration,
-    scannerId,
-    endDate,
-    endHour,
-    endMinute,
-    startDate,
-    startHour,
-    startMinute,
-  }) => {
+  ({gmp, name, duration, scannerId, endDate, startDate}) => {
     const params = {
       slave_id: scannerId,
       token: gmp.settings.token,
@@ -142,16 +131,8 @@ const ReportImage = withGmp(
     if (isDefined(duration)) {
       params.duration = DURATIONS[duration];
     } else {
-      params.start_year = startDate.year();
-      params.start_month = startDate.month() + 1; // month is zero indexed
-      params.start_day = startDate.date();
-      params.start_hour = startHour;
-      params.start_minute = startMinute;
-      params.end_year = endDate.year();
-      params.end_month = endDate.month() + 1;
-      params.end_day = endDate.date();
-      params.end_hour = endHour;
-      params.end_minute = endMinute;
+      params.start_time = startDate.toISOString();
+      params.end_time = endDate.toISOString();
     }
     const url = gmp.buildUrl('system_report/' + name + '/report.', params);
     return <img alt="" src={url} />;
@@ -161,13 +142,9 @@ const ReportImage = withGmp(
 ReportImage.propTypes = {
   duration: PropTypes.string,
   endDate: PropTypes.date,
-  endHour: PropTypes.number,
-  endMinute: PropTypes.number,
   name: PropTypes.string.isRequired,
   scannerId: PropTypes.idOrZero.isRequired,
   startDate: PropTypes.date,
-  startHour: PropTypes.number,
-  startMinute: PropTypes.number,
 };
 
 const Selector = withClickHandler()(styled.span`
@@ -378,11 +355,7 @@ class PerformancePage extends React.Component {
                 duration={duration}
                 scannerId={sensorId}
                 startDate={startDate}
-                startHour={startHour}
-                startMinute={startMinute}
                 endDate={endDate}
-                endHour={endHour}
-                endMinute={endMinute}
               />
             </div>
           ))}
