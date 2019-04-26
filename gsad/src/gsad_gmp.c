@@ -3416,7 +3416,7 @@ get_tasks (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t *response_data)
 {
-  const char *overrides, *schedules_only, *ignore_pagination;
+  const char *schedules_only, *ignore_pagination;
   gchar *extra_attribs, *ret;
 
   schedules_only = params_value (params, "schedules_only");
