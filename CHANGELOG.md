@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.1] - (unreleased)
 
 ### Added
+- Add new DefaultFilterSettings to UserSettings [#1326](https://github.com/greenbone/gsa/pull/1326)
 - Add warning for IE11 [#1322](https://github.com/greenbone/gsa/pull/1322)
 - Add tests for label and img [#1313](https://github.com/greenbone/gsa/pull/1313)
 - German translation [#1311](https://github.com/greenbone/gsa/pull/1311)[#1323](https://github.com/greenbone/gsa/pull/1323)
@@ -26,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix list of options of possible Filter types [#1326](https://github.com/greenbone/gsa/pull/1326)
 - Fix timezone handling at performance page [#1325](https://github.com/greenbone/gsa/pull/1325)
 - Fix creating and editing alerts without a result filter [#1315](https://github.com/greenbone/gsa/pull/1315)
 - Fix filter selection at report details page [#1314](https://github.com/greenbone/gsa/pull/1314)

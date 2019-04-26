@@ -665,25 +665,18 @@ init_validator ()
   gvm_validator_add (validator, "port_range_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (
     validator, "resource_type",
-    "^(agent|alert|asset|config|credential|filter|group|host|nvt|note|os|"
-    "override|permission|port_list|report|report_format|result|role|scanner|"
-    "schedule|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_"
-    "adv|vuln|ticket|"
-    "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating "
-    "System|Override|Permission|Port List|Report|Report "
-    "Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|CVE|CPE|"
-    "OVAL Definition|CERT-Bund Advisory|DFN-CERT Advisory|Vulnerability)$");
+    "^(agent|alert|asset|cert_bund_adv|config|cpe|credential|cve|dfn_cert_adv|"
+    "filter|group|host|info|nvt|note|os|ovaldef|override|permission|port_list|"
+    "report|report_format|result|role|scanner|schedule|tag|target|task|ticket|"
+    "user|vuln|)$");
   gvm_validator_add (validator, "resource_id", "^[[:alnum:]-_.:\\/~]*$");
   gvm_validator_add (validator, "resources_action", "^(|add|set|remove)$");
   gvm_validator_add (
     validator, "optional_resource_type",
-    "^(agent|alert|asset|config|credential|filter|group|host|note|nvt|os|"
-    "override|permission|port_list|report|report_format|result|role|scanner|"
-    "schedule|tag|target|task|user|info|vuln|"
-    "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating "
-    "System|Override|Permission|Port List|Report|Report "
-    "Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|"
-    "Vulnerability)?$");
+    "^(agent|alert|asset|cert_bund_adv|config|cpe|credential|cve|dfn_cert_adv|"
+    "filter|group|host|info|nvt|note|os|ovaldef|override|permission|port_list|"
+    "report|report_format|result|role|scanner|schedule|tag|target|task|ticket|"
+    "user|vuln|)?$");
   gvm_validator_add (validator, "select:value", "^.*$");
   gvm_validator_add (validator, "ssl_cert", "^.*$");
   gvm_validator_add (validator, "method_data:name", "^.*$");

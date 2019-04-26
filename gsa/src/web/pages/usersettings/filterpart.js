@@ -37,6 +37,7 @@ const FilterPart = ({
   configsFilter,
   credentialsFilter,
   filtersFilter,
+  groupsFilter,
   hostsFilter,
   notesFilter,
   operatingSystemsFilter,
@@ -47,10 +48,14 @@ const FilterPart = ({
   reportFormatsFilter,
   resultsFilter,
   rolesFilter,
+  scannersFilter,
   schedulesFilter,
   tagsFilter,
   targetsFilter,
   tasksFilter,
+  ticketsFilter,
+  usersFilter,
+  vulnerabilitiesFilter,
   cveFilter,
   cpeFilter,
   nvtFilter,
@@ -113,6 +118,17 @@ const FilterPart = ({
           value={filtersFilter}
           items={renderSelectItems(
             filterFilters(filters, 'filter'),
+            UNSET_VALUE,
+          )}
+          onChange={onChange}
+        />
+      </FormGroup>
+      <FormGroup title={_('Groups Filter')} titleSize="3">
+        <Select
+          name="groupsFilter"
+          value={groupsFilter}
+          items={renderSelectItems(
+            filterFilters(filters, 'group'),
             UNSET_VALUE,
           )}
           onChange={onChange}
@@ -216,6 +232,17 @@ const FilterPart = ({
           onChange={onChange}
         />
       </FormGroup>
+      <FormGroup title={_('Scanners Filter')} titleSize="3">
+        <Select
+          name="scannersFilter"
+          value={scannersFilter}
+          items={renderSelectItems(
+            filterFilters(filters, 'scanner'),
+            UNSET_VALUE,
+          )}
+          onChange={onChange}
+        />
+      </FormGroup>
       <FormGroup title={_('Schedules Filter')} titleSize="3">
         <Select
           name="schedulesFilter"
@@ -251,6 +278,33 @@ const FilterPart = ({
           name="tasksFilter"
           value={tasksFilter}
           items={renderSelectItems(filterFilters(filters, 'task'), UNSET_VALUE)}
+          onChange={onChange}
+        />
+      </FormGroup>
+      <FormGroup title={_('Tickets Filter')} titleSize="3">
+        <Select
+          name="ticketsFilter"
+          value={ticketsFilter}
+          items={renderSelectItems(
+            filterFilters(filters, 'ticket'),
+            UNSET_VALUE,
+          )}
+          onChange={onChange}
+        />
+      </FormGroup>
+      <FormGroup title={_('Users Filter')} titleSize="3">
+        <Select
+          name="usersFilter"
+          value={usersFilter}
+          items={renderSelectItems(filterFilters(filters, 'user'), UNSET_VALUE)}
+          onChange={onChange}
+        />
+      </FormGroup>
+      <FormGroup title={_('Vulnerabilities Filter')} titleSize="3">
+        <Select
+          name="vulnerabilitiesFilter"
+          value={vulnerabilitiesFilter}
+          items={renderSelectItems(filterFilters(filters, 'vuln'), UNSET_VALUE)}
           onChange={onChange}
         />
       </FormGroup>
@@ -325,6 +379,7 @@ FilterPart.propTypes = {
   dfnCertFilter: PropTypes.string,
   filters: PropTypes.array,
   filtersFilter: PropTypes.string,
+  groupsFilter: PropTypes.string,
   hostsFilter: PropTypes.string,
   notesFilter: PropTypes.string,
   nvtFilter: PropTypes.string,
@@ -337,11 +392,15 @@ FilterPart.propTypes = {
   reportsFilter: PropTypes.string,
   resultsFilter: PropTypes.string,
   rolesFilter: PropTypes.string,
+  scannersFilter: PropTypes.string,
   schedulesFilter: PropTypes.string,
   secInfoFilter: PropTypes.string,
   tagsFilter: PropTypes.string,
   targetsFilter: PropTypes.string,
   tasksFilter: PropTypes.string,
+  ticketsFilter: PropTypes.string,
+  usersFilter: PropTypes.string,
+  vulnerabilitiesFilter: PropTypes.string,
   onChange: PropTypes.func,
 };
 
