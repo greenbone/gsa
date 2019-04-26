@@ -238,9 +238,10 @@ class PerformancePage extends React.Component {
     this.setState({[name]: value});
   }
 
-  handleStartEndChange(data) {
+  handleStartEndChange({startDate, endDate}) {
     this.setState({
-      ...data,
+      endDate,
+      startDate,
       duration: undefined,
     });
 
