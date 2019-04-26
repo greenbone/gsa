@@ -15825,7 +15825,7 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   term = params_value (params, "term");
-  type = params_value (params, "optional_resource_type");
+  type = params_value (params, "resource_type");
 
   CHECK_VARIABLE_INVALID (name, "Create Filter");
   CHECK_VARIABLE_INVALID (comment, "Create Filter");
@@ -15956,7 +15956,7 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   term = params_value (params, "term");
-  type = params_value (params, "optional_resource_type");
+  type = params_value (params, "resource_type");
 
   CHECK_VARIABLE_INVALID (filter_id, "Save Filter");
   CHECK_VARIABLE_INVALID (name, "Save Filter");
