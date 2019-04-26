@@ -11896,13 +11896,10 @@ get_system_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
   entity_t report_entity;
   char name[501];
   gchar *gmp_command;
-  time_t now;
-  struct tm *now_broken;
   const char *slave_id, *duration;
-  const char *start_year, *start_month, *start_day, *start_hour, *start_minute;
-  const char *end_year, *end_month, *end_day, *end_hour, *end_minute;
-  struct tm start_time, end_time;
-  gchar *start_time_str, *end_time_str;
+
+  const char *start_time;
+  const char *end_time;
 
   if (url == NULL)
     return NULL;
@@ -11925,51 +11922,11 @@ get_system_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
         }
       else
         {
-          now = time (NULL);
-          now_broken = localtime (&now);
+          start_time = params_value (params, "start_time");
+          end_time = params_value (params, "end_time");
 
-          start_year = params_value (params, "start_year");
-          start_month = params_value (params, "start_month");
-          start_day = params_value (params, "start_day");
-          start_hour = params_value (params, "start_hour");
-          start_minute = params_value (params, "start_minute");
-
-          end_year = params_value (params, "end_year");
-          end_month = params_value (params, "end_month");
-          end_day = params_value (params, "end_day");
-          end_hour = params_value (params, "end_hour");
-          end_minute = params_value (params, "end_minute");
-
-          start_time.tm_year =
-            start_year ? atoi (start_year) - 1900 : now_broken->tm_year;
-          start_time.tm_mon =
-            start_month ? atoi (start_month) - 1 : now_broken->tm_mon;
-          start_time.tm_mday =
-            start_day ? atoi (start_day) : now_broken->tm_mday;
-          start_time.tm_hour =
-            start_hour ? atoi (start_hour) : now_broken->tm_hour;
-          start_time.tm_min =
-            start_minute ? atoi (start_minute) : now_broken->tm_min;
-          start_time.tm_zone = now_broken->tm_zone;
-
-          end_time.tm_year =
-            end_year ? atoi (end_year) - 1900 : now_broken->tm_year;
-          end_time.tm_mon =
-            end_month ? atoi (end_month) - 1 : now_broken->tm_mon;
-          end_time.tm_mday = end_day ? atoi (end_day) : now_broken->tm_mday;
-          end_time.tm_hour = end_hour ? atoi (end_hour) : now_broken->tm_hour;
-          end_time.tm_min = end_minute ? atoi (end_minute) : now_broken->tm_min;
-          end_time.tm_zone = now_broken->tm_zone;
-
-          start_time_str = g_strdup_printf (
-            "%04d-%02d-%02dT%02d:%02d:00", start_time.tm_year + 1900,
-            start_time.tm_mon + 1, start_time.tm_mday, start_time.tm_hour,
-            start_time.tm_min);
-
-          end_time_str = g_strdup_printf ("%04d-%02d-%02dT%02d:%02d:00",
-                                          end_time.tm_year + 1900,
-                                          end_time.tm_mon + 1, end_time.tm_mday,
-                                          end_time.tm_hour, end_time.tm_min);
+          CHECK_VARIABLE_INVALID (start_time, "Get System Report")
+          CHECK_VARIABLE_INVALID (end_time, "Get System Report")
 
           gmp_command = g_markup_printf_escaped (
             "<get_system_reports"
@@ -11977,9 +11934,7 @@ get_system_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
             " start_time=\"%s\""
             " end_time=\"%s\""
             " slave_id=\"%s\"/>",
-            name, start_time_str, end_time_str, slave_id ? slave_id : "0");
-          g_free (start_time_str);
-          g_free (end_time_str);
+            name, start_time, end_time, slave_id ? slave_id : "0");
         }
 
       if (gvm_connection_sendf (connection, "%s", gmp_command) == -1)

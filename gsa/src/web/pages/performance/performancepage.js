@@ -51,6 +51,7 @@ import MenuEntry from 'web/components/menu/menuentry';
 import Section from 'web/components/section/section';
 
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {getTimezone} from 'web/store/usersettings/selectors';
 import {
   loadEntities as loadScanners,
   selector as scannerSelector,
@@ -122,18 +123,7 @@ ToolBar.propTypes = {
 };
 
 const ReportImage = withGmp(
-  ({
-    gmp,
-    name,
-    duration,
-    scannerId,
-    endDate,
-    endHour,
-    endMinute,
-    startDate,
-    startHour,
-    startMinute,
-  }) => {
+  ({gmp, name, duration, scannerId, endDate, startDate}) => {
     const params = {
       slave_id: scannerId,
       token: gmp.settings.token,
@@ -142,16 +132,8 @@ const ReportImage = withGmp(
     if (isDefined(duration)) {
       params.duration = DURATIONS[duration];
     } else {
-      params.start_year = startDate.year();
-      params.start_month = startDate.month() + 1; // month is zero indexed
-      params.start_day = startDate.date();
-      params.start_hour = startHour;
-      params.start_minute = startMinute;
-      params.end_year = endDate.year();
-      params.end_month = endDate.month() + 1;
-      params.end_day = endDate.date();
-      params.end_hour = endHour;
-      params.end_minute = endMinute;
+      params.start_time = startDate.toISOString();
+      params.end_time = endDate.toISOString();
     }
     const url = gmp.buildUrl('system_report/' + name + '/report.', params);
     return <img alt="" src={url} />;
@@ -161,13 +143,9 @@ const ReportImage = withGmp(
 ReportImage.propTypes = {
   duration: PropTypes.string,
   endDate: PropTypes.date,
-  endHour: PropTypes.number,
-  endMinute: PropTypes.number,
   name: PropTypes.string.isRequired,
   scannerId: PropTypes.idOrZero.isRequired,
   startDate: PropTypes.date,
-  startHour: PropTypes.number,
-  startMinute: PropTypes.number,
 };
 
 const Selector = withClickHandler()(styled.span`
@@ -197,11 +175,7 @@ class PerformancePage extends React.Component {
       duration: 'day',
       scannerId: 0,
       startDate: start,
-      startHour: start.hour(),
-      startMinute: start.minute(),
       endDate: end,
-      endHour: end.hour(),
-      endMinute: end.minute(),
       scanners: [],
     };
 
@@ -212,7 +186,7 @@ class PerformancePage extends React.Component {
 
   componentDidMount() {
     const {start, end, scanner} = this.props.location.query;
-    const {gmp} = this.props;
+    const {gmp, timezone} = this.props;
 
     gmp.performance.get().then(response => {
       this.setState({reports: response.data});
@@ -232,14 +206,20 @@ class PerformancePage extends React.Component {
         endDate = date();
       }
 
+      endDate.tz(timezone);
+      startDate.tz(timezone);
+
       this.setState({
         duration: undefined,
-        endDate: endDate,
-        endHour: endDate.hour(),
-        endMinute: endDate.minute(),
-        startDate: startDate,
-        startHour: startDate.hour(),
-        startMinute: startDate.minute(),
+        endDate,
+        startDate,
+      });
+    } else {
+      const endDate = date().tz(timezone);
+      const startDate = endDate.clone().subtract(1, 'day');
+      this.setState({
+        endDate,
+        startDate,
       });
     }
 
@@ -258,11 +238,7 @@ class PerformancePage extends React.Component {
       this.setState({
         duration,
         startDate: start,
-        startHour: start.hour(),
-        startMinute: start.minute(),
         endDate: end,
-        endHour: end.hour(),
-        endMinute: end.minute(),
       });
 
       this.handleInteraction();
@@ -273,9 +249,10 @@ class PerformancePage extends React.Component {
     this.setState({[name]: value});
   }
 
-  handleStartEndChange(data) {
+  handleStartEndChange({startDate, endDate}) {
     this.setState({
-      ...data,
+      endDate,
+      startDate,
       duration: undefined,
     });
 
@@ -291,17 +268,7 @@ class PerformancePage extends React.Component {
 
   render() {
     const {scanners = []} = this.props;
-    const {
-      duration,
-      reports,
-      scannerId,
-      startDate,
-      startHour,
-      startMinute,
-      endDate,
-      endHour,
-      endMinute,
-    } = this.state;
+    const {duration, reports, scannerId, startDate, endDate} = this.state;
     const sensorId = selectSaveId(scanners, scannerId, 0);
     return (
       <Layout flex="column">
@@ -311,12 +278,9 @@ class PerformancePage extends React.Component {
           title={_('Performance')}
         >
           <StartEndTimeSelection
-            startDate={startDate}
-            startHour={startHour}
-            startMinute={startMinute}
             endDate={endDate}
-            endMinute={endMinute}
-            endHour={endHour}
+            timezone={this.props.timezone}
+            startDate={startDate}
             onChanged={this.handleStartEndChange}
           />
 
@@ -378,11 +342,7 @@ class PerformancePage extends React.Component {
                 duration={duration}
                 scannerId={sensorId}
                 startDate={startDate}
-                startHour={startHour}
-                startMinute={startMinute}
                 endDate={endDate}
-                endHour={endHour}
-                endMinute={endMinute}
               />
             </div>
           ))}
@@ -396,6 +356,7 @@ PerformancePage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   loadScanners: PropTypes.func.isRequired,
   scanners: PropTypes.arrayOf(PropTypes.model),
+  timezone: PropTypes.string.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
 
@@ -408,6 +369,7 @@ const mapStateToProps = rootState => {
   const select = scannerSelector(rootState);
   return {
     scanners: select.getEntities(SLAVE_SCANNER_FILTER),
+    timezone: getTimezone(rootState),
   };
 };
 
