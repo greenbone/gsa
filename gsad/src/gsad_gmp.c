@@ -3416,7 +3416,7 @@ get_tasks (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t *response_data)
 {
-  const char *overrides, *schedules_only, *ignore_pagination;
+  const char *schedules_only, *ignore_pagination;
   gchar *extra_attribs, *ret;
 
   schedules_only = params_value (params, "schedules_only");
@@ -9634,7 +9634,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
     " format_id=\"%s\"/>",
     ignore_pagination,
     filter,
-    filter_id ? filter_id : "",
+    filter_id ? filter_id : FILT_ID_NONE,
     report_id,
     delta_report_id ? delta_report_id : "0",
     format_id ? format_id : ""
