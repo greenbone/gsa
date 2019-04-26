@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-25 13:11+0200\n"
-"PO-Revision-Date: 2019-04-25 13:14+0200\n"
+"POT-Creation-Date: 2019-04-26 11:11+0200\n"
+"PO-Revision-Date: 2019-04-26 11:17+0200\n"
 "Last-Translator: Steffen <steffen.waterkamp@greenbone.net>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -260,7 +260,7 @@ msgstr "Besitzer:"
 #: gsa/src/web/pages/radius/radiuspage.js:155
 #: gsa/src/web/pages/ldap/ldappage.js:167 gsa/src/web/pages/start/page.js:395
 #: gsa/src/web/pages/help/about.js:68
-#: gsa/src/web/pages/usersettings/usersettingspage.js:347
+#: gsa/src/web/pages/usersettings/usersettingspage.js:355
 #: gsa/src/web/entities/page.js:274
 msgid "page"
 msgstr "Seite"
@@ -651,7 +651,7 @@ msgstr "CVSS-Basisvektor"
 #: gsa/src/web/pages/secinfo/dashboard/cvssdisplay.js:44
 #: gsa/src/web/pages/secinfo/table.js:95
 #: gsa/src/web/pages/secinfo/filterdialog.js:42
-#: gsa/src/web/pages/usersettings/usersettingspage.js:365
+#: gsa/src/web/pages/usersettings/usersettingspage.js:373
 #: gsa/src/web/pages/results/detailspage.js:188
 #: gsa/src/web/pages/results/dashboard/cvssdisplay.js:44
 #: gsa/src/web/pages/results/table.js:96
@@ -903,7 +903,7 @@ msgstr "OVAL-Definitionen nach Schweregradklasse (Gesamt: {{count}})"
 #: gsa/src/web/pages/operatingsystems/dashboard/severityclassdisplay.js:49
 #: gsa/src/web/pages/secinfo/dashboard/severityclassdisplay.js:49
 #: gsa/src/web/pages/usersettings/severitypart.js:42
-#: gsa/src/web/pages/usersettings/usersettingspage.js:433
+#: gsa/src/web/pages/usersettings/usersettingspage.js:441
 #: gsa/src/web/pages/results/dashboard/severityclassdisplay.js:45
 #: gsa/src/web/pages/vulns/dashboard/severityclassdisplay.js:32
 #: gsa/src/web/pages/vulns/dashboard/severityclassdisplay.js:45
@@ -1833,7 +1833,7 @@ msgid "Help: Targets"
 msgstr "Hilfe: Ziele"
 
 #: gsa/src/web/pages/targets/listpage.js:54
-#: gsa/src/web/pages/targets/component.js:151
+#: gsa/src/web/pages/targets/component.js:156
 #: gsa/src/web/pages/targets/dialog.js:132
 msgid "New Target"
 msgstr "Neues Ziel"
@@ -1922,11 +1922,11 @@ msgstr "ESXi-Anmeldedaten"
 msgid "SNMP Credential"
 msgstr "SNMP-Anmeldedaten"
 
-#: gsa/src/web/pages/targets/component.js:117
+#: gsa/src/web/pages/targets/component.js:119
 msgid "Edit Target {{name}}"
 msgstr "Ziel {{name}} bearbeiten"
 
-#: gsa/src/web/pages/targets/component.js:192
+#: gsa/src/web/pages/targets/component.js:197
 #: gsa/src/web/pages/portlists/listpage.js:56
 #: gsa/src/web/pages/portlists/component.js:93
 #: gsa/src/web/pages/portlists/dialog.js:56
@@ -2236,9 +2236,9 @@ msgstr "Loginname"
 
 #: gsa/src/web/pages/users/dialog.js:188
 #: gsa/src/web/pages/credentials/dialog.js:300
-#: gsa/src/web/pages/usersettings/usersettingspage.js:384
-#: gsa/src/web/pages/login/loginform.js:149
-#: gsa/src/web/pages/login/loginform.js:154
+#: gsa/src/web/pages/usersettings/usersettingspage.js:392
+#: gsa/src/web/pages/login/loginform.js:161
+#: gsa/src/web/pages/login/loginform.js:166
 msgid "Password"
 msgstr "Passwort"
 
@@ -3463,67 +3463,71 @@ msgstr "Vorkommen"
 msgid "No Applications available"
 msgstr "Keine Anwendungen vorhanden"
 
-#: gsa/src/web/pages/reports/detailspage.js:352
+#: gsa/src/web/pages/reports/detailspage.js:348
 msgid "Report content added to Assets with QoD>=70% and Overrides enabled."
 msgstr ""
 "Berichtinhalt zu Assets hinzugefügt mit QdE >=70% und Übersteuerungen "
 "aktiviert."
 
-#: gsa/src/web/pages/reports/detailspage.js:365
+#: gsa/src/web/pages/reports/detailspage.js:361
 msgid "Report content removed from Assets."
 msgstr "Berichtinhalt wurde aus Assets entfernt."
 
-#: gsa/src/web/pages/reports/emptyresultsreport.js:56
+#: gsa/src/web/pages/reports/emptyresultsreport.js:63
 msgid ""
 "The Report is empty. The filter does not match any of the {{all}} results."
 msgstr ""
 "Der Bericht ist leer. Der Filter passt zu keinem der {{all}} Ergebnisse."
 
-#: gsa/src/web/pages/reports/emptyresultsreport.js:66
+#: gsa/src/web/pages/reports/emptyresultsreport.js:68
+msgid "Current applied filter is: "
+msgstr "Angewandter Filter: "
+
+#: gsa/src/web/pages/reports/emptyresultsreport.js:76
 msgid "Log messages are currently excluded."
 msgstr "Log Nachrichten sind derzeit ausgeschlossen."
 
-#: gsa/src/web/pages/reports/emptyresultsreport.js:69
+#: gsa/src/web/pages/reports/emptyresultsreport.js:79
 msgid "Include log messages in your filter settings."
 msgstr "Log-Nachrichten in die Filtereinstellungen einbeziehen."
 
-#: gsa/src/web/pages/reports/emptyresultsreport.js:77
+#: gsa/src/web/pages/reports/emptyresultsreport.js:87
 msgid "You are using keywords setting a minimum limit on severity."
 msgstr ""
 "Sie benutzen Filterbefehle, die eine Minimalgrenze für den Schweregrad "
 "setzen."
 
-#: gsa/src/web/pages/reports/emptyresultsreport.js:81
+#: gsa/src/web/pages/reports/emptyresultsreport.js:91
 msgid "Remove the severity limit from your filter settings."
 msgstr "Schweregrad-Grenze aus den Filtereinstellungen entfernen."
 
-#: gsa/src/web/pages/reports/emptyresultsreport.js:89
+#: gsa/src/web/pages/reports/emptyresultsreport.js:99
 msgid ""
 "There may be results below the current minimum Quality of Detection level."
 msgstr ""
 "Es könnten Ergebnisse vorliegen, die unterhalb der aktuellen Grenze für die "
 "Qualität der Erkennung liegen."
 
-#: gsa/src/web/pages/reports/emptyresultsreport.js:95
+#: gsa/src/web/pages/reports/emptyresultsreport.js:105
 msgid ""
 "Decrease the minimum QoD in the Filter to 30 percent to see those results."
 msgstr ""
 "Die Minimum-QdE im Filter auf 30 Prozent verringern um diese Ergebnisse zu "
 "sehen."
 
-#: gsa/src/web/pages/reports/emptyresultsreport.js:103
+#: gsa/src/web/pages/reports/emptyresultsreport.js:113
 msgid "Your filter settings may be too refined."
 msgstr "Ihre Filtereinstellungen könnten zu präzise sein."
 
-#: gsa/src/web/pages/reports/emptyresultsreport.js:106
+#: gsa/src/web/pages/reports/emptyresultsreport.js:116
 msgid "Adjust and update your filter settings."
 msgstr "Ihre Filtereinstellungen anpassen und aktualisieren."
 
-#: gsa/src/web/pages/reports/emptyresultsreport.js:111
+#: gsa/src/web/pages/reports/emptyresultsreport.js:121
 msgid "Your last filter change may be too restrictive."
 msgstr "Ihre letzte Filteränderung könnte zu restriktiv sein."
 
-#: gsa/src/web/pages/reports/emptyresultsreport.js:114
+#: gsa/src/web/pages/reports/emptyresultsreport.js:124
 msgid "Remove all filter settings."
 msgstr "Alle Filtereinstellungen entfernen"
 
@@ -3794,7 +3798,7 @@ msgid "Filter"
 msgstr "Filter"
 
 #: gsa/src/web/pages/reports/scaninfo.js:225
-#: gsa/src/web/pages/usersettings/usersettingspage.js:380
+#: gsa/src/web/pages/usersettings/usersettingspage.js:388
 #: gsa/src/web/pages/schedules/details.js:73
 #: gsa/src/web/pages/schedules/dialog.js:418
 msgid "Timezone"
@@ -5583,8 +5587,8 @@ msgstr "Anmeldedaten exportieren"
 
 #: gsa/src/web/pages/credentials/row.js:119
 #: gsa/src/web/pages/credentials/details.js:84
-#: gsa/src/web/pages/usersettings/usersettingspage.js:420
-#: gsa/src/web/pages/usersettings/usersettingspage.js:443
+#: gsa/src/web/pages/usersettings/usersettingspage.js:428
+#: gsa/src/web/pages/usersettings/usersettingspage.js:451
 #: gsa/src/web/pages/alerts/details.js:145 gsa/src/web/utils/render.js:98
 #: gsa/src/web/components/form/yesnoradio.js:45
 msgid "Yes"
@@ -5592,8 +5596,8 @@ msgstr "Ja"
 
 #: gsa/src/web/pages/credentials/row.js:119
 #: gsa/src/web/pages/credentials/details.js:84
-#: gsa/src/web/pages/usersettings/usersettingspage.js:421
-#: gsa/src/web/pages/usersettings/usersettingspage.js:444
+#: gsa/src/web/pages/usersettings/usersettingspage.js:429
+#: gsa/src/web/pages/usersettings/usersettingspage.js:452
 #: gsa/src/web/pages/alerts/details.js:145 gsa/src/web/utils/render.js:104
 #: gsa/src/web/components/form/yesnoradio.js:54
 msgid "No"
@@ -5606,7 +5610,7 @@ msgstr "Unsichere Verwendung zulassen"
 
 #: gsa/src/web/pages/credentials/table.js:47
 #: gsa/src/web/pages/credentials/details.js:90
-#: gsa/src/web/pages/login/loginform.js:163
+#: gsa/src/web/pages/login/loginform.js:175
 #: gsa/src/web/pages/alerts/method.js:194
 msgid "Login"
 msgstr "Login"
@@ -5658,7 +5662,7 @@ msgid "Replace existing SNMP community with"
 msgstr "Existierende SNMP-Community ersetzen mit"
 
 #: gsa/src/web/pages/credentials/dialog.js:287
-#: gsa/src/web/pages/login/loginform.js:138
+#: gsa/src/web/pages/login/loginform.js:150
 #: gsa/src/web/pages/alerts/method.js:459
 msgid "Username"
 msgstr "Benutzername"
@@ -5693,12 +5697,12 @@ msgid "S/MIME Certificate"
 msgstr "S/MIME-Zertifikate"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:66
-#: gsa/src/web/pages/usersettings/usersettingspage.js:562
+#: gsa/src/web/pages/usersettings/usersettingspage.js:570
 msgid "Agents Filter"
 msgstr "Agenten-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:77
-#: gsa/src/web/pages/usersettings/usersettingspage.js:567
+#: gsa/src/web/pages/usersettings/usersettingspage.js:575
 msgid "Alerts Filter"
 msgstr "Benachrichtigungen-Filter"
 
@@ -5707,183 +5711,183 @@ msgid "Scan Configs Filter"
 msgstr "Scan-Konfigurationen-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:99
-#: gsa/src/web/pages/usersettings/usersettingspage.js:577
+#: gsa/src/web/pages/usersettings/usersettingspage.js:585
 msgid "Credentials Filter"
 msgstr "Anmeldedaten-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:110
-#: gsa/src/web/pages/usersettings/usersettingspage.js:582
+#: gsa/src/web/pages/usersettings/usersettingspage.js:590
 msgid "Filters Filter"
 msgstr "Filter-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:121
-#: gsa/src/web/pages/usersettings/usersettingspage.js:587
+#: gsa/src/web/pages/usersettings/usersettingspage.js:595
 msgid "Hosts Filter"
 msgstr "Hosts-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:129
-#: gsa/src/web/pages/usersettings/usersettingspage.js:592
+#: gsa/src/web/pages/usersettings/usersettingspage.js:600
 msgid "Notes Filter"
 msgstr "Notizen-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:137
-#: gsa/src/web/pages/usersettings/usersettingspage.js:597
+#: gsa/src/web/pages/usersettings/usersettingspage.js:605
 msgid "Operating Systems Filter"
 msgstr "Betriebssysteme-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:145
-#: gsa/src/web/pages/usersettings/usersettingspage.js:602
+#: gsa/src/web/pages/usersettings/usersettingspage.js:610
 msgid "Overrides Filter"
 msgstr "Übersteuerungen-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:156
-#: gsa/src/web/pages/usersettings/usersettingspage.js:607
+#: gsa/src/web/pages/usersettings/usersettingspage.js:615
 msgid "Permissions Filter"
 msgstr "Berechtigungen-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:167
-#: gsa/src/web/pages/usersettings/usersettingspage.js:612
+#: gsa/src/web/pages/usersettings/usersettingspage.js:620
 msgid "Port Lists Filter"
 msgstr "Portlisten-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:178
-#: gsa/src/web/pages/usersettings/usersettingspage.js:617
+#: gsa/src/web/pages/usersettings/usersettingspage.js:625
 msgid "Reports Filter"
 msgstr "Berichte-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:189
-#: gsa/src/web/pages/usersettings/usersettingspage.js:622
+#: gsa/src/web/pages/usersettings/usersettingspage.js:630
 msgid "Report Formats Filter"
 msgstr "Berichtformate-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:200
-#: gsa/src/web/pages/usersettings/usersettingspage.js:627
+#: gsa/src/web/pages/usersettings/usersettingspage.js:635
 #: gsa/src/web/pages/alerts/details.js:132
 msgid "Results Filter"
 msgstr "Ergebnisse-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:211
-#: gsa/src/web/pages/usersettings/usersettingspage.js:632
+#: gsa/src/web/pages/usersettings/usersettingspage.js:640
 msgid "Roles Filter"
 msgstr "Rollen-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:219
-#: gsa/src/web/pages/usersettings/usersettingspage.js:637
+#: gsa/src/web/pages/usersettings/usersettingspage.js:645
 msgid "Schedules Filter"
 msgstr "Zeitpläne-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:230
-#: gsa/src/web/pages/usersettings/usersettingspage.js:642
+#: gsa/src/web/pages/usersettings/usersettingspage.js:650
 msgid "Tags Filter"
 msgstr "Tags-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:238
-#: gsa/src/web/pages/usersettings/usersettingspage.js:647
+#: gsa/src/web/pages/usersettings/usersettingspage.js:655
 msgid "Targets Filter"
 msgstr "Ziele-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:249
-#: gsa/src/web/pages/usersettings/usersettingspage.js:652
+#: gsa/src/web/pages/usersettings/usersettingspage.js:660
 msgid "Tasks Filter"
 msgstr "Aufgaben-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:257
-#: gsa/src/web/pages/usersettings/usersettingspage.js:657
+#: gsa/src/web/pages/usersettings/usersettingspage.js:665
 msgid "CPE Filter"
 msgstr "CPE-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:265
-#: gsa/src/web/pages/usersettings/usersettingspage.js:662
+#: gsa/src/web/pages/usersettings/usersettingspage.js:670
 msgid "CVE Filter"
 msgstr "CVE-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:273
-#: gsa/src/web/pages/usersettings/usersettingspage.js:667
+#: gsa/src/web/pages/usersettings/usersettingspage.js:675
 msgid "NVT Filter"
 msgstr "NVT-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:281
-#: gsa/src/web/pages/usersettings/usersettingspage.js:672
+#: gsa/src/web/pages/usersettings/usersettingspage.js:680
 msgid "OVAL Definitions Filter"
 msgstr "OVAL-Definitionen-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:289
-#: gsa/src/web/pages/usersettings/usersettingspage.js:677
+#: gsa/src/web/pages/usersettings/usersettingspage.js:685
 msgid "CERT-Bund Advisories Filter"
 msgstr "CERT-Bund Advisories-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:297
-#: gsa/src/web/pages/usersettings/usersettingspage.js:682
+#: gsa/src/web/pages/usersettings/usersettingspage.js:690
 msgid "DFN-CERT Advisories Filter"
 msgstr "DFN-CERT Advisories-Filter"
 
 #: gsa/src/web/pages/usersettings/filterpart.js:305
-#: gsa/src/web/pages/usersettings/usersettingspage.js:687
+#: gsa/src/web/pages/usersettings/usersettingspage.js:695
 msgid "SecInfo Filter"
 msgstr "Alle-Sicherheitsinfos-Filter"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:61
-#: gsa/src/web/pages/usersettings/usersettingspage.js:463
+#: gsa/src/web/pages/usersettings/usersettingspage.js:471
 msgid "Default Alert"
 msgstr "Standard Benachrichtigung"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:71
-#: gsa/src/web/pages/usersettings/usersettingspage.js:470
+#: gsa/src/web/pages/usersettings/usersettingspage.js:478
 msgid "Default ESXi Credential"
 msgstr "Standard ESXi-Anmeldedaten"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:81
-#: gsa/src/web/pages/usersettings/usersettingspage.js:477
+#: gsa/src/web/pages/usersettings/usersettingspage.js:485
 msgid "Default OSP Scan Config"
 msgstr "Standard OSP-Scan-Konfiguration"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:91
-#: gsa/src/web/pages/usersettings/usersettingspage.js:484
+#: gsa/src/web/pages/usersettings/usersettingspage.js:492
 msgid "Default OSP Scanner"
 msgstr "Standard OSP-Scanner"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:101
-#: gsa/src/web/pages/usersettings/usersettingspage.js:491
+#: gsa/src/web/pages/usersettings/usersettingspage.js:499
 msgid "Default OpenVAS Scan Config"
 msgstr "Standard OpenVAS-Scan-Konfiguration"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:111
-#: gsa/src/web/pages/usersettings/usersettingspage.js:498
+#: gsa/src/web/pages/usersettings/usersettingspage.js:506
 msgid "Default OpenVAS Scanner"
 msgstr "Standard OpenVAS-Scanner"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:121
-#: gsa/src/web/pages/usersettings/usersettingspage.js:505
+#: gsa/src/web/pages/usersettings/usersettingspage.js:513
 msgid "Default Port List"
 msgstr "Standard Portliste"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:131
-#: gsa/src/web/pages/usersettings/usersettingspage.js:512
+#: gsa/src/web/pages/usersettings/usersettingspage.js:520
 msgid "Default Report Format"
 msgstr "Standard Berichtformat"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:141
-#: gsa/src/web/pages/usersettings/usersettingspage.js:519
+#: gsa/src/web/pages/usersettings/usersettingspage.js:527
 msgid "Default SMB Credential"
 msgstr "Standard SMB-Anmeldedaten"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:151
-#: gsa/src/web/pages/usersettings/usersettingspage.js:526
+#: gsa/src/web/pages/usersettings/usersettingspage.js:534
 msgid "Default SNMP Credential"
 msgstr "Standard SNMP-Anmeldedaten"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:161
-#: gsa/src/web/pages/usersettings/usersettingspage.js:533
+#: gsa/src/web/pages/usersettings/usersettingspage.js:541
 msgid "Default SSH Credential"
 msgstr "Standard SSH-Anmeldedaten"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:171
-#: gsa/src/web/pages/usersettings/usersettingspage.js:540
+#: gsa/src/web/pages/usersettings/usersettingspage.js:548
 msgid "Default Schedule"
 msgstr "Standard Zeitplan"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:181
-#: gsa/src/web/pages/usersettings/usersettingspage.js:547
+#: gsa/src/web/pages/usersettings/usersettingspage.js:555
 msgid "Default Target"
 msgstr "Standard Ziel"
 
@@ -5896,65 +5900,65 @@ msgid "Confirmation matches new password!"
 msgstr "Bestätigung entspricht neuem Passwort!"
 
 #: gsa/src/web/pages/usersettings/severitypart.js:50
-#: gsa/src/web/pages/usersettings/usersettingspage.js:439
+#: gsa/src/web/pages/usersettings/usersettingspage.js:447
 msgid "Dynamic Severity"
 msgstr "Dynamischer Schweregrad"
 
 #: gsa/src/web/pages/usersettings/severitypart.js:59
-#: gsa/src/web/pages/usersettings/usersettingspage.js:449
+#: gsa/src/web/pages/usersettings/usersettingspage.js:457
 msgid "Default Severity"
 msgstr "Standard Schweregrad"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:169
+#: gsa/src/web/pages/usersettings/usersettingspage.js:172
 msgid "Help: My Settings"
 msgstr "Hilfe: Eigene Einstellungen"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:173
+#: gsa/src/web/pages/usersettings/usersettingspage.js:176
 msgid "Edit My Settings"
 msgstr "Eigene Einstellungen bearbeiten"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:364
+#: gsa/src/web/pages/usersettings/usersettingspage.js:372
 msgid "General"
 msgstr "Allgemein"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:366
+#: gsa/src/web/pages/usersettings/usersettingspage.js:374
 msgid "Defaults"
 msgstr "Standards"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:368
+#: gsa/src/web/pages/usersettings/usersettingspage.js:376
 #: gsa/src/web/utils/render.js:137 gsa/src/web/components/bar/menubar.js:212
 msgid "Filters"
 msgstr "Filter"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:388
+#: gsa/src/web/pages/usersettings/usersettingspage.js:396
 msgid "User Interface Language"
 msgstr "Sprache der Benutzeroberfläche"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:394
+#: gsa/src/web/pages/usersettings/usersettingspage.js:402
 msgid "Rows Per Page"
 msgstr "Zeilen pro Seite"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:398
+#: gsa/src/web/pages/usersettings/usersettingspage.js:406
 msgid "Details Export File Name"
 msgstr "Dateiname für Details-Export"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:402
+#: gsa/src/web/pages/usersettings/usersettingspage.js:410
 msgid "List Export File Name"
 msgstr "Dateiname für Listen-Export"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:406
+#: gsa/src/web/pages/usersettings/usersettingspage.js:414
 msgid "Report Export File Name"
 msgstr "Dateiname für Bericht-Export"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:411
+#: gsa/src/web/pages/usersettings/usersettingspage.js:419
 msgid "Max Rows Per Page (immutable)"
 msgstr "Max Zeilen pro Seite (unveränderlich)"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:416
+#: gsa/src/web/pages/usersettings/usersettingspage.js:424
 msgid "Auto Cache Rebuild"
 msgstr "Automatische Cache-Neuerstellung"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:572
+#: gsa/src/web/pages/usersettings/usersettingspage.js:580
 msgid "Configs Filter"
 msgstr "Konfigurationen-Filter"
 
@@ -5978,11 +5982,11 @@ msgstr "Standards-Einstellungen"
 msgid "Filter Settings"
 msgstr "Filter-Einstellungen"
 
-#: gsa/src/web/pages/login/loginform.js:117
+#: gsa/src/web/pages/login/loginform.js:118
 msgid "Warning: Connection unencrypted"
 msgstr "Warnung: Verbindung unverschlüsselt"
 
-#: gsa/src/web/pages/login/loginform.js:120
+#: gsa/src/web/pages/login/loginform.js:121
 msgid ""
 "The connection to this GSA is not encrypted, allowing anyone listening to "
 "the traffic to steal your credentials."
@@ -5990,7 +5994,7 @@ msgstr ""
 "Die Verbindung zu diesem GSA ist nicht verschlüsselt, so dass jeder, der den "
 "Datenverkehr mitverfolgt, Ihre Anmeldedaten stehlen kann."
 
-#: gsa/src/web/pages/login/loginform.js:126
+#: gsa/src/web/pages/login/loginform.js:127
 msgid ""
 "Please configure a TLS certificate for the HTTPS service or ask your "
 "administrator to do so as soon as possible."
@@ -5998,15 +6002,27 @@ msgstr ""
 "Bitte konfigurieren Sie so bald wie möglich ein TLS-Zertifikat für den HTTPS-"
 "Dienst oder bitten Sie Ihren Administrator, dies zu tun."
 
-#: gsa/src/web/pages/login/loginform.js:142
+#: gsa/src/web/pages/login/loginform.js:136
+msgid "Warning: You are using IE11"
+msgstr "Warnung: Sie nutzen IE11"
+
+#: gsa/src/web/pages/login/loginform.js:139
+msgid ""
+"You are using Internet Explorer 11. You might encounter appearance and "
+"performance issues."
+msgstr ""
+"Sie nutzen Internet Explorer 11. Es kann zu Darstellungsfehlern und "
+"Problemen mit der Leistung kommen."
+
+#: gsa/src/web/pages/login/loginform.js:154
 msgid "e.g. johndoe"
 msgstr "z.B. maxmustermann"
 
-#: gsa/src/web/pages/login/loginform.js:184
+#: gsa/src/web/pages/login/loginform.js:196
 msgid "Login as Guest"
 msgstr "Als Gast anmelden"
 
-#: gsa/src/web/pages/login/loginpage.js:158
+#: gsa/src/web/pages/login/loginpage.js:163
 msgid "Unknown error on login"
 msgstr "Unbekannter Fehler beim Login"
 
