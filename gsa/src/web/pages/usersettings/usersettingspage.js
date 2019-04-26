@@ -322,6 +322,7 @@ class UserSettings extends React.Component {
       configsFilter = {},
       credentialsFilter = {},
       filtersFilter = {},
+      groupsFilter = {},
       hostsFilter = {},
       notesFilter = {},
       operatingSystemsFilter = {},
@@ -332,10 +333,14 @@ class UserSettings extends React.Component {
       reportFormatsFilter = {},
       resultsFilter = {},
       rolesFilter = {},
+      scannersFilter = {},
       schedulesFilter = {},
       tagsFilter = {},
       targetsFilter = {},
       tasksFilter = {},
+      ticketsFilter = {},
+      usersFilter = {},
+      vulnerabilitiesFilter = {},
       cpeFilter = {},
       cveFilter = {},
       nvtFilter = {},
@@ -591,6 +596,11 @@ class UserSettings extends React.Component {
                             type="filter"
                           />
                           <SettingTableRow
+                            setting={groupsFilter}
+                            title={_('Groups Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
                             setting={hostsFilter}
                             title={_('Hosts Filter')}
                             type="filter"
@@ -641,6 +651,11 @@ class UserSettings extends React.Component {
                             type="filter"
                           />
                           <SettingTableRow
+                            setting={scannersFilter}
+                            title={_('Scanners Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
                             setting={schedulesFilter}
                             title={_('Schedules Filter')}
                             type="filter"
@@ -658,6 +673,21 @@ class UserSettings extends React.Component {
                           <SettingTableRow
                             setting={tasksFilter}
                             title={_('Tasks Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={ticketsFilter}
+                            title={_('Tickets Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={usersFilter}
+                            title={_('Users Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={vulnerabilitiesFilter}
+                            title={_('Vulnerabilities Filter')}
                             type="filter"
                           />
                           <SettingTableRow
@@ -747,6 +777,7 @@ class UserSettings extends React.Component {
               configsFilter={configsFilter.id}
               credentialsFilter={credentialsFilter.id}
               filtersFilter={filtersFilter.id}
+              groupsFilter={groupsFilter.id}
               hostsFilter={hostsFilter.id}
               notesFilter={notesFilter.id}
               operatingSystemsFilter={operatingSystemsFilter.id}
@@ -757,10 +788,14 @@ class UserSettings extends React.Component {
               reportFormatsFilter={reportFormatsFilter.id}
               resultsFilter={resultsFilter.id}
               rolesFilter={rolesFilter.id}
+              scannersFilter={scannersFilter.id}
               schedulesFilter={schedulesFilter.id}
               tagsFilter={tagsFilter.id}
               targetsFilter={targetsFilter.id}
               tasksFilter={tasksFilter.id}
+              ticketsFilter={ticketsFilter.id}
+              usersFilter={usersFilter.id}
+              vulnerabilitiesFilter={vulnerabilitiesFilter.id}
               cpeFilter={cpeFilter.id}
               cveFilter={cveFilter.id}
               nvtFilter={nvtFilter.id}
@@ -811,6 +846,7 @@ UserSettings.propTypes = {
   filters: PropTypes.array,
   filtersFilter: PropTypes.object,
   gmp: PropTypes.gmp.isRequired,
+  groupsFilter: PropTypes.object,
   hostsFilter: PropTypes.object,
   isLoading: PropTypes.bool,
   listExportFileName: PropTypes.object,
@@ -843,6 +879,7 @@ UserSettings.propTypes = {
   rowsPerPage: PropTypes.object,
   scanconfigs: PropTypes.array,
   scanners: PropTypes.array,
+  scannersFilter: PropTypes.object,
   schedules: PropTypes.array,
   schedulesFilter: PropTypes.object,
   secInfoFilter: PropTypes.object,
@@ -853,8 +890,11 @@ UserSettings.propTypes = {
   targets: PropTypes.array,
   targetsFilter: PropTypes.object,
   tasksFilter: PropTypes.object,
+  ticketsFilter: PropTypes.object,
   timezone: PropTypes.string,
   userInterfaceLanguage: PropTypes.object,
+  usersFilter: PropTypes.object,
+  vulnerabilitiesFilter: PropTypes.object,
   onInteraction: PropTypes.func.isRequired,
 };
 
@@ -954,6 +994,7 @@ const mapStateToProps = rootState => {
   const configsFilter = userDefaultFilterSelector.getFilter('scanconfig');
   const credentialsFilter = userDefaultFilterSelector.getFilter('credential');
   const filtersFilter = userDefaultFilterSelector.getFilter('filter');
+  const groupsFilter = userDefaultFilterSelector.getFilter('group');
   const hostsFilter = userDefaultFilterSelector.getFilter('host');
   const notesFilter = userDefaultFilterSelector.getFilter('note');
   const operatingSystemsFilter = userDefaultFilterSelector.getFilter(
@@ -968,10 +1009,16 @@ const mapStateToProps = rootState => {
   );
   const resultsFilter = userDefaultFilterSelector.getFilter('result');
   const rolesFilter = userDefaultFilterSelector.getFilter('role');
+  const scannersFilter = userDefaultFilterSelector.getFilter('scanner');
   const schedulesFilter = userDefaultFilterSelector.getFilter('schedule');
   const tagsFilter = userDefaultFilterSelector.getFilter('tag');
   const targetsFilter = userDefaultFilterSelector.getFilter('target');
   const tasksFilter = userDefaultFilterSelector.getFilter('task');
+  const ticketsFilter = userDefaultFilterSelector.getFilter('ticket');
+  const usersFilter = userDefaultFilterSelector.getFilter('user');
+  const vulnerabilitiesFilter = userDefaultFilterSelector.getFilter(
+    'vulnerability',
+  );
   const cpeFilter = userDefaultFilterSelector.getFilter('cpe');
   const cveFilter = userDefaultFilterSelector.getFilter('cve');
   const certBundFilter = userDefaultFilterSelector.getFilter('certbund');
@@ -1024,6 +1071,7 @@ const mapStateToProps = rootState => {
     configsFilter,
     credentialsFilter,
     filtersFilter,
+    groupsFilter,
     hostsFilter,
     notesFilter,
     operatingSystemsFilter,
@@ -1034,10 +1082,14 @@ const mapStateToProps = rootState => {
     reportFormatsFilter,
     resultsFilter,
     rolesFilter,
+    scannersFilter,
     schedulesFilter,
     tagsFilter,
     targetsFilter,
     tasksFilter,
+    ticketsFilter,
+    usersFilter,
+    vulnerabilitiesFilter,
     cpeFilter,
     cveFilter,
     certBundFilter,
@@ -1059,6 +1111,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
     dispatch(loadUserSettingsDefaultFilter(gmp)('scanconfig'));
     dispatch(loadUserSettingsDefaultFilter(gmp)('credential'));
     dispatch(loadUserSettingsDefaultFilter(gmp)('filter'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('group'));
     dispatch(loadUserSettingsDefaultFilter(gmp)('host'));
     dispatch(loadUserSettingsDefaultFilter(gmp)('note'));
     dispatch(loadUserSettingsDefaultFilter(gmp)('operatingsystem'));
@@ -1069,10 +1122,14 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
     dispatch(loadUserSettingsDefaultFilter(gmp)('reportformat'));
     dispatch(loadUserSettingsDefaultFilter(gmp)('result'));
     dispatch(loadUserSettingsDefaultFilter(gmp)('role'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('scanner'));
     dispatch(loadUserSettingsDefaultFilter(gmp)('schedule'));
     dispatch(loadUserSettingsDefaultFilter(gmp)('tag'));
     dispatch(loadUserSettingsDefaultFilter(gmp)('target'));
     dispatch(loadUserSettingsDefaultFilter(gmp)('task'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('ticket'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('user'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('vulnerability'));
     dispatch(loadUserSettingsDefaultFilter(gmp)('cpe'));
     dispatch(loadUserSettingsDefaultFilter(gmp)('cve'));
     dispatch(loadUserSettingsDefaultFilter(gmp)('certbund'));
