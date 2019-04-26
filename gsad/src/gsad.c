@@ -592,6 +592,7 @@ init_validator ()
   gvm_validator_add (validator, "include_id_list:name", "^[[:alnum:]\\-_ ]+$");
   gvm_validator_add (validator, "include_id_list:value", "^(0|1)$");
   gvm_validator_add (validator, "installer_sig", "(?s)^.*$");
+  gvm_validator_add (validator, "isodate", "^.*$");
   gvm_validator_add (validator, "lang",
                      "^(Browser Language|"
                      "([a-z]{2,3})(_[A-Z]{2})?(@[[:alnum:]_-]+)?"
@@ -800,11 +801,7 @@ init_validator ()
   gvm_validator_alias (validator, "dynamic_severity", "boolean");
   gvm_validator_alias (validator, "enable", "boolean");
   gvm_validator_alias (validator, "enable_stop", "boolean");
-  gvm_validator_alias (validator, "end_day", "day_of_month");
-  gvm_validator_alias (validator, "end_hour", "hour");
-  gvm_validator_alias (validator, "end_minute", "minute");
-  gvm_validator_alias (validator, "end_month", "month");
-  gvm_validator_alias (validator, "end_year", "year");
+  gvm_validator_alias (validator, "end_time", "isodate");
   gvm_validator_alias (validator, "esxi_credential_id", "credential_id");
   gvm_validator_alias (validator, "filter_extra", "filter");
   gvm_validator_alias (validator, "filter_id", "id");
@@ -907,15 +904,11 @@ init_validator ()
   gvm_validator_alias (validator, "smb_credential_id", "credential_id");
   gvm_validator_alias (validator, "snmp_credential_id", "credential_id");
   gvm_validator_alias (validator, "ssh_credential_id", "credential_id");
-  gvm_validator_alias (validator, "start_day", "day_of_month");
-  gvm_validator_alias (validator, "start_hour", "hour");
-  gvm_validator_alias (validator, "start_minute", "minute");
-  gvm_validator_alias (validator, "start_month", "month");
-  gvm_validator_alias (validator, "start_year", "year");
   gvm_validator_alias (validator, "subgroup_column", "group_column");
   gvm_validator_alias (validator, "subject_id", "id");
   gvm_validator_alias (validator, "subject_id_optional", "id_optional");
   gvm_validator_alias (validator, "subtype", "asset_type");
+  gvm_validator_alias (validator, "start_time", "isodate");
   gvm_validator_alias (validator, "task_uuid", "optional_id");
   gvm_validator_alias (validator, "ticket_id", "id");
   gvm_validator_alias (validator, "timeout", "boolean");
