@@ -174,11 +174,7 @@ class PerformancePage extends React.Component {
       duration: 'day',
       scannerId: 0,
       startDate: start,
-      startHour: start.hour(),
-      startMinute: start.minute(),
       endDate: end,
-      endHour: end.hour(),
-      endMinute: end.minute(),
       scanners: [],
     };
 
@@ -211,12 +207,8 @@ class PerformancePage extends React.Component {
 
       this.setState({
         duration: undefined,
-        endDate: endDate,
-        endHour: endDate.hour(),
-        endMinute: endDate.minute(),
-        startDate: startDate,
-        startHour: startDate.hour(),
-        startMinute: startDate.minute(),
+        endDate,
+        startDate,
       });
     }
 
@@ -235,11 +227,7 @@ class PerformancePage extends React.Component {
       this.setState({
         duration,
         startDate: start,
-        startHour: start.hour(),
-        startMinute: start.minute(),
         endDate: end,
-        endHour: end.hour(),
-        endMinute: end.minute(),
       });
 
       this.handleInteraction();
@@ -268,17 +256,7 @@ class PerformancePage extends React.Component {
 
   render() {
     const {scanners = []} = this.props;
-    const {
-      duration,
-      reports,
-      scannerId,
-      startDate,
-      startHour,
-      startMinute,
-      endDate,
-      endHour,
-      endMinute,
-    } = this.state;
+    const {duration, reports, scannerId, startDate, endDate} = this.state;
     const sensorId = selectSaveId(scanners, scannerId, 0);
     return (
       <Layout flex="column">
@@ -288,12 +266,8 @@ class PerformancePage extends React.Component {
           title={_('Performance')}
         >
           <StartEndTimeSelection
-            startDate={startDate}
-            startHour={startHour}
-            startMinute={startMinute}
             endDate={endDate}
-            endMinute={endMinute}
-            endHour={endHour}
+            startDate={startDate}
             onChanged={this.handleStartEndChange}
           />
 
