@@ -33,19 +33,23 @@ export const setLocale = lang => {
 
 export const getLocale = () => setMomentLocale();
 
-const dateFormat = (date, format) => {
+export const ensureDate = date => {
   if (!isDefined(date)) {
     return undefined;
   }
 
   if (!isDate(date)) {
     if (isString(date) || isJsDate(date)) {
-      date = parseDate(date);
-    } else {
-      return undefined;
+      return parseDate(date);
     }
+    return undefined;
   }
-  return date.format(format);
+  return date;
+};
+
+const dateFormat = (date, format) => {
+  date = ensureDate(date);
+  return isDefined(date) ? date.format(format) : undefined;
 };
 
 export const shortDate = date => dateFormat(date, 'L');
