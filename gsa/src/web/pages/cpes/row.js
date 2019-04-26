@@ -19,11 +19,11 @@
 
 import React from 'react';
 
-import {longDate} from 'gmp/locale/date';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import Comment from 'web/components/comment/comment';
+
+import DateTime from 'web/components/date/datetime';
 
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
@@ -51,7 +51,9 @@ const Row = ({
       <Comment text={entity.comment} />
     </TableData>
     <TableData>{na(entity.title)}</TableData>
-    <TableData>{longDate(entity.modificationTime)}</TableData>
+    <TableData>
+      <DateTime date={entity.modificationTime} />
+    </TableData>
     <TableData>{entity.cve_refs}</TableData>
     <TableData>
       <SeverityBar severity={entity.severity} />

@@ -20,9 +20,10 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {shortDate} from 'gmp/locale/date';
 
 import {typeName} from 'gmp/utils/entitytype';
+
+import DateTime from 'web/components/date/datetime';
 
 import DisableIcon from 'web/components/icon/disableicon';
 import EnableIcon from 'web/components/icon/enableicon';
@@ -144,7 +145,9 @@ const Row = ({
       <TableData>{renderYesNo(entity.isActive())}</TableData>
       <TableData>{typeName(resourceType)}</TableData>
       <TableData>{resourceCount}</TableData>
-      <TableData>{shortDate(entity.modificationTime)}</TableData>
+      <TableData>
+        <DateTime date={entity.modificationTime} />
+      </TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );

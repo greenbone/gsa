@@ -20,7 +20,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import {duration as createDuration} from 'gmp/models/date';
 
@@ -29,6 +28,8 @@ import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 
 import StatusBar from 'web/components/bar/statusbar';
+
+import DateTime from 'web/components/date/datetime';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -139,9 +140,14 @@ const ReportScanInfoTable = ({filterString, links = true, report}) => {
             <TableData>
               {delta ? _('Scan Time Report 1') : _('Scan Time')}
             </TableData>
-            <TableData>
-              {longDate(scan_start)}
-              {is_ended ? ' - ' + longDate(scan_end) : ''}
+            <TableData flex="row">
+              <DateTime date={scan_start} />
+              {is_ended && (
+                <React.Fragment>
+                  {' - '}
+                  <DateTime date={scan_end} />
+                </React.Fragment>
+              )}
             </TableData>
           </TableRow>
         )}
@@ -180,19 +186,22 @@ const ReportScanInfoTable = ({filterString, links = true, report}) => {
         {delta && (
           <TableRow>
             <TableData>{_('Scan Time Report 2')}</TableData>
-            <TableData>
-              {longDate(delta_report.scan_start)}
+            <TableData flex="row">
+              <DateTime date={delta_report.scan_start} />
               {isDefined(delta_report.scan_end) &&
-              delta_report.scan_end.isValid()
-                ? ' - ' + longDate(delta_report.scan_end)
-                : ''}
+                delta_report.scan_end.isValid() && (
+                  <React.Fragment>
+                    {' - '}
+                    <DateTime date={delta_report.scan_end} />
+                  </React.Fragment>
+                )}
             </TableData>
           </TableRow>
         )}
         {delta && delta_report.scan_end.isValid() && (
           <TableRow>
             <TableData>{_('Scan Duration Report 2')}</TableData>
-            <TableData>
+            <TableData flex="row">
               {scanDuration(delta_report.scan_start, delta_report.scan_end)}
             </TableData>
           </TableRow>
