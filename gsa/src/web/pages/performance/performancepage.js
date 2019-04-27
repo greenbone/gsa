@@ -232,7 +232,8 @@ class PerformancePage extends React.Component {
 
   handleDurationChange(duration) {
     if (isDefined(duration)) {
-      const end = date();
+      const {timezone} = this.props;
+      const end = date().tz(timezone);
       const start = end.clone().subtract(DURATIONS[duration], 'seconds');
 
       this.setState({
