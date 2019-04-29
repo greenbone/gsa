@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix installation of locale files [#1330](https://github.com/greenbone/gsa/pull/1330)
 - Fix list of options of possible Filter types [#1326](https://github.com/greenbone/gsa/pull/1326)
 - Fix timezone handling at performance page [#1325](https://github.com/greenbone/gsa/pull/1325)
 - Fix creating and editing alerts without a result filter [#1315](https://github.com/greenbone/gsa/pull/1315)
