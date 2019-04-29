@@ -254,7 +254,7 @@ class ReportDetails extends React.Component {
 
   reload() {
     // reload data from backend
-    this.load();
+    this.load(this.state.lastFilter);
   }
 
   getReloadInterval() {
