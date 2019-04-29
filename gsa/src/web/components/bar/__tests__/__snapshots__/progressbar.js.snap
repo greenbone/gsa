@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`StatusBar tests should render 1`] = `
+exports[`ProgressBar tests should render 1`] = `
 .c0 {
   height: 13px;
   box-sizing: content-box;
@@ -24,11 +24,8 @@ exports[`StatusBar tests should render 1`] = `
 
 .c1 {
   height: 13px;
-  width: 100%;
-}
-
-.c3 {
-  white-space: nowrap;
+  width: 10%;
+  background: #4F91C7;
 }
 
 @media print {
@@ -53,7 +50,7 @@ exports[`StatusBar tests should render 1`] = `
 <div
   class="c0"
   data-testid="progressbar-box"
-  title="undefined"
+  title="Progress"
 >
   <div
     class="c1"
@@ -61,12 +58,6 @@ exports[`StatusBar tests should render 1`] = `
   />
   <div
     class="c2"
-  >
-    <span
-      class="c3"
-    >
-      undefined
-    </span>
-  </div>
+  />
 </div>
 `;

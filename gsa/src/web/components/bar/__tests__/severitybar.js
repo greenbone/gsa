@@ -20,68 +20,60 @@ import React from 'react';
 
 import {render} from 'web/utils/testing';
 
-import StatusBar from '../statusbar';
+import SeverityBar from '../severitybar';
 
-import {TASK_STATUS} from 'gmp/models/task';
-
-describe('StatusBar tests', () => {
+describe('SeverityBar tests', () => {
   test('should render', () => {
-    const {element} = render(<StatusBar progress="90" status="Unknown" />);
+    const {element} = render(<SeverityBar severity="9.5" />);
 
     expect(element).toMatchSnapshot();
   });
 
   test('should render text content', () => {
-    const {element} = render(
-      <StatusBar progress="90" status={TASK_STATUS.stopped} />,
-    );
-    expect(element).toHaveTextContent('Stopped at 90 %');
+    const {element} = render(<SeverityBar severity="9.5" />);
+    expect(element).toHaveTextContent('9.5 (High)');
   });
 
   test('should render title', () => {
-    const {getByTestId} = render(
-      <StatusBar progress="90" status={TASK_STATUS.stopped} />,
-    );
+    const {getByTestId} = render(<SeverityBar severity="9.5" />);
     const progressbarBox = getByTestId('progressbar-box');
 
-    expect(progressbarBox).toHaveAttribute('title', 'Stopped');
+    expect(progressbarBox).toHaveAttribute('title', 'High');
   });
 
   test('should render progress', () => {
-    const {getByTestId} = render(
-      <StatusBar progress="90" status={TASK_STATUS.stopped} />,
-    );
+    const {getByTestId} = render(<SeverityBar severity="9.5" />);
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('width', '90%');
+    expect(progress).toHaveStyleRule('width', '95%');
   });
 
   test('should not render progress > 100', () => {
-    const {getByTestId} = render(
-      <StatusBar progress="101" status={TASK_STATUS.stopped} />,
-    );
+    const {getByTestId} = render(<SeverityBar severity="10.1" />);
     const progress = getByTestId('progress');
 
     expect(progress).toHaveStyleRule('width', '100%');
   });
 
   test('should not render progress < 0', () => {
-    const {getByTestId} = render(
-      <StatusBar progress="-1" status={TASK_STATUS.stopped} />,
-    );
+    const {getByTestId} = render(<SeverityBar severity="-0.1" />);
     const progress = getByTestId('progress');
 
     expect(progress).toHaveStyleRule('width', '0%');
   });
 
   test('should render background', () => {
-    const {getByTestId} = render(
-      <StatusBar progress="90" status={TASK_STATUS.stopped} />,
-    );
+    const {getByTestId} = render(<SeverityBar severity="9.5" />);
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', '#F0A519');
+    expect(progress).toHaveStyleRule('background', '#C83814');
+  });
+
+  test('should render without severity prop', () => {
+    const {getByTestId} = render(<SeverityBar />);
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('background', '#4F91C7');
+    expect(progress).toHaveStyleRule('width', '0%');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:
