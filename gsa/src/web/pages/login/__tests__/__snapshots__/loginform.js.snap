@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`LoginForm tests should render full LoginForm 1`] = `
-.c5 {
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -19,25 +19,7 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   align-items: stretch;
 }
 
-.c9 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c16 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -55,7 +37,7 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   align-items: center;
 }
 
-.c15 {
+.c12 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -75,12 +57,12 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   z-index: 1;
 }
 
-.c15:focus,
-.c15:hover {
+.c12:focus,
+.c12:hover {
   border: 1px solid #393637;
 }
 
-.c15:hover {
+.c12:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -88,26 +70,26 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   color: #fff;
 }
 
-.c15[disabled] {
+.c12[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c15 img {
+.c12 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c15:link {
+.c12:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c14 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -126,46 +108,14 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
 }
 
 .c6 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  padding-bottom: 10px;
+  border: 0;
+  border-spacing: 0px;
+  font-size: 12px;
+  text-align: left;
+  table-layout: auto;
 }
 
-.c7 {
-  display: inline-block;
-  max-width: 100%;
-  font-weight: bold;
-  text-align: right;
-  padding-left: 10px;
-  padding-right: 10px;
-  width: 33.33333333%;
-  margin-left: 0;
-}
-
-.c8 {
-  width: 66.66666667%;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.c13 {
-  width: 33.33333333%;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-left: 33.33333333%;
-}
-
-.c11 {
+.c10 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -179,29 +129,11 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   padding: 1px 8px;
 }
 
-.c11:-webkit-autofill {
+.c10:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c10 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c12 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -231,9 +163,13 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   height: 95px;
 }
 
+.c5 {
+  table-layout: fixed;
+}
+
 .c1 {
-  margin-top: 5px;
-  margin-bottom: 5px;
+  width: 300px;
+  margin: 5px auto;
   padding-bottom: 10px;
   font-size: 9pt;
 }
@@ -246,10 +182,6 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
 }
 
 .c2 {
@@ -270,6 +202,20 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   border: 1px solid #c8d3d9;
   padding: 10px;
   margin-bottom: 10px;
+}
+
+.c7 {
+  font-weight: bold;
+  text-align: right;
+  padding-right: 5px;
+  table-layout: fixed;
+  width: 200px;
+}
+
+@media print {
+  .c6 {
+    border-collapse: collapse;
+  }
 }
 
 <body>
@@ -304,77 +250,85 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
           class="c4"
           src="/img/login-label.png"
         />
-        <div
-          class="c5"
+        <table
+          class="c5 c6"
         >
-          <div
-            class="c6"
+          <tbody
+            class=""
           >
-            <label
-              class="c7"
-              data-testid="formgroup-title"
-            >
-              Username
-            </label>
-            <div
-              class="c8 c9"
-              data-testid="formgroup-content"
-              size="8"
-            >
-              <input
-                autocomplete="username"
-                class="c10 c11"
-                name="username"
-                placeholder="e.g. johndoe"
-                tabindex="1"
-                type="text"
-                value=""
-              />
-            </div>
-          </div>
-          <div
-            class="c6"
-          >
-            <label
-              class="c7"
-              data-testid="formgroup-title"
-            >
-              Password
-            </label>
-            <div
-              class="c8 c9"
-              data-testid="formgroup-content"
-              size="8"
-            >
-              <input
-                autocomplete="current-password"
-                class="c12 c11"
-                name="password"
-                placeholder="Password"
-                type="password"
-                value=""
-              />
-            </div>
-          </div>
-          <div
-            class="c6"
-          >
-            <div
-              class="c13 c9"
-              data-testid="formgroup-content"
-              offset="4"
-              size="4"
-            >
-              <button
-                class="c14 c15"
-                data-testid="login-button"
-                title="Login"
+            <tr>
+              <td
+                class="c7"
               >
-                Login
-              </button>
-            </div>
-          </div>
-        </div>
+                <div
+                  class="c8"
+                >
+                  Username
+                </div>
+              </td>
+              <td>
+                <div
+                  class="c8"
+                >
+                  <input
+                    autocomplete="username"
+                    class="c9 c10"
+                    name="username"
+                    placeholder="e.g. johndoe"
+                    tabindex="1"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td
+                class="c7"
+              >
+                <div
+                  class="c8"
+                >
+                  Password
+                </div>
+              </td>
+              <td>
+                <div
+                  class="c8"
+                >
+                  <input
+                    autocomplete="current-password"
+                    class="c9 c10"
+                    name="password"
+                    placeholder="Password"
+                    type="password"
+                    value=""
+                  />
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div
+                  class="c8"
+                />
+              </td>
+              <td>
+                <div
+                  class="c8"
+                >
+                  <button
+                    class="c11 c12"
+                    data-testid="login-button"
+                    title="Login"
+                  >
+                    Login
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div
         class="c1"
@@ -395,10 +349,10 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
         class="c3"
       >
         <div
-          class="c16"
+          class="c13"
         >
           <button
-            class="c14 c15"
+            class="c11 c12"
             data-testid="guest-login-button"
             title="Login as Guest"
           >
