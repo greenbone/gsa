@@ -38,6 +38,7 @@ import PropTypes from 'web/utils/proptypes';
 import {na} from 'web/utils/render';
 
 import Trend from './trend';
+import {getTranslatedType} from 'gmp/models/scanconfig';
 
 const ScanConfigActions = withEntitiesActions(
   ({
@@ -100,6 +101,7 @@ const ScanConfigRow = ({
       displayName={_('Scan Config')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
+    <TableData>{getTranslatedType(entity.scan_config_type)}</TableData>
     <TableData>{na(entity.families.count)}</TableData>
     <TableData>
       <Trend

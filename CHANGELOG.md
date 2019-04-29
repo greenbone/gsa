@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.1] - (unreleased)
 
 ### Added
+- Add type column to scan configs to allow filter and sort by scan config type [#1331](https://github.com/greenbone/gsa/pull/1331)
 - Add new DefaultFilterSettings to UserSettings [#1326](https://github.com/greenbone/gsa/pull/1326)
 - Add warning for IE11 [#1322](https://github.com/greenbone/gsa/pull/1322)
 - Add tests for label and img [#1313](https://github.com/greenbone/gsa/pull/1313)
