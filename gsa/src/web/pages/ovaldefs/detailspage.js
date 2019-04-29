@@ -22,9 +22,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
+
+import DateTime from 'web/components/date/datetime';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
@@ -252,7 +253,9 @@ const Details = ({entity}) => {
                       )}
                     </Divider>
                   </TableData>
-                  <TableData>{longDate(change.date)}</TableData>
+                  <TableData>
+                    <DateTime date={change.date} />
+                  </TableData>
                   <TableData>
                     <Divider>
                       {change.contributors.map(contributor => (

@@ -20,7 +20,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Render all dates in the current configured timezone of the user
-  [#1327](https://github.com/greenbone/gsa/pull/1327), [#1329](https://github.com/greenbone/gsa/pull/1329)
+  [#1327](https://github.com/greenbone/gsa/pull/1327),
+  [#1329](https://github.com/greenbone/gsa/pull/1329),
+  [#1332](https://github.com/greenbone/gsa/pull/1332)
 - Change default PortList for NewTargetDialog [#1321](https://github.com/greenbone/gsa/pull/1321)
 - Update dependencies of react, react-dom, react-redux and create-react-app [#1312](https://github.com/greenbone/gsa/pull/1312)
 - Adjust clickable area of Select [#1296](https://github.com/greenbone/gsa/pull/1296)

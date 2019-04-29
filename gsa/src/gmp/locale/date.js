@@ -47,15 +47,23 @@ export const ensureDate = date => {
   return date;
 };
 
-const dateFormat = (date, format) => {
+const dateFormat = (date, format, tz) => {
   date = ensureDate(date);
-  return isDefined(date) ? date.format(format) : undefined;
+  if (!isDefined(date)) {
+    return undefined;
+  }
+
+  if (isDefined(tz)) {
+    date.tz(tz);
+  }
+  return date.format(format);
 };
 
-export const shortDate = date => dateFormat(date, 'L');
+export const shortDate = (date, tz) => dateFormat(date, 'L', tz);
 
-export const longDate = date => dateFormat(date, 'llll');
+export const longDate = (date, tz) => dateFormat(date, 'llll', tz);
 
-export const dateTimeWithTimeZone = date => dateFormat(date, 'llll z');
+export const dateTimeWithTimeZone = (date, tz) =>
+  dateFormat(date, 'llll z', tz);
 
 // vim: set ts=2 sw=2 tw=80:

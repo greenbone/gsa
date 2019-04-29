@@ -19,6 +19,8 @@
 
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
@@ -68,6 +70,8 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 
+import {getTimezone} from 'web/store/usersettings/selectors';
+
 import {renderYesNo} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
 
@@ -114,7 +118,9 @@ ToolBarIcons.propTypes = {
   onNoteEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({entity, ...props}) => {
+const Details = connect(rootState => ({
+  timezone: getTimezone(rootState),
+}))(({entity, timezone, ...props}) => {
   const {nvt} = entity;
   return (
     <Layout flex="column">
@@ -151,7 +157,9 @@ const Details = ({entity, ...props}) => {
               {entity.isActive() &&
                 isDefined(entity.endTime) &&
                 ' ' +
-                  _('until {{- enddate}}', {enddate: longDate(entity.endTime)})}
+                  _('until {{- enddate}}', {
+                    enddate: longDate(entity.endTime, timezone),
+                  })}
             </TableData>
           </TableRow>
         </TableBody>
@@ -160,7 +168,7 @@ const Details = ({entity, ...props}) => {
       <NoteDetails entity={entity} {...props} />
     </Layout>
   );
-};
+});
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,

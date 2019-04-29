@@ -19,11 +19,12 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
+
+import DateTime from 'web/components/date/datetime';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
@@ -59,13 +60,15 @@ const ScheduleDetails = ({entity, links = true}) => {
 
           <TableRow>
             <TableData>{_('First Run')}</TableData>
-            <TableData>{longDate(startDate)}</TableData>
+            <TableData>
+              <DateTime date={startDate} />
+            </TableData>
           </TableRow>
 
           <TableRow>
             <TableData>{_('Next Run')}</TableData>
             <TableData>
-              {isDefined(nextDate) ? longDate(nextDate) : '-'}
+              {isDefined(nextDate) ? <DateTime date={nextDate} /> : '-'}
             </TableData>
           </TableRow>
 

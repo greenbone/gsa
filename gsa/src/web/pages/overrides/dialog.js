@@ -20,7 +20,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -40,6 +39,8 @@ import {
   TASK_SELECTED,
   RESULT_UUID,
 } from 'gmp/models/override';
+
+import DateTime from 'web/components/date/datetime';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
@@ -226,7 +227,7 @@ const OverrideDialog = ({
                       title={_('yes, until')}
                       onChange={onValueChange}
                     />
-                    <span>{longDate(override.endTime)}</span>
+                    <DateTime date={override.endTime} />
                   </Divider>
                 </Layout>
               )}

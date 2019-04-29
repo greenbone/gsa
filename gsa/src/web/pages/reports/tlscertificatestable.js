@@ -26,6 +26,8 @@ import {shortDate} from 'gmp/locale/date';
 
 import PropTypes from 'web/utils/proptypes';
 
+import DateTime from 'web/components/date/datetime';
+
 import DownloadIcon from 'web/components/icon/downloadicon';
 
 import Link from 'web/components/link/link';
@@ -109,8 +111,12 @@ const Row = ({
         <StyledSpan>{issuer}</StyledSpan>
       </TableData>
       <TableData>{serial}</TableData>
-      <TableData>{shortDate(notbefore)}</TableData>
-      <TableData>{shortDate(notafter)}</TableData>
+      <TableData>
+        <DateTime format={shortDate} date={notbefore} />
+      </TableData>
+      <TableData>
+        <DateTime format={shortDate} data={notafter} />
+      </TableData>
       <TableData>
         <Link
           to="hosts"

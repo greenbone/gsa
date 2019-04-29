@@ -19,6 +19,8 @@
 
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
@@ -46,6 +48,8 @@ import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+
+import {getTimezone} from 'web/store/usersettings/selectors';
 
 import {
   OSP_SCANNER_TYPE,
@@ -76,36 +80,40 @@ const filter_credentials = (credentials, type) => {
   return filter(credentials, cred_filter);
 };
 
-const render_certificate_info = info => {
+const render_certificate_info = (info, tz) => {
   if (!isDefined(info)) {
     return null;
   }
 
   if (info.time_status === 'expired') {
     return _('Certificate currently in use expired at {{date}}', {
-      date: longDate(info.expirationTime),
+      date: longDate(info.expirationTime, tz),
     });
   }
   if (info.time_status === 'inactive') {
     return _('Certificate currently not valid until {{date}}', {
-      date: longDate(info.activationTime),
+      date: longDate(info.activationTime, tz),
     });
   }
   return _('Certificate in use will expire at {{date}}', {
-    date: longDate(info.expirationTime),
+    date: longDate(info.expirationTime, tz),
   });
 };
 
-const CertStatus = ({info}) => {
+const mapStateToProps = rootState => ({
+  timezone: getTimezone(rootState),
+});
+
+const CertStatus = connect(mapStateToProps)(({info, timezone}) => {
   return (
     <FootNote>
       <Layout>
         <KeyIcon />
       </Layout>
-      <span>{render_certificate_info(info)}</span>
+      <span>{render_certificate_info(info, timezone)}</span>
     </FootNote>
   );
-};
+});
 
 CertStatus.propTypes = {
   info: PropTypes.object.isRequired,

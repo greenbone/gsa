@@ -25,9 +25,10 @@ import {isDefined} from 'gmp/utils/identity';
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import DateTime from 'web/components/date/datetime';
 
 import DeleteIcon from '../../components/icon/deleteicon.js';
 
@@ -215,7 +216,9 @@ class Identifiers extends React.Component {
                     </DetailsLink>
                   </span>
                 </TableData>
-                <TableData>{longDate(identifier.creationTime)}</TableData>
+                <TableData>
+                  <DateTime date={identifier.creationTime} />
+                </TableData>
                 <TableData>
                   <Source source={identifier.source} />
                 </TableData>
