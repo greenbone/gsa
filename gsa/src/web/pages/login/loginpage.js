@@ -60,10 +60,19 @@ const GreenboneLogo = styled(Logo)`
   position: sticky;
 `;
 
+const LoginBox = styled(Layout)`
+  ${'' /* flex-grow: 1; */}
+  width: 100%;
+  flex-direction: row;
+  align-items: stretch;
+`;
+
+const LoginSpacer = styled(Layout)`
+  width: 42%;
+`;
+
 const LoginLayout = styled(Layout)`
   height: 100%;
-  width: 420px;
-  margin: 0 auto;
   padding: 20px 20px 0px 20px;
 `;
 
@@ -177,18 +186,22 @@ class LoginPage extends React.Component {
       <StyledLayout>
         <LoginHeader />
         <MenuSpacer />
-        <LoginLayout flex="column" className="login">
-          <GreenboneLogo />
-          <LoginForm
-            error={message}
-            showGuestLogin={showGuestLogin}
-            showLogin={showLogin}
-            showProtocolInsecure={showProtocolInsecure}
-            isIE11={isIE11()}
-            onGuestLoginClick={this.handleGuestLogin}
-            onSubmit={this.handleSubmit}
-          />
-        </LoginLayout>
+        <LoginBox>
+          <LoginSpacer />
+          <LoginLayout flex="column" className="login">
+            <GreenboneLogo />
+            <LoginForm
+              error={message}
+              showGuestLogin={showGuestLogin}
+              showLogin={showLogin}
+              showProtocolInsecure={showProtocolInsecure}
+              isIE11={isIE11()}
+              onGuestLoginClick={this.handleGuestLogin}
+              onSubmit={this.handleSubmit}
+            />
+          </LoginLayout>
+          <LoginSpacer />
+        </LoginBox>
         <Footer />
       </StyledLayout>
     );
