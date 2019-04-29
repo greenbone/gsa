@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.1] - (unreleased)
 
 ### Added
+- Add missing tool tips to credential download icons [#1335](https://github.com/greenbone/gsa/pull/1335)
 - Add type column to scan configs to allow filter and sort by scan config type [#1331](https://github.com/greenbone/gsa/pull/1331)
 - Add some tests for bar components [#1328](https://github.com/greenbone/gsa/pull/1328)
 - Add new DefaultFilterSettings to UserSettings [#1326](https://github.com/greenbone/gsa/pull/1326)
