@@ -48,10 +48,32 @@ describe('SeverityBar tests', () => {
     expect(progress).toHaveStyleRule('width', '95%');
   });
 
+  test('should not render progress > 100', () => {
+    const {getByTestId} = render(<SeverityBar severity="10.1" />);
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('width', '100%');
+  });
+
+  test('should not render progress < 0', () => {
+    const {getByTestId} = render(<SeverityBar severity="-0.1" />);
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('width', '0%');
+  });
+
   test('should render background', () => {
     const {getByTestId} = render(<SeverityBar severity="9.5" />);
     const progress = getByTestId('progress');
 
     expect(progress).toHaveStyleRule('background', '#C83814');
+  });
+
+  test('should render without severity prop', () => {
+    const {getByTestId} = render(<SeverityBar />);
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('background', '#4F91C7');
+    expect(progress).toHaveStyleRule('width', '0%');
   });
 });

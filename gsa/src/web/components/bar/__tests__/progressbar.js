@@ -48,12 +48,75 @@ describe('ProgressBar tests', () => {
     expect(progress).toHaveStyleRule('width', '90%');
   });
 
-  test('should render background', () => {
+  test('should not render progress > 100', () => {
+    const {getByTestId} = render(
+      <ProgressBar background="low" progress="101" title="Progress" />,
+    );
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('width', '100%');
+  });
+
+  test('should not render progress < 0', () => {
+    const {getByTestId} = render(
+      <ProgressBar background="low" progress="-1" title="Progress" />,
+    );
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('width', '0%');
+  });
+
+  test('should render background = warn', () => {
+    const {getByTestId} = render(
+      <ProgressBar background="warn" progress="10" title="Progress" />,
+    );
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('background', '#F0A519');
+  });
+
+  test('should render background = error', () => {
     const {getByTestId} = render(
       <ProgressBar background="error" progress="10" title="Progress" />,
     );
     const progress = getByTestId('progress');
 
     expect(progress).toHaveStyleRule('background', '#C83814');
+  });
+
+  test('should render background = low', () => {
+    const {getByTestId} = render(
+      <ProgressBar background="low" progress="10" title="Progress" />,
+    );
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('background', '#4F91C7');
+  });
+
+  test('should render background = new', () => {
+    const {getByTestId} = render(
+      <ProgressBar background="new" progress="10" title="Progress" />,
+    );
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('background', '#99BE48');
+  });
+
+  test('should render background = run', () => {
+    const {getByTestId} = render(
+      <ProgressBar background="run" progress="10" title="Progress" />,
+    );
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('background', '#70C000');
+  });
+
+  test('should render background = log', () => {
+    const {getByTestId} = render(
+      <ProgressBar background="log" progress="10" title="Progress" />,
+    );
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('background', 'gray');
   });
 });

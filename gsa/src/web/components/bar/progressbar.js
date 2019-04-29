@@ -80,6 +80,9 @@ const Progress = styled.div`
     if (progress > 100) {
       progress = 100;
     }
+    if (progress < 0) {
+      progress = 0;
+    }
     return {
       width: progress + '%',
       background,

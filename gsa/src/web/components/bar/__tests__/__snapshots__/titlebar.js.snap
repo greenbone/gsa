@@ -85,7 +85,9 @@ exports[`Titlebar tests should not render content if user is logged out 1`] = `
           src="/img/gsa.svg"
         />
       </div>
-      <div />
+      <div>
+        Vendor Version
+      </div>
     </div>
   </div>
 </body>

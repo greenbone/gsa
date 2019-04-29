@@ -38,11 +38,14 @@ describe('Titlebar tests', () => {
 
     expect(baseElement).toMatchSnapshot();
     expect(isLoggedIn).toHaveBeenCalled();
+    const links = baseElement.querySelectorAll('a');
+    expect(links[1]).toHaveTextContent('username');
+    expect(baseElement).not.toHaveTextContent('Vendor Version');
   });
 
   test('should not render content if user is logged out', () => {
     const isLoggedIn = jest.fn().mockReturnValue(false);
-    const gmp = {isLoggedIn, settings: {vendorVersion: ''}};
+    const gmp = {isLoggedIn, settings: {vendorVersion: 'Vendor Version'}};
     const {render, store} = rendererWith({gmp, router: true, store: true});
     store.dispatch(setUsername('username'));
 
@@ -50,5 +53,7 @@ describe('Titlebar tests', () => {
 
     expect(baseElement).toMatchSnapshot();
     expect(isLoggedIn).toHaveBeenCalled();
+    expect(baseElement).not.toHaveTextContent('username');
+    expect(baseElement).toHaveTextContent('Vendor Version');
   });
 });

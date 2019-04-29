@@ -56,6 +56,24 @@ describe('StatusBar tests', () => {
     expect(progress).toHaveStyleRule('width', '90%');
   });
 
+  test('should not render progress > 100', () => {
+    const {getByTestId} = render(
+      <StatusBar progress="101" status={TASK_STATUS.stopped} />,
+    );
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('width', '100%');
+  });
+
+  test('should not render progress < 0', () => {
+    const {getByTestId} = render(
+      <StatusBar progress="-1" status={TASK_STATUS.stopped} />,
+    );
+    const progress = getByTestId('progress');
+
+    expect(progress).toHaveStyleRule('width', '0%');
+  });
+
   test('should render background', () => {
     const {getByTestId} = render(
       <StatusBar progress="90" status={TASK_STATUS.stopped} />,
