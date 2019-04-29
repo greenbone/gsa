@@ -37,7 +37,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix timezone handling at performance page [#1325](https://github.com/greenbone/gsa/pull/1325)
 - Fix creating and editing alerts without a result filter [#1315](https://github.com/greenbone/gsa/pull/1315)
 - Fix filter selection at report details page [#1314](https://github.com/greenbone/gsa/pull/1314)
-- Fix using default results filter at report details page [#1314](https://github.com/greenbone/gsa/pull/1314)
+- Fix using default results filter at report details page
+  [#1314](https://github.com/greenbone/gsa/pull/1314),
+  [#1333](https://github.com/greenbone/gsa/pull/1333)
 - Fix loading filters at permission list page [#1306](https://github.com/greenbone/gsa/pull/1306)
 - Fix filter in Report Results view cannot be saved & Fix error for create filter with no available results [#1303](https://github.com/greenbone/gsa/pull/1303)
 - Fix creating permissions via the create multiple permissions dialog [#1302](https://github.com/greenbone/gsa/pull/1302)
