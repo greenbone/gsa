@@ -22,7 +22,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import {TASK_STATUS} from 'gmp/models/task';
 
@@ -30,6 +29,8 @@ import {isDefined} from 'gmp/utils/identity';
 
 import StatusBar from 'web/components/bar/statusbar';
 import ToolBar from 'web/components/bar/toolbar';
+
+import DateTime from 'web/components/date/datetime';
 
 import ErrorMessage from 'web/components/errorboundary/errormessage';
 
@@ -319,7 +320,7 @@ const PageContent = ({
         <span>{_('Loading')}</span>
       ) : (
         <Divider>
-          <span>{longDate(timestamp)}</span>
+          <DateTime date={timestamp} />
           <Span>
             <StatusBar status={status} progress={progress} />
           </Span>

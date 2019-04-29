@@ -20,7 +20,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -39,6 +38,8 @@ import {
   ACTIVE_NO_VALUE,
   RESULT_ANY,
 } from 'gmp/models/override';
+
+import DateTime from 'web/components/date/datetime';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -178,7 +179,7 @@ const NoteDialog = ({
                       value={ACTIVE_YES_UNTIL_VALUE}
                       onChange={onValueChange}
                     />
-                    <span>{longDate(note.endTime)}</span>
+                    <DateTime date={note.endTime} />
                   </Divider>
                 )}
               </Divider>

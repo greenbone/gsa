@@ -20,7 +20,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -28,6 +27,8 @@ import {
   CERTIFICATE_STATUS_INACTIVE,
   CERTIFICATE_STATUS_EXPIRED,
 } from 'gmp/models/credential';
+
+import DateTime from 'web/components/date/datetime';
 
 import CredentialIcon from 'web/components/icon/credentialicon';
 import ExportIcon from 'web/components/icon/exporticon';
@@ -137,7 +138,7 @@ const Details = ({entity, links = true, ...props}) => {
                 <TableData>{_('Activation')}</TableData>
                 <TableData>
                   <Divider>
-                    <span>{longDate(cert.activationTime)}</span>
+                    <DateTime date={cert.activationTime} />
                     {cert.time_status === CERTIFICATE_STATUS_INACTIVE && (
                       <span>{_('inactive')}</span>
                     )}
@@ -149,7 +150,7 @@ const Details = ({entity, links = true, ...props}) => {
                 <TableData>{_('Expiration')}</TableData>
                 <TableData>
                   <Divider>
-                    <span>{longDate(cert.expirationTime)}</span>
+                    <DateTime date={cert.expirationTime} />
                     {cert.time_status === CERTIFICATE_STATUS_EXPIRED && (
                       <span>{_('expired')}</span>
                     )}
