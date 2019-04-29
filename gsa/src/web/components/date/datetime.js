@@ -18,16 +18,14 @@
  */
 import {connect} from 'react-redux';
 
-import {dateTimeWithTimeZone, ensureDate} from 'gmp/locale/date';
+import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
 
 import PropTypes from 'web/utils/proptypes';
 
-const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) => {
-  date = ensureDate(date);
-  return formatter(date.tz(timezone));
-};
+const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) =>
+  formatter(date, timezone);
 
 DateTime.propTypes = {
   date: PropTypes.date.isRequired,
