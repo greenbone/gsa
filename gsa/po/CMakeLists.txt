@@ -101,7 +101,7 @@ if (GETTEXT_FOUND)
                         COMMENT "Creating translation template (.pot) file from JS")
 
     install (DIRECTORY
-             ${GSA_BUILD_DIR}/locales
+             ${GSA_LOCALE_DIR}
              DESTINATION ${GSA_DEST_DIR})
 
   else (PY_POLIB_FOUND)
