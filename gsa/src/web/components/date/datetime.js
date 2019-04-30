@@ -20,15 +20,17 @@ import {connect} from 'react-redux';
 
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import {getTimezone} from 'web/store/usersettings/selectors';
 
 import PropTypes from 'web/utils/proptypes';
 
 const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) =>
-  formatter(date, timezone);
+  isDefined(date) ? formatter(date, timezone) : null;
 
 DateTime.propTypes = {
-  date: PropTypes.date.isRequired,
+  date: PropTypes.date,
   formatter: PropTypes.func,
   timezone: PropTypes.string,
 };
