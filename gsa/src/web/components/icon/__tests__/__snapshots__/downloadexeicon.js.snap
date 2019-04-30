@@ -14,7 +14,6 @@ exports[`DownloadExeIcon component tests should render 1`] = `
 
 <span
   class="c0 "
-  title="Download Windows Executable (.exe)"
 >
   <svg>
     dl_exe.svg
