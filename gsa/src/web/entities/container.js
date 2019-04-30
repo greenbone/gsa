@@ -232,6 +232,10 @@ class EntitiesContainer extends React.Component {
     }
   }
 
+  resetTimer() {
+    this.timer = undefined;
+  }
+
   clearTimer() {
     if (isDefined(this.timer)) {
       log.debug(
@@ -240,6 +244,7 @@ class EntitiesContainer extends React.Component {
         'for',
         this.props.gmpname,
       );
+      this.resetTimer();
       global.clearTimeout(this.timer);
     }
   }
@@ -247,7 +252,7 @@ class EntitiesContainer extends React.Component {
   handleTimer() {
     log.debug('Timer', this.timer, 'finished. Reloading data.');
 
-    this.timer = undefined;
+    this.resetTimer();
 
     this.startMeasurement();
 
