@@ -33,7 +33,7 @@ import DetailsLink from 'web/components/link/detailslink';
 
 import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
+import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
@@ -61,6 +61,10 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
     .slice(0, MAX_HOSTS_LISTINGS)
     .map(host => <span key={host}>{host}</span>);
 
+  const excludeHostsListing = exclude_hosts
+    .slice(0, MAX_HOSTS_LISTINGS)
+    .map(host => <span key={host}>{host}</span>);
+
   return (
     <Layout grow="1" flex="column">
       <DetailsBlock title={_('Hosts')}>
@@ -71,7 +75,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
           </colgroup>
           <TableBody>
             <TableRow>
-              <TableData>{_('Included')}</TableData>
+              <TableDataAlignTop>{_('Included')}</TableDataAlignTop>
               <TableData>
                 <Divider wrap>
                   {hostsListing}
@@ -82,12 +86,11 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
 
             {exclude_hosts.length > 0 && (
               <TableRow>
-                <TableData>{_('Excluded')}</TableData>
+                <TableDataAlignTop>{_('Excluded')}</TableDataAlignTop>
                 <TableData>
-                  <Divider>
-                    {exclude_hosts.map(host => (
-                      <span key={host}>{host}</span>
-                    ))}
+                  <Divider wrap>
+                    {excludeHostsListing}
+                    {exclude_hosts.length > MAX_HOSTS_LISTINGS && '[...]'}
                   </Divider>
                 </TableData>
               </TableRow>
