@@ -19,6 +19,7 @@
 import {createAll} from './utils/main';
 
 const {
+  loadAllEntities,
   loadEntities,
   loadEntity,
   reducer,
@@ -28,6 +29,7 @@ const {
 } = createAll('operatingsystem');
 
 export {
+  loadAllEntities,
   loadEntities,
   loadEntity,
   reducer,

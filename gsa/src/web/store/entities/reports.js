@@ -25,6 +25,7 @@ import {createAll} from './utils/main';
 import {createReducer} from 'web/store/entities/utils/reducers';
 
 const {
+  loadAllEntities,
   loadEntities,
   reducer,
   selector,
@@ -115,6 +116,7 @@ export {
   deltaReducer,
   deltaSelector,
   loadDeltaReport,
+  loadAllEntities,
   loadEntities,
   loadEntity,
   reducer,
