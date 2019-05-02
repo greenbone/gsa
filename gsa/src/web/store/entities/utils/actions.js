@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import Filter from 'gmp/models/filter';
+import Filter, {ALL_FILTER} from 'gmp/models/filter';
 
 import {pluralizeType} from 'gmp/utils/entitytype';
 
@@ -107,11 +107,11 @@ export const createLoadAllEntities = ({
   const state = selector(rootState);
 
   if (isDefined(filter)) {
-    filter = isDefined(filter.toFilterString) ? filter.all() : Filter.fromString(filter).all()
-      ? (filter = filter.all())
-      : (filter = Filter.fromString(filter).all());
+    filter = isDefined(filter.toFilterString)
+      ? filter.all()
+      : Filter.fromString(filter).all();
   } else {
-    const newFilter = ALL_FILTER;
+    filter = ALL_FILTER;
   }
 
   if (state.isLoadingEntities(filter)) {
