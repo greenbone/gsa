@@ -219,6 +219,10 @@ const ref = ReactPropTypes.oneOfType([
   }),
 ]);
 
+const error = ReactPropTypes.shape({
+  message: ReactPropTypes.string,
+});
+
 export default {
   bool: ReactPropTypes.bool,
   any: ReactPropTypes.any,
@@ -245,6 +249,7 @@ export default {
   elementOrString,
   entitycommand,
   entitiescommand,
+  error,
   filter,
   gmp,
   iconSize,
