@@ -163,27 +163,11 @@ get_alert (gvm_connection_t *, credentials_t *, params_t *, const char *,
            cmd_response_data_t *);
 
 static char *
-get_alerts (gvm_connection_t *, credentials_t *, params_t *, const char *,
-            cmd_response_data_t *);
-
-static char *
 get_agent (gvm_connection_t *, credentials_t *, params_t *, const char *,
            cmd_response_data_t *);
 
 static char *
-get_agents (gvm_connection_t *, credentials_t *, params_t *, const char *,
-            cmd_response_data_t *);
-
-static char *
 get_asset (gvm_connection_t *, credentials_t *, params_t *, const char *,
-           cmd_response_data_t *);
-
-static char *
-get_assets (gvm_connection_t *, credentials_t *, params_t *, const char *,
-            cmd_response_data_t *);
-
-static char *
-get_tasks (gvm_connection_t *, credentials_t *, params_t *, const char *,
            cmd_response_data_t *);
 
 static char *
@@ -199,36 +183,16 @@ get_filter (gvm_connection_t *, credentials_t *, params_t *, const char *,
             cmd_response_data_t *);
 
 static char *
-get_filters (gvm_connection_t *, credentials_t *, params_t *, const char *,
-             cmd_response_data_t *);
-
-static char *
 get_group (gvm_connection_t *, credentials_t *, params_t *, const char *,
            cmd_response_data_t *);
-
-static char *
-get_groups (gvm_connection_t *, credentials_t *, params_t *, const char *,
-            cmd_response_data_t *);
 
 static char *
 get_credential (gvm_connection_t *, credentials_t *, params_t *, const char *,
                 cmd_response_data_t *);
 
 static char *
-get_credentials (gvm_connection_t *, credentials_t *, params_t *, const char *,
-                 cmd_response_data_t *);
-
-static char *
-get_notes (gvm_connection_t *, credentials_t *, params_t *, const char *,
-           cmd_response_data_t *);
-
-static char *
 get_note (gvm_connection_t *, credentials_t *, params_t *, const char *,
           cmd_response_data_t *);
-
-static char *
-get_overrides (gvm_connection_t *, credentials_t *, params_t *, const char *,
-               cmd_response_data_t *);
 
 static char *
 get_override (gvm_connection_t *, credentials_t *, params_t *, const char *,
@@ -239,80 +203,36 @@ get_permission (gvm_connection_t *, credentials_t *, params_t *, const char *,
                 cmd_response_data_t *);
 
 static char *
-get_permissions (gvm_connection_t *, credentials_t *, params_t *, const char *,
-                 cmd_response_data_t *);
-
-static char *
 get_port_list (gvm_connection_t *, credentials_t *, params_t *, const char *,
                cmd_response_data_t *);
-
-static char *
-get_port_lists (gvm_connection_t *, credentials_t *, params_t *, const char *,
-                cmd_response_data_t *);
 
 static char *
 get_tag (gvm_connection_t *, credentials_t *, params_t *, const char *,
          cmd_response_data_t *);
 
 static char *
-get_tags (gvm_connection_t *, credentials_t *, params_t *, const char *,
-          cmd_response_data_t *);
-
-static char *
 get_target (gvm_connection_t *, credentials_t *, params_t *, const char *,
             cmd_response_data_t *);
-
-static char *
-get_targets (gvm_connection_t *, credentials_t *, params_t *, const char *,
-             cmd_response_data_t *);
 
 static char *
 get_report_format (gvm_connection_t *, credentials_t *, params_t *,
                    const char *, cmd_response_data_t *);
 
 static char *
-get_report_formats (gvm_connection_t *, credentials_t *, params_t *,
-                    const char *, cmd_response_data_t *);
-
-static char *
-get_results (gvm_connection_t *, credentials_t *, params_t *, const char *,
-             cmd_response_data_t *);
-
-static char *
 get_role (gvm_connection_t *, credentials_t *, params_t *, const char *,
           cmd_response_data_t *);
-
-static char *
-get_roles (gvm_connection_t *, credentials_t *, params_t *, const char *,
-           cmd_response_data_t *);
 
 static char *
 get_scanner (gvm_connection_t *, credentials_t *, params_t *, const char *,
              cmd_response_data_t *);
 
 static char *
-get_scanners (gvm_connection_t *, credentials_t *, params_t *, const char *,
-              cmd_response_data_t *);
-
-static char *
 get_schedule (gvm_connection_t *, credentials_t *, params_t *, const char *,
               cmd_response_data_t *);
 
 static char *
-get_schedules (gvm_connection_t *, credentials_t *, params_t *, const char *,
-               cmd_response_data_t *);
-
-static char *
 get_user (gvm_connection_t *, credentials_t *, params_t *, const char *,
           cmd_response_data_t *);
-
-static char *
-get_users (gvm_connection_t *, credentials_t *, params_t *, const char *,
-           cmd_response_data_t *);
-
-static char *
-get_vulns (gvm_connection_t *, credentials_t *, params_t *, const char *,
-           cmd_response_data_t *);
 
 static char *
 wizard (gvm_connection_t *, credentials_t *, params_t *, const char *,
@@ -999,8 +919,7 @@ get_one (gvm_connection_t *connection, const char *type,
 static char *
 get_entities (gvm_connection_t *connection, const char *type,
               credentials_t *credentials, params_t *params,
-              const char *extra_xml, gmp_arguments_t *arguments,
-              cmd_response_data_t *response_data)
+              gmp_arguments_t *arguments, cmd_response_data_t *response_data)
 {
   GString *xml;
   gchar *cmd;
@@ -1076,7 +995,6 @@ get_entities (gvm_connection_t *connection, const char *type,
  * @param[in]  type           Resource type in plural form.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
- * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[in]  arguments      Extra arguments for GMP GET command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
@@ -1084,7 +1002,7 @@ get_entities (gvm_connection_t *connection, const char *type,
  */
 static char *
 get_many (gvm_connection_t *connection, const char *type,
-          credentials_t *credentials, params_t *params, const char *extra_xml,
+          credentials_t *credentials, params_t *params,
           gmp_arguments_t *arguments, cmd_response_data_t *response_data)
 {
   const gchar *filter_id, *filter;
@@ -1119,8 +1037,8 @@ get_many (gvm_connection_t *connection, const char *type,
       gmp_arguments_add (arguments, "filter", filter);
     }
 
-  return get_entities (connection, type, credentials, params, extra_xml,
-                       arguments, response_data);
+  return get_entities (connection, type, credentials, params, arguments,
+                       response_data);
 }
 
 /**
@@ -2985,20 +2903,18 @@ move_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Requests SecInfo.
+ * @brief Get info, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
- * @param[in]  credentials    Credentials for the manager connection.
+ * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
- * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XML enveloped SecInfo response or error message.
+ * @return Enveloped XML object.
  */
 char *
-get_info (gvm_connection_t *connection, credentials_t *credentials,
-          params_t *params, const char *extra_xml,
-          cmd_response_data_t *response_data)
+get_info_gmp (gvm_connection_t *connection, credentials_t *credentials,
+              params_t *params, cmd_response_data_t *response_data)
 {
   const char *info_type;
   gmp_arguments_t *arguments;
@@ -3021,42 +2937,23 @@ get_info (gvm_connection_t *connection, credentials_t *credentials,
                          params_value (params, "info_id"));
     }
 
-  return get_many (connection, "info", credentials, params, NULL, arguments,
+  return get_many (connection, "info", credentials, params, arguments,
                    response_data);
-}
-
-/**
- * @brief Get info, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  params         Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_info_gmp (gvm_connection_t *connection, credentials_t *credentials,
-              params_t *params, cmd_response_data_t *response_data)
-{
-  return get_info (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  params            Request parameters.
- * @param[in]  extra_xml         Extra XML to insert inside page element.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
  */
-static char *
-get_tasks (gvm_connection_t *connection, credentials_t *credentials,
-           params_t *params, const char *extra_xml,
-           cmd_response_data_t *response_data)
+char *
+get_tasks_gmp (gvm_connection_t *connection, credentials_t *credentials,
+               params_t *params, cmd_response_data_t *response_data)
 {
   const char *schedules_only, *ignore_pagination;
   gmp_arguments_t *arguments;
@@ -3076,25 +2973,8 @@ get_tasks (gvm_connection_t *connection, credentials_t *credentials,
       gmp_arguments_add (arguments, "ignore_pargination", ignore_pagination);
     }
 
-  return get_many (connection, "tasks", credentials, params, extra_xml,
-                   arguments, response_data);
-}
-
-/**
- * @brief Get all tasks, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_tasks_gmp (gvm_connection_t *connection, credentials_t *credentials,
-               params_t *params, cmd_response_data_t *response_data)
-{
-  return get_tasks (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "tasks", credentials, params, arguments,
+                   response_data);
 }
 
 /**
@@ -3677,27 +3557,6 @@ export_credentials_gmp (gvm_connection_t *connection,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  commands     Extra commands to run before the others when
- *                          credential_id is NULL.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return 0 success, 1 failure.
- */
-static char *
-get_credentials (gvm_connection_t *connection, credentials_t *credentials,
-                 params_t *params, const char *extra_xml,
-                 cmd_response_data_t *response_data)
-{
-  return get_many (connection, "credentials", credentials, params, extra_xml,
-                   NULL, response_data);
-}
-
-/**
- * @brief Get one or all credentials, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return 0 success, 1 failure.
@@ -3706,7 +3565,8 @@ char *
 get_credentials_gmp (gvm_connection_t *connection, credentials_t *credentials,
                      params_t *params, cmd_response_data_t *response_data)
 {
-  return get_credentials (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "credentials", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -4403,26 +4263,6 @@ get_agent_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @brief Get all agents, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_agents (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *extra_xml,
-            cmd_response_data_t *response_data)
-{
-  return get_many (connection, "agents", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all agents, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
  * @param[in]   credentials  Username and password for authentication.
  * @param[in]   params       Request parameters.
  * @param[out]  response_data  Extra data return for the HTTP response.
@@ -4433,7 +4273,8 @@ char *
 get_agents_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t *response_data)
 {
-  return get_agents (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "agents", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -5583,26 +5424,6 @@ get_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_alerts (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *extra_xml,
-            cmd_response_data_t *response_data)
-{
-  return get_many (connection, "alerts", credentials, params, NULL, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all alerts, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -5611,7 +5432,8 @@ char *
 get_alerts_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t *response_data)
 {
-  return get_alerts (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "alerts", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -6872,26 +6694,6 @@ get_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_tags (gvm_connection_t *connection, credentials_t *credentials,
-          params_t *params, const char *extra_xml,
-          cmd_response_data_t *response_data)
-{
-  return get_many (connection, "tags", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all tags, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -6900,7 +6702,8 @@ char *
 get_tags_gmp (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, cmd_response_data_t *response_data)
 {
-  return get_tags (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "tags", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -7014,26 +6817,6 @@ get_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_targets (gvm_connection_t *connection, credentials_t *credentials,
-             params_t *params, const char *extra_xml,
-             cmd_response_data_t *response_data)
-{
-  return get_many (connection, "targets", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all targets, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -7042,7 +6825,8 @@ char *
 get_targets_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_targets (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "targets", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -7482,26 +7266,6 @@ import_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_configs (gvm_connection_t *connection, credentials_t *credentials,
-             params_t *params, const char *extra_xml,
-             cmd_response_data_t *response_data)
-{
-  return get_many (connection, "configs", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all scan configs, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -7510,7 +7274,8 @@ char *
 get_configs_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_configs (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "configs", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -7533,10 +7298,6 @@ get_config (gvm_connection_t *connection, credentials_t *credentials,
   const char *config_id;
 
   config_id = params_value (params, "config_id");
-
-  if (config_id == NULL)
-    return get_configs (connection, credentials, params, extra_xml,
-                        response_data);
 
   xml = g_string_new ("<get_config_response>");
 
@@ -9475,8 +9236,8 @@ get_reports_gmp (gvm_connection_t *connection, credentials_t *credentials,
   params_remove (params, "filter");
   params_remove (params, "filter_id");
 
-  return get_entities (connection, "reports", credentials, params, NULL,
-                       arguments, response_data);
+  return get_entities (connection, "reports", credentials, params, arguments,
+                       response_data);
 }
 
 /**
@@ -9630,26 +9391,6 @@ export_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_results (gvm_connection_t *connection, credentials_t *credentials,
-             params_t *params, const char *extra_xml,
-             cmd_response_data_t *response_data)
-{
-  return get_many (connection, "results", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all results, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -9658,7 +9399,8 @@ char *
 get_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_results (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "results", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -9685,26 +9427,6 @@ get_result_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_notes (gvm_connection_t *connection, credentials_t *credentials,
-           params_t *params, const char *extra_xml,
-           cmd_response_data_t *response_data)
-{
-  return get_many (connection, "notes", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all notes, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -9713,7 +9435,8 @@ char *
 get_notes_gmp (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, cmd_response_data_t *response_data)
 {
-  return get_notes (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "notes", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -10102,26 +9825,6 @@ save_note_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_overrides (gvm_connection_t *connection, credentials_t *credentials,
-               params_t *params, const char *extra_xml,
-               cmd_response_data_t *response_data)
-{
-  return get_many (connection, "overrides", credentials, params, extra_xml,
-                   NULL, response_data);
-}
-
-/**
- * @brief Get all overrides, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -10130,7 +9833,8 @@ char *
 get_overrides_gmp (gvm_connection_t *connection, credentials_t *credentials,
                    params_t *params, cmd_response_data_t *response_data)
 {
-  return get_overrides (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "overrides", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -10430,26 +10134,6 @@ save_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_scanners (gvm_connection_t *connection, credentials_t *credentials,
-              params_t *params, const char *extra_xml,
-              cmd_response_data_t *response_data)
-{
-  return get_many (connection, "scanners", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all scanners, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -10458,7 +10142,8 @@ char *
 get_scanners_gmp (gvm_connection_t *connection, credentials_t *credentials,
                   params_t *params, cmd_response_data_t *response_data)
 {
-  return get_scanners (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "scanners", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -10915,26 +10600,6 @@ get_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_schedules (gvm_connection_t *connection, credentials_t *credentials,
-               params_t *params, const char *extra_xml,
-               cmd_response_data_t *response_data)
-{
-  return get_many (connection, "schedules", credentials, params, extra_xml,
-                   NULL, response_data);
-}
-
-/**
- * @brief Get all schedules, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -10943,7 +10608,8 @@ char *
 get_schedules_gmp (gvm_connection_t *connection, credentials_t *credentials,
                    params_t *params, cmd_response_data_t *response_data)
 {
-  return get_schedules (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "schedules", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -11396,26 +11062,6 @@ get_report_format_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_report_formats (gvm_connection_t *connection, credentials_t *credentials,
-                    params_t *params, const char *extra_xml,
-                    cmd_response_data_t *response_data)
-{
-  return get_many (connection, "report_formats", credentials, params, extra_xml,
-                   NULL, response_data);
-}
-
-/**
- * @brief Get all Report Formats, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -11425,8 +11071,8 @@ get_report_formats_gmp (gvm_connection_t *connection,
                         credentials_t *credentials, params_t *params,
                         cmd_response_data_t *response_data)
 {
-  return get_report_formats (connection, credentials, params, NULL,
-                             response_data);
+  return get_many (connection, "report_formats", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -12970,26 +12616,6 @@ get_group_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_groups (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *extra_xml,
-            cmd_response_data_t *response_data)
-{
-  return get_many (connection, "groups", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all groups, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -12998,7 +12624,8 @@ char *
 get_groups_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t *response_data)
 {
-  return get_groups (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "groups", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -13283,26 +12910,6 @@ get_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_permissions (gvm_connection_t *connection, credentials_t *credentials,
-                 params_t *params, const char *extra_xml,
-                 cmd_response_data_t *response_data)
-{
-  return get_many (connection, "permissions", credentials, params, extra_xml,
-                   NULL, response_data);
-}
-
-/**
- * @brief Get all permissions, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -13311,7 +12918,8 @@ char *
 get_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials,
                      params_t *params, cmd_response_data_t *response_data)
 {
-  return get_permissions (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "permissions", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -14209,26 +13817,6 @@ get_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get all Port Lists, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_port_lists (gvm_connection_t *connection, credentials_t *credentials,
-                params_t *params, const char *extra_xml,
-                cmd_response_data_t *response_data)
-{
-  return get_many (connection, "port_lists", credentials, params, extra_xml,
-                   NULL, response_data);
-}
-
-/**
  * @brief Get all port_lists, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -14242,7 +13830,8 @@ char *
 get_port_lists_gmp (gvm_connection_t *connection, credentials_t *credentials,
                     params_t *params, cmd_response_data_t *response_data)
 {
-  return get_port_lists (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "port_lists", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -14715,26 +14304,6 @@ get_role_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_roles (gvm_connection_t *connection, credentials_t *credentials,
-           params_t *params, const char *extra_xml,
-           cmd_response_data_t *response_data)
-{
-  return get_many (connection, "roles", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all roles, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -14743,7 +14312,8 @@ char *
 get_roles_gmp (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, cmd_response_data_t *response_data)
 {
-  return get_roles (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "roles", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -15090,26 +14660,6 @@ get_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_filters (gvm_connection_t *connection, credentials_t *credentials,
-             params_t *params, const char *extra_xml,
-             cmd_response_data_t *response_data)
-{
-  return get_many (connection, "filters", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all filters, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -15118,7 +14668,8 @@ char *
 get_filters_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_filters (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "filters", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -15566,78 +15117,6 @@ get_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_users (gvm_connection_t *connection, credentials_t *credentials,
-           params_t *params, const char *extra_xml,
-           cmd_response_data_t *response_data)
-{
-  gchar *html;
-  GString *extra;
-
-  extra = g_string_new ("");
-  if (command_enabled (credentials, "DESCRIBE_AUTH"))
-    {
-      gchar *response;
-      entity_t entity;
-
-      response = NULL;
-      entity = NULL;
-      switch (gmp (connection, credentials, &response, &entity, response_data,
-                   "<describe_auth/>"))
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred getting the auth list. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred getting the auth list. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred getting the auth list. "
-            "Diagnostics: Internal Error.",
-            response_data);
-        }
-
-      g_string_append (extra, response);
-
-      free_entity (entity);
-      g_free (response);
-    }
-  if (extra_xml)
-    g_string_append (extra, extra_xml);
-  html = get_many (connection, "users", credentials, params, extra->str, NULL,
-                   response_data);
-  g_string_free (extra, TRUE);
-  return html;
-}
-
-/**
- * @brief Get all users, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -15646,7 +15125,8 @@ char *
 get_users_gmp (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, cmd_response_data_t *response_data)
 {
-  return get_users (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "users", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -15835,26 +15315,7 @@ char *
 get_vulns_gmp (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, cmd_response_data_t *response_data)
 {
-  return get_vulns (connection, credentials, params, NULL, response_data);
-}
-
-/**
- * @brief Get multiple vulns, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_vulns (gvm_connection_t *connection, credentials_t *credentials,
-           params_t *params, const char *extra_xml,
-           cmd_response_data_t *response_data)
-{
-  return get_many (connection, "vulns", credentials, params, extra_xml, NULL,
+  return get_many (connection, "vulns", credentials, params, NULL,
                    response_data);
 }
 
@@ -16362,10 +15823,10 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t *credentials,
                   method, truefalse, radiushost, radiuskey);
     }
   else
-    return get_users (
-      connection, credentials, params,
-      GSAD_MESSAGE_INVALID_PARAM ("Save Authentication Configuration"),
-      response_data);
+    {
+      return message_invalid (connection, credentials, params, response_data,
+                              "Given method was invalid", "Save auth");
+    }
 
   switch (ret)
     {
@@ -17219,9 +16680,8 @@ get_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @return XML enveloped assets response or error message.
  */
 char *
-get_assets (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *extra_xml,
-            cmd_response_data_t *response_data)
+get_assets_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                params_t *params, cmd_response_data_t *response_data)
 {
   gmp_arguments_t *arguments;
   const char *asset_type;
@@ -17240,25 +16700,8 @@ get_assets (gvm_connection_t *connection, credentials_t *credentials,
                          params_value (params, "ignore_pagination"));
     }
 
-  return get_many (connection, "assets", credentials, params, extra_xml,
-                   arguments, response_data);
-}
-
-/**
- * @brief Get assets, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_assets_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                params_t *params, cmd_response_data_t *response_data)
-{
-  return get_assets (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "assets", credentials, params, arguments,
+                   response_data);
 }
 
 /**
@@ -17548,7 +16991,7 @@ char *
 get_tickets_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_many (connection, "tickets", credentials, params, NULL, NULL,
+  return get_many (connection, "tickets", credentials, params, NULL,
                    response_data);
 }
 
