@@ -90,7 +90,7 @@ const LoginHeader = styled(Header)`
 
 const MenuSpacer = styled.div`
   background: ${Theme.darkGray};
-  position: absolute;
+  position: fixed;
   top: 42px;
   left: 0;
   right: 0;
