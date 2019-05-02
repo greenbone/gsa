@@ -237,6 +237,8 @@ class ReportDetails extends React.Component {
       filter,
     });
 
+    this.clearTimer();
+
     this.startDurationMeasurement();
 
     this.setState(({lastFilter}) => ({
@@ -266,6 +268,10 @@ class ReportDetails extends React.Component {
 
   startTimer() {
     if (!this.isRunning || isDefined(this.timer)) {
+      log.debug('Not starting timer', {
+        isRunning: this.isRunning,
+        timer: this.timer,
+      });
       return;
     }
 
@@ -292,9 +298,16 @@ class ReportDetails extends React.Component {
     }
   }
 
+  resetTimer() {
+    this.timer = undefined;
+  }
+
   clearTimer() {
     if (isDefined(this.timer)) {
       log.debug('Clearing reload timer with id', this.timer);
+
+      this.resetTimer();
+
       global.clearTimeout(this.timer);
     }
   }
@@ -302,7 +315,8 @@ class ReportDetails extends React.Component {
   handleTimer() {
     log.debug('Timer', this.timer, 'finished. Reloading data.');
 
-    this.timer = undefined;
+    this.resetTimer();
+
     this.reload();
   }
 
