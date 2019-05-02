@@ -33,6 +33,7 @@ import withGmp from 'web/utils/withGmp';
 import Toolbar from 'web/components/bar/toolbar';
 
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+import ErrorMessage from 'web/components/errorboundary/errormessage';
 
 import Layout from 'web/components/layout/layout';
 
@@ -160,9 +161,14 @@ class EntitiesPage extends React.Component {
       filter,
       entities,
       entitiesCounts,
+      entitiesError,
       table: TableComponent,
       ...props
     } = this.props;
+
+    if (isDefined(entitiesError)) {
+      return <ErrorMessage message={entitiesError.message} />;
+    }
 
     if (!isDefined(entities) || !isDefined(TableComponent)) {
       return null;
@@ -288,6 +294,7 @@ EntitiesPage.propTypes = {
   dashboardControls: PropTypes.func,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
+  entitiesError: PropTypes.error,
   filter: PropTypes.filter,
   filterEditDialog: PropTypes.component,
   filters: PropTypes.array,

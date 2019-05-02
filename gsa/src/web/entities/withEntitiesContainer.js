@@ -63,6 +63,7 @@ const withEntitiesContainer = (
       defaultReloadInterval: gmp.reloadInterval,
       entities,
       entitiesCounts: eSelector.getEntitiesCounts(filter),
+      entitiesError: eSelector.getEntitiesError(filter),
       filter,
       isLoading: !isDefined(entities) || eSelector.isLoadingEntities(filter),
       loadedFilter: eSelector.getLoadedFilter(filter),
