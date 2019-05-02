@@ -29,7 +29,9 @@
 
 #include "gsad_base.h" /* for set_language_code */
 #include "gsad_credentials.h"
-#include "gsad_http.h" /* for gsad_message */
+#include "gsad_gmp_arguments.h" /* for gmp_arguments_t */
+#include "gsad_gmp_request.h"   /* for gmp_request() */
+#include "gsad_http.h"          /* for gsad_message */
 #include "gsad_i18n.h"
 #include "gsad_params.h"
 #include "gsad_session.h"
@@ -271,10 +273,6 @@ get_report_format (gvm_connection_t *, credentials_t *, params_t *,
 static char *
 get_report_formats (gvm_connection_t *, credentials_t *, params_t *,
                     const char *, cmd_response_data_t *);
-
-static char *
-get_reports (gvm_connection_t *, credentials_t *, params_t *, const char *,
-             cmd_response_data_t *);
 
 static char *
 get_results (gvm_connection_t *, credentials_t *, params_t *, const char *,
@@ -1096,222 +1094,36 @@ get_one (gvm_connection_t *connection, const char *type,
 }
 
 /**
- * @brief Get all of a particular type of resource, envelope the result.
+ * @brief Get all entities of a particular type, envelope the result.
  *
  * @param[in]  connection     Connection to manager
- * @param[in]  type           Resource type.
+ * @param[in]  type           Entity type.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[in]  extra_xml      Extra XML to insert inside page element.
- * @param[in]  extra_attribs  Extra attributes for GMP GET command.
+ * @param[in]  arguments      Extra arguments for GMP GET command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
  */
 static char *
-get_many (gvm_connection_t *connection, const char *type,
-          credentials_t *credentials, params_t *params, const char *extra_xml,
-          const char *extra_attribs, cmd_response_data_t *response_data)
+get_entities (gvm_connection_t *connection, const char *type,
+              credentials_t *credentials, params_t *params,
+              const char *extra_xml, gmp_arguments_t *arguments,
+              cmd_response_data_t *response_data)
 {
   GString *xml;
-  GString *type_many; /* The plural form of type */
-  gchar *request, *built_filter;
-  const char *build_filter, *filter_id, *filter, *filter_extra;
-  const char *first, *max, *sort_field, *sort_order, *owner, *permission;
-  const char *replace_task_id;
-  const char *overrides, *autofp, *autofp_value, *min_qod;
-  const char *level_high, *level_medium, *level_low, *level_log;
-  const char *level_false_positive;
-  const char *details;
+  gchar *cmd;
   entity_t entity;
 
-  build_filter = params_value (params, "build_filter");
-  filter_id = params_value (params, "filter_id");
-  filter = params_value (params, "filter");
-  filter_extra = params_value (params, "filter_extra");
-  first = params_value (params, "first");
-  max = params_value (params, "max");
-  replace_task_id = params_value (params, "replace_task_id");
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-  owner = params_value (params, "owner");
-  permission = params_value (params, "permission");
-  overrides = params_value (params, "overrides");
-  autofp = params_value (params, "autofp");
-  autofp_value = params_value (params, "autofp_value");
-  min_qod = params_value (params, "min_qod");
-  level_high = params_value (params, "level_high");
-  level_medium = params_value (params, "level_medium");
-  level_low = params_value (params, "level_low");
-  level_log = params_value (params, "level_log");
-  level_false_positive = params_value (params, "level_false_positive");
-  details = params_value (params, "details");
+  cmd = g_strdup_printf ("get_%s", type);
 
-  if (details == NULL || strcmp (details, "") == 0)
-    details = "0";
-
-  /* check if filter still exists */
-  xml = g_string_new ("");
-  type_many = g_string_new (type);
-
-  /* Workaround the fact that info is a non countable noun */
-  if (strcmp (type, "info") != 0)
-    g_string_append (type_many, "s");
-
-  g_string_append_printf (xml, "<get_%s>", type_many->str);
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  built_filter = NULL;
-  if (filter_id == NULL || str_equal (filter_id, "")
-      || str_equal (filter_id, "--"))
+  if (gmp_request (connection, cmd, arguments))
     {
-      if ((build_filter && str_equal (build_filter, "1"))
-          || ((filter == NULL || str_equal (filter, ""))
-              && (filter_extra == NULL || str_equal (filter_extra, ""))))
-        {
-          if (build_filter && (strcmp (build_filter, "1") == 0))
-            {
-              gchar *task;
-              const char *search_phrase, *task_id;
+      g_free (cmd);
 
-              if (str_equal (type, "report") || str_equal (type, "task"))
-                {
-                  task =
-                    g_strdup_printf ("apply_overrides=%i min_qod=%s ",
-                                     overrides && !str_equal (overrides, "0"),
-                                     min_qod ? min_qod : "");
-                }
-              else if (strcmp (type, "result") == 0)
-                {
-                  gchar *levels = g_strdup_printf (
-                    "%s%s%s%s%s", level_high ? "h" : "",
-                    level_medium ? "m" : "", level_low ? "l" : "",
-                    level_log ? "g" : "", level_false_positive ? "f" : "");
-                  task = g_strdup_printf (
-                    "apply_overrides=%i min_qod=%s"
-                    " autofp=%s levels=%s ",
-                    (overrides && !str_equal (overrides, "0")),
-                    min_qod ? min_qod : "",
-                    (autofp && autofp_value) ? autofp_value : "0", levels);
-                  g_free (levels);
-                }
-              else
-                task = NULL;
+      gmp_arguments_free (arguments);
 
-              search_phrase = params_value (params, "search_phrase");
-              task_id = params_value (params, "task_id");
-              built_filter = g_strdup_printf (
-                "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
-                task ? task : "", task_id ? "task_id=" : "",
-                task_id ? task_id : "", task_id ? " " : "",
-                first ? "first=" : "", first ? first : "", first ? " " : "",
-                max ? "rows=" : "", max ? max : "", max ? " " : "",
-                sort_field ? ((sort_order && strcmp (sort_order, "ascending"))
-                                ? "sort-reverse="
-                                : "sort=")
-                           : "",
-                sort_field ? sort_field : "", sort_field ? " " : "",
-                permission ? "permission=" : "", permission ? permission : "",
-                permission ? " " : "", owner ? "owner=" : "",
-                owner ? owner : "", owner ? " " : "",
-                (filter && search_phrase) ? " " : "", filter ? filter : "",
-                search_phrase ? " " : "", search_phrase ? search_phrase : "");
-
-              filter_id = FILT_ID_USER_SETTING;
-              g_free (task);
-            }
-          else if (strcmp (type, "info") == 0
-                   && params_value (params, "info_type"))
-            {
-              if (str_equal (params_value (params, "info_type"), "cve"))
-                filter = "sort-reverse=published rows=-2";
-              else if (str_equal (params_value (params, "info_type"), "cpe"))
-                filter = "sort-reverse=modified rows=-2";
-              else
-                filter = "sort-reverse=created rows=-2";
-            }
-          else if (str_equal (type, "user"))
-            filter = "sort=roles rows=-2";
-          else if (str_equal (type, "report"))
-            {
-              const char *task_id;
-              task_id = params_value (params, "task_id");
-              if (task_id)
-                built_filter = g_strdup_printf ("task_id=%s apply_overrides=1"
-                                                " rows=-2 sort-reverse=date",
-                                                task_id);
-              else
-                filter = "apply_overrides=1 rows=-2 sort-reverse=date";
-            }
-          else if (str_equal (type, "result"))
-            {
-              built_filter = g_strdup_printf (
-                "apply_overrides=%d autofp=%s rows=-2"
-                " sort-reverse=created",
-                (overrides == NULL || str_equal (overrides, "1")),
-                (autofp && str_equal (autofp, "1")) ? autofp_value : "0");
-            }
-          else if (str_equal (type, "note") || str_equal (type, "override"))
-            {
-              filter = "rows=-2 sort=nvt";
-            }
-          else if (!str_equal (type, "task"))
-            filter = "rows=-2";
-          else
-            filter = "apply_overrides=1 rows=-2";
-          if (filter_id && !str_equal (filter_id, ""))
-            /* Request to use "filter" instead. */
-            filter_id = FILT_ID_NONE;
-          else
-            filter_id = FILT_ID_USER_SETTING;
-        }
-      else if (str_equal (filter, "sort=nvt")
-               && (str_equal (type, "note") || str_equal (type, "override")))
-        filter_id = FILT_ID_USER_SETTING;
-      else if (str_equal (filter, "apply_overrides=1")
-               && str_equal (type, "task"))
-        filter_id = FILT_ID_USER_SETTING;
-    }
-  else if (replace_task_id)
-    {
-      const char *task_id;
-      task_id = params_value (params, "task_id");
-      if (task_id)
-        built_filter =
-          g_strdup_printf ("task_id=%s %s", task_id, filter ? filter : "");
-    }
-
-  /* Get the list. */
-
-  request = g_markup_printf_escaped (
-    " %sfilt_id=\"%s\""
-    " %sfilter=\"%s%s%s%s\""
-    " filter_replace=\"%s\""
-    " first=\"%s\""
-    " max=\"%s\""
-    " sort_field=\"%s\""
-    " sort_order=\"%s\"",
-    strcmp (type, "report") ? "" : "report_",
-    filter_id ? filter_id : FILT_ID_NONE,
-    strcmp (type, "report") ? "" : "report_",
-    built_filter ? built_filter : (filter ? filter : ""),
-    filter_extra ? " " : "", filter_extra ? filter_extra : "",
-    filter_extra ? " " : "", replace_task_id ? "task_id" : "",
-    first ? first : "1", max ? max : "-2", sort_field ? sort_field : "name",
-    sort_order ? sort_order : "ascending");
-
-  g_free (built_filter);
-  if (gvm_connection_sendf (connection, "<get_%s details=\"%s\" %s %s/>",
-                            type_many->str,
-                            strcmp (type, "report") ? details : "0", request,
-                            extra_attribs ? extra_attribs : "")
-      == -1)
-    {
-      g_free (request);
-      g_string_free (xml, TRUE);
-      g_string_free (type_many, TRUE);
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
@@ -1322,12 +1134,16 @@ get_many (gvm_connection_t *connection, const char *type,
         response_data);
     }
 
-  g_free (request);
+  gmp_arguments_free (arguments);
+
+  xml = g_string_new ("");
+  g_string_append_printf (xml, "<%s>", cmd);
 
   if (read_entity_and_string_c (connection, &entity, &xml))
     {
+      g_free (cmd);
       g_string_free (xml, TRUE);
-      g_string_free (type_many, TRUE);
+
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
@@ -1344,25 +1160,91 @@ get_many (gvm_connection_t *connection, const char *type,
 
       set_http_status_from_entity (entity, response_data);
 
-      g_string_free (xml, TRUE);
-      g_string_free (type_many, TRUE);
-
       message =
         gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
                       entity_attribute (entity, "status_text"), response_data);
 
+      g_free (cmd);
+      g_string_free (xml, TRUE);
       free_entity (entity);
       return message;
     }
 
-  free_entity (entity);
+  g_string_append_printf (xml, "</%s>", cmd);
 
-  /* Cleanup, and return transformed XML. */
-  g_string_append_printf (xml, "</get_%s>", type_many->str);
-  g_string_free (type_many, TRUE);
+  g_free (cmd);
+  free_entity (entity);
 
   return envelope_gmp (connection, credentials, params,
                        g_string_free (xml, FALSE), response_data);
+}
+
+/**
+ * @brief Get all of a particular type of resource, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager
+ * @param[in]  type           Resource type.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
+ * @param[in]  arguments      Extra arguments for GMP GET command.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+static char *
+get_many (gvm_connection_t *connection, const char *type,
+          credentials_t *credentials, params_t *params, const char *extra_xml,
+          gmp_arguments_t *arguments, cmd_response_data_t *response_data)
+{
+  GString *type_many; /* The plural form of type */
+  const gchar *filter_id, *filter;
+  const gchar *details;
+  gchar *ret;
+
+  filter_id = params_value (params, "filter_id");
+  filter = params_value (params, "filter");
+  details = params_value (params, "details");
+
+  if (arguments == NULL)
+    {
+      arguments = gmp_arguments_new ();
+    }
+
+  if (details && !str_equal (details, ""))
+    {
+      gmp_arguments_add (arguments, "details", details);
+    }
+
+  type_many = g_string_new (type);
+
+  /* Workaround the fact that info is a non countable noun */
+  if (!str_equal (type, "info"))
+    {
+      g_string_append (type_many, "s");
+    }
+
+  if (!filter_id && !filter)
+    {
+      filter_id = FILT_ID_USER_SETTING;
+    }
+
+  if (filter_id)
+    {
+      gmp_arguments_add (arguments, "filt_id", filter_id);
+    }
+
+  if (filter)
+    {
+      gmp_arguments_add (arguments, "filter", filter);
+    }
+
+  ret = get_entities (connection, type_many->str, credentials, params,
+                      extra_xml, arguments, response_data);
+
+  g_string_free (type_many, TRUE);
+
+  return ret;
 }
 
 /**
@@ -3242,107 +3124,29 @@ get_info (gvm_connection_t *connection, credentials_t *credentials,
           params_t *params, const char *extra_xml,
           cmd_response_data_t *response_data)
 {
-  char *ret;
-  GString *extra_attribs, *extra_response;
   const char *info_type;
+  gmp_arguments_t *arguments;
 
   info_type = params_value (params, "info_type");
-  if (info_type == NULL)
-    {
-      param_t *param;
-      param = params_add (params, "info_type", "nvt");
-      param->valid = 1;
-      param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
-      info_type = params_value (params, "info_type");
-    }
 
-  if (strcmp (info_type, "nvt") && strcmp (info_type, "cve")
-      && strcmp (info_type, "cpe") && strcmp (info_type, "ovaldef")
-      && strcmp (info_type, "cert_bund_adv")
-      && strcmp (info_type, "dfn_cert_adv") && strcmp (info_type, "allinfo")
-      && strcmp (info_type, "NVT") && strcmp (info_type, "CVE")
-      && strcmp (info_type, "CPE") && strcmp (info_type, "OVALDEF")
-      && strcmp (info_type, "CERT_BUND_ADV")
-      && strcmp (info_type, "DFN_CERT_ADV") && strcmp (info_type, "ALLINFO"))
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
-                           "An internal error occurred while getting SecInfo. "
-                           "Diagnostics: Invalid info_type parameter value",
-                           response_data);
-    }
+  CHECK_VARIABLE_INVALID (info_type, "Get SecInfo")
 
-  if (params_value (params, "info_name") && params_value (params, "info_id"))
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
-                           "An internal error occurred while getting SecInfo. "
-                           "Diagnostics: Both ID and Name set.",
-                           response_data);
-    }
-  extra_response = g_string_new (extra_xml ? extra_xml : "");
+  arguments = gmp_arguments_new ();
 
-  if (command_enabled (credentials, "GET_NOTES")
-      && (strcasecmp (info_type, "NVT") == 0)
-      && params_value (params, "info_id"))
-    {
-      gchar *response;
+  gmp_arguments_add (arguments, "type", info_type);
 
-      if (simple_gmpf (connection, "getting SecInfo", credentials, &response,
-                       response_data,
-                       "<get_notes"
-                       " nvt_oid=\"%s\""
-                       " sort_field=\"notes.text\"/>",
-                       params_value (params, "info_id")))
-        {
-          g_string_free (extra_response, TRUE);
-          return response;
-        }
-
-      g_string_append (extra_response, response);
-    }
-
-  if (command_enabled (credentials, "GET_OVERRIDES")
-      && (strcasecmp (info_type, "NVT") == 0)
-      && params_value (params, "info_id"))
-    {
-      gchar *response;
-
-      if (simple_gmpf (connection, "getting SecInfo", credentials, &response,
-                       response_data,
-                       "<get_overrides"
-                       " nvt_oid=\"%s\""
-                       " sort_field=\"overrides.text\"/>",
-                       params_value (params, "info_id")))
-        {
-          g_string_free (extra_response, TRUE);
-          return response;
-        }
-
-      g_string_append (extra_response, response);
-    }
-
-  extra_attribs = g_string_new ("");
-  g_string_append_printf (extra_attribs, "type=\"%s\"",
-                          params_value (params, "info_type"));
   if (params_value (params, "info_name"))
-    g_string_append_printf (extra_attribs, " name=\"%s\"",
-                            params_value (params, "info_name"));
+    {
+      gmp_arguments_add (arguments, "name", params_value (params, "info_name"));
+    }
   else if (params_value (params, "info_id"))
-    g_string_append_printf (extra_attribs, " info_id=\"%s\"",
-                            params_value (params, "info_id"));
-  if (params_value (params, "details"))
-    g_string_append_printf (extra_attribs, " details=\"%s\"",
-                            params_value (params, "details"));
-  ret = get_many (connection, "info", credentials, params, extra_response->str,
-                  extra_attribs->str, response_data);
+    {
+      gmp_arguments_add (arguments, "info_id",
+                         params_value (params, "info_id"));
+    }
 
-  g_string_free (extra_response, TRUE);
-  g_string_free (extra_attribs, TRUE);
-
-  return ret;
+  return get_many (connection, "info", credentials, params, NULL, arguments,
+                   response_data);
 }
 
 /**
@@ -3379,23 +3183,25 @@ get_tasks (gvm_connection_t *connection, credentials_t *credentials,
            cmd_response_data_t *response_data)
 {
   const char *schedules_only, *ignore_pagination;
-  gchar *extra_attribs, *ret;
+  gmp_arguments_t *arguments;
 
   schedules_only = params_value (params, "schedules_only");
   ignore_pagination = params_value (params, "ignore_pagination");
 
-  extra_attribs = g_strdup_printf (
-    "%s%s%s"
-    "%s%s%s",
-    schedules_only ? "schedules_only=\"" : "",
-    schedules_only ? schedules_only : "", schedules_only ? "\" " : "",
-    ignore_pagination ? "ignore_pagination=\"" : "",
-    ignore_pagination ? ignore_pagination : "", ignore_pagination ? "\" " : "");
+  arguments = gmp_arguments_new ();
 
-  ret = get_many (connection, "task", credentials, params, extra_xml,
-                  extra_attribs, response_data);
-  g_free (extra_attribs);
-  return ret;
+  if (schedules_only)
+    {
+      gmp_arguments_add (arguments, "schedules_only", schedules_only);
+    }
+
+  if (ignore_pagination)
+    {
+      gmp_arguments_add (arguments, "ignore_pargination", ignore_pagination);
+    }
+
+  return get_many (connection, "task", credentials, params, extra_xml,
+                   arguments, response_data);
 }
 
 /**
@@ -9923,26 +9729,6 @@ report_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_reports (gvm_connection_t *connection, credentials_t *credentials,
-             params_t *params, const char *extra_xml,
-             cmd_response_data_t *response_data)
-{
-  return get_many (connection, "report", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all reports, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -9951,7 +9737,33 @@ char *
 get_reports_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_reports (connection, credentials, params, NULL, response_data);
+  const gchar *filter, *filter_id;
+  gmp_arguments_t *arguments;
+
+  filter = params_value (params, "filter");
+  filter_id = params_value (params, "filter_id");
+
+  params_remove (params, "filter");
+  params_remove (params, "filter_id");
+
+  arguments = gmp_arguments_new ();
+
+  if (!filter && !filter_id)
+    {
+      filter_id = FILT_ID_USER_SETTING;
+    }
+
+  if (filter)
+    {
+      gmp_arguments_add (arguments, "report_filter", filter);
+    }
+  if (filter_id)
+    {
+      gmp_arguments_add (arguments, "report_filt_id", filter_id);
+    }
+
+  return get_entities (connection, "reports", credentials, params, NULL,
+                       arguments, response_data);
 }
 
 /**
