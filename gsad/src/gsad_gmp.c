@@ -9527,9 +9527,6 @@ get_reports_gmp (gvm_connection_t *connection, credentials_t *credentials,
   filter = params_value (params, "filter");
   filter_id = params_value (params, "filter_id");
 
-  params_remove (params, "filter");
-  params_remove (params, "filter_id");
-
   arguments = gmp_arguments_new ();
 
   if (!filter && !filter_id)
@@ -9545,6 +9542,9 @@ get_reports_gmp (gvm_connection_t *connection, credentials_t *credentials,
     {
       gmp_arguments_add (arguments, "report_filt_id", filter_id);
     }
+
+  params_remove (params, "filter");
+  params_remove (params, "filter_id");
 
   return get_entities (connection, "reports", credentials, params, NULL,
                        arguments, response_data);
