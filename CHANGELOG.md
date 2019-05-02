@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.1] - (unreleased)
 
 ### Added
+- Add getAllEntities() and loadAllEntities() actions and reducers to entities store [#1345](https://github.com/greenbone/gsa/pull/1345)
 - Add missing tool tips to credential download icons [#1335](https://github.com/greenbone/gsa/pull/1335)
 - Add type column to scan configs to allow filter and sort by scan config type [#1331](https://github.com/greenbone/gsa/pull/1331)
 - Add some tests for bar components [#1328](https://github.com/greenbone/gsa/pull/1328)
@@ -22,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Improve login page [#1347](https://github.com/greenbone/gsa/pull/1347)
+- Remove options for not implemented languages [#1344](https://github.com/greenbone/gsa/pull/1344)
 - Render all dates in the current configured timezone of the user
   [#1327](https://github.com/greenbone/gsa/pull/1327),
   [#1329](https://github.com/greenbone/gsa/pull/1329),
@@ -35,6 +37,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix rendering DateTime without dates being passed [#1343](https://github.com/greenbone/gsa/pull/1343)
+- Fix restarting reload timers [#1341](https://github.com/greenbone/gsa/pull/1341)
 - Fix list of excluded hosts formatting [#1340](https://github.com/greenbone/gsa/pull/1340)
 - Fix installation of locale files [#1330](https://github.com/greenbone/gsa/pull/1330)
 - Fix list of options of possible Filter types [#1326](https://github.com/greenbone/gsa/pull/1326)

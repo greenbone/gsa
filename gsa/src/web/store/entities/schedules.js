@@ -19,6 +19,7 @@
 import {createAll} from './utils/main';
 
 const {
+  loadAllEntities,
   entitiesActions,
   entityActions,
   loadEntities,
@@ -28,6 +29,7 @@ const {
 } = createAll('schedule');
 
 export {
+  loadAllEntities,
   entitiesActions,
   entityActions,
   loadEntities,

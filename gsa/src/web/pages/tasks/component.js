@@ -917,7 +917,7 @@ TaskComponent.propTypes = {
   alerts: PropTypes.arrayOf(PropTypes.model),
   capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
-  credentials: PropTypes.arrayOf(PropTypes.model).isRequired,
+  credentials: PropTypes.arrayOf(PropTypes.model),
   defaultAlertId: PropTypes.id,
   defaultEsxiCredential: PropTypes.id,
   defaultPortListId: PropTypes.id,
