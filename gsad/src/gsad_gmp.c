@@ -812,64 +812,63 @@ response_from_entity (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get one resource, envelope the result.
+ * @brief Get a single entity, envelope the result.
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  type           Type of resource.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[in]  extra_xml      Extra XML to insert inside page element.
- * @param[in]  extra_attribs  Extra attributes for GMP GET command.
+ * @param[in]  arguments      Extra arguments for GMP GET command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
  */
 char *
-get_one (gvm_connection_t *connection, const char *type,
-         credentials_t *credentials, params_t *params, const char *extra_xml,
-         const char *extra_attribs, cmd_response_data_t *response_data)
+get_entity (gvm_connection_t *connection, const char *type,
+            credentials_t *credentials, params_t *params,
+            gmp_arguments_t *arguments, cmd_response_data_t *response_data)
 {
   GString *xml;
-  gchar *id_name;
-  const char *id;
+  gchar *cmd;
   entity_t entity;
 
-  id_name = g_strdup_printf ("%s_id", type);
-  id = params_value (params, id_name);
-  g_free (id_name);
-
-  CHECK_VARIABLE_INVALID (id, "Get")
-
   xml = g_string_new ("");
+
+  if (str_equal (type, "info"))
+    {
+      cmd = g_strdup_printf ("get_%s", type);
+    }
+  else
+    {
+      cmd = g_strdup_printf ("get_%ss", type);
+    }
+
   g_string_append_printf (xml, "<get_%s>", type);
 
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  /* Get the resource. */
-
-  if (gvm_connection_sendf (connection,
-                            "<get_%ss"
-                            " %s_id=\"%s\""
-                            " details=\"1\""
-                            " %s/>",
-                            type, type, id, extra_attribs ? extra_attribs : "")
-      == -1)
+  if (gmp_request (connection, cmd, arguments))
     {
-      g_string_free (xml, TRUE);
+      g_free (cmd);
+
+      gmp_arguments_free (arguments);
+
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
         credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting resources list. "
+        "An internal error occurred while getting a resource list. "
         "The current list of resources is not available. "
         "Diagnostics: Failure to send command to manager daemon.",
         response_data);
     }
 
+  gmp_arguments_free (arguments);
+
   if (read_entity_and_string_c (connection, &entity, &xml))
     {
       g_string_free (xml, TRUE);
+      g_free (cmd);
+
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
@@ -891,16 +890,69 @@ get_one (gvm_connection_t *connection, const char *type,
                       entity_attribute (entity, "status_text"), response_data);
 
       g_string_free (xml, TRUE);
+      g_free (cmd);
       free_entity (entity);
       return message;
     }
 
-  /* Cleanup, and return transformed XML. */
+  g_string_append_printf (xml, "</get_%s>", type);
+
+  g_free (cmd);
   free_entity (entity);
 
-  g_string_append_printf (xml, "</get_%s>", type);
   return envelope_gmp (connection, credentials, params,
                        g_string_free (xml, FALSE), response_data);
+}
+
+/**
+ * @brief Get one resource, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager
+ * @param[in]  type           Type of resource.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
+ * @param[in]  arguments      Extra arguments for GMP GET command.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_one (gvm_connection_t *connection, const char *type,
+         credentials_t *credentials, params_t *params, const char *extra_xml,
+         gmp_arguments_t *arguments, cmd_response_data_t *response_data)
+{
+  gchar *id_name;
+  const gchar *id;
+  const gchar *details;
+
+  id_name = g_strdup_printf ("%s_id", type);
+  id = params_value (params, id_name);
+
+  CHECK_VARIABLE_INVALID (id, "Get")
+
+  details = params_value (params, "details");
+  if (!details)
+    {
+      details = "1";
+    }
+
+  if (arguments == NULL)
+    {
+      arguments = gmp_arguments_new ();
+    }
+
+  gmp_arguments_add (arguments, id_name, id);
+
+  if (details && !str_equal (details, ""))
+    {
+      gmp_arguments_add (arguments, "details", details);
+    }
+
+  g_free (id_name);
+
+  return get_entity (connection, type, credentials, params, arguments,
+                     response_data);
 }
 
 /**
@@ -2916,25 +2968,38 @@ char *
 get_info_gmp (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, cmd_response_data_t *response_data)
 {
-  const char *info_type;
+  const gchar *info_type;
+  const gchar *info_name;
+  const gchar *info_id;
+  const gchar *details;
+
   gmp_arguments_t *arguments;
 
   info_type = params_value (params, "info_type");
+  info_name = params_value (params, "info_name");
+  info_id = params_value (params, "info_id");
+  details = params_value (params, "details");
 
   CHECK_VARIABLE_INVALID (info_type, "Get SecInfo")
 
   arguments = gmp_arguments_new ();
 
   gmp_arguments_add (arguments, "type", info_type);
-
-  if (params_value (params, "info_name"))
+  if (details)
     {
-      gmp_arguments_add (arguments, "name", params_value (params, "info_name"));
+      gmp_arguments_add (arguments, "details", details);
     }
-  else if (params_value (params, "info_id"))
+
+  if (info_id)
     {
-      gmp_arguments_add (arguments, "info_id",
-                         params_value (params, "info_id"));
+      gmp_arguments_add (arguments, "info_id", info_id);
+
+      return get_entity (connection, "info", credentials, params, arguments,
+                         response_data);
+    }
+  else if (info_name)
+    {
+      gmp_arguments_add (arguments, "name", info_name);
     }
 
   return get_many (connection, "info", credentials, params, arguments,
@@ -3303,8 +3368,11 @@ get_credential (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, const char *extra_xml,
                 cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments = gmp_arguments_new ();
+  gmp_arguments_add (arguments, "targets", "1");
+  gmp_arguments_add (arguments, "scanners", "1");
   return get_one (connection, "credential", credentials, params, extra_xml,
-                  "targets=\"1\" scanners=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -5238,7 +5306,12 @@ get_alert (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t *response_data)
 {
-  return get_one (connection, "alert", credentials, params, NULL, "tasks=\"1\"",
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "tasks", "1");
+
+  return get_one (connection, "alert", credentials, params, NULL, arguments,
                   response_data);
 }
 
@@ -6631,8 +6704,13 @@ get_target (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "tasks", "1");
+
   return get_one (connection, "target", credentials, params, extra_xml,
-                  "tasks=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -9296,8 +9374,13 @@ get_note (gvm_connection_t *connection, credentials_t *credentials,
           params_t *params, const char *extra_xml,
           cmd_response_data_t *response_data)
 {
-  return get_one (connection, "note", credentials, params, extra_xml,
-                  "result=\"1\"", response_data);
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "result", "1");
+
+  return get_one (connection, "note", credentials, params, extra_xml, arguments,
+                  response_data);
 }
 
 /**
@@ -9694,8 +9777,13 @@ get_override (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, const char *extra_xml,
               cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "result", "1");
+
   return get_one (connection, "override", credentials, params, extra_xml,
-                  "result=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -10414,8 +10502,13 @@ get_schedule (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, const char *extra_xml,
               cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "tasks", "1");
+
   return get_one (connection, "schedule", credentials, params, extra_xml,
-                  "tasks=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -10875,8 +10968,14 @@ get_report_format (gvm_connection_t *connection, credentials_t *credentials,
                    params_t *params, const char *extra_xml,
                    cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "alerts", "1");
+  gmp_arguments_add (arguments, "params", "1");
+
   return get_one (connection, "report_format", credentials, params, extra_xml,
-                  "alerts =\"1\" params=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -12724,8 +12823,13 @@ get_permission (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, const char *extra_xml,
                 cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "alerts", "1");
+
   return get_one (connection, "permission", credentials, params, extra_xml,
-                  "alerts=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -13636,8 +13740,14 @@ get_port_list (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, const char *extra_xml,
                cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "targets", "1");
+  gmp_arguments_add (arguments, "details", "1");
+
   return get_one (connection, "port_list", credentials, params, extra_xml,
-                  "targets=\"1\" details=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -14474,8 +14584,13 @@ get_filter (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "alerts", "1");
+
   return get_one (connection, "filter", credentials, params, extra_xml,
-                  "alerts=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -16434,29 +16549,12 @@ get_asset (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t *response_data)
 {
-  char *ret;
-  GString *extra_attribs, *extra_response;
-  const char *asset_type;
+  const gchar *asset_type;
+  gmp_arguments_t *arguments;
 
   asset_type = params_value (params, "asset_type");
-  if (asset_type == NULL)
-    {
-      param_t *param;
-      param = params_add (params, "asset_type", "host");
-      param->valid = 1;
-      param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
-      asset_type = params_value (params, "asset_type");
-    }
 
-  if (strcmp (asset_type, "host") && strcmp (asset_type, "os"))
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
-                           "An internal error occurred while getting an asset. "
-                           "Diagnostics: Invalid asset_type parameter value",
-                           response_data);
-    }
+  CHECK_VARIABLE_INVALID (asset_type, "Get Asset")
 
   if (params_value (params, "asset_name") && params_value (params, "asset_id"))
     {
@@ -16468,28 +16566,18 @@ get_asset (gvm_connection_t *connection, credentials_t *credentials,
                            response_data);
     }
 
-  extra_response = g_string_new (extra_xml ? extra_xml : "");
+  arguments = gmp_arguments_new ();
 
-  extra_attribs = g_string_new ("");
-  g_string_append_printf (extra_attribs, "type=\"%s\"",
-                          params_value (params, "asset_type"));
+  gmp_arguments_add (arguments, "type", asset_type);
+
   if (params_value (params, "asset_name"))
-    g_string_append_printf (extra_attribs, " name=\"%s\"",
-                            params_value (params, "asset_name"));
-  else if (params_value (params, "asset_id"))
-    g_string_append_printf (extra_attribs, " asset_id=\"%s\"",
-                            params_value (params, "asset_id"));
-  if (params_value (params, "details"))
-    g_string_append_printf (extra_attribs, " details=\"%s\"",
-                            params_value (params, "details"));
+    {
+      gmp_arguments_add (arguments, "name",
+                         params_value (params, "asset_name"));
+    }
 
-  ret = get_one (connection, "asset", credentials, params, extra_response->str,
-                 extra_attribs->str, response_data);
-
-  g_string_free (extra_response, TRUE);
-  g_string_free (extra_attribs, TRUE);
-
-  return ret;
+  return get_one (connection, "asset", credentials, params, NULL, arguments,
+                  response_data);
 }
 
 /**
