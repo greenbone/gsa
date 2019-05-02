@@ -2101,7 +2101,6 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (get_config_family)
   ELSE (get_config_nvt)
   ELSE (ping)
-  ELSE (sync_config)
   ELSE (wizard)
   ELSE (wizard_get)
 

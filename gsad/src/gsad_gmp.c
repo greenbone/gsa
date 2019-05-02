@@ -7643,63 +7643,6 @@ edit_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Sync config, get configs, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-sync_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                 params_t *params, cmd_response_data_t *response_data)
-{
-  GString *xml;
-  const char *config_id;
-  char *ret;
-
-  config_id = params_value (params, "config_id");
-  CHECK_VARIABLE_INVALID (config_id, "Synchronize Config");
-
-  if (gvm_connection_sendf (connection, "<sync_config config_id=\"%s\"/>",
-                            config_id)
-      == -1)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while synchronizing a config. "
-        "The config is not synchronized. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  xml = g_string_new ("");
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while synchronizing a config. "
-        "It is unclear whether the config has been synchronized or not. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  // TODO return action result
-  ret = get_configs (connection, credentials, params, xml->str, response_data);
-
-  g_string_free (xml, TRUE);
-  return ret;
-}
-
-/**
  * @brief Save OSP file preferences.
  *
  * @param[in]   connection     Connection.

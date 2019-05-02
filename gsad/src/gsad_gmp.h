@@ -353,9 +353,6 @@ char *
 delete_config_gmp (gvm_connection_t *, credentials_t *, params_t *,
                    cmd_response_data_t *);
 char *
-sync_config_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                 cmd_response_data_t *);
-char *
 export_config_gmp (gvm_connection_t *, credentials_t *, params_t *,
                    cmd_response_data_t *);
 char *
