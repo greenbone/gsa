@@ -19,11 +19,12 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
 import Comment from 'web/components/comment/comment';
+
+import DateTime from 'web/components/date/datetime';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -51,7 +52,9 @@ const TicketDetails = ({entity, links = true}) => (
             <TableRow>
               <TableData>{_('Task')}</TableData>
               <TableData>
-                <EntityLink entity={entity.task} textOnly={!links} />
+                <span>
+                  <EntityLink entity={entity.task} textOnly={!links} />
+                </span>
               </TableData>
             </TableRow>
           )}
@@ -59,13 +62,15 @@ const TicketDetails = ({entity, links = true}) => (
             <TableRow>
               <TableData>{_('Report')}</TableData>
               <TableData>
-                <DetailsLink
-                  type="report"
-                  id={entity.report.id}
-                  textOnly={!links}
-                >
-                  {longDate(entity.report.timestamp)}
-                </DetailsLink>
+                <span>
+                  <DetailsLink
+                    type="report"
+                    id={entity.report.id}
+                    textOnly={!links}
+                  >
+                    <DateTime date={entity.report.timestamp} />
+                  </DetailsLink>
+                </span>
               </TableData>
             </TableRow>
           )}
@@ -73,13 +78,15 @@ const TicketDetails = ({entity, links = true}) => (
             <TableRow>
               <TableData>{_('Result')}</TableData>
               <TableData>
-                <DetailsLink
-                  type="result"
-                  id={entity.result.id}
-                  textOnly={!links}
-                >
-                  {entity.name}
-                </DetailsLink>
+                <span>
+                  <DetailsLink
+                    type="result"
+                    id={entity.result.id}
+                    textOnly={!links}
+                  >
+                    {entity.name}
+                  </DetailsLink>
+                </span>
               </TableData>
             </TableRow>
           )}
@@ -98,7 +105,9 @@ const TicketDetails = ({entity, links = true}) => (
             <React.Fragment>
               <TableRow>
                 <TableData>{_('Opened')}</TableData>
-                <TableData>{longDate(entity.openTime)}</TableData>
+                <TableData>
+                  <DateTime date={entity.openTime} />
+                </TableData>
               </TableRow>
               <TableRow>
                 <TableData>{_('With Note')}</TableData>
@@ -112,7 +121,9 @@ const TicketDetails = ({entity, links = true}) => (
             <React.Fragment>
               <TableRow>
                 <TableData>{_('Fixed')}</TableData>
-                <TableData>{longDate(entity.fixedTime)}</TableData>
+                <TableData>
+                  <DateTime date={entity.fixedTime} />
+                </TableData>
               </TableRow>
               <TableRow>
                 <TableData>{_('With Note')}</TableData>
@@ -126,18 +137,22 @@ const TicketDetails = ({entity, links = true}) => (
             <React.Fragment>
               <TableRow>
                 <TableData>{_('Fix Verified')}</TableData>
-                <TableData>{longDate(entity.fixedVerifiedTime)}</TableData>
+                <TableData>
+                  <DateTime date={entity.fixedVerifiedTime} />
+                </TableData>
               </TableRow>
               <TableRow>
                 <TableData>{_('With Report')}</TableData>
                 <TableData>
-                  <DetailsLink
-                    type="report"
-                    id={entity.fixedVerifiedReport.id}
-                    textOnly={!links}
-                  >
-                    {longDate(entity.fixedVerifiedReport.timestamp)}
-                  </DetailsLink>
+                  <span>
+                    <DetailsLink
+                      type="report"
+                      id={entity.fixedVerifiedReport.id}
+                      textOnly={!links}
+                    >
+                      <DateTime date={entity.fixedVerifiedReport.timestamp} />
+                    </DetailsLink>
+                  </span>
                 </TableData>
               </TableRow>
             </React.Fragment>
@@ -146,7 +161,9 @@ const TicketDetails = ({entity, links = true}) => (
             <React.Fragment>
               <TableRow>
                 <TableData>{_('Closed')}</TableData>
-                <TableData>{longDate(entity.closedTime)}</TableData>
+                <TableData>
+                  <DateTime date={entity.closedTime} />
+                </TableData>
               </TableRow>
               <TableRow>
                 <TableData>{_('With Note')}</TableData>

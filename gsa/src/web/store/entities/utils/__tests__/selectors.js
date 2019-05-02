@@ -301,6 +301,78 @@ describe('EntitiesSelector getEntities tests', () => {
   });
 });
 
+describe('EntitiesSelector getAllEntities tests', () => {
+  test('getAllEntities should return entities with all-filter', () => {
+    const filter = Filter.fromString('name=foo');
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      byId: {
+        foo: {
+          id: 'foo',
+        },
+        bar: {
+          id: 'bar',
+        },
+        lorem: {
+          id: 'lorem',
+        },
+        ipsum: {
+          id: 'ipsum',
+        },
+      },
+      default: {
+        ids: ['foo', 'bar'],
+      },
+      [filterIdentifier(filter.all())]: {
+        ids: ['lorem', 'ipsum', 'bar', 'foo'],
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getAllEntities(filter)).toEqual([
+      {id: 'lorem'},
+      {id: 'ipsum'},
+      {id: 'bar'},
+      {id: 'foo'},
+    ]);
+  });
+
+  test('getAllEntities should return entities with all-filter if filter is undefined', () => {
+    const filter = new Filter({});
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      byId: {
+        foo: {
+          id: 'foo',
+        },
+        bar: {
+          id: 'bar',
+        },
+        lorem: {
+          id: 'lorem',
+        },
+        ipsum: {
+          id: 'ipsum',
+        },
+      },
+      default: {
+        ids: ['foo', 'bar'],
+      },
+      [filterIdentifier(filter.all())]: {
+        ids: ['lorem', 'ipsum', 'bar', 'foo'],
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getAllEntities()).toEqual([
+      {id: 'lorem'},
+      {id: 'ipsum'},
+      {id: 'bar'},
+      {id: 'foo'},
+    ]);
+  });
+});
+
 describe('EntitiesSelector getEntitiesError tests', () => {
   test('should return undefined for undefined state', () => {
     const selector = createSelector('foo');

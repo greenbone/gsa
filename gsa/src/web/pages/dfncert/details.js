@@ -65,7 +65,11 @@ const DfnCertAdvDetails = ({entity, links = true}) => {
             <TableRow>
               <TableData>{_('Advisory Link')}</TableData>
               <TableData>
-                <ExternalLink to={advisory_link}>{advisory_link}</ExternalLink>
+                <span>
+                  <ExternalLink to={advisory_link}>
+                    {advisory_link}
+                  </ExternalLink>
+                </span>
               </TableData>
             </TableRow>
           )}

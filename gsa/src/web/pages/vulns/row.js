@@ -19,7 +19,7 @@
 
 import React from 'react';
 
-import {longDate} from 'gmp/locale/date';
+import DateTime from 'web/components/date/datetime';
 
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
@@ -45,12 +45,18 @@ const Row = ({
   return (
     <TableRow>
       <TableData>
-        <DetailsLink type="nvt" id={entity.id} textOnly={!links}>
-          {entity.name}
-        </DetailsLink>
+        <span>
+          <DetailsLink type="nvt" id={entity.id} textOnly={!links}>
+            {entity.name}
+          </DetailsLink>
+        </span>
       </TableData>
-      <TableData>{longDate(results.oldest)}</TableData>
-      <TableData>{longDate(results.newest)}</TableData>
+      <TableData>
+        <DateTime date={results.oldest} />
+      </TableData>
+      <TableData>
+        <DateTime date={results.newest} />
+      </TableData>
       <TableData>
         <SeverityBar severity={entity.severity} />
       </TableData>
@@ -58,9 +64,11 @@ const Row = ({
         <Qod value={entity.qod} />
       </TableData>
       <TableData>
-        <Link to="results" filter={'nvt=' + entity.id} textOnly={!links}>
-          {results.count}
-        </Link>
+        <span>
+          <Link to="results" filter={'nvt=' + entity.id} textOnly={!links}>
+            {results.count}
+          </Link>
+        </span>
       </TableData>
       <TableData>{hosts.count}</TableData>
       <ActionsComponent {...props} entity={entity} />

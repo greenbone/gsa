@@ -139,9 +139,11 @@ class EntityTagsTable extends React.Component {
                 return (
                   <TableRow key={tag.id}>
                     <TableData>
-                      <DetailsLink id={tag.id} type="tag">
-                        {tag.name}
-                      </DetailsLink>
+                      <span>
+                        <DetailsLink id={tag.id} type="tag">
+                          {tag.name}
+                        </DetailsLink>
+                      </span>
                     </TableData>
                     <TableData>{tag.value}</TableData>
                     <TableData>{tag.comment}</TableData>

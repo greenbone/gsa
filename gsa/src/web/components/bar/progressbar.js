@@ -80,6 +80,9 @@ const Progress = styled.div`
     if (progress > 100) {
       progress = 100;
     }
+    if (progress < 0) {
+      progress = 0;
+    }
     return {
       width: progress + '%',
       background,
@@ -89,8 +92,12 @@ const Progress = styled.div`
 
 const ProgressBar = ({background, children, progress, title}) => {
   return (
-    <ProgressBarBox title={title}>
-      <Progress progress={progress} background={background} />
+    <ProgressBarBox data-testid="progressbar-box" title={title}>
+      <Progress
+        data-testid="progress"
+        progress={progress}
+        background={background}
+      />
       <Content>{children}</Content>
     </ProgressBarBox>
   );

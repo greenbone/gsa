@@ -400,39 +400,6 @@ typedef struct
 } find_by_value_t;
 
 /**
- * @brief Check whether a filter exists
- *
- * @param[in] connection  Connection to manager.
- * @param[in] entity      Response entity.
- *
- * @return 1 success, 0 fail, -1 error, -2 could not send command to server,
- *         -3 could not read entity from server.
- */
-static int
-filter_exists (gvm_connection_t *connection, const char *filt_id)
-{
-  entity_t entity;
-
-  if (filt_id == NULL || str_equal (filt_id, FILT_ID_NONE)
-      || str_equal (filt_id, FILT_ID_USER_SETTING))
-    return 1;
-
-  /* check if filter still exists */
-  if (gvm_connection_sendf (connection, "<get_filters filter_id='%s'/>",
-                            filt_id))
-    {
-      return -2;
-    }
-
-  if (read_entity_c (connection, &entity))
-    {
-      return -3;
-    }
-
-  return gmp_success (entity);
-}
-
-/**
  * @brief Wrap some XML in an envelope.
  *
  * @param[in]  connection     Connection to manager
@@ -1165,7 +1132,7 @@ get_many (gvm_connection_t *connection, const char *type,
   GString *xml;
   GString *type_many; /* The plural form of type */
   gchar *request, *built_filter;
-  const char *build_filter, *filt_id, *filter, *filter_extra;
+  const char *build_filter, *filter_id, *filter, *filter_extra;
   const char *first, *max, *sort_field, *sort_order, *owner, *permission;
   const char *replace_task_id;
   const char *overrides, *autofp, *autofp_value, *min_qod;
@@ -1174,7 +1141,7 @@ get_many (gvm_connection_t *connection, const char *type,
   const char *details;
 
   build_filter = params_value (params, "build_filter");
-  filt_id = params_value (params, "filt_id");
+  filter_id = params_value (params, "filter_id");
   filter = params_value (params, "filter");
   filter_extra = params_value (params, "filter_extra");
   first = params_value (params, "first");
@@ -1199,31 +1166,6 @@ get_many (gvm_connection_t *connection, const char *type,
     details = "0";
 
   /* check if filter still exists */
-  switch (filter_exists (connection, filt_id))
-    {
-    case 1:
-      break;
-    case 0:
-      g_debug ("%s filter doesn't exist anymore %s!\n", __FUNCTION__, filt_id);
-      filt_id = NULL;
-      break;
-    case -1:
-      g_debug ("%s filter response didn't contain a status!\n", __FUNCTION__);
-      filt_id = NULL;
-      break;
-    case -2:
-      g_debug ("%s could not send filter request!\n", __FUNCTION__);
-      filt_id = NULL;
-      break;
-    case -3:
-      g_debug ("%s could not read entity from filter response!\n",
-               __FUNCTION__);
-      filt_id = NULL;
-      break;
-    default:
-      filt_id = NULL;
-    }
-
   xml = g_string_new ("");
   type_many = g_string_new (type);
 
@@ -1237,7 +1179,8 @@ get_many (gvm_connection_t *connection, const char *type,
     g_string_append (xml, extra_xml);
 
   built_filter = NULL;
-  if (filt_id == NULL || str_equal (filt_id, "") || str_equal (filt_id, "--"))
+  if (filter_id == NULL || str_equal (filter_id, "")
+      || str_equal (filter_id, "--"))
     {
       if ((build_filter && str_equal (build_filter, "1"))
           || ((filter == NULL || str_equal (filter, ""))
@@ -1290,7 +1233,8 @@ get_many (gvm_connection_t *connection, const char *type,
                 owner ? owner : "", owner ? " " : "",
                 (filter && search_phrase) ? " " : "", filter ? filter : "",
                 search_phrase ? " " : "", search_phrase ? search_phrase : "");
-              filt_id = FILT_ID_USER_SETTING;
+
+              filter_id = FILT_ID_USER_SETTING;
               g_free (task);
             }
           else if (strcmp (type, "info") == 0
@@ -1332,18 +1276,18 @@ get_many (gvm_connection_t *connection, const char *type,
             filter = "rows=-2";
           else
             filter = "apply_overrides=1 rows=-2";
-          if (filt_id && !str_equal (filt_id, ""))
+          if (filter_id && !str_equal (filter_id, ""))
             /* Request to use "filter" instead. */
-            filt_id = FILT_ID_NONE;
+            filter_id = FILT_ID_NONE;
           else
-            filt_id = FILT_ID_USER_SETTING;
+            filter_id = FILT_ID_USER_SETTING;
         }
       else if (str_equal (filter, "sort=nvt")
                && (str_equal (type, "note") || str_equal (type, "override")))
-        filt_id = FILT_ID_USER_SETTING;
+        filter_id = FILT_ID_USER_SETTING;
       else if (str_equal (filter, "apply_overrides=1")
                && str_equal (type, "task"))
-        filt_id = FILT_ID_USER_SETTING;
+        filter_id = FILT_ID_USER_SETTING;
     }
   else if (replace_task_id)
     {
@@ -1364,7 +1308,8 @@ get_many (gvm_connection_t *connection, const char *type,
     " max=\"%s\""
     " sort_field=\"%s\""
     " sort_order=\"%s\"",
-    strcmp (type, "report") ? "" : "report_", filt_id ? filt_id : "0",
+    strcmp (type, "report") ? "" : "report_",
+    filter_id ? filter_id : FILT_ID_NONE,
     strcmp (type, "report") ? "" : "report_",
     built_filter ? built_filter : (filter ? filter : ""),
     filter_extra ? " " : "", filter_extra ? filter_extra : "",
@@ -3414,55 +3359,6 @@ get_info_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Toggle overrides.
- *
- * @param[in]  params     Request parameters.
- * @param[in]  overrides  New overrides value.
- */
-static void
-params_toggle_overrides (params_t *params, const char *overrides)
-{
-  param_t *filt_id, *build_filter;
-  const char *new_filt_id;
-
-  build_filter = params_get (params, "build_filter");
-
-  if (build_filter)
-    new_filt_id = "";
-  else
-    new_filt_id = "0";
-
-  filt_id = params_get (params, "filt_id");
-  if (filt_id)
-    {
-      filt_id->value = g_strdup (new_filt_id);
-      filt_id->value_size = strlen (filt_id->value);
-      filt_id->valid = 1;
-      filt_id->valid_utf8 = 1;
-    }
-  else
-    params_add (params, "filt_id", new_filt_id);
-
-  if (build_filter == NULL)
-    {
-      param_t *filter;
-      filter = params_get (params, "filter");
-      if (filter && filter->value)
-        {
-          gchar *old;
-          old = filter->value;
-          filter->value =
-            g_strdup_printf ("apply_overrides=%s %s", overrides, old);
-          g_free (old);
-        }
-      else if (strcmp (overrides, "0"))
-        params_add (params, "filter", "apply_overrides=1 rows=-2");
-      else
-        params_add (params, "filter", "apply_overrides=0 rows=-2");
-    }
-}
-
-/**
  * @brief Get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -3478,16 +3374,11 @@ get_tasks (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t *response_data)
 {
-  const char *overrides, *schedules_only, *ignore_pagination;
+  const char *schedules_only, *ignore_pagination;
   gchar *extra_attribs, *ret;
 
-  overrides = params_value (params, "overrides");
   schedules_only = params_value (params, "schedules_only");
   ignore_pagination = params_value (params, "ignore_pagination");
-
-  if (overrides)
-    /* User toggled overrides.  Set the overrides value in the filter. */
-    params_toggle_overrides (params, overrides);
 
   extra_attribs = g_strdup_printf (
     "%s%s%s"
@@ -4993,7 +4884,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
   param_t *param;
 
   const char *data_column, *group_column, *subgroup_column, *type;
-  const char *filter, *filt_id;
+  const char *filter, *filter_id;
   const char *first_group, *max_groups;
   const char *mode;
   gchar *filter_escaped, *command_escaped, *response;
@@ -5008,19 +4899,20 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
   subgroup_column = params_value (params, "subgroup_column");
   type = params_value (params, "aggregate_type");
   filter = params_value (params, "filter");
-  filt_id = params_value (params, "filt_id");
+  filter_id = params_value (params, "filter_id");
   sort_fields = params_values (params, "sort_fields:");
   sort_stats = params_values (params, "sort_stats:");
   sort_orders = params_values (params, "sort_orders:");
   first_group = params_value (params, "first_group");
   max_groups = params_value (params, "max_groups");
   mode = params_value (params, "aggregate_mode");
-  if (filter && strcmp (filter, ""))
+
+  if (filter && !str_equal (filter, ""))
     filter_escaped = g_markup_escape_text (filter, -1);
   else
     {
-      if (filt_id == NULL || strcmp (filt_id, "") == 0
-          || strcmp (filt_id, "0") == 0)
+      if (filter_id == NULL || str_equal (filter_id, "")
+          || str_equal (filter_id, FILT_ID_NONE))
         filter_escaped = g_strdup ("rows=-2");
       else
         filter_escaped = NULL;
@@ -5032,21 +4924,28 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append_printf (command, " type=\"%s\"", type);
   if (data_column)
     g_string_append_printf (command, " data_column=\"%s\"", data_column);
+
   if (group_column)
     g_string_append_printf (command, " group_column=\"%s\"", group_column);
+
   if (subgroup_column)
     g_string_append_printf (command, " subgroup_column=\"%s\"",
                             subgroup_column);
   if (filter_escaped && strcmp (filter_escaped, ""))
     g_string_append_printf (command, " filter=\"%s\"", filter_escaped);
-  if (filt_id && strcmp (filt_id, ""))
-    g_string_append_printf (command, " filt_id=\"%s\"", filt_id);
+
+  if (filter_id && !str_equal (filter_id, ""))
+    g_string_append_printf (command, " filt_id=\"%s\"", filter_id);
+
   if (first_group && strcmp (first_group, ""))
     g_string_append_printf (command, " first_group=\"%s\"", first_group);
+
   if (max_groups && strcmp (max_groups, ""))
     g_string_append_printf (command, " max_groups=\"%s\"", max_groups);
+
   if (mode && strcmp (mode, ""))
     g_string_append_printf (command, " mode=\"%s\"", mode);
+
   g_string_append (command, ">");
 
   if (sort_fields && sort_stats && sort_orders)
@@ -5153,6 +5052,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   if (gmp_success (entity) == 0)
     set_http_status_from_entity (entity, response_data);
+
   g_string_append (xml, response);
 
   g_string_append (xml, "</get_aggregate>");
@@ -5709,7 +5609,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
                      "<active>%s</active>"
                      "<comment>%s</comment>"
                      "<event>%s",
-                     name, filter_id ? filter_id : "", active,
+                     name, filter_id ? filter_id : FILT_ID_NONE, active,
                      comment ? comment : "", event);
 
   append_alert_event_data (xml, event_data, event);
@@ -6412,13 +6312,17 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
   filter_id = params_value (params, "filter_id");
   active = params_value (params, "active");
 
+  if (filter_id == NULL || str_equal (filter_id, ""))
+    {
+      filter_id = FILT_ID_NONE;
+    }
+
   CHECK_VARIABLE_INVALID (name, "Save Alert");
   CHECK_VARIABLE_INVALID (comment, "Save Alert");
   CHECK_VARIABLE_INVALID (alert_id, "Save Alert");
   CHECK_VARIABLE_INVALID (condition, "Save Alert");
   CHECK_VARIABLE_INVALID (event, "Save Alert");
   CHECK_VARIABLE_INVALID (method, "Save Alert");
-  CHECK_VARIABLE_INVALID (filter_id, "Save Alert");
   CHECK_VARIABLE_INVALID (active, "Save Alert");
 
   xml = g_string_new ("");
@@ -9656,6 +9560,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   const char *report_id, *delta_report_id;
   const char *format_id;
   const char *filter;
+  const char *filter_id;
   int ret;
   int ignore_pagination;
   gchar *fname_format;
@@ -9671,8 +9576,9 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   format_id = params_value (params, "report_format_id");
 
   filter = params_value (params, "filter");
+  filter_id = params_value (params, "filter_id");
 
-  if (filter == NULL)
+  if (filter == NULL || filter_id)
     filter = "";
 
   ret = gvm_connection_sendf_xml (
@@ -9680,11 +9586,13 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
     "<get_reports"
     " ignore_pagination=\"%d\""
     " filter=\"%s\""
+    " filt_id=\"%s\""
     " report_id=\"%s\""
     " delta_report_id=\"%s\""
     " format_id=\"%s\"/>",
     ignore_pagination,
     filter,
+    filter_id ? filter_id : FILT_ID_NONE,
     report_id,
     delta_report_id ? delta_report_id : "0",
     format_id ? format_id : ""
@@ -10149,13 +10057,6 @@ get_reports (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t *response_data)
 {
-  const char *overrides;
-
-  overrides = params_value (params, "overrides");
-  if (overrides)
-    /* User toggled overrides.  Set the overrides value in the filter. */
-    params_toggle_overrides (params, overrides);
-
   return get_many (connection, "report", credentials, params, extra_xml, NULL,
                    response_data);
 }
@@ -10338,13 +10239,6 @@ get_results (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t *response_data)
 {
-  const char *overrides;
-  overrides = params_value (params, "overrides");
-
-  if (overrides)
-    /* User toggled overrides.  Set the overrides value in the filter. */
-    params_toggle_overrides (params, overrides);
-
   return get_many (connection, "result", credentials, params, extra_xml, NULL,
                    response_data);
 }
@@ -11960,13 +11854,10 @@ get_system_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
   entity_t report_entity;
   char name[501];
   gchar *gmp_command;
-  time_t now;
-  struct tm *now_broken;
   const char *slave_id, *duration;
-  const char *start_year, *start_month, *start_day, *start_hour, *start_minute;
-  const char *end_year, *end_month, *end_day, *end_hour, *end_minute;
-  struct tm start_time, end_time;
-  gchar *start_time_str, *end_time_str;
+
+  const char *start_time;
+  const char *end_time;
 
   if (url == NULL)
     return NULL;
@@ -11989,51 +11880,11 @@ get_system_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
         }
       else
         {
-          now = time (NULL);
-          now_broken = localtime (&now);
+          start_time = params_value (params, "start_time");
+          end_time = params_value (params, "end_time");
 
-          start_year = params_value (params, "start_year");
-          start_month = params_value (params, "start_month");
-          start_day = params_value (params, "start_day");
-          start_hour = params_value (params, "start_hour");
-          start_minute = params_value (params, "start_minute");
-
-          end_year = params_value (params, "end_year");
-          end_month = params_value (params, "end_month");
-          end_day = params_value (params, "end_day");
-          end_hour = params_value (params, "end_hour");
-          end_minute = params_value (params, "end_minute");
-
-          start_time.tm_year =
-            start_year ? atoi (start_year) - 1900 : now_broken->tm_year;
-          start_time.tm_mon =
-            start_month ? atoi (start_month) - 1 : now_broken->tm_mon;
-          start_time.tm_mday =
-            start_day ? atoi (start_day) : now_broken->tm_mday;
-          start_time.tm_hour =
-            start_hour ? atoi (start_hour) : now_broken->tm_hour;
-          start_time.tm_min =
-            start_minute ? atoi (start_minute) : now_broken->tm_min;
-          start_time.tm_zone = now_broken->tm_zone;
-
-          end_time.tm_year =
-            end_year ? atoi (end_year) - 1900 : now_broken->tm_year;
-          end_time.tm_mon =
-            end_month ? atoi (end_month) - 1 : now_broken->tm_mon;
-          end_time.tm_mday = end_day ? atoi (end_day) : now_broken->tm_mday;
-          end_time.tm_hour = end_hour ? atoi (end_hour) : now_broken->tm_hour;
-          end_time.tm_min = end_minute ? atoi (end_minute) : now_broken->tm_min;
-          end_time.tm_zone = now_broken->tm_zone;
-
-          start_time_str = g_strdup_printf (
-            "%04d-%02d-%02dT%02d:%02d:00", start_time.tm_year + 1900,
-            start_time.tm_mon + 1, start_time.tm_mday, start_time.tm_hour,
-            start_time.tm_min);
-
-          end_time_str = g_strdup_printf ("%04d-%02d-%02dT%02d:%02d:00",
-                                          end_time.tm_year + 1900,
-                                          end_time.tm_mon + 1, end_time.tm_mday,
-                                          end_time.tm_hour, end_time.tm_min);
+          CHECK_VARIABLE_INVALID (start_time, "Get System Report")
+          CHECK_VARIABLE_INVALID (end_time, "Get System Report")
 
           gmp_command = g_markup_printf_escaped (
             "<get_system_reports"
@@ -12041,9 +11892,7 @@ get_system_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
             " start_time=\"%s\""
             " end_time=\"%s\""
             " slave_id=\"%s\"/>",
-            name, start_time_str, end_time_str, slave_id ? slave_id : "0");
-          g_free (start_time_str);
-          g_free (end_time_str);
+            name, start_time, end_time, slave_id ? slave_id : "0");
         }
 
       if (gvm_connection_sendf (connection, "%s", gmp_command) == -1)
@@ -14099,19 +13948,14 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
   int ret;
   gchar *html, *response;
   const char *name, *comment, *resource_id, *resource_type;
-  const char *subject_id, *subject_type, *subject_name;
+  const char *subject_id, *subject_type;
   entity_t entity;
-
-  gchar *subject_response;
-  entity_t get_subject_entity = NULL;
-  entity_t subject_entity;
 
   name = params_value (params, "permission");
   comment = params_value (params, "comment");
   resource_id = params_value (params, "id_or_empty");
   resource_type = params_value (params, "optional_resource_type");
   subject_type = params_value (params, "subject_type");
-  subject_name = params_value (params, "subject_name");
 
   CHECK_VARIABLE_INVALID (name, "Create Permission");
   CHECK_VARIABLE_INVALID (comment, "Create Permission");
@@ -14121,78 +13965,11 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
   if (params_given (params, "optional_resource_type"))
     CHECK_VARIABLE_INVALID (resource_type, "Create Permission");
 
-  if (params_given (params, "subject_name"))
-    {
-      CHECK_VARIABLE_INVALID (subject_name, "Create Permission");
-      subject_id = NULL;
-      ret = gmpf (connection, credentials, &subject_response,
-                  &get_subject_entity, response_data,
-                  "<get_%ss filter=\"rows=1 name=%s\">"
-                  "</get_%ss>",
-                  subject_type, subject_name, subject_type);
-
-      switch (ret)
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while getting"
-                               " the subject for a permission. "
-                               "The permission was not created. "
-                               "Diagnostics: Failure to send command"
-                               " to manager daemon.",
-                               response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while getting"
-                               " the subject for a permission. "
-                               "The permission was not created. "
-                               "Diagnostics: Failure to receive response"
-                               " from manager daemon.",
-                               response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while getting"
-                               " the subject for a permission. "
-                               "The permission was not created. "
-                               "Diagnostics: Internal Error.",
-                               response_data);
-        }
-
-      subject_entity = entity_child (get_subject_entity, subject_type);
-
-      if (subject_entity)
-        subject_id = entity_attribute (subject_entity, "id");
-
-      if (subject_id == NULL)
-        {
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while creating a "
-                               "permission. Could not find Subject."
-                               "The permission was not created. "
-                               "Diagnostics: Internal Error.",
-                               response_data);
-        }
-    }
-  else if (strcmp (subject_type, "user") == 0)
+  if (str_equal (subject_type, "user"))
     subject_id = params_value (params, "permission_user_id");
-  else if (strcmp (subject_type, "group") == 0)
+  else if (str_equal (subject_type, "group"))
     subject_id = params_value (params, "permission_group_id");
-  else if (strcmp (subject_type, "role") == 0)
+  else if (str_equal (subject_type, "role"))
     subject_id = params_value (params, "permission_role_id");
   else
     subject_id = NULL;
@@ -14201,152 +13978,60 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   /* Create the permission(s). */
 
-  if (strcmp (name, "task_proxy") == 0)
+  response = NULL;
+  entity = NULL;
+  ret = gmpf (connection, credentials, &response, &entity, response_data,
+              "<create_permission>"
+              "<name>%s</name>"
+              "<comment>%s</comment>"
+              "<resource id=\"%s\">"
+              "<type>%s</type>"
+              "</resource>"
+              "<subject id=\"%s\"><type>%s</type></subject>"
+              "</create_permission>",
+              name, comment ? comment : "", resource_id ? resource_id : "",
+              resource_type ? resource_type : "", subject_id, subject_type);
+
+  switch (ret)
     {
-      response = NULL;
-      entity = NULL;
-      ret = gmpf (connection, credentials, &response, &entity, response_data,
-                  "<commands>"
-                  "<create_permission>"
-                  "<name>get_tasks</name>"
-                  "<comment>%s</comment>"
-                  "<resource id=\"%s\"/>"
-                  "<subject id=\"%s\"><type>%s</type></subject>"
-                  "</create_permission>"
-                  "<create_permission>"
-                  "<name>modify_task</name>"
-                  "<comment>%s</comment>"
-                  "<resource id=\"%s\"/>"
-                  "<subject id=\"%s\"><type>%s</type></subject>"
-                  "</create_permission>"
-                  "<create_permission>"
-                  "<name>start_task</name>"
-                  "<comment>%s</comment>"
-                  "<resource id=\"%s\"/>"
-                  "<subject id=\"%s\"><type>%s</type></subject>"
-                  "</create_permission>"
-                  "<create_permission>"
-                  "<name>stop_task</name>"
-                  "<comment>%s</comment>"
-                  "<resource id=\"%s\"/>"
-                  "<subject id=\"%s\"><type>%s</type></subject>"
-                  "</create_permission>"
-                  "<create_permission>"
-                  "<name>resume_task</name>"
-                  "<comment>%s</comment>"
-                  "<resource id=\"%s\"/>"
-                  "<subject id=\"%s\"><type>%s</type></subject>"
-                  "</create_permission>"
-                  "</commands>",
-                  comment ? comment : "", resource_id ? resource_id : "",
-                  subject_id, subject_type, comment ? comment : "",
-                  resource_id ? resource_id : "", subject_id, subject_type,
-                  comment ? comment : "", resource_id ? resource_id : "",
-                  subject_id, subject_type, comment ? comment : "",
-                  resource_id ? resource_id : "", subject_id, subject_type,
-                  comment ? comment : "", resource_id ? resource_id : "",
-                  subject_id, subject_type);
-
-      if (get_subject_entity)
-        free_entity (get_subject_entity);
-
-      switch (ret)
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while creating a permission. "
-            "The permission was not created. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while creating a permission. "
-            "It is unclear whether the permission has been created or not. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while creating a permission. "
-            "It is unclear whether the permission has been created or not. "
-            "Diagnostics: Internal Error.",
-            response_data);
-        }
-
-      if (entity_attribute (entity, "id"))
-        params_add (params, "permission_id", entity_attribute (entity, "id"));
-      html = response_from_entity (connection, credentials, params, entity,
-                                   "Create Permission", response_data);
+    case 0:
+    case -1:
+      break;
+    case 1:
+      cmd_response_data_set_status_code (response_data,
+                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __FUNCTION__, __LINE__,
+        "An internal error occurred while creating a permission. "
+        "The permission was not created. "
+        "Diagnostics: Failure to send command to manager daemon.",
+        response_data);
+    case 2:
+      cmd_response_data_set_status_code (response_data,
+                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __FUNCTION__, __LINE__,
+        "An internal error occurred while creating a permission. "
+        "It is unclear whether the permission has been created or not. "
+        "Diagnostics: Failure to receive response from manager daemon.",
+        response_data);
+    default:
+      cmd_response_data_set_status_code (response_data,
+                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __FUNCTION__, __LINE__,
+        "An internal error occurred while creating a permission. "
+        "It is unclear whether the permission has been created or not. "
+        "Diagnostics: Internal Error.",
+        response_data);
     }
-  else
-    {
-      response = NULL;
-      entity = NULL;
-      ret = gmpf (connection, credentials, &response, &entity, response_data,
-                  "<create_permission>"
-                  "<name>%s</name>"
-                  "<comment>%s</comment>"
-                  "<resource id=\"%s\">"
-                  "<type>%s</type>"
-                  "</resource>"
-                  "<subject id=\"%s\"><type>%s</type></subject>"
-                  "</create_permission>",
-                  name, comment ? comment : "", resource_id ? resource_id : "",
-                  resource_type ? resource_type : "", subject_id, subject_type);
 
-      if (get_subject_entity)
-        free_entity (get_subject_entity);
+  if (entity_attribute (entity, "id"))
+    params_add (params, "permission_id", entity_attribute (entity, "id"));
 
-      switch (ret)
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while creating a permission. "
-            "The permission was not created. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while creating a permission. "
-            "It is unclear whether the permission has been created or not. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while creating a permission. "
-            "It is unclear whether the permission has been created or not. "
-            "Diagnostics: Internal Error.",
-            response_data);
-        }
+  html = response_from_entity (connection, credentials, params, entity,
+                                "Create Permission", response_data);
 
-      if (entity_attribute (entity, "id"))
-        params_add (params, "permission_id", entity_attribute (entity, "id"));
-      html = response_from_entity (connection, credentials, params, entity,
-                                   "Create Permission", response_data);
-    }
   free_entity (entity);
   g_free (response);
   return html;
@@ -14401,6 +14086,10 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
       return html;                                                          \
     }
 
+#define INCLUDE_RELATED_CURRENT_RESOURCE_ONLY 0
+#define INCLUDE_RELATED_ALL_RESOURCES 1
+#define INCLUDE_RELATED_RESOURCES_ONLY 2
+
 /**
  * @brief Create multiple permission, get next page, envelope the result.
  *
@@ -14420,22 +14109,17 @@ create_permissions_gmp (gvm_connection_t *connection,
   gchar *html, *response, *summary_response;
   int successes;
   const char *permission, *comment, *resource_id, *resource_type;
-  const char *subject_id, *subject_type, *subject_name;
+  const char *subject_id, *subject_type;
   const char *permission_resource_type;
   int include_related;
 
   entity_t entity;
 
-  gchar *subject_response;
-  entity_t get_subject_entity = NULL;
-  entity_t subject_entity;
-
-  permission = params_value (params, "permission");
+  permission = params_value (params, "permission_type");
   comment = params_value (params, "comment");
   resource_id = params_value (params, "resource_id");
   resource_type = params_value (params, "resource_type");
   subject_type = params_value (params, "subject_type");
-  subject_name = params_value (params, "subject_name");
 
   CHECK_VARIABLE_INVALID (params_value (params, "include_related"),
                           "Create Permission");
@@ -14454,74 +14138,7 @@ create_permissions_gmp (gvm_connection_t *connection,
 
   include_related = atoi (params_value (params, "include_related"));
 
-  if (params_given (params, "subject_name"))
-    {
-      CHECK_VARIABLE_INVALID (subject_name, "Create Permission");
-      subject_id = NULL;
-      ret = gmpf (connection, credentials, &subject_response,
-                  &get_subject_entity, response_data,
-                  "<get_%ss filter=\"rows=1 name=%s\">"
-                  "</get_%ss>",
-                  subject_type, subject_name, subject_type);
-
-      switch (ret)
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while getting"
-                               " the subject for a permission. "
-                               "The permission was not created. "
-                               "Diagnostics: Failure to send command"
-                               " to manager daemon.",
-                               response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while getting"
-                               " the subject for a permission. "
-                               "The permission was not created. "
-                               "Diagnostics: Failure to receive response"
-                               " from manager daemon.",
-                               response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while getting"
-                               " the subject for a permission. "
-                               "The permission was not created. "
-                               "Diagnostics: Internal Error.",
-                               response_data);
-        }
-
-      subject_entity = entity_child (get_subject_entity, subject_type);
-
-      if (subject_entity)
-        subject_id = entity_attribute (subject_entity, "id");
-
-      if (subject_id == NULL)
-        {
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while creating a "
-                               "permission. Could not find Subject."
-                               "The permission was not created. "
-                               "Diagnostics: Internal Error.",
-                               response_data);
-        }
-    }
-  else if (str_equal (subject_type, "user"))
+  if (str_equal (subject_type, "user"))
     subject_id = params_value (params, "permission_user_id");
   else if (str_equal (subject_type, "group"))
     subject_id = params_value (params, "permission_group_id");
@@ -14537,9 +14154,9 @@ create_permissions_gmp (gvm_connection_t *connection,
   /* Create the permission(s). */
 
   // Main resource permissions
-  if (include_related != 2)
+  if (include_related != INCLUDE_RELATED_RESOURCES_ONLY)
     {
-      if (strcmp (permission, "read") == 0 || strcmp (permission, "proxy") == 0)
+      if (str_equal (permission, "read") || str_equal (permission, "write"))
         {
           response = NULL;
           entity = NULL;
@@ -14558,10 +14175,11 @@ create_permissions_gmp (gvm_connection_t *connection,
           CHECK_GMPF_RET
         }
 
-      if ((strcmp (permission, "proxy") == 0)
-          && strcmp (permission_resource_type, "result")
-          && strcmp (permission_resource_type, "report"))
+      if ((str_equal (permission, "write"))
+          && !str_equal (permission_resource_type, "result")
+          && !str_equal (permission_resource_type, "report"))
         {
+          // create modify permission for resource
           response = NULL;
           entity = NULL;
           ret =
@@ -14578,8 +14196,9 @@ create_permissions_gmp (gvm_connection_t *connection,
 
           CHECK_GMPF_RET
 
-          if (strcmp (permission_resource_type, "task") == 0)
+          if (str_equal (permission_resource_type, "task"))
             {
+              // create start_task, stop_task and resume_task permission
               response = NULL;
               entity = NULL;
               ret = gmpf (connection, credentials, &response, &entity,
@@ -14629,8 +14248,9 @@ create_permissions_gmp (gvm_connection_t *connection,
               CHECK_GMPF_RET
             }
 
-          if (strcmp (permission_resource_type, "alert") == 0)
+          if (str_equal (permission_resource_type, "alert"))
             {
+              // create test permission
               response = NULL;
               entity = NULL;
               ret = gmpf (connection, credentials, &response, &entity,
@@ -14648,10 +14268,11 @@ create_permissions_gmp (gvm_connection_t *connection,
               CHECK_GMPF_RET
             }
 
-          if (strcmp (permission_resource_type, "agent") == 0
-              || strcmp (permission_resource_type, "report_format") == 0
-              || strcmp (permission_resource_type, "scanner") == 0)
+          if (str_equal (permission_resource_type, "agent")
+              || str_equal (permission_resource_type, "report_format")
+              || str_equal (permission_resource_type, "scanner"))
             {
+              // create verify permission
               response = NULL;
               entity = NULL;
               ret = gmpf (connection, credentials, &response, &entity,
@@ -14672,7 +14293,7 @@ create_permissions_gmp (gvm_connection_t *connection,
     }
 
   // Related permissions
-  if (include_related)
+  if (include_related != INCLUDE_RELATED_CURRENT_RESOURCE_ONLY)
     {
       params_t *related;
       related = params_values (params, "related:");
@@ -14696,8 +14317,8 @@ create_permissions_gmp (gvm_connection_t *connection,
               else
                 related_type = param->value;
 
-              if (strcmp (permission, "read") == 0
-                  || strcmp (permission, "proxy") == 0)
+              if (str_equal (permission, "read") == 0
+                  || str_equal (permission, "write") == 0)
                 {
                   response = NULL;
                   entity = NULL;
@@ -14716,9 +14337,9 @@ create_permissions_gmp (gvm_connection_t *connection,
                   CHECK_GMPF_RET
                 }
 
-              if ((strcmp (permission, "proxy") == 0)
-                  && strcmp (related_type, "result")
-                  && strcmp (related_type, "report"))
+              if ((str_equal (permission, "write"))
+                  && !str_equal (related_type, "result")
+                  && !str_equal (related_type, "report"))
                 {
                   response = NULL;
                   entity = NULL;
@@ -14736,7 +14357,7 @@ create_permissions_gmp (gvm_connection_t *connection,
 
                   CHECK_GMPF_RET
 
-                  if (strcmp (related_type, "task") == 0)
+                  if (str_equal (related_type, "task"))
                     {
                       response = NULL;
                       entity = NULL;
@@ -14787,7 +14408,7 @@ create_permissions_gmp (gvm_connection_t *connection,
                       CHECK_GMPF_RET
                     }
 
-                  if (strcmp (related_type, "alert") == 0)
+                  if (str_equal (related_type, "alert"))
                     {
                       response = NULL;
                       entity = NULL;
@@ -14806,9 +14427,9 @@ create_permissions_gmp (gvm_connection_t *connection,
                       CHECK_GMPF_RET
                     }
 
-                  if (strcmp (related_type, "agent") == 0
-                      || strcmp (related_type, "report_format") == 0
-                      || strcmp (related_type, "scanner") == 0)
+                  if (str_equal (related_type, "agent")
+                      || str_equal (related_type, "report_format")
+                      || str_equal (related_type, "scanner"))
                     {
                       response = NULL;
                       entity = NULL;
@@ -14830,9 +14451,6 @@ create_permissions_gmp (gvm_connection_t *connection,
             }
         }
     }
-
-  if (get_subject_entity)
-    free_entity (get_subject_entity);
 
   summary_response =
     g_strdup_printf ("Successfully created %i permissions", successes);
@@ -16123,7 +15741,7 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   term = params_value (params, "term");
-  type = params_value (params, "optional_resource_type");
+  type = params_value (params, "resource_type");
 
   CHECK_VARIABLE_INVALID (name, "Create Filter");
   CHECK_VARIABLE_INVALID (comment, "Create Filter");
@@ -16171,22 +15789,6 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
         response_data);
     }
 
-  if (gmp_success (entity))
-    {
-      const char *filter_id;
-
-      filter_id = entity_attribute (entity, "id");
-      if (filter_id && strlen (filter_id))
-        {
-          param_t *param;
-          param = params_add (params, "filt_id", filter_id);
-          param->valid = 1;
-          param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
-        }
-    }
-
-  if (entity_attribute (entity, "id"))
-    params_add (params, "filter_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
                                "Create Filter", response_data);
   free_entity (entity);
@@ -16208,15 +15810,6 @@ char *
 delete_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
                    params_t *params, cmd_response_data_t *response_data)
 {
-  param_t *filt_id, *id;
-
-  filt_id = params_get (params, "filt_id");
-  id = params_get (params, "filter_id");
-  if (id && id->value && filt_id && filt_id->value
-      && (strcmp (id->value, filt_id->value) == 0))
-    // TODO: Add params_remove.
-    filt_id->value = NULL;
-
   return move_resource_to_trash (connection, "filter", credentials, params,
                                  response_data);
 }
@@ -16279,7 +15872,7 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   term = params_value (params, "term");
-  type = params_value (params, "optional_resource_type");
+  type = params_value (params, "resource_type");
 
   CHECK_VARIABLE_INVALID (filter_id, "Save Filter");
   CHECK_VARIABLE_INVALID (name, "Save Filter");

@@ -204,9 +204,11 @@ const Details = ({entity, ...props}) => {
               <TableRow>
                 <TableData>{_('Host')}</TableData>
                 <TableData>
-                  <DetailsLink type="host" id={host.id}>
-                    {host.name}
-                  </DetailsLink>
+                  <span>
+                    <DetailsLink type="host" id={host.id}>
+                      {host.name}
+                    </DetailsLink>
+                  </span>
                 </TableData>
               </TableRow>
               <TableRow>

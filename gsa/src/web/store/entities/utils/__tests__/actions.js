@@ -23,6 +23,7 @@ import Filter from 'gmp/models/filter';
 import {
   types,
   createEntitiesActions,
+  createLoadAllEntities,
   createLoadEntities,
   createEntityActions,
   createLoadEntity,
@@ -178,6 +179,198 @@ describe('entities actions tests', () => {
         entityType: 'foo',
         id: 'id1',
         error: 'An error',
+      });
+    });
+  });
+
+  describe('createLoadAllEntities tests', () => {
+    test('test isLoading true', () => {
+      const actions = createEntitiesActions('foo');
+
+      const getState = jest.fn().mockReturnValue({foo: 'bar'});
+
+      const dispatch = jest.fn();
+      const isLoadingEntities = jest.fn().mockReturnValue(true);
+      const get = jest.fn();
+      const gmp = {
+        foos: {
+          get,
+        },
+      };
+
+      const selector = jest.fn(() => ({
+        isLoadingEntities,
+      }));
+
+      const loadAllEntities = createLoadAllEntities({
+        selector,
+        actions,
+        entityType: 'foo',
+      });
+
+      expect(loadAllEntities).toBeDefined();
+      expect(isFunction(loadAllEntities)).toBe(true);
+
+      return loadAllEntities(gmp)()(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(selector).toBeCalledWith({foo: 'bar'});
+        expect(isLoadingEntities).toBeCalled();
+        expect(dispatch).not.toBeCalled();
+        expect(get).not.toBeCalled();
+      });
+    });
+
+    test('test loading success', () => {
+      const actions = {
+        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: jest.fn(),
+      };
+
+      const getState = jest.fn().mockReturnValue({foo: 'bar'});
+
+      const loadedFilter = Filter.fromString('name=abc');
+      const counts = {first: 1};
+      const dispatch = jest.fn();
+      const get = jest.fn().mockReturnValue(
+        Promise.resolve({
+          data: 'foo',
+          meta: {
+            filter: loadedFilter,
+            counts,
+          },
+        }),
+      );
+      const gmp = {
+        foos: {
+          get,
+        },
+      };
+      const isLoadingEntities = jest.fn().mockReturnValue(false);
+
+      const selector = jest.fn(() => ({
+        isLoadingEntities,
+      }));
+
+      const loadAllEntities = createLoadAllEntities({
+        selector,
+        actions,
+        entityType: 'foo',
+      });
+
+      const filter = Filter.fromString('type=teip');
+
+      const myFilterAll = {
+        entityType: 'filter',
+        filter_type: undefined,
+        id: undefined,
+        terms: [
+          {
+            keyword: 'type',
+            relation: '=',
+            value: 'teip',
+          },
+          {
+            keyword: 'first',
+            relation: '=',
+            value: 1,
+          },
+          {
+            keyword: 'rows',
+            relation: '=',
+            value: -1,
+          },
+        ],
+      };
+      expect(loadAllEntities).toBeDefined();
+      expect(isFunction(loadAllEntities)).toBe(true);
+
+      return loadAllEntities(gmp)(filter)(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(selector).toBeCalledWith({foo: 'bar'});
+        expect(isLoadingEntities).toBeCalledWith(myFilterAll);
+        expect(get).toBeCalledWith({filter: myFilterAll});
+        expect(actions.request).toBeCalledWith(myFilterAll);
+        expect(actions.success).toBeCalledWith(
+          'foo',
+          myFilterAll,
+          loadedFilter,
+          counts,
+        );
+        expect(actions.error).not.toBeCalled();
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
+        expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_SUCCESS_ACTION'}]);
+      });
+    });
+
+    test('test loading error', () => {
+      const actions = {
+        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
+      };
+
+      const getState = jest.fn().mockReturnValue({foo: 'bar'});
+
+      const dispatch = jest.fn();
+      const get = jest.fn().mockReturnValue(Promise.reject('AnError'));
+      const gmp = {
+        foos: {
+          get,
+        },
+      };
+      const isLoadingEntities = jest.fn().mockReturnValue(false);
+
+      const selector = jest.fn(() => ({
+        isLoadingEntities,
+      }));
+
+      const loadAllEntities = createLoadAllEntities({
+        selector,
+        actions,
+        entityType: 'foo',
+      });
+
+      const filter = Filter.fromString('type=teip');
+
+      const myFilterAll = {
+        entityType: 'filter',
+        filter_type: undefined,
+        id: undefined,
+        terms: [
+          {
+            keyword: 'type',
+            relation: '=',
+            value: 'teip',
+          },
+          {
+            keyword: 'first',
+            relation: '=',
+            value: 1,
+          },
+          {
+            keyword: 'rows',
+            relation: '=',
+            value: -1,
+          },
+        ],
+      };
+
+      expect(loadAllEntities).toBeDefined();
+      expect(isFunction(loadAllEntities)).toBe(true);
+
+      return loadAllEntities(gmp)(filter)(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(selector).toBeCalledWith({foo: 'bar'});
+        expect(isLoadingEntities).toBeCalledWith(myFilterAll);
+        expect(actions.request).toBeCalledWith(myFilterAll);
+        expect(actions.success).not.toBeCalled();
+        expect(actions.error).toBeCalledWith('AnError', myFilterAll);
+        expect(get).toBeCalledWith({filter: myFilterAll});
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
+        expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_ERROR_ACTION'}]);
       });
     });
   });

@@ -97,6 +97,7 @@ class Badge extends React.Component {
 
         {isDefined(content) && (
           <BadgeIcon
+            data-testid="badge-icon"
             innerRef={ref => (this.icon = ref)}
             color={color}
             backgroundColor={backgroundColor}

@@ -38,6 +38,7 @@ import PropTypes from 'web/utils/proptypes';
 import {na} from 'web/utils/render';
 
 import Trend from './trend';
+import {getTranslatedType} from 'gmp/models/scanconfig';
 
 const ScanConfigActions = withEntitiesActions(
   ({
@@ -100,6 +101,7 @@ const ScanConfigRow = ({
       displayName={_('Scan Config')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
+    <TableData>{getTranslatedType(entity.scan_config_type)}</TableData>
     <TableData>{na(entity.families.count)}</TableData>
     <TableData>
       <Trend
@@ -123,7 +125,7 @@ const ScanConfigRow = ({
             'selected families will automatically be added and considered.',
         )}
         titleStatic={_(
-          'The NVT selection is DYNAMIC. New NVTS of ' +
+          'The NVT selection is STATIC. New NVTs of ' +
             'selected families will NOT automatically be added and ' +
             'considered.',
         )}

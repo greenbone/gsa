@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "gmp/*": ["./gmp/*"],
+      "web/*": ["./web/*"]
+    }
+  },
+  "exclude": ["build", "coverage", "node_modules"],
+  "typeAcquisition": {
+    "enable": true,
+    "include": ["jest"]
+  }
+}

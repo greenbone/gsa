@@ -228,7 +228,7 @@ MultiplePermissionDialog.propTypes = {
     INCLUDE_RELATED_RESOURCES,
     RELATED_RESOURCES_ONLY,
   ]),
-  permission: PropTypes.oneOf(['read', 'proxy']),
+  permission: PropTypes.oneOf(['read', 'write']),
   related: PropTypes.array, // array of models
   roleId: PropTypes.id,
   roles: PropTypes.array,

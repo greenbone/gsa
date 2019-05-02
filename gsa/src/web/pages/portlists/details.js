@@ -22,14 +22,13 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
 
 import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
+import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
@@ -74,15 +73,17 @@ const PortListDetails = ({entity, ...props}) => {
 
           {targets.length > 0 && (
             <TableRow>
-              <TableData>{_('Targets using this Port List')}</TableData>
+              <TableDataAlignTop>
+                {_('Targets using this Port List')}
+              </TableDataAlignTop>
               <TableData>
-                <Divider>
-                  {targets.map(target => (
-                    <DetailsLink key={target.id} id={target.id} type="target">
+                {targets.map(target => (
+                  <span key={target.id}>
+                    <DetailsLink id={target.id} type="target">
                       {target.name}
                     </DetailsLink>
-                  ))}
-                </Divider>
+                  </span>
+                ))}
               </TableData>
             </TableRow>
           )}

@@ -97,12 +97,14 @@ const AlertDetails = ({capabilities, entity, links = true}) => {
               <TableRow>
                 <TableData>{_('Delta Report')}</TableData>
                 <TableData>
-                  <DetailsLink
-                    id={method.data.delta_report_id.value}
-                    type="report"
-                  >
-                    {_('Report ')} {method.data.delta_report_id.value}
-                  </DetailsLink>
+                  <span>
+                    <DetailsLink
+                      id={method.data.delta_report_id.value}
+                      type="report"
+                    >
+                      {_('Report ')} {method.data.delta_report_id.value}
+                    </DetailsLink>
+                  </span>
                 </TableData>
               </TableRow>
             )}
@@ -129,9 +131,11 @@ const AlertDetails = ({capabilities, entity, links = true}) => {
             <TableRow>
               <TableData>{_('Results Filter')}</TableData>
               <TableData>
-                <DetailsLink id={filter.id} type="filter">
-                  {filter.name}
-                </DetailsLink>
+                <span>
+                  <DetailsLink id={filter.id} type="filter">
+                    {filter.name}
+                  </DetailsLink>
+                </span>
               </TableData>
             </TableRow>
           )}
@@ -147,9 +151,11 @@ const AlertDetails = ({capabilities, entity, links = true}) => {
               <TableData>
                 <Divider wrap>
                   {tasks.map(task => (
-                    <DetailsLink key={task.id} id={task.id} type="task">
-                      {task.name}
-                    </DetailsLink>
+                    <span key={task.id}>
+                      <DetailsLink id={task.id} type="task">
+                        {task.name}
+                      </DetailsLink>
+                    </span>
                   ))}
                 </Divider>
               </TableData>

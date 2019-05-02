@@ -25,12 +25,20 @@ import {parseInt} from '../parser';
 
 import Model from '../model';
 
+import _ from '../locale';
+
 export const EMPTY_SCAN_CONFIG_ID = '085569ce-73ed-11df-83c3-002264764cea';
 export const FULL_AND_FAST_SCAN_CONFIG_ID =
   'daba56c8-73ec-11df-a475-002264764cea';
 
 export const OSP_SCAN_CONFIG_TYPE = 1;
 export const OPENVAS_SCAN_CONFIG_TYPE = 0;
+
+export const getTranslatedType = config => {
+  return config.scan_config_type === OSP_SCAN_CONFIG_TYPE
+    ? _('OSP')
+    : _('OpenVAS');
+};
 
 export const parse_count = count => {
   return !isEmpty(count) && count !== '-1' ? parseInt(count) : undefined;

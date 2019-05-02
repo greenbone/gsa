@@ -86,17 +86,23 @@ const Row = ({entity}) => {
   return (
     <TableRow>
       <TableData>
-        <CveLink id={id} />
+        <span>
+          <CveLink id={id} />
+        </span>
       </TableData>
       <TableData>
-        <DetailsLink type="host" id={host.id}>
-          {host.ip}
-        </DetailsLink>
+        <span>
+          <DetailsLink type="host" id={host.id}>
+            {host.ip}
+          </DetailsLink>
+        </span>
       </TableData>
       <TableData>
-        <DetailsLink type="nvt" id={source.name}>
-          {source.description}
-        </DetailsLink>
+        <span>
+          <DetailsLink type="nvt" id={source.name}>
+            {source.description}
+          </DetailsLink>
+        </span>
       </TableData>
       <TableData>
         <SeverityBar severity={severity} />

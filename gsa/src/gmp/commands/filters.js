@@ -43,7 +43,7 @@ class FilterCommand extends EntityCommand {
       cmd: 'create_filter',
       term,
       name,
-      optional_resource_type: type,
+      resource_type: type,
       comment,
     };
     log.debug('Creating new filter', args, data);
@@ -57,7 +57,7 @@ class FilterCommand extends EntityCommand {
       comment,
       id,
       name,
-      optional_resource_type: type,
+      resource_type: type,
       term,
     };
     log.debug('Saving filter', args, data);

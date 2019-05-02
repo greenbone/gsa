@@ -16,15 +16,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {_} from 'gmp/locale/lang';
-
 import withSvgIcon from './withSvgIcon';
 
 import {ReactComponent as Icon} from './svg/dl_rpm.svg';
 
-const DownloadRpmIcon = withSvgIcon({
-  title: _('Download RPM (.rpm) Package'),
-})(Icon);
+const DownloadRpmIcon = withSvgIcon()(Icon);
 
 export default DownloadRpmIcon;
 

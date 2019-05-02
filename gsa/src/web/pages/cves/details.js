@@ -119,7 +119,9 @@ const CveDetails = ({entity}) => {
                 <TableRow key={ref.name}>
                   <TableData>{ref.source}</TableData>
                   <TableData>
-                    <ExternalLink to={ref.href}>{ref.name}</ExternalLink>
+                    <span>
+                      <ExternalLink to={ref.href}>{ref.name}</ExternalLink>
+                    </span>
                   </TableData>
                 </TableRow>
               ))}

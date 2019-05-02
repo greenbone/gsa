@@ -19,6 +19,8 @@
 
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
@@ -71,6 +73,8 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 
+import {getTimezone} from 'web/store/usersettings/selectors';
+
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 
@@ -117,7 +121,9 @@ ToolBarIcons.propTypes = {
   onOverrideEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({entity, ...props}) => {
+const Details = connect(rootState => ({
+  timezone: getTimezone(rootState),
+}))(({entity, timezone, ...props}) => {
   const {nvt} = entity;
   return (
     <Layout flex="column">
@@ -131,9 +137,11 @@ const Details = ({entity, ...props}) => {
             <TableData>{_('NVT Name')}</TableData>
             <TableData>
               {isDefined(nvt) ? (
-                <DetailsLink id={nvt.id} type="nvt">
-                  {nvt.name}
-                </DetailsLink>
+                <span>
+                  <DetailsLink id={nvt.id} type="nvt">
+                    {nvt.name}
+                  </DetailsLink>
+                </span>
               ) : (
                 _('None. Result was an open port.')
               )}
@@ -152,7 +160,9 @@ const Details = ({entity, ...props}) => {
               {entity.isActive() &&
                 isDefined(entity.endTime) &&
                 ' ' +
-                  _('until {{- enddate}}', {enddate: longDate(entity.endTime)})}
+                  _('until {{- enddate}}', {
+                    enddate: longDate(entity.endTime, timezone),
+                  })}
             </TableData>
           </TableRow>
         </TableBody>
@@ -161,7 +171,7 @@ const Details = ({entity, ...props}) => {
       <OverrideDetails entity={entity} {...props} />
     </Layout>
   );
-};
+});
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,

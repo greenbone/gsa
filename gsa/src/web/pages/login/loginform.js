@@ -25,7 +25,6 @@ import _ from 'gmp/locale';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
-import FormGroup from 'web/components/form/formgroup';
 import PasswordField from 'web/components/form/passwordfield';
 import Button from 'web/components/form/button';
 import TextField from 'web/components/form/textfield';
@@ -34,12 +33,21 @@ import ProductImage from 'web/components/img/product';
 
 import Layout from 'web/components/layout/layout';
 
+import Table from 'web/components/table/simpletable';
+import Body from 'web/components/table/body';
+import Row from 'web/components/table/row';
+import Data from 'web/components/table/data';
+
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
+const LoginTable = styled(Table)`
+  table-layout: fixed;
+`;
+
 const Panel = styled.div`
-  margin-top: 5px;
-  margin-bottom: 5px;
+  width: 300px;
+  margin: 5px auto;
   padding-bottom: 10px;
   font-size: 9pt;
 `;
@@ -47,7 +55,6 @@ const Panel = styled.div`
 const LoginPanel = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
 `;
 
 const Error = styled.p`
@@ -63,6 +70,14 @@ const Wrapper = styled.div`
   border: 1px solid ${Theme.lightGray};
   padding: 10px;
   margin-bottom: 10px;
+`;
+
+const StyledData = styled(Data)`
+  font-weight: bold;
+  text-align: right;
+  padding-right: 5px;
+  table-layout: fixed;
+  width: 200px;
 `;
 
 class LoginForm extends React.Component {
@@ -106,6 +121,7 @@ class LoginForm extends React.Component {
       showGuestLogin = false,
       showLogin = true,
       showProtocolInsecure = false,
+      isIE11 = false,
       onGuestLoginClick,
     } = this.props;
     const {username, password} = this.state;
@@ -130,41 +146,64 @@ class LoginForm extends React.Component {
             </Panel>
           )}
 
+          {isIE11 && (
+            <Panel data-testid="IE11">
+              <Error>{_('Warning: You are using IE11')}</Error>
+              <p>
+                {_(
+                  'You are using Internet Explorer 11. You might encounter appearance and performance issues.',
+                )}
+              </p>
+            </Panel>
+          )}
+
           <LoginPanel>
             <ProductImage />
 
             {showLogin && (
-              <Layout flex="column">
-                <FormGroup title={_('Username')} titleSize="4">
-                  <TextField
-                    autoComplete="username"
-                    name="username"
-                    placeholder={_('e.g. johndoe')}
-                    value={username}
-                    autoFocus="autofocus"
-                    tabIndex="1"
-                    onChange={this.handleValueChange}
-                  />
-                </FormGroup>
-                <FormGroup title={_('Password')} titleSize="4">
-                  <PasswordField
-                    autoComplete="current-password"
-                    name="password"
-                    grow="1"
-                    placeholder={_('Password')}
-                    value={password}
-                    onKeyDown={this.handleKeyDown}
-                    onChange={this.handleValueChange}
-                  />
-                </FormGroup>
-                <FormGroup size="4" offset="4">
-                  <Button
-                    data-testid="login-button"
-                    title={_('Login')}
-                    onClick={this.handleSubmit}
-                  />
-                </FormGroup>
-              </Layout>
+              <LoginTable>
+                <Body>
+                  <Row>
+                    <StyledData>{_('Username')}</StyledData>
+                    <Data>
+                      <TextField
+                        grow="1"
+                        autoComplete="username"
+                        name="username"
+                        placeholder={_('e.g. johndoe')}
+                        value={username}
+                        autoFocus="autofocus"
+                        tabIndex="1"
+                        onChange={this.handleValueChange}
+                      />
+                    </Data>
+                  </Row>
+                  <Row>
+                    <StyledData>{_('Password')}</StyledData>
+                    <Data>
+                      <PasswordField
+                        autoComplete="current-password"
+                        name="password"
+                        grow="1"
+                        placeholder={_('Password')}
+                        value={password}
+                        onKeyDown={this.handleKeyDown}
+                        onChange={this.handleValueChange}
+                      />
+                    </Data>
+                  </Row>
+                  <Row>
+                    <Data />
+                    <Data>
+                      <Button
+                        data-testid="login-button"
+                        title={_('Login')}
+                        onClick={this.handleSubmit}
+                      />
+                    </Data>
+                  </Row>
+                </Body>
+              </LoginTable>
             )}
           </LoginPanel>
 
@@ -195,6 +234,7 @@ class LoginForm extends React.Component {
 
 LoginForm.propTypes = {
   error: PropTypes.string,
+  isIE11: PropTypes.bool,
   showGuestLogin: PropTypes.bool,
   showLogin: PropTypes.bool,
   showProtocolInsecure: PropTypes.bool,

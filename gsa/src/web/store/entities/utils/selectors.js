@@ -16,6 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import Filter, {ALL_FILTER} from 'gmp/models/filter';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import {filterIdentifier} from 'web/store/utils';
@@ -51,6 +53,15 @@ class EntitiesSelector {
       return state.ids.map(id => this.state.byId[id]).filter(isDefined);
     }
     return undefined;
+  }
+
+  getAllEntities(filter) {
+    if (!isDefined(filter)) {
+      return this.getEntities(ALL_FILTER);
+    }
+    return isDefined(filter.toFilterString)
+      ? this.getEntities(filter.all())
+      : this.getEntities(Filter.fromString(filter).all());
   }
 
   getEntitiesCounts(filter) {

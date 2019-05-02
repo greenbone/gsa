@@ -19,11 +19,12 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
+
+import DateTime from 'web/components/date/datetime';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
@@ -32,7 +33,7 @@ import DetailsLink from 'web/components/link/detailslink';
 
 import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
+import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
@@ -59,13 +60,15 @@ const ScheduleDetails = ({entity, links = true}) => {
 
           <TableRow>
             <TableData>{_('First Run')}</TableData>
-            <TableData>{longDate(startDate)}</TableData>
+            <TableData>
+              <DateTime date={startDate} />
+            </TableData>
           </TableRow>
 
           <TableRow>
             <TableData>{_('Next Run')}</TableData>
             <TableData>
-              {isDefined(nextDate) ? longDate(nextDate) : '-'}
+              {isDefined(nextDate) ? <DateTime date={nextDate} /> : '-'}
             </TableData>
           </TableRow>
 
@@ -95,15 +98,17 @@ const ScheduleDetails = ({entity, links = true}) => {
            any */}
           {tasks.length > 0 && (
             <TableRow>
-              <TableData>{_('Tasks using this Schedule')}</TableData>
+              <TableDataAlignTop>
+                {_('Tasks using this Schedule')}
+              </TableDataAlignTop>
               <TableData>
-                <Divider>
-                  {tasks.map(task => (
-                    <DetailsLink key={task.id} id={task.id} type="task">
+                {tasks.map(task => (
+                  <span key={task.id}>
+                    <DetailsLink id={task.id} type="task">
                       {task.name}
                     </DetailsLink>
-                  ))}
-                </Divider>
+                  </span>
+                ))}
               </TableData>
             </TableRow>
           )}

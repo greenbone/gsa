@@ -1,7 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TimezoneSelect tests should render 1`] = `
-.c5 {
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c6 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -26,33 +44,15 @@ exports[`TimezoneSelect tests should render 1`] = `
   cursor: pointer;
 }
 
-.c4 {
+.c5 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
-}
-
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
 }
 
 .c1 {
@@ -91,7 +91,7 @@ exports[`TimezoneSelect tests should render 1`] = `
   width: 230px;
 }
 
-.c2 {
+.c3 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -110,32 +110,36 @@ exports[`TimezoneSelect tests should render 1`] = `
   cursor: pointer;
 }
 
+.c2 {
+  cursor: default;
+}
+
 <div
   class="c0"
   width="230px"
 >
   <div
-    aria-expanded="false"
-    aria-haspopup="true"
-    aria-label="open menu"
     class="c1"
-    data-testid="select-open-button"
-    data-toggle="true"
-    role="button"
-    type="button"
   >
     <div
-      class="c2"
+      class="c2 c3"
       data-testid="select-selected-value"
       title="Coordinated Universal Time/UTC"
     >
       Coordinated Universal Time/UTC
     </div>
     <div
-      class="c3"
+      class="c4"
     >
       <span
-        class="c4 c5"
+        aria-expanded="false"
+        aria-haspopup="true"
+        aria-label="open menu"
+        class="c5 c6"
+        data-testid="select-open-button"
+        data-toggle="true"
+        role="button"
+        type="button"
       >
         ▼
       </span>

@@ -19,13 +19,14 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes.js';
 
 import SeverityBar from 'web/components/bar/severitybar.js';
+
+import DateTime from 'web/components/date/datetime';
 
 import Layout from 'web/components/layout/layout.js';
 
@@ -76,7 +77,9 @@ const CpeDetails = ({entity}) => {
           {isDefined(updateTime) && (
             <TableRow>
               <TableData>{_('Last updated')}</TableData>
-              <TableData>{longDate(updateTime)}</TableData>
+              <TableData>
+                <DateTime date={updateTime} />
+              </TableData>
             </TableRow>
           )}
           {isDefined(status) && (

@@ -142,9 +142,11 @@ const Details = ({entity}) => (
         <TableRow>
           <TableData>{_('Assigned To')}</TableData>
           <TableData>
-            <DetailsLink type="user" id={entity.assignedTo.user.id}>
-              {entity.assignedTo.user.name}
-            </DetailsLink>
+            <span>
+              <DetailsLink type="user" id={entity.assignedTo.user.id}>
+                {entity.assignedTo.user.name}
+              </DetailsLink>
+            </span>
           </TableData>
         </TableRow>
         <TableRow>

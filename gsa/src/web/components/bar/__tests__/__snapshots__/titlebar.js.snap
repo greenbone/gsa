@@ -1,0 +1,271 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Titlebar tests should not render content if user is logged out 1`] = `
+<body>
+  <div
+    id="portals"
+  />
+  .c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c3 {
+  width: 40px;
+  height: 40px;
+  margin-right: 4px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+.c4 {
+  height: 40px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 42px;
+  background-color: #66c430;
+  padding: 0px 5px 0px 5px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 600;
+}
+
+.c0 {
+  height: 42px;
+}
+
+<div>
+    <div
+      class="c0"
+    />
+    <div
+      class="c1"
+    >
+      <div
+        class="c2"
+      >
+        <img
+          alt="Greenbone Security Assistant"
+          class="c3"
+          src="/img/greenbone.svg"
+        />
+        <img
+          alt="Greenbone Security Assistant"
+          class="c4"
+          src="/img/gsa.svg"
+        />
+      </div>
+      <div>
+        Vendor Version
+      </div>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Titlebar tests should render content if user is logged in 1`] = `
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c2 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c7 {
+  margin-left: -5px;
+}
+
+.c7 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c7 > * {
+  margin-left: 5px;
+}
+
+.c6 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c8 {
+  color: #393637;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.c8:link,
+.c8:hover,
+.c8:active,
+.c8:visited {
+  color: #393637;
+}
+
+.c9 {
+  color: #393637;
+  cursor: pointer;
+}
+
+.c9:link,
+.c9:hover,
+.c9:active,
+.c9:visited {
+  color: #393637;
+}
+
+.c4 {
+  width: 40px;
+  height: 40px;
+  margin-right: 4px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+.c5 {
+  height: 40px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 42px;
+  background-color: #66c430;
+  padding: 0px 5px 0px 5px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 600;
+}
+
+.c0 {
+  height: 42px;
+}
+
+<body>
+  <div
+    id="portals"
+  />
+  <div>
+    <div
+      class="c0"
+    />
+    <div
+      class="c1"
+    >
+      <a
+        class="c2"
+        href="/"
+        title="Dashboard"
+      >
+        <div
+          class="c3"
+        >
+          <img
+            alt="Greenbone Security Assistant"
+            class="c4"
+            src="/img/greenbone.svg"
+          />
+          <img
+            alt="Greenbone Security Assistant"
+            class="c5"
+            src="/img/gsa.svg"
+          />
+        </div>
+      </a>
+      <div
+        class="c6 c3"
+      >
+        <div
+          class="c7 c3"
+          margin="5px"
+        >
+          <span>
+            Logged in as 
+          </span>
+          <a
+            class="c8 c2"
+            href="/usersettings"
+            title="Your session will end at "
+          >
+            username
+          </a>
+          <span>
+             | 
+          </span>
+          <a
+            class="c9"
+          >
+            Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;

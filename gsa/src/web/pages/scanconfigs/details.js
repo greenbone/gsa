@@ -58,9 +58,11 @@ const ScanConfigDetails = ({entity}) => {
             <TableRow>
               <TableData>{_('Scanner')}</TableData>
               <TableData>
-                <DetailsLink type="scanner" id={scanner.id}>
-                  {scanner.name}
-                </DetailsLink>
+                <span>
+                  <DetailsLink type="scanner" id={scanner.id}>
+                    {scanner.name}
+                  </DetailsLink>
+                </span>
               </TableData>
             </TableRow>
           )}

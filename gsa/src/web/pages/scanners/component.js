@@ -255,6 +255,7 @@ class ScannerComponent extends React.Component {
       credentialDialogVisible,
       credentials,
       credentialTypes,
+      host,
       id,
       name,
       scannerDialogVisible,
@@ -295,6 +296,7 @@ class ScannerComponent extends React.Component {
                 comment={comment}
                 credentials={credentials}
                 credential_id={credential_id}
+                host={host}
                 id={id}
                 name={name}
                 scanner={scanner}

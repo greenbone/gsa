@@ -99,6 +99,9 @@ import {
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
+import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
+import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
+
 import {getTimezone} from 'web/store/usersettings/selectors';
 import {
   updateTimezone,
@@ -198,7 +201,7 @@ class UserSettings extends React.Component {
   }
 
   componentDidMount() {
-    this.props.loadSettings();
+    this.loadSettings();
     this.loadEntities();
   }
 
@@ -218,6 +221,11 @@ class UserSettings extends React.Component {
     this.props.loadScanners();
     this.props.loadSchedules();
     this.props.loadTargets();
+  }
+
+  loadSettings() {
+    this.props.loadFilterDefaults();
+    this.props.loadSettings();
   }
 
   openDialog() {
@@ -263,7 +271,7 @@ class UserSettings extends React.Component {
       );
       this.props.setTimezone(timezone);
 
-      this.props.loadSettings();
+      this.loadSettings();
     });
   }
 
@@ -314,6 +322,7 @@ class UserSettings extends React.Component {
       configsFilter = {},
       credentialsFilter = {},
       filtersFilter = {},
+      groupsFilter = {},
       hostsFilter = {},
       notesFilter = {},
       operatingSystemsFilter = {},
@@ -324,10 +333,14 @@ class UserSettings extends React.Component {
       reportFormatsFilter = {},
       resultsFilter = {},
       rolesFilter = {},
+      scannersFilter = {},
       schedulesFilter = {},
       tagsFilter = {},
       targetsFilter = {},
       tasksFilter = {},
+      ticketsFilter = {},
+      usersFilter = {},
+      vulnerabilitiesFilter = {},
       cpeFilter = {},
       cveFilter = {},
       nvtFilter = {},
@@ -583,6 +596,11 @@ class UserSettings extends React.Component {
                             type="filter"
                           />
                           <SettingTableRow
+                            setting={groupsFilter}
+                            title={_('Groups Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
                             setting={hostsFilter}
                             title={_('Hosts Filter')}
                             type="filter"
@@ -633,6 +651,11 @@ class UserSettings extends React.Component {
                             type="filter"
                           />
                           <SettingTableRow
+                            setting={scannersFilter}
+                            title={_('Scanners Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
                             setting={schedulesFilter}
                             title={_('Schedules Filter')}
                             type="filter"
@@ -650,6 +673,21 @@ class UserSettings extends React.Component {
                           <SettingTableRow
                             setting={tasksFilter}
                             title={_('Tasks Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={ticketsFilter}
+                            title={_('Tickets Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={usersFilter}
+                            title={_('Users Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={vulnerabilitiesFilter}
+                            title={_('Vulnerabilities Filter')}
                             type="filter"
                           />
                           <SettingTableRow
@@ -739,6 +777,7 @@ class UserSettings extends React.Component {
               configsFilter={configsFilter.id}
               credentialsFilter={credentialsFilter.id}
               filtersFilter={filtersFilter.id}
+              groupsFilter={groupsFilter.id}
               hostsFilter={hostsFilter.id}
               notesFilter={notesFilter.id}
               operatingSystemsFilter={operatingSystemsFilter.id}
@@ -749,10 +788,14 @@ class UserSettings extends React.Component {
               reportFormatsFilter={reportFormatsFilter.id}
               resultsFilter={resultsFilter.id}
               rolesFilter={rolesFilter.id}
+              scannersFilter={scannersFilter.id}
               schedulesFilter={schedulesFilter.id}
               tagsFilter={tagsFilter.id}
               targetsFilter={targetsFilter.id}
               tasksFilter={tasksFilter.id}
+              ticketsFilter={ticketsFilter.id}
+              usersFilter={usersFilter.id}
+              vulnerabilitiesFilter={vulnerabilitiesFilter.id}
               cpeFilter={cpeFilter.id}
               cveFilter={cveFilter.id}
               nvtFilter={nvtFilter.id}
@@ -803,11 +846,13 @@ UserSettings.propTypes = {
   filters: PropTypes.array,
   filtersFilter: PropTypes.object,
   gmp: PropTypes.gmp.isRequired,
+  groupsFilter: PropTypes.object,
   hostsFilter: PropTypes.object,
   isLoading: PropTypes.bool,
   listExportFileName: PropTypes.object,
   loadAlerts: PropTypes.func.isRequired,
   loadCredentials: PropTypes.func.isRequired,
+  loadFilterDefaults: PropTypes.func.isRequired,
   loadFilters: PropTypes.func.isRequired,
   loadPortLists: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
@@ -834,6 +879,7 @@ UserSettings.propTypes = {
   rowsPerPage: PropTypes.object,
   scanconfigs: PropTypes.array,
   scanners: PropTypes.array,
+  scannersFilter: PropTypes.object,
   schedules: PropTypes.array,
   schedulesFilter: PropTypes.object,
   secInfoFilter: PropTypes.object,
@@ -844,13 +890,17 @@ UserSettings.propTypes = {
   targets: PropTypes.array,
   targetsFilter: PropTypes.object,
   tasksFilter: PropTypes.object,
+  ticketsFilter: PropTypes.object,
   timezone: PropTypes.string,
   userInterfaceLanguage: PropTypes.object,
+  usersFilter: PropTypes.object,
+  vulnerabilitiesFilter: PropTypes.object,
   onInteraction: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = rootState => {
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const userDefaultFilterSelector = getUserSettingsDefaultFilter(rootState);
 
   const userInterfaceLanguage = userDefaultsSelector.getByName(
     'userinterfacelanguage',
@@ -909,53 +959,6 @@ const mapStateToProps = rootState => {
   );
   const defaultTargetId = userDefaultsSelector.getValueByName('defaulttarget');
 
-  const agentsFilterId = userDefaultsSelector.getValueByName('agentsfilter');
-  const alertsFilterId = userDefaultsSelector.getValueByName('alertsfilter');
-  const hostsFilterId = userDefaultsSelector.getValueByName('hostsfilter');
-  const configsFilterId = userDefaultsSelector.getValueByName('configsfilter');
-  const credentialsFilterId = userDefaultsSelector.getValueByName(
-    'credentialsfilter',
-  );
-  const filtersFilterId = userDefaultsSelector.getValueByName('filtersfilter');
-  const notesFilterId = userDefaultsSelector.getValueByName('notesfilter');
-  const operatingSystemsFilterId = userDefaultsSelector.getValueByName(
-    'operatingsystemsfilter',
-  );
-  const overridesFilterId = userDefaultsSelector.getValueByName(
-    'overridesfilter',
-  );
-  const permissionsFilterId = userDefaultsSelector.getValueByName(
-    'permissionsfilter',
-  );
-  const portListsFilterId = userDefaultsSelector.getValueByName(
-    'portlistsfilter',
-  );
-
-  const reportsFilterId = userDefaultsSelector.getValueByName('reportsfilter');
-  const reportFormatsFilterId = userDefaultsSelector.getValueByName(
-    'reportformatsfilter',
-  );
-  const resultsFilterId = userDefaultsSelector.getValueByName('resultsfilter');
-  const rolesFilterId = userDefaultsSelector.getValueByName('rolesfilter');
-  const schedulesFilterId = userDefaultsSelector.getValueByName(
-    'schedulesfilter',
-  );
-  const tagsFilterId = userDefaultsSelector.getValueByName('tagsfilter');
-
-  const targetsFilterId = userDefaultsSelector.getValueByName('targetsfilter');
-  const tasksFilterId = userDefaultsSelector.getValueByName('tasksfilter');
-  const cpeFilterId = userDefaultsSelector.getValueByName('cpefilter');
-  const cveFilterId = userDefaultsSelector.getValueByName('cvefilter');
-  const certBundFilterId = userDefaultsSelector.getValueByName(
-    'certbundfilter',
-  );
-  const dfnCertFilterId = userDefaultsSelector.getValueByName('dfncertfilter');
-  const nvtFilterId = userDefaultsSelector.getValueByName('nvtfilter');
-  const ovalFilterId = userDefaultsSelector.getValueByName('ovalfilter');
-  const secInfoFilterId = userDefaultsSelector.getValueByName(
-    'allsecinfofilter',
-  );
-
   const alertsSel = alertsSelector(rootState);
   const credentialsSel = credentialsSelector(rootState);
   const filtersSel = filtersSelector(rootState);
@@ -986,32 +989,43 @@ const mapStateToProps = rootState => {
   const defaultSshCredential = credentialsSel.getEntity(defaultSshCredentialId);
   const defaultSchedule = schedulesSel.getEntity(defaultScheduleId);
   const defaultTarget = targetsSel.getEntity(defaultTargetId);
-  const agentsFilter = filtersSel.getEntity(agentsFilterId);
-  const alertsFilter = filtersSel.getEntity(alertsFilterId);
-  const configsFilter = filtersSel.getEntity(configsFilterId);
-  const credentialsFilter = filtersSel.getEntity(credentialsFilterId);
-  const filtersFilter = filtersSel.getEntity(filtersFilterId);
-  const hostsFilter = filtersSel.getEntity(hostsFilterId);
-  const notesFilter = filtersSel.getEntity(notesFilterId);
-  const operatingSystemsFilter = filtersSel.getEntity(operatingSystemsFilterId);
-  const overridesFilter = filtersSel.getEntity(overridesFilterId);
-  const permissionsFilter = filtersSel.getEntity(permissionsFilterId);
-  const portListsFilter = filtersSel.getEntity(portListsFilterId);
-  const reportsFilter = filtersSel.getEntity(reportsFilterId);
-  const reportFormatsFilter = filtersSel.getEntity(reportFormatsFilterId);
-  const resultsFilter = filtersSel.getEntity(resultsFilterId);
-  const rolesFilter = filtersSel.getEntity(rolesFilterId);
-  const schedulesFilter = filtersSel.getEntity(schedulesFilterId);
-  const tagsFilter = filtersSel.getEntity(tagsFilterId);
-  const targetsFilter = filtersSel.getEntity(targetsFilterId);
-  const tasksFilter = filtersSel.getEntity(tasksFilterId);
-  const cpeFilter = filtersSel.getEntity(cpeFilterId);
-  const cveFilter = filtersSel.getEntity(cveFilterId);
-  const certBundFilter = filtersSel.getEntity(certBundFilterId);
-  const dfnCertFilter = filtersSel.getEntity(dfnCertFilterId);
-  const nvtFilter = filtersSel.getEntity(nvtFilterId);
-  const ovalFilter = filtersSel.getEntity(ovalFilterId);
-  const secInfoFilter = filtersSel.getEntity(secInfoFilterId);
+  const agentsFilter = userDefaultFilterSelector.getFilter('agent');
+  const alertsFilter = userDefaultFilterSelector.getFilter('alert');
+  const configsFilter = userDefaultFilterSelector.getFilter('scanconfig');
+  const credentialsFilter = userDefaultFilterSelector.getFilter('credential');
+  const filtersFilter = userDefaultFilterSelector.getFilter('filter');
+  const groupsFilter = userDefaultFilterSelector.getFilter('group');
+  const hostsFilter = userDefaultFilterSelector.getFilter('host');
+  const notesFilter = userDefaultFilterSelector.getFilter('note');
+  const operatingSystemsFilter = userDefaultFilterSelector.getFilter(
+    'operatingsystem',
+  );
+  const overridesFilter = userDefaultFilterSelector.getFilter('override');
+  const permissionsFilter = userDefaultFilterSelector.getFilter('permission');
+  const portListsFilter = userDefaultFilterSelector.getFilter('portlist');
+  const reportsFilter = userDefaultFilterSelector.getFilter('report');
+  const reportFormatsFilter = userDefaultFilterSelector.getFilter(
+    'reportformat',
+  );
+  const resultsFilter = userDefaultFilterSelector.getFilter('result');
+  const rolesFilter = userDefaultFilterSelector.getFilter('role');
+  const scannersFilter = userDefaultFilterSelector.getFilter('scanner');
+  const schedulesFilter = userDefaultFilterSelector.getFilter('schedule');
+  const tagsFilter = userDefaultFilterSelector.getFilter('tag');
+  const targetsFilter = userDefaultFilterSelector.getFilter('target');
+  const tasksFilter = userDefaultFilterSelector.getFilter('task');
+  const ticketsFilter = userDefaultFilterSelector.getFilter('ticket');
+  const usersFilter = userDefaultFilterSelector.getFilter('user');
+  const vulnerabilitiesFilter = userDefaultFilterSelector.getFilter(
+    'vulnerability',
+  );
+  const cpeFilter = userDefaultFilterSelector.getFilter('cpe');
+  const cveFilter = userDefaultFilterSelector.getFilter('cve');
+  const certBundFilter = userDefaultFilterSelector.getFilter('certbund');
+  const dfnCertFilter = userDefaultFilterSelector.getFilter('dfncert');
+  const nvtFilter = userDefaultFilterSelector.getFilter('nvt');
+  const ovalFilter = userDefaultFilterSelector.getFilter('ovaldef');
+  const secInfoFilter = userDefaultFilterSelector.getFilter('allinfo');
 
   let scanconfigs = scanConfigsSel.getEntities(ALL_FILTER);
   if (isDefined(scanconfigs)) {
@@ -1057,6 +1071,7 @@ const mapStateToProps = rootState => {
     configsFilter,
     credentialsFilter,
     filtersFilter,
+    groupsFilter,
     hostsFilter,
     notesFilter,
     operatingSystemsFilter,
@@ -1067,10 +1082,14 @@ const mapStateToProps = rootState => {
     reportFormatsFilter,
     resultsFilter,
     rolesFilter,
+    scannersFilter,
     schedulesFilter,
     tagsFilter,
     targetsFilter,
     tasksFilter,
+    ticketsFilter,
+    usersFilter,
+    vulnerabilitiesFilter,
     cpeFilter,
     cveFilter,
     certBundFilter,
@@ -1086,6 +1105,39 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
   loadCredentials: () => dispatch(loadCredentials(gmp)(ALL_FILTER)),
   loadFilters: () => dispatch(loadFilters(gmp)(ALL_FILTER)),
+  loadFilterDefaults: () => {
+    dispatch(loadUserSettingsDefaultFilter(gmp)('agent'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('alert'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('scanconfig'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('credential'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('filter'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('group'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('host'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('note'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('operatingsystem'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('override'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('permission'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('portlist'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('report'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('reportformat'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('result'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('role'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('scanner'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('schedule'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('tag'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('target'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('task'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('ticket'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('user'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('vulnerability'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('cpe'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('cve'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('certbund'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('dfncert'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('nvt'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('ovaldef'));
+    dispatch(loadUserSettingsDefaultFilter(gmp)('allinfo'));
+  },
   loadPortLists: () => dispatch(loadPortLists(gmp)(ALL_FILTER)),
   loadReportFormats: () => dispatch(loadReportFormats(gmp)(ALL_FILTER)),
   loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
