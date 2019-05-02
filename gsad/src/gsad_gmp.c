@@ -1073,7 +1073,7 @@ get_entities (gvm_connection_t *connection, const char *type,
  * @brief Get all of a particular type of resource, envelope the result.
  *
  * @param[in]  connection     Connection to manager
- * @param[in]  type           Resource type.
+ * @param[in]  type           Resource type in plural form.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[in]  extra_xml      Extra XML to insert inside page element.
@@ -1087,10 +1087,8 @@ get_many (gvm_connection_t *connection, const char *type,
           credentials_t *credentials, params_t *params, const char *extra_xml,
           gmp_arguments_t *arguments, cmd_response_data_t *response_data)
 {
-  GString *type_many; /* The plural form of type */
   const gchar *filter_id, *filter;
   const gchar *details;
-  gchar *ret;
 
   filter_id = params_value (params, "filter_id");
   filter = params_value (params, "filter");
@@ -1104,14 +1102,6 @@ get_many (gvm_connection_t *connection, const char *type,
   if (details && !str_equal (details, ""))
     {
       gmp_arguments_add (arguments, "details", details);
-    }
-
-  type_many = g_string_new (type);
-
-  /* Workaround the fact that info is a non countable noun */
-  if (!str_equal (type, "info"))
-    {
-      g_string_append (type_many, "s");
     }
 
   if (!filter_id && !filter)
@@ -1129,12 +1119,8 @@ get_many (gvm_connection_t *connection, const char *type,
       gmp_arguments_add (arguments, "filter", filter);
     }
 
-  ret = get_entities (connection, type_many->str, credentials, params,
-                      extra_xml, arguments, response_data);
-
-  g_string_free (type_many, TRUE);
-
-  return ret;
+  return get_entities (connection, type, credentials, params, extra_xml,
+                       arguments, response_data);
 }
 
 /**
@@ -3090,7 +3076,7 @@ get_tasks (gvm_connection_t *connection, credentials_t *credentials,
       gmp_arguments_add (arguments, "ignore_pargination", ignore_pagination);
     }
 
-  return get_many (connection, "task", credentials, params, extra_xml,
+  return get_many (connection, "tasks", credentials, params, extra_xml,
                    arguments, response_data);
 }
 
@@ -3702,7 +3688,7 @@ get_credentials (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, const char *extra_xml,
                  cmd_response_data_t *response_data)
 {
-  return get_many (connection, "credential", credentials, params, extra_xml,
+  return get_many (connection, "credentials", credentials, params, extra_xml,
                    NULL, response_data);
 }
 
@@ -4429,7 +4415,7 @@ get_agents (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t *response_data)
 {
-  return get_many (connection, "agent", credentials, params, extra_xml, NULL,
+  return get_many (connection, "agents", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
@@ -5607,7 +5593,7 @@ get_alerts (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t *response_data)
 {
-  return get_many (connection, "alert", credentials, params, NULL, NULL,
+  return get_many (connection, "alerts", credentials, params, NULL, NULL,
                    response_data);
 }
 
@@ -6896,7 +6882,7 @@ get_tags (gvm_connection_t *connection, credentials_t *credentials,
           params_t *params, const char *extra_xml,
           cmd_response_data_t *response_data)
 {
-  return get_many (connection, "tag", credentials, params, extra_xml, NULL,
+  return get_many (connection, "tags", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
@@ -7038,7 +7024,7 @@ get_targets (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t *response_data)
 {
-  return get_many (connection, "target", credentials, params, extra_xml, NULL,
+  return get_many (connection, "targets", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
@@ -7506,7 +7492,7 @@ get_configs (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t *response_data)
 {
-  return get_many (connection, "config", credentials, params, extra_xml, NULL,
+  return get_many (connection, "configs", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
@@ -9711,7 +9697,7 @@ get_results (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t *response_data)
 {
-  return get_many (connection, "result", credentials, params, extra_xml, NULL,
+  return get_many (connection, "results", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
@@ -9766,7 +9752,7 @@ get_notes (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t *response_data)
 {
-  return get_many (connection, "note", credentials, params, extra_xml, NULL,
+  return get_many (connection, "notes", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
@@ -10183,8 +10169,8 @@ get_overrides (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, const char *extra_xml,
                cmd_response_data_t *response_data)
 {
-  return get_many (connection, "override", credentials, params, extra_xml, NULL,
-                   response_data);
+  return get_many (connection, "overrides", credentials, params, extra_xml,
+                   NULL, response_data);
 }
 
 /**
@@ -10511,7 +10497,7 @@ get_scanners (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, const char *extra_xml,
               cmd_response_data_t *response_data)
 {
-  return get_many (connection, "scanner", credentials, params, extra_xml, NULL,
+  return get_many (connection, "scanners", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
@@ -10996,8 +10982,8 @@ get_schedules (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, const char *extra_xml,
                cmd_response_data_t *response_data)
 {
-  return get_many (connection, "schedule", credentials, params, extra_xml, NULL,
-                   response_data);
+  return get_many (connection, "schedules", credentials, params, extra_xml,
+                   NULL, response_data);
 }
 
 /**
@@ -11477,7 +11463,7 @@ get_report_formats (gvm_connection_t *connection, credentials_t *credentials,
                     params_t *params, const char *extra_xml,
                     cmd_response_data_t *response_data)
 {
-  return get_many (connection, "report_format", credentials, params, extra_xml,
+  return get_many (connection, "report_formats", credentials, params, extra_xml,
                    NULL, response_data);
 }
 
@@ -13051,7 +13037,7 @@ get_groups (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t *response_data)
 {
-  return get_many (connection, "group", credentials, params, extra_xml, NULL,
+  return get_many (connection, "groups", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
@@ -13364,7 +13350,7 @@ get_permissions (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, const char *extra_xml,
                  cmd_response_data_t *response_data)
 {
-  return get_many (connection, "permission", credentials, params, extra_xml,
+  return get_many (connection, "permissions", credentials, params, extra_xml,
                    NULL, response_data);
 }
 
@@ -14295,7 +14281,7 @@ get_port_lists (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, const char *extra_xml,
                 cmd_response_data_t *response_data)
 {
-  return get_many (connection, "port_list", credentials, params, extra_xml,
+  return get_many (connection, "port_lists", credentials, params, extra_xml,
                    NULL, response_data);
 }
 
@@ -14796,7 +14782,7 @@ get_roles (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t *response_data)
 {
-  return get_many (connection, "role", credentials, params, extra_xml, NULL,
+  return get_many (connection, "roles", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
@@ -15171,7 +15157,7 @@ get_filters (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t *response_data)
 {
-  return get_many (connection, "filter", credentials, params, extra_xml, NULL,
+  return get_many (connection, "filters", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
@@ -15697,7 +15683,7 @@ get_users (gvm_connection_t *connection, credentials_t *credentials,
     }
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = get_many (connection, "user", credentials, params, extra->str, NULL,
+  html = get_many (connection, "users", credentials, params, extra->str, NULL,
                    response_data);
   g_string_free (extra, TRUE);
   return html;
@@ -15925,7 +15911,7 @@ get_vulns (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t *response_data)
 {
-  return get_many (connection, "vuln", credentials, params, extra_xml, NULL,
+  return get_many (connection, "vulns", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
@@ -17311,7 +17297,7 @@ get_assets (gvm_connection_t *connection, credentials_t *credentials,
                          params_value (params, "ignore_pagination"));
     }
 
-  return get_many (connection, "asset", credentials, params, extra_xml,
+  return get_many (connection, "assets", credentials, params, extra_xml,
                    arguments, response_data);
 }
 
@@ -17619,7 +17605,7 @@ char *
 get_tickets_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_many (connection, "ticket", credentials, params, NULL, NULL,
+  return get_many (connection, "tickets", credentials, params, NULL, NULL,
                    response_data);
 }
 
