@@ -107,7 +107,7 @@ export const createLoadAllEntities = ({
   const state = selector(rootState);
 
   if (isDefined(filter)) {
-    isDefined(filter.toFilterString)
+    filter = isDefined(filter.toFilterString) ? filter.all() : Filter.fromString(filter).all()
       ? (filter = filter.all())
       : (filter = Filter.fromString(filter).all());
   } else {
