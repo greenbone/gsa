@@ -35,6 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix rendering DateTime without dates being passed [#1343](https://github.com/greenbone/gsa/pull/1343)
 - Fix restarting reload timers [#1341](https://github.com/greenbone/gsa/pull/1341)
 - Fix list of excluded hosts formatting [#1340](https://github.com/greenbone/gsa/pull/1340)
 - Fix installation of locale files [#1330](https://github.com/greenbone/gsa/pull/1330)
