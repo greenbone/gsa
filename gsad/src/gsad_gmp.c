@@ -17510,48 +17510,25 @@ get_assets (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t *response_data)
 {
-  char *ret;
-  GString *extra_attribs, *extra_response;
+  gmp_arguments_t *arguments;
   const char *asset_type;
 
   asset_type = params_value (params, "asset_type");
-  if (asset_type == NULL)
+
+  CHECK_VARIABLE_INVALID (asset_type, "Get Assets");
+
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "type", asset_type);
+
+  if (params_value (params, "ignore_pagination"))
     {
-      param_t *param;
-      param = params_add (params, "asset_type", "host");
-      param->valid = 1;
-      param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
-      asset_type = params_value (params, "asset_type");
+      gmp_arguments_add (arguments, "ignore_pagination",
+                         params_value (params, "ignore_pagination"));
     }
 
-  if (strcmp (asset_type, "host") && strcmp (asset_type, "os"))
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
-                           "An internal error occurred while getting Assets. "
-                           "Diagnostics: Invalid asset_type parameter value",
-                           response_data);
-    }
-
-  extra_response = g_string_new (extra_xml ? extra_xml : "");
-
-  extra_attribs = g_string_new ("");
-  g_string_append_printf (extra_attribs, "type=\"%s\" ignore_pagination=\"%s\"",
-                          params_value (params, "asset_type"),
-                          params_value (params, "ignore_pagination")
-                            ? params_value (params, "ignore_pagination")
-                            : "0");
-  if (params_value (params, "details"))
-    g_string_append_printf (extra_attribs, " details=\"%s\"",
-                            params_value (params, "details"));
-  ret = get_many (connection, "asset", credentials, params, extra_response->str,
-                  extra_attribs->str, response_data);
-
-  g_string_free (extra_response, TRUE);
-  g_string_free (extra_attribs, TRUE);
-
-  return ret;
+  return get_many (connection, "asset", credentials, params, extra_xml,
+                   arguments, response_data);
 }
 
 /**
