@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add tooltips to deactivated text fields in AlertDialog [#1269](https://github.com/greenbone/gsa/pull/1269)
 
 ### Changed
+- Display data loading errors at list pages [#1349](https://github.com/greenbone/gsa/pull/1349)
 - Improve login page [#1347](https://github.com/greenbone/gsa/pull/1347)
 - Remove options for not implemented languages [#1344](https://github.com/greenbone/gsa/pull/1344)
 - Render all dates in the current configured timezone of the user
