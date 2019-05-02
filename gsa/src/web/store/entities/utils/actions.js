@@ -112,7 +112,6 @@ export const createLoadAllEntities = ({
       : (filter = Filter.fromString(filter).all());
   } else {
     const newFilter = ALL_FILTER;
-    filter = newFilter.all();
   }
 
   if (state.isLoadingEntities(filter)) {
