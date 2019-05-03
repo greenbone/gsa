@@ -7,12 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
- * Add storybook [#1272](https://github.com/greenbone/gsa/pull/1286)
+- Add storybook [#1272](https://github.com/greenbone/gsa/pull/1286)
 
 ### Changed
- * Allow dynamic ref types in NVT model and adjust CertLink to it [#1434](https://github.com/greenbone/gsa/pull/1434)
- * Use new ref structure in NVTs [#1424](https://github.com/greenbone/gsa/pull/1424)
- * Use HTTPS for documentation links
+- Allow dynamic ref types in NVT model and adjust CertLink to it [#1434](https://github.com/greenbone/gsa/pull/1434)
+- Use new ref structure in NVTs [#1424](https://github.com/greenbone/gsa/pull/1424)
+- Use HTTPS for documentation links
 
 ### Fixed
 
