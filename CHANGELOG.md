@@ -38,6 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix loading time measurements for list pages [#1352](https://github.com/greenbone/gsa/pull/1352)
 - Fix rendering DateTime without dates being passed [#1343](https://github.com/greenbone/gsa/pull/1343)
 - Fix restarting reload timers
   [#1341](https://github.com/greenbone/gsa/pull/1341),
