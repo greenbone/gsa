@@ -674,6 +674,7 @@ EntitiesContainer.propTypes = {
   defaultReloadInterval: PropTypes.number.isRequired,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
+  entitiesError: PropTypes.error,
   extraLoadParams: PropTypes.object,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
