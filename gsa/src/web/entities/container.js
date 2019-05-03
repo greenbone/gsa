@@ -283,8 +283,8 @@ class EntitiesContainer extends React.Component {
 
   handleDownloadBulk(filename = 'export.xml') {
     const {entitiesCommand} = this;
-    const {selected, selectionType} = this.state;
-    const {loadedFilter, onDownload} = this.props;
+    const {loadedFilter, selected, selectionType} = this.state;
+    const {onDownload} = this.props;
 
     let promise;
 
@@ -306,8 +306,7 @@ class EntitiesContainer extends React.Component {
 
   handleDeleteBulk() {
     const {entitiesCommand} = this;
-    const {selected, selectionType} = this.state;
-    const {loadedFilter} = this.props;
+    const {loadedFilter, selected, selectionType} = this.state;
     let promise;
 
     if (selectionType === SelectionType.SELECTION_USER) {
@@ -347,7 +346,7 @@ class EntitiesContainer extends React.Component {
   }
 
   handleSortChange(field) {
-    const {loadedFilter} = this.props;
+    const {loadedFilter} = this.state;
 
     let sort = 'sort';
     const sortField = loadedFilter.getSortBy();
@@ -375,19 +374,19 @@ class EntitiesContainer extends React.Component {
   }
 
   handleFirst() {
-    const {loadedFilter: filter} = this.props;
+    const {loadedFilter: filter} = this.state;
 
     this.changeFilter(filter.first());
   }
 
   handleNext() {
-    const {loadedFilter: filter} = this.props;
+    const {loadedFilter: filter} = this.state;
 
     this.changeFilter(filter.next());
   }
 
   handlePrevious() {
-    const {loadedFilter: filter} = this.props;
+    const {loadedFilter: filter} = this.state;
 
     this.changeFilter(filter.previous());
   }
@@ -470,8 +469,8 @@ class EntitiesContainer extends React.Component {
   }
 
   handleAddMultiTag({comment, id, name, value = ''}) {
-    const {gmp, loadedFilter} = this.props;
-    const {selectionType, selected, entities = []} = this.state;
+    const {gmp} = this.props;
+    const {loadedFilter, selectionType, selected, entities = []} = this.state;
 
     const entitiesType = getEntityType(entities[0]);
 
