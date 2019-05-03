@@ -613,7 +613,6 @@ class EntitiesContainer extends React.Component {
           filter: loadedFilter,
           isLoading,
           isUpdating,
-          loading: isLoading, // TODO convert list pages to use isLoading and remove me
           selectionType: selectionType,
           sortBy,
           sortDir,
