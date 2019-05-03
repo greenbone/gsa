@@ -18,7 +18,7 @@
  */
 import {isArray} from '../../utils/identity';
 
-import Filter, {UNKNOWN_FILTER_ID} from '../filter';
+import Filter from '../filter';
 import FilterTerm from '../filter/filterterm';
 
 describe('Filter parse from string tests', () => {
@@ -463,14 +463,6 @@ describe('Filter equal', () => {
     const filter1 = Filter.fromString('severity<7 and severity>3.9');
     const filter2 = Filter.fromString('severity>3.9 and severity<7');
     expect(filter1.equals(filter2)).toEqual(true);
-  });
-
-  test('filter with unknown filter id should not equal', () => {
-    const filter1 = Filter.fromString('abc=1');
-    filter1.id = UNKNOWN_FILTER_ID;
-    const filter2 = Filter.fromString('def=1');
-    filter2.id = UNKNOWN_FILTER_ID;
-    expect(filter1.equals(filter2)).toEqual(false);
   });
 
   test('filter with an and term should not equal', () => {
