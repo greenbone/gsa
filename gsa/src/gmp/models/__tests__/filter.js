@@ -18,7 +18,7 @@
  */
 import {isArray} from '../../utils/identity';
 
-import Filter from '../filter';
+import Filter, {UNKNOWN_FILTER_ID} from '../filter';
 import FilterTerm from '../filter/filterterm';
 
 describe('Filter parse from string tests', () => {
@@ -652,6 +652,11 @@ describe('Filter parse elem', () => {
     expect(isArray(filter1.alerts)).toEqual(true);
     expect(filter1.alerts).toHaveLength(2);
   });
+
+  test('should parse id of zero as undefined id', () => {
+    const filter = new Filter({_id: UNKNOWN_FILTER_ID});
+    expect(filter.id).toBeUndefined();
+  });
 });
 
 describe('Filter copy', () => {
@@ -724,6 +729,7 @@ describe('Filter next', () => {
     expect(filter.id).toBeUndefined();
   });
 });
+
 describe('Filter first', () => {
   test('should set first if undefined', () => {
     let filter = Filter.fromString('');
