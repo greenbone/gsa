@@ -465,14 +465,6 @@ describe('Filter equal', () => {
     expect(filter1.equals(filter2)).toEqual(true);
   });
 
-  test('filter with unknown filter id should not equal', () => {
-    const filter1 = Filter.fromString('abc=1');
-    filter1.id = UNKNOWN_FILTER_ID;
-    const filter2 = Filter.fromString('def=1');
-    filter2.id = UNKNOWN_FILTER_ID;
-    expect(filter1.equals(filter2)).toEqual(false);
-  });
-
   test('filter with an and term should not equal', () => {
     const filter1 = Filter.fromString(
       'min_qod=70 apply_overrides=1 rows=10 first=1 sort=name',
@@ -660,6 +652,11 @@ describe('Filter parse elem', () => {
     expect(isArray(filter1.alerts)).toEqual(true);
     expect(filter1.alerts).toHaveLength(2);
   });
+
+  test('should parse id of zero as undefined id', () => {
+    const filter = new Filter({_id: UNKNOWN_FILTER_ID});
+    expect(filter.id).toBeUndefined();
+  });
 });
 
 describe('Filter copy', () => {
@@ -732,6 +729,7 @@ describe('Filter next', () => {
     expect(filter.id).toBeUndefined();
   });
 });
+
 describe('Filter first', () => {
   test('should set first if undefined', () => {
     let filter = Filter.fromString('');

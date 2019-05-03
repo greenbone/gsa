@@ -38,6 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix parsing a filter id of '0' [#1358](https://github.com/greenbone/gsa/pull/1358)
 - Parse report timestamp as date object [#1357](https://github.com/greenbone/gsa/pull/1357)
 - Don't crash topology chart if host has no severity [#1356](https://github.com/greenbone/gsa/pull/1356)
 - Fix loading time measurements for list pages [#1352](https://github.com/greenbone/gsa/pull/1352)
