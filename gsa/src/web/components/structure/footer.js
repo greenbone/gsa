@@ -39,6 +39,7 @@ const Footer = styled.footer`
   color: ${Theme.mediumGray};
   margin-top: 10px;
   padding-right: 5px;
+  z-index: ${Theme.Layers.aboveAll};
 `;
 
 const GreenboneFooter = () => {

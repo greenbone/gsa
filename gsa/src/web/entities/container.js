@@ -132,8 +132,6 @@ class EntitiesContainer extends React.Component {
     this.isRunning = true;
     const {filter} = this.props.location.query;
 
-    this.startMeasurement();
-
     if (isDefined(filter)) {
       // use filter from url
       this.load(Filter.fromString(filter));
@@ -172,7 +170,10 @@ class EntitiesContainer extends React.Component {
 
     this.clearTimer();
 
+    this.startMeasurement();
+
     updateFilter(filter);
+
     loadEntities(filter).then(() => this.startTimer());
   }
 
@@ -258,15 +259,11 @@ class EntitiesContainer extends React.Component {
 
     this.resetTimer();
 
-    this.startMeasurement();
-
     this.notifyTimer();
     this.reload();
   }
 
   handleChanged() {
-    this.startMeasurement();
-
     this.notifyChanged();
     this.reload();
   }
@@ -613,7 +610,6 @@ class EntitiesContainer extends React.Component {
           filter: loadedFilter,
           isLoading,
           isUpdating,
-          loading: isLoading, // TODO convert list pages to use isLoading and remove me
           selectionType: selectionType,
           sortBy,
           sortDir,
@@ -675,6 +671,7 @@ EntitiesContainer.propTypes = {
   defaultReloadInterval: PropTypes.number.isRequired,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
+  entitiesError: PropTypes.error,
   extraLoadParams: PropTypes.object,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,

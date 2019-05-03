@@ -36,6 +36,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add tooltips to deactivated text fields in AlertDialog [#1269](https://github.com/greenbone/gsa/pull/1269)
 
 ### Changed
+- Display data loading errors at list pages [#1349](https://github.com/greenbone/gsa/pull/1349)
+- Improve login page [#1347](https://github.com/greenbone/gsa/pull/1347)
 - Remove options for not implemented languages [#1344](https://github.com/greenbone/gsa/pull/1344)
 - Render all dates in the current configured timezone of the user
   [#1327](https://github.com/greenbone/gsa/pull/1327),
@@ -50,8 +52,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix loading time measurements for list pages [#1352](https://github.com/greenbone/gsa/pull/1352)
 - Fix rendering DateTime without dates being passed [#1343](https://github.com/greenbone/gsa/pull/1343)
-- Fix restarting reload timers [#1341](https://github.com/greenbone/gsa/pull/1341)
+- Fix restarting reload timers
+  [#1341](https://github.com/greenbone/gsa/pull/1341),
+  [#1351](https://github.com/greenbone/gsa/pull/1351)
 - Fix list of excluded hosts formatting [#1340](https://github.com/greenbone/gsa/pull/1340)
 - Fix installation of locale files [#1330](https://github.com/greenbone/gsa/pull/1330)
 - Fix list of options of possible Filter types [#1326](https://github.com/greenbone/gsa/pull/1326)
