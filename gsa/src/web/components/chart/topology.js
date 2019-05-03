@@ -242,8 +242,7 @@ class HostsTopologyChart extends React.Component {
     if (host.isScanner) {
       return Theme.green;
     }
-
-    if (isDefined(host.uuid)) {
+    if (isDefined(host.uuid) && isDefined(host.severity)) {
       return color(this.colorScale(host.severity)).darker();
     }
 
