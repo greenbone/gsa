@@ -133,7 +133,13 @@ class Dialog extends React.Component {
     const left = event.pageX - this.relX;
     const top = event.pageY - this.relY;
 
-    this.setDialogPosition(left, top);
+    const rightBorder = window.outerWidth - DEFAULT_DIALOG_MIN_WIDTH;
+    const bottomBorder = window.outerHeight - DEFAULT_DIALOG_MIN_HEIGHT;
+
+    this.setDialogPosition(
+      Math.min(Math.max(left, 0), rightBorder),
+      Math.min(Math.max(top, 0), bottomBorder),
+    );
 
     event.preventDefault();
   }

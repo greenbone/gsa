@@ -18,8 +18,6 @@
  */
 import React from 'react';
 
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
 
 import DetailsBlock from 'web/entity/block';
@@ -32,12 +30,8 @@ import ExternalLink from 'web/components/link/externallink';
 
 import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
+import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
-const TableDataAlignTop = styled(TableData)`
-  vertical-align: top;
-`;
 
 const References = ({nvt, links = true}) => {
   const {cves = [], bids = [], certs = [], xrefs = []} = nvt;
@@ -55,12 +49,13 @@ const References = ({nvt, links = true}) => {
               <TableDataAlignTop>{_('CVE')}</TableDataAlignTop>
               <TableData>
                 {cves.map(cve_id => (
-                  <CveLink
-                    title={_('View Details of {{cve_id}}', {cve_id})}
-                    key={cve_id}
-                    id={cve_id}
-                    textOnly={!links}
-                  />
+                  <span key={cve_id}>
+                    <CveLink
+                      title={_('View Details of {{cve_id}}', {cve_id})}
+                      id={cve_id}
+                      textOnly={!links}
+                    />
+                  </span>
                 ))}
               </TableData>
             </TableRow>
@@ -82,12 +77,9 @@ const References = ({nvt, links = true}) => {
               <TableDataAlignTop>{_('CERT')}</TableDataAlignTop>
               <TableData>
                 {certs.map(cert => (
-                  <CertLink
-                    key={cert.id}
-                    type={cert.type}
-                    id={cert.id}
-                    textOnly={!links}
-                  />
+                  <span key={cert.id}>
+                    <CertLink type={cert.type} id={cert.id} textOnly={!links} />
+                  </span>
                 ))}
               </TableData>
             </TableRow>
@@ -98,13 +90,14 @@ const References = ({nvt, links = true}) => {
               <TableDataAlignTop>{_('Other')}</TableDataAlignTop>
               <TableData>
                 {xrefs.map(xref => (
-                  <ExternalLink
-                    key={xref.ref}
-                    textOnly={!links || xref.type !== 'URL'}
-                    to={xref.ref}
-                  >
-                    {xref.ref}
-                  </ExternalLink>
+                  <span key={xref.ref}>
+                    <ExternalLink
+                      textOnly={!links || xref.type !== 'URL'}
+                      to={xref.ref}
+                    >
+                      {xref.ref}
+                    </ExternalLink>
+                  </span>
                 ))}
               </TableData>
             </TableRow>

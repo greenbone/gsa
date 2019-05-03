@@ -161,13 +161,15 @@ const NvtFamilies = ({entity}) => {
             {family_list.map(family => (
               <TableRow key={family.name}>
                 <TableData>
-                  <Link
-                    to="nvts"
-                    filter={'family="' + family.name + '"'}
-                    title={_('NVTs of family {{name}}', {name: family.name})}
-                  >
-                    {family.name}
-                  </Link>
+                  <span>
+                    <Link
+                      to="nvts"
+                      filter={'family="' + family.name + '"'}
+                      title={_('NVTs of family {{name}}', {name: family.name})}
+                    >
+                      {family.name}
+                    </Link>
+                  </span>
                 </TableData>
                 <TableData align={['center', 'start']}>
                   <Layout>{_('{{count}} of {{max}}', family.nvts)}</Layout>
@@ -254,9 +256,11 @@ const NvtPreferences = ({entity}) => {
             {preferences.nvt.map(pref => (
               <TableRow key={pref.nvt.oid + pref.nvt.name + pref.name}>
                 <TableData>
-                  <DetailsLink id={pref.nvt.oid} type="nvt">
-                    {pref.nvt.name}
-                  </DetailsLink>
+                  <span>
+                    <DetailsLink id={pref.nvt.oid} type="nvt">
+                      {pref.nvt.name}
+                    </DetailsLink>
+                  </span>
                 </TableData>
                 <TableData>{pref.name}</TableData>
                 <StyledTableData>{pref.value}</StyledTableData>

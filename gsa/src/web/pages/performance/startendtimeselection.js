@@ -20,74 +20,50 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import Button from 'web/components/form/button';
+import Datepicker from 'web/components/form/datepicker';
+import FormGroup from 'web/components/form/formgroup';
+import Spinner from 'web/components/form/spinner';
 
-import Button from '../../components/form/button.js';
-import Datepicker from '../../components/form/datepicker.js';
-import FormGroup from '../../components/form/formgroup.js';
-import Spinner from '../../components/form/spinner.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import PropTypes from 'web/utils/proptypes';
 
 class StartTimeSelection extends React.Component {
   constructor(...args) {
     super(...args);
 
-    const {
-      startDate,
-      startHour,
-      startMinute,
-      endDate,
-      endHour,
-      endMinute,
-    } = this.props;
+    const {startDate, endDate} = this.props;
 
     this.state = {
-      startDate,
-      startHour,
-      startMinute,
-      endDate,
-      endHour,
-      endMinute,
+      startHour: startDate.hour(),
+      startMinute: startDate.minute(),
+      endHour: endDate.hour(),
+      endMinute: endDate.minute(),
     };
 
     this.handleValueChange = this.handleValueChange.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
   }
 
-  componentWillReceiveProps(next) {
-    const {
-      startDate,
-      startHour,
-      startMinute,
-      endDate,
-      endHour,
-      endMinute,
-    } = this.state;
+  static getDerivedStateFromProps(props, state) {
+    const {startDate, endDate} = props;
 
-    const state = {};
-
-    if (!startDate.isSame(next.startDate)) {
-      state.startDate = next.startDate;
+    if (
+      props.startDate !== state.prevStartDate ||
+      props.endDate !== state.prevEndDate
+    ) {
+      return {
+        endHour: endDate.hour(),
+        endMinute: endDate.minute(),
+        prevStartDate: startDate,
+        prevEndDate: endDate,
+        startHour: startDate.hour(),
+        startMinute: startDate.minute(),
+      };
     }
-    if (startHour !== next.startHour) {
-      state.startHour = next.startHour;
-    }
-    if (startMinute !== next.startMinute) {
-      state.startMinute = next.startMinute;
-    }
-    if (!endDate.isSame(next.endDate)) {
-      state.endDate = next.endDate;
-    }
-    if (endHour !== next.endHour) {
-      state.endHour = next.endHour;
-    }
-    if (endMinute !== next.endMinute) {
-      state.endMinute = next.endMinute;
-    }
-
-    this.setState(state);
+    return null;
   }
 
   handleValueChange(value, name) {
@@ -95,37 +71,27 @@ class StartTimeSelection extends React.Component {
   }
 
   handleUpdate() {
-    const {onChanged} = this.props;
-    const {
-      startDate,
-      startHour,
-      startMinute,
-      endDate,
-      endHour,
-      endMinute,
-    } = this.state;
+    const {startDate, endDate, onChanged} = this.props;
+    const {startHour, startMinute, endHour, endMinute} = this.state;
 
     onChanged({
-      startDate,
-      startHour,
-      startMinute,
-      endDate,
-      endHour,
-      endMinute,
+      startDate: startDate
+        .clone()
+        .hour(startHour)
+        .minute(startMinute),
+      endDate: endDate
+        .clone()
+        .hour(endHour)
+        .minute(endMinute),
     });
   }
 
   render() {
-    const {
-      startDate,
-      startHour,
-      startMinute,
-      endDate,
-      endHour,
-      endMinute,
-    } = this.state;
+    const {endDate, startDate, timezone} = this.props;
+    const {startHour, startMinute, endHour, endMinute} = this.state;
     return (
       <Layout flex="column">
+        <FormGroup title={_('Timezone')}>{timezone}</FormGroup>
         <FormGroup title={_('Start Time')}>
           <Divider flex="column">
             <Datepicker
@@ -198,11 +164,8 @@ class StartTimeSelection extends React.Component {
 
 StartTimeSelection.propTypes = {
   endDate: PropTypes.date,
-  endHour: PropTypes.number,
-  endMinute: PropTypes.number,
   startDate: PropTypes.date,
-  startHour: PropTypes.number,
-  startMinute: PropTypes.number,
+  timezone: PropTypes.string.isRequired,
   onChanged: PropTypes.func.isRequired,
 };
 

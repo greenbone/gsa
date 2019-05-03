@@ -19,6 +19,8 @@
 
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
@@ -47,7 +49,7 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-import EntityPage from 'web/entity/page';
+import EntityPage, {Col} from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
@@ -67,6 +69,8 @@ import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
+
+import {getTimezone} from 'web/store/usersettings/selectors';
 
 import {renderYesNo} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
@@ -114,19 +118,27 @@ ToolBarIcons.propTypes = {
   onNoteEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({entity, ...props}) => {
+const Details = connect(rootState => ({
+  timezone: getTimezone(rootState),
+}))(({entity, timezone, ...props}) => {
   const {nvt} = entity;
   return (
     <Layout flex="column">
       <InfoTable>
+        <colgroup>
+          <Col width="10%" />
+          <Col width="90%" />
+        </colgroup>
         <TableBody>
           <TableRow>
             <TableData>{_('NVT Name')}</TableData>
             <TableData>
               {isDefined(nvt) ? (
-                <DetailsLink id={nvt.id} type="nvt">
-                  {nvt.name}
-                </DetailsLink>
+                <span>
+                  <DetailsLink id={nvt.id} type="nvt">
+                    {nvt.name}
+                  </DetailsLink>
+                </span>
               ) : (
                 _('None. Result was an open port.')
               )}
@@ -145,7 +157,9 @@ const Details = ({entity, ...props}) => {
               {entity.isActive() &&
                 isDefined(entity.endTime) &&
                 ' ' +
-                  _('until {{- enddate}}', {enddate: longDate(entity.endTime)})}
+                  _('until {{- enddate}}', {
+                    enddate: longDate(entity.endTime, timezone),
+                  })}
             </TableData>
           </TableRow>
         </TableBody>
@@ -154,7 +168,7 @@ const Details = ({entity, ...props}) => {
       <NoteDetails entity={entity} {...props} />
     </Layout>
   );
-};
+});
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,

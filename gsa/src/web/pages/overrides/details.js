@@ -90,7 +90,9 @@ const OverrideDetails = ({entity}) => {
                 {entity.isOrphan() ? (
                   <b>{_('Orphan')}</b>
                 ) : isDefined(task) ? (
-                  <EntityLink entity={task} />
+                  <span>
+                    <EntityLink entity={task} />
+                  </span>
                 ) : (
                   _('Any')
                 )}
@@ -103,7 +105,9 @@ const OverrideDetails = ({entity}) => {
                 {entity.isOrphan() ? (
                   <b>{_('Orphan')}</b>
                 ) : isDefined(result) ? (
-                  <EntityLink entity={result} />
+                  <span>
+                    <EntityLink entity={result} />
+                  </span>
                 ) : (
                   _('Any')
                 )}

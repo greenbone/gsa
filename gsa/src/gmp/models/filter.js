@@ -730,6 +730,7 @@ export const OS_FILTER_FILTER = Filter.fromString('type=os');
 export const OVALDEFS_FILTER_FILTER = Filter.fromString('type=info');
 export const OVERRIDES_FILTER_FILTER = Filter.fromString('type=override');
 export const PORTLISTS_FILTER_FILTER = Filter.fromString('type=port_list');
+export const PERMISSIONS_FILTER_FILTER = Filter.fromString('type=permission');
 export const REPORT_FORMATS_FILTER_FILTER = Filter.fromString(
   'type=report_format',
 );

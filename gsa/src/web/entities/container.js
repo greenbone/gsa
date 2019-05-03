@@ -20,6 +20,8 @@ import 'core-js/fn/set';
 
 import React from 'react';
 
+import _ from 'gmp/locale';
+
 import logger from 'gmp/log';
 
 import {map} from 'gmp/utils/array';
@@ -203,6 +205,10 @@ class EntitiesContainer extends React.Component {
 
   startTimer() {
     if (!this.isRunning || isDefined(this.timer)) {
+      log.debug('Not starting timer', {
+        isRunning: this.isRunning,
+        timer: this.timer,
+      });
       return;
     }
 
@@ -230,6 +236,10 @@ class EntitiesContainer extends React.Component {
     }
   }
 
+  resetTimer() {
+    this.timer = undefined;
+  }
+
   clearTimer() {
     if (isDefined(this.timer)) {
       log.debug(
@@ -238,6 +248,7 @@ class EntitiesContainer extends React.Component {
         'for',
         this.props.gmpname,
       );
+      this.resetTimer();
       global.clearTimeout(this.timer);
     }
   }
@@ -245,7 +256,7 @@ class EntitiesContainer extends React.Component {
   handleTimer() {
     log.debug('Timer', this.timer, 'finished. Reloading data.');
 
-    this.timer = undefined;
+    this.resetTimer();
 
     this.startMeasurement();
 
@@ -573,11 +584,11 @@ class EntitiesContainer extends React.Component {
 
     let title;
     if (selectionType === SelectionType.SELECTION_USER) {
-      title = 'Add Tag to Selection';
+      title = _('Add Tag to Selection');
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      title = 'Add Tag to Page Contents';
+      title = _('Add Tag to Page Contents');
     } else {
-      title = 'Add Tag to All Filtered';
+      title = _('Add Tag to All Filtered');
     }
 
     const other = excludeObjectProps(props, exclude_props);
@@ -595,7 +606,7 @@ class EntitiesContainer extends React.Component {
       <React.Fragment>
         {children({
           ...other,
-          createFilterType: entitiesType,
+          createFilterType: this.props.gmpname,
           entities,
           entitiesCounts,
           entitiesSelected: selected,

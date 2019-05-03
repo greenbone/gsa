@@ -38,9 +38,11 @@ const Row = ({entity, links = true, ...other}) => {
   return (
     <TableRow>
       <TableData>
-        <DetailsLink type="nvt" id={entity.id} textOnly={!links}>
-          {entity.name}
-        </DetailsLink>
+        <span>
+          <DetailsLink type="nvt" id={entity.id} textOnly={!links}>
+            {entity.name}
+          </DetailsLink>
+        </span>
       </TableData>
       <TableData align="center">
         <SeverityBar severity={entity.severity} />

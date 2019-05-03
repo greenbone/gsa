@@ -20,7 +20,8 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
+
+import DateTime from 'web/components/date/datetime';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -110,7 +111,9 @@ const Details = ({entity}) => {
               {revision_history.map(rev => (
                 <TableRow key={rev.revision}>
                   <TableData>{rev.revision}</TableData>
-                  <TableData>{longDate(rev.date)}</TableData>
+                  <TableData>
+                    <DateTime date={rev.date} />
+                  </TableData>
                   <TableData>{rev.description}</TableData>
                 </TableRow>
               ))}
@@ -160,7 +163,9 @@ const Details = ({entity}) => {
               <li key={info.url}>
                 <Layout flex="column">
                   <b>{info.issuer}</b>
-                  <ExternalLink to={info.url}>{info.url}</ExternalLink>
+                  <span>
+                    <ExternalLink to={info.url}>{info.url}</ExternalLink>
+                  </span>
                 </Layout>
               </li>
             ))}

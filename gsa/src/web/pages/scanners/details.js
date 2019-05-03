@@ -38,7 +38,6 @@ import {renderYesNo} from 'web/utils/render';
 
 import DetailsBlock from 'web/entity/block';
 
-import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -46,7 +45,7 @@ import DetailsLink from 'web/components/link/detailslink';
 import InfoTable from 'web/components/table/infotable';
 import SimpleTable from 'web/components/table/simpletable';
 import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
+import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
@@ -252,15 +251,17 @@ const ScannerDetails = ({entity}) => {
 
           {tasks.length > 0 && (
             <TableRow>
-              <TableData>{_('Tasks using this Scanner')}</TableData>
+              <TableDataAlignTop>
+                {_('Tasks using this Scanner')}
+              </TableDataAlignTop>
               <TableData>
-                <Divider wrap>
-                  {tasks.map(task => (
-                    <DetailsLink key={task.id} id={task.id} type="task">
+                {tasks.map(task => (
+                  <span key={task.id}>
+                    <DetailsLink id={task.id} type="task">
                       {task.name}
                     </DetailsLink>
-                  ))}
-                </Divider>
+                  </span>
+                ))}
               </TableData>
             </TableRow>
           )}
@@ -269,17 +270,13 @@ const ScannerDetails = ({entity}) => {
             <TableRow>
               <TableData>{_('Scan Configs using this Scanner')}</TableData>
               <TableData>
-                <Divider wrap>
-                  {configs.map(config => (
-                    <DetailsLink
-                      key={config.id}
-                      id={config.id}
-                      type="scanconfig"
-                    >
+                {configs.map(config => (
+                  <span key={config.id}>
+                    <DetailsLink id={config.id} type="scanconfig">
                       {config.name}
                     </DetailsLink>
-                  ))}
-                </Divider>
+                  </span>
+                ))}
               </TableData>
             </TableRow>
           )}

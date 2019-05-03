@@ -180,9 +180,11 @@ const Method = ({method, details = false}) => {
                 <TableRow>
                   <TableData>{_('Credential')}</TableData>
                   <TableData>
-                    <DetailsLink id={credential.id} type="credential">
-                      {credential.name}
-                    </DetailsLink>
+                    <span>
+                      <DetailsLink id={credential.id} type="credential">
+                        {credential.name}
+                      </DetailsLink>
+                    </span>
                   </TableData>
                 </TableRow>
               )}
@@ -309,12 +311,14 @@ const Method = ({method, details = false}) => {
                 <TableRow>
                   <TableData>{_('Email Encryption')}</TableData>
                   <TableData>
-                    <DetailsLink
-                      id={data.recipient_credential.value}
-                      type="credential"
-                    >
-                      {_('Credential')}
-                    </DetailsLink>
+                    <span>
+                      <DetailsLink
+                        id={data.recipient_credential.value}
+                        type="credential"
+                      >
+                        {_('Credential')}
+                      </DetailsLink>
+                    </span>
                   </TableData>
                 </TableRow>
               )}
@@ -441,16 +445,18 @@ const Method = ({method, details = false}) => {
                 <TableRow>
                   <TableData>{_('Credential')}</TableData>
                   <TableData>
-                    <DetailsLink id={credential.id} type="credential">
-                      {credential.name}
-                    </DetailsLink>
+                    <span>
+                      <DetailsLink id={credential.id} type="credential">
+                        {credential.name}
+                      </DetailsLink>
+                    </span>
                   </TableData>
                 </TableRow>
               )}
 
               {isDefined(credential) && isDefined(credential.login) && (
                 <TableRow>
-                  <TableData>{_('Userame')}</TableData>
+                  <TableData>{_('Username')}</TableData>
                   <TableData>{credential.login}</TableData>
                 </TableRow>
               )}

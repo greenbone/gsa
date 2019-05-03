@@ -19,13 +19,13 @@
 
 import React from 'react';
 
-import {longDate} from 'gmp/locale/date';
-
 import {shorten} from 'gmp/utils/string';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
 import Comment from 'web/components/comment/comment';
+
+import DateTime from 'web/components/date/datetime';
 
 import TableBody from 'web/components/table/body';
 import TableRow from 'web/components/table/row';
@@ -47,17 +47,23 @@ const Row = ({
   <TableBody>
     <TableRow>
       <TableData rowSpan="2">
-        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-          {entity.name}
-        </RowDetailsToggle>
+        <span>
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+            {entity.name}
+          </RowDetailsToggle>
+        </span>
         <div>{shorten(entity.file, 45)}</div>
         <Comment text={entity.comment} />
       </TableData>
       <TableData>{na(entity.version)}</TableData>
       <TableData>{na(entity.status)}</TableData>
       <TableData>{na(entity.class)}</TableData>
-      <TableData>{longDate(entity.creationTime)}</TableData>
-      <TableData>{longDate(entity.modificationTime)}</TableData>
+      <TableData>
+        <DateTime date={entity.creationTime} />
+      </TableData>
+      <TableData>
+        <DateTime date={entity.modificationTime} />
+      </TableData>
       <TableData>{entity.cve_refs}</TableData>
       <TableData>
         <SeverityBar severity={entity.severity} />

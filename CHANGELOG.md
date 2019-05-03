@@ -21,18 +21,53 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.1] - (unreleased)
 
 ### Added
+- Add getAllEntities() and loadAllEntities() actions and reducers to entities store [#1345](https://github.com/greenbone/gsa/pull/1345)
+- Add missing tool tips to credential download icons [#1335](https://github.com/greenbone/gsa/pull/1335)
+- Add type column to scan configs to allow filter and sort by scan config type [#1331](https://github.com/greenbone/gsa/pull/1331)
+- Add some tests for bar components [#1328](https://github.com/greenbone/gsa/pull/1328)
+- Add new DefaultFilterSettings to UserSettings [#1326](https://github.com/greenbone/gsa/pull/1326)
+- Add warning for IE11 [#1322](https://github.com/greenbone/gsa/pull/1322)
+- Add tests for label and img [#1313](https://github.com/greenbone/gsa/pull/1313)
+- German translation [#1311](https://github.com/greenbone/gsa/pull/1311)[#1323](https://github.com/greenbone/gsa/pull/1323)
+- Add tests for comment and badge [#1309](https://github.com/greenbone/gsa/pull/1309)
 - Add error dialog to fix missing error messages in trashcan [#1286](https://github.com/greenbone/gsa/pull/1286)
 - Display current result, comparable result and diff between results for delta
   reports and their results in delta state "changed" [#1284](https://github.com/greenbone/gsa/pull/1284)
 - Add tooltips to deactivated text fields in AlertDialog [#1269](https://github.com/greenbone/gsa/pull/1269)
 
 ### Changed
+- Remove options for not implemented languages [#1344](https://github.com/greenbone/gsa/pull/1344)
+- Render all dates in the current configured timezone of the user
+  [#1327](https://github.com/greenbone/gsa/pull/1327),
+  [#1329](https://github.com/greenbone/gsa/pull/1329),
+  [#1332](https://github.com/greenbone/gsa/pull/1332)
+- Change default PortList for NewTargetDialog [#1321](https://github.com/greenbone/gsa/pull/1321)
+- Update dependencies of react, react-dom, react-redux and create-react-app [#1312](https://github.com/greenbone/gsa/pull/1312)
+- Adjust clickable area of Select [#1296](https://github.com/greenbone/gsa/pull/1296)
 - Update dialog for Task Wizard, Advanced Task Wizard and Modify Task Wizard [#1287](https://github.com/greenbone/gsa/pull/1287)
 - Disable inputs for improper option selection in EmailMethodPart of
   AlertDialog [#1266](https://github.com/greenbone/gsa/pull/1266)
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix rendering DateTime without dates being passed [#1343](https://github.com/greenbone/gsa/pull/1343)
+- Fix restarting reload timers [#1341](https://github.com/greenbone/gsa/pull/1341)
+- Fix list of excluded hosts formatting [#1340](https://github.com/greenbone/gsa/pull/1340)
+- Fix installation of locale files [#1330](https://github.com/greenbone/gsa/pull/1330)
+- Fix list of options of possible Filter types [#1326](https://github.com/greenbone/gsa/pull/1326)
+- Fix timezone handling at performance page [#1325](https://github.com/greenbone/gsa/pull/1325)
+- Fix creating and editing alerts without a result filter [#1315](https://github.com/greenbone/gsa/pull/1315)
+- Fix filter selection at report details page [#1314](https://github.com/greenbone/gsa/pull/1314)
+- Fix using default results filter at report details page
+  [#1314](https://github.com/greenbone/gsa/pull/1314),
+  [#1333](https://github.com/greenbone/gsa/pull/1333)
+- Fix loading filters at permission list page [#1306](https://github.com/greenbone/gsa/pull/1306)
+- Fix filter in Report Results view cannot be saved & Fix error for create filter with no available results [#1303](https://github.com/greenbone/gsa/pull/1303)
+- Fix creating permissions via the create multiple permissions dialog [#1302](https://github.com/greenbone/gsa/pull/1302)
+- Fix showing host in Scanner dialog [#1301](https://github.com/greenbone/gsa/pull/1301)
+- Fix detailslinks in AllSecInfo [#1299](https://github.com/greenbone/gsa/pull/1299)
+- Only run libmicrohttp in debug mode if gsad build type is debug [#1295](https://github.com/greenbone/gsa/pull/1295)
+- Fix dialog can be moved outside browser frame [#1294](https://github.com/greenbone/gsa/pull/1294)
 - Fix permission description [#1292](https://github.com/greenbone/gsa/pull/1292)
 - Fix port ranges from file radio button [#1291](https://github.com/greenbone/gsa/pull/1291)
 - Don't run more then one reload timer for a page [#1289](https://github.com/greenbone/gsa/pull/1289)
@@ -51,6 +86,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix release build [#1259](https://github.com/greenbone/gsa/pull/1259), [#1265](https://github.com/greenbone/gsa/pull/1265)
 
 ### Removed
+- Remove old tool tips from credential download icons because they are not visible and update new tool tips [#1338](https://github.com/greenbone/gsa/pull/1338)
+- Remove sort by credential from Target view [1300](https://github.com/greenbone/gsa/pull/1300)
 - Remove fifth from schedule [#1279](https://github.com/greenbone/gsa/pull/1279)
 - Removed obsolete CLI arguments [#1265](https://github.com/greenbone/gsa/pull/1265)
   - --login-label

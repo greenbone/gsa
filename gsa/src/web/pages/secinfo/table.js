@@ -36,6 +36,7 @@ import TableRow from '../../components/table/row.js';
 
 import SecinfoDetails from './details.js';
 import Row from './row.js';
+import {normalizeType} from 'gmp/utils/entitytype.js';
 
 const Header = ({
   actionsColumn,
@@ -108,12 +109,14 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
+const infoType = entity => normalizeType(secInfoType(entity));
+
 export default createEntitiesTable({
   body: false,
   emptyTitle: _l('No SecInfo Information available'),
   row: Row,
   header: withEntitiesHeader(true)(Header),
-  rowDetails: withRowDetails(secInfoType)(SecinfoDetails),
+  rowDetails: withRowDetails(infoType)(SecinfoDetails),
   footer: createEntitiesFooter({
     span: 10,
     download: 'secinfo.xml',

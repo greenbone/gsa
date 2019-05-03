@@ -94,9 +94,11 @@ const Row = ({entity, links = true}) => {
       <TableData>{description}</TableData>
       <TableData>
         {isDefined(host.id) ? (
-          <DetailsLink type="host" id={host.id} textOnly={!links}>
-            {host.ip}
-          </DetailsLink>
+          <span>
+            <DetailsLink type="host" id={host.id} textOnly={!links}>
+              {host.ip}
+            </DetailsLink>
+          </span>
         ) : (
           host.ip
         )}
@@ -105,9 +107,11 @@ const Row = ({entity, links = true}) => {
         <i>{host.name}</i>
       </TableData>
       <TableData>
-        <DetailsLink type="nvt" id={nvt.id} textOnly={!links}>
-          {nvt.name}
-        </DetailsLink>
+        <span>
+          <DetailsLink type="nvt" id={nvt.id} textOnly={!links}>
+            {nvt.name}
+          </DetailsLink>
+        </span>
       </TableData>
       <TableData>{port}</TableData>
     </TableRow>

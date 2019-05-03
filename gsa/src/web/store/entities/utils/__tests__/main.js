@@ -26,6 +26,7 @@ describe('createAll function tests', () => {
     const {
       entitiesActions,
       entityActions,
+      loadAllEntities,
       loadEntities,
       loadEntity,
       reducer,
@@ -40,6 +41,7 @@ describe('createAll function tests', () => {
       },
     });
 
+    expect(isFunction(loadAllEntities)).toBe(true);
     expect(isFunction(loadEntities)).toBe(true);
     expect(isFunction(loadEntity)).toBe(true);
     expect(isFunction(reducer)).toBe(true);

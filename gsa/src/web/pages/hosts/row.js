@@ -20,13 +20,14 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
 import Comment from 'web/components/comment/comment';
+
+import DateTime from 'web/components/date/datetime';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import NewIcon from 'web/components/icon/newicon';
@@ -121,9 +122,11 @@ const Row = ({
   return (
     <TableRow>
       <TableData flex="column">
-        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-          {entity.name}
-        </RowDetailsToggle>
+        <span>
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+            {entity.name}
+          </RowDetailsToggle>
+        </span>
         <Comment text={entity.comment} />
       </TableData>
       <TableData>{entity.hostname}</TableData>
@@ -135,8 +138,7 @@ const Row = ({
         <SeverityBar severity={entity.severity} />
       </TableData>
       <TableData>
-        {isDefined(entity.modificationTime) &&
-          longDate(entity.modificationTime)}
+        <DateTime date={entity.modificationTime} />
       </TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>

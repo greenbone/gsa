@@ -16,14 +16,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {_} from 'gmp/locale/lang';
-
 import {ReactComponent as Icon} from './svg/dl_deb.svg';
 import withSvgIcon from './withSvgIcon';
 
-const DownloadDebIcon = withSvgIcon({
-  title: _('Download Debian (.deb) Package'),
-})(Icon);
+const DownloadDebIcon = withSvgIcon()(Icon);
 
 export default DownloadDebIcon;
 

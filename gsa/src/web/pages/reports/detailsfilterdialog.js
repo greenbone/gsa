@@ -38,10 +38,14 @@ import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import SeverityLevelsGroup from 'web/components/powerfilter/severitylevelsgroup';
+import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
 
 /* eslint-enable */
 
 import DeltaResultsFilterGroup from './deltaresultsfiltergroup';
+
+import compose from 'web/utils/compose';
+import withCapabilities from 'web/utils/withCapabilities';
 
 const FilterDialog = ({
   delta = false,
@@ -49,6 +53,10 @@ const FilterDialog = ({
   filterstring,
   onFilterStringChange,
   onFilterValueChange,
+  capabilities,
+  filterName,
+  saveNamedFilter,
+  onValueChange,
 }) => {
   const result_hosts_only = filter.get('result_hosts_only');
   return (
@@ -93,12 +101,24 @@ const FilterDialog = ({
       <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
       <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
+
+      {capabilities.mayCreate('filter') && (
+        <CreateNamedFilterGroup
+          filter={filter}
+          filterName={filterName}
+          saveNamedFilter={saveNamedFilter}
+          onValueChange={onValueChange}
+        />
+      )}
     </Layout>
   );
 };
 
 FilterDialog.propTypes = FilterDialogPropTypes;
 
-export default withFilterDialog()(FilterDialog);
+export default compose(
+  withCapabilities,
+  withFilterDialog(),
+)(FilterDialog);
 
 // vim: set ts=2 sw=2 tw=80:

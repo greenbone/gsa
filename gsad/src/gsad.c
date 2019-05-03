@@ -591,6 +591,7 @@ init_validator ()
   gvm_validator_add (validator, "include_id_list:name", "^[[:alnum:]\\-_ ]+$");
   gvm_validator_add (validator, "include_id_list:value", "^(0|1)$");
   gvm_validator_add (validator, "installer_sig", "(?s)^.*$");
+  gvm_validator_add (validator, "isodate", "^.*$");
   gvm_validator_add (validator, "lang",
                      "^(Browser Language|"
                      "([a-z]{2,3})(_[A-Z]{2})?(@[[:alnum:]_-]+)?"
@@ -658,29 +659,23 @@ init_validator ()
   gvm_validator_add (validator, "result_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "role", "^[[:alnum:] ]+$");
   gvm_validator_add (validator, "permission", "^([_a-z]+|Super)$");
+  gvm_validator_add (validator, "permission_type", "^(read|write)$");
   gvm_validator_add (validator, "port_list_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "port_range_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (
     validator, "resource_type",
-    "^(agent|alert|asset|config|credential|filter|group|host|nvt|note|os|"
-    "override|permission|port_list|report|report_format|result|role|scanner|"
-    "schedule|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_"
-    "adv|vuln|ticket|"
-    "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating "
-    "System|Override|Permission|Port List|Report|Report "
-    "Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|CVE|CPE|"
-    "OVAL Definition|CERT-Bund Advisory|DFN-CERT Advisory|Vulnerability)$");
+    "^(agent|alert|asset|cert_bund_adv|config|cpe|credential|cve|dfn_cert_adv|"
+    "filter|group|host|info|nvt|note|os|ovaldef|override|permission|port_list|"
+    "report|report_format|result|role|scanner|schedule|tag|target|task|ticket|"
+    "user|vuln|)$");
   gvm_validator_add (validator, "resource_id", "^[[:alnum:]-_.:\\/~]*$");
   gvm_validator_add (validator, "resources_action", "^(|add|set|remove)$");
   gvm_validator_add (
     validator, "optional_resource_type",
-    "^(agent|alert|asset|config|credential|filter|group|host|note|nvt|os|"
-    "override|permission|port_list|report|report_format|result|role|scanner|"
-    "schedule|tag|target|task|user|info|vuln|"
-    "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating "
-    "System|Override|Permission|Port List|Report|Report "
-    "Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|"
-    "Vulnerability)?$");
+    "^(agent|alert|asset|cert_bund_adv|config|cpe|credential|cve|dfn_cert_adv|"
+    "filter|group|host|info|nvt|note|os|ovaldef|override|permission|port_list|"
+    "report|report_format|result|role|scanner|schedule|tag|target|task|ticket|"
+    "user|vuln|)?$");
   gvm_validator_add (validator, "select:value", "^.*$");
   gvm_validator_add (validator, "ssl_cert", "^.*$");
   gvm_validator_add (validator, "method_data:name", "^.*$");
@@ -798,13 +793,8 @@ init_validator ()
   gvm_validator_alias (validator, "dynamic_severity", "boolean");
   gvm_validator_alias (validator, "enable", "boolean");
   gvm_validator_alias (validator, "enable_stop", "boolean");
-  gvm_validator_alias (validator, "end_day", "day_of_month");
-  gvm_validator_alias (validator, "end_hour", "hour");
-  gvm_validator_alias (validator, "end_minute", "minute");
-  gvm_validator_alias (validator, "end_month", "month");
-  gvm_validator_alias (validator, "end_year", "year");
+  gvm_validator_alias (validator, "end_time", "isodate");
   gvm_validator_alias (validator, "esxi_credential_id", "credential_id");
-  gvm_validator_alias (validator, "filt_id", "id");
   gvm_validator_alias (validator, "filter_extra", "filter");
   gvm_validator_alias (validator, "filter_id", "id");
   gvm_validator_alias (validator, "filterbox", "boolean");
@@ -861,7 +851,6 @@ init_validator ()
   gvm_validator_alias (validator, "old_password", "password");
   gvm_validator_alias (validator, "open_note", "note_optional");
   gvm_validator_alias (validator, "original_overrides", "boolean");
-  gvm_validator_alias (validator, "overrides", "boolean");
   gvm_validator_alias (validator, "owner", "name");
   gvm_validator_alias (validator, "passphrase", "lsc_password");
   gvm_validator_alias (validator, "password:name", "preference_name");
@@ -907,18 +896,11 @@ init_validator ()
   gvm_validator_alias (validator, "smb_credential_id", "credential_id");
   gvm_validator_alias (validator, "snmp_credential_id", "credential_id");
   gvm_validator_alias (validator, "ssh_credential_id", "credential_id");
-  gvm_validator_alias (validator, "start_day", "day_of_month");
-  gvm_validator_alias (validator, "start_hour", "hour");
-  gvm_validator_alias (validator, "start_minute", "minute");
-  gvm_validator_alias (validator, "start_month", "month");
-  gvm_validator_alias (validator, "start_year", "year");
   gvm_validator_alias (validator, "subgroup_column", "group_column");
   gvm_validator_alias (validator, "subject_id", "id");
   gvm_validator_alias (validator, "subject_id_optional", "id_optional");
-  gvm_validator_alias (validator, "subject_name", "name");
   gvm_validator_alias (validator, "subtype", "asset_type");
-  gvm_validator_alias (validator, "task_filter", "filter");
-  gvm_validator_alias (validator, "task_filt_id", "filt_id");
+  gvm_validator_alias (validator, "start_time", "isodate");
   gvm_validator_alias (validator, "task_uuid", "optional_id");
   gvm_validator_alias (validator, "ticket_id", "id");
   gvm_validator_alias (validator, "timeout", "boolean");
@@ -2583,6 +2565,7 @@ start_http_daemon (int port,
                    http_handler_t *http_handlers,
                    struct sockaddr_storage *address)
 {
+  unsigned int flags;
   int ipv6_flag;
 
   if (address->ss_family == AF_INET6)
@@ -2594,12 +2577,17 @@ start_http_daemon (int port,
 #endif
   else
     ipv6_flag = MHD_NO_FLAG;
+
+  flags =
+    MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD | ipv6_flag;
+#ifndef NDEBUG
+  flags = flags | MHD_USE_DEBUG;
+#endif
+
   return MHD_start_daemon (
-    MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
-      | MHD_USE_DEBUG | ipv6_flag,
-    port, NULL, NULL, handler, http_handlers, MHD_OPTION_NOTIFY_COMPLETED,
-    free_resources, NULL, MHD_OPTION_SOCK_ADDR, address,
-    MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
+    flags, port, NULL, NULL, handler, http_handlers,
+    MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL, MHD_OPTION_SOCK_ADDR,
+    address, MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
     MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
 }
 
@@ -2609,6 +2597,7 @@ start_https_daemon (int port, const char *key, const char *cert,
                     http_handler_t *http_handlers,
                     struct sockaddr_storage *address)
 {
+  unsigned int flags;
   int ipv6_flag;
 
   if (address->ss_family == AF_INET6)
@@ -2620,13 +2609,18 @@ start_https_daemon (int port, const char *key, const char *cert,
 #endif
   else
     ipv6_flag = MHD_NO_FLAG;
+
+  flags = MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
+          | MHD_USE_SSL | ipv6_flag;
+#ifndef NDEBUG
+  flags = flags | MHD_USE_DEBUG;
+#endif
+
   return MHD_start_daemon (
-    MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
-      | MHD_USE_DEBUG | MHD_USE_SSL | ipv6_flag,
-    port, NULL, NULL, &handle_request, http_handlers, MHD_OPTION_HTTPS_MEM_KEY,
-    key, MHD_OPTION_HTTPS_MEM_CERT, cert, MHD_OPTION_NOTIFY_COMPLETED,
-    free_resources, NULL, MHD_OPTION_SOCK_ADDR, address,
-    MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
+    flags, port, NULL, NULL, &handle_request, http_handlers,
+    MHD_OPTION_HTTPS_MEM_KEY, key, MHD_OPTION_HTTPS_MEM_CERT, cert,
+    MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL, MHD_OPTION_SOCK_ADDR,
+    address, MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
     MHD_OPTION_HTTPS_PRIORITIES, priorities, MHD_OPTION_EXTERNAL_LOGGER,
     mhd_logger, NULL,
 /* LibmicroHTTPD 0.9.35 and higher. */

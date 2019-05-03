@@ -34,7 +34,7 @@ import DetailsLink from 'web/components/link/detailslink';
 
 import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
+import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
@@ -95,15 +95,17 @@ const ReportFormatDetails = ({entity, links = true}) => {
 
           {alerts.length > 0 && (
             <TableRow>
-              <TableData>{_('Alerts using this Report Format')}</TableData>
+              <TableDataAlignTop>
+                {_('Alerts using this Report Format')}
+              </TableDataAlignTop>
               <TableData>
-                <Divider>
-                  {alerts.map(alert => (
-                    <DetailsLink key={alert.id} id={alert.id} type="alert">
+                {alerts.map(alert => (
+                  <span key={alert.id}>
+                    <DetailsLink id={alert.id} type="alert">
                       {alert.name}
                     </DetailsLink>
-                  ))}
-                </Divider>
+                  </span>
+                ))}
               </TableData>
             </TableRow>
           )}

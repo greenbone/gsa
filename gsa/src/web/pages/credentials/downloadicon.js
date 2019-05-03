@@ -41,12 +41,14 @@ const CredentialDownloadIcon = ({credential, onDownload}) => {
     <IconDivider align={['center', 'center']}>
       {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE && (
         <DownloadRpmIcon
+          title={_('Download RPM (.rpm) Package')}
           value={credential}
           onClick={cred => onDownload(cred, 'rpm')}
         />
       )}
       {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE && (
         <DownloadDebIcon
+          title={_('Download Debian (.deb) Package')}
           value={credential}
           onClick={cred => onDownload(cred, 'deb')}
         />
@@ -60,6 +62,7 @@ const CredentialDownloadIcon = ({credential, onDownload}) => {
       )}
       {type === USERNAME_PASSWORD_CREDENTIAL_TYPE && (
         <DownloadExeIcon
+          title={_('Download Windows Executable (.exe)')}
           value={credential}
           onClick={cred => onDownload(cred, 'exe')}
         />

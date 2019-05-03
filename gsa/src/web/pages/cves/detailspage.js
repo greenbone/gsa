@@ -105,11 +105,13 @@ const Details = ({entity, links = true}) => {
               {certs.map(cert => (
                 <TableRow key={cert.name}>
                   <TableData>
-                    <CertLink
-                      id={cert.name}
-                      type={cert.cert_type}
-                      textOnly={!links}
-                    />
+                    <span>
+                      <CertLink
+                        id={cert.name}
+                        type={cert.cert_type}
+                        textOnly={!links}
+                      />
+                    </span>
                   </TableData>
                   <TableData>{cert.title}</TableData>
                 </TableRow>
@@ -123,9 +125,11 @@ const Details = ({entity, links = true}) => {
         <DetailsBlock title={_('Vulnerable Products')}>
           <Layout flex="column">
             {products.map(product => (
-              <DetailsLink key={product} type="cpe" id={product}>
-                {product}
-              </DetailsLink>
+              <span key={product}>
+                <DetailsLink type="cpe" id={product}>
+                  {product}
+                </DetailsLink>
+              </span>
             ))}
           </Layout>
         </DetailsBlock>
@@ -135,9 +139,11 @@ const Details = ({entity, links = true}) => {
         <DetailsBlock title={_('NVTs addressing this CVE')}>
           <Layout flex="column">
             {nvts.map(nvt => (
-              <DetailsLink key={nvt.id} type="nvt" id={nvt.id}>
-                {nvt.name}
-              </DetailsLink>
+              <span key={nvt.id}>
+                <DetailsLink type="nvt" id={nvt.id}>
+                  {nvt.name}
+                </DetailsLink>
+              </span>
             ))}
           </Layout>
         </DetailsBlock>

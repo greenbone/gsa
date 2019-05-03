@@ -36,6 +36,8 @@ import PortListDialog from '../portlists/dialog.js';
 
 import TargetDialog from './dialog.js';
 
+const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP 2012-02-10
+
 const id_or__ = value => {
   return isDefined(value) ? value.id : UNSET_VALUE;
 };
@@ -127,7 +129,11 @@ class TargetComponent extends React.Component {
         });
       });
     } else {
-      this.loadAll();
+      this.loadAll().then(() => {
+        this.setState({
+          port_list_id: DEFAULT_PORT_LIST_ID,
+        });
+      });
 
       this.setState({
         targetDialogVisible: true,
@@ -140,7 +146,6 @@ class TargetComponent extends React.Component {
         in_use: undefined,
         name: undefined,
         port: undefined,
-        port_list_id: undefined,
         reverse_lookup_only: undefined,
         reverse_lookup_unify: undefined,
         smb_credential_id: undefined,

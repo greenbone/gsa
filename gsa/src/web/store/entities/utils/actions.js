@@ -16,7 +16,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import Filter, {ALL_FILTER} from 'gmp/models/filter';
+
 import {pluralizeType} from 'gmp/utils/entitytype';
+
+import {isDefined} from 'gmp/utils/identity';
 
 export const types = {
   ENTITIES_LOADING_REQUEST: 'ENTITIES_LOADING_REQUEST',
@@ -82,6 +86,38 @@ export const createLoadEntities = ({
     return Promise.resolve();
   }
 
+  dispatch(actions.request(filter));
+
+  return gmp[pluralizeType(entityType)].get({filter}).then(
+    response => {
+      const {data, meta} = response;
+      const {filter: loadedFilter, counts} = meta;
+      return dispatch(actions.success(data, filter, loadedFilter, counts));
+    },
+    error => dispatch(actions.error(error, filter)),
+  );
+};
+
+export const createLoadAllEntities = ({
+  selector,
+  actions,
+  entityType,
+}) => gmp => filter => (dispatch, getState) => {
+  const rootState = getState();
+  const state = selector(rootState);
+
+  if (isDefined(filter)) {
+    filter = isDefined(filter.toFilterString)
+      ? filter.all()
+      : Filter.fromString(filter).all();
+  } else {
+    filter = ALL_FILTER;
+  }
+
+  if (state.isLoadingEntities(filter)) {
+    // we are already loading data
+    return Promise.resolve();
+  }
   dispatch(actions.request(filter));
 
   return gmp[pluralizeType(entityType)].get({filter}).then(

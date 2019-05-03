@@ -23,8 +23,6 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import {withRouter} from 'react-router-dom';
-
 import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
@@ -38,6 +36,8 @@ import {isDefined} from 'gmp/utils/identity';
 import withDownload from 'web/components/form/withDownload';
 
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
+
+import withDefaultFilter from 'web/entities/withDefaultFilter';
 
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
 
@@ -181,13 +181,9 @@ class ReportDetails extends React.Component {
 
   componentDidMount() {
     this.isRunning = true;
-    const {filter: filterString} = this.props.location.query;
 
-    const filter = isDefined(filterString)
-      ? Filter.fromString(filterString)
-      : undefined;
+    this.load();
 
-    this.load(filter);
     this.props.loadFilters();
     this.props.loadReportFormats();
     this.props.loadReportComposerDefaults();
@@ -258,7 +254,7 @@ class ReportDetails extends React.Component {
 
   reload() {
     // reload data from backend
-    this.load();
+    this.load(this.state.lastFilter);
   }
 
   getReloadInterval() {
@@ -392,9 +388,9 @@ class ReportDetails extends React.Component {
     const {
       deltaReportId,
       entity,
-      filter,
       gmp,
       reportComposerDefaults,
+      reportFilter,
       reportFormats = [],
       onDownload,
     } = this.props;
@@ -405,7 +401,7 @@ class ReportDetails extends React.Component {
       storeAsDefault,
     } = state;
 
-    const newFilter = filter.copy();
+    const newFilter = reportFilter.copy();
     newFilter.set('notes', includeNotes);
     newFilter.set('overrides', includeOverrides);
 
@@ -458,44 +454,43 @@ class ReportDetails extends React.Component {
 
   handleFilterCreated(filter) {
     this.handleInteraction();
-
     this.load(filter);
     this.props.loadFilters();
   }
 
   handleFilterAddLogLevel() {
-    const {filter} = this.props;
-    let levels = filter.get('levels', '');
+    const {reportFilter} = this.props;
+    let levels = reportFilter.get('levels', '');
 
     this.handleInteraction();
 
     if (!levels.includes('g')) {
       levels += 'g';
-      const lfilter = filter.copy();
+      const lfilter = reportFilter.copy();
       lfilter.set('levels', levels);
       this.load(lfilter);
     }
   }
 
   handleFilterRemoveSeverity() {
-    const {filter} = this.props;
+    const {reportFilter} = this.props;
 
     this.handleInteraction();
 
-    if (filter.has('severity')) {
-      const lfilter = filter.copy();
+    if (reportFilter.has('severity')) {
+      const lfilter = reportFilter.copy();
       lfilter.delete('severity');
       this.load(lfilter);
     }
   }
 
   handleFilterDecreaseMinQoD() {
-    const {filter} = this.props;
+    const {reportFilter} = this.props;
 
     this.handleInteraction();
 
-    if (filter.has('min_qod')) {
-      const lfilter = filter.copy();
+    if (reportFilter.has('min_qod')) {
+      const lfilter = reportFilter.copy();
       lfilter.set('min_qod', 30);
       this.load(lfilter);
     }
@@ -538,9 +533,9 @@ class ReportDetails extends React.Component {
     const {
       entity,
       entityError,
-      filter,
       filters = [],
       isLoading,
+      reportFilter,
       reportFormats,
       onInteraction,
       reportComposerDefaults,
@@ -569,7 +564,7 @@ class ReportDetails extends React.Component {
               activeTab={activeTab}
               entity={entity}
               entityError={entityError}
-              filter={filter}
+              filter={reportFilter}
               filters={filters}
               isLoading={isLoading}
               isUpdating={isUpdating}
@@ -603,16 +598,18 @@ class ReportDetails extends React.Component {
         </TargetComponent>
         {showFilterDialog && (
           <FilterDialog
-            filter={filter}
+            filter={reportFilter}
             delta={isDefined(report) && report.isDeltaReport()}
             onFilterChanged={this.handleFilterChange}
             onCloseClick={this.handleFilterDialogClose}
+            createFilterType="result"
+            onFilterCreated={this.handleFilterCreated}
           />
         )}
         {showDownloadReportDialog && (
           <DownloadReportDialog
             defaultReportFormatId={reportComposerDefaults.defaultReportFormatId}
-            filter={filter}
+            filter={reportFilter}
             includeNotes={reportComposerDefaults.includeNotes}
             includeOverrides={reportComposerDefaults.includeOverrides}
             reportFormats={reportFormats}
@@ -642,6 +639,7 @@ ReportDetails.propTypes = {
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   reportComposerDefaults: PropTypes.object,
+  reportFilter: PropTypes.filter,
   reportFormats: PropTypes.array,
   reportId: PropTypes.id,
   saveReportComposerDefaults: PropTypes.func.isRequired,
@@ -694,7 +692,7 @@ const mapStateToProps = (rootState, {match}) => {
   return {
     entity,
     entityError,
-    filter: getFilter(entity),
+    reportFilter: getFilter(entity),
     isLoading: !isDefined(entity),
     filters: filterSel.getEntities(RESULTS_FILTER_FILTER),
     reportFormats: reportFormatsSel.getEntities(REPORT_FORMATS_FILTER),
@@ -705,10 +703,10 @@ const mapStateToProps = (rootState, {match}) => {
 };
 
 export default compose(
-  withRouter,
   withGmp,
   withDialogNotification,
   withDownload,
+  withDefaultFilter('result'),
   connect(
     mapStateToProps,
     mapDispatchToProps,

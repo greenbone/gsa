@@ -47,6 +47,16 @@ const Header = ({
         >
           {_('Name')}
         </TableHead>
+        <TableHead
+          width="5%"
+          rowSpan="2"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'type' : false}
+          onSortChange={onSortChange}
+        >
+          {_('Type')}
+        </TableHead>
         <TableHead width="10%" colSpan="2">
           {_('Family')}
         </TableHead>
