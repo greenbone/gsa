@@ -46,7 +46,7 @@ class ReportReport extends Model {
   parseProperties(elem) {
     const copy = super.parseProperties(elem);
 
-    const {delta, severity, scan_start, scan_end, task, scan} = elem;
+    const {delta, severity, scan_start, scan_end, task, scan, timestamp} = elem;
 
     const filter = parseFilter(elem);
 
@@ -93,6 +93,10 @@ class ReportReport extends Model {
 
     if (isDefined(scan_end)) {
       copy.scan_end = parseDate(scan_end);
+    }
+
+    if (isDefined(timestamp)) {
+      copy.timestamp = parseDate(timestamp);
     }
 
     if (isDefined(scan) && isDefined(scan.task) && isDefined(scan.task.slave)) {
