@@ -156,7 +156,6 @@ module.exports = {
     'prefer-rest-params': 'error', // require using the rest parameters instead of arguments
     'prefer-spread': 'warn', // prefer spread operator Xyz.func(...args) instead of Xyz.func.apply(Xyz, args)
     'prefer-template': 'off',
-    'require-jsdoc': 'off',
     'sort-imports': 'off',
     'sort-keys': 'off',
     'spaced-comment': [
@@ -165,15 +164,6 @@ module.exports = {
       'always',
     ],
     'symbol-description': 'error', // require symbol description: Symbol('some description')
-    'valid-jsdoc': [
-      'warn',
-      {
-        requireReturnType: false,
-        requireReturn: false,
-        requireParamDescription: false,
-        requireReturnDescription: false,
-      },
-    ],
     yoda: [
       // disallow yoda conditions: if (1 === b)
       'error',
