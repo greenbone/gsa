@@ -103,7 +103,7 @@ class Titlebar extends React.Component {
 
     event.preventDefault();
 
-    gmp.logout().then(() => {
+    gmp.doLogout().then(() => {
       history.push('/login?type=logout');
     });
   }
