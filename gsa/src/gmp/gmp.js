@@ -124,7 +124,7 @@ class Gmp {
     });
   }
 
-  logout() {
+  doLogout() {
     if (this.isLoggedIn()) {
       const url = this.buildUrl('logout');
       const args = {token: this.settings.token};
@@ -135,24 +135,25 @@ class Gmp {
           args,
           transform: DefaultTransform,
         })
-        .then(xhr => {
-          this.clearToken();
-          log.debug('Logged out successfully');
-          return xhr;
-        })
         .catch(err => {
-          this.clearToken();
           log.error('Error on logout', err);
+        })
+        .then(() => {
+          this.logout();
         });
-
-      for (const listener of this._logoutListeners) {
-        listener();
-      }
 
       return promise;
     }
 
     return Promise.resolve();
+  }
+
+  logout() {
+    this.clearToken();
+
+    for (const listener of this._logoutListeners) {
+      listener();
+    }
   }
 
   isLoggedIn() {
