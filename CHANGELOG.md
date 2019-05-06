@@ -38,6 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix creating permissions in Roles dialog [#1365](https://github.com/greenbone/gsa/pull/1365)
 - Fix cloning permission for Roles [#1361](https://github.com/greenbone/gsa/pull/1361)
 - Use correct loaded filter in entities container [#1359](https://github.com/greenbone/gsa/pull/1359)
 - Fix parsing a filter id of '0' [#1358](https://github.com/greenbone/gsa/pull/1358)

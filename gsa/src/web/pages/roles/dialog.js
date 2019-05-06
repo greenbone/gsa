@@ -47,13 +47,13 @@ import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
 const Dialog = ({
-  all_groups,
-  all_permissions,
-  all_users,
+  allGroups,
+  allPermissions,
+  allUsers,
   error,
-  group_id,
+  groupId,
   permissions,
-  permission_name,
+  permissionName,
   role,
   title = _('New Role'),
   onClose,
@@ -65,17 +65,16 @@ const Dialog = ({
 }) => {
   const DEFAULTS = {name: _('Unnamed')};
 
-  const is_edit = isDefined(role);
-  const has_groups = isDefined(all_groups) && all_groups.length > 0;
-  const has_permissions =
-    isDefined(all_permissions) && all_permissions.length > 0;
+  const isEdit = isDefined(role);
+  const hasGroups = isDefined(allGroups) && allGroups.length > 0;
+  const hasPermissions = isDefined(allPermissions) && allPermissions.length > 0;
 
-  const groupOptions = map(all_groups, group => ({
+  const groupOptions = map(allGroups, group => ({
     label: group.name,
     value: group.id,
   }));
 
-  const permissionsOptions = map(all_permissions, permission => {
+  const permissionsOptions = map(allPermissions, permission => {
     const labelString =
       permission.name + ' (' + permissionDescription(permission.name) + ')';
     return {
@@ -84,7 +83,7 @@ const Dialog = ({
     };
   });
 
-  const usersOptions = map(all_users, user => ({
+  const usersOptions = map(allUsers, user => ({
     label: user.name,
     value: user.name,
   }));
@@ -132,7 +131,7 @@ const Dialog = ({
               />
             </FormGroup>
 
-            {is_edit && (
+            {isEdit && (
               <Layout flex="column">
                 <h2>{_('New Permission')}</h2>
 
@@ -141,15 +140,15 @@ const Dialog = ({
                   align={['space-between', 'center']}
                 >
                   <Select
-                    name="permission_name"
+                    name="permissionName"
                     items={permissionsOptions}
-                    value={state.permission_name}
+                    value={state.permissionName}
                     onChange={onValueChange}
                   />
                   <Button
                     title={_('Create Permission')}
-                    disabled={state.in_use || !has_permissions}
-                    value={{role_id: state.id, name: state.permission_name}}
+                    disabled={state.in_use || !hasPermissions}
+                    value={{roleId: state.id, name: state.permissionName}}
                     onClick={onCreatePermission}
                   />
                 </FormGroup>
@@ -161,15 +160,15 @@ const Dialog = ({
                   align={['space-between', 'center']}
                 >
                   <Select
-                    name="group_id"
+                    name="groupId"
                     items={groupOptions}
-                    value={state.group_id}
+                    value={state.groupId}
                     onChange={onValueChange}
                   />
                   <Button
                     title={_('Create Permission')}
-                    disabled={!has_groups}
-                    value={{role_id: state.id, group_id: state.group_id}}
+                    disabled={!hasGroups}
+                    value={{roleId: state.id, groupId: state.groupId}}
                     onClick={onCreateSuperPermission}
                   />
                 </FormGroup>
@@ -199,8 +198,8 @@ const Dialog = ({
                               <TrashIcon
                                 title={_('Move permission to trashcan')}
                                 value={{
-                                  role_id: state.id,
-                                  permission_id: permission.id,
+                                  roleId: state.id,
+                                  permissionId: permission.id,
                                 }}
                                 onClick={onDeletePermission}
                               />
@@ -221,12 +220,12 @@ const Dialog = ({
 };
 
 Dialog.propTypes = {
-  all_groups: PropTypes.array,
-  all_permissions: PropTypes.array,
-  all_users: PropTypes.array,
+  allGroups: PropTypes.array,
+  allPermissions: PropTypes.array,
+  allUsers: PropTypes.array,
   error: PropTypes.string,
-  group_id: PropTypes.id,
-  permission_name: PropTypes.string,
+  groupId: PropTypes.id,
+  permissionName: PropTypes.string,
   permissions: PropTypes.array,
   role: PropTypes.model,
   title: PropTypes.string,

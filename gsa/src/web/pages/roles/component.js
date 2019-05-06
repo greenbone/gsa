@@ -99,45 +99,42 @@ class RoleComponent extends React.Component {
     this.handleInteraction();
   }
 
-  handleCreateSuperPermission({role_id, group_id}) {
+  handleCreateSuperPermission({roleId, groupId}) {
     const {gmp} = this.props;
 
     const promise = gmp.permission.create({
       name: 'Super',
-      resource_type: 'group',
-      resource_id: group_id,
-      role_id,
-      subject_type: 'role',
+      resourceType: 'group',
+      resourceId: groupId,
+      roleId,
+      subjectType: 'role',
     });
 
     this.handleInteraction();
 
-    return this.loadSettings(promise, role_id);
+    return this.loadSettings(promise, roleId);
   }
 
-  handleCreatePermission({role_id, name}) {
+  handleCreatePermission({roleId, name}) {
     const {gmp} = this.props;
 
     const promise = gmp.permission.create({
       name,
-      role_id,
-      subject_type: 'role',
+      roleId,
+      subjectType: 'role',
     });
 
     this.handleInteraction();
 
-    return this.loadSettings(promise, role_id);
+    return this.loadSettings(promise, roleId);
   }
 
-  handleDeletePermission({role_id, permission_id}) {
+  handleDeletePermission({roleId, permissionId}) {
     const {gmp} = this.props;
 
     this.handleInteraction();
 
-    return this.loadSettings(
-      gmp.permission.delete({id: permission_id}),
-      role_id,
-    );
+    return this.loadSettings(gmp.permission.delete({id: permissionId}), roleId);
   }
 
   handleErrorClose() {
@@ -148,17 +145,17 @@ class RoleComponent extends React.Component {
     this.setState({error: error.message});
   }
 
-  loadSettings(promise, role_id) {
+  loadSettings(promise, roleId) {
     const {gmp} = this.props;
 
     return promise
-      .then(() => gmp.role.editRoleSettings({id: role_id}))
+      .then(() => gmp.role.editRoleSettings({id: roleId}))
       .then(response => {
         const settings = response.data;
         this.setState({
           permissions: settings.permissions,
-          all_permissions: settings.all_permissions,
-          permission_name: first(settings.all_permissions).name,
+          allPermissions: settings.all_permissions,
+          permissionName: first(settings.all_permissions).name,
         });
       })
       .catch(error => {
@@ -226,12 +223,12 @@ class RoleComponent extends React.Component {
             })}
             {dialogVisible && (
               <RoleDialog
-                all_users={allUsers}
-                all_groups={allGroups}
-                all_permissions={allPermissions}
+                allUsers={allUsers}
+                allGroups={allGroups}
+                allPermissions={allPermissions}
                 error={error}
-                group_id={groupId}
-                permission_name={permissionName}
+                groupId={groupId}
+                permissionName={permissionName}
                 permissions={permissions}
                 role={role}
                 title={title}
