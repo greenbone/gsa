@@ -75,7 +75,7 @@ import {BROWSER_LANGUAGE} from './locale/languages';
 const log = logger.getLogger('gmp');
 
 class Gmp {
-  constructor(settings = {}) {
+  constructor(settings = {}, http) {
     this.settings = settings;
 
     logger.init(this.settings);
@@ -84,7 +84,7 @@ class Gmp {
 
     this.log = logger;
 
-    this.http = new GmpHttp(this.settings);
+    this.http = isDefined(http) ? http : new GmpHttp(this.settings);
 
     this._login = new LoginCommand(this.http);
 
