@@ -37,16 +37,8 @@ class Rejection {
     this.stack = error.stack;
   }
 
-  isCancel() {
-    return this.reason === Rejection.REASON_CANCEL;
-  }
-
   isError() {
     return this.reason === Rejection.REASON_ERROR;
-  }
-
-  isTimeout() {
-    return this.reason === Rejection.REASON_TIMEOUT;
   }
 
   setMessage(message) {
