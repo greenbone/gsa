@@ -177,7 +177,11 @@ class Http {
     }
 
     promise.catch(request => {
-      const rej = new Rejection(request, Rejection.REASON_ERROR);
+      const {status} = request;
+      const rej = new Rejection(
+        request,
+        status === 401 ? Rejection.REASON_UNAUTHORIZED : Rejection.REASON_ERROR,
+      );
       try {
         reject(this.transformRejection(rej, options));
       } catch (error) {
