@@ -22,6 +22,7 @@ class Rejection {
   static REASON_ERROR = 'error';
   static REASON_TIMEOUT = 'timeout';
   static REASON_CANCEL = 'cancel';
+  static REASON_UNAUTHORIZED = 'unauthorized';
 
   constructor(xhr, reason = Rejection.REASON_ERROR, message = '', error) {
     this.name = 'Rejection';
