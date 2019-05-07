@@ -37,8 +37,10 @@ class StartTimeSelection extends React.Component {
     const {startDate, endDate} = this.props;
 
     this.state = {
+      startDate,
       startHour: startDate.hour(),
       startMinute: startDate.minute(),
+      endDate,
       endHour: endDate.hour(),
       endMinute: endDate.minute(),
     };
@@ -163,8 +165,8 @@ class StartTimeSelection extends React.Component {
 }
 
 StartTimeSelection.propTypes = {
-  endDate: PropTypes.date,
-  startDate: PropTypes.date,
+  endDate: PropTypes.date.isRequired,
+  startDate: PropTypes.date.isRequired,
   timezone: PropTypes.string.isRequired,
   onChanged: PropTypes.func.isRequired,
 };
