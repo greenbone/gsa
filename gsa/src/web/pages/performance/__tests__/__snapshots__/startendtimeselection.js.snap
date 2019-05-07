@@ -1,0 +1,545 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StartTimeSelection tests should render 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c6 {
+  margin-top: -5px;
+}
+
+.c6 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c6 > * {
+  margin-top: 5px;
+}
+
+.c10 {
+  margin-left: -20px;
+}
+
+.c10 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c10 > * {
+  margin-left: 20px;
+}
+
+.c5 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c9 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c9 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c18 {
+  display: inline-block;
+  padding: 0 15px;
+  color: #393637;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 30px;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: #fff;
+  border-radius: 2px;
+  border: 1px solid #aaaaaa;
+  cursor: pointer;
+  overflow: visible;
+  z-index: 1;
+}
+
+.c18:focus,
+.c18:hover {
+  border: 1px solid #393637;
+}
+
+.c18:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background: #66c430;
+  font-weight: bold;
+  color: #fff;
+}
+
+.c18[disabled] {
+  cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+.c18 img {
+  height: 32px;
+  width: 32px;
+  margin-top: 5px 10px 5px -10px;
+  vertical-align: middle;
+}
+
+.c18:link {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #393637;
+}
+
+.c17 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  padding-bottom: 10px;
+}
+
+.c2 {
+  display: inline-block;
+  max-width: 100%;
+  font-weight: bold;
+  text-align: right;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 16.66666667%;
+  margin-left: 0;
+}
+
+.c3 {
+  width: 83.33333333%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.c16 {
+  margin-left: 33.33333333%;
+}
+
+.c11 {
+  border-radius: 2px;
+  border: 1px solid #c8d3d9;
+  background-color: #fff;
+  font-size: 1.1em;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0;
+  vertical-align: middle;
+}
+
+.c12 {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  border: none;
+  background: none;
+  color: inherit;
+  padding: 0;
+  margin: 0.2em 0;
+  vertical-align: middle;
+  margin-left: 0.4em;
+  margin-right: 22px;
+}
+
+.c14 {
+  background-color: #c8d3d9;
+  color: #787878;
+  border-left: 1px solid #393637;
+  width: 16px;
+  height: 50%;
+  font-size: 0.6em;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  vertical-align: middle;
+  position: absolute;
+  right: 0;
+  cursor: default;
+  display: block;
+  overflow: hidden;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.c14:hover {
+  background-color: #66c430;
+  color: #fff;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c14:active {
+  background-color: #fff;
+  color: #519032;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c13 {
+  border-top-right-radius: 1px;
+  top: 0;
+}
+
+.c15 {
+  border-bottom-right-radius: 1px;
+  bottom: 0;
+}
+
+.c8 {
+  margin-left: 5px;
+}
+
+.c8:hover {
+  cursor: pointer;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-right: 5px;
+  width: auto;
+}
+
+<div
+  class="c0"
+>
+  <div
+    class="c1"
+  >
+    <label
+      class="c2"
+      data-testid="formgroup-title"
+    >
+      Timezone
+    </label>
+    <div
+      class="c3 c4"
+      data-testid="timezone"
+      size="10"
+    >
+      CET
+    </div>
+  </div>
+  <div
+    class="c1"
+  >
+    <label
+      class="c2"
+      data-testid="formgroup-title"
+    >
+      Start Time
+    </label>
+    <div
+      class="c3 c4"
+      data-testid="formgroup-content"
+      size="10"
+    >
+      <div
+        class="c5 c4"
+      >
+        <div
+          class="c6 c0"
+          margin="5px"
+        >
+          <div
+            class="react-datepicker-wrapper"
+          >
+            <div
+              class="react-datepicker__input-container"
+            >
+              <div
+                class="c7"
+                width="auto"
+              >
+                01/01/2019
+                <span
+                  class="c8 c9 "
+                >
+                  <svg>
+                    calendar.svg
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="c5 c4"
+          >
+            <div
+              class="c10 c4"
+              margin="20px"
+            >
+              <span
+                class="c11"
+              >
+                <input
+                  class="c12"
+                  data-testid="spinner-input"
+                  max="23"
+                  maxlength="5"
+                  min="0"
+                  name="startHour"
+                  size="4"
+                  value="13"
+                />
+                <span
+                  class="c13 c14"
+                  data-testid="spinner-up"
+                >
+                  ▲
+                </span>
+                <span
+                  class="c15 c14"
+                  data-testid="spinner-down"
+                >
+                  ▼
+                </span>
+              </span>
+               
+              h
+              <span
+                class="c11"
+              >
+                <input
+                  class="c12"
+                  data-testid="spinner-input"
+                  max="59"
+                  maxlength="5"
+                  min="0"
+                  name="startMinute"
+                  size="4"
+                  value="0"
+                />
+                <span
+                  class="c13 c14"
+                  data-testid="spinner-up"
+                >
+                  ▲
+                </span>
+                <span
+                  class="c15 c14"
+                  data-testid="spinner-down"
+                >
+                  ▼
+                </span>
+              </span>
+               
+              m
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="c1"
+  >
+    <label
+      class="c2"
+      data-testid="formgroup-title"
+    >
+      End Time
+    </label>
+    <div
+      class="c3 c4"
+      data-testid="formgroup-content"
+      size="10"
+    >
+      <div
+        class="c5 c4"
+      >
+        <div
+          class="c6 c0"
+          margin="5px"
+        >
+          <div
+            class="react-datepicker-wrapper"
+          >
+            <div
+              class="react-datepicker__input-container"
+            >
+              <div
+                class="c7"
+                width="auto"
+              >
+                01/01/2019
+                <span
+                  class="c8 c9 "
+                >
+                  <svg>
+                    calendar.svg
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="c5 c4"
+          >
+            <div
+              class="c10 c4"
+              margin="20px"
+            >
+              <span
+                class="c11"
+              >
+                <input
+                  class="c12"
+                  data-testid="spinner-input"
+                  max="23"
+                  maxlength="5"
+                  min="0"
+                  name="endHour"
+                  size="4"
+                  value="14"
+                />
+                <span
+                  class="c13 c14"
+                  data-testid="spinner-up"
+                >
+                  ▲
+                </span>
+                <span
+                  class="c15 c14"
+                  data-testid="spinner-down"
+                >
+                  ▼
+                </span>
+              </span>
+               
+              h
+              <span
+                class="c11"
+              >
+                <input
+                  class="c12"
+                  data-testid="spinner-input"
+                  max="59"
+                  maxlength="5"
+                  min="0"
+                  name="endMinute"
+                  size="4"
+                  value="0"
+                />
+                <span
+                  class="c13 c14"
+                  data-testid="spinner-up"
+                >
+                  ▲
+                </span>
+                <span
+                  class="c15 c14"
+                  data-testid="spinner-down"
+                >
+                  ▼
+                </span>
+              </span>
+               
+              m
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="c1"
+  >
+    <div
+      class="c16 c4"
+      data-testid="formgroup-content"
+      offset="4"
+    >
+      <button
+        class="c17 c18"
+        data-testid="update-button"
+      >
+        Update
+      </button>
+    </div>
+  </div>
+</div>
+`;
