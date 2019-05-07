@@ -93,7 +93,9 @@ class StartTimeSelection extends React.Component {
     const {startHour, startMinute, endHour, endMinute} = this.state;
     return (
       <Layout flex="column">
-        <FormGroup title={_('Timezone')}>{timezone}</FormGroup>
+        <FormGroup data-testid="timezone" title={_('Timezone')}>
+          {timezone}
+        </FormGroup>
         <FormGroup title={_('Start Time')}>
           <Divider flex="column">
             <Datepicker
@@ -157,7 +159,9 @@ class StartTimeSelection extends React.Component {
         </FormGroup>
 
         <FormGroup offset="4">
-          <Button onClick={this.handleUpdate}>{_('Update')}</Button>
+          <Button data-testid="update-button" onClick={this.handleUpdate}>
+            {_('Update')}
+          </Button>
         </FormGroup>
       </Layout>
     );
