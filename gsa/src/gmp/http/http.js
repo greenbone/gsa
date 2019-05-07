@@ -185,7 +185,7 @@ class Http {
       try {
         reject(this.transformRejection(rej, options));
       } catch (error) {
-        log.eror('Could not transform rejection', error, rej);
+        log.error('Could not transform rejection', error, rej);
         reject(rej);
       }
     });

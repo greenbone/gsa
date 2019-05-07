@@ -23,7 +23,7 @@ import {types} from './actions';
 import {filterIdentifier} from 'web/store/utils';
 
 /**
- * Return trues if error is not a Rejection class or if Rejection class has a
+ * Return true if error is not a Rejection class or if Rejection class has a
  * reason of error
  *
  * @returns Boolean
