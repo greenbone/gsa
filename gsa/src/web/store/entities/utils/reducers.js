@@ -16,9 +16,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {isDefined} from 'gmp/utils/identity';
+
 import {types} from './actions';
 
 import {filterIdentifier} from 'web/store/utils';
+
+/**
+ * Return true if error is not a Rejection class or if Rejection class has a
+ * reason of error
+ *
+ * @returns Boolean
+ */
+const isError = error => !isDefined(error.isError) || error.isError();
 
 const initialState = {
   byId: {},
@@ -67,10 +77,13 @@ export const createReducer = entityType => {
         delete state[filterString];
         return state;
       case types.ENTITIES_LOADING_ERROR:
-        return {
-          ...state,
-          [filterString]: action.error,
-        };
+        if (isError(action.error)) {
+          return {
+            ...state,
+            [filterString]: action.error,
+          };
+        }
+        return state;
       case types.ENTITY_LOADING_SUCCESS:
         state = {
           ...state,
@@ -78,10 +91,13 @@ export const createReducer = entityType => {
         delete state[action.id];
         return state;
       case types.ENTITY_LOADING_ERROR:
-        return {
-          ...state,
-          [action.id]: action.error,
-        };
+        if (isError(action.error)) {
+          return {
+            ...state,
+            [action.id]: action.error,
+          };
+        }
+        return state;
       default:
         return state;
     }

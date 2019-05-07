@@ -39,6 +39,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 - Don't render *Invalid Date* [#1368](https://github.com/greenbone/gsa/pull/1368)
+- Don't show error message after re-login [#1366](https://github.com/greenbone/gsa/pull/1366)
 - Fix creating permissions in Roles dialog [#1365](https://github.com/greenbone/gsa/pull/1365)
 - Fix cloning permission for Roles [#1361](https://github.com/greenbone/gsa/pull/1361)
 - Use correct loaded filter in entities container [#1359](https://github.com/greenbone/gsa/pull/1359)
