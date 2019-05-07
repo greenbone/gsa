@@ -104,8 +104,8 @@ const FormGroup = ({
         </Title>
       )}
       <FormGroupContent
-        {...other}
         data-testid="formgroup-content"
+        {...other}
         offset={offset}
         size={size}
       >
