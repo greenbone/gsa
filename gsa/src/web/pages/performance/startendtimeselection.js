@@ -20,6 +20,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import Button from 'web/components/form/button';
 import Datepicker from 'web/components/form/datepicker';
 import FormGroup from 'web/components/form/formgroup';
@@ -53,8 +55,8 @@ class StartTimeSelection extends React.Component {
     const {startDate, endDate} = props;
 
     if (
-      props.startDate !== state.prevStartDate ||
-      props.endDate !== state.prevEndDate
+      (isDefined(startDate) && startDate !== state.prevStartDate) ||
+      (isDefined(endDate) && props.endDate !== state.prevEndDate)
     ) {
       return {
         endHour: endDate.hour(),
