@@ -45,6 +45,7 @@ class GmpSettings {
       disableLoginForm = false,
       loglevel = storage.loglevel,
       manualurl = DEFAULT_MANUAL_URL,
+      manualLanguageMapping,
       protocol = global.location.protocol,
       protocoldocurl = DEFAULT_PROTOCOLDOC_URL,
       reloadinterval = DEFAULT_RELOAD_INTERVAL,
@@ -62,6 +63,7 @@ class GmpSettings {
     this.timeout = timeout;
 
     setAndFreeze(this, 'manualurl', manualurl);
+    setAndFreeze(this, 'manualLanguageMapping', manualLanguageMapping);
     setAndFreeze(this, 'protocoldocurl', protocoldocurl);
     setAndFreeze(this, 'server', server);
     setAndFreeze(this, 'protocol', protocol);
