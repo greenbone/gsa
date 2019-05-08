@@ -717,7 +717,9 @@ handle_static_config (http_connection_t *connection, const char *method,
   g_debug ("Requesting url %s for static config path %s", url, path);
 
   response_data = cmd_response_data_new ();
-  cmd_response_data_set_allow_caching (response_data, 1);
+
+  // don't cache config file
+  cmd_response_data_set_allow_caching (response_data, FALSE);
 
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     {
