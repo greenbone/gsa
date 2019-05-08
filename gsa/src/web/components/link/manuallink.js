@@ -50,9 +50,9 @@ const getLanguagePath = (
 };
 
 const ManualLink = ({anchor, gmp, page, searchTerm, lang, ...props}) => {
-  const {manualurl, manualLanguageMapping} = gmp.settings;
+  const {manualUrl, manualLanguageMapping} = gmp.settings;
 
-  let url = manualurl;
+  let url = manualUrl;
   if (!url.endsWith('/')) {
     url += '/';
   }

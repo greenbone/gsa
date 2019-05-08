@@ -26,7 +26,7 @@ import ManualLink from '../manuallink';
 
 const createGmp = (settings = {}) => ({
   settings: {
-    manualurl: 'http://foo.bar',
+    manualUrl: 'http://foo.bar',
     ...settings,
   },
 });
