@@ -69,7 +69,7 @@ describe('ManualLink tests', () => {
     const {element} = render(<ManualLink title="Foo" page="foo" />);
 
     expect(element).toHaveAttribute('title', 'Foo');
-    expect(element).toHaveAttribute('href', 'http://foo.bar/en/foo.html');
+    expect(element).toHaveAttribute('href', 'http://foo.bar/de/foo.html');
     expect(element).toHaveAttribute('target', '_blank');
     expect(element).toHaveAttribute('rel', 'noopener noreferrer');
   });
