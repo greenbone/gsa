@@ -763,6 +763,7 @@ init_http_handlers ()
   url_handler_add_func (url_handlers, "^/config\\.*js$", handle_static_config);
   url_handler_add_func (url_handlers, "^/static/(img|js|css)/.+$",
                         handle_static_file);
+  url_handler_add_func (url_handlers, "^/manual/.+$", handle_static_file);
 
   http_handler_t *gmp_handler = http_handler_new (handle_setup_user);
   http_handler_add (gmp_handler, http_handler_new (handle_setup_credentials));
