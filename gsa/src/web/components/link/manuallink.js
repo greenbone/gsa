@@ -35,28 +35,29 @@ const LANGUAGE_MAPPING = {
 
 const DEFAULT_LANGUAGE_PATH = 'en';
 
-const get_language_path = () => {
-  const lang = getLocale();
-
+const getLanguagePath = (
+  lang = getLocale(),
+  languageMapping = LANGUAGE_MAPPING,
+) => {
   if (!isDefined(lang)) {
     return DEFAULT_LANGUAGE_PATH;
   }
 
   const code = lang.slice(0, 2);
-  const path = LANGUAGE_MAPPING[code];
+  const path = languageMapping[code];
 
   return isDefined(path) ? path : DEFAULT_LANGUAGE_PATH;
 };
 
-const ManualLink = ({anchor, gmp, page, searchTerm, ...props}) => {
-  const {manualurl} = gmp.settings;
+const ManualLink = ({anchor, gmp, page, searchTerm, lang, ...props}) => {
+  const {manualurl, manualLanguageMapping} = gmp.settings;
 
   let url = manualurl;
   if (!url.endsWith('/')) {
     url += '/';
   }
 
-  url += get_language_path() + '/' + page + '.html';
+  url += getLanguagePath(lang, manualLanguageMapping) + '/' + page + '.html';
 
   if (page === 'search' && isDefined(searchTerm)) {
     url += '?q=' + searchTerm;
@@ -69,6 +70,7 @@ const ManualLink = ({anchor, gmp, page, searchTerm, ...props}) => {
 ManualLink.propTypes = {
   anchor: PropTypes.string,
   gmp: PropTypes.gmp.isRequired,
+  lang: PropTypes.string,
   page: PropTypes.string.isRequired,
   searchTerm: PropTypes.string,
 };
