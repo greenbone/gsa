@@ -42,7 +42,7 @@ const get_language_path = () => {
     return DEFAULT_LANGUAGE_PATH;
   }
 
-  const code = lang.slice(0, 1);
+  const code = lang.slice(0, 2);
   const path = LANGUAGE_MAPPING[code];
 
   return isDefined(path) ? path : DEFAULT_LANGUAGE_PATH;
