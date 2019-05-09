@@ -39,6 +39,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix scheduled task tooltip time format [#1382](https://github.com/greenbone/gsa/pull/1382)
 - Use German manual for *DE* locale [#1372](https://github.com/greenbone/gsa/pull/1372)
 - Load all container tasks for report import dialog from redux store [#1370](https://github.com/greenbone/gsa/pull/1370)
 - Don't render *Invalid Date* [#1368](https://github.com/greenbone/gsa/pull/1368)
