@@ -18,7 +18,7 @@
  */
 import {connect} from 'react-redux';
 
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
+import {dateTimeWithTimeZone, ensureDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -26,8 +26,11 @@ import {getTimezone} from 'web/store/usersettings/selectors';
 
 import PropTypes from 'web/utils/proptypes';
 
-const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) =>
-  isDefined(date) ? formatter(date, timezone) : null;
+const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) => {
+  date = ensureDate(date);
+
+  return !isDefined(date) || !date.isValid() ? null : formatter(date, timezone);
+};
 
 DateTime.propTypes = {
   date: PropTypes.date,

@@ -38,7 +38,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
-- Load all container dialogs for report import dialog from redux store [#1370](https://github.com/greenbone/gsa/pull/1370)
+- Load all container tasks for report import dialog from redux store [#1370](https://github.com/greenbone/gsa/pull/1370)
+- Don't render *Invalid Date* [#1368](https://github.com/greenbone/gsa/pull/1368)
 - Don't show error message after re-login [#1366](https://github.com/greenbone/gsa/pull/1366)
 - Fix creating permissions in Roles dialog [#1365](https://github.com/greenbone/gsa/pull/1365)
 - Fix cloning permission for Roles [#1361](https://github.com/greenbone/gsa/pull/1361)
