@@ -24,6 +24,7 @@ import {withRouter} from 'react-router-dom';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import {setIsLoggedIn} from './store/usersettings/actions';
 import {isLoggedIn} from 'web/store/usersettings/selectors';
 
 import compose from 'web/utils/compose';
@@ -43,6 +44,8 @@ class Authorized extends React.Component {
     this.responseError = this.responseError.bind(this);
 
     this.unsubscribe = gmp.addHttpErrorHandler(this.responseError);
+
+    this.checkIsLoggedIn();
   }
 
   componentWillUnmount() {
@@ -51,24 +54,37 @@ class Authorized extends React.Component {
     }
   }
 
-  responseError(xhr) {
-    const {location} = this.props;
+  componentDidUpdate() {
+    this.checkIsLoggedIn();
+  }
 
-    if (xhr.status === 401 && location.pathname !== '/login') {
-      this.toLoginPage();
+  responseError(xhr) {
+    const {logout} = this.props;
+
+    if (xhr.status === 401) {
+      logout();
       return Promise.resolve(xhr);
     }
     return Promise.reject(xhr);
   }
 
+  checkIsLoggedIn() {
+    if (!this.props.isLoggedIn) {
+      this.toLoginPage();
+    }
+  }
+
   toLoginPage() {
-    const {gmp, history} = this.props;
+    const {history, location} = this.props;
+
+    if (location.pathname === '/login') {
+      // already at login page
+      return;
+    }
 
     history.replace('/login', {
       next: this.props.location.pathname,
     });
-
-    gmp.logout();
   }
 
   render() {
@@ -81,16 +97,27 @@ Authorized.propTypes = {
   history: PropTypes.object.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = rootState => ({
   isLoggedIn: isLoggedIn(rootState),
 });
 
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  logout: () => {
+    gmp.logout();
+    dispatch(setIsLoggedIn(false));
+  },
+});
+
 export default compose(
   withGmp,
   withRouter,
-  connect(mapStateToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(Authorized);
 
 // vim: set ts=2 sw=2 tw=80:

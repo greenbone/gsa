@@ -133,6 +133,14 @@ class LoginPage extends React.Component {
         const {locale, timezone, sessionTimeout} = data;
 
         const {location, history} = this.props;
+
+        this.props.setTimezone(timezone);
+        this.props.setLocale(locale);
+        this.props.setSessionTimeout(sessionTimeout);
+        this.props.setUsername(username);
+        // must be set before changing the location
+        this.props.setIsLoggedIn(true);
+
         if (
           location &&
           location.state &&
@@ -143,12 +151,6 @@ class LoginPage extends React.Component {
         } else {
           history.replace('/');
         }
-
-        this.props.setTimezone(timezone);
-        this.props.setLocale(locale);
-        this.props.setSessionTimeout(sessionTimeout);
-        this.props.setUsername(username);
-        this.props.setIsLoggedIn(true);
       },
       rej => {
         log.error(rej);
