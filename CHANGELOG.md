@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add tooltips to deactivated text fields in AlertDialog [#1269](https://github.com/greenbone/gsa/pull/1269)
 
 ### Changed
+- Don't allow to verify predefined report formats [#1378](https://github.com/greenbone/gsa/pull/1378)
 - Avoid storing config.js in browser cache [#1372](https://github.com/greenbone/gsa/pull/1372)
 - Display data loading errors at list pages [#1349](https://github.com/greenbone/gsa/pull/1349)
 - Improve login page [#1347](https://github.com/greenbone/gsa/pull/1347)
