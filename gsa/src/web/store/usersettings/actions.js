@@ -23,6 +23,7 @@ export const USER_SETTINGS_SET_LOCALE = 'USER_SETTINGS_SET_LOCALE';
 export const USER_SETTINGS_SET_USERNAME = 'USER_SETTINGS_SET_USERNAME';
 export const USER_SETTINGS_SET_SESSION_TIMEOUT =
   'USER_SETTINGS_SET_SESSION_TIMEOUT';
+export const USER_SETTINGS_SET_LOGGED_IN = 'USER_SETTINGS_SET_LOGGED_IN';
 
 export const getReportComposerDefaultsAction = data => ({
   type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
@@ -57,6 +58,11 @@ export const setUsername = username => ({
 export const setSessionTimeout = timeout => ({
   type: USER_SETTINGS_SET_SESSION_TIMEOUT,
   timeout,
+});
+
+export const setIsLoggedIn = isLoggedIn => ({
+  type: USER_SETTINGS_SET_LOGGED_IN,
+  isLoggedIn: isLoggedIn === true,
 });
 
 export const renewSessionTimeout = gmp => () => dispatch =>

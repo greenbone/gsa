@@ -29,10 +29,9 @@ import Comment from 'web/components/comment/comment';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+import VerifyIcon from 'web/entity/icon/verifyicon';
 
 import ExportIcon from 'web/components/icon/exporticon';
-import Icon from 'web/components/icon/icon';
-import VerifyIcon from 'web/components/icon/verifyicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -84,18 +83,13 @@ const Actions = compose(
         title={_('Export Report Format')}
         onClick={onReportFormatDownloadClick}
       />
-      {capabilities.mayOp('verify_report_format') ? (
-        <VerifyIcon
-          value={entity}
-          title={_('Verify Report Format')}
-          onClick={onReportFormatVerifyClick}
-        />
-      ) : (
-        <Icon
-          img="verify_inactive.svg"
-          title={_('Permission to verify Report Format denied')}
-        />
-      )}
+      <VerifyIcon
+        displayName={_('Report Format')}
+        name="report_format"
+        entity={entity}
+        value={entity}
+        onClick={onReportFormatVerifyClick}
+      />
     </IconDivider>
   ),
 );
