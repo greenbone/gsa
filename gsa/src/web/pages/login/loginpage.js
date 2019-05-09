@@ -48,6 +48,7 @@ import {
   setSessionTimeout,
   setUsername,
   updateTimezone,
+  setIsLoggedIn,
 } from 'web/store/usersettings/actions';
 
 import LoginForm from './loginform';
@@ -147,6 +148,7 @@ class LoginPage extends React.Component {
         this.props.setLocale(locale);
         this.props.setSessionTimeout(sessionTimeout);
         this.props.setUsername(username);
+        this.props.setIsLoggedIn(true);
       },
       rej => {
         log.error(rej);
@@ -212,6 +214,7 @@ LoginPage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
+  setIsLoggedIn: PropTypes.func.isRequired,
   setLocale: PropTypes.func.isRequired,
   setSessionTimeout: PropTypes.func.isRequired,
   setTimezone: PropTypes.func.isRequired,
@@ -223,6 +226,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   setLocale: locale => gmp.setLocale(locale),
   setSessionTimeout: timeout => dispatch(setSessionTimeout(timeout)),
   setUsername: username => dispatch(setUsername(username)),
+  setIsLoggedIn: value => dispatch(setIsLoggedIn(value)),
 });
 
 export default compose(
