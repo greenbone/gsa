@@ -2828,6 +2828,9 @@ main (int argc, char **argv)
 
   option_context =
     g_option_context_new ("- Greenbone Security Assistant Daemon");
+
+  g_option_context_set_summary (option_context, COPYRIGHT);
+
   g_option_context_add_main_entries (option_context, option_entries, NULL);
   if (!g_option_context_parse (option_context, &argc, &argv, &error))
     {
@@ -2872,7 +2875,6 @@ main (int argc, char **argv)
           printf ("gnutls %s\n", gnutls_check_version (NULL));
           printf ("libmicrohttpd %s\n", MHD_get_version ());
         }
-      printf (COPYRIGHT);
       exit (EXIT_SUCCESS);
     }
 

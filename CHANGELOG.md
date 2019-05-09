@@ -16,6 +16,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Removed
 
+- Remove copyright from gsad version output [#1379](https://github.com/greenbone/gsa/pull/1379)
+
 [Unreleased]: https://github.com/greenbone/gsa/compare/gsa-8.0...master
 
 ## [8.0.1] - (unreleased)
