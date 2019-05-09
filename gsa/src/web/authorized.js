@@ -18,9 +18,13 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import {withRouter} from 'react-router-dom';
 
 import {isDefined} from 'gmp/utils/identity';
+
+import {isLoggedIn} from 'web/store/usersettings/selectors';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -68,27 +72,25 @@ class Authorized extends React.Component {
   }
 
   render() {
-    const {gmp} = this.props;
-
-    if (gmp.isLoggedIn()) {
-      return this.props.children;
-    }
-
-    this.toLoginPage();
-
-    return null;
+    return this.props.isLoggedIn ? this.props.children : null;
   }
 }
 
 Authorized.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   history: PropTypes.object.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
 };
+
+const mapStateToProps = rootState => ({
+  isLoggedIn: isLoggedIn(rootState),
+});
 
 export default compose(
   withGmp,
   withRouter,
+  connect(mapStateToProps),
 )(Authorized);
 
 // vim: set ts=2 sw=2 tw=80:

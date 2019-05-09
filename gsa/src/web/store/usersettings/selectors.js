@@ -32,4 +32,7 @@ export const getSessionTimeout = rootState =>
 
 export const getUsername = rootState => rootState.userSettings.username;
 
+export const isLoggedIn = rootState =>
+  rootState.userSettings.isLoggedIn === true;
+
 // vim: set ts=2 sw=2 tw=80:

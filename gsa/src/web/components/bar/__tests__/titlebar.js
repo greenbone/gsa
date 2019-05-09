@@ -21,7 +21,7 @@ import React from 'react';
 import {rendererWith} from 'web/utils/testing';
 
 import Titlebar from '../titlebar';
-import {setUsername} from 'web/store/usersettings/actions';
+import {setIsLoggedIn, setUsername} from 'web/store/usersettings/actions';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -29,30 +29,32 @@ setLocale('en');
 
 describe('Titlebar tests', () => {
   test('should render content if user is logged in', () => {
-    const isLoggedIn = jest.fn().mockReturnValue(true);
-    const gmp = {isLoggedIn, settings: {vendorVersion: ''}};
+    const gmp = {settings: {vendorVersion: ''}};
+
     const {render, store} = rendererWith({gmp, router: true, store: true});
+
     store.dispatch(setUsername('username'));
+    store.dispatch(setIsLoggedIn(true));
 
     const {baseElement} = render(<Titlebar />);
 
     expect(baseElement).toMatchSnapshot();
-    expect(isLoggedIn).toHaveBeenCalled();
     const links = baseElement.querySelectorAll('a');
     expect(links[1]).toHaveTextContent('username');
     expect(baseElement).not.toHaveTextContent('Vendor Version');
   });
 
   test('should not render content if user is logged out', () => {
-    const isLoggedIn = jest.fn().mockReturnValue(false);
-    const gmp = {isLoggedIn, settings: {vendorVersion: 'Vendor Version'}};
+    const gmp = {settings: {vendorVersion: 'Vendor Version'}};
+
     const {render, store} = rendererWith({gmp, router: true, store: true});
+
     store.dispatch(setUsername('username'));
+    store.dispatch(setIsLoggedIn(false));
 
     const {baseElement} = render(<Titlebar />);
 
     expect(baseElement).toMatchSnapshot();
-    expect(isLoggedIn).toHaveBeenCalled();
     expect(baseElement).not.toHaveTextContent('username');
     expect(baseElement).toHaveTextContent('Vendor Version');
   });
