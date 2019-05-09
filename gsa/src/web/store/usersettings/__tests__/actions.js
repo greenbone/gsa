@@ -25,6 +25,7 @@ import {
   getReportComposerDefaultsAction,
   loadReportComposerDefaults,
   saveReportComposerDefaults,
+  setIsLoggedIn,
   setLocale,
   setSessionTimeout,
   setTimezone,
@@ -36,6 +37,7 @@ import {
   USER_SETTINGS_SET_SESSION_TIMEOUT,
   USER_SETTINGS_SET_TIMEZONE,
   USER_SETTINGS_SET_USERNAME,
+  USER_SETTINGS_SET_LOGGED_IN,
 } from '../actions';
 
 describe('settings actions tests', () => {
@@ -64,6 +66,21 @@ describe('settings actions tests', () => {
     expect(setSessionTimeout('12345')).toEqual({
       type: USER_SETTINGS_SET_SESSION_TIMEOUT,
       timeout: '12345',
+    });
+  });
+
+  test('should create setIsLoggedIn action', () => {
+    expect(setIsLoggedIn(true)).toEqual({
+      type: USER_SETTINGS_SET_LOGGED_IN,
+      isLoggedIn: true,
+    });
+    expect(setIsLoggedIn(false)).toEqual({
+      type: USER_SETTINGS_SET_LOGGED_IN,
+      isLoggedIn: false,
+    });
+    expect(setIsLoggedIn('foo')).toEqual({
+      type: USER_SETTINGS_SET_LOGGED_IN,
+      isLoggedIn: false,
     });
   });
 
