@@ -22,20 +22,20 @@ import _ from 'gmp/locale';
 
 import {YES_VALUE} from 'gmp/parser';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderSelectItems} from '../../utils/render.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import FileField from 'web/components/form/filefield';
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
+import YesNoRadio from 'web/components/form/yesnoradio';
 
-import FileField from '../../components/form/filefield.js';
-import FormGroup from '../../components/form/formgroup.js';
-import Select from '../../components/form/select.js';
-import YesNoRadio from '../../components/form/yesnoradio.js';
+import NewIcon from 'web/components/icon/newicon';
 
-import NewIcon from '../../components/icon/newicon.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 
 const ImportDialog = ({
   in_assets = YES_VALUE,
