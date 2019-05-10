@@ -87,6 +87,10 @@ class EntityContainer extends React.Component {
 
   startTimer() {
     if (!this.isRunning || isDefined(this.timer)) {
+      log.debug('Not starting timer', {
+        isRunning: this.isRunning,
+        timer: this.timer,
+      });
       return;
     }
 
