@@ -57,7 +57,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix rendering DateTime without dates being passed [#1343](https://github.com/greenbone/gsa/pull/1343)
 - Fix restarting reload timers
   [#1341](https://github.com/greenbone/gsa/pull/1341),
-  [#1351](https://github.com/greenbone/gsa/pull/1351)
+  [#1351](https://github.com/greenbone/gsa/pull/1351),
+  [#1389](https://github.com/greenbone/gsa/pull/1389)
 - Fix list of excluded hosts formatting [#1340](https://github.com/greenbone/gsa/pull/1340)
 - Fix installation of locale files [#1330](https://github.com/greenbone/gsa/pull/1330)
 - Fix list of options of possible Filter types [#1326](https://github.com/greenbone/gsa/pull/1326)
