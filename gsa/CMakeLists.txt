@@ -587,6 +587,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/entity/icon/editicon.js
      ${GSA_SRC_DIR}/src/web/entity/icon/observericon.js
      ${GSA_SRC_DIR}/src/web/entity/icon/trashicon.js
+     ${GSA_SRC_DIR}/src/web/entity/icon/verifyicon.js
      ${GSA_SRC_DIR}/src/web/entity/info.js
      ${GSA_SRC_DIR}/src/web/entity/link.js
      ${GSA_SRC_DIR}/src/web/entity/note.js

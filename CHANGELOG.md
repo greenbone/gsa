@@ -38,6 +38,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add tooltips to deactivated text fields in AlertDialog [#1269](https://github.com/greenbone/gsa/pull/1269)
 
 ### Changed
+- Link to search in the manual for vulnerabilities [#1391](https://github.com/greenbone/gsa/pull/1391)
+- Separate tasks using this scan config with commas [#1384](https://github.com/greenbone/gsa/pull/1384)
+- Don't allow to verify predefined report formats [#1378](https://github.com/greenbone/gsa/pull/1378)
+- Avoid storing config.js in browser cache [#1372](https://github.com/greenbone/gsa/pull/1372)
 - Display data loading errors at list pages [#1349](https://github.com/greenbone/gsa/pull/1349)
 - Improve login page [#1347](https://github.com/greenbone/gsa/pull/1347)
 - Remove options for not implemented languages [#1344](https://github.com/greenbone/gsa/pull/1344)
@@ -54,11 +58,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Improve EditScanConfigDialog performance (delete styles from svg-Icons) [#1388](https://github.com/greenbone/gsa/pull/1388)
+- Fix race condition in EditUserSettingsDialog and loading all default filters [#1383](https://github.com/greenbone/gsa/pull/1383)
+- Fix scheduled task tooltip time format [#1382](https://github.com/greenbone/gsa/pull/1382)
+- Fix updating Titlebar after session timeout [#1377](https://github.com/greenbone/gsa/pull/1377)
+- Use German manual for *DE* locale [#1372](https://github.com/greenbone/gsa/pull/1372)
+- Load all container tasks for report import dialog from redux store [#1370](https://github.com/greenbone/gsa/pull/1370)
+- Don't render *Invalid Date* [#1368](https://github.com/greenbone/gsa/pull/1368)
+- Don't show error message after re-login [#1366](https://github.com/greenbone/gsa/pull/1366)
+- Fix creating permissions in Roles dialog [#1365](https://github.com/greenbone/gsa/pull/1365)
+- Fix cloning permission for Roles [#1361](https://github.com/greenbone/gsa/pull/1361)
+- Use correct loaded filter in entities container [#1359](https://github.com/greenbone/gsa/pull/1359)
+- Fix parsing a filter id of '0' [#1358](https://github.com/greenbone/gsa/pull/1358)
+- Parse report timestamp as date object [#1357](https://github.com/greenbone/gsa/pull/1357)
+- Don't crash topology chart if host has no severity [#1356](https://github.com/greenbone/gsa/pull/1356)
 - Fix loading time measurements for list pages [#1352](https://github.com/greenbone/gsa/pull/1352)
 - Fix rendering DateTime without dates being passed [#1343](https://github.com/greenbone/gsa/pull/1343)
 - Fix restarting reload timers
   [#1341](https://github.com/greenbone/gsa/pull/1341),
-  [#1351](https://github.com/greenbone/gsa/pull/1351)
+  [#1351](https://github.com/greenbone/gsa/pull/1351),
+  [#1389](https://github.com/greenbone/gsa/pull/1389)
 - Fix list of excluded hosts formatting [#1340](https://github.com/greenbone/gsa/pull/1340)
 - Fix installation of locale files [#1330](https://github.com/greenbone/gsa/pull/1330)
 - Fix list of options of possible Filter types [#1326](https://github.com/greenbone/gsa/pull/1326)

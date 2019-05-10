@@ -18,6 +18,8 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -28,7 +30,10 @@ import ScheduleIcon from 'web/components/icon/scheduleicon';
 
 import DetailsLink from 'web/components/link/detailslink';
 
-const TaskScheduleIcon = ({size, links = true, schedule}) => {
+import {dateTimeWithTimeZone} from 'gmp/locale/date';
+import {getTimezone} from 'web/store/usersettings/selectors';
+
+const TaskScheduleIcon = ({size, links = true, schedule, timezone}) => {
   if (
     schedule.userCapabilities.areDefined() &&
     schedule.userCapabilities.length === 0
@@ -55,7 +60,7 @@ const TaskScheduleIcon = ({size, links = true, schedule}) => {
   } else if (count === 1) {
     title = _('View Details of Schedule {{name}} (Next due: {{time}} Once)', {
       name,
-      time: nextDate,
+      time: dateTimeWithTimeZone(nextDate, timezone),
     });
   } else if (count > 1) {
     title = _(
@@ -63,14 +68,14 @@ const TaskScheduleIcon = ({size, links = true, schedule}) => {
         '{{time}}, {{periods}} more times )',
       {
         name,
-        time: nextDate,
+        time: dateTimeWithTimeZone(nextDate, timezone),
         periods: count,
       },
     );
   } else {
     title = _('View Details of Schedule {{name}} (Next due: {{time}})', {
       name,
-      time: nextDate,
+      time: dateTimeWithTimeZone(nextDate, timezone),
     });
   }
 
@@ -91,8 +96,13 @@ TaskScheduleIcon.propTypes = {
   schedule: PropTypes.model.isRequired,
   schedulePeriods: PropTypes.number,
   size: PropTypes.iconSize,
+  timezone: PropTypes.string,
 };
 
-export default TaskScheduleIcon;
+const mapStateToProps = rootState => ({
+  timezone: getTimezone(rootState),
+});
+
+export default connect(mapStateToProps)(TaskScheduleIcon);
 
 // vim: set ts=2 sw=2 tw=80:

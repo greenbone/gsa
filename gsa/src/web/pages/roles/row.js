@@ -58,7 +58,7 @@ const Actions = withEntitiesActions(
       />
       <CloneIcon
         displayName={_('Role')}
-        name="user"
+        name="role"
         entity={entity}
         title={_('Clone Role')}
         value={entity}

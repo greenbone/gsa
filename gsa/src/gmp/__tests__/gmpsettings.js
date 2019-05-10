@@ -39,7 +39,8 @@ describe('GmpSettings tests', () => {
     expect(settings.loglevel).toEqual(DEFAULT_LOG_LEVEL);
     expect(settings.reloadinterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.locale).toBeUndefined();
-    expect(settings.manualurl).toEqual(DEFAULT_MANUAL_URL);
+    expect(settings.manualUrl).toEqual(DEFAULT_MANUAL_URL);
+    expect(settings.manualLanguageMapping).toBeUndefined();
     expect(settings.protocol).toEqual('http:');
     expect(settings.protocoldocurl).toEqual(DEFAULT_PROTOCOLDOC_URL);
     expect(settings.server).toEqual('localhost');
@@ -63,7 +64,10 @@ describe('GmpSettings tests', () => {
       reloadinterval: 10,
       locale: 'en',
       loglevel: 'error',
-      manualurl: 'http://manual',
+      manualUrl: 'http://manual',
+      manualLanguageMapping: {
+        foo: 'bar',
+      },
       protocol: 'http',
       protocoldocurl: 'http://protocol',
       server: 'localhost',
@@ -80,7 +84,8 @@ describe('GmpSettings tests', () => {
 
     expect(settings.reloadinterval).toEqual(10);
     expect(settings.locale).toBeUndefined();
-    expect(settings.manualurl).toEqual('http://manual');
+    expect(settings.manualUrl).toEqual('http://manual');
+    expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual('http://protocol');
     expect(settings.server).toEqual('localhost');
@@ -118,7 +123,8 @@ describe('GmpSettings tests', () => {
 
     expect(settings.reloadinterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.locale).toEqual('en');
-    expect(settings.manualurl).toEqual(DEFAULT_MANUAL_URL);
+    expect(settings.manualUrl).toEqual(DEFAULT_MANUAL_URL);
+    expect(settings.manualLanguageMapping).toBeUndefined();
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual(DEFAULT_PROTOCOLDOC_URL);
     expect(settings.server).toEqual('foo');
@@ -136,7 +142,8 @@ describe('GmpSettings tests', () => {
     const storage = createStorage({
       reloadinterval: 20,
       locale: 'de',
-      manualurl: 'http://ipsum',
+      manualUrl: 'http://ipsum',
+      manualLanguageMapping: {lorem: 'ipsum'},
       protocol: 'https',
       protocoldocurl: 'http://lorem',
       server: 'foo.bar',
@@ -152,7 +159,8 @@ describe('GmpSettings tests', () => {
     const settings = new GmpSettings(storage, {
       reloadinterval: 10,
       locale: 'en',
-      manualurl: 'http://manual',
+      manualUrl: 'http://manual',
+      manualLanguageMapping: {foo: 'bar'},
       protocol: 'http',
       protocoldocurl: 'http://protocol',
       server: 'localhost',
@@ -167,7 +175,8 @@ describe('GmpSettings tests', () => {
 
     expect(settings.reloadinterval).toEqual(10);
     expect(settings.locale).toEqual('de');
-    expect(settings.manualurl).toEqual('http://manual');
+    expect(settings.manualUrl).toEqual('http://manual');
+    expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual('http://protocol');
     expect(settings.server).toEqual('localhost');
@@ -225,7 +234,8 @@ describe('GmpSettings tests', () => {
       reloadinterval: 10,
       locale: 'en',
       loglevel: 'error',
-      manualurl: 'http://manual',
+      manualUrl: 'http://manual',
+      manualLanguageMapping: {foo: 'bar'},
       protocol: 'http',
       protocoldocurl: 'http://protocol',
       server: 'localhost',
@@ -241,9 +251,13 @@ describe('GmpSettings tests', () => {
     });
 
     expect(() => {
-      settings.manualurl = 'foo';
+      settings.manualUrl = 'foo';
     }).toThrow();
-    expect(settings.manualurl).toEqual('http://manual');
+    expect(settings.manualUrl).toEqual('http://manual');
+    expect(() => {
+      settings.manualLanguageMapping = {lorem: 'ipsum'};
+    }).toThrow();
+    expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
     expect(() => {
       settings.protocoldocurl = 'foo';
     }).toThrow();

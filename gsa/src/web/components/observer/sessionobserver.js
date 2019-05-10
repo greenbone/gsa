@@ -55,6 +55,8 @@ class Ping extends React.Component {
       log.debug('clearing ping timer', this.timer);
 
       global.clearTimeout(this.timer);
+
+      this.timer = undefined;
     }
   }
 

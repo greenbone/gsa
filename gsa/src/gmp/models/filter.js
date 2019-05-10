@@ -72,6 +72,10 @@ class Filter extends Model {
 
     ret.filter_type = ret._type;
 
+    if (ret.id === UNKNOWN_FILTER_ID) {
+      ret.id = undefined;
+    }
+
     if (isDefined(ret.keywords)) {
       forEach(ret.keywords.keyword, keyword => {
         const {relation, value, column: key} = keyword;

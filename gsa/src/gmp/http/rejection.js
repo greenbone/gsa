@@ -22,6 +22,7 @@ class Rejection {
   static REASON_ERROR = 'error';
   static REASON_TIMEOUT = 'timeout';
   static REASON_CANCEL = 'cancel';
+  static REASON_UNAUTHORIZED = 'unauthorized';
 
   constructor(xhr, reason = Rejection.REASON_ERROR, message = '', error) {
     this.name = 'Rejection';
@@ -37,16 +38,8 @@ class Rejection {
     this.stack = error.stack;
   }
 
-  isCancel() {
-    return this.reason === Rejection.REASON_CANCEL;
-  }
-
   isError() {
     return this.reason === Rejection.REASON_ERROR;
-  }
-
-  isTimeout() {
-    return this.reason === Rejection.REASON_TIMEOUT;
   }
 
   setMessage(message) {

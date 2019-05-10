@@ -24,9 +24,10 @@ import {rendererWith} from 'web/utils/testing';
 
 import ManualLink from '../manuallink';
 
-const createGmp = () => ({
+const createGmp = (settings = {}) => ({
   settings: {
-    manualurl: 'http://foo.bar',
+    manualUrl: 'http://foo.bar',
+    ...settings,
   },
 });
 
@@ -69,7 +70,7 @@ describe('ManualLink tests', () => {
     const {element} = render(<ManualLink title="Foo" page="foo" />);
 
     expect(element).toHaveAttribute('title', 'Foo');
-    expect(element).toHaveAttribute('href', 'http://foo.bar/en/foo.html');
+    expect(element).toHaveAttribute('href', 'http://foo.bar/de/foo.html');
     expect(element).toHaveAttribute('target', '_blank');
     expect(element).toHaveAttribute('rel', 'noopener noreferrer');
   });
@@ -84,6 +85,29 @@ describe('ManualLink tests', () => {
     expect(element).toHaveAttribute('href', 'http://foo.bar/en/foo.html');
     expect(element).toHaveAttribute('target', '_blank');
     expect(element).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  test('should render fallback to english locale', () => {
+    const {render} = rendererWith({gmp: createGmp()});
+    const {element} = render(<ManualLink title="Foo" lang="foo" page="foo" />);
+
+    expect(element).toHaveAttribute('title', 'Foo');
+    expect(element).toHaveAttribute('href', 'http://foo.bar/en/foo.html');
+    expect(element).toHaveAttribute('target', '_blank');
+    expect(element).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  test('should use manual language mapping', () => {
+    const {render} = rendererWith({
+      gmp: createGmp({
+        manualLanguageMapping: {
+          de: 'foo',
+        },
+      }),
+    });
+    const {element} = render(<ManualLink title="Foo" lang="de" page="foo" />);
+
+    expect(element).toHaveAttribute('href', 'http://foo.bar/foo/foo.html');
   });
 });
 

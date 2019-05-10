@@ -97,10 +97,14 @@ let UserSettingsDialog = ({
   reportFormatsFilter,
   resultsFilter,
   rolesFilter,
+  scannersFilter,
   schedulesFilter,
   tagsFilter,
   targetsFilter,
   tasksFilter,
+  ticketsFilter,
+  usersFilter,
+  vulnerabilitiesFilter,
   cpeFilter,
   cveFilter,
   nvtFilter,
@@ -155,10 +159,14 @@ let UserSettingsDialog = ({
     reportFormatsFilter,
     resultsFilter,
     rolesFilter,
+    scannersFilter,
     schedulesFilter,
     tagsFilter,
     targetsFilter,
     tasksFilter,
+    ticketsFilter,
+    usersFilter,
+    vulnerabilitiesFilter,
     cpeFilter,
     cveFilter,
     nvtFilter,
@@ -245,6 +253,7 @@ let UserSettingsDialog = ({
                     configsFilter={values.configsFilter}
                     credentialsFilter={values.credentialsFilter}
                     filtersFilter={values.filtersFilter}
+                    groupsFilter={values.groupsFilter}
                     hostsFilter={values.hostsFilter}
                     notesFilter={values.notesFilter}
                     operatingSystemsFilter={values.operatingSystemsFilter}
@@ -255,10 +264,14 @@ let UserSettingsDialog = ({
                     reportFormatsFilter={values.reportFormatsFilter}
                     resultsFilter={values.resultsFilter}
                     rolesFilter={values.rolesFilter}
+                    scannersFilter={values.scannersFilter}
                     schedulesFilter={values.schedulesFilter}
                     tagsFilter={values.tagsFilter}
                     targetsFilter={values.targetsFilter}
                     tasksFilter={values.tasksFilter}
+                    ticketsFilter={values.ticketsFilter}
+                    usersFilter={values.usersFilter}
+                    vulnerabilitiesFilter={values.vulnerabilitiesFilter}
                     cpeFilter={values.cpeFilter}
                     cveFilter={values.cveFilter}
                     nvtFilter={values.nvtFilter}
@@ -310,6 +323,7 @@ UserSettingsDialog.propTypes = {
   dynamicSeverity: PropTypes.string,
   filters: PropTypes.array,
   filtersFilter: PropTypes.string,
+  groupsFilter: PropTypes.string,
   hostsFilter: PropTypes.string,
   listExportFileName: PropTypes.string,
   maxRowsPerPage: PropTypes.string,
@@ -332,6 +346,7 @@ UserSettingsDialog.propTypes = {
   resultsFilter: PropTypes.string,
   rolesFilter: PropTypes.string,
   rowsPerPage: PropTypes.string,
+  scannersFilter: PropTypes.string,
   schedules: PropTypes.array,
   schedulesFilter: PropTypes.string,
   secInfoFilter: PropTypes.string,
@@ -340,8 +355,11 @@ UserSettingsDialog.propTypes = {
   targets: PropTypes.array,
   targetsFilter: PropTypes.string,
   tasksFilter: PropTypes.string,
+  ticketsFilter: PropTypes.string,
   timezone: PropTypes.string,
   userInterfaceLanguage: PropTypes.string,
+  usersFilter: PropTypes.string,
+  vulnerabilitiesFilter: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

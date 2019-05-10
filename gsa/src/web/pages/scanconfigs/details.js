@@ -72,11 +72,16 @@ const ScanConfigDetails = ({entity}) => {
               <TableData>{_('Tasks using this Scan Config')}</TableData>
               <TableData>
                 <Divider wrap>
-                  {tasks.map(task => (
-                    <DetailsLink key={task.id} id={task.id} type="task">
-                      {task.name}
-                    </DetailsLink>
-                  ))}
+                  {tasks.map((task, index) => {
+                    return (
+                      <React.Fragment key={task.id}>
+                        <DetailsLink id={task.id} type="task">
+                          {task.name}
+                        </DetailsLink>
+                        {index !== tasks.length - 1 && ','}
+                      </React.Fragment>
+                    );
+                  })}
                 </Divider>
               </TableData>
             </TableRow>

@@ -48,7 +48,7 @@ const ToolBarIcons = () => (
   <Layout>
     <ManualIcon
       page="search"
-      anchor="vulnerabilities"
+      searchTerm="vulnerabilities"
       title={_('Vulnerabilities')}
     />
   </Layout>

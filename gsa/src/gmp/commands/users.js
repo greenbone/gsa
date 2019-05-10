@@ -326,7 +326,7 @@ class UserCommand extends EntityCommand {
       [saveDefaultFilterSettingId('target')]: data.targetsFilter,
       [saveDefaultFilterSettingId('task')]: data.tasksFilter,
       [saveDefaultFilterSettingId('ticket')]: data.ticketsFilter,
-      [saveDefaultFilterSettingId('user')]: data.userssFilter,
+      [saveDefaultFilterSettingId('user')]: data.usersFilter,
       [saveDefaultFilterSettingId('vulnerability')]: data.vulnerabilitiesFilter,
       [saveDefaultFilterSettingId('cpe')]: data.cpeFilter,
       [saveDefaultFilterSettingId('cve')]: data.cveFilter,
