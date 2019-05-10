@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="256" height="256" version="1.1" viewBox="0 0 67.733 67.733" xmlns="http://www.w3.org/2000/svg">
- <style>.gui_icon_class {
-    opacity:1;
-    stroke-linejoin:miter;
-    stroke-opacity:1;
-    fill-opacity:1;
-    fill-rule:nonzero;
-    paint-order:markers fill stroke;
-    stroke:none;
-    stroke-linecap:square;
-    stroke-miterlimit:4;
-    stroke-dasharray:none;
-    stroke-width:18;
-    fill:#000000;
-}</style>
  <g transform="translate(0 -229.27)">
   <g transform="matrix(2.0878 0 0 2.2337 41.673 -337.41)">
    <path class="gui_icon_class" transform="matrix(.12673 0 0 .11845 -19.96 253.7)" d="m128.22-0.45898a24 24 0 0 0-24 24 24 24 0 0 0 15.783 22.518v18.344a80 80 0 0 0-71.516 71.598h-16.484v-16h-32v48h32v-16h16v72h-16v32h192v-32h-16v-72h16v16h32v-48h-32v16h-16.402a80 80 0 0 0-71.598-71.516v-18.271a24 24 0 0 0 16.217-22.672 24 24 0 0 0-24-24zm-32.217 112.46a24 24 0 0 1 24 24 24 24 0 0 1-24 24 24 24 0 0 1-24-24 24 24 0 0 1 24-24zm64 0a24 24 0 0 1 24 24 24 24 0 0 1-24 24 24 24 0 0 1-24-24 24 24 0 0 1 24-24zm-80 80h96v32h-96v-32z"/>

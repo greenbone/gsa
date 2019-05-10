@@ -1,32 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="256" height="256" version="1.1" viewBox="0 0 67.733 67.733" xmlns="http://www.w3.org/2000/svg">
- <style>.gui_icon_class {
-    opacity:1;
-    stroke-linejoin:miter;
-    stroke-opacity:1;
-    fill-opacity:1;
-    fill-rule:nonzero;
-    paint-order:normal;
-    stroke:none;
-    stroke-linecap:square;
-    stroke-miterlimit:4;
-    stroke-dasharray:none;
-    stroke-width:15.99999905;
-    fill:#000000;
-}
-.gui_icon_class {
-    opacity:1;
-    stroke-linejoin:miter;
-    stroke-opacity:1;
-    fill-opacity:1;
-    fill-rule:nonzero;
-    paint-order:markers fill stroke;
-    stroke:none;
-    stroke-linecap:square;
-    stroke-miterlimit:4;
-    stroke-dasharray:none;
-    stroke-width:18;
-    fill:#000000;
-}</style>
  <path class="gui_icon_class" transform="scale(.26458)" d="m240.34 8.2129a16 16 0 0 0-13.709 7.7871h-162.63v16 48 16 16h-33.781a16 16 0 0 0-14.148-8.5488 16 16 0 0 0-16 16 16 16 0 0 0 16 16 16 16 0 0 0 13.504-7.4512h34.426v16 16 48 16h162.64a16 16 0 0 0 13.805 7.9473 16 16 0 0 0 16-16 16 16 0 0 0-16-16 16 16 0 0 0-13.875 8.0527h-146.57v-48h147.51a16 16 0 0 0 13.924 8.1602 16 16 0 0 0 16-16 16 16 0 0 0-16-16 16 16 0 0 0-13.742 7.8398h-147.69v-48h145.97a16 16 0 0 0 13.885 8.0879 16 16 0 0 0 16-16 16 16 0 0 0-16-16 16 16 0 0 0-13.787 7.9121h-146.07v-48h146.38a16 16 0 0 0 13.955 8.2129 16 16 0 0 0 16-16 16 16 0 0 0-16-16z"/>
 </svg>
