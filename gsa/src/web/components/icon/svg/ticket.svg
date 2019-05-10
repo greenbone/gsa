@@ -1,30 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="256" height="256" version="1.1" viewBox="0 0 67.733 67.733" xmlns="http://www.w3.org/2000/svg">
- <style>.gui_icon_class {
-    opacity:1;
-    stroke-linejoin:miter;
-    stroke-opacity:1;
-    fill-opacity:1;
-    fill-rule:nonzero;
-    paint-order:normal;
-    stroke:none;
-    stroke-linecap:square;
-    stroke-miterlimit:4;
-    stroke-dasharray:none;
-    stroke-width:15.99999905;
-    fill:#000000;
-}
-.gui_icon_class {
-    stroke-linejoin:miter;
-    opacity:1;
-    fill-opacity:1;
-    paint-order:stroke fill markers;
-    stroke:none;
-    stroke-linecap:butt;
-    stroke-miterlimit:4;
-    stroke-dasharray:none;
-    fill:#000000;
-}</style>
  <path class="gui_icon_class" transform="scale(.26458)" d="m80 0-28.701 28.701c6.2481 6.2483 6.2481 16.379 0 22.627-6.2483 6.2481-16.379 6.2481-22.627 0l-28.672 28.672 176 176 28.672-28.672c-6.2481-6.2483-6.2481-16.379 0-22.627 6.2483-6.2481 16.379-6.2481 22.627 0l28.701-28.701zm0 24 152 152-8.8438 8.8438c0.18601 0.0504 0.37157 0.10249 0.55664 0.15625-10.888-2.7208-22.406 0.46169-30.354 8.3867-7.7892 7.7982-11.017 19.056-8.543 29.797l-8.8164 8.8164-152-152 8.8359-8.8359c10.731 2.4718 21.979-0.74792 29.777-8.5234 7.7892-7.7982 11.017-19.056 8.543-29.797z" fill-rule="evenodd" stroke-width="1px"/>
  <g stroke-opacity=".56849" stroke-width="4.2333">
   <path class="gui_icon_class" d="m21.167 27.517a2.1167 2.1167 0 0 1-2.1167 2.1167 2.1167 2.1167 0 0 1-2.1167-2.1167 2.1167 2.1167 0 0 1 2.1167-2.1167 2.1167 2.1167 0 0 1 2.1167 2.1167z"/>

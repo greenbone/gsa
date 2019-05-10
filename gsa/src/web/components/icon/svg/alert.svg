@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="256" height="256" version="1.1" viewBox="0 0 67.733 67.733" xmlns="http://www.w3.org/2000/svg">
- <style>.gui_icon_class {
-    opacity:1;
-    stroke-linejoin:miter;
-    stroke-opacity:1;
-    fill-opacity:1;
-    fill-rule:nonzero;
-    paint-order:markers fill stroke;
-    stroke:none;
-    stroke-linecap:square;
-    stroke-miterlimit:4;
-    stroke-dasharray:none;
-    stroke-width:17.99810791;
-    fill:#000000;
-}</style>
  <g transform="translate(0 -229.27)">
   <g transform="rotate(-.93013 55.033 248.32)">
    <path d="m-72.455 271.88 18.979 12.806 6.3499 0.0354 0.30687-55.032-6.3499-0.0354-19.121 12.594-0.03541 6.3499 21.249-14.698-0.25966 46.566-21.084-14.934z" fill-rule="evenodd"/>
