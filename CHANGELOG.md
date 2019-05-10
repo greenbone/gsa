@@ -41,6 +41,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix race condition in EditUserSettingsDialog and loading all default filters [#1383](https://github.com/greenbone/gsa/pull/1383)
 - Fix scheduled task tooltip time format [#1382](https://github.com/greenbone/gsa/pull/1382)
 - Fix updating Titlebar after session timeout [#1377](https://github.com/greenbone/gsa/pull/1377)
 - Use German manual for *DE* locale [#1372](https://github.com/greenbone/gsa/pull/1372)
