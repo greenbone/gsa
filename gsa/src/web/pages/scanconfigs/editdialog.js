@@ -24,7 +24,6 @@ import styled from 'styled-components';
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
 
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
@@ -32,6 +31,8 @@ import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
 import SaveDialog from 'web/components/dialog/savedialog';
+
+import {FoldState} from 'web/components/folding/folding';
 
 import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
@@ -96,9 +97,15 @@ NvtPreferenceDisplay.propTypes = {
   onEditNvtDetailsClick: PropTypes.func.isRequired,
 };
 
-const NvtPreferences = ({config, preferences, onEditNvtDetailsClick}) => {
+const NvtPreferences = ({config, preferences = [], onEditNvtDetailsClick}) => {
   return (
-    <Section foldable title={_('Network Vulnerability Test Preferences')}>
+    <Section
+      foldable
+      initialFoldState={FoldState.FOLDED}
+      title={_('Network Vulnerability Test Preferences ({{counts}})', {
+        counts: preferences.length,
+      })}
+    >
       <Table fixed>
         <TableHeader>
           <TableRow>
@@ -111,16 +118,14 @@ const NvtPreferences = ({config, preferences, onEditNvtDetailsClick}) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {map(preferences, pref => {
-            return (
-              <NvtPreferenceDisplay
-                key={pref.nvt.name + pref.name}
-                config={config}
-                preference={pref}
-                onEditNvtDetailsClick={onEditNvtDetailsClick}
-              />
-            );
-          })}
+          {preferences.map(pref => (
+            <NvtPreferenceDisplay
+              key={pref.nvt.name + pref.name}
+              config={config}
+              preference={pref}
+              onEditNvtDetailsClick={onEditNvtDetailsClick}
+            />
+          ))}
         </TableBody>
       </Table>
     </Section>
@@ -220,9 +225,15 @@ class ScannerPreferences extends React.Component {
   }
 
   render() {
-    const {preferences, values} = this.props;
+    const {preferences = [], values} = this.props;
     return (
-      <Section foldable title={_('Edit Scanner Preferences')}>
+      <Section
+        foldable
+        initialFoldState={FoldState.FOLDED}
+        title={_('Edit Scanner Preferences ({{counts}})', {
+          counts: preferences.length,
+        })}
+      >
         <Table>
           <TableHeader>
             <TableRow>
@@ -232,16 +243,14 @@ class ScannerPreferences extends React.Component {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {map(preferences, pref => {
-              return (
-                <ScannerPreference
-                  key={pref.name}
-                  preference={pref}
-                  value={values[pref.name]}
-                  onPreferenceChange={this.onPreferenceChange}
-                />
-              );
-            })}
+            {preferences.map(pref => (
+              <ScannerPreferences
+                key={pref.name}
+                preference={pref}
+                value={values[pref.name]}
+                onPreferenceChange={this.onPreferenceChange}
+              />
+            ))}
           </TableBody>
         </Table>
       </Section>
@@ -372,14 +381,19 @@ class NvtFamilies extends React.Component {
   render() {
     const {
       config,
-      families,
+      families = [],
       trend,
       select,
       onEditConfigFamilyClick,
     } = this.props;
 
     return (
-      <Section foldable title={_('Edit Network Vulnerability Test Families')}>
+      <Section
+        foldable
+        title={_('Edit Network Vulnerability Test Families ({{counts}})', {
+          counts: families.length,
+        })}
+      >
         <Table>
           <TableHeader>
             <TableRow>
@@ -391,7 +405,7 @@ class NvtFamilies extends React.Component {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {map(families, family => {
+            {families.map(family => {
               const {name} = family;
               return (
                 <NvtFamily
