@@ -25,6 +25,8 @@ import {withRouter} from 'react-router-dom';
 
 import styled from 'styled-components';
 
+import Rejection from 'gmp/http/rejection';
+
 import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
@@ -172,8 +174,10 @@ class LoginPage extends React.Component {
     let message;
 
     if (error) {
-      if (isEmpty(error.message)) {
-        message = _('Unknown error on login');
+      if (error.reason === Rejection.REASON_UNAUTHORIZED) {
+        message = _('Login Failed. Invalid password or username.');
+      } else if (isEmpty(error.message)) {
+        message = _('Unknown error on login.');
       } else {
         message = error.message;
       }
