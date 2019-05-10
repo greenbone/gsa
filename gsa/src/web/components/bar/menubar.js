@@ -18,18 +18,13 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-import withCapabilities from 'web/utils/withCapabilities';
-import compose from 'web/utils/compose';
-
-import Theme from 'web/utils/theme';
 
 import Layout from 'web/components/layout/layout';
 
@@ -37,6 +32,14 @@ import Menu from 'web/components/menu/menu';
 import MenuEntry from 'web/components/menu/menuentry';
 import MenuHelpEntry from 'web/components/menu/menuhelpentry';
 import MenuSection from 'web/components/menu/menusection';
+
+import {isLoggedIn} from 'web/store/usersettings/selectors';
+
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
+import withGmp from 'web/utils/withGmp';
+import withCapabilities from 'web/utils/withCapabilities';
 
 const MENU_BAR_HEIGHT = '35px';
 
@@ -63,8 +66,9 @@ const MenuBarPlaceholder = styled.div`
   height: ${MENU_BAR_HEIGHT};
 `;
 
-const MenuBar = ({gmp, capabilities}) => {
-  if (!gmp.isLoggedIn() || !isDefined(capabilities)) {
+// eslint-disable-next-line no-shadow
+const MenuBar = ({isLoggedIn, capabilities}) => {
+  if (!isLoggedIn || !isDefined(capabilities)) {
     return null;
   }
 
@@ -276,11 +280,17 @@ const MenuBar = ({gmp, capabilities}) => {
 MenuBar.propTypes = {
   capabilities: PropTypes.capabilities,
   gmp: PropTypes.gmp.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
 };
+
+const mapStateToProps = rootState => ({
+  isLoggedIn: isLoggedIn(rootState),
+});
 
 export default compose(
   withCapabilities,
   withGmp,
+  connect(mapStateToProps),
 )(MenuBar);
 
 // vim: set ts=2 sw=2 tw=80:

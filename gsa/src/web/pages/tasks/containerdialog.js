@@ -44,9 +44,9 @@ import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
 const ContainerTaskDialog = ({
   auto_delete = AUTO_DELETE_KEEP,
   auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  comment,
+  comment = '',
   in_assets = YES_VALUE,
-  name,
+  name = '',
   task,
   title = _('New Container Task'),
   onClose,

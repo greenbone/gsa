@@ -25,6 +25,8 @@ import {withRouter} from 'react-router-dom';
 
 import styled from 'styled-components';
 
+import Rejection from 'gmp/http/rejection';
+
 import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
@@ -48,6 +50,7 @@ import {
   setSessionTimeout,
   setUsername,
   updateTimezone,
+  setIsLoggedIn,
 } from 'web/store/usersettings/actions';
 
 import LoginForm from './loginform';
@@ -132,6 +135,14 @@ class LoginPage extends React.Component {
         const {locale, timezone, sessionTimeout} = data;
 
         const {location, history} = this.props;
+
+        this.props.setTimezone(timezone);
+        this.props.setLocale(locale);
+        this.props.setSessionTimeout(sessionTimeout);
+        this.props.setUsername(username);
+        // must be set before changing the location
+        this.props.setIsLoggedIn(true);
+
         if (
           location &&
           location.state &&
@@ -142,11 +153,6 @@ class LoginPage extends React.Component {
         } else {
           history.replace('/');
         }
-
-        this.props.setTimezone(timezone);
-        this.props.setLocale(locale);
-        this.props.setSessionTimeout(sessionTimeout);
-        this.props.setUsername(username);
       },
       rej => {
         log.error(rej);
@@ -168,8 +174,10 @@ class LoginPage extends React.Component {
     let message;
 
     if (error) {
-      if (isEmpty(error.message)) {
-        message = _('Unknown error on login');
+      if (error.reason === Rejection.REASON_UNAUTHORIZED) {
+        message = _('Login Failed. Invalid password or username.');
+      } else if (isEmpty(error.message)) {
+        message = _('Unknown error on login.');
       } else {
         message = error.message;
       }
@@ -212,6 +220,7 @@ LoginPage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
+  setIsLoggedIn: PropTypes.func.isRequired,
   setLocale: PropTypes.func.isRequired,
   setSessionTimeout: PropTypes.func.isRequired,
   setTimezone: PropTypes.func.isRequired,
@@ -223,6 +232,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   setLocale: locale => gmp.setLocale(locale),
   setSessionTimeout: timeout => dispatch(setSessionTimeout(timeout)),
   setUsername: username => dispatch(setUsername(username)),
+  setIsLoggedIn: value => dispatch(setIsLoggedIn(value)),
 });
 
 export default compose(

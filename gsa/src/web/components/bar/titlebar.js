@@ -19,6 +19,8 @@
 
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import {withRouter} from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -33,6 +35,8 @@ import Layout from 'web/components/layout/layout';
 
 import Link from 'web/components/link/link';
 import UserLink from 'web/components/link/userlink';
+
+import {isLoggedIn} from 'web/store/usersettings/selectors';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -103,7 +107,7 @@ class Titlebar extends React.Component {
 
     event.preventDefault();
 
-    gmp.logout().then(() => {
+    gmp.doLogout().then(() => {
       history.push('/login?type=logout');
     });
   }
@@ -114,7 +118,7 @@ class Titlebar extends React.Component {
       <React.Fragment>
         <TitlebarPlaceholder />
         <TitlebarLayout>
-          {gmp.isLoggedIn() ? (
+          {this.props.isLoggedIn ? (
             <React.Fragment>
               <Link to="/" title={_('Dashboard')}>
                 <Greenbone />
@@ -143,11 +147,17 @@ class Titlebar extends React.Component {
 Titlebar.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   history: PropTypes.object.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
 };
+
+const mapStateToProps = rootState => ({
+  isLoggedIn: isLoggedIn(rootState),
+});
 
 export default compose(
   withGmp,
   withRouter,
+  connect(mapStateToProps),
 )(Titlebar);
 
 // vim: set ts=2 sw=2 tw=80:

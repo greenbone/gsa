@@ -20,6 +20,8 @@ import {isFunction} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
 
+import Rejection from 'gmp/http/rejection';
+
 import {filterIdentifier} from 'web/store/utils';
 
 import {createEntitiesActions, createEntityActions} from '../actions';
@@ -453,6 +455,58 @@ describe('entities reducers test', () => {
         [filterId]: {},
       });
     });
+
+    test('should not reduce expected errors', () => {
+      const actions = createEntitiesActions('foo');
+      const reducer = createReducer('foo');
+      const filter = Filter.fromString('name=bar');
+      const filterId = filterIdentifier(filter);
+      const otherFilter = Filter.fromString('name=foo');
+      const otherFilterId = filterIdentifier(otherFilter);
+      const rejection = new Rejection({}, Rejection.REASON_UNAUTHORIZED);
+      const action = actions.error(rejection, filter);
+      const state = {
+        byId: {
+          lorem: {
+            id: 'lorem',
+          },
+          ipsum: {
+            id: 'ipsum',
+          },
+        },
+        errors: {
+          [otherFilterId]: 'Another error',
+        },
+        isLoading: {
+          [otherFilterId]: true,
+        },
+        [otherFilterId]: {
+          ids: ['lorem', 'ipsum'],
+        },
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {
+          lorem: {
+            id: 'lorem',
+          },
+          ipsum: {
+            id: 'ipsum',
+          },
+        },
+        errors: {
+          [otherFilterId]: 'Another error',
+        },
+        isLoading: {
+          [otherFilterId]: true,
+          [filterId]: false,
+        },
+        [otherFilterId]: {
+          ids: ['lorem', 'ipsum'],
+        },
+        [filterId]: {},
+      });
+    });
   });
 
   describe('reducing entity loading requests', () => {
@@ -776,6 +830,44 @@ describe('entities reducers test', () => {
         errors: {
           baz: 'Another error',
           [id]: 'An error',
+        },
+        isLoading: {
+          [id]: false,
+          bar: true,
+        },
+      });
+    });
+
+    test('should not reduce expected errors', () => {
+      const id = 'a1';
+      const actions = createEntityActions('foo');
+      const rejection = new Rejection({}, Rejection.REASON_UNAUTHORIZED);
+      const action = actions.error(id, rejection);
+      const reducer = createReducer('foo');
+      const state = {
+        byId: {
+          baz: {
+            id: 'baz',
+            old: 'mydata',
+          },
+        },
+        errors: {
+          baz: 'Another error',
+        },
+        isLoading: {
+          bar: true,
+        },
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {
+          baz: {
+            id: 'baz',
+            old: 'mydata',
+          },
+        },
+        errors: {
+          baz: 'Another error',
         },
         isLoading: {
           [id]: false,

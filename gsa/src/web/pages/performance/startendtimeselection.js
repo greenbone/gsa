@@ -20,6 +20,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import Button from 'web/components/form/button';
 import Datepicker from 'web/components/form/datepicker';
 import FormGroup from 'web/components/form/formgroup';
@@ -37,8 +39,10 @@ class StartTimeSelection extends React.Component {
     const {startDate, endDate} = this.props;
 
     this.state = {
+      startDate,
       startHour: startDate.hour(),
       startMinute: startDate.minute(),
+      endDate,
       endHour: endDate.hour(),
       endMinute: endDate.minute(),
     };
@@ -51,8 +55,8 @@ class StartTimeSelection extends React.Component {
     const {startDate, endDate} = props;
 
     if (
-      props.startDate !== state.prevStartDate ||
-      props.endDate !== state.prevEndDate
+      (isDefined(startDate) && startDate !== state.prevStartDate) ||
+      (isDefined(endDate) && props.endDate !== state.prevEndDate)
     ) {
       return {
         endHour: endDate.hour(),
@@ -91,7 +95,9 @@ class StartTimeSelection extends React.Component {
     const {startHour, startMinute, endHour, endMinute} = this.state;
     return (
       <Layout flex="column">
-        <FormGroup title={_('Timezone')}>{timezone}</FormGroup>
+        <FormGroup data-testid="timezone" title={_('Timezone')}>
+          {timezone}
+        </FormGroup>
         <FormGroup title={_('Start Time')}>
           <Divider flex="column">
             <Datepicker
@@ -155,7 +161,9 @@ class StartTimeSelection extends React.Component {
         </FormGroup>
 
         <FormGroup offset="4">
-          <Button onClick={this.handleUpdate}>{_('Update')}</Button>
+          <Button data-testid="update-button" onClick={this.handleUpdate}>
+            {_('Update')}
+          </Button>
         </FormGroup>
       </Layout>
     );
@@ -163,8 +171,8 @@ class StartTimeSelection extends React.Component {
 }
 
 StartTimeSelection.propTypes = {
-  endDate: PropTypes.date,
-  startDate: PropTypes.date,
+  endDate: PropTypes.date.isRequired,
+  startDate: PropTypes.date.isRequired,
   timezone: PropTypes.string.isRequired,
   onChanged: PropTypes.func.isRequired,
 };

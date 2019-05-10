@@ -162,7 +162,7 @@ SettingTableRow.propTypes = {
   type: PropTypes.string.isRequired,
 };
 
-const ToolBarIcons = ({onEditSettingsClick}) => (
+const ToolBarIcons = ({disableEditIcon, onEditSettingsClick}) => (
   <Layout>
     <IconDivider>
       <ManualIcon
@@ -172,6 +172,7 @@ const ToolBarIcons = ({onEditSettingsClick}) => (
         title={_('Help: My Settings')}
       />
       <EditIcon
+        disabled={disableEditIcon}
         size="small"
         title={_('Edit My Settings')}
         onClick={onEditSettingsClick}
@@ -181,6 +182,7 @@ const ToolBarIcons = ({onEditSettingsClick}) => (
 );
 
 ToolBarIcons.propTypes = {
+  disableEditIcon: PropTypes.bool.isRequired,
   onEditSettingsClick: PropTypes.func.isRequired,
 };
 
@@ -191,6 +193,7 @@ class UserSettings extends React.Component {
     this.state = {
       activeTab: 0,
       dialogVisible: false,
+      disableEditIcon: true,
     };
 
     this.openDialog = this.openDialog.bind(this);
@@ -224,7 +227,14 @@ class UserSettings extends React.Component {
   }
 
   loadSettings() {
-    this.props.loadFilterDefaults();
+    this.props
+      .loadFilterDefaults()
+      .then(() => {
+        this.setState({disableEditIcon: false});
+      })
+      .catch(() => {
+        this.setState({disableEditIcon: false});
+      });
     this.props.loadSettings();
   }
 
@@ -280,8 +290,7 @@ class UserSettings extends React.Component {
   }
 
   render() {
-    const {activeTab, dialogVisible} = this.state;
-
+    const {activeTab, dialogVisible, disableEditIcon} = this.state;
     const {
       capabilities,
       filters,
@@ -359,7 +368,10 @@ class UserSettings extends React.Component {
     return (
       <ErrorBoundary errElement={_('page')}>
         <Layout flex="column">
-          <ToolBarIcons onEditSettingsClick={this.openDialog} />
+          <ToolBarIcons
+            disableEditIcon={disableEditIcon}
+            onEditSettingsClick={this.openDialog}
+          />
           <Section
             img={<MySettingsIcon size="large" />}
             title={_('My Settings')}
@@ -1105,39 +1117,40 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
   loadCredentials: () => dispatch(loadCredentials(gmp)(ALL_FILTER)),
   loadFilters: () => dispatch(loadFilters(gmp)(ALL_FILTER)),
-  loadFilterDefaults: () => {
-    dispatch(loadUserSettingsDefaultFilter(gmp)('agent'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('alert'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('scanconfig'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('credential'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('filter'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('group'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('host'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('note'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('operatingsystem'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('override'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('permission'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('portlist'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('report'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('reportformat'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('result'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('role'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('scanner'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('schedule'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('tag'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('target'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('task'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('ticket'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('user'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('vulnerability'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('cpe'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('cve'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('certbund'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('dfncert'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('nvt'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('ovaldef'));
-    dispatch(loadUserSettingsDefaultFilter(gmp)('allinfo'));
-  },
+  loadFilterDefaults: () =>
+    Promise.all([
+      dispatch(loadUserSettingsDefaultFilter(gmp)('agent')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('alert')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('scanconfig')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('credential')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('filter')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('group')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('host')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('note')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('operatingsystem')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('override')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('permission')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('portlist')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('report')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('reportformat')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('result')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('role')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('scanner')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('schedule')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('tag')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('target')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('task')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('ticket')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('user')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('vulnerability')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('cpe')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('cve')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('certbund')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('dfncert')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('nvt')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('ovaldef')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('allinfo')),
+    ]),
   loadPortLists: () => dispatch(loadPortLists(gmp)(ALL_FILTER)),
   loadReportFormats: () => dispatch(loadReportFormats(gmp)(ALL_FILTER)),
   loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
