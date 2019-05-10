@@ -1,28 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="256" height="256" version="1.1" viewBox="0 0 67.733 67.733" xmlns="http://www.w3.org/2000/svg">
- <style>.gui_icon_class {
-    opacity:1;
-    stroke-linejoin:miter;
-    stroke-opacity:1;
-    fill-opacity:1;
-    fill-rule:nonzero;
-    paint-order:normal;
-    stroke:none;
-    stroke-linecap:square;
-    stroke-miterlimit:4;
-    stroke-dasharray:none;
-    stroke-width:15.99999905;
-    fill:#000000;
-}
-.gui_icon_class {
-    stroke-linejoin:miter;
-    stroke-opacity:1;
-    fill-opacity:1;
-    fill-rule:evenodd;
-    stroke:none;
-    stroke-linecap:butt;
-    stroke-width:1px;
-    fill:#000000;
-}</style>
  <path class="gui_icon_class" transform="scale(.26458)" d="m16 16v80l136 136 80-80-136-136h-80zm16 16h56l120 120-56 56-120-120v-56zm32 16.146a16 16 0 0 0-16 16 16 16 0 0 0 16 16 16 16 0 0 0 16-16 16 16 0 0 0-16-16z"/>
 </svg>
