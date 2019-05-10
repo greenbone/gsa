@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="256" height="256" version="1.1" viewBox="0 0 67.733 67.733" xmlns="http://www.w3.org/2000/svg">
- <style>.gui_icon_class {
-    stroke-linejoin:miter;
-    stroke-opacity:1;
-    fill-opacity:1;
-    fill-rule:evenodd;
-    stroke:none;
-    stroke-linecap:butt;
-    stroke-width:1px;
-    fill:#000000;
-}</style>
  <g transform="translate(0 -229.27)">
   <g transform="matrix(2.0878 0 0 2.2337 41.673 -337.41)">
    <path class="gui_icon_class" transform="matrix(.12673 0 0 .11845 -19.96 253.7)" d="m104 0a56 56 0 0 0-56 56v144h-48v16h48 16v-160a40 40 0 0 1 40-40 40 40 0 0 1 40 40v160h16 48v40l48-48-48-48v40h-48v-144a56 56 0 0 0-56-56zm-24 200v16h48v-16h-48z"/>
