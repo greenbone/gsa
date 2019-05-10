@@ -40,14 +40,12 @@ describe('LoginPagetests', () => {
   });
 
   test('should allow to login with username and password', () => {
-    const login = jest.fn().mockReturnValue(
-      Promise.resolve({
-        locale: 'locale',
-        username: 'username',
-        token: 'token',
-        timezone: 'timezone',
-      }),
-    );
+    const login = jest.fn().mockResolvedValue({
+      locale: 'locale',
+      username: 'username',
+      token: 'token',
+      timezone: 'timezone',
+    });
     const isLoggedIn = jest.fn().mockReturnValue(false);
     const clearToken = jest.fn();
     const setLocale = jest.fn();
@@ -93,14 +91,12 @@ describe('LoginPagetests', () => {
   });
 
   test('should allow to login as guest', () => {
-    const login = jest.fn().mockReturnValue(
-      Promise.resolve({
-        locale: 'locale',
-        username: 'username',
-        token: 'token',
-        timezone: 'timezone',
-      }),
-    );
+    const login = jest.fn().mockResolvedValue({
+      locale: 'locale',
+      username: 'username',
+      token: 'token',
+      timezone: 'timezone',
+    });
     const isLoggedIn = jest.fn().mockReturnValue(false);
     const clearToken = jest.fn();
     const setLocale = jest.fn();
@@ -124,9 +120,7 @@ describe('LoginPagetests', () => {
   });
 
   test('should display error message', async () => {
-    const login = jest
-      .fn()
-      .mockReturnValue(Promise.reject({message: 'Just a test'}));
+    const login = jest.fn().mockRejectedValue({message: 'Just a test'});
     const isLoggedIn = jest.fn().mockReturnValue(false);
     const clearToken = jest.fn();
     const setLocale = jest.fn();
