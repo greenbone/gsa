@@ -108,17 +108,22 @@ class EntityContainer extends React.Component {
     }
   }
 
+  resetTimer() {
+    this.timer = undefined;
+  }
+
   clearTimer() {
     if (isDefined(this.timer)) {
       log.debug('Clearing reload timer with id', this.timer);
       window.clearTimeout(this.timer);
+      this.resetTimer();
     }
   }
 
   handleTimer() {
     log.debug('Timer', this.timer, 'finished. Reloading data.');
 
-    this.timer = undefined;
+    this.resetTimer();
     this.reload();
   }
 
