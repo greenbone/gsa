@@ -249,8 +249,10 @@ class EntitiesContainer extends React.Component {
         'for',
         this.props.gmpname,
       );
-      this.resetTimer();
+
       global.clearTimeout(this.timer);
+
+      this.resetTimer();
     }
   }
 
