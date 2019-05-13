@@ -54,7 +54,7 @@ class SolutionTypesFilterGroup extends React.Component {
     return (
       <FormGroup title={_('Solution Type')}>
         <Radio
-          checked={solutionType === undefined}
+          checked={!isDefined(solutionType) || solutionType === 'All'}
           name="All"
           onChange={this.handleSolutionTypeChange}
         >
