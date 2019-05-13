@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-10 12:36+0200\n"
-"PO-Revision-Date: 2019-05-10 12:46+0200\n"
+"POT-Creation-Date: 2019-05-13 13:11+0200\n"
+"PO-Revision-Date: 2019-05-13 13:14+0200\n"
 "Last-Translator: Steffen <steffen.waterkamp@greenbone.net>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.2.1\n"
 "X-POOTLE-MTIME: 1556177008.411253\n"
 
 #: gsa/src/gmp/models/scanner.js:51
@@ -4557,7 +4557,7 @@ msgid "Families: Trend"
 msgstr "Familien: Trend"
 
 #: gsa/src/web/pages/scanconfigs/table.js:48
-msgid "NVTS: Total"
+msgid "NVTs: Total"
 msgstr "NVTs: Gesamt"
 
 #: gsa/src/web/pages/scanconfigs/table.js:52
@@ -5844,16 +5844,13 @@ msgid "{{value}}: {{count}} (severity: {{severity}})"
 msgstr "{{value}}: {{count}} (Schweregrad: {{severity}})"
 
 #: gsa/src/web/pages/nvts/dashboard/familydisplay.js:124
-msgid "NVTS by Family (Total: {{count}})"
+#: gsa/src/web/pages/nvts/dashboard/familydisplay.js:165
+msgid "NVTs by Family (Total: {{count}})"
 msgstr "NVTs nach Familie (Gesamt: {{count}})"
 
 #: gsa/src/web/pages/nvts/dashboard/familydisplay.js:161
 msgid "NVT Family"
 msgstr "NVT-Familie"
-
-#: gsa/src/web/pages/nvts/dashboard/familydisplay.js:165
-msgid "NVTs by Family (Total: {{count}})"
-msgstr "NVTs nach Familie (Gesamt: {{count}})"
 
 #: gsa/src/web/pages/nvts/dashboard/familydisplay.js:172
 msgid "Chart: NVTs by Family"
