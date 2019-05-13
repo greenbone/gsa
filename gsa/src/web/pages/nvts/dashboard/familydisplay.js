@@ -121,7 +121,7 @@ export class NvtsFamilyDisplay extends React.Component {
             {...loaderProps}
             dataTransform={transformFamilyData}
             title={({data: tdata}) =>
-              _('NVTS by Family (Total: {{count}})', {count: tdata.total})
+              _('NVTs by Family (Total: {{count}})', {count: tdata.total})
             }
             showToggleLegend={false}
           >
