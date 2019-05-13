@@ -351,28 +351,28 @@ class ReportDetails extends React.Component {
   }
 
   handleAddToAssets() {
-    const {gmp, showSuccessMessage} = this.props;
-    const {entity, filter} = this.state;
+    const {gmp, showSuccessMessage, entity, reportFilter: filter} = this.props;
 
     this.handleInteraction();
 
-    gmp.report.addAssets(entity, {filter}).then(response => {
+    gmp.report.addAssets(entity, {filter}).then(() => {
       showSuccessMessage(
         _(
           'Report content added to Assets with QoD>=70% and Overrides enabled.',
         ),
       );
+      this.reload();
     }, this.handleError);
   }
 
   handleRemoveFromAssets() {
-    const {gmp, showSuccessMessage} = this.props;
-    const {entity, filter} = this.state;
+    const {gmp, showSuccessMessage, entity, reportFilter: filter} = this.props;
 
     this.handleInteraction();
 
-    gmp.report.removeAssets(entity, {filter}).then(response => {
+    gmp.report.removeAssets(entity, {filter}).then(() => {
       showSuccessMessage(_('Report content removed from Assets.'));
+      this.reload();
     }, this.handleError);
   }
 
