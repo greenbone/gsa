@@ -28,6 +28,8 @@ import FormGroup from 'web/components/form/formgroup';
 
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
 
+import {isDefined} from 'gmp/utils/identity';
+
 class SolutionTypesFilterGroup extends React.Component {
   constructor(...args) {
     super(...args);
