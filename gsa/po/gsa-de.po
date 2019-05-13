@@ -7152,10 +7152,8 @@ msgid "Login Failed. Invalid password or username."
 msgstr "Anmeldung fehlgeschlagen. Ungültiger Benutzername oder Passwort."
 
 #: gsa/src/web/pages/login/loginpage.js:180
-#, fuzzy
-#| msgid "Unknown error on login"
 msgid "Unknown error on login."
-msgstr "Unbekannter Fehler beim Login"
+msgstr "Unbekannter Fehler beim Login."
 
 #: gsa/src/web/pages/secinfo/table.js:116
 msgid "No SecInfo Information available"
