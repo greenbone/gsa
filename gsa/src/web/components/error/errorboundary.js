@@ -45,6 +45,8 @@ const ErrorDetails = styled.div`
   padding: 5px;
   max-height: 200px;
   overflow: auto;
+  overflow-x: auto;
+  white-space: pre;
 `;
 
 class ErrorBoundary extends React.Component {
