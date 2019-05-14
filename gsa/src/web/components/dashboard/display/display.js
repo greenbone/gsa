@@ -117,7 +117,9 @@ const Display = ({children, dragHandleProps, title, onRemoveClick}) => {
         </Header>
       </HeaderContainer>
       <DisplayContent>
-        <ErrorBoundary errElement={_('chart')}>{children}</ErrorBoundary>
+        <ErrorBoundary message={_('An error occurred on this chart.')}>
+          {children}
+        </ErrorBoundary>
       </DisplayContent>
     </DisplayView>
   );
