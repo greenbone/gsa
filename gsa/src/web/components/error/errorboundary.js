@@ -19,17 +19,41 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 
+import Divider from 'web/components/layout/divider';
+
 import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 import ErrorMessage from './errormessage';
+
+const ErrorDetailsToggle = styled.span`
+  margin-top: 10px;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
+  }
+`;
+
+const ErrorDetails = styled.div`
+  margin-top: 10px;
+  border: 1px solid ${Theme.mediumLightRed};
+  background-color: ${Theme.white};
+  padding: 5px;
+  max-height: 200px;
+  overflow: auto;
+`;
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {hasError: false};
+    this.state = {hasError: false, showDetails: false};
+
+    this.handleToggleDetails = this.handleToggleDetails.bind(this);
   }
 
   componentDidCatch(error, info) {
@@ -40,13 +64,35 @@ class ErrorBoundary extends React.Component {
     });
   }
 
+  handleToggleDetails() {
+    this.setState(({showDetails}) => ({showDetails: !showDetails}));
+  }
+
   render() {
+    const {hasError, showDetails, error, info} = this.state;
     const {message = _('An error occurred on this page.')} = this.props;
 
-    if (this.state.hasError) {
+    if (hasError) {
       return (
-        <ErrorMessage message={message}>
-          <span>{_('Please try again.')}</span>
+        <ErrorMessage
+          message={message}
+          details={_('Please try again.')}
+          flex="column"
+        >
+          <ErrorDetailsToggle onClick={this.handleToggleDetails}>
+            {showDetails ? _('Hide Error Details') : _('Show Error Details')}
+          </ErrorDetailsToggle>
+          {showDetails && (
+            <ErrorDetails>
+              <Divider flex="column">
+                <h3>
+                  {error.name}: {error.message}
+                </h3>
+                <pre>{info.componentStack}</pre>
+                <pre>{error.stack}</pre>
+              </Divider>
+            </ErrorDetails>
+          )}
         </ErrorMessage>
       );
     }
