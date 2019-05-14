@@ -42,12 +42,12 @@ import withDefaultFilter from 'web/entities/withDefaultFilter';
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
 
 import {
-  loadEntities as loadFilters,
+  loadAllEntities as loadFilters,
   selector as filterSelector,
 } from 'web/store/entities/filters';
 
 import {
-  loadEntities as loadReportFormats,
+  loadAllEntities as loadReportFormats,
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 
@@ -708,8 +708,8 @@ const mapStateToProps = (rootState, {match}) => {
     entityError,
     reportFilter: getFilter(entity),
     isLoading: !isDefined(entity),
-    filters: filterSel.getEntities(RESULTS_FILTER_FILTER),
-    reportFormats: reportFormatsSel.getEntities(REPORT_FORMATS_FILTER),
+    filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
+    reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
     reportId: id,
     deltaReportId: deltaid,
     reportComposerDefaults: getReportComposerDefaults(rootState),
