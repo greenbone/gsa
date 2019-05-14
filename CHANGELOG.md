@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.1] - (unreleased)
 
 ### Added
+- Add test for solution type group [#1402](https://github.com/greenbone/gsa/pull/1402)
 - Add tests for loginpage and structure components [#1390](https://github.com/greenbone/gsa/pull/1390)
 - Add getAllEntities() and loadAllEntities() actions and reducers to entities store [#1345](https://github.com/greenbone/gsa/pull/1345)
 - Add missing tool tips to credential download icons [#1335](https://github.com/greenbone/gsa/pull/1335)

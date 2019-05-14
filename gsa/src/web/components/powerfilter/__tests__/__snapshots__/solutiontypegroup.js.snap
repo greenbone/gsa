@@ -1,0 +1,333 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SolutionTypesFilterGroup tests should render 1`] = `
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c6 {
+  margin-left: -5px;
+}
+
+.c6 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c6 > * {
+  margin-left: 5px;
+}
+
+.c5 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c9 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c9 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  padding-bottom: 10px;
+}
+
+.c1 {
+  display: inline-block;
+  max-width: 100%;
+  font-weight: bold;
+  text-align: right;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 16.66666667%;
+  margin-left: 0;
+}
+
+.c2 {
+  width: 83.33333333%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.c4 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.c8 {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  margin-left: 10px;
+  line-height: normal;
+  width: auto;
+  height: auto;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+<div
+  class="c0"
+>
+  <label
+    class="c1"
+    data-testid="formgroup-title"
+  >
+    Solution Type
+  </label>
+  <div
+    class="c2 c3"
+    data-testid="formgroup-content"
+    size="10"
+  >
+    <label
+      class="c4"
+    >
+      <div
+        class="c5 c3"
+      >
+        <div
+          class="c6 c3"
+          margin="5px"
+        >
+          <input
+            checked=""
+            class="c7 c8"
+            data-testid="radio-input"
+            name="All"
+            type="radio"
+            value=""
+          />
+          <span>
+            All
+          </span>
+        </div>
+      </div>
+    </label>
+    <label
+      class="c4"
+    >
+      <div
+        class="c5 c3"
+      >
+        <div
+          class="c6 c3"
+          margin="5px"
+        >
+          <input
+            class="c7 c8"
+            data-testid="radio-input"
+            name="Workaround"
+            type="radio"
+            value=""
+          />
+          <span
+            alt="Workaround"
+            class="c9 "
+            title="Workaround"
+          >
+            <svg>
+              st_workaround.svg
+            </svg>
+          </span>
+          <span>
+            Workaround
+          </span>
+        </div>
+      </div>
+    </label>
+    <label
+      class="c4"
+    >
+      <div
+        class="c5 c3"
+      >
+        <div
+          class="c6 c3"
+          margin="5px"
+        >
+          <input
+            class="c7 c8"
+            data-testid="radio-input"
+            name="Mitigation"
+            type="radio"
+            value=""
+          />
+          <span
+            alt="Mitigation"
+            class="c9 "
+            title="Mitigation"
+          >
+            <svg>
+              st_mitigate.svg
+            </svg>
+          </span>
+          <span>
+            Mitigation
+          </span>
+        </div>
+      </div>
+    </label>
+    <label
+      class="c4"
+    >
+      <div
+        class="c5 c3"
+      >
+        <div
+          class="c6 c3"
+          margin="5px"
+        >
+          <input
+            class="c7 c8"
+            data-testid="radio-input"
+            name="VendorFix"
+            type="radio"
+            value=""
+          />
+          <span
+            alt="Vendorfix"
+            class="c9 "
+            title="Vendorfix"
+          >
+            <svg>
+              st_vendorfix.svg
+            </svg>
+          </span>
+          <span>
+            Vendor fix
+          </span>
+        </div>
+      </div>
+    </label>
+    <label
+      class="c4"
+    >
+      <div
+        class="c5 c3"
+      >
+        <div
+          class="c6 c3"
+          margin="5px"
+        >
+          <input
+            class="c7 c8"
+            data-testid="radio-input"
+            name="NoneAvailable"
+            type="radio"
+            value=""
+          />
+          <span
+            alt="None available"
+            class="c9 "
+            title="None available"
+          >
+            <svg>
+              st_nonavailable.svg
+            </svg>
+          </span>
+          <span>
+            None available
+          </span>
+        </div>
+      </div>
+    </label>
+    <label
+      class="c4"
+    >
+      <div
+        class="c5 c3"
+      >
+        <div
+          class="c6 c3"
+          margin="5px"
+        >
+          <input
+            class="c7 c8"
+            data-testid="radio-input"
+            name="WillNotFix"
+            type="radio"
+            value=""
+          />
+          <span
+            alt="Will not fix"
+            class="c9 "
+            title="Will not fix"
+          >
+            <svg>
+              st_willnotfix.svg
+            </svg>
+          </span>
+          <span>
+            Will not fix
+          </span>
+        </div>
+      </div>
+    </label>
+  </div>
+</div>
+`;
