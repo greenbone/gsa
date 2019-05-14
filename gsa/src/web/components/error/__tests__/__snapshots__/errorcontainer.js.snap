@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ErrorContainer tests should render 1`] = `
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c0 {
+  padding: 15px;
+  margin: 15px 15px 15px 15px;
+  border: 1px solid #ebccd1;
+  color: #a94442;
+  background-color: #f2dede;
+}
+
+<div
+  class="c0 c1"
+>
+  <span>
+    An error
+  </span>
+</div>
+`;
