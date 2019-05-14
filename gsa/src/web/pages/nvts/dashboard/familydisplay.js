@@ -119,6 +119,7 @@ export class NvtsFamilyDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
+            filter={filter}
             dataTransform={transformFamilyData}
             title={({data: tdata}) =>
               _('NVTs by Family (Total: {{count}})', {count: tdata.total})
