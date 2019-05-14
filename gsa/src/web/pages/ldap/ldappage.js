@@ -24,8 +24,6 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import ErrorBoundary from 'web/components/errorboundary/errorboundary';
-
 import EditIcon from 'web/components/icon/editicon';
 import LdapIcon from 'web/components/icon/ldapicon';
 import ManualIcon from 'web/components/icon/manualicon';
@@ -164,7 +162,7 @@ class LdapAuthentication extends React.Component {
     } = this.state;
 
     return (
-      <ErrorBoundary errElement={_('page')}>
+      <React.Fragment>
         <Layout flex="column">
           <ToolBarIcons onOpenDialogClick={this.openDialog} />
           <Section
@@ -217,7 +215,7 @@ class LdapAuthentication extends React.Component {
             onSave={this.handleSaveSettings}
           />
         )}
-      </ErrorBoundary>
+      </React.Fragment>
     );
   }
 }

@@ -24,8 +24,6 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import ErrorBoundary from 'web/components/errorboundary/errorboundary';
-
 import EditIcon from 'web/components/icon/editicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import RadiusIcon from 'web/components/icon/radiusicon';
@@ -132,8 +130,7 @@ class RadiusAuthentication extends React.Component {
       this.getRadiusAuth();
       this.setState({dialogVisible: false});
     });
-  };
-
+  }
 
   openDialog() {
     this.setState({dialogVisible: true});
@@ -152,7 +149,7 @@ class RadiusAuthentication extends React.Component {
     const {dialogVisible, enable, radiushost, radiuskey} = this.state;
 
     return (
-      <ErrorBoundary errElement={_('page')}>
+      <React.Fragment>
         <Layout flex="column">
           <ToolBarIcons onOpenDialogClick={this.openDialog} />
           <Section
@@ -189,7 +186,7 @@ class RadiusAuthentication extends React.Component {
             onSave={this.handleSaveSettings}
           />
         )}
-      </ErrorBoundary>
+      </React.Fragment>
     );
   }
 }
