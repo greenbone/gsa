@@ -28,7 +28,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import CloseButton from 'web/components/dialog/closebutton';
 
-import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+import ErrorBoundary from 'web/components/error/errorboundary';
 
 export const DISPLAY_HEADER_HEIGHT = 20;
 export const DISPLAY_BORDER_WIDTH = 2;

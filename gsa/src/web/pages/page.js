@@ -34,7 +34,7 @@ import withGmp from 'web/utils/withGmp';
 
 import MenuBar from 'web/components/bar/menubar';
 
-import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+import ErrorBoundary from 'web/components/error/errorboundary';
 
 import Layout from 'web/components/layout/layout';
 

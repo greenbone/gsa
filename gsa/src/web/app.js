@@ -29,7 +29,7 @@ import {_, initLocale} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+import ErrorBoundary from 'web/components/error/errorboundary';
 
 import LocaleObserver from 'web/components/observer/localeobserver';
 

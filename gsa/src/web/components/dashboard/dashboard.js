@@ -51,7 +51,7 @@ import {
   removeDisplay,
 } from 'web/components/dashboard/utils';
 
-import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+import ErrorBoundary from 'web/components/error/errorboundary';
 
 import Loading from 'web/components/loading/loading';
 

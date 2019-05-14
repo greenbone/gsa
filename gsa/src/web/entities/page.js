@@ -32,7 +32,7 @@ import withGmp from 'web/utils/withGmp';
 
 import Toolbar from 'web/components/bar/toolbar';
 
-import ErrorMessage from 'web/components/errorboundary/errormessage';
+import ErrorMessage from 'web/components/error/errormessage';
 
 import Layout from 'web/components/layout/layout';
 
