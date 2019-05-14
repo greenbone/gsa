@@ -1197,7 +1197,7 @@ msgstr "Es ist ein Fehler in diesem Dashboard aufgetreten."
 msgid "Severity"
 msgstr "Schweregrad"
 
-#: gsa/src/web/components/dashboard/display/datadisplay.js:340
+#: gsa/src/web/components/dashboard/display/datadisplay.js:341
 msgid "Applied filter: "
 msgstr "Angewandter Filter: "
 
@@ -1405,14 +1405,22 @@ msgstr "Link folgen"
 msgid "Your session will end at {{date}}"
 msgstr "Ihre Sitzung läuft {{date}} ab"
 
-#: gsa/src/web/components/error/errorboundary.js:44
+#: gsa/src/web/components/error/errorboundary.js:73
 #: gsa/src/web/pages/page.js:93
 msgid "An error occurred on this page."
 msgstr "Es ist ein Fehler auf dieser Seite aufgetreten."
 
-#: gsa/src/web/components/error/errorboundary.js:49
+#: gsa/src/web/components/error/errorboundary.js:80
 msgid "Please try again."
 msgstr "Bitte versuchen Sie es erneut."
+
+#: gsa/src/web/components/error/errorboundary.js:84
+msgid "Hide Error Details"
+msgstr "Fehlerdetails ausblenden"
+
+#: gsa/src/web/components/error/errorboundary.js:84
+msgid "Show Error Details"
+msgstr "Fehlerdetails anzeigen"
 
 #: gsa/src/web/components/pagination/pagination.js:67
 msgid "First"
@@ -6555,7 +6563,8 @@ msgstr "Testen der Benachrichtigung {{name}} ist fehlgeschlagen. {{message}}."
 
 #: gsa/src/web/pages/alerts/component.js:838
 msgid "An error occurred during Testing the alert {{name}}"
-msgstr "Es ist ein Fehler während des Tests der Benachrichtigung {{name}} aufgetreten"
+msgstr ""
+"Es ist ein Fehler während des Tests der Benachrichtigung {{name}} aufgetreten"
 
 #: gsa/src/web/pages/alerts/verinicemethodpart.js:57
 msgid "verinice.PRO URL"
