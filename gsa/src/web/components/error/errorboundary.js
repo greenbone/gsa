@@ -81,17 +81,22 @@ class ErrorBoundary extends React.Component {
           details={_('Please try again.')}
           flex="column"
         >
-          <ErrorDetailsToggle onClick={this.handleToggleDetails}>
+          <ErrorDetailsToggle
+            data-testid="errorboundary-toggle"
+            onClick={this.handleToggleDetails}
+          >
             {showDetails ? _('Hide Error Details') : _('Show Error Details')}
           </ErrorDetailsToggle>
           {showDetails && (
             <ErrorDetails>
               <Divider flex="column">
-                <h3>
+                <h3 data-testid="errorboundary-heading">
                   {error.name}: {error.message}
                 </h3>
-                <pre>{info.componentStack}</pre>
-                <pre>{error.stack}</pre>
+                <pre data-testid="errorboundary-component-stack">
+                  {info.componentStack}
+                </pre>
+                <pre data-testid="errorboundary-error-stack">{error.stack}</pre>
               </Divider>
             </ErrorDetails>
           )}

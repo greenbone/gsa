@@ -29,14 +29,22 @@ import PropTypes from 'web/utils/proptypes';
 
 import ErrorContainer from './errorcontainer';
 
-const ErrorMessage = ({message, details, children, ...props}) => (
-  <ErrorContainer>
+const ErrorMessage = ({
+  message,
+  details,
+  children,
+  'data-testid': dataTestId,
+  ...props
+}) => (
+  <ErrorContainer data-testid={dataTestId}>
     <Divider margin="15px" align={['start', 'start']}>
       <StNonAvailableIcon size="medium" />
       <Layout {...props}>
         <Divider>
-          <b>{message}</b>
-          {isDefined(details) && <span>{details}</span>}
+          <b data-testid="error-message">{message}</b>
+          {isDefined(details) && (
+            <span data-testid="error-details">{details}</span>
+          )}
         </Divider>
         {children}
       </Layout>
@@ -45,6 +53,7 @@ const ErrorMessage = ({message, details, children, ...props}) => (
 );
 
 ErrorMessage.propTypes = {
+  'data-testid': PropTypes.string,
   details: PropTypes.string,
   message: PropTypes.string,
 };
