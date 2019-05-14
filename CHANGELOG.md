@@ -44,6 +44,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Load all filters and report formats at the report details page [#1401](https://github.com/greenbone/gsa/pull/1401)
 - Don't link to hosts not being added to the assets [#1399](https://github.com/greenbone/gsa/pull/1399)
 - Fix adding and removing host assets at the report details [#1397](https://github.com/greenbone/gsa/pull/1397)
 - Fix displaying the observer group name at tasks list page [#1393](https://github.com/greenbone/gsa/pull/1393)
