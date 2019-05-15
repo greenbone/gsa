@@ -1,0 +1,139 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ErrorMessage tests should render 1`] = `
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c3 {
+  margin-left: -15px;
+}
+
+.c3 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c3 > * {
+  margin-left: 15px;
+}
+
+.c6 {
+  margin-left: -5px;
+}
+
+.c6 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c6 > * {
+  margin-left: 5px;
+}
+
+.c2 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c5 {
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+}
+
+.c5 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c0 {
+  padding: 15px;
+  margin: 15px 15px 15px 15px;
+  border: 1px solid #ebccd1;
+  color: #a94442;
+  background-color: #f2dede;
+}
+
+<div
+  class="c0 c1"
+>
+  <div
+    class="c2 c1"
+  >
+    <div
+      class="c3 c4"
+      margin="15px"
+    >
+      <span
+        class="c5 "
+      >
+        <svg>
+          st_nonavailable.svg
+        </svg>
+      </span>
+      <div
+        class="c1"
+      >
+        <div
+          class="c2 c1"
+        >
+          <div
+            class="c6 c1"
+            margin="5px"
+          >
+            <b
+              data-testid="error-message"
+            >
+              An error occurred.
+            </b>
+            <span
+              data-testid="error-details"
+            >
+              Because of foo.
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

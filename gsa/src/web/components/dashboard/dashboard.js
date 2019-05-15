@@ -51,7 +51,7 @@ import {
   removeDisplay,
 } from 'web/components/dashboard/utils';
 
-import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+import ErrorBoundary from 'web/components/error/errorboundary';
 
 import Loading from 'web/components/loading/loading';
 
@@ -286,7 +286,7 @@ export class Dashboard extends React.Component {
     const other = excludeObjectProps(props, ownPropNames);
 
     return (
-      <ErrorBoundary errElement="dashboard">
+      <ErrorBoundary message={_('An error occurred on this dashboard.')}>
         <Grid
           items={convertDisplaysToGridItems(filterDisplays(rows, isAllowed))}
           maxItemsPerRow={maxItemsPerRow}
