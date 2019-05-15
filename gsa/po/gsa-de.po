@@ -1312,7 +1312,7 @@ msgid "Remove"
 msgstr "Entfernen"
 
 #: gsa/src/web/components/dashboard/display/display.js:120
-msgid "An error occurred on this chart."
+msgid "An error occurred in this chart."
 msgstr "Es ist ein Fehler in diesem Graphen aufgetreten."
 
 #: gsa/src/web/components/dashboard/display/filterselection.js:99
@@ -1356,7 +1356,7 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: gsa/src/web/components/dialog/savedialog.js:123
-msgid "An error occurred on this dialog."
+msgid "An error occurred in this dialog."
 msgstr "Es ist ein Fehler in diesem Dialog aufgetreten."
 
 #: gsa/src/web/components/dialog/savedialog.js:161

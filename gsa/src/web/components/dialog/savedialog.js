@@ -120,7 +120,7 @@ class SaveDialogContent extends React.Component {
                   onCloseClick={this.handleErrorClose}
                 />
               )}
-              <ErrorBoundary message={_('An error occurred on this dialog.')}>
+              <ErrorBoundary message={_('An error occurred in this dialog.')}>
                 <ScrollableContent {...heightProps}>
                   {children({
                     values: childValues,
