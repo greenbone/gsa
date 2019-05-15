@@ -51,7 +51,7 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
   }
 
   if (status === TASK_STATUS.stopped || status === TASK_STATUS.interrupted) {
-    text = _('{{status}} at {{progress}} %', {status, progress});
+    text = _('{{status}} at {{progress}} %', {status: text, progress});
   } else if (status === TASK_STATUS.running) {
     text = _('{{progress}} %', {progress});
   }
