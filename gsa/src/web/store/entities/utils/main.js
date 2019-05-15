@@ -17,8 +17,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
-  createEntitiesActions,
-  createEntityActions,
+  createEntitiesLoadingActions,
+  createEntityLoadingActions,
   createLoadAllEntities,
   createLoadEntities,
   createLoadEntity,
@@ -30,8 +30,8 @@ import {createSelector} from './selectors';
 
 export const createAll = entityType => {
   const selector = createSelector(entityType);
-  const entitiesActions = createEntitiesActions(entityType);
-  const entityActions = createEntityActions(entityType);
+  const entitiesActions = createEntitiesLoadingActions(entityType);
+  const entityActions = createEntityLoadingActions(entityType);
   const reducer = createReducer(entityType);
   const loadAllEntities = createLoadAllEntities({
     selector,
