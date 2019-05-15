@@ -52,6 +52,7 @@ const Dialog = ({
   allUsers,
   error,
   groupId,
+  isInUse = false,
   permissions,
   permissionName,
   role,
@@ -88,17 +89,19 @@ const Dialog = ({
     value: user.name,
   }));
 
+  const defaultValues = {
+    ...DEFAULTS,
+    ...role,
+  };
+
   return (
     <SaveDialog
+      defaultValues={defaultValues}
       error={error}
       title={title}
       onClose={onClose}
       onErrorClose={onErrorClose}
       onSave={onSave}
-      defaultValues={{
-        ...DEFAULTS,
-        ...role,
-      }}
     >
       {({values: state, onValueChange}) => {
         return (
@@ -147,7 +150,7 @@ const Dialog = ({
                   />
                   <Button
                     title={_('Create Permission')}
-                    disabled={state.in_use || !hasPermissions}
+                    disabled={isInUse || !hasPermissions}
                     value={{roleId: state.id, name: state.permissionName}}
                     onClick={onCreatePermission}
                   />
@@ -225,6 +228,7 @@ Dialog.propTypes = {
   allUsers: PropTypes.array,
   error: PropTypes.string,
   groupId: PropTypes.id,
+  isInUse: PropTypes.bool,
   permissionName: PropTypes.string,
   permissions: PropTypes.array,
   role: PropTypes.model,

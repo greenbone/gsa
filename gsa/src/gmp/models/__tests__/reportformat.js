@@ -27,7 +27,7 @@ import {testModel} from 'gmp/models/testing';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-testModel(ReportFormat, 'reportformat');
+testModel(ReportFormat, 'reportformat', {testIsActive: false});
 
 describe('ReportFormat model tests', () => {
   test('should parse trust', () => {
