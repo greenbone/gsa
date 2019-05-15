@@ -136,7 +136,6 @@ export const testModelProperties = (
 
     test('should parse props as YES_VALUE/NO_VALUE', () => {
       const elem = {
-        in_use: '1',
         writable: '0',
         orphan: '1',
         active: '0',
@@ -144,11 +143,22 @@ export const testModelProperties = (
       };
       const model = new modelClass(elem);
 
-      expect(model.in_use).toEqual(YES_VALUE);
       expect(model.writable).toEqual(NO_VALUE);
       expect(model.orphan).toEqual(YES_VALUE);
       expect(model.active).toEqual(NO_VALUE);
       expect(model.trash).toEqual(YES_VALUE);
+    });
+
+    test('should parse in_use', () => {
+      const model1 = new modelClass({in_use: '1'});
+      const model2 = new modelClass({in_use: '0'});
+      const model3 = new modelClass({in_use: '2'});
+      const model4 = new modelClass();
+
+      expect(model1.isInUse()).toBe(true);
+      expect(model2.isInUse()).toBe(false);
+      expect(model3.isInUse()).toBe(true);
+      expect(model4.isInUse()).toBe(false);
     });
 
     test('isInTrash() should return correct true/false', () => {
