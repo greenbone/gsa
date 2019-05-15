@@ -134,11 +134,17 @@ export const testModelProperties = (modelClass, type) => {
       const elem = {
         in_use: '1',
         writable: '0',
+        orphan: '1',
+        active: '0',
+        trash: '1',
       };
       const model = new modelClass(elem);
 
       expect(model.in_use).toEqual(YES_VALUE);
       expect(model.writable).toEqual(NO_VALUE);
+      expect(model.orphan).toEqual(YES_VALUE);
+      expect(model.active).toEqual(NO_VALUE);
+      expect(model.trash).toEqual(YES_VALUE);
     });
   });
 
