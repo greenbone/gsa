@@ -65,7 +65,7 @@ class RoleComponent extends React.Component {
       this.setState({
         allUsers,
         dialogVisible: true,
-        in_use: role.isInUse(),
+        isInUse: role.isInUse(),
         role,
         title: _('Edit Role {{name}}', role),
       });
@@ -85,6 +85,7 @@ class RoleComponent extends React.Component {
         allUsers,
         dialogVisible: true,
         role,
+        isInUse: false,
         title: _('New Role'),
       });
     }
@@ -193,6 +194,7 @@ class RoleComponent extends React.Component {
       dialogVisible,
       error,
       groupId,
+      isInUse,
       permissionName,
       permissions,
       role,
@@ -227,6 +229,7 @@ class RoleComponent extends React.Component {
                 allGroups={allGroups}
                 allPermissions={allPermissions}
                 error={error}
+                isInUse={isInUse}
                 groupId={groupId}
                 permissionName={permissionName}
                 permissions={permissions}

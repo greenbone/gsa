@@ -207,14 +207,14 @@ const TargetDialog = ({
                   <Radio
                     title={_('Manual')}
                     name="target_source"
-                    disabled={state.in_use}
+                    disabled={in_use}
                     checked={state.target_source === 'manual'}
                     value="manual"
                     onChange={onValueChange}
                   />
                   <TextField
                     grow="1"
-                    disabled={state.in_use || state.target_source !== 'manual'}
+                    disabled={in_use || state.target_source !== 'manual'}
                     name="hosts"
                     value={state.hosts}
                     onChange={onValueChange}
@@ -225,14 +225,14 @@ const TargetDialog = ({
                   <Radio
                     title={_('From file')}
                     name="target_source"
-                    disabled={state.in_use}
+                    disabled={in_use}
                     checked={state.target_source === 'file'}
                     value="file"
                     onChange={onValueChange}
                   />
                   <FileField
                     name="file"
-                    disabled={state.in_use}
+                    disabled={in_use}
                     onChange={onValueChange}
                   />
                 </Divider>
@@ -245,7 +245,7 @@ const TargetDialog = ({
                       count: state.hosts_count,
                     })}
                     name="target_source"
-                    disabled={state.in_use}
+                    disabled={in_use}
                     checked={state.target_source === 'asset_hosts'}
                     value="asset_hosts"
                     onChange={onValueChange}
@@ -260,7 +260,7 @@ const TargetDialog = ({
                   <Radio
                     title={_('Manual')}
                     name="target_exclude_source"
-                    disabled={state.in_use}
+                    disabled={in_use}
                     checked={state.target_exclude_source === 'manual'}
                     value="manual"
                     onChange={onValueChange}
@@ -268,7 +268,7 @@ const TargetDialog = ({
                   <TextField
                     grow="1"
                     disabled={
-                      state.in_use || state.target_exclude_source !== 'manual'
+                      in_use || state.target_exclude_source !== 'manual'
                     }
                     name="exclude_hosts"
                     value={state.exclude_hosts}
@@ -280,14 +280,14 @@ const TargetDialog = ({
                   <Radio
                     title={_('From file')}
                     name="target_exclude_source"
-                    disabled={state.in_use}
+                    disabled={in_use}
                     checked={state.target_exclude_source === 'file'}
                     value="file"
                     onChange={onValueChange}
                   />
                   <FileField
                     name="exclude_file"
-                    disabled={state.in_use}
+                    disabled={in_use}
                     onChange={onValueChange}
                   />
                 </Divider>
@@ -299,12 +299,12 @@ const TargetDialog = ({
                 <Divider>
                   <Select
                     name="port_list_id"
-                    disabled={state.in_use}
+                    disabled={in_use}
                     items={renderSelectItems(port_lists)}
                     value={state.port_list_id}
                     onChange={onPortListChange}
                   />
-                  {!state.in_use && (
+                  {!in_use && (
                     <Layout>
                       <NewIcon
                         title={_('Create a new port list')}
@@ -334,7 +334,7 @@ const TargetDialog = ({
                 <Divider>
                   <Select
                     name="ssh_credential_id"
-                    disabled={state.in_use}
+                    disabled={in_use}
                     items={renderSelectItems(ssh_credentials, UNSET_VALUE)}
                     value={state.ssh_credential_id}
                     onChange={onSshCredentialChange}
@@ -343,11 +343,11 @@ const TargetDialog = ({
                   <TextField
                     size="6"
                     name="port"
-                    disabled={state.in_use}
+                    disabled={in_use}
                     value={state.port}
                     onChange={onValueChange}
                   />
-                  {!state.in_use && (
+                  {!in_use && (
                     <Layout>
                       <NewIcon
                         title={_('Create a new credential')}
@@ -365,7 +365,7 @@ const TargetDialog = ({
                 <Divider>
                   <Select
                     name="smb_credential_id"
-                    disabled={state.in_use}
+                    disabled={in_use}
                     items={renderSelectItems(up_credentials, UNSET_VALUE)}
                     value={state.smb_credential_id}
                     onChange={onSmbCredentialChange}
@@ -387,13 +387,13 @@ const TargetDialog = ({
               <FormGroup title={_('ESXi')}>
                 <Divider>
                   <Select
-                    disabled={state.in_use}
+                    disabled={in_use}
                     name="esxi_credential_id"
                     items={renderSelectItems(up_credentials, UNSET_VALUE)}
                     value={state.esxi_credential_id}
                     onChange={onEsxiCredentialChange}
                   />
-                  {!state.in_use && (
+                  {!in_use && (
                     <Layout>
                       <NewIcon
                         title={_('Create a new credential')}
@@ -410,7 +410,7 @@ const TargetDialog = ({
               <FormGroup title={_('SNMP')}>
                 <Divider>
                   <Select
-                    disabled={state.in_use}
+                    disabled={in_use}
                     name="snmp_credential_id"
                     items={renderSelectItems(snmp_credentials, UNSET_VALUE)}
                     value={state.snmp_credential_id}
@@ -432,7 +432,7 @@ const TargetDialog = ({
             <FormGroup title={_('Reverse Lookup Only')}>
               <YesNoRadio
                 name="reverse_lookup_only"
-                disabled={state.in_use}
+                disabled={in_use}
                 value={state.reverse_lookup_only}
                 onChange={onValueChange}
               />
@@ -441,7 +441,7 @@ const TargetDialog = ({
             <FormGroup title={_('Reverse Lookup Unify')}>
               <YesNoRadio
                 name="reverse_lookup_unify"
-                disabled={state.in_use}
+                disabled={in_use}
                 value={state.reverse_lookup_unify}
                 onChange={onValueChange}
               />
