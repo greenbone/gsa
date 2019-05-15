@@ -24,8 +24,8 @@ const {
   loadEntity,
   reducer,
   selector,
-  entitiesActions,
-  entityActions,
+  entitiesLoadingActions,
+  entityLoadingActions,
 } = createAll('certbund');
 
 export {
@@ -34,8 +34,8 @@ export {
   loadEntity,
   reducer,
   selector,
-  entitiesActions,
-  entityActions,
+  entitiesLoadingActions,
+  entityLoadingActions,
 };
 
 // vim: set ts=2 sw=2 tw=80:
