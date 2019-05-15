@@ -50,8 +50,6 @@ import {
   convertDefaultDisplays,
 } from 'web/components/dashboard/utils';
 
-import ErrorBoundary from 'web/components/errorboundary/errorboundary';
-
 import DashboardIcon from 'web/components/icon/dashboardicon';
 import DeleteIcon from 'web/components/icon/deleteicon';
 import EditIcon from 'web/components/icon/editicon';
@@ -392,7 +390,7 @@ class StartPage extends React.Component {
 
     const canAdd = dashboards.length < MAX_DASHBOARDS;
     return (
-      <ErrorBoundary errElement={_('page')}>
+      <React.Fragment>
         <Section title={_('Dashboards')} img={<DashboardIcon size="large" />}>
           {isLoading ? (
             <Loading />
@@ -507,7 +505,7 @@ class StartPage extends React.Component {
             onSave={this.handleSaveEditDashboard}
           />
         )}
-      </ErrorBoundary>
+      </React.Fragment>
     );
   }
 }

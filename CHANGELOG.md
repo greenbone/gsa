@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.1] - (unreleased)
 
 ### Added
+- Allow to show error details [#1403](https://github.com/greenbone/gsa/pull/1403)
 - Add test for solution type group [#1402](https://github.com/greenbone/gsa/pull/1402)
 - Add tests for loginpage and structure components [#1390](https://github.com/greenbone/gsa/pull/1390)
 - Add getAllEntities() and loadAllEntities() actions and reducers to entities store [#1345](https://github.com/greenbone/gsa/pull/1345)
@@ -16,7 +17,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add new DefaultFilterSettings to UserSettings [#1326](https://github.com/greenbone/gsa/pull/1326)
 - Add warning for IE11 [#1322](https://github.com/greenbone/gsa/pull/1322)
 - Add tests for label and img [#1313](https://github.com/greenbone/gsa/pull/1313)
-- German translation [#1311](https://github.com/greenbone/gsa/pull/1311)[#1323](https://github.com/greenbone/gsa/pull/1323)
+- German translation
+  [#1311](https://github.com/greenbone/gsa/pull/1311),
+  [#1323](https://github.com/greenbone/gsa/pull/1323),
+  [#1403](https://github.com/greenbone/gsa/pull/1403)
 - Add tests for comment and badge [#1309](https://github.com/greenbone/gsa/pull/1309)
 - Add error dialog to fix missing error messages in trashcan [#1286](https://github.com/greenbone/gsa/pull/1286)
 - Display current result, comparable result and diff between results for delta
@@ -46,7 +50,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 - Fix "Invalid date" string for scan times [#1405](https://github.com/greenbone/gsa/pull/1405)
+- Fix missing "Applied filter" message for "NVTs by Family" chart [#1404](https://github.com/greenbone/gsa/pull/1404)
 - Load all filters and report formats at the report details page [#1401](https://github.com/greenbone/gsa/pull/1401)
+- Fix rendering reports list page if user has no report formats [#1400](https://github.com/greenbone/gsa/pull/1400)
 - Don't link to hosts not being added to the assets [#1399](https://github.com/greenbone/gsa/pull/1399)
 - Fix adding and removing host assets at the report details [#1397](https://github.com/greenbone/gsa/pull/1397)
 - Fix displaying the observer group name at tasks list page [#1393](https://github.com/greenbone/gsa/pull/1393)

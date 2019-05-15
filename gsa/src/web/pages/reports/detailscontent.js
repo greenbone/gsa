@@ -32,7 +32,7 @@ import ToolBar from 'web/components/bar/toolbar';
 
 import DateTime from 'web/components/date/datetime';
 
-import ErrorMessage from 'web/components/errorboundary/errormessage';
+import ErrorMessage from 'web/components/error/errormessage';
 
 import AddToAssetsIcon from 'web/components/icon/addtoassetsicon';
 import DownloadIcon from 'web/components/icon/downloadicon';

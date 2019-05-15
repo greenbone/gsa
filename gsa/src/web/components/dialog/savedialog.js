@@ -25,7 +25,7 @@ import {isDefined} from 'gmp/utils/identity';
 import State from 'web/utils/state';
 import PropTypes from 'web/utils/proptypes';
 
-import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+import ErrorBoundary from 'web/components/error/errorboundary';
 
 import Dialog from '../dialog/dialog';
 import DialogContent from '../dialog/content';
@@ -120,7 +120,7 @@ class SaveDialogContent extends React.Component {
                   onCloseClick={this.handleErrorClose}
                 />
               )}
-              <ErrorBoundary errElement={_('dialog')}>
+              <ErrorBoundary message={_('An error occurred in this dialog.')}>
                 <ScrollableContent {...heightProps}>
                   {children({
                     values: childValues,

@@ -25,11 +25,11 @@ import GmpSettings from 'gmp/gmpsettings';
 
 import {LOG_LEVEL_DEBUG} from 'gmp/log';
 
-import {initLocale} from 'gmp/locale/lang';
+import {_, initLocale} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+import ErrorBoundary from 'web/components/error/errorboundary';
 
 import LocaleObserver from 'web/components/observer/localeobserver';
 
@@ -98,15 +98,15 @@ class App extends React.Component {
 
   render() {
     return (
-      <GmpProvider gmp={gmp}>
-        <ErrorBoundary>
+      <ErrorBoundary message={_('An error occurred on this page')}>
+        <GmpProvider gmp={gmp}>
           <StoreProvider store={store}>
             <LocaleObserver>
               <Routes />
             </LocaleObserver>
           </StoreProvider>
-        </ErrorBoundary>
-      </GmpProvider>
+        </GmpProvider>
+      </ErrorBoundary>
     );
   }
 }

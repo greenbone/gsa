@@ -197,9 +197,19 @@ class ReportDetails extends React.Component {
 
   componentDidUpdate() {
     const {reportFormats} = this.props;
-    if (!isDefined(this.state.reportFormatId) && isDefined(reportFormats)) {
-      // set initial report format id
-      this.setState({reportFormatId: first(reportFormats).id});
+    if (
+      !isDefined(this.state.reportFormatId) &&
+      isDefined(reportFormats) &&
+      reportFormats.length > 0
+    ) {
+      // set initial report format id if available
+      const reportFormatId = first(reportFormats).id;
+      if (isDefined(reportFormatId)) {
+        // ensure the report format id is only set if we really have one
+        // if no report format id is available we would create an infinite
+        // render loop here
+        this.setState({reportFormatId});
+      }
     }
 
     if (
