@@ -24,6 +24,7 @@ import {
   parseProperties,
   parseYesNo,
   parseDate,
+  parseBoolean,
   setProperties,
   NO_VALUE,
   YES_VALUE,
@@ -86,13 +87,18 @@ class Model {
       copy.userTags = [];
     }
 
-    const yes_no_props = ['in_use', 'writable', 'orphan', 'active', 'trash'];
+    const yes_no_props = ['writable', 'orphan', 'active', 'trash'];
 
     for (const name of yes_no_props) {
       const prop = elem[name];
       if (isDefined(prop)) {
         copy[name] = parseYesNo(prop);
       }
+    }
+
+    if (isDefined(elem.in_use)) {
+      copy.inUse = parseBoolean(elem.in_use);
+      delete copy.in_use;
     }
 
     if (isDefined(elem.owner) && isEmpty(elem.owner.name)) {
@@ -107,7 +113,7 @@ class Model {
   }
 
   isInUse() {
-    return this.in_use === YES_VALUE;
+    return this.inUse === true;
   }
 
   isInTrash() {

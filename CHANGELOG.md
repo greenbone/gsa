@@ -50,6 +50,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 - Fix some translation bugs (statusbar, about page, table header tooltips)[#1407](https://github.com/greenbone/gsa/pull/1407)
+- Fix checking if an entity is in use [#1406](https://github.com/greenbone/gsa/pull/1406)
+- Fix "Invalid date" string for scan times [#1405](https://github.com/greenbone/gsa/pull/1405)
 - Fix missing "Applied filter" message for "NVTs by Family" chart [#1404](https://github.com/greenbone/gsa/pull/1404)
 - Load all filters and report formats at the report details page [#1401](https://github.com/greenbone/gsa/pull/1401)
 - Fix rendering reports list page if user has no report formats [#1400](https://github.com/greenbone/gsa/pull/1400)

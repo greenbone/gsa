@@ -44,7 +44,11 @@ const testNvtId = modelClass => {
   });
 };
 
-export const testModelProperties = (modelClass, type) => {
+export const testModelProperties = (
+  modelClass,
+  type,
+  {testIsActive = true} = {},
+) => {
   describe(`${type} Model tests`, () => {
     test('should unescape name when parsing', () => {
       const elem = {name: `foo&quot;&lt;&gt;&amp;&apos;&#x2F;&#x5C;`};
@@ -132,14 +136,80 @@ export const testModelProperties = (modelClass, type) => {
 
     test('should parse props as YES_VALUE/NO_VALUE', () => {
       const elem = {
-        in_use: '1',
         writable: '0',
+        orphan: '1',
+        active: '0',
+        trash: '1',
       };
       const model = new modelClass(elem);
 
-      expect(model.in_use).toEqual(YES_VALUE);
       expect(model.writable).toEqual(NO_VALUE);
+      expect(model.orphan).toEqual(YES_VALUE);
+      expect(model.active).toEqual(NO_VALUE);
+      expect(model.trash).toEqual(YES_VALUE);
     });
+
+    test('should parse in_use', () => {
+      const model1 = new modelClass({in_use: '1'});
+      const model2 = new modelClass({in_use: '0'});
+      const model3 = new modelClass({in_use: '2'});
+      const model4 = new modelClass();
+
+      expect(model1.isInUse()).toBe(true);
+      expect(model2.isInUse()).toBe(false);
+      expect(model3.isInUse()).toBe(true);
+      expect(model4.isInUse()).toBe(false);
+    });
+
+    test('isInTrash() should return correct true/false', () => {
+      const model1 = new modelClass({trash: '1'});
+      const model2 = new modelClass({trash: '0'});
+      const model3 = new modelClass({trash: '2'});
+      const model4 = new modelClass();
+
+      expect(model1.isInTrash()).toBe(true);
+      expect(model2.isInTrash()).toBe(false);
+      expect(model3.isInTrash()).toBe(false);
+      expect(model4.isInTrash()).toBe(false);
+    });
+
+    test('isWritable() should return correct true/false', () => {
+      const model1 = new modelClass({writable: '1'});
+      const model2 = new modelClass({writable: '0'});
+      const model3 = new modelClass({writable: '2'});
+      const model4 = new modelClass();
+
+      expect(model1.isWritable()).toBe(true);
+      expect(model2.isWritable()).toBe(false);
+      expect(model3.isWritable()).toBe(false);
+      expect(model4.isWritable()).toBe(true);
+    });
+
+    test('isOrphan() should return correct true/false', () => {
+      const model1 = new modelClass({orphan: '1'});
+      const model2 = new modelClass({orphan: '0'});
+      const model3 = new modelClass({orphan: '2'});
+      const model4 = new modelClass();
+
+      expect(model1.isOrphan()).toBe(true);
+      expect(model2.isOrphan()).toBe(false);
+      expect(model3.isOrphan()).toBe(false);
+      expect(model4.isOrphan()).toBe(false);
+    });
+
+    if (testIsActive) {
+      test('isActive() should return correct true/false', () => {
+        const model1 = new modelClass({active: '1'});
+        const model2 = new modelClass({active: '0'});
+        const model3 = new modelClass({active: '2'});
+        const model4 = new modelClass();
+
+        expect(model1.isActive()).toBe(true);
+        expect(model2.isActive()).toBe(false);
+        expect(model3.isActive()).toBe(false);
+        expect(model4.isActive()).toBe(true);
+      });
+    }
   });
 
   describe(`${type} Model parse_properties function test`, () => {
@@ -229,14 +299,14 @@ export const testModelMethods = (modelClass, type) => {
   });
 };
 
-export const testModel = (modelClass, type) => {
-  testModelProperties(modelClass, type);
+export const testModel = (modelClass, type, options) => {
+  testModelProperties(modelClass, type, options);
   testModelMethods(modelClass, type);
   testId(modelClass);
 };
 
-export const testNvtModel = modelClass => {
-  testModelProperties(modelClass, 'nvt');
+export const testNvtModel = (modelClass, options) => {
+  testModelProperties(modelClass, 'nvt', options);
   testModelMethods(modelClass, 'nvt');
   testNvtId(modelClass);
 };
