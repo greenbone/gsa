@@ -29,8 +29,8 @@ const {
   loadEntities,
   reducer,
   selector,
-  entitiesActions,
-  entityActions,
+  entitiesLoadingActions,
+  entityLoadingActions,
 } = createAll('report');
 
 const entityType = 'deltaReport';
@@ -65,7 +65,7 @@ const deltaReducer = createReducer(entityType);
 const deltaSelector = rootState =>
   new DeltaSelector(rootState.entities[entityType]);
 
-const deltaEntityActions = createEntityLoadingActions(entityType);
+const deltaEntityLoadingActions = createEntityLoadingActions(entityType);
 
 const loadEntity = gmp => (id, filter) => (dispatch, getState) => {
   const rootState = getState();
@@ -76,13 +76,13 @@ const loadEntity = gmp => (id, filter) => (dispatch, getState) => {
     return Promise.resolve();
   }
 
-  dispatch(entityActions.request(id));
+  dispatch(entityLoadingActions.request(id));
 
   return gmp.report
     .get({id}, {filter})
     .then(
-      response => dispatch(entityActions.success(id, response.data)),
-      error => dispatch(entityActions.error(id, error)),
+      response => dispatch(entityLoadingActions.success(id, response.data)),
+      error => dispatch(entityLoadingActions.error(id, error)),
     );
 };
 
@@ -100,19 +100,19 @@ const loadDeltaReport = gmp => (id, deltaId, filter) => (
 
   const identifier = deltaIdentifier(id, deltaId);
 
-  dispatch(deltaEntityActions.request(identifier));
+  dispatch(deltaEntityLoadingActions.request(identifier));
 
   return gmp.report
     .getDelta({id}, {id: deltaId}, {filter})
     .then(
       response =>
-        dispatch(deltaEntityActions.success(identifier, response.data)),
-      error => dispatch(deltaEntityActions.error(identifier, error)),
+        dispatch(deltaEntityLoadingActions.success(identifier, response.data)),
+      error => dispatch(deltaEntityLoadingActions.error(identifier, error)),
     );
 };
 
 export {
-  deltaEntityActions,
+  deltaEntityLoadingActions,
   deltaReducer,
   deltaSelector,
   loadDeltaReport,
@@ -121,8 +121,8 @@ export {
   loadEntity,
   reducer,
   selector,
-  entitiesActions,
-  entityActions,
+  entitiesLoadingActions,
+  entityLoadingActions,
 };
 
 // vim: set ts=2 sw=2 tw=80:

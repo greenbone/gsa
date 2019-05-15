@@ -31,23 +31,23 @@ import {
 } from 'web/store/entities/utils/testing';
 
 import {
-  entitiesActions,
-  entityActions,
+  entitiesLoadingActions,
+  entityLoadingActions,
   loadEntities,
   loadEntity,
   reducer,
-  deltaEntityActions,
+  deltaEntityLoadingActions,
   deltaReducer,
   deltaSelector,
   loadDeltaReport,
 } from '../reports';
 import Filter from 'gmp/models/filter';
 
-testEntitiesActions('report', entitiesActions);
-testEntityActions('report', entityActions);
+testEntitiesActions('report', entitiesLoadingActions);
+testEntityActions('report', entityLoadingActions);
 testLoadEntities('report', loadEntities);
-testReducerForEntities('report', reducer, entitiesActions);
-testReducerForEntity('report', reducer, entityActions);
+testReducerForEntities('report', reducer, entitiesLoadingActions);
+testReducerForEntity('report', reducer, entityLoadingActions);
 
 const entityType = 'report';
 
@@ -220,8 +220,8 @@ describe('report loadEntity function tests', () => {
   });
 });
 
-testEntityActions('deltaReport', deltaEntityActions);
-testReducerForEntity('deltaReport', deltaReducer, deltaEntityActions);
+testEntityActions('deltaReport', deltaEntityLoadingActions);
+testReducerForEntity('deltaReport', deltaReducer, deltaEntityLoadingActions);
 
 describe('delta report loadDeltaReport function tests', () => {
   test('should load delta report successfully', () => {
