@@ -58,38 +58,6 @@ describe('Task model tests', () => {
 });
 
 describe(`Task Model methods tests`, () => {
-  test('isInUse() should return correct true/false', () => {
-    const task1 = new Task({in_use: '1'});
-    const task2 = new Task({in_use: '0'});
-
-    expect(task1.isInUse()).toBe(true);
-    expect(task2.isInUse()).toBe(false);
-  });
-
-  test('isInTrash() should return correct true/false', () => {
-    const task1 = new Task({trash: '1'});
-    const task2 = new Task({trash: '0'});
-
-    expect(task1.isInTrash()).toBe(true);
-    expect(task2.isInTrash()).toBe(false);
-  });
-
-  test('isWritable() should return correct true/false', () => {
-    const task1 = new Task({writable: '1'});
-    const task2 = new Task({writable: '0'});
-
-    expect(task1.isWritable()).toBe(true);
-    expect(task2.isWritable()).toBe(false);
-  });
-
-  test('isOrphan() should return correct true/false', () => {
-    const task1 = new Task({orphan: '1'});
-    const task2 = new Task({orphan: '0'});
-
-    expect(task1.isOrphan()).toBe(true);
-    expect(task2.isOrphan()).toBe(false);
-  });
-
   test('should be a container if target_id is not set', () => {
     const task1 = new Task({});
     const task2 = new Task({target: {_id: 'foo'}});
