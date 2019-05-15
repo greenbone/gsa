@@ -44,7 +44,11 @@ const testNvtId = modelClass => {
   });
 };
 
-export const testModelProperties = (modelClass, type) => {
+export const testModelProperties = (
+  modelClass,
+  type,
+  {testIsActive = true} = {},
+) => {
   describe(`${type} Model tests`, () => {
     test('should unescape name when parsing', () => {
       const elem = {name: `foo&quot;&lt;&gt;&amp;&apos;&#x2F;&#x5C;`};
@@ -182,6 +186,20 @@ export const testModelProperties = (modelClass, type) => {
       expect(model3.isOrphan()).toBe(false);
       expect(model4.isOrphan()).toBe(false);
     });
+
+    if (testIsActive) {
+      test('isActive() should return correct true/false', () => {
+        const model1 = new modelClass({active: '1'});
+        const model2 = new modelClass({active: '0'});
+        const model3 = new modelClass({active: '2'});
+        const model4 = new modelClass();
+
+        expect(model1.isActive()).toBe(true);
+        expect(model2.isActive()).toBe(false);
+        expect(model3.isActive()).toBe(false);
+        expect(model4.isActive()).toBe(true);
+      });
+    }
   });
 
   describe(`${type} Model parse_properties function test`, () => {
@@ -271,14 +289,14 @@ export const testModelMethods = (modelClass, type) => {
   });
 };
 
-export const testModel = (modelClass, type) => {
-  testModelProperties(modelClass, type);
+export const testModel = (modelClass, type, options) => {
+  testModelProperties(modelClass, type, options);
   testModelMethods(modelClass, type);
   testId(modelClass);
 };
 
-export const testNvtModel = modelClass => {
-  testModelProperties(modelClass, 'nvt');
+export const testNvtModel = (modelClass, options) => {
+  testModelProperties(modelClass, 'nvt', options);
   testModelMethods(modelClass, 'nvt');
   testNvtId(modelClass);
 };

@@ -27,7 +27,7 @@ import Task, {
 } from 'gmp/models/task';
 import {testModelProperties} from '../testing';
 
-testModelProperties(Task, 'task');
+testModelProperties(Task, 'task', {testIsActive: false});
 
 describe('Task model tests', () => {
   test('should parse undefined hosts_ordering', () => {
