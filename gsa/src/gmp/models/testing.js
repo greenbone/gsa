@@ -146,6 +146,42 @@ export const testModelProperties = (modelClass, type) => {
       expect(model.active).toEqual(NO_VALUE);
       expect(model.trash).toEqual(YES_VALUE);
     });
+
+    test('isInTrash() should return correct true/false', () => {
+      const model1 = new modelClass({trash: '1'});
+      const model2 = new modelClass({trash: '0'});
+      const model3 = new modelClass({trash: '2'});
+      const model4 = new modelClass();
+
+      expect(model1.isInTrash()).toBe(true);
+      expect(model2.isInTrash()).toBe(false);
+      expect(model3.isInTrash()).toBe(false);
+      expect(model4.isInTrash()).toBe(false);
+    });
+
+    test('isWritable() should return correct true/false', () => {
+      const model1 = new modelClass({writable: '1'});
+      const model2 = new modelClass({writable: '0'});
+      const model3 = new modelClass({writable: '2'});
+      const model4 = new modelClass();
+
+      expect(model1.isWritable()).toBe(true);
+      expect(model2.isWritable()).toBe(false);
+      expect(model3.isWritable()).toBe(false);
+      expect(model4.isWritable()).toBe(true);
+    });
+
+    test('isOrphan() should return correct true/false', () => {
+      const model1 = new modelClass({orphan: '1'});
+      const model2 = new modelClass({orphan: '0'});
+      const model3 = new modelClass({orphan: '2'});
+      const model4 = new modelClass();
+
+      expect(model1.isOrphan()).toBe(true);
+      expect(model2.isOrphan()).toBe(false);
+      expect(model3.isOrphan()).toBe(false);
+      expect(model4.isOrphan()).toBe(false);
+    });
   });
 
   describe(`${type} Model parse_properties function test`, () => {
