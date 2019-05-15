@@ -51,9 +51,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}
-        >
-          {_('Name')}
-        </TableHead>
+          title={_('Name')}
+        />
         <TableHead
           width="19%"
           rowSpan="2"
@@ -61,9 +60,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'title' : false}
           onSortChange={onSortChange}
-        >
-          {_('Title')}
-        </TableHead>
+          title={_('Title')}
+        />
         <TableHead width="24%" colSpan="3">
           {_('Severity')}
         </TableHead>
@@ -74,9 +72,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hosts' : false}
           onSortChange={onSortChange}
-        >
-          {_('Hosts')}
-        </TableHead>
+          title={_('Hosts')}
+        />
         <TableHead
           width="15%"
           rowSpan="2"
@@ -84,9 +81,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'modified' : false}
           onSortChange={onSortChange}
-        >
-          {_('Modified')}
-        </TableHead>
+          title={_('Modified')}
+        />
         {isDefined(actionsColumn) ? (
           actionsColumn
         ) : (
@@ -102,27 +98,24 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'latest_severity' : false}
           onSortChange={onSortChange}
-        >
-          {_('Latest')}
-        </TableHead>
+          title={_('Latest')}
+        />
         <TableHead
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'highest_severity' : false}
           onSortChange={onSortChange}
-        >
-          {_('Highest')}
-        </TableHead>
+          title={_('Highest')}
+        />
         <TableHead
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'average_severity' : false}
           onSortChange={onSortChange}
-        >
-          {_('Average')}
-        </TableHead>
+          title={_('Average')}
+        />
       </TableRow>
     </TableHeader>
   );

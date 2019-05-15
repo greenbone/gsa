@@ -46,9 +46,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}
-        >
-          {_('Name')}
-        </TableHead>
+          title={_('Name')}
+        />
         {actionsColumn}
       </TableRow>
     </TableHeader>

@@ -51,63 +51,56 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'text' : false}
           onSortChange={onSortChange}
-        >
-          {_('Text')}
-        </TableHead>
+          title={_('Text')}
+        />
         <TableHead
           width="30%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'nvt' : false}
           onSortChange={onSortChange}
-        >
-          {_('NVT')}
-        </TableHead>
+          title={_('NVT')}
+        />
         <TableHead
           width="12%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hosts' : false}
           onSortChange={onSortChange}
-        >
-          {_('Hosts')}
-        </TableHead>
+          title={_('Hosts')}
+        />
         <TableHead
           width="12%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'port' : false}
           onSortChange={onSortChange}
-        >
-          {_('Location')}
-        </TableHead>
+          title={_('Location')}
+        />
         <TableHead
           width="9%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}
-        >
-          {_('From')}
-        </TableHead>
+          title={_('From')}
+        />
         <TableHead
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           width="8%"
           sortBy={sort ? 'new_severity' : false}
           onSortChange={onSortChange}
-        >
-          {_('To')}
-        </TableHead>
+          title={_('To')}
+        />
         <TableHead
           width="4%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'active' : false}
           onSortChange={onSortChange}
-        >
-          {_('Active')}
-        </TableHead>
+          title={_('Active')}
+        />
         {actionsColumn}
       </TableRow>
     </TableHeader>

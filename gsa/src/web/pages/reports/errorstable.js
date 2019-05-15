@@ -41,41 +41,36 @@ const Header = ({currentSortDir, currentSortBy, sort = true, onSortChange}) => (
         currentSortBy={currentSortBy}
         sortBy={sort ? 'error' : false}
         onSortChange={onSortChange}
-      >
-        {_('Error Message')}
-      </TableHead>
+        title={_('Error Message')}
+      />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'host' : false}
         onSortChange={onSortChange}
-      >
-        {_('Host')}
-      </TableHead>
+        title={_('Host')}
+      />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'hostname' : false}
         onSortChange={onSortChange}
-      >
-        {_('Hostname')}
-      </TableHead>
+        title={_('Hostname')}
+      />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'nvt' : false}
         onSortChange={onSortChange}
-      >
-        {_('NVT')}
-      </TableHead>
+        title={_('NVT')}
+      />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'port' : false}
         onSortChange={onSortChange}
-      >
-        {_('Port')}
-      </TableHead>
+        title={_('Port')}
+      />
     </TableRow>
   </TableHeader>
 );
