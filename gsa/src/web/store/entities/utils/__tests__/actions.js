@@ -22,17 +22,17 @@ import Filter from 'gmp/models/filter';
 
 import {
   types,
-  createEntitiesActions,
+  createEntitiesLoadingActions,
   createLoadAllEntities,
   createLoadEntities,
-  createEntityActions,
+  createEntityLoadingActions,
   createLoadEntity,
 } from '../actions';
 
-describe('entities actions tests', () => {
-  describe('createEntitiesActions tests', () => {
+describe('entities loading actions tests', () => {
+  describe('createEntitiesLoadingActions tests', () => {
     test('should create action creators for loading', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
 
       expect(actions.request).toBeDefined();
       expect(isFunction(actions.request)).toBe(true);
@@ -43,7 +43,7 @@ describe('entities actions tests', () => {
     });
 
     test('should create a load request action', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const action = actions.request();
 
       expect(action).toEqual({
@@ -54,7 +54,7 @@ describe('entities actions tests', () => {
 
     test('should create a load request action with filter', () => {
       const filter = Filter.fromString('type=abc');
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const action = actions.request(filter);
 
       expect(action).toEqual({
@@ -65,7 +65,7 @@ describe('entities actions tests', () => {
     });
 
     test('should create a load success action', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const action = actions.success(['foo', 'bar']);
 
       expect(action).toEqual({
@@ -77,7 +77,7 @@ describe('entities actions tests', () => {
 
     test('should create a load success action with filter', () => {
       const filter = Filter.fromString('type=abc');
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const action = actions.success(['foo', 'bar'], filter);
 
       expect(action).toEqual({
@@ -91,7 +91,7 @@ describe('entities actions tests', () => {
     test('should create a load success action with meta info', () => {
       const filter = Filter.fromString('type=abc');
       const loadedFilter = Filter.fromString('type=abc rows=100');
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const counts = {first: 1};
       const action = actions.success(
         ['foo', 'bar'],
@@ -111,7 +111,7 @@ describe('entities actions tests', () => {
     });
 
     test('should create a load error action', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const action = actions.error('An error');
 
       expect(action).toEqual({
@@ -123,7 +123,7 @@ describe('entities actions tests', () => {
 
     test('should create a load error action with filter', () => {
       const filter = Filter.fromString('type=abc');
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const action = actions.error('An error', filter);
 
       expect(action).toEqual({
@@ -135,9 +135,9 @@ describe('entities actions tests', () => {
     });
   });
 
-  describe('createEntityActions tests', () => {
+  describe('createEntityLoadingActions tests', () => {
     test('should create actions for loading', () => {
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
 
       expect(actions.request).toBeDefined();
       expect(isFunction(actions.request)).toBe(true);
@@ -148,7 +148,7 @@ describe('entities actions tests', () => {
     });
 
     test('should create a load request action', () => {
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const action = actions.request('id1');
 
       expect(action).toEqual({
@@ -159,7 +159,7 @@ describe('entities actions tests', () => {
     });
 
     test('should create a load success action', () => {
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const action = actions.success('id1', {foo: 'bar'});
 
       expect(action).toEqual({
@@ -171,7 +171,7 @@ describe('entities actions tests', () => {
     });
 
     test('should create a load error action', () => {
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const action = actions.error('id1', 'An error');
 
       expect(action).toEqual({
@@ -185,7 +185,7 @@ describe('entities actions tests', () => {
 
   describe('createLoadAllEntities tests', () => {
     test('test isLoading true', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
 
       const getState = jest.fn().mockReturnValue({foo: 'bar'});
 
@@ -377,7 +377,7 @@ describe('entities actions tests', () => {
 
   describe('createLoadEntities tests', () => {
     test('test isLoading true', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
 
       const getState = jest.fn().mockReturnValue({foo: 'bar'});
 

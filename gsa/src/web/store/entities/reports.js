@@ -18,7 +18,7 @@
  */
 import {isDefined} from 'gmp/utils/identity';
 
-import {createEntityActions} from './utils/actions';
+import {createEntityLoadingActions} from './utils/actions';
 
 import {createAll} from './utils/main';
 
@@ -65,7 +65,7 @@ const deltaReducer = createReducer(entityType);
 const deltaSelector = rootState =>
   new DeltaSelector(rootState.entities[entityType]);
 
-const deltaEntityActions = createEntityActions(entityType);
+const deltaEntityActions = createEntityLoadingActions(entityType);
 
 const loadEntity = gmp => (id, filter) => (dispatch, getState) => {
   const rootState = getState();
