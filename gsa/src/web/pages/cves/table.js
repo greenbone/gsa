@@ -51,81 +51,72 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}
-        >
-          {_('Name')}
-        </TableHead>
+          title={_('Name')}
+        />
         <TableHead
           width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'vector' : false}
           onSortChange={onSortChange}
-        >
-          {_('Vector')}
-        </TableHead>
+          title={_('Vector')}
+        />
         <TableHead
           width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'complexity' : false}
           onSortChange={onSortChange}
-        >
-          {_('Complexity')}
-        </TableHead>
+          title={_('Complexity')}
+        />
         <TableHead
           width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'authentication' : false}
           onSortChange={onSortChange}
-        >
-          {_('Authentication')}
-        </TableHead>
+          title={_('Authentication')}
+        />
         <TableHead
           width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'confidentiality_impact' : false}
           onSortChange={onSortChange}
-        >
-          {_('Confidentiality Impact')}
-        </TableHead>
+          title={_('Confidentiality Impact')}
+        />
         <TableHead
           width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'integrity_impact' : false}
           onSortChange={onSortChange}
-        >
-          {_('Integrity Impact')}
-        </TableHead>
+          title={_('Integrity Impact')}
+        />
         <TableHead
           width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'availability_impact' : false}
           onSortChange={onSortChange}
-        >
-          {_('Availability Impact')}
-        </TableHead>
+          title={_('Availability Impact')}
+        />
         <TableHead
           width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'published' : false}
           onSortChange={onSortChange}
-        >
-          {_('Published')}
-        </TableHead>
+          title={_('Published')}
+        />
         <TableHead
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}
-        >
-          {_('Severity')}
-        </TableHead>
+          title={_('Severity')}
+        />
         {actionsColumn}
       </TableRow>
     </TableHeader>

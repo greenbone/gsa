@@ -64,7 +64,7 @@ export const StyledTitle = styled.span`
   opacity: ${props => (props.disabled ? '0.5' : '1')};
 `;
 
-const RadioComponent = ({title, disabled, ...other}) => (
+const RadioComponent = ({title, children, disabled, ...other}) => (
   <StyledElement disabled={disabled}>
     <Divider>
       <StyledInput
@@ -78,6 +78,7 @@ const RadioComponent = ({title, disabled, ...other}) => (
           {title}
         </StyledTitle>
       )}
+      {children}
     </Divider>
   </StyledElement>
 );

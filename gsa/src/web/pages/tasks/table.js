@@ -51,24 +51,38 @@ const Header = ({
   return (
     <TableHeader>
       <TableRow>
-        <TableHead {...sortProps} sortBy="name" width="41%">
-          {_('Name')}
-        </TableHead>
-        <TableHead {...sortProps} width="8%" sortBy="status">
-          {_('Status')}
-        </TableHead>
-        <TableHead {...sortProps} sortBy="total" width="6%">
-          {_('Reports')}
-        </TableHead>
-        <TableHead {...sortProps} sortBy="last" width="24%">
-          {_('Last Report')}
-        </TableHead>
-        <TableHead {...sortProps} width="8%" sortBy="severity">
-          {_('Severity')}
-        </TableHead>
-        <TableHead {...sortProps} align="center" width="5%" sortBy="trend">
-          {_('Trend')}
-        </TableHead>
+        <TableHead {...sortProps} sortBy="name" width="41%" title={_('Name')} />
+        <TableHead
+          {...sortProps}
+          width="8%"
+          sortBy="status"
+          title={_('Status')}
+        />
+        <TableHead
+          {...sortProps}
+          sortBy="total"
+          width="6%"
+          title={_('Reports')}
+        />
+        <TableHead
+          {...sortProps}
+          sortBy="last"
+          width="24%"
+          title={_('Last Report')}
+        />
+        <TableHead
+          {...sortProps}
+          width="8%"
+          sortBy="severity"
+          title={_('Severity')}
+        />
+        <TableHead
+          {...sortProps}
+          align="center"
+          width="5%"
+          sortBy="trend"
+          title={_('Trend')}
+        />
         {actionsColumn}
       </TableRow>
     </TableHeader>

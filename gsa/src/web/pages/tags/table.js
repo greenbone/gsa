@@ -51,54 +51,48 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}
-        >
-          {_('Name')}
-        </TableHead>
+          title={_('Name')}
+        />
         <TableHead
           width="30%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'value' : false}
           onSortChange={onSortChange}
-        >
-          {_('Value')}
-        </TableHead>
+          title={_('Value')}
+        />
         <TableHead
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'active' : false}
           onSortChange={onSortChange}
-        >
-          {_('Active')}
-        </TableHead>
+          title={_('Active')}
+        />
         <TableHead
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'resource_type' : false}
           onSortChange={onSortChange}
-        >
-          {_('Resource Type')}
-        </TableHead>
+          title={_('Resource Type')}
+        />
         <TableHead
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={false}
           onSortChange={onSortChange}
-        >
-          {_('Number of Resources')}
-        </TableHead>
+          title={_('Number of Resources')}
+        />
         <TableHead
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'modified' : false}
           onSortChange={onSortChange}
-        >
-          {_('Modified')}
-        </TableHead>
+          title={_('Modified')}
+        />
         {actionsColumn}
       </TableRow>
     </TableHeader>

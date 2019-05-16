@@ -31,8 +31,6 @@ import {parseCvssBaseVector, parseCvssBaseFromVector} from 'gmp/parser';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
-import ErrorBoundary from 'web/components/errorboundary/errorboundary';
-
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
@@ -205,167 +203,165 @@ class CvssCalculator extends React.Component {
       integrityImpact,
     } = this.state;
     return (
-      <ErrorBoundary errElement={_('page')}>
-        <Layout flex="column">
-          <ToolBarIcons />
-          <Section
-            img={<CvssIcon size="large" />}
-            title={_('CVSS Base Score Calculator')}
+      <Layout flex="column">
+        <ToolBarIcons />
+        <Section
+          img={<CvssIcon size="large" />}
+          title={_('CVSS Base Score Calculator')}
+        />
+
+        <h3>{_('From Metrics')}:</h3>
+        <FormGroup title={_('Access Vector')}>
+          <Select
+            items={[
+              {
+                value: 'LOCAL',
+                label: _('Local'),
+              },
+              {
+                value: 'ADJACENT_NETWORK',
+                label: _('Adjacent'),
+              },
+              {
+                value: 'NETWORK',
+                label: _('Network'),
+              },
+            ]}
+            name="accessVector"
+            value={accessVector}
+            menuPosition="adjust"
+            onChange={this.handleMetricsChange}
           />
+        </FormGroup>
+        <FormGroup title={_('Access Complexity')}>
+          <Select
+            items={[
+              {
+                value: 'LOW',
+                label: _('Low'),
+              },
+              {
+                value: 'MEDIUM',
+                label: _('Medium'),
+              },
+              {
+                value: 'HIGH',
+                label: _('High'),
+              },
+            ]}
+            name="accessComplexity"
+            value={accessComplexity}
+            menuPosition="adjust"
+            onChange={this.handleMetricsChange}
+          />
+        </FormGroup>
+        <FormGroup title={_('Authentication')}>
+          <Select
+            items={[
+              {
+                value: 'NONE',
+                label: _('None'),
+              },
+              {
+                value: 'SINGLE_INSTANCES',
+                label: _('Single'),
+              },
+              {
+                value: 'MULTIPLE_INSTANCES',
+                label: _('Multiple'),
+              },
+            ]}
+            name="authentication"
+            value={authentication}
+            menuPosition="adjust"
+            onChange={this.handleMetricsChange}
+          />
+        </FormGroup>
+        <FormGroup title={_('Confidentiality')}>
+          <Select
+            items={[
+              {
+                value: 'NONE',
+                label: _('None'),
+              },
+              {
+                value: 'PARTIAL',
+                label: _('Partial'),
+              },
+              {
+                value: 'COMPLETE',
+                label: _('Complete'),
+              },
+            ]}
+            name="confidentialityImpact"
+            value={confidentialityImpact}
+            onChange={this.handleMetricsChange}
+          />
+        </FormGroup>
+        <FormGroup title={_('Integrity')}>
+          <Select
+            items={[
+              {
+                value: 'NONE',
+                label: _('None'),
+              },
+              {
+                value: 'PARTIAL',
+                label: _('Partial'),
+              },
+              {
+                value: 'COMPLETE',
+                label: _('Complete'),
+              },
+            ]}
+            name="integrityImpact"
+            value={integrityImpact}
+            menuPosition="adjust"
+            onChange={this.handleMetricsChange}
+          />
+        </FormGroup>
+        <FormGroup title={_('Availability')}>
+          <Select
+            items={[
+              {
+                value: 'NONE',
+                label: _('None'),
+              },
+              {
+                value: 'PARTIAL',
+                label: _('Partial'),
+              },
+              {
+                value: 'COMPLETE',
+                label: _('Complete'),
+              },
+            ]}
+            name="availabilityImpact"
+            value={availabilityImpact}
+            menuPosition="adjust"
+            onChange={this.handleMetricsChange}
+          />
+        </FormGroup>
 
-          <h3>{_('From Metrics')}:</h3>
-          <FormGroup title={_('Access Vector')}>
-            <Select
-              items={[
-                {
-                  value: 'LOCAL',
-                  label: _('Local'),
-                },
-                {
-                  value: 'ADJACENT_NETWORK',
-                  label: _('Adjacent'),
-                },
-                {
-                  value: 'NETWORK',
-                  label: _('Network'),
-                },
-              ]}
-              name="accessVector"
-              value={accessVector}
-              menuPosition="adjust"
-              onChange={this.handleMetricsChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Access Complexity')}>
-            <Select
-              items={[
-                {
-                  value: 'LOW',
-                  label: _('Low'),
-                },
-                {
-                  value: 'MEDIUM',
-                  label: _('Medium'),
-                },
-                {
-                  value: 'HIGH',
-                  label: _('High'),
-                },
-              ]}
-              name="accessComplexity"
-              value={accessComplexity}
-              menuPosition="adjust"
-              onChange={this.handleMetricsChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Authentication')}>
-            <Select
-              items={[
-                {
-                  value: 'NONE',
-                  label: _('None'),
-                },
-                {
-                  value: 'SINGLE_INSTANCES',
-                  label: _('Single'),
-                },
-                {
-                  value: 'MULTIPLE_INSTANCES',
-                  label: _('Multiple'),
-                },
-              ]}
-              name="authentication"
-              value={authentication}
-              menuPosition="adjust"
-              onChange={this.handleMetricsChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Confidentiality')}>
-            <Select
-              items={[
-                {
-                  value: 'NONE',
-                  label: _('None'),
-                },
-                {
-                  value: 'PARTIAL',
-                  label: _('Partial'),
-                },
-                {
-                  value: 'COMPLETE',
-                  label: _('Complete'),
-                },
-              ]}
-              name="confidentialityImpact"
-              value={confidentialityImpact}
-              onChange={this.handleMetricsChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Integrity')}>
-            <Select
-              items={[
-                {
-                  value: 'NONE',
-                  label: _('None'),
-                },
-                {
-                  value: 'PARTIAL',
-                  label: _('Partial'),
-                },
-                {
-                  value: 'COMPLETE',
-                  label: _('Complete'),
-                },
-              ]}
-              name="integrityImpact"
-              value={integrityImpact}
-              menuPosition="adjust"
-              onChange={this.handleMetricsChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Availability')}>
-            <Select
-              items={[
-                {
-                  value: 'NONE',
-                  label: _('None'),
-                },
-                {
-                  value: 'PARTIAL',
-                  label: _('Partial'),
-                },
-                {
-                  value: 'COMPLETE',
-                  label: _('Complete'),
-                },
-              ]}
-              name="availabilityImpact"
-              value={availabilityImpact}
-              menuPosition="adjust"
-              onChange={this.handleMetricsChange}
-            />
-          </FormGroup>
+        <h3>{_('From Vector')}:</h3>
+        <FormGroup title={_('Vector')}>
+          <StyledTextField
+            name="userVector"
+            value={userVector}
+            onChange={this.handleInputChange}
+            onBlur={this.handleVectorChange}
+            onKeyDown={this.handleKeyDown}
+          />
+        </FormGroup>
 
-          <h3>{_('From Vector')}:</h3>
-          <FormGroup title={_('Vector')}>
-            <StyledTextField
-              name="userVector"
-              value={userVector}
-              onChange={this.handleInputChange}
-              onBlur={this.handleVectorChange}
-              onKeyDown={this.handleKeyDown}
-            />
-          </FormGroup>
-
-          <h3>{_('Results')}:</h3>
-          <FormGroup title={_('CVSS Base Vector')}>
-            <span>{cvssVector}</span>
-          </FormGroup>
-          <FormGroup title={_('Severity')}>
-            <SeverityBar severity={cvssScore} />
-          </FormGroup>
-        </Layout>
-      </ErrorBoundary>
+        <h3>{_('Results')}:</h3>
+        <FormGroup title={_('CVSS Base Vector')}>
+          <span>{cvssVector}</span>
+        </FormGroup>
+        <FormGroup title={_('Severity')}>
+          <SeverityBar severity={cvssScore} />
+        </FormGroup>
+      </Layout>
     );
   }
 }

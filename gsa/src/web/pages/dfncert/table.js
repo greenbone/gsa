@@ -51,45 +51,40 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}
-        >
-          {_('Name')}
-        </TableHead>
+          title={_('Name')}
+        />
         <TableHead
           width="62%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'title' : false}
           onSortChange={onSortChange}
-        >
-          {_('Title')}
-        </TableHead>
+          title={_('Title')}
+        />
         <TableHead
           width="15%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'created' : false}
           onSortChange={onSortChange}
-        >
-          {_('Created')}
-        </TableHead>
+          title={_('Created')}
+        />
         <TableHead
           width="2%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'cves' : false}
           onSortChange={onSortChange}
-        >
-          {_('CVEs')}
-        </TableHead>
+          title={_('CVEs')}
+        />
         <TableHead
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}
-        >
-          {_('Severity')}
-        </TableHead>
+          title={_('Severity')}
+        />
         {actionsColumn}
       </TableRow>
     </TableHeader>

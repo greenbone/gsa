@@ -51,45 +51,40 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'text' : false}
           onSortChange={onSortChange}
-        >
-          {_('Text')}
-        </TableHead>
+          title={_('Text')}
+        />
         <TableHead
           width="35%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'nvt' : false}
           onSortChange={onSortChange}
-        >
-          {_('NVT')}
-        </TableHead>
+          title={_('NVT')}
+        />
         <TableHead
           width="16%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hosts' : false}
           onSortChange={onSortChange}
-        >
-          {_('Hosts')}
-        </TableHead>
+          title={_('Hosts')}
+        />
         <TableHead
           width="16%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'port' : false}
           onSortChange={onSortChange}
-        >
-          {_('Location')}
-        </TableHead>
+          title={_('Location')}
+        />
         <TableHead
           width="5%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'active' : false}
           onSortChange={onSortChange}
-        >
-          {_('Active')}
-        </TableHead>
+          title={_('Active')}
+        />
         {actionsColumn}
       </TableRow>
     </TableHeader>

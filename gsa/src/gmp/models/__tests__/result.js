@@ -51,7 +51,6 @@ describe('Result model tests', () => {
     };
     const res2 = {
       name: 'foo',
-      id: 'foo',
       hostname: '',
     };
     expect(result.host).toEqual(res);
@@ -62,11 +61,24 @@ describe('Result model tests', () => {
     const result = new Result({host: 'foo'});
     const res = {
       name: 'foo',
-      id: 'foo',
       hostname: '',
     };
 
     expect(result.host).toEqual(res);
+  });
+
+  test('should remove empty host id', () => {
+    const host = {
+      _asset_id: '',
+      __text: 'foo',
+      hostname: 'bar',
+    };
+    const result = new Result({host});
+
+    expect(result.host).toEqual({
+      name: 'foo',
+      hostname: 'bar',
+    });
   });
 
   test('should parse NVTs', () => {

@@ -50,9 +50,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}
-        >
-          {_('Name')}
-        </TableHead>
+          title={_('Name')}
+        />
         {hideColumns.oldest !== true && (
           <TableHead
             width="15%"
@@ -60,9 +59,8 @@ const Header = ({
             currentSortBy={currentSortBy}
             sortBy={sort ? 'oldest' : false}
             onSortChange={onSortChange}
-          >
-            {_('Oldest Result')}
-          </TableHead>
+            title={_('Oldest Result')}
+          />
         )}
         {hideColumns.oldest !== true && (
           <TableHead
@@ -71,9 +69,8 @@ const Header = ({
             currentSortBy={currentSortBy}
             sortBy={sort ? 'newest' : false}
             onSortChange={onSortChange}
-          >
-            {_('Newest Result')}
-          </TableHead>
+            title={_('Newest Result')}
+          />
         )}
         <TableHead
           width="8%"
@@ -81,36 +78,32 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}
-        >
-          {_('Severity')}
-        </TableHead>
+          title={_('Severity')}
+        />
         <TableHead
           width="4%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'qod' : false}
           onSortChange={onSortChange}
-        >
-          {_('QoD')}
-        </TableHead>
+          title={_('QoD')}
+        />
         <TableHead
           width="5%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'results' : false}
           onSortChange={onSortChange}
-        >
-          {_('Results')}
-        </TableHead>
+          title={_('Results')}
+        />
         <TableHead
           width="5%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hosts' : false}
           onSortChange={onSortChange}
-        >
-          {_('Hosts')}
-        </TableHead>
+          title={_('Hosts')}
+        />
         {actionsColumn}
       </TableRow>
     </TableHeader>

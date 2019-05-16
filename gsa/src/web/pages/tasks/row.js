@@ -109,7 +109,7 @@ const Row = ({
         obs.push(_('Role {{name}}', {name: observers.role.name}));
       }
       if (isDefined(observers.group)) {
-        obs.push(_('Group {{name}}', {name: observers.role.name}));
+        obs.push(_('Group {{name}}', {name: observers.group.name}));
       }
     }
   }

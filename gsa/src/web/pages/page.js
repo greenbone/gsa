@@ -21,6 +21,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import _ from 'gmp/locale';
+
 import logger from 'gmp/log';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -31,6 +33,8 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 import MenuBar from 'web/components/bar/menubar';
+
+import ErrorBoundary from 'web/components/error/errorboundary';
 
 import Layout from 'web/components/layout/layout';
 
@@ -85,7 +89,11 @@ class Page extends React.Component {
         <StyledLayout flex="column" align={['start', 'stretch']}>
           <Header />
           <MenuBar />
-          <Main>{children}</Main>
+          <Main>
+            <ErrorBoundary message={_('An error occurred on this page.')}>
+              {children}
+            </ErrorBoundary>
+          </Main>
           <Footer />
         </StyledLayout>
       </CapabilitiesProvider>

@@ -44,9 +44,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}
-        >
-          {_('Name')}
-        </TableHead>
+          title={_('Name')}
+        />
         <TableHead
           width="5%"
           rowSpan="2"
@@ -54,9 +53,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'type' : false}
           onSortChange={onSortChange}
-        >
-          {_('Type')}
-        </TableHead>
+          title={_('Type')}
+        />
         <TableHead width="10%" colSpan="2">
           {_('Family')}
         </TableHead>
@@ -77,18 +75,16 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'families_total' : false}
           onSortChange={onSortChange}
-        >
-          {_('Total')}
-        </TableHead>
+          title={_('Total')}
+        />
         <TableHead
           width="5%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'families_trend' : false}
           onSortChange={onSortChange}
-        >
-          {_('Trend')}
-        </TableHead>
+          title={_('Trend')}
+        />
 
         <TableHead
           width="5%"
@@ -96,18 +92,16 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'nvts_total' : false}
           onSortChange={onSortChange}
-        >
-          {_('Total')}
-        </TableHead>
+          title={_('Total')}
+        />
         <TableHead
           width="5%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'nvts_trend' : false}
           onSortChange={onSortChange}
-        >
-          {_('Trend')}
-        </TableHead>
+          title={_('Trend')}
+        />
       </TableRow>
     </TableHeader>
   );

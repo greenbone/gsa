@@ -54,9 +54,8 @@ const Header = ({
           sortBy={sort ? 'name' : false}
           rowSpan="2"
           onSortChange={onSortChange}
-        >
-          {_('Name')}
-        </TableHead>
+          title={_('Name')}
+        />
         <TableHead width="33%" colSpan="3">
           {_('Port Counts')}
         </TableHead>
@@ -75,27 +74,24 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'total' : false}
           onSortChange={onSortChange}
-        >
-          {_('Total')}
-        </TableHead>
+          title={_('Total')}
+        />
         <TableHead
           width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'tcp' : false}
           onSortChange={onSortChange}
-        >
-          {_('TCP')}
-        </TableHead>
+          title={_('TCP')}
+        />
         <TableHead
           width="11%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'udp' : false}
           onSortChange={onSortChange}
-        >
-          {_('UDP')}
-        </TableHead>
+          title={_('UDP')}
+        />
       </TableRow>
     </TableHeader>
   );

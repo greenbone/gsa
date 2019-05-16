@@ -1139,6 +1139,7 @@ get_many (gvm_connection_t *connection, const char *type,
   const char *level_high, *level_medium, *level_low, *level_log;
   const char *level_false_positive;
   const char *details;
+  entity_t entity;
 
   build_filter = params_value (params, "build_filter");
   filter_id = params_value (params, "filter_id");
@@ -1336,8 +1337,10 @@ get_many (gvm_connection_t *connection, const char *type,
         "Diagnostics: Failure to send command to manager daemon.",
         response_data);
     }
+
   g_free (request);
-  if (read_string_c (connection, &xml))
+
+  if (read_entity_and_string_c (connection, &entity, &xml))
     {
       g_string_free (xml, TRUE);
       g_string_free (type_many, TRUE);
@@ -1351,9 +1354,29 @@ get_many (gvm_connection_t *connection, const char *type,
         response_data);
     }
 
+  if (gmp_success (entity) != 1)
+    {
+      gchar *message;
+
+      set_http_status_from_entity (entity, response_data);
+
+      g_string_free (xml, TRUE);
+      g_string_free (type_many, TRUE);
+
+      message =
+        gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
+                      entity_attribute (entity, "status_text"), response_data);
+
+      free_entity (entity);
+      return message;
+    }
+
+  free_entity (entity);
+
   /* Cleanup, and return transformed XML. */
   g_string_append_printf (xml, "</get_%s>", type_many->str);
   g_string_free (type_many, TRUE);
+
   return envelope_gmp (connection, credentials, params,
                        g_string_free (xml, FALSE), response_data);
 }

@@ -23,7 +23,7 @@ import {interpolateHcl} from 'd3-interpolate';
 import {_, _l} from 'gmp/locale/lang';
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
-import {TASK_STATUS} from 'gmp/models/task';
+import {getTranslatableTaskStatus, TASK_STATUS} from 'gmp/models/task';
 
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {totalCount, percent} from 'web/components/dashboard/display/utils';
@@ -74,11 +74,12 @@ const transformStatusData = (data = {}) => {
 
   const tdata = groups.map(group => {
     const {count, value} = group;
+    const translatableValue = getTranslatableTaskStatus(value);
     const perc = percent(count, sum);
     return {
       value: count,
-      label: value,
-      toolTip: `${value}: ${perc}% (${count})`,
+      label: translatableValue,
+      toolTip: `${translatableValue}: ${perc}% (${count})`,
       color: taskStatusColorScale(value),
       filterValue: value,
     };

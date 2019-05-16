@@ -42,12 +42,12 @@ import withDefaultFilter from 'web/entities/withDefaultFilter';
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
 
 import {
-  loadEntities as loadFilters,
+  loadAllEntities as loadFilters,
   selector as filterSelector,
 } from 'web/store/entities/filters';
 
 import {
-  loadEntities as loadReportFormats,
+  loadAllEntities as loadReportFormats,
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 
@@ -197,9 +197,19 @@ class ReportDetails extends React.Component {
 
   componentDidUpdate() {
     const {reportFormats} = this.props;
-    if (!isDefined(this.state.reportFormatId) && isDefined(reportFormats)) {
-      // set initial report format id
-      this.setState({reportFormatId: first(reportFormats).id});
+    if (
+      !isDefined(this.state.reportFormatId) &&
+      isDefined(reportFormats) &&
+      reportFormats.length > 0
+    ) {
+      // set initial report format id if available
+      const reportFormatId = first(reportFormats).id;
+      if (isDefined(reportFormatId)) {
+        // ensure the report format id is only set if we really have one
+        // if no report format id is available we would create an infinite
+        // render loop here
+        this.setState({reportFormatId});
+      }
     }
 
     if (
@@ -351,28 +361,28 @@ class ReportDetails extends React.Component {
   }
 
   handleAddToAssets() {
-    const {gmp, showSuccessMessage} = this.props;
-    const {entity, filter} = this.state;
+    const {gmp, showSuccessMessage, entity, reportFilter: filter} = this.props;
 
     this.handleInteraction();
 
-    gmp.report.addAssets(entity, {filter}).then(response => {
+    gmp.report.addAssets(entity, {filter}).then(() => {
       showSuccessMessage(
         _(
           'Report content added to Assets with QoD>=70% and Overrides enabled.',
         ),
       );
+      this.reload();
     }, this.handleError);
   }
 
   handleRemoveFromAssets() {
-    const {gmp, showSuccessMessage} = this.props;
-    const {entity, filter} = this.state;
+    const {gmp, showSuccessMessage, entity, reportFilter: filter} = this.props;
 
     this.handleInteraction();
 
-    gmp.report.removeAssets(entity, {filter}).then(response => {
+    gmp.report.removeAssets(entity, {filter}).then(() => {
       showSuccessMessage(_('Report content removed from Assets.'));
+      this.reload();
     }, this.handleError);
   }
 
@@ -708,8 +718,8 @@ const mapStateToProps = (rootState, {match}) => {
     entityError,
     reportFilter: getFilter(entity),
     isLoading: !isDefined(entity),
-    filters: filterSel.getEntities(RESULTS_FILTER_FILTER),
-    reportFormats: reportFormatsSel.getEntities(REPORT_FORMATS_FILTER),
+    filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
+    reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
     reportId: id,
     deltaReportId: deltaid,
     reportComposerDefaults: getReportComposerDefaults(rootState),

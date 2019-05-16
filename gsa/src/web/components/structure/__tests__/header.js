@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,28 +16,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import React from 'react';
 
-import Divider from 'web/components/layout/divider';
+import {rendererWith} from 'web/utils/testing';
 
-import StNonAvailableIcon from 'web/components/icon/stnonavailableicon';
+import Header from '../header';
+import {setUsername} from 'web/store/usersettings/actions';
 
-import PropTypes from 'web/utils/proptypes';
+describe('Header tests', () => {
+  test('should render header', () => {
+    const isLoggedIn = jest.fn().mockReturnValue(true);
+    const gmp = {isLoggedIn, settings: {vendorVersion: ''}};
+    const {render, store} = rendererWith({gmp, router: true, store: true});
+    store.dispatch(setUsername('username'));
 
-import ErrorContainer from './errorcontainer';
+    const {element} = render(<Header />);
 
-const ErrorMessage = ({message, children}) => (
-  <ErrorContainer>
-    <Divider>
-      <StNonAvailableIcon size="medium" />
-      <b>{message}</b>
-      {children}
-    </Divider>
-  </ErrorContainer>
-);
-
-ErrorMessage.propTypes = {
-  message: PropTypes.string,
-};
-
-export default ErrorMessage;
+    expect(element).toMatchSnapshot();
+  });
+});

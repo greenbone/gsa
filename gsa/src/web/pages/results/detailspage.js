@@ -205,9 +205,13 @@ const Details = ({entity, ...props}) => {
                 <TableData>{_('Host')}</TableData>
                 <TableData>
                   <span>
-                    <DetailsLink type="host" id={host.id}>
-                      {host.name}
-                    </DetailsLink>
+                    {isDefined(host.id) ? (
+                      <DetailsLink type="host" id={host.id}>
+                        {host.name}
+                      </DetailsLink>
+                    ) : (
+                      host.name
+                    )}
                   </span>
                 </TableData>
               </TableRow>

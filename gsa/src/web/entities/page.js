@@ -32,8 +32,7 @@ import withGmp from 'web/utils/withGmp';
 
 import Toolbar from 'web/components/bar/toolbar';
 
-import ErrorBoundary from 'web/components/errorboundary/errorboundary';
-import ErrorMessage from 'web/components/errorboundary/errormessage';
+import ErrorMessage from 'web/components/error/errormessage';
 
 import Layout from 'web/components/layout/layout';
 
@@ -277,13 +276,11 @@ class EntitiesPage extends React.Component {
 
   render() {
     return (
-      <ErrorBoundary errElement={_('page')}>
-        <Layout grow="1" flex="column">
-          {this.renderToolbar()}
-          {this.renderSection()}
-          {this.renderDialogs()}
-        </Layout>
-      </ErrorBoundary>
+      <Layout grow="1" flex="column">
+        {this.renderToolbar()}
+        {this.renderSection()}
+        {this.renderDialogs()}
+      </Layout>
     );
   }
 }
