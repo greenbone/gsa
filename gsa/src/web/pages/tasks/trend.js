@@ -19,6 +19,8 @@
 
 import React from 'react';
 
+import _ from 'gmp/locale';
+
 import PropTypes from 'web/utils/proptypes';
 
 import TrendUpIcon from 'web/components/icon/trendupicon';
@@ -32,19 +34,19 @@ const Trend = ({name}) => {
   let IconComponent;
 
   if (name === 'up') {
-    title = 'Severity increased';
+    title = _('Severity increased');
     IconComponent = TrendUpIcon;
   } else if (name === 'down') {
-    title = 'Severity decreased';
+    title = _('Severity decreased');
     IconComponent = TrendDownIcon;
   } else if (name === 'more') {
-    title = 'Vulnerability count increased';
+    title = _('Vulnerability count increased');
     IconComponent = TrendMoreIcon;
   } else if (name === 'less') {
-    title = 'Vulnerability count decreased';
+    title = _('Vulnerability count decreased');
     IconComponent = TrendLessIcon;
   } else if (name === 'same') {
-    title = 'Vulnerabilities did not change';
+    title = _('Vulnerabilities did not change');
     IconComponent = TrendNoChangeIcon;
   } else {
     return <span />;
