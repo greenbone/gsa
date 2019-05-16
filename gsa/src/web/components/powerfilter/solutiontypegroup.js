@@ -34,13 +34,12 @@ import Table from 'web/components/table/table';
 import TableBody from 'web/components/table/body';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
+import Layout from 'web/components/layout/layout';
 
 import styled from 'styled-components';
 
-const StyledSpan = styled.span`
-  display: flex;
-  flex-direction: row;
-  flex-basis: auto;
+const StyledLayout = styled(Layout)`
+  flex-grow: 0;
 `;
 
 class SolutionTypesFilterGroup extends React.Component {
@@ -68,7 +67,7 @@ class SolutionTypesFilterGroup extends React.Component {
 
     return (
       <FormGroup title={_('Solution Type')}>
-        <StyledSpan>
+        <StyledLayout>
           <Table>
             <TableBody>
               <TableRow>
@@ -136,7 +135,7 @@ class SolutionTypesFilterGroup extends React.Component {
               </TableRow>
             </TableBody>
           </Table>
-        </StyledSpan>
+        </StyledLayout>
       </FormGroup>
     );
   }
