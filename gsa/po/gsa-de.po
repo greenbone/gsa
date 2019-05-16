@@ -3872,7 +3872,7 @@ msgstr "Tag {{name}} bearbeiten"
 
 #: gsa/src/web/pages/help/about.js:74
 msgid "Version {{version}}"
-msgstr "Version ({{count}})"
+msgstr "Version ({{version}})"
 
 #: gsa/src/web/pages/reports/triggeralertdialog.js:87
 msgid "Trigger Alert for Scan Report"

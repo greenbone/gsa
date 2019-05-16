@@ -246,33 +246,29 @@ class EditDialogComponent extends React.Component {
                       currentSortDir={sortDir}
                       sortBy="name"
                       onSortChange={this.handleSortChange}
-                    >
-                      {_('Name')}
-                    </TableHead>
+                      title={_('Name')}
+                    />
                     <TableHead
                       currentSortBy={sortBy}
                       currentSortDir={sortDir}
                       sortBy="oid"
                       onSortChange={this.handleSortChange}
-                    >
-                      {_('OID')}
-                    </TableHead>
+                      title={_('OID')}
+                    />
                     <TableHead
                       currentSortBy={sortBy}
                       currentSortDir={sortDir}
                       sortBy="severity"
                       onSortChange={this.handleSortChange}
-                    >
-                      {_('Severity')}
-                    </TableHead>
+                      title={_('Severity')}
+                    />
                     <TableHead
                       currentSortBy={sortBy}
                       currentSortDir={sortDir}
                       sortBy="timeout"
                       onSortChange={this.handleSortChange}
-                    >
-                      {_('Timeout')}
-                    </TableHead>
+                      title={_('Timeout')}
+                    />
                     <TableHead>{_('Prefs')}</TableHead>
                     <TableHead
                       currentSortBy={sortBy}
@@ -280,9 +276,8 @@ class EditDialogComponent extends React.Component {
                       sortBy="selected"
                       onSortChange={this.handleSortChange}
                       align="center"
-                    >
-                      {_('Selected')}
-                    </TableHead>
+                      title={_('Selected')}
+                    />
                     <TableHead align="center">{_('Actions')}</TableHead>
                   </TableRow>
                 </TableHeader>

@@ -46,89 +46,79 @@ const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
         currentSortBy={currentSortBy}
         sortBy={sort ? 'ip' : false}
         onSortChange={onSortChange}
-      >
-        {_('IP Address')}
-      </TableHead>
+        title={_('IP Address')}
+      />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'hostname' : false}
         onSortChange={onSortChange}
-      >
-        {_('Hostname')}
-      </TableHead>
+        title={_('Hostname')}
+      />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'os' : false}
         width="5em"
         onSortChange={onSortChange}
-      >
-        {_('OS')}
-      </TableHead>
+        title={_('OS')}
+      />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'high' : false}
         width="10%"
         onSortChange={onSortChange}
-      >
-        {_('High')}
-      </TableHead>
+        title={_('High')}
+      />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'medium' : false}
         width="10%"
         onSortChange={onSortChange}
-      >
-        {_('Medium')}
-      </TableHead>
+        title={_('Medium')}
+      />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'low' : false}
         width="10%"
         onSortChange={onSortChange}
-      >
-        {_('Low')}
-      </TableHead>
+        title={_('Low')}
+      />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'log' : false}
         width="10%"
         onSortChange={onSortChange}
-      >
-        {_('Log')}
-      </TableHead>
+        title={_('Log')}
+      />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'false_positive' : false}
         width="10%"
         onSortChange={onSortChange}
-      >
-        {_('False Positive')}
-      </TableHead>
+        title={_('False Positive')}
+      />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'total' : false}
         width="10%"
         onSortChange={onSortChange}
-      >
-        {_('Total')}
-      </TableHead>
+        title={_('Total')}
+      />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'severity' : false}
         width="10%"
         onSortChange={onSortChange}
-      >
-        {_('Severity')}
-      </TableHead>
+        title={_('Severity')}
+      />
     </TableRow>
   </TableHeader>
 );

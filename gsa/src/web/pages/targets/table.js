@@ -52,36 +52,32 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}
-        >
-          {_('Name')}
-        </TableHead>
+          title={_('Name')}
+        />
         <TableHead
           width="20%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hosts' : false}
           onSortChange={onSortChange}
-        >
-          {_('Hosts')}
-        </TableHead>
+          title={_('Hosts')}
+        />
         <TableHead
           width="5%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'ips' : false}
           onSortChange={onSortChange}
-        >
-          {_('IPs')}
-        </TableHead>
+          title={_('IPs')}
+        />
         <TableHead
           width="15%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'port_list' : false}
           onSortChange={onSortChange}
-        >
-          {_('Port List')}
-        </TableHead>
+          title={_('Port List')}
+        />
         <TableHead width="15%">{_('Credentials')}</TableHead>
         {actionsColumn}
       </TableRow>
