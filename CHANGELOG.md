@@ -49,6 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix translation for task status and task trend tooltip [#1409](https://github.com/greenbone/gsa/pull/1409)
 - Fix some translation bugs (statusbar, about page, table header tooltips)[#1407](https://github.com/greenbone/gsa/pull/1407)
 - Fix checking if an entity is in use [#1406](https://github.com/greenbone/gsa/pull/1406)
 - Fix "Invalid date" string for scan times [#1405](https://github.com/greenbone/gsa/pull/1405)
