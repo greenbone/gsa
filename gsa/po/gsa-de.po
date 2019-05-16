@@ -730,6 +730,10 @@ msgstr "Anz. erstellter CVEs"
 msgid "Total CVEs"
 msgstr "CVEs gesamt"
 
+#: gsa/src/web/components/label/severityclass.js:74
+msgid "False Pos."
+msgstr "Falsch-Pos."
+
 #: gsa/src/web/pages/cves/dashboard/createddisplay.js:39
 #: gsa/src/web/pages/reports/dashboard/highresultsdisplay.js:126
 #: gsa/src/web/pages/tickets/dashboard/createddisplay.js:66
