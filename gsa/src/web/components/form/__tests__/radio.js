@@ -68,6 +68,16 @@ describe('Radio tests', () => {
     expect(element).toMatchSnapshot();
   });
 
+  test('should render radio with children', () => {
+    const {element} = render(
+      <Radio>
+        <span>child1</span>
+        <span>child2</span>
+      </Radio>,
+    );
+    expect(element).toMatchSnapshot();
+  });
+
   test('should call change handler', () => {
     const onChange = jest.fn();
 
