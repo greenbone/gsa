@@ -119,6 +119,7 @@ export const parseEnvelopeMeta = envelope => {
 
   for (const [name, to] of ENVELOPE_PROPS) {
     meta[to] = envelope[name];
+    delete envelope[name];
   }
   return meta;
 };
@@ -145,10 +146,6 @@ export const parseProperties = (element = {}, object = {}) => {
   if (isString(element._id) && element._id.length > 0) {
     // only set id if it id defined
     copy.id = element._id;
-  }
-
-  if (isString(element.name) && element.name.length > 0) {
-    copy.name = parseXmlEncodedString(element.name);
   }
 
   if (isDefined(element.creation_time)) {

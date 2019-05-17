@@ -22,7 +22,7 @@ import {isDefined, isString} from '../utils/identity';
 import {isEmpty, split} from '../utils/string';
 import {map} from '../utils/array';
 
-import {parseFloat, parseSeverity, parseXmlEncodedString} from '../parser';
+import {parseFloat, parseSeverity} from '../parser';
 
 import Info from './info';
 
@@ -35,7 +35,7 @@ const parse_tags = tags => {
     const splited = tags.split('|');
     for (const t of splited) {
       const [key, value] = split(t, '=', 1);
-      newtags[key] = parseXmlEncodedString(value);
+      newtags[key] = value;
     }
   }
 
