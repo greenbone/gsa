@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Task Trend tests should render 1`] = `
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+<span
+  alt="Severity increased"
+  class="c0 "
+  title="Severity increased"
+>
+  <svg>
+    trend_up.svg
+  </svg>
+</span>
+`;
