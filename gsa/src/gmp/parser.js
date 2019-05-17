@@ -119,6 +119,7 @@ export const parseEnvelopeMeta = envelope => {
 
   for (const [name, to] of ENVELOPE_PROPS) {
     meta[to] = envelope[name];
+    delete envelope[name];
   }
   return meta;
 };
