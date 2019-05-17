@@ -18,11 +18,14 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../utils/proptypes.js';
-
-import withGmp from '../utils/withGmp.js';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
+import {createDeleteEntity} from 'web/store/entities/utils/actions';
 
 export const goto_details = (type, props) => ({data}) => {
   const {history} = props;
@@ -45,12 +48,11 @@ class EntityComponent extends React.Component {
   }
 
   handleEntityDelete(entity) {
-    const {onDeleted, onDeleteError, gmp, name} = this.props;
-    const cmd = gmp[name];
+    const {deleteEntity, onDeleted, onDeleteError} = this.props;
 
     this.handleInteraction();
 
-    return cmd.delete(entity).then(onDeleted, onDeleteError);
+    return deleteEntity(entity.id).then(onDeleted, onDeleteError);
   }
 
   handleEntityClone(entity) {
@@ -113,6 +115,7 @@ class EntityComponent extends React.Component {
 
 EntityComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  deleteEntity: PropTypes.func.isRequired,
   gmp: PropTypes.gmp.isRequired,
   name: PropTypes.string.isRequired,
   onCloneError: PropTypes.func,
@@ -128,6 +131,19 @@ EntityComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default withGmp(EntityComponent);
+const mapDispatchToProps = (dispatch, {name, gmp}) => {
+  const deleteEntity = createDeleteEntity({entityType: name});
+  return {
+    deleteEntity: id => dispatch(deleteEntity(gmp)(id)),
+  };
+};
+
+export default compose(
+  withGmp,
+  connect(
+    undefined,
+    mapDispatchToProps,
+  ),
+)(EntityComponent);
 
 // vim: set ts=2 sw=2 tw=80:
