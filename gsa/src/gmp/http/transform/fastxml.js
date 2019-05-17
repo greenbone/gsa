@@ -29,6 +29,8 @@ const PARSER_OPTIONS = {
   ignoreAttributes: false,
   ignoreNameSpace: true,
   textNodeName: '__text',
+  attrValueProcessor: attr => parseXmlEncodedString(attr),
+  tagValueProcessor: value => parseXmlEncodedString(value),
 };
 
 const transformXmlData = response => {
