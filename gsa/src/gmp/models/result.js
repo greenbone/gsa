@@ -22,7 +22,7 @@ import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 import Model from '../model';
-import {parseSeverity, parseQod, parseXmlEncodedString} from '../parser';
+import {parseSeverity, parseQod} from '../parser';
 
 import Nvt from './nvt';
 
@@ -90,7 +90,7 @@ class Result extends Model {
     copy.nvt = new Nvt(nvt);
 
     if (isDefined(description)) {
-      copy.description = parseXmlEncodedString(description);
+      copy.description = description;
     }
 
     if (isDefined(severity)) {

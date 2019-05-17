@@ -246,50 +246,6 @@ describe('Filter parse from keywords', () => {
     const filter2 = Filter.fromString(filterstring);
     expect(filter.equals(filter2)).toEqual(true);
   });
-
-  test('should parse keywords with xml encoded values', () => {
-    const elem = {
-      keywords: {
-        keyword: [
-          {
-            column: 'foo',
-            relation: '=',
-            value: '&quot;bar&quot;',
-          },
-          {
-            column: 'bar',
-            relation: '=',
-            value: '&apos;foo&apos;',
-          },
-        ],
-      },
-    };
-
-    const filter = new Filter(elem);
-    expect(filter.toFilterString()).toEqual('foo="bar" bar=\'foo\'');
-  });
-
-  test('should parse keywords with xml encoded relations', () => {
-    const elem = {
-      keywords: {
-        keyword: [
-          {
-            column: 'foo',
-            relation: '&lt;',
-            value: 'bar',
-          },
-          {
-            column: 'bar',
-            relation: '&gt;',
-            value: 'foo',
-          },
-        ],
-      },
-    };
-
-    const filter = new Filter(elem);
-    expect(filter.toFilterString()).toEqual('foo<bar bar>foo');
-  });
 });
 
 describe('Filter set', () => {

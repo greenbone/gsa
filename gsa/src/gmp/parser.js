@@ -147,10 +147,6 @@ export const parseProperties = (element = {}, object = {}) => {
     copy.id = element._id;
   }
 
-  if (isString(element.name) && element.name.length > 0) {
-    copy.name = parseXmlEncodedString(element.name);
-  }
-
   if (isDefined(element.creation_time)) {
     copy.creationTime = parseDate(element.creation_time);
     delete copy.creation_time;
