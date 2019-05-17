@@ -93,4 +93,17 @@ describe('Rejection tests', () => {
 
     expect(rejection.message).toEqual('bar');
   });
+
+  test('should allow to get plain data', () => {
+    const xhr = {
+      response: 'foo',
+      responseText: 'bar',
+      responseXML: 'ipsum',
+    };
+    const rejection = new Rejection(xhr, Rejection.REASON_ERROR, 'foo');
+
+    expect(rejection.plainData()).toEqual('foo');
+    expect(rejection.plainData('text')).toEqual('bar');
+    expect(rejection.plainData('xml')).toEqual('ipsum');
+  });
 });

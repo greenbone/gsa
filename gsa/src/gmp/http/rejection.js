@@ -39,6 +39,16 @@ class Rejection {
     this.stack = error.stack;
   }
 
+  plainData(type = '') {
+    if (type === 'xml') {
+      return this._xhr.responseXML;
+    }
+    if (type === 'text') {
+      return this._xhr.responseText;
+    }
+    return this._xhr.response;
+  }
+
   isError() {
     return this.reason === Rejection.REASON_ERROR;
   }
