@@ -24,14 +24,14 @@ describe('Rejection tests', () => {
 
     expect(rejection.reason).toEqual(Rejection.REASON_ERROR);
     expect(rejection.message).toEqual('');
-    expect(rejection.xhr).toBeUndefined();
     expect(rejection.error).toBeUndefined();
     expect(rejection.stack).toBeDefined();
     expect(rejection.isError()).toEqual(true);
+    expect(rejection.status).toBeUndefined();
   });
 
   test('should create error rejection', () => {
-    const xhr = {foo: 'bar'};
+    const xhr = {status: 123};
     const error = new Error('foobar');
     const rejection = new Rejection(
       xhr,
@@ -42,46 +42,46 @@ describe('Rejection tests', () => {
 
     expect(rejection.reason).toEqual(Rejection.REASON_ERROR);
     expect(rejection.message).toEqual('an error');
-    expect(rejection.xhr).toEqual(xhr);
     expect(rejection.error).toEqual(error);
     expect(rejection.stack).toBeDefined();
     expect(rejection.isError()).toEqual(true);
+    expect(rejection.status).toEqual(123);
   });
 
   test('should create unauthorized rejection', () => {
-    const xhr = {foo: 'bar'};
+    const xhr = {status: 123};
     const rejection = new Rejection(xhr, Rejection.REASON_UNAUTHORIZED);
 
     expect(rejection.reason).toEqual(Rejection.REASON_UNAUTHORIZED);
     expect(rejection.message).toEqual('');
-    expect(rejection.xhr).toEqual(xhr);
     expect(rejection.error).toBeUndefined();
     expect(rejection.stack).toBeDefined();
     expect(rejection.isError()).toEqual(false);
+    expect(rejection.status).toEqual(123);
   });
 
   test('should create cancel rejection', () => {
-    const xhr = {foo: 'bar'};
+    const xhr = {status: 123};
     const rejection = new Rejection(xhr, Rejection.REASON_CANCEL, 'foo');
 
     expect(rejection.reason).toEqual(Rejection.REASON_CANCEL);
     expect(rejection.message).toEqual('foo');
-    expect(rejection.xhr).toEqual(xhr);
     expect(rejection.error).toBeUndefined();
     expect(rejection.stack).toBeDefined();
     expect(rejection.isError()).toEqual(false);
+    expect(rejection.status).toEqual(123);
   });
 
   test('should create timeout rejection', () => {
-    const xhr = {foo: 'bar'};
+    const xhr = {status: 123};
     const rejection = new Rejection(xhr, Rejection.REASON_TIMEOUT, 'foo');
 
     expect(rejection.reason).toEqual(Rejection.REASON_TIMEOUT);
     expect(rejection.message).toEqual('foo');
-    expect(rejection.xhr).toEqual(xhr);
     expect(rejection.error).toBeUndefined();
     expect(rejection.stack).toBeDefined();
     expect(rejection.isError()).toEqual(false);
+    expect(rejection.status).toEqual(123);
   });
 
   test('should allow to change message', () => {

@@ -28,8 +28,9 @@ class Rejection {
     this.name = 'Rejection';
     this.message = message;
     this.reason = reason;
-    this.xhr = xhr;
     this.error = error;
+
+    this._xhr = xhr;
 
     if (!isDefined(error)) {
       error = new Error();
@@ -45,6 +46,10 @@ class Rejection {
   setMessage(message) {
     this.message = message;
     return this;
+  }
+
+  get status() {
+    return isDefined(this._xhr) ? this._xhr.status : undefined;
   }
 }
 
