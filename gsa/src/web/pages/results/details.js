@@ -71,6 +71,11 @@ const ResultDetails = ({className, links = true, entity}) => {
     ? result.detection.result.details
     : undefined;
 
+  const result2 = result.delta.result;
+  const result2Description = isDefined(result2)
+    ? result2.description
+    : undefined;
+
   return (
     <Layout flex="column" grow="1" className={className}>
       <DetailsBlock title={_('Summary')}>
@@ -85,7 +90,7 @@ const ResultDetails = ({className, links = true, entity}) => {
           </div>
           <div>
             <h3>Result 2</h3>
-            <Pre>{result.delta.result.description}</Pre>
+            <Pre>{result2Description}</Pre>
           </div>
           <div>
             <h3>Different Lines</h3>
