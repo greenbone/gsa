@@ -18,66 +18,34 @@
  */
 import {parse} from 'fast-xml-parser';
 
-import {_} from 'gmp/locale/lang';
-
-import {parseEnvelopeMeta} from 'gmp/parser';
+import {parseEnvelopeMeta, parseXmlEncodedString} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Rejection from '../rejection';
+import {success, rejection} from './xml';
 
 const PARSER_OPTIONS = {
   attributeNamePrefix: '_',
   ignoreAttributes: false,
   ignoreNameSpace: true,
   textNodeName: '__text',
+  attrValueProcessor: attr => parseXmlEncodedString(attr),
+  tagValueProcessor: value => parseXmlEncodedString(value),
 };
 
-const transform_xml_data = response => {
-  const {envelope} = parse(response.data, PARSER_OPTIONS);
+const transformXmlData = response => {
+  const xmlString = response.plainData('text');
+  const {envelope} = parse(xmlString, PARSER_OPTIONS);
   const meta = parseEnvelopeMeta(envelope);
   return response.set(envelope, meta);
 };
 
-const success = (response, options) => {
-  try {
-    return transform_xml_data(response);
-  } catch (error) {
-    throw new Rejection(
-      response.xhr,
-      Rejection.REASON_ERROR,
-      _(
-        'An error occurred while converting gmp response to js for ' +
-          'url {{- url}}',
-        {url: options.url},
-      ),
-      error,
-    );
-  }
-};
-
-const rejection = (rej, options) => {
-  if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
-    const {envelope} = parse(rej.xhr.response);
-
-    if (isDefined(envelope)) {
-      rej.root = envelope;
-
-      if (isDefined(envelope.gsad_response)) {
-        return rej.setMessage(envelope.gsad_response.message);
-      }
-
-      if (isDefined(envelope.action_result)) {
-        return rej.setMessage(envelope.action_result.message);
-      }
-    }
-
-    return rej.setMessage(_('Unknown Error'));
-  }
-  return rej;
+const transformRejection = rej => {
+  const xmlString = rej.plainData('text');
+  return isDefined(xmlString) ? parse(xmlString) : undefined;
 };
 
 export default {
-  success,
-  rejection,
+  success: success(transformXmlData),
+  rejection: rejection(transformRejection),
 };

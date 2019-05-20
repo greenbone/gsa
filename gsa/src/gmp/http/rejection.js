@@ -28,14 +28,25 @@ class Rejection {
     this.name = 'Rejection';
     this.message = message;
     this.reason = reason;
-    this.xhr = xhr;
     this.error = error;
+
+    this._xhr = xhr;
 
     if (!isDefined(error)) {
       error = new Error();
     }
 
     this.stack = error.stack;
+  }
+
+  plainData(type = '') {
+    if (type === 'xml') {
+      return this._xhr.responseXML;
+    }
+    if (type === 'text') {
+      return this._xhr.responseText;
+    }
+    return this._xhr.response;
   }
 
   isError() {
@@ -45,6 +56,10 @@ class Rejection {
   setMessage(message) {
     this.message = message;
     return this;
+  }
+
+  get status() {
+    return isDefined(this._xhr) ? this._xhr.status : undefined;
   }
 }
 

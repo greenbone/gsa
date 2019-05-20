@@ -39,7 +39,9 @@ class Response {
     if (type === 'xml') {
       return this._xhr.responseXML;
     }
-    this._xhr.responseType = type;
+    if (type === 'text') {
+      return this._xhr.responseText;
+    }
     return this._xhr.response;
   }
 

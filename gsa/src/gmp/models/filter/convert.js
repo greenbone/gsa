@@ -17,10 +17,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {isDefined, isString} from '../../utils/identity';
+import {isDefined} from '../../utils/identity';
 import {isEmpty} from '../../utils/string';
 
-import {parseInt, parseXmlEncodedString} from '../../parser';
+import {parseInt} from '../../parser';
 
 const convertBooleanInt = (keyword, value, relation) => ({
   keyword,
@@ -53,9 +53,6 @@ const convertNoRelation = (keyword, value, relation) => ({
 
 const convertNoRelationAndKeyword = (keyword, value, relation) => ({value});
 
-const convertXmlEncoding = value =>
-  isString(value) ? parseXmlEncodedString(value) : value;
-
 const KEYWORD_CONVERTERS = {
   apply_overrides: convertBooleanInt,
   autofp: convertInt,
@@ -78,9 +75,6 @@ const VALUE_CONVERTERS = {
 
 const convert = (keyword, value, relation) => {
   let converter = KEYWORD_CONVERTERS[keyword];
-
-  value = convertXmlEncoding(value);
-  relation = convertXmlEncoding(relation);
 
   if (isDefined(converter)) {
     return converter(keyword, value, relation);
