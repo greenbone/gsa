@@ -126,7 +126,7 @@ const Row = ({
         <DateTime format={shortDate} date={notbefore} />
       </TableData>
       <TableData>
-        <DateTime format={shortDate} data={notafter} />
+        <DateTime format={shortDate} date={notafter} />
       </TableData>
       <TableData>
         <Link
