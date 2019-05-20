@@ -50,6 +50,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Don't crash if second result for delta is undefined [#1418](https://github.com/greenbone/gsa/pull/1418)
 - Fix xml decoding issues with fast-xml-parser [#1414](https://github.com/greenbone/gsa/pull/1414)
 - Fix translation for task status and task trend tooltip [#1409](https://github.com/greenbone/gsa/pull/1409)
 - Fix problems with German translation in Add Dashboard dialog, SolutionTypeGroup and SeverityClassLabel [#1412](https://github.com/greenbone/gsa/pull/1412)
