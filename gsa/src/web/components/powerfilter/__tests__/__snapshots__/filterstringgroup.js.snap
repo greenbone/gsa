@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterStringGroup tests should render 1`] = `
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  padding-bottom: 10px;
+}
+
+.c1 {
+  display: inline-block;
+  max-width: 100%;
+  font-weight: bold;
+  text-align: right;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 16.66666667%;
+  margin-left: 0;
+}
+
+.c2 {
+  width: 83.33333333%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.c5 {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  display: block;
+  height: 22px;
+  color: #393637;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #aaaaaa;
+  border-radius: 2px;
+  padding: 1px 8px;
+}
+
+.c5:-webkit-autofill {
+  box-shadow: 0 0 0 1000px white inset;
+}
+
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+<div
+  class="c0"
+>
+  <label
+    class="c1"
+    data-testid="formgroup-title"
+  >
+    Filter
+  </label>
+  <div
+    class="c2 c3"
+    data-testid="formgroup-content"
+    size="10"
+  >
+    <input
+      class="c4 c5"
+      maxlength="80"
+      name="name"
+      size="30"
+      type="text"
+      value=""
+    />
+  </div>
+</div>
+`;
