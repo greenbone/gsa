@@ -1,0 +1,337 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SortByGroup tests should render 1`] = `
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c8 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c13 {
+  margin-left: -5px;
+}
+
+.c13 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c13 > * {
+  margin-left: 5px;
+}
+
+.c12 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  padding-bottom: 10px;
+}
+
+.c1 {
+  display: inline-block;
+  max-width: 100%;
+  font-weight: bold;
+  text-align: right;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 16.66666667%;
+  margin-left: 0;
+}
+
+.c2 {
+  width: 83.33333333%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.c10 {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  outline: none;
+  margin: 1px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.c9 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c9 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c5 {
+  border: 1px solid #aaaaaa;
+  border-radius: 2px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  padding: 1px 5px;
+  background-color: #fff;
+  color: #000;
+  font-weight: normal;
+}
+
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: relative;
+  width: 180px;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.c6 {
+  cursor: default;
+}
+
+.c11 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.c15 {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  margin-left: 10px;
+  line-height: normal;
+  width: auto;
+  height: auto;
+}
+
+.c16 {
+  opacity: 1;
+}
+
+.c14 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+<div
+  class="c0"
+>
+  <label
+    class="c1"
+    data-testid="formgroup-title"
+  >
+    Sort by
+  </label>
+  <div
+    class="c2 c3"
+    data-testid="formgroup-content"
+    size="10"
+  >
+    <div
+      class="c4"
+      width="180px"
+    >
+      <div
+        class="c5"
+      >
+        <div
+          class="c6 c7"
+          data-testid="select-selected-value"
+        />
+        <div
+          class="c8"
+        >
+          <span
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-label="open menu"
+            class="c9 c10"
+            data-testid="select-open-button"
+            data-toggle="true"
+            role="button"
+            type="button"
+          >
+            ▼
+          </span>
+        </div>
+      </div>
+    </div>
+    <label
+      class="c11"
+    >
+      <div
+        class="c12 c3"
+      >
+        <div
+          class="c13 c3"
+          margin="5px"
+        >
+          <input
+            checked=""
+            class="c14 c15"
+            data-testid="radio-input"
+            name="sort_order"
+            type="radio"
+            value="sort"
+          />
+          <span
+            class="c16"
+            data-testid="radio-title"
+          >
+            Ascending
+          </span>
+        </div>
+      </div>
+    </label>
+    <label
+      class="c11"
+    >
+      <div
+        class="c12 c3"
+      >
+        <div
+          class="c13 c3"
+          margin="5px"
+        >
+          <input
+            class="c14 c15"
+            data-testid="radio-input"
+            name="sort_order"
+            type="radio"
+            value="sort-reverse"
+          />
+          <span
+            class="c16"
+            data-testid="radio-title"
+          >
+            Descending
+          </span>
+        </div>
+      </div>
+    </label>
+  </div>
+</div>
+`;
