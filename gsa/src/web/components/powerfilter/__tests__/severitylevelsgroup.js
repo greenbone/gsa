@@ -1,0 +1,101 @@
+/* Copyright (C) 2019 Greenbone Networks GmbH
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+import React from 'react';
+
+import {render, fireEvent} from 'web/utils/testing';
+
+import SeverityLevelsFilterGroup from '../severitylevelsgroup';
+
+import Filter from 'gmp/models/filter';
+
+describe('SeverityLevelsFilterGroup tests', () => {
+  test('should render', () => {
+    const filter = Filter.fromString('levels=h');
+    const handleChange = jest.fn();
+    const {element} = render(
+      <SeverityLevelsFilterGroup filter={filter} onChange={handleChange} />,
+    );
+
+    expect(element).toMatchSnapshot();
+  });
+
+  test('should call change handler', () => {
+    const filter = Filter.fromString('levels=');
+    const handleChange = jest.fn();
+    const {element} = render(
+      <SeverityLevelsFilterGroup filter={filter} onChange={handleChange} />,
+    );
+
+    const checkbox = element.querySelectorAll('input');
+    fireEvent.click(checkbox[0]);
+
+    expect(handleChange).toHaveBeenCalled();
+    expect(handleChange).toHaveBeenCalledWith('h', 'levels');
+  });
+
+  test('should check checkbox', () => {
+    const filter = Filter.fromString('levels=hm');
+    const handleChange = jest.fn();
+    const {element} = render(
+      <SeverityLevelsFilterGroup filter={filter} onChange={handleChange} />,
+    );
+
+    const checkbox = element.querySelectorAll('input');
+
+    expect(checkbox[0].checked).toEqual(true);
+    expect(checkbox[1].checked).toEqual(true);
+  });
+
+  test('should uncheck checkbox', () => {
+    const filter1 = Filter.fromString('levels=hm');
+    const filter2 = Filter.fromString('levels=m');
+    const handleChange = jest.fn();
+    const {element, rerender} = render(
+      <SeverityLevelsFilterGroup filter={filter1} onChange={handleChange} />,
+    );
+
+    const checkbox = element.querySelectorAll('input');
+
+    expect(checkbox[0].checked).toEqual(true);
+    expect(checkbox[1].checked).toEqual(true);
+
+    rerender(
+      <SeverityLevelsFilterGroup filter={filter2} onChange={handleChange} />,
+    );
+
+    expect(checkbox[0].checked).toEqual(false);
+    expect(checkbox[1].checked).toEqual(true);
+  });
+
+  test('should be unchecked by default', () => {
+    const filter = Filter.fromString();
+    const handleChange = jest.fn();
+    const {element} = render(
+      <SeverityLevelsFilterGroup filter={filter} onChange={handleChange} />,
+    );
+
+    const checkbox = element.querySelectorAll('input');
+
+    expect(checkbox[0].checked).toEqual(false);
+    expect(checkbox[1].checked).toEqual(false);
+    expect(checkbox[2].checked).toEqual(false);
+    expect(checkbox[3].checked).toEqual(false);
+    expect(checkbox[4].checked).toEqual(false);
+  });
+});
