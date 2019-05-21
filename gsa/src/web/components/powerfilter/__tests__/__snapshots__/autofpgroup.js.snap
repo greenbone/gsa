@@ -1,0 +1,290 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AutoFpGroup tests should render 1`] = `
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c5 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c6 {
+  margin-top: -5px;
+}
+
+.c6 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c6 > * {
+  margin-top: 5px;
+}
+
+.c8 {
+  margin-left: -5px;
+}
+
+.c8 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c8 > * {
+  margin-left: 5px;
+}
+
+.c4 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  padding-bottom: 10px;
+}
+
+.c1 {
+  display: inline-block;
+  max-width: 100%;
+  font-weight: bold;
+  text-align: right;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 16.66666667%;
+  margin-left: 0;
+}
+
+.c2 {
+  width: 83.33333333%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.c7 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.c10 {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  margin-left: 10px;
+  line-height: normal;
+  width: auto;
+  height: auto;
+}
+
+.c11 {
+  opacity: 1;
+}
+
+.c12 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c9 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+<div
+  class="c0"
+>
+  <label
+    class="c1"
+    data-testid="formgroup-title"
+  >
+    Auto-FP
+  </label>
+  <div
+    class="c2 c3"
+    data-testid="formgroup-content"
+    size="10"
+  >
+    <div
+      class="c4 c5"
+    >
+      <div
+        class="c6 c3"
+        margin="5px"
+      >
+        <label
+          class="c7"
+        >
+          <div
+            class="c4 c5"
+          >
+            <div
+              class="c8 c5"
+              margin="5px"
+            >
+              <input
+                checked=""
+                class="c9 c10"
+                name="autofp"
+                type="checkbox"
+                value=""
+              />
+              <span
+                class="c11"
+                data-testid="checkbox-title"
+              >
+                Trust vendor security updates
+              </span>
+            </div>
+          </div>
+        </label>
+        <div
+          class="c4 c5"
+        >
+          <div
+            class="c8 c5"
+            margin="5px"
+          >
+            <label
+              class="c7"
+            >
+              <div
+                class="c4 c5"
+              >
+                <div
+                  class="c8 c5"
+                  margin="5px"
+                >
+                  <input
+                    checked=""
+                    class="c12 c10"
+                    data-testid="radio-input"
+                    name="autofp"
+                    type="radio"
+                    value="1"
+                  />
+                  <span
+                    class="c11"
+                    data-testid="radio-title"
+                  >
+                    Full CVE match
+                  </span>
+                </div>
+              </div>
+            </label>
+            <label
+              class="c7"
+            >
+              <div
+                class="c4 c5"
+              >
+                <div
+                  class="c8 c5"
+                  margin="5px"
+                >
+                  <input
+                    class="c12 c10"
+                    data-testid="radio-input"
+                    name="autofp"
+                    type="radio"
+                    value="2"
+                  />
+                  <span
+                    class="c11"
+                    data-testid="radio-title"
+                  >
+                    Partial CVE match
+                  </span>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
