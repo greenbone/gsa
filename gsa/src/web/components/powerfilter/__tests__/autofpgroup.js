@@ -45,6 +45,9 @@ describe('AutoFpGroup tests', () => {
     const radio = getAllByTestId('radio-input');
 
     expect(input[0].checked).toEqual(true);
+    expect(radio[0].checked).toEqual(true);
+    expect(radio[1].checked).toEqual(false);
+
     expect(radio[0].disabled).toEqual(false);
     expect(radio[1].disabled).toEqual(false);
   });
@@ -59,6 +62,9 @@ describe('AutoFpGroup tests', () => {
     const radio = getAllByTestId('radio-input');
 
     expect(input[0].checked).toEqual(false);
+    expect(radio[0].checked).toEqual(false);
+    expect(radio[1].checked).toEqual(false);
+
     expect(radio[0].disabled).toEqual(true);
     expect(radio[1].disabled).toEqual(true);
   });
@@ -73,6 +79,25 @@ describe('AutoFpGroup tests', () => {
     fireEvent.click(input[0]);
 
     expect(handleChange).toHaveBeenCalledWith(1, 'autofp');
+  });
+
+  test('should check radio buttons correctly', () => {
+    const filter1 = Filter.fromString('autofp=1');
+    const filter2 = Filter.fromString('autofp=2');
+    const handleChange = jest.fn();
+    const {rerender, getAllByTestId} = render(
+      <AutoFpGroup filter={filter1} onChange={handleChange} />,
+    );
+
+    const radio = getAllByTestId('radio-input');
+
+    expect(radio[0].checked).toEqual(true);
+    expect(radio[1].checked).toEqual(false);
+
+    rerender(<AutoFpGroup filter={filter2} onChange={handleChange} />);
+
+    expect(radio[0].checked).toEqual(false);
+    expect(radio[1].checked).toEqual(true);
   });
 
   test('should call change handler of checkbox for "unchecking"', () => {
