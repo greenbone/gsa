@@ -31,7 +31,7 @@ describe('ApplyOverridesGroup tests', () => {
     const {element} = render(
       <ApplyOverridesGroup
         filter={filter}
-        name="apply overrides"
+        name="applyOverrides"
         overrides={1}
         onChange={handleChange}
       />,
@@ -46,7 +46,7 @@ describe('ApplyOverridesGroup tests', () => {
     const {getAllByTestId} = render(
       <ApplyOverridesGroup
         filter={filter}
-        name="apply overrides"
+        name="applyOverrides"
         overrides={1}
         onChange={handleChange}
       />,
@@ -55,7 +55,7 @@ describe('ApplyOverridesGroup tests', () => {
     const radio = getAllByTestId('radio-input');
     fireEvent.click(radio[1]);
 
-    expect(handleChange).toHaveBeenCalledWith(0, 'apply overrides');
+    expect(handleChange).toHaveBeenCalledWith(0, 'applyOverrides');
   });
 
   test('should check radio', () => {
@@ -64,7 +64,7 @@ describe('ApplyOverridesGroup tests', () => {
     const {getAllByTestId} = render(
       <ApplyOverridesGroup
         filter={filter}
-        name="apply overrides"
+        name="applyOverrides"
         overrides={1}
         onChange={handleChange}
       />,
@@ -82,7 +82,7 @@ describe('ApplyOverridesGroup tests', () => {
     const {getAllByTestId, rerender} = render(
       <ApplyOverridesGroup
         filter={filter1}
-        name="apply overrides"
+        name="applyOverrides"
         overrides={1}
         onChange={handleChange}
       />,
@@ -96,7 +96,7 @@ describe('ApplyOverridesGroup tests', () => {
     rerender(
       <ApplyOverridesGroup
         filter={filter2}
-        name="apply overrides"
+        name="applyOverrides"
         overrides={1}
         onChange={handleChange}
       />,
@@ -112,7 +112,7 @@ describe('ApplyOverridesGroup tests', () => {
     const {getAllByTestId} = render(
       <ApplyOverridesGroup
         filter={filter}
-        name="apply overrides"
+        name="applyOverrides"
         overrides={0}
         onChange={handleChange}
       />,
@@ -127,7 +127,7 @@ describe('ApplyOverridesGroup tests', () => {
     const handleChange = jest.fn();
     const {getAllByTestId} = render(
       <ApplyOverridesGroup
-        name="apply overrides"
+        name="applyOverrides"
         overrides={1}
         onChange={handleChange}
       />,

@@ -160,7 +160,7 @@ exports[`ApplyOverridesGroup tests should render 1`] = `
                 <input
                   class="c7 c8"
                   data-testid="radio-input"
-                  name="apply overrides"
+                  name="applyOverrides"
                   type="radio"
                   value="1"
                 />
@@ -186,7 +186,7 @@ exports[`ApplyOverridesGroup tests should render 1`] = `
                 <input
                   class="c7 c8"
                   data-testid="radio-input"
-                  name="apply overrides"
+                  name="applyOverrides"
                   type="radio"
                   value="0"
                 />
