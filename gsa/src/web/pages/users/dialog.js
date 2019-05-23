@@ -181,49 +181,6 @@ class Dialog extends React.Component {
                     />
                   </FormGroup>
 
-                  {!is_edit && (
-                    <FormGroup title={_('Authentication')} flex="column">
-                      <Divider>
-                        <Radio
-                          title={_('Password')}
-                          name="auth_method"
-                          value={AUTH_METHOD_PASSWORD}
-                          checked={state.auth_method === AUTH_METHOD_PASSWORD}
-                          onChange={onValueChange}
-                        />
-                        <PasswordField
-                          name="password"
-                          value={state.password}
-                          onChange={onValueChange}
-                        />
-                      </Divider>
-                      {settings.get('method:ldap_connect').enable ===
-                        YES_VALUE && (
-                        <Divider>
-                          <Radio
-                            title={_('LDAP Authentication Only')}
-                            name="auth_method"
-                            value={AUTH_METHOD_LDAP}
-                            checked={state.auth_method === AUTH_METHOD_LDAP}
-                            onChange={onValueChange}
-                          />
-                        </Divider>
-                      )}
-                      {settings.get('method:radius_connect').enable ===
-                        YES_VALUE && (
-                        <Divider>
-                          <Radio
-                            title={_('RADIUS Authentication Only')}
-                            name="auth_method"
-                            value={AUTH_METHOD_RADIUS}
-                            checked={state.auth_method === AUTH_METHOD_RADIUS}
-                            onChange={onValueChange}
-                          />
-                        </Divider>
-                      )}
-                    </FormGroup>
-                  )}
-
                   {is_edit && (
                     <FormGroup title={_('Authentication')} flex="column">
                       <Divider>
