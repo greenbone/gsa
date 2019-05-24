@@ -71,7 +71,6 @@ const ResultDetails = ({className, links = true, entity}) => {
     ? result.detection.result.details
     : undefined;
 
-  const delta = isDefined(result.delta) ? result.delta : undefined;
   const result2 = isDefined(delta) ? result.delta.result : undefined;
   const result2Description = isDefined(result2)
     ? result2.description
