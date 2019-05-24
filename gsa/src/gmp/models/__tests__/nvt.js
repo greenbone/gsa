@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 Greenbone Networks GmbH
+/* Copyright (C) 2018 - 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -50,36 +50,49 @@ describe('NVT model tests', () => {
     expect(nvt2.tags).toEqual({});
   });
 
-  test('should parse cve and cve_id', () => {
-    const nvt1 = new Nvt({cve: '42', cve_id: '21'});
-    const nvt2 = new Nvt({cve: '42, 21'});
-    const nvt3 = new Nvt({cve: ''});
-    const nvt4 = new Nvt({cve: 'NOCVE'});
-    const nvt5 = new Nvt({});
+  test('should parse refs', () => {
+    const elem = {
+      refs: {
+        ref: [
+          {
+            _id: 'cveId',
+            _type: 'cve',
+          },
+          {
+            _id: 'cve_idId',
+            _type: 'cve_id',
+          },
+          {
+            _id: 'bidId',
+            _type: 'bid',
+          },
+          {
+            _id: 'bugtraq_idId',
+            _type: 'bugtraq_id',
+          },
+          {
+            _id: 'dfn-certId',
+            _type: 'dfn-cert',
+          },
+          {
+            _id: 'cert-bundId',
+            _type: 'cert-bund',
+          },
+        ],
+      },
+    };
+    const nvt1 = new Nvt(elem);
+    const nvt2 = new Nvt({});
 
-    expect(nvt1.cves).toEqual(['42', '21']);
-    expect(nvt1.cve).toBeUndefined();
-    expect(nvt1.cve_id).toBeUndefined();
-    expect(nvt2.cves).toEqual(['42', '21']);
-    expect(nvt3.cves).toEqual([]);
-    expect(nvt4.cves).toEqual([]);
-    expect(nvt5.cves).toEqual([]);
-  });
-
-  test('should parse bid and bugtraq_id', () => {
-    const nvt1 = new Nvt({bid: '42', bugtraq_id: '21'});
-    const nvt2 = new Nvt({bid: '42, 21'});
-    const nvt3 = new Nvt({bid: ''});
-    const nvt4 = new Nvt({bid: 'NOBID'});
-    const nvt5 = new Nvt({});
-
-    expect(nvt1.bids).toEqual(['42', '21']);
-    expect(nvt1.bid).toBeUndefined();
-    expect(nvt1.bugtraq_id).toBeUndefined();
-    expect(nvt2.bids).toEqual(['42', '21']);
-    expect(nvt3.bids).toEqual([]);
-    expect(nvt4.bids).toEqual([]);
-    expect(nvt5.bids).toEqual([]);
+    expect(nvt1.cves).toEqual(['cveId', 'cve_idId']);
+    expect(nvt2.cves).toEqual([]);
+    expect(nvt1.bids).toEqual(['bidId', 'bugtraq_idId']);
+    expect(nvt2.bids).toEqual([]);
+    expect(nvt1.certs).toEqual([
+      {id: 'dfn-certId', type: 'dfn-cert'},
+      {id: 'cert-bundId', type: 'cert-bund'},
+    ]);
+    expect(nvt2.certs).toEqual([]);
   });
 
   test('should parse severity', () => {
@@ -116,111 +129,23 @@ describe('NVT model tests', () => {
     expect(nvt2.preferences).toEqual(res);
   });
 
-  test('should parse cert and cert_refs', () => {
-    const elem2 = {
-      cert: {
-        cert_ref: [
-          {
-            _id: '123',
-            _type: 'foo',
-          },
-          {
-            _id: '456',
-            _type: 'bar',
-          },
-        ],
-      },
-    };
-    const res2 = [
-      {
-        id: '123',
-        type: 'foo',
-      },
-      {
-        id: '456',
-        type: 'bar',
-      },
-    ];
-    const elem3 = {
-      cert_refs: {
-        cert_ref: [
-          {
-            _id: '123',
-            _type: 'foo',
-          },
-        ],
-      },
-    };
-    const res3 = [
-      {
-        id: '123',
-        type: 'foo',
-      },
-    ];
-    const elem4 = {
-      cert: {
-        cert_ref: [
-          {
-            _id: '1',
-            _type: 'foo',
-          },
-        ],
-      },
-      cert_refs: {
-        cert_ref: [
-          {
-            _id: '2',
-            _type: 'bar',
-          },
-        ],
-      },
-    };
-    const res4 = [
-      {
-        id: '1',
-        type: 'foo',
-      },
-      {
-        id: '2',
-        type: 'bar',
-      },
-    ];
-
-    const nvt1 = new Nvt({});
-    const nvt2 = new Nvt(elem2);
-    const nvt3 = new Nvt(elem3);
-    const nvt4 = new Nvt(elem4);
-
-    expect(nvt1.certs).toEqual([]);
-    expect(nvt2.cert).toBeUndefined();
-    expect(nvt2.certs).toEqual(res2);
-    expect(nvt3.certs).toEqual(res3);
-    expect(nvt3.cert_refs).toBeUndefined();
-    expect(nvt4.certs).toEqual(res4);
-  });
-
   test('should parse xrefs with correct protocol', () => {
-    const nvt1 = new Nvt({xrefs: '42'});
-    const nvt2 = new Nvt({xrefs: '42, 21'});
-    const nvt3 = new Nvt({xrefs: 'URL:42'});
-    const nvt4 = new Nvt({xrefs: 'URL:http://42'});
-    const nvt5 = new Nvt({xrefs: 'URL:https://42'});
-    const nvt6 = new Nvt({xrefs: 'URL:ftp://42'});
-    const nvt7 = new Nvt({xrefs: 'URL:ftps://42'});
-    const nvt8 = new Nvt({xrefs: 'ftps://42'});
+    const nvt1 = new Nvt({refs: {ref: [{_id: '42'}]}});
+    const nvt2 = new Nvt({refs: {ref: [{_type: 'URL', _id: '42'}]}});
+    const nvt3 = new Nvt({refs: {ref: [{_type: 'URL', _id: 'http://42'}]}});
+    const nvt4 = new Nvt({refs: {ref: [{_type: 'URL', _id: 'https://42'}]}});
+    const nvt5 = new Nvt({refs: {ref: [{_type: 'URL', _id: 'ftp://42'}]}});
+    const nvt6 = new Nvt({refs: {ref: [{_type: 'URL', _id: 'ftps://42'}]}});
+    const nvt7 = new Nvt({refs: {ref: [{_id: 'ftps://42'}]}});
 
     expect(nvt1.xrefs).toEqual([{ref: '42', type: 'other'}]);
-    expect(nvt2.xrefs).toEqual([
-      {ref: '42', type: 'other'},
-      {ref: '21', type: 'other'},
-    ]);
+    expect(nvt2.xrefs).toEqual([{ref: 'http://42', type: 'URL'}]);
     expect(nvt3.xrefs).toEqual([{ref: 'http://42', type: 'URL'}]);
-    expect(nvt4.xrefs).toEqual([{ref: 'http://42', type: 'URL'}]);
-    expect(nvt5.xrefs).toEqual([{ref: 'https://42', type: 'URL'}]);
-    expect(nvt6.xrefs).toEqual([{ref: 'ftp://42', type: 'URL'}]);
-    expect(nvt7.xrefs).toEqual([{ref: 'ftps://42', type: 'URL'}]);
-    expect(nvt8.xrefs).toEqual([{ref: 'ftps://42', type: 'other'}]);
-    expect(nvt8.xref).toBeUndefined();
+    expect(nvt4.xrefs).toEqual([{ref: 'https://42', type: 'URL'}]);
+    expect(nvt5.xrefs).toEqual([{ref: 'ftp://42', type: 'URL'}]);
+    expect(nvt6.xrefs).toEqual([{ref: 'ftps://42', type: 'URL'}]);
+    expect(nvt7.xrefs).toEqual([{ref: 'ftps://42', type: 'other'}]);
+    expect(nvt7.xref).toBeUndefined();
   });
 
   test('should parse qod', () => {
