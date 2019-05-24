@@ -18,7 +18,7 @@
  */
 import 'core-js/fn/string/starts-with';
 
-import {isDefined, isString} from '../utils/identity';
+import {isDefined, isArray} from '../utils/identity';
 import {isEmpty, split} from '../utils/string';
 import {map} from '../utils/array';
 
@@ -42,11 +42,55 @@ const parse_tags = tags => {
   return newtags;
 };
 
-const parse_ids = (ids, no) => {
-  if (isString(ids) && ids.length > 0 && ids !== no) {
-    return ids.split(',').map(id => id.trim());
-  }
-  return [];
+const getFilteredRefIds = (refs, type) => {
+  const filteredRefs = refs.filter(ref => ref._type === type);
+  return filteredRefs.map(ref => ref._id);
+};
+
+const getFilteredRefs = (refs, type) => {
+  const filteredRefs = refs.filter(ref => ref._type === type);
+  const returnRefs = filteredRefs.map(ref => {
+    let id = ref._id;
+    if (type === 'URL') {
+      if (
+        !id.startsWith('http://') &&
+        !id.startsWith('https://') &&
+        !id.startsWith('ftp://') &&
+        !id.startsWith('ftps://')
+      ) {
+        id = 'http://' + id;
+      }
+      return {
+        ref: id,
+        type: type,
+      };
+    }
+    return {
+      id: id,
+      type: type,
+    };
+  });
+  return returnRefs;
+};
+
+const getOtherRefs = refs => {
+  const filteredRefs = refs.filter(
+    ref =>
+      ref._type !== 'URL' &&
+      ref._type !== 'cve' &&
+      ref._type !== 'cve_id' &&
+      ref._type !== 'bid' &&
+      ref._type !== 'bugtraq_id' &&
+      ref._type !== 'dfn-cert' &&
+      ref._type !== 'cert-bund',
+  );
+  const returnRefs = filteredRefs.map(ref => {
+    return {
+      ref: ref._id,
+      type: 'other',
+    };
+  });
+  return returnRefs;
 };
 
 class Nvt extends Info {
@@ -61,20 +105,27 @@ class Nvt extends Info {
     ret.id = ret.oid;
     ret.tags = parse_tags(ret.tags);
 
-    // several properties use different names in different responses
-    // cve and cve_id, bid and bugtraq_id, cert and cert_ref
+    let refs = [];
+    if (isDefined(ret.refs) && isArray(ret.refs.ref)) {
+      refs = ret.refs.ref;
+    } else if (isDefined(ret.refs) && isDefined(ret.refs.ref)) {
+      refs = [ret.refs.ref];
+    }
 
-    ret.cves = parse_ids(ret.cve, 'NOCVE').concat(
-      parse_ids(ret.cve_id, 'NOCVE'),
+    ret.cves = getFilteredRefIds(refs, 'cve').concat(
+      getFilteredRefIds(refs, 'cve_id'),
     );
-    delete ret.cve;
-    delete ret.cve_id;
+    ret.bids = getFilteredRefIds(refs, 'bid').concat(
+      getFilteredRefIds(refs, 'bugtraq_id'),
+    );
 
-    ret.bids = parse_ids(ret.bid, 'NOBID').concat(
-      parse_ids(ret.bugtraq_id, 'NOBID'),
+    ret.certs = getFilteredRefs(refs, 'dfn-cert').concat(
+      getFilteredRefs(refs, 'cert-bund'),
     );
-    delete ret.bid;
-    delete ret.bugtraq_id;
+
+    ret.xrefs = getFilteredRefs(refs, 'URL').concat(getOtherRefs(refs));
+
+    delete ret.refs;
 
     ret.severity = parseSeverity(ret.cvss_base);
     delete ret.cvss_base;
@@ -88,52 +139,6 @@ class Nvt extends Info {
     } else {
       ret.preferences = [];
     }
-
-    if (isDefined(ret.cert)) {
-      ret.certs = map(ret.cert.cert_ref, ref => {
-        return {
-          id: ref._id,
-          type: ref._type,
-        };
-      });
-
-      delete ret.cert;
-    } else {
-      ret.certs = [];
-    }
-
-    if (isDefined(ret.cert_refs)) {
-      const crefs = map(ret.cert_refs.cert_ref, ref => {
-        return {
-          id: ref._id,
-          type: ref._type,
-        };
-      });
-      ret.certs = [...ret.certs, ...crefs];
-      delete ret.cert_refs;
-    }
-
-    const xrefs = parse_ids(ret.xrefs, 'NOXREF');
-
-    ret.xrefs = xrefs.map(xref => {
-      let type = 'other';
-      let ref = xref;
-      if (xref.startsWith('URL:')) {
-        type = 'URL';
-        ref = xref.slice(4);
-        if (
-          !ref.startsWith('http://') &&
-          !ref.startsWith('https://') &&
-          !ref.startsWith('ftp://') &&
-          !ref.startsWith('ftps://')
-        ) {
-          ref = 'http://' + ref;
-        }
-      }
-      return {type, ref};
-    });
-
-    delete ret.xref;
 
     if (isDefined(elem.qod)) {
       if (isEmpty(elem.qod.value)) {
