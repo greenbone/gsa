@@ -43,6 +43,7 @@ function loadStories() {
   require('../src/stories/mydialog.js');
   require('../src/stories/savedialog.js');
   require('../src/stories/containerdialog.js');
+  require('../src/stories/snackbar.js');
   // You can require as many stories as you need.
 }
 
