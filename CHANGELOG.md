@@ -38,6 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add tooltips to deactivated text fields in AlertDialog [#1269](https://github.com/greenbone/gsa/pull/1269)
 
 ### Changed
+- Use new ref structure in NVTs [#1424](https://github.com/greenbone/gsa/pull/1424)
 - Link to search in the manual for vulnerabilities [#1391](https://github.com/greenbone/gsa/pull/1391)
 - Separate tasks using this scan config with commas [#1384](https://github.com/greenbone/gsa/pull/1384)
 - Don't allow to verify predefined report formats [#1378](https://github.com/greenbone/gsa/pull/1378)
