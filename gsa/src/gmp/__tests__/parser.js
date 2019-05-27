@@ -528,7 +528,7 @@ describe('parseCvssBaseVector tests', () => {
     expect(parseCvssBaseVector({authentication: 'MULTIPLE_INSTANCES'})).toEqual(
       'AV:ERROR/AC:ERROR/Au:M/C:ERROR/I:ERROR/A:ERROR',
     );
-    expect(parseCvssBaseVector({authentication: 'SINGLE_INSTANCES'})).toEqual(
+    expect(parseCvssBaseVector({authentication: 'SINGLE_INSTANCE'})).toEqual(
       'AV:ERROR/AC:ERROR/Au:S/C:ERROR/I:ERROR/A:ERROR',
     );
   });
