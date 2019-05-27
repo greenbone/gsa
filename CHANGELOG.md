@@ -51,6 +51,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix loading data on login [#1426](https://github.com/greenbone/gsa/pull/1426)
 - Fix result undefined error on result details [#1423](https://github.com/greenbone/gsa/pull/1423)
 - Fix showing Scanner Preferences in EditScanConfigDialog [#1420](https://github.com/greenbone/gsa/pull/1420)
 - Don't crash if second result for delta is undefined [#1418](https://github.com/greenbone/gsa/pull/1418)

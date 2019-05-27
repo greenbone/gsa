@@ -24,17 +24,17 @@ import {isDefined} from 'gmp/utils/identity';
 
 class Login {
   constructor(elem) {
-    this.clientAddress = elem.client_address;
-    this.guest = elem.guest;
-    this.locale = elem.i18n;
-    this.role = elem.role;
-    this.severity = elem.severity;
-    this.timezone = elem.timezone;
-    this.token = elem.token;
-    this.vendorVersion = elem.vendor_version;
-    this.version = elem.version;
-
-    const unixSeconds = parseInt(elem.session);
+    const {data = {}, meta = {}} = elem;
+    this.clientAddress = data.client_address;
+    this.guest = data.guest;
+    this.locale = meta.i18n;
+    this.role = data.role;
+    this.severity = data.severity;
+    this.timezone = meta.timezone;
+    this.token = data.token;
+    this.vendorVersion = meta.vendor_version;
+    this.version = meta.version;
+    const unixSeconds = parseInt(data.session);
 
     this.sessionTimeout = isDefined(unixSeconds)
       ? moment.unix(unixSeconds)

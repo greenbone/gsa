@@ -23,16 +23,20 @@ import Login from 'gmp/models/login';
 describe('Login model tests', () => {
   test('should set all properties correctly', () => {
     const elem = {
-      client_address: '1.2.3.4',
-      guest: '0',
-      i18n: 'en',
-      role: 'admin',
-      severity: '8.5',
-      timezone: 'UTC',
-      token: '123abc',
-      vendor_version: '42',
-      version: '1337',
-      session: '12345',
+      data: {
+        client_address: '1.2.3.4',
+        guest: '0',
+        role: 'admin',
+        severity: '8.5',
+        token: '123abc',
+        session: '12345',
+      },
+      meta: {
+        i18n: 'en',
+        timezone: 'UTC',
+        vendor_version: '42',
+        version: '1337',
+      },
     };
     const login = new Login(elem);
     const login2 = new Login({});
