@@ -239,7 +239,7 @@ export const parseCvssBaseVector = ({
     case 'MULTIPLE_INSTANCES':
       vector += 'M';
       break;
-    case 'SINGLE_INSTANCES':
+    case 'SINGLE_INSTANCE':
       vector += 'S';
       break;
     default:
