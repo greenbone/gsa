@@ -34,7 +34,7 @@ class LoginCommand extends HttpCommand {
       login: username,
       password,
     }).then(
-      response => new Login(response.data),
+      response => new Login(response),
       rej => {
         if (rej.isError && rej.isError()) {
           switch (rej.status) {
