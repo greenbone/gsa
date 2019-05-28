@@ -74,6 +74,7 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
     filterEditDialog={VulnsFilterDialog}
     filtersFilter={VULNS_FILTER_FILTER}
     table={VulnsTable}
+    tags={false}
     title={_('Vulnerabilities')}
     sectionIcon={<VulnerabilityIcon size="large" />}
     toolBarIcons={ToolBarIcons}
