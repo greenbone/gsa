@@ -51,6 +51,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix sending related resources in permission.create() [#1431](https://github.com/greenbone/gsa/pull/1431)
 - Fix parsing CVSS authentication SINGLE_INSTANCE [#1427](https://github.com/greenbone/gsa/pull/1427)
 - Fix loading data on login [#1426](https://github.com/greenbone/gsa/pull/1426)
 - Fix result undefined error on result details [#1423](https://github.com/greenbone/gsa/pull/1423)
