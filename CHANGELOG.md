@@ -30,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add tooltips to deactivated text fields in AlertDialog [#1269](https://github.com/greenbone/gsa/pull/1269)
 
 ### Changed
+- Disable some FileFields when RadioButton is not checked [#1430](https://github.com/greenbone/gsa/pull/1430)
 - Change checkboxes for solution types to radio buttons [#1398](https://github.com/greenbone/gsa/pull/1398)
 - Link to search in the manual for vulnerabilities [#1391](https://github.com/greenbone/gsa/pull/1391)
 - Separate tasks using this scan config with commas [#1384](https://github.com/greenbone/gsa/pull/1384)
@@ -51,7 +52,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
-- Fix sending related resources in permission.create() [#1431](https://github.com/greenbone/gsa/pull/1431)
+- Fix sending related resources in permission.create() [#1432](https://github.com/greenbone/gsa/pull/1432)
+- Don't allow bulk tagging vulnerabilities [#1429](https://github.com/greenbone/gsa/pull/1429)
+- Fix "given type was invalid" error for saving filters [#1428](https://github.com/greenbone/gsa/pull/1428)
 - Fix parsing CVSS authentication SINGLE_INSTANCE [#1427](https://github.com/greenbone/gsa/pull/1427)
 - Fix loading data on login [#1426](https://github.com/greenbone/gsa/pull/1426)
 - Fix result undefined error on result details [#1423](https://github.com/greenbone/gsa/pull/1423)

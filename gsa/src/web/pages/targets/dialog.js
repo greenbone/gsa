@@ -232,7 +232,7 @@ const TargetDialog = ({
                   />
                   <FileField
                     name="file"
-                    disabled={in_use}
+                    disabled={in_use || state.target_source !== 'file'}
                     onChange={onValueChange}
                   />
                 </Divider>
@@ -287,7 +287,7 @@ const TargetDialog = ({
                   />
                   <FileField
                     name="exclude_file"
-                    disabled={in_use}
+                    disabled={in_use || state.target_exclude_source !== 'file'}
                     onChange={onValueChange}
                   />
                 </Divider>
