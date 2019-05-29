@@ -122,9 +122,9 @@ class PermissionsCommand extends EntitiesCommand {
       subject_type: subjectType,
     };
 
-    for (const resource in related) {
-      data['related:' + resource.id] = resource.name;
-    }
+    related.forEach(resource => {
+      data['related:' + resource.id] = apiType(resource.entityType);
+    });
 
     log.debug('Creating new permission', data);
     return this.httpPost(data);
