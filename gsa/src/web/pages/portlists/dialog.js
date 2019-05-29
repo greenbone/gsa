@@ -138,7 +138,11 @@ const PortListsDialog = ({
                       onChange={onValueChange}
                       checked={parseYesNo(state.from_file) === FROM_FILE}
                     />
-                    <FileField name="file" onChange={onValueChange} />
+                    <FileField
+                      name="file"
+                      disabled={parseYesNo(state.from_file) !== FROM_FILE}
+                      onChange={onValueChange}
+                    />
                   </Divider>
                 </Divider>
               </FormGroup>
