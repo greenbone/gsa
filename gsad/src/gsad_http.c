@@ -412,8 +412,7 @@ create_not_found_response (const gchar *url, cmd_response_data_t *response_data)
     "</p>"
     "</body>"
     "</html>",
-    url
-  );
+    url);
 
   cmd_response_data_set_content_type (response_data,
                                       GSAD_CONTENT_TYPE_TEXT_HTML);
@@ -1030,18 +1029,17 @@ gsad_message (credentials_t *credentials, const char *title,
     }
   else
     {
-      xml =
-        g_strdup_printf ("<envelope>"
-                         "<version>%s</version>"
-                         "<vendor_version>%s</vendor_version>"
-                         "<gsad_response>"
-                         "%s"
-                         "<message>%s</message>"
-                         "<token></token>"
-                         "</gsad_response>"
-                         "</envelope>",
-                         GSAD_VERSION, vendor_version_get (),
-                         xmltitle, msg ? msg : "");
+      xml = g_strdup_printf ("<envelope>"
+                             "<version>%s</version>"
+                             "<vendor_version>%s</vendor_version>"
+                             "<gsad_response>"
+                             "%s"
+                             "<message>%s</message>"
+                             "<token></token>"
+                             "</gsad_response>"
+                             "</envelope>",
+                             GSAD_VERSION, vendor_version_get (), xmltitle,
+                             msg ? msg : "");
     }
 
   g_free (xmltitle);

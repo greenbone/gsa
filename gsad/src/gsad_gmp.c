@@ -139,7 +139,6 @@ gchar *manager_address = NULL;
  */
 int manager_port = 9390;
 
-
 #define XML_REPORT_FORMAT_ID "a994b278-1f62-11e1-96ac-406186ea4fc5"
 #define ANONXML_REPORT_FORMAT_ID "5057e5cc-b825-11e4-9d0e-28d24461215b"
 
@@ -446,18 +445,11 @@ envelope_gmp (gvm_connection_t *connection, credentials_t *credentials,
     "<i18n>%s</i18n>"
     "<client_address>%s</client_address>"
     "<backend_operation>%.2f</backend_operation>",
-    GSAD_VERSION,
-    vendor_version_get (),
-    user_get_token (user),
-    ctime_now,
-    timezone ? timezone : "",
-    user_get_username (user),
-    user_get_session_timeout (user),
-    user_get_role (user),
-    user_get_severity (user),
-    credentials_get_language (credentials),
-    user_get_client_address (user),
-    credentials_get_cmd_duration (credentials));
+    GSAD_VERSION, vendor_version_get (), user_get_token (user), ctime_now,
+    timezone ? timezone : "", user_get_username (user),
+    user_get_session_timeout (user), user_get_role (user),
+    user_get_severity (user), credentials_get_language (credentials),
+    user_get_client_address (user), credentials_get_cmd_duration (credentials));
 
   g_string_append (string, res);
   g_free (res);
@@ -9590,13 +9582,8 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
     " report_id=\"%s\""
     " delta_report_id=\"%s\""
     " format_id=\"%s\"/>",
-    ignore_pagination,
-    filter,
-    filter_id ? filter_id : FILT_ID_NONE,
-    report_id,
-    delta_report_id ? delta_report_id : "0",
-    format_id ? format_id : ""
-  );
+    ignore_pagination, filter, filter_id ? filter_id : FILT_ID_NONE, report_id,
+    delta_report_id ? delta_report_id : "0", format_id ? format_id : "");
 
   if (ret == -1)
     {
@@ -9853,9 +9840,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
         g_string_append (xml, extra_xml);
 
       if (delta_report_id)
-        g_string_append_printf (xml,
-                                "<delta>%s</delta>",
-                                delta_report_id);
+        g_string_append_printf (xml, "<delta>%s</delta>", delta_report_id);
 
       entity = NULL;
       if (read_entity_and_string_c (connection, &entity, &xml))
@@ -9870,20 +9855,20 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
             response_data);
         }
 
-    if (gmp_success (entity) != 1)
-      {
-        gchar *message;
+      if (gmp_success (entity) != 1)
+        {
+          gchar *message;
 
-        set_http_status_from_entity (entity, response_data);
+          set_http_status_from_entity (entity, response_data);
 
-        message =
-          gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
-                        entity_attribute (entity, "status_text"), response_data);
+          message = gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
+                                  entity_attribute (entity, "status_text"),
+                                  response_data);
 
-        g_string_free (xml, TRUE);
-        free_entity (entity);
-        return message;
-      }
+          g_string_free (xml, TRUE);
+          free_entity (entity);
+          return message;
+        }
 
       report_entity = entity_child (entity, "report");
       if (report_entity)
@@ -11886,13 +11871,13 @@ get_system_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
           CHECK_VARIABLE_INVALID (start_time, "Get System Report")
           CHECK_VARIABLE_INVALID (end_time, "Get System Report")
 
-          gmp_command = g_markup_printf_escaped (
-            "<get_system_reports"
-            " name=\"%s\""
-            " start_time=\"%s\""
-            " end_time=\"%s\""
-            " slave_id=\"%s\"/>",
-            name, start_time, end_time, slave_id ? slave_id : "0");
+          gmp_command = g_markup_printf_escaped ("<get_system_reports"
+                                                 " name=\"%s\""
+                                                 " start_time=\"%s\""
+                                                 " end_time=\"%s\""
+                                                 " slave_id=\"%s\"/>",
+                                                 name, start_time, end_time,
+                                                 slave_id ? slave_id : "0");
         }
 
       if (gvm_connection_sendf (connection, "%s", gmp_command) == -1)
@@ -13999,7 +13984,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
       break;
     case 1:
       cmd_response_data_set_status_code (response_data,
-                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
         credentials, "Internal error", __FUNCTION__, __LINE__,
         "An internal error occurred while creating a permission. "
@@ -14008,7 +13993,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
         response_data);
     case 2:
       cmd_response_data_set_status_code (response_data,
-                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
         credentials, "Internal error", __FUNCTION__, __LINE__,
         "An internal error occurred while creating a permission. "
@@ -14017,7 +14002,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
         response_data);
     default:
       cmd_response_data_set_status_code (response_data,
-                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
         credentials, "Internal error", __FUNCTION__, __LINE__,
         "An internal error occurred while creating a permission. "
@@ -14030,7 +14015,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
     params_add (params, "permission_id", entity_attribute (entity, "id"));
 
   html = response_from_entity (connection, credentials, params, entity,
-                                "Create Permission", response_data);
+                               "Create Permission", response_data);
 
   free_entity (entity);
   g_free (response);
