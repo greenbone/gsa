@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: Check Source Format
-          command: clang-format -i -style=file gsa/src/*.{c,h} && git diff --exit-code
+          command: clang-format -i -style=file gsad/src/*.{c,h} && git diff --exit-code
   js_test:
     working_directory: ~/gsa
     docker:
