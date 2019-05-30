@@ -1,5 +1,13 @@
 version: 2
 jobs:
+  c_check_format:
+    docker:
+      - image: greenbone/build-env-gvm-libs-master-debian-buster-clang-core
+    steps:
+      - checkout
+      - run:
+          name: Check Source Format
+          command: clang-format -i -style=file gsa/src/*.{c,h} && git diff --exit-code
   js_test:
     working_directory: ~/gsa
     docker:
@@ -95,6 +103,7 @@ workflows:
   version: 2
   build_and_test:
     jobs:
+      - c_check_format
       - build_gsad
       - build_gsa
       - js_lint
