@@ -18,7 +18,7 @@
  */
 import 'core-js/fn/string/starts-with';
 
-import {isDefined, isArray} from '../utils/identity';
+import {isDefined, isArray, isString} from '../utils/identity';
 import {isEmpty, split} from '../utils/string';
 import {map} from '../utils/array';
 
@@ -48,10 +48,13 @@ const getFilteredRefIds = (refs, type) => {
 };
 
 const getFilteredRefs = (refs, type) => {
-  const filteredRefs = refs.filter(ref => ref._type === type);
+  const filteredRefs = refs.filter(ref => {
+    const rtype = isString(ref._type) ? ref._type.toLowerCase() : undefined;
+    return rtype === type;
+  });
   const returnRefs = filteredRefs.map(ref => {
     let id = ref._id;
-    if (type === 'URL') {
+    if (type === 'url') {
       if (
         !id.startsWith('http://') &&
         !id.startsWith('https://') &&
@@ -74,20 +77,22 @@ const getFilteredRefs = (refs, type) => {
 };
 
 const getOtherRefs = refs => {
-  const filteredRefs = refs.filter(
-    ref =>
-      ref._type !== 'URL' &&
-      ref._type !== 'cve' &&
-      ref._type !== 'cve_id' &&
-      ref._type !== 'bid' &&
-      ref._type !== 'bugtraq_id' &&
-      ref._type !== 'dfn-cert' &&
-      ref._type !== 'cert-bund',
-  );
+  const filteredRefs = refs.filter(ref => {
+    const rtype = isString(ref._type) ? ref._type.toLowerCase() : undefined;
+    return (
+      rtype !== 'url' &&
+      rtype !== 'cve' &&
+      rtype !== 'cve_id' &&
+      rtype !== 'bid' &&
+      rtype !== 'bugtraq_id' &&
+      rtype !== 'dfn-cert' &&
+      rtype !== 'cert-bund'
+    );
+  });
   const returnRefs = filteredRefs.map(ref => {
     return {
       ref: ref._id,
-      type: 'other',
+      type: isString(ref._type) ? ref._type.toLowerCase() : 'other',
     };
   });
   return returnRefs;
@@ -123,7 +128,7 @@ class Nvt extends Info {
       getFilteredRefs(refs, 'cert-bund'),
     );
 
-    ret.xrefs = getFilteredRefs(refs, 'URL').concat(getOtherRefs(refs));
+    ret.xrefs = getFilteredRefs(refs, 'url').concat(getOtherRefs(refs));
 
     delete ret.refs;
 
