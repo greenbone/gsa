@@ -75,8 +75,16 @@ describe('NVT model tests', () => {
             _type: 'dfn-cert',
           },
           {
+            _id: 'DFN-certId',
+            _type: 'DFN-cert',
+          },
+          {
             _id: 'cert-bundId',
             _type: 'cert-bund',
+          },
+          {
+            _id: 'customId',
+            _type: 'Custom-type',
           },
         ],
       },
@@ -90,9 +98,12 @@ describe('NVT model tests', () => {
     expect(nvt2.bids).toEqual([]);
     expect(nvt1.certs).toEqual([
       {id: 'dfn-certId', type: 'dfn-cert'},
+      {id: 'DFN-certId', type: 'dfn-cert'},
       {id: 'cert-bundId', type: 'cert-bund'},
     ]);
     expect(nvt2.certs).toEqual([]);
+    expect(nvt1.xrefs).toEqual([{ref: 'customId', type: 'custom-type'}]);
+    expect(nvt2.xrefs).toEqual([]);
   });
 
   test('should parse severity', () => {
@@ -139,11 +150,11 @@ describe('NVT model tests', () => {
     const nvt7 = new Nvt({refs: {ref: [{_id: 'ftps://42'}]}});
 
     expect(nvt1.xrefs).toEqual([{ref: '42', type: 'other'}]);
-    expect(nvt2.xrefs).toEqual([{ref: 'http://42', type: 'URL'}]);
-    expect(nvt3.xrefs).toEqual([{ref: 'http://42', type: 'URL'}]);
-    expect(nvt4.xrefs).toEqual([{ref: 'https://42', type: 'URL'}]);
-    expect(nvt5.xrefs).toEqual([{ref: 'ftp://42', type: 'URL'}]);
-    expect(nvt6.xrefs).toEqual([{ref: 'ftps://42', type: 'URL'}]);
+    expect(nvt2.xrefs).toEqual([{ref: 'http://42', type: 'url'}]);
+    expect(nvt3.xrefs).toEqual([{ref: 'http://42', type: 'url'}]);
+    expect(nvt4.xrefs).toEqual([{ref: 'https://42', type: 'url'}]);
+    expect(nvt5.xrefs).toEqual([{ref: 'ftp://42', type: 'url'}]);
+    expect(nvt6.xrefs).toEqual([{ref: 'ftps://42', type: 'url'}]);
     expect(nvt7.xrefs).toEqual([{ref: 'ftps://42', type: 'other'}]);
     expect(nvt7.xref).toBeUndefined();
   });
