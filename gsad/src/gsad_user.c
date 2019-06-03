@@ -359,9 +359,8 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user_free (user);
     }
 
-  user =
-    user_new_with_data (username, password, timezone, severity, role,
-                        capabilities, language, pw_warning, address);
+  user = user_new_with_data (username, password, timezone, severity, role,
+                             capabilities, language, pw_warning, address);
 
   session_add_user (user->token, user);
 

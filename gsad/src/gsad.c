@@ -172,9 +172,9 @@
  */
 #define DEFAULT_GSAD_PER_IP_CONNECTION_LIMIT 30
 
-#define COPYRIGHT \
-  "Copyright (C) 2010 - 2019 Greenbone Networks GmbH\n" \
-  "License GPLv2+: GNU GPL version 2 or later\n" \
+#define COPYRIGHT                                                        \
+  "Copyright (C) 2010 - 2019 Greenbone Networks GmbH\n"                  \
+  "License GPLv2+: GNU GPL version 2 or later\n"                         \
   "This is free software: you are free to change and redistribute it.\n" \
   "There is NO WARRANTY, to the extent permitted by law.\n\n"
 
@@ -508,8 +508,7 @@ init_validator ()
   gvm_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
   gvm_validator_add (validator, "credential_type",
                      "^(cc|up|usk|smime|pgp|snmp|pw)$");
-  gvm_validator_add (validator, "credential_login",
-                     "^[-_[:alnum:]\\.@\\\\]*$");
+  gvm_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]*$");
   gvm_validator_add (validator, "condition_data:name", "^.*$");
   gvm_validator_add (validator, "condition_data:value", "(?s)^.*$");
   gvm_validator_add (validator, "cvss_av", "^(L|A|N)$");
@@ -548,8 +547,7 @@ init_validator ()
                      "^.*[[0-9abcdefABCDEF\\-]*]:.*$");
   gvm_validator_add (validator, "exclude_file:value", "^yes$");
   gvm_validator_add (validator, "file", "(?s)^.*$");
-  gvm_validator_add (validator, "file:name",
-                     "^.*[[0-9abcdefABCDEF\\-]*]:.*$");
+  gvm_validator_add (validator, "file:name", "^.*[[0-9abcdefABCDEF\\-]*]:.*$");
   gvm_validator_add (validator, "file:value", "^yes$");
   gvm_validator_add (validator, "settings_changed:name", "^.*$");
   gvm_validator_add (validator, "settings_changed:value", "^[a-z0-9\\-]+$");
@@ -624,13 +622,11 @@ init_validator ()
   gvm_validator_add (validator, "password", "^.*$");
   gvm_validator_add (validator, "password:value", "(?s)^.*$");
   gvm_validator_add (validator, "port", "^.*$");
-  gvm_validator_add (validator, "port_range",
-                     "^((default)|([-0-9, TU:]+))$");
+  gvm_validator_add (validator, "port_range", "^((default)|([-0-9, TU:]+))$");
   gvm_validator_add (validator, "port_type", "^(tcp|udp)$");
   /** @todo Better regex. */
   gvm_validator_add (validator, "preference_name", "^.*$");
-  gvm_validator_add (validator, "preference:name",
-                     "^([^:]*:[^:]*:.*){0,400}$");
+  gvm_validator_add (validator, "preference:name", "^([^:]*:[^:]*:.*){0,400}$");
   gvm_validator_add (validator, "preference:value", "(?s)^.*$");
   gvm_validator_add (validator, "prev_action", "(?s)^.*$");
   gvm_validator_add (validator, "privacy_algorithm", "^(aes|des|)$");
