@@ -92,7 +92,7 @@ const References = ({nvt, links = true}) => {
                 {xrefs.map(xref => (
                   <span key={xref.ref}>
                     <ExternalLink
-                      textOnly={!links || xref.type !== 'URL'}
+                      textOnly={!links || xref.type !== 'url'}
                       to={xref.ref}
                     >
                       {xref.ref}
