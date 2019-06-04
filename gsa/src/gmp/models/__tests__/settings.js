@@ -21,7 +21,7 @@ import Settings from 'gmp/models/settings';
 
 describe('Settings model tests', () => {
   test('settings have working setters and getters', () => {
-    const settings = new Settings({});
+    const settings = new Settings();
     settings.set('foo', 'bar');
     const res = settings.get('foo');
     const res2 = settings.get('');
@@ -31,7 +31,7 @@ describe('Settings model tests', () => {
   });
 
   test('getEntries() should return all settings', () => {
-    const settings = new Settings({});
+    const settings = new Settings();
     settings.set('foo', 'bar');
     settings.set('lorem', 'ipsum');
 
