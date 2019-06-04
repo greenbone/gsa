@@ -20,8 +20,6 @@ import logger from '../log';
 
 import registerCommand from '../command';
 
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
 import {forEach, map} from '../utils/array';
 import {isDefined} from '../utils/identity';
 import {severityValue} from '../utils/number';
@@ -86,7 +84,7 @@ export const DEFAULT_FILTER_SETTINGS = {
 const saveDefaultFilterSettingId = entityType =>
   `settings_filter:${DEFAULT_FILTER_SETTINGS[entityType]}`;
 
-class UserCommand extends EntityCommand {
+export class UserCommand extends EntityCommand {
   constructor(http) {
     super(http, 'user', User);
   }
@@ -113,7 +111,7 @@ class UserCommand extends EntityCommand {
 
           forEach(group.auth_conf_setting, setting => {
             if (setting.key === 'enable') {
-              values.enable = setting.value === 'true' ? YES_VALUE : NO_VALUE;
+              values.enabled = setting.value === 'true';
             } else {
               values[setting.key] = setting.value;
             }
