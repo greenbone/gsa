@@ -148,6 +148,10 @@ class Dialog extends React.Component {
       value: group.id,
     }));
 
+    const hasLdapEnabled =
+      settings.get('method:ldap_connect').enable === YES_VALUE;
+    const hasRadiusEnabled =
+      settings.get('method:radius_connect').enable === YES_VALUE;
     return (
       <React.Fragment>
         <SaveDialog
@@ -198,8 +202,7 @@ class Dialog extends React.Component {
                           onChange={onValueChange}
                         />
                       </Divider>
-                      {settings.get('method:ldap_connect').enable ===
-                        YES_VALUE && (
+                      {hasLdapEnabled && (
                         <Divider>
                           <Radio
                             title={_('LDAP Authentication Only')}
@@ -210,8 +213,7 @@ class Dialog extends React.Component {
                           />
                         </Divider>
                       )}
-                      {settings.get('method:radius_connect').enable ===
-                        YES_VALUE && (
+                      {hasRadiusEnabled && (
                         <Divider>
                           <Radio
                             title={_('RADIUS Authentication Only')}
@@ -253,8 +255,7 @@ class Dialog extends React.Component {
                           onChange={onValueChange}
                         />
                       </Divider>
-                      {settings.get('method:ldap_connect').enable ===
-                        YES_VALUE && (
+                      {hasLdapEnabled && (
                         <Divider>
                           <Radio
                             title={_('LDAP Authentication Only')}
@@ -265,8 +266,7 @@ class Dialog extends React.Component {
                           />
                         </Divider>
                       )}
-                      {settings.get('method:radius_connect').enable ===
-                        YES_VALUE && (
+                      {hasRadiusEnabled && (
                         <Divider>
                           <Radio
                             title={_('RADIUS Authentication Only')}
