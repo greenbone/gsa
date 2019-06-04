@@ -68,6 +68,7 @@ const RadiusDialog = ({
             <TextField
               data-testid="radiushost-textfield"
               name="radiushost"
+              size="50"
               value={values.radiushost}
               onChange={onValueChange}
             />
@@ -76,8 +77,8 @@ const RadiusDialog = ({
             <PasswordField
               data-testid="radiuskey-textfield"
               name="radiuskey"
+              size="50"
               value={radiuskey}
-              size="30"
               onChange={onValueChange}
             />
           </FormGroup>
