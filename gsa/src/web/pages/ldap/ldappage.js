@@ -71,42 +71,43 @@ class LdapAuthentication extends React.Component {
     super(...args);
 
     this.state = {
-      authdn: '',
-      ldaphost: '',
-      enable: '',
-      certificateInfo: {},
-      loading: 'true',
+      hasLdapSupport: true,
+      loading: true,
+      initial: true,
       dialogVisible: false,
     };
 
-    this.getLdapAuth = this.getLdapAuth.bind(this);
     this.handleSaveSettings = this.handleSaveSettings.bind(this);
-    this.handleValueChange = this.handleValueChange.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
     this.openDialog = this.openDialog.bind(this);
   }
 
   componentDidMount() {
-    this.load();
+    this.loadLdapAuthSettings();
   }
 
-  load() {
-    this.getLdapAuth().then(this.setState({loading: false}));
-  }
-
-  getLdapAuth() {
+  loadLdapAuthSettings() {
     const {gmp} = this.props;
-    const authData = gmp.user.currentAuthSettings().then(response => {
-      const data = response.data.get('method:ldap_connect');
-      const {authdn, certificateInfo, enable, ldaphost} = data;
+
+    this.setState({loading: true});
+
+    return gmp.user.currentAuthSettings().then(response => {
+      const {data: settings} = response;
+      // ldap support is enabled in gvm-libs
+      const hasLdapSupport = settings.has('method:ldap_connect');
+      const {authdn, certificateInfo, enabled, ldaphost} = settings.get(
+        'method:ldap_connect',
+      );
       this.setState({
+        hasLdapSupport,
         authdn,
         certificateInfo,
-        enable,
+        enabled,
         ldaphost,
+        loading: false,
+        initial: false,
       });
     });
-    return authData;
   }
 
   handleInteraction() {
@@ -116,27 +117,22 @@ class LdapAuthentication extends React.Component {
     }
   }
 
-  handleSaveSettings(state) {
-    const {authdn, certificate, enable, ldaphost} = state;
-
-    const data = {
-      authdn,
-      certificate,
-      enable,
-      ldaphost,
-    };
+  handleSaveSettings({authdn, certificate, enable, ldaphost}) {
     const {gmp} = this.props;
 
     this.handleInteraction();
 
-    return gmp.auth.saveLdap(data).then(() => {
-      this.getLdapAuth();
-      this.setState({dialogVisible: false});
-    });
-  }
-
-  handleValueChange(value, name) {
-    this.setState({[name]: value});
+    return gmp.auth
+      .saveLdap({
+        authdn,
+        certificate,
+        enable,
+        ldaphost,
+      })
+      .then(() => {
+        this.loadLdapAuthSettings();
+        this.setState({dialogVisible: false});
+      });
   }
 
   openDialog() {
@@ -148,68 +144,75 @@ class LdapAuthentication extends React.Component {
   }
 
   render() {
-    const {loading} = this.state;
-    if (loading) {
+    const {loading, initial} = this.state;
+    if (loading && initial) {
       return <Loading />;
     }
-
     const {
       authdn,
       certificateInfo = {},
       dialogVisible,
-      enable,
+      enabled,
+      hasLdapSupport,
       ldaphost,
     } = this.state;
 
     return (
       <React.Fragment>
         <Layout flex="column">
-          <ToolBarIcons onOpenDialogClick={this.openDialog} />
+          {hasLdapSupport && (
+            <ToolBarIcons onOpenDialogClick={this.openDialog} />
+          )}
           <Section
             img={<LdapIcon size="large" />}
             title={_('LDAP per-User Authentication')}
           />
-          <Table>
-            <colgroup>
-              <Col width="10%" />
-              <Col width="90%" />
-            </colgroup>
-            <TableBody>
-              <TableRow>
-                <TableData>{_('Enabled')}</TableData>
-                <TableData>{renderYesNo(enable)}</TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('LDAP Host')}</TableData>
-                <TableData>{ldaphost}</TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('Auth. DN')}</TableData>
-                <TableData>{authdn}</TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('Activation')}</TableData>
-                <TableData>{certificateInfo.activation_time}</TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('Expiration')}</TableData>
-                <TableData>{certificateInfo.expiration_time}</TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('MD5 Fingerprint')}</TableData>
-                <TableData>{certificateInfo.md5_fingerprint}</TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('Issued by')}</TableData>
-                <TableData>{certificateInfo.issuer}</TableData>
-              </TableRow>
-            </TableBody>
-          </Table>
+          {hasLdapSupport ? (
+            <Table>
+              <colgroup>
+                <Col width="10%" />
+                <Col width="90%" />
+              </colgroup>
+              <TableBody>
+                <TableRow>
+                  <TableData>{_('Enabled')}</TableData>
+                  <TableData>{renderYesNo(enabled)}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('LDAP Host')}</TableData>
+                  <TableData>{ldaphost}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Auth. DN')}</TableData>
+                  <TableData>{authdn}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Activation')}</TableData>
+                  <TableData>{certificateInfo.activation_time}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Expiration')}</TableData>
+                  <TableData>{certificateInfo.expiration_time}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('MD5 Fingerprint')}</TableData>
+                  <TableData>{certificateInfo.md5_fingerprint}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Issued by')}</TableData>
+                  <TableData>{certificateInfo.issuer}</TableData>
+                </TableRow>
+              </TableBody>
+            </Table>
+          ) : (
+            <p>{_('Support for LDAP is not available.')}</p>
+          )}
         </Layout>
+
         {dialogVisible && (
           <LdapDialog
             authdn={authdn}
-            enable={enable}
+            enable={enabled}
             ldaphost={ldaphost}
             onClose={this.closeDialog}
             onSave={this.handleSaveSettings}
