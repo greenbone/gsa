@@ -29,55 +29,45 @@ const createEntitiesCounts = entities => ({
   _page: entities.length,
 });
 
+export const createResponse = data => new Response({}, data);
+
 export const createEntitiesResponse = (name, entities) =>
-  new Response(
-    {},
-    {
-      [`get_${name}s`]: {
-        [`get_${name}s_response`]: {
-          [name]: entities,
-          [`${name}s`]: entitiesRange,
-          [`${name}_count`]: createEntitiesCounts(entities),
-        },
+  createResponse({
+    [`get_${name}s`]: {
+      [`get_${name}s_response`]: {
+        [name]: entities,
+        [`${name}s`]: entitiesRange,
+        [`${name}_count`]: createEntitiesCounts(entities),
       },
     },
-  );
+  });
 
 export const createEntityResponse = (name, entity) =>
-  new Response(
-    {},
-    {
-      [`get_${name}`]: {
-        [`get_${name}s_response`]: {
-          [name]: entity,
-        },
+  createResponse({
+    [`get_${name}`]: {
+      [`get_${name}s_response`]: {
+        [name]: entity,
       },
     },
-  );
+  });
 
 export const createActionResultResponse = () =>
-  new Response(
-    {},
-    {
-      action_result: {
-        action: 'ipsum',
-        id: 'foo',
-        message: 'OK',
-      },
+  createResponse({
+    action_result: {
+      action: 'ipsum',
+      id: 'foo',
+      message: 'OK',
     },
-  );
+  });
 
 export const createAggregatesResponse = (data = {}) =>
-  new Response(
-    {},
-    {
-      get_aggregate: {
-        get_aggregates_response: {
-          aggregate: data,
-        },
+  createResponse({
+    get_aggregate: {
+      get_aggregates_response: {
+        aggregate: data,
       },
     },
-  );
+  });
 
 export const createHttp = response => ({
   request: jest.fn().mockReturnValue(Promise.resolve(response)),
