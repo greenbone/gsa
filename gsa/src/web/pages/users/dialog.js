@@ -193,6 +193,7 @@ class Dialog extends React.Component {
                         />
                         <PasswordField
                           name="password"
+                          autoComplete="new-password"
                           value={state.password}
                           onChange={onValueChange}
                         />
@@ -247,6 +248,7 @@ class Dialog extends React.Component {
                         />
                         <PasswordField
                           name="password"
+                          autoComplete="new-password"
                           value={state.password}
                           onChange={onValueChange}
                         />
