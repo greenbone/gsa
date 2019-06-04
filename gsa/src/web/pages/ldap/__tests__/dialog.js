@@ -31,7 +31,7 @@ describe('Ldap dialog component tests', () => {
     const {baseElement} = render(
       <Dialog
         authdn="foo"
-        enable={1}
+        enable={true}
         ldaphost="bar"
         onChange={handleChange}
         onClose={handleClose}
@@ -50,7 +50,7 @@ describe('Ldap dialog component tests', () => {
     const {getByTestId} = render(
       <Dialog
         authdn="foo"
-        enable={1}
+        enable={true}
         ldaphost="bar"
         onChange={handleValueChange}
         onClose={handleClose}
@@ -62,7 +62,7 @@ describe('Ldap dialog component tests', () => {
     fireEvent.click(checkBox);
     expect(handleSave).toHaveBeenCalledWith({
       authdn: 'foo',
-      enable: 1,
+      enable: true,
       ldaphost: 'bar',
     });
   });
@@ -74,7 +74,7 @@ describe('Ldap dialog component tests', () => {
     const {getByTestId} = render(
       <Dialog
         authdn="foo"
-        enable={1}
+        enable={true}
         ldaphost="bar"
         onClose={handleClose}
         onSave={handleSave}
@@ -95,7 +95,7 @@ describe('Ldap dialog component tests', () => {
     const {getByTestId} = render(
       <Dialog
         authdn="foo"
-        enable={1}
+        enable={true}
         ldaphost="bar"
         onClose={handleClose}
         onSave={handleSave}
@@ -116,7 +116,7 @@ describe('Ldap dialog component tests', () => {
 
     expect(handleSave).toHaveBeenCalledWith({
       authdn: 'lorem',
-      enable: 0,
+      enable: false,
       ldaphost: 'ipsum',
     });
   });
