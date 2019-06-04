@@ -37,6 +37,18 @@ describe('Settings model tests', () => {
 
     expect(settings.getEntries()).toEqual([['foo', 'bar'], ['lorem', 'ipsum']]);
   });
+
+  test('should not have non existing key', () => {
+    const settings = new Settings();
+    expect(settings.has('foo')).toEqual(false);
+  });
+
+  test('should have existing key', () => {
+    const settings = new Settings();
+    settings.set('foo', 'bar');
+
+    expect(settings.has('foo')).toEqual(true);
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
