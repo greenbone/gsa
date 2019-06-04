@@ -161,32 +161,32 @@ class Dialog extends React.Component {
           onSave={d => this.handleSaveClick(onSave, d)}
           defaultValues={data}
         >
-          {({values: state, onValueChange}) => {
-            return (
-              <React.Fragment>
-                <Layout flex="column">
-                  <FormGroup title={_('Login Name')}>
-                    <TextField
-                      name="name"
-                      grow="1"
-                      value={state.name}
-                      size="30"
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
+          {({values: state, onValueChange}) => (
+            <React.Fragment>
+              <Layout flex="column">
+                <FormGroup title={_('Login Name')}>
+                  <TextField
+                    name="name"
+                    grow="1"
+                    value={state.name}
+                    size="30"
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
 
-                  <FormGroup title={_('Comment')}>
-                    <TextField
-                      name="comment"
-                      value={state.comment}
-                      grow="1"
-                      size="30"
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
+                <FormGroup title={_('Comment')}>
+                  <TextField
+                    name="comment"
+                    value={state.comment}
+                    grow="1"
+                    size="30"
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
 
-                  {!isEdit && (
-                    <FormGroup title={_('Authentication')} flex="column">
+                {!isEdit && (
+                  <FormGroup title={_('Authentication')} flex="column">
+                    <Divider flex="column">
                       <Divider>
                         <Radio
                           title={_('Password')}
@@ -203,41 +203,37 @@ class Dialog extends React.Component {
                         />
                       </Divider>
                       {hasLdapEnabled && (
-                        <Divider>
-                          <Radio
-                            title={_('LDAP Authentication Only')}
-                            name="auth_method"
-                            value={AUTH_METHOD_LDAP}
-                            checked={state.auth_method === AUTH_METHOD_LDAP}
-                            onChange={onValueChange}
-                          />
-                        </Divider>
-                      )}
-                      {hasRadiusEnabled && (
-                        <Divider>
-                          <Radio
-                            title={_('RADIUS Authentication Only')}
-                            name="auth_method"
-                            value={AUTH_METHOD_RADIUS}
-                            checked={state.auth_method === AUTH_METHOD_RADIUS}
-                            onChange={onValueChange}
-                          />
-                        </Divider>
-                      )}
-                    </FormGroup>
-                  )}
-
-                  {isEdit && (
-                    <FormGroup title={_('Authentication')} flex="column">
-                      <Divider>
                         <Radio
-                          title={_('Password: Use existing Password')}
+                          title={_('LDAP Authentication Only')}
                           name="auth_method"
-                          value={AUTH_METHOD_PASSWORD}
-                          checked={state.auth_method === AUTH_METHOD_PASSWORD}
+                          value={AUTH_METHOD_LDAP}
+                          checked={state.auth_method === AUTH_METHOD_LDAP}
                           onChange={onValueChange}
                         />
-                      </Divider>
+                      )}
+                      {hasRadiusEnabled && (
+                        <Radio
+                          title={_('RADIUS Authentication Only')}
+                          name="auth_method"
+                          value={AUTH_METHOD_RADIUS}
+                          checked={state.auth_method === AUTH_METHOD_RADIUS}
+                          onChange={onValueChange}
+                        />
+                      )}
+                    </Divider>
+                  </FormGroup>
+                )}
+
+                {isEdit && (
+                  <FormGroup title={_('Authentication')} flex="column">
+                    <Divider flex="column">
+                      <Radio
+                        title={_('Password: Use existing Password')}
+                        name="auth_method"
+                        value={AUTH_METHOD_PASSWORD}
+                        checked={state.auth_method === AUTH_METHOD_PASSWORD}
+                        onChange={onValueChange}
+                      />
                       <Divider>
                         <Radio
                           title={_('New Password')}
@@ -256,122 +252,118 @@ class Dialog extends React.Component {
                         />
                       </Divider>
                       {hasLdapEnabled && (
-                        <Divider>
-                          <Radio
-                            title={_('LDAP Authentication Only')}
-                            name="auth_method"
-                            value={AUTH_METHOD_LDAP}
-                            checked={state.auth_method === AUTH_METHOD_LDAP}
-                            onChange={onValueChange}
-                          />
-                        </Divider>
+                        <Radio
+                          title={_('LDAP Authentication Only')}
+                          name="auth_method"
+                          value={AUTH_METHOD_LDAP}
+                          checked={state.auth_method === AUTH_METHOD_LDAP}
+                          onChange={onValueChange}
+                        />
                       )}
                       {hasRadiusEnabled && (
-                        <Divider>
-                          <Radio
-                            title={_('RADIUS Authentication Only')}
-                            name="auth_method"
-                            value={AUTH_METHOD_RADIUS}
-                            checked={state.auth_method === AUTH_METHOD_RADIUS}
-                            onChange={onValueChange}
-                          />
-                        </Divider>
+                        <Radio
+                          title={_('RADIUS Authentication Only')}
+                          name="auth_method"
+                          value={AUTH_METHOD_RADIUS}
+                          checked={state.auth_method === AUTH_METHOD_RADIUS}
+                          onChange={onValueChange}
+                        />
                       )}
-                    </FormGroup>
-                  )}
-
-                  {capabilities.mayAccess('roles') && (
-                    <FormGroup title={_('Roles')}>
-                      <MultiSelect
-                        name="role_ids"
-                        items={rolesOptions}
-                        value={roleIds}
-                        onChange={this.handleRoleIdsChange}
-                      />
-                    </FormGroup>
-                  )}
-
-                  {capabilities.mayAccess('groups') && (
-                    <FormGroup title={_('Groups')}>
-                      <MultiSelect
-                        name="group_ids"
-                        items={groupsOptions}
-                        value={state.group_ids}
-                        onChange={onValueChange}
-                      />
-                    </FormGroup>
-                  )}
-
-                  <FormGroup title={_('Host Access')}>
-                    <Divider flex="column">
-                      <Divider>
-                        <Radio
-                          name="hosts_allow"
-                          title={_('Allow all and deny')}
-                          value={ACCESS_ALLOW_ALL}
-                          checked={state.hosts_allow === ACCESS_ALLOW_ALL}
-                          onChange={onValueChange}
-                        />
-                        <Radio
-                          name="hosts_allow"
-                          title={_('Deny all and allow')}
-                          value={ACCESS_DENY_ALL}
-                          checked={state.hosts_allow === ACCESS_DENY_ALL}
-                          onChange={onValueChange}
-                        />
-                      </Divider>
-                      <TextField
-                        name="access_hosts"
-                        size="30"
-                        value={state.access_hosts}
-                        onChange={onValueChange}
-                      />
                     </Divider>
                   </FormGroup>
-
-                  <FormGroup title={_('Interface Access')}>
-                    <Divider flex="column">
-                      <Divider>
-                        <Radio
-                          name="ifaces_allow"
-                          title={_('Allow all and deny')}
-                          value={ACCESS_ALLOW_ALL}
-                          checked={state.ifaces_allow === ACCESS_ALLOW_ALL}
-                          onChange={onValueChange}
-                        />
-                        <Radio
-                          name="ifaces_allow"
-                          title={_('Deny all and allow')}
-                          value={ACCESS_DENY_ALL}
-                          checked={state.ifaces_allow === ACCESS_DENY_ALL}
-                          onChange={onValueChange}
-                        />
-                      </Divider>
-                      <TextField
-                        name="access_ifaces"
-                        size="30"
-                        value={state.access_ifaces}
-                        onChange={onValueChange}
-                      />
-                    </Divider>
-                  </FormGroup>
-                </Layout>
-                {confirmationDialogVisible && (
-                  <ConfirmationDialog
-                    text={_(
-                      'Please note: You are about to create a user ' +
-                        'without a role. This user will not have any ' +
-                        'permissions and as a result will not be able to login.',
-                    )}
-                    title={_('User without a role')}
-                    width="400px"
-                    onClose={this.closeConfirmationDialog}
-                    onResumeClick={this.handleResumeClick}
-                  />
                 )}
-              </React.Fragment>
-            );
-          }}
+
+                {capabilities.mayAccess('roles') && (
+                  <FormGroup title={_('Roles')}>
+                    <MultiSelect
+                      name="role_ids"
+                      items={rolesOptions}
+                      value={roleIds}
+                      onChange={this.handleRoleIdsChange}
+                    />
+                  </FormGroup>
+                )}
+
+                {capabilities.mayAccess('groups') && (
+                  <FormGroup title={_('Groups')}>
+                    <MultiSelect
+                      name="group_ids"
+                      items={groupsOptions}
+                      value={state.group_ids}
+                      onChange={onValueChange}
+                    />
+                  </FormGroup>
+                )}
+
+                <FormGroup title={_('Host Access')}>
+                  <Divider flex="column">
+                    <Divider>
+                      <Radio
+                        name="hosts_allow"
+                        title={_('Allow all and deny')}
+                        value={ACCESS_ALLOW_ALL}
+                        checked={state.hosts_allow === ACCESS_ALLOW_ALL}
+                        onChange={onValueChange}
+                      />
+                      <Radio
+                        name="hosts_allow"
+                        title={_('Deny all and allow')}
+                        value={ACCESS_DENY_ALL}
+                        checked={state.hosts_allow === ACCESS_DENY_ALL}
+                        onChange={onValueChange}
+                      />
+                    </Divider>
+                    <TextField
+                      name="access_hosts"
+                      size="30"
+                      value={state.access_hosts}
+                      onChange={onValueChange}
+                    />
+                  </Divider>
+                </FormGroup>
+
+                <FormGroup title={_('Interface Access')}>
+                  <Divider flex="column">
+                    <Divider>
+                      <Radio
+                        name="ifaces_allow"
+                        title={_('Allow all and deny')}
+                        value={ACCESS_ALLOW_ALL}
+                        checked={state.ifaces_allow === ACCESS_ALLOW_ALL}
+                        onChange={onValueChange}
+                      />
+                      <Radio
+                        name="ifaces_allow"
+                        title={_('Deny all and allow')}
+                        value={ACCESS_DENY_ALL}
+                        checked={state.ifaces_allow === ACCESS_DENY_ALL}
+                        onChange={onValueChange}
+                      />
+                    </Divider>
+                    <TextField
+                      name="access_ifaces"
+                      size="30"
+                      value={state.access_ifaces}
+                      onChange={onValueChange}
+                    />
+                  </Divider>
+                </FormGroup>
+              </Layout>
+              {confirmationDialogVisible && (
+                <ConfirmationDialog
+                  text={_(
+                    'Please note: You are about to create a user ' +
+                      'without a role. This user will not have any ' +
+                      'permissions and as a result will not be able to login.',
+                  )}
+                  title={_('User without a role')}
+                  width="400px"
+                  onClose={this.closeConfirmationDialog}
+                  onResumeClick={this.handleResumeClick}
+                />
+              )}
+            </React.Fragment>
+          )}
         </SaveDialog>
       </React.Fragment>
     );
