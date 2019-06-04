@@ -52,6 +52,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Display text if gvm-libs is build without LDAP and/or Radius support [#1437](https://github.com/greenbone/gsa/pull/1437)
 - Fix sending related resources in permission.create() [#1432](https://github.com/greenbone/gsa/pull/1432)
 - Don't allow bulk tagging vulnerabilities [#1429](https://github.com/greenbone/gsa/pull/1429)
 - Fix "given type was invalid" error for saving filters [#1428](https://github.com/greenbone/gsa/pull/1428)
