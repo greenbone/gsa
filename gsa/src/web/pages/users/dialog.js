@@ -21,8 +21,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {YES_VALUE} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
@@ -148,10 +146,8 @@ class Dialog extends React.Component {
       value: group.id,
     }));
 
-    const hasLdapEnabled =
-      settings.get('method:ldap_connect').enable === YES_VALUE;
-    const hasRadiusEnabled =
-      settings.get('method:radius_connect').enable === YES_VALUE;
+    const hasLdapEnabled = settings.get('method:ldap_connect').enabled;
+    const hasRadiusEnabled = settings.get('method:radius_connect').enabled;
     return (
       <React.Fragment>
         <SaveDialog

@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,33 +16,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import registerCommand from '../command';
 
-import HttpCommand from './http';
+import {convertBoolean} from '../convert';
 
-import {convertBoolean} from './convert';
+describe('convertBoolean tests', () => {
+  test('should convert true', () => {
+    expect(convertBoolean(true)).toEqual(1);
+  });
 
-export class AuthenticationCommand extends HttpCommand {
-  saveLdap({authdn, certificate, enable, ldaphost}) {
-    return this.httpPost({
-      cmd: 'save_auth',
-      group: 'method:ldap_connect',
-      authdn,
-      certificate,
-      enable: convertBoolean(enable),
-      ldaphost,
-    });
-  }
+  test('should convert false', () => {
+    expect(convertBoolean(false)).toEqual(0);
+  });
 
-  saveRadius({enable, radiushost, radiuskey}) {
-    return this.httpPost({
-      cmd: 'save_auth',
-      group: 'method:radius_connect',
-      enable: convertBoolean(enable),
-      radiushost,
-      radiuskey,
-    });
-  }
-}
-
-registerCommand('auth', AuthenticationCommand);
+  test('should convert to undefined for other value', () => {
+    expect(convertBoolean('true')).toBeUndefined();
+    expect(convertBoolean('false')).toBeUndefined();
+    expect(convertBoolean(1)).toBeUndefined();
+    expect(convertBoolean(0)).toBeUndefined();
+  });
+});

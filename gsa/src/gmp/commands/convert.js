@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,33 +16,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import registerCommand from '../command';
 
-import HttpCommand from './http';
-
-import {convertBoolean} from './convert';
-
-export class AuthenticationCommand extends HttpCommand {
-  saveLdap({authdn, certificate, enable, ldaphost}) {
-    return this.httpPost({
-      cmd: 'save_auth',
-      group: 'method:ldap_connect',
-      authdn,
-      certificate,
-      enable: convertBoolean(enable),
-      ldaphost,
-    });
+/**
+ * Convert boolean true/false to API 1/0 values
+ *
+ * It converts true to int 1 and false to 0. Converting other values returns
+ * undefined.
+ */
+export const convertBoolean = value => {
+  if (value === true) {
+    return 1;
   }
-
-  saveRadius({enable, radiushost, radiuskey}) {
-    return this.httpPost({
-      cmd: 'save_auth',
-      group: 'method:radius_connect',
-      enable: convertBoolean(enable),
-      radiushost,
-      radiuskey,
-    });
+  if (value === false) {
+    return 0;
   }
-}
-
-registerCommand('auth', AuthenticationCommand);
+  return undefined;
+};
