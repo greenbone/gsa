@@ -136,7 +136,7 @@ class Dialog extends React.Component {
       role_ids: roleIds,
     };
 
-    const is_edit = isDefined(user);
+    const isEdit = isDefined(user);
 
     const rolesOptions = map(roles, role => ({
       label: role.name,
@@ -181,7 +181,7 @@ class Dialog extends React.Component {
                     />
                   </FormGroup>
 
-                  {!is_edit && (
+                  {!isEdit && (
                     <FormGroup title={_('Authentication')} flex="column">
                       <Divider>
                         <Radio
@@ -224,7 +224,7 @@ class Dialog extends React.Component {
                     </FormGroup>
                   )}
 
-                  {is_edit && (
+                  {isEdit && (
                     <FormGroup title={_('Authentication')} flex="column">
                       <Divider>
                         <Radio
