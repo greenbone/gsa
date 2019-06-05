@@ -17,11 +17,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {isDefined, isString} from '../utils/identity';
-import {forEach, map} from '../utils/array';
+import {forEach, map} from 'gmp/utils/array';
+import {isDefined, isString} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 import Model from '../model';
-import {parseSeverity, parseQod, parseXmlEncodedString} from '../parser';
+import {parseSeverity, parseQod} from '../parser';
 
 import Nvt from './nvt';
 
@@ -73,13 +74,15 @@ class Result extends Model {
       // openvas 8
       copy.host = {
         name: host,
-        id: host,
         hostname: '',
       };
     } else {
       copy.host = {
         name: host.__text,
-        id: isDefined(host.asset) ? host.asset._asset_id : host.__text,
+        id:
+          isDefined(host.asset) && !isEmpty(host.asset._asset_id)
+            ? host.asset._asset_id
+            : undefined,
         hostname: isDefined(host.hostname) ? host.hostname : '',
       };
     }
@@ -87,7 +90,7 @@ class Result extends Model {
     copy.nvt = new Nvt(nvt);
 
     if (isDefined(description)) {
-      copy.description = parseXmlEncodedString(description);
+      copy.description = description;
     }
 
     if (isDefined(severity)) {

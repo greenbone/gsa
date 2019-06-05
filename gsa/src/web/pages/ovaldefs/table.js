@@ -51,72 +51,64 @@ const Header = ({
           currentSortBy={currentSortBy}
           sorty={sort ? 'name' : false}
           onSortChange={onSortChange}
-        >
-          {_('Name')}
-        </TableHead>
+          title={_('Name')}
+        />
         <TableHead
           width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'version' : false}
           onSortChange={onSortChange}
-        >
-          {_('Version')}
-        </TableHead>
+          title={_('Version')}
+        />
         <TableHead
           width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'status' : false}
           onSortChange={onSortChange}
-        >
-          {_('Status')}
-        </TableHead>
+          title={_('Status')}
+        />
         <TableHead
           width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'class' : false}
           onSortChange={onSortChange}
-        >
-          {_('Class')}
-        </TableHead>
+          title={_('Class')}
+        />
         <TableHead
           width="15%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'created' : false}
           onSortChange={onSortChange}
-        >
-          {_('Created')}
-        </TableHead>
+          title={_('Created')}
+        />
         <TableHead
           width="15%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'modified' : false}
           onSortChange={onSortChange}
-        >
-          {_('Modified')}
-        </TableHead>
+          title={_('Modified')}
+        />
         <TableHead
           width="2%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'cves' : false}
           onSortChange={onSortChange}
-        >
-          {_('CVEs')}
-        </TableHead>
+          title={_('CVEs')}
+        />
         <TableHead
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}
-        >
-          {_('Severity')}
-        </TableHead>
+          title={_('Severity')}
+        />
         {actionsColumn}
       </TableRow>
     </TableHeader>

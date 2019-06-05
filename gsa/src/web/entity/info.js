@@ -22,7 +22,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
+import DateTime from 'web/components/date/datetime';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -58,9 +58,13 @@ const EntityInfo = ({entity}) => {
       <div>{_('ID:')}</div>
       <div>{id}</div>
       <div>{_('Created:')}</div>
-      <div>{dateTimeWithTimeZone(creationTime)}</div>
+      <div>
+        <DateTime date={creationTime} />
+      </div>
       <div>{_('Modified:')}</div>
-      <div>{dateTimeWithTimeZone(modificationTime)}</div>
+      <div>
+        <DateTime date={modificationTime} />
+      </div>
       <div>{_('Owner:')}</div>
       <OwnerInfo owner={owner} />
     </InfoLayout>

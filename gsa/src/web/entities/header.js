@@ -127,9 +127,8 @@ export const createEntitiesHeader = (columns, actions_column, options = {}) => {
               currentSortDir={currentSortDir}
               sortBy={sort ? name : false}
               onSortChange={onSortChange}
-            >
-              {`${displayName}`}
-            </TableHead>
+              title={`${displayName}`}
+            />
           );
         })}
         {actionsColumn}

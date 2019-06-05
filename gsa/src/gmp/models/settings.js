@@ -26,6 +26,10 @@ class Settings {
     this._settings = {};
   }
 
+  has(name) {
+    return name in this._settings;
+  }
+
   set(name, value) {
     this._settings[name] = value;
   }

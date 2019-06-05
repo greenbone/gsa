@@ -1,0 +1,324 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SeverityLevelsFilterGroup tests should render 1`] = `
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c5 {
+  margin-left: -5px;
+}
+
+.c5 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c5 > * {
+  margin-left: 5px;
+}
+
+.c4 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  padding-bottom: 10px;
+}
+
+.c1 {
+  display: inline-block;
+  max-width: 100%;
+  font-weight: bold;
+  text-align: right;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 16.66666667%;
+  margin-left: 0;
+}
+
+.c2 {
+  width: 83.33333333%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.c6 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.c8 {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  margin-left: 10px;
+  line-height: normal;
+  width: auto;
+  height: auto;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c9 {
+  text-align: center;
+  font-weight: normal;
+  font-style: normal;
+  color: white;
+  padding: 1px;
+  display: inline-block;
+  width: 60px;
+  height: 1.5em;
+  font-size: 0.8em;
+  background-color: #C83814;
+  border-color: #C83814;
+}
+
+.c10 {
+  text-align: center;
+  font-weight: normal;
+  font-style: normal;
+  color: white;
+  padding: 1px;
+  display: inline-block;
+  width: 60px;
+  height: 1.5em;
+  font-size: 0.8em;
+  background-color: #F0A519;
+  border-color: #F0A519;
+}
+
+.c11 {
+  text-align: center;
+  font-weight: normal;
+  font-style: normal;
+  color: white;
+  padding: 1px;
+  display: inline-block;
+  width: 60px;
+  height: 1.5em;
+  font-size: 0.8em;
+  background-color: #4F91C7;
+  border-color: #4F91C7;
+}
+
+.c12 {
+  text-align: center;
+  font-weight: normal;
+  font-style: normal;
+  color: white;
+  padding: 1px;
+  display: inline-block;
+  width: 60px;
+  height: 1.5em;
+  font-size: 0.8em;
+  background-color: #191919;
+  border-color: #191919;
+}
+
+<div
+  class="c0"
+>
+  <label
+    class="c1"
+    data-testid="formgroup-title"
+  >
+    Severity (Class)
+  </label>
+  <div
+    class="c2 c3"
+    data-testid="formgroup-content"
+    size="10"
+  >
+    <div
+      class="c4 c3"
+    >
+      <div
+        class="c5 c3"
+        margin="5px"
+      >
+        <label
+          class="c6"
+        >
+          <div
+            class="c4 c3"
+          >
+            <div
+              class="c5 c3"
+              margin="5px"
+            >
+              <input
+                checked=""
+                class="c7 c8"
+                name="h"
+                type="checkbox"
+                value=""
+              />
+              <div
+                class="c9"
+              >
+                High
+              </div>
+            </div>
+          </div>
+        </label>
+        <label
+          class="c6"
+        >
+          <div
+            class="c4 c3"
+          >
+            <div
+              class="c5 c3"
+              margin="5px"
+            >
+              <input
+                class="c7 c8"
+                name="m"
+                type="checkbox"
+                value=""
+              />
+              <div
+                class="c10"
+              >
+                Medium
+              </div>
+            </div>
+          </div>
+        </label>
+        <label
+          class="c6"
+        >
+          <div
+            class="c4 c3"
+          >
+            <div
+              class="c5 c3"
+              margin="5px"
+            >
+              <input
+                class="c7 c8"
+                name="l"
+                type="checkbox"
+                value=""
+              />
+              <div
+                class="c11"
+              >
+                Low
+              </div>
+            </div>
+          </div>
+        </label>
+        <label
+          class="c6"
+        >
+          <div
+            class="c4 c3"
+          >
+            <div
+              class="c5 c3"
+              margin="5px"
+            >
+              <input
+                class="c7 c8"
+                name="g"
+                type="checkbox"
+                value=""
+              />
+              <div
+                class="c12"
+              >
+                Log
+              </div>
+            </div>
+          </div>
+        </label>
+        <label
+          class="c6"
+        >
+          <div
+            class="c4 c3"
+          >
+            <div
+              class="c5 c3"
+              margin="5px"
+            >
+              <input
+                class="c7 c8"
+                name="f"
+                type="checkbox"
+                value=""
+              />
+              <div
+                class="c12"
+              >
+                False Pos.
+              </div>
+            </div>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+`;

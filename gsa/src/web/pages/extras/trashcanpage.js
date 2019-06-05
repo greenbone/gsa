@@ -26,7 +26,6 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 import ErrorDialog from 'web/components/dialog/errordialog';
 
 import Button from 'web/components/form/button';
@@ -309,176 +308,171 @@ class Trashcan extends React.Component {
     };
 
     return (
-      <ErrorBoundary errElement={_('page')}>
-        <Layout flex="column">
-          <ToolBarIcons />
-          {error && (
-            <ErrorDialog
-              text={error.message}
-              title={_('Error')}
-              onClose={this.handleErrorClose}
+      <Layout flex="column">
+        <ToolBarIcons />
+        {error && (
+          <ErrorDialog
+            text={error.message}
+            title={_('Error')}
+            onClose={this.handleErrorClose}
+          />
+        )}
+        <Section img={<TrashcanIcon size="large" />} title={_('Trashcan')} />
+        <EmptyTrashButton onClick={this.handleEmpty} />
+
+        <LinkTarget id="Contents" />
+        <h1>{_('Contents')}</h1>
+        <Table>
+          <colgroup>
+            <Col />
+            <Col />
+          </colgroup>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{_('Type')}</TableHead>
+              <TableHead>{_('Items')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          {contents_table}
+        </Table>
+
+        {isDefined(trash.agent_list) && (
+          <span>
+            <LinkTarget id="agent" />
+            <h1>{_('Agents')}</h1>
+            <AgentsTable entities={trash.agent_list} {...table_props} />
+          </span>
+        )}
+        {isDefined(trash.alert_list) && (
+          <span>
+            <LinkTarget id="alert" />
+            <h1>{_('Alerts')}</h1>
+            <AlertsTable entities={trash.alert_list} {...table_props} />
+          </span>
+        )}
+        {isDefined(trash.config_list) && (
+          <span>
+            <LinkTarget id="config" />
+            <h1>{_('Scan Configs')}</h1>
+            <ScanConfigsTable entities={trash.config_list} {...table_props} />
+          </span>
+        )}
+        {isDefined(trash.credential_list) && (
+          <span>
+            <LinkTarget id="credential" />
+            <h1>{_('Credentials')}</h1>
+            <CredentialsTable
+              entities={trash.credential_list}
+              {...table_props}
             />
-          )}
-          <Section img={<TrashcanIcon size="large" />} title={_('Trashcan')} />
-          <EmptyTrashButton onClick={this.handleEmpty} />
+          </span>
+        )}
+        {isDefined(trash.filter_list) && (
+          <span>
+            <LinkTarget id="filter" />
+            <h1>{_('Filters')}</h1>
+            <FiltersTable entities={trash.filter_list} {...table_props} />
+          </span>
+        )}
+        {isDefined(trash.group_list) && (
+          <span>
+            <LinkTarget id="group" />
+            <h1>{_('Groups')}</h1>
+            <GroupsTable entities={trash.group_list} {...table_props} />
+          </span>
+        )}
+        {isDefined(trash.note_list) && (
+          <span>
+            <LinkTarget id="note" />
+            <h1>{_('Notes')}</h1>
+            <NotesTable entities={trash.note_list} {...table_props} />
+          </span>
+        )}
+        {isDefined(trash.override_list) && (
+          <span>
+            <LinkTarget id="override" />
+            <h1>{_('Overrides')}</h1>
+            <OverridesTable entities={trash.override_list} {...table_props} />
+          </span>
+        )}
+        {isDefined(trash.permission_list) && (
+          <span>
+            <LinkTarget id="permission" />
+            <h1>{_('Permissions')}</h1>
+            <PermissionsTable
+              entities={trash.permission_list}
+              {...table_props}
+            />
+          </span>
+        )}
+        {isDefined(trash.port_list_list) && (
+          <span>
+            <LinkTarget id="port_list" />
+            <h1>{_('Port Lists')}</h1>
+            <PortListsTable entities={trash.port_list_list} {...table_props} />
+          </span>
+        )}
+        {isDefined(trash.report_format_list) && (
+          <span>
+            <LinkTarget id="report_format" />
+            <h1>{_('Report Formats')}</h1>
+            <ReportFormatsTable
+              entities={trash.report_format_list}
+              {...table_props}
+            />
+          </span>
+        )}
+        {isDefined(trash.role_list) && (
+          <span>
+            <LinkTarget id="role" />
+            <h1>{_('Roles')}</h1>
+            <RolesTable entities={trash.role_list} {...table_props} />
+          </span>
+        )}
+        {isDefined(trash.scanner_list) && (
+          <span>
+            <LinkTarget id="scanner" />
+            <h1>{_('Scanners')}</h1>
+            <ScannersTable entities={trash.scanner_list} {...table_props} />
+          </span>
+        )}
+        {isDefined(trash.schedule_list) && (
+          <span>
+            <LinkTarget id="schedule" />
+            <h1>{_('Schedules')}</h1>
+            <SchedulesTable entities={trash.schedule_list} {...table_props} />
+          </span>
+        )}
+        {isDefined(trash.tag_list) && (
+          <span>
+            <LinkTarget id="tag" />
+            <h1>{_('Tags')}</h1>
+            <TagsTable entities={trash.tag_list} {...table_props} />
+          </span>
+        )}
+        {isDefined(trash.target_list) && (
+          <span>
+            <LinkTarget id="target" />
+            <h1>{_('Targets')}</h1>
+            <TargetsTable entities={trash.target_list} {...table_props} />
+          </span>
+        )}
+        {isDefined(trash.task_list) && (
+          <span>
+            <LinkTarget id="task" />
+            <h1>{_('Tasks')}</h1>
+            <TasksTable entities={trash.task_list} {...table_props} />
+          </span>
+        )}
 
-          <LinkTarget id="Contents" />
-          <h1>{_('Contents')}</h1>
-          <Table>
-            <colgroup>
-              <Col />
-              <Col />
-            </colgroup>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{_('Type')}</TableHead>
-                <TableHead>{_('Items')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            {contents_table}
-          </Table>
-
-          {isDefined(trash.agent_list) && (
-            <span>
-              <LinkTarget id="agent" />
-              <h1>{_('Agents')}</h1>
-              <AgentsTable entities={trash.agent_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.alert_list) && (
-            <span>
-              <LinkTarget id="alert" />
-              <h1>{_('Alerts')}</h1>
-              <AlertsTable entities={trash.alert_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.config_list) && (
-            <span>
-              <LinkTarget id="config" />
-              <h1>{_('Scan Configs')}</h1>
-              <ScanConfigsTable entities={trash.config_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.credential_list) && (
-            <span>
-              <LinkTarget id="credential" />
-              <h1>{_('Credentials')}</h1>
-              <CredentialsTable
-                entities={trash.credential_list}
-                {...table_props}
-              />
-            </span>
-          )}
-          {isDefined(trash.filter_list) && (
-            <span>
-              <LinkTarget id="filter" />
-              <h1>{_('Filters')}</h1>
-              <FiltersTable entities={trash.filter_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.group_list) && (
-            <span>
-              <LinkTarget id="group" />
-              <h1>{_('Groups')}</h1>
-              <GroupsTable entities={trash.group_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.note_list) && (
-            <span>
-              <LinkTarget id="note" />
-              <h1>{_('Notes')}</h1>
-              <NotesTable entities={trash.note_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.override_list) && (
-            <span>
-              <LinkTarget id="override" />
-              <h1>{_('Overrides')}</h1>
-              <OverridesTable entities={trash.override_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.permission_list) && (
-            <span>
-              <LinkTarget id="permission" />
-              <h1>{_('Permissions')}</h1>
-              <PermissionsTable
-                entities={trash.permission_list}
-                {...table_props}
-              />
-            </span>
-          )}
-          {isDefined(trash.port_list_list) && (
-            <span>
-              <LinkTarget id="port_list" />
-              <h1>{_('Port Lists')}</h1>
-              <PortListsTable
-                entities={trash.port_list_list}
-                {...table_props}
-              />
-            </span>
-          )}
-          {isDefined(trash.report_format_list) && (
-            <span>
-              <LinkTarget id="report_format" />
-              <h1>{_('Report Formats')}</h1>
-              <ReportFormatsTable
-                entities={trash.report_format_list}
-                {...table_props}
-              />
-            </span>
-          )}
-          {isDefined(trash.role_list) && (
-            <span>
-              <LinkTarget id="role" />
-              <h1>{_('Roles')}</h1>
-              <RolesTable entities={trash.role_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.scanner_list) && (
-            <span>
-              <LinkTarget id="scanner" />
-              <h1>{_('Scanners')}</h1>
-              <ScannersTable entities={trash.scanner_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.schedule_list) && (
-            <span>
-              <LinkTarget id="schedule" />
-              <h1>{_('Schedules')}</h1>
-              <SchedulesTable entities={trash.schedule_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.tag_list) && (
-            <span>
-              <LinkTarget id="tag" />
-              <h1>{_('Tags')}</h1>
-              <TagsTable entities={trash.tag_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.target_list) && (
-            <span>
-              <LinkTarget id="target" />
-              <h1>{_('Targets')}</h1>
-              <TargetsTable entities={trash.target_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.task_list) && (
-            <span>
-              <LinkTarget id="task" />
-              <h1>{_('Tasks')}</h1>
-              <TasksTable entities={trash.task_list} {...table_props} />
-            </span>
-          )}
-
-          {isDefined(trash.ticket_list) && (
-            <span>
-              <LinkTarget id="ticket" />
-              <h1>{_('Tickets')}</h1>
-              <TicketsTable entities={trash.ticket_list} {...table_props} />
-            </span>
-          )}
-        </Layout>
-      </ErrorBoundary>
+        {isDefined(trash.ticket_list) && (
+          <span>
+            <LinkTarget id="ticket" />
+            <h1>{_('Tickets')}</h1>
+            <TicketsTable entities={trash.ticket_list} {...table_props} />
+          </span>
+        )}
+      </Layout>
     );
   }
 }

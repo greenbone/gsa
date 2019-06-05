@@ -21,8 +21,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
 import PropTypes from 'web/utils/proptypes';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -34,13 +32,18 @@ import TextField from 'web/components/form/textfield';
 
 import Layout from 'web/components/layout/layout';
 
-const LdapDialog = ({authdn, enable, ldaphost, onClose, onSave}) => {
+const LdapDialog = ({
+  authdn = '',
+  enable = false,
+  ldaphost = '',
+  onClose,
+  onSave,
+}) => {
   const uncontrolledValues = {
     authdn,
     enable,
     ldaphost,
   };
-
   return (
     <SaveDialog
       buttonTitle={_('OK')}
@@ -55,9 +58,9 @@ const LdapDialog = ({authdn, enable, ldaphost, onClose, onSave}) => {
             <CheckBox
               data-testid="enable-checkbox"
               name="enable"
-              checked={values.enable === YES_VALUE}
-              checkedValue={YES_VALUE}
-              unCheckedValue={NO_VALUE}
+              checked={values.enable}
+              checkedValue={true}
+              unCheckedValue={false}
               onChange={onValueChange}
             />
           </FormGroup>
@@ -91,9 +94,9 @@ const LdapDialog = ({authdn, enable, ldaphost, onClose, onSave}) => {
 };
 
 LdapDialog.propTypes = {
-  authdn: PropTypes.string.isRequired,
-  enable: PropTypes.number.isRequired,
-  ldaphost: PropTypes.string.isRequired,
+  authdn: PropTypes.string,
+  enable: PropTypes.bool,
+  ldaphost: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

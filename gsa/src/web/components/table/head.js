@@ -23,7 +23,6 @@ import styled from 'styled-components';
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
-import {capitalizeFirstLetter} from 'gmp/utils/string';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
@@ -52,7 +51,7 @@ const TableHead = ({
       sortSymbol = ( // triangle pointing down
         <span
           title={_('Sorted In Descending Order By {{sortBy}}', {
-            sortBy: capitalizeFirstLetter(sortBy),
+            sortBy: `${title}`,
           })}
         >
           &nbsp;&#9660;
@@ -62,7 +61,7 @@ const TableHead = ({
       sortSymbol = ( // triangle pointing up
         <span
           title={_('Sorted In Ascending Order By {{sortBy}}', {
-            sortBy: capitalizeFirstLetter(sortBy),
+            sortBy: `${title}`,
           })}
         >
           &nbsp;&#9650;
@@ -70,7 +69,7 @@ const TableHead = ({
       );
     }
   }
-  if (isDefined(title)) {
+  if (isDefined(title) && !isDefined(children)) {
     children = `${title}`;
   }
   return (

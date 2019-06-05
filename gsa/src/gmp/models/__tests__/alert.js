@@ -31,7 +31,7 @@ import Alert, {
 } from 'gmp/models/alert';
 import {testModel} from 'gmp/models/testing';
 
-testModel(Alert, 'alert');
+testModel(Alert, 'alert', {testIsActive: false});
 
 describe('Alert Model tests', () => {
   test('should parse condition, event, and method', () => {

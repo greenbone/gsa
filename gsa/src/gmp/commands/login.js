@@ -34,10 +34,10 @@ class LoginCommand extends HttpCommand {
       login: username,
       password,
     }).then(
-      response => new Login(response.data),
+      response => new Login(response),
       rej => {
-        if (rej.isError && rej.isError() && rej.xhr) {
-          switch (rej.xhr.status) {
+        if (rej.isError && rej.isError()) {
+          switch (rej.status) {
             case 401:
               rej.setMessage(_('Bad login information'));
               break;

@@ -25,6 +25,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.1] - (unreleased)
 
 ### Added
+- Add tests for filter groups [#1419](https://github.com/greenbone/gsa/pull/1419)
+- Add tests for severitylevelsgroup, radio button and task trend [#1413](https://github.com/greenbone/gsa/pull/1413)
+- Allow to show error details [#1403](https://github.com/greenbone/gsa/pull/1403)
+- Add test for solution type group [#1402](https://github.com/greenbone/gsa/pull/1402)
+- Add tests for loginpage and structure components [#1390](https://github.com/greenbone/gsa/pull/1390)
 - Add getAllEntities() and loadAllEntities() actions and reducers to entities store [#1345](https://github.com/greenbone/gsa/pull/1345)
 - Add missing tool tips to credential download icons [#1335](https://github.com/greenbone/gsa/pull/1335)
 - Add type column to scan configs to allow filter and sort by scan config type [#1331](https://github.com/greenbone/gsa/pull/1331)
@@ -32,7 +37,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add new DefaultFilterSettings to UserSettings [#1326](https://github.com/greenbone/gsa/pull/1326)
 - Add warning for IE11 [#1322](https://github.com/greenbone/gsa/pull/1322)
 - Add tests for label and img [#1313](https://github.com/greenbone/gsa/pull/1313)
-- German translation [#1311](https://github.com/greenbone/gsa/pull/1311)[#1323](https://github.com/greenbone/gsa/pull/1323)
+- German translation
+  [#1311](https://github.com/greenbone/gsa/pull/1311),
+  [#1323](https://github.com/greenbone/gsa/pull/1323),
+  [#1403](https://github.com/greenbone/gsa/pull/1403)
 - Add tests for comment and badge [#1309](https://github.com/greenbone/gsa/pull/1309)
 - Add error dialog to fix missing error messages in trashcan [#1286](https://github.com/greenbone/gsa/pull/1286)
 - Display current result, comparable result and diff between results for delta
@@ -40,6 +48,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add tooltips to deactivated text fields in AlertDialog [#1269](https://github.com/greenbone/gsa/pull/1269)
 
 ### Changed
+- Disable some FileFields when RadioButton is not checked [#1430](https://github.com/greenbone/gsa/pull/1430)
+- Change checkboxes for solution types to radio buttons [#1398](https://github.com/greenbone/gsa/pull/1398)
 - Link to search in the manual for vulnerabilities [#1391](https://github.com/greenbone/gsa/pull/1391)
 - Separate tasks using this scan config with commas [#1384](https://github.com/greenbone/gsa/pull/1384)
 - Don't allow to verify predefined report formats [#1378](https://github.com/greenbone/gsa/pull/1378)
@@ -60,6 +70,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Display text if gvm-libs is build without LDAP and/or Radius support [#1437](https://github.com/greenbone/gsa/pull/1437)
+- Fix sending related resources in permission.create() [#1432](https://github.com/greenbone/gsa/pull/1432)
+- Don't allow bulk tagging vulnerabilities [#1429](https://github.com/greenbone/gsa/pull/1429)
+- Fix "given type was invalid" error for saving filters [#1428](https://github.com/greenbone/gsa/pull/1428)
+- Fix parsing CVSS authentication SINGLE_INSTANCE [#1427](https://github.com/greenbone/gsa/pull/1427)
+- Fix loading data on login [#1426](https://github.com/greenbone/gsa/pull/1426)
+- Fix result undefined error on result details [#1423](https://github.com/greenbone/gsa/pull/1423)
+- Fix showing Scanner Preferences in EditScanConfigDialog [#1420](https://github.com/greenbone/gsa/pull/1420)
+- Don't crash if second result for delta is undefined [#1418](https://github.com/greenbone/gsa/pull/1418)
+- Fix xml decoding issues with fast-xml-parser [#1414](https://github.com/greenbone/gsa/pull/1414)
+- Fix translation for task status and task trend tooltip [#1409](https://github.com/greenbone/gsa/pull/1409)
+- Fix problems with German translation in Add Dashboard dialog, SolutionTypeGroup and SeverityClassLabel [#1412](https://github.com/greenbone/gsa/pull/1412)
+- Fix some translation bugs (statusbar, about page, table header tooltips)[#1407](https://github.com/greenbone/gsa/pull/1407)
+- Fix checking if an entity is in use [#1406](https://github.com/greenbone/gsa/pull/1406)
+- Fix "Invalid date" string for scan times [#1405](https://github.com/greenbone/gsa/pull/1405)
+- Fix missing "Applied filter" message for "NVTs by Family" chart [#1404](https://github.com/greenbone/gsa/pull/1404)
+- Load all filters and report formats at the report details page [#1401](https://github.com/greenbone/gsa/pull/1401)
+- Fix rendering reports list page if user has no report formats [#1400](https://github.com/greenbone/gsa/pull/1400)
+- Don't link to hosts not being added to the assets [#1399](https://github.com/greenbone/gsa/pull/1399)
+- Fix adding and removing host assets at the report details [#1397](https://github.com/greenbone/gsa/pull/1397)
+- Fix displaying the observer group name at tasks list page [#1393](https://github.com/greenbone/gsa/pull/1393)
 - Improve EditScanConfigDialog performance (delete styles from svg-Icons) [#1388](https://github.com/greenbone/gsa/pull/1388)
 - Fix race condition in EditUserSettingsDialog and loading all default filters [#1383](https://github.com/greenbone/gsa/pull/1383)
 - Fix scheduled task tooltip time format [#1382](https://github.com/greenbone/gsa/pull/1382)
@@ -79,7 +110,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix restarting reload timers
   [#1341](https://github.com/greenbone/gsa/pull/1341),
   [#1351](https://github.com/greenbone/gsa/pull/1351),
-  [#1389](https://github.com/greenbone/gsa/pull/1389)
+  [#1389](https://github.com/greenbone/gsa/pull/1389),
+  [#1396](https://github.com/greenbone/gsa/pull/1396)
 - Fix list of excluded hosts formatting [#1340](https://github.com/greenbone/gsa/pull/1340)
 - Fix installation of locale files [#1330](https://github.com/greenbone/gsa/pull/1330)
 - Fix list of options of possible Filter types [#1326](https://github.com/greenbone/gsa/pull/1326)

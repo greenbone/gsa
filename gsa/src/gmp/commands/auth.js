@@ -20,23 +20,25 @@ import registerCommand from '../command';
 
 import HttpCommand from './http';
 
-class AuthenticationCommand extends HttpCommand {
-  saveLdap({authdn, certificate, enable, group, ldaphost}) {
+import {convertBoolean} from './convert';
+
+export class AuthenticationCommand extends HttpCommand {
+  saveLdap({authdn, certificate, enable, ldaphost}) {
     return this.httpPost({
       cmd: 'save_auth',
       group: 'method:ldap_connect',
       authdn,
       certificate,
-      enable,
+      enable: convertBoolean(enable),
       ldaphost,
     });
   }
 
-  saveRadius({enable, group, radiushost, radiuskey}) {
+  saveRadius({enable, radiushost, radiuskey}) {
     return this.httpPost({
       cmd: 'save_auth',
       group: 'method:radius_connect',
-      enable,
+      enable: convertBoolean(enable),
       radiushost,
       radiuskey,
     });

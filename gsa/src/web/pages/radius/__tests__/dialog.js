@@ -29,7 +29,7 @@ describe('RADIUS dialog component tests', () => {
 
     const {baseElement} = render(
       <Dialog
-        enable={1}
+        enable={true}
         radiushost="foo"
         radiuskey="bar"
         onClose={handleClose}
@@ -46,7 +46,7 @@ describe('RADIUS dialog component tests', () => {
 
     const {getByTestId} = render(
       <Dialog
-        enable={1}
+        enable={true}
         radiushost="foo"
         radiuskey="bar"
         onClose={handleClose}
@@ -57,7 +57,7 @@ describe('RADIUS dialog component tests', () => {
     const checkBox = getByTestId('dialog-save-button');
     fireEvent.click(checkBox);
     expect(handleSave).toHaveBeenCalledWith({
-      enable: 1,
+      enable: true,
       radiushost: 'foo',
       radiuskey: 'bar',
     });
@@ -69,7 +69,7 @@ describe('RADIUS dialog component tests', () => {
 
     const {getByTestId} = render(
       <Dialog
-        enable={1}
+        enable={true}
         radiushost="foo"
         radiuskey="bar"
         onClose={handleClose}
@@ -90,7 +90,7 @@ describe('RADIUS dialog component tests', () => {
 
     const {getByTestId} = render(
       <Dialog
-        enable={1}
+        enable={true}
         radiushost="foo"
         radiuskey="bar"
         onClose={handleClose}
@@ -112,7 +112,7 @@ describe('RADIUS dialog component tests', () => {
 
     expect(handleSave).toHaveBeenCalledWith({
       radiushost: 'lorem',
-      enable: 0,
+      enable: false,
       radiuskey: 'ipsum',
     });
   });

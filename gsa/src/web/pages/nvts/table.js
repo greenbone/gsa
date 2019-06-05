@@ -57,45 +57,40 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}
-        >
-          {_('Name')}
-        </TableHead>
+          title={_('Name')}
+        />
         <TableHead
           width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'family' : false}
           onSortChange={onSortChange}
-        >
-          {_('Family')}
-        </TableHead>
+          title={_('Family')}
+        />
         <TableHead
           width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'created' : false}
           onSortChange={onSortChange}
-        >
-          {_('Created')}
-        </TableHead>
+          title={_('Created')}
+        />
         <TableHead
           width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'modified' : false}
           onSortChange={onSortChange}
-        >
-          {_('Modified')}
-        </TableHead>
+          title={_('Modified')}
+        />
         <TableHead
           width="18%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'cve' : false}
           onSortChange={onSortChange}
-        >
-          {_('CVE')}
-        </TableHead>
+          title={_('CVE')}
+        />
         <TableHead width="1%">
           <Layout align="center">
             {sort ? (
@@ -113,18 +108,16 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}
-        >
-          {_('Severity')}
-        </TableHead>
+          title={_('Severity')}
+        />
         <TableHead
           width="3%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'qod' : false}
           onSortChange={onSortChange}
-        >
-          {_('QoD')}
-        </TableHead>
+          title={_('QoD')}
+        />
         {actionsColumn}
       </TableRow>
     </TableHeader>

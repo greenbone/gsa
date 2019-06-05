@@ -52,42 +52,39 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'date' : false}
           onSortChange={onSortChange}
-        >
-          {_('Date')}
-        </TableHead>
+          title={_('Date')}
+        />
         <TableHead
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'status' : false}
           onSortChange={onSortChange}
-        >
-          {_('Status')}
-        </TableHead>
+          title={_('Status')}
+        />
         <TableHead
           width="39%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'task' : false}
           onSortChange={onSortChange}
-        >
-          {_('Task')}
-        </TableHead>
+          title={_('Task')}
+        />
         <TableHead
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}
-        >
-          {_('Severity')}
-        </TableHead>
+          title={_('Severity')}
+        />
         <TableHead
           width="3%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'high' : false}
           onSortChange={onSortChange}
+          title={_('High')}
         >
           <SeverityClassLabel.High />
         </TableHead>
@@ -97,6 +94,7 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'medium' : false}
           onSortChange={onSortChange}
+          title={_('Medium')}
         >
           <SeverityClassLabel.Medium />
         </TableHead>
@@ -106,6 +104,7 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'low' : false}
           onSortChange={onSortChange}
+          title={_('Low')}
         >
           <SeverityClassLabel.Low />
         </TableHead>
@@ -115,6 +114,7 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'log' : false}
           onSortChange={onSortChange}
+          title={_('Log')}
         >
           <SeverityClassLabel.Log />
         </TableHead>
@@ -124,6 +124,7 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'false_positive' : false}
           onSortChange={onSortChange}
+          title={_('False Positive')}
         >
           <SeverityClassLabel.FalsePositive />
         </TableHead>

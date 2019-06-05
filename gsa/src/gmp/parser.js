@@ -19,7 +19,7 @@
 import 'core-js/fn/object/entries';
 import 'core-js/fn/string/starts-with';
 
-import {isDefined, isString} from './utils/identity';
+import {isDefined, isString, isNumber} from './utils/identity';
 import {isEmpty} from './utils/string';
 
 import date, {duration} from './models/date';
@@ -119,6 +119,7 @@ export const parseEnvelopeMeta = envelope => {
 
   for (const [name, to] of ENVELOPE_PROPS) {
     meta[to] = envelope[name];
+    delete envelope[name];
   }
   return meta;
 };
@@ -145,10 +146,6 @@ export const parseProperties = (element = {}, object = {}) => {
   if (isString(element._id) && element._id.length > 0) {
     // only set id if it id defined
     copy.id = element._id;
-  }
-
-  if (isString(element.name) && element.name.length > 0) {
-    copy.name = parseXmlEncodedString(element.name);
   }
 
   if (isDefined(element.creation_time)) {
@@ -242,7 +239,7 @@ export const parseCvssBaseVector = ({
     case 'MULTIPLE_INSTANCES':
       vector += 'M';
       break;
-    case 'SINGLE_INSTANCES':
+    case 'SINGLE_INSTANCE':
       vector += 'S';
       break;
     default:
@@ -410,6 +407,27 @@ export const parseDuration = value => {
     return undefined;
   }
   return duration(value, 'seconds');
+};
+
+/**
+ * Parse Numbers, Number Strings and Boolean to Boolean
+ *
+ * Number Strings are converted to Numbers by using the parseInt function.
+ * A Number is considered true if the value is not equal zero.
+ * All other values are compared against true.
+ *
+ * @param {String, Number, Boolean} value Value to convert to boolean
+ *
+ * @returns true if value is considered true else false
+ */
+export const parseBoolean = value => {
+  if (isString(value)) {
+    value = parseInt(value);
+  }
+  if (isNumber(value)) {
+    return value !== 0;
+  }
+  return value === true;
 };
 
 // vim: set ts=2 sw=2 tw=80:

@@ -244,7 +244,7 @@ class ScannerPreferences extends React.Component {
           </TableHeader>
           <TableBody>
             {preferences.map(pref => (
-              <ScannerPreferences
+              <ScannerPreference
                 key={pref.name}
                 preference={pref}
                 value={values[pref.name]}

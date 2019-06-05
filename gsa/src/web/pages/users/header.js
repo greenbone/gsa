@@ -46,45 +46,40 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}
-        >
-          {_('Name')}
-        </TableHead>
+          title={_('Name')}
+        />
         <TableHead
           width="26%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'roles' : false}
           onSortChange={onSortChange}
-        >
-          {_('Roles')}
-        </TableHead>
+          title={_('Roles')}
+        />
         <TableHead
           width="26%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'groups' : false}
           onSortChange={onSortChange}
-        >
-          {_('Groups')}
-        </TableHead>
+          title={_('Groups')}
+        />
         <TableHead
           width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'host_access' : false}
           onSortChange={onSortChange}
-        >
-          {_('Host Access')}
-        </TableHead>
+          title={_('Host Access')}
+        />
         <TableHead
           width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'ldap' : false}
           onSortChange={onSortChange}
-        >
-          {_('Authentication Type')}
-        </TableHead>
+          title={_('Authentication Type')}
+        />
         {actionsColumn}
       </TableRow>
     </TableHeader>

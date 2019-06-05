@@ -143,7 +143,7 @@ export class DashboardControls extends React.Component {
             title={_('Add new Dashboard Display')}
             buttonTitle={_('Add')}
             minHeight={163}
-            width="500px"
+            width="660px"
             defaultValues={{
               displayId: first(displays).displayId,
             }}
@@ -151,7 +151,7 @@ export class DashboardControls extends React.Component {
             onSave={this.handleNewDisplay}
           >
             {({values, onValueChange}) => (
-              <FormGroup title={_('Choose Display')} titleSize={4}>
+              <FormGroup title={_('Choose Display')} titleSize={3}>
                 <Select
                   name="displayId"
                   items={displayItems}

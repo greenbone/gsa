@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,28 +16,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
 
-import Divider from 'web/components/layout/divider';
-
-import StNonAvailableIcon from 'web/components/icon/stnonavailableicon';
-
-import PropTypes from 'web/utils/proptypes';
-
-import ErrorContainer from './errorcontainer';
-
-const ErrorMessage = ({message, children}) => (
-  <ErrorContainer>
-    <Divider>
-      <StNonAvailableIcon size="medium" />
-      <b>{message}</b>
-      {children}
-    </Divider>
-  </ErrorContainer>
-);
-
-ErrorMessage.propTypes = {
-  message: PropTypes.string,
+/**
+ * Convert boolean true/false to API 1/0 values
+ *
+ * It converts true to int 1 and false to 0. Converting other values returns
+ * undefined.
+ */
+export const convertBoolean = value => {
+  if (value === true) {
+    return 1;
+  }
+  if (value === false) {
+    return 0;
+  }
+  return undefined;
 };
-
-export default ErrorMessage;

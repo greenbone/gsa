@@ -1,0 +1,426 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SolutionTypesFilterGroup tests should render 1`] = `
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c9 {
+  margin-left: -5px;
+}
+
+.c9 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c9 > * {
+  margin-left: 5px;
+}
+
+.c8 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c12 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c12 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  padding-bottom: 10px;
+}
+
+.c1 {
+  display: inline-block;
+  max-width: 100%;
+  font-weight: bold;
+  text-align: right;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 16.66666667%;
+  margin-left: 0;
+}
+
+.c2 {
+  width: 83.33333333%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.c5 {
+  border: 0;
+  border-spacing: 0px;
+  font-size: 12px;
+  text-align: left;
+  table-layout: auto;
+  width: 100%;
+}
+
+.c7 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.c11 {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  margin-left: 10px;
+  line-height: normal;
+  width: auto;
+  height: auto;
+}
+
+.c10 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c4 {
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+}
+
+@media print {
+  .c5 {
+    border-collapse: collapse;
+  }
+}
+
+<div
+  class="c0"
+>
+  <label
+    class="c1"
+    data-testid="formgroup-title"
+  >
+    Solution Type
+  </label>
+  <div
+    class="c2 c3"
+    data-testid="formgroup-content"
+    size="10"
+  >
+    <div
+      class="c4 c3"
+    >
+      <table
+        class="c5"
+      >
+        <tbody
+          class=""
+        >
+          <tr>
+            <td>
+              <div
+                class="c6"
+              >
+                <label
+                  class="c7"
+                >
+                  <div
+                    class="c8 c3"
+                  >
+                    <div
+                      class="c9 c3"
+                      margin="5px"
+                    >
+                      <input
+                        checked=""
+                        class="c10 c11"
+                        data-testid="radio-input"
+                        name="All"
+                        type="radio"
+                        value=""
+                      />
+                      <span>
+                        All
+                      </span>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c6"
+              >
+                <label
+                  class="c7"
+                >
+                  <div
+                    class="c8 c3"
+                  >
+                    <div
+                      class="c9 c3"
+                      margin="5px"
+                    >
+                      <input
+                        class="c10 c11"
+                        data-testid="radio-input"
+                        name="Workaround"
+                        type="radio"
+                        value=""
+                      />
+                      <span
+                        alt="Workaround"
+                        class="c12 "
+                        title="Workaround"
+                      >
+                        <svg>
+                          st_workaround.svg
+                        </svg>
+                      </span>
+                      <span>
+                        Workaround
+                      </span>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c6"
+              >
+                <label
+                  class="c7"
+                >
+                  <div
+                    class="c8 c3"
+                  >
+                    <div
+                      class="c9 c3"
+                      margin="5px"
+                    >
+                      <input
+                        class="c10 c11"
+                        data-testid="radio-input"
+                        name="Mitigation"
+                        type="radio"
+                        value=""
+                      />
+                      <span
+                        alt="Mitigation"
+                        class="c12 "
+                        title="Mitigation"
+                      >
+                        <svg>
+                          st_mitigate.svg
+                        </svg>
+                      </span>
+                      <span>
+                        Mitigation
+                      </span>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c6"
+              >
+                <label
+                  class="c7"
+                >
+                  <div
+                    class="c8 c3"
+                  >
+                    <div
+                      class="c9 c3"
+                      margin="5px"
+                    >
+                      <input
+                        class="c10 c11"
+                        data-testid="radio-input"
+                        name="VendorFix"
+                        type="radio"
+                        value=""
+                      />
+                      <span
+                        alt="Vendorfix"
+                        class="c12 "
+                        title="Vendorfix"
+                      >
+                        <svg>
+                          st_vendorfix.svg
+                        </svg>
+                      </span>
+                      <span>
+                        Vendor fix
+                      </span>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c6"
+              >
+                <label
+                  class="c7"
+                >
+                  <div
+                    class="c8 c3"
+                  >
+                    <div
+                      class="c9 c3"
+                      margin="5px"
+                    >
+                      <input
+                        class="c10 c11"
+                        data-testid="radio-input"
+                        name="NoneAvailable"
+                        type="radio"
+                        value=""
+                      />
+                      <span
+                        alt="None available"
+                        class="c12 "
+                        title="None available"
+                      >
+                        <svg>
+                          st_nonavailable.svg
+                        </svg>
+                      </span>
+                      <span>
+                        None available
+                      </span>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c6"
+              >
+                <label
+                  class="c7"
+                >
+                  <div
+                    class="c8 c3"
+                  >
+                    <div
+                      class="c9 c3"
+                      margin="5px"
+                    >
+                      <input
+                        class="c10 c11"
+                        data-testid="radio-input"
+                        name="WillNotFix"
+                        type="radio"
+                        value=""
+                      />
+                      <span
+                        alt="Will not fix"
+                        class="c12 "
+                        title="Will not fix"
+                      >
+                        <svg>
+                          st_willnotfix.svg
+                        </svg>
+                      </span>
+                      <span>
+                        Will not fix
+                      </span>
+                    </div>
+                  </div>
+                </label>
+                 
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+`;

@@ -21,8 +21,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
 import PropTypes from 'web/utils/proptypes';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -34,13 +32,18 @@ import TextField from 'web/components/form/textfield';
 
 import Layout from 'web/components/layout/layout';
 
-const RadiusDialog = ({enable, radiushost, radiuskey, onClose, onSave}) => {
+const RadiusDialog = ({
+  enable = false,
+  radiushost = '',
+  radiuskey = '',
+  onClose,
+  onSave,
+}) => {
   const uncontrolledValues = {
     enable,
     radiushost,
     radiuskey,
   };
-
   return (
     <SaveDialog
       buttonTitle={_('OK')}
@@ -55,9 +58,9 @@ const RadiusDialog = ({enable, radiushost, radiuskey, onClose, onSave}) => {
             <CheckBox
               data-testid="enable-checkbox"
               name="enable"
-              checked={values.enable === YES_VALUE}
-              checkedValue={YES_VALUE}
-              unCheckedValue={NO_VALUE}
+              checked={values.enable}
+              checkedValue={true}
+              unCheckedValue={false}
               onChange={onValueChange}
             />
           </FormGroup>
@@ -65,6 +68,7 @@ const RadiusDialog = ({enable, radiushost, radiuskey, onClose, onSave}) => {
             <TextField
               data-testid="radiushost-textfield"
               name="radiushost"
+              size="50"
               value={values.radiushost}
               onChange={onValueChange}
             />
@@ -73,8 +77,8 @@ const RadiusDialog = ({enable, radiushost, radiuskey, onClose, onSave}) => {
             <PasswordField
               data-testid="radiuskey-textfield"
               name="radiuskey"
+              size="50"
               value={radiuskey}
-              size="30"
               onChange={onValueChange}
             />
           </FormGroup>
@@ -85,9 +89,9 @@ const RadiusDialog = ({enable, radiushost, radiuskey, onClose, onSave}) => {
 };
 
 RadiusDialog.propTypes = {
-  enable: PropTypes.number.isRequired,
-  radiushost: PropTypes.string.isRequired,
-  radiuskey: PropTypes.string.isRequired,
+  enable: PropTypes.bool,
+  radiushost: PropTypes.string,
+  radiuskey: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

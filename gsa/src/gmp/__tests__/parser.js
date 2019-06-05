@@ -24,6 +24,7 @@ import {
   parseCsv,
   parseCvssBaseVector,
   parseCvssBaseFromVector,
+  parseBoolean,
   parseDate,
   parseDuration,
   parseEnvelopeMeta,
@@ -54,6 +55,11 @@ describe('parseInt tests', () => {
   test('should shut cut float strings', () => {
     expect(parseInt('5.9999')).toBe(5);
     expect(parseInt('5.1')).toBe(5);
+  });
+
+  test('should parse int numbers', () => {
+    expect(parseInt(5)).toBe(5);
+    expect(parseInt(-5)).toBe(-5);
   });
 
   test('should cut float numbers', () => {
@@ -522,7 +528,7 @@ describe('parseCvssBaseVector tests', () => {
     expect(parseCvssBaseVector({authentication: 'MULTIPLE_INSTANCES'})).toEqual(
       'AV:ERROR/AC:ERROR/Au:M/C:ERROR/I:ERROR/A:ERROR',
     );
-    expect(parseCvssBaseVector({authentication: 'SINGLE_INSTANCES'})).toEqual(
+    expect(parseCvssBaseVector({authentication: 'SINGLE_INSTANCE'})).toEqual(
       'AV:ERROR/AC:ERROR/Au:S/C:ERROR/I:ERROR/A:ERROR',
     );
   });
@@ -789,6 +795,39 @@ describe('parseText tests', () => {
 
   test('should return __text if set', () => {
     expect(parseText({__text: 'foo'})).toEqual('foo');
+  });
+});
+
+describe('parseBoolean tests', () => {
+  test('should parse int numbers', () => {
+    expect(parseBoolean(1)).toBe(true);
+    expect(parseBoolean(0)).toBe(false);
+    expect(parseBoolean(2)).toBe(true);
+    expect(parseBoolean(-2)).toBe(true);
+  });
+
+  test('should parse int number strings', () => {
+    expect(parseBoolean('1')).toBe(true);
+    expect(parseBoolean('0')).toBe(false);
+    expect(parseBoolean('2')).toBe(true);
+    expect(parseBoolean('-2')).toBe(true);
+  });
+
+  test('should parse undefined', () => {
+    expect(parseBoolean()).toBe(false);
+  });
+
+  test('should parse empty string', () => {
+    expect(parseBoolean('')).toBe(false);
+  });
+
+  test('should parse non number strings', () => {
+    expect(parseBoolean('foo')).toBe(false);
+  });
+
+  test('should parse boolean', () => {
+    expect(parseBoolean(false)).toBe(false);
+    expect(parseBoolean(true)).toBe(true);
   });
 });
 

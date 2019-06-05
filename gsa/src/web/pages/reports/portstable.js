@@ -39,26 +39,23 @@ const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
         currentSortBy={currentSortBy}
         sortBy={sort ? 'name' : false}
         onSortChange={onSortChange}
-      >
-        {_('Port')}
-      </TableHead>
+        title={_('Port')}
+      />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'hosts' : false}
         onSortChange={onSortChange}
-      >
-        {_('Hosts')}
-      </TableHead>
+        title={_('Hosts')}
+      />
       <TableHead
         width="10%"
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'severity' : false}
         onSortChange={onSortChange}
-      >
-        {_('Severity')}
-      </TableHead>
+        title={_('Severity')}
+      />
     </TableRow>
   </TableHeader>
 );

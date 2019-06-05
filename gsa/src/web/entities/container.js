@@ -249,8 +249,10 @@ class EntitiesContainer extends React.Component {
         'for',
         this.props.gmpname,
       );
-      this.resetTimer();
+
       global.clearTimeout(this.timer);
+
+      this.resetTimer();
     }
   }
 
@@ -602,7 +604,7 @@ class EntitiesContainer extends React.Component {
       <React.Fragment>
         {children({
           ...other,
-          createFilterType: this.props.gmpname,
+          createFilterType: apiType(this.props.gmpname),
           entities,
           entitiesCounts,
           entitiesSelected: selected,

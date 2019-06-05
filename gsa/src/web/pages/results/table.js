@@ -60,9 +60,8 @@ const Header = ({
             currentSortBy={currentSortBy}
             sortBy={sort ? 'delta' : false}
             onSortChange={onSortChange}
-          >
-            {_('Delta')}
-          </TableHead>
+            title={_('Delta')}
+          />
         )}
         <TableHead
           width="45%"
@@ -71,9 +70,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'vulnerability' : false}
           onSortChange={onSortChange}
-        >
-          {_('Vulnerability')}
-        </TableHead>
+          title={_('Vulnerability')}
+        />
         <TableHead width="2%" rowSpan="2">
           <Layout align="center">
             {sort ? (
@@ -92,9 +90,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}
-        >
-          {_('Severity')}
-        </TableHead>
+          title={_('Severity')}
+        />
         <TableHead
           width="3%"
           rowSpan="2"
@@ -102,9 +99,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'qod' : false}
           onSortChange={onSortChange}
-        >
-          {_('QoD')}
-        </TableHead>
+          title={_('QoD')}
+        />
         <TableHead colSpan="2" width="23%">
           {_('Host')}
         </TableHead>
@@ -115,9 +111,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'location' : false}
           onSortChange={onSortChange}
-        >
-          {_('Location')}
-        </TableHead>
+          title={_('Location')}
+        />
         <TableHead
           width="10%"
           rowSpan="2"
@@ -125,9 +120,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'created' : false}
           onSortChange={onSortChange}
-        >
-          {_('Created')}
-        </TableHead>
+          title={_('Created')}
+        />
         {actionsColumn}
       </TableRow>
       <TableRow>
@@ -136,17 +130,15 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'host' : false}
           onSortChange={onSortChange}
-        >
-          {_('IP')}
-        </TableHead>
+          title={_('IP')}
+        />
         <TableHead
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hostname' : false}
           onSortChange={onSortChange}
-        >
-          {_('Name')}
-        </TableHead>
+          title={_('Name')}
+        />
       </TableRow>
     </TableHeader>
   );

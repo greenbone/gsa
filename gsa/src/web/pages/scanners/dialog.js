@@ -178,7 +178,7 @@ class ScannerDialog extends React.Component {
 
     const scanner_credentials = filter_credentials(credentials, type);
     const is_edit = isDefined(scanner);
-    const in_use = isDefined(scanner) && scanner.isInUse();
+    const isInUse = isDefined(scanner) && scanner.isInUse();
     const show_cred_info =
       isDefined(scanner) &&
       isDefined(scanner.credential) &&
@@ -224,7 +224,7 @@ class ScannerDialog extends React.Component {
                   name="type"
                   value={state.type}
                   items={scannerTypesOptions}
-                  disabled={in_use}
+                  disabled={isInUse}
                   onChange={this.handleTypeChange}
                 />
               </FormGroup>
@@ -233,7 +233,7 @@ class ScannerDialog extends React.Component {
                 <TextField
                   name="host"
                   value={state.host}
-                  disabled={in_use}
+                  disabled={isInUse}
                   grow="1"
                   onChange={onValueChange}
                 />
@@ -245,7 +245,7 @@ class ScannerDialog extends React.Component {
                     <TextField
                       name="port"
                       value={state.port}
-                      disabled={in_use}
+                      disabled={isInUse}
                       grow="1"
                       onChange={onValueChange}
                     />

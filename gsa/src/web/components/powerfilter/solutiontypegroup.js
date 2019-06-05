@@ -23,10 +23,24 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Checkbox from 'web/components/form/checkbox';
+import Radio from 'web/components/form/radio';
 import FormGroup from 'web/components/form/formgroup';
 
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
+
+import {isDefined} from 'gmp/utils/identity';
+
+import Table from 'web/components/table/table';
+import TableBody from 'web/components/table/body';
+import TableRow from 'web/components/table/row';
+import TableData from 'web/components/table/data';
+import Layout from 'web/components/layout/layout';
+
+import styled from 'styled-components';
+
+const StyledLayout = styled(Layout)`
+  flex-grow: 0;
+`;
 
 class SolutionTypesFilterGroup extends React.Component {
   constructor(...args) {
@@ -39,9 +53,9 @@ class SolutionTypesFilterGroup extends React.Component {
     const {filter, onChange} = this.props;
     const filteredSolutionType = filter.get('solution_type');
 
-    if (!value && solutionType === filteredSolutionType) {
+    if (!isDefined(solutionType) || solutionType === 'All') {
       onChange(filter.delete('solution_type'));
-    } else if (value && solutionType !== filteredSolutionType) {
+    } else if (solutionType !== filteredSolutionType) {
       onChange(filter.set('solution_type', solutionType));
     }
   }
@@ -53,46 +67,75 @@ class SolutionTypesFilterGroup extends React.Component {
 
     return (
       <FormGroup title={_('Solution Type')}>
-        <Checkbox
-          checked={solutionType === 'Workaround'}
-          name="Workaround"
-          onChange={this.handleSolutionTypeChange}
-        >
-          <SolutionTypeIcon type="Workaround" />
-          <span>{_('Workaround')}</span>
-        </Checkbox>
-        <Checkbox
-          checked={solutionType === 'Mitigation'}
-          name="Mitigation"
-          onChange={this.handleSolutionTypeChange}
-        >
-          <SolutionTypeIcon type="Mitigation" />
-          <span>{_('Mitigation')}</span>
-        </Checkbox>
-        <Checkbox
-          checked={solutionType === 'VendorFix'}
-          name="VendorFix"
-          onChange={this.handleSolutionTypeChange}
-        >
-          <SolutionTypeIcon type="VendorFix" />
-          <span>{_('Vendor fix')}</span>
-        </Checkbox>
-        <Checkbox
-          checked={solutionType === 'NoneAvailable'}
-          name="NoneAvailable"
-          onChange={this.handleSolutionTypeChange}
-        >
-          <SolutionTypeIcon type="NoneAvailable" />
-          <span>{_('None available')}</span>
-        </Checkbox>
-        <Checkbox
-          checked={solutionType === 'WillNotFix'}
-          name="WillNotFix"
-          onChange={this.handleSolutionTypeChange}
-        >
-          <SolutionTypeIcon type="WillNotFix" />
-          <span>{_('Will not fix')}</span>
-        </Checkbox>
+        <StyledLayout>
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableData>
+                  <Radio
+                    checked={!isDefined(solutionType) || solutionType === 'All'}
+                    name="All"
+                    onChange={this.handleSolutionTypeChange}
+                  >
+                    <span>{_('All')}</span>
+                  </Radio>
+                </TableData>
+                <TableData>
+                  <Radio
+                    checked={solutionType === 'Workaround'}
+                    name="Workaround"
+                    onChange={this.handleSolutionTypeChange}
+                  >
+                    <SolutionTypeIcon type="Workaround" />
+                    <span>{_('Workaround')}</span>
+                  </Radio>
+                </TableData>
+                <TableData>
+                  <Radio
+                    checked={solutionType === 'Mitigation'}
+                    name="Mitigation"
+                    onChange={this.handleSolutionTypeChange}
+                  >
+                    <SolutionTypeIcon type="Mitigation" />
+                    <span>{_('Mitigation')}</span>
+                  </Radio>
+                </TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>
+                  <Radio
+                    checked={solutionType === 'VendorFix'}
+                    name="VendorFix"
+                    onChange={this.handleSolutionTypeChange}
+                  >
+                    <SolutionTypeIcon type="VendorFix" />
+                    <span>{_('Vendor fix')}</span>
+                  </Radio>
+                </TableData>
+                <TableData>
+                  <Radio
+                    checked={solutionType === 'NoneAvailable'}
+                    name="NoneAvailable"
+                    onChange={this.handleSolutionTypeChange}
+                  >
+                    <SolutionTypeIcon type="NoneAvailable" />
+                    <span>{_('None available')}</span>
+                  </Radio>
+                </TableData>
+                <TableData>
+                  <Radio
+                    checked={solutionType === 'WillNotFix'}
+                    name="WillNotFix"
+                    onChange={this.handleSolutionTypeChange}
+                  >
+                    <SolutionTypeIcon type="WillNotFix" />
+                    <span>{_('Will not fix')}</span>
+                  </Radio>{' '}
+                </TableData>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </StyledLayout>
       </FormGroup>
     );
   }

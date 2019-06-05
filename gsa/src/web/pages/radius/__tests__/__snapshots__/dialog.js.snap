@@ -573,6 +573,7 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
                         class="c20 c21"
                         data-testid="radiushost-textfield"
                         name="radiushost"
+                        size="50"
                         type="text"
                         value="foo"
                       />
@@ -596,7 +597,7 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
                         class="c20 c21"
                         data-testid="radiuskey-textfield"
                         name="radiuskey"
-                        size="30"
+                        size="50"
                         type="password"
                         value="bar"
                       />
