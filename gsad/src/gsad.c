@@ -373,6 +373,7 @@ init_validator ()
                      "|(get_info)"
                      "|(get_note)"
                      "|(get_notes)"
+                     "|(get_nvt_families)"
                      "|(get_override)"
                      "|(get_overrides)"
                      "|(get_permission)"
@@ -2064,6 +2065,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (get_info)
   ELSE (get_note)
   ELSE (get_notes)
+  ELSE (get_nvt_families)
   ELSE (get_override)
   ELSE (get_overrides)
   ELSE (get_permission)

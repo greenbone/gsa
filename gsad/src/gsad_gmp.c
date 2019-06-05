@@ -8065,6 +8065,25 @@ get_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
+ * @brief Get all nvt_families, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_nvt_families_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                      params_t *params, cmd_response_data_t *response_data)
+{
+  return get_entities (connection, "nvt_families", credentials, params, NULL,
+                       response_data);
+}
+
+
+/**
  * @brief Edit details of an NVT for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
