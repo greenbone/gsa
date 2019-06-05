@@ -257,9 +257,12 @@ class ScanConfigComponent extends React.Component {
   loadEditScanConfigSettings(config) {
     const {gmp} = this.props;
 
-    return gmp.scanconfig.editScanConfigSettings(config).then(response => {
-      const {data} = response;
-      const {families, scanconfig} = data;
+    return Promise.all([
+      gmp.scanconfig.get(config),
+      gmp.nvtfamilies.get(),
+    ]).then(([configResponse, familiesResponse]) => {
+      const {data: scanconfig} = configResponse;
+      const {data: families} = familiesResponse;
       const trend = {};
       const select = {};
 
