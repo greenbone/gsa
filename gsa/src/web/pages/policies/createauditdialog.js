@@ -55,21 +55,14 @@ import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
-import MultiSelect from 'web/components/form/multiselect';
 import Select from 'web/components/form/select';
-import Spinner from 'web/components/form/spinner';
 import FormGroup from 'web/components/form/formgroup';
-import Checkbox from 'web/components/form/checkbox';
-import YesNoRadio from 'web/components/form/yesnoradio';
 import TextField from 'web/components/form/textfield';
 
 import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
-import AddResultsToAssetsGroup from 'web/pages/tasks/addresultstoassetsgroup';
-import AutoDeleteReportsGroup from 'web/pages/tasks/autodeletereportsgroup';
 
 const log = logger.getLogger('web.tasks.dialog');
 
@@ -101,82 +94,11 @@ const get_scanner = (scanners, scanner_id) => {
   });
 };
 
-class ScannerSelect extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.handleScannerChange = this.handleScannerChange.bind(this);
-  }
-
-  handleScannerChange(value, name) {
-    const {
-      scanners,
-      scanConfigs,
-      onScanConfigChange,
-      onScannerChange,
-    } = this.props;
-    let config_id;
-
-    const scanner = get_scanner(scanners, value);
-    const scanner_type = isDefined(scanner) ? scanner.scannerType : undefined;
-
-    if (
-      scanner_type === OPENVAS_SCANNER_TYPE ||
-      scanner_type === GMP_SCANNER_TYPE
-    ) {
-      config_id = selectSaveId(
-        scanConfigs[OPENVAS_SCAN_CONFIG_TYPE],
-        FULL_AND_FAST_SCAN_CONFIG_ID,
-      );
-    } else if (scanner_type === OSP_SCANNER_TYPE) {
-      config_id = selectSaveId(scanConfigs[OSP_SCAN_CONFIG_TYPE], UNSET_VALUE);
-    } else {
-      config_id = UNSET_VALUE;
-    }
-
-    log.debug('on scanner change', value, config_id, scanner);
-
-    if (isDefined(onScannerChange)) {
-      onScannerChange(value);
-    }
-    if (isDefined(onScanConfigChange)) {
-      onScanConfigChange(config_id);
-    }
-  }
-
-  render() {
-    const {changeTask, scannerId, scanners} = this.props;
-    return (
-      <FormGroup title={_('Scanner')}>
-        <Select
-          name="scanner_id"
-          value={scannerId}
-          disabled={!changeTask}
-          items={renderSelectItems(scanners)}
-          onChange={this.handleScannerChange}
-        />
-      </FormGroup>
-    );
-  }
-}
-
-ScannerSelect.propTypes = {
-  changeTask: PropTypes.bool.isRequired,
-  scanConfigs: PropTypes.shape({
-    [OPENVAS_SCANNER_TYPE]: PropTypes.array,
-    [OSP_SCANNER_TYPE]: PropTypes.array,
-  }),
-  scannerId: PropTypes.id.isRequired,
-  scanners: PropTypes.array.isRequired,
-  onScanConfigChange: PropTypes.func.isRequired,
-  onScannerChange: PropTypes.func.isRequired,
-};
-
 const DEFAULT_MAX_CHECKS = 4;
 const DEFAULT_MAX_HOSTS = 20;
 const DEFAULT_MIN_QOD = 70;
 
-const TaskDialog = ({
+const CreateAuditDialog = ({
   add_tag = NO_VALUE,
   alert_ids = [],
   alerts = [],
@@ -187,6 +109,7 @@ const TaskDialog = ({
   capabilities,
   comment = '',
   config_id = FULL_AND_FAST_SCAN_CONFIG_ID,
+  //config_id = scan_configs[0].id,
   hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
   in_assets = YES_VALUE,
   max_checks = DEFAULT_MAX_CHECKS,
@@ -198,7 +121,7 @@ const TaskDialog = ({
   scanners = [
     {
       id: OPENVAS_DEFAULT_SCANNER_ID,
-      scanner_type: OPENVAS_SCANNER_TYPE,
+      scannerType: OPENVAS_SCANNER_TYPE,
     },
   ],
   schedule_id = UNSET_VALUE,
@@ -209,10 +132,10 @@ const TaskDialog = ({
   target_id,
   targets,
   task,
-  title = _('New Task'),
-  onAlertsChange,
+  title = _('New Audit'),
+  //onAlertsChange,
   onClose,
-  onNewAlertClick,
+  //onNewAlertClick,
   onNewScheduleClick,
   onNewTargetClick,
   onSave,
@@ -223,7 +146,9 @@ const TaskDialog = ({
   ...data
 }) => {
   const scanner = get_scanner(scanners, scanner_id);
-  const scanner_type = isDefined(scanner) ? scanner.scannerType : undefined;
+  const scanner_type = isDefined(scanner) ? scanner.scannerType : undefined; //scannerType
+
+  console.log('scanner=', scanner, 'scanner type=', scanner_type);
 
   const tag_items = renderSelectItems(tags);
 
@@ -241,7 +166,7 @@ const TaskDialog = ({
     sorted_scan_configs[OPENVAS_SCAN_CONFIG_TYPE],
   );
 
-  const alert_items = renderSelectItems(alerts);
+  //const alert_items = renderSelectItems(alerts);
 
   // having a task means we are editing a task
   const hasTask = isDefined(task);
@@ -292,7 +217,7 @@ const TaskDialog = ({
       values={controlledData}
     >
       {({values: state, onValueChange}) => {
-        const osp_config_id = selectSaveId(
+        /* const osp_config_id = selectSaveId(
           sorted_scan_configs[OSP_SCAN_CONFIG_TYPE],
           state.config_id,
         );
@@ -305,7 +230,7 @@ const TaskDialog = ({
 
         const use_openvas_scan_config =
           state.scanner_type === OPENVAS_SCANNER_TYPE ||
-          state.scanner_type === GMP_SCANNER_TYPE;
+          state.scanner_type === GMP_SCANNER_TYPE; */
         return (
           <Layout flex="column">
             <FormGroup title={_('Name')}>
@@ -317,7 +242,6 @@ const TaskDialog = ({
                 onChange={onValueChange}
               />
             </FormGroup>
-
             <FormGroup title={_('Comment')}>
               <TextField
                 name="comment"
@@ -327,7 +251,6 @@ const TaskDialog = ({
                 onChange={onValueChange}
               />
             </FormGroup>
-
             <FormGroup title={_('Scan Targets')}>
               <Divider>
                 <Select
@@ -347,212 +270,6 @@ const TaskDialog = ({
                 )}
               </Divider>
             </FormGroup>
-
-            {capabilities.mayOp('get_alerts') && (
-              <FormGroup title={_('Alerts')}>
-                <Divider>
-                  <MultiSelect
-                    name="alert_ids"
-                    items={alert_items}
-                    value={state.alert_ids}
-                    onChange={onAlertsChange}
-                  />
-                  <Layout>
-                    <NewIcon
-                      title={_('Create a new alert')}
-                      onClick={onNewAlertClick}
-                    />
-                  </Layout>
-                </Divider>
-              </FormGroup>
-            )}
-
-            {capabilities.mayOp('get_schedules') && (
-              <FormGroup title={_('Schedule')}>
-                <Divider>
-                  <Select
-                    name="schedule_id"
-                    value={state.schedule_id}
-                    items={schedule_items}
-                    onChange={onScheduleChange}
-                  />
-                  <Checkbox
-                    name="schedule_periods"
-                    checked={state.schedule_periods === YES_VALUE}
-                    checkedValue={YES_VALUE}
-                    unCheckedValue={NO_VALUE}
-                    title={_('Once')}
-                    onChange={onValueChange}
-                  />
-                  <Layout>
-                    <NewIcon
-                      title={_('Create a new schedule')}
-                      onClick={onNewScheduleClick}
-                    />
-                  </Layout>
-                </Divider>
-              </FormGroup>
-            )}
-
-            <AddResultsToAssetsGroup
-              inAssets={state.in_assets}
-              onChange={onValueChange}
-            />
-
-            <FormGroup title={_('Apply Overrides')}>
-              <YesNoRadio
-                name="apply_overrides"
-                disabled={state.in_assets !== YES_VALUE}
-                value={state.apply_overrides}
-                onChange={onValueChange}
-              />
-            </FormGroup>
-
-            <FormGroup title={_('Min QoD')}>
-              <Spinner
-                name="min_qod"
-                size="4"
-                disabled={state.in_assets !== YES_VALUE}
-                type="int"
-                min="0"
-                max="100"
-                value={state.min_qod}
-                onChange={onValueChange}
-              />
-              <Layout>%</Layout>
-            </FormGroup>
-
-            {change_task && (
-              <FormGroup title={_('Alterable Task')}>
-                <YesNoRadio
-                  name="alterable"
-                  disabled={task && !task.isNew()}
-                  value={state.alterable}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-            )}
-
-            <AutoDeleteReportsGroup
-              autoDelete={state.auto_delete}
-              autoDeleteData={state.auto_delete_data}
-              onChange={onValueChange}
-            />
-
-            <ScannerSelect
-              scanConfigs={sorted_scan_configs}
-              scanners={scanners}
-              scannerId={state.scanner_id}
-              changeTask={change_task}
-              onScanConfigChange={onScanConfigChange}
-              onScannerChange={onScannerChange}
-            />
-
-            {use_openvas_scan_config && (
-              <Layout flex="column" grow="1">
-                <FormGroup titleSize="2" title={_('Scan Config')}>
-                  <Select
-                    name="config_id"
-                    disabled={!change_task}
-                    items={openvas_scan_config_items}
-                    value={openvas_config_id}
-                    onChange={onScanConfigChange}
-                  />
-                </FormGroup>
-                <FormGroup titleSize="4" title={_('Network Source Interface')}>
-                  <TextField
-                    name="source_iface"
-                    value={state.source_iface}
-                    onChange={onValueChange}
-                  />
-                </FormGroup>
-                <FormGroup titleSize="4" title={_('Order for target hosts')}>
-                  <Select
-                    name="hosts_ordering"
-                    items={[
-                      {
-                        value: 'sequential',
-                        label: _('Sequential'),
-                      },
-                      {
-                        value: 'random',
-                        label: _('Random'),
-                      },
-                      {
-                        value: 'reverse',
-                        label: _('Reverse'),
-                      },
-                    ]}
-                    value={state.hosts_ordering}
-                    onChange={onValueChange}
-                  />
-                </FormGroup>
-                <FormGroup
-                  titleSize="4"
-                  title={_('Maximum concurrently executed NVTs per host')}
-                >
-                  <Spinner
-                    name="max_checks"
-                    size="10"
-                    min="0"
-                    maxLength="10"
-                    value={state.max_checks}
-                    onChange={onValueChange}
-                  />
-                </FormGroup>
-                <FormGroup
-                  titleSize="4"
-                  title={_('Maximum concurrently scanned hosts')}
-                >
-                  <Spinner
-                    name="max_hosts"
-                    type="int"
-                    min="0"
-                    size="10"
-                    maxLength="10"
-                    value={state.max_hosts}
-                    onChange={onValueChange}
-                  />
-                </FormGroup>
-              </Layout>
-            )}
-
-            {is_osp_scanner && (
-              <FormGroup titleSize="2" title={_('Scan Config')}>
-                <Select
-                  name="config_id"
-                  items={osp_scan_config_items}
-                  value={osp_config_id}
-                  onChange={onScanConfigChange}
-                />
-              </FormGroup>
-            )}
-
-            {capabilities.mayAccess('tags') &&
-              capabilities.mayCreate('tag') &&
-              showTagSelection && (
-                <React.Fragment>
-                  <FormGroup title={_('Tag')}>
-                    <Divider>
-                      <Checkbox
-                        title={_('Add:')}
-                        name="add_tag"
-                        checkedValue={YES_VALUE}
-                        unCheckedValue={NO_VALUE}
-                        checked={state.add_tag === YES_VALUE}
-                        onChange={onValueChange}
-                      />
-                      <Select
-                        disabled={state.add_tag !== YES_VALUE}
-                        name="tag_id"
-                        items={tag_items}
-                        value={state.tag_id}
-                        onChange={onValueChange}
-                      />
-                    </Divider>
-                  </FormGroup>
-                </React.Fragment>
-              )}
           </Layout>
         );
       }}
@@ -560,7 +277,7 @@ const TaskDialog = ({
   );
 };
 
-TaskDialog.propTypes = {
+CreateAuditDialog.propTypes = {
   add_tag: PropTypes.yesno,
   alert_ids: PropTypes.array,
   alerts: PropTypes.array,
@@ -590,18 +307,18 @@ TaskDialog.propTypes = {
   targets: PropTypes.array,
   task: PropTypes.model,
   title: PropTypes.string,
-  onAlertsChange: PropTypes.func.isRequired,
+  //onAlertsChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
-  onNewAlertClick: PropTypes.func.isRequired,
-  onNewScheduleClick: PropTypes.func.isRequired,
+  //onNewAlertClick: PropTypes.func.isRequired,
+  //onNewScheduleClick: PropTypes.func.isRequired,
   onNewTargetClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
-  onScanConfigChange: PropTypes.func.isRequired,
-  onScannerChange: PropTypes.func.isRequired,
-  onScheduleChange: PropTypes.func.isRequired,
+  // onScanConfigChange: PropTypes.func.isRequired,
+  // onScannerChange: PropTypes.func.isRequired,
+  // onScheduleChange: PropTypes.func.isRequired,
   onTargetChange: PropTypes.func.isRequired,
 };
 
-export default withCapabilities(TaskDialog);
+export default withCapabilities(CreateAuditDialog);
 
 // vim: set ts=2 sw=2 tw=80:

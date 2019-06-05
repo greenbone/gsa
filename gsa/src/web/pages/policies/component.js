@@ -18,7 +18,11 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
+
+import {ALL_FILTER} from 'gmp/models/filter';
 
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -27,9 +31,41 @@ import {selectSaveId} from 'gmp/utils/id';
 
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
-import {ospScannersFilter} from 'gmp/models/scanner';
+import {
+  ospScannersFilter,
+  OPENVAS_DEFAULT_SCANNER_ID,
+  OPENVAS_SCANNER_TYPE,
+} from 'gmp/models/scanner';
+import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 
+import {
+  loadEntities as loadScanConfigs,
+  selector as scanConfigsSelector,
+} from 'web/store/entities/scanconfigs';
+
+import {
+  loadEntities as loadScanners,
+  selector as scannerSelector,
+} from 'web/store/entities/scanners';
+
+import {
+  loadEntities as loadTags,
+  selector as tagsSelector,
+} from 'web/store/entities/tags';
+
+import {
+  loadEntities as loadTargets,
+  selector as targetSelector,
+} from 'web/store/entities/targets';
+
+import {getTimezone} from 'web/store/usersettings/selectors';
+
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
@@ -37,32 +73,25 @@ import EntityComponent from 'web/entity/component';
 import EditConfigFamilyDialog from 'web/pages/scanconfigs/editconfigfamilydialog';
 import EditScanConfigDialog from 'web/pages/scanconfigs/editdialog';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/editnvtdetailsdialog';
-//import ImportDialog from './importdialog';
-import ScanConfigDialog from 'web/pages/scanconfigs/dialog';
+// import ScanConfigDialog from 'web/pages/scanconfigs/dialog';
 import AuditDialog from './createauditdialog';
 
-import TaskComponent from 'web/pages/tasks/component';
+// import TaskComponent from 'web/pages/tasks/component';
+import TargetComponent from 'web/pages/targets/component';
 
 class PolicyComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
     this.state = {
-      //createConfigDialogVisible: false,
       editConfigDialogVisible: false,
       editConfigFamilyDialogVisible: false,
       editNvtDetailsDialogVisible: false,
-      //importDialogVisible: false,
       createAuditDialogVisible: false,
     };
 
-    //this.handleImportConfig = this.handleImportConfig.bind(this);
     this.handleSaveConfigFamily = this.handleSaveConfigFamily.bind(this);
     this.handleSaveConfigNvt = this.handleSaveConfigNvt.bind(this);
-    //this.openCreateConfigDialog = this.openCreateConfigDialog.bind(this);
-    /*this.handleCloseCreateConfigDialog = this.handleCloseCreateConfigDialog.bind(
-      this,
-    );*/
     this.openEditConfigDialog = this.openEditConfigDialog.bind(this);
     this.handleCloseEditConfigDialog = this.handleCloseEditConfigDialog.bind(
       this,
@@ -77,12 +106,25 @@ class PolicyComponent extends React.Component {
     this.handleCloseEditNvtDetailsDialog = this.handleCloseEditNvtDetailsDialog.bind(
       this,
     );
-    //this.openImportDialog = this.openImportDialog.bind(this);
-    //this.handleCloseImportDialog = this.handleCloseImportDialog.bind(this);
     this.openCreateAuditDialog = this.openCreateAuditDialog.bind(this);
     this.handleCloseCreateAuditDialog = this.handleCloseCreateAuditDialog.bind(
       this,
     );
+    this.handleSaveAudit = this.handleSaveAudit.bind(this);
+    this.handleTargetChange = this.handleTargetChange.bind(this);
+    this.handleTargetCreated = this.handleTargetCreated.bind(this);
+  }
+
+  handleTargetChange(target_id) {
+    this.setState({target_id});
+  }
+
+  handleTargetCreated(resp) {
+    const {data} = resp;
+
+    this.props.loadTargets();
+
+    this.setState({target_id: data.id});
   }
 
   openEditConfigDialog(config) {
@@ -111,42 +153,55 @@ class PolicyComponent extends React.Component {
     this.handleInteraction();
   }
 
-  /* openCreateConfigDialog() {
-    this.loadScanners().then(state =>
-      this.setState({
-        ...state,
-        createConfigDialogVisible: true,
-      }),
-    );
+  openCreateAuditDialog(config) {
+    const {capabilities} = this.props;
+
+    this.props.loadScanConfigs();
+    this.props.loadScanners();
+    this.props.loadTargets();
+    this.props.loadTags();
+
+    const {
+      defaultAlertId,
+      defaultScanConfigId = FULL_AND_FAST_SCAN_CONFIG_ID,
+      defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID,
+      defaultScheduleId,
+      defaultTargetId,
+    } = this.props;
+
+    console.log('default=', defaultScannerId);
+    const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
+
+    this.setState({
+      createAuditDialogVisible: true,
+      alert_ids,
+      alterable: undefined,
+      apply_overrides: undefined,
+      auto_delete: undefined,
+      auto_delete_data: undefined,
+      comment: '',
+      config_id: defaultScanConfigId,
+      //config_id: scanConfig.id,
+      hosts_ordering: undefined,
+      id: undefined,
+      in_assets: undefined,
+      max_checks: undefined,
+      max_hosts: undefined,
+      min_qod: undefined,
+      name: undefined,
+      scanner_id: defaultScannerId,
+      schedule_id: defaultScheduleId,
+      schedule_periods: undefined,
+      source_iface: undefined,
+      target_id: defaultTargetId,
+      task: undefined,
+      title: _('New Task'),
+    });
 
     this.handleInteraction();
   }
 
-  closeCreateConfigDialog() {
-    this.setState({createConfigDialogVisible: false});
-  }
-
-  handleCloseCreateConfigDialog() {
-    this.closeCreateConfigDialog();
-    this.handleInteraction();
-  }
-
-  openImportDialog() {
-    this.setState({importDialogVisible: true});
-    this.handleInteraction();
-  }
-
-  closeImportDialog() {
-    this.setState({importDialogVisible: false});
-  }
-
-  handleCloseImportDialog() {
-    this.closeImportDialog();
-    this.handleInteraction();
-  }
- */
-
-  openCreateAuditDialog() {
+  /* openCreateAuditDialog() {
     this.loadScanners().then(state =>
       this.setState({
         ...state,
@@ -155,7 +210,7 @@ class PolicyComponent extends React.Component {
     );
 
     this.handleInteraction();
-  }
+  } */
 
   closeCreateAuditDialog() {
     this.setState({createAuditDialogVisible: false});
@@ -166,7 +221,88 @@ class PolicyComponent extends React.Component {
     this.handleInteraction();
   }
 
-  //handleSaveAudit
+  handleSaveAudit({
+    add_tag,
+    alert_ids,
+    alterable,
+    auto_delete,
+    auto_delete_data,
+    apply_overrides,
+    comment,
+    config_id,
+    hosts_ordering,
+    id,
+    in_assets,
+    min_qod,
+    max_checks,
+    max_hosts,
+    name,
+    scanner_id,
+    scanner_type,
+    schedule_id,
+    schedule_periods,
+    source_iface,
+    tag_id,
+    target_id,
+    task,
+  }) {
+    const {gmp} = this.props;
+
+    this.handleInteraction();
+
+    console.log('input=', {
+      add_tag,
+      alert_ids,
+      alterable,
+      auto_delete,
+      auto_delete_data,
+      apply_overrides,
+      comment,
+      config_id,
+      hosts_ordering,
+      id,
+      in_assets,
+      min_qod,
+      max_checks,
+      max_hosts,
+      name,
+      scanner_id,
+      scanner_type,
+      schedule_id,
+      schedule_periods,
+      source_iface,
+      tag_id,
+      target_id,
+      task,
+    });
+    const {onCreated, onCreateError} = this.props;
+    return gmp.task
+      .create({
+        add_tag,
+        alert_ids,
+        alterable,
+        apply_overrides,
+        auto_delete,
+        auto_delete_data,
+        comment,
+        config_id,
+        hosts_ordering,
+        in_assets,
+        max_checks,
+        max_hosts,
+        min_qod,
+        name,
+        scanner_type,
+        scanner_id,
+        schedule_id,
+        schedule_periods,
+        source_iface,
+        tag_id,
+        target_id,
+      })
+      .then(onCreated, onCreateError)
+      .then(() => this.closeCreateAuditDialog());
+  }
 
   openEditConfigFamilyDialog({config, name}) {
     this.loadEditScanConfigFamilySettings(config, name).then(state => {
@@ -413,6 +549,7 @@ class PolicyComponent extends React.Component {
   render() {
     const {
       children,
+      targets,
       onCloned,
       onCloneError,
       onCreated,
@@ -431,7 +568,6 @@ class PolicyComponent extends React.Component {
       comment,
       config,
       config_name,
-      //createConfigDialogVisible,
       createAuditDialogVisible,
       editConfigDialogVisible,
       editConfigFamilyDialogVisible,
@@ -441,7 +577,6 @@ class PolicyComponent extends React.Component {
       families,
       family_name,
       id,
-      //importDialogVisible,
       manual_timeout,
       name,
       nvt,
@@ -452,6 +587,7 @@ class PolicyComponent extends React.Component {
       scanners,
       select,
       selected,
+      target_id,
       timeout,
       title,
       trend,
@@ -505,10 +641,31 @@ class PolicyComponent extends React.Component {
                 /> 
                 )} */}
               {createAuditDialogVisible && (
-                <AuditDialog
-                  onClose={this.handleCloseCreateAuditDialog}
-                  //onSave={this.handleSaveTask}
-                />
+                <TargetComponent
+                  onCreated={this.handleTargetCreated}
+                  onInteraction={onInteraction}
+                >
+                  {({create: createtarget}) => (
+                    <AuditDialog
+                      //add_tag={1}
+                      scanner_id={OPENVAS_DEFAULT_SCANNER_ID}
+                      scanners={[
+                        {
+                          id: OPENVAS_DEFAULT_SCANNER_ID,
+                          scannerType: OPENVAS_SCANNER_TYPE,
+                        },
+                      ]}
+                      scan-configs={[config]}
+                      //tag_id="task:compliance"
+                      target_id={target_id}
+                      targets={targets}
+                      onNewTargetClick={createtarget}
+                      onTargetChange={this.handleTargetChange}
+                      onClose={this.handleCloseCreateAuditDialog}
+                      onSave={this.handleSaveAudit}
+                    />
+                  )}
+                </TargetComponent>
               )}
               {editConfigDialogVisible && (
                 <EditScanConfigDialog
@@ -532,6 +689,7 @@ class PolicyComponent extends React.Component {
                   }}
                 />
               )}
+              {console.log('config=', config)}
             </React.Fragment>
           )}
         </EntityComponent>
@@ -592,37 +750,49 @@ PolicyComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-//export default withGmp(PoliciesComponent);
+//export default withGmp(PolicyComponent);
 
-PolicyComponent = withGmp(PolicyComponent);
+const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
 
-const PolicyWithTaskComponent = ({
-  onInteraction,
-  onTaskCreated,
-  onTaskCreateError,
-  ...props
-}) => {
-  return (
-    <TaskComponent
-      onCreated={onTaskCreated}
-      onCreateError={onTaskCreateError}
-      onInteraction={onInteraction}
-    >
-      {({create}) => (
-        <PolicyComponent
-          {...props}
-          createtarget={create}
-          onInteraction={onInteraction}
-        />
-      )}
-    </TaskComponent>
-  );
+const mapStateToProps = rootState => {
+  const userDefaults = getUserSettingsDefaults(rootState);
+  const scanConfigsSel = scanConfigsSelector(rootState);
+  const scannersSel = scannerSelector(rootState);
+  const tagsSel = tagsSelector(rootState);
+  const targetSel = targetSelector(rootState);
+  return {
+    timezone: getTimezone(rootState),
+    defaultAlertId: userDefaults.getValueByName('defaultalert'),
+    defaultEsxiCredential: userDefaults.getValueByName('defaultesxicredential'),
+    defaultPortListId: userDefaults.getValueByName('defaultportlist'),
+    defaultScanConfigId: userDefaults.getValueByName(
+      'defaultopenvasscanconfig',
+    ),
+    defaultScannerId: userDefaults.getValueByName('defaultopenvasscanner'),
+    defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
+    defaultSshCredential: userDefaults.getValueByName('defaultsshcredential'),
+    defaultSmbCredential: userDefaults.getValueByName('defaultsmbcredential'),
+    defaultTargetId: userDefaults.getValueByName('defaulttarget'),
+    scanConfigs: scanConfigsSel.getEntities(ALL_FILTER),
+    scanners: scannersSel.getEntities(ALL_FILTER),
+    tags: tagsSel.getEntities(TAGS_FILTER),
+    targets: targetSel.getEntities(ALL_FILTER),
+  };
 };
 
-PolicyWithTaskComponent.propTypes = {
-  onInteraction: PropTypes.func.isRequired,
-  onTargetCreateError: PropTypes.func.isRequired,
-  onTargetCreated: PropTypes.func.isRequired,
-};
+const mapDispatchToProp = (dispatch, {gmp}) => ({
+  loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
+  loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
+  loadTags: () => dispatch(loadTags(gmp)(TAGS_FILTER)),
+  loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
+  loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
+});
 
-export default PolicyWithTaskComponent;
+export default compose(
+  withGmp,
+  withCapabilities,
+  connect(
+    mapStateToProps,
+    mapDispatchToProp,
+  ),
+)(PolicyComponent);
