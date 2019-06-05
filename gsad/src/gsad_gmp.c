@@ -193,14 +193,6 @@ get_config_family (gvm_connection_t *, credentials_t *, params_t *, int,
                    cmd_response_data_t *);
 
 static char *
-get_config (gvm_connection_t *, credentials_t *, params_t *, const char *, int,
-            cmd_response_data_t *);
-
-static char *
-get_configs (gvm_connection_t *, credentials_t *, params_t *, const char *,
-             cmd_response_data_t *);
-
-static char *
 get_filter (gvm_connection_t *, credentials_t *, params_t *, const char *,
             cmd_response_data_t *);
 
@@ -2295,8 +2287,6 @@ create_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
-<<<<<<< HEAD
-=======
  * @brief Import report, get all reports, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -2314,7 +2304,6 @@ import_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
->>>>>>> upstream/gsa-8.0
  * @brief Create a container task, serve next page.
  *
  * @param[in]  connection     Connection to manager.
@@ -7955,14 +7944,13 @@ get_configs_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[in]  edit         0 for config view page, else config edit page.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
  */
 static char *
 get_config (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *extra_xml, int edit,
+            params_t *params, const char *extra_xml,
             cmd_response_data_t *response_data)
 {
   GString *xml;
@@ -7975,12 +7963,6 @@ get_config (gvm_connection_t *connection, credentials_t *credentials,
                         response_data);
 
   xml = g_string_new ("<get_config_response>");
-  if (edit)
-    g_string_append (xml, "<edit/>");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-  /* Get the config families. */
 
   if (gvm_connection_sendf (connection,
                             "<get_configs"
@@ -8043,101 +8025,6 @@ get_config (gvm_connection_t *connection, credentials_t *credentials,
         response_data);
     }
 
-  if (edit)
-    {
-      /* Get OSP scanners */
-      if (gvm_connection_sendf (connection, "<get_scanners filter=\"type=1\"/>")
-          == -1)
-        {
-          g_string_free (xml, TRUE);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting the config. "
-            "The config is not available. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        }
-
-      if (read_string_c (connection, &xml))
-        {
-          g_string_free (xml, TRUE);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting the config. "
-            "The config is not available. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        }
-    }
-
-  /* Get Credentials */
-  if (gvm_connection_sendf (connection, "<get_credentials/>") == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the config. "
-        "The config is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the config. "
-        "The config is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  /* Get the permissions */
-
-  g_string_append (xml, "<permissions>");
-
-  if (gvm_connection_sendf (connection,
-                            "<get_permissions"
-                            " filter=\"name:^.*(config)s?$"
-                            "          and resource_uuid=%s"
-                            "          first=1 rows=-1\"/>",
-                            config_id)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting permissions list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting permissions list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  g_string_append (xml, "</permissions>");
-
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_config_response>");
@@ -8159,26 +8046,7 @@ char *
 get_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t *response_data)
 {
-  return get_config (connection, credentials, params, NULL, 0, response_data);
-}
-
-/**
- * @brief Get a config, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-edit_config (gvm_connection_t *connection, credentials_t *credentials,
-             params_t *params, const char *extra_xml,
-             cmd_response_data_t *response_data)
-{
-  return get_config (connection, credentials, params, extra_xml, 1,
-                     response_data);
+  return get_config (connection, credentials, params, NULL, response_data);
 }
 
 /**
@@ -8195,7 +8063,7 @@ char *
 edit_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return edit_config (connection, credentials, params, NULL, response_data);
+  return get_config (connection, credentials, params, NULL, response_data);
 }
 
 /**
