@@ -30,7 +30,7 @@ import {YES_VALUE, NO_VALUE} from '../parser';
 import {parseCounts} from '../collection/parser';
 
 import Nvt from '../models/nvt';
-import ScanConfig, {parse_count} from '../models/scanconfig';
+import ScanConfig from '../models/scanconfig';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
@@ -115,34 +115,6 @@ class ScanConfigCommand extends EntityCommand {
     };
     log.debug('Saving scanconfig', data);
     return this.action(data);
-  }
-
-  editScanConfigSettings({id}) {
-    // should be removed in future and split into several api calls
-    return this.httpGet({
-      cmd: 'edit_config',
-      id,
-    }).then(response => {
-      const {data} = response;
-      const config_resp = data.get_config_response;
-      const settings = {};
-
-      settings.scanconfig = new ScanConfig(
-        config_resp.get_configs_response.config,
-      );
-
-      settings.families = map(
-        config_resp.get_nvt_families_response.families.family,
-        family => {
-          return {
-            name: family.name,
-            max: parse_count(family.max_nvt_count),
-          };
-        },
-      );
-
-      return response.setData(settings);
-    });
   }
 
   saveScanConfigFamily({config_name, family_name, id, selected}) {
