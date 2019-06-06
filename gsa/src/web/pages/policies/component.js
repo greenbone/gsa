@@ -128,6 +128,7 @@ class PolicyComponent extends React.Component {
   }
 
   openEditConfigDialog(config) {
+    console.log(config);
     Promise.all([
       this.loadEditScanConfigSettings(config),
       this.loadScanners(),
@@ -156,6 +157,8 @@ class PolicyComponent extends React.Component {
   openCreateAuditDialog(config) {
     const {capabilities} = this.props;
 
+    console.log(config);
+
     this.props.loadScanConfigs();
     this.props.loadScanners();
     this.props.loadTargets();
@@ -180,8 +183,8 @@ class PolicyComponent extends React.Component {
       auto_delete: undefined,
       auto_delete_data: undefined,
       comment: '',
-      config_id: defaultScanConfigId,
-      //config_id: scanConfig.id,
+      //config_id: defaultScanConfigId,
+      config_id: isDefined(config) ? config.id : defaultScanConfigId,
       hosts_ordering: undefined,
       id: undefined,
       in_assets: undefined,
@@ -200,17 +203,6 @@ class PolicyComponent extends React.Component {
 
     this.handleInteraction();
   }
-
-  /* openCreateAuditDialog() {
-    this.loadScanners().then(state =>
-      this.setState({
-        ...state,
-        createAuditDialogVisible: true,
-      }),
-    );
-
-    this.handleInteraction();
-  } */
 
   closeCreateAuditDialog() {
     this.setState({createAuditDialogVisible: false});
@@ -349,17 +341,6 @@ class PolicyComponent extends React.Component {
     this.closeEditNvtDetailsDialog();
     this.handleInteraction();
   }
-
-  /*  handleImportConfig(data) {
-    const {gmp, onImported, onImportError} = this.props;
-
-    this.handleInteraction();
-
-    return gmp.scanconfig
-      .import(data)
-      .then(onImported, onImportError)
-      .then(() => this.closeImportDialog());
-  } */
 
   handleSaveConfigFamily(data) {
     const {gmp} = this.props;
@@ -550,6 +531,7 @@ class PolicyComponent extends React.Component {
     const {
       children,
       targets,
+      tags,
       onCloned,
       onCloneError,
       onCreated,
@@ -567,6 +549,7 @@ class PolicyComponent extends React.Component {
       base,
       comment,
       config,
+      config_id,
       config_name,
       createAuditDialogVisible,
       editConfigDialogVisible,
@@ -613,33 +596,10 @@ class PolicyComponent extends React.Component {
             <React.Fragment>
               {children({
                 ...other,
-                //create: this.openCreateConfigDialog,
                 create: this.openCreateAuditDialog,
                 edit: this.openEditConfigDialog,
                 import: this.openImportDialog,
               })}
-              {/* {createConfigDialogVisible && (
-                <ScanConfigDialog
-                  scanner_id={scanner_id}
-                  scanners={scanners}
-                  onClose={this.handleCloseCreateConfigDialog}
-                  onSave={d => {
-                    this.handleInteraction();
-                    return save(d).then(() => this.closeCreateConfigDialog());
-                  }}
-                />
-                )} */}
-              {/* {createAuditDialogVisible && (
-                <ScanConfigDialog
-                  scanner_id={scanner_id}
-                  scanners={scanners}
-                  onClose={this.handleCloseCreateAuditDialog}
-                  onSave={d => {
-                    this.handleInteraction();
-                    return save(d).then(() => this.closeCreateAuditDialog());
-                  }}
-                /> 
-                )} */}
               {createAuditDialogVisible && (
                 <TargetComponent
                   onCreated={this.handleTargetCreated}
@@ -647,7 +607,8 @@ class PolicyComponent extends React.Component {
                 >
                   {({create: createtarget}) => (
                     <AuditDialog
-                      //add_tag={1}
+                      add_tag={1}
+                      config_id={config_id}
                       scanner_id={OPENVAS_DEFAULT_SCANNER_ID}
                       scanners={[
                         {
@@ -656,6 +617,7 @@ class PolicyComponent extends React.Component {
                         },
                       ]}
                       scan-configs={[config]}
+                      tags={tags}
                       //tag_id="task:compliance"
                       target_id={target_id}
                       targets={targets}
@@ -689,16 +651,9 @@ class PolicyComponent extends React.Component {
                   }}
                 />
               )}
-              {console.log('config=', config)}
             </React.Fragment>
           )}
         </EntityComponent>
-        {/* {importDialogVisible && (
-          <ImportDialog
-            onClose={this.handleCloseImportDialog}
-            onSave={this.handleImportConfig}
-          />
-        )} */}
         {editConfigFamilyDialogVisible && (
           <EditConfigFamilyDialog
             config={config}
@@ -735,6 +690,10 @@ class PolicyComponent extends React.Component {
 PolicyComponent.propTypes = {
   children: PropTypes.func.isRequired,
   gmp: PropTypes.gmp.isRequired,
+  loadScanConfigs: PropTypes.func.isRequired,
+  loadScanners: PropTypes.func.isRequired,
+  loadTags: PropTypes.func.isRequired,
+  loadTargets: PropTypes.func.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,

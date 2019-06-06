@@ -25,7 +25,6 @@ import logger from 'gmp/log';
 
 import {forEach, first} from 'gmp/utils/array';
 import {isDefined, isArray} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
@@ -37,17 +36,10 @@ import {
 
 import {
   OPENVAS_SCANNER_TYPE,
-  OSP_SCANNER_TYPE,
-  GMP_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
 } from 'gmp/models/scanner';
 
-import {
-  FULL_AND_FAST_SCAN_CONFIG_ID,
-  OPENVAS_SCAN_CONFIG_TYPE,
-  OSP_SCAN_CONFIG_TYPE,
-  filterEmptyScanConfig,
-} from 'gmp/models/scanconfig';
+import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -63,26 +55,6 @@ import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
-const log = logger.getLogger('web.tasks.dialog');
-
-const sort_scan_configs = (scan_configs = []) => {
-  const sorted_scan_configs = {
-    [OPENVAS_SCAN_CONFIG_TYPE]: [],
-    [OSP_SCAN_CONFIG_TYPE]: [],
-  };
-
-  scan_configs = scan_configs.filter(filterEmptyScanConfig);
-
-  forEach(scan_configs, config => {
-    const type = config.scan_config_type;
-    if (!isArray(sorted_scan_configs[type])) {
-      sorted_scan_configs[type] = [];
-    }
-    sorted_scan_configs[type].push(config);
-  });
-  return sorted_scan_configs;
-};
 
 const get_scanner = (scanners, scanner_id) => {
   if (!isDefined(scanners)) {
@@ -108,7 +80,8 @@ const CreateAuditDialog = ({
   auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   capabilities,
   comment = '',
-  config_id = FULL_AND_FAST_SCAN_CONFIG_ID,
+  //config_id = FULL_AND_FAST_SCAN_CONFIG_ID,
+  config_id = undefined,
   //config_id = scan_configs[0].id,
   hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
   in_assets = YES_VALUE,
@@ -136,12 +109,12 @@ const CreateAuditDialog = ({
   //onAlertsChange,
   onClose,
   //onNewAlertClick,
-  onNewScheduleClick,
+  //onNewScheduleClick,
   onNewTargetClick,
   onSave,
-  onScanConfigChange,
-  onScannerChange,
-  onScheduleChange,
+  //onScanConfigChange,
+  //onScannerChange,
+  //onScheduleChange,
   onTargetChange,
   ...data
 }) => {
@@ -149,33 +122,28 @@ const CreateAuditDialog = ({
   const scanner_type = isDefined(scanner) ? scanner.scannerType : undefined; //scannerType
 
   console.log('scanner=', scanner, 'scanner type=', scanner_type);
-
-  const tag_items = renderSelectItems(tags);
+  console.log('scan_configs=', scan_configs);
 
   const target_items = renderSelectItems(targets);
 
-  const schedule_items = renderSelectItems(schedules, UNSET_VALUE);
+  const tag = tags.find(element => {
+    return element.name === 'task:compliance';
+  });
 
-  const sorted_scan_configs = sort_scan_configs(scan_configs);
+  console.log('tag=', tag);
 
-  const osp_scan_config_items = renderSelectItems(
-    sorted_scan_configs[OSP_SCAN_CONFIG_TYPE],
-  );
+  const tag_id = tag ? tag.id : undefined;
 
-  const openvas_scan_config_items = renderSelectItems(
-    sorted_scan_configs[OPENVAS_SCAN_CONFIG_TYPE],
-  );
-
-  //const alert_items = renderSelectItems(alerts);
+  console.log('tags=', tags, 'tag_id=', tag_id);
 
   // having a task means we are editing a task
   const hasTask = isDefined(task);
 
   const change_task = hasTask ? task.isChangeable() : true;
 
-  const showTagSelection = !hasTask && tags.length > 0;
+  /*   const showTagSelection = !hasTask && tags.length > 0;
 
-  const tag_id = showTagSelection ? first(tags).id : undefined;
+  const tag_id = showTagSelection ? first(tags).id : undefined; */
 
   const uncontrolledData = {
     ...data,
@@ -205,6 +173,7 @@ const CreateAuditDialog = ({
     schedule_id,
     scanner_id,
     scanner_type,
+    tag_id,
     target_id,
   };
 
@@ -217,20 +186,6 @@ const CreateAuditDialog = ({
       values={controlledData}
     >
       {({values: state, onValueChange}) => {
-        /* const osp_config_id = selectSaveId(
-          sorted_scan_configs[OSP_SCAN_CONFIG_TYPE],
-          state.config_id,
-        );
-        const openvas_config_id = selectSaveId(
-          sorted_scan_configs[OPENVAS_SCAN_CONFIG_TYPE],
-          state.config_id,
-        );
-
-        const is_osp_scanner = state.scanner_type === OSP_SCANNER_TYPE;
-
-        const use_openvas_scan_config =
-          state.scanner_type === OPENVAS_SCANNER_TYPE ||
-          state.scanner_type === GMP_SCANNER_TYPE; */
         return (
           <Layout flex="column">
             <FormGroup title={_('Name')}>
@@ -307,15 +262,9 @@ CreateAuditDialog.propTypes = {
   targets: PropTypes.array,
   task: PropTypes.model,
   title: PropTypes.string,
-  //onAlertsChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
-  //onNewAlertClick: PropTypes.func.isRequired,
-  //onNewScheduleClick: PropTypes.func.isRequired,
   onNewTargetClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
-  // onScanConfigChange: PropTypes.func.isRequired,
-  // onScannerChange: PropTypes.func.isRequired,
-  // onScheduleChange: PropTypes.func.isRequired,
   onTargetChange: PropTypes.func.isRequired,
 };
 
