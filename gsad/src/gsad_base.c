@@ -334,6 +334,12 @@ params_add (params_t *params, const char *name, const char *value)
   return param;
 }
 
+void
+params_remove (params_t *params, const char *name)
+{
+  g_hash_table_remove (params, (gconstpointer *) name);
+}
+
 /**
  * @brief Append binary data to a param.
  *

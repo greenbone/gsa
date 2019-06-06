@@ -88,6 +88,9 @@ params_valid (params_t *, const char *);
 param_t *
 params_add (params_t *, const char *, const char *);
 
+void
+params_remove (params_t *, const char *);
+
 param_t *
 params_append_bin (params_t *, const char *, const char *, int, int);
 

@@ -84,6 +84,8 @@ add_executable (gsad
                 gsad_cmd.c
                 gsad_credentials.c
                 gsad_gmp.c
+                gsad_gmp_arguments.c
+                gsad_gmp_request.c
                 gsad_http.c
                 gsad_http_handler.c
                 gsad_i18n.c
