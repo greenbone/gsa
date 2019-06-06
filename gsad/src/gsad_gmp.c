@@ -7203,97 +7203,6 @@ get_configs_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_config (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *extra_xml,
-            cmd_response_data_t *response_data)
-{
-  GString *xml;
-  const char *config_id;
-
-  config_id = params_value (params, "config_id");
-
-  xml = g_string_new ("<get_config_response>");
-
-  if (gvm_connection_sendf (connection,
-                            "<get_configs"
-                            " config_id=\"%s\""
-                            " families=\"1\""
-                            " tasks=\"1\""
-                            " preferences=\"1\"/>",
-                            config_id)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the config. "
-        "The config is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the config. "
-        "The config is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  /* Get all the families. */
-
-  if (gvm_connection_sendf (connection, "<get_nvt_families/>") == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the config. "
-        "The config is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the config. "
-        "The config is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_config_response>");
-  return envelope_gmp (connection, credentials, params,
-                       g_string_free (xml, FALSE), response_data);
-}
-
-/**
- * @brief Get a config, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -7302,7 +7211,16 @@ char *
 get_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t *response_data)
 {
-  return get_config (connection, credentials, params, NULL, response_data);
+  gmp_arguments_t *arguments;
+
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "families", "1");
+  gmp_arguments_add (arguments, "tasks", "1");
+  gmp_arguments_add (arguments, "preferences", "1");
+
+  return get_one (connection, "config", credentials, params, NULL, arguments,
+                  response_data);
 }
 
 /**
@@ -8064,7 +7982,6 @@ get_nvt_families_gmp (gvm_connection_t *connection, credentials_t *credentials,
   return get_entities (connection, "nvt_families", credentials, params, NULL,
                        response_data);
 }
-
 
 /**
  * @brief Edit details of an NVT for a config, envelope the result.
