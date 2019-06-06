@@ -217,7 +217,7 @@ class ScanConfigCommand extends EntityCommand {
   }
 
   getElementFromRoot(root) {
-    return root.get_config_response.get_configs_response.config;
+    return root.get_config.get_configs_response.config;
   }
 }
 
