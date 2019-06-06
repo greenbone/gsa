@@ -304,7 +304,6 @@ init_validator ()
                      "|(download_ca_pub)"
                      "|(download_key_pub)"
                      "|(edit_alert)"
-                     "|(edit_config)"
                      "|(edit_config_family)"
                      "|(edit_config_nvt)"
                      "|(edit_role)"
@@ -1919,7 +1918,6 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (get_task)
   ELSE (get_tasks)
   ELSE (edit_alert)
-  ELSE (edit_config)
   ELSE (edit_config_family)
   ELSE (edit_config_nvt)
   ELSE (edit_role)

@@ -7306,23 +7306,6 @@ get_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get a config, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-edit_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                 params_t *params, cmd_response_data_t *response_data)
-{
-  return get_config (connection, credentials, params, NULL, response_data);
-}
-
-/**
  * @brief Save OSP file preferences.
  *
  * @param[in]   connection     Connection.
