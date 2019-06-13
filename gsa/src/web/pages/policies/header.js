@@ -38,7 +38,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="72%"
+          width="92%"
           rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}

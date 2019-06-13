@@ -32,6 +32,12 @@ import {selectSaveId} from 'gmp/utils/id';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import {
+  AUTO_DELETE_KEEP_DEFAULT_VALUE,
+  HOSTS_ORDERING_SEQUENTIAL,
+  AUTO_DELETE_NO,
+} from 'gmp/models/task';
+
+import {
   ospScannersFilter,
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
@@ -67,31 +73,53 @@ import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
+import {UNSET_VALUE} from 'web/utils/render';
 
 import EntityComponent from 'web/entity/component';
 
 import EditConfigFamilyDialog from 'web/pages/scanconfigs/editconfigfamilydialog';
 import EditScanConfigDialog from 'web/pages/scanconfigs/editdialog';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/editnvtdetailsdialog';
-// import ScanConfigDialog from 'web/pages/scanconfigs/dialog';
 import AuditDialog from './createauditdialog';
+import ImportDialog from 'web/pages/scanconfigs/importdialog';
+import ScanConfigDialog from 'web/pages/scanconfigs/dialog';
 
-// import TaskComponent from 'web/pages/tasks/component';
 import TargetComponent from 'web/pages/targets/component';
+
+const DEFAULT_MAX_CHECKS = 4;
+const DEFAULT_MAX_HOSTS = 20;
+const DEFAULT_MIN_QOD = 70;
+
+const get_scanner = (scanners, scanner_id) => {
+  if (!isDefined(scanners)) {
+    return undefined;
+  }
+
+  return scanners.find(sc => {
+    return sc.id === scanner_id;
+  });
+};
 
 class PolicyComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
     this.state = {
+      //createConfigDialogVisible: false,
       editConfigDialogVisible: false,
       editConfigFamilyDialogVisible: false,
       editNvtDetailsDialogVisible: false,
       createAuditDialogVisible: false,
+      importDialogVisible: false,
     };
 
+    this.handleImportConfig = this.handleImportConfig.bind(this);
     this.handleSaveConfigFamily = this.handleSaveConfigFamily.bind(this);
     this.handleSaveConfigNvt = this.handleSaveConfigNvt.bind(this);
+    /*  this.openCreateConfigDialog = this.openCreateConfigDialog.bind(this);
+    this.handleCloseCreateConfigDialog = this.handleCloseCreateConfigDialog.bind(
+      this,
+    ); */
     this.openEditConfigDialog = this.openEditConfigDialog.bind(this);
     this.handleCloseEditConfigDialog = this.handleCloseEditConfigDialog.bind(
       this,
@@ -106,6 +134,8 @@ class PolicyComponent extends React.Component {
     this.handleCloseEditNvtDetailsDialog = this.handleCloseEditNvtDetailsDialog.bind(
       this,
     );
+    this.openImportDialog = this.openImportDialog.bind(this);
+    this.handleCloseImportDialog = this.handleCloseImportDialog.bind(this);
     this.openCreateAuditDialog = this.openCreateAuditDialog.bind(this);
     this.handleCloseCreateAuditDialog = this.handleCloseCreateAuditDialog.bind(
       this,
@@ -128,7 +158,6 @@ class PolicyComponent extends React.Component {
   }
 
   openEditConfigDialog(config) {
-    console.log(config);
     Promise.all([
       this.loadEditScanConfigSettings(config),
       this.loadScanners(),
@@ -154,50 +183,87 @@ class PolicyComponent extends React.Component {
     this.handleInteraction();
   }
 
-  openCreateAuditDialog(config) {
-    const {capabilities} = this.props;
+  /* openCreateConfigDialog() {
+    this.loadScanners().then(state =>
+      this.setState({
+        ...state,
+        createConfigDialogVisible: true,
+      }),
+    );
 
-    console.log(config);
+    this.handleInteraction();
+  }
+
+  closeCreateConfigDialog() {
+    this.setState({createConfigDialogVisible: false});
+  }
+
+  handleCloseCreateConfigDialog() {
+    this.closeCreateConfigDialog();
+    this.handleInteraction();
+  } */
+
+  openImportDialog() {
+    this.setState({importDialogVisible: true});
+    this.handleInteraction();
+  }
+
+  closeImportDialog() {
+    this.setState({importDialogVisible: false});
+  }
+
+  handleCloseImportDialog() {
+    this.closeImportDialog();
+    this.handleInteraction();
+  }
+
+  openCreateAuditDialog(config) {
+    // const {capabilities} = this.props;
+
+    // console.log(config);
 
     this.props.loadScanConfigs();
-    this.props.loadScanners();
+    //this.props.loadScanners();
     this.props.loadTargets();
     this.props.loadTags();
 
     const {
-      defaultAlertId,
-      defaultScanConfigId = FULL_AND_FAST_SCAN_CONFIG_ID,
-      defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID,
-      defaultScheduleId,
+      // defaultAlertId,
+      // defaultScanConfigId = FULL_AND_FAST_SCAN_CONFIG_ID,
+      // defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID,
+      // defaultScheduleId,
       defaultTargetId,
     } = this.props;
 
-    console.log('default=', defaultScannerId);
-    const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
+    //console.log('defaults', defaultAlertId, defaultScheduleId, defaultTargetId);
+
+    // console.log('default=', defaultScannerId);
+    // const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
     this.setState({
       createAuditDialogVisible: true,
-      alert_ids,
-      alterable: undefined,
-      apply_overrides: undefined,
-      auto_delete: undefined,
-      auto_delete_data: undefined,
+      // alert_ids,
+      // alterable: undefined,
+      // apply_overrides: undefined,
+      // auto_delete: undefined,
+      // auto_delete_data: undefined,
       comment: '',
-      //config_id: defaultScanConfigId,
-      config_id: isDefined(config) ? config.id : defaultScanConfigId,
-      hosts_ordering: undefined,
-      id: undefined,
-      in_assets: undefined,
-      max_checks: undefined,
-      max_hosts: undefined,
-      min_qod: undefined,
+      // config_id: defaultScanConfigId,
+      //config_id: isDefined(config) ? config.id : defaultScanConfigId,
+      config_id: isDefined(config) ? config.id : undefined, //must not use default because the scanconfig has to be the policy
+      // hosts_ordering: undefined,
+      // id: undefined,
+      // in_assets: undefined,
+      // max_checks: undefined,
+      // max_hosts: undefined,
+      // min_qod: undefined,
       name: undefined,
-      scanner_id: defaultScannerId,
-      schedule_id: defaultScheduleId,
-      schedule_periods: undefined,
-      source_iface: undefined,
+      // scanner_id: defaultScannerId,
+      // schedule_id: defaultScheduleId,
+      // schedule_periods: undefined,
+      // source_iface: undefined,
       target_id: defaultTargetId,
-      task: undefined,
+      //task: undefined,
       title: _('New Task'),
     });
 
@@ -213,60 +279,44 @@ class PolicyComponent extends React.Component {
     this.handleInteraction();
   }
 
-  handleSaveAudit({
-    add_tag,
-    alert_ids,
-    alterable,
-    auto_delete,
-    auto_delete_data,
-    apply_overrides,
-    comment,
-    config_id,
-    hosts_ordering,
-    id,
-    in_assets,
-    min_qod,
-    max_checks,
-    max_hosts,
-    name,
-    scanner_id,
-    scanner_type,
-    schedule_id,
-    schedule_periods,
-    source_iface,
-    tag_id,
-    target_id,
-    task,
-  }) {
-    const {gmp} = this.props;
+  handleSaveAudit({comment, name, target_id}) {
+    const {gmp, defaultAlertId, defaultScheduleId} = this.props;
+    const {config_id} = this.state;
+
+    const scanner_id = OPENVAS_DEFAULT_SCANNER_ID;
+    const scanners = [
+      {
+        id: OPENVAS_DEFAULT_SCANNER_ID,
+        scannerType: OPENVAS_SCANNER_TYPE,
+      },
+    ];
+    const scanner = get_scanner(scanners, scanner_id);
+    const scanner_type = isDefined(scanner) ? scanner.scannerType : undefined;
+
+    const tag = this.props.tags.find(element => {
+      return element.name === 'task:compliance';
+    });
+    const tag_id = tag ? tag.id : undefined;
+    const add_tag = YES_VALUE;
+
+    const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
+    const alterable = NO_VALUE;
+    const apply_overrides = YES_VALUE;
+    const auto_delete = AUTO_DELETE_NO;
+    const auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE;
+    const hosts_ordering = HOSTS_ORDERING_SEQUENTIAL;
+    const in_assets = YES_VALUE;
+    const max_checks = DEFAULT_MAX_CHECKS;
+    const max_hosts = DEFAULT_MAX_HOSTS;
+    const min_qod = DEFAULT_MIN_QOD;
+    const schedule_id = isDefined(defaultScheduleId)
+      ? defaultScheduleId
+      : UNSET_VALUE;
+    const schedule_periods = NO_VALUE;
+    const source_iface = '';
 
     this.handleInteraction();
 
-    console.log('input=', {
-      add_tag,
-      alert_ids,
-      alterable,
-      auto_delete,
-      auto_delete_data,
-      apply_overrides,
-      comment,
-      config_id,
-      hosts_ordering,
-      id,
-      in_assets,
-      min_qod,
-      max_checks,
-      max_hosts,
-      name,
-      scanner_id,
-      scanner_type,
-      schedule_id,
-      schedule_periods,
-      source_iface,
-      tag_id,
-      target_id,
-      task,
-    });
     const {onCreated, onCreateError} = this.props;
     return gmp.task
       .create({
@@ -340,6 +390,17 @@ class PolicyComponent extends React.Component {
   handleCloseEditNvtDetailsDialog() {
     this.closeEditNvtDetailsDialog();
     this.handleInteraction();
+  }
+
+  handleImportConfig(data) {
+    const {gmp, onImported, onImportError} = this.props;
+
+    this.handleInteraction();
+
+    return gmp.scanconfig
+      .import(data)
+      .then(onImported, onImportError)
+      .then(() => this.closeImportDialog());
   }
 
   handleSaveConfigFamily(data) {
@@ -531,7 +592,6 @@ class PolicyComponent extends React.Component {
     const {
       children,
       targets,
-      tags,
       onCloned,
       onCloneError,
       onCreated,
@@ -549,8 +609,8 @@ class PolicyComponent extends React.Component {
       base,
       comment,
       config,
-      config_id,
       config_name,
+      //createConfigDialogVisible,
       createAuditDialogVisible,
       editConfigDialogVisible,
       editConfigFamilyDialogVisible,
@@ -560,6 +620,7 @@ class PolicyComponent extends React.Component {
       families,
       family_name,
       id,
+      importDialogVisible,
       manual_timeout,
       name,
       nvt,
@@ -607,18 +668,6 @@ class PolicyComponent extends React.Component {
                 >
                   {({create: createtarget}) => (
                     <AuditDialog
-                      add_tag={1}
-                      config_id={config_id}
-                      scanner_id={OPENVAS_DEFAULT_SCANNER_ID}
-                      scanners={[
-                        {
-                          id: OPENVAS_DEFAULT_SCANNER_ID,
-                          scannerType: OPENVAS_SCANNER_TYPE,
-                        },
-                      ]}
-                      scan-configs={[config]}
-                      tags={tags}
-                      //tag_id="task:compliance"
                       target_id={target_id}
                       targets={targets}
                       onNewTargetClick={createtarget}
@@ -629,6 +678,17 @@ class PolicyComponent extends React.Component {
                   )}
                 </TargetComponent>
               )}
+              {/* {createConfigDialogVisible && (
+                <ScanConfigDialog
+                  scanner_id={scanner_id}
+                  scanners={scanners}
+                  onClose={this.handleCloseCreateConfigDialog}
+                  onSave={d => {
+                    this.handleInteraction();
+                    return save(d).then(() => this.closeCreateConfigDialog());
+                  }}
+                />
+                )} */}
               {editConfigDialogVisible && (
                 <EditScanConfigDialog
                   base={base}
@@ -654,6 +714,12 @@ class PolicyComponent extends React.Component {
             </React.Fragment>
           )}
         </EntityComponent>
+        {importDialogVisible && (
+          <ImportDialog
+            onClose={this.handleCloseImportDialog}
+            onSave={this.handleImportConfig}
+          />
+        )}
         {editConfigFamilyDialogVisible && (
           <EditConfigFamilyDialog
             config={config}
@@ -689,11 +755,18 @@ class PolicyComponent extends React.Component {
 
 PolicyComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  defaultAlertId: PropTypes.id,
+  defaultScanConfigId: PropTypes.id,
+  defaultScannerId: PropTypes.id,
+  defaultScheduleId: PropTypes.id,
+  defaultTargetId: PropTypes.id,
   gmp: PropTypes.gmp.isRequired,
   loadScanConfigs: PropTypes.func.isRequired,
   loadScanners: PropTypes.func.isRequired,
   loadTags: PropTypes.func.isRequired,
   loadTargets: PropTypes.func.isRequired,
+  tags: PropTypes.arrayOf(PropTypes.model),
+  targets: PropTypes.arrayOf(PropTypes.model),
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -708,8 +781,6 @@ PolicyComponent.propTypes = {
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };
-
-//export default withGmp(PolicyComponent);
 
 const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
 

@@ -33,7 +33,7 @@ export const SORT_FIELDS = [
   },
 ];
 
-const PoliciessTable = createEntitiesTable({
+const PoliciesTable = createEntitiesTable({
   emptyTitle: _l('No Scan Configs available'),
   header: Header,
   row: Row,
@@ -41,10 +41,10 @@ const PoliciessTable = createEntitiesTable({
   footer: createEntitiesFooter({
     download: 'scanconfigs.xml',
     span: 7,
-    trash: false,
+    trash: true,
   }),
 });
 
-export default PoliciessTable;
+export default PoliciesTable;
 
 // vim: set ts=2 sw=2 tw=80:

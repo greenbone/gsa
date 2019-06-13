@@ -43,7 +43,8 @@ const PoliciesActions = compose(
   withCapabilities,
 )(
   ({
-    entity, //onScanConfigDeleteClick,
+    entity,
+    onScanConfigDeleteClick,
     onScanConfigDownloadClick,
     onScanConfigCloneClick,
     onScanConfigEditClick,
@@ -51,12 +52,12 @@ const PoliciesActions = compose(
     capabilities,
   }) => (
     <IconDivider grow align={['center', 'center']}>
-      {/*  <TrashIcon
+      <TrashIcon
         displayName={_('Scan Config')}
         name="config"
         entity={entity}
         onClick={onScanConfigDeleteClick}
-      /> */}
+      />
       <EditIcon
         displayName={_('Scan Config')}
         name="config"
@@ -90,7 +91,7 @@ const PoliciesActions = compose(
 PoliciesActions.propTypes = {
   entity: PropTypes.model.isRequired,
   onScanConfigCloneClick: PropTypes.func.isRequired,
-  //onScanConfigDeleteClick: PropTypes.func.isRequired,
+  onScanConfigDeleteClick: PropTypes.func.isRequired,
   onScanConfigDownloadClick: PropTypes.func.isRequired,
   onScanConfigEditClick: PropTypes.func.isRequired,
 };

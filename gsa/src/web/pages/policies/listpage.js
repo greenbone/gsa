@@ -30,6 +30,8 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ScanConfigIcon from 'web/components/icon/scanconfigicon';
 import ManualIcon from 'web/components/icon/manualicon';
+import UploadIcon from 'web/components/icon/uploadicon';
+import NewIcon from 'web/components/icon/newicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -43,20 +45,31 @@ import {
 import PoliciesComponent from './component';
 import Table, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = withCapabilities(({capabilities}) => (
-  <IconDivider>
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="scan-configuration"
-      title={_('Help: Scan Configs')}
-    />
-  </IconDivider>
-));
+const ToolBarIcons = withCapabilities(
+  ({capabilities, onScanConfigCreateClick, onPolicyImportClick}) => (
+    <IconDivider>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="scan-configuration"
+        title={_('Help: Scan Configs')}
+      />
+      {/* {capabilities.mayCreate('config') && (
+        <NewIcon
+          title={_('New Scan Config')}
+          onClick={onScanConfigCreateClick}
+        />
+      )} */}
+      {capabilities.mayCreate('config') && (
+        <UploadIcon title={_('Import Policy')} onClick={onPolicyImportClick} />
+      )}
+    </IconDivider>
+  ),
+);
 
-/* ToolBarIcons.propTypes = {
-  onScanConfigCreateClick: PropTypes.func.isRequired,
-  onScanConfigImportClick: PropTypes.func.isRequired,
-}; */
+ToolBarIcons.propTypes = {
+  //onScanConfigCreateClick: PropTypes.func.isRequired,
+  onPolicyImportClick: PropTypes.func.isRequired,
+};
 
 const ScanConfigFilterDialog = createFilterDialog({
   sortFields: SORT_FIELDS,
@@ -99,11 +112,10 @@ const PoliciesPage = ({
         toolBarIcons={ToolBarIcons}
         onError={onError}
         onInteraction={onInteraction}
-        //onScanConfigImportClick={import_func}
+        onPolicyImportClick={import_func}
         onScanConfigCloneClick={clone}
-        //onScanConfigCreateClick={create}
         onCreateAuditClick={create}
-        //onScanConfigDeleteClick={delete_func}
+        onScanConfigDeleteClick={delete_func}
         onScanConfigDownloadClick={download}
         onScanConfigEditClick={edit}
       />
