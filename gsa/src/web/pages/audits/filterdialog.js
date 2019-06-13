@@ -55,15 +55,7 @@ const SORT_FIELDS = [
   {
     name: 'complianceStatus',
     displayName: _l('Compliance Status'),
-  } /* 
-  {
-    name: 'severity',
-    displayName: _l('Severity'),
   },
-  {
-    name: 'trend',
-    displayName: _l('Trend'),
-  }, */,
 ];
 
 const TaskFilterDialogComponent = ({

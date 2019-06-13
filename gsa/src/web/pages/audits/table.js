@@ -58,31 +58,12 @@ const Header = ({
           sortBy="status"
           title={_('Status')}
         />
-        {/* <TableHead
-          {...sortProps}
-          sortBy="total"
-          width="6%"
-          title={_('Reports')}
-        /> */}
         <TableHead
           {...sortProps}
           sortBy="last"
           width="24%"
           title={_('Report')}
         />
-        {/* <TableHead
-          {...sortProps}
-          width="8%"
-          sortBy="severity"
-          title={_('Severity')}
-        />
-        <TableHead
-          {...sortProps}
-          align="center"
-          width="5%"
-          sortBy="trend"
-          title={_('Trend')}
-        /> */}
         {/* TODO: sort by compliance status*/}
         <TableHead
           {...sortProps}
@@ -120,5 +101,3 @@ export default createEntitiesTable({
     download: 'tasks.xml',
   }),
 });
-
-// vim: set ts=2 sw=2 tw=80:

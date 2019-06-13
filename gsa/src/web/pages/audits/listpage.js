@@ -44,7 +44,7 @@ import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 import NewIconMenu from 'web/pages/tasks/icons/newiconmenu';
 
 import AuditComponent from './component';
-//import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
+// import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import Table from './table';
 import TaskIcon from 'web/components/icon/taskicon';
@@ -77,18 +77,18 @@ const Page = ({
   ...props
 }) => (
   <AuditComponent
-    //onAdvancedTaskWizardSaved={onChanged}
+    // onAdvancedTaskWizardSaved={onChanged}
     onCloned={onChanged}
     onCloneError={onError}
-    //onContainerSaved={onChanged}
-    //onCreated={onChanged}
-    //onContainerCreated={onChanged}
+    // onContainerSaved={onChanged}
+    // onCreated={onChanged}
+    // onContainerCreated={onChanged}
     onDeleted={onChanged}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
     onInteraction={onInteraction}
-    //onModifyTaskWizardSaved={onChanged}
+    // onModifyTaskWizardSaved={onChanged}
     onReportImported={onChanged}
     onResumed={onChanged}
     onResumeError={onError}
@@ -97,12 +97,12 @@ const Page = ({
     onStartError={onError}
     onStopped={onChanged}
     onStopError={onError}
-    //onTaskWizardSaved={onChanged}
+    // onTaskWizardSaved={onChanged}
   >
     {({
       clone,
-      //create,
-      //createcontainer,
+      // create,
+      // createcontainer,
       delete: delete_func,
       download,
       edit,
@@ -110,9 +110,9 @@ const Page = ({
       stop,
       resume,
       reportimport,
-      //advancedtaskwizard,
-      //modifytaskwizard,
-      //taskwizard,
+      // advancedtaskwizard,
+      // modifytaskwizard,
+      // taskwizard,
     }) => (
       <EntitiesPage
         {...props}
@@ -136,22 +136,22 @@ const Page = ({
         table={Table}
         title={_('Audits')}
         toolBarIcons={ToolBarIcons}
-        //onAdvancedTaskWizardClick={advancedtaskwizard}
-        //onContainerTaskCreateClick={createcontainer}
+        // onAdvancedTaskWizardClick={advancedtaskwizard}
+        // onContainerTaskCreateClick={createcontainer}
         onError={onError}
         onFilterChanged={onFilterChanged}
         onInteraction={onInteraction}
-        //onModifyTaskWizardClick={modifytaskwizard}
+        // onModifyTaskWizardClick={modifytaskwizard}
         onReportImportClick={reportimport}
         onTaskCloneClick={clone}
-        //onTaskCreateClick={create}
+        // onTaskCreateClick={create}
         onTaskDeleteClick={delete_func}
         onTaskDownloadClick={download}
         onTaskEditClick={edit}
         onTaskResumeClick={resume}
         onTaskStartClick={start}
         onTaskStopClick={stop}
-        //onTaskWizardClick={taskwizard}
+        // onTaskWizardClick={taskwizard}
       />
     )}
   </AuditComponent>

@@ -30,8 +30,6 @@ import {RowDetailsToggle} from 'web/entities/row';
 
 import ObserverIcon from 'web/entity/icon/observericon';
 
-import SeverityBar from 'web/components/bar/severitybar';
-
 import Comment from 'web/components/comment/comment';
 
 import DateTime from 'web/components/date/datetime';
@@ -44,14 +42,12 @@ import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
-import Link from 'web/components/link/link';
 
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
 import Actions from './actions';
 import TaskStatus from 'web/pages/tasks/status';
-//import Trend from './trend';
 
 import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
@@ -65,28 +61,6 @@ const render_report = (report, links) => {
         <DateTime date={report.timestamp} />
       </DetailsLink>
     </span>
-  );
-};
-
-const render_report_total = (entity, links) => {
-  if (entity.report_count.total <= 0) {
-    return null;
-  }
-  return (
-    <Layout>
-      <Link
-        to={'reports'}
-        filter={'task_id=' + entity.id + ' sort-reverse=date'}
-        title={_(
-          'View list of all reports for Task {{name}},' +
-            ' including unfinished ones',
-          {name: entity.name},
-        )}
-        textOnly={!links || entity.report_count.total === 0}
-      >
-        {entity.report_count.total}
-      </Link>
-    </Layout>
   );
 };
 
@@ -153,18 +127,9 @@ const Row = ({
       <TableData>
         <TaskStatus task={entity} links={links} />
       </TableData>
-      {/* <TableData>{render_report_total(entity, links)}</TableData> */}
       <TableData>{render_report(entity.last_report, links)}</TableData>
-      {/* <TableData>
-        {!entity.isContainer() && isDefined(entity.last_report) && (
-          <SeverityBar severity={entity.last_report.severity} />
-        )}
-      </TableData>
-      <TableData align="center">
-        {!entity.isContainer() && <Trend name={entity.trend} />}
-      </TableData> */}
       <TableData>
-        {/*TODO: Compliance Status Bar */}
+        {/* TODO: Compliance Status Bar */}
         <TaskStatus task={entity} links={links} />
       </TableData>
       <ActionsComponent {...props} links={links} entity={entity} />

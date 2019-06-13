@@ -24,13 +24,13 @@ import _ from 'gmp/locale';
 
 import {ALL_FILTER} from 'gmp/models/filter';
 
-import {NO_VALUE} from 'gmp/parser';
+// import {NO_VALUE} from 'gmp/parser';
 
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId, hasId} from 'gmp/utils/id';
 
-import date from 'gmp/models/date';
+// import date from 'gmp/models/date';
 
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 
@@ -94,7 +94,7 @@ import ScheduleComponent from 'web/pages/schedules/component';
 import AlertComponent from 'web/pages/alerts/component';
 import TargetComponent from 'web/pages/targets/component';
 
-import TaskDialog from 'web/pages/tasks/dialog';
+import TaskDialog from 'web/pages/audits/dialog';
 import ContainerTaskDialog from 'web/pages/tasks/containerdialog';
 
 class TaskComponent extends React.Component {
@@ -102,12 +102,9 @@ class TaskComponent extends React.Component {
     super(...args);
 
     this.state = {
-      // advancedTaskWizardVisible: false,
       containerTaskDialogVisible: false,
-      // modifyTaskWizardVisible: false,
       reportImportDialogVisible: false,
       taskDialogVisible: false,
-      //taskWizardVisible: false,
     };
 
     const {gmp} = this.props;
@@ -116,23 +113,13 @@ class TaskComponent extends React.Component {
 
     this.handleReportImport = this.handleReportImport.bind(this);
     this.handleTaskResume = this.handleTaskResume.bind(this);
-    /*this.handleSaveAdvancedTaskWizard = this.handleSaveAdvancedTaskWizard.bind(
-      this,
-    );*/
+
     this.handleSaveTask = this.handleSaveTask.bind(this);
     this.handleSaveContainerTask = this.handleSaveContainerTask.bind(this);
-    /*this.handleSaveModifyTaskWizard = this.handleSaveModifyTaskWizard.bind(
-      this,
-    );*/
-    //this.handleSaveTaskWizard = this.handleSaveTaskWizard.bind(this);
+
     this.handleTaskStart = this.handleTaskStart.bind(this);
     this.handleTaskStop = this.handleTaskStop.bind(this);
-    //this.handleTaskWizardNewClick = this.handleTaskWizardNewClick.bind(this);
 
-    //this.openAdvancedTaskWizard = this.openAdvancedTaskWizard.bind(this);
-    /*this.handleCloseAdvancedTaskWizard = this.handleCloseAdvancedTaskWizard.bind(
-      this,
-    );*/
     this.openContainerTaskDialog = this.openContainerTaskDialog.bind(this);
     this.handleCloseContainerTaskDialog = this.handleCloseContainerTaskDialog.bind(
       this,
@@ -141,15 +128,10 @@ class TaskComponent extends React.Component {
     this.handleCloseReportImportDialog = this.handleCloseReportImportDialog.bind(
       this,
     );
-    /*this.openModifyTaskWizard = this.openModifyTaskWizard.bind(this);
-    this.handleCloseModifyTaskWizard = this.handleCloseModifyTaskWizard.bind(
-      this,
-    );*/
+
     this.openStandardTaskDialog = this.openStandardTaskDialog.bind(this);
     this.openTaskDialog = this.openTaskDialog.bind(this);
     this.handleCloseTaskDialog = this.handleCloseTaskDialog.bind(this);
-    //this.openTaskWizard = this.openTaskWizard.bind(this);
-    //this.handleCloseTaskWizard = this.handleCloseTaskWizard.bind(this);
 
     this.handleAlertsChange = this.handleAlertsChange.bind(this);
     this.handleTargetChange = this.handleTargetChange.bind(this);
@@ -211,11 +193,6 @@ class TaskComponent extends React.Component {
 
     return this.cmd.resume(task).then(onResumed, onResumeError);
   }
-
-  /* handleTaskWizardNewClick() {
-    this.openTaskDialog();
-    this.closeTaskWizard();
-  } */
 
   handleAlertCreated(resp) {
     const {data} = resp;
@@ -477,161 +454,6 @@ class TaskComponent extends React.Component {
     this.handleInteraction();
   }
 
-  /* openTaskWizard() {
-    const {
-      gmp,
-      defaultAlertId,
-      defaultEsxiCredential,
-      defaultPortListId,
-      defaultScanConfigId,
-      defaultScannerId,
-      defaultSshCredential,
-      defaultSmbCredential,
-    } = this.props;
-
-    gmp.wizard.task().then(response => {
-      const settings = response.data;
-      this.setState({
-        taskWizardVisible: true,
-        hosts: settings.client_address,
-        port_list_id: defaultPortListId,
-        alert_id: defaultAlertId,
-        config_id: defaultScanConfigId,
-        ssh_credential: defaultSshCredential,
-        smb_credential: defaultSmbCredential,
-        esxi_credential: defaultEsxiCredential,
-        scanner_id: defaultScannerId,
-      });
-    });
-    this.handleInteraction();
-  }
-
-  closeTaskWizard() {
-    this.setState({taskWizardVisible: false});
-  }
-
-  handleCloseTaskWizard() {
-    this.closeTaskWizard();
-    this.handleInteraction();
-  }
-
-  handleSaveTaskWizard(data) {
-    const {onTaskWizardSaved, onTaskWizardError, gmp} = this.props;
-
-    this.handleInteraction();
-
-    return gmp.wizard
-      .runQuickFirstScan(data)
-      .then(onTaskWizardSaved, onTaskWizardError)
-      .then(() => this.closeTaskWizard());
-  }
-
-  openAdvancedTaskWizard() {
-    const {
-      gmp,
-      timezone,
-      defaultAlertId,
-      defaultEsxiCredential,
-      defaultPortListId,
-      defaultScanConfigId = FULL_AND_FAST_SCAN_CONFIG_ID,
-      defaultScannerId,
-      defaultSshCredential,
-      defaultSmbCredential,
-    } = this.props;
-
-    this.props.loadCredentials();
-    this.props.loadScanConfigs();
-
-    gmp.wizard.advancedTask().then(response => {
-      const settings = response.data;
-
-      const now = date().tz(timezone);
-
-      this.setState({
-        advancedTaskWizardVisible: true,
-        task_name: _('New Quick Task'),
-        target_hosts: settings.client_address,
-        port_list_id: defaultPortListId,
-        alert_id: defaultAlertId,
-        config_id: defaultScanConfigId,
-        ssh_credential: defaultSshCredential,
-        smb_credential: defaultSmbCredential,
-        esxi_credential: defaultEsxiCredential,
-        scanner_id: defaultScannerId,
-        start_date: now,
-        start_minute: now.minutes(),
-        start_hour: now.hours(),
-        start_timezone: timezone,
-      });
-    });
-    this.handleInteraction();
-  }
-
-  closeAdvancedTaskWizard() {
-    this.setState({advancedTaskWizardVisible: false});
-  }
-
-  handleCloseAdvancedTaskWizard() {
-    this.closeAdvancedTaskWizard();
-    this.handleInteraction();
-  }
-
-  handleSaveAdvancedTaskWizard(data) {
-    const {
-      gmp,
-      onAdvancedTaskWizardSaved,
-      onAdvancedTaskWizardError,
-    } = this.props;
-
-    this.handleInteraction();
-
-    return gmp.wizard
-      .runQuickTask(data)
-      .then(onAdvancedTaskWizardSaved, onAdvancedTaskWizardError)
-      .then(() => this.closeAdvancedTaskWizard());
-  }
-
-  openModifyTaskWizard() {
-    const {gmp, timezone} = this.props;
-
-    gmp.wizard.modifyTask().then(response => {
-      const settings = response.data;
-      const now = date().tz(timezone);
-
-      this.setState({
-        modifyTaskWizardVisible: true,
-        tasks: settings.tasks,
-        reschedule: NO_VALUE,
-        task_id: selectSaveId(settings.tasks),
-        start_date: now,
-        start_minute: now.minutes(),
-        start_hour: now.hours(),
-        start_timezone: timezone,
-      });
-    });
-    this.handleInteraction();
-  }
-
-  closeModifyTaskWizard() {
-    this.setState({modifyTaskWizardVisible: false});
-  }
-
-  handleCloseModifyTaskWizard() {
-    this.closeModifyTaskWizard();
-    this.handleInteraction();
-  }
-
-  handleSaveModifyTaskWizard(data) {
-    const {onModifyTaskWizardSaved, onModifyTaskWizardError, gmp} = this.props;
-
-    this.handleInteraction();
-
-    return gmp.wizard
-      .runModifyTask(data)
-      .then(onModifyTaskWizardSaved, onModifyTaskWizardError)
-      .then(() => this.closeModifyTaskWizard());
-  } */
-
   openReportImportDialog(task) {
     this.setState({
       reportImportDialogVisible: true,
@@ -760,9 +582,6 @@ class TaskComponent extends React.Component {
                 stop: this.handleTaskStop,
                 resume: this.handleTaskResume,
                 reportimport: this.openReportImportDialog,
-                //advancedtaskwizard: this.openAdvancedTaskWizard,
-                //modifytaskwizard: this.openModifyTaskWizard,
-                //taskwizard: this.openTaskWizard,
               })}
 
               {taskDialogVisible && (
@@ -846,58 +665,6 @@ class TaskComponent extends React.Component {
             onSave={this.handleSaveContainerTask}
           />
         )}
-
-        {/* {taskWizardVisible && (
-          <TaskWizard
-            hosts={hosts}
-            port_list_id={port_list_id}
-            alert_id={alert_id}
-            config_id={config_id}
-            ssh_credential={ssh_credential}
-            smb_credential={smb_credential}
-            esxi_credential={esxi_credential}
-            scanner_id={scanner_id}
-            onClose={this.handleCloseTaskWizard}
-            onSave={this.handleSaveTaskWizard}
-            onNewClick={this.handleTaskWizardNewClick}
-          />
-        )}
-
-        {advancedTaskWizardVisible && (
-          <AdvancedTaskWizard
-            credentials={credentials}
-            scan_configs={scanConfigs}
-            start_date={start_date}
-            task_name={task_name}
-            target_hosts={target_hosts}
-            port_list_id={port_list_id}
-            alert_id={alert_id}
-            config_id={config_id}
-            ssh_credential={ssh_credential}
-            smb_credential={smb_credential}
-            esxi_credential={esxi_credential}
-            scanner_id={scanner_id}
-            start_minute={start_minute}
-            start_hour={start_hour}
-            start_timezone={start_timezone}
-            onClose={this.handleCloseAdvancedTaskWizard}
-            onSave={this.handleSaveAdvancedTaskWizard}
-          />
-        )}
-
-        {modifyTaskWizardVisible && (
-          <ModifyTaskWizard
-            start_date={start_date}
-            tasks={tasks}
-            reschedule={reschedule}
-            task_id={task_id}
-            start_minute={start_minute}
-            start_hour={start_hour}
-            start_timezone={start_timezone}
-            onClose={this.handleCloseModifyTaskWizard}
-            onSave={this.handleSaveModifyTaskWizard}
-          />
-        )} */}
 
         {reportImportDialogVisible && (
           <ImportReportDialog
