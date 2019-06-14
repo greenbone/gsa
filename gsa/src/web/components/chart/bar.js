@@ -170,7 +170,7 @@ class BarChart extends React.Component {
     const hideTickLabels = maxWidth / numTicks < MIN_TICK_WIDTH;
     return (
       <StyledLayout align={['start', 'start']}>
-        <Svg innerRef={svgRef} width={width} height={height}>
+        <Svg ref={svgRef} width={width} height={height}>
           <Group top={margin.top} left={marginLeft}>
             <Axis
               orientation="left"
@@ -219,7 +219,7 @@ class BarChart extends React.Component {
         </Svg>
         {showLegend && data.length > 0 && (
           <Legend
-            innerRef={this.legendRef}
+            ref={this.legendRef}
             data={data}
             onItemClick={onLegendItemClick}
           />

@@ -109,8 +109,8 @@ Line.propTypes = {
   width: PropTypes.number,
 };
 
-const Legend = ({data, children, innerRef, onItemClick}) => (
-  <StyledLegend innerRef={innerRef}>
+const Legend = React.forwardRef(({data, children, onItemClick}, ref) => (
+  <StyledLegend ref={ref}>
     {data.map((d, i) => (
       <ToolTip key={i} content={d.toolTip}>
         {({targetRef, hide, show}) =>
@@ -118,7 +118,7 @@ const Legend = ({data, children, innerRef, onItemClick}) => (
             children({
               d,
               toolTipProps: {
-                innerRef: targetRef,
+                ref: targetRef,
                 onMouseEnter: show,
                 onMouseLeave: hide,
               },
@@ -126,7 +126,7 @@ const Legend = ({data, children, innerRef, onItemClick}) => (
             })
           ) : (
             <Item
-              innerRef={targetRef}
+              ref={targetRef}
               onMouseEnter={show}
               onMouseLeave={hide}
               onClick={
@@ -141,7 +141,7 @@ const Legend = ({data, children, innerRef, onItemClick}) => (
       </ToolTip>
     ))}
   </StyledLegend>
-);
+));
 
 Legend.propTypes = {
   children: PropTypes.func,
@@ -152,7 +152,6 @@ Legend.propTypes = {
       toolTip: PropTypes.elementOrString,
     }),
   ).isRequired,
-  innerRef: PropTypes.ref,
   onItemClick: PropTypes.func,
 };
 

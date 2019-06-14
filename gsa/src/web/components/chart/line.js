@@ -503,7 +503,7 @@ class LineChart extends React.Component {
         <Svg
           width={width}
           height={height}
-          innerRef={setRef(svgRef, ref => (this.svg = ref))}
+          ref={setRef(svgRef, ref => (this.svg = ref))}
           onMouseLeave={hasValue ? this.hideInfo : undefined}
           onMouseEnter={hasValue ? this.showInfo : undefined}
           onMouseMove={hasValue ? this.handleMouseMove : undefined}
@@ -591,7 +591,7 @@ class LineChart extends React.Component {
           </Group>
         </Svg>
         {hasLines && showLegend && (
-          <Legend innerRef={this.legendRef} data={[yLine, y2Line]}>
+          <Legend ref={this.legendRef} data={[yLine, y2Line]}>
             {({d, toolTipProps}) => (
               <Item {...toolTipProps}>
                 <LegendLine

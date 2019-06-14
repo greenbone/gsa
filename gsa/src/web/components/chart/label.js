@@ -22,9 +22,9 @@ import Theme from 'web/utils/theme';
 
 import PropTypes from '../../utils/proptypes';
 
-const Label = ({x, y, innerRef, children, ...props}) => (
+const Label = React.forwardRef(({x, y, children, ...props}, ref) => (
   <text
-    ref={innerRef}
+    ref={ref}
     fill={Theme.dialogGray} // to have labels a bit visible on white background
     textAnchor="middle"
     x={x}
@@ -37,10 +37,9 @@ const Label = ({x, y, innerRef, children, ...props}) => (
   >
     {children}
   </text>
-);
+));
 
 Label.propTypes = {
-  innerRef: PropTypes.ref,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
 };

@@ -58,7 +58,7 @@ const Labels = ({
             <Label
               x={x}
               y={y}
-              innerRef={targetRef}
+              ref={targetRef}
               key={index}
               onMouseEnter={show}
               onMouseLeave={hide}

@@ -70,7 +70,7 @@ class Row extends React.Component {
         >
           {(provided, snapshot) => (
             <GridRow
-              innerRef={ref => {
+              ref={ref => {
                 this.row = ref;
                 provided.innerRef(ref);
               }}

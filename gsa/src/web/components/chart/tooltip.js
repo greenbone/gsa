@@ -61,12 +61,12 @@ const ToolTipContainer = styled.div`
 
 ToolTipContainer.displayName = 'ToolTipContainer';
 
-const ToolTipDisplay = ({children, ...props}) => (
-  <ToolTipContainer {...props}>
+const ToolTipDisplay = React.forwardRef(({children, ...props}, ref) => (
+  <ToolTipContainer ref={ref} {...props}>
     <ToolTipText>{children}</ToolTipText>
     <ToolTipArrow>▼</ToolTipArrow>
   </ToolTipContainer>
-);
+));
 
 class ToolTip extends React.Component {
   static propTypes = {
@@ -127,7 +127,7 @@ class ToolTip extends React.Component {
       <React.Fragment>
         {content && visible && (
           <Portal>
-            <ToolTipDisplay innerRef={this.tooltip}>{content}</ToolTipDisplay>
+            <ToolTipDisplay ref={this.tooltip}>{content}</ToolTipDisplay>
           </Portal>
         )}
         {children({

@@ -41,7 +41,7 @@ const EmptyRow = ({children, active = false, height}) => (
       <EmptyGridRow
         active={active}
         height={height}
-        innerRef={provided.innerRef}
+        ref={provided.innerRef}
         isDraggingOver={snapshot.isDraggingOver}
       >
         {children}

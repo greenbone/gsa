@@ -132,7 +132,7 @@ class WordCloudChart extends React.Component {
 
     const {words = []} = this.state;
     return (
-      <Svg width={width} height={height} innerRef={svgRef}>
+      <Svg width={width} height={height} ref={svgRef}>
         <Group top={height / 2 + margin.top} left={width / 2 + margin.left}>
           {words.map(word => (
             <Group
