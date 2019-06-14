@@ -55,7 +55,7 @@ export const MultiSelectedValue = styled(SelectedValue)`
   padding: 0 3px;
   margin-right: 4px;
   margin-top: 1px;
-  margin-bottom: 1px;
+  margin-bottom: 0px;
   background-color: ${Theme.lightGray};
   width: 80px; /* acts similar to minWidth? */
 `;
