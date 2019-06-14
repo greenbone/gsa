@@ -104,6 +104,8 @@ class Select extends React.Component {
       search: '',
     };
 
+    this.input = React.createRef();
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
@@ -155,7 +157,8 @@ class Select extends React.Component {
         itemToString={itemToString}
         onChange={this.handleChange}
         onSelect={this.handleSelect}
-        render={({
+      >
+        {({
           getButtonProps,
           getInputProps,
           getItemProps,
@@ -170,15 +173,14 @@ class Select extends React.Component {
           const label = find_label(items, selectedItem);
           return (
             <SelectContainer
-              {...getRootProps({refKey: 'innerRef'})}
+              {...getRootProps({}, {suppressRefError: true})}
               className={className}
-              flex="column"
               width={width}
             >
               <Box
                 isOpen={isOpen}
                 title={toolTipTitle}
-                innerRef={ref => (this.box = ref)}
+                ref={ref => (this.box = ref)}
               >
                 <SingleSelectedValue
                   data-testid="select-selected-value"
@@ -195,9 +197,10 @@ class Select extends React.Component {
                         ? undefined
                         : event => {
                             event.preventDefault(); // don't call default handler from downshift
-                            openMenu(
-                              () => isDefined(this.input) && this.input.focus(),
-                            ); // set focus to input field after menu is opened
+                            openMenu(() => {
+                              const {current: input} = this.input;
+                              input !== null && input.focus();
+                            }); // set focus to input field after menu is opened
                           },
                     })}
                     data-testid="select-open-button"
@@ -215,7 +218,7 @@ class Select extends React.Component {
                       onChange: this.handleSearch,
                     })}
                     disabled={disabled}
-                    innerRef={ref => (this.input = ref)}
+                    ref={this.input}
                   />
                   <ItemContainer>
                     {displayedItems.map(
@@ -243,7 +246,7 @@ class Select extends React.Component {
             </SelectContainer>
           );
         }}
-      />
+      </Downshift>
     );
   }
 }
