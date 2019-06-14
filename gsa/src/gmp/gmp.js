@@ -39,6 +39,7 @@ import './commands/groups.js';
 import './commands/hosts.js';
 import './commands/notes.js';
 import './commands/nvt.js';
+import './commands/nvtfamilies';
 import './commands/os.js';
 import './commands/ovaldefs.js';
 import './commands/overrides.js';

@@ -288,7 +288,7 @@ class NvtFamily extends React.Component {
     const config_family = config.families[name];
     const counts = {
       count: 0,
-      max: family.max,
+      max: family.maxNvtCount,
     };
 
     if (isDefined(config_family)) {

@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 ### Removed
-
+- Remove edit_config command from gsad [#1439](https://github.com/greenbone/gsa/pull/1439)
 - Remove copyright from gsad version output [#1379](https://github.com/greenbone/gsa/pull/1379)
 
 [Unreleased]: https://github.com/greenbone/gsa/compare/gsa-8.0...master

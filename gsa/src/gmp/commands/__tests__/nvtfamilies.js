@@ -1,0 +1,64 @@
+/* Copyright (C) 2019 Greenbone Networks GmbH
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+import {NvtFamiliesCommand} from '../nvtfamilies';
+
+import {createResponse, createHttp} from '../testing';
+
+describe('NvtFamiliesCommand tests', () => {
+  test('should load nvt families', () => {
+    const response = createResponse({
+      get_nvt_families: {
+        get_nvt_families_response: {
+          families: {
+            family: [
+              {
+                name: 'foo',
+                max_nvt_count: '1000',
+              },
+              {
+                name: 'bar',
+                max_nvt_count: '666',
+              },
+            ],
+          },
+        },
+      },
+    });
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new NvtFamiliesCommand(fakeHttp);
+    return cmd.get().then(resp => {
+      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+        args: {
+          cmd: 'get_nvt_families',
+        },
+      });
+
+      const {data: families} = resp;
+
+      expect(families.length).toEqual(2);
+      expect(families[0].name).toEqual('foo');
+      expect(families[0].maxNvtCount).toEqual(1000);
+      expect(families[1].name).toEqual('bar');
+      expect(families[1].maxNvtCount).toEqual(666);
+    });
+  });
+});
