@@ -32,8 +32,8 @@ exports[`Snackbar tests should render 1`] = `
   background-color: #393637;
   color: #fff;
   font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
-  -webkit-animation: eDClNj 5s ease-in-out;
-  animation: eDClNj 5s ease-in-out;
+  -webkit-animation: hRwsCZ 5s ease-in-out;
+  animation: hRwsCZ 5s ease-in-out;
 }
 
 <span>

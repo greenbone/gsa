@@ -120,6 +120,21 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
 }
 
 .c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   margin-left: -5px;
 }
 
@@ -135,6 +150,21 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
 }
 
 .c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -142,6 +172,10 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
 }
 
 .c8 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
   color: #393637;
   cursor: pointer;
   font-weight: bold;
@@ -239,17 +273,17 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
         </div>
       </a>
       <div
-        class="c6 c3"
+        class="c6"
       >
         <div
-          class="c7 c3"
+          class="c7"
           margin="5px"
         >
           <span>
             Logged in as 
           </span>
           <a
-            class="c8 c2"
+            class="c8"
             href="/usersettings"
             title="Your session will end at "
           >

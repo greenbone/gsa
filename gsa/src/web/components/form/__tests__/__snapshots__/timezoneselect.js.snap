@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TimezoneSelect tests should render 1`] = `
-.c4 {
+.c3 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -19,7 +19,7 @@ exports[`TimezoneSelect tests should render 1`] = `
   align-items: center;
 }
 
-.c6 {
+.c5 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -44,13 +44,13 @@ exports[`TimezoneSelect tests should render 1`] = `
   cursor: pointer;
 }
 
-.c5 {
+.c4 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c5 * {
+.c4 * {
   height: inherit;
   width: inherit;
 }
@@ -91,7 +91,7 @@ exports[`TimezoneSelect tests should render 1`] = `
   width: 230px;
 }
 
-.c3 {
+.c2 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -108,9 +108,6 @@ exports[`TimezoneSelect tests should render 1`] = `
   white-space: nowrap;
   overflow: hidden;
   cursor: pointer;
-}
-
-.c2 {
   cursor: default;
 }
 
@@ -122,20 +119,20 @@ exports[`TimezoneSelect tests should render 1`] = `
     class="c1"
   >
     <div
-      class="c2 c3"
+      class="c2"
       data-testid="select-selected-value"
       title="Coordinated Universal Time/UTC"
     >
       Coordinated Universal Time/UTC
     </div>
     <div
-      class="c4"
+      class="c3"
     >
       <span
         aria-expanded="false"
         aria-haspopup="true"
         aria-label="open menu"
-        class="c5 c6"
+        class="c4 c5"
         data-testid="select-open-button"
         data-toggle="true"
         role="button"

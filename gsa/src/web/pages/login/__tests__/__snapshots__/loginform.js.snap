@@ -175,12 +175,42 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
 }
 
 .c10 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   width: 66.66666667%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
 .c13 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   width: 33.33333333%;
   padding-left: 10px;
   padding-right: 10px;
@@ -347,7 +377,7 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
                 Username
               </label>
               <div
-                class="c10 c0"
+                class="c10"
                 data-testid="formgroup-content"
                 size="8"
               >
@@ -372,7 +402,7 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
                 Password
               </label>
               <div
-                class="c10 c0"
+                class="c10"
                 data-testid="formgroup-content"
                 size="8"
               >
@@ -390,7 +420,7 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
               class="c8"
             >
               <div
-                class="c13 c0"
+                class="c13"
                 data-testid="formgroup-content"
                 offset="4"
                 size="4"

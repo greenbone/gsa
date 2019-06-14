@@ -20,6 +20,21 @@ exports[`YesNoRadio tests should render 1`] = `
 }
 
 .c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   margin-left: -5px;
 }
 
@@ -35,6 +50,21 @@ exports[`YesNoRadio tests should render 1`] = `
 }
 
 .c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -94,20 +124,20 @@ exports[`YesNoRadio tests should render 1`] = `
   class="c0"
 >
   <div
-    class="c1 c0"
+    class="c1"
   >
     <div
-      class="c2 c0"
+      class="c2"
       margin="5px"
     >
       <label
         class="c3"
       >
         <div
-          class="c1 c0"
+          class="c1"
         >
           <div
-            class="c2 c0"
+            class="c2"
             margin="5px"
           >
             <input
@@ -129,10 +159,10 @@ exports[`YesNoRadio tests should render 1`] = `
         class="c3"
       >
         <div
-          class="c1 c0"
+          class="c1"
         >
           <div
-            class="c2 c0"
+            class="c2"
             margin="5px"
           >
             <input
