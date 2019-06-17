@@ -203,7 +203,7 @@ class ScheduleChart extends React.Component {
     const bandwidth = yScale.bandwidth();
     return (
       <Layout align={['start', 'start']}>
-        <Svg width={width} height={height} innerRef={svgRef}>
+        <Svg width={width} height={height} ref={svgRef}>
           <Group top={margin.top} left={marginLeft}>
             <Axis
               orientation="left"

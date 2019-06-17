@@ -27,6 +27,46 @@ exports[`Spinner tests should render 1`] = `
   margin-right: 22px;
 }
 
+.c2 {
+  background-color: #c8d3d9;
+  color: #787878;
+  border-left: 1px solid #393637;
+  width: 16px;
+  height: 50%;
+  font-size: 0.6em;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  vertical-align: middle;
+  position: absolute;
+  right: 0;
+  cursor: default;
+  display: block;
+  overflow: hidden;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border-top-right-radius: 1px;
+  top: 0;
+}
+
+.c2:hover {
+  background-color: #66c430;
+  color: #fff;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c2:active {
+  background-color: #fff;
+  color: #519032;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
 .c3 {
   background-color: #c8d3d9;
   color: #787878;
@@ -49,6 +89,8 @@ exports[`Spinner tests should render 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  border-bottom-right-radius: 1px;
+  bottom: 0;
 }
 
 .c3:hover {
@@ -65,16 +107,6 @@ exports[`Spinner tests should render 1`] = `
   text-decoration: none;
 }
 
-.c2 {
-  border-top-right-radius: 1px;
-  top: 0;
-}
-
-.c4 {
-  border-bottom-right-radius: 1px;
-  bottom: 0;
-}
-
 <span
   class="c0"
 >
@@ -86,13 +118,13 @@ exports[`Spinner tests should render 1`] = `
     value="1"
   />
   <span
-    class="c2 c3"
+    class="c2"
     data-testid="spinner-up"
   >
     ▲
   </span>
   <span
-    class="c4 c3"
+    class="c3"
     data-testid="spinner-down"
   >
     ▼

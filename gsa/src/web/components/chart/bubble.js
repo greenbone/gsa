@@ -50,7 +50,7 @@ const BubbleChart = ({data = [], width, height, svgRef, onDataClick}) => {
 
   const nodes = bubbles(root).leaves();
   return (
-    <Svg width={width} height={height} innerRef={svgRef}>
+    <Svg width={width} height={height} ref={svgRef}>
       <Group top={margin.top} left={margin.left}>
         {hasBubbles ? (
           nodes.map((node, i) => {

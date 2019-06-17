@@ -34,15 +34,24 @@ const StyledDialogContainer = styled.div`
   height: ${props => (isDefined(props.height) ? props.height : 'auto')};
 `;
 
-const DialogContainer = ({width = '', height = '', ...other}) => {
-  if (!width.toString().endsWith('px')) {
-    width += 'px';
-  }
-  if (!height.toString().endsWith('px')) {
-    height += 'px';
-  }
-  return <StyledDialogContainer {...other} width={width} height={height} />;
-};
+const DialogContainer = React.forwardRef(
+  ({width = '', height = '', ...other}, ref) => {
+    if (!width.toString().endsWith('px')) {
+      width += 'px';
+    }
+    if (!height.toString().endsWith('px')) {
+      height += 'px';
+    }
+    return (
+      <StyledDialogContainer
+        {...other}
+        ref={ref}
+        width={width}
+        height={height}
+      />
+    );
+  },
+);
 
 DialogContainer.displayName = 'DialogContainer';
 

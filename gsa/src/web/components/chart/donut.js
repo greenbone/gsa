@@ -275,7 +275,7 @@ class DonutChart extends React.Component {
         <Svg
           width={width}
           height={height}
-          innerRef={setRef(svgRef, ref => (this.svg = ref))}
+          ref={setRef(svgRef, ref => (this.svg = ref))}
         >
           {data.length > 0 ? (
             <React.Fragment>
@@ -329,7 +329,7 @@ class DonutChart extends React.Component {
         {data.length > 0 && showLegend && (
           <Legend
             data={data}
-            innerRef={this.legendRef}
+            ref={this.legendRef}
             onItemClick={onLegendItemClick}
           />
         )}

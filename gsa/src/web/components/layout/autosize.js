@@ -98,7 +98,7 @@ class AutoSize extends React.Component {
     // only call children if height and width are defined
     const shouldCallChildren = isDefined(height) && isDefined(width);
     return (
-      <Container innerRef={this.containerRef}>
+      <Container ref={this.containerRef}>
         {shouldCallChildren && children({width, height})}
       </Container>
     );

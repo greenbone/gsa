@@ -344,7 +344,7 @@ class DataDisplay extends React.Component {
             )}
           </Layout>
         </DisplayBox>
-        <Download innerRef={this.downloadRef} />
+        <Download ref={this.downloadRef} />
       </Display>
     );
   }

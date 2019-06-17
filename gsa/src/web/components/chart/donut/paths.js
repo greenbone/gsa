@@ -102,33 +102,36 @@ const pieOuterPath = (sa, ea, rx, ry, h) => {
   return paths;
 };
 
-export const PieOuterPath = ({
-  startAngle = 0,
-  endAngle = PI2,
-  donutHeight,
-  color,
-  innerRef,
-  outerRadiusX,
-  outerRadiusY,
-}) => (
-  <path
-    d={pieOuterPath(
-      startAngle,
-      endAngle,
+export const PieOuterPath = React.forwardRef(
+  (
+    {
+      startAngle = 0,
+      endAngle = PI2,
+      donutHeight,
+      color,
       outerRadiusX,
       outerRadiusY,
-      donutHeight,
-    )}
-    ref={innerRef}
-    fill={color}
-  />
+    },
+    ref,
+  ) => (
+    <path
+      d={pieOuterPath(
+        startAngle,
+        endAngle,
+        outerRadiusX,
+        outerRadiusY,
+        donutHeight,
+      )}
+      ref={ref}
+      fill={color}
+    />
+  ),
 );
 
 PieOuterPath.propTypes = {
   color: PropTypes.toString.isRequired,
   donutHeight: PropTypes.number.isRequired,
   endAngle: PropTypes.number,
-  innerRef: PropTypes.ref,
   outerRadiusX: PropTypes.number.isRequired,
   outerRadiusY: PropTypes.number.isRequired,
   startAngle: PropTypes.number,

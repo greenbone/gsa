@@ -2,27 +2,6 @@
 
 exports[`DialogTwoButtonFooter tests should render 1`] = `
 .c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c5 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -42,12 +21,12 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
   z-index: 1;
 }
 
-.c5:focus,
-.c5:hover {
+.c2:focus,
+.c2:hover {
   border: 1px solid #393637;
 }
 
-.c5:hover {
+.c2:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -55,26 +34,26 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
   color: #fff;
 }
 
-.c5[disabled] {
+.c2[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c5 img {
+.c2 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c5:link {
+.c2:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c4 {
+.c1 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -90,28 +69,40 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c3 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c3:hover {
+.c1:hover {
   color: #fff;
   background: #519032;
 }
 
-.c1 {
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c8d3d9;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
-}
-
-.c0 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
@@ -119,17 +110,17 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
 }
 
 <div
-  class="c0 c1 c2"
+  class="c0"
 >
   <button
-    class="c3 c4 c5"
+    class="c1 c2"
     data-testid="dialog-close-button"
     title="Cancel"
   >
     Cancel
   </button>
   <button
-    class="c3 c4 c5"
+    class="c1 c2"
     data-testid="dialog-save-button"
     title="Foo"
   >
@@ -140,27 +131,6 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
 
 exports[`DialogTwoButtonFooter tests should render loading 1`] = `
 .c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c5 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -180,12 +150,12 @@ exports[`DialogTwoButtonFooter tests should render loading 1`] = `
   z-index: 1;
 }
 
-.c5:focus,
-.c5:hover {
+.c2:focus,
+.c2:hover {
   border: 1px solid #393637;
 }
 
-.c5:hover {
+.c2:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -193,26 +163,26 @@ exports[`DialogTwoButtonFooter tests should render loading 1`] = `
   color: #fff;
 }
 
-.c5[disabled] {
+.c2[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c5 img {
+.c2 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c5:link {
+.c2:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c4 {
+.c1 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -228,39 +198,66 @@ exports[`DialogTwoButtonFooter tests should render loading 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c3 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c3:hover {
+.c1:hover {
   color: #fff;
   background: #519032;
 }
 
-.c6 {
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   border: 1px solid #787878;
   color: rgba(0,0,0,0.0);
   background: #87d050 url(/img/loading.gif) center center no-repeat;
 }
 
-.c6:hover {
+.c3:hover {
   color: rgba(0,0,0,0.0);
   background: #66c430 url(/img/loading.gif) center center no-repeat;
 }
 
-.c1 {
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c8d3d9;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
-}
-
-.c0 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
@@ -268,17 +265,17 @@ exports[`DialogTwoButtonFooter tests should render loading 1`] = `
 }
 
 <div
-  class="c0 c1 c2"
+  class="c0"
 >
   <button
-    class="c3 c4 c5"
+    class="c1 c2"
     data-testid="dialog-close-button"
     title="Cancel"
   >
     Cancel
   </button>
   <button
-    class="c6 c4 c5"
+    class="c3 c2"
     data-testid="dialog-save-button"
     title="Foo"
   >

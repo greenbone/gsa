@@ -55,7 +55,7 @@ export const MultiSelectedValue = styled(SelectedValue)`
   padding: 0 3px;
   margin-right: 4px;
   margin-top: 1px;
-  margin-bottom: 1px;
+  margin-bottom: 0px;
   background-color: ${Theme.lightGray};
   width: 80px; /* acts similar to minWidth? */
 `;
@@ -84,6 +84,8 @@ class MultiSelect extends React.Component {
       search: '',
       selectedItems: isArray(value) ? value : [],
     };
+
+    this.input = React.createRef();
 
     this.handleRemoveItem = this.handleRemoveItem.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -189,7 +191,8 @@ class MultiSelect extends React.Component {
         selectedItem={selectedItems}
         onChange={this.handleChange}
         onSelect={this.handleSelect}
-        render={({
+      >
+        {({
           getButtonProps,
           getInputProps,
           getItemProps,
@@ -202,15 +205,14 @@ class MultiSelect extends React.Component {
         }) => {
           return (
             <SelectContainer
-              {...getRootProps({refKey: 'innerRef'})}
+              {...getRootProps({}, {suppressRefError: true})}
               className={className}
-              flex="column"
               width={width}
             >
               <Box
                 isOpen={isOpen}
                 disabled={disabled}
-                innerRef={ref => (this.box = ref)}
+                ref={ref => (this.box = ref)}
               >
                 <Layout grow="1" wrap>
                   {selectedItems.map(item => this.renderItem(item, items))}
@@ -224,9 +226,10 @@ class MultiSelect extends React.Component {
                         ? undefined
                         : event => {
                             event.preventDefault(); // don't call default handler from downshift
-                            openMenu(
-                              () => isDefined(this.input) && this.input.focus(),
-                            ); // set focus to input field after menu is opened
+                            openMenu(() => {
+                              const {current: input} = this.input;
+                              input !== null && input.focus();
+                            });
                           },
                     })}
                     size="small"
@@ -241,7 +244,7 @@ class MultiSelect extends React.Component {
                       onChange: this.handleSearch,
                     })}
                     disabled={disabled}
-                    innerRef={ref => (this.input = ref)}
+                    ref={this.input}
                     data-testid="multiselect-input"
                   />
                   <ItemContainer>
@@ -265,7 +268,7 @@ class MultiSelect extends React.Component {
             </SelectContainer>
           );
         }}
-      />
+      </Downshift>
     );
   }
 }
