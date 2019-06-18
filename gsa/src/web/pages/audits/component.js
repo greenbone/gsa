@@ -22,15 +22,14 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {ALL_FILTER} from 'gmp/models/filter';
-
-// import {NO_VALUE} from 'gmp/parser';
+import Filter, {ALL_FILTER, RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-import {selectSaveId, hasId} from 'gmp/utils/id';
+import {hasId} from 'gmp/utils/id';
 
-// import date from 'gmp/models/date';
+import withDownload from 'web/components/form/withDownload';
+import {withRouter} from 'react-router-dom';
 
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 
@@ -71,7 +70,20 @@ import {
   selector as targetSelector,
 } from 'web/store/entities/targets';
 
-import {getTimezone} from 'web/store/usersettings/selectors';
+import {
+  loadAllEntities as loadReportFormats,
+  selector as reportFormatsSelector,
+} from 'web/store/entities/reportformats';
+
+import {
+  loadAllEntities as loadFilters,
+  // selector as filterSelector,
+} from 'web/store/entities/filters';
+
+import {
+  // getReportComposerDefaults,
+  getTimezone,
+} from 'web/store/usersettings/selectors';
 
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
@@ -86,16 +98,14 @@ import EntityComponent from 'web/entity/component';
 
 import ImportReportDialog from 'web/pages/reports/importdialog';
 
-/* import AdvancedTaskWizard from 'web/wizard/advancedtaskwizard';
-import ModifyTaskWizard from 'web/wizard/modifytaskwizard';
-import TaskWizard from 'web/wizard/taskwizard'; */
-
 import ScheduleComponent from 'web/pages/schedules/component';
 import AlertComponent from 'web/pages/alerts/component';
 import TargetComponent from 'web/pages/targets/component';
 
 import TaskDialog from 'web/pages/audits/dialog';
 import ContainerTaskDialog from 'web/pages/tasks/containerdialog';
+
+const REPORT_FORMATS_FILTER = Filter.fromString('active=1 trust=1 rows=-1');
 
 class TaskComponent extends React.Component {
   constructor(...args) {
@@ -104,7 +114,9 @@ class TaskComponent extends React.Component {
     this.state = {
       containerTaskDialogVisible: false,
       reportImportDialogVisible: false,
+      showDownloadReportDialog: false,
       taskDialogVisible: false,
+      gcrFormatDefined: undefined,
     };
 
     const {gmp} = this.props;
@@ -129,6 +141,9 @@ class TaskComponent extends React.Component {
       this,
     );
 
+    this.handleReportDownloadClick = this.handleReportDownloadClick.bind(this);
+    this.handleReportDownload = this.handleReportDownload.bind(this);
+
     this.openStandardTaskDialog = this.openStandardTaskDialog.bind(this);
     this.openTaskDialog = this.openTaskDialog.bind(this);
     this.handleCloseTaskDialog = this.handleCloseTaskDialog.bind(this);
@@ -149,6 +164,24 @@ class TaskComponent extends React.Component {
 
   componentDidMount() {
     this.props.loadUserSettingsDefaults();
+
+    this.props.loadFilters();
+    this.props.loadReportFormats();
+  }
+
+  componentDidUpdate() {
+    const {reportFormats} = this.props;
+    if (
+      !isDefined(this.state.gcrFormatDefined) &&
+      isDefined(reportFormats) &&
+      reportFormats.length > 0
+    ) {
+      const gcrFormat = reportFormats.find(format => {
+        return format.name === 'GCR PDF';
+      });
+      const gcrFormatDefined = isDefined(gcrFormat);
+      this.setState({gcrFormatDefined: gcrFormatDefined});
+    }
   }
 
   handleInteraction() {
@@ -483,6 +516,45 @@ class TaskComponent extends React.Component {
       .then(() => this.closeReportImportDialog());
   }
 
+  handleReportDownloadClick(task) {
+    this.setState({
+      task: task,
+    });
+
+    this.handleReportDownload(this.state, task);
+  }
+
+  handleReportDownload(state, task) {
+    const {gmp, reportFormats = [], onDownload} = this.props;
+
+    const report_format = reportFormats.find(
+      format => format.name === 'GCR PDF',
+    );
+
+    const extension = isDefined(report_format)
+      ? report_format.extension
+      : 'unknown'; // unknown should never happen but we should be save here
+
+    this.handleInteraction();
+
+    const {id} = task.last_report;
+
+    gmp.report
+      .download(
+        {id},
+        {
+          reportFormatId: report_format.id,
+          deltaReportId: undefined,
+          filter: undefined,
+        },
+      )
+      .then(response => {
+        const {data} = response;
+        const filename = 'report-' + id + '.' + extension;
+        onDownload({filename, data});
+      }, this.handleError);
+  }
+
   handleScanConfigChange(config_id) {
     this.setState({config_id});
   }
@@ -494,7 +566,8 @@ class TaskComponent extends React.Component {
   render() {
     const {
       alerts,
-      credentials,
+      // credentials,
+      // entity,
       scanConfigs,
       scanners,
       schedules,
@@ -510,6 +583,9 @@ class TaskComponent extends React.Component {
       onDownloaded,
       onDownloadError,
       onInteraction,
+      // reportFilter,
+      // reportFormats,
+      // reportComposerDefaults,
     } = this.props;
 
     const {
@@ -528,6 +604,7 @@ class TaskComponent extends React.Component {
       hosts_ordering,
       id,
       in_assets,
+      gcrFormatDefined,
       max_checks,
       max_hosts,
       min_qod,
@@ -539,6 +616,7 @@ class TaskComponent extends React.Component {
       scanner_id,
       schedule_id,
       schedule_periods,
+      // showDownloadReportDialog,
       source_iface,
       ssh_credential,
       smb_credential,
@@ -546,6 +624,7 @@ class TaskComponent extends React.Component {
       start_minute,
       start_hour,
       start_timezone,
+      // storeAsDefault,
       tag_id,
       target_id,
       target_hosts,
@@ -582,6 +661,9 @@ class TaskComponent extends React.Component {
                 stop: this.handleTaskStop,
                 resume: this.handleTaskResume,
                 reportimport: this.openReportImportDialog,
+                //reportDownload: this.handleOpenDownloadReportDialog,
+                reportDownload: this.handleReportDownloadClick,
+                gcrFormatDefined: gcrFormatDefined,
               })}
 
               {taskDialogVisible && (
@@ -742,7 +824,7 @@ TaskComponent.propTypes = {
 
 const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
 
-const mapStateToProps = rootState => {
+const mapStateToProps = (rootState, {match}) => {
   const alertSel = alertSelector(rootState);
   const credentialsSel = credentialsSelector(rootState);
   const userDefaults = getUserSettingsDefaults(rootState);
@@ -751,6 +833,9 @@ const mapStateToProps = rootState => {
   const scheduleSel = scheduleSelector(rootState);
   const tagsSel = tagsSelector(rootState);
   const targetSel = targetSelector(rootState);
+
+  const reportFormatsSel = reportFormatsSelector(rootState);
+
   return {
     timezone: getTimezone(rootState),
     alerts: alertSel.getEntities(ALL_FILTER),
@@ -766,6 +851,7 @@ const mapStateToProps = rootState => {
     defaultSshCredential: userDefaults.getValueByName('defaultsshcredential'),
     defaultSmbCredential: userDefaults.getValueByName('defaultsmbcredential'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
+    reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
     scanConfigs: scanConfigsSel.getEntities(ALL_FILTER),
     scanners: scannersSel.getEntities(ALL_FILTER),
     schedules: scheduleSel.getEntities(ALL_FILTER),
@@ -777,17 +863,22 @@ const mapStateToProps = rootState => {
 const mapDispatchToProp = (dispatch, {gmp}) => ({
   loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
   loadCredentials: () => dispatch(loadCredentials(gmp)(ALL_FILTER)),
+  loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
   loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
   loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
   loadTags: () => dispatch(loadTags(gmp)(TAGS_FILTER)),
   loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
   loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
+  loadReportFormats: () =>
+    dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
 });
 
 export default compose(
   withGmp,
   withCapabilities,
+  withDownload,
+  withRouter,
   connect(
     mapStateToProps,
     mapDispatchToProp,

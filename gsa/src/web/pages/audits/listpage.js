@@ -33,7 +33,7 @@ import {
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import DashboardControls from 'web/components/dashboard/controls';
+// import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
 
@@ -41,7 +41,7 @@ import IconDivider from 'web/components/layout/icondivider';
 
 import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 
-import NewIconMenu from 'web/pages/tasks/icons/newiconmenu';
+// import NewIconMenu from 'web/pages/tasks/icons/newiconmenu';
 
 import AuditComponent from './component';
 // import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
@@ -89,6 +89,7 @@ const Page = ({
     onDownloadError={onError}
     onInteraction={onInteraction}
     // onModifyTaskWizardSaved={onChanged}
+    // on Report Dowloaded???
     onReportImported={onChanged}
     onResumed={onChanged}
     onResumeError={onError}
@@ -109,7 +110,9 @@ const Page = ({
       start,
       stop,
       resume,
+      reportDownload,
       reportimport,
+      gcrFormatDefined,
       // advancedtaskwizard,
       // modifytaskwizard,
       // taskwizard,
@@ -132,6 +135,7 @@ const Page = ({
         filter={filter}
         filterEditDialog={TaskFilterDialog}
         filtersFilter={TASKS_FILTER_FILTER}
+        gcrFormatDefined={gcrFormatDefined}
         sectionIcon={<TaskIcon size="large" />}
         table={Table}
         title={_('Audits')}
@@ -142,6 +146,7 @@ const Page = ({
         onFilterChanged={onFilterChanged}
         onInteraction={onInteraction}
         // onModifyTaskWizardClick={modifytaskwizard}
+        onReportDownloadClick={reportDownload}
         onReportImportClick={reportimport}
         onTaskCloneClick={clone}
         // onTaskCreateClick={create}

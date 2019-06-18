@@ -128,10 +128,7 @@ const Row = ({
         <TaskStatus task={entity} links={links} />
       </TableData>
       <TableData>{render_report(entity.last_report, links)}</TableData>
-      <TableData>
-        {/* TODO: Compliance Status Bar */}
-        <TaskStatus task={entity} links={links} />
-      </TableData>
+      {/* TODO: Compliance Status Bar */}
       <ActionsComponent {...props} links={links} entity={entity} />
     </TableRow>
   );

@@ -51,7 +51,7 @@ const Header = ({
   return (
     <TableHeader>
       <TableRow>
-        <TableHead {...sortProps} sortBy="name" width="48%" title={_('Name')} />
+        <TableHead {...sortProps} sortBy="name" width="60%" title={_('Name')} />
         <TableHead
           {...sortProps}
           width="8%"
@@ -64,13 +64,7 @@ const Header = ({
           width="24%"
           title={_('Report')}
         />
-        {/* TODO: sort by compliance status*/}
-        <TableHead
-          {...sortProps}
-          width="12%"
-          sortBy="complianceStatus"
-          title={_('Compliance Status')}
-        />
+        {/* TODO: compliance status*/}
         {actionsColumn}
       </TableRow>
     </TableHeader>

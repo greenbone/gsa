@@ -31,6 +31,7 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+import DownloadIcon from 'web/components/icon/downloadicon';
 
 import ImportReportIcon from 'web/pages/tasks/icons/importreporticon';
 import ResumeIcon from 'web/pages/tasks/icons/resumeicon';
@@ -43,6 +44,8 @@ import PropTypes from 'web/utils/proptypes';
 const Actions = ({
   entity,
   links,
+  gcrFormatDefined,
+  onReportDownloadClick,
   onReportImportClick,
   onTaskCloneClick,
   onTaskDeleteClick,
@@ -73,13 +76,20 @@ const Actions = ({
       title={_('Export Task')}
       onClick={onTaskDownloadClick}
     />
-    {/* TODO: dowload greenbone compliance report button*/}
+    <DownloadIcon
+      value={entity}
+      title={_('Download Greenbone Compliance Report')}
+      onClick={onReportDownloadClick}
+      disabled={!gcrFormatDefined || !isDefined(entity.last_report)}
+    />
   </IconDivider>
 );
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
+  gcrFormatDefined: PropTypes.bool,
   links: PropTypes.bool,
+  onReportDownloadClick: PropTypes.func.isRequired,
   onReportImportClick: PropTypes.func.isRequired,
   onTaskCloneClick: PropTypes.func.isRequired,
   onTaskDeleteClick: PropTypes.func.isRequired,
