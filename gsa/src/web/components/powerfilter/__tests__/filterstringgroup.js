@@ -56,7 +56,7 @@ describe('FilterStringGroup tests', () => {
 
     const input = element.querySelectorAll('input');
 
-    expect(input[0]).toHaveAttribute('value', 'Test');
+    expect(input[0]).toHaveAttribute('value', 'test');
   });
 
   test('should call change handler', () => {
