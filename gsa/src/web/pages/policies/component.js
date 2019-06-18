@@ -42,7 +42,7 @@ import {
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
 } from 'gmp/models/scanner';
-import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
+// import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 
 import {
   loadEntities as loadScanConfigs,
@@ -82,7 +82,7 @@ import EditScanConfigDialog from 'web/pages/scanconfigs/editdialog';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/editnvtdetailsdialog';
 import AuditDialog from './createauditdialog';
 import ImportDialog from 'web/pages/scanconfigs/importdialog';
-import ScanConfigDialog from 'web/pages/scanconfigs/dialog';
+import ScanConfigDialog from 'web/pages/policies/dialog';
 
 import TargetComponent from 'web/pages/targets/component';
 
@@ -105,7 +105,7 @@ class PolicyComponent extends React.Component {
     super(...args);
 
     this.state = {
-      //createConfigDialogVisible: false,
+      createConfigDialogVisible: false,
       editConfigDialogVisible: false,
       editConfigFamilyDialogVisible: false,
       editNvtDetailsDialogVisible: false,
@@ -116,10 +116,10 @@ class PolicyComponent extends React.Component {
     this.handleImportConfig = this.handleImportConfig.bind(this);
     this.handleSaveConfigFamily = this.handleSaveConfigFamily.bind(this);
     this.handleSaveConfigNvt = this.handleSaveConfigNvt.bind(this);
-    /*  this.openCreateConfigDialog = this.openCreateConfigDialog.bind(this);
+    this.openCreateConfigDialog = this.openCreateConfigDialog.bind(this);
     this.handleCloseCreateConfigDialog = this.handleCloseCreateConfigDialog.bind(
       this,
-    ); */
+    );
     this.openEditConfigDialog = this.openEditConfigDialog.bind(this);
     this.handleCloseEditConfigDialog = this.handleCloseEditConfigDialog.bind(
       this,
@@ -183,7 +183,7 @@ class PolicyComponent extends React.Component {
     this.handleInteraction();
   }
 
-  /* openCreateConfigDialog() {
+  openCreateConfigDialog() {
     this.loadScanners().then(state =>
       this.setState({
         ...state,
@@ -201,7 +201,7 @@ class PolicyComponent extends React.Component {
   handleCloseCreateConfigDialog() {
     this.closeCreateConfigDialog();
     this.handleInteraction();
-  } */
+  }
 
   openImportDialog() {
     this.setState({importDialogVisible: true});
@@ -223,7 +223,7 @@ class PolicyComponent extends React.Component {
     // console.log(config);
 
     this.props.loadScanConfigs();
-    //this.props.loadScanners();
+    // this.props.loadScanners();
     this.props.loadTargets();
     this.props.loadTags();
 
@@ -235,7 +235,7 @@ class PolicyComponent extends React.Component {
       defaultTargetId,
     } = this.props;
 
-    //console.log('defaults', defaultAlertId, defaultScheduleId, defaultTargetId);
+    // console.log('defaults', defaultAlertId, defaultScheduleId, defaultTargetId);
 
     // console.log('default=', defaultScannerId);
     // const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
@@ -249,8 +249,8 @@ class PolicyComponent extends React.Component {
       // auto_delete_data: undefined,
       comment: '',
       // config_id: defaultScanConfigId,
-      //config_id: isDefined(config) ? config.id : defaultScanConfigId,
-      config_id: isDefined(config) ? config.id : undefined, //must not use default because the scanconfig has to be the policy
+      // config_id: isDefined(config) ? config.id : defaultScanConfigId,
+      config_id: isDefined(config) ? config.id : undefined, // must not use default because the scanconfig has to be the policy
       // hosts_ordering: undefined,
       // id: undefined,
       // in_assets: undefined,
@@ -263,7 +263,7 @@ class PolicyComponent extends React.Component {
       // schedule_periods: undefined,
       // source_iface: undefined,
       target_id: defaultTargetId,
-      //task: undefined,
+      // task: undefined,
       title: _('New Task'),
     });
 
@@ -610,7 +610,7 @@ class PolicyComponent extends React.Component {
       comment,
       config,
       config_name,
-      //createConfigDialogVisible,
+      createConfigDialogVisible,
       createAuditDialogVisible,
       editConfigDialogVisible,
       editConfigFamilyDialogVisible,
@@ -657,7 +657,8 @@ class PolicyComponent extends React.Component {
             <React.Fragment>
               {children({
                 ...other,
-                create: this.openCreateAuditDialog,
+                createAudit: this.openCreateAuditDialog,
+                create: this.openCreateConfigDialog,
                 edit: this.openEditConfigDialog,
                 import: this.openImportDialog,
               })}
@@ -678,7 +679,7 @@ class PolicyComponent extends React.Component {
                   )}
                 </TargetComponent>
               )}
-              {/* {createConfigDialogVisible && (
+              {createConfigDialogVisible && (
                 <ScanConfigDialog
                   scanner_id={scanner_id}
                   scanners={scanners}
@@ -688,7 +689,7 @@ class PolicyComponent extends React.Component {
                     return save(d).then(() => this.closeCreateConfigDialog());
                   }}
                 />
-                )} */}
+              )}
               {editConfigDialogVisible && (
                 <EditScanConfigDialog
                   base={base}

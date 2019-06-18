@@ -53,12 +53,12 @@ const ToolBarIcons = withCapabilities(
         anchor="scan-configuration"
         title={_('Help: Scan Configs')}
       />
-      {/* {capabilities.mayCreate('config') && (
+      {capabilities.mayCreate('config') && (
         <NewIcon
           title={_('New Scan Config')}
           onClick={onScanConfigCreateClick}
         />
-      )} */}
+      )}
       {capabilities.mayCreate('config') && (
         <UploadIcon title={_('Import Policy')} onClick={onPolicyImportClick} />
       )}
@@ -67,8 +67,8 @@ const ToolBarIcons = withCapabilities(
 );
 
 ToolBarIcons.propTypes = {
-  //onScanConfigCreateClick: PropTypes.func.isRequired,
   onPolicyImportClick: PropTypes.func.isRequired,
+  onScanConfigCreateClick: PropTypes.func.isRequired,
 };
 
 const ScanConfigFilterDialog = createFilterDialog({
@@ -97,6 +97,7 @@ const PoliciesPage = ({
     {({
       clone,
       create,
+      createAudit,
       delete: delete_func,
       download,
       edit,
@@ -114,7 +115,8 @@ const PoliciesPage = ({
         onInteraction={onInteraction}
         onPolicyImportClick={import_func}
         onScanConfigCloneClick={clone}
-        onCreateAuditClick={create}
+        onScanConfigCreateClick={create}
+        onCreateAuditClick={createAudit}
         onScanConfigDeleteClick={delete_func}
         onScanConfigDownloadClick={download}
         onScanConfigEditClick={edit}
