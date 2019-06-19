@@ -1085,4 +1085,68 @@ describe('Filter toFilterExtraString', () => {
   });
 });
 
+describe('should lower the case of capitalized keywords', () => {
+  test('should lower the case of multiple keywords', () => {
+    const filter = Filter.fromString('sevErIty>3.9 and Qod_MIN=70 RoWs=14');
+    expect(filter.toFilterString()).toEqual(
+      'severity>3.9 and qod_min=70 rows=14',
+    );
+  });
+  test('should do the same for filters from arrays', () => {
+    const element = {
+      keywords: {
+        keyword: [
+          {
+            column: '',
+            relation: '~',
+            value: 'abc',
+          },
+          {
+            column: '',
+            relation: '~',
+            value: 'and',
+          },
+          {
+            column: '',
+            relation: '~',
+            value: 'not',
+          },
+          {
+            column: '',
+            relation: '~',
+            value: 'def',
+          },
+          {
+            column: 'ROWS',
+            relation: '=',
+            value: '10',
+          },
+          {
+            column: 'fiRsT',
+            relation: '=',
+            value: '1',
+          },
+          {
+            column: 'sORt',
+            relation: '=',
+            value: 'name',
+          },
+        ],
+      },
+    };
+    const filter = new Filter(element);
+    expect(filter.toFilterString()).toEqual(
+      '~abc and not ~def rows=10 first=1 sort=name',
+    );
+  });
+  test('a more wacky scenario', () => {
+    const filter1 = Filter.fromString('~abc SorT=name');
+    expect(filter1.toFilterString()).toEqual('~abc sort=name');
+  });
+  test('just a value', () => {
+    const filter2 = Filter.fromString('~AbC');
+    expect(filter2.toFilterString()).toEqual('~AbC');
+  });
+});
+
 // vim: set ts=2 sw=2 tw=80:

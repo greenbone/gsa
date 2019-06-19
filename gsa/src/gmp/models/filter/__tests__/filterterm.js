@@ -173,4 +173,14 @@ describe('FilterTerm toString tests', () => {
   });
 });
 
+describe('keywords should be lowercase', () => {
+  test('should lower keyword case from string', () => {
+    const term = FilterTerm.fromString('timEZOne=CET');
+
+    expect(term.keyword).toBe('timezone');
+    expect(term.value).toBe('CET');
+    expect(term.relation).toBe('=');
+  });
+});
+
 // vim: set ts=2 sw=2 tw=80:
