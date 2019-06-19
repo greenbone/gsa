@@ -73,6 +73,7 @@ import PerformancePage from './pages/performance/performancepage';
 import PermissionsPage from './pages/permissions/listpage';
 import PermissionDetailsPage from './pages/permissions/detailspage';
 import PoliciesPage from './pages/policies/listpage';
+import PoliciesDetailsPage from './pages/policies/detailspage';
 import PortListsPage from './pages/portlists/listpage';
 import PortListDetailsPage from './pages/portlists/detailspage';
 import RadiusPage from './pages/radius/radiuspage';
@@ -198,6 +199,7 @@ const Routes = () => (
               <Route path="/user/:id" component={UserDetailsPage} />
               <Route path="/group/:id" component={GroupDetailsPage} />
               <Route path="/role/:id" component={RoleDetailsPage} />
+              <Route path="/policy/:id" component={PoliciesDetailsPage} />
               <Route path="/portlist/:id" component={PortListDetailsPage} />
               <Route path="/credential/:id" component={CredentialDetailsPage} />
               <Route path="/schedule/:id" component={ScheduleDetailsPage} />

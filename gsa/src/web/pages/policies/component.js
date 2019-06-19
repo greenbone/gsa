@@ -82,7 +82,7 @@ import EditScanConfigDialog from 'web/pages/scanconfigs/editdialog';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/editnvtdetailsdialog';
 import AuditDialog from './createauditdialog';
 import ImportDialog from 'web/pages/scanconfigs/importdialog';
-import ScanConfigDialog from 'web/pages/policies/dialog';
+import PolicyDialog from 'web/pages/policies/dialog';
 
 import TargetComponent from 'web/pages/targets/component';
 
@@ -105,7 +105,7 @@ class PolicyComponent extends React.Component {
     super(...args);
 
     this.state = {
-      createConfigDialogVisible: false,
+      createPolicyDialogVisible: false,
       editConfigDialogVisible: false,
       editConfigFamilyDialogVisible: false,
       editNvtDetailsDialogVisible: false,
@@ -116,8 +116,8 @@ class PolicyComponent extends React.Component {
     this.handleImportConfig = this.handleImportConfig.bind(this);
     this.handleSaveConfigFamily = this.handleSaveConfigFamily.bind(this);
     this.handleSaveConfigNvt = this.handleSaveConfigNvt.bind(this);
-    this.openCreateConfigDialog = this.openCreateConfigDialog.bind(this);
-    this.handleCloseCreateConfigDialog = this.handleCloseCreateConfigDialog.bind(
+    this.openCreatePolicyDialog = this.openCreatePolicyDialog.bind(this);
+    this.handleCloseCreatePolicyDialog = this.handleCloseCreatePolicyDialog.bind(
       this,
     );
     this.openEditConfigDialog = this.openEditConfigDialog.bind(this);
@@ -183,23 +183,23 @@ class PolicyComponent extends React.Component {
     this.handleInteraction();
   }
 
-  openCreateConfigDialog() {
+  openCreatePolicyDialog() {
     this.loadScanners().then(state =>
       this.setState({
         ...state,
-        createConfigDialogVisible: true,
+        createPolicyDialogVisible: true,
       }),
     );
 
     this.handleInteraction();
   }
 
-  closeCreateConfigDialog() {
-    this.setState({createConfigDialogVisible: false});
+  closeCreatePolicyDialog() {
+    this.setState({createPolicyDialogVisible: false});
   }
 
-  handleCloseCreateConfigDialog() {
-    this.closeCreateConfigDialog();
+  handleCloseCreatePolicyDialog() {
+    this.closeCreatePolicyDialog();
     this.handleInteraction();
   }
 
@@ -264,7 +264,7 @@ class PolicyComponent extends React.Component {
       // source_iface: undefined,
       target_id: defaultTargetId,
       // task: undefined,
-      title: _('New Task'),
+      title: _('New Audit'),
     });
 
     this.handleInteraction();
@@ -610,7 +610,7 @@ class PolicyComponent extends React.Component {
       comment,
       config,
       config_name,
-      createConfigDialogVisible,
+      createPolicyDialogVisible,
       createAuditDialogVisible,
       editConfigDialogVisible,
       editConfigFamilyDialogVisible,
@@ -658,7 +658,7 @@ class PolicyComponent extends React.Component {
               {children({
                 ...other,
                 createAudit: this.openCreateAuditDialog,
-                create: this.openCreateConfigDialog,
+                create: this.openCreatePolicyDialog,
                 edit: this.openEditConfigDialog,
                 import: this.openImportDialog,
               })}
@@ -679,14 +679,14 @@ class PolicyComponent extends React.Component {
                   )}
                 </TargetComponent>
               )}
-              {createConfigDialogVisible && (
-                <ScanConfigDialog
+              {createPolicyDialogVisible && (
+                <PolicyDialog
                   scanner_id={scanner_id}
                   scanners={scanners}
-                  onClose={this.handleCloseCreateConfigDialog}
+                  onClose={this.handleCloseCreatePolicyDialog}
                   onSave={d => {
                     this.handleInteraction();
-                    return save(d).then(() => this.closeCreateConfigDialog());
+                    return save(d).then(() => this.closeCreatePolicyDialog());
                   }}
                 />
               )}

@@ -44,40 +44,40 @@ const PoliciesActions = compose(
 )(
   ({
     entity,
-    onScanConfigDeleteClick,
-    onScanConfigDownloadClick,
-    onScanConfigCloneClick,
-    onScanConfigEditClick,
+    onPolicyDeleteClick,
+    onPolicyDownloadClick,
+    onPolicyCloneClick,
+    onPolicyEditClick,
     onCreateAuditClick,
     capabilities,
   }) => (
     <IconDivider grow align={['center', 'center']}>
       <TrashIcon
-        displayName={_('Scan Config')}
+        displayName={_('Policy')}
         name="config"
         entity={entity}
-        onClick={onScanConfigDeleteClick}
+        onClick={onPolicyDeleteClick}
       />
       <EditIcon
-        displayName={_('Scan Config')}
+        displayName={_('Policy')}
         name="config"
         entity={entity}
-        onClick={onScanConfigEditClick}
+        onClick={onPolicyEditClick}
       />
       <CloneIcon
-        displayName={_('Scan Config')}
+        displayName={_('Policy')}
         name="config"
         entity={entity}
-        title={_('Clone Scan Config')}
+        title={_('Clone Policy')}
         value={entity}
-        onClick={onScanConfigCloneClick}
+        onClick={onPolicyCloneClick}
       />
       <ExportIcon
         value={entity}
-        title={_('Export Scan Config')}
-        onClick={onScanConfigDownloadClick}
+        title={_('Export Policy')}
+        onClick={onPolicyDownloadClick}
       />
-      {capabilities.mayCreate('config') && (
+      {capabilities.mayCreate('task') && (
         <NewIcon
           value={entity}
           title={_('Create Audit')}
@@ -90,10 +90,10 @@ const PoliciesActions = compose(
 
 PoliciesActions.propTypes = {
   entity: PropTypes.model.isRequired,
-  onScanConfigCloneClick: PropTypes.func.isRequired,
-  onScanConfigDeleteClick: PropTypes.func.isRequired,
-  onScanConfigDownloadClick: PropTypes.func.isRequired,
-  onScanConfigEditClick: PropTypes.func.isRequired,
+  onPolicyCloneClick: PropTypes.func.isRequired,
+  onPolicyDeleteClick: PropTypes.func.isRequired,
+  onPolicyDownloadClick: PropTypes.func.isRequired,
+  onPolicyEditClick: PropTypes.func.isRequired,
 };
 
 const PoliciesRow = ({
@@ -108,7 +108,7 @@ const PoliciesRow = ({
       entity={entity}
       link={links}
       type="scanconfig"
-      displayName={_('Scan Config')}
+      displayName={_('Policy')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <ActionsComponent {...props} entity={entity} />

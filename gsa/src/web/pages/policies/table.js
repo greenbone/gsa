@@ -24,6 +24,7 @@ import withRowDetails from 'web/entities/withRowDetails';
 
 import Header from './header';
 import Row from './row';
+// import PolicyDetails from 'web/pages/policies/details';
 import ScanConfigDetails from 'web/pages/scanconfigs/details';
 
 export const SORT_FIELDS = [
@@ -34,12 +35,13 @@ export const SORT_FIELDS = [
 ];
 
 const PoliciesTable = createEntitiesTable({
-  emptyTitle: _l('No Scan Configs available'),
+  emptyTitle: _l('No Policies available'),
   header: Header,
   row: Row,
+  // rowDetails: withRowDetails('policy')(PolicyDetails),
   rowDetails: withRowDetails('scanconfig')(ScanConfigDetails),
   footer: createEntitiesFooter({
-    download: 'scanconfigs.xml',
+    download: 'policies.xml',
     span: 7,
     trash: true,
   }),

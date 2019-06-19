@@ -46,18 +46,15 @@ import PoliciesComponent from './component';
 import Table, {SORT_FIELDS} from './table';
 
 const ToolBarIcons = withCapabilities(
-  ({capabilities, onScanConfigCreateClick, onPolicyImportClick}) => (
+  ({capabilities, onPolicyCreateClick, onPolicyImportClick}) => (
     <IconDivider>
       <ManualIcon
         page="vulnerabilitymanagement"
         anchor="scan-configuration"
-        title={_('Help: Scan Configs')}
+        title={_('Help: Policies')}
       />
       {capabilities.mayCreate('config') && (
-        <NewIcon
-          title={_('New Scan Config')}
-          onClick={onScanConfigCreateClick}
-        />
+        <NewIcon title={_('New Policy')} onClick={onPolicyCreateClick} />
       )}
       {capabilities.mayCreate('config') && (
         <UploadIcon title={_('Import Policy')} onClick={onPolicyImportClick} />
@@ -67,8 +64,8 @@ const ToolBarIcons = withCapabilities(
 );
 
 ToolBarIcons.propTypes = {
+  onPolicyCreateClick: PropTypes.func.isRequired,
   onPolicyImportClick: PropTypes.func.isRequired,
-  onScanConfigCreateClick: PropTypes.func.isRequired,
 };
 
 const ScanConfigFilterDialog = createFilterDialog({
@@ -114,12 +111,12 @@ const PoliciesPage = ({
         onError={onError}
         onInteraction={onInteraction}
         onPolicyImportClick={import_func}
-        onScanConfigCloneClick={clone}
-        onScanConfigCreateClick={create}
+        onPolicyCloneClick={clone}
+        onPolicyCreateClick={create}
         onCreateAuditClick={createAudit}
-        onScanConfigDeleteClick={delete_func}
-        onScanConfigDownloadClick={download}
-        onScanConfigEditClick={edit}
+        onPolicyDeleteClick={delete_func}
+        onPolicyDownloadClick={download}
+        onPolicyEditClick={edit}
       />
     )}
   </PoliciesComponent>
