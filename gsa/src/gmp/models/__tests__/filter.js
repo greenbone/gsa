@@ -20,7 +20,6 @@ import {isArray} from '../../utils/identity';
 
 import Filter, {UNKNOWN_FILTER_ID} from '../filter';
 import FilterTerm from '../filter/filterterm';
-import {tsExternalModuleReference} from '@babel/types';
 
 describe('Filter parse from string tests', () => {
   test('should parse aprox relation without column', () => {
