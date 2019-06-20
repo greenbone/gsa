@@ -155,7 +155,7 @@ class BarChart extends React.Component {
 
     const yScale = scaleLinear()
       .range(horizontal ? [0, maxWidth] : [maxHeight, 0])
-      .domain([0, yMax])
+      .domain([0, Math.abs(yMax) > 0 ? yMax : 10])
 
       /*
         nice seems to round first and last value.
