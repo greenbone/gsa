@@ -62,7 +62,9 @@ class Override extends Model {
 
     ret.severity = parseSeverity(ret.severity);
 
-    ret.new_severity = parseSeverity(ret.new_severity);
+    ret.newSeverity = parseSeverity(ret.newSeverity);
+
+    delete ret.newSeverity;
 
     ret = {...ret, ...parseTextElement(ret.text)};
 
@@ -79,7 +81,7 @@ class Override extends Model {
     }
 
     ret.active = parseYesNo(elem.active);
-    ret.text_excerpt = parseYesNo(elem.text_excerpt);
+    ret.textExcerpt = parseYesNo(elem.textExcerpt);
 
     ret.hosts = parseCsv(ret.hosts);
 
@@ -91,7 +93,7 @@ class Override extends Model {
   }
 
   isExcerpt() {
-    return this.text_excerpt === YES_VALUE;
+    return this.textExcerpt === YES_VALUE;
   }
 }
 

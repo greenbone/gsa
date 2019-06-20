@@ -45,12 +45,12 @@ describe('Note model tests', () => {
     expect(note2.active).toEqual(YES_VALUE);
   });
 
-  test('should parse text_excerpt as yes/no correctly', () => {
-    const note1 = new Note({text_excerpt: '0'});
-    const note2 = new Note({text_excerpt: '1'});
+  test('should parse textExcerpt as yes/no correctly', () => {
+    const note1 = new Note({textExcerpt: '0'});
+    const note2 = new Note({textExcerpt: '1'});
 
-    expect(note1.text_excerpt).toEqual(NO_VALUE);
-    expect(note2.text_excerpt).toEqual(YES_VALUE);
+    expect(note1.textExcerpt).toEqual(NO_VALUE);
+    expect(note2.textExcerpt).toEqual(YES_VALUE);
   });
 
   test('should parse hosts or return empty array', () => {
@@ -73,8 +73,8 @@ describe('Note model tests', () => {
   });
 
   test('isExcerpt() should return correct true/false', () => {
-    const note1 = new Note({text_excerpt: '1'});
-    const note2 = new Note({text_excerpt: '0'});
+    const note1 = new Note({textExcerpt: '1'});
+    const note2 = new Note({textExcerpt: '0'});
 
     expect(note1.isExcerpt()).toEqual(true);
     expect(note2.isExcerpt()).toEqual(false);

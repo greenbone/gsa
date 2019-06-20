@@ -37,14 +37,14 @@ describe('Note model tests', () => {
     expect(override3.severity).toBeUndefined();
   });
 
-  test('should parse new_severity', () => {
-    const override1 = new Override({new_severity: '8.5'});
-    const override2 = new Override({new_severity: '10'});
+  test('should parse newSeverity', () => {
+    const override1 = new Override({newSeverity: '8.5'});
+    const override2 = new Override({newSeverity: '10'});
     const override3 = new Override({});
 
-    expect(override1.new_severity).toEqual(8.5);
-    expect(override2.new_severity).toEqual(10);
-    expect(override3.new_severity).toBeUndefined();
+    expect(override1.newSeverity).toEqual(8.5);
+    expect(override2.newSeverity).toEqual(10);
+    expect(override3.newSeverity).toBeUndefined();
   });
 
   test('should parse active as yes/no correctly', () => {
@@ -55,12 +55,12 @@ describe('Note model tests', () => {
     expect(override2.active).toEqual(YES_VALUE);
   });
 
-  test('should parse text_excerpt as yes/no correctly', () => {
-    const override1 = new Override({text_excerpt: '0'});
-    const override2 = new Override({text_excerpt: '1'});
+  test('should parse textExcerpt as yes/no correctly', () => {
+    const override1 = new Override({textExcerpt: '0'});
+    const override2 = new Override({textExcerpt: '1'});
 
-    expect(override1.text_excerpt).toEqual(NO_VALUE);
-    expect(override2.text_excerpt).toEqual(YES_VALUE);
+    expect(override1.textExcerpt).toEqual(NO_VALUE);
+    expect(override2.textExcerpt).toEqual(YES_VALUE);
   });
 
   test('should parse hosts or return empty array', () => {
@@ -75,8 +75,8 @@ describe('Note model tests', () => {
   });
 
   test('isExcerpt() should return correct true/false', () => {
-    const override1 = new Override({text_excerpt: '1'});
-    const override2 = new Override({text_excerpt: '0'});
+    const override1 = new Override({textExcerpt: '1'});
+    const override2 = new Override({textExcerpt: '0'});
 
     expect(override1.isExcerpt()).toEqual(true);
     expect(override2.isExcerpt()).toEqual(false);

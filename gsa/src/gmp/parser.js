@@ -51,13 +51,13 @@ export const parseTextElement = (text = {}) => {
   if (isDefined(text.__text)) {
     return {
       text: text.__text,
-      text_excerpt: text.__excerpt,
+      textExcerpt: text.__excerpt,
     };
   }
 
   return {
     text,
-    text_excerpt: '0',
+    textExcerpt: '0',
   };
 };
 

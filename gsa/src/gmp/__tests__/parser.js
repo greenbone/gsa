@@ -156,14 +156,14 @@ describe('parseTextElement tests', () => {
       }),
     ).toEqual({
       text: 'foo',
-      text_excerpt: '1',
+      textExcerpt: '1',
     });
   });
 
   test('should convert plain text elements', () => {
     expect(parseTextElement('foo')).toEqual({
       text: 'foo',
-      text_excerpt: '0',
+      textExcerpt: '0',
     });
   });
 });
