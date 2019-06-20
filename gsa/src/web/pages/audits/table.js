@@ -85,13 +85,13 @@ const actionsColumn = (
 );
 
 export default createEntitiesTable({
-  emptyTitle: _l('No Tasks available'),
+  emptyTitle: _l('No Audits available'),
   row: Row,
   rowDetails: withRowDetails('task', 10)(TaskDetails),
   header: withEntitiesHeader(actionsColumn)(Header),
   footer: createEntitiesFooter({
     span: 10,
     trash: true,
-    download: 'tasks.xml',
+    download: 'audits.xml',
   }),
 });

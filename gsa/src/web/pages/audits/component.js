@@ -22,7 +22,7 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import Filter, {ALL_FILTER, RESULTS_FILTER_FILTER} from 'gmp/models/filter';
+import Filter, {ALL_FILTER} from 'gmp/models/filter';
 
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -75,15 +75,7 @@ import {
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 
-import {
-  loadAllEntities as loadFilters,
-  // selector as filterSelector,
-} from 'web/store/entities/filters';
-
-import {
-  // getReportComposerDefaults,
-  getTimezone,
-} from 'web/store/usersettings/selectors';
+import {getTimezone} from 'web/store/usersettings/selectors';
 
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
@@ -102,7 +94,7 @@ import ScheduleComponent from 'web/pages/schedules/component';
 import AlertComponent from 'web/pages/alerts/component';
 import TargetComponent from 'web/pages/targets/component';
 
-import TaskDialog from 'web/pages/audits/dialog';
+import AuditDialog from 'web/pages/audits/dialog';
 import ContainerTaskDialog from 'web/pages/tasks/containerdialog';
 
 const REPORT_FORMATS_FILTER = Filter.fromString('active=1 trust=1 rows=-1');
@@ -115,7 +107,7 @@ class TaskComponent extends React.Component {
       containerTaskDialogVisible: false,
       reportImportDialogVisible: false,
       showDownloadReportDialog: false,
-      taskDialogVisible: false,
+      auditDialogVisible: false,
       gcrFormatDefined: undefined,
     };
 
@@ -144,9 +136,9 @@ class TaskComponent extends React.Component {
     this.handleReportDownloadClick = this.handleReportDownloadClick.bind(this);
     this.handleReportDownload = this.handleReportDownload.bind(this);
 
-    this.openStandardTaskDialog = this.openStandardTaskDialog.bind(this);
-    this.openTaskDialog = this.openTaskDialog.bind(this);
-    this.handleCloseTaskDialog = this.handleCloseTaskDialog.bind(this);
+    this.openStandardAuditDialog = this.openStandardAuditDialog.bind(this);
+    this.openAuditDialog = this.openAuditDialog.bind(this);
+    this.handleCloseAuditDialog = this.handleCloseAuditDialog.bind(this);
 
     this.handleAlertsChange = this.handleAlertsChange.bind(this);
     this.handleTargetChange = this.handleTargetChange.bind(this);
@@ -164,8 +156,6 @@ class TaskComponent extends React.Component {
 
   componentDidMount() {
     this.props.loadUserSettingsDefaults();
-
-    this.props.loadFilters();
     this.props.loadReportFormats();
   }
 
@@ -179,7 +169,9 @@ class TaskComponent extends React.Component {
       const gcrFormat = reportFormats.find(format => {
         return format.name === 'GCR PDF';
       });
-      const gcrFormatDefined = isDefined(gcrFormat);
+      const gcrFormatDefined = isDefined(gcrFormat)
+        ? gcrFormat.active === 1 && gcrFormat.trust.value === 'yes'
+        : false;
       this.setState({gcrFormatDefined: gcrFormatDefined});
     }
   }
@@ -357,7 +349,7 @@ class TaskComponent extends React.Component {
           source_iface,
         })
         .then(onSaved, onSaveError)
-        .then(() => this.closeTaskDialog());
+        .then(() => this.closeAuditDialog());
     }
 
     const {onCreated, onCreateError} = this.props;
@@ -386,27 +378,27 @@ class TaskComponent extends React.Component {
         target_id,
       })
       .then(onCreated, onCreateError)
-      .then(() => this.closeTaskDialog());
+      .then(() => this.closeAuditDialog());
   }
 
-  openTaskDialog(task) {
+  openAuditDialog(task) {
     if (isDefined(task) && task.isContainer()) {
       this.openContainerTaskDialog(task);
     } else {
-      this.openStandardTaskDialog(task);
+      this.openStandardAuditDialog(task);
     }
   }
 
-  closeTaskDialog() {
-    this.setState({taskDialogVisible: false});
+  closeAuditDialog() {
+    this.setState({auditDialogVisible: false});
   }
 
-  handleCloseTaskDialog() {
-    this.closeTaskDialog();
+  handleCloseAuditDialog() {
+    this.closeAuditDialog();
     this.handleInteraction();
   }
 
-  openStandardTaskDialog(task) {
+  openStandardAuditDialog(task) {
     const {capabilities} = this.props;
 
     this.props.loadAlerts();
@@ -425,7 +417,7 @@ class TaskComponent extends React.Component {
         : undefined;
 
       this.setState({
-        taskDialogVisible: true,
+        auditDialogVisible: true,
         alert_ids: map(task.alerts, alert => alert.id),
         alterable: task.alterable,
         apply_overrides: task.apply_overrides,
@@ -446,7 +438,7 @@ class TaskComponent extends React.Component {
         source_iface: task.source_iface,
         target_id: hasId(task.target) ? task.target.id : undefined,
         task,
-        title: _('Edit Task {{name}}', task),
+        title: _('Edit Audit {{name}}', task),
       });
     } else {
       const {
@@ -460,7 +452,7 @@ class TaskComponent extends React.Component {
       const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
       this.setState({
-        taskDialogVisible: true,
+        auditDialogVisible: true,
         alert_ids,
         alterable: undefined,
         apply_overrides: undefined,
@@ -481,7 +473,7 @@ class TaskComponent extends React.Component {
         source_iface: undefined,
         target_id: defaultTargetId,
         task: undefined,
-        title: _('New Task'),
+        title: _('New Audit'),
       });
     }
     this.handleInteraction();
@@ -583,14 +575,11 @@ class TaskComponent extends React.Component {
       onDownloaded,
       onDownloadError,
       onInteraction,
-      // reportFilter,
-      // reportFormats,
-      // reportComposerDefaults,
     } = this.props;
 
     const {
-      advancedTaskWizardVisible,
-      alert_id,
+      // advancedTaskWizardVisible,
+      // alert_id,
       alert_ids,
       alterable,
       apply_overrides,
@@ -599,8 +588,8 @@ class TaskComponent extends React.Component {
       config_id,
       containerTaskDialogVisible,
       comment,
-      esxi_credential,
-      hosts,
+      // esxi_credential,
+      // hosts,
       hosts_ordering,
       id,
       in_assets,
@@ -608,33 +597,33 @@ class TaskComponent extends React.Component {
       max_checks,
       max_hosts,
       min_qod,
-      modifyTaskWizardVisible,
+      // modifyTaskWizardVisible,
       name,
-      port_list_id,
+      // port_list_id,
       reportImportDialogVisible,
-      reschedule,
+      // reschedule,
       scanner_id,
       schedule_id,
       schedule_periods,
       // showDownloadReportDialog,
       source_iface,
-      ssh_credential,
-      smb_credential,
-      start_date,
-      start_minute,
-      start_hour,
-      start_timezone,
+      // ssh_credential,
+      // smb_credential,
+      // start_date,
+      // start_minute,
+      // start_hour,
+      // start_timezone,
       // storeAsDefault,
       tag_id,
       target_id,
-      target_hosts,
+      // target_hosts,
       task_id,
-      task_name,
+      // task_name,
       task,
       tasks,
-      taskDialogVisible,
-      taskWizardVisible,
-      title = _('Edit Task {{name}}', task),
+      auditDialogVisible,
+      // taskWizardVisible,
+      title = _('Edit Audit {{name}}', task),
     } = this.state;
     return (
       <React.Fragment>
@@ -654,19 +643,18 @@ class TaskComponent extends React.Component {
             <React.Fragment>
               {children({
                 ...other,
-                create: this.openTaskDialog,
+                create: this.openAuditDialog,
                 createcontainer: this.openContainerTaskDialog,
-                edit: this.openTaskDialog,
+                edit: this.openAuditDialog,
                 start: this.handleTaskStart,
                 stop: this.handleTaskStop,
                 resume: this.handleTaskResume,
                 reportimport: this.openReportImportDialog,
-                //reportDownload: this.handleOpenDownloadReportDialog,
                 reportDownload: this.handleReportDownloadClick,
                 gcrFormatDefined: gcrFormatDefined,
               })}
 
-              {taskDialogVisible && (
+              {auditDialogVisible && (
                 <TargetComponent
                   onCreated={this.handleTargetCreated}
                   onInteraction={onInteraction}
@@ -682,7 +670,7 @@ class TaskComponent extends React.Component {
                           onInteraction={onInteraction}
                         >
                           {({create: createschedule}) => (
-                            <TaskDialog
+                            <AuditDialog
                               alerts={alerts}
                               alert_ids={alert_ids}
                               alterable={alterable}
@@ -719,7 +707,7 @@ class TaskComponent extends React.Component {
                               onScannerChange={this.handleScannerChange}
                               onScheduleChange={this.handleScheduleChange}
                               onTargetChange={this.handleTargetChange}
-                              onClose={this.handleCloseTaskDialog}
+                              onClose={this.handleCloseAuditDialog}
                               onSave={this.handleSaveTask}
                             />
                           )}
@@ -779,12 +767,14 @@ TaskComponent.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
   loadCredentials: PropTypes.func.isRequired,
+  loadReportFormats: PropTypes.func.isRequired,
   loadScanConfigs: PropTypes.func.isRequired,
   loadScanners: PropTypes.func.isRequired,
   loadSchedules: PropTypes.func.isRequired,
   loadTags: PropTypes.func.isRequired,
   loadTargets: PropTypes.func.isRequired,
   loadUserSettingsDefaults: PropTypes.func.isRequired,
+  reportFormats: PropTypes.array,
   scanConfigs: PropTypes.arrayOf(PropTypes.model),
   scanners: PropTypes.arrayOf(PropTypes.model),
   schedules: PropTypes.arrayOf(PropTypes.model),
@@ -803,6 +793,7 @@ TaskComponent.propTypes = {
   onCreated: PropTypes.func,
   onDeleteError: PropTypes.func,
   onDeleted: PropTypes.func,
+  onDownload: PropTypes.func.isRequired,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
   onInteraction: PropTypes.func.isRequired,
@@ -863,7 +854,6 @@ const mapStateToProps = (rootState, {match}) => {
 const mapDispatchToProp = (dispatch, {gmp}) => ({
   loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
   loadCredentials: () => dispatch(loadCredentials(gmp)(ALL_FILTER)),
-  loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
   loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
   loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),

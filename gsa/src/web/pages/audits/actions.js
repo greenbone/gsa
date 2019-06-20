@@ -34,9 +34,9 @@ import TrashIcon from 'web/entity/icon/trashicon';
 import DownloadIcon from 'web/components/icon/downloadicon';
 
 import ImportReportIcon from 'web/pages/tasks/icons/importreporticon';
-import ResumeIcon from 'web/pages/tasks/icons/resumeicon';
+import ResumeIcon from 'web/pages/audits/icons/resumeicon';
 import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
-import StartIcon from 'web/pages/tasks/icons/starticon';
+import StartIcon from 'web/pages/audits/icons/starticon';
 import StopIcon from 'web/pages/tasks/icons/stopicon';
 
 import PropTypes from 'web/utils/proptypes';
@@ -68,12 +68,27 @@ const Actions = ({
 
     <ResumeIcon task={entity} onClick={onTaskResumeClick} />
 
-    <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
-    <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
-    <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
+    <TrashIcon
+      entity={entity}
+      title={_('Move Audit to trashcan')}
+      name="task"
+      onClick={onTaskDeleteClick}
+    />
+    <EditIcon
+      entity={entity}
+      title={_('Edit Audit')}
+      name="task"
+      onClick={onTaskEditClick}
+    />
+    <CloneIcon
+      entity={entity}
+      title={_('Clone Audit')}
+      name="task"
+      onClick={onTaskCloneClick}
+    />
     <ExportIcon
       value={entity}
-      title={_('Export Task')}
+      title={_('Export Audit')}
       onClick={onTaskDownloadClick}
     />
     <DownloadIcon

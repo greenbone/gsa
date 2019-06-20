@@ -209,7 +209,7 @@ const TaskDialog = ({
   target_id,
   targets,
   task,
-  title = _('New Task'),
+  title = _('New Audit'),
   onAlertsChange,
   onClose,
   onNewAlertClick,
