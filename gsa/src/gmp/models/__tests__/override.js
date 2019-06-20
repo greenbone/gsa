@@ -38,8 +38,8 @@ describe('Note model tests', () => {
   });
 
   test('should parse newSeverity', () => {
-    const override1 = new Override({newSeverity: '8.5'});
-    const override2 = new Override({newSeverity: '10'});
+    const override1 = new Override({new_severity: '8.5'});
+    const override2 = new Override({new_severity: '10'});
     const override3 = new Override({});
 
     expect(override1.newSeverity).toEqual(8.5);

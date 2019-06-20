@@ -62,9 +62,9 @@ class Override extends Model {
 
     ret.severity = parseSeverity(ret.severity);
 
-    ret.newSeverity = parseSeverity(ret.newSeverity);
+    ret.newSeverity = parseSeverity(ret.new_severity);
 
-    delete ret.newSeverity;
+    delete ret.new_severity;
 
     ret = {...ret, ...parseTextElement(ret.text)};
 
