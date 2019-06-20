@@ -373,7 +373,7 @@ const NoteDialog = ({
                     name="result_uuid"
                     size="34"
                     disabled={state.result_id !== '0'}
-                    value={state.result_uuid}
+                    value={state.result_id}
                     onChange={onValueChange}
                   />
                 )}
