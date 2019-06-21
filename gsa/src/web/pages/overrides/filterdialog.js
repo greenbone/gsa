@@ -42,7 +42,7 @@ const SORT_FIELDS = [
     displayName: _l('From'),
   },
   {
-    name: 'new_severity',
+    name: 'newSeverity',
     displayName: _l('To'),
   },
   {

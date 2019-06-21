@@ -86,13 +86,13 @@ class OverrideComponent extends React.Component {
 
       let custom_severity = NO_VALUE;
       let new_severity_from_list;
-      let new_severity;
+      let newSeverity;
 
-      if (SEVERITIES_LIST.includes(override.new_severity)) {
-        new_severity_from_list = override.new_severity;
+      if (SEVERITIES_LIST.includes(override.newSeverity)) {
+        new_severity_from_list = override.newSeverity;
       } else {
         custom_severity = YES_VALUE;
-        new_severity = override.new_severity;
+        newSeverity = override.newSeverity;
       }
 
       const {result, task, nvt, hosts} = override;
@@ -104,7 +104,7 @@ class OverrideComponent extends React.Component {
         custom_severity,
         hosts: hosts.length > 0 ? MANUAL : ANY,
         hosts_manual: hosts.join(' '),
-        new_severity,
+        newSeverity,
         new_severity_from_list,
         nvt_name: isDefined(nvt) ? nvt.name : undefined,
         oid: isDefined(nvt) ? nvt.oid : undefined,
@@ -130,7 +130,7 @@ class OverrideComponent extends React.Component {
         hosts: undefined,
         hosts_manual: undefined,
         id: undefined,
-        new_severity: undefined,
+        newSeverity: undefined,
         nvt_name: undefined,
         oid: undefined,
         override: undefined,
@@ -201,7 +201,7 @@ class OverrideComponent extends React.Component {
       hosts,
       hosts_manual,
       id,
-      new_severity,
+      newSeverity,
       new_severity_from_list,
       nvt_name,
       oid,
@@ -249,7 +249,7 @@ class OverrideComponent extends React.Component {
                 hosts={hosts}
                 hosts_manual={hosts_manual}
                 id={id}
-                new_severity={new_severity}
+                newSeverity={newSeverity}
                 new_severity_from_list={new_severity_from_list}
                 nvt_name={nvt_name}
                 oid={oid}

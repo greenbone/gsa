@@ -82,7 +82,7 @@ const OverrideDialog = ({
   hosts = ANY,
   hosts_manual = '',
   id,
-  new_severity,
+  newSeverity,
   new_severity_from_list = FALSE_POSITIVE_VALUE,
   nvt_name,
   oid,
@@ -110,7 +110,7 @@ const OverrideDialog = ({
     days,
     hosts,
     hosts_manual,
-    new_severity,
+    newSeverity,
     new_severity_from_list,
     oid: isDefined(oid) ? oid : DEFAULT_OID_VALUE,
     override,
@@ -392,10 +392,10 @@ const OverrideDialog = ({
                   onChange={onValueChange}
                 />
                 <TextField
-                  name="new_severity"
+                  name="newSeverity"
                   disabled={state.custom_severity === NO_VALUE}
                   convert={parseFloat}
-                  value={state.new_severity}
+                  value={state.newSeverity}
                   onChange={onValueChange}
                 />
               </Divider>
@@ -494,7 +494,7 @@ OverrideDialog.propTypes = {
   hosts: PropTypes.string,
   hosts_manual: PropTypes.string,
   id: PropTypes.string,
-  new_severity: PropTypes.number,
+  newSeverity: PropTypes.number,
   new_severity_from_list: PropTypes.number,
   nvt_name: PropTypes.string,
   oid: PropTypes.string,

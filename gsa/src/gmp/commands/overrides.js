@@ -70,7 +70,7 @@ class OverrideCommand extends EntityCommand {
       task_uuid = '',
       text,
       custom_severity = NO_VALUE,
-      new_severity = '',
+      newSeverity = '',
       new_severity_from_list = SEVERITY_FALSE_POSITIVE,
     } = args;
 
@@ -81,7 +81,7 @@ class OverrideCommand extends EntityCommand {
       id,
       active,
       custom_severity,
-      new_severity,
+      newSeverity,
       new_severity_from_list,
       days,
       hosts: hosts === MANUAL ? '--' : '',

@@ -61,7 +61,7 @@ class Note extends Model {
     }
 
     ret.active = parseYesNo(elem.active);
-    ret.text_excerpt = parseYesNo(elem.text_excerpt);
+    ret.textExcerpt = parseYesNo(elem.textExcerpt);
 
     ret.hosts = parseCsv(elem.hosts);
 
@@ -73,7 +73,7 @@ class Note extends Model {
   }
 
   isExcerpt() {
-    return this.text_excerpt === YES_VALUE;
+    return this.textExcerpt === YES_VALUE;
   }
 }
 

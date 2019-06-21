@@ -38,7 +38,7 @@ import DetailsLink from 'web/components/link/detailslink';
 
 const OverrideBox = ({override, detailsLink = true}) => {
   let severity;
-  let new_severity = '';
+  let newSeverity = '';
   if (!isDefined(override.severity)) {
     severity = _('Any');
   } else if (override.severity > LOG_VALUE) {
@@ -47,10 +47,10 @@ const OverrideBox = ({override, detailsLink = true}) => {
     severity = translatedResultSeverityRiskFactor(override.severity);
   }
 
-  if (override.new_severity > LOG_VALUE) {
-    new_severity = override.new_severity + ': ';
+  if (override.newSeverity > LOG_VALUE) {
+    newSeverity = override.newSeverity + ': ';
   }
-  new_severity += translatedResultSeverityRiskFactor(override.new_severity);
+  newSeverity += translatedResultSeverityRiskFactor(override.newSeverity);
 
   const toolbox = detailsLink ? (
     <IconDivider>
@@ -67,9 +67,9 @@ const OverrideBox = ({override, detailsLink = true}) => {
   );
   return (
     <EntityBox
-      title={_('Override from {{- severity}} to {{- new_severity}}', {
+      title={_('Override from {{- severity}} to {{- newSeverity}}', {
         severity,
-        new_severity,
+        newSeverity,
       })}
       text={override.text}
       end={override.endTime}
