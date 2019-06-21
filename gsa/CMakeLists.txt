@@ -278,6 +278,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/allinfoicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/alterableicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/arrowicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/auditicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/calendaricon.js
      ${GSA_SRC_DIR}/src/web/components/icon/certbundadvicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cloneicon.js
@@ -334,6 +335,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/overrideicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/performanceicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/permissionicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/policyicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/portlisticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/previousicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/provideviewicon.js
@@ -392,6 +394,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/alert.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/allinfo.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/alterable.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/audit.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/calendar.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/cert_bund_adv.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/clone.svg
@@ -448,6 +451,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/override.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/performance.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/permission.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/policy.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/port_list.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/previous.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/provide_view.svg
