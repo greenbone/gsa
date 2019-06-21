@@ -77,11 +77,11 @@ import {UNSET_VALUE} from 'web/utils/render';
 
 import EntityComponent from 'web/entity/component';
 
-import EditConfigFamilyDialog from 'web/pages/scanconfigs/editconfigfamilydialog';
+import EditConfigFamilyDialog from 'web/pages/policies/editpolicyfamilydialog';
 import EditScanConfigDialog from 'web/pages/scanconfigs/editdialog';
-import EditNvtDetailsDialog from 'web/pages/scanconfigs/editnvtdetailsdialog';
+import EditNvtDetailsDialog from 'web/pages/policies/editnvtdetailsdialog';
 import AuditDialog from './createauditdialog';
-import ImportDialog from 'web/pages/scanconfigs/importdialog';
+import ImportDialog from 'web/pages/policies/importdialog';
 import PolicyDialog from 'web/pages/policies/dialog';
 
 import TargetComponent from 'web/pages/targets/component';
@@ -113,7 +113,7 @@ class PolicyComponent extends React.Component {
       importDialogVisible: false,
     };
 
-    this.handleImportConfig = this.handleImportConfig.bind(this);
+    this.handleImportPolicy = this.handleImportPolicy.bind(this);
     this.handleSaveConfigFamily = this.handleSaveConfigFamily.bind(this);
     this.handleSaveConfigNvt = this.handleSaveConfigNvt.bind(this);
     this.openCreatePolicyDialog = this.openCreatePolicyDialog.bind(this);
@@ -167,7 +167,7 @@ class PolicyComponent extends React.Component {
         ...scanConfigState,
         base: config.base,
         editConfigDialogVisible: true,
-        title: _('Edit Scan Config {{name}}', {name: shorten(config.name)}),
+        title: _('Edit Policy {{name}}', {name: shorten(config.name)}),
       });
     });
 
@@ -352,7 +352,7 @@ class PolicyComponent extends React.Component {
         ...state,
         config,
         editConfigFamilyDialogVisible: true,
-        editConfigFamilyDialogTitle: _('Edit Scan Config Family {{name}}', {
+        editConfigFamilyDialogTitle: _('Edit Policy Family {{name}}', {
           name: shorten(name),
         }),
       });
@@ -375,7 +375,7 @@ class PolicyComponent extends React.Component {
         ...state,
         config,
         editNvtDetailsDialogVisible: true,
-        editNvtDetailsDialogTitle: _('Edit Scan Config NVT {{name}}', {
+        editNvtDetailsDialogTitle: _('Edit Policy NVT {{name}}', {
           name: shorten(nvt.name),
         }),
       });
@@ -392,7 +392,7 @@ class PolicyComponent extends React.Component {
     this.handleInteraction();
   }
 
-  handleImportConfig(data) {
+  handleImportPolicy(data) {
     const {gmp, onImported, onImportError} = this.props;
 
     this.handleInteraction();
@@ -718,7 +718,7 @@ class PolicyComponent extends React.Component {
         {importDialogVisible && (
           <ImportDialog
             onClose={this.handleCloseImportDialog}
-            onSave={this.handleImportConfig}
+            onSave={this.handleImportPolicy}
           />
         )}
         {editConfigFamilyDialogVisible && (
