@@ -28,7 +28,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import ScanConfigIcon from 'web/components/icon/scanconfigicon';
+import PolicyIcon from 'web/components/icon/policyicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import UploadIcon from 'web/components/icon/uploadicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -104,7 +104,7 @@ const PoliciesPage = ({
         {...props}
         filterEditDialog={ScanConfigFilterDialog}
         filtersFilter={SCANCONFIGS_FILTER_FILTER}
-        sectionIcon={<ScanConfigIcon size="large" />}
+        sectionIcon={<PolicyIcon size="large" />}
         table={Table}
         title={_('Policies')}
         toolBarIcons={ToolBarIcons}

@@ -45,7 +45,7 @@ import NoteIcon from 'web/components/icon/noteicon';
 import OverrideIcon from 'web/components/icon/overrideicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
-import TaskIcon from 'web/components/icon/taskicon';
+import AuditIcon from 'web/components/icon/taskicon';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -352,7 +352,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<TaskIcon size="large" />}
+        sectionIcon={<AuditIcon size="large" />}
         title={_('Audit')}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}

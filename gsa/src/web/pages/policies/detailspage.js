@@ -32,7 +32,7 @@ import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 // import UploadIcon from 'web/components/icon/uploadicon';
 import ListIcon from 'web/components/icon/listicon';
-import ScanConfigIcon from 'web/components/icon/scanconfigicon';
+import PolicyIcon from 'web/components/icon/scanconfigicon';
 
 import Link from 'web/components/link/link';
 
@@ -324,7 +324,7 @@ const Page = ({
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon={<ScanConfigIcon size="large" />}
+          sectionIcon={<PolicyIcon size="large" />}
           toolBarIcons={ToolBarIcons}
           title={_('Policy')}
           onInteraction={onInteraction}

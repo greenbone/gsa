@@ -47,7 +47,7 @@ import AuditComponent from './component';
 // import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import Table from './table';
-import TaskIcon from 'web/components/icon/taskicon';
+import AuditIcon from 'web/components/icon/auditicon';
 
 const ToolBarIcons = withCapabilities(({capabilities}) => (
   <IconDivider>
@@ -136,7 +136,7 @@ const Page = ({
         filterEditDialog={TaskFilterDialog}
         filtersFilter={TASKS_FILTER_FILTER}
         gcrFormatDefined={gcrFormatDefined}
-        sectionIcon={<TaskIcon size="large" />}
+        sectionIcon={<AuditIcon size="large" />}
         table={Table}
         title={_('Audits')}
         toolBarIcons={ToolBarIcons}
