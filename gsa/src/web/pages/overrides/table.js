@@ -89,7 +89,7 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           width="8%"
-          sortBy={sort ? 'new_severity' : false}
+          sortBy={sort ? 'newSeverity' : false}
           onSortChange={onSortChange}
           title={_('To')}
         />
