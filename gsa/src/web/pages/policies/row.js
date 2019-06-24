@@ -72,18 +72,18 @@ const PoliciesActions = compose(
         value={entity}
         onClick={onPolicyCloneClick}
       />
+      {capabilities.mayCreate('task') && (
+        <NewIcon
+          value={entity}
+          title={_('Create Audit from Policy')}
+          onClick={onCreateAuditClick}
+        />
+      )}
       <ExportIcon
         value={entity}
         title={_('Export Policy')}
         onClick={onPolicyDownloadClick}
       />
-      {capabilities.mayCreate('task') && (
-        <NewIcon
-          value={entity}
-          title={_('Create Audit')}
-          onClick={onCreateAuditClick}
-        />
-      )}
     </IconDivider>
   ),
 );
