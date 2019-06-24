@@ -139,7 +139,7 @@ ToolBarIcons.propTypes = {
 ToolBarIcons = withCapabilities(ToolBarIcons);
 
 const Details = ({entity}) => {
-  const {average_severity, highest_severity, latest_severity, name} = entity;
+  const {averageSeverity, highestSeverity, latestSeverity, name} = entity;
   return (
     <Layout flex="column">
       <InfoTable>
@@ -161,21 +161,21 @@ const Details = ({entity}) => {
           <TableRow>
             <TableData>{_('Latest Severity')}</TableData>
             <TableData>
-              <SeverityBar severity={latest_severity} />
+              <SeverityBar severity={latestSeverity} />
             </TableData>
           </TableRow>
 
           <TableRow>
             <TableData>{_('Highest Severity')}</TableData>
             <TableData>
-              <SeverityBar severity={highest_severity} />
+              <SeverityBar severity={highestSeverity} />
             </TableData>
           </TableRow>
 
           <TableRow>
             <TableData>{_('Average Severity')}</TableData>
             <TableData>
-              <SeverityBar severity={average_severity} />
+              <SeverityBar severity={averageSeverity} />
             </TableData>
           </TableRow>
         </TableBody>
