@@ -110,6 +110,7 @@ const Row = ({
   ));
 
   const authMethod = convert_auth_method(entity.authMethod);
+  delete entity.authMethod;
   const host_allow = convert_allow(entity.hosts);
   return (
     <TableRow>
