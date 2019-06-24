@@ -77,13 +77,13 @@ class User extends Model {
     if (isDefined(elem.sources)) {
       const {source} = elem.sources;
       if (source === 'ldap_connect') {
-        ret.auth_method = AUTH_METHOD_LDAP;
+        ret.authMethod = AUTH_METHOD_LDAP;
       } else if (source === 'radius_connect') {
-        ret.auth_method = AUTH_METHOD_RADIUS;
+        ret.authMethod = AUTH_METHOD_RADIUS;
       }
       delete ret.sources;
     } else {
-      ret.auth_method = AUTH_METHOD_PASSWORD;
+      ret.authMethod = AUTH_METHOD_PASSWORD;
     }
 
     return ret;

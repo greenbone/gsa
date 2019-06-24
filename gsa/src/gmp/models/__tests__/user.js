@@ -118,10 +118,10 @@ describe('User model tests', () => {
     const user2 = new User(elem2);
     const user3 = new User({});
 
-    expect(user1.auth_method).toEqual(AUTH_METHOD_LDAP);
-    expect(user2.auth_method).toEqual(AUTH_METHOD_RADIUS);
+    expect(user1.authMethod).toEqual(AUTH_METHOD_LDAP);
+    expect(user2.authMethod).toEqual(AUTH_METHOD_RADIUS);
     expect(user1.sources).toBeUndefined();
-    expect(user3.auth_method).toEqual(AUTH_METHOD_PASSWORD);
+    expect(user3.authMethod).toEqual(AUTH_METHOD_PASSWORD);
   });
 });
 
