@@ -48,12 +48,12 @@ describe('OperatingSystem model tests', () => {
     const os1 = new OperatingSystem(elem);
     const os2 = new OperatingSystem({});
 
-    expect(os1.average_severity).toEqual(7);
-    expect(os1.latest_severity).toEqual(8);
-    expect(os1.highest_severity).toEqual(8.5);
-    expect(os2.average_severity).toBeUndefined();
-    expect(os2.latest_severity).toBeUndefined();
-    expect(os2.highest_severity).toBeUndefined();
+    expect(os1.averageSeverity).toEqual(7);
+    expect(os1.latestSeverity).toEqual(8);
+    expect(os1.highestSeverity).toEqual(8.5);
+    expect(os2.averageSeverity).toBeUndefined();
+    expect(os2.latestSeverity).toBeUndefined();
+    expect(os2.highestSeverity).toBeUndefined();
   });
 
   test('should have title equal to os.title', () => {

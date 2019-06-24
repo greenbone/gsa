@@ -85,13 +85,13 @@ const Row = ({
     </TableData>
     <TableData>{entity.title}</TableData>
     <TableData>
-      <SeverityBar severity={entity.latest_severity} />
+      <SeverityBar severity={entity.latestSeverity} />
     </TableData>
     <TableData>
-      <SeverityBar severity={entity.highest_severity} />
+      <SeverityBar severity={entity.highestSeverity} />
     </TableData>
     <TableData>
-      <SeverityBar severity={entity.average_severity} />
+      <SeverityBar severity={entity.averageSeverity} />
     </TableData>
     <TableData>
       <span>
