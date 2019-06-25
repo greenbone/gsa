@@ -85,23 +85,21 @@ class Scanner extends Model {
         ? new Credential(ret.credential)
         : undefined;
 
-    if (isEmpty(ret.ca_pub)) {
+    if (isEmpty(elem.ca_pub)) {
       delete ret.ca_pub;
     } else {
-      ret.ca_pub = {
-        certificate: ret.ca_pub,
+      ret.caPub = {
+        certificate: elem.ca_pub,
       };
 
-      if (isDefined(ret.ca_pub_info)) {
-        ret.ca_pub.info = ret.ca_pub_info;
-        ret.ca_pub.info.activationTime = parseDate(
-          ret.ca_pub.info.activation_time,
+      if (isDefined(elem.ca_pub_info)) {
+        ret.caPub.info = elem.ca_pub_info;
+        ret.caPub.info.activationTime = parseDate(
+          elem.ca_pub_info.activation_time,
         );
-        ret.ca_pub.info.expirationTime = parseDate(
-          ret.ca_pub.info.expiration_time,
+        ret.caPub.info.expirationTime = parseDate(
+          elem.ca_pub_info.expiration_time,
         );
-        delete ret.ca_pub.info.activation_time;
-        delete ret.ca_pub.info.expiration_time;
         delete ret.ca_pub_info;
       }
     }

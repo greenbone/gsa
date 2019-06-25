@@ -93,7 +93,7 @@ const Actions = withEntitiesActions(
           onClick={onScannerCredentialDownloadClick}
         />
       )}
-      {isDefined(entity.ca_pub) && (
+      {isDefined(entity.caPub) && (
         <DownloadKeyIcon
           title={_('Download CA Certificate')}
           value={entity}

@@ -70,8 +70,8 @@ describe('Scanner model tests', () => {
     const scanner = new Scanner({});
     const scanner2 = new Scanner(elem);
 
-    expect(scanner.ca_pub).toBeUndefined();
-    expect(scanner2.ca_pub).toEqual({certificate: {}});
+    expect(scanner.caPub).toBeUndefined();
+    expect(scanner2.caPub).toEqual({certificate: {}});
   });
 
   test('should parse ca_pub_info', () => {
@@ -84,11 +84,9 @@ describe('Scanner model tests', () => {
     };
     const scanner = new Scanner(elem);
 
-    expect(isDate(scanner.ca_pub.info.activationTime)).toEqual(true);
-    expect(isDate(scanner.ca_pub.info.expirationTime)).toEqual(true);
+    expect(isDate(scanner.caPub.info.activationTime)).toEqual(true);
+    expect(isDate(scanner.caPub.info.expirationTime)).toEqual(true);
     expect(scanner.ca_pub_info).toBeUndefined();
-    expect(scanner.ca_pub.info.activation_time).toBeUndefined();
-    expect(scanner.ca_pub.info.expiration_time).toBeUndefined();
   });
 
   test('should parse tasks', () => {
