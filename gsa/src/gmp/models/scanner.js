@@ -135,7 +135,7 @@ class Scanner extends Model {
         ret.info.params = map(ret.info.params.param, param => ({
           name: param.name,
           description: param.description,
-          param_type: param.type,
+          paramType: param.type,
           mandatory: parseYesNo(param.mandatory),
           default: param.default,
         }));

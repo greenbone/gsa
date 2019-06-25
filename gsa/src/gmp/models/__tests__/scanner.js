@@ -161,7 +161,7 @@ describe('Scanner model tests', () => {
     const paramsRes = {
       name: 'ipsum',
       description: 'dolor',
-      param_type: 'sit',
+      paramType: 'sit',
       mandatory: YES_VALUE,
       default: 'amet',
     };
@@ -175,6 +175,7 @@ describe('Scanner model tests', () => {
     expect(scanner.info.protocol.name).toEqual('bar');
     expect(scanner.info.protocol.version).toBeUndefined();
     expect(scanner.info.params[0]).toEqual(paramsRes);
+    expect(scanner.info.params[0].paramType).toEqual('sit');
     expect(scanner2.info.description).toBeUndefined();
     expect(scanner2.info.params).toBeUndefined();
   });
