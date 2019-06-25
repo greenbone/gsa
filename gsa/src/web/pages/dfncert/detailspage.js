@@ -78,7 +78,7 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
-  const {cves, summary, additional_links} = entity;
+  const {cves, summary, additionalLinks} = entity;
   return (
     <Layout flex="column">
       <DfnCertAdvDetails entity={entity} />
@@ -87,10 +87,10 @@ const Details = ({entity, links = true}) => {
         {isDefined(summary) ? <p>{summary}</p> : _('None')}
       </DetailsBlock>
 
-      {additional_links.length > 0 && (
+      {additionalLinks.length > 0 && (
         <DetailsBlock title={_('Other Links')}>
           <ul>
-            {additional_links.map(link => (
+            {additionalLinks.map(link => (
               <li key={link}>
                 <ExternalLink to={link}>{link}</ExternalLink>
               </li>

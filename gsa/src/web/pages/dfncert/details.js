@@ -38,7 +38,7 @@ import TableRow from 'web/components/table/row';
 import {Col} from 'web/entity/page';
 
 const DfnCertAdvDetails = ({entity, links = true}) => {
-  const {title, severity, advisory_link} = entity;
+  const {title, severity, advisoryLink} = entity;
   return (
     <Layout flex="column" grow>
       <InfoTable>
@@ -61,14 +61,12 @@ const DfnCertAdvDetails = ({entity, links = true}) => {
             </TableData>
           </TableRow>
 
-          {isDefined(advisory_link) && (
+          {isDefined(advisoryLink) && (
             <TableRow>
               <TableData>{_('Advisory Link')}</TableData>
               <TableData>
                 <span>
-                  <ExternalLink to={advisory_link}>
-                    {advisory_link}
-                  </ExternalLink>
+                  <ExternalLink to={advisoryLink}>{advisoryLink}</ExternalLink>
                 </span>
               </TableData>
             </TableRow>
