@@ -92,7 +92,7 @@ const Criteria = ({criteria}) => {
   const {
     criterions,
     criterias: subcriterias,
-    extend_definitions,
+    extendDefinitions,
     operator,
     comment,
     negate,
@@ -114,7 +114,7 @@ const Criteria = ({criteria}) => {
             </Divider>
           </li>
         ))}
-        {extend_definitions.map((extend_definition, i) => (
+        {extendDefinitions.map((extend_definition, i) => (
           <li key={i}>
             <Divider>
               {extend_definition.negate && <b>NOT</b>}

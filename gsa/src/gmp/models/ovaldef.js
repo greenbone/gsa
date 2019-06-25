@@ -46,7 +46,7 @@ class Criteria {
       testRef: criterion._test_ref,
     }));
 
-    this.extend_definitions = map(extend_definitions, extend_definition => ({
+    this.extendDefinitions = map(extend_definitions, extend_definition => ({
       applicabilityCheck: extend_definition._applicability_check,
       comment: isEmpty(extend_definition._comment)
         ? undefined
