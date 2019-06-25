@@ -54,7 +54,7 @@ class Criteria {
       negate: isDefined(extend_definition._negate)
         ? extend_definition._negate.toLowerCase() === 'true'
         : false,
-      definition_ref: extend_definition._definition_ref,
+      definitionRef: extend_definition._definition_ref,
     }));
 
     this.criterias = map(criterias, criteria => new Criteria(criteria));

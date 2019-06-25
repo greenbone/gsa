@@ -119,7 +119,7 @@ const Criteria = ({criteria}) => {
             <Divider>
               {extend_definition.negate && <b>NOT</b>}
               <span>{extend_definition.comment}</span>
-              <i>({extend_definition.definition_ref})</i>
+              <i>({extend_definition.definitionRef})</i>
             </Divider>
           </li>
         ))}

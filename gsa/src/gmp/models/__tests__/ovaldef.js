@@ -213,7 +213,7 @@ describe('Ovaldef model tests', () => {
     ).toEqual('foo');
     expect(ovaldef.criterias[0].extendDefinitions[0].comment).toEqual('bar');
     expect(ovaldef.criterias[0].extendDefinitions[0].negate).toEqual(false);
-    expect(ovaldef.criterias[0].extendDefinitions[0].definition_ref).toEqual(
+    expect(ovaldef.criterias[0].extendDefinitions[0].definitionRef).toEqual(
       'ref',
     );
   });
