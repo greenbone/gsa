@@ -289,7 +289,7 @@ class ScannerDialog extends React.Component {
                       </Divider>
                     </Layout>
                     {is_edit && isDefined(state.ca_pub) && (
-                      <CertStatus info={state.ca_pub.info} />
+                      <CertStatus info={state.ca_pub_info} />
                     )}
                   </FormGroup>
                 </React.Fragment>
