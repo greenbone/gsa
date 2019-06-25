@@ -132,7 +132,7 @@ class Nvt extends Info {
 
     delete ret.refs;
 
-    ret.severity = parseSeverity(ret.cvss_base);
+    ret.severity = parseSeverity(elem.cvss_base);
     delete ret.cvss_base;
 
     if (isDefined(ret.preferences)) {
@@ -160,7 +160,8 @@ class Nvt extends Info {
     if (isEmpty(elem.default_timeout)) {
       delete ret.default_timeout;
     } else {
-      ret.default_timeout = parseFloat(elem.default_timeout);
+      ret.defaultTimeout = parseFloat(elem.default_timeout);
+      delete ret.default_timeout;
     }
 
     if (isEmpty(elem.timeout)) {
