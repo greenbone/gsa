@@ -41,11 +41,11 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-export const convert_auth_method = auth_method => {
-  if (auth_method === AUTH_METHOD_LDAP) {
+export const convert_auth_method = authMethod => {
+  if (authMethod === AUTH_METHOD_LDAP) {
     return _('LDAP');
   }
-  if (auth_method === AUTH_METHOD_RADIUS) {
+  if (authMethod === AUTH_METHOD_RADIUS) {
     return _('RADIUS');
   }
   return _('Local');
@@ -73,7 +73,7 @@ export const convert_allow = ({addresses, allow}) => {
 
 const UserDetails = ({entity, links = true}) => {
   const {
-    auth_method,
+    authMethod,
     comment,
     groups = [],
     hosts = {},
@@ -141,7 +141,7 @@ const UserDetails = ({entity, links = true}) => {
 
           <TableRow>
             <TableData>{_('Authentication Type')}</TableData>
-            <TableData>{convert_auth_method(auth_method)}</TableData>
+            <TableData>{convert_auth_method(authMethod)}</TableData>
           </TableRow>
         </TableBody>
       </InfoTable>
