@@ -29,7 +29,7 @@ class CertBundAdv extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'cert_bund_adv');
 
-    ret.severity = parseSeverity(ret.max_cvss);
+    ret.severity = parseSeverity(elem.max_cvss);
     delete ret.max_cvss;
 
     ret.categories = [];
@@ -37,7 +37,7 @@ class CertBundAdv extends Info {
     ret.cves = [];
     ret.additional_information = [];
 
-    if (isDefined(ret.raw_data) && isDefined(ret.raw_data.Advisory)) {
+    if (isDefined(elem.raw_data) && isDefined(elem.raw_data.Advisory)) {
       const {raw_data} = ret;
       const {Advisory: advisory} = raw_data;
 
