@@ -17053,12 +17053,11 @@ delete_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
  */
 char *
 get_tls_certificates_gmp (gvm_connection_t *connection,
-                          credentials_t *credentials,
-                          params_t *params,
+                          credentials_t *credentials, params_t *params,
                           cmd_response_data_t *response_data)
 {
-  return get_many (connection, "tls_certificates", credentials, params,
-                   NULL, response_data);
+  return get_many (connection, "tls_certificates", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -17073,12 +17072,11 @@ get_tls_certificates_gmp (gvm_connection_t *connection,
  */
 char *
 get_tls_certificate_gmp (gvm_connection_t *connection,
-                         credentials_t *credentials,
-                         params_t *params,
+                         credentials_t *credentials, params_t *params,
                          cmd_response_data_t *response_data)
 {
-  return get_one (connection, "tls_certificate", credentials, params,
-                  NULL, NULL, response_data);
+  return get_one (connection, "tls_certificate", credentials, params, NULL,
+                  NULL, response_data);
 }
 
 /**
@@ -17093,8 +17091,7 @@ get_tls_certificate_gmp (gvm_connection_t *connection,
  */
 char *
 create_tls_certificate_gmp (gvm_connection_t *connection,
-                            credentials_t *credentials,
-                            params_t *params,
+                            credentials_t *credentials, params_t *params,
                             cmd_response_data_t *response_data)
 {
   gchar *response = NULL;
@@ -17110,10 +17107,10 @@ create_tls_certificate_gmp (gvm_connection_t *connection,
   certificate_bin = params_value (params, "certificate_bin");
   certificate_size = params_value_size (params, "certificate_bin");
 
-  certificate_b64 = (certificate_size > 0)
-                      ? g_base64_encode ((guchar *) certificate_bin,
-                                         certificate_size)
-                      : g_strdup ("");
+  certificate_b64 =
+    (certificate_size > 0)
+      ? g_base64_encode ((guchar *) certificate_bin, certificate_size)
+      : g_strdup ("");
 
   CHECK_VARIABLE_INVALID (name, "Create TLS Certificate");
   CHECK_VARIABLE_INVALID (comment, "Create TLS Certificate");
@@ -17126,10 +17123,7 @@ create_tls_certificate_gmp (gvm_connection_t *connection,
                 "<trust>%s</trust>"
                 "<certificate>%s</certificate>"
                 "</create_tls_certificate>",
-                name,
-                comment,
-                trust,
-                certificate_b64))
+                name, comment, trust, certificate_b64))
     {
     case 0:
     case -1:
@@ -17183,8 +17177,7 @@ create_tls_certificate_gmp (gvm_connection_t *connection,
  */
 char *
 save_tls_certificate_gmp (gvm_connection_t *connection,
-                          credentials_t *credentials,
-                          params_t *params,
+                          credentials_t *credentials, params_t *params,
                           cmd_response_data_t *response_data)
 {
   gchar *response = NULL;
@@ -17201,10 +17194,10 @@ save_tls_certificate_gmp (gvm_connection_t *connection,
   certificate_bin = params_value (params, "certificate_bin");
   certificate_size = params_value_size (params, "certificate_bin");
 
-  certificate_b64 = (certificate_size > 0)
-                      ? g_base64_encode ((guchar *) certificate_bin,
-                                         certificate_size)
-                      : g_strdup ("");
+  certificate_b64 =
+    (certificate_size > 0)
+      ? g_base64_encode ((guchar *) certificate_bin, certificate_size)
+      : g_strdup ("");
 
   CHECK_VARIABLE_INVALID (tls_certificate_id, "Save TLS Certificate");
   CHECK_VARIABLE_INVALID (name, "Save TLS Certificate");
@@ -17218,11 +17211,7 @@ save_tls_certificate_gmp (gvm_connection_t *connection,
                 "<trust>%s</trust>"
                 "<certificate>%s</certificate>"
                 "</modify_tls_certificate>",
-                tls_certificate_id,
-                name,
-                comment,
-                trust,
-                certificate_b64))
+                tls_certificate_id, name, comment, trust, certificate_b64))
     {
     case 0:
     case -1:
@@ -17276,8 +17265,7 @@ save_tls_certificate_gmp (gvm_connection_t *connection,
  */
 char *
 delete_tls_certificate_gmp (gvm_connection_t *connection,
-                            credentials_t *credentials,
-                            params_t *params,
+                            credentials_t *credentials, params_t *params,
                             cmd_response_data_t *response_data)
 {
   return move_resource_to_trash (connection, "tls_certificate", credentials,
