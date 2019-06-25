@@ -48,7 +48,7 @@ const CertBundAdvDetails = ({entity}) => {
     remoteAttack,
     risk,
     referenceSource,
-    reference_url,
+    referenceUrl,
   } = entity;
   return (
     <Layout flex="column" grow>
@@ -114,14 +114,12 @@ const CertBundAdvDetails = ({entity}) => {
               <TableData>{referenceSource}</TableData>
             </TableRow>
           )}
-          {isDefined(reference_url) && (
+          {isDefined(referenceUrl) && (
             <TableRow>
               <TableData>{_('Reference URL')}</TableData>
               <TableData>
                 <span>
-                  <ExternalLink to={reference_url}>
-                    {reference_url}
-                  </ExternalLink>
+                  <ExternalLink to={referenceUrl}>{referenceUrl}</ExternalLink>
                 </span>
               </TableData>
             </TableRow>
