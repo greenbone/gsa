@@ -109,7 +109,7 @@ const Row = ({
     </DetailsLink>
   ));
 
-  const auth_method = convert_auth_method(entity.auth_method);
+  const authMethod = convert_auth_method(entity.authMethod);
   const host_allow = convert_allow(entity.hosts);
   return (
     <TableRow>
@@ -127,7 +127,7 @@ const Row = ({
         <Divider>{groups}</Divider>
       </TableData>
       <TableData>{host_allow}</TableData>
-      <TableData>{auth_method}</TableData>
+      <TableData>{authMethod}</TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );
