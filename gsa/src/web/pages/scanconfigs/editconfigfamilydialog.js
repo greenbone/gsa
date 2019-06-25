@@ -74,7 +74,7 @@ class Nvt extends React.Component {
       pref_count = '';
     }
 
-    const {name, oid, severity, timeout, default_timeout} = nvt;
+    const {name, oid, severity, timeout, defaultTimeout} = nvt;
     return (
       <TableRow>
         <TableData>{name}</TableData>
@@ -84,7 +84,7 @@ class Nvt extends React.Component {
         </TableData>
         <TableData>
           {isEmpty(timeout) ? _('default') : timeout}
-          {isEmpty(default_timeout) ? '' : ' (' + default_timeout + ')'}
+          {isEmpty(defaultTimeout) ? '' : ' (' + defaultTimeout + ')'}
         </TableData>
         <TableData>{pref_count}</TableData>
         <TableData align="center">
