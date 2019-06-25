@@ -70,8 +70,9 @@ describe('Scanner model tests', () => {
     const scanner = new Scanner({});
     const scanner2 = new Scanner(elem);
 
+    expect(scanner.caPub).toBeUndefined();
+    expect(scanner2.caPub).toEqual({certificate: {}});
     expect(scanner.ca_pub).toBeUndefined();
-    expect(scanner2.ca_pub).toEqual({certificate: {}});
   });
 
   test('should parse ca_pub_info', () => {
@@ -84,11 +85,9 @@ describe('Scanner model tests', () => {
     };
     const scanner = new Scanner(elem);
 
-    expect(isDate(scanner.ca_pub.info.activationTime)).toEqual(true);
-    expect(isDate(scanner.ca_pub.info.expirationTime)).toEqual(true);
+    expect(isDate(scanner.caPub.info.activationTime)).toEqual(true);
+    expect(isDate(scanner.caPub.info.expirationTime)).toEqual(true);
     expect(scanner.ca_pub_info).toBeUndefined();
-    expect(scanner.ca_pub.info.activation_time).toBeUndefined();
-    expect(scanner.ca_pub.info.expiration_time).toBeUndefined();
   });
 
   test('should parse tasks', () => {
@@ -163,7 +162,7 @@ describe('Scanner model tests', () => {
     const paramsRes = {
       name: 'ipsum',
       description: 'dolor',
-      param_type: 'sit',
+      paramType: 'sit',
       mandatory: YES_VALUE,
       default: 'amet',
     };
@@ -177,6 +176,8 @@ describe('Scanner model tests', () => {
     expect(scanner.info.protocol.name).toEqual('bar');
     expect(scanner.info.protocol.version).toBeUndefined();
     expect(scanner.info.params[0]).toEqual(paramsRes);
+    expect(scanner.info.params[0].paramType).toEqual('sit');
+    expect(scanner.info.params.param).toBeUndefined();
     expect(scanner2.info.description).toBeUndefined();
     expect(scanner2.info.params).toBeUndefined();
   });
