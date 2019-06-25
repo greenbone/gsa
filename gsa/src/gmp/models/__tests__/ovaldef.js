@@ -67,7 +67,7 @@ describe('Ovaldef model tests', () => {
     const ovaldef2 = new Ovaldef({});
     const ovaldef3 = new Ovaldef({raw_data: {}});
 
-    expect(ovaldef.short_id).toEqual('123abc');
+    expect(ovaldef.shortId).toEqual('123abc');
     expect(ovaldef.version).toEqual('42');
     expect(ovaldef.class).toEqual('foo');
     expect(ovaldef.deprecation).toEqual('0');

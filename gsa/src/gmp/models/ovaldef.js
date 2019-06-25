@@ -85,7 +85,7 @@ class Ovaldef extends Info {
       const {definition} = raw_data;
 
       if (isDefined(definition._id)) {
-        ret.short_id = definition._id;
+        ret.shortId = definition._id;
       }
       if (isDefined(definition._version)) {
         ret.version = definition._version;
