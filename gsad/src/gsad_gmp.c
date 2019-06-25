@@ -11589,6 +11589,9 @@ get_trash (gvm_connection_t *connection, credentials_t *credentials,
 
   GET_TRASH_RESOURCE ("GET_TICKETS", "get_tickets", "tickets");
 
+  GET_TRASH_RESOURCE ("GET_TLS_CERTIFICATES", "get_tls_certificates",
+                      "tls_certificates");
+
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_trash>");
@@ -17036,6 +17039,249 @@ delete_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   return move_resource_to_trash (connection, "ticket", credentials, params,
                                  response_data);
+}
+
+/**
+ * @brief Get all TLS certificates, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_tls_certificates_gmp (gvm_connection_t *connection,
+                          credentials_t *credentials,
+                          params_t *params,
+                          cmd_response_data_t *response_data)
+{
+  return get_many (connection, "tls_certificates", credentials, params,
+                   NULL, response_data);
+}
+
+/**
+ * @brief Get single TLS certificates, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_tls_certificate_gmp (gvm_connection_t *connection,
+                         credentials_t *credentials,
+                         params_t *params,
+                         cmd_response_data_t *response_data)
+{
+  return get_one (connection, "tls_certificate", credentials, params,
+                  NULL, NULL, response_data);
+}
+
+/**
+ * @brief Create a TLS certificate.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+create_tls_certificate_gmp (gvm_connection_t *connection,
+                            credentials_t *credentials,
+                            params_t *params,
+                            cmd_response_data_t *response_data)
+{
+  gchar *response = NULL;
+  entity_t entity = NULL;
+  const gchar *name, *comment, *trust, *certificate_bin;
+  size_t certificate_size;
+  gchar *certificate_b64;
+  gchar *ret;
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  trust = params_value (params, "trust");
+  certificate_bin = params_value (params, "certificate_bin");
+  certificate_size = params_value_size (params, "certificate_bin");
+
+  certificate_b64 = (certificate_size > 0)
+                      ? g_base64_encode ((guchar *) certificate_bin,
+                                         certificate_size)
+                      : g_strdup ("");
+
+  CHECK_VARIABLE_INVALID (name, "Create TLS Certificate");
+  CHECK_VARIABLE_INVALID (comment, "Create TLS Certificate");
+  CHECK_VARIABLE_INVALID (trust, "Create TLS Certificate");
+
+  switch (gmpf (connection, credentials, &response, &entity, response_data,
+                "<create_tls_certificate>"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<trust>%s</trust>"
+                "<certificate>%s</certificate>"
+                "</create_tls_certificate>",
+                name,
+                comment,
+                trust,
+                certificate_b64))
+    {
+    case 0:
+    case -1:
+      break;
+    case 1:
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __FUNCTION__, __LINE__,
+        "An internal error occurred while creating a TLS certificate. "
+        "Diagnostics: Failure to send command to manager daemon.",
+        response_data);
+    case 2:
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __FUNCTION__, __LINE__,
+        "An internal error occurred while creating a TLS certificate. "
+        "It is unclear whether the TLS certificate has been created or not. "
+        "Diagnostics: Failure to receive response from manager daemon.",
+        response_data);
+    default:
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __FUNCTION__, __LINE__,
+        "An internal error occurred while creating a TLS certificate. "
+        "It is unclear whether the TLS certificate has been created or not. "
+        "Diagnostics: Internal Error.",
+        response_data);
+    }
+
+  ret = response_from_entity (connection, credentials, params, entity,
+                              "Create TLS Certificate", response_data);
+
+  free_entity (entity);
+  g_free (response);
+  g_free (certificate_b64);
+  return ret;
+}
+
+/**
+ * @brief Modify a TLS certificate.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+save_tls_certificate_gmp (gvm_connection_t *connection,
+                          credentials_t *credentials,
+                          params_t *params,
+                          cmd_response_data_t *response_data)
+{
+  gchar *response = NULL;
+  entity_t entity = NULL;
+  const gchar *tls_certificate_id, *name, *comment, *trust, *certificate_bin;
+  size_t certificate_size;
+  gchar *certificate_b64;
+  gchar *ret;
+
+  tls_certificate_id = params_value (params, "tls_certificate_id");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  trust = params_value (params, "trust");
+  certificate_bin = params_value (params, "certificate_bin");
+  certificate_size = params_value_size (params, "certificate_bin");
+
+  certificate_b64 = (certificate_size > 0)
+                      ? g_base64_encode ((guchar *) certificate_bin,
+                                         certificate_size)
+                      : g_strdup ("");
+
+  CHECK_VARIABLE_INVALID (tls_certificate_id, "Save TLS Certificate");
+  CHECK_VARIABLE_INVALID (name, "Save TLS Certificate");
+  CHECK_VARIABLE_INVALID (comment, "Save TLS Certificate");
+  CHECK_VARIABLE_INVALID (trust, "Save TLS Certificate");
+
+  switch (gmpf (connection, credentials, &response, &entity, response_data,
+                "<modify_tls_certificate tls_certificate_id=\"%s\">"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<trust>%s</trust>"
+                "<certificate>%s</certificate>"
+                "</modify_tls_certificate>",
+                tls_certificate_id,
+                name,
+                comment,
+                trust,
+                certificate_b64))
+    {
+    case 0:
+    case -1:
+      break;
+    case 1:
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __FUNCTION__, __LINE__,
+        "An internal error occurred while saving a TLS certificate. "
+        "Diagnostics: Failure to send command to manager daemon.",
+        response_data);
+    case 2:
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __FUNCTION__, __LINE__,
+        "An internal error occurred while saving a TLS certificate. "
+        "It is unclear whether the TLS certificate has been saved or not. "
+        "Diagnostics: Failure to receive response from manager daemon.",
+        response_data);
+    default:
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __FUNCTION__, __LINE__,
+        "An internal error occurred while saving a TLS certificate. "
+        "It is unclear whether the TLS certificate has been saved or not. "
+        "Diagnostics: Internal Error.",
+        response_data);
+    }
+
+  ret = response_from_entity (connection, credentials, params, entity,
+                              "Save TLS Certificate", response_data);
+
+  free_entity (entity);
+  g_free (response);
+  g_free (certificate_b64);
+  return ret;
+}
+
+/**
+ * @brief Delete a TLS certificate.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+delete_tls_certificate_gmp (gvm_connection_t *connection,
+                            credentials_t *credentials,
+                            params_t *params,
+                            cmd_response_data_t *response_data)
+{
+  return move_resource_to_trash (connection, "tls_certificate", credentials,
+                                 params, response_data);
 }
 
 char *

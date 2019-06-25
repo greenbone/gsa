@@ -729,6 +729,22 @@ delete_ticket_gmp (gvm_connection_t *, credentials_t *, params_t *,
                    cmd_response_data_t *);
 
 char *
+get_tls_certificates_gmp (gvm_connection_t *, credentials_t *, params_t *,
+                          cmd_response_data_t *);
+char *
+get_tls_certificate_gmp (gvm_connection_t *, credentials_t *, params_t *,
+                         cmd_response_data_t *);
+char *
+create_tls_certificate_gmp (gvm_connection_t *, credentials_t *, params_t *,
+                            cmd_response_data_t *);
+char *
+save_tls_certificate_gmp (gvm_connection_t *, credentials_t *, params_t *,
+                          cmd_response_data_t *);
+char *
+delete_tls_certificate_gmp (gvm_connection_t *, credentials_t *, params_t *,
+                            cmd_response_data_t *);
+
+char *
 renew_session_gmp (gvm_connection_t *, credentials_t *, params_t *,
                    cmd_response_data_t *);
 char *
