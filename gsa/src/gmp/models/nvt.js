@@ -104,16 +104,16 @@ class Nvt extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'nvt');
 
-    ret.nvt_type = elem._type;
+    ret.nvtType = elem._type;
 
     ret.oid = ret._oid;
     ret.id = ret.oid;
-    ret.tags = parse_tags(ret.tags);
+    ret.tags = parse_tags(elem.tags);
 
     let refs = [];
-    if (isDefined(ret.refs) && isArray(ret.refs.ref)) {
+    if (isDefined(elem.refs) && isArray(elem.refs.ref)) {
       refs = ret.refs.ref;
-    } else if (isDefined(ret.refs) && isDefined(ret.refs.ref)) {
+    } else if (isDefined(elem.refs) && isDefined(elem.refs.ref)) {
       refs = [ret.refs.ref];
     }
 
@@ -132,10 +132,10 @@ class Nvt extends Info {
 
     delete ret.refs;
 
-    ret.severity = parseSeverity(ret.cvss_base);
+    ret.severity = parseSeverity(elem.cvss_base);
     delete ret.cvss_base;
 
-    if (isDefined(ret.preferences)) {
+    if (isDefined(elem.preferences)) {
       ret.preferences = map(ret.preferences.preference, preference => {
         const pref = {...preference};
         delete pref.nvt;
@@ -160,7 +160,8 @@ class Nvt extends Info {
     if (isEmpty(elem.default_timeout)) {
       delete ret.default_timeout;
     } else {
-      ret.default_timeout = parseFloat(elem.default_timeout);
+      ret.defaultTimeout = parseFloat(elem.default_timeout);
+      delete ret.default_timeout;
     }
 
     if (isEmpty(elem.timeout)) {

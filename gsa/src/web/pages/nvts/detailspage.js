@@ -193,7 +193,7 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
-  const {default_timeout, preferences = [], userTags} = entity;
+  const {defaultTimeout, preferences = [], userTags} = entity;
   const numPreferences = preferences.length;
 
   return (
@@ -247,7 +247,7 @@ const Page = ({
                     <TabPanel>
                       <Preferences
                         preferences={preferences}
-                        default_timeout={default_timeout}
+                        defaultTimeout={defaultTimeout}
                       />
                     </TabPanel>
                     <TabPanel>
