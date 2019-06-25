@@ -110,7 +110,7 @@ const Criteria = ({criteria}) => {
             <Divider>
               {criterion.negate && <b>NOT</b>}
               <span>{criterion.comment}</span>
-              <i>({criterion.test_ref})</i>
+              <i>({criterion.testRef})</i>
             </Divider>
           </li>
         ))}

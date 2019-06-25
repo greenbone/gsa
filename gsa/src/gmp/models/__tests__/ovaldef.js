@@ -174,7 +174,7 @@ describe('Ovaldef model tests', () => {
     );
     expect(ovaldef.criterias[0].criterions[0].comment).toEqual('bar');
     expect(ovaldef.criterias[0].criterions[0].negate).toEqual(true);
-    expect(ovaldef.criterias[0].criterions[0].test_ref).toEqual('ref');
+    expect(ovaldef.criterias[0].criterions[0].testRef).toEqual('ref');
     expect(
       ovaldef.criterias[0].criterias[0].criterions[0].applicability_check,
     ).toEqual('lorem');
@@ -184,7 +184,7 @@ describe('Ovaldef model tests', () => {
     expect(ovaldef.criterias[0].criterias[0].criterions[0].negate).toEqual(
       false,
     );
-    expect(ovaldef.criterias[0].criterias[0].criterions[0].test_ref).toEqual(
+    expect(ovaldef.criterias[0].criterias[0].criterions[0].testRef).toEqual(
       'ref2',
     );
   });

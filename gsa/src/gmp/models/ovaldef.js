@@ -43,7 +43,7 @@ class Criteria {
       negate: isDefined(criterion._negate)
         ? criterion._negate.toLowerCase() === 'true'
         : false,
-      test_ref: criterion._test_ref,
+      testRef: criterion._test_ref,
     }));
 
     this.extend_definitions = map(extend_definitions, extend_definition => ({
