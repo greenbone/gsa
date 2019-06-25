@@ -35,7 +35,7 @@ describe('NVT model tests', () => {
   test('should parse nvt_type', () => {
     const nvt = new Nvt({_type: 'foo'});
 
-    expect(nvt.nvt_type).toEqual('foo');
+    expect(nvt.nvtType).toEqual('foo');
   });
 
   test('should parse tags', () => {

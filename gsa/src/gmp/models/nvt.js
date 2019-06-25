@@ -104,17 +104,17 @@ class Nvt extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'nvt');
 
-    ret.nvt_type = elem._type;
+    ret.nvtType = elem._type;
 
     ret.oid = ret._oid;
     ret.id = ret.oid;
-    ret.tags = parse_tags(ret.tags);
+    ret.tags = parse_tags(elem.tags);
 
     let refs = [];
-    if (isDefined(ret.refs) && isArray(ret.refs.ref)) {
-      refs = ret.refs.ref;
-    } else if (isDefined(ret.refs) && isDefined(ret.refs.ref)) {
-      refs = [ret.refs.ref];
+    if (isDefined(elem.refs) && isArray(elem.refs.ref)) {
+      refs = elem.refs.ref;
+    } else if (isDefined(elem.refs) && isDefined(elem.refs.ref)) {
+      refs = [elem.refs.ref];
     }
 
     ret.cves = getFilteredRefIds(refs, 'cve').concat(
