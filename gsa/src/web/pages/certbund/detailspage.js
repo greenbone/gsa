@@ -87,7 +87,7 @@ ToolBarIcons.propTypes = {
 
 const Details = ({entity}) => {
   const {
-    additional_information,
+    additionalInformation,
     categories,
     description,
     cves,
@@ -156,10 +156,10 @@ const Details = ({entity}) => {
         )}
       </DetailsBlock>
 
-      {additional_information.length > 0 && (
+      {additionalInformation.length > 0 && (
         <DetailsBlock title={_('Other Links')}>
           <ul>
-            {additional_information.map(info => (
+            {additionalInformation.map(info => (
               <li key={info.url}>
                 <Layout flex="column">
                   <b>{info.issuer}</b>

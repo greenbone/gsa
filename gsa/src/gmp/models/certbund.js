@@ -35,7 +35,7 @@ class CertBundAdv extends Info {
     ret.categories = [];
     ret.description = [];
     ret.cves = [];
-    ret.additional_information = [];
+    ret.additionalInformation = [];
 
     if (isDefined(elem.raw_data) && isDefined(elem.raw_data.Advisory)) {
       const {raw_data} = ret;
@@ -63,7 +63,7 @@ class CertBundAdv extends Info {
           if (isDefined(element.TextBlock)) {
             ret.description.push(element.TextBlock);
           } else if (isDefined(element.Infos)) {
-            ret.additional_information = ret.additional_information.concat(
+            ret.additionalInformation = ret.additionalInformation.concat(
               map(element.Infos.Info, info => ({
                 issuer: info._Info_Issuer,
                 url: info._Info_URL,

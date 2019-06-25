@@ -110,7 +110,7 @@ describe('CertBundAdv model tests', () => {
 
   test('should return empty additional_information array if no advisory is given', () => {
     const certBundAdv = new CertBundAdv({});
-    expect(certBundAdv.additional_information).toEqual([]);
+    expect(certBundAdv.additionalInformation).toEqual([]);
   });
 
   test('should return array of additional_information', () => {
@@ -149,7 +149,7 @@ describe('CertBundAdv model tests', () => {
         url: 'ipsum',
       },
     ];
-    expect(certBundAdv.additional_information).toEqual(res);
+    expect(certBundAdv.additionalInformation).toEqual(res);
   });
 
   test('should return array even for single additional_information', () => {
@@ -178,7 +178,7 @@ describe('CertBundAdv model tests', () => {
         url: 'bar',
       },
     ];
-    expect(certBundAdv.additional_information).toEqual(res);
+    expect(certBundAdv.additionalInformation).toEqual(res);
   });
 
   test('should return Ref_Num as version', () => {
