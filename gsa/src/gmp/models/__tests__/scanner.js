@@ -176,6 +176,7 @@ describe('Scanner model tests', () => {
     expect(scanner.info.protocol.version).toBeUndefined();
     expect(scanner.info.params[0]).toEqual(paramsRes);
     expect(scanner.info.params[0].paramType).toEqual('sit');
+    expect(scanner.info.params.param).toBeUndefined();
     expect(scanner2.info.description).toBeUndefined();
     expect(scanner2.info.params).toBeUndefined();
   });

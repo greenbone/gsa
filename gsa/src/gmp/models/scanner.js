@@ -139,6 +139,7 @@ class Scanner extends Model {
           mandatory: parseYesNo(param.mandatory),
           default: param.default,
         }));
+        delete ret.info.params.param;
       }
     }
 
