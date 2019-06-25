@@ -104,7 +104,7 @@ class Nvt extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'nvt');
 
-    ret.nvt_type = elem._type;
+    ret.nvtType = elem._type;
 
     ret.oid = ret._oid;
     ret.id = ret.oid;
@@ -160,7 +160,8 @@ class Nvt extends Info {
     if (isEmpty(elem.default_timeout)) {
       delete ret.default_timeout;
     } else {
-      ret.default_timeout = parseFloat(elem.default_timeout);
+      ret.defaultTimeout = parseFloat(elem.default_timeout);
+      delete ret.default_timeout;
     }
 
     if (isEmpty(elem.timeout)) {

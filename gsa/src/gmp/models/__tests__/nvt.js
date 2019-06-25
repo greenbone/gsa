@@ -35,7 +35,7 @@ describe('NVT model tests', () => {
   test('should parse nvt_type', () => {
     const nvt = new Nvt({_type: 'foo'});
 
-    expect(nvt.nvt_type).toEqual('foo');
+    expect(nvt.nvtType).toEqual('foo');
   });
 
   test('should parse tags', () => {
@@ -179,9 +179,10 @@ describe('NVT model tests', () => {
     const nvt2 = new Nvt({default_timeout: ''});
     const nvt3 = new Nvt({default_timeout: '123'});
 
-    expect(nvt1.default_timeout).toBeUndefined();
-    expect(nvt2.default_timeout).toBeUndefined();
-    expect(nvt3.default_timeout).toEqual(123);
+    expect(nvt1.defaultTimeout).toBeUndefined();
+    expect(nvt2.defaultTimeout).toBeUndefined();
+    expect(nvt3.defaultTimeout).toEqual(123);
+    expect(nvt3.default_timeout).toBeUndefined();
   });
 
   test('should parse timeout', () => {
