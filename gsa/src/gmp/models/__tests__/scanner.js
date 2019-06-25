@@ -72,6 +72,7 @@ describe('Scanner model tests', () => {
 
     expect(scanner.caPub).toBeUndefined();
     expect(scanner2.caPub).toEqual({certificate: {}});
+    expect(scanner.ca_pub).toBeUndefined();
   });
 
   test('should parse ca_pub_info', () => {

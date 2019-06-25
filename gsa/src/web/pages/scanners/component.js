@@ -80,8 +80,8 @@ class ScannerComponent extends React.Component {
             name: shorten(scanner.name),
           });
           this.setState({
-            ca_pub: isDefined(scanner.ca_pub)
-              ? scanner.ca_pub.certificate
+            ca_pub: isDefined(scanner.caPub)
+              ? scanner.caPub.certificate
               : undefined,
             comment: scanner.comment,
             credentials,
@@ -95,7 +95,7 @@ class ScannerComponent extends React.Component {
             scanner,
             title,
             type: scanner.scannerType,
-            which_cert: isDefined(scanner.ca_pub) ? 'existing' : 'default',
+            which_cert: isDefined(scanner.caPub) ? 'existing' : 'default',
           });
         },
       );
@@ -199,10 +199,10 @@ class ScannerComponent extends React.Component {
 
   handleDownloadCertificate(scanner) {
     const {onCertificateDownloaded} = this.props;
-    const {id, name, ca_pub} = scanner;
+    const {id, name, caPub} = scanner;
 
     const filename = 'scanner-' + name + '-' + id + '-ca-pub.pem';
-    return onCertificateDownloaded({filename, data: ca_pub.certificate});
+    return onCertificateDownloaded({filename, data: caPub.certificate});
   }
 
   handleDownloadCredential(scanner) {
