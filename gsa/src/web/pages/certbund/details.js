@@ -45,9 +45,9 @@ const CertBundAdvDetails = ({entity}) => {
     software,
     platform,
     effect,
-    remote_attack,
+    remoteAttack,
     risk,
-    reference_source,
+    referenceSource,
     reference_url,
   } = entity;
   return (
@@ -88,10 +88,10 @@ const CertBundAdvDetails = ({entity}) => {
               <TableData>{effect}</TableData>
             </TableRow>
           )}
-          {isDefined(remote_attack) && (
+          {isDefined(remoteAttack) && (
             <TableRow>
               <TableData>{_('Remote Attack')}</TableData>
-              <TableData>{remote_attack}</TableData>
+              <TableData>{remoteAttack}</TableData>
             </TableRow>
           )}
           {isDefined(severity) && (
@@ -108,10 +108,10 @@ const CertBundAdvDetails = ({entity}) => {
               <TableData>{risk}</TableData>
             </TableRow>
           )}
-          {isDefined(reference_source) && (
+          {isDefined(referenceSource) && (
             <TableRow>
               <TableData>{_('Reference Source')}</TableData>
-              <TableData>{reference_source}</TableData>
+              <TableData>{referenceSource}</TableData>
             </TableRow>
           )}
           {isDefined(reference_url) && (
