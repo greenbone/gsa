@@ -209,7 +209,7 @@ describe('Ovaldef model tests', () => {
     const ovaldef = new Ovaldef(elem);
 
     expect(
-      ovaldef.criterias[0].extend_definitions[0].applicability_check,
+      ovaldef.criterias[0].extend_definitions[0].applicabilityCheck,
     ).toEqual('foo');
     expect(ovaldef.criterias[0].extend_definitions[0].comment).toEqual('bar');
     expect(ovaldef.criterias[0].extend_definitions[0].negate).toEqual(false);

@@ -47,7 +47,7 @@ class Criteria {
     }));
 
     this.extend_definitions = map(extend_definitions, extend_definition => ({
-      applicability_check: extend_definition._applicability_check,
+      applicabilityCheck: extend_definition._applicability_check,
       comment: isEmpty(extend_definition._comment)
         ? undefined
         : extend_definition._comment,
