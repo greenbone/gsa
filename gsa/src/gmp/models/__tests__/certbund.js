@@ -229,7 +229,7 @@ describe('CertBundAdv model tests', () => {
         date: parseDate('2018-10-10T13:31:00+01:00'),
       },
     ];
-    expect(certBundAdv.revision_history).toEqual(res);
+    expect(certBundAdv.revisionHistory).toEqual(res);
   });
 
   test('should return empty cves array if no advisory is given', () => {

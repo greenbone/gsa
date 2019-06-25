@@ -74,7 +74,7 @@ class CertBundAdv extends Info {
       }
 
       if (isDefined(advisory.RevisionHistory)) {
-        ret.revision_history = map(advisory.RevisionHistory.Revision, rev => ({
+        ret.revisionHistory = map(advisory.RevisionHistory.Revision, rev => ({
           revision: rev.Number,
           description: rev.Description,
           date: parseDate(rev.Date),
