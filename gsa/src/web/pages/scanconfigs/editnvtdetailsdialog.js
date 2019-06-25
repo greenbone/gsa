@@ -202,8 +202,8 @@ class EditDialog extends React.Component {
                           />
                           <span>
                             {_('Apply default timeout')}
-                            {isDefined(nvt.default_timeout)
-                              ? ' (' + nvt.default_timeout + ')'
+                            {isDefined(nvt.defaultTimeout)
+                              ? ' (' + nvt.defaultTimeout + ')'
                               : ''}
                           </span>
                         </Divider>
@@ -224,9 +224,7 @@ class EditDialog extends React.Component {
                       </Divider>
                     </TableData>
                     <TableData>
-                      {isDefined(nvt.default_timeout)
-                        ? nvt.default_timeout
-                        : ''}
+                      {isDefined(nvt.defaultTimeout) ? nvt.defaultTimeout : ''}
                     </TableData>
                   </TableRow>
                   {nvt.preferences.map(pref => {

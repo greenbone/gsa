@@ -31,7 +31,7 @@ import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
-const Preferences = ({preferences = [], default_timeout}) => {
+const Preferences = ({preferences = [], defaultTimeout}) => {
   return (
     <Table>
       <TableHeader>
@@ -44,7 +44,7 @@ const Preferences = ({preferences = [], default_timeout}) => {
         <TableRow>
           <TableData>{_('Timeout')}</TableData>
           <TableData>
-            {isDefined(default_timeout) ? default_timeout : _('default')}
+            {isDefined(defaultTimeout) ? defaultTimeout : _('default')}
           </TableData>
         </TableRow>
         {preferences.map(pref => (
@@ -59,7 +59,7 @@ const Preferences = ({preferences = [], default_timeout}) => {
 };
 
 Preferences.propTypes = {
-  default_timeout: PropTypes.number,
+  defaultTimeout: PropTypes.number,
   preferences: PropTypes.array,
 };
 
