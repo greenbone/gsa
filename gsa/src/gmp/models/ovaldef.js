@@ -76,7 +76,7 @@ class Ovaldef extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'ovaldef');
 
-    ret.severity = parseSeverity(ret.max_cvss);
+    ret.severity = parseSeverity(elem.max_cvss);
     delete ret.max_cvss;
 
     const {raw_data} = ret;
