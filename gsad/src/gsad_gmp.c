@@ -2049,19 +2049,23 @@ create_container_task_gmp (gvm_connection_t *connection,
   entity_t entity;
   int ret;
   gchar *command, *html, *response;
-  const char *name, *comment;
+  const char *name, *comment, *usage_type;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
+  usage_type = params_value (params, "usage_type");
+
   CHECK_VARIABLE_INVALID (name, "Create Container Task");
   CHECK_VARIABLE_INVALID (comment, "Create Container Task");
+  CHECK_VARIABLE_INVALID (usage_type, "Create Container Task");
 
   command = g_markup_printf_escaped ("<create_task>"
                                      "<target id=\"0\"/>"
                                      "<name>%s</name>"
                                      "<comment>%s</comment>"
+                                     "<usage_type>%s</usage_type>"
                                      "</create_task>",
-                                     name, comment);
+                                     name, comment, usage_type);
   ret =
     gmp (connection, credentials, &response, &entity, response_data, command);
   g_free (command);
@@ -2134,7 +2138,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   const char *max_checks, *max_hosts;
   const char *in_assets, *hosts_ordering, *alterable, *source_iface;
   const char *add_tag, *tag_id, *auto_delete, *auto_delete_data;
-  const char *apply_overrides, *min_qod;
+  const char *apply_overrides, *min_qod, *usage_type;
   gchar *name_escaped, *comment_escaped;
   params_t *alerts;
   GString *alert_element;
@@ -2159,6 +2163,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   source_iface = params_value (params, "source_iface");
   tag_id = params_value (params, "tag_id");
   target_id = params_value (params, "target_id");
+  usage_type = params_value (params, "usage_type");
 
   CHECK_VARIABLE_INVALID (scanner_type, "Create Task");
   if (!strcmp (scanner_type, "1"))
@@ -2179,6 +2184,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   CHECK_VARIABLE_INVALID (name, "Create Task");
   CHECK_VARIABLE_INVALID (comment, "Create Task");
+  CHECK_VARIABLE_INVALID (usage_type, "Create Task");
   CHECK_VARIABLE_INVALID (config_id, "Create Task");
   CHECK_VARIABLE_INVALID (target_id, "Create Task");
   CHECK_VARIABLE_INVALID (hosts_ordering, "Create Task");
@@ -2303,12 +2309,14 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
     "</preference>"
     "</preferences>"
     "<alterable>%i</alterable>"
+    "<usage_type>%s</usage_type>"
     "</create_task>",
     config_id, schedule_periods, schedule_element, alert_element->str,
     target_id, scanner_id, hosts_ordering, name_escaped, comment_escaped,
     max_checks, max_hosts, strcmp (in_assets, "0") ? "yes" : "no",
     strcmp (apply_overrides, "0") ? "yes" : "no", min_qod, source_iface,
-    auto_delete, auto_delete_data, alterable ? strcmp (alterable, "0") : 0);
+    auto_delete, auto_delete_data, alterable ? strcmp (alterable, "0") : 0,
+    usage_type);
 
   g_free (name_escaped);
   g_free (comment_escaped);
@@ -7039,16 +7047,18 @@ create_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
                    params_t *params, cmd_response_data_t *response_data)
 {
   gchar *html, *response;
-  const char *name, *comment, *base, *scanner = NULL;
+  const char *name, *comment, *base, *usage_type, *scanner = NULL;
   entity_t entity;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   base = params_value (params, "base");
+  usage_type = params_value (params, "usage_type");
 
   CHECK_VARIABLE_INVALID (name, "New Config");
   CHECK_VARIABLE_INVALID (comment, "New Config");
   CHECK_VARIABLE_INVALID (base, "New Config");
+  CHECK_VARIABLE_INVALID (usage_type, "New Config");
   if (str_equal (base, "0"))
     {
       scanner = params_value (params, "scanner_id");
@@ -7062,8 +7072,9 @@ create_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 "<copy>%s</copy>"
                 "<comment>%s</comment>"
                 "<scanner>%s</scanner>"
+                "<usage_type>%s</usage_type>"
                 "</create_config>",
-                name, base, comment, scanner ?: ""))
+                name, base, comment, scanner ?: "", usage_type))
     {
     case 0:
     case -1:
