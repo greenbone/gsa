@@ -38,7 +38,7 @@ class CertBundAdv extends Info {
     ret.additionalInformation = [];
 
     if (isDefined(elem.raw_data) && isDefined(elem.raw_data.Advisory)) {
-      const {raw_data} = ret;
+       const {raw_data} = elem;
       const {Advisory: advisory} = raw_data;
 
       ret.version = advisory.Version;
