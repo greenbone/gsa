@@ -67,7 +67,7 @@ describe('Ovaldef model tests', () => {
     const ovaldef2 = new Ovaldef({});
     const ovaldef3 = new Ovaldef({raw_data: {}});
 
-    expect(ovaldef.short_id).toEqual('123abc');
+    expect(ovaldef.shortId).toEqual('123abc');
     expect(ovaldef.version).toEqual('42');
     expect(ovaldef.class).toEqual('foo');
     expect(ovaldef.deprecation).toEqual('0');
@@ -169,14 +169,14 @@ describe('Ovaldef model tests', () => {
     };
     const ovaldef = new Ovaldef(elem);
 
-    expect(ovaldef.criterias[0].criterions[0].applicability_check).toEqual(
+    expect(ovaldef.criterias[0].criterions[0].applicabilityCheck).toEqual(
       'foo',
     );
     expect(ovaldef.criterias[0].criterions[0].comment).toEqual('bar');
     expect(ovaldef.criterias[0].criterions[0].negate).toEqual(true);
-    expect(ovaldef.criterias[0].criterions[0].test_ref).toEqual('ref');
+    expect(ovaldef.criterias[0].criterions[0].testRef).toEqual('ref');
     expect(
-      ovaldef.criterias[0].criterias[0].criterions[0].applicability_check,
+      ovaldef.criterias[0].criterias[0].criterions[0].applicabilityCheck,
     ).toEqual('lorem');
     expect(ovaldef.criterias[0].criterias[0].criterions[0].comment).toEqual(
       'ipsum',
@@ -184,7 +184,7 @@ describe('Ovaldef model tests', () => {
     expect(ovaldef.criterias[0].criterias[0].criterions[0].negate).toEqual(
       false,
     );
-    expect(ovaldef.criterias[0].criterias[0].criterions[0].test_ref).toEqual(
+    expect(ovaldef.criterias[0].criterias[0].criterions[0].testRef).toEqual(
       'ref2',
     );
   });
@@ -209,11 +209,11 @@ describe('Ovaldef model tests', () => {
     const ovaldef = new Ovaldef(elem);
 
     expect(
-      ovaldef.criterias[0].extend_definitions[0].applicability_check,
+      ovaldef.criterias[0].extendDefinitions[0].applicabilityCheck,
     ).toEqual('foo');
-    expect(ovaldef.criterias[0].extend_definitions[0].comment).toEqual('bar');
-    expect(ovaldef.criterias[0].extend_definitions[0].negate).toEqual(false);
-    expect(ovaldef.criterias[0].extend_definitions[0].definition_ref).toEqual(
+    expect(ovaldef.criterias[0].extendDefinitions[0].comment).toEqual('bar');
+    expect(ovaldef.criterias[0].extendDefinitions[0].negate).toEqual(false);
+    expect(ovaldef.criterias[0].extendDefinitions[0].definitionRef).toEqual(
       'ref',
     );
   });
