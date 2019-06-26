@@ -729,6 +729,7 @@ init_validator ()
                      "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
   gvm_validator_add (validator, "source_iface", "^(.*){1,16}$");
   gvm_validator_add (validator, "uuid", "^[0-9abcdefABCDEF\\-]{1,40}$");
+  gvm_validator_add (validator, "usage_type", "^(audit|policy|scan|)$");
   /* This must be "login" with space and comma. */
   gvm_validator_add (validator, "users", "^[[:alnum:]-_@., ]*$");
   gvm_validator_add (validator, "x_field", "^[\\[\\]_[:alnum:]]+$");
