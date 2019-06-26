@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Add storybook [#1272](https://github.com/greenbone/gsa/pull/1286)
+- Added TLS certificates to the asset management. [#1455](https://github.com/greenbone/gsa/pull/1455)
 
 ### Changed
 - Modified the BarChart's y-domain to avoid range [0,0]. [#1447](https://github.com/greenbone/gsa/pull/1447)

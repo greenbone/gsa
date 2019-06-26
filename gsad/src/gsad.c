@@ -273,6 +273,7 @@ init_validator ()
                      "|(create_target)"
                      "|(create_task)"
                      "|(create_ticket)"
+                     "|(create_tls_certificate)"
                      "|(create_user)"
                      "|(cvss_calculator)"
                      "|(delete_agent)"
@@ -297,6 +298,7 @@ init_validator ()
                      "|(delete_target)"
                      "|(delete_task)"
                      "|(delete_ticket)"
+                     "|(delete_tls_certificate)"
                      "|(delete_user)"
                      "|(download_agent)"
                      "|(download_credential)"
@@ -402,6 +404,8 @@ init_validator ()
                      "|(get_tasks)"
                      "|(get_ticket)"
                      "|(get_tickets)"
+                     "|(get_tls_certificate)"
+                     "|(get_tls_certificates)"
                      "|(get_trash)"
                      "|(get_user)"
                      "|(get_users)"
@@ -444,6 +448,7 @@ init_validator ()
                      "|(save_target)"
                      "|(save_task)"
                      "|(save_ticket)"
+                     "|(save_tls_certificate)"
                      "|(save_user)"
                      "|(start_task)"
                      "|(stop_task)"
@@ -663,7 +668,7 @@ init_validator ()
     "^(agent|alert|asset|cert_bund_adv|config|cpe|credential|cve|dfn_cert_adv|"
     "filter|group|host|info|nvt|note|os|ovaldef|override|permission|port_list|"
     "report|report_format|result|role|scanner|schedule|tag|target|task|ticket|"
-    "user|vuln|)$");
+    "tls_certificate|user|vuln|)$");
   gvm_validator_add (validator, "resource_id", "^[[:alnum:]-_.:\\/~]*$");
   gvm_validator_add (validator, "resources_action", "^(|add|set|remove)$");
   gvm_validator_add (
@@ -671,7 +676,7 @@ init_validator ()
     "^(agent|alert|asset|cert_bund_adv|config|cpe|credential|cve|dfn_cert_adv|"
     "filter|group|host|info|nvt|note|os|ovaldef|override|permission|port_list|"
     "report|report_format|result|role|scanner|schedule|tag|target|task|ticket|"
-    "user|vuln|)?$");
+    "tls_certificate|user|vuln|)?$");
   gvm_validator_add (validator, "select:value", "^.*$");
   gvm_validator_add (validator, "ssl_cert", "^.*$");
   gvm_validator_add (validator, "method_data:name", "^.*$");
@@ -738,6 +743,7 @@ init_validator ()
   gvm_validator_add (validator, "icalendar", "(?s)^BEGIN:VCALENDAR.+$");
 
   /* Binary data params that should not use no UTF-8 validation */
+  gvm_validator_add_binary (validator, "certificate_bin");
   gvm_validator_add_binary (validator, "installer");
   gvm_validator_add_binary (validator, "method_data:pkcs12:");
 
@@ -900,7 +906,9 @@ init_validator ()
   gvm_validator_alias (validator, "task_uuid", "optional_id");
   gvm_validator_alias (validator, "ticket_id", "id");
   gvm_validator_alias (validator, "timeout", "boolean");
+  gvm_validator_alias (validator, "tls_certificate_id", "id");
   gvm_validator_alias (validator, "trend:name", "family");
+  gvm_validator_alias (validator, "trust", "boolean");
   gvm_validator_alias (validator, "user_id", "id");
   gvm_validator_alias (validator, "user_id_optional", "id_optional");
   gvm_validator_alias (validator, "xml", "boolean");
@@ -1471,6 +1479,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (create_tag)
   ELSE (create_target)
   ELSE (create_ticket)
+  ELSE (create_tls_certificate)
   ELSE (create_user)
   ELSE (create_role)
   ELSE (delete_agent)
@@ -1495,6 +1504,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (delete_target)
   ELSE (delete_task)
   ELSE (delete_ticket)
+  ELSE (delete_tls_certificate)
   ELSE (delete_user)
   ELSE (empty_trashcan)
   ELSE (import_config)
@@ -1535,6 +1545,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (save_task)
   ELSE (save_ticket)
   ELSE (save_container_task)
+  ELSE (save_tls_certificate)
   ELSE (save_user)
   ELSE (start_task)
   ELSE (stop_task)
@@ -2091,6 +2102,8 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (get_targets)
   ELSE (get_ticket)
   ELSE (get_tickets)
+  ELSE (get_tls_certificate)
+  ELSE (get_tls_certificates)
   ELSE (get_trash)
   ELSE (get_user)
   ELSE (get_users)
