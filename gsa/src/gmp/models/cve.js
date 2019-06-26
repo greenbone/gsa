@@ -54,12 +54,12 @@ class Cve extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'cve');
 
-    if (isDefined(ret.update_time)) {
-      ret.updateTime = parseDate(ret.update_time);
+    if (isDefined(elem.update_time)) {
+      ret.updateTime = parseDate(elem.update_time);
       delete ret.update_time;
     }
 
-    ret.severity = parseSeverity(ret.cvss);
+    ret.severity = parseSeverity(elem.cvss);
     delete ret.cvss;
 
     if (isDefined(ret.nvts)) {
@@ -124,8 +124,8 @@ class Cve extends Info {
     if (isDefined(ret.raw_data) && isDefined(ret.raw_data.entry)) {
       const {entry} = ret.raw_data;
 
-      if (isDefined(ret.cwe)) {
-        ret.cwe_id = entry.cwe._id;
+      if (isDefined(elem.cwe)) {
+        ret.cweId = entry.cwe._id;
       }
 
       ret.publishedTime = parseDate(entry['published-datetime'].__text);

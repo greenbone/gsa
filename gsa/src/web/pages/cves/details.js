@@ -52,7 +52,7 @@ const CVSS_PROPS = {
 const CveDetails = ({entity}) => {
   const {
     cvssBaseVector,
-    cwe_id,
+    cweId,
     description,
     references = [],
     severity,
@@ -60,12 +60,12 @@ const CveDetails = ({entity}) => {
 
   return (
     <Layout flex="column" grow="1">
-      {isDefined(cwe_id) && (
+      {isDefined(cweId) && (
         <InfoTable>
           <TableBody>
             <TableRow>
               <TableData>{_('CWE ID')}</TableData>
-              <TableData>{entity.cwe_id}</TableData>
+              <TableData>{entity.cweId}</TableData>
             </TableRow>
           </TableBody>
         </InfoTable>
