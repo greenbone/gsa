@@ -79,7 +79,7 @@ class Ovaldef extends Info {
     ret.severity = parseSeverity(elem.max_cvss);
     delete ret.max_cvss;
 
-    const {raw_data} = ret;
+    const {raw_data} = elem;
 
     if (isDefined(raw_data) && isDefined(raw_data.definition)) {
       const {definition} = raw_data;
