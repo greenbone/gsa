@@ -92,7 +92,7 @@ const Criteria = ({criteria}) => {
   const {
     criterions,
     criterias: subcriterias,
-    extend_definitions,
+    extendDefinitions,
     operator,
     comment,
     negate,
@@ -110,16 +110,16 @@ const Criteria = ({criteria}) => {
             <Divider>
               {criterion.negate && <b>NOT</b>}
               <span>{criterion.comment}</span>
-              <i>({criterion.test_ref})</i>
+              <i>({criterion.testRef})</i>
             </Divider>
           </li>
         ))}
-        {extend_definitions.map((extend_definition, i) => (
+        {extendDefinitions.map((extend_definition, i) => (
           <li key={i}>
             <Divider>
               {extend_definition.negate && <b>NOT</b>}
               <span>{extend_definition.comment}</span>
-              <i>({extend_definition.definition_ref})</i>
+              <i>({extend_definition.definitionRef})</i>
             </Divider>
           </li>
         ))}
