@@ -169,14 +169,14 @@ describe('Ovaldef model tests', () => {
     };
     const ovaldef = new Ovaldef(elem);
 
-    expect(ovaldef.criterias[0].criterions[0].applicability_check).toEqual(
+    expect(ovaldef.criterias[0].criterions[0].applicabilityCheck).toEqual(
       'foo',
     );
     expect(ovaldef.criterias[0].criterions[0].comment).toEqual('bar');
     expect(ovaldef.criterias[0].criterions[0].negate).toEqual(true);
     expect(ovaldef.criterias[0].criterions[0].testRef).toEqual('ref');
     expect(
-      ovaldef.criterias[0].criterias[0].criterions[0].applicability_check,
+      ovaldef.criterias[0].criterias[0].criterions[0].applicabilityCheck,
     ).toEqual('lorem');
     expect(ovaldef.criterias[0].criterias[0].criterions[0].comment).toEqual(
       'ipsum',

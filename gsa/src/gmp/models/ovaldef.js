@@ -38,7 +38,7 @@ class Criteria {
     } = elem;
 
     this.criterions = map(criterions, criterion => ({
-      applicability_check: criterion._applicability_check,
+      applicabilityCheck: criterion._applicability_check,
       comment: isEmpty(criterion._comment) ? undefined : criterion._comment,
       negate: isDefined(criterion._negate)
         ? criterion._negate.toLowerCase() === 'true'
