@@ -45,10 +45,10 @@ class CertBundAdv extends Info {
       ret.software = advisory.Software;
       ret.platform = advisory.Platform;
       ret.effect = advisory.effect;
-      ret.remote_attack = advisory.RemoteAttack;
+      ret.remoteAttack = advisory.RemoteAttack;
       ret.risk = advisory.Risk;
-      ret.reference_source = advisory.Reference_Source;
-      ret.reference_url = advisory.Reference_URL;
+      ret.referenceSource = advisory.Reference_Source;
+      ret.referenceUrl = advisory.Reference_URL;
       ret.categories = map(advisory.CategoryTree, categoryTree => categoryTree);
 
       if (!isDefined(ret.version) && isDefined(advisory.Ref_Num)) {
