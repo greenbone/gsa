@@ -29,26 +29,26 @@ class CertBundAdv extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'cert_bund_adv');
 
-    ret.severity = parseSeverity(ret.max_cvss);
+    ret.severity = parseSeverity(elem.max_cvss);
     delete ret.max_cvss;
 
     ret.categories = [];
     ret.description = [];
     ret.cves = [];
-    ret.additional_information = [];
+    ret.additionalInformation = [];
 
-    if (isDefined(ret.raw_data) && isDefined(ret.raw_data.Advisory)) {
-      const {raw_data} = ret;
+    if (isDefined(elem.raw_data) && isDefined(elem.raw_data.Advisory)) {
+       const {raw_data} = elem;
       const {Advisory: advisory} = raw_data;
 
       ret.version = advisory.Version;
       ret.software = advisory.Software;
       ret.platform = advisory.Platform;
       ret.effect = advisory.effect;
-      ret.remote_attack = advisory.RemoteAttack;
+      ret.remoteAttack = advisory.RemoteAttack;
       ret.risk = advisory.Risk;
-      ret.reference_source = advisory.Reference_Source;
-      ret.reference_url = advisory.Reference_URL;
+      ret.referenceSource = advisory.Reference_Source;
+      ret.referenceUrl = advisory.Reference_URL;
       ret.categories = map(advisory.CategoryTree, categoryTree => categoryTree);
 
       if (!isDefined(ret.version) && isDefined(advisory.Ref_Num)) {
@@ -63,7 +63,7 @@ class CertBundAdv extends Info {
           if (isDefined(element.TextBlock)) {
             ret.description.push(element.TextBlock);
           } else if (isDefined(element.Infos)) {
-            ret.additional_information = ret.additional_information.concat(
+            ret.additionalInformation = ret.additionalInformation.concat(
               map(element.Infos.Info, info => ({
                 issuer: info._Info_Issuer,
                 url: info._Info_URL,
@@ -74,7 +74,7 @@ class CertBundAdv extends Info {
       }
 
       if (isDefined(advisory.RevisionHistory)) {
-        ret.revision_history = map(advisory.RevisionHistory.Revision, rev => ({
+        ret.revisionHistory = map(advisory.RevisionHistory.Revision, rev => ({
           revision: rev.Number,
           description: rev.Description,
           date: parseDate(rev.Date),

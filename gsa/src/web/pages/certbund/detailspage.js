@@ -87,18 +87,18 @@ ToolBarIcons.propTypes = {
 
 const Details = ({entity}) => {
   const {
-    additional_information,
+    additionalInformation,
     categories,
     description,
     cves,
-    revision_history = [],
+    revisionHistory = [],
   } = entity;
   return (
     <Layout flex="column">
       <CertBundAdvDetails entity={entity} />
 
       <DetailsBlock title={_('Revision History')}>
-        {revision_history.length > 0 && (
+        {revisionHistory.length > 0 && (
           <InfoTable>
             <TableHeader>
               <TableRow>
@@ -108,7 +108,7 @@ const Details = ({entity}) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {revision_history.map(rev => (
+              {revisionHistory.map(rev => (
                 <TableRow key={rev.revision}>
                   <TableData>{rev.revision}</TableData>
                   <TableData>
@@ -156,10 +156,10 @@ const Details = ({entity}) => {
         )}
       </DetailsBlock>
 
-      {additional_information.length > 0 && (
+      {additionalInformation.length > 0 && (
         <DetailsBlock title={_('Other Links')}>
           <ul>
-            {additional_information.map(info => (
+            {additionalInformation.map(info => (
               <li key={info.url}>
                 <Layout flex="column">
                   <b>{info.issuer}</b>
