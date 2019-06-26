@@ -29,12 +29,12 @@ class DfnCertAdv extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'dfn_cert_adv');
 
-    ret.severity = parseSeverity(ret.max_cvss);
+    ret.severity = parseSeverity(elem.max_cvss);
     delete ret.max_cvss;
 
     const {raw_data} = ret;
 
-    ret.additional_links = [];
+    ret.additionalLinks = [];
     ret.cves = [];
 
     if (isDefined(raw_data) && isDefined(raw_data.entry)) {
@@ -43,9 +43,9 @@ class DfnCertAdv extends Info {
       if (isDefined(entry.link)) {
         forEach(entry.link, link => {
           if (link._rel === 'alternate') {
-            ret.advisory_link = link._href;
+            ret.advisoryLink = link._href;
           } else {
-            ret.additional_links.push(link._href);
+            ret.additionalLinks.push(link._href);
           }
         });
       }

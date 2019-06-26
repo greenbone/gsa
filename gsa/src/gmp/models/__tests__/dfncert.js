@@ -60,8 +60,8 @@ describe('DfnCertAdv model tests', () => {
     };
     const dfnCertAdv = new DfnCertAdv(elem);
 
-    expect(dfnCertAdv.advisory_link).toEqual('prot://url');
-    expect(dfnCertAdv.additional_links).toEqual(['prot://url2', 'prot://url3']);
+    expect(dfnCertAdv.advisoryLink).toEqual('prot://url');
+    expect(dfnCertAdv.additionalLinks).toEqual(['prot://url2', 'prot://url3']);
   });
 
   test('should parse summary', () => {

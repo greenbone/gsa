@@ -31,10 +31,10 @@ class Cpe extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'cpe');
 
-    ret.severity = parseSeverity(ret.max_cvss);
+    ret.severity = parseSeverity(elem.max_cvss);
     delete ret.max_cvss;
 
-    if (isDefined(ret.cves) && isDefined(ret.cves.cve)) {
+    if (isDefined(elem.cves) && isDefined(elem.cves.cve)) {
       ret.cves = map(ret.cves.cve.entry, cve => ({
         id: cve._id,
         severity: parseSeverity(cve.cvss.base_metrics.score.__text),
@@ -43,11 +43,11 @@ class Cpe extends Info {
       ret.cves = [];
     }
 
-    if (isEmpty(ret.status)) {
+    if (isEmpty(elem.status)) {
       delete ret.status;
     }
 
-    if (isDefined(ret.update_time)) {
+    if (isDefined(elem.update_time)) {
       ret.updateTime = parseDate(ret.update_time);
       delete ret.update_time;
     }
