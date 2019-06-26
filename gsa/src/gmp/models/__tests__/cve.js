@@ -187,7 +187,7 @@ describe('CVE model tests', () => {
     };
     const cve = new Cve(elem);
 
-    expect(cve.cwe_id).toEqual('123abc');
+    expect(cve.cweId).toEqual('123abc');
     expect(isDate(cve.publishedTime)).toBe(true);
     expect(isDate(cve.lastModifiedTime)).toBe(true);
   });
