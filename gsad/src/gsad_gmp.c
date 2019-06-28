@@ -11600,9 +11600,6 @@ get_trash (gvm_connection_t *connection, credentials_t *credentials,
 
   GET_TRASH_RESOURCE ("GET_TICKETS", "get_tickets", "tickets");
 
-  GET_TRASH_RESOURCE ("GET_TLS_CERTIFICATES", "get_tls_certificates",
-                      "tls_certificates");
-
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_trash>");
