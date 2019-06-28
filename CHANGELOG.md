@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- Additional report-host information [#1462](https://github.com/greenbone/gsa/pull/1462)
+- New VerifyNoIcon [#1462](https://github.com/greenbone/gsa/pull/1462)
 - Add storybook [#1272](https://github.com/greenbone/gsa/pull/1286)
 - Added TLS certificates to the asset management.
   [#1455](https://github.com/greenbone/gsa/pull/1455),
