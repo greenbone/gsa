@@ -18,7 +18,7 @@
 
 # CMake find module for yarn package manager
 
-find_program (YARN_EXECUTABLE NAMES yarn
+find_program (YARN_EXECUTABLE NAMES yarn yarnpkg
   HINTS
   $ENV{NODE_DIR}
   PATH_SUFFIXES bin
