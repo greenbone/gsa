@@ -1,20 +1,5 @@
-# default reviewers
-*                 @greenbone/gsa-dev
+# GSA maintainers
+*                 @bjoernricks @swaterkamp
 
-# cmake files
-*/CMakeLists.txt  @bjoernricks @wiegandm
-*.cmake           @bjoernricks @wiegandm
-gsa/CMakeLists.txt @bjoernricks
-
-# web dev files
-*.js              @bjoernricks @swaterkamp
-*.css             @bjoernricks @swaterkamp
-
-# all gsad files
+# gsad maintainers
 /gsad/            @bjoernricks @timopollmeier
-# tools
-/tools/           @bjoernricks @timopollmeier
-
-# licenses
-COPYING*          @wiegandm
-LICENSE           @wiegandm
