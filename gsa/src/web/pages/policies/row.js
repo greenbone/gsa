@@ -68,7 +68,7 @@ const PoliciesActions = compose(
         displayName={_('Policy')}
         name="config"
         entity={entity}
-        title={_('Clone Policy')}
+        //title={_('Clone Policy')}
         value={entity}
         onClick={onPolicyCloneClick}
       />
@@ -105,9 +105,10 @@ const PoliciesRow = ({
 }) => (
   <TableRow>
     <EntityNameTableData
+      test-id={'table-data'}
       entity={entity}
       link={links}
-      type="scanconfig"
+      type="policy"
       displayName={_('Policy')}
       onToggleDetailsClick={onToggleDetailsClick}
     />

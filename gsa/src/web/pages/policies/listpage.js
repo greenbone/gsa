@@ -20,7 +20,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
+import {RESET_FILTER, SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -40,7 +40,7 @@ import {createFilterDialog} from 'web/components/powerfilter/dialog';
 import {
   loadEntities,
   selector as entitiesSelector,
-} from 'web/store/entities/scanconfigs';
+} from 'web/store/entities/policies';
 
 import PoliciesComponent from './component';
 import Table, {SORT_FIELDS} from './table';
@@ -129,9 +129,10 @@ PoliciesPage.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-export default withEntitiesContainer('scanconfig', {
+export default withEntitiesContainer('policies', {
   entitiesSelector,
   loadEntities,
+  defaultFilter: RESET_FILTER,
 })(PoliciesPage);
 
 // vim: set ts=2 sw=2 tw=80:

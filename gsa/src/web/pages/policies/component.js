@@ -45,7 +45,7 @@ import {
 import {
   loadEntities as loadScanConfigs,
   selector as scanConfigsSelector,
-} from 'web/store/entities/scanconfigs';
+} from 'web/store/entities/policies';
 
 import {
   loadEntities as loadScanners,
@@ -405,8 +405,8 @@ class PolicyComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.scanconfig
-      .saveScanConfigFamily(data)
+    return gmp.policy
+      .savePolicyFamily(data)
       .then(() => {
         return this.loadEditScanConfigSettings(data.config);
       })
@@ -421,8 +421,8 @@ class PolicyComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.scanconfig
-      .saveScanConfigNvt(values)
+    return gmp.policy
+      .savePolicyNvt(values)
       .then(response => {
         // update nvt timeouts in nvt family dialog
         this.loadEditScanConfigFamilySettings(
@@ -463,52 +463,54 @@ class PolicyComponent extends React.Component {
   loadEditScanConfigSettings(config) {
     const {gmp} = this.props;
 
-    return gmp.scanconfig.editScanConfigSettings(config).then(response => {
-      const {data} = response;
-      const {families, scanconfig} = data;
-      const trend = {};
-      const select = {};
+    return Promise.all([gmp.policy.get(config), gmp.nvtfamilies.get()]).then(
+      ([configResponse, familiesResponse]) => {
+        const {data: scanconfig} = configResponse;
+        const {data: families} = familiesResponse;
+        const trend = {};
+        const select = {};
 
-      forEach(families, family => {
-        const {name} = family;
-        const config_family = scanconfig.families[name];
+        forEach(families, family => {
+          const {name} = family;
+          const config_family = scanconfig.families[name];
 
-        if (isDefined(config_family)) {
-          trend[name] = parseYesNo(config_family.trend);
-          select[name] =
-            config_family.nvts.count === family.max ? YES_VALUE : NO_VALUE;
-        } else {
-          trend[name] = NO_VALUE;
-          select[name] = NO_VALUE;
-        }
-      });
+          if (isDefined(config_family)) {
+            trend[name] = parseYesNo(config_family.trend);
+            select[name] =
+              config_family.nvts.count === family.max ? YES_VALUE : NO_VALUE;
+          } else {
+            trend[name] = NO_VALUE;
+            select[name] = NO_VALUE;
+          }
+        });
 
-      const scanner_preference_values = {};
+        const scanner_preference_values = {};
 
-      forEach(scanconfig.preferences.scanner, preference => {
-        scanner_preference_values[preference.name] = preference.value;
-      });
+        forEach(scanconfig.preferences.scanner, preference => {
+          scanner_preference_values[preference.name] = preference.value;
+        });
 
-      const state = {
-        comment: scanconfig.comment,
-        id: config.id,
-        name: config.name,
-        config: scanconfig,
-        families,
-        trend,
-        select,
-        scanner_preference_values,
-      };
-      return state;
-    });
+        const state = {
+          comment: scanconfig.comment,
+          id: config.id,
+          name: config.name,
+          config: scanconfig,
+          families,
+          trend,
+          select,
+          scanner_preference_values,
+        };
+        return state;
+      },
+    );
   }
 
   loadEditScanConfigFamilySettings(config, name) {
     const {gmp} = this.props;
     const {select} = this.state;
 
-    return gmp.scanconfig
-      .editScanConfigFamilySettings({
+    return gmp.policy
+      .editPolicyFamilySettings({
         id: config.id,
         family_name: name,
         config_name: config.name,
@@ -544,8 +546,8 @@ class PolicyComponent extends React.Component {
   loadEditScanConfigNvtSettings(config, nvt) {
     const {gmp} = this.props;
 
-    return gmp.scanconfig
-      .editScanConfigNvtSettings({
+    return gmp.policy
+      .editPolicyNvtSettings({
         id: config.id,
         oid: nvt.oid,
         config_name: config.name,
@@ -650,7 +652,7 @@ class PolicyComponent extends React.Component {
     return (
       <React.Fragment>
         <EntityComponent
-          name="scanconfig"
+          name="policy"
           onCreated={onCreated}
           onCreateError={onCreateError}
           onCloned={onCloned}
