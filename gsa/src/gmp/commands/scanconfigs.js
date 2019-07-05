@@ -94,6 +94,7 @@ class ScanConfigCommand extends EntityCommand {
       comment,
       name,
       scanner_id,
+      usage_type: 'scan',
     };
     log.debug('Creating scanconfig', data);
     return this.action(data);
