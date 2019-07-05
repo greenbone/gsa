@@ -131,6 +131,7 @@ export class TaskCommand extends EntityCommand {
       source_iface,
       tag_id,
       target_id,
+      usage_type: 'scan',
     };
     log.debug('Creating task', args, data);
     return this.action(data);
