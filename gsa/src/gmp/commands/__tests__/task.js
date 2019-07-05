@@ -79,6 +79,7 @@ describe('TaskCommand tests', () => {
             source_iface: undefined,
             tag_id: undefined,
             target_id: 't1',
+            usage_type: 'scan',
           },
         });
 
@@ -143,6 +144,7 @@ describe('TaskCommand tests', () => {
             source_iface: 'eth0',
             tag_id: 't1',
             target_id: 't1',
+            usage_type: 'scan',
           },
         });
 
