@@ -3028,11 +3028,14 @@ char *
 get_tasks_gmp (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, cmd_response_data_t *response_data)
 {
-  const char *schedules_only, *ignore_pagination;
+  const char *schedules_only, *ignore_pagination, *usage_type;
   gmp_arguments_t *arguments;
 
   schedules_only = params_value (params, "schedules_only");
   ignore_pagination = params_value (params, "ignore_pagination");
+  usage_type = params_value (params, "usage_type");
+  if (params_given (params, "usage_type"))
+    CHECK_VARIABLE_INVALID (usage_type, "Get Tasks");
 
   arguments = gmp_arguments_new ();
 
@@ -3044,6 +3047,11 @@ get_tasks_gmp (gvm_connection_t *connection, credentials_t *credentials,
   if (ignore_pagination)
     {
       gmp_arguments_add (arguments, "ignore_pargination", ignore_pagination);
+    }
+
+  if (usage_type)
+    {
+      gmp_arguments_add (arguments, "usage_type", usage_type);
     }
 
   return get_many (connection, "tasks", credentials, params, arguments,
@@ -7204,7 +7212,20 @@ char *
 get_configs_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_many (connection, "configs", credentials, params, NULL,
+  const char *usage_type;
+  gmp_arguments_t *arguments = NULL;
+
+  usage_type = params_value (params, "usage_type");
+  if (params_given (params, "usage_type"))
+    CHECK_VARIABLE_INVALID (usage_type, "Get Configs")
+
+  if (usage_type)
+    {
+      arguments = gmp_arguments_new ();
+      gmp_arguments_add (arguments, "usage_type", usage_type);
+    }
+
+  return get_many (connection, "configs", credentials, params, arguments,
                    response_data);
 }
 
