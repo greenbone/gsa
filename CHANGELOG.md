@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added TLS certificates to the asset management.
   [#1455](https://github.com/greenbone/gsa/pull/1455),
   [#1461](https://github.com/greenbone/gsa/pull/1461)
+- Add policies and audits to separate compliance testing from regular
+  vulnerability scanning.
+  [#1460](https://github.com/greenbone/gsa/pull/1460)
+  [#1466](https://github.com/greenbone/gsa/pull/1466)
 
 ### Changed
 - Modified the BarChart's y-domain to avoid range [0,0]. [#1447](https://github.com/greenbone/gsa/pull/1447)
