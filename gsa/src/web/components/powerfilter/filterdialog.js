@@ -85,19 +85,21 @@ class FilterDialog extends React.Component {
     let {filter, filterName = '', filterstring, saveNamedFilter} = this.state;
     const {onFilterChanged, onCloseClick} = this.props;
 
-    filter = Filter.fromString(filterstring, filter);
+    const newFilter = Filter.fromString(filterstring);
+    newFilter._merge(filter);
 
     if (saveNamedFilter) {
       if (filterName.trim().length > 0) {
-        return this.createFilter(filter).then(onCloseClick);
+        return this.createFilter(newFilter).then(onCloseClick);
       }
       return Promise.reject(
         new Error(_('Please insert a name for the new filter')),
       );
     }
+    console.log(filter, this.orig_filter);
 
-    if (onFilterChanged && !filter.equals(this.orig_filter)) {
-      onFilterChanged(filter);
+    if (onFilterChanged && !newFilter.equals(this.orig_filter)) {
+      onFilterChanged(newFilter);
     }
 
     if (isDefined(onCloseClick)) {
@@ -112,6 +114,8 @@ class FilterDialog extends React.Component {
 
   onFilterValueChange(value, name, relation = '=') {
     const {filter} = this.state;
+
+    console.log(value, name);
 
     filter.set(name, value, relation);
 
