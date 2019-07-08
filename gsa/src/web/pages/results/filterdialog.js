@@ -41,6 +41,7 @@ import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import AutoFpGroup from 'web/components/powerfilter/autofpgroup';
 import CvssBaseGroup from 'web/components/powerfilter/cvssbasegroup';
 import IncludeNotesGroup from 'web/components/powerfilter/includenotesgroup';
+import VulnerabilityGroup from 'web/components/powerfilter/vulnerabilitygroup';
 
 /* eslint-enable */
 
@@ -115,6 +116,8 @@ const ResultsFilterDialogComponent = ({
       filter={filter}
       onChange={onFilterValueChange}
     />
+
+    <VulnerabilityGroup filter={filter} onChange={onFilterValueChange} />
 
     <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
