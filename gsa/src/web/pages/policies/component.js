@@ -80,7 +80,7 @@ import withGmp from 'web/utils/withGmp';
 import EntityComponent from 'web/entity/component';
 
 import EditConfigFamilyDialog from 'web/pages/policies/editpolicyfamilydialog';
-import EditScanConfigDialog from 'web/pages/scanconfigs/editdialog';
+import EditScanConfigDialog from 'web/pages/policies/editdialog';
 import EditNvtDetailsDialog from 'web/pages/policies/editnvtdetailsdialog';
 import AuditDialog from './createauditdialog';
 import ImportDialog from 'web/pages/policies/importdialog';
@@ -394,7 +394,7 @@ class PolicyComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.scanconfig
+    return gmp.policy
       .import(data)
       .then(onImported, onImportError)
       .then(() => this.closeImportDialog());
@@ -513,7 +513,7 @@ class PolicyComponent extends React.Component {
       .editPolicyFamilySettings({
         id: config.id,
         family_name: name,
-        config_name: config.name,
+        policy_name: config.name,
       })
       .then(response => {
         const {data} = response;
@@ -550,8 +550,8 @@ class PolicyComponent extends React.Component {
       .editPolicyNvtSettings({
         id: config.id,
         oid: nvt.oid,
-        config_name: config.name,
-        name: nvt.name,
+        policy_name: config.name,
+        family_name: nvt.name,
       })
       .then(response => {
         const {data} = response;
@@ -571,10 +571,10 @@ class PolicyComponent extends React.Component {
         });
 
         const state = {
-          config: data.config,
-          config_name: data.config.name,
+          config: data.policy,
+          config_name: data.policy.name,
           family_name: data.nvt.family,
-          id: data.config.id,
+          id: data.policy.id,
           oid: data.nvt.oid,
           manual_timeout: data.nvt.timeout,
           nvt: data.nvt,

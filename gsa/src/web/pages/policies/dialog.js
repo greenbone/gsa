@@ -50,6 +50,7 @@ const Dialog = ({
     comment,
     name,
     scanner_id,
+    usage_type: 'policy',
   };
 
   return (

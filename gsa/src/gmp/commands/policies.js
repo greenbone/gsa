@@ -24,7 +24,6 @@ import {forEach, map} from '../utils/array';
 import {isDefined} from '../utils/identity';
 
 import Model from '../model';
-import ScanConfig from '../models/scanconfig';
 import registerCommand from '../command';
 import {YES_VALUE, NO_VALUE} from '../parser';
 
