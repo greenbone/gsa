@@ -33,13 +33,7 @@ const HostGroup = ({host, filter, onChange, name = 'host'}) => {
   }
   return (
     <FormGroup title={_('Host IP')}>
-      <TextField
-        type="text"
-        name={name}
-        value={host}
-        onChange={onChange}
-        size="30"
-      />
+      <TextField type="text" name={name} value={host} onChange={onChange} />
     </FormGroup>
   );
 };

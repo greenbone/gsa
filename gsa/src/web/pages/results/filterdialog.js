@@ -60,6 +60,10 @@ const SORT_FIELDS = [
     displayName: _l('Severity'),
   },
   {
+    name: 'original_severity',
+    displayName: _l('Original Severity'),
+  },
+  {
     name: 'qod',
     displayName: _l('QoD'),
   },
