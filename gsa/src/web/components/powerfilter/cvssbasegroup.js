@@ -33,7 +33,6 @@ const CvssBaseGroup = ({cvss, filter, onChange, name = 'cvss_base'}) => {
     cvss = parseSeverity(filter.get('cvss_base'));
   }
 
-  console.log(filter);
   return (
     <FormGroup title={_('CVSS Base Score')}>
       <Spinner
@@ -51,9 +50,9 @@ const CvssBaseGroup = ({cvss, filter, onChange, name = 'cvss_base'}) => {
 };
 
 CvssBaseGroup.propTypes = {
+  cvss: PropTypes.number,
   filter: PropTypes.filter,
   name: PropTypes.string,
-  cvss: PropTypes.number,
   onChange: PropTypes.func,
 };
 
