@@ -39,6 +39,7 @@ import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import AutoFpGroup from 'web/components/powerfilter/autofpgroup';
+import CvssBaseGroup from 'web/components/powerfilter/cvssbasegroup';
 
 /* eslint-enable */
 
@@ -115,6 +116,8 @@ const ResultsFilterDialogComponent = ({
     <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
     <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
+
+    <CvssBaseGroup filter={filter} onChange={onFilterValueChange} />
 
     <SortByGroup
       filter={filter}

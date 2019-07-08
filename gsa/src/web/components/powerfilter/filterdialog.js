@@ -113,6 +113,8 @@ class FilterDialog extends React.Component {
   onFilterValueChange(value, name, relation = '=') {
     const {filter} = this.state;
 
+    console.log(value, name);
+
     filter.set(name, value, relation);
 
     this.setState({filter});
