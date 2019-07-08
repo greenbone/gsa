@@ -22,19 +22,27 @@ import styled, {keyframes} from 'styled-components';
 
 import Layout from 'web/components/layout/layout';
 
-import Theme from 'web/utils/theme';
+import GbLogo from 'web/components/icon/svg/greenbone.svg';
 
 const Loader = styled.div`
-  border: 12px solid ${Theme.lightGray};
-  border-top: 12px solid ${Theme.green};
-  border-radius: 50%;
   width: 80px;
   height: 80px;
+  margin: 40px auto;
+  background-image: url(${GbLogo});
+  background-size: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
   animation: ${keyframes({
-      '0%': {transform: 'rotate(0deg)'},
-      '100%': {transform: 'rotate(360deg)'},
+      '0%, 100%': {
+        transform: 'scale(0.9)',
+        opacity: 0.2,
+      },
+      '50%': {
+        transform: 'scale(1.0)',
+        opacity: 1,
+      },
     })}
-    2s linear infinite;
+    2s infinite ease-in-out;
 `;
 
 const StyledLayout = styled(Layout)`
