@@ -43,6 +43,7 @@ import CvssBaseGroup from 'web/components/powerfilter/cvssbasegroup';
 import IncludeNotesGroup from 'web/components/powerfilter/includenotesgroup';
 import VulnerabilityGroup from 'web/components/powerfilter/vulnerabilitygroup';
 import HostGroup from 'web/components/powerfilter/hostgroup';
+import LocationGroup from 'web/components/powerfilter/locationgroup';
 
 /* eslint-enable */
 
@@ -125,6 +126,8 @@ const ResultsFilterDialogComponent = ({
     <VulnerabilityGroup filter={filter} onChange={onFilterValueChange} />
 
     <HostGroup filter={filter} onChange={onFilterValueChange} />
+
+    <LocationGroup filter={filter} onChange={onFilterValueChange} />
 
     <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
