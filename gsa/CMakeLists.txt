@@ -421,6 +421,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/filter.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/first.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/feed.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/greenbone.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/group.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/help.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/host.svg
