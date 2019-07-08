@@ -84,6 +84,10 @@ const SORT_FIELDS = [
     name: 'created',
     displayName: _l('Created'),
   },
+  {
+    name: 'modified',
+    displayName: _l('Modified'),
+  },
 ];
 
 const ResultsFilterDialogComponent = ({
