@@ -40,6 +40,7 @@ import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import AutoFpGroup from 'web/components/powerfilter/autofpgroup';
 import CvssBaseGroup from 'web/components/powerfilter/cvssbasegroup';
+import IncludeNotesGroup from 'web/components/powerfilter/includenotesgroup';
 
 /* eslint-enable */
 
@@ -100,6 +101,8 @@ const ResultsFilterDialogComponent = ({
     />
 
     <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange} />
+
+    <IncludeNotesGroup filter={filter} onChange={onFilterValueChange} />
 
     <AutoFpGroup filter={filter} onChange={onFilterValueChange} />
 
