@@ -180,7 +180,7 @@ exports[`CvssBaseGroup tests should render 1`] = `
         min="0"
         name="name"
         size="5"
-        value="0"
+        value="5"
       />
       <span
         class="c5"

@@ -20,19 +20,19 @@ import React from 'react';
 
 import {render, fireEvent} from 'web/utils/testing';
 
-import CvssBaseGroup from '../cvssbasegroup';
+import CvssBaseGroup from 'web/components/powerfilter/cvssbasegroup';
 
 import Filter from 'gmp/models/filter';
 
 describe('CvssBaseGroup tests', () => {
   test('should render', () => {
-    const filter = Filter.fromString('cvss_base=10');
+    const filter = Filter.fromString('cvss_base=5');
     const handleChange = jest.fn();
     const {element} = render(
       <CvssBaseGroup
         filter={filter}
         name="name"
-        cvss={20}
+        cvss={5}
         onChange={handleChange}
       />,
     );
@@ -41,32 +41,31 @@ describe('CvssBaseGroup tests', () => {
   });
 
   test('should render value from filter', () => {
-    const filter = Filter.fromString('cvss_base=10');
+    const filter = Filter.fromString('cvss_base=7');
     const handleChange = jest.fn();
     const {element} = render(
       <CvssBaseGroup filter={filter} name="name" onChange={handleChange} />,
     );
-
     const input = element.querySelectorAll('input');
 
-    expect(input[0]).toHaveAttribute('value', '10');
+    expect(input[0]).toHaveAttribute('value', '7');
   });
 
-  test('should render value from cvss by default', () => {
+  test('should render value from cvss_base by default', () => {
     const filter = Filter.fromString('cvss_base=10');
     const handleChange = jest.fn();
     const {element} = render(
       <CvssBaseGroup
         filter={filter}
         name="name"
-        cvss={70}
+        cvss={5}
         onChange={handleChange}
       />,
     );
 
     const input = element.querySelectorAll('input');
 
-    expect(input[0]).toHaveAttribute('value', '70');
+    expect(input[0]).toHaveAttribute('value', '5');
   });
 
   test('should call change handler', () => {
@@ -76,15 +75,15 @@ describe('CvssBaseGroup tests', () => {
       <CvssBaseGroup
         filter={filter}
         name="name"
-        cvss={70}
+        cvss={5}
         onChange={handleChange}
       />,
     );
 
     const input = element.querySelectorAll('input');
 
-    fireEvent.change(input[0], {target: {value: '80'}});
+    fireEvent.change(input[0], {target: {value: '10'}});
 
-    expect(handleChange).toHaveBeenCalledWith(80, 'name');
+    expect(handleChange).toHaveBeenCalledWith(10, 'name');
   });
 });
