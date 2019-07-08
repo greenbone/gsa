@@ -26,11 +26,13 @@ import PropTypes from '../../utils/proptypes.js';
 
 import FormGroup from '../form/formgroup.js';
 import Spinner from '../form/spinner.js';
+import {parseSeverity} from 'gmp/parser.js';
 
 const CvssBaseGroup = ({cvss, filter, onChange, name = 'cvss_base'}) => {
   if (!isDefined(cvss) && isDefined(filter)) {
-    cvss = filter.get('cvss_base');
+    cvss = parseSeverity(filter.get('cvss_base'));
   }
+  console.log(filter);
   return (
     <FormGroup title={_('CVSS Base Score')}>
       <Spinner
