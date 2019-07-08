@@ -34,7 +34,7 @@ const LocationGroup = ({loc, filter, onChange, name = 'location'}) => {
   }
 
   return (
-    <FormGroup title={_('Port and Protocol')}>
+    <FormGroup title={_('Location (eg. port/protocol)')}>
       <TextField name={name} value={loc} onChange={onChange} />
     </FormGroup>
   );
