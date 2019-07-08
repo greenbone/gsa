@@ -44,6 +44,7 @@ import IncludeNotesGroup from 'web/components/powerfilter/includenotesgroup';
 import VulnerabilityGroup from 'web/components/powerfilter/vulnerabilitygroup';
 import HostGroup from 'web/components/powerfilter/hostgroup';
 import LocationGroup from 'web/components/powerfilter/locationgroup';
+import OwnerGroup from 'web/components/powerfilter/ownergroup';
 
 /* eslint-enable */
 
@@ -126,6 +127,8 @@ const ResultsFilterDialogComponent = ({
       filter={filter}
       onChange={onFilterValueChange}
     />
+
+    <OwnerGroup filter={filter} onChange={onFilterValueChange} />
 
     <VulnerabilityGroup filter={filter} onChange={onFilterValueChange} />
 
