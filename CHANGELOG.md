@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.1] - (unreleased)
 
 ### Added
+- Additional report-host information [#1468](https://github.com/greenbone/gsa/pull/1468)
+- New VerifyNoIcon [#1468](https://github.com/greenbone/gsa/pull/1468)
 - Add tests for filter groups [#1419](https://github.com/greenbone/gsa/pull/1419)
 - Add tests for severitylevelsgroup, radio button and task trend [#1413](https://github.com/greenbone/gsa/pull/1413)
 - Allow to show error details [#1403](https://github.com/greenbone/gsa/pull/1403)
