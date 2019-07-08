@@ -39,7 +39,7 @@ import TableRow from 'web/components/table/row';
 import {Col} from 'web/entity/page';
 
 const PolicyDetails = ({entity}) => {
-  const {comment, scan_config_type, scanner, tasks = []} = entity;
+  const {comment, policy_type, scanner, tasks = []} = entity;
   return (
     <Layout flex="column" grow>
       <InfoTable>
@@ -54,7 +54,7 @@ const PolicyDetails = ({entity}) => {
               <TableData>{comment}</TableData>
             </TableRow>
           )}
-          {scan_config_type === OSP_SCAN_CONFIG_TYPE && isDefined(scanner) && (
+          {policy_type === OSP_SCAN_CONFIG_TYPE && isDefined(scanner) && (
             <TableRow>
               <TableData>{_('Scanner')}</TableData>
               <TableData>
@@ -69,7 +69,7 @@ const PolicyDetails = ({entity}) => {
 
           {tasks.length > 0 && (
             <TableRow>
-              <TableData>{_('Tasks using this Policy')}</TableData>
+              <TableData>{_('Audits using this Policy')}</TableData>
               <TableData>
                 <Divider wrap>
                   {tasks.map((task, index) => {

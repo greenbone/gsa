@@ -43,6 +43,8 @@ const types = {
   certbunds: 'info',
   secinfo: 'info',
   secinfos: 'info',
+  policy: 'config',
+  policies: 'config',
   portlist: 'port_list',
   portlists: 'port_list',
   reportformat: 'report_format',

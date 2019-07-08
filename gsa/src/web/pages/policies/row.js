@@ -68,7 +68,6 @@ const PoliciesActions = compose(
         displayName={_('Policy')}
         name="config"
         entity={entity}
-        //title={_('Clone Policy')}
         value={entity}
         onClick={onPolicyCloneClick}
       />

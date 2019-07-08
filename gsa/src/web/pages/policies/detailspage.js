@@ -30,9 +30,8 @@ import Layout from 'web/components/layout/layout';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
-// import UploadIcon from 'web/components/icon/uploadicon';
 import ListIcon from 'web/components/icon/listicon';
-import PolicyIcon from 'web/components/icon/scanconfigicon';
+import PolicyIcon from 'web/components/icon/policyicon';
 
 import Link from 'web/components/link/link';
 
@@ -60,7 +59,6 @@ import withEntityContainer, {
 } from 'web/entity/withEntityContainer';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
-// import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
@@ -83,11 +81,9 @@ const ToolBarIcons = withCapabilities(
     capabilities,
     entity,
     onPolicyCloneClick,
-    // onPolicyCreateClick,
     onPolicyDeleteClick,
     onPolicyDownloadClick,
     onPolicyEditClick,
-    // onPolicyImportClick,
   }) => (
     <Divider margin="10px">
       <IconDivider>
@@ -96,24 +92,29 @@ const ToolBarIcons = withCapabilities(
           anchor="scan-configuration"
           title={_('Help: Policies')}
         />
-        <ListIcon title={_('Policies List')} page="scanconfigs" />
+        <ListIcon title={_('Policies List')} page="policies" />
       </IconDivider>
       <IconDivider>
-        {/* <CreateIcon entity={entity} onClick={onPolicyCreateClick} /> */}
-        <CloneIcon entity={entity} onClick={onPolicyCloneClick} />
-        <EditIcon entity={entity} onClick={onPolicyEditClick} />
-        <TrashIcon entity={entity} onClick={onPolicyDeleteClick} />
+        <CloneIcon
+          entity={entity}
+          displayName={_('Policy')}
+          onClick={onPolicyCloneClick}
+        />
+        <EditIcon
+          entity={entity}
+          displayName={_('Policy')}
+          onClick={onPolicyEditClick}
+        />
+        <TrashIcon
+          entity={entity}
+          displayName={_('Policy')}
+          onClick={onPolicyDeleteClick}
+        />
         <ExportIcon
           value={entity}
           title={_('Export Policy as XML')}
           onClick={onPolicyDownloadClick}
         />
-        {/* {capabilities.mayCreate('config') && (
-          <UploadIcon
-            title={_('Import Policy')}
-            onClick={onPolicyImportClick}
-          />
-        )} */}
       </IconDivider>
     </Divider>
   ),
@@ -122,11 +123,9 @@ const ToolBarIcons = withCapabilities(
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
   onPolicyCloneClick: PropTypes.func.isRequired,
-  // onPolicyCreateClick: PropTypes.func.isRequired,
   onPolicyDeleteClick: PropTypes.func.isRequired,
   onPolicyDownloadClick: PropTypes.func.isRequired,
   onPolicyEditClick: PropTypes.func.isRequired,
-  // onPolicyImportClick: PropTypes.func.isRequired,
 };
 
 const NvtFamilies = ({entity}) => {
@@ -301,26 +300,16 @@ const Page = ({
 }) => {
   return (
     <PolicyComponent
-      onCloned={goto_details('scanconfig', props)}
+      onCloned={goto_details('policies', props)}
       onCloneError={onError}
-      // onCreated={goto_details('scanconfig', props)}
-      onDeleted={goto_list('scanconfigs', props)}
+      onDeleted={goto_list('policies', props)}
       onDeleteError={onError}
       onDownloaded={onDownloaded}
       onDownloadError={onError}
-      // onImported={goto_details('scanconfig', props)}
       onInteraction={onInteraction}
       onSaved={onChanged}
     >
-      {({
-        clone,
-        create,
-        delete: delete_func,
-        download,
-        edit,
-        // import: import_func,
-        save,
-      }) => (
+      {({clone, delete: delete_func, download, edit, save}) => (
         <EntityPage
           {...props}
           entity={entity}
@@ -329,12 +318,10 @@ const Page = ({
           title={_('Policy')}
           onInteraction={onInteraction}
           onPolicyCloneClick={clone}
-          onPolicyCreateClick={create}
           onPolicyDeleteClick={delete_func}
           onPolicyDownloadClick={download}
           onPolicyEditClick={edit}
           onPolicySaveClick={save}
-          // onPolicyImportClick={import_func}
         >
           {({activeTab = 0, onActivateTab}) => {
             const {preferences} = entity;
@@ -434,7 +421,7 @@ const mapStateToProps = (rootState, {id}) => {
   };
 };
 
-export default withEntityContainer('scanconfig', {
+export default withEntityContainer('policy', {
   entitySelector: selector,
   load,
   mapStateToProps,
