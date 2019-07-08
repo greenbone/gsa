@@ -58,11 +58,6 @@ import {
 } from 'web/store/entities/schedules';
 
 import {
-  loadEntities as loadTags,
-  selector as tagsSelector,
-} from 'web/store/entities/tags';
-
-import {
   loadEntities as loadTargets,
   selector as targetSelector,
 } from 'web/store/entities/targets';
@@ -242,7 +237,6 @@ class PolicyComponent extends React.Component {
     this.props.loadScanConfigs();
     this.props.loadSchedules();
     this.props.loadTargets();
-    this.props.loadTags();
 
     const {defaultAlertId, defaultScheduleId, defaultTargetId} = this.props;
 
@@ -303,11 +297,8 @@ class PolicyComponent extends React.Component {
     const scanner_id = OPENVAS_DEFAULT_SCANNER_ID;
     const scanner_type = OPENVAS_SCANNER_TYPE;
 
-    const tag = this.props.tags.find(element => {
-      return element.name === 'task:compliance';
-    });
-    const tag_id = tag ? tag.id : undefined;
-    const add_tag = YES_VALUE;
+    const tag_id = undefined;
+    const add_tag = NO_VALUE;
 
     const apply_overrides = YES_VALUE;
     const min_qod = DEFAULT_MIN_QOD;
@@ -814,10 +805,8 @@ PolicyComponent.propTypes = {
   loadScanConfigs: PropTypes.func.isRequired,
   loadScanners: PropTypes.func.isRequired,
   loadSchedules: PropTypes.func.isRequired,
-  loadTags: PropTypes.func.isRequired,
   loadTargets: PropTypes.func.isRequired,
   schedules: PropTypes.arrayOf(PropTypes.model),
-  tags: PropTypes.arrayOf(PropTypes.model),
   targets: PropTypes.arrayOf(PropTypes.model),
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
@@ -834,7 +823,7 @@ PolicyComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
+//const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
 
 const mapStateToProps = rootState => {
   const alertSel = alertSelector(rootState);
@@ -842,7 +831,6 @@ const mapStateToProps = rootState => {
   const scanConfigsSel = scanConfigsSelector(rootState);
   const scannersSel = scannerSelector(rootState);
   const scheduleSel = scheduleSelector(rootState);
-  const tagsSel = tagsSelector(rootState);
   const targetSel = targetSelector(rootState);
   return {
     timezone: getTimezone(rootState),
@@ -861,7 +849,6 @@ const mapStateToProps = rootState => {
     scanConfigs: scanConfigsSel.getEntities(ALL_FILTER),
     scanners: scannersSel.getEntities(ALL_FILTER),
     schedules: scheduleSel.getEntities(ALL_FILTER),
-    tags: tagsSel.getEntities(TAGS_FILTER),
     targets: targetSel.getEntities(ALL_FILTER),
   };
 };
@@ -871,7 +858,6 @@ const mapDispatchToProp = (dispatch, {gmp}) => ({
   loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
   loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
-  loadTags: () => dispatch(loadTags(gmp)(TAGS_FILTER)),
   loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
   loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
 });

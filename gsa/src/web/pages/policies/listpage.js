@@ -29,13 +29,10 @@ import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import PolicyIcon from 'web/components/icon/policyicon';
-import ManualIcon from 'web/components/icon/manualicon';
 import UploadIcon from 'web/components/icon/uploadicon';
 import NewIcon from 'web/components/icon/newicon';
 
 import IconDivider from 'web/components/layout/icondivider';
-
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
 import {
   loadEntities,
@@ -43,16 +40,11 @@ import {
 } from 'web/store/entities/policies';
 
 import PoliciesComponent from './component';
-import Table, {SORT_FIELDS} from './table';
+import Table from './table';
 
 const ToolBarIcons = withCapabilities(
   ({capabilities, onPolicyCreateClick, onPolicyImportClick}) => (
     <IconDivider>
-      <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="scan-configuration"
-        title={_('Help: Policies')}
-      />
       {capabilities.mayCreate('config') && (
         <NewIcon title={_('New Policy')} onClick={onPolicyCreateClick} />
       )}
@@ -67,10 +59,6 @@ ToolBarIcons.propTypes = {
   onPolicyCreateClick: PropTypes.func.isRequired,
   onPolicyImportClick: PropTypes.func.isRequired,
 };
-
-const ScanConfigFilterDialog = createFilterDialog({
-  sortFields: SORT_FIELDS,
-});
 
 const PoliciesPage = ({
   onChanged,
@@ -102,7 +90,6 @@ const PoliciesPage = ({
     }) => (
       <EntitiesPage
         {...props}
-        filterEditDialog={ScanConfigFilterDialog}
         filtersFilter={SCANCONFIGS_FILTER_FILTER}
         sectionIcon={<PolicyIcon size="large" />}
         table={Table}

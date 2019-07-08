@@ -29,7 +29,6 @@ import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
 import PolicyIcon from 'web/components/icon/policyicon';
 
@@ -87,11 +86,6 @@ const ToolBarIcons = withCapabilities(
   }) => (
     <Divider margin="10px">
       <IconDivider>
-        <ManualIcon
-          page="vulnerabilitymanagement"
-          anchor="scan-configuration"
-          title={_('Help: Policies')}
-        />
         <ListIcon title={_('Policies List')} page="policies" />
       </IconDivider>
       <IconDivider>
