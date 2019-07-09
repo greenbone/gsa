@@ -20,19 +20,19 @@ import React from 'react';
 
 import {render, fireEvent} from 'web/utils/testing';
 
-import VulnerabilityGroup from 'web/components/powerfilter/vulnerabilitygroup';
+import HostGroup from 'web/components/powerfilter/hostgroup';
 
 import Filter from 'gmp/models/filter';
 
-describe('VulnerabilityGroup tests', () => {
+describe('HostGroup tests', () => {
   test('should render', () => {
-    const filter = Filter.fromString('vulnerability=foo');
+    const filter = Filter.fromString('host=foo');
     const handleChange = jest.fn();
     const {element} = render(
-      <VulnerabilityGroup
+      <HostGroup
         filter={filter}
         name="name"
-        vuln={'foo'}
+        host={'foo'}
         onChange={handleChange}
       />,
     );
@@ -41,28 +41,24 @@ describe('VulnerabilityGroup tests', () => {
   });
 
   test('should render value from filter', () => {
-    const filter = Filter.fromString('vulnerability=foo');
+    const filter = Filter.fromString('host=foo');
     const handleChange = jest.fn();
     const {element} = render(
-      <VulnerabilityGroup
-        filter={filter}
-        name="name"
-        onChange={handleChange}
-      />,
+      <HostGroup filter={filter} name="name" onChange={handleChange} />,
     );
     const input = element.querySelectorAll('input');
 
     expect(input[0]).toHaveAttribute('value', 'foo');
   });
 
-  test('should render value from vulnerability by default', () => {
-    const filter = Filter.fromString('vulnerability=foo');
+  test('should render value from host by default', () => {
+    const filter = Filter.fromString('host=foo');
     const handleChange = jest.fn();
     const {element} = render(
-      <VulnerabilityGroup
+      <HostGroup
         filter={filter}
         name="name"
-        vuln={'bar'}
+        host={'bar'}
         onChange={handleChange}
       />,
     );
@@ -73,13 +69,13 @@ describe('VulnerabilityGroup tests', () => {
   });
 
   test('should call change handler', () => {
-    const filter = Filter.fromString('vulnerability=foo');
+    const filter = Filter.fromString('host=foo');
     const handleChange = jest.fn();
     const {element} = render(
-      <VulnerabilityGroup
+      <HostGroup
         filter={filter}
         name="name"
-        vuln={'bar'}
+        host={'bar'}
         onChange={handleChange}
       />,
     );
