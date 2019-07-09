@@ -56,10 +56,10 @@ const FixedLabel = props => {
 
 // same color as "new"
 
-const FixedVerifiedLabel = props => {
+const FixVerifiedLabel = props => {
   return (
     <Label {...props} backgroundColor="#4F91C7" borderColor="#4F91C7">
-      {_('Fixed Verified')}
+      {_('Fix Verified')}
     </Label>
   );
 };
@@ -79,7 +79,7 @@ const ClosedLabel = props => {
 export const TicketStatusLabels = {
   Open: OpenLabel,
   Fixed: FixedLabel,
-  FixedVerified: FixedVerifiedLabel,
+  FixVerified: FixVerifiedLabel,
   Closed: ClosedLabel,
 };
 
