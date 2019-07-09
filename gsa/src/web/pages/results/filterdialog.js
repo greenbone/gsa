@@ -131,26 +131,11 @@ const ResultsFilterDialogComponent = ({
 
     <OwnerGroup filter={filter} onChange={onSearchTermChange} />
 
-    <VulnerabilityGroup
-      filter={filter}
-      onChange={(value, name, relation = '~') =>
-        onFilterValueChange(value.toString(), name, relation)
-      }
-    />
+    <VulnerabilityGroup filter={filter} onChange={onSearchTermChange} />
 
-    <HostGroup
-      filter={filter}
-      onChange={(value, name, relation = '~') =>
-        onFilterValueChange(value.toString(), name, relation)
-      }
-    />
+    <HostGroup filter={filter} onChange={onSearchTermChange} />
 
-    <LocationGroup
-      filter={filter}
-      onChange={(value, name, relation = '~') =>
-        onFilterValueChange(value.toString(), name, relation)
-      }
-    />
+    <LocationGroup filter={filter} onChange={onSearchTermChange} />
 
     <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
