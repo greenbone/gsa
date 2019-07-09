@@ -40,7 +40,7 @@ const HostGroup = ({host, filter, onChange, name = 'host'}) => {
 
 HostGroup.propTypes = {
   filter: PropTypes.filter,
-  host: PropTypes.number,
+  host: PropTypes.string,
   name: PropTypes.string,
   onChange: PropTypes.func,
 };
