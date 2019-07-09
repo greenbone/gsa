@@ -115,8 +115,6 @@ const ResultsFilterDialogComponent = ({
 
     <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange} />
 
-    <IncludeNotesGroup filter={filter} onChange={onFilterValueChange} />
-
     <AutoFpGroup filter={filter} onChange={onFilterValueChange} />
 
     <SeverityLevelsGroup filter={filter} onChange={onFilterValueChange} />
