@@ -101,6 +101,7 @@ const ResultsFilterDialogComponent = ({
   onFilterChange,
   onFilterStringChange,
   onFilterValueChange,
+  onSearchTermChange,
   onSortByChange,
   onSortOrderChange,
   onValueChange,
@@ -128,12 +129,7 @@ const ResultsFilterDialogComponent = ({
       onChange={onFilterValueChange}
     />
 
-    <OwnerGroup
-      filter={filter}
-      onChange={(value, name, relation = '~') =>
-        onFilterValueChange(value.toString(), name, relation)
-      }
-    />
+    <OwnerGroup filter={filter} onChange={onSearchTermChange} />
 
     <VulnerabilityGroup
       filter={filter}

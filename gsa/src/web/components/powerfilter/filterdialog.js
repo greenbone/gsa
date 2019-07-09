@@ -42,6 +42,7 @@ class FilterDialog extends React.Component {
     this.onSortByChange = this.onSortByChange.bind(this);
     this.onSortOrderChange = this.onSortOrderChange.bind(this);
     this.onValueChange = this.onValueChange.bind(this);
+    this.onSearchTermChange = this.onSearchTermChange.bind(this);
   }
 
   setFilter(filter) {
@@ -120,6 +121,15 @@ class FilterDialog extends React.Component {
     filter.set(name, value, relation);
 
     this.setState({filter});
+  }
+
+  onSearchTermChange(value, name, relation = '~') {
+    const {filter} = this.state;
+    filter.set(name, value.toString(), relation);
+
+    this.setState({filter});
+
+    console.log(filter);
   }
 
   onFilterStringChange(value) {
