@@ -181,6 +181,7 @@ class FilterDialog extends React.Component {
             saveNamedFilter,
             onFilterChange: this.handleFilterChange,
             onFilterValueChange: this.onFilterValueChange,
+            onSearchTermChange: this.onSearchTermChange,
             onFilterStringChange: this.onFilterStringChange,
             onSortOrderChange: this.onSortOrderChange,
             onSortByChange: this.onSortByChange,
