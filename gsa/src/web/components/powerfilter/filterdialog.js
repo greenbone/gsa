@@ -97,7 +97,6 @@ class FilterDialog extends React.Component {
         new Error(_('Please insert a name for the new filter')),
       );
     }
-    console.log(filter, this.orig_filter);
 
     if (onFilterChanged && !newFilter.equals(this.orig_filter)) {
       onFilterChanged(newFilter);
@@ -116,8 +115,6 @@ class FilterDialog extends React.Component {
   onFilterValueChange(value, name, relation = '=') {
     const {filter} = this.state;
 
-    console.log(value, name);
-
     filter.set(name, value, relation);
 
     this.setState({filter});
@@ -128,8 +125,6 @@ class FilterDialog extends React.Component {
     filter.set(name, value.toString(), relation);
 
     this.setState({filter});
-
-    console.log(filter);
   }
 
   onFilterStringChange(value) {
