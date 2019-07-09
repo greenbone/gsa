@@ -43,11 +43,6 @@ import {
 } from 'web/store/entities/alerts';
 
 import {
-  loadEntities as loadScanConfigs,
-  selector as scanConfigsSelector,
-} from 'web/store/entities/policies';
-
-import {
   loadEntities as loadScanners,
   selector as scannerSelector,
 } from 'web/store/entities/scanners';
@@ -74,8 +69,8 @@ import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
 
-import EditConfigFamilyDialog from 'web/pages/policies/editpolicyfamilydialog';
-import EditScanConfigDialog from 'web/pages/policies/editdialog';
+import EditPolicyFamilyDialog from 'web/pages/policies/editpolicyfamilydialog';
+import EditPolicyDialog from 'web/pages/policies/editdialog';
 import EditNvtDetailsDialog from 'web/pages/policies/editnvtdetailsdialog';
 import AuditDialog from './createauditdialog';
 import ImportDialog from 'web/pages/policies/importdialog';
@@ -93,28 +88,28 @@ class PolicyComponent extends React.Component {
 
     this.state = {
       createPolicyDialogVisible: false,
-      editConfigDialogVisible: false,
-      editConfigFamilyDialogVisible: false,
+      editPolicyDialogVisible: false,
+      editPolicyFamilyDialogVisible: false,
       editNvtDetailsDialogVisible: false,
       createAuditDialogVisible: false,
       importDialogVisible: false,
     };
 
     this.handleImportPolicy = this.handleImportPolicy.bind(this);
-    this.handleSaveConfigFamily = this.handleSaveConfigFamily.bind(this);
-    this.handleSaveConfigNvt = this.handleSaveConfigNvt.bind(this);
+    this.handleSavePolicyFamily = this.handleSavePolicyFamily.bind(this);
+    this.handleSavePolicyNvt = this.handleSavePolicyNvt.bind(this);
     this.openCreatePolicyDialog = this.openCreatePolicyDialog.bind(this);
     this.handleCloseCreatePolicyDialog = this.handleCloseCreatePolicyDialog.bind(
       this,
     );
-    this.openEditConfigDialog = this.openEditConfigDialog.bind(this);
-    this.handleCloseEditConfigDialog = this.handleCloseEditConfigDialog.bind(
+    this.openEditPolicyDialog = this.openEditPolicyDialog.bind(this);
+    this.handleCloseEditPolicyDialog = this.handleCloseEditPolicyDialog.bind(
       this,
     );
-    this.openEditConfigFamilyDialog = this.openEditConfigFamilyDialog.bind(
+    this.openEditPolicyFamilyDialog = this.openEditPolicyFamilyDialog.bind(
       this,
     );
-    this.handleCloseEditConfigFamilyDialog = this.handleCloseEditConfigFamilyDialog.bind(
+    this.handleCloseEditPolicyFamilyDialog = this.handleCloseEditPolicyFamilyDialog.bind(
       this,
     );
     this.openEditNvtDetailsDialog = this.openEditNvtDetailsDialog.bind(this);
@@ -172,16 +167,16 @@ class PolicyComponent extends React.Component {
     this.setState({target_id: data.id});
   }
 
-  openEditConfigDialog(config) {
+  openEditPolicyDialog(config) {
     Promise.all([
-      this.loadEditScanConfigSettings(config),
+      this.loadEditPolicySettings(config),
       this.loadScanners(),
     ]).then(([scanConfigState, scannerState]) => {
       this.setState({
         ...scannerState,
         ...scanConfigState,
         base: config.base,
-        editConfigDialogVisible: true,
+        editPolicyDialogVisible: true,
         title: _('Edit Policy {{name}}', {name: shorten(config.name)}),
       });
     });
@@ -189,12 +184,12 @@ class PolicyComponent extends React.Component {
     this.handleInteraction();
   }
 
-  closeEditConfigDialog() {
-    this.setState({editConfigDialogVisible: false});
+  closeEditPolicyDialog() {
+    this.setState({editPolicyDialogVisible: false});
   }
 
-  handleCloseEditConfigDialog() {
-    this.closeEditConfigDialog();
+  handleCloseEditPolicyDialog() {
+    this.closeEditPolicyDialog();
     this.handleInteraction();
   }
 
@@ -232,11 +227,12 @@ class PolicyComponent extends React.Component {
     this.handleInteraction();
   }
 
-  openCreateAuditDialog(config) {
+  openCreateAuditDialog(policy) {
     this.props.loadAlerts();
-    this.props.loadScanConfigs();
     this.props.loadSchedules();
     this.props.loadTargets();
+
+    console.log('config=', policy);
 
     const {defaultAlertId, defaultScheduleId, defaultTargetId} = this.props;
 
@@ -249,7 +245,7 @@ class PolicyComponent extends React.Component {
       auto_delete: undefined,
       auto_delete_data: undefined,
       comment: '',
-      config_id: isDefined(config) ? config.id : undefined, // must not use default because the scanconfig has to be the policy
+      policy_id: isDefined(policy) ? policy.id : undefined,
       hosts_ordering: undefined,
       id: undefined,
       in_assets: undefined,
@@ -292,7 +288,7 @@ class PolicyComponent extends React.Component {
     target_id,
   }) {
     const {gmp} = this.props;
-    const {config_id} = this.state;
+    const config_id = this.state.policy_id;
 
     const scanner_id = OPENVAS_DEFAULT_SCANNER_ID;
     const scanner_type = OPENVAS_SCANNER_TYPE;
@@ -334,13 +330,13 @@ class PolicyComponent extends React.Component {
       .then(() => this.closeCreateAuditDialog());
   }
 
-  openEditConfigFamilyDialog({config, name}) {
-    this.loadEditScanConfigFamilySettings(config, name).then(state => {
+  openEditPolicyFamilyDialog({config, name}) {
+    this.loadEditPolicyFamilySettings(config, name).then(state => {
       this.setState({
         ...state,
         config,
-        editConfigFamilyDialogVisible: true,
-        editConfigFamilyDialogTitle: _('Edit Policy Family {{name}}', {
+        editPolicyFamilyDialogVisible: true,
+        editPolicyFamilyDialogTitle: _('Edit Policy Family {{name}}', {
           name: shorten(name),
         }),
       });
@@ -348,17 +344,17 @@ class PolicyComponent extends React.Component {
     this.handleInteraction();
   }
 
-  closeEditConfigFamilyDialog() {
-    this.setState({editConfigFamilyDialogVisible: false});
+  closeEditPolicyFamilyDialog() {
+    this.setState({editPolicyFamilyDialogVisible: false});
   }
 
-  handleCloseEditConfigFamilyDialog() {
-    this.closeEditConfigFamilyDialog();
+  handleCloseEditPolicyFamilyDialog() {
+    this.closeEditPolicyFamilyDialog();
     this.handleInteraction();
   }
 
   openEditNvtDetailsDialog({config, nvt}) {
-    this.loadEditScanConfigNvtSettings(config, nvt).then(state => {
+    this.loadEditPolicyNvtSettings(config, nvt).then(state => {
       this.setState({
         ...state,
         config,
@@ -391,7 +387,7 @@ class PolicyComponent extends React.Component {
       .then(() => this.closeImportDialog());
   }
 
-  handleSaveConfigFamily(data) {
+  handleSavePolicyFamily(data) {
     const {gmp} = this.props;
 
     this.handleInteraction();
@@ -399,15 +395,15 @@ class PolicyComponent extends React.Component {
     return gmp.policy
       .savePolicyFamily(data)
       .then(() => {
-        return this.loadEditScanConfigSettings(data.config);
+        return this.loadEditPolicySettings(data.config);
       })
       .then(state => {
-        this.closeEditConfigFamilyDialog();
+        this.closeEditPolicyFamilyDialog();
         this.setState({...state});
       });
   }
 
-  handleSaveConfigNvt(values) {
+  handleSavePolicyNvt(values) {
     const {gmp} = this.props;
 
     this.handleInteraction();
@@ -416,7 +412,7 @@ class PolicyComponent extends React.Component {
       .savePolicyNvt(values)
       .then(response => {
         // update nvt timeouts in nvt family dialog
-        this.loadEditScanConfigFamilySettings(
+        this.loadEditPolicyFamilySettings(
           values.config,
           values.family_name,
         ).then(state => {
@@ -424,7 +420,7 @@ class PolicyComponent extends React.Component {
         });
 
         // update nvt preference values in edit dialog
-        this.loadEditScanConfigSettings(values.config).then(state => {
+        this.loadEditPolicySettings(values.config).then(state => {
           this.setState({state});
         });
       })
@@ -451,7 +447,7 @@ class PolicyComponent extends React.Component {
     });
   }
 
-  loadEditScanConfigSettings(config) {
+  loadEditPolicySettings(config) {
     const {gmp} = this.props;
 
     return Promise.all([gmp.policy.get(config), gmp.nvtfamilies.get()]).then(
@@ -496,7 +492,7 @@ class PolicyComponent extends React.Component {
     );
   }
 
-  loadEditScanConfigFamilySettings(config, name) {
+  loadEditPolicyFamilySettings(config, name) {
     const {gmp} = this.props;
     const {select} = this.state;
 
@@ -534,7 +530,7 @@ class PolicyComponent extends React.Component {
       });
   }
 
-  loadEditScanConfigNvtSettings(config, nvt) {
+  loadEditPolicyNvtSettings(config, nvt) {
     const {gmp} = this.props;
 
     return gmp.policy
@@ -542,7 +538,7 @@ class PolicyComponent extends React.Component {
         id: config.id,
         oid: nvt.oid,
         policy_name: config.name,
-        family_name: nvt.name,
+        name: nvt.name,
       })
       .then(response => {
         const {data} = response;
@@ -608,9 +604,9 @@ class PolicyComponent extends React.Component {
       config_name,
       createPolicyDialogVisible,
       createAuditDialogVisible,
-      editConfigDialogVisible,
-      editConfigFamilyDialogVisible,
-      editConfigFamilyDialogTitle,
+      editPolicyDialogVisible,
+      editPolicyFamilyDialogVisible,
+      editPolicyFamilyDialogTitle,
       editNvtDetailsDialogVisible,
       editNvtDetailsDialogTitle,
       families,
@@ -662,9 +658,10 @@ class PolicyComponent extends React.Component {
                 ...other,
                 createAudit: this.openCreateAuditDialog,
                 create: this.openCreatePolicyDialog,
-                edit: this.openEditConfigDialog,
+                edit: this.openEditPolicyDialog,
                 import: this.openImportDialog,
               })}
+              {console.log('config=', config)}
               {createAuditDialogVisible && (
                 <TargetComponent
                   onCreated={this.handleTargetCreated}
@@ -728,8 +725,8 @@ class PolicyComponent extends React.Component {
                   }}
                 />
               )}
-              {editConfigDialogVisible && (
-                <EditScanConfigDialog
+              {editPolicyDialogVisible && (
+                <EditPolicyDialog
                   base={base}
                   comment={comment}
                   config={config}
@@ -741,12 +738,12 @@ class PolicyComponent extends React.Component {
                   select={select}
                   title={title}
                   trend={trend}
-                  onClose={this.handleCloseEditConfigDialog}
-                  onEditConfigFamilyClick={this.openEditConfigFamilyDialog}
+                  onClose={this.handleCloseEditPolicyDialog}
+                  onEditConfigFamilyClick={this.openEditPolicyFamilyDialog}
                   onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
                   onSave={d => {
                     this.handleInteraction();
-                    return save(d).then(() => this.closeEditConfigDialog());
+                    return save(d).then(() => this.closeEditPolicyDialog());
                   }}
                 />
               )}
@@ -759,18 +756,18 @@ class PolicyComponent extends React.Component {
             onSave={this.handleImportPolicy}
           />
         )}
-        {editConfigFamilyDialogVisible && (
-          <EditConfigFamilyDialog
+        {editPolicyFamilyDialogVisible && (
+          <EditPolicyFamilyDialog
             config={config}
             config_name={config_name}
             family_name={family_name}
             id={id}
             nvts={nvts}
             selected={selected}
-            title={editConfigFamilyDialogTitle}
-            onClose={this.handleCloseEditConfigFamilyDialog}
+            title={editPolicyFamilyDialogTitle}
+            onClose={this.handleCloseEditPolicyFamilyDialog}
             onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
-            onSave={this.handleSaveConfigFamily}
+            onSave={this.handleSavePolicyFamily}
           />
         )}
         {editNvtDetailsDialogVisible && (
@@ -784,7 +781,7 @@ class PolicyComponent extends React.Component {
             timeout={timeout}
             title={editNvtDetailsDialogTitle}
             onClose={this.handleCloseEditNvtDetailsDialog}
-            onSave={this.handleSaveConfigNvt}
+            onSave={this.handleSavePolicyNvt}
           />
         )}
       </React.Fragment>
@@ -802,7 +799,6 @@ PolicyComponent.propTypes = {
   defaultTargetId: PropTypes.id,
   gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
-  loadScanConfigs: PropTypes.func.isRequired,
   loadScanners: PropTypes.func.isRequired,
   loadSchedules: PropTypes.func.isRequired,
   loadTargets: PropTypes.func.isRequired,
@@ -823,12 +819,9 @@ PolicyComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-//const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
-
 const mapStateToProps = rootState => {
   const alertSel = alertSelector(rootState);
   const userDefaults = getUserSettingsDefaults(rootState);
-  const scanConfigsSel = scanConfigsSelector(rootState);
   const scannersSel = scannerSelector(rootState);
   const scheduleSel = scheduleSelector(rootState);
   const targetSel = targetSelector(rootState);
@@ -846,7 +839,6 @@ const mapStateToProps = rootState => {
     defaultSshCredential: userDefaults.getValueByName('defaultsshcredential'),
     defaultSmbCredential: userDefaults.getValueByName('defaultsmbcredential'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
-    scanConfigs: scanConfigsSel.getEntities(ALL_FILTER),
     scanners: scannersSel.getEntities(ALL_FILTER),
     schedules: scheduleSel.getEntities(ALL_FILTER),
     targets: targetSel.getEntities(ALL_FILTER),
@@ -855,7 +847,6 @@ const mapStateToProps = rootState => {
 
 const mapDispatchToProp = (dispatch, {gmp}) => ({
   loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
-  loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
   loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
   loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
