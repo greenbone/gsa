@@ -21,8 +21,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import logger from 'gmp/log';
-
 import {forEach, first} from 'gmp/utils/array';
 import {isDefined, isArray} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
@@ -34,13 +32,6 @@ import {
   HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_NO,
 } from 'gmp/models/task';
-
-import {
-  OPENVAS_SCANNER_TYPE,
-  OSP_SCANNER_TYPE,
-  GMP_SCANNER_TYPE,
-  OPENVAS_DEFAULT_SCANNER_ID,
-} from 'gmp/models/scanner';
 
 import {
   FULL_AND_FAST_SCAN_CONFIG_ID,
@@ -71,8 +62,6 @@ import Layout from 'web/components/layout/layout';
 import AddResultsToAssetsGroup from 'web/pages/tasks/addresultstoassetsgroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/autodeletereportsgroup';
 
-const log = logger.getLogger('web.tasks.dialog');
-
 const sort_scan_configs = (scan_configs = []) => {
   const sorted_scan_configs = {
     [OPENVAS_SCAN_CONFIG_TYPE]: [],
@@ -89,87 +78,6 @@ const sort_scan_configs = (scan_configs = []) => {
     sorted_scan_configs[type].push(config);
   });
   return sorted_scan_configs;
-};
-
-const get_scanner = (scanners, scanner_id) => {
-  if (!isDefined(scanners)) {
-    return undefined;
-  }
-
-  return scanners.find(sc => {
-    return sc.id === scanner_id;
-  });
-};
-
-class ScannerSelect extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.handleScannerChange = this.handleScannerChange.bind(this);
-  }
-
-  handleScannerChange(value, name) {
-    const {
-      scanners,
-      scanConfigs,
-      onScanConfigChange,
-      onScannerChange,
-    } = this.props;
-    let config_id;
-
-    const scanner = get_scanner(scanners, value);
-    const scanner_type = isDefined(scanner) ? scanner.scannerType : undefined;
-
-    if (
-      scanner_type === OPENVAS_SCANNER_TYPE ||
-      scanner_type === GMP_SCANNER_TYPE
-    ) {
-      config_id = selectSaveId(
-        scanConfigs[OPENVAS_SCAN_CONFIG_TYPE],
-        FULL_AND_FAST_SCAN_CONFIG_ID,
-      );
-    } else if (scanner_type === OSP_SCANNER_TYPE) {
-      config_id = selectSaveId(scanConfigs[OSP_SCAN_CONFIG_TYPE], UNSET_VALUE);
-    } else {
-      config_id = UNSET_VALUE;
-    }
-
-    log.debug('on scanner change', value, config_id, scanner);
-
-    if (isDefined(onScannerChange)) {
-      onScannerChange(value);
-    }
-    if (isDefined(onScanConfigChange)) {
-      onScanConfigChange(config_id);
-    }
-  }
-
-  render() {
-    const {changeTask, scannerId, scanners} = this.props;
-    return (
-      <FormGroup title={_('Scanner')}>
-        <Select
-          name="scanner_id"
-          value={scannerId}
-          disabled={!changeTask}
-          items={renderSelectItems(scanners)}
-          onChange={this.handleScannerChange}
-        />
-      </FormGroup>
-    );
-  }
-}
-
-ScannerSelect.propTypes = {
-  changeTask: PropTypes.bool.isRequired,
-  scanConfigs: PropTypes.shape({
-    [OPENVAS_SCANNER_TYPE]: PropTypes.array,
-    [OSP_SCANNER_TYPE]: PropTypes.array,
-  }),
-  scannerId: PropTypes.id.isRequired,
-  scanners: PropTypes.array.isRequired,
-  onScanConfigChange: PropTypes.func.isRequired,
-  onScannerChange: PropTypes.func.isRequired,
 };
 
 const DEFAULT_MAX_CHECKS = 4;
@@ -194,13 +102,6 @@ const TaskDialog = ({
   min_qod = DEFAULT_MIN_QOD,
   name = _('Unnamed'),
   scan_configs = [],
-  scanner_id = OPENVAS_DEFAULT_SCANNER_ID,
-  scanners = [
-    {
-      id: OPENVAS_DEFAULT_SCANNER_ID,
-      scanner_type: OPENVAS_SCANNER_TYPE,
-    },
-  ],
   schedule_id = UNSET_VALUE,
   schedule_periods = NO_VALUE,
   schedules = [],
@@ -222,24 +123,16 @@ const TaskDialog = ({
   onTargetChange,
   ...data
 }) => {
-  const scanner = get_scanner(scanners, scanner_id);
-  const scanner_type = isDefined(scanner) ? scanner.scannerType : undefined;
-
-  const tag_items = renderSelectItems(tags);
-
   const target_items = renderSelectItems(targets);
 
   const schedule_items = renderSelectItems(schedules, UNSET_VALUE);
 
   const sorted_scan_configs = sort_scan_configs(scan_configs);
 
-  const osp_scan_config_items = renderSelectItems(
-    sorted_scan_configs[OSP_SCAN_CONFIG_TYPE],
-  );
+  const policyFilter = config => config.usage_type === 'policy';
+  const policies = scan_configs.filter(policyFilter);
 
-  const openvas_scan_config_items = renderSelectItems(
-    sorted_scan_configs[OPENVAS_SCAN_CONFIG_TYPE],
-  );
+  const openvas_scan_config_items = renderSelectItems(policies);
 
   const alert_items = renderSelectItems(alerts);
 
@@ -266,8 +159,6 @@ const TaskDialog = ({
     max_hosts,
     min_qod,
     name,
-    scanner_type,
-    scanner_id,
     source_iface,
     tag_id,
     tags,
@@ -278,8 +169,6 @@ const TaskDialog = ({
     alert_ids,
     config_id,
     schedule_id,
-    scanner_id,
-    scanner_type,
     target_id,
   };
 
@@ -292,20 +181,12 @@ const TaskDialog = ({
       values={controlledData}
     >
       {({values: state, onValueChange}) => {
-        const osp_config_id = selectSaveId(
-          sorted_scan_configs[OSP_SCAN_CONFIG_TYPE],
-          state.config_id,
-        );
         const openvas_config_id = selectSaveId(
           sorted_scan_configs[OPENVAS_SCAN_CONFIG_TYPE],
           state.config_id,
         );
 
-        const is_osp_scanner = state.scanner_type === OSP_SCANNER_TYPE;
-
-        const use_openvas_scan_config =
-          state.scanner_type === OPENVAS_SCANNER_TYPE ||
-          state.scanner_type === GMP_SCANNER_TYPE;
+        const use_openvas_scan_config = true;
         return (
           <Layout flex="column">
             <FormGroup title={_('Name')}>
@@ -399,29 +280,6 @@ const TaskDialog = ({
               onChange={onValueChange}
             />
 
-            <FormGroup title={_('Apply Overrides')}>
-              <YesNoRadio
-                name="apply_overrides"
-                disabled={state.in_assets !== YES_VALUE}
-                value={state.apply_overrides}
-                onChange={onValueChange}
-              />
-            </FormGroup>
-
-            <FormGroup title={_('Min QoD')}>
-              <Spinner
-                name="min_qod"
-                size="4"
-                disabled={state.in_assets !== YES_VALUE}
-                type="int"
-                min="0"
-                max="100"
-                value={state.min_qod}
-                onChange={onValueChange}
-              />
-              <Layout>%</Layout>
-            </FormGroup>
-
             {change_task && (
               <FormGroup title={_('Alterable Task')}>
                 <YesNoRadio
@@ -439,18 +297,9 @@ const TaskDialog = ({
               onChange={onValueChange}
             />
 
-            <ScannerSelect
-              scanConfigs={sorted_scan_configs}
-              scanners={scanners}
-              scannerId={state.scanner_id}
-              changeTask={change_task}
-              onScanConfigChange={onScanConfigChange}
-              onScannerChange={onScannerChange}
-            />
-
             {use_openvas_scan_config && (
               <Layout flex="column" grow="1">
-                <FormGroup titleSize="2" title={_('Scan Config')}>
+                <FormGroup titleSize="2" title={_('Policy')}>
                   <Select
                     name="config_id"
                     disabled={!change_task || hasTask}
@@ -516,43 +365,6 @@ const TaskDialog = ({
                 </FormGroup>
               </Layout>
             )}
-
-            {is_osp_scanner && (
-              <FormGroup titleSize="2" title={_('Scan Config')}>
-                <Select
-                  name="config_id"
-                  items={osp_scan_config_items}
-                  value={osp_config_id}
-                  onChange={onScanConfigChange}
-                />
-              </FormGroup>
-            )}
-
-            {capabilities.mayAccess('tags') &&
-              capabilities.mayCreate('tag') &&
-              showTagSelection && (
-                <React.Fragment>
-                  <FormGroup title={_('Tag')}>
-                    <Divider>
-                      <Checkbox
-                        title={_('Add:')}
-                        name="add_tag"
-                        checkedValue={YES_VALUE}
-                        unCheckedValue={NO_VALUE}
-                        checked={state.add_tag === YES_VALUE}
-                        onChange={onValueChange}
-                      />
-                      <Select
-                        disabled={state.add_tag !== YES_VALUE}
-                        name="tag_id"
-                        items={tag_items}
-                        value={state.tag_id}
-                        onChange={onValueChange}
-                      />
-                    </Divider>
-                  </FormGroup>
-                </React.Fragment>
-              )}
           </Layout>
         );
       }}

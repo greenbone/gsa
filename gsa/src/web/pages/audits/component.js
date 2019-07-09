@@ -33,7 +33,10 @@ import {withRouter} from 'react-router-dom';
 
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 
-import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
+import {
+  OPENVAS_DEFAULT_SCANNER_ID,
+  OPENVAS_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 
 import {
   loadEntities as loadAlerts,
@@ -99,7 +102,7 @@ import ContainerTaskDialog from 'web/pages/tasks/containerdialog';
 
 const REPORT_FORMATS_FILTER = Filter.fromString('active=1 trust=1 rows=-1');
 
-class TaskComponent extends React.Component {
+class AuditComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
@@ -303,8 +306,6 @@ class TaskComponent extends React.Component {
     max_checks,
     max_hosts,
     name,
-    scanner_id,
-    scanner_type,
     schedule_id,
     schedule_periods,
     source_iface,
@@ -313,6 +314,7 @@ class TaskComponent extends React.Component {
     task,
   }) {
     const {gmp} = this.props;
+    let {scanner_id, scanner_type} = this.state;
 
     this.handleInteraction();
 
@@ -451,6 +453,8 @@ class TaskComponent extends React.Component {
 
       const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
+      const defaultScannerType = OPENVAS_SCANNER_TYPE;
+
       this.setState({
         auditDialogVisible: true,
         alert_ids,
@@ -468,6 +472,7 @@ class TaskComponent extends React.Component {
         min_qod: undefined,
         name: undefined,
         scanner_id: defaultScannerId,
+        scanner_type: defaultScannerType,
         schedule_id: defaultScheduleId,
         schedule_periods: undefined,
         source_iface: undefined,
@@ -578,7 +583,6 @@ class TaskComponent extends React.Component {
     } = this.props;
 
     const {
-      // advancedTaskWizardVisible,
       // alert_id,
       alert_ids,
       alterable,
@@ -597,7 +601,6 @@ class TaskComponent extends React.Component {
       max_checks,
       max_hosts,
       min_qod,
-      // modifyTaskWizardVisible,
       name,
       // port_list_id,
       reportImportDialogVisible,
@@ -622,7 +625,6 @@ class TaskComponent extends React.Component {
       task,
       tasks,
       auditDialogVisible,
-      // taskWizardVisible,
       title = _('Edit Audit {{name}}', task),
     } = this.state;
     return (
@@ -750,7 +752,7 @@ class TaskComponent extends React.Component {
   }
 }
 
-TaskComponent.propTypes = {
+AuditComponent.propTypes = {
   alerts: PropTypes.arrayOf(PropTypes.model),
   capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
@@ -873,4 +875,4 @@ export default compose(
     mapStateToProps,
     mapDispatchToProp,
   ),
-)(TaskComponent);
+)(AuditComponent);

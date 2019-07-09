@@ -33,39 +33,37 @@ import {
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-// import DashboardControls from 'web/components/dashboard/controls';
-
 import ManualIcon from 'web/components/icon/manualicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
 import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 
-// import NewIconMenu from 'web/pages/tasks/icons/newiconmenu';
+import NewIcon from 'web/components/icon/newicon';
 
 import AuditComponent from './component';
-// import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import Table from './table';
+
 import AuditIcon from 'web/components/icon/auditicon';
 
-const ToolBarIcons = withCapabilities(({capabilities}) => (
+const ToolBarIcons = withCapabilities(({capabilities, onAuditCreateClick}) => (
   <IconDivider>
     <ManualIcon
       page="vulnerabilitymanagement"
       anchor="creating-a-task"
       title={_('Help: Tasks')}
     />
+
+    {capabilities.mayCreate('task') && (
+      <NewIcon title={_('New Audit')} onClick={onAuditCreateClick} />
+    )}
   </IconDivider>
 ));
 
-/* ToolBarIcons.propTypes = {
-  onAdvancedTaskWizardClick: PropTypes.func.isRequired,
-  onContainerTaskCreateClick: PropTypes.func.isRequired,
-  onModifyTaskWizardClick: PropTypes.func.isRequired,
-  onTaskCreateClick: PropTypes.func.isRequired,
-  onTaskWizardClick: PropTypes.func.isRequired,
-}; */
+ToolBarIcons.propTypes = {
+  onAuditCreateClick: PropTypes.func.isRequired,
+};
 
 const Page = ({
   filter,
@@ -77,19 +75,14 @@ const Page = ({
   ...props
 }) => (
   <AuditComponent
-    // onAdvancedTaskWizardSaved={onChanged}
     onCloned={onChanged}
     onCloneError={onError}
-    // onContainerSaved={onChanged}
-    // onCreated={onChanged}
-    // onContainerCreated={onChanged}
+    onCreated={onChanged}
     onDeleted={onChanged}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
     onInteraction={onInteraction}
-    // onModifyTaskWizardSaved={onChanged}
-    // on Report Dowloaded???
     onReportImported={onChanged}
     onResumed={onChanged}
     onResumeError={onError}
@@ -98,12 +91,10 @@ const Page = ({
     onStartError={onError}
     onStopped={onChanged}
     onStopError={onError}
-    // onTaskWizardSaved={onChanged}
   >
     {({
       clone,
-      // create,
-      // createcontainer,
+      create,
       delete: delete_func,
       download,
       edit,
@@ -113,25 +104,9 @@ const Page = ({
       reportDownload,
       reportimport,
       gcrFormatDefined,
-      // advancedtaskwizard,
-      // modifytaskwizard,
-      // taskwizard,
     }) => (
       <EntitiesPage
         {...props}
-        /* dashboard={() => (
-          <TaskDashboard
-            filter={filter}
-            onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
-          />
-        )}
-        dashboardControls={() => (
-          <DashboardControls
-            dashboardId={TASK_DASHBOARD_ID}
-            onInteraction={onInteraction}
-          />
-        )} */
         filter={filter}
         filterEditDialog={TaskFilterDialog}
         filtersFilter={TASKS_FILTER_FILTER}
@@ -140,23 +115,19 @@ const Page = ({
         table={Table}
         title={_('Audits')}
         toolBarIcons={ToolBarIcons}
-        // onAdvancedTaskWizardClick={advancedtaskwizard}
-        // onContainerTaskCreateClick={createcontainer}
         onError={onError}
         onFilterChanged={onFilterChanged}
         onInteraction={onInteraction}
-        // onModifyTaskWizardClick={modifytaskwizard}
         onReportDownloadClick={reportDownload}
         onReportImportClick={reportimport}
         onTaskCloneClick={clone}
-        // onTaskCreateClick={create}
+        onAuditCreateClick={create}
         onTaskDeleteClick={delete_func}
         onTaskDownloadClick={download}
         onTaskEditClick={edit}
         onTaskResumeClick={resume}
         onTaskStartClick={start}
         onTaskStopClick={stop}
-        // onTaskWizardClick={taskwizard}
       />
     )}
   </AuditComponent>
