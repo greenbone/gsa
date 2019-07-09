@@ -83,7 +83,7 @@ class FilterDialog extends React.Component {
   }
 
   handleSave() {
-    let {filter, filterName = '', filterstring, saveNamedFilter} = this.state;
+    const {filter, filterName = '', filterstring, saveNamedFilter} = this.state;
     const {onFilterChanged, onCloseClick} = this.props;
 
     const newFilter = Filter.fromString(filterstring);
