@@ -61,7 +61,7 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {selector, loadEntity} from 'web/store/entities/scanconfigs';
+import {selector, loadEntity} from 'web/store/entities/policies';
 
 import {
   selector as permissionsSelector,

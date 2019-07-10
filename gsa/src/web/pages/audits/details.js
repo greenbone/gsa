@@ -39,7 +39,7 @@ import {
 import {
   loadEntity as loadScanConfig,
   selector as scanConfigSelector,
-} from 'web/store/entities/scanconfigs';
+} from 'web/store/entities/policies';
 
 import PropTypes from 'web/utils/proptypes';
 import compose from 'web/utils/compose';
@@ -175,7 +175,7 @@ class AuditDetails extends React.Component {
                       <span>
                         <DetailsLink
                           textOnly={!links}
-                          type="scanconfig"
+                          type="policy"
                           id={config.id}
                         >
                           {config.name}

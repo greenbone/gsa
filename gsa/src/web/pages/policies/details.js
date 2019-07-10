@@ -39,7 +39,7 @@ import TableRow from 'web/components/table/row';
 import {Col} from 'web/entity/page';
 
 const PolicyDetails = ({entity}) => {
-  const {comment, policy_type, scanner, tasks = []} = entity;
+  const {comment, policy_type, scanner, audits = []} = entity;
   return (
     <Layout flex="column" grow>
       <InfoTable>
@@ -67,18 +67,18 @@ const PolicyDetails = ({entity}) => {
             </TableRow>
           )}
 
-          {tasks.length > 0 && (
+          {audits.length > 0 && (
             <TableRow>
               <TableData>{_('Audits using this Policy')}</TableData>
               <TableData>
                 <Divider wrap>
-                  {tasks.map((task, index) => {
+                  {audits.map((audit, index) => {
                     return (
-                      <React.Fragment key={task.id}>
-                        <DetailsLink id={task.id} type="task">
-                          {task.name}
+                      <React.Fragment key={audit.id}>
+                        <DetailsLink id={audit.id} type="audit">
+                          {audit.name}
                         </DetailsLink>
-                        {index !== tasks.length - 1 && ','}
+                        {index !== audits.length - 1 && ','}
                       </React.Fragment>
                     );
                   })}

@@ -125,8 +125,8 @@ class Policy extends Model {
       ret.scanner = new Model(scanner, 'scanner');
     }
 
-    if (isDefined(elem.audits)) {
-      ret.audits = map(elem.audits.audit, audit => new Model(audit, 'audit'));
+    if (isDefined(elem.tasks)) {
+      ret.audits = map(elem.tasks.task, task => new Model(task, 'audit'));
     } else {
       ret.audits = [];
     }
