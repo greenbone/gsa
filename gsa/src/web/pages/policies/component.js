@@ -232,8 +232,6 @@ class PolicyComponent extends React.Component {
     this.props.loadSchedules();
     this.props.loadTargets();
 
-    console.log('config=', policy);
-
     const {defaultAlertId, defaultScheduleId, defaultTargetId} = this.props;
 
     const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
@@ -302,7 +300,7 @@ class PolicyComponent extends React.Component {
     this.handleInteraction();
 
     const {onCreated, onCreateError} = this.props;
-    return gmp.task
+    return gmp.audit
       .create({
         add_tag,
         alert_ids,
@@ -661,7 +659,6 @@ class PolicyComponent extends React.Component {
                 edit: this.openEditPolicyDialog,
                 import: this.openImportDialog,
               })}
-              {console.log('config=', config)}
               {createAuditDialogVisible && (
                 <TargetComponent
                   onCreated={this.handleTargetCreated}

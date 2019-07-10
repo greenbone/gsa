@@ -45,7 +45,7 @@ import NoteIcon from 'web/components/icon/noteicon';
 import OverrideIcon from 'web/components/icon/overrideicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
-import AuditIcon from 'web/components/icon/taskicon';
+import AuditIcon from 'web/components/icon/auditicon';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -87,7 +87,7 @@ import {
 import {
   selector as taskSelector,
   loadEntity as loadTask,
-} from 'web/store/entities/tasks';
+} from 'web/store/entities/audits';
 
 import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 import PropTypes from 'web/utils/proptypes';
@@ -97,9 +97,9 @@ import withComponentDefaults from 'web/utils/withComponentDefaults';
 // import ImportReportIcon from './icons/importreporticon';
 // import NewIconMenu from './icons/newiconmenu';
 import ResumeIcon from './icons/resumeicon';
-import ScheduleIcon from './icons/scheduleicon';
+import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
 import StartIcon from './icons/starticon';
-import StopIcon from './icons/stopicon';
+import StopIcon from 'web/pages/tasks/icons/stopicon';
 
 import AuditDetails from './details';
 import TaskStatus from 'web/pages/tasks/status';
@@ -129,7 +129,7 @@ const ToolBarIcons = ({
           anchor="creating-a-task"
           title={_('Help: Audits')}
         />
-        <ListIcon title={_('Audit List')} page="tasks" />
+        <ListIcon title={_('Audit List')} page="audits" />
         {entity.isAlterable() && !entity.isNew() && (
           <AlterableIcon
             title={_(
@@ -318,12 +318,12 @@ const Page = ({
   ...props
 }) => (
   <AuditComponent
-    onCloned={goto_details('task', props)}
+    onCloned={goto_details('audit', props)}
     onCloneError={onError}
     onCreated={goto_details('task', props)}
     onContainerCreated={goto_details('task', props)}
     onContainerSaved={onChanged}
-    onDeleted={goto_list('tasks', props)}
+    onDeleted={goto_list('audits', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
@@ -503,7 +503,7 @@ const reloadInterval = ({defaultReloadInterval, entity}) => {
     : defaultReloadInterval;
 };
 
-export default withEntityContainer('task', {
+export default withEntityContainer('audit', {
   load,
   entitySelector: taskSelector,
   mapStateToProps,

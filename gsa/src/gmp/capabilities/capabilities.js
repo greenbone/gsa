@@ -24,6 +24,8 @@ import {map} from '../utils/array';
 import {pluralizeType} from '../utils/entitytype';
 
 const types = {
+  audit: 'task',
+  audits: 'task',
   host: 'asset',
   hosts: 'asset',
   os: 'asset',

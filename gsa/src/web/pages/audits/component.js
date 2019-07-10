@@ -116,7 +116,7 @@ class AuditComponent extends React.Component {
 
     const {gmp} = this.props;
 
-    this.cmd = gmp.task;
+    this.cmd = gmp.audit;
 
     this.handleReportImport = this.handleReportImport.bind(this);
     this.handleTaskResume = this.handleTaskResume.bind(this);
@@ -327,7 +327,7 @@ class AuditComponent extends React.Component {
         config_id = undefined;
       }
       const {onSaved, onSaveError} = this.props;
-      return gmp.task
+      return gmp.audit
         .save({
           alert_ids,
           alterable,
@@ -355,7 +355,7 @@ class AuditComponent extends React.Component {
     }
 
     const {onCreated, onCreateError} = this.props;
-    return gmp.task
+    return gmp.audit
       .create({
         add_tag,
         alert_ids,

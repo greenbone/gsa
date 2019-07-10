@@ -20,7 +20,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
+import {RESET_FILTER, TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -28,7 +28,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 import {
   loadEntities,
   selector as entitiesSelector,
-} from 'web/store/entities/tasks';
+} from 'web/store/entities/audits';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -147,9 +147,10 @@ const taskReloadInterval = ({entities = [], defaultReloadInterval}) =>
     ? DEFAULT_RELOAD_INTERVAL_ACTIVE
     : defaultReloadInterval;
 
-export default withEntitiesContainer('task', {
+export default withEntitiesContainer('audit', {
   entitiesSelector,
   loadEntities,
+  defaultFilter: RESET_FILTER,
   reloadInterval: taskReloadInterval,
 })(Page);
 

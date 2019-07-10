@@ -38,6 +38,7 @@ import AgentDetailsPage from './pages/agents/detailspage';
 import AlertsPage from './pages/alerts/listpage';
 import AlertDetailsPage from './pages/alerts/detailspage';
 import AuditsPage from './pages/audits/listpage';
+import AuditsDetailsPage from './pages/audits/detailspage';
 import SecInfosPage from './pages/secinfo/listpage';
 import CertBundsPage from './pages/certbund/listpage';
 import CertBundDetailsPage from './pages/certbund/detailspage';
@@ -199,7 +200,6 @@ const Routes = () => (
               <Route path="/user/:id" component={UserDetailsPage} />
               <Route path="/group/:id" component={GroupDetailsPage} />
               <Route path="/role/:id" component={RoleDetailsPage} />
-              <Route path="/policy/:id" component={PoliciesDetailsPage} />
               <Route path="/portlist/:id" component={PortListDetailsPage} />
               <Route path="/credential/:id" component={CredentialDetailsPage} />
               <Route path="/schedule/:id" component={ScheduleDetailsPage} />
@@ -213,6 +213,8 @@ const Routes = () => (
               <Route path="/tag/:id" component={TagDetailsPage} />
               <Route path="/permission/:id" component={PermissionDetailsPage} />
               <Route path="/scanconfig/:id" component={ScanConfigDetailsPage} />
+              <Route path="/policy/:id" component={PoliciesDetailsPage} />
+              <Route path="/audit/:id" component={AuditsDetailsPage} />
               <Route path="/notfound" component={PageNotFound} />
               <Route component={PageNotFound} />
             </Switch>

@@ -31,7 +31,7 @@ import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_NO,
-} from 'gmp/models/task';
+} from 'gmp/models/audit';
 
 import {
   FULL_AND_FAST_SCAN_CONFIG_ID,
