@@ -448,7 +448,7 @@ msgstr "主機 (名稱)"
 #: gsa/src/web/pages/certbund/filterdialog.js:34
 #: gsa/src/web/pages/certbund/table.js:70
 msgid "Created"
-msgstr "已建立"
+msgstr "建立日期"
 
 #: gsa/src/web/pages/results/table.js:63
 msgid "Delta"
@@ -606,7 +606,7 @@ msgstr "ID:"
 
 #: gsa/src/web/pages/cves/detailspage.js:166
 msgid "Published:"
-msgstr "已發佈："
+msgstr "發佈日期："
 
 #: gsa/src/web/pages/cves/detailspage.js:168
 #: gsa/src/web/pages/cpes/detailspage.js:94 gsa/src/web/entity/info.js:64
@@ -686,7 +686,7 @@ msgstr "複雜性"
 #: gsa/src/web/pages/cves/filterdialog.js:54
 #: gsa/src/web/pages/cves/table.js:110
 msgid "Published"
-msgstr "已發佈"
+msgstr "發佈日期"
 
 #: gsa/src/web/pages/cves/table.js:145
 #: gsa/src/web/pages/reports/cvestable.js:107
@@ -4329,7 +4329,7 @@ msgstr "匯出 CPE"
 
 #: gsa/src/web/pages/cpes/detailspage.js:96 gsa/src/web/entity/info.js:60
 msgid "Created:"
-msgstr ""
+msgstr "建立日期："
 
 #: gsa/src/web/pages/cpes/detailspage.js:113
 msgid "Reported Vulnerabilities"
