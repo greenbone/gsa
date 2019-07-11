@@ -40,10 +40,7 @@ import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import AutoFpGroup from 'web/components/powerfilter/autofpgroup';
 import CvssBaseGroup from 'web/components/powerfilter/cvssbasegroup';
-import VulnerabilityGroup from 'web/components/powerfilter/vulnerabilitygroup';
-import HostGroup from 'web/components/powerfilter/hostgroup';
-import LocationGroup from 'web/components/powerfilter/locationgroup';
-import OwnerGroup from 'web/components/powerfilter/ownergroup';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 
 /* eslint-enable */
 
@@ -124,13 +121,29 @@ const ResultsFilterDialogComponent = ({
       onChange={onFilterValueChange}
     />
 
-    <OwnerGroup filter={filter} onChange={onSearchTermChange} />
+    <FilterSearchGroup
+      name="owner"
+      filter={filter}
+      onChange={onSearchTermChange}
+    />
 
-    <VulnerabilityGroup filter={filter} onChange={onSearchTermChange} />
+    <FilterSearchGroup
+      name="vulnerability"
+      filter={filter}
+      onChange={onSearchTermChange}
+    />
 
-    <HostGroup filter={filter} onChange={onSearchTermChange} />
+    <FilterSearchGroup
+      name="host"
+      filter={filter}
+      onChange={onSearchTermChange}
+    />
 
-    <LocationGroup filter={filter} onChange={onSearchTermChange} />
+    <FilterSearchGroup
+      name="location"
+      filter={filter}
+      onChange={onSearchTermChange}
+    />
 
     <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
