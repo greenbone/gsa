@@ -630,7 +630,7 @@ class AuditComponent extends React.Component {
     return (
       <React.Fragment>
         <EntityComponent
-          name="task"
+          name="audit"
           onCreated={onCreated}
           onCreateError={onCreateError}
           onCloned={onCloned}

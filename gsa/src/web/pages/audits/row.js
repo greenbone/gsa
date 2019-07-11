@@ -47,7 +47,7 @@ import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
 import Actions from './actions';
-import TaskStatus from 'web/pages/tasks/status';
+import AuditStatus from 'web/pages/tasks/status';
 
 import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
@@ -96,25 +96,25 @@ const Row = ({
           </RowDetailsToggle>
           <IconDivider>
             {entity.alterable === 1 && (
-              <AlterableIcon size="small" title={_('Task is alterable')} />
+              <AlterableIcon size="small" title={_('Audit is alterable')} />
             )}
             {isDefined(scanner) && scanner.type === GMP_SCANNER_TYPE && (
               <SensorIcon
                 size="small"
-                title={_('Task is configured to run on sensor {{name}}', {
+                title={_('Audit is configured to run on sensor {{name}}', {
                   name: scanner.name,
                 })}
               />
             )}
             <ObserverIcon
-              displayName={_('Task')}
+              displayName={_('Audit')}
               entity={entity}
               userName={username}
             />
             {isDefined(observers) && observers.length > 0 && (
               <ProvideViewIcon
                 size="small"
-                title={_('Task made visible for: {{observers}}', {
+                title={_('Audit made visible for: {{observers}}', {
                   observers: obs.join(', '),
                 })}
               />
@@ -125,7 +125,7 @@ const Row = ({
         {entity.comment && <Comment>({entity.comment})</Comment>}
       </TableData>
       <TableData>
-        <TaskStatus task={entity} links={links} />
+        <AuditStatus task={entity} links={links} />
       </TableData>
       <TableData>{render_report(entity.last_report, links)}</TableData>
       {/* TODO: Compliance Status Bar */}

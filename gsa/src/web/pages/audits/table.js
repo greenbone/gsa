@@ -32,7 +32,7 @@ import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
 import Row from './row';
-import TaskDetails from 'web/pages/audits/details';
+import AuditDetails from 'web/pages/audits/details';
 
 const Header = ({
   actionsColumn,
@@ -87,7 +87,7 @@ const actionsColumn = (
 export default createEntitiesTable({
   emptyTitle: _l('No Audits available'),
   row: Row,
-  rowDetails: withRowDetails('audit', 10)(TaskDetails),
+  rowDetails: withRowDetails('audit', 10)(AuditDetails),
   header: withEntitiesHeader(actionsColumn)(Header),
   footer: createEntitiesFooter({
     span: 10,

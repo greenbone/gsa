@@ -302,7 +302,7 @@ const TaskDialog = ({
                 <FormGroup titleSize="2" title={_('Policy')}>
                   <Select
                     name="config_id"
-                    disabled={!change_task || hasTask}
+                    disabled={!change_task}
                     items={openvas_scan_config_items}
                     value={openvas_config_id}
                     onChange={onScanConfigChange}
