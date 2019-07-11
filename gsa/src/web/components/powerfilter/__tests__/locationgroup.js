@@ -32,7 +32,7 @@ describe('LocationGroup tests', () => {
       <LocationGroup
         filter={filter}
         name="name"
-        loc={'general/tcp'}
+        loc="general/tcp"
         onChange={handleChange}
       />,
     );
