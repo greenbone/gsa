@@ -32,35 +32,24 @@ import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
 
 const FILTER_TITLE = {
+  comment: 'Comment',
   host: 'Host (IP)',
   location: 'Location (eg. port/protocol)',
   owner: 'Owner',
-  vulnerability: 'Vulnerability Name',
-};
-
-let host;
-let loc;
-let owner;
-let vuln;
-
-const FILTER_VARS = {
-  host: host,
-  location: loc,
-  owner: owner,
-  vulnerability: vuln,
+  vulnerability: 'Vulnerability',
 };
 
 const FilterSearchGroup = ({name, filter, onChange}) => {
   const formTitle = FILTER_TITLE[name];
-  let keyword = FILTER_VARS[name];
+  let filterVal;
 
-  if (!isDefined(keyword) && isDefined(filter)) {
-    keyword = filter.get(name);
+  if (!isDefined(filterVal) && isDefined(filter)) {
+    filterVal = filter.get(name);
   }
 
   return (
     <FormGroup title={_(formTitle)}>
-      <TextField name={name} value={keyword} onChange={onChange} />
+      <TextField name={name} value={filterVal} onChange={onChange} />
     </FormGroup>
   );
 };
