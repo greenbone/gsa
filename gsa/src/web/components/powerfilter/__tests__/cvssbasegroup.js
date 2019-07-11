@@ -51,7 +51,7 @@ describe('CvssBaseGroup tests', () => {
     expect(input[0]).toHaveAttribute('value', '7');
   });
 
-  test('should render value from cvss_base by default', () => {
+  test('should render value from cvss prop by default', () => {
     const filter = Filter.fromString('cvss_base=10');
     const handleChange = jest.fn();
     const {element} = render(
