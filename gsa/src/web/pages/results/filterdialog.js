@@ -117,6 +117,8 @@ const ResultsFilterDialogComponent = ({
     <AutoFpGroup filter={filter} onChange={onFilterValueChange} />
 
     <SeverityLevelsGroup filter={filter} onChange={onFilterValueChange} />
+  
+    <CvssBaseGroup filter={filter} onChange={onFilterValueChange} />
 
     <SolutionTypeGroup filter={filter} onChange={onFilterChange} />
 
@@ -137,8 +139,6 @@ const ResultsFilterDialogComponent = ({
     <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
     <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
-
-    <CvssBaseGroup filter={filter} onChange={onFilterValueChange} />
 
     <SortByGroup
       filter={filter}
