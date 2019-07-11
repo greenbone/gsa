@@ -116,6 +116,8 @@ const ResultsFilterDialogComponent = ({
   
     <CvssBaseGroup filter={filter} onChange={onFilterValueChange} />
 
+    <CvssBaseGroup filter={filter} onChange={onFilterValueChange} />
+
     <SolutionTypeGroup filter={filter} onChange={onFilterChange} />
 
     <MinQodGroup
