@@ -32,7 +32,7 @@ import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
 
 const FILTER_TITLE = {
-  host: 'Host IP',
+  host: 'Host (IP)',
   location: 'Location (eg. port/protocol)',
   owner: 'Owner',
   vulnerability: 'Vulnerability Name',
