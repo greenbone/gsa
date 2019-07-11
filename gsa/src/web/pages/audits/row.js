@@ -51,6 +51,8 @@ import AuditStatus from 'web/pages/tasks/status';
 
 import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
+import ComplianceStatusBar from 'web/components/bar/compliancestatusbar';
+
 const render_report = (report, links) => {
   if (!isDefined(report)) {
     return null;
@@ -62,6 +64,23 @@ const render_report = (report, links) => {
       </DetailsLink>
     </span>
   );
+};
+
+const getComplianceStatus = report => {
+  if (!isDefined(report)) {
+    return -1;
+  }
+
+  const complianceResultsTotal =
+    parseInt(report.compliance_count.yes) +
+    parseInt(report.compliance_count.no) +
+    parseInt(report.compliance_count.incomplete);
+
+  const complianceStatus = parseInt(
+    (parseInt(report.compliance_count.yes) / complianceResultsTotal) * 100,
+  );
+
+  return complianceStatus;
 };
 
 const Row = ({
@@ -128,7 +147,13 @@ const Row = ({
         <AuditStatus task={entity} links={links} />
       </TableData>
       <TableData>{render_report(entity.last_report, links)}</TableData>
-      {/* TODO: Compliance Status Bar */}
+      <TableData>
+        {isDefined(entity.last_report) && (
+          <ComplianceStatusBar
+            complianceStatus={getComplianceStatus(entity.last_report)}
+          />
+        )}
+      </TableData>
       <ActionsComponent {...props} links={links} entity={entity} />
     </TableRow>
   );
