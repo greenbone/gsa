@@ -122,7 +122,7 @@ class FilterDialog extends React.Component {
 
   onSearchTermChange(value, name, relation = '~') {
     const {filter} = this.state;
-    filter.set(name, value.toString(), relation);
+    filter.set(name, `${value}`, relation);
 
     this.setState({filter});
   }
