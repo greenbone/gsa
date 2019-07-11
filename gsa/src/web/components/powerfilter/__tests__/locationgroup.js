@@ -58,7 +58,7 @@ describe('LocationGroup tests', () => {
       <LocationGroup
         filter={filter}
         name="name"
-        loc={'foo'}
+        loc="foo"
         onChange={handleChange}
       />,
     );
