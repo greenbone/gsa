@@ -34,7 +34,7 @@ const CvssBaseGroup = ({cvss, filter, onChange, name = 'cvss_base'}) => {
   }
 
   return (
-    <FormGroup title={_('CVSS Base Score')}>
+    <FormGroup title={_('Severity')}>
       <Spinner
         type="int"
         name={name}
