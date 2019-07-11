@@ -75,7 +75,7 @@ describe('HostGroup tests', () => {
       <HostGroup
         filter={filter}
         name="name"
-        host={'bar'}
+        host="bar"
         onChange={handleChange}
       />,
     );
