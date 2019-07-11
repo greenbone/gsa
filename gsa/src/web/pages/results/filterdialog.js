@@ -113,8 +113,6 @@ const ResultsFilterDialogComponent = ({
     <AutoFpGroup filter={filter} onChange={onFilterValueChange} />
 
     <SeverityLevelsGroup filter={filter} onChange={onFilterValueChange} />
-  
-    <CvssBaseGroup filter={filter} onChange={onFilterValueChange} />
 
     <CvssBaseGroup filter={filter} onChange={onFilterValueChange} />
 
