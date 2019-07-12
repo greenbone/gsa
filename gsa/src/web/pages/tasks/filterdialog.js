@@ -64,6 +64,14 @@ const SORT_FIELDS = [
     name: 'trend',
     displayName: _l('Trend'),
   },
+  {
+    name: 'false_positive',
+    displayName: _l('False Positive'),
+  },
+  {
+    name: 'hosts',
+    displayName: _l('Number of Hosts'),
+  },
 ];
 
 const TaskFilterDialogComponent = ({

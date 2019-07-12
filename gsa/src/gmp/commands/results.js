@@ -32,6 +32,10 @@ export class ResultsCommand extends EntitiesCommand {
     return root.get_results.get_results_response;
   }
 
+  get(params = {}, options) {
+    return super.get({...params, details: 1}, options);
+  }
+
   getDescriptionWordCountsAggregates({filter} = {}) {
     return this.getAggregates({
       aggregate_type: 'result',

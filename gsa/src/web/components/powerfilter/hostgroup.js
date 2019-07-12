@@ -18,43 +18,31 @@
  */
 import React from 'react';
 
-import styled, {keyframes} from 'styled-components';
+import _ from 'gmp/locale';
 
-import Layout from 'web/components/layout/layout';
+import {isDefined} from 'gmp/utils/identity';
 
-import GbLogo from 'web/components/icon/svg/greenbone.svg';
+import PropTypes from '../../utils/proptypes.js';
 
-const Loader = styled.div`
-  width: 80px;
-  height: 80px;
-  margin: 40px auto;
-  background-image: url(${GbLogo});
-  background-size: 90%;
-  background-position: center;
-  background-repeat: no-repeat;
-  animation: ${keyframes({
-      '0%, 100%': {
-        transform: 'scale(0.9)',
-        opacity: 0.2,
-      },
-      '50%': {
-        transform: 'scale(1.0)',
-        opacity: 1,
-      },
-    })}
-    2s infinite ease-in-out;
-`;
+import FormGroup from '../form/formgroup.js';
+import TextField from '../form/textfield.js';
 
-const StyledLayout = styled(Layout)`
-  width: 100%;
-`;
+const HostGroup = ({host, filter, onChange, name = 'host'}) => {
+  if (!isDefined(host) && isDefined(filter)) {
+    host = filter.get('host');
+  }
+  return (
+    <FormGroup title={_('Host IP')}>
+      <TextField type="text" name={name} value={host} onChange={onChange} />
+    </FormGroup>
+  );
+};
 
-const Loading = () => (
-  <StyledLayout align={['center', 'center']}>
-    <Loader />
-  </StyledLayout>
-);
+HostGroup.propTypes = {
+  filter: PropTypes.filter,
+  host: PropTypes.string,
+  name: PropTypes.string,
+  onChange: PropTypes.func,
+};
 
-export default Loading;
-
-// vim: set ts=2 sw=2 tw=80:
+export default HostGroup;

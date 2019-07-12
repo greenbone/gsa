@@ -82,9 +82,11 @@ class Host {
 
     delete copy.result_count;
 
+    copy.authSuccess = {};
     copy.details = {};
 
     if (isArray(elem.detail)) {
+      let appsCount = 0;
       elem.detail.forEach(details => {
         const {name, value} = details;
         switch (name) {
@@ -97,9 +99,21 @@ class Host {
           case 'best_os_txt':
             copy.details.best_os_txt = value;
             break;
+          case 'traceroute':
+            copy.details.distance = value.split(',').length - 1;
+            break;
+          case 'App':
+            appsCount++;
+            break;
           default:
             break;
         }
+        if (name.startsWith('Auth')) {
+          const authArray = name.split('-');
+          copy.authSuccess[authArray[1].toLowerCase()] =
+            authArray[2] === 'Success';
+        }
+        copy.details.appsCount = appsCount;
       });
     }
 

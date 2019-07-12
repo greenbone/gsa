@@ -16,45 +16,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import withSvgIcon from './withSvgIcon';
 
-import styled, {keyframes} from 'styled-components';
+import {ReactComponent as Icon} from './svg/verify_no.svg';
 
-import Layout from 'web/components/layout/layout';
+const VerifyNoIcon = withSvgIcon()(Icon);
 
-import GbLogo from 'web/components/icon/svg/greenbone.svg';
-
-const Loader = styled.div`
-  width: 80px;
-  height: 80px;
-  margin: 40px auto;
-  background-image: url(${GbLogo});
-  background-size: 90%;
-  background-position: center;
-  background-repeat: no-repeat;
-  animation: ${keyframes({
-      '0%, 100%': {
-        transform: 'scale(0.9)',
-        opacity: 0.2,
-      },
-      '50%': {
-        transform: 'scale(1.0)',
-        opacity: 1,
-      },
-    })}
-    2s infinite ease-in-out;
-`;
-
-const StyledLayout = styled(Layout)`
-  width: 100%;
-`;
-
-const Loading = () => (
-  <StyledLayout align={['center', 'center']}>
-    <Loader />
-  </StyledLayout>
-);
-
-export default Loading;
+export default VerifyNoIcon;
 
 // vim: set ts=2 sw=2 tw=80:
