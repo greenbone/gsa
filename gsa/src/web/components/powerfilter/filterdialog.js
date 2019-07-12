@@ -42,6 +42,7 @@ class FilterDialog extends React.Component {
     this.onSortByChange = this.onSortByChange.bind(this);
     this.onSortOrderChange = this.onSortOrderChange.bind(this);
     this.onValueChange = this.onValueChange.bind(this);
+    this.onSearchTermChange = this.onSearchTermChange.bind(this);
   }
 
   setFilter(filter) {
@@ -82,22 +83,23 @@ class FilterDialog extends React.Component {
   }
 
   handleSave() {
-    let {filter, filterName = '', filterstring, saveNamedFilter} = this.state;
+    const {filter, filterName = '', filterstring, saveNamedFilter} = this.state;
     const {onFilterChanged, onCloseClick} = this.props;
 
-    filter = Filter.fromString(filterstring, filter);
+    const newFilter = Filter.fromString(filterstring);
+    newFilter._merge(filter);
 
     if (saveNamedFilter) {
       if (filterName.trim().length > 0) {
-        return this.createFilter(filter).then(onCloseClick);
+        return this.createFilter(newFilter).then(onCloseClick);
       }
       return Promise.reject(
         new Error(_('Please insert a name for the new filter')),
       );
     }
 
-    if (onFilterChanged && !filter.equals(this.orig_filter)) {
-      onFilterChanged(filter);
+    if (onFilterChanged && !newFilter.equals(this.orig_filter)) {
+      onFilterChanged(newFilter);
     }
 
     if (isDefined(onCloseClick)) {
@@ -114,6 +116,13 @@ class FilterDialog extends React.Component {
     const {filter} = this.state;
 
     filter.set(name, value, relation);
+
+    this.setState({filter});
+  }
+
+  onSearchTermChange(value, name, relation = '~') {
+    const {filter} = this.state;
+    filter.set(name, `${value}`, relation);
 
     this.setState({filter});
   }
@@ -167,6 +176,7 @@ class FilterDialog extends React.Component {
             saveNamedFilter,
             onFilterChange: this.handleFilterChange,
             onFilterValueChange: this.onFilterValueChange,
+            onSearchTermChange: this.onSearchTermChange,
             onFilterStringChange: this.onFilterStringChange,
             onSortOrderChange: this.onSortOrderChange,
             onSortByChange: this.onSortByChange,

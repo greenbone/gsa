@@ -39,6 +39,11 @@ import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import AutoFpGroup from 'web/components/powerfilter/autofpgroup';
+import CvssBaseGroup from 'web/components/powerfilter/cvssbasegroup';
+import VulnerabilityGroup from 'web/components/powerfilter/vulnerabilitygroup';
+import HostGroup from 'web/components/powerfilter/hostgroup';
+import LocationGroup from 'web/components/powerfilter/locationgroup';
+import OwnerGroup from 'web/components/powerfilter/ownergroup';
 
 /* eslint-enable */
 
@@ -75,6 +80,10 @@ const SORT_FIELDS = [
     name: 'created',
     displayName: _l('Created'),
   },
+  {
+    name: 'modified',
+    displayName: _l('Modified'),
+  },
 ];
 
 const ResultsFilterDialogComponent = ({
@@ -87,6 +96,7 @@ const ResultsFilterDialogComponent = ({
   onFilterChange,
   onFilterStringChange,
   onFilterValueChange,
+  onSearchTermChange,
   onSortByChange,
   onSortOrderChange,
   onValueChange,
@@ -104,6 +114,8 @@ const ResultsFilterDialogComponent = ({
 
     <SeverityLevelsGroup filter={filter} onChange={onFilterValueChange} />
 
+    <CvssBaseGroup filter={filter} onChange={onFilterValueChange} />
+
     <SolutionTypeGroup filter={filter} onChange={onFilterChange} />
 
     <MinQodGroup
@@ -111,6 +123,14 @@ const ResultsFilterDialogComponent = ({
       filter={filter}
       onChange={onFilterValueChange}
     />
+
+    <OwnerGroup filter={filter} onChange={onSearchTermChange} />
+
+    <VulnerabilityGroup filter={filter} onChange={onSearchTermChange} />
+
+    <HostGroup filter={filter} onChange={onSearchTermChange} />
+
+    <LocationGroup filter={filter} onChange={onSearchTermChange} />
 
     <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
