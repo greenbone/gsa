@@ -21,6 +21,7 @@
 import React from 'react';
 import {storiesOf} from '@storybook/react';
 import Select from '../web/components/form/select';
+import RelationSelector from '../web/components/powerfilter/relationselector';
 
 class TestSelect extends React.Component {
   constructor(props) {
@@ -62,4 +63,5 @@ class TestSelect extends React.Component {
 
 storiesOf('Select', module)
   .add('default', () => <TestSelect />)
-  .add('disabled', () => <TestSelect disabled={true} />);
+  .add('disabled', () => <TestSelect disabled={true} />)
+  .add('relation selector', () => <RelationSelector />);

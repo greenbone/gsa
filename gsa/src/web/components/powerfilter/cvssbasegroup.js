@@ -20,37 +20,60 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import PropTypes from '../../utils/proptypes.js';
 
 import FormGroup from '../form/formgroup.js';
 import Spinner from '../form/spinner.js';
 import {parseSeverity} from 'gmp/parser.js';
+import RelationSelector from 'web/components/powerfilter/relationselector';
 
-const CvssBaseGroup = ({cvss, filter, onChange, name = 'cvss_base'}) => {
-  if (!isDefined(cvss) && isDefined(filter)) {
-    cvss = parseSeverity(filter.get('cvss_base'));
+class CvssBaseGroup extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: 'cvss_base',
+      cvss: parseSeverity(props.filter.get('cvss_base')),
+      relation: '',
+    };
+
+    this.handleRelationChange = this.handleRelationChange.bind(this);
   }
 
-  return (
-    <FormGroup title={_('Severity')}>
-      <Spinner
-        type="int"
-        name={name}
-        min="0"
-        max="10"
-        step="1"
-        value={cvss}
-        size="5"
-        onChange={onChange}
-      />
-    </FormGroup>
-  );
-};
+  handleRelationChange(value) {
+    this.setState({
+      relation: value,
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <FormGroup title={_('Severity')}>
+          <RelationSelector
+            relation={this.state.relation}
+            onChange={this.handleRelationChange}
+          />
+          <h3>{this.state.relation}</h3>
+          <Spinner
+            type="int"
+            min="0"
+            max="10"
+            name={this.state.name}
+            value={this.state.cvss}
+            size="5"
+            onChange={(
+              value = this.state.cvss,
+              name = this.state.name,
+              relation = this.state.relation,
+            ) => this.props.onChange(value, name, relation)}
+          />
+        </FormGroup>
+      </div>
+    );
+  }
+}
 
 CvssBaseGroup.propTypes = {
-  cvss: PropTypes.number,
   filter: PropTypes.filter,
   name: PropTypes.string,
   onChange: PropTypes.func,
