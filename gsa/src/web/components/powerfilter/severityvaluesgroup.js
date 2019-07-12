@@ -27,7 +27,11 @@ import {parseSeverity} from 'gmp/parser.js';
 import RelationSelector from 'web/components/powerfilter/relationselector';
 import NumberField from 'web/components/form/numberfield';
 
-class CvssBaseGroup extends React.Component {
+const FILTER_TITLE = {
+  cvss_base: 'Severity',
+};
+
+class SeverityValuesGroup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,9 +49,10 @@ class CvssBaseGroup extends React.Component {
   }
 
   render() {
+    const formTitle = FILTER_TITLE[this.props.name];
     return (
       <div>
-        <FormGroup title={_('Severity')}>
+        <FormGroup title={_(formTitle)}>
           <RelationSelector
             relation={this.state.relation}
             onChange={this.handleRelationChange}
@@ -70,10 +75,10 @@ class CvssBaseGroup extends React.Component {
   }
 }
 
-CvssBaseGroup.propTypes = {
+SeverityValuesGroup.propTypes = {
   filter: PropTypes.filter,
   name: PropTypes.string,
   onChange: PropTypes.func,
 };
 
-export default CvssBaseGroup;
+export default SeverityValuesGroup;

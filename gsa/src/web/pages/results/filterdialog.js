@@ -39,7 +39,7 @@ import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import AutoFpGroup from 'web/components/powerfilter/autofpgroup';
-import CvssBaseGroup from 'web/components/powerfilter/cvssbasegroup';
+import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
 import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 
 /* eslint-enable */
@@ -111,7 +111,11 @@ const ResultsFilterDialogComponent = ({
 
     <SeverityLevelsGroup filter={filter} onChange={onFilterValueChange} />
 
-    <CvssBaseGroup filter={filter} onChange={onFilterValueChange} />
+    <SeverityValuesGroup
+      name="cvss_base"
+      filter={filter}
+      onChange={onFilterValueChange}
+    />
 
     <SolutionTypeGroup filter={filter} onChange={onFilterChange} />
 
