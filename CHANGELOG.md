@@ -35,6 +35,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.1] - (unreleased)
 
 ### Added
+- Additional report-host information [#1468](https://github.com/greenbone/gsa/pull/1468)
+- New VerifyNoIcon [#1468](https://github.com/greenbone/gsa/pull/1468)
 - Add tests for filter groups [#1419](https://github.com/greenbone/gsa/pull/1419)
 - Add tests for severitylevelsgroup, radio button and task trend [#1413](https://github.com/greenbone/gsa/pull/1413)
 - Allow to show error details [#1403](https://github.com/greenbone/gsa/pull/1403)
@@ -58,6 +60,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add tooltips to deactivated text fields in AlertDialog [#1269](https://github.com/greenbone/gsa/pull/1269)
 
 ### Changed
+- Brand the Loading indicator [#1469](https://github.com/greenbone/gsa/pull/1469)
+- Always load notes and overrides when getting results [#1446](https://github.com/greenbone/gsa/pull/1446)
 - Disable some FileFields when RadioButton is not checked [#1430](https://github.com/greenbone/gsa/pull/1430)
 - Change checkboxes for solution types to radio buttons [#1398](https://github.com/greenbone/gsa/pull/1398)
 - Link to search in the manual for vulnerabilities [#1391](https://github.com/greenbone/gsa/pull/1391)
@@ -80,6 +84,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix showing Loading indicator at entities pages [#1469](https://github.com/greenbone/gsa/pull/1469)
+- Show notes and overrides for results and their icon indicator in results rows [#1446](https://github.com/greenbone/gsa/pull/1446)
 - Display text if gvm-libs is build without LDAP and/or Radius support [#1437](https://github.com/greenbone/gsa/pull/1437)
 - Fix sending related resources in permission.create() [#1432](https://github.com/greenbone/gsa/pull/1432)
 - Don't allow bulk tagging vulnerabilities [#1429](https://github.com/greenbone/gsa/pull/1429)

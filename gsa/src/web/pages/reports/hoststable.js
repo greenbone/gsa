@@ -26,7 +26,13 @@ import PropTypes from 'web/utils/proptypes';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
+import DateTime from 'web/components/date/datetime';
+
 import OsIcon from 'web/components/icon/osicon';
+import VerifyIcon from 'web/components/icon/verifyicon';
+import VerifyNoIcon from 'web/components/icon/verifynoicon';
+
+import IconDivider from 'web/components/layout/icondivider';
 
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
@@ -45,6 +51,7 @@ const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'ip' : false}
+        width="10%"
         onSortChange={onSortChange}
         title={_('IP Address')}
       />
@@ -52,6 +59,7 @@ const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'hostname' : false}
+        width="20%"
         onSortChange={onSortChange}
         title={_('Hostname')}
       />
@@ -59,15 +67,56 @@ const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'os' : false}
-        width="5em"
+        width="1%"
         onSortChange={onSortChange}
         title={_('OS')}
       />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
+        sortBy={sort ? 'portsCount' : false}
+        width="3%"
+        onSortChange={onSortChange}
+        title={_('Ports')}
+      />
+      <TableHead
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'appsCount' : false}
+        width="3%"
+        onSortChange={onSortChange}
+        title={_('Apps')}
+      />
+      <TableHead
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'distance' : false}
+        width="3%"
+        onSortChange={onSortChange}
+        title={_('Distance')}
+      />
+      <TableHead width="8%" title={_('Auth')} />
+      <TableHead
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'start' : false}
+        width="13%"
+        onSortChange={onSortChange}
+        title={_('Start')}
+      />
+      <TableHead
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'end' : false}
+        width="13%"
+        onSortChange={onSortChange}
+        title={_('End')}
+      />
+      <TableHead
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
         sortBy={sort ? 'high' : false}
-        width="10%"
+        width="3%"
         onSortChange={onSortChange}
         title={_('High')}
       />
@@ -75,7 +124,7 @@ const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'medium' : false}
-        width="10%"
+        width="3%"
         onSortChange={onSortChange}
         title={_('Medium')}
       />
@@ -83,7 +132,7 @@ const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'low' : false}
-        width="10%"
+        width="3%"
         onSortChange={onSortChange}
         title={_('Low')}
       />
@@ -91,7 +140,7 @@ const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'log' : false}
-        width="10%"
+        width="3%"
         onSortChange={onSortChange}
         title={_('Log')}
       />
@@ -99,7 +148,7 @@ const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'false_positive' : false}
-        width="10%"
+        width="3%"
         onSortChange={onSortChange}
         title={_('False Positive')}
       />
@@ -107,7 +156,7 @@ const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'total' : false}
-        width="10%"
+        width="3%"
         onSortChange={onSortChange}
         title={_('Total')}
       />
@@ -115,7 +164,7 @@ const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'severity' : false}
-        width="10%"
+        width="8%"
         onSortChange={onSortChange}
         title={_('Severity')}
       />
@@ -130,9 +179,60 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
+const renderAuthIcons = authSuccess => {
+  const {smb, snmp, esxi, ssh} = authSuccess;
+  const showSmbSuccess = smb === true;
+  const showSmbFailure = smb === false;
+  const showSnmpSuccess = snmp === true;
+  const showSnmpFailure = snmp === false;
+  const showEsxiSuccess = esxi === true;
+  const showEsxiFailure = esxi === false;
+  const showSshSuccess = ssh === true;
+  const showSshFailure = ssh === false;
+  return (
+    <IconDivider>
+      {showSmbSuccess && (
+        <VerifyIcon title={_('SMB authentification was successful')} />
+      )}
+      {showSmbFailure && (
+        <VerifyNoIcon title={_('SMB authentification was unsuccessful')} />
+      )}
+      {showSnmpSuccess && (
+        <VerifyIcon title={_('SNMP authentification was successful')} />
+      )}
+      {showSnmpFailure && (
+        <VerifyNoIcon title={_('SNMP authentification was unsuccessful')} />
+      )}
+      {showEsxiSuccess && (
+        <VerifyIcon title={_('ESXi authentification was successful')} />
+      )}
+      {showEsxiFailure && (
+        <VerifyNoIcon title={_('ESXi authentification was unsuccessful')} />
+      )}
+      {showSshSuccess && (
+        <VerifyIcon title={_('SSH authentification was successful')} />
+      )}
+      {showSshFailure && (
+        <VerifyNoIcon title={_('SSH authentification was unsuccessful')} />
+      )}
+    </IconDivider>
+  );
+};
+
 const Row = ({entity, links = true}) => {
-  const {ip, details = {}, result_counts = {}, severity, asset = {}} = entity;
-  const {best_os_cpe, best_os_txt} = details;
+  const {
+    asset = {},
+    authSuccess,
+    details = {},
+    end,
+    ip,
+    result_counts = {},
+    severity,
+    start,
+    portsCount,
+  } = entity;
+
+  const {appsCount, best_os_cpe, best_os_txt, distance} = details;
   return (
     <TableRow>
       <TableData>
@@ -153,6 +253,16 @@ const Row = ({entity, links = true}) => {
       </TableData>
       <TableData align="center">
         <OsIcon osCpe={best_os_cpe} osTxt={best_os_txt} />
+      </TableData>
+      <TableData>{portsCount}</TableData>
+      <TableData>{appsCount}</TableData>
+      <TableData>{distance}</TableData>
+      <TableData>{renderAuthIcons(authSuccess)}</TableData>
+      <TableData>
+        <DateTime date={start} />
+      </TableData>
+      <TableData>
+        <DateTime date={end} />
       </TableData>
       <TableData>{result_counts.hole}</TableData>
       <TableData>{result_counts.warning}</TableData>

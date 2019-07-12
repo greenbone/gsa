@@ -384,6 +384,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/uploadicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/usericon.js
      ${GSA_SRC_DIR}/src/web/components/icon/verifyicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/verifynoicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/viewothericon.js
      ${GSA_SRC_DIR}/src/web/components/icon/vulnerabilityicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/withIconSize.js
@@ -423,6 +424,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/filter.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/first.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/feed.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/greenbone.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/group.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/help.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/host.svg
@@ -487,6 +489,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/upload.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/user.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/verify.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/verify_no.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/view_other.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/vulnerability.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/wizard.svg

@@ -27,6 +27,21 @@ exports[`Loading component tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c2 {
+  width: 80px;
+  height: 80px;
+  margin: 40px auto;
+  background-image: url(greenbone.svg);
+  background-size: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-animation: tXyVs 2s infinite ease-in-out;
+  animation: tXyVs 2s infinite ease-in-out;
+}
+
+.c0 {
   width: 100%;
 }
 
