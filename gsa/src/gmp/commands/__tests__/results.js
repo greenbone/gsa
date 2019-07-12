@@ -45,6 +45,7 @@ describe('ResultsCommand tests', () => {
       expect(fakeHttp.request).toHaveBeenCalledWith('get', {
         args: {
           cmd: 'get_results',
+          details: 1,
           filter: ALL_FILTER.toFilterString(),
         },
       });
@@ -72,6 +73,7 @@ describe('ResultsCommand tests', () => {
       expect(fakeHttp.request).toHaveBeenCalledWith('get', {
         args: {
           cmd: 'get_results',
+          details: 1,
         },
       });
       const {data} = resp;
