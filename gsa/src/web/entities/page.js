@@ -114,7 +114,7 @@ class EntitiesPage extends React.Component {
   renderSection() {
     const {
       entities,
-      loading,
+      isLoading,
       sectionIcon,
       dashboard,
       dashboardControls,
@@ -142,17 +142,10 @@ class EntitiesPage extends React.Component {
       >
         <Layout flex="column" grow="1">
           {isDefined(dashboard) && dashboard()}
-          {loading && !isDefined(entities)
-            ? this.renderLoading()
-            : this.renderTable()}
+          {isLoading && !isDefined(entities) ? <Loading /> : this.renderTable()}
         </Layout>
       </SectionComponent>
     );
-  }
-
-  renderLoading() {
-    const {loading} = this.props;
-    return <Loading loading={loading} />;
   }
 
   renderTable() {
@@ -296,8 +289,8 @@ EntitiesPage.propTypes = {
   filterEditDialog: PropTypes.component,
   filters: PropTypes.array,
   filtersFilter: PropTypes.filter,
+  isLoading: PropTypes.bool,
   loadFilters: PropTypes.func.isRequired,
-  loading: PropTypes.bool,
   powerfilter: PropTypes.componentOrFalse,
   section: PropTypes.componentOrFalse,
   sectionIcon: PropTypes.icon,

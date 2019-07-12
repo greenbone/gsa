@@ -57,6 +57,9 @@ export const errorsSortFunctions = {
 export const hostsSortFunctions = {
   ip: makeCompareIp('ip'),
   hostname: makeCompareString('hostname'),
+  portsCount: makeCompareNumber(entity => entity.portCount),
+  appsCount: makeCompareNumber(entity => entity.appsCount),
+  distance: makeCompareNumber(entity => entity.details.distance),
   os: makeCompareString(entity => entity.details.best_os_cpe),
   high: makeCompareNumber(entity => entity.result_counts.hole),
   medium: makeCompareNumber(entity => entity.result_counts.warning),
