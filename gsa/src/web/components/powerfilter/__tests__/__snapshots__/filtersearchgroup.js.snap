@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LocationGroup tests should render 1`] = `
+exports[`FilterSearchGroup tests should render 1`] = `
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -18,17 +18,6 @@ exports[`LocationGroup tests should render 1`] = `
 }
 
 .c1 {
-  display: inline-block;
-  max-width: 100%;
-  font-weight: bold;
-  text-align: right;
-  padding-left: 10px;
-  padding-right: 10px;
-  width: 16.66666667%;
-  margin-left: 0;
-}
-
-.c2 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -44,12 +33,9 @@ exports[`LocationGroup tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  width: 83.33333333%;
-  padding-left: 10px;
-  padding-right: 10px;
 }
 
-.c4 {
+.c3 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -63,11 +49,11 @@ exports[`LocationGroup tests should render 1`] = `
   padding: 1px 8px;
 }
 
-.c4:-webkit-autofill {
+.c3:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c3 {
+.c2 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -88,22 +74,15 @@ exports[`LocationGroup tests should render 1`] = `
 <div
   class="c0"
 >
-  <label
-    class="c1"
-    data-testid="formgroup-title"
-  >
-    Location (eg. port/protocol)
-  </label>
   <div
-    class="c2"
+    class="c1"
     data-testid="formgroup-content"
-    size="10"
   >
     <input
-      class="c3 c4"
-      name="name"
+      class="c2 c3"
+      name="location"
       type="text"
-      value="general/tcp"
+      value="tcp"
     />
   </div>
 </div>

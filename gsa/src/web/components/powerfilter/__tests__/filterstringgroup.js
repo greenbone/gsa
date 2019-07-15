@@ -39,7 +39,11 @@ describe('FilterStringGroup tests', () => {
     const filter = 'Test';
     const handleChange = jest.fn();
     const {element} = render(
-      <FilterStringGroup filter={filter} name="name" onChange={handleChange} />,
+      <FilterStringGroup
+        filter={filter}
+        name="keyword"
+        onChange={handleChange}
+      />,
     );
 
     const input = element.querySelectorAll('input');
@@ -57,6 +61,22 @@ describe('FilterStringGroup tests', () => {
     const input = element.querySelectorAll('input');
 
     expect(input[0]).toHaveAttribute('value', 'Test');
+  });
+
+  test('should return correct keyword name', () => {
+    const filter = 'Test';
+    const handleChange = jest.fn();
+    const {element} = render(
+      <FilterStringGroup
+        filter={filter}
+        name="location"
+        onChange={handleChange}
+      />,
+    );
+
+    const input = element.querySelectorAll('input');
+
+    expect(input[0]).toHaveAttribute('name', 'location');
   });
 
   test('should call change handler', () => {

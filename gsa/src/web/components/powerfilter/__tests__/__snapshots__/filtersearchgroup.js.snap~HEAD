@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`VulnerabilityGroup tests should render 1`] = `
+exports[`FilterSearchGroup tests should render 1`] = `
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -44,9 +44,6 @@ exports[`VulnerabilityGroup tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  width: 83.33333333%;
-  padding-left: 10px;
-  padding-right: 10px;
 }
 
 .c4 {
@@ -91,19 +88,16 @@ exports[`VulnerabilityGroup tests should render 1`] = `
   <label
     class="c1"
     data-testid="formgroup-title"
-  >
-    Vulnerability Name
-  </label>
+  />
   <div
     class="c2"
     data-testid="formgroup-content"
-    size="10"
   >
     <input
       class="c3 c4"
-      name="name"
+      name="location"
       type="text"
-      value="foo"
+      value="tcp"
     />
   </div>
 </div>

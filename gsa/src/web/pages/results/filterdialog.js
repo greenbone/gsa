@@ -18,7 +18,7 @@
  */
 import React from 'react';
 
-import {_l} from 'gmp/locale/lang';
+import {_, _l} from 'gmp/locale/lang';
 
 import Layout from 'web/components/layout/layout';
 
@@ -40,10 +40,7 @@ import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import AutoFpGroup from 'web/components/powerfilter/autofpgroup';
 import CvssBaseGroup from 'web/components/powerfilter/cvssbasegroup';
-import VulnerabilityGroup from 'web/components/powerfilter/vulnerabilitygroup';
-import HostGroup from 'web/components/powerfilter/hostgroup';
-import LocationGroup from 'web/components/powerfilter/locationgroup';
-import OwnerGroup from 'web/components/powerfilter/ownergroup';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 
 /* eslint-enable */
 
@@ -124,13 +121,33 @@ const ResultsFilterDialogComponent = ({
       onChange={onFilterValueChange}
     />
 
-    <OwnerGroup filter={filter} onChange={onSearchTermChange} />
+    <FilterSearchGroup
+      name="owner"
+      filter={filter}
+      title={_('Owner')}
+      onChange={onSearchTermChange}
+    />
 
-    <VulnerabilityGroup filter={filter} onChange={onSearchTermChange} />
+    <FilterSearchGroup
+      name="vulnerability"
+      filter={filter}
+      title={_('Vulnerability')}
+      onChange={onSearchTermChange}
+    />
 
-    <HostGroup filter={filter} onChange={onSearchTermChange} />
+    <FilterSearchGroup
+      name="host"
+      filter={filter}
+      title={_('Host (IP)')}
+      onChange={onSearchTermChange}
+    />
 
-    <LocationGroup filter={filter} onChange={onSearchTermChange} />
+    <FilterSearchGroup
+      name="location"
+      filter={filter}
+      title={_('Location (eg. port/protocol)')}
+      onChange={onSearchTermChange}
+    />
 
     <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 

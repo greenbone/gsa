@@ -20,19 +20,18 @@ import React from 'react';
 
 import {render, fireEvent} from 'web/utils/testing';
 
-import HostGroup from 'web/components/powerfilter/hostgroup';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 
 import Filter from 'gmp/models/filter';
 
-describe('HostGroup tests', () => {
+describe('FilterSearchGroup tests', () => {
   test('should render', () => {
-    const filter = Filter.fromString('host=foo');
+    const filter = Filter.fromString('location=tcp');
     const handleChange = jest.fn();
     const {element} = render(
-      <HostGroup
+      <FilterSearchGroup
         filter={filter}
-        name="name"
-        host={'foo'}
+        name="location"
         onChange={handleChange}
       />,
     );
@@ -41,49 +40,34 @@ describe('HostGroup tests', () => {
   });
 
   test('should render value from filter', () => {
-    const filter = Filter.fromString('host=foo');
+    const filter = Filter.fromString('location=tcp');
     const handleChange = jest.fn();
     const {element} = render(
-      <HostGroup filter={filter} name="name" onChange={handleChange} />,
-    );
-    const input = element.querySelectorAll('input');
-
-    expect(input[0]).toHaveAttribute('value', 'foo');
-  });
-
-  test('should render value from host by default', () => {
-    const filter = Filter.fromString('host=foo');
-    const handleChange = jest.fn();
-    const {element} = render(
-      <HostGroup
+      <FilterSearchGroup
         filter={filter}
-        name="name"
-        host="bar"
+        name="location"
         onChange={handleChange}
       />,
     );
-
     const input = element.querySelectorAll('input');
 
-    expect(input[0]).toHaveAttribute('value', 'bar');
+    expect(input[0]).toHaveAttribute('value', 'tcp');
   });
-
   test('should call change handler', () => {
-    const filter = Filter.fromString('host=foo');
+    const filter = Filter.fromString('location=tcp');
     const handleChange = jest.fn();
     const {element} = render(
-      <HostGroup
+      <FilterSearchGroup
         filter={filter}
-        name="name"
-        host="bar"
+        name="location"
         onChange={handleChange}
       />,
     );
 
     const input = element.querySelectorAll('input');
 
-    fireEvent.change(input[0], {target: {value: 'abc'}});
+    fireEvent.change(input[0], {target: {value: 'general'}});
 
-    expect(handleChange).toHaveBeenCalledWith('abc', 'name');
+    expect(handleChange).toHaveBeenCalledWith('general', 'location');
   });
 });
