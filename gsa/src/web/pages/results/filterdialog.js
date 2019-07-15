@@ -18,7 +18,7 @@
  */
 import React from 'react';
 
-import {_l} from 'gmp/locale/lang';
+import {_, _l} from 'gmp/locale/lang';
 
 import Layout from 'web/components/layout/layout';
 
