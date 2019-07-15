@@ -25,8 +25,8 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import StartIcon from 'web/components/icon/starticon';
 
-const TaskStartIcon = ({capabilities, task, onClick}) => {
-  if (task.isRunning() || task.isContainer()) {
+const AuditStartIcon = ({capabilities, audit, onClick}) => {
+  if (audit.isRunning()) {
     return null;
   }
 
@@ -36,18 +36,18 @@ const TaskStartIcon = ({capabilities, task, onClick}) => {
     );
   }
 
-  if (!task.isActive()) {
-    return <StartIcon title={_('Start')} value={task} onClick={onClick} />;
+  if (!audit.isActive()) {
+    return <StartIcon title={_('Start')} value={audit} onClick={onClick} />;
   }
   return <StartIcon active={false} title={_('Audit is already active')} />;
 };
 
-TaskStartIcon.propTypes = {
+AuditStartIcon.propTypes = {
+  audit: PropTypes.model.isRequired,
   capabilities: PropTypes.capabilities.isRequired,
-  task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(TaskStartIcon);
+export default withCapabilities(AuditStartIcon);
 
 // vim: set ts=2 sw=2 tw=80:

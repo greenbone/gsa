@@ -37,8 +37,8 @@ import {
 } from 'web/store/entities/schedules';
 
 import {
-  loadEntity as loadScanConfig,
-  selector as scanConfigSelector,
+  loadEntity as loadPolicy,
+  selector as policySelector,
 } from 'web/store/entities/policies';
 
 import PropTypes from 'web/utils/proptypes';
@@ -75,7 +75,7 @@ class AuditDetails extends React.Component {
     const {entity} = this.props;
 
     if (isDefined(entity.config)) {
-      this.props.loadScanConfig(entity.config.id);
+      this.props.loadPolicy(entity.config.id);
     }
     if (isDefined(entity.schedule)) {
       this.props.loadSchedule(entity.schedule.id);
@@ -83,7 +83,7 @@ class AuditDetails extends React.Component {
   }
 
   render() {
-    const {links = true, entity, scanConfig, schedule} = this.props;
+    const {links = true, entity, policy, schedule} = this.props;
     const {
       alerts,
       apply_overrides,
@@ -184,22 +184,22 @@ class AuditDetails extends React.Component {
                     </TableData>
                   </TableRow>
                 )}
-                {isDefined(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                {isDefined(policy) &&
+                  policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE && (
                     <TableRow>
                       <TableData>{_('Order for target hosts')}</TableData>
                       <TableData>{hosts_ordering}</TableData>
                     </TableRow>
                   )}
-                {isDefined(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                {isDefined(policy) &&
+                  policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE && (
                     <TableRow>
                       <TableData>{_('Network Source Interface')}</TableData>
                       <TableData>{iface.value}</TableData>
                     </TableRow>
                   )}
-                {isDefined(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+                {isDefined(policy) &&
+                  policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE &&
                   isDefined(max_checks.name) && (
                     <TableRow>
                       <TableData>
@@ -208,8 +208,8 @@ class AuditDetails extends React.Component {
                       <TableData>{max_checks.value}</TableData>
                     </TableRow>
                   )}
-                {isDefined(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+                {isDefined(policy) &&
+                  policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE &&
                   isDefined(max_hosts.name) && (
                     <TableRow>
                       <TableData>
@@ -326,18 +326,18 @@ AuditDetails.propTypes = {
   entity: PropTypes.model.isRequired,
   gmp: PropTypes.gmp.isRequired,
   links: PropTypes.bool,
-  loadScanConfig: PropTypes.func.isRequired,
+  loadPolicy: PropTypes.func.isRequired,
   loadSchedule: PropTypes.func.isRequired,
-  scanConfig: PropTypes.model,
+  policy: PropTypes.model,
   schedule: PropTypes.model,
 };
 
 const mapStateToProps = (rootState, {entity = {}}) => {
   const scheduleSel = scheduleSelector(rootState);
-  const scanConfigSel = scanConfigSelector(rootState);
+  const policySel = policySelector(rootState);
   return {
-    scanConfig: isDefined(entity.config)
-      ? scanConfigSel.getEntity(entity.config.id)
+    policy: isDefined(entity.config)
+      ? policySel.getEntity(entity.config.id)
       : undefined,
     schedule: isDefined(entity.schedule)
       ? scheduleSel.getEntity(entity.schedule.id)
@@ -346,7 +346,7 @@ const mapStateToProps = (rootState, {entity = {}}) => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadScanConfig: id => dispatch(loadScanConfig(gmp)(id)),
+  loadPolicy: id => dispatch(loadPolicy(gmp)(id)),
   loadSchedule: id => dispatch(loadSchedule(gmp)(id)),
 });
 

@@ -100,14 +100,14 @@ const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => (
         onInteraction={onInteraction}
         onReportDownloadClick={reportDownload}
         onReportImportClick={reportimport}
-        onTaskCloneClick={clone}
+        onAuditCloneClick={clone}
         onAuditCreateClick={create}
-        onTaskDeleteClick={delete_func}
-        onTaskDownloadClick={download}
-        onTaskEditClick={edit}
-        onTaskResumeClick={resume}
-        onTaskStartClick={start}
-        onTaskStopClick={stop}
+        onAuditDeleteClick={delete_func}
+        onAuditDownloadClick={download}
+        onAuditEditClick={edit}
+        onAuditResumeClick={resume}
+        onAuditStartClick={start}
+        onAuditStopClick={stop}
       />
     )}
   </AuditComponent>
@@ -120,8 +120,8 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const taskReloadInterval = ({entities = [], defaultReloadInterval}) =>
-  entities.some(task => task.isActive())
+const auditReloadInterval = ({entities = [], defaultReloadInterval}) =>
+  entities.some(audit => audit.isActive())
     ? DEFAULT_RELOAD_INTERVAL_ACTIVE
     : defaultReloadInterval;
 
@@ -129,7 +129,7 @@ export default withEntitiesContainer('audit', {
   entitiesSelector,
   loadEntities,
   defaultFilter: RESET_FILTER,
-  reloadInterval: taskReloadInterval,
+  reloadInterval: auditReloadInterval,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:

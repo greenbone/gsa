@@ -27,18 +27,8 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import ResumeIcon from 'web/components/icon/resumeicon';
 
-const TaskResumeIcon = ({capabilities, task, onClick}) => {
-  if (task.isContainer()) {
-    return (
-      <ResumeIcon
-        active={false}
-        alt={_('Resume')}
-        title={_('Audit is a container')}
-      />
-    );
-  }
-
-  if (isDefined(task.schedule)) {
+const AuditResumeIcon = ({capabilities, audit, onClick}) => {
+  if (isDefined(audit.schedule)) {
     return (
       <ResumeIcon
         active={false}
@@ -48,9 +38,9 @@ const TaskResumeIcon = ({capabilities, task, onClick}) => {
     );
   }
 
-  if (task.isStopped() || task.isInterrupted()) {
+  if (audit.isStopped() || audit.isInterrupted()) {
     if (capabilities.mayOp('resume_task')) {
-      return <ResumeIcon title={_('Resume')} value={task} onClick={onClick} />;
+      return <ResumeIcon title={_('Resume')} value={audit} onClick={onClick} />;
     }
     return (
       <ResumeIcon
@@ -70,12 +60,12 @@ const TaskResumeIcon = ({capabilities, task, onClick}) => {
   );
 };
 
-TaskResumeIcon.propTypes = {
+AuditResumeIcon.propTypes = {
+  audit: PropTypes.model.isRequired,
   capabilities: PropTypes.capabilities.isRequired,
-  task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(TaskResumeIcon);
+export default withCapabilities(AuditResumeIcon);
 
 // vim: set ts=2 sw=2 tw=80:

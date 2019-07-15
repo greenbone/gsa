@@ -76,9 +76,13 @@ const getComplianceStatus = report => {
     parseInt(report.compliance_count.no) +
     parseInt(report.compliance_count.incomplete);
 
-  const complianceStatus = parseInt(
-    (parseInt(report.compliance_count.yes) / complianceResultsTotal) * 100,
-  );
+  const complianceStatus =
+    complianceResultsTotal === 0
+      ? -1 // if there are no results at all there must have been an error
+      : parseInt(
+          (parseInt(report.compliance_count.yes) / complianceResultsTotal) *
+            100,
+        );
 
   return complianceStatus;
 };

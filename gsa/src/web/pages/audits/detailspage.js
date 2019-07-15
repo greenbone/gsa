@@ -83,8 +83,8 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import {
-  selector as taskSelector,
-  loadEntity as loadTask,
+  selector as auditSelector,
+  loadEntity as loadAudit,
 } from 'web/store/entities/audits';
 
 import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
@@ -98,7 +98,7 @@ import StartIcon from './icons/starticon';
 import StopIcon from 'web/pages/tasks/icons/stopicon';
 
 import AuditDetails from './details';
-import TaskStatus from 'web/pages/tasks/status';
+import AuditStatus from 'web/pages/tasks/status';
 import AuditComponent from './component';
 
 const ToolBarIcons = ({
@@ -161,12 +161,12 @@ const ToolBarIcons = ({
             links={links}
           />
         )}
-        <StartIcon task={entity} onClick={onAuditStartClick} />
+        <StartIcon audit={entity} onClick={onAuditStartClick} />
 
         <StopIcon task={entity} onClick={onAuditStopClick} />
 
         {!entity.isContainer() && (
-          <ResumeIcon task={entity} onClick={onAuditResumeClick} />
+          <ResumeIcon audit={entity} onClick={onAuditResumeClick} />
         )}
       </IconDivider>
 
@@ -276,7 +276,7 @@ const Details = ({entity, ...props}) => {
           <TableRow>
             <TableData>{_('Status')}</TableData>
             <TableData>
-              <TaskStatus task={entity} />
+              <AuditStatus task={entity} />
             </TableData>
           </TableRow>
         </TableBody>
@@ -368,7 +368,7 @@ const Page = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    <TaskPermissions
+                    <AuditPermissions
                       entity={entity}
                       permissions={permissions}
                       onChanged={onChanged}
@@ -396,7 +396,7 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const TaskPermissions = withComponentDefaults({
+const AuditPermissions = withComponentDefaults({
   relatedResourcesLoaders: [
     ({entity, gmp}) =>
       isDefined(entity.alerts)
@@ -433,30 +433,30 @@ const TaskPermissions = withComponentDefaults({
   ],
 })(EntityPermissions);
 
-const taskIdFilter = id => Filter.fromString('task_id=' + id).all();
+const auditIdFilter = id => Filter.fromString('task_id=' + id).all();
 
 const mapStateToProps = (rootState, {id}) => {
   const permSel = permissionsSelector(rootState);
   const notesSel = notesSelector(rootState);
   const overridesSel = overridesSelector(rootState);
   return {
-    notes: notesSel.getEntities(taskIdFilter(id)),
-    overrides: overridesSel.getEntities(taskIdFilter(id)),
+    notes: notesSel.getEntities(auditIdFilter(id)),
+    overrides: overridesSel.getEntities(auditIdFilter(id)),
     permissions: permSel.getEntities(permissionsResourceFilter(id)),
   };
 };
 
 const load = gmp => {
-  const loadTaskFunc = loadTask(gmp);
+  const loadAuditFunc = loadAudit(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
   const loadNotesFunc = loadNotes(gmp);
   const loadOverridesFunc = loadOverrides(gmp);
   return id => dispatch =>
     Promise.all([
-      dispatch(loadTaskFunc(id)),
+      dispatch(loadAuditFunc(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-      dispatch(loadNotesFunc(taskIdFilter(id))),
-      dispatch(loadOverridesFunc(taskIdFilter(id))),
+      dispatch(loadNotesFunc(auditIdFilter(id))),
+      dispatch(loadOverridesFunc(auditIdFilter(id))),
     ]);
 };
 
@@ -471,7 +471,7 @@ const reloadInterval = ({defaultReloadInterval, entity}) => {
 
 export default withEntityContainer('audit', {
   load,
-  entitySelector: taskSelector,
+  entitySelector: auditSelector,
   mapStateToProps,
   reloadInterval,
 })(Page);

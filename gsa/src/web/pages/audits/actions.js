@@ -47,49 +47,49 @@ const Actions = ({
   gcrFormatDefined,
   onReportDownloadClick,
   onReportImportClick,
-  onTaskCloneClick,
-  onTaskDeleteClick,
-  onTaskDownloadClick,
-  onTaskEditClick,
-  onTaskResumeClick,
-  onTaskStartClick,
-  onTaskStopClick,
+  onAuditCloneClick,
+  onAuditDeleteClick,
+  onAuditDownloadClick,
+  onAuditEditClick,
+  onAuditResumeClick,
+  onAuditStartClick,
+  onAuditStopClick,
 }) => (
   <IconDivider align={['center', 'center']} grow>
     {isDefined(entity.schedule) ? (
       <ScheduleIcon schedule={entity.schedule} links={links} />
     ) : (
-      <StartIcon task={entity} onClick={onTaskStartClick} />
+      <StartIcon audit={entity} onClick={onAuditStartClick} />
     )}
 
     <ImportReportIcon task={entity} onClick={onReportImportClick} />
 
-    <StopIcon task={entity} onClick={onTaskStopClick} />
+    <StopIcon task={entity} onClick={onAuditStopClick} />
 
-    <ResumeIcon task={entity} onClick={onTaskResumeClick} />
+    <ResumeIcon audit={entity} onClick={onAuditResumeClick} />
 
     <TrashIcon
       entity={entity}
       title={_('Move Audit to trashcan')}
       name="task"
-      onClick={onTaskDeleteClick}
+      onClick={onAuditDeleteClick}
     />
     <EditIcon
       entity={entity}
       title={_('Edit Audit')}
       name="task"
-      onClick={onTaskEditClick}
+      onClick={onAuditEditClick}
     />
     <CloneIcon
       entity={entity}
       title={_('Clone Audit')}
       name="task"
-      onClick={onTaskCloneClick}
+      onClick={onAuditCloneClick}
     />
     <ExportIcon
       value={entity}
       title={_('Export Audit')}
-      onClick={onTaskDownloadClick}
+      onClick={onAuditDownloadClick}
     />
     <DownloadIcon
       value={entity}
@@ -104,15 +104,15 @@ Actions.propTypes = {
   entity: PropTypes.model.isRequired,
   gcrFormatDefined: PropTypes.bool,
   links: PropTypes.bool,
+  onAuditCloneClick: PropTypes.func.isRequired,
+  onAuditDeleteClick: PropTypes.func.isRequired,
+  onAuditDownloadClick: PropTypes.func.isRequired,
+  onAuditEditClick: PropTypes.func.isRequired,
+  onAuditResumeClick: PropTypes.func.isRequired,
+  onAuditStartClick: PropTypes.func.isRequired,
+  onAuditStopClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
   onReportImportClick: PropTypes.func.isRequired,
-  onTaskCloneClick: PropTypes.func.isRequired,
-  onTaskDeleteClick: PropTypes.func.isRequired,
-  onTaskDownloadClick: PropTypes.func.isRequired,
-  onTaskEditClick: PropTypes.func.isRequired,
-  onTaskResumeClick: PropTypes.func.isRequired,
-  onTaskStartClick: PropTypes.func.isRequired,
-  onTaskStopClick: PropTypes.func.isRequired,
 };
 
 export default withEntitiesActions(Actions);
