@@ -1485,7 +1485,7 @@ msgstr ""
 
 #: gsa/src/web/pages/reports/row.js:53
 msgid "Scan is active"
-msgstr "掃描啟動"
+msgstr "掃描進行中"
 
 #: gsa/src/web/pages/reports/row.js:53
 msgid "Delete Report"
