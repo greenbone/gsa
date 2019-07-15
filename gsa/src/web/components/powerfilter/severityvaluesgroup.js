@@ -20,54 +20,54 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes.js';
 
-import FormGroup from '../form/formgroup.js';
+import FormGroup from 'web/components/form/formgroup.js';
 import {parseSeverity} from 'gmp/parser.js';
 import RelationSelector from 'web/components/powerfilter/relationselector';
 import NumberField from 'web/components/form/numberfield';
 
-const FILTER_TITLE = {
-  cvss_base: 'Severity',
-};
-
 class SeverityValuesGroup extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      filterVal: parseSeverity(props.filter.get(this.props.name)),
       relation: '=',
     };
 
     this.handleRelationChange = this.handleRelationChange.bind(this);
   }
 
-  handleRelationChange(value) {
+  handleRelationChange(rel) {
     this.setState({
-      relation: value,
+      relation: rel,
     });
+    const severity = parseSeverity(this.props.filter.get(this.props.name));
+    const keyword = this.props.name;
+
+    this.props.onChange(severity, keyword, rel);
   }
 
   render() {
-    const formTitle = FILTER_TITLE[this.props.name];
+    const severity = parseSeverity(this.props.filter.get(this.props.name));
+    const newRelation = this.state.relation;
+    const keyword = this.props.name;
     return (
       <div>
-        <FormGroup title={_(formTitle)}>
+        <FormGroup title={_(this.props.title)}>
           <RelationSelector
-            relation={this.state.relation}
+            relation={newRelation}
             onChange={this.handleRelationChange}
           />
           <NumberField
             type="int"
-            min="0"
-            max="10"
-            value={this.state.filterVal}
+            min={0}
+            max={10}
+            value={severity}
             size="5"
-            onChange={(
-              value = this.state.filterVal,
-              name = this.props.name,
-              relation = this.state.relation,
-            ) => this.props.onChange(value, name, relation)}
+            onChange={(value = severity, name = keyword) =>
+              this.props.onChange(value, name, newRelation)
+            }
           />
         </FormGroup>
       </div>
@@ -78,6 +78,7 @@ class SeverityValuesGroup extends React.Component {
 SeverityValuesGroup.propTypes = {
   filter: PropTypes.filter,
   name: PropTypes.string,
+  title: PropTypes.string,
   onChange: PropTypes.func,
 };
 
