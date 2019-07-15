@@ -124,28 +124,28 @@ const ResultsFilterDialogComponent = ({
     <FilterSearchGroup
       name="owner"
       filter={filter}
-      title="Owner"
+      title={_('Owner')}
       onChange={onSearchTermChange}
     />
 
     <FilterSearchGroup
       name="vulnerability"
       filter={filter}
-      title="Vulnerability"
+      title={_('Vulnerability')}
       onChange={onSearchTermChange}
     />
 
     <FilterSearchGroup
       name="host"
       filter={filter}
-      title="Host (IP)"
+      title={_('Host (IP)')}
       onChange={onSearchTermChange}
     />
 
     <FilterSearchGroup
       name="location"
       filter={filter}
-      title="Location (eg. port/protocol)"
+      title={_('Location (eg. port/protocol)')}
       onChange={onSearchTermChange}
     />
 

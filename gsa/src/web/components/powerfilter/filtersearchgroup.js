@@ -39,7 +39,7 @@ const FilterSearchGroup = ({name, filter, title, onChange}) => {
   }
 
   return (
-    <FormGroup title={_(title)}>
+    <FormGroup title={title}>
       <TextField name={name} value={filterVal} onChange={onChange} />
     </FormGroup>
   );
