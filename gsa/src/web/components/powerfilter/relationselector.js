@@ -20,7 +20,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import Select from 'web/components/form/select';
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes.js';
 
 const RelationSelector = ({relation, onChange}) => (
   <div>
