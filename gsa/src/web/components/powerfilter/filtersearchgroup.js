@@ -26,21 +26,12 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes.js';
 
-import FormGroup from '../form/formgroup.js';
-import TextField from '../form/textfield.js';
+import FormGroup from 'web/components/form/formgroup.js';
+import TextField from 'web/components/form/textfield.js';
 
-const FILTER_TITLE = {
-  comment: 'Comment',
-  host: 'Host (IP)',
-  location: 'Location (eg. port/protocol)',
-  owner: 'Owner',
-  vulnerability: 'Vulnerability',
-};
-
-const FilterSearchGroup = ({name, filter, onChange}) => {
-  const formTitle = FILTER_TITLE[name];
+const FilterSearchGroup = ({name, filter, title, onChange}) => {
   let filterVal;
 
   if (!isDefined(filterVal) && isDefined(filter)) {
@@ -48,7 +39,7 @@ const FilterSearchGroup = ({name, filter, onChange}) => {
   }
 
   return (
-    <FormGroup title={_(formTitle)}>
+    <FormGroup title={_(title)}>
       <TextField name={name} value={filterVal} onChange={onChange} />
     </FormGroup>
   );
@@ -57,6 +48,7 @@ const FilterSearchGroup = ({name, filter, onChange}) => {
 FilterSearchGroup.propTypes = {
   filter: PropTypes.filter,
   name: PropTypes.string,
+  title: PropTypes.string,
   onChange: PropTypes.func,
 };
 

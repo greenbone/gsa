@@ -44,9 +44,6 @@ exports[`FilterSearchGroup tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  width: 83.33333333%;
-  padding-left: 10px;
-  padding-right: 10px;
 }
 
 .c4 {
@@ -91,13 +88,10 @@ exports[`FilterSearchGroup tests should render 1`] = `
   <label
     class="c1"
     data-testid="formgroup-title"
-  >
-    Location (eg. port/protocol)
-  </label>
+  />
   <div
     class="c2"
     data-testid="formgroup-content"
-    size="10"
   >
     <input
       class="c3 c4"
