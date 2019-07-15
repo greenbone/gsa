@@ -33,8 +33,6 @@ import {
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import ManualIcon from 'web/components/icon/manualicon';
-
 import IconDivider from 'web/components/layout/icondivider';
 
 import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
@@ -42,19 +40,12 @@ import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 import NewIcon from 'web/components/icon/newicon';
 
 import AuditComponent from './component';
-import TaskFilterDialog from './filterdialog';
 import Table from './table';
 
 import AuditIcon from 'web/components/icon/auditicon';
 
 const ToolBarIcons = withCapabilities(({capabilities, onAuditCreateClick}) => (
   <IconDivider>
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="creating-a-task"
-      title={_('Help: Tasks')}
-    />
-
     {capabilities.mayCreate('task') && (
       <NewIcon title={_('New Audit')} onClick={onAuditCreateClick} />
     )}
@@ -65,15 +56,7 @@ ToolBarIcons.propTypes = {
   onAuditCreateClick: PropTypes.func.isRequired,
 };
 
-const Page = ({
-  filter,
-  onFilterChanged,
-  onInteraction,
-  onChanged,
-  onDownloaded,
-  onError,
-  ...props
-}) => (
+const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => (
   <AuditComponent
     onCloned={onChanged}
     onCloneError={onError}
@@ -107,8 +90,6 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
-        filter={filter}
-        filterEditDialog={TaskFilterDialog}
         filtersFilter={TASKS_FILTER_FILTER}
         gcrFormatDefined={gcrFormatDefined}
         sectionIcon={<AuditIcon size="large" />}
@@ -116,7 +97,6 @@ const Page = ({
         title={_('Audits')}
         toolBarIcons={ToolBarIcons}
         onError={onError}
-        onFilterChanged={onFilterChanged}
         onInteraction={onInteraction}
         onReportDownloadClick={reportDownload}
         onReportImportClick={reportimport}
@@ -134,11 +114,9 @@ const Page = ({
 );
 
 Page.propTypes = {
-  filter: PropTypes.filter,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
 
