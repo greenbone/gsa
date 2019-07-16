@@ -24,6 +24,7 @@ import FormGroup from 'web/components/form/formgroup.js';
 import {parseSeverity} from 'gmp/parser.js';
 import RelationSelector from 'web/components/powerfilter/relationselector';
 import NumberField from 'web/components/form/numberfield';
+import Divider from '../layout/divider';
 
 class SeverityValuesGroup extends React.Component {
   constructor(props) {
@@ -51,8 +52,8 @@ class SeverityValuesGroup extends React.Component {
     const newRelation = this.state.relation;
     const keyword = this.props.name;
     return (
-      <div>
-        <FormGroup title={this.props.title}>
+      <FormGroup title={this.props.title}>
+        <Divider>
           <RelationSelector
             relation={newRelation}
             onChange={this.handleRelationChange}
@@ -68,8 +69,8 @@ class SeverityValuesGroup extends React.Component {
               this.props.onChange(value, name, newRelation)
             }
           />
-        </FormGroup>
-      </div>
+        </Divider>
+      </FormGroup>
     );
   }
 }
