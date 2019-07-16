@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,44 +16,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
+/* eslint-disable react/prop-types */
 import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import Select from 'web/components/form/select';
+import PropTypes from 'web/utils/proptypes.js';
 
-import PropTypes from '../../utils/proptypes.js';
+const RelationSelector = ({relation, onChange}) => (
+  <Select
+    value={relation}
+    onChange={onChange}
+    items={[
+      {label: _('is equal to'), value: '='},
+      {label: _('is greater than'), value: '>'},
+      {label: _('is less than'), value: '<'},
+    ]}
+  />
+);
 
-import FormGroup from '../form/formgroup.js';
-import Spinner from '../form/spinner.js';
-import {parseSeverity} from 'gmp/parser.js';
-
-const CvssBaseGroup = ({cvss, filter, onChange, name = 'cvss_base'}) => {
-  if (!isDefined(cvss) && isDefined(filter)) {
-    cvss = parseSeverity(filter.get('cvss_base'));
-  }
-
-  return (
-    <FormGroup title={_('Severity')}>
-      <Spinner
-        type="int"
-        name={name}
-        min="0"
-        max="10"
-        step="1"
-        value={cvss}
-        size="5"
-        onChange={onChange}
-      />
-    </FormGroup>
-  );
-};
-
-CvssBaseGroup.propTypes = {
-  cvss: PropTypes.number,
-  filter: PropTypes.filter,
-  name: PropTypes.string,
+RelationSelector.propTypes = {
+  relation: PropTypes.string,
   onChange: PropTypes.func,
 };
 
-export default CvssBaseGroup;
+export default RelationSelector;
