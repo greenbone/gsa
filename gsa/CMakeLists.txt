@@ -320,6 +320,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/legendicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/listicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/listsvgicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/logouticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/manualicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/mysettingsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newicon.js
@@ -434,6 +435,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/ldap.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/legend.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/list.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/logout.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_mitigate.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_nonavailable.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_unknown.svg
@@ -512,12 +514,12 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/link/manuallink.js
      ${GSA_SRC_DIR}/src/web/components/link/protocoldoclink.js
      ${GSA_SRC_DIR}/src/web/components/link/target.js
-     ${GSA_SRC_DIR}/src/web/components/link/userlink.js
      ${GSA_SRC_DIR}/src/web/components/menu/iconmenu.js
      ${GSA_SRC_DIR}/src/web/components/menu/menu.js
      ${GSA_SRC_DIR}/src/web/components/menu/menuentry.js
      ${GSA_SRC_DIR}/src/web/components/menu/menuhelpentry.js
      ${GSA_SRC_DIR}/src/web/components/menu/menusection.js
+     ${GSA_SRC_DIR}/src/web/components/menu/usermenu.js
      ${GSA_SRC_DIR}/src/web/components/notification/dialognotification.js
      ${GSA_SRC_DIR}/src/web/components/notification/withDialogNotifiaction.js
      ${GSA_SRC_DIR}/src/web/components/observer/localeobserver.js

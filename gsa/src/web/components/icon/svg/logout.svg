@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" version="1.1" viewBox="0 0 67.733 67.733" xmlns="http://www.w3.org/2000/svg">
+ <style>.gui_icon_class {
+    opacity:1;
+    stroke-linejoin:miter;
+    stroke-opacity:1;
+    fill-opacity:1;
+    fill-rule:nonzero;
+    paint-order:normal;
+    stroke:none;
+    stroke-linecap:square;
+    stroke-miterlimit:4;
+    stroke-dasharray:none;
+    stroke-width:16.00000191;
+    fill:#000000;
+}</style>
+ <g transform="translate(0 -229.27)">
+  <g transform="matrix(2.0878 0 0 2.2337 41.673 -337.41)">
+   <path class="gui_icon_class" transform="matrix(.12673 0 0 .11845 -19.96 253.7)" d="m0 0v256h16 112v-16-64h-16v64h-96v-224h96v64h16v-64-16h-112-16zm182.46 54.461-22.627 22.627 34.912 34.912h-114.75v32h115.25l-35.541 35.539 22.627 22.629 73.539-73.539-0.25-0.25 0.37891-0.37891-73.539-73.539z"/>
+  </g>
+ </g>
+</svg>
