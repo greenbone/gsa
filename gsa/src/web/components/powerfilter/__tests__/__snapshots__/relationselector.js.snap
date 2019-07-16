@@ -111,37 +111,35 @@ exports[`Relation Selector Tests should render 1`] = `
   cursor: default;
 }
 
-<div>
+<div
+  class="c0"
+  width="180px"
+>
   <div
-    class="c0"
-    width="180px"
+    class="c1"
   >
     <div
-      class="c1"
+      class="c2"
+      data-testid="select-selected-value"
+      title="is less than"
     >
-      <div
-        class="c2"
-        data-testid="select-selected-value"
-        title="is less than"
+      is less than
+    </div>
+    <div
+      class="c3"
+    >
+      <span
+        aria-expanded="false"
+        aria-haspopup="true"
+        aria-label="open menu"
+        class="c4 c5"
+        data-testid="select-open-button"
+        data-toggle="true"
+        role="button"
+        type="button"
       >
-        is less than
-      </div>
-      <div
-        class="c3"
-      >
-        <span
-          aria-expanded="false"
-          aria-haspopup="true"
-          aria-label="open menu"
-          class="c4 c5"
-          data-testid="select-open-button"
-          data-toggle="true"
-          role="button"
-          type="button"
-        >
-          ▼
-        </span>
-      </div>
+        ▼
+      </span>
     </div>
   </div>
 </div>

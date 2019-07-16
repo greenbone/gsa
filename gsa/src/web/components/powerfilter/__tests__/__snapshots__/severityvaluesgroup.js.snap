@@ -174,37 +174,35 @@ exports[`Severity Values Group Tests should render 1`] = `
       data-testid="formgroup-content"
       size="10"
     >
-      <div>
+      <div
+        class="c3"
+        width="180px"
+      >
         <div
-          class="c3"
-          width="180px"
+          class="c4"
         >
           <div
-            class="c4"
+            class="c5"
+            data-testid="select-selected-value"
+            title="is equal to"
           >
-            <div
-              class="c5"
-              data-testid="select-selected-value"
-              title="is equal to"
+            is equal to
+          </div>
+          <div
+            class="c6"
+          >
+            <span
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-label="open menu"
+              class="c7 c8"
+              data-testid="select-open-button"
+              data-toggle="true"
+              role="button"
+              type="button"
             >
-              is equal to
-            </div>
-            <div
-              class="c6"
-            >
-              <span
-                aria-expanded="false"
-                aria-haspopup="true"
-                aria-label="open menu"
-                class="c7 c8"
-                data-testid="select-open-button"
-                data-toggle="true"
-                role="button"
-                type="button"
-              >
-                ▼
-              </span>
-            </div>
+              ▼
+            </span>
           </div>
         </div>
       </div>

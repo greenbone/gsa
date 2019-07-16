@@ -26,17 +26,15 @@ import Select from 'web/components/form/select';
 import PropTypes from 'web/utils/proptypes.js';
 
 const RelationSelector = ({relation, onChange}) => (
-  <div>
-    <Select
-      value={relation}
-      onChange={onChange}
-      items={[
-        {label: _('is equal to'), value: '='},
-        {label: _('is greater than'), value: '>'},
-        {label: _('is less than'), value: '<'},
-      ]}
-    />
-  </div>
+  <Select
+    value={relation}
+    onChange={onChange}
+    items={[
+      {label: _('is equal to'), value: '='},
+      {label: _('is greater than'), value: '>'},
+      {label: _('is less than'), value: '<'},
+    ]}
+  />
 );
 
 RelationSelector.propTypes = {
