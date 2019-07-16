@@ -62,7 +62,7 @@ class Nvt extends React.Component {
 
   render() {
     const {
-      config,
+      policy,
       nvt,
       selected,
       onSelectedChange,
@@ -102,7 +102,7 @@ class Nvt extends React.Component {
         <TableData align={['center', 'center']}>
           <EditIcon
             title={_('Select and edit NVT details')}
-            value={{config, nvt}}
+            value={{policy, nvt}}
             onClick={onEditNvtDetailsClick}
           />
         </TableData>
@@ -112,8 +112,8 @@ class Nvt extends React.Component {
 }
 
 Nvt.propTypes = {
-  config: PropTypes.model.isRequired,
   nvt: PropTypes.object.isRequired,
+  policy: PropTypes.model.isRequired,
   selected: PropTypes.yesno.isRequired,
   onEditNvtDetailsClick: PropTypes.func,
   onSelectedChange: PropTypes.func,
@@ -193,8 +193,8 @@ class EditDialogComponent extends React.Component {
   render() {
     const {sortBy, sortReverse, selected} = this.state;
     const {
-      config,
-      config_name,
+      policy,
+      policyName,
       family_name,
       id,
       title,
@@ -204,8 +204,8 @@ class EditDialogComponent extends React.Component {
     } = this.props;
 
     const data = {
-      config,
-      config_name,
+      policy,
+      policyName,
       family_name,
       id,
       selected,
@@ -228,7 +228,7 @@ class EditDialogComponent extends React.Component {
               <TableBody>
                 <TableRow>
                   <TableData>{_('Policy')}</TableData>
-                  <TableData>{config_name}</TableData>
+                  <TableData>{policyName}</TableData>
                 </TableRow>
                 <TableRow>
                   <TableData>{_('Family')}</TableData>
@@ -288,7 +288,7 @@ class EditDialogComponent extends React.Component {
                       <Nvt
                         key={oid}
                         nvt={nvt}
-                        config={config}
+                        policy={policy}
                         selected={selected[oid]}
                         onSelectedChange={this.handleSelectedChange}
                         onEditNvtDetailsClick={onEditNvtDetailsClick}
@@ -306,11 +306,11 @@ class EditDialogComponent extends React.Component {
 }
 
 EditDialogComponent.propTypes = {
-  config: PropTypes.model.isRequired,
-  config_name: PropTypes.string,
   family_name: PropTypes.string,
   id: PropTypes.string,
   nvts: PropTypes.array.isRequired,
+  policy: PropTypes.model.isRequired,
+  policyName: PropTypes.string,
   selected: PropTypes.object.isRequired,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,

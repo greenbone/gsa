@@ -116,7 +116,7 @@ PoliciesPage.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-export default withEntitiesContainer('policies', {
+export default withEntitiesContainer('policy', {
   entitiesSelector,
   loadEntities,
   defaultFilter: RESET_FILTER,

@@ -73,7 +73,7 @@ class NvtPreferenceDisplay extends React.Component {
   }
 
   render() {
-    const {config, preference, onEditNvtDetailsClick} = this.props;
+    const {policy, preference, onEditNvtDetailsClick} = this.props;
     return (
       <TableRow>
         <StyledTableData>{preference.nvt.name}</StyledTableData>
@@ -81,8 +81,8 @@ class NvtPreferenceDisplay extends React.Component {
         <StyledTableData>{preference.value}</StyledTableData>
         <TableData align={['center', 'center']}>
           <EditIcon
-            title={_('Edit Scan Config NVT Details')}
-            value={{config, nvt: preference.nvt}}
+            title={_('Edit Policy NVT Details')}
+            value={{policy, nvt: preference.nvt}}
             onClick={onEditNvtDetailsClick}
           />
         </TableData>
@@ -92,12 +92,12 @@ class NvtPreferenceDisplay extends React.Component {
 }
 
 NvtPreferenceDisplay.propTypes = {
-  config: PropTypes.model.isRequired,
+  policy: PropTypes.model.isRequired,
   preference: PropTypes.object.isRequired,
   onEditNvtDetailsClick: PropTypes.func.isRequired,
 };
 
-const NvtPreferences = ({config, preferences = [], onEditNvtDetailsClick}) => {
+const NvtPreferences = ({policy, preferences = [], onEditNvtDetailsClick}) => {
   return (
     <Section
       foldable
@@ -121,7 +121,7 @@ const NvtPreferences = ({config, preferences = [], onEditNvtDetailsClick}) => {
           {preferences.map(pref => (
             <NvtPreferenceDisplay
               key={pref.nvt.name + pref.name}
-              config={config}
+              policy={policy}
               preference={pref}
               onEditNvtDetailsClick={onEditNvtDetailsClick}
             />
@@ -133,7 +133,7 @@ const NvtPreferences = ({config, preferences = [], onEditNvtDetailsClick}) => {
 };
 
 NvtPreferences.propTypes = {
-  config: PropTypes.model.isRequired,
+  policy: PropTypes.model.isRequired,
   preferences: PropTypes.array.isRequired,
   onEditNvtDetailsClick: PropTypes.func.isRequired,
 };
@@ -267,7 +267,7 @@ ScannerPreferences.propTypes = {
 class NvtFamily extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     return (
-      nextProps.config !== this.props.config ||
+      nextProps.policy !== this.props.policy ||
       nextProps.family !== this.props.family ||
       nextProps.select !== this.props.select ||
       nextProps.trend !== this.props.trend
@@ -276,24 +276,24 @@ class NvtFamily extends React.Component {
 
   render() {
     const {
-      config,
+      policy,
       family,
       select,
       trend,
-      onEditConfigFamilyClick,
+      onEditPolicyFamilyClick,
       onSelectChange,
       onTrendChange,
     } = this.props;
     const {name} = family;
-    const config_family = config.families[name];
+    const policyFamily = policy.families[name];
     const counts = {
       count: 0,
       max: family.maxNvtCount,
     };
 
-    if (isDefined(config_family)) {
-      counts.count = config_family.nvts.count;
-      counts.max = config_family.nvts.max;
+    if (isDefined(policyFamily)) {
+      counts.count = policyFamily.nvts.count;
+      counts.max = policyFamily.nvts.max;
     }
 
     return (
@@ -334,9 +334,9 @@ class NvtFamily extends React.Component {
         </TableData>
         <TableData align={['center', 'center']}>
           <EditIcon
-            title={_('Edit Scan Config Family')}
-            value={{name, config}}
-            onClick={onEditConfigFamilyClick}
+            title={_('Edit Policy Family')}
+            value={{name, policy}}
+            onClick={onEditPolicyFamilyClick}
           />
         </TableData>
       </TableRow>
@@ -345,11 +345,11 @@ class NvtFamily extends React.Component {
 }
 
 NvtFamily.propTypes = {
-  config: PropTypes.model.isRequired,
   family: PropTypes.object.isRequired,
+  policy: PropTypes.model.isRequired,
   select: PropTypes.yesno.isRequired,
   trend: PropTypes.yesno.isRequired,
-  onEditConfigFamilyClick: PropTypes.func,
+  onEditPolicyFamilyClick: PropTypes.func,
   onSelectChange: PropTypes.func,
   onTrendChange: PropTypes.func,
 };
@@ -380,11 +380,11 @@ class NvtFamilies extends React.Component {
 
   render() {
     const {
-      config,
+      policy,
       families = [],
       trend,
       select,
-      onEditConfigFamilyClick,
+      onEditPolicyFamilyClick,
     } = this.props;
 
     return (
@@ -410,11 +410,11 @@ class NvtFamilies extends React.Component {
               return (
                 <NvtFamily
                   key={name}
-                  config={config}
+                  policy={policy}
                   family={family}
                   trend={trend[name]}
                   select={select[name]}
-                  onEditConfigFamilyClick={onEditConfigFamilyClick}
+                  onEditPolicyFamilyClick={onEditPolicyFamilyClick}
                   onSelectChange={this.onSelectChange}
                   onTrendChange={this.onTrendChange}
                 />
@@ -422,10 +422,10 @@ class NvtFamilies extends React.Component {
             })}
             <TableRow>
               <TableData>
-                {_('Total: {{count}}', {count: config.families.count})}
+                {_('Total: {{count}}', {count: policy.families.count})}
               </TableData>
               <TableData align="start">
-                {_('{{known}} of {{max}}', config.nvts)}
+                {_('{{known}} of {{max}}', policy.nvts)}
               </TableData>
               {/* add empty cells to spread row to end of table */}
               <TableData />
@@ -440,17 +440,17 @@ class NvtFamilies extends React.Component {
 }
 
 NvtFamilies.propTypes = {
-  config: PropTypes.model.isRequired,
   families: PropTypes.array.isRequired,
+  policy: PropTypes.model.isRequired,
   select: PropTypes.object.isRequired,
   trend: PropTypes.object.isRequired,
-  onEditConfigFamilyClick: PropTypes.func,
+  onEditPolicyFamilyClick: PropTypes.func,
   onValueChange: PropTypes.func,
 };
 
 const EditDialog = ({
   comment = '',
-  config,
+  policy,
   families,
   name,
   scanner_id,
@@ -460,19 +460,19 @@ const EditDialog = ({
   title,
   trend,
   onClose,
-  onEditConfigFamilyClick,
+  onEditPolicyFamilyClick,
   onEditNvtDetailsClick,
   onSave,
 }) => {
   const uncontrolledData = {
-    base: config.policy_type,
+    base: policy.policy_type,
     comment,
     name,
     scanner_id,
   };
 
   const controlledData = {
-    id: config.id,
+    id: policy.id,
     scanner_preference_values,
     select,
     trend,
@@ -509,7 +509,7 @@ const EditDialog = ({
               />
             </FormGroup>
 
-            {!config.isInUse() && config.policy_type === OSP_SCAN_CONFIG_TYPE && (
+            {!policy.isInUse() && policy.policy_type === OSP_SCAN_CONFIG_TYPE && (
               <FormGroup title={_('Scanner')}>
                 <Select
                   name="scanner_id"
@@ -520,31 +520,31 @@ const EditDialog = ({
               </FormGroup>
             )}
 
-            {!config.isInUse() &&
-              config.policy_type === OPENVAS_SCAN_CONFIG_TYPE && (
+            {!policy.isInUse() &&
+              policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE && (
                 <NvtFamilies
-                  config={config}
+                  policy={policy}
                   families={families}
                   trend={trend}
                   select={select}
-                  onEditConfigFamilyClick={onEditConfigFamilyClick}
+                  onEditPolicyFamilyClick={onEditPolicyFamilyClick}
                   onValueChange={onValueChange}
                 />
               )}
 
-            {!config.isInUse() && (
+            {!policy.isInUse() && (
               <ScannerPreferences
                 values={scanner_preference_values}
-                preferences={config.preferences.scanner}
+                preferences={policy.preferences.scanner}
                 onValueChange={onValueChange}
               />
             )}
 
-            {!config.isInUse() &&
-              config.policy_type === OPENVAS_SCAN_CONFIG_TYPE && (
+            {!policy.isInUse() &&
+              policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE && (
                 <NvtPreferences
-                  config={config}
-                  preferences={config.preferences.nvt}
+                  policy={policy}
+                  preferences={policy.preferences.nvt}
                   onValueChange={onValueChange}
                   onEditNvtDetailsClick={onEditNvtDetailsClick}
                 />
@@ -558,9 +558,9 @@ const EditDialog = ({
 
 EditDialog.propTypes = {
   comment: PropTypes.string,
-  config: PropTypes.model.isRequired,
   families: PropTypes.array,
   name: PropTypes.string,
+  policy: PropTypes.model.isRequired,
   scanner_id: PropTypes.id,
   scanner_preference_values: PropTypes.object,
   scanners: PropTypes.array,
@@ -568,8 +568,8 @@ EditDialog.propTypes = {
   title: PropTypes.string.isRequired,
   trend: PropTypes.object,
   onClose: PropTypes.func.isRequired,
-  onEditConfigFamilyClick: PropTypes.func,
   onEditNvtDetailsClick: PropTypes.func,
+  onEditPolicyFamilyClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,
 };
 

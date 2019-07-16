@@ -64,8 +64,8 @@ class EditDialog extends React.Component {
 
   render() {
     const {
-      config,
-      config_name,
+      policy,
+      policyName,
       family_name,
       nvt,
       timeout,
@@ -77,10 +77,10 @@ class EditDialog extends React.Component {
     } = this.props;
 
     const controlledData = {
-      config,
-      config_name,
+      policy,
+      policyName,
       family_name,
-      id: config.id,
+      id: policy.id,
       nvt_name: nvt.name,
       oid: nvt.oid,
       preference_values,
@@ -114,7 +114,7 @@ class EditDialog extends React.Component {
                   </TableRow>
                   <TableRow>
                     <TableData>{_('Policy')}</TableData>
-                    <TableData>{config.name}</TableData>
+                    <TableData>{policy.name}</TableData>
                   </TableRow>
                   <TableRow>
                     <TableData>{_('Family')}</TableData>
@@ -259,11 +259,11 @@ class EditDialog extends React.Component {
 }
 
 EditDialog.propTypes = {
-  config: PropTypes.model.isRequired,
-  config_name: PropTypes.string,
   family_name: PropTypes.string,
   manual_timeout: PropTypes.string,
   nvt: PropTypes.object.isRequired,
+  policy: PropTypes.model.isRequired,
+  policyName: PropTypes.string,
   preference_values: PropTypes.object.isRequired,
   timeout: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
