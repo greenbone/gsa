@@ -514,7 +514,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/link/manuallink.js
      ${GSA_SRC_DIR}/src/web/components/link/protocoldoclink.js
      ${GSA_SRC_DIR}/src/web/components/link/target.js
-     ${GSA_SRC_DIR}/src/web/components/link/userlink.js
      ${GSA_SRC_DIR}/src/web/components/menu/iconmenu.js
      ${GSA_SRC_DIR}/src/web/components/menu/menu.js
      ${GSA_SRC_DIR}/src/web/components/menu/menuentry.js
