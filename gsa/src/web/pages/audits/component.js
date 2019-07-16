@@ -24,14 +24,14 @@ import _ from 'gmp/locale';
 
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {hasId} from 'gmp/utils/id';
 
 import withDownload from 'web/components/form/withDownload';
 import {withRouter} from 'react-router-dom';
-
-import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 
 import {
   OPENVAS_DEFAULT_SCANNER_ID,
@@ -44,29 +44,14 @@ import {
 } from 'web/store/entities/alerts';
 
 import {
-  loadEntities as loadCredentials,
-  selector as credentialsSelector,
-} from 'web/store/entities/credentials';
-
-import {
-  loadEntities as loadScanConfigs,
-  selector as scanConfigsSelector,
-} from 'web/store/entities/scanconfigs';
-
-import {
-  loadEntities as loadScanners,
-  selector as scannerSelector,
-} from 'web/store/entities/scanners';
+  loadEntities as loadPolicies,
+  selector as policiesSelector,
+} from 'web/store/entities/policies';
 
 import {
   loadEntities as loadSchedules,
   selector as scheduleSelector,
 } from 'web/store/entities/schedules';
-
-import {
-  loadEntities as loadTags,
-  selector as tagsSelector,
-} from 'web/store/entities/tags';
 
 import {
   loadEntities as loadTargets,
@@ -77,8 +62,6 @@ import {
   loadAllEntities as loadReportFormats,
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
-
-import {getTimezone} from 'web/store/usersettings/selectors';
 
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
@@ -91,24 +74,21 @@ import {UNSET_VALUE} from 'web/utils/render';
 
 import EntityComponent from 'web/entity/component';
 
-import ImportReportDialog from 'web/pages/reports/importdialog';
-
 import ScheduleComponent from 'web/pages/schedules/component';
 import AlertComponent from 'web/pages/alerts/component';
 import TargetComponent from 'web/pages/targets/component';
 
 import AuditDialog from 'web/pages/audits/dialog';
-import ContainerTaskDialog from 'web/pages/tasks/containerdialog';
 
 const REPORT_FORMATS_FILTER = Filter.fromString('active=1 trust=1 rows=-1');
+
+const DEFAULT_MIN_QOD = 70;
 
 class AuditComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
     this.state = {
-      containerTaskDialogVisible: false,
-      reportImportDialogVisible: false,
       showDownloadReportDialog: false,
       auditDialogVisible: false,
       gcrFormatDefined: undefined,
@@ -118,28 +98,16 @@ class AuditComponent extends React.Component {
 
     this.cmd = gmp.audit;
 
-    this.handleReportImport = this.handleReportImport.bind(this);
-    this.handleTaskResume = this.handleTaskResume.bind(this);
+    this.handleAuditResume = this.handleAuditResume.bind(this);
 
-    this.handleSaveTask = this.handleSaveTask.bind(this);
-    this.handleSaveContainerTask = this.handleSaveContainerTask.bind(this);
+    this.handleSaveAudit = this.handleSaveAudit.bind(this);
 
-    this.handleTaskStart = this.handleTaskStart.bind(this);
-    this.handleTaskStop = this.handleTaskStop.bind(this);
-
-    this.openContainerTaskDialog = this.openContainerTaskDialog.bind(this);
-    this.handleCloseContainerTaskDialog = this.handleCloseContainerTaskDialog.bind(
-      this,
-    );
-    this.openReportImportDialog = this.openReportImportDialog.bind(this);
-    this.handleCloseReportImportDialog = this.handleCloseReportImportDialog.bind(
-      this,
-    );
+    this.handleAuditStart = this.handleAuditStart.bind(this);
+    this.handleAuditStop = this.handleAuditStop.bind(this);
 
     this.handleReportDownloadClick = this.handleReportDownloadClick.bind(this);
     this.handleReportDownload = this.handleReportDownload.bind(this);
 
-    this.openStandardAuditDialog = this.openStandardAuditDialog.bind(this);
     this.openAuditDialog = this.openAuditDialog.bind(this);
     this.handleCloseAuditDialog = this.handleCloseAuditDialog.bind(this);
 
@@ -153,8 +121,7 @@ class AuditComponent extends React.Component {
 
     this.handleInteraction = this.handleInteraction.bind(this);
 
-    this.handleScanConfigChange = this.handleScanConfigChange.bind(this);
-    this.handleScannerChange = this.handleScannerChange.bind(this);
+    this.handlePolicyChange = this.handlePolicyChange.bind(this);
   }
 
   componentDidMount() {
@@ -198,28 +165,28 @@ class AuditComponent extends React.Component {
     this.setState({schedule_id});
   }
 
-  handleTaskStart(task) {
+  handleAuditStart(audit) {
     const {onStarted, onStartError} = this.props;
 
     this.handleInteraction();
 
-    return this.cmd.start(task).then(onStarted, onStartError);
+    return this.cmd.start(audit).then(onStarted, onStartError);
   }
 
-  handleTaskStop(task) {
+  handleAuditStop(audit) {
     const {onStopped, onStopError} = this.props;
 
     this.handleInteraction();
 
-    return this.cmd.stop(task).then(onStopped, onStopError);
+    return this.cmd.stop(audit).then(onStopped, onStopError);
   }
 
-  handleTaskResume(task) {
+  handleAuditResume(audit) {
     const {onResumed, onResumeError} = this.props;
 
     this.handleInteraction();
 
-    return this.cmd.resume(task).then(onResumed, onResumeError);
+    return this.cmd.resume(audit).then(onResumed, onResumeError);
   }
 
   handleAlertCreated(resp) {
@@ -246,85 +213,45 @@ class AuditComponent extends React.Component {
     this.setState({target_id: data.id});
   }
 
-  openContainerTaskDialog(task) {
-    this.setState({
-      containerTaskDialogVisible: true,
-      task,
-      name: task ? task.name : _('Unnamed'),
-      comment: task ? task.comment : '',
-      id: task ? task.id : undefined,
-      in_assets: task ? task.in_assets : undefined,
-      auto_delete: task ? task.auto_delete : undefined,
-      auto_delete_data: task ? task.auto_delete_data : undefined,
-      title: task
-        ? _('Edit Container Task {{name}}', task)
-        : _('New Container Task'),
-    });
-    this.handleInteraction();
-  }
-
-  closeContainerTaskDialog() {
-    this.setState({containerTaskDialogVisible: false});
-  }
-
-  handleCloseContainerTaskDialog() {
-    this.closeContainerTaskDialog();
-    this.handleInteraction();
-  }
-
-  handleSaveContainerTask(data) {
-    this.handleInteraction();
-
-    if (isDefined(data.id)) {
-      const {onContainerSaved, onContainerSaveError} = this.props;
-      return this.cmd
-        .saveContainer(data)
-        .then(onContainerSaved, onContainerSaveError)
-        .then(() => this.closeContainerTaskDialog());
-    }
-
-    const {onContainerCreated, onContainerCreateError} = this.props;
-    return this.cmd
-      .createContainer(data)
-      .then(onContainerCreated, onContainerCreateError)
-      .then(() => this.closeContainerTaskDialog());
-  }
-
-  handleSaveTask({
-    add_tag,
+  handleSaveAudit({
     alert_ids,
     alterable,
     auto_delete,
     auto_delete_data,
-    apply_overrides,
     comment,
-    config_id,
+    policy_id,
     hosts_ordering,
     id,
     in_assets,
-    min_qod,
     max_checks,
     max_hosts,
     name,
     schedule_id,
     schedule_periods,
     source_iface,
-    tag_id,
     target_id,
-    task,
+    audit,
   }) {
     const {gmp} = this.props;
-    let {scanner_id, scanner_type} = this.state;
+
+    let scanner_id = OPENVAS_DEFAULT_SCANNER_ID;
+    const scanner_type = OPENVAS_SCANNER_TYPE;
+
+    const tag_id = undefined;
+    const add_tag = NO_VALUE;
+
+    const apply_overrides = YES_VALUE;
+    const min_qod = DEFAULT_MIN_QOD;
 
     this.handleInteraction();
 
     if (isDefined(id)) {
       // save edit part
-      if (isDefined(task) && !task.isChangeable()) {
-        // arguments need to be undefined if the task is not changeable
+      if (isDefined(audit) && !audit.isChangeable()) {
+        // arguments need to be undefined if the audit is not changeable
         target_id = undefined;
         scanner_id = undefined;
-        config_id = undefined;
+        policy_id = undefined;
       }
       const {onSaved, onSaveError} = this.props;
       return gmp.audit
@@ -335,7 +262,7 @@ class AuditComponent extends React.Component {
           auto_delete_data,
           apply_overrides,
           comment,
-          config_id,
+          config_id: policy_id,
           hosts_ordering,
           id,
           in_assets,
@@ -364,7 +291,7 @@ class AuditComponent extends React.Component {
         auto_delete,
         auto_delete_data,
         comment,
-        config_id,
+        config_id: policy_id,
         hosts_ordering,
         in_assets,
         max_checks,
@@ -383,14 +310,6 @@ class AuditComponent extends React.Component {
       .then(() => this.closeAuditDialog());
   }
 
-  openAuditDialog(task) {
-    if (isDefined(task) && task.isContainer()) {
-      this.openContainerTaskDialog(task);
-    } else {
-      this.openStandardAuditDialog(task);
-    }
-  }
-
   closeAuditDialog() {
     this.setState({auditDialogVisible: false});
   }
@@ -400,52 +319,49 @@ class AuditComponent extends React.Component {
     this.handleInteraction();
   }
 
-  openStandardAuditDialog(task) {
+  openAuditDialog(audit) {
     const {capabilities} = this.props;
 
     this.props.loadAlerts();
-    this.props.loadScanConfigs();
-    this.props.loadScanners();
+    this.props.loadPolicies();
     this.props.loadSchedules();
     this.props.loadTargets();
-    this.props.loadTags();
 
-    if (isDefined(task)) {
+    if (isDefined(audit)) {
       const canAccessSchedules =
-        capabilities.mayAccess('schedules') && isDefined(task.schedule);
-      const schedule_id = canAccessSchedules ? task.schedule.id : UNSET_VALUE;
+        capabilities.mayAccess('schedules') && isDefined(audit.schedule);
+      const schedule_id = canAccessSchedules ? audit.schedule.id : UNSET_VALUE;
       const schedule_periods = canAccessSchedules
-        ? task.schedule_periods
+        ? audit.schedule_periods
         : undefined;
 
       this.setState({
         auditDialogVisible: true,
-        alert_ids: map(task.alerts, alert => alert.id),
-        alterable: task.alterable,
-        apply_overrides: task.apply_overrides,
-        auto_delete: task.auto_delete,
-        auto_delete_data: task.auto_delete_data,
-        comment: task.comment,
-        config_id: hasId(task.config) ? task.config.id : undefined,
-        hosts_ordering: task.hosts_ordering,
-        id: task.id,
-        in_assets: task.in_assets,
-        max_checks: task.max_checks,
-        max_hosts: task.max_hosts,
-        min_qod: task.min_qod,
-        name: task.name,
-        scanner_id: hasId(task.scanner) ? task.scanner.id : undefined,
+        alert_ids: map(audit.alerts, alert => alert.id),
+        alterable: audit.alterable,
+        apply_overrides: audit.apply_overrides,
+        auto_delete: audit.auto_delete,
+        auto_delete_data: audit.auto_delete_data,
+        comment: audit.comment,
+        policy_id: hasId(audit.config) ? audit.config.id : undefined,
+        hosts_ordering: audit.hosts_ordering,
+        id: audit.id,
+        in_assets: audit.in_assets,
+        max_checks: audit.max_checks,
+        max_hosts: audit.max_hosts,
+        min_qod: audit.min_qod,
+        name: audit.name,
+        scanner_id: hasId(audit.scanner) ? audit.scanner.id : undefined,
         schedule_id,
         schedule_periods,
-        source_iface: task.source_iface,
-        target_id: hasId(task.target) ? task.target.id : undefined,
-        task,
-        title: _('Edit Audit {{name}}', task),
+        source_iface: audit.source_iface,
+        target_id: hasId(audit.target) ? audit.target.id : undefined,
+        audit,
+        title: _('Edit Audit {{name}}', audit),
       });
     } else {
       const {
         defaultAlertId,
-        defaultScanConfigId = FULL_AND_FAST_SCAN_CONFIG_ID,
         defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID,
         defaultScheduleId,
         defaultTargetId,
@@ -463,7 +379,7 @@ class AuditComponent extends React.Component {
         auto_delete: undefined,
         auto_delete_data: undefined,
         comment: undefined,
-        config_id: defaultScanConfigId,
+        policy_id: undefined,
         hosts_ordering: undefined,
         id: undefined,
         in_assets: undefined,
@@ -477,51 +393,22 @@ class AuditComponent extends React.Component {
         schedule_periods: undefined,
         source_iface: undefined,
         target_id: defaultTargetId,
-        task: undefined,
+        audit: undefined,
         title: _('New Audit'),
       });
     }
     this.handleInteraction();
   }
 
-  openReportImportDialog(task) {
+  handleReportDownloadClick(audit) {
     this.setState({
-      reportImportDialogVisible: true,
-      task_id: task.id,
-      tasks: [task],
-    });
-    this.handleInteraction();
-  }
-
-  closeReportImportDialog() {
-    this.setState({reportImportDialogVisible: false});
-  }
-
-  handleCloseReportImportDialog() {
-    this.closeReportImportDialog();
-    this.handleInteraction();
-  }
-
-  handleReportImport(data) {
-    const {onReportImported, onReportImportError, gmp} = this.props;
-
-    this.handleInteraction();
-
-    return gmp.report
-      .import(data)
-      .then(onReportImported, onReportImportError)
-      .then(() => this.closeReportImportDialog());
-  }
-
-  handleReportDownloadClick(task) {
-    this.setState({
-      task: task,
+      audit: audit,
     });
 
-    this.handleReportDownload(this.state, task);
+    this.handleReportDownload(this.state, audit);
   }
 
-  handleReportDownload(state, task) {
+  handleReportDownload(state, audit) {
     const {gmp, reportFormats = [], onDownload} = this.props;
 
     const report_format = reportFormats.find(
@@ -534,7 +421,7 @@ class AuditComponent extends React.Component {
 
     this.handleInteraction();
 
-    const {id} = task.last_report;
+    const {id} = audit.last_report;
 
     gmp.report
       .download(
@@ -552,23 +439,15 @@ class AuditComponent extends React.Component {
       }, this.handleError);
   }
 
-  handleScanConfigChange(config_id) {
-    this.setState({config_id});
-  }
-
-  handleScannerChange(scanner_id) {
-    this.setState({scanner_id});
+  handlePolicyChange(policy_id) {
+    this.setState({policy_id});
   }
 
   render() {
     const {
       alerts,
-      // credentials,
-      // entity,
-      scanConfigs,
-      scanners,
+      policies,
       schedules,
-      tags,
       targets,
       children,
       onCloned,
@@ -583,49 +462,26 @@ class AuditComponent extends React.Component {
     } = this.props;
 
     const {
-      // alert_id,
       alert_ids,
       alterable,
-      apply_overrides,
       auto_delete,
       auto_delete_data,
-      config_id,
-      containerTaskDialogVisible,
+      policy_id,
       comment,
-      // esxi_credential,
-      // hosts,
       hosts_ordering,
       id,
       in_assets,
       gcrFormatDefined,
       max_checks,
       max_hosts,
-      min_qod,
       name,
-      // port_list_id,
-      reportImportDialogVisible,
-      // reschedule,
-      scanner_id,
       schedule_id,
       schedule_periods,
-      // showDownloadReportDialog,
       source_iface,
-      // ssh_credential,
-      // smb_credential,
-      // start_date,
-      // start_minute,
-      // start_hour,
-      // start_timezone,
-      // storeAsDefault,
-      tag_id,
       target_id,
-      // target_hosts,
-      task_id,
-      // task_name,
-      task,
-      tasks,
+      audit,
       auditDialogVisible,
-      title = _('Edit Audit {{name}}', task),
+      title = _('Edit Audit {{name}}', audit),
     } = this.state;
     return (
       <React.Fragment>
@@ -646,12 +502,10 @@ class AuditComponent extends React.Component {
               {children({
                 ...other,
                 create: this.openAuditDialog,
-                createcontainer: this.openContainerTaskDialog,
                 edit: this.openAuditDialog,
-                start: this.handleTaskStart,
-                stop: this.handleTaskStop,
-                resume: this.handleTaskResume,
-                reportimport: this.openReportImportDialog,
+                start: this.handleAuditStart,
+                stop: this.handleAuditStop,
+                resume: this.handleAuditResume,
                 reportDownload: this.handleReportDownloadClick,
                 gcrFormatDefined: gcrFormatDefined,
               })}
@@ -676,41 +530,34 @@ class AuditComponent extends React.Component {
                               alerts={alerts}
                               alert_ids={alert_ids}
                               alterable={alterable}
-                              apply_overrides={apply_overrides}
                               auto_delete={auto_delete}
                               auto_delete_data={auto_delete_data}
                               comment={comment}
-                              config_id={config_id}
+                              policy_id={policy_id}
                               hosts_ordering={hosts_ordering}
                               id={id}
                               in_assets={in_assets}
                               max_checks={max_checks}
                               max_hosts={max_hosts}
-                              min_qod={min_qod}
                               name={name}
-                              scan_configs={scanConfigs}
-                              scanner_id={scanner_id}
-                              scanners={scanners}
+                              policies={policies}
                               schedule_id={schedule_id}
                               schedule_periods={schedule_periods}
                               schedules={schedules}
                               source_iface={source_iface}
-                              tag_id={tag_id}
-                              tags={tags}
                               target_id={target_id}
                               targets={targets}
-                              task={task}
+                              audit={audit}
                               title={title}
                               onAlertsChange={this.handleAlertsChange}
                               onNewAlertClick={createalert}
                               onNewTargetClick={createtarget}
                               onNewScheduleClick={createschedule}
-                              onScanConfigChange={this.handleScanConfigChange}
-                              onScannerChange={this.handleScannerChange}
+                              onPolicyChange={this.handlePolicyChange}
                               onScheduleChange={this.handleScheduleChange}
                               onTargetChange={this.handleTargetChange}
                               onClose={this.handleCloseAuditDialog}
-                              onSave={this.handleSaveTask}
+                              onSave={this.handleSaveAudit}
                             />
                           )}
                         </ScheduleComponent>
@@ -722,31 +569,6 @@ class AuditComponent extends React.Component {
             </React.Fragment>
           )}
         </EntityComponent>
-
-        {containerTaskDialogVisible && (
-          <ContainerTaskDialog
-            task={task}
-            name={name}
-            comment={comment}
-            id={id}
-            in_assets={in_assets}
-            auto_delete={auto_delete}
-            auto_delete_data={auto_delete_data}
-            title={title}
-            onClose={this.handleCloseContainerTaskDialog}
-            onSave={this.handleSaveContainerTask}
-          />
-        )}
-
-        {reportImportDialogVisible && (
-          <ImportReportDialog
-            newContainerTask={false}
-            task_id={task_id}
-            tasks={tasks}
-            onClose={this.handleCloseReportImportDialog}
-            onSave={this.handleReportImport}
-          />
-        )}
       </React.Fragment>
     );
   }
@@ -756,41 +578,23 @@ AuditComponent.propTypes = {
   alerts: PropTypes.arrayOf(PropTypes.model),
   capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
-  credentials: PropTypes.arrayOf(PropTypes.model),
   defaultAlertId: PropTypes.id,
-  defaultEsxiCredential: PropTypes.id,
-  defaultPortListId: PropTypes.id,
-  defaultScanConfigId: PropTypes.id,
   defaultScannerId: PropTypes.id,
   defaultScheduleId: PropTypes.id,
-  defaultSmbCredential: PropTypes.id,
-  defaultSshCredential: PropTypes.id,
   defaultTargetId: PropTypes.id,
   gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
-  loadCredentials: PropTypes.func.isRequired,
+  loadPolicies: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
-  loadScanConfigs: PropTypes.func.isRequired,
-  loadScanners: PropTypes.func.isRequired,
   loadSchedules: PropTypes.func.isRequired,
-  loadTags: PropTypes.func.isRequired,
   loadTargets: PropTypes.func.isRequired,
   loadUserSettingsDefaults: PropTypes.func.isRequired,
+  policies: PropTypes.arrayOf(PropTypes.model),
   reportFormats: PropTypes.array,
-  scanConfigs: PropTypes.arrayOf(PropTypes.model),
-  scanners: PropTypes.arrayOf(PropTypes.model),
   schedules: PropTypes.arrayOf(PropTypes.model),
-  tags: PropTypes.arrayOf(PropTypes.model),
   targets: PropTypes.arrayOf(PropTypes.model),
-  timezone: PropTypes.string.isRequired,
-  onAdvancedTaskWizardError: PropTypes.func,
-  onAdvancedTaskWizardSaved: PropTypes.func,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
-  onContainerCreateError: PropTypes.func,
-  onContainerCreated: PropTypes.func,
-  onContainerSaveError: PropTypes.func,
-  onContainerSaved: PropTypes.func,
   onCreateError: PropTypes.func,
   onCreated: PropTypes.func,
   onDeleteError: PropTypes.func,
@@ -799,10 +603,6 @@ AuditComponent.propTypes = {
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
   onInteraction: PropTypes.func.isRequired,
-  onModifyTaskWizardError: PropTypes.func,
-  onModifyTaskWizardSaved: PropTypes.func,
-  onReportImportError: PropTypes.func,
-  onReportImported: PropTypes.func,
   onResumeError: PropTypes.func,
   onResumed: PropTypes.func,
   onSaveError: PropTypes.func,
@@ -811,55 +611,33 @@ AuditComponent.propTypes = {
   onStarted: PropTypes.func,
   onStopError: PropTypes.func,
   onStopped: PropTypes.func,
-  onTaskWizardError: PropTypes.func,
-  onTaskWizardSaved: PropTypes.func,
 };
-
-const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
 
 const mapStateToProps = (rootState, {match}) => {
   const alertSel = alertSelector(rootState);
-  const credentialsSel = credentialsSelector(rootState);
   const userDefaults = getUserSettingsDefaults(rootState);
-  const scanConfigsSel = scanConfigsSelector(rootState);
-  const scannersSel = scannerSelector(rootState);
+  const policiesSel = policiesSelector(rootState);
   const scheduleSel = scheduleSelector(rootState);
-  const tagsSel = tagsSelector(rootState);
   const targetSel = targetSelector(rootState);
 
   const reportFormatsSel = reportFormatsSelector(rootState);
 
   return {
-    timezone: getTimezone(rootState),
     alerts: alertSel.getEntities(ALL_FILTER),
-    credentials: credentialsSel.getEntities(ALL_FILTER),
     defaultAlertId: userDefaults.getValueByName('defaultalert'),
-    defaultEsxiCredential: userDefaults.getValueByName('defaultesxicredential'),
-    defaultPortListId: userDefaults.getValueByName('defaultportlist'),
-    defaultScanConfigId: userDefaults.getValueByName(
-      'defaultopenvasscanconfig',
-    ),
-    defaultScannerId: userDefaults.getValueByName('defaultopenvasscanner'),
     defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
-    defaultSshCredential: userDefaults.getValueByName('defaultsshcredential'),
-    defaultSmbCredential: userDefaults.getValueByName('defaultsmbcredential'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
     reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
-    scanConfigs: scanConfigsSel.getEntities(ALL_FILTER),
-    scanners: scannersSel.getEntities(ALL_FILTER),
+    policies: policiesSel.getEntities(ALL_FILTER),
     schedules: scheduleSel.getEntities(ALL_FILTER),
-    tags: tagsSel.getEntities(TAGS_FILTER),
     targets: targetSel.getEntities(ALL_FILTER),
   };
 };
 
 const mapDispatchToProp = (dispatch, {gmp}) => ({
   loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
-  loadCredentials: () => dispatch(loadCredentials(gmp)(ALL_FILTER)),
-  loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
-  loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
+  loadPolicies: () => dispatch(loadPolicies(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
-  loadTags: () => dispatch(loadTags(gmp)(TAGS_FILTER)),
   loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
   loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
   loadReportFormats: () =>
