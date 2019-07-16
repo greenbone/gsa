@@ -149,10 +149,16 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
               )}
             </Menu>
           )}
-          <Menu title={_('Compliance')}>
-            <MenuEntry title={_('Policies')} to="policies" />
-            <MenuEntry title={_('Audits')} to="audits" />
-          </Menu>
+          {may_op_scans && may_op_configuration && (
+            <Menu title={_('Compliance')}>
+              {capabilities.mayAccess('configs') && (
+                <MenuEntry title={_('Policies')} to="policies" />
+              )}
+              {capabilities.mayAccess('tasks') && (
+                <MenuEntry title={_('Audits')} to="audits" />
+              )}
+            </Menu>
+          )}
           {capabilities.mayAccess('assets') && (
             <Menu title={_('Assets')}>
               <MenuEntry title={_('Hosts')} to="hosts" />
