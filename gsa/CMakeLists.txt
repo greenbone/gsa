@@ -320,6 +320,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/legendicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/listicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/listsvgicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/logouticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/manualicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/mysettingsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newicon.js
@@ -434,6 +435,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/ldap.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/legend.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/list.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/logout.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_mitigate.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_nonavailable.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_unknown.svg
