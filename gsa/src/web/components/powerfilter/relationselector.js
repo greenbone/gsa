@@ -29,8 +29,8 @@ const RelationSelector = ({relation, onChange}) => (
       onChange={onChange}
       items={[
         {label: 'is equal to', value: '='},
-        {label: 'is greater than', value: '>'},
-        {label: 'is less than', value: '<'},
+        {label: _('is greater than'), value: '>'},
+        {label: _('is less than'), value: '<'},
       ]}
     />
   </div>
