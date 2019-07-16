@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- Added a component "SeverityValuesGroup" enabling user choose the relation they want [#1477](https://github.com/greenbone/gsa/pull/1477)
 - Added filter keywords owner, host, cvss base score, vulnerability and location to filter dialog on results page [#1472](https://github.com/greenbone/gsa/pull/1472)
 - Add storybook [#1272](https://github.com/greenbone/gsa/pull/1286)
 - Added TLS certificates to the asset management.
