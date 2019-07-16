@@ -19,7 +19,7 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
@@ -114,6 +114,21 @@ const MenuList = styled.ul`
   ${StyledMenu}:hover & {
     display: block;
   }
+  animation: ${keyframes({
+      '0%': {
+        transform: 'scale(0.9)',
+        transformOrigin: 'top',
+        opacity: 0,
+        translateY: '0px',
+      },
+      '100%': {
+        transform: 'scale(1.0)',
+        transformOrigin: 'top',
+        opacity: 1,
+        translate: 0,
+      },
+    })}
+    0.1s ease-in;
 `;
 
 const getFirstMenuEntry = child => {
