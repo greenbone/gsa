@@ -19,6 +19,9 @@
 
 /* eslint-disable react/prop-types */
 import React from 'react';
+
+import _ from 'gmp/locale';
+
 import Select from 'web/components/form/select';
 import PropTypes from 'web/utils/proptypes.js';
 
@@ -28,9 +31,9 @@ const RelationSelector = ({relation, onChange}) => (
       value={relation}
       onChange={onChange}
       items={[
-        {label: 'is equal to', value: '='},
-        {label: 'is greater than', value: '>'},
-        {label: 'is less than', value: '<'},
+        {label: _('is equal to'), value: '='},
+        {label: _('is greater than'), value: '>'},
+        {label: _('is less than'), value: '<'},
       ]}
     />
   </div>
