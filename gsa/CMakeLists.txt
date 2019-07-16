@@ -520,6 +520,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/menu/menuentry.js
      ${GSA_SRC_DIR}/src/web/components/menu/menuhelpentry.js
      ${GSA_SRC_DIR}/src/web/components/menu/menusection.js
+     ${GSA_SRC_DIR}/src/web/components/menu/usermenu.js
      ${GSA_SRC_DIR}/src/web/components/notification/dialognotification.js
      ${GSA_SRC_DIR}/src/web/components/notification/withDialogNotifiaction.js
      ${GSA_SRC_DIR}/src/web/components/observer/localeobserver.js
