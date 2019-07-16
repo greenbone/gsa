@@ -18,8 +18,6 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes.js';
 
 import FormGroup from 'web/components/form/formgroup.js';
@@ -54,12 +52,13 @@ class SeverityValuesGroup extends React.Component {
     const keyword = this.props.name;
     return (
       <div>
-        <FormGroup title={_(this.props.title)}>
+        <FormGroup title={this.props.title}>
           <RelationSelector
             relation={newRelation}
             onChange={this.handleRelationChange}
           />
           <NumberField
+            name={this.props.name}
             type="int"
             min={0}
             max={10}
