@@ -230,6 +230,16 @@ class ScanConfigsCommand extends EntitiesCommand {
   getEntitiesResponse(root) {
     return root.get_configs.get_configs_response;
   }
+
+  get(params, options) {
+    params = {...params, usage_type: 'scan'};
+    return this.httpGet(params, options).then(response => {
+      const {entities, filter, counts} = this.getCollectionListFromRoot(
+        response.data,
+      );
+      return response.set(entities, {filter, counts});
+    });
+  }
 }
 
 registerCommand('scanconfig', ScanConfigCommand);

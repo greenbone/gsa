@@ -193,6 +193,7 @@ export class TaskCommand extends EntityCommand {
       source_iface,
       target_id,
       task_id: id,
+      usage_type: 'scan',
     };
     log.debug('Saving task', args, data);
     return this.action(data);
@@ -216,6 +217,7 @@ export class TaskCommand extends EntityCommand {
       auto_delete,
       auto_delete_data,
       task_id: id,
+      usage_type: 'scan',
     });
   }
 
@@ -231,6 +233,16 @@ class TasksCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_tasks.get_tasks_response;
+  }
+
+  get(params, options) {
+    params = {...params, usage_type: 'scan'};
+    return this.httpGet(params, options).then(response => {
+      const {entities, filter, counts} = this.getCollectionListFromRoot(
+        response.data,
+      );
+      return response.set(entities, {filter, counts});
+    });
   }
 
   getSeverityAggregates({filter} = {}) {
