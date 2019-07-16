@@ -87,7 +87,7 @@ class FilterDialog extends React.Component {
     const {onFilterChanged, onCloseClick} = this.props;
 
     const newFilter = Filter.fromString(filterstring);
-    newFilter._merge(filter);
+    newFilter.merge(filter);
 
     if (saveNamedFilter) {
       if (filterName.trim().length > 0) {
