@@ -180,6 +180,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
 
 <span
   class="c0 c1"
+  data-testid="usermenu"
 >
   <span
     class="c2 c3 "

@@ -150,7 +150,7 @@ class UserMenuContainer extends React.Component {
     const {sessionTimeout, userName} = this.props;
 
     return (
-      <UserMenu>
+      <UserMenu data-testid="usermenu">
         <StyledUserIcon size="medium" />
         <Div>
           <List>

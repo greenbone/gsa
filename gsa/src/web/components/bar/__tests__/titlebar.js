@@ -36,11 +36,11 @@ describe('Titlebar tests', () => {
     store.dispatch(setUsername('username'));
     store.dispatch(setIsLoggedIn(true));
 
-    const {baseElement} = render(<Titlebar />);
+    const {baseElement, getByTestId} = render(<Titlebar />);
+    const menuElement = getByTestId('usermenu');
 
     expect(baseElement).toMatchSnapshot();
-    const links = baseElement.querySelectorAll('a');
-    expect(links[1]).toHaveTextContent('username');
+    expect(menuElement).toBeDefined();
     expect(baseElement).not.toHaveTextContent('Vendor Version');
   });
 
