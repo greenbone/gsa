@@ -33,7 +33,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add tooltips to deactivated text fields in AlertDialog [#1269](https://github.com/greenbone/gsa/pull/1269)
 
 ### Changed
-- Brand the Loading indicator [#1469](https://github.com/greenbone/gsa/pull/1469)
 - Always load notes and overrides when getting results [#1446](https://github.com/greenbone/gsa/pull/1446)
 - Disable some FileFields when RadioButton is not checked [#1430](https://github.com/greenbone/gsa/pull/1430)
 - Change checkboxes for solution types to radio buttons [#1398](https://github.com/greenbone/gsa/pull/1398)
