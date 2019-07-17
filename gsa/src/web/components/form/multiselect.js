@@ -176,6 +176,7 @@ class MultiSelect extends React.Component {
       items,
       menuPosition = 'adjust',
       width = DEFAULT_WIDTH,
+      grow,
     } = this.props;
 
     const {search, selectedItems} = this.state;
@@ -208,6 +209,7 @@ class MultiSelect extends React.Component {
               {...getRootProps({}, {suppressRefError: true})}
               className={className}
               width={width}
+              grow={grow}
             >
               <Box
                 isOpen={isOpen}
@@ -275,6 +277,7 @@ class MultiSelect extends React.Component {
 
 MultiSelect.propTypes = {
   disabled: PropTypes.bool,
+  grow: PropTypes.number,
   items: PropTypes.arrayOf(PropTypes.object),
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,

@@ -441,7 +441,10 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  position: relative;
+  -webkit-box-flex: position:relative;
+  -webkit-flex-grow: position:relative;
+  -ms-flex-positive: position:relative;
+  flex-grow: position:relative;
   width: 180px;
 }
 
