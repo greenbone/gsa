@@ -49,7 +49,7 @@ const TicketStatusFilterGroup = ({
         items={[
           {label: _('Open'), value: '0'},
           {label: _('Fixed'), value: '1'},
-          {label: 'Fix Verified', value: '2'},
+          {label: _('Fix Verified'), value: '2'},
           {label: _('Closed'), value: '3'},
         ]}
       />

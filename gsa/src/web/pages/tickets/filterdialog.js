@@ -18,7 +18,7 @@
  */
 import React from 'react';
 
-import {_l, _} from 'gmp/locale/lang';
+import {_} from 'gmp/locale/lang';
 
 import Layout from 'web/components/layout/layout';
 
@@ -38,45 +38,7 @@ import TicketStatusFilterGroup from 'web/components/powerfilter/ticketstatusgrou
 import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
 import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
 
-const SORT_FIELDS = [
-  {
-    name: 'name',
-    displayName: _l('Vulnerability'),
-  },
-  {
-    name: 'severity',
-    displayName: _l('Severity'),
-  },
-  {
-    name: 'host',
-    displayName: _l('Host'),
-  },
-  {
-    name: 'solution_type',
-    displayName: _l('Solution Type'),
-    align: ['center', 'start'],
-  },
-  {
-    name: 'username',
-    displayName: _l('Assigned User'),
-  },
-  {
-    name: 'opened',
-    displayName: _l('Time Opened'),
-  },
-  {
-    name: 'closed',
-    displayName: _l('Time Closed'),
-  },
-  {
-    name: 'modified',
-    displayName: _l('Modification Time'),
-  },
-  {
-    name: 'status',
-    displayName: _l('Status'),
-  },
-];
+import {FIELDS} from './table';
 
 const TicketsFilterDialogComponent = ({
   capabilities,
@@ -116,7 +78,7 @@ const TicketsFilterDialogComponent = ({
 
     <SortByGroup
       filter={filter}
-      fields={SORT_FIELDS}
+      fields={FIELDS}
       onSortOrderChange={onSortOrderChange}
       onSortByChange={onSortByChange}
     />
