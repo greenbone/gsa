@@ -53,7 +53,6 @@ const CreateTicketDialog = ({
         <FormGroup title={_('Assign To User')}>
           <Select
             name="userId"
-            grow="1"
             value={values.userId}
             items={renderSelectItems(users)}
             onChange={onUserIdChange}
