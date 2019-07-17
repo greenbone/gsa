@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.1] - (unreleased)
 
 ### Added
+- Added systemd service file and logrotate config to gsad [#1486](https://github.com/greenbone/gsa/pull/1486)
 - Additional report-host information [#1468](https://github.com/greenbone/gsa/pull/1468)
 - New VerifyNoIcon [#1468](https://github.com/greenbone/gsa/pull/1468)
 - Add tests for filter groups [#1419](https://github.com/greenbone/gsa/pull/1419)
