@@ -308,121 +308,135 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({
-  entity,
-  permissions = [],
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <TaskComponent
-    onCloned={goto_details('task', props)}
-    onCloneError={onError}
-    onCreated={goto_details('task', props)}
-    onContainerCreated={goto_details('task', props)}
-    onContainerSaved={onChanged}
-    onDeleted={goto_list('tasks', props)}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-    onReportImported={onChanged}
-    onResumed={onChanged}
-    onResumeError={onError}
-    onSaved={onChanged}
-    onStarted={onChanged}
-    onStartError={onError}
-    onStopped={onChanged}
-    onStopError={onError}
-  >
-    {({
-      clone,
-      create,
-      createcontainer,
-      delete: delete_func,
-      download,
-      edit,
-      start,
-      stop,
-      resume,
-      reportimport,
-    }) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<TaskIcon size="large" />}
-        title={_('Task')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onContainerTaskCreateClick={createcontainer}
-        onError={onError}
-        onInteraction={onInteraction}
-        onReportImportClick={reportimport}
-        onTaskCloneClick={clone}
-        onTaskCreateClick={create}
-        onTaskDeleteClick={delete_func}
-        onTaskDownloadClick={download}
-        onTaskEditClick={edit}
-        onTaskResumeClick={resume}
-        onTaskStartClick={start}
-        onTaskStopClick={stop}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <Layout grow="1" flex="column">
-              <TabLayout grow="1" align={['start', 'end']}>
-                <TabList
-                  active={activeTab}
-                  align={['start', 'stretch']}
-                  onActivateTab={onActivateTab}
-                >
-                  <Tab>{_('Information')}</Tab>
-                  <EntitiesTab entities={entity.userTags}>
-                    {_('User Tags')}
-                  </EntitiesTab>
-                  <EntitiesTab entities={permissions}>
-                    {_('Permissions')}
-                  </EntitiesTab>
-                </TabList>
-              </TabLayout>
+class Page extends React.Component {
+  componentDidUpdate() {
+    // eslint-disable-next-line no-unused-vars
+    const {entity, history, ...props} = this.props;
+    if (isDefined(entity) && entity.usageType === 'audit') {
+      return history.replace('/audit/' + entity.id);
+    }
+  }
 
-              <Tabs active={activeTab}>
-                <TabPanels>
-                  <TabPanel>
-                    <Details entity={entity} />
-                  </TabPanel>
-                  <TabPanel>
-                    <EntityTags
-                      entity={entity}
-                      onChanged={onChanged}
-                      onError={onError}
-                      onInteraction={onInteraction}
-                    />
-                  </TabPanel>
-                  <TabPanel>
-                    <TaskPermissions
-                      entity={entity}
-                      permissions={permissions}
-                      onChanged={onChanged}
-                      onDownloaded={onDownloaded}
-                      onInteraction={onInteraction}
-                      onError={onError}
-                    />
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </Layout>
-          );
-        }}
-      </EntityPage>
-    )}
-  </TaskComponent>
-);
+  render() {
+    const {
+      entity,
+      permissions = [],
+      onChanged,
+      onDownloaded,
+      onError,
+      onInteraction,
+      ...props
+    } = this.props;
+    return (
+      <TaskComponent
+        onCloned={goto_details('task', props)}
+        onCloneError={onError}
+        onCreated={goto_details('task', props)}
+        onContainerCreated={goto_details('task', props)}
+        onContainerSaved={onChanged}
+        onDeleted={goto_list('tasks', props)}
+        onDeleteError={onError}
+        onDownloaded={onDownloaded}
+        onDownloadError={onError}
+        onInteraction={onInteraction}
+        onReportImported={onChanged}
+        onResumed={onChanged}
+        onResumeError={onError}
+        onSaved={onChanged}
+        onStarted={onChanged}
+        onStartError={onError}
+        onStopped={onChanged}
+        onStopError={onError}
+      >
+        {({
+          clone,
+          create,
+          createcontainer,
+          delete: delete_func,
+          download,
+          edit,
+          start,
+          stop,
+          resume,
+          reportimport,
+        }) => (
+          <EntityPage
+            {...props}
+            entity={entity}
+            sectionIcon={<TaskIcon size="large" />}
+            title={_('Task')}
+            toolBarIcons={ToolBarIcons}
+            onChanged={onChanged}
+            onContainerTaskCreateClick={createcontainer}
+            onError={onError}
+            onInteraction={onInteraction}
+            onReportImportClick={reportimport}
+            onTaskCloneClick={clone}
+            onTaskCreateClick={create}
+            onTaskDeleteClick={delete_func}
+            onTaskDownloadClick={download}
+            onTaskEditClick={edit}
+            onTaskResumeClick={resume}
+            onTaskStartClick={start}
+            onTaskStopClick={stop}
+          >
+            {({activeTab = 0, onActivateTab}) => {
+              return (
+                <Layout grow="1" flex="column">
+                  <TabLayout grow="1" align={['start', 'end']}>
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <TaskPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onDownloaded={onDownloaded}
+                          onInteraction={onInteraction}
+                          onError={onError}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              );
+            }}
+          </EntityPage>
+        )}
+      </TaskComponent>
+    );
+  }
+}
 
 Page.propTypes = {
   entity: PropTypes.model,
+  history: PropTypes.object.isRequired,
   permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
