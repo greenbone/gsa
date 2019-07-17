@@ -11,11 +11,13 @@ version number for the new release. We are following
   git checkout -b create-new-release upstream/master
   ```
 
-* Open [CMakeLists.tx](https://github.com/greenbone/gsa/blob/master/CMakeLists.txt)
+* Open [CMakeLists.txt](https://github.com/greenbone/gsa/blob/master/CMakeLists.txt)
   and increment the version number and check PROJECT_BETA_RELEASE.
   PROJECT_BETA_RELEASE must be unset for a non pre-release.
 
-* Check gsa version at the [about page](https://github.com/greenbone/gsa/blob/master/gsa/src/web/pages/help/about.js).
+* Update version at the [package.json](https://github.com/greenbone/gsa/blob/master/gsa/package.json) file.
+
+* Check version at the about page running GSA via gsad.
 
 * Test the build
 
@@ -26,7 +28,7 @@ version number for the new release. We are following
   make -j6
   ```
 
-* Update [CHANGES.md](https://github.com/greenbone/gsa/blob/master/CHANGES.md)
+* Update [CHANGELOG.md](https://github.com/greenbone/gsa/blob/master/CHANGELOG.md)
 
 * Create a git commit
 

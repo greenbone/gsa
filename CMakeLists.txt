@@ -21,7 +21,7 @@ cmake_minimum_required (VERSION 3.0)
 message ("-- Configuring Greenbone Security Assistant...")
 
 project (greenbone-security-assistant
-         VERSION 8.0.0
+         VERSION 8.0.1
          LANGUAGES C)
 
 

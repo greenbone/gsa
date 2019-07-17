@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [8.0.1] - (unreleased)
+## [8.0.1] - 2019-07-17
 
 ### Added
 - Added systemd service file and logrotate config to gsad [#1486](https://github.com/greenbone/gsa/pull/1486)
@@ -148,7 +148,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - --guest-username
   - --guest-password
 
-[8.0.1]: https://github.com/greenbone/gsa/compare/v8.0.0...gsa-8.0
+[8.0.1]: https://github.com/greenbone/gsa/compare/v8.0.0...v8.0.1
 
 ## [8.0.0] - 2018-04-05
 
