@@ -26,84 +26,41 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import Checkbox from '../form/checkbox.js';
 import FormGroup from '../form/formgroup.js';
 
-import IconDivider from '../layout/icondivider.js';
+import Select from 'web/components/form/select';
 
-import TicketStatusLabels from 'web/components/label/ticketstatus';
-
-class TicketStatusFilterGroup extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.handleStatusChange = this.handleStatusChange.bind(this);
+const TicketStatusFilterGroup = ({
+  status,
+  filter,
+  name = 'status',
+  onChange,
+}) => {
+  if (isDefined(filter)) {
+    status = filter.get('status');
   }
 
-  handleStatusChange(value, stat) {
-    const {filter, onChange} = this.props;
-    let status = filter.get('status');
-
-    if (!status) {
-      status = '';
-    }
-
-    if (value && !status.includes(stat)) {
-      status += stat;
-      onChange(status, 'status');
-    } else if (!value && status.includes(stat)) {
-      status = status.replace(stat, '');
-      onChange(status, 'status');
-    }
-  }
-
-  render() {
-    const {filter} = this.props;
-
-    let status = filter.get('status');
-
-    if (!isDefined(status)) {
-      status = '';
-    }
-    return (
-      <FormGroup title={_('Ticket Status')}>
-        <IconDivider>
-          <Checkbox
-            checked={status.includes('open')}
-            name="open"
-            onChange={this.handleLevelChange}
-          >
-            <TicketStatusLabels.Open />
-          </Checkbox>
-          <Checkbox
-            checked={status.includes('fixed')}
-            name="fixed"
-            onChange={this.handleLevelChange}
-          >
-            <TicketStatusLabels.Fixed />
-          </Checkbox>
-          <Checkbox
-            checked={status.includes('verified')}
-            name="verified"
-            onChange={this.handleLevelChange}
-          >
-            <TicketStatusLabels.FixVerified />
-          </Checkbox>
-          <Checkbox
-            checked={status.includes('closed')}
-            name="closed"
-            onChange={this.handleLevelChange}
-          >
-            <TicketStatusLabels.Closed />
-          </Checkbox>
-        </IconDivider>
-      </FormGroup>
-    );
-  }
-}
+  return (
+    <FormGroup title={_('Ticket Status')}>
+      <Select
+        name={name}
+        value={status}
+        onChange={onChange}
+        items={[
+          {label: _('Open'), value: '0'},
+          {label: _('Fixed'), value: '1'},
+          {label: 'Fix Verified', value: '2'},
+          {label: _('Closed'), value: '3'},
+        ]}
+      />
+    </FormGroup>
+  );
+};
 
 TicketStatusFilterGroup.propTypes = {
   filter: PropTypes.filter.isRequired,
+  name: PropTypes.string,
+  status: PropTypes.number,
   onChange: PropTypes.func.isRequired,
 };
 
