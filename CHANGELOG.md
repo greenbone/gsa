@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- Add LogoutIcon [#1481](https://github.com/greenbone/gsa/pull/1481)
+- Added a component "SeverityValuesGroup" enabling user choose the relation they want [#1477](https://github.com/greenbone/gsa/pull/1477)
 - Added filter keywords owner, host, cvss base score, vulnerability and location to filter dialog on results page [#1472](https://github.com/greenbone/gsa/pull/1472)
 - Add storybook [#1272](https://github.com/greenbone/gsa/pull/1286)
 - Added TLS certificates to the asset management.
@@ -16,6 +18,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1466](https://github.com/greenbone/gsa/pull/1466) [#1467](https://github.com/greenbone/gsa/pull/1467)
 
 ### Changed
+- Restructured menu categories [#1481](https://github.com/greenbone/gsa/pull/1481)
+- Logout and usersettings link got a menu [#1481](https://github.com/greenbone/gsa/pull/1481)
 - Modified the BarChart's y-domain to avoid range [0,0]. [#1447](https://github.com/greenbone/gsa/pull/1447)
 - Changed FilterTerm to convert all filter keywords to lower case [#1444](https://github.com/greenbone/gsa/pull/1444)
 - Use Reacts new ref API (no innerRef anymore [#1441](https://github.com/greenbone/gsa/pull/1441))
@@ -28,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 ### Removed
+- Removed UserLink component [#1481](https://github.com/greenbone/gsa/pull/1481)
 - Remove edit_config command from gsad [#1439](https://github.com/greenbone/gsa/pull/1439)
 - Remove copyright from gsad version output [#1379](https://github.com/greenbone/gsa/pull/1379)
 

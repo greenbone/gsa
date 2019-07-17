@@ -119,7 +119,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   display: inline-flex;
 }
 
-.c7 {
+.c14 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -138,18 +138,18 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   margin-left: -5px;
 }
 
-.c7 > * {
+.c14 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c7 > * {
+.c14 > * {
   margin-left: 5px;
 }
 
-.c6 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -171,33 +171,129 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   display: inline-flex;
 }
 
-.c8 {
+.c9 {
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+}
+
+.c9 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c15 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c15 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c7 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  color: #393637;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c10 {
+  position: relative;
+  display: none;
+  -webkit-animation: iKjwYD 0.1s ease-in;
+  animation: iKjwYD 0.1s ease-in;
+}
+
+.c6:hover .c10 {
+  display: block;
+}
+
+.c11 {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  right: 0;
+  top: 0;
+  z-index: 600;
+  list-style: none;
+  font-size: 10px;
+  width: 255px;
+}
+
+.c12 {
+  height: 30px;
+  width: 255px;
+  border-left: 1px solid #787878;
+  border-right: 1px solid #787878;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: #fff;
+  padding-left: 12px;
+}
+
+.c12:hover {
+  background: #66c430;
+  color: #fff;
   cursor: pointer;
-  font-weight: bold;
 }
 
-.c8:link,
-.c8:hover,
-.c8:active,
-.c8:visited {
-  color: #393637;
+.c12:first-child {
+  border-top: 1px solid #787878;
+  cursor: default;
+  background-color: #eeeeee;
 }
 
-.c9 {
-  color: #393637;
-  cursor: pointer;
+.c12:first-child:hover {
+  color: #000;
 }
 
-.c9:link,
-.c9:hover,
-.c9:active,
-.c9:visited {
-  color: #393637;
+.c12:nth-child(2) {
+  cursor: default;
+  background-color: #eeeeee;
+}
+
+.c12:nth-child(2):hover {
+  color: #000;
+}
+
+.c12:last-child {
+  border-top: 1px solid #787878;
+  border-bottom: 1px solid #787878;
+}
+
+.c8 {
+  margin-right: 10px;
+}
+
+.c16 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  width: 100%;
+  height: 100%;
+}
+
+.c16:link,
+.c16:hover,
+.c16:active,
+.c16:visited,
+.c16:hover {
+  color: inherit;
+  -webkit-text-decoration: none;
+  text-decoration: none;
 }
 
 .c4 {
@@ -272,33 +368,126 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
           />
         </div>
       </a>
-      <div
-        class="c6"
+      <span
+        class="c6 c7"
+        data-testid="usermenu"
       >
-        <div
-          class="c7"
-          margin="5px"
+        <span
+          class="c8 c9 "
         >
-          <span>
-            Logged in as 
-          </span>
-          <a
-            class="c8"
-            href="/usersettings"
-            title="Your session will end at "
+          <svg>
+            user.svg
+          </svg>
+        </span>
+        <div
+          class="c10"
+        >
+          <ul
+            class="c11"
           >
-            username
-          </a>
-          <span>
-             | 
-          </span>
-          <a
-            class="c9"
-          >
-            Logout
-          </a>
+            <li
+              class="c12"
+              title="Logged in as: username"
+            >
+              <div
+                class="c13"
+              >
+                <div
+                  class="c14"
+                  margin="5px"
+                >
+                  <span
+                    class="c15 "
+                  >
+                    <svg>
+                      user.svg
+                    </svg>
+                  </span>
+                  <span>
+                    username
+                  </span>
+                </div>
+              </div>
+            </li>
+            <li
+              class="c12"
+            >
+              <div
+                class="c13"
+              >
+                <div
+                  class="c14"
+                  margin="5px"
+                >
+                  <span
+                    class="c15 "
+                  >
+                    <svg>
+                      schedule.svg
+                    </svg>
+                  </span>
+                  <span>
+                    Session timeout: 
+                  </span>
+                </div>
+              </div>
+            </li>
+            <li
+              class="c12"
+            >
+              <a
+                class="c16"
+                data-testid="usermenu-settings"
+                href="/usersettings"
+              >
+                <div
+                  class="c13"
+                >
+                  <div
+                    class="c14"
+                    margin="5px"
+                  >
+                    <span
+                      class="c15 "
+                    >
+                      <svg>
+                        my_setting.svg
+                      </svg>
+                    </span>
+                    <span>
+                      My Settings
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li
+              class="c12"
+            >
+              <div
+                class="c13"
+              >
+                <div
+                  class="c14"
+                  data-testid="usermenu-logout"
+                  margin="5px"
+                >
+                  <span
+                    class="c15 "
+                  >
+                    <svg>
+                      logout.svg
+                    </svg>
+                  </span>
+                  <span>
+                    Log Out
+                  </span>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
-      </div>
+      </span>
     </div>
   </div>
 </body>

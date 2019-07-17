@@ -205,7 +205,7 @@ class Filter extends Model {
    *
    * @return {Filter} This filter with merged terms.
    */
-  _merge(filter) {
+  merge(filter) {
     if (isDefined(filter)) {
       this._addTerm(...filter.getAllTerms());
     }
@@ -597,7 +597,7 @@ class Filter extends Model {
     }
 
     this._resetFilterId(); // filter has changed
-    return this._merge(filter);
+    return this.merge(filter);
   }
 
   /**

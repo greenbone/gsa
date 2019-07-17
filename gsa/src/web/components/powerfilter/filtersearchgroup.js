@@ -17,41 +17,37 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+/* this is experimental. trying to consolidate all filter terms whose
+ * method should be ~'value' into one. */
 
-import _ from 'gmp/locale';
+import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes.js';
 
-import FormGroup from '../form/formgroup.js';
-import TextField from '../form/textfield.js';
+import FormGroup from 'web/components/form/formgroup.js';
+import TextField from 'web/components/form/textfield.js';
 
-const VulnerabilityGroup = ({
-  vuln,
-  filter,
-  onChange,
-  name = 'vulnerability',
-}) => {
-  if (!isDefined(vuln) && isDefined(filter)) {
-    vuln = filter.get('vulnerability');
+const FilterSearchGroup = ({name, filter, title, onChange}) => {
+  let filterVal;
+
+  if (!isDefined(filterVal) && isDefined(filter)) {
+    filterVal = filter.get(name);
   }
 
   return (
-    <FormGroup title={_('Vulnerability Name')}>
-      <TextField type="text" name={name} value={vuln} onChange={onChange} />
+    <FormGroup title={title}>
+      <TextField name={name} value={filterVal} onChange={onChange} />
     </FormGroup>
   );
 };
 
-VulnerabilityGroup.propTypes = {
+FilterSearchGroup.propTypes = {
   filter: PropTypes.filter,
   name: PropTypes.string,
-  vuln: PropTypes.string,
+  title: PropTypes.string,
   onChange: PropTypes.func,
 };
 
-export default VulnerabilityGroup;
-
-// vim: set ts=2 sw=2 tw=80:
+export default FilterSearchGroup;

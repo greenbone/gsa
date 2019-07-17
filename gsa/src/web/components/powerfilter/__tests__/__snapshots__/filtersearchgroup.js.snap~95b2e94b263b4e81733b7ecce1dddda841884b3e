@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`OwnerGroup tests should render 1`] = `
+exports[`FilterSearchGroup tests should render 1`] = `
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -92,7 +92,7 @@ exports[`OwnerGroup tests should render 1`] = `
     class="c1"
     data-testid="formgroup-title"
   >
-    Owner
+    Location (eg. port/protocol)
   </label>
   <div
     class="c2"
@@ -101,9 +101,9 @@ exports[`OwnerGroup tests should render 1`] = `
   >
     <input
       class="c3 c4"
-      name="name"
+      name="location"
       type="text"
-      value="foo"
+      value="tcp"
     />
   </div>
 </div>

@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019  Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,37 +16,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import withSvgIcon from './withSvgIcon';
 
-import React from 'react';
+import {ReactComponent as Icon} from './svg/logout.svg';
 
-import _ from 'gmp/locale';
+const LogoutIcon = withSvgIcon()(Icon);
 
-import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from '../../utils/proptypes.js';
-
-import FormGroup from '../form/formgroup.js';
-import TextField from '../form/textfield.js';
-
-const OwnerGroup = ({owner, filter, onChange, name = 'owner'}) => {
-  if (!isDefined(owner) && isDefined(filter)) {
-    owner = filter.get('owner');
-  }
-
-  return (
-    <FormGroup title={_('Owner')}>
-      <TextField name={name} value={owner} onChange={onChange} />
-    </FormGroup>
-  );
-};
-
-OwnerGroup.propTypes = {
-  filter: PropTypes.filter,
-  name: PropTypes.string,
-  owner: PropTypes.string,
-  onChange: PropTypes.func,
-};
-
-export default OwnerGroup;
+export default LogoutIcon;
 
 // vim: set ts=2 sw=2 tw=80:

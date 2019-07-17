@@ -21,8 +21,6 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import {withRouter} from 'react-router-dom';
-
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
@@ -30,11 +28,11 @@ import _ from 'gmp/locale';
 import Logo from 'web/components/img/greenbone';
 import Img from 'web/components/img/img';
 
-import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import Link from 'web/components/link/link';
-import UserLink from 'web/components/link/userlink';
+
+import UserMenu from 'web/components/menu/usermenu';
 
 import {isLoggedIn} from 'web/store/usersettings/selectors';
 
@@ -44,17 +42,6 @@ import Theme from 'web/utils/theme';
 import withGmp from 'web/utils/withGmp';
 
 const TITLE_BAR_HEIGHT = '42px';
-
-const LogoutLink = styled.a`
-  color: ${Theme.darkGray};
-  cursor: pointer;
-  &:link,
-  &:hover,
-  &:active,
-  &:visited {
-    color: ${Theme.darkGray};
-  }
-`;
 
 const GreenboneIcon = styled(Logo)`
   width: 40px;
@@ -95,68 +82,38 @@ const TitlebarPlaceholder = styled.div`
   height: ${TITLE_BAR_HEIGHT};
 `;
 
-class Titlebar extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.handleLogout = this.handleLogout.bind(this);
-  }
-
-  handleLogout(event) {
-    const {gmp, history} = this.props;
-
-    event.preventDefault();
-
-    gmp.doLogout().then(() => {
-      history.push('/login?type=logout');
-    });
-  }
-
-  render() {
-    const {gmp} = this.props;
-    return (
-      <React.Fragment>
-        <TitlebarPlaceholder />
-        <TitlebarLayout>
-          {this.props.isLoggedIn ? (
-            <React.Fragment>
-              <Link to="/" title={_('Dashboard')}>
-                <Greenbone />
-              </Link>
-              <Divider>
-                <span>{_('Logged in as ')}</span>
-                <UserLink />
-                <span> | </span>
-                <LogoutLink onClick={this.handleLogout}>
-                  {_('Logout')}
-                </LogoutLink>
-              </Divider>
-            </React.Fragment>
-          ) : (
-            <React.Fragment>
-              <Greenbone />
-              <div>{gmp.settings.vendorVersion}</div>
-            </React.Fragment>
-          )}
-        </TitlebarLayout>
-      </React.Fragment>
-    );
-  }
-}
+const Titlebar = ({gmp, loggedIn}) => (
+  <React.Fragment>
+    <TitlebarPlaceholder />
+    <TitlebarLayout>
+      {loggedIn ? (
+        <React.Fragment>
+          <Link to="/" title={_('Dashboard')}>
+            <Greenbone />
+          </Link>
+          <UserMenu />
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <Greenbone />
+          <div>{gmp.settings.vendorVersion}</div>
+        </React.Fragment>
+      )}
+    </TitlebarLayout>
+  </React.Fragment>
+);
 
 Titlebar.propTypes = {
   gmp: PropTypes.gmp.isRequired,
-  history: PropTypes.object.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
+  loggedIn: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = rootState => ({
-  isLoggedIn: isLoggedIn(rootState),
+  loggedIn: isLoggedIn(rootState),
 });
 
 export default compose(
   withGmp,
-  withRouter,
   connect(mapStateToProps),
 )(Titlebar);
 

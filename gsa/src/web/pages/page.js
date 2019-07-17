@@ -87,8 +87,8 @@ class Page extends React.Component {
     return (
       <CapabilitiesProvider capabilities={capabilities}>
         <StyledLayout flex="column" align={['start', 'stretch']}>
-          <Header />
           <MenuBar />
+          <Header />
           <Main>
             <ErrorBoundary message={_('An error occurred on this page.')}>
               {children}

@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019  Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -17,36 +17,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+import {testIcon} from 'web/components/icon/testing';
 
-import _ from 'gmp/locale';
+import LogoutIcon from '../logouticon';
 
-import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from '../../utils/proptypes.js';
-
-import FormGroup from '../form/formgroup.js';
-import TextField from '../form/textfield.js';
-
-const LocationGroup = ({loc, filter, onChange, name = 'location'}) => {
-  if (!isDefined(loc) && isDefined(filter)) {
-    loc = filter.get('location');
-  }
-
-  return (
-    <FormGroup title={_('Location (eg. port/protocol)')}>
-      <TextField name={name} value={loc} onChange={onChange} />
-    </FormGroup>
-  );
-};
-
-LocationGroup.propTypes = {
-  filter: PropTypes.filter,
-  loc: PropTypes.string,
-  name: PropTypes.string,
-  onChange: PropTypes.func,
-};
-
-export default LocationGroup;
+describe('LogoutIcon component tests', () => {
+  testIcon(LogoutIcon);
+});
 
 // vim: set ts=2 sw=2 tw=80:
