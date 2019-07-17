@@ -1,0 +1,14 @@
+[Unit]
+Description=Greenbone Security Assistant
+After=network.target
+
+[Service]
+Type=forking
+EnvironmentFile=-${DEFAULT_CONFIG_DIR}/gsad
+ExecStart=${SBINDIR}/gsad --listen $GSA_ADDRESS --port $GSA_PORT
+Restart=always
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target
+Alias=greenbone-security-assistant.service
