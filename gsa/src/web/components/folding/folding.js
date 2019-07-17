@@ -18,24 +18,9 @@
  */
 import React from 'react';
 
-import styled from 'styled-components';
-
-import {css} from 'glamor';
-
-import {isDefined} from 'gmp/utils/identity';
+import styled, {keyframes, css} from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes';
-
-const Div = styled.div`
-  ${props => {
-    return {...props.styleProps};
-  }}
-`;
-
-const foldDelay = css.keyframes({
-  '0%': {minWidth: '0px'},
-  '100%': {minWidth: '1px'},
-});
 
 /**
  * State used in foldable components
@@ -48,6 +33,48 @@ export const FoldState = {
   FOLDING: 'FOLDING',
   UNFOLDING: 'UNFOLDING',
 };
+
+const foldDelay = keyframes`
+  0%: {
+    min-width: 0px;
+  }
+  100%: {
+    min-width: 1px;
+  }
+`;
+
+const Div = styled.div`
+  overflow: hidden;
+  transition: 0.4s;
+
+  display: ${({foldState}) =>
+    foldState === FoldState.FOLDED ? 'none' : undefined};
+
+  height: ${({foldState}) => {
+    if (foldState === FoldState.FOLDED || foldState === FoldState.FOLDING) {
+      return 0;
+    }
+    if (
+      foldState === FoldState.FOLDING_START ||
+      foldState === FoldState.UNFOLDING
+    ) {
+      const windowHeight = Math.ceil(window.innerHeight * 1.2) + 'px';
+      return windowHeight;
+    }
+    if (foldState === FoldState.UNFOLDING_START) {
+      return '1px';
+    }
+    return undefined;
+  }};
+
+  animation: ${({foldState}) =>
+    foldState === FoldState.UNFOLDING_START ||
+    foldState === FoldState.FOLDING_START
+      ? css`
+          ${foldDelay} 0.01s
+        `
+      : undefined};
+`;
 
 const FoldStatePropType = PropTypes.oneOf([
   FoldState.UNFOLDED,
@@ -65,69 +92,18 @@ const FoldStatePropType = PropTypes.oneOf([
 export const withFolding = (Component, defaults = {}) => {
   const FoldingWrapper = ({
     foldState,
-    style = {},
     onFoldStepEnd,
     onFoldToggle,
     ...props
-  }) => {
-    let height;
-    let animation;
-    let display;
-    const window_height = Math.ceil(window.innerHeight * 1.2) + 'px';
-    const styleProps = {...style};
-
-    switch (foldState) {
-      case FoldState.FOLDED:
-        height = '0';
-        display = 'none';
-        break;
-      case FoldState.UNFOLDED:
-        height = '';
-        break;
-      case FoldState.UNFOLDING_START:
-        height = '1px';
-        animation = `${foldDelay} 0.01s`;
-        break;
-      case FoldState.FOLDING_START:
-        height = window_height;
-        animation = `${foldDelay} 0.01s`;
-        break;
-      case FoldState.UNFOLDING:
-        height = window_height;
-        break;
-      case FoldState.FOLDING:
-        height = '0';
-        break;
-      default:
-        break;
-    }
-
-    if (isDefined(height)) {
-      styleProps.maxHeight = height;
-    }
-    if (isDefined(animation)) {
-      styleProps.animation = animation;
-    }
-    if (!isDefined(styleProps.overflow)) {
-      styleProps.overflow = 'hidden';
-    }
-    if (!isDefined(styleProps.transition)) {
-      styleProps.transition = '0.4s';
-    }
-    if (isDefined(display)) {
-      styleProps.display = display;
-    }
-
-    return (
-      <Div
-        styleProps={styleProps}
-        onTransitionEnd={onFoldStepEnd}
-        onAnimationEnd={onFoldStepEnd}
-      >
-        <Component {...props} />
-      </Div>
-    );
-  };
+  }) => (
+    <Div
+      foldState={foldState}
+      onTransitionEnd={onFoldStepEnd}
+      onAnimationEnd={onFoldStepEnd}
+    >
+      <Component {...props} />
+    </Div>
+  );
 
   FoldingWrapper.propTypes = {
     foldState: FoldStatePropType,
@@ -159,61 +135,63 @@ export const withFoldToggle = Component => {
     }
 
     handleFoldToggle() {
-      let newFoldState;
+      this.setState(({foldState}) => {
+        let newFoldState;
 
-      switch (this.state.foldState) {
-        case FoldState.FOLDED:
-          newFoldState = FoldState.UNFOLDING_START;
-          break;
-        case FoldState.UNFOLDED:
-          newFoldState = FoldState.FOLDING_START;
-          break;
-        case FoldState.UNFOLDING_START:
-          newFoldState = FoldState.FOLDED;
-          break;
-        case FoldState.FOLDING_START:
-          newFoldState = FoldState.UNFOLDED;
-          break;
-        case FoldState.UNFOLDING:
-          newFoldState = FoldState.FOLDING;
-          break;
-        case FoldState.FOLDING:
-          newFoldState = FoldState.UNFOLDING;
-          break;
-        default:
-          newFoldState = FoldState.UNFOLDED;
-      }
-
-      this.setState({foldState: newFoldState});
+        switch (foldState) {
+          case FoldState.FOLDED:
+            newFoldState = FoldState.UNFOLDING_START;
+            break;
+          case FoldState.UNFOLDED:
+            newFoldState = FoldState.FOLDING_START;
+            break;
+          case FoldState.UNFOLDING_START:
+            newFoldState = FoldState.FOLDED;
+            break;
+          case FoldState.FOLDING_START:
+            newFoldState = FoldState.UNFOLDED;
+            break;
+          case FoldState.UNFOLDING:
+            newFoldState = FoldState.FOLDING;
+            break;
+          case FoldState.FOLDING:
+            newFoldState = FoldState.UNFOLDING;
+            break;
+          default:
+            newFoldState = FoldState.UNFOLDED;
+        }
+        return {foldState: newFoldState};
+      });
     }
 
     handleFoldStepEnd() {
-      let newFoldState;
+      this.setState(({foldState}) => {
+        let newFoldState;
 
-      switch (this.state.foldState) {
-        case FoldState.FOLDED:
-          newFoldState = FoldState.FOLDED;
-          break;
-        case FoldState.UNFOLDED:
-          newFoldState = FoldState.UNFOLDED;
-          break;
-        case FoldState.UNFOLDING_START:
-          newFoldState = FoldState.UNFOLDING;
-          break;
-        case FoldState.FOLDING_START:
-          newFoldState = FoldState.FOLDING;
-          break;
-        case FoldState.UNFOLDING:
-          newFoldState = FoldState.UNFOLDED;
-          break;
-        case FoldState.FOLDING:
-          newFoldState = FoldState.FOLDED;
-          break;
-        default:
-          newFoldState = FoldState.UNFOLDED;
-      }
-
-      this.setState({foldState: newFoldState});
+        switch (foldState) {
+          case FoldState.FOLDED:
+            newFoldState = FoldState.FOLDED;
+            break;
+          case FoldState.UNFOLDED:
+            newFoldState = FoldState.UNFOLDED;
+            break;
+          case FoldState.UNFOLDING_START:
+            newFoldState = FoldState.UNFOLDING;
+            break;
+          case FoldState.FOLDING_START:
+            newFoldState = FoldState.FOLDING;
+            break;
+          case FoldState.UNFOLDING:
+            newFoldState = FoldState.UNFOLDED;
+            break;
+          case FoldState.FOLDING:
+            newFoldState = FoldState.FOLDED;
+            break;
+          default:
+            newFoldState = FoldState.UNFOLDED;
+        }
+        return {foldState: newFoldState};
+      });
     }
 
     render() {
