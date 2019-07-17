@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-16 09:29+0200\n"
-"PO-Revision-Date: 2019-07-10 10:24+0800\n"
+"PO-Revision-Date: 2019-07-15 18:15+0800\n"
 "Last-Translator: Jason Cheng <sanyu3u@gmail.com>\n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -427,7 +427,7 @@ msgstr ""
 #: gsa/src/web/pages/results/table.js:79 gsa/src/web/pages/results/table.js:82
 #: gsa/src/web/pages/nvts/table.js:98 gsa/src/web/pages/nvts/table.js:101
 msgid "Solution type"
-msgstr ""
+msgstr "解決方案類型"
 
 #: gsa/src/web/pages/results/filterdialog.js:64
 msgid "Host (IP)"
@@ -633,7 +633,7 @@ msgstr ""
 #: gsa/src/web/pages/users/dialog.js:185 gsa/src/web/pages/users/dialog.js:228
 #: gsa/src/web/pages/extras/cvsscalculatorpage.js:258
 msgid "Authentication"
-msgstr ""
+msgstr "驗證"
 
 #: gsa/src/web/pages/cves/details.js:47
 #: gsa/src/web/pages/cves/filterdialog.js:42 gsa/src/web/pages/cves/table.js:86
@@ -691,7 +691,7 @@ msgstr "發佈日期"
 #: gsa/src/web/pages/cves/table.js:145
 #: gsa/src/web/pages/reports/cvestable.js:107
 msgid "No CVEs available"
-msgstr ""
+msgstr "沒有可用的 CVE"
 
 #: gsa/src/web/pages/cves/dashboard/cvssdisplay.js:33
 #: gsa/src/web/pages/cves/dashboard/cvssdisplay.js:44
@@ -726,7 +726,7 @@ msgstr ""
 #: gsa/src/web/pages/cves/dashboard/createddisplay.js:47
 #: gsa/src/web/pages/cves/dashboard/createddisplay.js:58
 msgid "Total CVEs"
-msgstr ""
+msgstr "CVE 總計"
 
 #: gsa/src/web/components/label/severityclass.js:74
 msgid "False Pos."
@@ -751,7 +751,7 @@ msgstr "時間"
 
 #: gsa/src/web/pages/cves/dashboard/createddisplay.js:42
 msgid "Created CVEs"
-msgstr ""
+msgstr "CVE 已建立"
 
 #: gsa/src/web/pages/cves/dashboard/createddisplay.js:58
 #: gsa/src/web/pages/overrides/dashboard/createddisplay.js:63
@@ -769,11 +769,11 @@ msgstr "建立時間"
 
 #: gsa/src/web/pages/cves/dashboard/createddisplay.js:67
 msgid "Table: CVEs by Creation Time"
-msgstr ""
+msgstr "表格：依 CVE 建立時間"
 
 #: gsa/src/web/pages/cves/dashboard/createddisplay.js:71
 msgid "Chart: CVEs by Creation Time"
-msgstr ""
+msgstr "圖表：依 CVE 建立時間"
 
 #: gsa/src/web/pages/cves/dashboard/severityclassdisplay.js:34
 #: gsa/src/web/pages/cves/dashboard/severityclassdisplay.js:44
@@ -782,11 +782,11 @@ msgstr ""
 
 #: gsa/src/web/pages/cves/dashboard/severityclassdisplay.js:52
 msgid "Chart: CVEs by Severity Class"
-msgstr ""
+msgstr "圖表：依 CVE 嚴重性等級"
 
 #: gsa/src/web/pages/cves/dashboard/severityclassdisplay.js:59
 msgid "Table: CVEs by Severity Class"
-msgstr ""
+msgstr "表格：依 CVE 嚴重性等級"
 
 #: gsa/src/web/pages/performance/performancepage.js:88
 msgid "Help: Performance"
@@ -1405,7 +1405,7 @@ msgstr ""
 
 #: gsa/src/web/pages/reports/alertactions.js:180
 msgid "Trigger Alert"
-msgstr ""
+msgstr "觸發警報"
 
 #: gsa/src/web/pages/reports/detailsfilterdialog.js:81
 msgid "Only show hosts that have results"
@@ -1437,7 +1437,7 @@ msgstr "主機"
 
 #: gsa/src/web/pages/reports/portstable.js:89
 msgid "No Ports available"
-msgstr ""
+msgstr "沒有可用的連接埠"
 
 #: gsa/src/web/pages/reports/tlscertificatestable.js:62
 msgid "DN"
@@ -1469,15 +1469,15 @@ msgstr ""
 #: gsa/src/web/entity/tags.js:133 gsa/src/web/entities/header.js:32
 #: gsa/src/web/entities/header.js:71
 msgid "Actions"
-msgstr ""
+msgstr "動作"
 
 #: gsa/src/web/pages/reports/tlscertificatestable.js:136
 msgid "Show all Hosts with IP {{ip}}"
-msgstr ""
+msgstr "顯示所有主機與 IP {{ip}}"
 
 #: gsa/src/web/pages/reports/tlscertificatestable.js:146
 msgid "Download TLS Certificate"
-msgstr ""
+msgstr "下載 TLS 憑證"
 
 #: gsa/src/web/pages/reports/tlscertificatestable.js:165
 msgid "No TLS Certificates available"
@@ -1485,11 +1485,11 @@ msgstr ""
 
 #: gsa/src/web/pages/reports/row.js:53
 msgid "Scan is active"
-msgstr ""
+msgstr "掃描進行中"
 
 #: gsa/src/web/pages/reports/row.js:53
 msgid "Delete Report"
-msgstr ""
+msgstr "刪除報告"
 
 #: gsa/src/web/pages/reports/row.js:61
 msgid "Report is selected for delta comparision"
@@ -1508,7 +1508,7 @@ msgstr ""
 #: gsa/src/web/pages/alerts/row.js:67 gsa/src/web/pages/alerts/row.js:73
 #: gsa/src/web/pages/alerts/row.js:132 gsa/src/gmp/utils/entitytype.js:67
 msgid "Alert"
-msgstr ""
+msgstr "警報"
 
 #: gsa/src/web/pages/reports/importdialog.js:52
 #: gsa/src/web/pages/portlists/importdialog.js:35
@@ -1534,7 +1534,7 @@ msgstr "報告"
 
 #: gsa/src/web/pages/reports/importdialog.js:64
 msgid "Container Task"
-msgstr ""
+msgstr "容器作業"
 
 #: gsa/src/web/pages/reports/importdialog.js:74
 msgid "Create new Container Task"
@@ -1563,7 +1563,7 @@ msgstr ""
 
 #: gsa/src/web/pages/reports/scaninfo.js:97 gsa/src/gmp/models/task.js:75
 msgid "Container"
-msgstr ""
+msgstr "容器"
 
 #: gsa/src/web/pages/reports/scaninfo.js:111
 #: gsa/src/web/pages/tasks/dashboard/mosthighresults.js:96
@@ -1572,51 +1572,51 @@ msgstr ""
 #: gsa/src/web/pages/tasks/dashboard/highresults.js:140
 #: gsa/src/web/wizard/advancedtaskwizard.js:183
 msgid "Task Name"
-msgstr ""
+msgstr "作業名稱"
 
 #: gsa/src/web/pages/reports/scaninfo.js:128
 msgid "Report 1"
-msgstr ""
+msgstr "報告 1"
 
 #: gsa/src/web/pages/reports/scaninfo.js:141
 msgid "Scan Time Report 1"
-msgstr ""
+msgstr "掃描時間報告 1"
 
 #: gsa/src/web/pages/reports/scaninfo.js:141
 msgid "Scan Time"
-msgstr ""
+msgstr "掃描時間"
 
 #: gsa/src/web/pages/reports/scaninfo.js:157
 msgid "Scan Duration Report 1"
-msgstr ""
+msgstr "掃描期間報告 1"
 
 #: gsa/src/web/pages/reports/scaninfo.js:157
 msgid "Scan Duration"
-msgstr ""
+msgstr "掃描期間"
 
 #: gsa/src/web/pages/reports/scaninfo.js:164
 msgid "Scan Status Report 1"
-msgstr ""
+msgstr "掃描狀態報告 1"
 
 #: gsa/src/web/pages/reports/scaninfo.js:164
 msgid "Scan Status"
-msgstr ""
+msgstr "掃描狀態"
 
 #: gsa/src/web/pages/reports/scaninfo.js:172
 msgid "Report 2"
-msgstr ""
+msgstr "報告 2"
 
 #: gsa/src/web/pages/reports/scaninfo.js:188
 msgid "Scan Time Report 2"
-msgstr ""
+msgstr "掃描時間報告 2"
 
 #: gsa/src/web/pages/reports/scaninfo.js:203
 msgid "Scan Duration Report 2"
-msgstr ""
+msgstr "掃描期間報告 2"
 
 #: gsa/src/web/pages/reports/scaninfo.js:211
 msgid "Scan Status Report 2"
-msgstr ""
+msgstr "掃描狀態報告 1"
 
 #: gsa/src/web/pages/reports/scaninfo.js:219
 msgid "Scan sensor"
@@ -1624,7 +1624,7 @@ msgstr ""
 
 #: gsa/src/web/pages/reports/scaninfo.js:225
 msgid "Hosts scanned"
-msgstr ""
+msgstr "已掃描主機"
 
 #: gsa/src/web/pages/reports/scaninfo.js:230
 #: gsa/src/web/pages/filters/component.js:38
@@ -1639,7 +1639,7 @@ msgstr ""
 #: gsa/src/web/components/dashboard/display/filterselection.js:105
 #: gsa/src/gmp/utils/entitytype.js:75
 msgid "Filter"
-msgstr ""
+msgstr "篩選"
 
 #: gsa/src/web/pages/reports/deltaresultsfiltergroup.js:67
 msgid "Delta Results"
@@ -1651,14 +1651,14 @@ msgstr ""
 
 #: gsa/src/web/pages/reports/deltaresultsfiltergroup.js:95
 msgid "Changed"
-msgstr ""
+msgstr "已變更"
 
 #: gsa/src/web/pages/reports/hoststable.js:49
 #: gsa/src/web/pages/hosts/detailspage.js:188
 #: gsa/src/web/pages/hosts/filterdialog.js:34
 #: gsa/src/web/pages/hosts/table.js:76
 msgid "IP Address"
-msgstr ""
+msgstr "IP 位址"
 
 #: gsa/src/web/pages/reports/hoststable.js:64
 #: gsa/src/web/pages/hosts/detailspage.js:198
@@ -1672,7 +1672,7 @@ msgstr ""
 #: gsa/src/web/components/label/severityclass.js:42
 #: gsa/src/web/utils/severity.js:26
 msgid "High"
-msgstr ""
+msgstr "高"
 
 #: gsa/src/web/pages/reports/hoststable.js:80
 #: gsa/src/web/pages/reports/table.js:97
@@ -1680,7 +1680,7 @@ msgstr ""
 #: gsa/src/web/components/label/severityclass.js:50
 #: gsa/src/web/utils/severity.js:25
 msgid "Medium"
-msgstr ""
+msgstr "中"
 
 #: gsa/src/web/pages/reports/hoststable.js:88
 #: gsa/src/web/pages/reports/table.js:107
@@ -1688,7 +1688,7 @@ msgstr ""
 #: gsa/src/web/components/label/severityclass.js:58
 #: gsa/src/web/utils/severity.js:24
 msgid "Low"
-msgstr ""
+msgstr "低"
 
 #: gsa/src/web/pages/reports/hoststable.js:104
 #: gsa/src/web/pages/reports/table.js:127 gsa/src/web/utils/severity.js:28
@@ -1700,7 +1700,7 @@ msgstr ""
 #: gsa/src/web/pages/scanconfigs/header.js:78
 #: gsa/src/web/pages/scanconfigs/header.js:95
 msgid "Total"
-msgstr ""
+msgstr "總計"
 
 #: gsa/src/web/pages/reports/hoststable.js:177
 msgid "No Hosts available"
@@ -1730,14 +1730,14 @@ msgstr "結果"
 #: gsa/src/web/pages/reports/vulnerabilitiestable.js:130
 #: gsa/src/web/pages/vulns/table.js:131
 msgid "No Vulnerabilites available"
-msgstr ""
+msgstr "沒有可用的漏洞"
 
 #: gsa/src/web/pages/reports/filterdialog.js:45
 #: gsa/src/web/pages/reports/table.js:55
 #: gsa/src/web/pages/ovaldefs/detailspage.js:239
 #: gsa/src/web/pages/certbund/detailspage.js:106
 msgid "Date"
-msgstr ""
+msgstr "日期"
 
 #: gsa/src/web/pages/reports/filterdialog.js:49
 #: gsa/src/web/pages/reports/table.js:63
@@ -1756,7 +1756,7 @@ msgstr ""
 #: gsa/src/web/pages/ovaldefs/table.js:70
 #: gsa/src/web/pages/extras/feedstatuspage.js:118
 msgid "Status"
-msgstr ""
+msgstr "狀態"
 
 #: gsa/src/web/pages/reports/filterdialog.js:53
 #: gsa/src/web/pages/reports/table.js:71
@@ -1768,19 +1768,19 @@ msgstr ""
 #: gsa/src/web/wizard/modifytaskwizard.js:115
 #: gsa/src/gmp/utils/entitytype.js:96
 msgid "Task"
-msgstr ""
+msgstr "作業"
 
 #: gsa/src/web/pages/reports/filterdialog.js:61
 msgid "Scan Results: High"
-msgstr ""
+msgstr "掃描結果：高"
 
 #: gsa/src/web/pages/reports/filterdialog.js:65
 msgid "Scan Results: Medium"
-msgstr ""
+msgstr "掃描結果：中"
 
 #: gsa/src/web/pages/reports/filterdialog.js:69
 msgid "Scan Results: Low"
-msgstr ""
+msgstr "掃描結果：低"
 
 #: gsa/src/web/pages/reports/filterdialog.js:73
 msgid "Scan Results: Log"
@@ -1846,15 +1846,15 @@ msgstr ""
 
 #: gsa/src/web/pages/reports/dashboard/highresultsdisplay.js:162
 msgid "Created Time"
-msgstr ""
+msgstr "建立時間"
 
 #: gsa/src/web/pages/reports/dashboard/highresultsdisplay.js:173
 msgid "Chart: Reports with high Results"
-msgstr ""
+msgstr "圖表：報表與高風險結果"
 
 #: gsa/src/web/pages/reports/dashboard/highresultsdisplay.js:181
 msgid "Table: Reports with high Results"
-msgstr ""
+msgstr "表格：報表與高風險結果"
 
 #: gsa/src/web/pages/reports/dashboard/severityclassdisplay.js:34
 #: gsa/src/web/pages/reports/dashboard/severityclassdisplay.js:46
@@ -1863,11 +1863,11 @@ msgstr ""
 
 #: gsa/src/web/pages/reports/dashboard/severityclassdisplay.js:52
 msgid "Chart: Reports by Severity Class"
-msgstr ""
+msgstr "圖表：報表依嚴重性等級"
 
 #: gsa/src/web/pages/reports/dashboard/severityclassdisplay.js:59
 msgid "Table: Reports by Severity Class"
-msgstr ""
+msgstr "表格：報表依嚴重性等級"
 
 #: gsa/src/web/pages/reports/emptyreport.js:51
 msgid "The Report is empty. This can happen for the following reasons:"
@@ -1946,19 +1946,19 @@ msgstr "報告:"
 
 #: gsa/src/web/pages/reports/detailscontent.js:320
 msgid "Loading"
-msgstr ""
+msgstr "載入中"
 
 #: gsa/src/web/pages/reports/detailscontent.js:384
 msgid "Information"
-msgstr ""
+msgstr "資訊"
 
 #: gsa/src/web/pages/reports/detailscontent.js:404
 msgid "Ports"
-msgstr ""
+msgstr "連接埠"
 
 #: gsa/src/web/pages/reports/detailscontent.js:410
 msgid "Applications"
-msgstr ""
+msgstr "應用程式"
 
 #: gsa/src/web/pages/reports/detailscontent.js:418
 #: gsa/src/web/components/bar/menubar.js:164 gsa/src/web/utils/render.js:145
@@ -1977,7 +1977,7 @@ msgstr "作業系統"
 #: gsa/src/web/components/dashboard/display/utils.js:167
 #: gsa/src/web/utils/render.js:127
 msgid "CVEs"
-msgstr ""
+msgstr "CVE"
 
 #: gsa/src/web/pages/reports/detailscontent.js:431
 msgid "Closed CVEs"
@@ -1985,24 +1985,24 @@ msgstr ""
 
 #: gsa/src/web/pages/reports/detailscontent.js:439
 msgid "TLS Certificates"
-msgstr ""
+msgstr "TLS 憑證"
 
 #: gsa/src/web/pages/reports/detailscontent.js:447
 msgid "Error Messages"
-msgstr ""
+msgstr "錯誤訊息"
 
 #: gsa/src/web/pages/filters/detailspage.js:78
 #: gsa/src/web/pages/filters/listpage.js:49
 msgid "Help: Filters"
-msgstr ""
+msgstr "說明：篩選器"
 
 #: gsa/src/web/pages/filters/detailspage.js:80
 msgid "Filter List"
-msgstr ""
+msgstr "篩選器清單"
 
 #: gsa/src/web/pages/filters/detailspage.js:89
 msgid "Export Filter as XML"
-msgstr ""
+msgstr "匯出篩選器為 XML"
 
 #: gsa/src/web/pages/filters/component.js:35
 #: gsa/src/web/pages/alerts/method.js:261
@@ -2011,7 +2011,7 @@ msgstr ""
 #: gsa/src/web/pages/agents/row.js:68 gsa/src/web/pages/agents/row.js:116
 #: gsa/src/web/utils/render.js:113 gsa/src/gmp/utils/entitytype.js:66
 msgid "Agent"
-msgstr ""
+msgstr "代理程式"
 
 #: gsa/src/web/pages/filters/component.js:39
 #: gsa/src/web/pages/roles/dialog.js:162
@@ -2022,17 +2022,17 @@ msgstr ""
 #: gsa/src/web/pages/groups/row.js:60 gsa/src/web/pages/groups/row.js:96
 #: gsa/src/gmp/utils/entitytype.js:76
 msgid "Group"
-msgstr ""
+msgstr "群組"
 
 #: gsa/src/web/pages/filters/component.js:41
 #: gsa/src/web/pages/tickets/createdialog.js:62 gsa/src/web/entity/note.js:45
 #: gsa/src/gmp/utils/entitytype.js:82
 msgid "Note"
-msgstr ""
+msgstr "備註"
 
 #: gsa/src/web/pages/filters/component.js:43 gsa/src/gmp/utils/entitytype.js:81
 msgid "Override"
-msgstr ""
+msgstr "覆寫"
 
 #: gsa/src/web/pages/filters/component.js:44
 #: gsa/src/web/pages/roles/detailspage.js:149
@@ -2042,7 +2042,7 @@ msgstr ""
 #: gsa/src/web/pages/permissions/row.js:68
 #: gsa/src/web/pages/permissions/row.js:105 gsa/src/gmp/utils/entitytype.js:84
 msgid "Permission"
-msgstr ""
+msgstr "權限"
 
 #: gsa/src/web/pages/filters/component.js:45
 #: gsa/src/web/pages/targets/details.js:120
@@ -2052,7 +2052,7 @@ msgstr ""
 #: gsa/src/web/pages/portlists/row.js:55 gsa/src/web/pages/portlists/row.js:61
 #: gsa/src/web/pages/portlists/row.js:95 gsa/src/gmp/utils/entitytype.js:85
 msgid "Port List"
-msgstr ""
+msgstr "連接埠清單"
 
 #: gsa/src/web/pages/filters/component.js:48
 #: gsa/src/web/pages/tickets/details.js:79
@@ -2071,7 +2071,7 @@ msgstr "結果"
 #: gsa/src/web/pages/permissions/multipledialog.js:156
 #: gsa/src/gmp/utils/entitytype.js:90
 msgid "Role"
-msgstr ""
+msgstr "角色"
 
 #: gsa/src/web/pages/filters/component.js:51
 #: gsa/src/web/pages/tasks/details.js:252 gsa/src/web/pages/tasks/dialog.js:371
@@ -2079,7 +2079,7 @@ msgstr ""
 #: gsa/src/web/pages/schedules/row.js:68 gsa/src/web/pages/schedules/row.js:107
 #: gsa/src/gmp/utils/entitytype.js:93
 msgid "Schedule"
-msgstr ""
+msgstr "排程"
 
 #: gsa/src/web/pages/filters/component.js:52
 #: gsa/src/web/pages/alerts/event.js:35 gsa/src/web/pages/alerts/event.js:40
@@ -2097,21 +2097,21 @@ msgstr "安全資訊"
 #: gsa/src/web/wizard/advancedtaskwizard.js:194
 #: gsa/src/gmp/utils/entitytype.js:91
 msgid "Scan Config"
-msgstr ""
+msgstr "掃描設定"
 
 #: gsa/src/web/pages/filters/component.js:54
 #: gsa/src/web/pages/tasks/dialog.js:535 gsa/src/web/pages/tags/row.js:88
 #: gsa/src/web/pages/tags/row.js:94 gsa/src/web/pages/tags/row.js:100
 #: gsa/src/web/pages/tags/row.js:141 gsa/src/gmp/utils/entitytype.js:94
 msgid "Tag"
-msgstr ""
+msgstr "標籤"
 
 #: gsa/src/web/pages/filters/component.js:55
 #: gsa/src/web/pages/tasks/details.js:125 gsa/src/web/pages/targets/row.js:56
 #: gsa/src/web/pages/targets/row.js:62 gsa/src/web/pages/targets/row.js:68
 #: gsa/src/web/pages/targets/row.js:126 gsa/src/gmp/utils/entitytype.js:95
 msgid "Target"
-msgstr ""
+msgstr "目標"
 
 #: gsa/src/web/pages/filters/component.js:57
 #: gsa/src/web/pages/tickets/table.js:89 gsa/src/web/pages/tickets/table.js:95
@@ -2130,11 +2130,11 @@ msgstr ""
 #: gsa/src/web/pages/hosts/identifiers.js:101
 #: gsa/src/gmp/utils/entitytype.js:98
 msgid "User"
-msgstr ""
+msgstr "使用者"
 
 #: gsa/src/web/pages/filters/component.js:107
 msgid "Edit Filter {{name}}"
-msgstr ""
+msgstr "編輯篩選器 {{name}}"
 
 #: gsa/src/web/pages/filters/details.js:57
 #: gsa/src/web/pages/filters/dialog.js:85 gsa/src/web/pages/filters/table.js:37
@@ -2148,19 +2148,19 @@ msgstr ""
 #: gsa/src/web/pages/filters/dialog.js:38
 #: gsa/src/web/pages/filters/listpage.js:51
 msgid "New Filter"
-msgstr ""
+msgstr "新篩選器"
 
 #: gsa/src/web/pages/filters/row.js:67
 msgid "Clone Filter"
-msgstr ""
+msgstr "再製篩選器"
 
 #: gsa/src/web/pages/filters/row.js:73
 msgid "Export Filter"
-msgstr ""
+msgstr "匯出篩選器"
 
 #: gsa/src/web/pages/filters/table.js:48
 msgid "No filters available"
-msgstr ""
+msgstr "沒有可用的篩選器"
 
 #: gsa/src/web/pages/alerts/condition.js:52
 msgid "Filter matches at least {{count}} {{type}}"
@@ -2264,21 +2264,21 @@ msgstr "建立憑證"
 
 #: gsa/src/web/pages/alerts/smbmethodpart.js:86
 msgid "Share path"
-msgstr ""
+msgstr "共用路徑"
 
 #: gsa/src/web/pages/alerts/smbmethodpart.js:95
 msgid "File path"
-msgstr ""
+msgstr "檔案路徑"
 
 #: gsa/src/web/pages/alerts/details.js:69
 #: gsa/src/web/pages/alerts/dialog.js:557 gsa/src/web/pages/alerts/table.js:42
 msgid "Condition"
-msgstr ""
+msgstr "條件式"
 
 #: gsa/src/web/pages/alerts/details.js:76
 #: gsa/src/web/pages/alerts/dialog.js:526 gsa/src/web/pages/alerts/table.js:37
 msgid "Event"
-msgstr ""
+msgstr "事件"
 
 #: gsa/src/web/pages/alerts/details.js:86
 #: gsa/src/web/pages/alerts/details.js:98
@@ -2293,12 +2293,12 @@ msgstr ""
 
 #: gsa/src/web/pages/alerts/details.js:105
 msgid "Report "
-msgstr ""
+msgstr "報告"
 
 #: gsa/src/web/pages/alerts/details.js:125
 #: gsa/src/web/pages/alerts/dialog.js:610
 msgid "Details URL"
-msgstr ""
+msgstr "詳細資訊 URL"
 
 #: gsa/src/web/pages/alerts/details.js:132
 #: gsa/src/web/pages/usersettings/filterpart.js:216
@@ -2353,24 +2353,24 @@ msgstr ""
 #: gsa/src/web/pages/alerts/dialog.js:423
 #: gsa/src/web/pages/alerts/method.js:293
 msgid "Email"
-msgstr ""
+msgstr "電子郵件"
 
 #: gsa/src/web/pages/alerts/dialog.js:361
 msgid "HTTP Get"
-msgstr ""
+msgstr "HTTP Get"
 
 #: gsa/src/web/pages/alerts/dialog.js:365
 #: gsa/src/web/pages/alerts/dialog.js:427
 #: gsa/src/web/pages/alerts/method.js:165
 msgid "SCP"
-msgstr ""
+msgstr "SCP"
 
 #: gsa/src/web/pages/alerts/dialog.js:373
 #: gsa/src/web/pages/alerts/dialog.js:435
 #: gsa/src/web/pages/targets/details.js:157
 #: gsa/src/web/pages/targets/dialog.js:364
 msgid "SMB"
-msgstr ""
+msgstr "SMB"
 
 #: gsa/src/web/pages/alerts/dialog.js:377
 #: gsa/src/web/pages/alerts/dialog.js:439
@@ -2378,7 +2378,7 @@ msgstr ""
 #: gsa/src/web/pages/targets/details.js:183
 #: gsa/src/web/pages/targets/dialog.js:410 gsa/src/gmp/models/credential.js:101
 msgid "SNMP"
-msgstr ""
+msgstr "SNMP"
 
 #: gsa/src/web/pages/alerts/dialog.js:381
 #: gsa/src/web/pages/alerts/method.js:390
@@ -2391,13 +2391,13 @@ msgstr ""
 #: gsa/src/web/pages/alerts/starttaskmethodpart.js:31
 #: gsa/src/web/pages/alerts/method.js:372
 msgid "Start Task"
-msgstr ""
+msgstr "開始作業"
 
 #: gsa/src/web/pages/alerts/dialog.js:389
 #: gsa/src/web/pages/alerts/dialog.js:412
 #: gsa/src/web/pages/alerts/dialog.js:443
 msgid "System Logger"
-msgstr ""
+msgstr "系統記錄器"
 
 #: gsa/src/web/pages/alerts/dialog.js:393
 #: gsa/src/web/pages/alerts/dialog.js:447
@@ -2417,7 +2417,7 @@ msgstr ""
 
 #: gsa/src/web/pages/alerts/dialog.js:560
 msgid "Always"
-msgstr ""
+msgstr "總是"
 
 #: gsa/src/web/pages/alerts/dialog.js:621
 msgid "Report Content"
@@ -2457,25 +2457,25 @@ msgstr ""
 
 #: gsa/src/web/pages/alerts/dialog.js:654
 msgid "Report with ID"
-msgstr ""
+msgstr "報表與 ID"
 
 #: gsa/src/web/pages/alerts/scpmethodpart.js:87
 #: gsa/src/web/pages/alerts/method.js:202
 msgid "Known Hosts"
-msgstr ""
+msgstr "已知主機"
 
 #: gsa/src/web/pages/alerts/scpmethodpart.js:98
 #: gsa/src/web/pages/alerts/method.js:209
 msgid "Path"
-msgstr ""
+msgstr "路徑"
 
 #: gsa/src/web/pages/alerts/tippingpointmethodpart.js:58
 msgid "Hostname / IP"
-msgstr ""
+msgstr "主機名稱 / IP"
 
 #: gsa/src/web/pages/alerts/tippingpointmethodpart.js:85
 msgid "SSL / TLS Certificate"
-msgstr ""
+msgstr "SSL / TLS 憑證"
 
 #: gsa/src/web/pages/alerts/tippingpointmethodpart.js:91
 msgid "Use workaround for default certificate"
@@ -2483,7 +2483,7 @@ msgstr ""
 
 #: gsa/src/web/pages/alerts/emailmethodpart.js:85
 msgid "To Address"
-msgstr ""
+msgstr "到位址"
 
 #: gsa/src/web/pages/alerts/emailmethodpart.js:94
 msgid "From Address"
@@ -2495,12 +2495,12 @@ msgstr ""
 #: gsa/src/web/pages/permissions/dialog.js:238
 #: gsa/src/web/pages/permissions/table.js:57
 msgid "Subject"
-msgstr ""
+msgstr "主旨"
 
 #: gsa/src/web/pages/alerts/emailmethodpart.js:115
 #: gsa/src/web/pages/alerts/method.js:312
 msgid "Email Encryption"
-msgstr ""
+msgstr "電子郵件加密"
 
 # Hilfe Übersicht
 #: gsa/src/web/pages/alerts/emailmethodpart.js:133
@@ -2550,16 +2550,16 @@ msgstr ""
 
 #: gsa/src/web/pages/alerts/sourcefiremethodpart.js:76
 msgid "PKCS12 Credential"
-msgstr ""
+msgstr "PKCS12 憑證"
 
 #: gsa/src/web/pages/alerts/sourcefiremethodpart.js:93
 msgid "PKCS12 File"
-msgstr ""
+msgstr "PKCS12 檔案"
 
 #: gsa/src/web/pages/alerts/method.js:79
 #: gsa/src/web/pages/alerts/alembavfiremethodpart.js:79
 msgid "Base URL"
-msgstr ""
+msgstr "基礎 URL"
 
 #: gsa/src/web/pages/alerts/method.js:87
 #: gsa/src/web/pages/alerts/alembavfiremethodpart.js:142
@@ -2594,14 +2594,14 @@ msgstr ""
 #: gsa/src/web/pages/alerts/method.js:145
 #: gsa/src/web/pages/alerts/alembavfiremethodpart.js:107
 msgid "Session Type"
-msgstr ""
+msgstr "Session 類型"
 
 #: gsa/src/web/pages/alerts/method.js:194
 #: gsa/src/web/pages/credentials/details.js:90
 #: gsa/src/web/pages/credentials/table.js:47
 #: gsa/src/web/pages/login/loginform.js:189
 msgid "Login"
-msgstr ""
+msgstr "登入"
 
 #: gsa/src/web/pages/alerts/method.js:222
 msgid "(Credential unavailable)"
@@ -2648,7 +2648,7 @@ msgstr ""
 #: gsa/src/web/pages/alerts/snmpmethodpart.js:58
 #: gsa/src/web/components/notification/dialognotification.js:58
 msgid "Message"
-msgstr ""
+msgstr "訊息"
 
 #: gsa/src/web/pages/alerts/method.js:364
 msgid "Encrypted Email to {{address}}"
@@ -2656,15 +2656,15 @@ msgstr ""
 
 #: gsa/src/web/pages/alerts/method.js:365
 msgid "Email to {{address}}"
-msgstr ""
+msgstr "寄送郵件至 {{address}}"
 
 #: gsa/src/web/pages/alerts/method.js:379
 msgid "HTTP GET request to URL {{- url}}"
-msgstr ""
+msgstr "HTTP GET 要求至 URL {{- url}}"
 
 #: gsa/src/web/pages/alerts/method.js:382
 msgid "HTTP GET request"
-msgstr ""
+msgstr "HTTP GET 要求"
 
 #: gsa/src/web/pages/alerts/method.js:429
 #: gsa/src/web/pages/alerts/method.js:468
@@ -2674,25 +2674,25 @@ msgstr ""
 #: gsa/src/web/pages/alerts/method.js:439
 #: gsa/src/web/pages/ovaldefs/detailspage.js:201
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: gsa/src/web/pages/alerts/method.js:459
 #: gsa/src/web/pages/credentials/dialog.js:287
 #: gsa/src/web/pages/login/loginform.js:162
 msgid "Username"
-msgstr ""
+msgstr "使用者名稱"
 
 #: gsa/src/web/pages/alerts/row.js:76
 msgid "Clone Alert"
-msgstr ""
+msgstr "再製警報"
 
 #: gsa/src/web/pages/alerts/row.js:82
 msgid "Export Alert"
-msgstr ""
+msgstr "匯出警報"
 
 #: gsa/src/web/pages/alerts/row.js:87
 msgid "Test Alert"
-msgstr ""
+msgstr "測試警報"
 
 #: gsa/src/web/pages/alerts/ticketeventpart.js:37
 msgid "Ticket Received"
@@ -2725,11 +2725,11 @@ msgstr ""
 
 #: gsa/src/web/pages/alerts/taskeventpart.js:58 gsa/src/gmp/models/task.js:71
 msgid "Requested"
-msgstr ""
+msgstr "已要求"
 
 #: gsa/src/web/pages/alerts/taskeventpart.js:62 gsa/src/gmp/models/task.js:66
 msgid "Running"
-msgstr ""
+msgstr "執行中"
 
 #: gsa/src/web/pages/alerts/taskeventpart.js:66 gsa/src/gmp/models/task.js:67
 msgid "Stop Requested"
@@ -2737,12 +2737,12 @@ msgstr ""
 
 #: gsa/src/web/pages/alerts/taskeventpart.js:70 gsa/src/gmp/models/task.js:72
 msgid "Stopped"
-msgstr ""
+msgstr "已停止"
 
 #: gsa/src/web/pages/alerts/alembavfiremethodpart.js:70
 #: gsa/src/web/components/bar/menubar.js:203 gsa/src/web/utils/render.js:167
 msgid "Report Formats"
-msgstr ""
+msgstr "報告格式"
 
 #: gsa/src/web/pages/alerts/alembavfiremethodpart.js:109
 msgid "Analyst"
@@ -2794,7 +2794,7 @@ msgstr ""
 
 #: gsa/src/web/pages/alerts/secinfoeventpart.js:57
 msgid "Updated"
-msgstr ""
+msgstr "已更新"
 
 #: gsa/src/web/pages/alerts/secinfoeventpart.js:69
 #: gsa/src/web/pages/scanconfigs/header.js:62
@@ -2802,14 +2802,14 @@ msgstr ""
 #: gsa/src/web/components/dashboard/display/utils.js:169
 #: gsa/src/web/utils/render.js:151
 msgid "NVTs"
-msgstr ""
+msgstr "NVT"
 
 #: gsa/src/web/pages/alerts/secinfoeventpart.js:77
 #: gsa/src/web/components/bar/menubar.js:171
 #: gsa/src/web/components/dashboard/display/utils.js:166
 #: gsa/src/web/utils/render.js:125
 msgid "CPEs"
-msgstr ""
+msgstr "CPE"
 
 #: gsa/src/web/pages/alerts/secinfoeventpart.js:81
 #: gsa/src/web/pages/certbund/detailspage.js:73
@@ -2896,11 +2896,11 @@ msgstr ""
 
 #: gsa/src/web/pages/tickets/details.js:123 gsa/src/gmp/models/ticket.js:37
 msgid "Fixed"
-msgstr ""
+msgstr "已修正"
 
 #: gsa/src/web/pages/tickets/details.js:139 gsa/src/gmp/models/ticket.js:38
 msgid "Fix Verified"
-msgstr ""
+msgstr "修正已確認"
 
 #: gsa/src/web/pages/tickets/details.js:145
 msgid "With Report"
@@ -2937,7 +2937,7 @@ msgstr ""
 
 #: gsa/src/web/pages/tickets/createdialog.js:53
 msgid "Assign To User"
-msgstr ""
+msgstr "指派給使用者"
 
 #: gsa/src/web/pages/tickets/table.js:76
 msgid "Modification Time"
@@ -3015,37 +3015,37 @@ msgstr ""
 
 #: gsa/src/web/pages/users/detailspage.js:78
 msgid "Help: User Details"
-msgstr ""
+msgstr "說明：使用者詳節"
 
 #: gsa/src/web/pages/users/detailspage.js:80
 msgid "Users List"
-msgstr ""
+msgstr "使用者清單"
 
 #: gsa/src/web/pages/users/detailspage.js:89
 msgid "Export User as XML"
-msgstr ""
+msgstr "匯出使用者為 XML"
 
 #: gsa/src/web/pages/users/component.js:74
 msgid "Edit User {{name}}"
-msgstr ""
+msgstr "編輯使用者 {{name}}"
 
 #: gsa/src/web/pages/users/details.js:46
 #: gsa/src/web/components/bar/menubar.js:261
 msgid "LDAP"
-msgstr ""
+msgstr "LDAP"
 
 #: gsa/src/web/pages/users/details.js:49
 msgid "RADIUS"
-msgstr ""
+msgstr "RADIUS"
 
 #: gsa/src/web/pages/users/details.js:51
 #: gsa/src/web/pages/extras/cvsscalculatorpage.js:219
 msgid "Local"
-msgstr ""
+msgstr "本機"
 
 #: gsa/src/web/pages/users/details.js:57
 msgid "Allow all"
-msgstr ""
+msgstr "全部允許"
 
 #: gsa/src/web/pages/users/details.js:59
 msgid "Allow all and deny from {{addresses}}"
@@ -3053,7 +3053,7 @@ msgstr ""
 
 #: gsa/src/web/pages/users/details.js:65
 msgid "Deny all"
-msgstr ""
+msgstr "全部拒絕"
 
 #: gsa/src/web/pages/users/details.js:67
 msgid "Deny all and allow from {{addresses}}"
@@ -3063,7 +3063,7 @@ msgstr ""
 #: gsa/src/web/pages/users/header.js:57 gsa/src/web/pages/users/table.js:36
 #: gsa/src/web/components/bar/menubar.js:256 gsa/src/web/utils/render.js:171
 msgid "Roles"
-msgstr ""
+msgstr "角色"
 
 #: gsa/src/web/pages/users/details.js:115 gsa/src/web/pages/users/dialog.js:293
 #: gsa/src/web/pages/users/header.js:65 gsa/src/web/pages/users/table.js:40
@@ -3074,7 +3074,7 @@ msgstr "群組"
 #: gsa/src/web/pages/users/details.js:133 gsa/src/web/pages/users/dialog.js:303
 #: gsa/src/web/pages/users/header.js:73 gsa/src/web/pages/users/table.js:44
 msgid "Host Access"
-msgstr ""
+msgstr "主機存取"
 
 #: gsa/src/web/pages/users/details.js:138 gsa/src/web/pages/users/dialog.js:330
 msgid "Interface Access"
@@ -3087,11 +3087,11 @@ msgstr ""
 
 #: gsa/src/web/pages/users/dialog.js:111 gsa/src/web/pages/users/listpage.js:66
 msgid "New User"
-msgstr ""
+msgstr "新使用者"
 
 #: gsa/src/web/pages/users/dialog.js:164
 msgid "Login Name"
-msgstr ""
+msgstr "登入名稱"
 
 #: gsa/src/web/pages/users/dialog.js:188
 #: gsa/src/web/pages/credentials/dialog.js:300
@@ -3099,7 +3099,7 @@ msgstr ""
 #: gsa/src/web/pages/login/loginform.js:174
 #: gsa/src/web/pages/login/loginform.js:179
 msgid "Password"
-msgstr ""
+msgstr "密碼"
 
 #: gsa/src/web/pages/users/dialog.js:204 gsa/src/web/pages/users/dialog.js:258
 msgid "LDAP Authentication Only"
@@ -3115,7 +3115,7 @@ msgstr ""
 
 #: gsa/src/web/pages/users/dialog.js:240
 msgid "New Password"
-msgstr ""
+msgstr "新密碼"
 
 #: gsa/src/web/pages/users/dialog.js:308 gsa/src/web/pages/users/dialog.js:335
 msgid "Allow all and deny"
@@ -3135,7 +3135,7 @@ msgstr ""
 
 #: gsa/src/web/pages/users/listpage.js:63
 msgid "Help: Users"
-msgstr ""
+msgstr "說明：使用者"
 
 #: gsa/src/web/pages/users/listpage.js:124
 msgid "Confirm deletion of user {{name}}"
@@ -3147,11 +3147,11 @@ msgstr ""
 
 #: gsa/src/web/pages/users/row.js:72
 msgid "Clone User"
-msgstr ""
+msgstr "再製使用者"
 
 #: gsa/src/web/pages/users/row.js:78
 msgid "Export User"
-msgstr ""
+msgstr "匯出使用者"
 
 #: gsa/src/web/pages/users/confirmdeletedialog.js:44
 msgid "User {{name}} will be deleted."
@@ -3167,14 +3167,14 @@ msgstr ""
 
 #: gsa/src/web/pages/users/confirmdeletedialog.js:64
 msgid "Current User"
-msgstr ""
+msgstr "目前使用者"
 
 #: gsa/src/web/pages/users/confirmdeletedialog.js:72
 #: gsa/src/web/pages/operatingsystems/detailspage.js:105
 #: gsa/src/web/pages/operatingsystems/row.js:52
 #: gsa/src/web/pages/extras/trashactions.js:159
 msgid "Delete"
-msgstr ""
+msgstr "刪除"
 
 #: gsa/src/web/pages/users/confirmdeletedialog.js:84
 msgid "If no inheriting user is selected, all owned resources will be deleted as well."
@@ -3186,19 +3186,19 @@ msgstr ""
 
 #: gsa/src/web/pages/users/table.js:53
 msgid "No Users available"
-msgstr ""
+msgstr "沒有可用的使用者"
 
 #: gsa/src/web/pages/ldap/dialog.js:47 gsa/src/web/pages/radius/dialog.js:47
 msgid "Edit Authentication"
-msgstr ""
+msgstr "編輯驗證"
 
 #: gsa/src/web/pages/ldap/dialog.js:54 gsa/src/web/pages/radius/dialog.js:54
 msgid "Enable"
-msgstr ""
+msgstr "啟用"
 
 #: gsa/src/web/pages/ldap/dialog.js:64 gsa/src/web/pages/ldap/ldappage.js:183
 msgid "LDAP Host"
-msgstr ""
+msgstr "LDAP 主機"
 
 #: gsa/src/web/pages/ldap/dialog.js:73 gsa/src/web/pages/ldap/ldappage.js:187
 msgid "Auth. DN"
@@ -3211,7 +3211,7 @@ msgstr ""
 #: gsa/src/web/pages/ldap/ldappage.js:179
 #: gsa/src/web/pages/radius/radiuspage.js:166
 msgid "Enabled"
-msgstr ""
+msgstr "已啟用"
 
 #: gsa/src/web/pages/ldap/ldappage.js:203
 msgid "Issued by"
@@ -3220,11 +3220,11 @@ msgstr ""
 #: gsa/src/web/pages/tasks/detailspage.js:130
 #: gsa/src/web/pages/tasks/listpage.js:69
 msgid "Help: Tasks"
-msgstr ""
+msgstr "說明：作業"
 
 #: gsa/src/web/pages/tasks/detailspage.js:132
 msgid "Task List"
-msgstr ""
+msgstr "作業清單"
 
 #: gsa/src/web/pages/tasks/detailspage.js:136
 msgid "This is an Alterable Task. Reports may not relate to current Scan Config or Target!"
@@ -3232,7 +3232,7 @@ msgstr ""
 
 #: gsa/src/web/pages/tasks/detailspage.js:153
 msgid "Export Task as XML"
-msgstr ""
+msgstr "匯出作業為 XML"
 
 #: gsa/src/web/pages/tasks/detailspage.js:183
 msgid "Current Report for Task {{- name}} from {{- date}}"
@@ -3264,29 +3264,29 @@ msgstr ""
 
 #: gsa/src/web/pages/tasks/component.js:255
 msgid "Edit Container Task {{name}}"
-msgstr ""
+msgstr "編輯容器作業 {{name}}"
 
 #: gsa/src/web/pages/tasks/component.js:256
 #: gsa/src/web/pages/tasks/icons/newiconmenu.js:37
 #: gsa/src/web/pages/tasks/containerdialog.js:51
 msgid "New Container Task"
-msgstr ""
+msgstr "新容器作業"
 
 #: gsa/src/web/pages/tasks/component.js:439
 #: gsa/src/web/pages/tasks/component.js:736
 msgid "Edit Task {{name}}"
-msgstr ""
+msgstr "編輯作業 {{name}}"
 
 #: gsa/src/web/pages/tasks/component.js:474
 #: gsa/src/web/pages/tasks/dialog.js:212
 #: gsa/src/web/pages/tasks/icons/newiconmenu.js:35
 #: gsa/src/web/wizard/taskwizard.js:112
 msgid "New Task"
-msgstr ""
+msgstr "新作業"
 
 #: gsa/src/web/pages/tasks/component.js:552
 msgid "New Quick Task"
-msgstr ""
+msgstr "新快速作業"
 
 #: gsa/src/web/pages/tasks/trend.js:37
 msgid "Severity increased"
@@ -3357,7 +3357,7 @@ msgstr ""
 
 #: gsa/src/web/pages/tasks/details.js:282
 msgid "Scan"
-msgstr ""
+msgstr "掃描"
 
 #: gsa/src/web/pages/tasks/details.js:286
 msgid "Duration of last Scan"
@@ -3698,7 +3698,7 @@ msgstr ""
 
 #: gsa/src/web/pages/overrides/detailspage.js:99
 msgid "Override List"
-msgstr ""
+msgstr "覆寫清單"
 
 #: gsa/src/web/pages/overrides/detailspage.js:108
 msgid "Export Override as XML"
@@ -3707,7 +3707,7 @@ msgstr ""
 #: gsa/src/web/pages/overrides/detailspage.js:137
 #: gsa/src/web/pages/notes/detailspage.js:134
 msgid "NVT Name"
-msgstr ""
+msgstr "NVT 名稱"
 
 #: gsa/src/web/pages/overrides/detailspage.js:146
 #: gsa/src/web/pages/notes/detailspage.js:143
@@ -3733,7 +3733,7 @@ msgstr ""
 #: gsa/src/web/pages/overrides/details.js:49
 #: gsa/src/web/pages/notes/details.js:50
 msgid "Application"
-msgstr ""
+msgstr "應用程式"
 
 #: gsa/src/web/pages/overrides/details.js:66
 #: gsa/src/web/pages/overrides/details.js:73
@@ -3752,7 +3752,7 @@ msgstr ""
 #: gsa/src/web/pages/notes/dialog.js:271 gsa/src/web/pages/notes/dialog.js:324
 #: gsa/src/web/pages/notes/dialog.js:352 gsa/src/web/entity/override.js:43
 msgid "Any"
-msgstr ""
+msgstr "任一"
 
 #: gsa/src/web/pages/overrides/details.js:81
 #: gsa/src/web/pages/overrides/dialog.js:351
@@ -3801,7 +3801,7 @@ msgstr ""
 #: gsa/src/web/pages/overrides/dialog.js:251
 #: gsa/src/web/pages/notes/dialog.js:203
 msgid "days"
-msgstr ""
+msgstr "日"
 
 #: gsa/src/web/pages/overrides/dialog.js:256
 #: gsa/src/web/pages/overrides/row.js:122 gsa/src/web/pages/notes/dialog.js:207
@@ -4052,15 +4052,15 @@ msgstr ""
 #: gsa/src/web/pages/roles/detailspage.js:90
 #: gsa/src/web/pages/roles/listpage.js:52
 msgid "Help: Roles"
-msgstr ""
+msgstr "說明：角色"
 
 #: gsa/src/web/pages/roles/detailspage.js:92
 msgid "Roles List"
-msgstr ""
+msgstr "角色清單"
 
 #: gsa/src/web/pages/roles/detailspage.js:101
 msgid "Export Role as XML"
-msgstr ""
+msgstr "匯出角色為 XML"
 
 #: gsa/src/web/pages/roles/detailspage.js:133
 #: gsa/src/web/pages/roles/detailspage.js:218
@@ -4070,12 +4070,12 @@ msgstr ""
 
 #: gsa/src/web/pages/roles/component.js:70
 msgid "Edit Role {{name}}"
-msgstr ""
+msgstr "編輯角色 {{name}}"
 
 #: gsa/src/web/pages/roles/component.js:89 gsa/src/web/pages/roles/dialog.js:59
 #: gsa/src/web/pages/roles/listpage.js:55
 msgid "New Role"
-msgstr ""
+msgstr "新角色"
 
 #: gsa/src/web/pages/roles/details.js:51 gsa/src/web/pages/roles/dialog.js:128
 #: gsa/src/web/pages/groups/details.js:51 gsa/src/web/pages/groups/dialog.js:87
@@ -4088,16 +4088,16 @@ msgstr "使用者"
 #: gsa/src/web/pages/permissions/listpage.js:58
 #: gsa/src/web/entity/permissions.js:57
 msgid "New Permission"
-msgstr ""
+msgstr "新權限"
 
 #: gsa/src/web/pages/roles/dialog.js:152 gsa/src/web/pages/roles/dialog.js:172
 #: gsa/src/web/pages/permissions/multipledialog.js:57
 msgid "Create Permission"
-msgstr ""
+msgstr "建立權限"
 
 #: gsa/src/web/pages/roles/dialog.js:159
 msgid "New Super Permission"
-msgstr ""
+msgstr "新超級權限"
 
 #: gsa/src/web/pages/roles/dialog.js:202
 msgid "Move permission to trashcan"
@@ -4105,44 +4105,44 @@ msgstr ""
 
 #: gsa/src/web/pages/roles/row.js:63
 msgid "Clone Role"
-msgstr ""
+msgstr "再製角色"
 
 #: gsa/src/web/pages/roles/row.js:69
 msgid "Export Role"
-msgstr ""
+msgstr "匯出角色"
 
 #: gsa/src/web/pages/roles/table.js:38
 msgid "No Roles available"
-msgstr ""
+msgstr "沒有可用的角色"
 
 #: gsa/src/web/pages/notes/detailspage.js:94
 #: gsa/src/web/pages/notes/listpage.js:55
 msgid "Help: Notes"
-msgstr ""
+msgstr "說明：備註"
 
 #: gsa/src/web/pages/notes/detailspage.js:96
 msgid "Note List"
-msgstr ""
+msgstr "備註清單"
 
 #: gsa/src/web/pages/notes/detailspage.js:105
 msgid "Export Note as XML"
-msgstr ""
+msgstr "匯出備註為 XML"
 
 #: gsa/src/web/pages/notes/component.js:88
 msgid "Edit Note {{name}}"
-msgstr ""
+msgstr "編輯備註 {{name}}"
 
 #: gsa/src/web/pages/notes/dialog.js:88 gsa/src/web/pages/notes/listpage.js:58
 msgid "New Note"
-msgstr ""
+msgstr "新備註"
 
 #: gsa/src/web/pages/notes/row.js:56
 msgid "Export Note"
-msgstr ""
+msgstr "匯出備註"
 
 #: gsa/src/web/pages/notes/table.js:104
 msgid "No Notes available"
-msgstr ""
+msgstr "沒有可用的備註"
 
 #: gsa/src/web/pages/notes/dashboard/activedaysdisplay.js:161
 #: gsa/src/web/pages/notes/dashboard/activedaysdisplay.js:207
@@ -4288,7 +4288,7 @@ msgstr ""
 
 #: gsa/src/web/pages/tags/row.js:103
 msgid "Clone Tag"
-msgstr "複製標籤"
+msgstr "再製標籤"
 
 #: gsa/src/web/pages/tags/row.js:109
 msgid "Export Tag"
@@ -4544,7 +4544,7 @@ msgstr ""
 
 #: gsa/src/web/pages/schedules/row.js:71
 msgid "Clone Schedule"
-msgstr "複製排程"
+msgstr "再製排程"
 
 #: gsa/src/web/pages/schedules/row.js:77
 msgid "Export Schedule"
@@ -4825,7 +4825,7 @@ msgstr ""
 
 #: gsa/src/web/pages/permissions/row.js:71
 msgid "Clone Permission"
-msgstr "複製權限"
+msgstr "再製權限"
 
 #: gsa/src/web/pages/permissions/row.js:78
 msgid "Export Permission"
@@ -4838,20 +4838,20 @@ msgstr "主旨類型"
 #: gsa/src/web/pages/permissions/table.js:63
 #: gsa/src/web/entity/permissions.js:212
 msgid "No permissions available"
-msgstr ""
+msgstr "沒有可用的權限"
 
 #: gsa/src/web/pages/ovaldefs/detailspage.js:74
 #: gsa/src/web/pages/ovaldefs/listpage.js:49
 msgid "Help: OVAL Definitions"
-msgstr ""
+msgstr "說明：OVAL 定義"
 
 #: gsa/src/web/pages/ovaldefs/detailspage.js:76
 msgid "OVAL Definitions List"
-msgstr ""
+msgstr "OVAL 定義清單"
 
 #: gsa/src/web/pages/ovaldefs/detailspage.js:80
 msgid "Export OVAL Definition"
-msgstr ""
+msgstr "匯出 OVAL 定義"
 
 #: gsa/src/web/pages/ovaldefs/detailspage.js:148
 msgid "Affected"
@@ -5135,7 +5135,7 @@ msgstr "建立新憑證"
 
 #: gsa/src/web/pages/targets/row.js:71
 msgid "Clone Target"
-msgstr "複製目標"
+msgstr "再製目標"
 
 #: gsa/src/web/pages/targets/row.js:77
 msgid "Export Target"
@@ -5217,7 +5217,7 @@ msgstr "安裝程式簽署"
 
 #: gsa/src/web/pages/agents/row.js:71
 msgid "Clone Agent"
-msgstr "複製代理程式"
+msgstr "再製代理程式"
 
 #: gsa/src/web/pages/agents/row.js:77
 msgid "Export Agent"
@@ -5396,7 +5396,7 @@ msgstr "說明：群組"
 
 #: gsa/src/web/pages/groups/row.js:63
 msgid "Clone Group"
-msgstr "複製群組"
+msgstr "再製群組"
 
 #: gsa/src/web/pages/groups/row.js:69
 msgid "Export Group"
