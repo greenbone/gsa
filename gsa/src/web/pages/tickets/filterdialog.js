@@ -18,7 +18,7 @@
  */
 import React from 'react';
 
-import {_l} from 'gmp/locale/lang';
+import {_l, _} from 'gmp/locale/lang';
 
 import Layout from 'web/components/layout/layout';
 
@@ -35,6 +35,8 @@ import SortByGroup from 'web/components/powerfilter/sortbygroup';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import TicketStatusFilterGroup from 'web/components/powerfilter/ticketstatusgroup';
+import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
+import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
 
 const SORT_FIELDS = [
   {
@@ -95,6 +97,15 @@ const TicketsFilterDialogComponent = ({
       name="filterstring"
       filter={filterstring}
       onChange={onFilterStringChange}
+    />
+
+    <SolutionTypeGroup filter={filter} onChange={onFilterChange} />
+
+    <SeverityValuesGroup
+      name="severity"
+      title={_('Severity')}
+      filter={filter}
+      onChange={onFilterValueChange}
     />
 
     <TicketStatusFilterGroup filter={filter} onChange={onFilterValueChange} />

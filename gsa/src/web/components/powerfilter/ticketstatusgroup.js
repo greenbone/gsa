@@ -24,9 +24,9 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes.js';
 
-import FormGroup from '../form/formgroup.js';
+import FormGroup from 'web/components/form/formgroup.js';
 
 import Select from 'web/components/form/select';
 
