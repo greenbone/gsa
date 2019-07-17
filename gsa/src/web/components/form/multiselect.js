@@ -176,7 +176,7 @@ class MultiSelect extends React.Component {
       items,
       menuPosition = 'adjust',
       width = DEFAULT_WIDTH,
-      grow = '0',
+      grow,
     } = this.props;
 
     const {search, selectedItems} = this.state;
