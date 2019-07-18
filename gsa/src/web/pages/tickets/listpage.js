@@ -26,8 +26,6 @@ import TicketIcon from 'web/components/icon/ticketicon';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
-
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
@@ -40,11 +38,8 @@ import PropTypes from 'web/utils/proptypes';
 
 import TicketComponent from './component';
 import TicketsDashboard, {TICKETS_DASHBOARD_ID} from './dashboard';
-import Table, {FIELDS} from './table';
-
-const FilterDialog = createFilterDialog({
-  sortFields: FIELDS,
-});
+import Table from './table';
+import TicketsFilterDialogComponent from './filterdialog';
 
 const Page = ({
   filter,
@@ -87,7 +82,7 @@ const Page = ({
           />
         )}
         filter={filter}
-        filterEditDialog={FilterDialog}
+        filterEditDialog={TicketsFilterDialogComponent}
         filtersFilter={TICKETS_FILTER_FILTER}
         sectionIcon={<TicketIcon size="large" />}
         table={Table}
