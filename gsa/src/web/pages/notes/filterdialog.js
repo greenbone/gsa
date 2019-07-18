@@ -36,6 +36,7 @@ import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup';
 import SortByGroup from 'web/components/powerfilter/sortbygroup';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 
 const SORT_FIELDS = [
@@ -71,6 +72,7 @@ const NotesFilterDialogComponent = ({
   onFilterChange,
   onFilterStringChange,
   onFilterValueChange,
+  onSearchTermChange,
   onSortByChange,
   onSortOrderChange,
   onValueChange,
@@ -87,6 +89,27 @@ const NotesFilterDialogComponent = ({
       title={_('Note is active')}
       filter={filter}
       onChange={onFilterValueChange}
+    />
+
+    <FilterSearchGroup
+      name="text"
+      title={_('Search by content')}
+      filter={filter}
+      onChange={onSearchTermChange}
+    />
+
+    <FilterSearchGroup
+      name="nvt"
+      title={_('NVT Name')}
+      filter={filter}
+      onChange={onSearchTermChange}
+    />
+
+    <FilterSearchGroup
+      name="task_name"
+      title={_('Task Name')}
+      filter={filter}
+      onChange={onSearchTermChange}
     />
 
     <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
