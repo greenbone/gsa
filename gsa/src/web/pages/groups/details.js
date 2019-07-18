@@ -51,8 +51,11 @@ const GroupDetails = ({entity, links}) => {
             <TableData>{_('Users')}</TableData>
             <TableData>
               <Divider>
-                {users.map(user => (
-                  <span key={user}>{user}</span>
+                {users.map((user, index) => (
+                  <span key={user}>
+                    {index > 0 && <>&bull;&ensp;</>}
+                    {user}
+                  </span>
                 ))}
               </Divider>
             </TableData>

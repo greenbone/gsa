@@ -97,13 +97,14 @@ const UserDetails = ({entity, links = true}) => {
             <TableData>{_('Roles')}</TableData>
             <TableData>
               <Divider>
-                {roles.map(role => (
+                {roles.map((role, index) => (
                   <DetailsLink
                     textOnly={!links}
                     key={role.id}
                     type="role"
                     id={role.id}
                   >
+                    {index > 0 && <>&bull;&ensp;</>}
                     {role.name}
                   </DetailsLink>
                 ))}
@@ -115,13 +116,14 @@ const UserDetails = ({entity, links = true}) => {
             <TableData>{_('Groups')}</TableData>
             <TableData>
               <Divider>
-                {groups.map(group => (
+                {groups.map((group, index) => (
                   <DetailsLink
                     textOnly={!links}
                     type="group"
                     key={group.id}
                     id={group.id}
                   >
+                    {index > 0 && <>&bull;&ensp;</>}
                     {group.name}
                   </DetailsLink>
                 ))}
