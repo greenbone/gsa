@@ -77,9 +77,10 @@ const PortListDetails = ({entity, ...props}) => {
                 {_('Targets using this Port List')}
               </TableDataAlignTop>
               <TableData>
-                {targets.map(target => (
+                {targets.map((target, index) => (
                   <span key={target.id}>
                     <DetailsLink id={target.id} type="target">
+                      {index > 0 && <>&bull;&ensp;</>}
                       {target.name}
                     </DetailsLink>
                   </span>
