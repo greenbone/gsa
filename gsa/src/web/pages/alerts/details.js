@@ -150,9 +150,10 @@ const AlertDetails = ({capabilities, entity, links = true}) => {
               <TableData>{_('Task using this Alert')}</TableData>
               <TableData>
                 <Divider wrap>
-                  {tasks.map(task => (
+                  {tasks.map((task, index) => (
                     <span key={task.id}>
                       <DetailsLink id={task.id} type="task">
+                        {index > 0 && <>&bull;&ensp;</>}
                         {task.name}
                       </DetailsLink>
                     </span>
