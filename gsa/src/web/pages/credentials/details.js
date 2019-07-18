@@ -126,7 +126,7 @@ const CredentialDetails = ({entity}) => {
 
           {scanners.length > 0 && (
             <TableRow>
-              <TableData>{_('Sanners using this Credential')}</TableData>
+              <TableData>{_('Scanners using this Credential')}</TableData>
               <TableData>
                 <Divider wrap>
                   {scanners.map((scanner, index) => (
