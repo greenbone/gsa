@@ -92,6 +92,7 @@ export default createEntitiesTable({
   footer: createEntitiesFooter({
     span: 10,
     trash: true,
+    tags: false,
     download: 'audits.xml',
   }),
 });

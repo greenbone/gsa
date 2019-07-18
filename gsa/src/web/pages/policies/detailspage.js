@@ -52,7 +52,6 @@ import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
-import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
@@ -337,9 +336,6 @@ const Page = ({
                     <EntitiesTab entities={preferences.nvt}>
                       {_('NVT Preferences')}
                     </EntitiesTab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
                     <EntitiesTab entities={permissions}>
                       {_('Permissions')}
                     </EntitiesTab>
@@ -359,14 +355,6 @@ const Page = ({
                     </TabPanel>
                     <TabPanel>
                       <NvtPreferences entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
                     </TabPanel>
                     <TabPanel>
                       <EntityPermissions

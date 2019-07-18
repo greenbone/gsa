@@ -42,6 +42,7 @@ const PoliciesTable = createEntitiesTable({
     download: 'policies.xml',
     span: 7,
     trash: true,
+    tags: false,
   }),
 });
 

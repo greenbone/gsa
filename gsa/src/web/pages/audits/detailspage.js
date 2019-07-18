@@ -61,7 +61,6 @@ import EntityPage, {Col} from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
-import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
@@ -345,9 +344,6 @@ const Page = ({
                   onActivateTab={onActivateTab}
                 >
                   <Tab>{_('Information')}</Tab>
-                  <EntitiesTab entities={entity.userTags}>
-                    {_('User Tags')}
-                  </EntitiesTab>
                   <EntitiesTab entities={permissions}>
                     {_('Permissions')}
                   </EntitiesTab>
@@ -358,14 +354,6 @@ const Page = ({
                 <TabPanels>
                   <TabPanel>
                     <Details entity={entity} />
-                  </TabPanel>
-                  <TabPanel>
-                    <EntityTags
-                      entity={entity}
-                      onChanged={onChanged}
-                      onError={onError}
-                      onInteraction={onInteraction}
-                    />
                   </TabPanel>
                   <TabPanel>
                     <AuditPermissions
