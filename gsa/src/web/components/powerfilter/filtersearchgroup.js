@@ -34,6 +34,14 @@ const FilterSearchGroup = ({name, filter, title, onChange}) => {
 
   if (!isDefined(filterVal) && isDefined(filter)) {
     filterVal = filter.get(name);
+    if (isDefined(filterVal)) {
+      if (filterVal.startsWith('"')) {
+        filterVal = filterVal.slice(1);
+      }
+      if (filterVal.endsWith('"')) {
+        filterVal = filterVal.slice(0, -1);
+      }
+    }
   }
 
   return (
