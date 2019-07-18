@@ -59,11 +59,11 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
 
   const hostsListing = hosts
     .slice(0, MAX_HOSTS_LISTINGS)
-    .map(host => <span key={host}>{host}</span>);
+    .map(host => <span key={host}>{host + ','}</span>);
 
   const excludeHostsListing = exclude_hosts
     .slice(0, MAX_HOSTS_LISTINGS)
-    .map(host => <span key={host}>{host}</span>);
+    .map(host => <span key={host}>{host + ','}</span>);
 
   return (
     <Layout grow="1" flex="column">
@@ -201,8 +201,9 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
           })}
         >
           <Divider>
-            {tasks.map(task => (
+            {tasks.map((task, index) => (
               <DetailsLink key={task.id} id={task.id} type="task">
+                {index > 0 && <>&bull;&ensp;</>}
                 {task.name}
               </DetailsLink>
             ))}

@@ -132,13 +132,14 @@ class TaskDetails extends React.Component {
         {isDefined(alerts) && (
           <DetailsBlock title={_('Alerts')}>
             <Divider>
-              {alerts.sort(compareAlerts).map(alert => (
+              {alerts.sort(compareAlerts).map((alert, index) => (
                 <DetailsLink
                   key={alert.id}
                   textOnly={!links}
                   type="alert"
                   id={alert.id}
                 >
+                  {index > 0 && <>&bull;&ensp;</>}
                   {alert.name}
                 </DetailsLink>
               ))}
