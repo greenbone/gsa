@@ -36,6 +36,7 @@ import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup'
 import SortByGroup from 'web/components/powerfilter/sortbygroup';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
+import TaskTrendGroup from 'web/components/powerfilter/tasktrendgroup';
 
 /* eslint-enable */
 
@@ -110,6 +111,8 @@ const TaskFilterDialogComponent = ({
         filter={filter}
         onChange={onFilterValueChange}
       />
+
+      <TaskTrendGroup filter={filter} onChange={onFilterValueChange} />
 
       <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
