@@ -50,7 +50,7 @@ const BooleanFilterGroup = ({filter, name, title, onChange}) => {
 
 BooleanFilterGroup.propTypes = {
   filter: PropTypes.filter,
-  name: PropTypes.string,
+  name: PropTypes.string.isRequired,
   title: PropTypes.string,
   onChange: PropTypes.func,
 };
