@@ -59,8 +59,11 @@ const NoteDetails = ({entity}) => {
               <TableData>
                 {hosts.length > 0 ? (
                   <Divider>
-                    {hosts.map(host => (
-                      <span key={host}>{host}</span>
+                    {hosts.map((host, index) => (
+                      <span key={host}>
+                        {index > 0 && <>&bull;&ensp;</>}
+                        {host}
+                      </span>
                     ))}
                   </Divider>
                 ) : (
