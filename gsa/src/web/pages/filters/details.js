@@ -68,8 +68,9 @@ const FilterDetails = ({entity}) => {
               <TableData>{_('Alerts using this Filter')}</TableData>
               <TableData>
                 <Divider wrap>
-                  {alerts.map(alert => (
+                  {alerts.map((alert, index) => (
                     <DetailsLink key={alert.id} id={alert.id} type="alert">
+                      {index > 0 && <>&bull;&ensp;</>}
                       {alert.name}
                     </DetailsLink>
                   ))}
