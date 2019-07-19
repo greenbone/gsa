@@ -21,12 +21,14 @@ const Theme = {
   /* source styleguide */
   lightGreen: '#87d050',
   green: '#66c430',
+  paleGreen: '#99BE48',
 
   lightGray: '#c8d3d9', // used by: disabled inputs
   mediumGray: '#787878',
   darkGray: '#393637',
 
   goldYellow: '#fdc300',
+  warnYellow: '#f0a519',
   redBrown: '#a54317',
 
   /* source own */
@@ -40,6 +42,7 @@ const Theme = {
   mediumLightRed: '#ebccd1', // used by: dialog errors border
   warningRed: '#d83636', // used for warning font color at login dialog
   darkRed: '#a94442', // used by: dialog errors font
+  errorRed: '#c83814', // used by: compliance status bar
 
   lightBlue: '#bce8f1', // used by InfoPanel and dashboard hovering
   mediumBlue: '#5897fb', // used by active/hovered items in Select
