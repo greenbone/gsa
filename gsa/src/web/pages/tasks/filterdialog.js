@@ -37,6 +37,8 @@ import SortByGroup from 'web/components/powerfilter/sortbygroup';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import TaskTrendGroup from 'web/components/powerfilter/tasktrendgroup';
+import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 
 /* eslint-enable */
 
@@ -83,6 +85,7 @@ const TaskFilterDialogComponent = ({
   saveNamedFilter,
   onFilterStringChange,
   onFilterValueChange,
+  onSearchTermChange,
   onSortOrderChange,
   onSortByChange,
   onValueChange,
@@ -106,6 +109,20 @@ const TaskFilterDialogComponent = ({
         onChange={onFilterValueChange}
       />
 
+      <SeverityValuesGroup
+        name="severity"
+        title={_('Severity of Last Report')}
+        filter={filter}
+        onChange={onFilterValueChange}
+      />
+
+      <FilterSearchGroup
+        name="name"
+        title={_('Task Name')}
+        filter={filter}
+        onChange={onSearchTermChange}
+      />
+
       <MinQodGroup
         name="min_qod"
         filter={filter}
@@ -113,6 +130,13 @@ const TaskFilterDialogComponent = ({
       />
 
       <TaskTrendGroup filter={filter} onChange={onFilterValueChange} />
+
+      <FilterSearchGroup
+        name="comment"
+        title={_('Comment')}
+        filter={filter}
+        onChange={onSearchTermChange}
+      />
 
       <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 
