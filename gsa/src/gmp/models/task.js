@@ -242,6 +242,8 @@ class Task extends Model {
       delete copy.hosts_ordering;
     }
 
+    copy.usageType = elem.usage_type;
+
     return copy;
   }
 }

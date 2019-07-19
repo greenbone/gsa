@@ -55,23 +55,23 @@ const DEFAULT_MAX_CHECKS = 4;
 const DEFAULT_MAX_HOSTS = 20;
 
 const CreateAuditDialog = ({
-  alert_ids = [],
+  alertIds = [],
   alerts = [],
   alterable = NO_VALUE,
   auto_delete = AUTO_DELETE_NO,
   auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   capabilities,
   comment = '',
-  hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
+  hostsOrdering = HOSTS_ORDERING_SEQUENTIAL,
   in_assets = YES_VALUE,
-  max_checks = DEFAULT_MAX_CHECKS,
-  max_hosts = DEFAULT_MAX_HOSTS,
+  maxChecks = DEFAULT_MAX_CHECKS,
+  maxHosts = DEFAULT_MAX_HOSTS,
   name = _('Unnamed'),
-  schedule_id = UNSET_VALUE,
-  schedule_periods = NO_VALUE,
+  scheduleId = UNSET_VALUE,
+  schedulePeriods = NO_VALUE,
   schedules = [],
-  source_iface = '',
-  target_id,
+  sourceIface = '',
+  targetId,
   targets,
   title = _('New Audit'),
   onAlertsChange,
@@ -84,11 +84,11 @@ const CreateAuditDialog = ({
   onTargetChange,
   ...data
 }) => {
-  const target_items = renderSelectItems(targets);
+  const targetItems = renderSelectItems(targets);
 
-  const schedule_items = renderSelectItems(schedules, UNSET_VALUE);
+  const scheduleItems = renderSelectItems(schedules, UNSET_VALUE);
 
-  const alert_items = renderSelectItems(alerts);
+  const alertItems = renderSelectItems(alerts);
 
   const uncontrolledData = {
     ...data,
@@ -96,18 +96,18 @@ const CreateAuditDialog = ({
     auto_delete,
     auto_delete_data,
     comment,
-    hosts_ordering,
+    hostsOrdering,
     in_assets,
-    max_checks,
-    max_hosts,
+    maxChecks,
+    maxHosts,
     name,
-    source_iface,
+    sourceIface,
   };
 
   const controlledData = {
-    alert_ids,
-    schedule_id,
-    target_id,
+    alertIds,
+    scheduleId,
+    targetId,
   };
 
   return (
@@ -144,9 +144,9 @@ const CreateAuditDialog = ({
             <FormGroup title={_('Scan Targets')}>
               <Divider>
                 <Select
-                  name="target_id"
-                  items={target_items}
-                  value={state.target_id}
+                  name="targetId"
+                  items={targetItems}
+                  value={state.targetId}
                   onChange={onTargetChange}
                 />
                 <Layout>
@@ -162,9 +162,9 @@ const CreateAuditDialog = ({
               <FormGroup title={_('Alerts')}>
                 <Divider>
                   <MultiSelect
-                    name="alert_ids"
-                    items={alert_items}
-                    value={state.alert_ids}
+                    name="alertIds"
+                    items={alertItems}
+                    value={state.alertIds}
                     onChange={onAlertsChange}
                   />
                   <Layout>
@@ -181,14 +181,14 @@ const CreateAuditDialog = ({
               <FormGroup title={_('Schedule')}>
                 <Divider>
                   <Select
-                    name="schedule_id"
-                    value={state.schedule_id}
-                    items={schedule_items}
+                    name="scheduleId"
+                    value={state.scheduleId}
+                    items={scheduleItems}
                     onChange={onScheduleChange}
                   />
                   <Checkbox
-                    name="schedule_periods"
-                    checked={state.schedule_periods === YES_VALUE}
+                    name="schedulePeriods"
+                    checked={state.schedulePeriods === YES_VALUE}
                     checkedValue={YES_VALUE}
                     unCheckedValue={NO_VALUE}
                     title={_('Once')}
@@ -226,14 +226,14 @@ const CreateAuditDialog = ({
             <Layout flex="column" grow="1">
               <FormGroup titleSize="4" title={_('Network Source Interface')}>
                 <TextField
-                  name="source_iface"
-                  value={state.source_iface}
+                  name="sourceIface"
+                  value={state.sourceIface}
                   onChange={onValueChange}
                 />
               </FormGroup>
               <FormGroup titleSize="4" title={_('Order for target hosts')}>
                 <Select
-                  name="hosts_ordering"
+                  name="hostsOrdering"
                   items={[
                     {
                       value: 'sequential',
@@ -248,7 +248,7 @@ const CreateAuditDialog = ({
                       label: _('Reverse'),
                     },
                   ]}
-                  value={state.hosts_ordering}
+                  value={state.hostsOrdering}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -257,11 +257,11 @@ const CreateAuditDialog = ({
                 title={_('Maximum concurrently executed NVTs per host')}
               >
                 <Spinner
-                  name="max_checks"
+                  name="maxChecks"
                   size="10"
                   min="0"
                   maxLength="10"
-                  value={state.max_checks}
+                  value={state.maxChecks}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -270,12 +270,12 @@ const CreateAuditDialog = ({
                 title={_('Maximum concurrently scanned hosts')}
               >
                 <Spinner
-                  name="max_hosts"
+                  name="maxHosts"
                   type="int"
                   min="0"
                   size="10"
                   maxLength="10"
-                  value={state.max_hosts}
+                  value={state.maxHosts}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -288,24 +288,24 @@ const CreateAuditDialog = ({
 };
 
 CreateAuditDialog.propTypes = {
-  alert_ids: PropTypes.array,
+  alertIds: PropTypes.array,
   alerts: PropTypes.array,
   alterable: PropTypes.yesno,
   auto_delete: PropTypes.oneOf(['keep', 'no']),
   auto_delete_data: PropTypes.number,
   capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
-  hosts_ordering: PropTypes.oneOf(['sequential', 'random', 'reverse']),
+  hostsOrdering: PropTypes.oneOf(['sequential', 'random', 'reverse']),
   in_assets: PropTypes.yesno,
-  max_checks: PropTypes.number,
-  max_hosts: PropTypes.number,
-  min_qod: PropTypes.number,
+  maxChecks: PropTypes.number,
+  maxHosts: PropTypes.number,
+  minQod: PropTypes.number,
   name: PropTypes.string,
-  schedule_id: PropTypes.idOrZero,
-  schedule_periods: PropTypes.yesno,
+  scheduleId: PropTypes.idOrZero,
+  schedulePeriods: PropTypes.yesno,
   schedules: PropTypes.array,
-  source_iface: PropTypes.string,
-  target_id: PropTypes.idOrZero,
+  sourceIface: PropTypes.string,
+  targetId: PropTypes.idOrZero,
   targets: PropTypes.array,
   title: PropTypes.string,
   onAlertsChange: PropTypes.func.isRequired,

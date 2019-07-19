@@ -53,7 +53,7 @@ import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import ComplianceStatusBar from 'web/components/bar/compliancestatusbar';
 
-const render_report = (report, links) => {
+const renderReport = (report, links) => {
   if (!isDefined(report)) {
     return null;
   }
@@ -150,7 +150,7 @@ const Row = ({
       <TableData>
         <AuditStatus task={entity} links={links} />
       </TableData>
-      <TableData>{render_report(entity.last_report, links)}</TableData>
+      <TableData>{renderReport(entity.last_report, links)}</TableData>
       <TableData>
         {isDefined(entity.last_report) && (
           <ComplianceStatusBar

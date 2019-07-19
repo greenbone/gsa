@@ -83,10 +83,10 @@ const PoliciesPage = ({
       clone,
       create,
       createAudit,
-      delete: delete_func,
+      delete: deleteFunc,
       download,
       edit,
-      import: import_func,
+      import: importFunc,
     }) => (
       <EntitiesPage
         {...props}
@@ -97,11 +97,11 @@ const PoliciesPage = ({
         toolBarIcons={ToolBarIcons}
         onError={onError}
         onInteraction={onInteraction}
-        onPolicyImportClick={import_func}
+        onPolicyImportClick={importFunc}
         onPolicyCloneClick={clone}
         onPolicyCreateClick={create}
         onCreateAuditClick={createAudit}
-        onPolicyDeleteClick={delete_func}
+        onPolicyDeleteClick={deleteFunc}
         onPolicyDownloadClick={download}
         onPolicyEditClick={edit}
       />

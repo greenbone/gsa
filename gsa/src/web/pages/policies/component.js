@@ -131,16 +131,16 @@ class PolicyComponent extends React.Component {
     this.handleTargetCreated = this.handleTargetCreated.bind(this);
   }
 
-  handleAlertsChange(alert_ids) {
-    this.setState({alert_ids});
+  handleAlertsChange(alertIds) {
+    this.setState({alertIds});
   }
 
-  handleScheduleChange(schedule_id) {
-    this.setState({schedule_id});
+  handleScheduleChange(scheduleId) {
+    this.setState({scheduleId});
   }
 
-  handleTargetChange(target_id) {
-    this.setState({target_id});
+  handleTargetChange(targetId) {
+    this.setState({targetId});
   }
 
   handleAlertCreated(resp) {
@@ -148,7 +148,7 @@ class PolicyComponent extends React.Component {
 
     this.props.loadAlerts();
 
-    this.setState(({alert_ids}) => ({alert_ids: [data.id, ...alert_ids]}));
+    this.setState(({alertIds}) => ({alertIds: [data.id, ...alertIds]}));
   }
 
   handleScheduleCreated(resp) {
@@ -156,7 +156,7 @@ class PolicyComponent extends React.Component {
 
     this.props.loadSchedules();
 
-    this.setState({schedule_id: data.id});
+    this.setState({scheduleId: data.id});
   }
 
   handleTargetCreated(resp) {
@@ -164,7 +164,7 @@ class PolicyComponent extends React.Component {
 
     this.props.loadTargets();
 
-    this.setState({target_id: data.id});
+    this.setState({targetId: data.id});
   }
 
   openEditPolicyDialog(policy) {
@@ -234,26 +234,26 @@ class PolicyComponent extends React.Component {
 
     const {defaultAlertId, defaultScheduleId, defaultTargetId} = this.props;
 
-    const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
+    const alertIds = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
     this.setState({
       createAuditDialogVisible: true,
-      alert_ids,
+      alertIds,
       alterable: undefined,
       auto_delete: undefined,
       auto_delete_data: undefined,
       comment: '',
       policy_id: isDefined(policy) ? policy.id : undefined,
-      hosts_ordering: undefined,
+      hostsOrdering: undefined,
       id: undefined,
       in_assets: undefined,
-      max_checks: undefined,
-      max_hosts: undefined,
+      maxChecks: undefined,
+      maxHosts: undefined,
       name: undefined,
-      schedule_id: defaultScheduleId,
-      schedule_periods: undefined,
-      source_iface: undefined,
-      target_id: defaultTargetId,
+      scheduleId: defaultScheduleId,
+      schedulePeriods: undefined,
+      sourceIface: undefined,
+      targetId: defaultTargetId,
       title: _('New Audit'),
     });
 
@@ -270,59 +270,59 @@ class PolicyComponent extends React.Component {
   }
 
   handleSaveAudit({
-    alert_ids,
+    alertIds,
     alterable,
     auto_delete,
     auto_delete_data,
     comment,
-    hosts_ordering,
+    hostsOrdering,
     in_assets,
-    max_checks,
-    max_hosts,
+    maxChecks,
+    maxHosts,
     name,
-    schedule_id,
-    schedule_periods,
-    source_iface,
-    target_id,
+    scheduleId,
+    schedulePeriods,
+    sourceIface,
+    targetId,
   }) {
     const {gmp} = this.props;
-    const config_id = this.state.policy_id;
+    const policyId = this.state.policy_id;
 
-    const scanner_id = OPENVAS_DEFAULT_SCANNER_ID;
-    const scanner_type = OPENVAS_SCANNER_TYPE;
+    const scannerId = OPENVAS_DEFAULT_SCANNER_ID;
+    const scannerType = OPENVAS_SCANNER_TYPE;
 
-    const tag_id = undefined;
-    const add_tag = NO_VALUE;
+    const tagId = undefined;
+    const addTag = NO_VALUE;
 
-    const apply_overrides = YES_VALUE;
-    const min_qod = DEFAULT_MIN_QOD;
+    const applyOverrides = YES_VALUE;
+    const minQod = DEFAULT_MIN_QOD;
 
     this.handleInteraction();
 
     const {onCreated, onCreateError} = this.props;
     return gmp.audit
       .create({
-        add_tag,
-        alert_ids,
+        addTag,
+        alertIds,
         alterable,
-        apply_overrides,
-        auto_delete,
-        auto_delete_data,
+        applyOverrides,
+        autoDelete: auto_delete,
+        autoDeleteData: auto_delete_data,
         comment,
-        config_id,
-        hosts_ordering,
-        in_assets,
-        max_checks,
-        max_hosts,
-        min_qod,
+        policyId,
+        hostsOrdering,
+        inAssets: in_assets,
+        maxChecks,
+        maxHosts,
+        minQod,
         name,
-        scanner_type,
-        scanner_id,
-        schedule_id,
-        schedule_periods,
-        source_iface,
-        tag_id,
-        target_id,
+        scannerType,
+        scannerId,
+        scheduleId,
+        schedulePeriods,
+        sourceIface,
+        tagId,
+        targetId,
       })
       .then(onCreated, onCreateError)
       .then(() => this.closeCreateAuditDialog());
@@ -593,7 +593,7 @@ class PolicyComponent extends React.Component {
     } = this.props;
 
     const {
-      alert_ids,
+      alertIds,
       alterable,
       auto_delete,
       auto_delete_data,
@@ -610,13 +610,13 @@ class PolicyComponent extends React.Component {
       editNvtDetailsDialogTitle,
       families,
       family_name,
-      hosts_ordering,
+      hostsOrdering,
       id,
       importDialogVisible,
       in_assets,
       manual_timeout,
-      max_checks,
-      max_hosts,
+      maxChecks,
+      maxHosts,
       name,
       nvt,
       nvts,
@@ -624,12 +624,12 @@ class PolicyComponent extends React.Component {
       scanner_id,
       scanner_preference_values,
       scanners,
-      schedule_id,
-      schedule_periods,
-      source_iface,
+      scheduleId,
+      schedulePeriods,
+      sourceIface,
       select,
       selected,
-      target_id,
+      targetId,
       timeout,
       title,
       trend,
@@ -678,22 +678,22 @@ class PolicyComponent extends React.Component {
                           {({create: createschedule}) => (
                             <AuditDialog
                               alerts={alerts}
-                              alert_ids={alert_ids}
+                              alertIds={alertIds}
                               alterable={alterable}
                               auto_delete={auto_delete}
                               auto_delete_data={auto_delete_data}
                               comment={comment}
-                              hosts_ordering={hosts_ordering}
+                              hostsOrdering={hostsOrdering}
                               id={id}
                               in_assets={in_assets}
-                              max_checks={max_checks}
-                              max_hosts={max_hosts}
+                              maxChecks={maxChecks}
+                              maxHosts={maxHosts}
                               name={name}
-                              schedule_id={schedule_id}
-                              schedule_periods={schedule_periods}
+                              scheduleId={scheduleId}
+                              schedulePeriods={schedulePeriods}
                               schedules={schedules}
-                              source_iface={source_iface}
-                              target_id={target_id}
+                              sourceIface={sourceIface}
+                              targetId={targetId}
                               targets={targets}
                               title={title}
                               onAlertsChange={this.handleAlertsChange}

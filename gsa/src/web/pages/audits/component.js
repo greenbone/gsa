@@ -153,16 +153,20 @@ class AuditComponent extends React.Component {
     }
   }
 
-  handleTargetChange(target_id) {
-    this.setState({target_id});
+  handleTargetChange(targetId) {
+    this.setState({targetId});
   }
 
-  handleAlertsChange(alert_ids) {
-    this.setState({alert_ids});
+  handleAlertsChange(alertIds) {
+    this.setState({alertIds});
   }
 
-  handleScheduleChange(schedule_id) {
-    this.setState({schedule_id});
+  handleScheduleChange(scheduleId) {
+    this.setState({scheduleId});
+  }
+
+  handlePolicyChange(policyId) {
+    this.setState({policyId});
   }
 
   handleAuditStart(audit) {
@@ -194,7 +198,7 @@ class AuditComponent extends React.Component {
 
     this.props.loadAlerts();
 
-    this.setState(({alert_ids}) => ({alert_ids: [data.id, ...alert_ids]}));
+    this.setState(({alertIds}) => ({alertIds: [data.id, ...alertIds]}));
   }
 
   handleScheduleCreated(resp) {
@@ -202,7 +206,7 @@ class AuditComponent extends React.Component {
 
     this.props.loadSchedules();
 
-    this.setState({schedule_id: data.id});
+    this.setState({scheduleId: data.id});
   }
 
   handleTargetCreated(resp) {
@@ -210,38 +214,38 @@ class AuditComponent extends React.Component {
 
     this.props.loadTargets();
 
-    this.setState({target_id: data.id});
+    this.setState({targetId: data.id});
   }
 
   handleSaveAudit({
-    alert_ids,
+    alertIds,
     alterable,
     auto_delete,
     auto_delete_data,
     comment,
-    policy_id,
-    hosts_ordering,
+    policyId,
+    hostsOrdering,
     id,
     in_assets,
-    max_checks,
-    max_hosts,
+    maxChecks,
+    maxHosts,
     name,
-    schedule_id,
-    schedule_periods,
-    source_iface,
-    target_id,
+    scheduleId,
+    schedulePeriods,
+    sourceIface,
+    targetId,
     audit,
   }) {
     const {gmp} = this.props;
 
-    let scanner_id = OPENVAS_DEFAULT_SCANNER_ID;
-    const scanner_type = OPENVAS_SCANNER_TYPE;
+    let scannerId = OPENVAS_DEFAULT_SCANNER_ID;
+    const scannerType = OPENVAS_SCANNER_TYPE;
 
-    const tag_id = undefined;
-    const add_tag = NO_VALUE;
+    const tagId = undefined;
+    const addTag = NO_VALUE;
 
-    const apply_overrides = YES_VALUE;
-    const min_qod = DEFAULT_MIN_QOD;
+    const applyOverrides = YES_VALUE;
+    const minQod = DEFAULT_MIN_QOD;
 
     this.handleInteraction();
 
@@ -249,33 +253,33 @@ class AuditComponent extends React.Component {
       // save edit part
       if (isDefined(audit) && !audit.isChangeable()) {
         // arguments need to be undefined if the audit is not changeable
-        target_id = undefined;
-        scanner_id = undefined;
-        policy_id = undefined;
+        targetId = undefined;
+        scannerId = undefined;
+        policyId = undefined;
       }
       const {onSaved, onSaveError} = this.props;
       return gmp.audit
         .save({
-          alert_ids,
+          alertIds,
           alterable,
-          auto_delete,
-          auto_delete_data,
-          apply_overrides,
+          autoDelete: auto_delete,
+          autoDeleteData: auto_delete_data,
+          applyOverrides,
           comment,
-          config_id: policy_id,
-          hosts_ordering,
+          policyId,
+          hostsOrdering,
           id,
-          in_assets,
-          max_checks,
-          max_hosts,
-          min_qod,
+          inAssets: in_assets,
+          maxChecks,
+          maxHosts,
+          minQod,
           name,
-          scanner_id,
-          scanner_type,
-          schedule_id,
-          schedule_periods,
-          target_id,
-          source_iface,
+          scannerId,
+          scannerType,
+          scheduleId,
+          schedulePeriods,
+          targetId,
+          sourceIface,
         })
         .then(onSaved, onSaveError)
         .then(() => this.closeAuditDialog());
@@ -284,27 +288,27 @@ class AuditComponent extends React.Component {
     const {onCreated, onCreateError} = this.props;
     return gmp.audit
       .create({
-        add_tag,
-        alert_ids,
+        addTag,
+        alertIds,
         alterable,
-        apply_overrides,
-        auto_delete,
-        auto_delete_data,
+        applyOverrides,
+        autoDelete: auto_delete,
+        autoDeleteData: auto_delete_data,
         comment,
-        config_id: policy_id,
-        hosts_ordering,
-        in_assets,
-        max_checks,
-        max_hosts,
-        min_qod,
+        policyId,
+        hostsOrdering,
+        inAssets: in_assets,
+        maxChecks,
+        maxHosts,
+        minQod,
         name,
-        scanner_type,
-        scanner_id,
-        schedule_id,
-        schedule_periods,
-        source_iface,
-        tag_id,
-        target_id,
+        scannerType,
+        scannerId,
+        scheduleId,
+        schedulePeriods,
+        sourceIface,
+        tagId,
+        targetId: targetId,
       })
       .then(onCreated, onCreateError)
       .then(() => this.closeAuditDialog());
@@ -330,32 +334,32 @@ class AuditComponent extends React.Component {
     if (isDefined(audit)) {
       const canAccessSchedules =
         capabilities.mayAccess('schedules') && isDefined(audit.schedule);
-      const schedule_id = canAccessSchedules ? audit.schedule.id : UNSET_VALUE;
-      const schedule_periods = canAccessSchedules
+      const scheduleId = canAccessSchedules ? audit.schedule.id : UNSET_VALUE;
+      const schedulePeriods = canAccessSchedules
         ? audit.schedule_periods
         : undefined;
 
       this.setState({
         auditDialogVisible: true,
-        alert_ids: map(audit.alerts, alert => alert.id),
+        alertIds: map(audit.alerts, alert => alert.id),
         alterable: audit.alterable,
-        apply_overrides: audit.apply_overrides,
+        applyOverrides: audit.apply_overrides,
         auto_delete: audit.auto_delete,
         auto_delete_data: audit.auto_delete_data,
         comment: audit.comment,
-        policy_id: hasId(audit.config) ? audit.config.id : undefined,
-        hosts_ordering: audit.hosts_ordering,
+        policyId: hasId(audit.config) ? audit.config.id : undefined,
+        hostsOrdering: audit.hosts_ordering,
         id: audit.id,
         in_assets: audit.in_assets,
-        max_checks: audit.max_checks,
-        max_hosts: audit.max_hosts,
-        min_qod: audit.min_qod,
+        maxChecks: audit.max_checks,
+        maxHosts: audit.max_hosts,
+        minQod: audit.min_qod,
         name: audit.name,
-        scanner_id: hasId(audit.scanner) ? audit.scanner.id : undefined,
-        schedule_id,
-        schedule_periods,
-        source_iface: audit.source_iface,
-        target_id: hasId(audit.target) ? audit.target.id : undefined,
+        scannerId: hasId(audit.scanner) ? audit.scanner.id : undefined,
+        scheduleId,
+        schedulePeriods,
+        sourceIface: audit.source_iface,
+        targetId: hasId(audit.target) ? audit.target.id : undefined,
         audit,
         title: _('Edit Audit {{name}}', audit),
       });
@@ -367,32 +371,32 @@ class AuditComponent extends React.Component {
         defaultTargetId,
       } = this.props;
 
-      const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
+      const alertIds = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
       const defaultScannerType = OPENVAS_SCANNER_TYPE;
 
       this.setState({
         auditDialogVisible: true,
-        alert_ids,
+        alertIds,
         alterable: undefined,
-        apply_overrides: undefined,
+        applyOverrides: undefined,
         auto_delete: undefined,
         auto_delete_data: undefined,
         comment: undefined,
-        policy_id: undefined,
-        hosts_ordering: undefined,
+        policyId: undefined,
+        hostsOrdering: undefined,
         id: undefined,
         in_assets: undefined,
-        max_checks: undefined,
-        max_hosts: undefined,
-        min_qod: undefined,
+        maxChecks: undefined,
+        maxHosts: undefined,
+        minQod: undefined,
         name: undefined,
-        scanner_id: defaultScannerId,
+        scannerId: defaultScannerId,
         scanner_type: defaultScannerType,
-        schedule_id: defaultScheduleId,
-        schedule_periods: undefined,
-        source_iface: undefined,
-        target_id: defaultTargetId,
+        scheduleId: defaultScheduleId,
+        schedulePeriods: undefined,
+        sourceIface: undefined,
+        targetId: defaultTargetId,
         audit: undefined,
         title: _('New Audit'),
       });
@@ -411,12 +415,12 @@ class AuditComponent extends React.Component {
   handleReportDownload(state, audit) {
     const {gmp, reportFormats = [], onDownload} = this.props;
 
-    const report_format = reportFormats.find(
+    const reportFormat = reportFormats.find(
       format => format.name === 'GCR PDF',
     );
 
-    const extension = isDefined(report_format)
-      ? report_format.extension
+    const extension = isDefined(reportFormat)
+      ? reportFormat.extension
       : 'unknown'; // unknown should never happen but we should be save here
 
     this.handleInteraction();
@@ -427,7 +431,7 @@ class AuditComponent extends React.Component {
       .download(
         {id},
         {
-          reportFormatId: report_format.id,
+          reportFormatId: reportFormat.id,
           deltaReportId: undefined,
           filter: undefined,
         },
@@ -437,10 +441,6 @@ class AuditComponent extends React.Component {
         const filename = 'report-' + id + '.' + extension;
         onDownload({filename, data});
       }, this.handleError);
-  }
-
-  handlePolicyChange(policy_id) {
-    this.setState({policy_id});
   }
 
   render() {
@@ -462,23 +462,23 @@ class AuditComponent extends React.Component {
     } = this.props;
 
     const {
-      alert_ids,
+      alertIds,
       alterable,
       auto_delete,
       auto_delete_data,
-      policy_id,
+      policyId,
       comment,
-      hosts_ordering,
+      hostsOrdering,
       id,
       in_assets,
       gcrFormatDefined,
-      max_checks,
-      max_hosts,
+      maxChecks,
+      maxHosts,
       name,
-      schedule_id,
-      schedule_periods,
-      source_iface,
-      target_id,
+      scheduleId,
+      schedulePeriods,
+      sourceIface,
+      targetId,
       audit,
       auditDialogVisible,
       title = _('Edit Audit {{name}}', audit),
@@ -528,24 +528,24 @@ class AuditComponent extends React.Component {
                           {({create: createschedule}) => (
                             <AuditDialog
                               alerts={alerts}
-                              alert_ids={alert_ids}
+                              alertIds={alertIds}
                               alterable={alterable}
                               auto_delete={auto_delete}
                               auto_delete_data={auto_delete_data}
                               comment={comment}
-                              policy_id={policy_id}
-                              hosts_ordering={hosts_ordering}
+                              policyId={policyId}
+                              hostsOrdering={hostsOrdering}
                               id={id}
                               in_assets={in_assets}
-                              max_checks={max_checks}
-                              max_hosts={max_hosts}
+                              maxChecks={maxChecks}
+                              maxHosts={maxHosts}
                               name={name}
                               policies={policies}
-                              schedule_id={schedule_id}
-                              schedule_periods={schedule_periods}
+                              scheduleId={scheduleId}
+                              schedulePeriods={schedulePeriods}
                               schedules={schedules}
-                              source_iface={source_iface}
-                              target_id={target_id}
+                              sourceIface={sourceIface}
+                              targetId={targetId}
                               targets={targets}
                               audit={audit}
                               title={title}

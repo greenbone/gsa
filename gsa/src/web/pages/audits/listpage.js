@@ -78,7 +78,7 @@ const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => (
     {({
       clone,
       create,
-      delete: delete_func,
+      delete: deleteFunc,
       download,
       edit,
       start,
@@ -102,7 +102,7 @@ const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => (
         onReportImportClick={reportimport}
         onAuditCloneClick={clone}
         onAuditCreateClick={create}
-        onAuditDeleteClick={delete_func}
+        onAuditDeleteClick={deleteFunc}
         onAuditDownloadClick={download}
         onAuditEditClick={edit}
         onAuditResumeClick={resume}

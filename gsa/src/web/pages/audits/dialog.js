@@ -58,25 +58,25 @@ const DEFAULT_MAX_CHECKS = 4;
 const DEFAULT_MAX_HOSTS = 20;
 
 const AuditDialog = ({
-  alert_ids = [],
+  alertIds = [],
   alerts = [],
   alterable = NO_VALUE,
   auto_delete = AUTO_DELETE_NO,
   auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   capabilities,
   comment = '',
-  policy_id,
-  hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
+  policyId,
+  hostsOrdering = HOSTS_ORDERING_SEQUENTIAL,
   in_assets = YES_VALUE,
-  max_checks = DEFAULT_MAX_CHECKS,
-  max_hosts = DEFAULT_MAX_HOSTS,
+  maxChecks = DEFAULT_MAX_CHECKS,
+  maxHosts = DEFAULT_MAX_HOSTS,
   name = _('Unnamed'),
   policies = [],
-  schedule_id = UNSET_VALUE,
-  schedule_periods = NO_VALUE,
+  scheduleId = UNSET_VALUE,
+  schedulePeriods = NO_VALUE,
   schedules = [],
-  source_iface = '',
-  target_id,
+  sourceIface = '',
+  targetId,
   targets,
   audit,
   title = _('New Audit'),
@@ -91,13 +91,13 @@ const AuditDialog = ({
   onTargetChange,
   ...data
 }) => {
-  const target_items = renderSelectItems(targets);
+  const targetItems = renderSelectItems(targets);
 
-  const schedule_items = renderSelectItems(schedules, UNSET_VALUE);
+  const scheduleItems = renderSelectItems(schedules, UNSET_VALUE);
 
   const policyItems = renderSelectItems(policies);
 
-  const alert_items = renderSelectItems(alerts);
+  const alertItems = renderSelectItems(alerts);
 
   // having an audit means we are editing an audit
   const hasAudit = isDefined(audit);
@@ -110,20 +110,20 @@ const AuditDialog = ({
     auto_delete,
     auto_delete_data,
     comment,
-    hosts_ordering,
+    hostsOrdering,
     in_assets,
-    max_checks,
-    max_hosts,
+    maxChecks,
+    maxHosts,
     name,
-    source_iface,
+    sourceIface,
     audit,
   };
 
   const controlledData = {
-    alert_ids,
-    policy_id,
-    schedule_id,
-    target_id,
+    alertIds,
+    policyId,
+    scheduleId,
+    targetId,
   };
 
   return (
@@ -135,7 +135,7 @@ const AuditDialog = ({
       values={controlledData}
     >
       {({values: state, onValueChange}) => {
-        const policyId = selectSaveId(policies, state.policy_id);
+        const currentPolicyId = selectSaveId(policies, state.policyId);
 
         return (
           <Layout flex="column">
@@ -162,10 +162,10 @@ const AuditDialog = ({
             <FormGroup title={_('Scan Targets')}>
               <Divider>
                 <Select
-                  name="target_id"
+                  name="targetId"
                   disabled={!changeAudit}
-                  items={target_items}
-                  value={state.target_id}
+                  items={targetItems}
+                  value={state.targetId}
                   onChange={onTargetChange}
                 />
                 {changeAudit && (
@@ -183,9 +183,9 @@ const AuditDialog = ({
               <FormGroup title={_('Alerts')}>
                 <Divider>
                   <MultiSelect
-                    name="alert_ids"
-                    items={alert_items}
-                    value={state.alert_ids}
+                    name="alertIds"
+                    items={alertItems}
+                    value={state.alertIds}
                     onChange={onAlertsChange}
                   />
                   <Layout>
@@ -202,14 +202,14 @@ const AuditDialog = ({
               <FormGroup title={_('Schedule')}>
                 <Divider>
                   <Select
-                    name="schedule_id"
-                    value={state.schedule_id}
-                    items={schedule_items}
+                    name="scheduleId"
+                    value={state.scheduleId}
+                    items={scheduleItems}
                     onChange={onScheduleChange}
                   />
                   <Checkbox
-                    name="schedule_periods"
-                    checked={state.schedule_periods === YES_VALUE}
+                    name="schedulePeriods"
+                    checked={state.schedulePeriods === YES_VALUE}
                     checkedValue={YES_VALUE}
                     unCheckedValue={NO_VALUE}
                     title={_('Once')}
@@ -250,23 +250,23 @@ const AuditDialog = ({
             <Layout flex="column" grow="1">
               <FormGroup titleSize="2" title={_('Policy')}>
                 <Select
-                  name="policy_id"
+                  name="policyId"
                   disabled={!changeAudit || hasAudit}
                   items={policyItems}
-                  value={policyId}
+                  value={currentPolicyId}
                   onChange={onPolicyChange}
                 />
               </FormGroup>
               <FormGroup titleSize="4" title={_('Network Source Interface')}>
                 <TextField
-                  name="source_iface"
-                  value={state.source_iface}
+                  name="sourceIface"
+                  value={state.sourceIface}
                   onChange={onValueChange}
                 />
               </FormGroup>
               <FormGroup titleSize="4" title={_('Order for target hosts')}>
                 <Select
-                  name="hosts_ordering"
+                  name="hostsOrdering"
                   items={[
                     {
                       value: 'sequential',
@@ -281,7 +281,7 @@ const AuditDialog = ({
                       label: _('Reverse'),
                     },
                   ]}
-                  value={state.hosts_ordering}
+                  value={state.hostsOrdering}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -290,11 +290,11 @@ const AuditDialog = ({
                 title={_('Maximum concurrently executed NVTs per host')}
               >
                 <Spinner
-                  name="max_checks"
+                  name="maxChecks"
                   size="10"
                   min="0"
                   maxLength="10"
-                  value={state.max_checks}
+                  value={state.maxChecks}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -303,12 +303,12 @@ const AuditDialog = ({
                 title={_('Maximum concurrently scanned hosts')}
               >
                 <Spinner
-                  name="max_hosts"
+                  name="maxHosts"
                   type="int"
                   min="0"
                   size="10"
                   maxLength="10"
-                  value={state.max_hosts}
+                  value={state.maxHosts}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -321,7 +321,7 @@ const AuditDialog = ({
 };
 
 AuditDialog.propTypes = {
-  alert_ids: PropTypes.array,
+  alertIds: PropTypes.array,
   alerts: PropTypes.array,
   alterable: PropTypes.yesno,
   audit: PropTypes.model,
@@ -329,18 +329,18 @@ AuditDialog.propTypes = {
   auto_delete_data: PropTypes.number,
   capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
-  hosts_ordering: PropTypes.oneOf(['sequential', 'random', 'reverse']),
+  hostsOrdering: PropTypes.oneOf(['sequential', 'random', 'reverse']),
   in_assets: PropTypes.yesno,
-  max_checks: PropTypes.number,
-  max_hosts: PropTypes.number,
+  maxChecks: PropTypes.number,
+  maxHosts: PropTypes.number,
   name: PropTypes.string,
   policies: PropTypes.arrayOf(PropTypes.model),
-  policy_id: PropTypes.idOrZero,
-  schedule_id: PropTypes.idOrZero,
-  schedule_periods: PropTypes.yesno,
+  policyId: PropTypes.idOrZero,
+  scheduleId: PropTypes.idOrZero,
+  schedulePeriods: PropTypes.yesno,
   schedules: PropTypes.array,
-  source_iface: PropTypes.string,
-  target_id: PropTypes.idOrZero,
+  sourceIface: PropTypes.string,
+  targetId: PropTypes.idOrZero,
   targets: PropTypes.array,
   title: PropTypes.string,
   onAlertsChange: PropTypes.func.isRequired,
