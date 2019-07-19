@@ -38,6 +38,7 @@ import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import SeverityLevelsGroup from 'web/components/powerfilter/severitylevelsgroup';
+import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
 
 /* eslint-enable */
@@ -100,6 +101,13 @@ const FilterDialog = ({
       />
 
       <SeverityLevelsGroup filter={filter} onChange={onFilterValueChange} />
+
+      <SeverityValuesGroup
+        name="severity"
+        title={_('Severity')}
+        filter={filter}
+        onChange={onFilterValueChange}
+      />
 
       <SolutionTypeGroup filter={filter} onChange={onFilterValueChange} />
 
