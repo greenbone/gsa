@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- Added HorizontalSep component for horizontal lists. [#1494](https://github.com/greenbone/gsa/pull/1494)
 - Added grow option to multiselect component [#1485](https://github.com/greenbone/gsa/pull/1485)
 - Add LogoutIcon [#1481](https://github.com/greenbone/gsa/pull/1481)
 - Added a component "SeverityValuesGroup" enabling user choose the relation they want [#1477](https://github.com/greenbone/gsa/pull/1477)
