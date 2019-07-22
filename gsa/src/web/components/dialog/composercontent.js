@@ -42,7 +42,7 @@ export const COMPOSER_CONTENT_DEFAULTS = {
 
 const FilterField = styled.div`
   display: block;
-  height: 22px;
+  min-height: 22px;
   color: ${Theme.darkGray};
   border: 1px solid ${Theme.inputBorderGray};
   border-radius: 2px;
