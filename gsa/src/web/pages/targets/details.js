@@ -39,6 +39,8 @@ import TableRow from 'web/components/table/row';
 import DetailsBlock from 'web/entity/block';
 import {Col} from 'web/entity/page';
 
+import HorizontalSep from 'web/components/layout/horizontalsep';
+
 const MAX_HOSTS_LISTINGS = 70;
 
 const TargetDetails = ({capabilities, entity, links = true}) => {
@@ -203,7 +205,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
           <Divider>
             {tasks.map((task, index) => (
               <DetailsLink key={task.id} id={task.id} type="task">
-                {index > 0 && <>&bull;&ensp;</>}
+                {index > 0 && <HorizontalSep />}
                 {task.name}
               </DetailsLink>
             ))}

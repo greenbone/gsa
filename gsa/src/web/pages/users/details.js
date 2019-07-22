@@ -41,6 +41,8 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
+import HorizontalSep from 'web/components/layout/horizontalsep';
+
 export const convert_auth_method = auth_method => {
   if (auth_method === AUTH_METHOD_LDAP) {
     return _('LDAP');
@@ -104,7 +106,7 @@ const UserDetails = ({entity, links = true}) => {
                     type="role"
                     id={role.id}
                   >
-                    {index > 0 && <>&bull;&ensp;</>}
+                    {index > 0 && <HorizontalSep />}
                     {role.name}
                   </DetailsLink>
                 ))}
@@ -123,7 +125,7 @@ const UserDetails = ({entity, links = true}) => {
                     key={group.id}
                     id={group.id}
                   >
-                    {index > 0 && <>&bull;&ensp;</>}
+                    {index > 0 && <HorizontalSep />}
                     {group.name}
                   </DetailsLink>
                 ))}

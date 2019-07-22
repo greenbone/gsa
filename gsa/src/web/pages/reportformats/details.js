@@ -99,10 +99,9 @@ const ReportFormatDetails = ({entity, links = true}) => {
                 {_('Alerts using this Report Format')}
               </TableDataAlignTop>
               <TableData>
-                {alerts.map((alert, index) => (
+                {alerts.map(alert => (
                   <span key={alert.id}>
                     <DetailsLink id={alert.id} type="alert">
-                      {index > 0 && <>&bull;&ensp;</>}
                       {alert.name}
                     </DetailsLink>
                   </span>
