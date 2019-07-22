@@ -56,6 +56,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Displaying delta information at result details [#1499](https://github.com/greenbone/gsa/pull/1499)
 - Don't crash Alerts listpage and trashcan when Alert data is missing [#1498](https://github.com/greenbone/gsa/pull/1498)
 - Show full filter term in content composer [#1496](https://github.com/greenbone/gsa/pull/1496)
 - Fix finding python modules
