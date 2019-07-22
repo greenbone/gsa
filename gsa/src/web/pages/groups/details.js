@@ -32,6 +32,8 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
+import HorizontalSep from 'web/components/layout/horizontalsep';
+
 const GroupDetails = ({entity, links}) => {
   const {users = [], comment} = entity;
   return (
@@ -53,7 +55,7 @@ const GroupDetails = ({entity, links}) => {
               <Divider>
                 {users.map((user, index) => (
                   <span key={user}>
-                    {index > 0 && <>&bull;&ensp;</>}
+                    {index > 0 && <HorizontalSep />}
                     {user}
                   </span>
                 ))}

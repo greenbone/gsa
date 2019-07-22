@@ -58,6 +58,8 @@ import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
 
+import HorizontalSep from 'web/components/layout/horizontalsep';
+
 const compareAlerts = (alertA, alertB) => {
   const nameA = alertA.name.toLowerCase();
   const nameB = alertB.name.toLowerCase();
@@ -139,7 +141,7 @@ class TaskDetails extends React.Component {
                   type="alert"
                   id={alert.id}
                 >
-                  {index > 0 && <>&bull;&ensp;</>}
+                  {index > 0 && <HorizontalSep />}
                   {alert.name}
                 </DetailsLink>
               ))}

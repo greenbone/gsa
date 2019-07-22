@@ -43,6 +43,8 @@ import NoteBox from 'web/entity/note';
 
 import {Col} from 'web/entity/page';
 
+import HorizontalSep from 'web/components/layout/horizontalsep';
+
 const NoteDetails = ({entity}) => {
   const {hosts, port, result, severity, task} = entity;
   return (
@@ -61,7 +63,7 @@ const NoteDetails = ({entity}) => {
                   <Divider>
                     {hosts.map((host, index) => (
                       <span key={host}>
-                        {index > 0 && <>&bull;&ensp;</>}
+                        {index > 0 && <HorizontalSep />}
                         {host}
                       </span>
                     ))}
