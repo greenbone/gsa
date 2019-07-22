@@ -263,7 +263,7 @@ class CvssCalculator extends React.Component {
                 label: _('None'),
               },
               {
-                value: 'SINGLE_INSTANCES',
+                value: 'SINGLE_INSTANCE',
                 label: _('Single'),
               },
               {
