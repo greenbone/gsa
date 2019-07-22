@@ -193,11 +193,11 @@ export class Menu extends React.Component {
   render() {
     const {target, ...props} = this.props;
 
-    if (!hasValue(target)) {
+    if (!hasValue(target) || target.current === null) {
       return null;
     }
 
-    const rect = target.getBoundingClientRect();
+    const rect = target.current.getBoundingClientRect();
     const {height, width, right, left, top} = rect;
 
     return (
@@ -216,7 +216,7 @@ export class Menu extends React.Component {
 }
 
 Menu.propTypes = {
-  target: PropTypes.object,
+  target: PropTypes.ref,
 };
 
 export const SelectContainer = styled.div`
