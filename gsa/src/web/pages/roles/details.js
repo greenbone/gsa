@@ -29,6 +29,7 @@ import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 
 import {Col} from 'web/entity/page';
 
@@ -53,7 +54,7 @@ const RoleDetails = ({entity, links = true}) => {
               <Divider>
                 {users.map((user, index) => (
                   <span key={user}>
-                    {index > 0 && <>&bull;&ensp;</>}
+                    {index > 0 && <HorizontalSep />}
                     {user}
                   </span>
                 ))}
