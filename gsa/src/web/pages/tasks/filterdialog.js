@@ -132,6 +132,13 @@ const TaskFilterDialogComponent = ({
       <TaskTrendGroup filter={filter} onChange={onFilterValueChange} />
 
       <FilterSearchGroup
+        name="schedule"
+        title={_('Schedule')}
+        filter={filter}
+        onChange={onSearchTermChange}
+      />
+
+      <FilterSearchGroup
         name="comment"
         title={_('Comment')}
         filter={filter}

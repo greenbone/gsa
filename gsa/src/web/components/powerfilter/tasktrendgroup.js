@@ -30,7 +30,7 @@ import FormGroup from '../form/formgroup.js';
 import Select from 'web/components/form/select';
 
 const TaskTrendGroup = ({trend, name = 'trend', filter, onChange}) => {
-  if (!isDefined(filter)) {
+  if (!isDefined(trend) && isDefined(filter)) {
     trend = filter.get('trend');
   }
   return (
@@ -52,8 +52,10 @@ const TaskTrendGroup = ({trend, name = 'trend', filter, onChange}) => {
 };
 
 TaskTrendGroup.propTypes = {
-  relation: PropTypes.string,
-  onChange: PropTypes.func,
+  filter: PropTypes.filter.isRequired,
+  name: PropTypes.string,
+  trend: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default TaskTrendGroup;
