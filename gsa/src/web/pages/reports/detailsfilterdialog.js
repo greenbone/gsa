@@ -40,6 +40,7 @@ import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import SeverityLevelsGroup from 'web/components/powerfilter/severitylevelsgroup';
 import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 
 /* eslint-enable */
 
@@ -54,6 +55,7 @@ const FilterDialog = ({
   filterstring,
   onFilterStringChange,
   onFilterValueChange,
+  onSearchTermChange,
   capabilities,
   filterName,
   saveNamedFilter,
@@ -110,6 +112,27 @@ const FilterDialog = ({
       />
 
       <SolutionTypeGroup filter={filter} onChange={onFilterValueChange} />
+
+      <FilterSearchGroup
+        name="vulnerability"
+        filter={filter}
+        title={_('Vulnerability')}
+        onChange={onSearchTermChange}
+      />
+
+      <FilterSearchGroup
+        name="host"
+        filter={filter}
+        title={_('Host (IP)')}
+        onChange={onSearchTermChange}
+      />
+
+      <FilterSearchGroup
+        name="location"
+        filter={filter}
+        title={_('Location (eg. port/protocol)')}
+        onChange={onSearchTermChange}
+      />
 
       <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 

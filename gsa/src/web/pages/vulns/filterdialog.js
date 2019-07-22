@@ -70,7 +70,7 @@ const SORT_FIELDS = [
   },
 ];
 
-const NotesFilterDialogComponent = ({
+const VulnsFilterDialogComponent = ({
   capabilities,
   filter,
   filterName,
@@ -134,11 +134,11 @@ const NotesFilterDialogComponent = ({
   </Layout>
 );
 
-NotesFilterDialogComponent.propTypes = FilterDialogPropTypes;
+VulnsFilterDialogComponent.propTypes = FilterDialogPropTypes;
 
 export default compose(
   withCapabilities,
   withFilterDialog(),
-)(NotesFilterDialogComponent);
+)(VulnsFilterDialogComponent);
 
 // vim: set ts=2 sw=2 tw=80:
