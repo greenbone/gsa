@@ -157,7 +157,7 @@ const getScrollX = () =>
 const getScrollY = () =>
   isDefined(window.scrollY) ? window.scrollY : window.pageYOffset;
 
-export class Menu extends React.Component {
+class MenuComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
@@ -191,7 +191,7 @@ export class Menu extends React.Component {
   }
 
   render() {
-    const {target, ...props} = this.props;
+    const {target, forwardedRef, ...props} = this.props;
 
     if (!hasValue(target) || target.current === null) {
       return null;
@@ -205,6 +205,7 @@ export class Menu extends React.Component {
         <MenuContainer
           data-testid="select-menu"
           {...props}
+          ref={forwardedRef}
           right={document.body.clientWidth - right}
           width={width}
           x={left + getScrollX()}
@@ -215,9 +216,14 @@ export class Menu extends React.Component {
   }
 }
 
-Menu.propTypes = {
+MenuComponent.propTypes = {
+  forwardedRef: PropTypes.ref,
   target: PropTypes.ref,
 };
+
+export const Menu = React.forwardRef((props, ref) => (
+  <MenuComponent {...props} forwardedRef={ref} />
+));
 
 export const SelectContainer = styled.div`
   display: flex;
