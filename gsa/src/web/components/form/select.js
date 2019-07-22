@@ -105,6 +105,7 @@ class Select extends React.Component {
     };
 
     this.input = React.createRef();
+    this.box = React.createRef();
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -159,10 +160,11 @@ class Select extends React.Component {
         onSelect={this.handleSelect}
       >
         {({
-          getButtonProps,
           getInputProps,
           getItemProps,
+          getMenuProps,
           getRootProps,
+          getToggleButtonProps,
           highlightedIndex,
           inputValue,
           isOpen,
@@ -173,15 +175,11 @@ class Select extends React.Component {
           const label = find_label(items, selectedItem);
           return (
             <SelectContainer
-              {...getRootProps({}, {suppressRefError: true})}
+              {...getRootProps({})}
               className={className}
               width={width}
             >
-              <Box
-                isOpen={isOpen}
-                title={toolTipTitle}
-                ref={ref => (this.box = ref)}
-              >
+              <Box isOpen={isOpen} title={toolTipTitle} ref={this.box}>
                 <SingleSelectedValue
                   data-testid="select-selected-value"
                   disabled={disabled}
@@ -191,12 +189,12 @@ class Select extends React.Component {
                 </SingleSelectedValue>
                 <Layout align={['center', 'center']}>
                   <ArrowIcon
-                    {...getButtonProps({
+                    {...getToggleButtonProps({
                       disabled,
                       onClick: isOpen
                         ? undefined
                         : event => {
-                            event.preventDefault(); // don't call default handler from downshift
+                            event.preventDownshiftDefault = true; // don't call default handler from downshift
                             openMenu(() => {
                               const {current: input} = this.input;
                               input !== null && input.focus();
@@ -204,20 +202,23 @@ class Select extends React.Component {
                           },
                     })}
                     data-testid="select-open-button"
-                    disabled={disabled}
                     down={!isOpen}
                     size="small"
                   />
                 </Layout>
               </Box>
               {isOpen && !disabled && (
-                <Menu position={menuPosition} target={this.box}>
+                <Menu
+                  {...getMenuProps({})}
+                  position={menuPosition}
+                  target={this.box}
+                >
                   <Input
                     {...getInputProps({
                       value: search,
+                      disabled,
                       onChange: this.handleSearch,
                     })}
-                    disabled={disabled}
                     ref={this.input}
                   />
                   <ItemContainer>
@@ -227,12 +228,17 @@ class Select extends React.Component {
                         i,
                       ) => (
                         <Item
-                          {...getItemProps({item: itemValue})}
+                          {...getItemProps({
+                            item: itemValue,
+                            isSelected: itemValue === selectedItem,
+                            isActive: i === highlightedIndex,
+                            onClick: event => {
+                              event.preventDownshiftDefault = true;
+                            },
+                            onMouseDown: () => selectItem(itemValue),
+                          })}
                           data-testid="select-item"
-                          isSelected={itemValue === selectedItem}
-                          isActive={i === highlightedIndex}
                           key={key}
-                          onMouseDown={() => selectItem(itemValue)}
                         >
                           {React.isValidElement(itemLabel)
                             ? itemLabel
