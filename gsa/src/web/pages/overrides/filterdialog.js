@@ -34,6 +34,7 @@ import SortByGroup from 'web/components/powerfilter/sortbygroup';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
+import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 
 const SORT_FIELDS = [
   {
@@ -89,6 +90,13 @@ const OverridesFilterDialogComponent = ({
         name="filterstring"
         filter={filterstring}
         onChange={onFilterStringChange}
+      />
+
+      <BooleanFilterGroup
+        name="active"
+        title={_('Active')}
+        filter={filter}
+        onChange={onFilterValueChange}
       />
 
       <FilterSearchGroup

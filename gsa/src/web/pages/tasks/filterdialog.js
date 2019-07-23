@@ -109,18 +109,18 @@ const TaskFilterDialogComponent = ({
         onChange={onFilterValueChange}
       />
 
-      <SeverityValuesGroup
-        name="severity"
-        title={_('Severity of Last Report')}
-        filter={filter}
-        onChange={onFilterValueChange}
-      />
-
       <FilterSearchGroup
         name="name"
         title={_('Task Name')}
         filter={filter}
         onChange={onSearchTermChange}
+      />
+
+      <SeverityValuesGroup
+        name="severity"
+        title={_('Severity of Last Report')}
+        filter={filter}
+        onChange={onFilterValueChange}
       />
 
       <MinQodGroup
