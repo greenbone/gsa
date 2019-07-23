@@ -260,7 +260,7 @@ class MultiSelect extends React.Component {
                             isSelected: selectedItems.includes(itemValue),
                             isActive: i === highlightedIndex,
                             onClick: event => {
-                              event.native.preventDownshiftDefault = true;
+                              event.preventDownshiftDefault = true;
                             },
                             onMouseDown: () => selectItem(itemValue),
                           })}
