@@ -41,6 +41,8 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
+import HorizontalSep from 'web/components/layout/horizontalsep';
+
 export const convert_auth_method = auth_method => {
   if (auth_method === AUTH_METHOD_LDAP) {
     return _('LDAP');
@@ -97,13 +99,14 @@ const UserDetails = ({entity, links = true}) => {
             <TableData>{_('Roles')}</TableData>
             <TableData>
               <Divider>
-                {roles.map(role => (
+                {roles.map((role, index) => (
                   <DetailsLink
                     textOnly={!links}
                     key={role.id}
                     type="role"
                     id={role.id}
                   >
+                    {index > 0 && <HorizontalSep />}
                     {role.name}
                   </DetailsLink>
                 ))}
@@ -115,13 +118,14 @@ const UserDetails = ({entity, links = true}) => {
             <TableData>{_('Groups')}</TableData>
             <TableData>
               <Divider>
-                {groups.map(group => (
+                {groups.map((group, index) => (
                   <DetailsLink
                     textOnly={!links}
                     type="group"
                     key={group.id}
                     id={group.id}
                   >
+                    {index > 0 && <HorizontalSep />}
                     {group.name}
                   </DetailsLink>
                 ))}

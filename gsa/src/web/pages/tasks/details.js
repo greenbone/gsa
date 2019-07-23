@@ -58,6 +58,8 @@ import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
 
+import HorizontalSep from 'web/components/layout/horizontalsep';
+
 const compareAlerts = (alertA, alertB) => {
   const nameA = alertA.name.toLowerCase();
   const nameB = alertB.name.toLowerCase();
@@ -132,13 +134,14 @@ class TaskDetails extends React.Component {
         {isDefined(alerts) && (
           <DetailsBlock title={_('Alerts')}>
             <Divider>
-              {alerts.sort(compareAlerts).map(alert => (
+              {alerts.sort(compareAlerts).map((alert, index) => (
                 <DetailsLink
                   key={alert.id}
                   textOnly={!links}
                   type="alert"
                   id={alert.id}
                 >
+                  {index > 0 && <HorizontalSep />}
                   {alert.name}
                 </DetailsLink>
               ))}
