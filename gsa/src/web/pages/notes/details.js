@@ -43,6 +43,8 @@ import NoteBox from 'web/entity/note';
 
 import {Col} from 'web/entity/page';
 
+import HorizontalSep from 'web/components/layout/horizontalsep';
+
 const NoteDetails = ({entity}) => {
   const {hosts, port, result, severity, task} = entity;
   return (
@@ -59,8 +61,11 @@ const NoteDetails = ({entity}) => {
               <TableData>
                 {hosts.length > 0 ? (
                   <Divider>
-                    {hosts.map(host => (
-                      <span key={host}>{host}</span>
+                    {hosts.map((host, index) => (
+                      <span key={host}>
+                        {index > 0 && <HorizontalSep />}
+                        {host}
+                      </span>
                     ))}
                   </Divider>
                 ) : (

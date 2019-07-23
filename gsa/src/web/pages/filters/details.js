@@ -36,6 +36,8 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
+import HorizontalSep from 'web/components/layout/horizontalsep';
+
 const FilterDetails = ({entity}) => {
   const {comment, filter_type, alerts = []} = entity;
   return (
@@ -68,8 +70,9 @@ const FilterDetails = ({entity}) => {
               <TableData>{_('Alerts using this Filter')}</TableData>
               <TableData>
                 <Divider wrap>
-                  {alerts.map(alert => (
+                  {alerts.map((alert, index) => (
                     <DetailsLink key={alert.id} id={alert.id} type="alert">
+                      {index > 0 && <HorizontalSep />}
                       {alert.name}
                     </DetailsLink>
                   ))}
