@@ -28,7 +28,7 @@ import {
   LOG_VALUE,
 } from 'web/utils/severity';
 
-import Divider from 'web/components/layout/divider';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
 
 import InfoTable from 'web/components/table/infotable';
@@ -41,8 +41,6 @@ import EntityLink from 'web/entity/link';
 import DetailsBlock from 'web/entity/block';
 import OverrideBox from 'web/entity/override';
 import {Col} from 'web/entity/page';
-
-import HorizontalSep from 'web/components/layout/horizontalsep';
 
 const OverrideDetails = ({entity}) => {
   const {hosts, port, result, severity, task} = entity;
@@ -59,14 +57,11 @@ const OverrideDetails = ({entity}) => {
               <TableData>{_('Hosts')}</TableData>
               <TableData>
                 {hosts.length > 0 ? (
-                  <Divider>
-                    {hosts.map((host, index) => (
-                      <span key={host}>
-                        {index > 0 && <HorizontalSep />}
-                        {host}
-                      </span>
+                  <HorizontalSep>
+                    {hosts.map(host => (
+                      <span key={host}>{host}</span>
                     ))}
-                  </Divider>
+                  </HorizontalSep>
                 ) : (
                   _('Any')
                 )}

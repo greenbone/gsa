@@ -46,7 +46,7 @@ import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
 import {renderYesNo} from 'web/utils/render';
 
-import Divider from 'web/components/layout/divider';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -57,8 +57,6 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
-
-import HorizontalSep from 'web/components/layout/horizontalsep';
 
 const compareAlerts = (alertA, alertB) => {
   const nameA = alertA.name.toLowerCase();
@@ -133,19 +131,15 @@ class TaskDetails extends React.Component {
 
         {isDefined(alerts) && (
           <DetailsBlock title={_('Alerts')}>
-            <Divider>
-              {alerts.sort(compareAlerts).map((alert, index) => (
-                <DetailsLink
-                  key={alert.id}
-                  textOnly={!links}
-                  type="alert"
-                  id={alert.id}
-                >
-                  {index > 0 && <HorizontalSep />}
-                  {alert.name}
-                </DetailsLink>
+            <HorizontalSep>
+              {alerts.sort(compareAlerts).map(alert => (
+                <span key={alert.id}>
+                  <DetailsLink textOnly={!links} type="alert" id={alert.id}>
+                    {alert.name}
+                  </DetailsLink>
+                </span>
               ))}
-            </Divider>
+            </HorizontalSep>
           </DetailsBlock>
         )}
 
