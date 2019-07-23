@@ -86,6 +86,7 @@ class MultiSelect extends React.Component {
     };
 
     this.input = React.createRef();
+    this.box = React.createRef();
 
     this.handleRemoveItem = this.handleRemoveItem.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -194,10 +195,11 @@ class MultiSelect extends React.Component {
         onSelect={this.handleSelect}
       >
         {({
-          getButtonProps,
           getInputProps,
           getItemProps,
+          getMenuProps,
           getRootProps,
+          getToggleButtonProps,
           highlightedIndex,
           inputValue,
           isOpen,
@@ -206,28 +208,24 @@ class MultiSelect extends React.Component {
         }) => {
           return (
             <SelectContainer
-              {...getRootProps({}, {suppressRefError: true})}
+              {...getRootProps({})}
               className={className}
               width={width}
               grow={grow}
             >
-              <Box
-                isOpen={isOpen}
-                disabled={disabled}
-                ref={ref => (this.box = ref)}
-              >
+              <Box isOpen={isOpen} disabled={disabled} ref={this.box}>
                 <Layout grow="1" wrap>
                   {selectedItems.map(item => this.renderItem(item, items))}
                 </Layout>
                 <Layout align={['center', 'center']}>
                   <ArrowIcon
-                    {...getButtonProps({
+                    {...getToggleButtonProps({
                       disabled,
                       down: !isOpen,
                       onClick: isOpen
                         ? undefined
                         : event => {
-                            event.preventDefault(); // don't call default handler from downshift
+                            event.preventDownshiftDefault = true; // don't call default handler from downshift
                             openMenu(() => {
                               const {current: input} = this.input;
                               input !== null && input.focus();
@@ -239,13 +237,17 @@ class MultiSelect extends React.Component {
                 </Layout>
               </Box>
               {isOpen && !disabled && (
-                <Menu position={menuPosition} target={this.box}>
+                <Menu
+                  {...getMenuProps({})}
+                  position={menuPosition}
+                  target={this.box}
+                >
                   <Input
                     {...getInputProps({
+                      disabled,
                       value: search,
                       onChange: this.handleSearch,
                     })}
-                    disabled={disabled}
                     ref={this.input}
                     data-testid="multiselect-input"
                   />
@@ -253,12 +255,17 @@ class MultiSelect extends React.Component {
                     {displayedItems.map(
                       ({label: itemLabel, value: itemValue}, i) => (
                         <Item
-                          {...getItemProps({item: itemValue})}
+                          {...getItemProps({
+                            item: itemValue,
+                            isSelected: selectedItems.includes(itemValue),
+                            isActive: i === highlightedIndex,
+                            onClick: event => {
+                              event.preventDownshiftDefault = true;
+                              selectItem(itemValue);
+                            },
+                          })}
                           data-testid="multiselect-item-label"
-                          isSelected={selectedItems.includes(itemValue)}
-                          isActive={i === highlightedIndex}
                           key={itemValue}
-                          onMouseDown={() => selectItem(itemValue)}
                         >
                           {itemLabel}
                         </Item>

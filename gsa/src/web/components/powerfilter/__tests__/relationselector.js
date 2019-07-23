@@ -19,29 +19,15 @@
 
 import React from 'react';
 
+import {render, fireEvent} from 'web/utils/testing';
+
 import {
-  render,
-  fireEvent,
-  queryAllByTestId,
-  getByTestId,
-} from 'web/utils/testing';
+  openSelectElement,
+  getItemElements,
+  getInputBox,
+} from 'web/components/form/__tests__/select';
 
 import RelationSelector from 'web/components/powerfilter/relationselector';
-
-const openSelectElement = element => {
-  const openButton = getByTestId(element, 'select-open-button');
-  fireEvent.click(openButton);
-};
-
-const getItemElements = baseElement => {
-  const portal = baseElement.querySelector('#portals');
-  return queryAllByTestId(portal, 'select-item');
-};
-
-const getInputBox = baseElement => {
-  const portal = baseElement.querySelector('#portals');
-  return portal.querySelector('[role="combobox"]');
-};
 
 describe('Relation Selector Tests', () => {
   test('should render', () => {

@@ -19,26 +19,16 @@
 
 import React from 'react';
 
+import {render, fireEvent} from 'web/utils/testing';
+
 import {
-  render,
-  fireEvent,
-  queryAllByTestId,
-  getByTestId,
-} from 'web/utils/testing';
+  openSelectElement,
+  getItemElements,
+} from 'web/components/form/__tests__/select';
 
 import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
 
 import Filter from 'gmp/models/filter';
-
-const openSelectElement = element => {
-  const openButton = getByTestId(element, 'select-open-button');
-  fireEvent.click(openButton);
-};
-
-const getItemElements = baseElement => {
-  const portal = baseElement.querySelector('#portals');
-  return queryAllByTestId(portal, 'select-item');
-};
 
 describe('Severity Values Group Tests', () => {
   test('should render', () => {
