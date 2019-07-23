@@ -219,6 +219,7 @@ class Select extends React.Component {
                       disabled,
                       onChange: this.handleSearch,
                     })}
+                    data-testid="select-search-input"
                     ref={this.input}
                   />
                   <ItemContainer>
