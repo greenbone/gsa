@@ -32,10 +32,16 @@ import date, {duration as createDuration} from './date';
 
 const log = Logger.getLogger('gmp.models.event');
 
-const convertIcalDate = (idate, timezone) =>
-  isDefined(timezone)
-    ? date.unix(idate.toUnixTime()).tz(timezone)
-    : date.unix(idate.toUnixTime());
+const convertIcalDate = (idate, timezone) => {
+  if (isDefined(timezone)) {
+    if (idate.zone === ical.Timezone.localTimezone) {
+      // assume timezone hasn't been set and date wasn't supposed to use floating and therefore local timezone
+      return date.tz(idate.toString(), timezone);
+    }
+    return date.unix(idate.toUnixTime()).tz(timezone);
+  }
+  return date.unix(idate.toUnixTime());
+};
 
 const setEventDuration = (event, duration) => {
   // setting the duration of an event directly isn't possible in

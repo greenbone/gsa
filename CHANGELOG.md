@@ -44,6 +44,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.1] - (unreleased)
 
 ### Added
+- Added systemd service file and logrotate config to gsad [#1486](https://github.com/greenbone/gsa/pull/1486)
 - Additional report-host information [#1468](https://github.com/greenbone/gsa/pull/1468)
 - New VerifyNoIcon [#1468](https://github.com/greenbone/gsa/pull/1468)
 - Add tests for filter groups [#1419](https://github.com/greenbone/gsa/pull/1419)
@@ -93,6 +94,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Fix displaying schedules created during migration [#1479](https://github.com/greenbone/gsa/pull/1478)
 - Fix showing Loading indicator at entities pages [#1469](https://github.com/greenbone/gsa/pull/1469)
 - Show notes and overrides for results and their icon indicator in results rows [#1446](https://github.com/greenbone/gsa/pull/1446)
 - Display text if gvm-libs is build without LDAP and/or Radius support [#1437](https://github.com/greenbone/gsa/pull/1437)
