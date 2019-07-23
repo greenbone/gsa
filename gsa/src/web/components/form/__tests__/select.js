@@ -97,6 +97,8 @@ describe('Select component tests', () => {
 
     const domItems = getItemElements(baseElement);
 
+    expect(domItems.length).toEqual(2);
+
     fireEvent.click(domItems[0]);
 
     expect(onChange).toBeCalled();
