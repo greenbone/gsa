@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1466](https://github.com/greenbone/gsa/pull/1466) [#1467](https://github.com/greenbone/gsa/pull/1467)
 
 ### Changed
+- modified filterdialogs for reports and vulnerabilities [#1503](https://github.com/greenbone/gsa/pull/1503)
 - Changed filterdialog for tickets page [#1489](https://github.com/greenbone/gsa/pull/1489)
 - Restructured menu categories [#1481](https://github.com/greenbone/gsa/pull/1481)
 - Logout and usersettings link got a menu [#1481](https://github.com/greenbone/gsa/pull/1481)
