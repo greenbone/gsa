@@ -234,8 +234,8 @@ class Select extends React.Component {
                             isActive: i === highlightedIndex,
                             onClick: event => {
                               event.preventDownshiftDefault = true;
+                              selectItem(itemValue);
                             },
-                            onMouseDown: () => selectItem(itemValue),
                           })}
                           data-testid="select-item"
                           key={key}
