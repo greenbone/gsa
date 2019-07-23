@@ -27,7 +27,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 /* eslint-disable max-len */
 
-import ApplyOverridesGroup from 'web/components/powerfilter/applyoverridesgroup';
+import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
@@ -105,7 +105,12 @@ const ResultsFilterDialogComponent = ({
       onChange={onFilterStringChange}
     />
 
-    <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange} />
+    <BooleanFilterGroup
+      name="apply_overrides"
+      title={_('Apply Overrides')}
+      filter={filter}
+      onChange={onFilterValueChange}
+    />
 
     <AutoFpGroup filter={filter} onChange={onFilterValueChange} />
 
