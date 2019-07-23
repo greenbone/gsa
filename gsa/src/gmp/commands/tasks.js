@@ -144,6 +144,7 @@ export class TaskCommand extends EntityCommand {
       cmd: 'create_container_task',
       name,
       comment,
+      usage_type: 'scan',
     });
   }
 
