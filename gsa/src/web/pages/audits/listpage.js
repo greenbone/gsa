@@ -66,7 +66,6 @@ const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => (
     onDownloaded={onDownloaded}
     onDownloadError={onError}
     onInteraction={onInteraction}
-    onReportImported={onChanged}
     onResumed={onChanged}
     onResumeError={onError}
     onSaved={onChanged}
@@ -85,7 +84,6 @@ const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => (
       stop,
       resume,
       reportDownload,
-      reportimport,
       gcrFormatDefined,
     }) => (
       <EntitiesPage
@@ -99,7 +97,6 @@ const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => (
         onError={onError}
         onInteraction={onInteraction}
         onReportDownloadClick={reportDownload}
-        onReportImportClick={reportimport}
         onAuditCloneClick={clone}
         onAuditCreateClick={create}
         onAuditDeleteClick={deleteFunc}

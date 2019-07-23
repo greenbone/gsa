@@ -33,7 +33,6 @@ import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 import DownloadIcon from 'web/components/icon/downloadicon';
 
-import ImportReportIcon from 'web/pages/tasks/icons/importreporticon';
 import ResumeIcon from 'web/pages/audits/icons/resumeicon';
 import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
 import StartIcon from 'web/pages/audits/icons/starticon';
@@ -46,7 +45,6 @@ const Actions = ({
   links,
   gcrFormatDefined,
   onReportDownloadClick,
-  onReportImportClick,
   onAuditCloneClick,
   onAuditDeleteClick,
   onAuditDownloadClick,
@@ -61,8 +59,6 @@ const Actions = ({
     ) : (
       <StartIcon audit={entity} onClick={onAuditStartClick} />
     )}
-
-    <ImportReportIcon task={entity} onClick={onReportImportClick} />
 
     <StopIcon task={entity} onClick={onAuditStopClick} />
 
@@ -112,7 +108,6 @@ Actions.propTypes = {
   onAuditStartClick: PropTypes.func.isRequired,
   onAuditStopClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
-  onReportImportClick: PropTypes.func.isRequired,
 };
 
 export default withEntitiesActions(Actions);
