@@ -47,6 +47,7 @@ import {Col} from 'web/entity/page';
 import Condition from './condition';
 import Event from './event';
 import Method from './method';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 
 const AlertDetails = ({capabilities, entity, links = true}) => {
   const {comment, condition, event, method, tasks = [], filter} = entity;
@@ -150,9 +151,10 @@ const AlertDetails = ({capabilities, entity, links = true}) => {
               <TableData>{_('Task using this Alert')}</TableData>
               <TableData>
                 <Divider wrap>
-                  {tasks.map(task => (
+                  {tasks.map((task, index) => (
                     <span key={task.id}>
                       <DetailsLink id={task.id} type="task">
+                        {index > 0 && <HorizontalSep />}
                         {task.name}
                       </DetailsLink>
                     </span>

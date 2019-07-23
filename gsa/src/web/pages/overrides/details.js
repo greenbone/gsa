@@ -42,6 +42,8 @@ import DetailsBlock from 'web/entity/block';
 import OverrideBox from 'web/entity/override';
 import {Col} from 'web/entity/page';
 
+import HorizontalSep from 'web/components/layout/horizontalsep';
+
 const OverrideDetails = ({entity}) => {
   const {hosts, port, result, severity, task} = entity;
   return (
@@ -58,8 +60,11 @@ const OverrideDetails = ({entity}) => {
               <TableData>
                 {hosts.length > 0 ? (
                   <Divider>
-                    {hosts.map(host => (
-                      <span key={host}>{host}</span>
+                    {hosts.map((host, index) => (
+                      <span key={host}>
+                        {index > 0 && <HorizontalSep />}
+                        {host}
+                      </span>
                     ))}
                   </Divider>
                 ) : (

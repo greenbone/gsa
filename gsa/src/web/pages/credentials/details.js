@@ -43,6 +43,8 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
+import HorizontalSep from 'web/components/layout/horizontalsep';
+
 const CredentialDetails = ({entity}) => {
   const {
     comment,
@@ -113,8 +115,9 @@ const CredentialDetails = ({entity}) => {
               <TableData>{_('Targets using this Credential')}</TableData>
               <TableData>
                 <Divider wrap>
-                  {targets.map(target => (
+                  {targets.map((target, index) => (
                     <DetailsLink key={target.id} id={target.id} type="target">
+                      {index > 0 && <HorizontalSep />}
                       {target.name}
                     </DetailsLink>
                   ))}
@@ -125,15 +128,16 @@ const CredentialDetails = ({entity}) => {
 
           {scanners.length > 0 && (
             <TableRow>
-              <TableData>{_('Sanners using this Credential')}</TableData>
+              <TableData>{_('Scanners using this Credential')}</TableData>
               <TableData>
                 <Divider wrap>
-                  {scanners.map(scanner => (
+                  {scanners.map((scanner, index) => (
                     <DetailsLink
                       key={scanner.id}
                       id={scanner.id}
                       type="scanner"
                     >
+                      {index > 0 && <HorizontalSep />}
                       {scanner.name}
                     </DetailsLink>
                   ))}

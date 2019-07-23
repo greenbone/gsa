@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HorizontalSep tests should render 1`] = `•`;
+
+exports[`HorizontalSep tests should render with separator option 1`] = `|`;
+
+exports[`HorizontalSep tests should render with spacing 1`] = `|`;
