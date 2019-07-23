@@ -207,7 +207,7 @@ class CvssCalculator extends React.Component {
         <ToolBarIcons />
         <Section
           img={<CvssIcon size="large" />}
-          title={_('CVSS Base Score Calculator')}
+          title={_('CVSSv2 Base Score Calculator')}
         />
 
         <h3>{_('From Metrics')}:</h3>
