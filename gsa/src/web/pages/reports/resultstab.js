@@ -100,6 +100,7 @@ const ResultsTab = ({
           filter={filter}
           footer={false}
           isUpdating={isUpdating}
+          links={!delta}
           sortBy={sortBy}
           sortDir={sortDir}
           toggleDetailsIcon={false}
