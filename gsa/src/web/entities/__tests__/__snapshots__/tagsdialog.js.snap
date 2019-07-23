@@ -512,10 +512,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: position:relative;
-  -webkit-flex-grow: position:relative;
-  -ms-flex-positive: position:relative;
-  flex-grow: position:relative;
+  position: relative;
   width: 230px;
 }
 
@@ -605,7 +602,11 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
                           margin="5px"
                         >
                           <div
+                            aria-expanded="false"
+                            aria-haspopup="listbox"
+                            aria-labelledby="downshift-1-label"
                             class="c14"
+                            role="combobox"
                             width="230px"
                           >
                             <div
@@ -620,7 +621,6 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
                                 class="c17"
                               >
                                 <span
-                                  aria-expanded="false"
                                   aria-haspopup="true"
                                   aria-label="open menu"
                                   class="c18 c19"
@@ -1222,10 +1222,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: position:relative;
-  -webkit-flex-grow: position:relative;
-  -ms-flex-positive: position:relative;
-  flex-grow: position:relative;
+  position: relative;
   width: 230px;
 }
 
@@ -1319,7 +1316,11 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
                           margin="5px"
                         >
                           <div
+                            aria-expanded="false"
+                            aria-haspopup="listbox"
+                            aria-labelledby="downshift-0-label"
                             class="c14"
+                            role="combobox"
                             width="230px"
                           >
                             <div
@@ -1333,7 +1334,6 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
                                 class="c17"
                               >
                                 <span
-                                  aria-expanded="false"
                                   aria-haspopup="true"
                                   aria-label="open menu"
                                   class="c18 c19"

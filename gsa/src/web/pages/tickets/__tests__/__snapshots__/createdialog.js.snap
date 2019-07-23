@@ -441,10 +441,7 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: position:relative;
-  -webkit-flex-grow: position:relative;
-  -ms-flex-positive: position:relative;
-  flex-grow: position:relative;
+  position: relative;
   width: 180px;
 }
 
@@ -558,7 +555,11 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
                       size="10"
                     >
                       <div
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        aria-labelledby="downshift-0-label"
                         class="c12"
+                        role="combobox"
                         width="180px"
                       >
                         <div
@@ -575,7 +576,6 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
                             class="c15"
                           >
                             <span
-                              aria-expanded="false"
                               aria-haspopup="true"
                               aria-label="open menu"
                               class="c16 c17"
