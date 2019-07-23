@@ -204,14 +204,17 @@ describe('caseInsensitiveFilter tests', () => {
 });
 
 class MenuTestComponent extends React.Component {
+  constructor(...args) {
+    super(...args);
+
+    this.target = React.createRef();
+  }
+
   render() {
-    const hasTarget = this.target !== undefined && this.target !== null;
+    const hasTarget = this.target.current !== null;
     return (
       <div>
-        <div
-          ref={ref => (this.target = ref)}
-          style={{width: '200px', height: '100px'}}
-        />
+        <div ref={this.target} style={{width: '200px', height: '100px'}} />
         {hasTarget && <Menu {...this.props} target={this.target} />}
       </div>
     );
