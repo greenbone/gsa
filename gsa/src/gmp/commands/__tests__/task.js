@@ -153,6 +153,33 @@ describe('TaskCommand tests', () => {
       });
   });
 
+  test('should create new container task', () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new TaskCommand(fakeHttp);
+    return cmd
+      .createContainer({
+        name: 'foo',
+        comment: 'comment',
+      })
+      .then(resp => {
+        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+          data: {
+            cmd: 'create_container_task',
+            comment: 'comment',
+            name: 'foo',
+            usage_type: 'scan',
+          },
+        });
+
+        const {data} = resp;
+        expect(data.id).toEqual('foo');
+      });
+  });
+
   test('should save task', () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
