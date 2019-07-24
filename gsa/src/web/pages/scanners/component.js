@@ -223,7 +223,7 @@ class ScannerComponent extends React.Component {
     const filename = generateFilename({
       creationTime: creationTime,
       extension: 'pem',
-      fileNameFormat: detailsExportFileName.value,
+      fileNameFormat: detailsExportFileName,
       id: id,
       modificationTime,
       resourceName: name,
