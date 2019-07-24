@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Audit ResumeIcon component tests should render in active state with correct permissions 1`] = `
+.c1 {
+  cursor: pointer;
+}
+
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+@media print {
+  .c1 {
+    display: none;
+  }
+}
+
+<span
+  class="c0 c1"
+  data-testid="svg-icon"
+  title="Resume"
+>
+  <svg>
+    resume.svg
+  </svg>
+</span>
+`;
