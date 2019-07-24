@@ -77,7 +77,7 @@ class AgentComponent extends React.Component {
       .then(response => {
         const filename = generateFilename({
           creationTime: creationTime,
-          fileNameFormat: detailsExportFileName.value,
+          fileNameFormat: detailsExportFileName,
           id: id,
           modificationTime,
           resourceName: name,
