@@ -314,7 +314,7 @@ class EntitiesContainer extends React.Component {
 
     promise.then(response => {
       const filename = generateFilename({
-        fileNameFormat: listExportFileName.value,
+        fileNameFormat: listExportFileName,
         resourceType: pluralizeType(getEntityType(entities[0])),
         username,
       });
