@@ -135,10 +135,7 @@ exports[`Task Trend Selector Tests should render 1`] = `
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: position:relative;
-  -webkit-flex-grow: position:relative;
-  -ms-flex-positive: position:relative;
-  flex-grow: position:relative;
+  position: relative;
   width: 180px;
 }
 
@@ -177,7 +174,11 @@ exports[`Task Trend Selector Tests should render 1`] = `
     size="10"
   >
     <div
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-labelledby="downshift-0-label"
       class="c3"
+      role="combobox"
       width="180px"
     >
       <div
@@ -194,7 +195,6 @@ exports[`Task Trend Selector Tests should render 1`] = `
           class="c6"
         >
           <span
-            aria-expanded="false"
             aria-haspopup="true"
             aria-label="open menu"
             class="c7 c8"
