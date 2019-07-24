@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.2] - unreleased
 
 ### Added
+- Highlight result diffs at delta reports [#1513](https://github.com/greenbone/gsa/pull/1513)
 - Added HorizontalSep component for horizontal lists
   [#1506](https://github.com/greenbone/gsa/pull/1506),
   [#1507](https://github.com/greenbone/gsa/pull/1507)
