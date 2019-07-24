@@ -208,7 +208,7 @@ AgentComponent.propTypes = {
 const mapStateToProps = rootState => {
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
   const username = getUsername(rootState);
-  const detailsExportFileName = userDefaultsSelector.getByName(
+  const detailsExportFileName = userDefaultsSelector.getValueByName(
     'detailsexportfilename',
   );
   return {
