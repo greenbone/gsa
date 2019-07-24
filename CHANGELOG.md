@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Fix showing details for tasks [#1515](https://github.com/greenbone/gsa/pull/1515)
 - Fix using filename templates from usersettings [#1512](https://github.com/greenbone/gsa/pull/1512)
 - Allow to use additional options for starting gsad via systemd
   [#1514](https://github.com/greenbone/gsa/pull/1514)
