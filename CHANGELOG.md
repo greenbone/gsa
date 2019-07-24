@@ -33,6 +33,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use HTTPS for documentation links
 - Cleanup and improve handling of http parameters and arguments for gmp
   requests in gsad [#1355](https://github.com/greenbone/gsa/pull/1355)
+- Use hsts by default
+- Use secure cookies
 
 ### Fixed
 - Fixed outer click issues for multi select and select boxes
