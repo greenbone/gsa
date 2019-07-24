@@ -12,6 +12,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1506](https://github.com/greenbone/gsa/pull/1506),
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
+### Changed
+- Redirect to main page when visiting the login page and the user is already
+  logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
+
 ### Fixed
 - Allow to use additional options for starting gsad via systemd
   [#1514](https://github.com/greenbone/gsa/pull/1514)
