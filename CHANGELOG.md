@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [8.0.2] - unreleased
+
+### Added
+- Added HorizontalSep component for horizontal lists
+  [#1506](https://github.com/greenbone/gsa/pull/1506),
+  [#1507](https://github.com/greenbone/gsa/pull/1507)
+
+[8.0.2]: https://github.com/greenbone/gsa/compare/v8.0.1...gsa-8.0
+
 ## [8.0.1] - 2019-07-17
 
 ### Added

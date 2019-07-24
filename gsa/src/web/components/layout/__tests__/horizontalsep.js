@@ -28,12 +28,14 @@ describe('HorizontalSep tests', () => {
     const {element} = render(<HorizontalSep />);
     expect(element).toMatchSnapshot();
   });
+
   test('should render with separator option', () => {
-    const {element} = render(<HorizontalSep separator="pipe" />);
+    const {element} = render(<HorizontalSep separator="|" />);
     expect(element).toMatchSnapshot();
   });
+
   test('should render with spacing', () => {
-    const {element} = render(<HorizontalSep separator="pipe" spacing="wide" />);
+    const {element} = render(<HorizontalSep separator="|" spacing="10px" />);
     expect(element).toMatchSnapshot();
   });
 });

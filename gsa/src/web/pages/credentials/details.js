@@ -114,14 +114,15 @@ const CredentialDetails = ({entity}) => {
             <TableRow>
               <TableData>{_('Targets using this Credential')}</TableData>
               <TableData>
-                <Divider wrap>
-                  {targets.map((target, index) => (
-                    <DetailsLink key={target.id} id={target.id} type="target">
-                      {index > 0 && <HorizontalSep />}
-                      {target.name}
-                    </DetailsLink>
+                <HorizontalSep wrap>
+                  {targets.map(target => (
+                    <span key={target.id}>
+                      <DetailsLink id={target.id} type="target">
+                        {target.name}
+                      </DetailsLink>
+                    </span>
                   ))}
-                </Divider>
+                </HorizontalSep>
               </TableData>
             </TableRow>
           )}
@@ -130,18 +131,15 @@ const CredentialDetails = ({entity}) => {
             <TableRow>
               <TableData>{_('Scanners using this Credential')}</TableData>
               <TableData>
-                <Divider wrap>
-                  {scanners.map((scanner, index) => (
-                    <DetailsLink
-                      key={scanner.id}
-                      id={scanner.id}
-                      type="scanner"
-                    >
-                      {index > 0 && <HorizontalSep />}
-                      {scanner.name}
-                    </DetailsLink>
+                <HorizontalSep wrap>
+                  {scanners.map(scanner => (
+                    <span key={scanner.id}>
+                      <DetailsLink id={scanner.id} type="scanner">
+                        {scanner.name}
+                      </DetailsLink>
+                    </span>
                   ))}
-                </Divider>
+                </HorizontalSep>
               </TableData>
             </TableRow>
           )}

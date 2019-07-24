@@ -1,7 +1,172 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`HorizontalSep tests should render 1`] = `•`;
+exports[`HorizontalSep tests should render 1`] = `
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
 
-exports[`HorizontalSep tests should render with separator option 1`] = `|`;
+.c3 {
+  margin-left: -5px;
+}
 
-exports[`HorizontalSep tests should render with spacing 1`] = `|`;
+.c3 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c3 > * {
+  margin-left: 5px;
+}
+
+.c0 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c2 > *:not(:first-child)::before {
+  content: '•';
+  margin-right: 5px;
+}
+
+<div
+  class="c0 c1"
+>
+  <div
+    class="c2 c3 c1"
+    margin="5px"
+  />
+</div>
+`;
+
+exports[`HorizontalSep tests should render with separator option 1`] = `
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c3 {
+  margin-left: -5px;
+}
+
+.c3 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c3 > * {
+  margin-left: 5px;
+}
+
+.c0 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c2 > *:not(:first-child)::before {
+  content: '|';
+  margin-right: 5px;
+}
+
+<div
+  class="c0 c1"
+>
+  <div
+    class="c2 c3 c1"
+    margin="5px"
+    separator="|"
+  />
+</div>
+`;
+
+exports[`HorizontalSep tests should render with spacing 1`] = `
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c3 {
+  margin-left: -5px;
+}
+
+.c3 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c3 > * {
+  margin-left: 5px;
+}
+
+.c0 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c2 > *:not(:first-child)::before {
+  content: '|';
+  margin-right: 10px;
+}
+
+<div
+  class="c0 c1"
+>
+  <div
+    class="c2 c3 c1"
+    margin="5px"
+    separator="|"
+    spacing="10px"
+  />
+</div>
+`;

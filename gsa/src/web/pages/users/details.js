@@ -29,7 +29,7 @@ import {
 
 import PropTypes from 'web/utils/proptypes';
 
-import Divider from 'web/components/layout/divider';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -40,8 +40,6 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
-
-import HorizontalSep from 'web/components/layout/horizontalsep';
 
 export const convert_auth_method = auth_method => {
   if (auth_method === AUTH_METHOD_LDAP) {
@@ -98,38 +96,35 @@ const UserDetails = ({entity, links = true}) => {
           <TableRow>
             <TableData>{_('Roles')}</TableData>
             <TableData>
-              <Divider>
-                {roles.map((role, index) => (
-                  <DetailsLink
-                    textOnly={!links}
-                    key={role.id}
-                    type="role"
-                    id={role.id}
-                  >
-                    {index > 0 && <HorizontalSep />}
-                    {role.name}
-                  </DetailsLink>
+              <HorizontalSep>
+                {roles.map(role => (
+                  <span key={role.id}>
+                    <DetailsLink textOnly={!links} type="role" id={role.id}>
+                      {role.name}
+                    </DetailsLink>
+                  </span>
                 ))}
-              </Divider>
+              </HorizontalSep>
             </TableData>
           </TableRow>
 
           <TableRow>
             <TableData>{_('Groups')}</TableData>
             <TableData>
-              <Divider>
-                {groups.map((group, index) => (
-                  <DetailsLink
-                    textOnly={!links}
-                    type="group"
-                    key={group.id}
-                    id={group.id}
-                  >
-                    {index > 0 && <HorizontalSep />}
-                    {group.name}
-                  </DetailsLink>
+              <HorizontalSep>
+                {groups.map(group => (
+                  <span key={group.id}>
+                    <DetailsLink
+                      textOnly={!links}
+                      type="group"
+                      key={group.id}
+                      id={group.id}
+                    >
+                      {group.name}
+                    </DetailsLink>
+                  </span>
                 ))}
-              </Divider>
+              </HorizontalSep>
             </TableData>
           </TableRow>
 
