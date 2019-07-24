@@ -24,9 +24,9 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import FormGroup from '../form/formgroup.js';
+import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
 const TaskTrendGroup = ({trend, name = 'trend', filter, onChange}) => {
