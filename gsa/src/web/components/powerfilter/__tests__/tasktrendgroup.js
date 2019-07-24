@@ -21,19 +21,19 @@ import React from 'react';
 
 import {render, fireEvent} from 'web/utils/testing';
 
+import TaskTrendGroup from 'web/components/powerfilter/tasktrendgroup';
+import Filter from 'gmp/models/filter';
 import {
   openSelectElement,
   getItemElements,
-  getInputBox,
 } from 'web/components/form/__tests__/select';
 
-import RelationSelector from 'web/components/powerfilter/relationselector';
-
-describe('Relation Selector Tests', () => {
+describe('Task Trend Selector Tests', () => {
   test('should render', () => {
     const onChange = jest.fn();
+    const filter = Filter.fromString('trend=down');
     const {element} = render(
-      <RelationSelector relation="<" onChange={onChange} />,
+      <TaskTrendGroup filter={filter} onChange={onChange} />,
     );
 
     expect(element).toMatchSnapshot();
@@ -41,8 +41,9 @@ describe('Relation Selector Tests', () => {
 
   test('should return items', () => {
     const onChange = jest.fn();
+    const filter = Filter.fromString('trend=down');
     const {element, baseElement} = render(
-      <RelationSelector relation="<" onChange={onChange} />,
+      <TaskTrendGroup filter={filter} onChange={onChange} />,
     );
 
     let domItems = getItemElements(baseElement);
@@ -53,17 +54,29 @@ describe('Relation Selector Tests', () => {
 
     domItems = getItemElements(baseElement);
 
-    expect(domItems.length).toEqual(3);
-    expect(domItems[0]).toHaveTextContent('is equal to');
-    expect(domItems[1]).toHaveTextContent('is greater than');
-    expect(domItems[2]).toHaveTextContent('is less than');
+    expect(domItems.length).toEqual(5);
+    expect(domItems[0]).toHaveTextContent('Up');
+    expect(domItems[1]).toHaveTextContent('Down');
+    expect(domItems[2]).toHaveTextContent('More');
+  });
+
+  test('should parse filter', () => {
+    const onChange = jest.fn();
+    const filter = Filter.fromString('trend=same');
+    // eslint-disable-next-line no-shadow
+    const {getByTestId} = render(
+      <TaskTrendGroup filter={filter} onChange={onChange} />,
+    );
+
+    const displayedValue = getByTestId('select-selected-value');
+    expect(displayedValue).toHaveTextContent('Same');
   });
 
   test('should call onChange handler', () => {
     const onChange = jest.fn();
-
+    const filter = Filter.fromString('trend=down');
     const {element, baseElement} = render(
-      <RelationSelector relation="<" onChange={onChange} />,
+      <TaskTrendGroup filter={filter} onChange={onChange} />,
     );
 
     openSelectElement(element);
@@ -73,18 +86,19 @@ describe('Relation Selector Tests', () => {
     fireEvent.click(domItems[0]);
 
     expect(onChange).toBeCalled();
-    expect(onChange).toBeCalledWith('=', undefined);
+    expect(onChange).toBeCalledWith('up', 'trend');
   });
   test('should change value', () => {
     const onChange = jest.fn();
+    const filter = Filter.fromString('trend=down');
 
     // eslint-disable-next-line no-shadow
     const {baseElement, element, getByTestId} = render(
-      <RelationSelector relation="=" onChange={onChange} />,
+      <TaskTrendGroup trend="up" filter={filter} onChange={onChange} />,
     );
 
     const displayedValue = getByTestId('select-selected-value');
-    expect(displayedValue).toHaveTextContent('is equal to');
+    expect(displayedValue).toHaveTextContent('Up');
 
     openSelectElement(element);
 
@@ -93,29 +107,6 @@ describe('Relation Selector Tests', () => {
     fireEvent.click(domItems[2]);
 
     expect(onChange).toBeCalled();
-    expect(onChange).toBeCalledWith('<', undefined);
-  });
-
-  test('should filter items', () => {
-    const onChange = jest.fn();
-    const {element, baseElement} = render(
-      <RelationSelector relation="=" onChange={onChange} />,
-    );
-    openSelectElement(element);
-
-    let domItems = getItemElements(baseElement);
-    expect(domItems.length).toEqual(3);
-
-    const input = getInputBox(baseElement);
-
-    fireEvent.change(input, {target: {value: 'than'}});
-
-    domItems = getItemElements(baseElement);
-    expect(domItems.length).toEqual(2);
-
-    fireEvent.change(input, {target: {value: 'to'}});
-
-    domItems = getItemElements(baseElement);
-    expect(domItems.length).toEqual(1);
+    expect(onChange).toBeCalledWith('more', 'trend');
   });
 });

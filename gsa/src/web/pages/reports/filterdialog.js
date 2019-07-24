@@ -36,6 +36,8 @@ import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup'
 import SortByGroup from 'web/components/powerfilter/sortbygroup';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
+import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 
 /* eslint-enable */
 
@@ -87,6 +89,7 @@ const ReportFilterDialogComponent = ({
   saveNamedFilter,
   onFilterStringChange,
   onFilterValueChange,
+  onSearchTermChange,
   onSortByChange,
   onSortOrderChange,
   onValueChange,
@@ -110,10 +113,24 @@ const ReportFilterDialogComponent = ({
         onChange={onFilterValueChange}
       />
 
+      <SeverityValuesGroup
+        name="severity"
+        title={_('Highest Severity from Results')}
+        filter={filter}
+        onChange={onFilterValueChange}
+      />
+
       <MinQodGroup
         name="min_qod"
         filter={filter}
         onChange={onFilterValueChange}
+      />
+
+      <FilterSearchGroup
+        name="task"
+        title={_('From Task (name)')}
+        filter={filter}
+        onChange={onSearchTermChange}
       />
 
       <FirstResultGroup filter={filter} onChange={onFilterValueChange} />

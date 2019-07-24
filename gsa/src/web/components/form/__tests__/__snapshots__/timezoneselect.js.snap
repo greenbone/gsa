@@ -87,10 +87,7 @@ exports[`TimezoneSelect tests should render 1`] = `
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-flex: position:relative;
-  -webkit-flex-grow: position:relative;
-  -ms-flex-positive: position:relative;
-  flex-grow: position:relative;
+  position: relative;
   width: 230px;
 }
 
@@ -115,7 +112,11 @@ exports[`TimezoneSelect tests should render 1`] = `
 }
 
 <div
+  aria-expanded="false"
+  aria-haspopup="listbox"
+  aria-labelledby="downshift-0-label"
   class="c0"
+  role="combobox"
   width="230px"
 >
   <div
@@ -132,7 +133,6 @@ exports[`TimezoneSelect tests should render 1`] = `
       class="c3"
     >
       <span
-        aria-expanded="false"
         aria-haspopup="true"
         aria-label="open menu"
         class="c4 c5"
