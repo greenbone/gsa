@@ -19,25 +19,14 @@
 
 import React from 'react';
 
-import {
-  render,
-  fireEvent,
-  queryAllByTestId,
-  getByTestId,
-} from 'web/utils/testing';
+import {render, fireEvent} from 'web/utils/testing';
 
 import TaskTrendGroup from 'web/components/powerfilter/tasktrendgroup';
 import Filter from 'gmp/models/filter';
-
-const openSelectElement = element => {
-  const openButton = getByTestId(element, 'select-open-button');
-  fireEvent.click(openButton);
-};
-
-const getItemElements = baseElement => {
-  const portal = baseElement.querySelector('#portals');
-  return queryAllByTestId(portal, 'select-item');
-};
+import {
+  openSelectElement,
+  getItemElements,
+} from 'web/components/form/__tests__/select';
 
 describe('Task Trend Selector Tests', () => {
   test('should render', () => {
