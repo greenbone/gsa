@@ -108,7 +108,7 @@ class EntityComponent extends React.Component {
     const promise = cmd.export(entity).then(response => {
       const filename = generateFilename({
         creationTime: entity.creationTime,
-        fileNameFormat: detailsExportFileName.value,
+        fileNameFormat: detailsExportFileName,
         id: entity.id,
         modificationTime: entity.modificationTime,
         resourceName: entity.name,
