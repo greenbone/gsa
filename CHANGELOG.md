@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 - Fix using filename templates from usersettings [#1512](https://github.com/greenbone/gsa/pull/1512)
+- Allow to use additional options for starting gsad via systemd
+  [#1514](https://github.com/greenbone/gsa/pull/1514)
 
 [8.0.2]: https://github.com/greenbone/gsa/compare/v8.0.1...gsa-8.0
 
