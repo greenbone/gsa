@@ -296,7 +296,7 @@ class Page extends React.Component {
         const {creationTime, entityType, id, modificationTime, name} = result;
         const filename = generateFilename({
           creationTime: creationTime,
-          fileNameFormat: detailsExportFileName.value,
+          fileNameFormat: detailsExportFileName,
           id: id,
           modificationTime,
           resourceName: name,
