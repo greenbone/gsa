@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- added tasktrendgroup component for tasks filter dialog [#1511](https://github.com/greenbone/gsa/pull/1511)
 - Added HorizontalSep component for horizontal lists. [#1494](https://github.com/greenbone/gsa/pull/1494)
 - added BooleanFilterGroup and changed notes filter dialog [#1493](https://github.com/greenbone/gsa/pull/1493)
 - Added grow option to multiselect component [#1485](https://github.com/greenbone/gsa/pull/1485)
@@ -21,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1466](https://github.com/greenbone/gsa/pull/1466) [#1467](https://github.com/greenbone/gsa/pull/1467)
 
 ### Changed
+- Changed the filter dialogues for tasks and overrides [#1511](https://github.com/greenbone/gsa/pull/1511)
 - modified filterdialogs for reports and vulnerabilities [#1503](https://github.com/greenbone/gsa/pull/1503)
 - Changed filterdialog for tickets page [#1489](https://github.com/greenbone/gsa/pull/1489)
 - Restructured menu categories [#1481](https://github.com/greenbone/gsa/pull/1481)
