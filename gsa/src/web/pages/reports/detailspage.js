@@ -64,7 +64,13 @@ import {
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
 
-import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+
+import {
+  getReportComposerDefaults,
+  getUsername,
+} from 'web/store/usersettings/selectors';
 
 import {create_pem_certificate} from 'web/utils/cert';
 import {
@@ -72,6 +78,7 @@ import {
   LOAD_TIME_FACTOR,
 } from 'web/utils/constants';
 import compose from 'web/utils/compose';
+import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
@@ -184,6 +191,7 @@ class ReportDetails extends React.Component {
 
     this.load();
 
+    this.props.loadSettings();
     this.props.loadFilters();
     this.props.loadReportFormats();
     this.props.loadReportComposerDefaults();
@@ -414,8 +422,10 @@ class ReportDetails extends React.Component {
       entity,
       gmp,
       reportComposerDefaults,
+      reportExportFileName,
       reportFilter,
       reportFormats = [],
+      username,
       onDownload,
     } = this.props;
     const {
@@ -458,7 +468,18 @@ class ReportDetails extends React.Component {
       .then(response => {
         this.setState({showDownloadReportDialog: false});
         const {data} = response;
-        const filename = 'report-' + entity.id + '.' + extension;
+        let filename = generateFilename({
+          creationTime: entity.creationTime,
+          fileNameFormat: reportExportFileName,
+          id: entity.id,
+          modificationTime: entity.modificationTime,
+          reportFormat: report_format,
+          resourceName: entity.task.name,
+          resourceType: 'report',
+          username,
+        });
+        filename += '.' + extension;
+
         onDownload({filename, data});
       }, this.handleError);
   }
@@ -659,10 +680,12 @@ ReportDetails.propTypes = {
   loadReport: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
+  loadSettings: PropTypes.func.isRequired,
   loadTarget: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   reportComposerDefaults: PropTypes.object,
+  reportExportFileName: PropTypes.object,
   reportFilter: PropTypes.filter,
   reportFormats: PropTypes.array,
   reportId: PropTypes.id,
@@ -671,6 +694,7 @@ ReportDetails.propTypes = {
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   target: PropTypes.model,
+  username: PropTypes.string,
   onDownload: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
@@ -679,6 +703,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
   return {
     onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
     loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
+    loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
     loadTarget: targetId => gmp.target.get({id: targetId}),
     loadReportFormats: () =>
       dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
@@ -701,6 +726,8 @@ const mapStateToProps = (rootState, {match}) => {
   const reportSel = reportSelector(rootState);
   const deltaSel = deltaSelector(rootState);
   const reportFormatsSel = reportFormatsSelector(rootState);
+  const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const username = getUsername(rootState);
 
   let entity;
   let entityError;
@@ -714,15 +741,19 @@ const mapStateToProps = (rootState, {match}) => {
   }
 
   return {
+    deltaReportId: deltaid,
     entity,
     entityError,
-    reportFilter: getFilter(entity),
-    isLoading: !isDefined(entity),
     filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
+    isLoading: !isDefined(entity),
+    reportExportFileName: userDefaultsSelector.getValueByName(
+      'reportexportfilename',
+    ),
+    reportFilter: getFilter(entity),
     reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
     reportId: id,
-    deltaReportId: deltaid,
     reportComposerDefaults: getReportComposerDefaults(rootState),
+    username,
   };
 };
 
