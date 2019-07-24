@@ -53,6 +53,8 @@ import {
   setIsLoggedIn,
 } from 'web/store/usersettings/actions';
 
+import {isLoggedIn} from 'web/store/usersettings/selectors';
+
 import LoginForm from './loginform';
 
 const log = logger.getLogger('web.login');
@@ -162,9 +164,12 @@ class LoginPage extends React.Component {
   }
 
   componentDidMount() {
-    // reset token
-    const {gmp} = this.props;
-    gmp.clearToken();
+    const {history, isLoggedIn = false} = this.props; // eslint-disable-line no-shadow
+
+    // redirect user to main page if he is already logged in
+    if (isLoggedIn) {
+      history.replace('/');
+    }
   }
 
   render() {
@@ -219,6 +224,7 @@ class LoginPage extends React.Component {
 LoginPage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   history: PropTypes.object.isRequired,
+  isLoggedIn: PropTypes.bool,
   location: PropTypes.object.isRequired,
   setIsLoggedIn: PropTypes.func.isRequired,
   setLocale: PropTypes.func.isRequired,
@@ -235,11 +241,15 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   setIsLoggedIn: value => dispatch(setIsLoggedIn(value)),
 });
 
+const mapStateToProp = (rootState, ownProps) => ({
+  isLoggedIn: isLoggedIn(rootState),
+});
+
 export default compose(
   withRouter,
   withGmp,
   connect(
-    null,
+    mapStateToProp,
     mapDispatchToProps,
   ),
 )(LoginPage);

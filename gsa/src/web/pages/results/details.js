@@ -48,6 +48,8 @@ import References from '../nvts/references';
 import Solution from '../nvts/solution';
 import P from '../nvts/preformatted';
 
+import Diff from './diff';
+
 /*
  security and log messages from nvts are converted to results
  results should preserve newlines AND whitespaces for formatting
@@ -107,9 +109,11 @@ const ResultDetails = ({className, links = true, entity}) => {
           </div>
           <div>
             <h3>{_('Different Lines')}</h3>
-            <Pre>
-              {isDefined(result.delta.diff) ? result.delta.diff : _('N/A')}
-            </Pre>
+            {isDefined(result.delta.diff) ? (
+              <Diff>{result.delta.diff}</Diff>
+            ) : (
+              <Pre>{_('N/A')}</Pre>
+            )}
           </div>
         </DetailsBlock>
       ) : (
