@@ -130,7 +130,7 @@ class CredentialsComponent extends React.Component {
         const filename = generateFilename({
           creationTime: creationTime,
           extension: format,
-          fileNameFormat: detailsExportFileName.value,
+          fileNameFormat: detailsExportFileName,
           id: id,
           modificationTime,
           resourceName: name,
