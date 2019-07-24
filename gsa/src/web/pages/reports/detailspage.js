@@ -470,7 +470,7 @@ class ReportDetails extends React.Component {
         const {data} = response;
         let filename = generateFilename({
           creationTime: entity.creationTime,
-          fileNameFormat: reportExportFileName.value,
+          fileNameFormat: reportExportFileName,
           id: entity.id,
           modificationTime: entity.modificationTime,
           reportFormat: report_format,
