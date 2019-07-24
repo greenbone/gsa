@@ -18,11 +18,22 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../utils/proptypes.js';
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {getUsername} from 'web/store/usersettings/selectors';
 
-import withGmp from '../utils/withGmp.js';
+import compose from 'web/utils/compose';
+
+import PropTypes from 'web/utils/proptypes';
+
+import {generateFilename} from 'web/utils/render';
+
+import withGmp from 'web/utils/withGmp';
 
 export const goto_details = (type, props) => ({data}) => {
   const {history} = props;
@@ -42,6 +53,10 @@ class EntityComponent extends React.Component {
     this.handleEntityDelete = this.handleEntityDelete.bind(this);
     this.handleEntityDownload = this.handleEntityDownload.bind(this);
     this.handleEntitySave = this.handleEntitySave.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.loadSettings();
   }
 
   handleEntityDelete(entity) {
@@ -78,13 +93,29 @@ class EntityComponent extends React.Component {
   }
 
   handleEntityDownload(entity) {
-    const {onDownloaded, onDownloadError, gmp, name} = this.props;
+    const {
+      detailsExportFileName,
+      username,
+      gmp,
+      name,
+      onDownloaded,
+      onDownloadError,
+    } = this.props;
     const cmd = gmp[name];
 
     this.handleInteraction();
 
     const promise = cmd.export(entity).then(response => {
-      const filename = name + '-' + entity.id + '.xml';
+      const filename = generateFilename({
+        creationTime: entity.creationTime,
+        fileNameFormat: detailsExportFileName.value,
+        id: entity.id,
+        modificationTime: entity.modificationTime,
+        resourceName: entity.name,
+        resourceType: name,
+        username,
+      });
+
       return {filename, data: response.data};
     });
 
@@ -113,8 +144,11 @@ class EntityComponent extends React.Component {
 
 EntityComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  detailsExportFileName: PropTypes.object,
   gmp: PropTypes.gmp.isRequired,
+  loadSettings: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
+  username: PropTypes.string,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -128,6 +162,29 @@ EntityComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default withGmp(EntityComponent);
+const mapStateToProps = rootState => {
+  const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const username = getUsername(rootState);
+  const detailsExportFileName = userDefaultsSelector.getByName(
+    'detailsexportfilename',
+  );
+  return {
+    detailsExportFileName,
+    username,
+  };
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+)(EntityComponent);
 
 // vim: set ts=2 sw=2 tw=80:

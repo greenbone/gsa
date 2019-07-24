@@ -18,6 +18,8 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
 import {MANUAL, TASK_SELECTED, RESULT_UUID} from 'gmp/models/override';
@@ -71,6 +73,13 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 
 import {loadEntity, selector} from 'web/store/entities/results';
 
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {getUsername} from 'web/store/usersettings/selectors';
+
+import compose from 'web/utils/compose';
+import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
@@ -280,11 +289,20 @@ class Page extends React.Component {
   handleDownload(result) {
     const {gmp} = this.props;
 
-    const {onError, onDownloaded} = this.props;
+    const {detailsExportFileName, username, onError, onDownloaded} = this.props;
     return gmp.result
       .export(result)
       .then(response => {
-        const filename = 'result-' + result.id + '.xml';
+        const {creationTime, entityType, id, modificationTime, name} = result;
+        const filename = generateFilename({
+          creationTime: creationTime,
+          fileNameFormat: detailsExportFileName.value,
+          id: id,
+          modificationTime,
+          resourceName: name,
+          resourceType: entityType,
+          username,
+        });
         return {filename, data: response.data};
       })
       .then(onDownloaded, onError);
@@ -385,17 +403,42 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
+  detailsExportFileName: PropTypes.object,
   entity: PropTypes.model,
   gmp: PropTypes.gmp.isRequired,
+  username: PropTypes.string,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onInteraction: PropTypes.func,
 };
 
-export default withEntityContainer('result', {
-  entitySelector: selector,
-  load: loadEntity,
-})(Page);
+const mapStateToProps = rootState => {
+  const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const username = getUsername(rootState);
+  const detailsExportFileName = userDefaultsSelector.getByName(
+    'detailsexportfilename',
+  );
+  return {
+    detailsExportFileName,
+    username,
+  };
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withEntityContainer('result', {
+    entitySelector: selector,
+    load: loadEntity,
+  }),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+)(Page);
 
 // vim: set ts=2 sw=2 tw=80:
