@@ -714,7 +714,7 @@ EntitiesContainer.propTypes = {
 const mapStateToProps = rootState => {
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
   const username = getUsername(rootState);
-  const listExportFileName = userDefaultsSelector.getByName(
+  const listExportFileName = userDefaultsSelector.getValueByName(
     'listexportfilename',
   );
   return {
