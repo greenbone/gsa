@@ -83,7 +83,7 @@ describe('generateFilename tests', () => {
   test('should generate filename for details export filename', () => {
     const data = {
       creationTime: new Date('2019-10-10T12:00:00'),
-      fileNameFormat: 'foo_%C-%c-%D-%F-%M-%m-%N-%%-%T-%U-%u_42',
+      fileNameFormat: 'foo_%C-%c-%F-%M-%m-%N-%%-%T-%U-%u_42',
       id: '123',
       modificationTime: new Date('2019-10-10T13:00:00'),
       resourceName: 'lorem',
@@ -93,7 +93,7 @@ describe('generateFilename tests', () => {
 
     const filename = generateFilename(data);
     expect(filename).toEqual(
-      'foo_20191010-121000-20190724-XML-20191010-131000-lorem-%-type-123-ObiWLAN_42.xml',
+      'foo_20191010-121000-XML-20191010-131000-lorem-%-type-123-ObiWLAN_42.xml',
     );
   });
 
