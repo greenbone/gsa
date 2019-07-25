@@ -236,14 +236,14 @@ class Trashcan extends React.Component {
     const {scan: tasks, compliance: audits} = separateByUsageType(
       trash.task_list,
     );
-    const renderTasks = isDefined(tasks) ? tasks.length > 0 : false;
-    const renderAudits = isDefined(audits) ? audits.length > 0 : false;
+    const renderTasks = isDefined(trash.task_list);
+    const renderAudits = isDefined(trash.task_list);
 
     const {scan: configs, compliance: policies} = separateByUsageType(
       trash.config_list,
     );
-    const renderConfigs = isDefined(configs) ? configs.length > 0 : false;
-    const renderPolicies = isDefined(policies) ? policies.length > 0 : false;
+    const renderConfigs = isDefined(trash.config_list);
+    const renderPolicies = isDefined(trash.config_list);
 
     return (
       <TableBody>
@@ -280,7 +280,7 @@ class Trashcan extends React.Component {
             trash.permission_list.length,
           )}
         {renderPolicies &&
-          this.createContentRow('policies', 'Policies', policies.length)}
+          this.createContentRow('policy', 'Policies', policies.length)}
         {render_port_lists &&
           this.createContentRow(
             'port_list',
@@ -386,14 +386,14 @@ class Trashcan extends React.Component {
             <AlertsTable entities={trash.alert_list} {...table_props} />
           </span>
         )}
-        {audits.length > 0 && (
+        {isDefined(trash.task_list) && (
           <span>
             <LinkTarget id="audit" />
             <h1>{_('Audits')}</h1>
             <TasksTable entities={audits} {...table_props} />
           </span>
         )}
-        {configs.length > 0 && (
+        {isDefined(trash.config_list) && (
           <span>
             <LinkTarget id="config" />
             <h1>{_('Scan Configs')}</h1>
@@ -448,7 +448,7 @@ class Trashcan extends React.Component {
             />
           </span>
         )}
-        {policies.length > 0 && (
+        {isDefined(trash.config_list) > 0 && (
           <span>
             <LinkTarget id="policy" />
             <h1>{_('Policies')}</h1>
@@ -507,7 +507,7 @@ class Trashcan extends React.Component {
             <TargetsTable entities={trash.target_list} {...table_props} />
           </span>
         )}
-        {tasks.length > 0 && (
+        {isDefined(trash.task_list) > 0 && (
           <span>
             <LinkTarget id="task" />
             <h1>{_('Tasks')}</h1>
