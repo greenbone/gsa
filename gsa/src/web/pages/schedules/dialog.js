@@ -215,8 +215,8 @@ class ScheduleDialog extends React.Component {
 
   handleNowButtonClick() {
     const {timezone} = this.state;
-    const Now = date().tz(timezone);
-    this.setState({startDate: Now});
+    const now = date().tz(timezone);
+    this.setState({startDate: now});
   }
 
   handleEndHoursChange(value) {
