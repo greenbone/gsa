@@ -80,7 +80,10 @@ import TargetComponent from 'web/pages/targets/component';
 
 import AuditDialog from 'web/pages/audits/dialog';
 
-const REPORT_FORMATS_FILTER = Filter.fromString('active=1 trust=1 rows=-1');
+// TODO: use id instead of name when a unique id becomes available
+const REPORT_FORMATS_FILTER = Filter.fromString(
+  'name="GCR PDF" and active=1 and trust=1 and rows=-1',
+);
 
 const DEFAULT_MIN_QOD = 70;
 
@@ -91,7 +94,7 @@ class AuditComponent extends React.Component {
     this.state = {
       showDownloadReportDialog: false,
       auditDialogVisible: false,
-      gcrFormatDefined: undefined,
+      gcrFormatDefined: false,
     };
 
     const {gmp} = this.props;
@@ -126,24 +129,11 @@ class AuditComponent extends React.Component {
 
   componentDidMount() {
     this.props.loadUserSettingsDefaults();
-    this.props.loadReportFormats();
-  }
-
-  componentDidUpdate() {
-    const {reportFormats} = this.props;
-    if (
-      !isDefined(this.state.gcrFormatDefined) &&
-      isDefined(reportFormats) &&
-      reportFormats.length > 0
-    ) {
-      const gcrFormat = reportFormats.find(format => {
-        return format.name === 'GCR PDF';
-      });
-      const gcrFormatDefined = isDefined(gcrFormat)
-        ? gcrFormat.active === 1 && gcrFormat.trust.value === 'yes'
-        : false;
-      this.setState({gcrFormatDefined: gcrFormatDefined});
-    }
+    this.props.loadReportFormats().then(() => {
+      const {reportFormats} = this.props;
+      const gcrFormatDefined = isDefined(reportFormats[0]);
+      this.setState({gcrFormatDefined});
+    });
   }
 
   handleInteraction() {
@@ -406,18 +396,17 @@ class AuditComponent extends React.Component {
 
   handleReportDownloadClick(audit) {
     this.setState({
-      audit: audit,
+      audit,
     });
 
-    this.handleReportDownload(this.state, audit);
+    this.handleReportDownload(audit);
   }
 
-  handleReportDownload(state, audit) {
+  handleReportDownload(audit) {
+    // TODO: use generateFilename when it becomes available for master
     const {gmp, reportFormats = [], onDownload} = this.props;
 
-    const reportFormat = reportFormats.find(
-      format => format.name === 'GCR PDF',
-    );
+    const [reportFormat] = reportFormats;
 
     const extension = isDefined(reportFormat)
       ? reportFormat.extension
