@@ -59,27 +59,24 @@ const Actions = ({
     ) : (
       <StartIcon audit={entity} onClick={onAuditStartClick} />
     )}
-
     <StopIcon task={entity} onClick={onAuditStopClick} />
-
     <ResumeIcon audit={entity} onClick={onAuditResumeClick} />
-
     <TrashIcon
       entity={entity}
-      title={_('Move Audit to trashcan')}
       name="task"
+      displayName="Audit"
       onClick={onAuditDeleteClick}
     />
     <EditIcon
       entity={entity}
-      title={_('Edit Audit')}
       name="task"
+      displayName="Audit"
       onClick={onAuditEditClick}
     />
     <CloneIcon
       entity={entity}
-      title={_('Clone Audit')}
       name="task"
+      displayName="Audit"
       onClick={onAuditCloneClick}
     />
     <ExportIcon
@@ -89,7 +86,11 @@ const Actions = ({
     />
     <DownloadIcon
       value={entity}
-      title={_('Download Greenbone Compliance Report')}
+      title={
+        gcrFormatDefined && isDefined(entity.last_report)
+          ? _('Download Greenbone Compliance Report')
+          : _('Report download not available')
+      }
       onClick={onReportDownloadClick}
       disabled={!gcrFormatDefined || !isDefined(entity.last_report)}
     />
