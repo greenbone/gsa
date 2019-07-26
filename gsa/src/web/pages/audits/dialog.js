@@ -80,15 +80,12 @@ const AuditDialog = ({
   targets,
   audit,
   title = _('New Audit'),
-  onAlertsChange,
   onClose,
   onNewAlertClick,
   onNewScheduleClick,
   onNewTargetClick,
   onSave,
-  onPolicyChange,
-  onScheduleChange,
-  onTargetChange,
+  onChange,
   ...data
 }) => {
   const targetItems = renderSelectItems(targets);
@@ -166,7 +163,7 @@ const AuditDialog = ({
                   disabled={!changeAudit}
                   items={targetItems}
                   value={state.targetId}
-                  onChange={onTargetChange}
+                  onChange={onChange}
                 />
                 {changeAudit && (
                   <Layout>
@@ -186,7 +183,7 @@ const AuditDialog = ({
                     name="alertIds"
                     items={alertItems}
                     value={state.alertIds}
-                    onChange={onAlertsChange}
+                    onChange={onChange}
                   />
                   <Layout>
                     <NewIcon
@@ -205,7 +202,7 @@ const AuditDialog = ({
                     name="scheduleId"
                     value={state.scheduleId}
                     items={scheduleItems}
-                    onChange={onScheduleChange}
+                    onChange={onChange}
                   />
                   <Checkbox
                     name="schedulePeriods"
@@ -254,7 +251,7 @@ const AuditDialog = ({
                   disabled={!changeAudit || hasAudit}
                   items={policyItems}
                   value={currentPolicyId}
-                  onChange={onPolicyChange}
+                  onChange={onChange}
                 />
               </FormGroup>
               <FormGroup titleSize="4" title={_('Network Source Interface')}>
@@ -343,15 +340,12 @@ AuditDialog.propTypes = {
   targetId: PropTypes.idOrZero,
   targets: PropTypes.array,
   title: PropTypes.string,
-  onAlertsChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onNewAlertClick: PropTypes.func.isRequired,
   onNewScheduleClick: PropTypes.func.isRequired,
   onNewTargetClick: PropTypes.func.isRequired,
-  onPolicyChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
-  onScheduleChange: PropTypes.func.isRequired,
-  onTargetChange: PropTypes.func.isRequired,
 };
 
 export default withCapabilities(AuditDialog);

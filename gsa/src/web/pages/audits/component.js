@@ -114,17 +114,13 @@ class AuditComponent extends React.Component {
     this.openAuditDialog = this.openAuditDialog.bind(this);
     this.handleCloseAuditDialog = this.handleCloseAuditDialog.bind(this);
 
-    this.handleAlertsChange = this.handleAlertsChange.bind(this);
-    this.handleTargetChange = this.handleTargetChange.bind(this);
-    this.handleScheduleChange = this.handleScheduleChange.bind(this);
-
     this.handleAlertCreated = this.handleAlertCreated.bind(this);
     this.handleTargetCreated = this.handleTargetCreated.bind(this);
     this.handleScheduleCreated = this.handleScheduleCreated.bind(this);
 
     this.handleInteraction = this.handleInteraction.bind(this);
 
-    this.handlePolicyChange = this.handlePolicyChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -143,20 +139,8 @@ class AuditComponent extends React.Component {
     }
   }
 
-  handleTargetChange(targetId) {
-    this.setState({targetId});
-  }
-
-  handleAlertsChange(alertIds) {
-    this.setState({alertIds});
-  }
-
-  handleScheduleChange(scheduleId) {
-    this.setState({scheduleId});
-  }
-
-  handlePolicyChange(policyId) {
-    this.setState({policyId});
+  handleChange(value, name) {
+    this.setState({[name]: value});
   }
 
   handleAuditStart(audit) {
@@ -538,13 +522,10 @@ class AuditComponent extends React.Component {
                               targets={targets}
                               audit={audit}
                               title={title}
-                              onAlertsChange={this.handleAlertsChange}
                               onNewAlertClick={createalert}
                               onNewTargetClick={createtarget}
                               onNewScheduleClick={createschedule}
-                              onPolicyChange={this.handlePolicyChange}
-                              onScheduleChange={this.handleScheduleChange}
-                              onTargetChange={this.handleTargetChange}
+                              onChange={this.handleChange}
                               onClose={this.handleCloseAuditDialog}
                               onSave={this.handleSaveAudit}
                             />
