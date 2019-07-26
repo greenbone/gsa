@@ -99,8 +99,10 @@ class AuditDetails extends React.Component {
       scanner,
       schedule_periods,
       target,
+      max_checks,
+      max_hosts,
     } = entity;
-    const {max_checks = {}, iface = {}, max_hosts = {}} = preferences;
+    const {iface = {}} = preferences;
 
     let dur;
     const has_duration =
@@ -200,22 +202,22 @@ class AuditDetails extends React.Component {
                   )}
                 {isDefined(policy) &&
                   policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(max_checks.name) && (
+                  isDefined(max_checks) && (
                     <TableRow>
                       <TableData>
                         {_('Maximum concurrently executed NVTs per host')}
                       </TableData>
-                      <TableData>{max_checks.value}</TableData>
+                      <TableData>{max_checks}</TableData>
                     </TableRow>
                   )}
                 {isDefined(policy) &&
                   policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(max_hosts.name) && (
+                  isDefined(max_hosts) && (
                     <TableRow>
                       <TableData>
                         {_('Maximum concurrently scanned hosts')}
                       </TableData>
-                      <TableData>{max_hosts.value}</TableData>
+                      <TableData>{max_hosts}</TableData>
                     </TableRow>
                   )}
               </TableBody>
