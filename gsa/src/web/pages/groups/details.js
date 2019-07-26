@@ -22,7 +22,7 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Divider from 'web/components/layout/divider';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
 
 import InfoTable from 'web/components/table/infotable';
@@ -31,8 +31,6 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
-
-import HorizontalSep from 'web/components/layout/horizontalsep';
 
 const GroupDetails = ({entity, links}) => {
   const {users = [], comment} = entity;
@@ -52,14 +50,11 @@ const GroupDetails = ({entity, links}) => {
           <TableRow>
             <TableData>{_('Users')}</TableData>
             <TableData>
-              <Divider>
-                {users.map((user, index) => (
-                  <span key={user}>
-                    {index > 0 && <HorizontalSep />}
-                    {user}
-                  </span>
+              <HorizontalSep>
+                {users.map(user => (
+                  <span key={user}>{user}</span>
                 ))}
-              </Divider>
+              </HorizontalSep>
             </TableData>
           </TableRow>
         </TableBody>

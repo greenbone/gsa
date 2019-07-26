@@ -202,14 +202,15 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
             count: tasks.length,
           })}
         >
-          <Divider>
-            {tasks.map((task, index) => (
-              <DetailsLink key={task.id} id={task.id} type="task">
-                {index > 0 && <HorizontalSep />}
-                {task.name}
-              </DetailsLink>
+          <HorizontalSep>
+            {tasks.map(task => (
+              <span key={task.id}>
+                <DetailsLink id={task.id} type="task">
+                  {task.name}
+                </DetailsLink>
+              </span>
             ))}
-          </Divider>
+          </HorizontalSep>
         </DetailsBlock>
       )}
     </Layout>

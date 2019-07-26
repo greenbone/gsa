@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=forking
 EnvironmentFile=-${DEFAULT_CONFIG_DIR}/gsad
-ExecStart=${SBINDIR}/gsad --listen $GSA_ADDRESS --port $GSA_PORT
+ExecStart=${SBINDIR}/gsad --listen $GSA_ADDRESS --port $GSA_PORT $OPTIONS
 Restart=always
 TimeoutStopSec=10
 

@@ -59,7 +59,10 @@ const Table = styled(SimpleTable)`
   }
 `;
 
-const Method = ({method, details = false}) => {
+const Method = ({method = {}, details = false}) => {
+  if (!isDefined(method.type)) {
+    return null;
+  }
   let url = '';
   if (method.type === METHOD_TYPE_ALEMBA_VFIRE) {
     const {data = {}} = method;

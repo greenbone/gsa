@@ -1,0 +1,130 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Diff component tests should render 1`] = `
+.c0 {
+  white-space: pre-wrap;
+  word-wrap: normal;
+  font-family: monospace;
+}
+
+.c2 {
+  white-space: pre-wrap;
+  word-wrap: normal;
+  font-family: monospace;
+  background-color: #ffeef0;
+}
+
+.c3 {
+  white-space: pre-wrap;
+  word-wrap: normal;
+  font-family: monospace;
+  background-color: #e6ffed;
+}
+
+.c1 {
+  white-space: pre-wrap;
+  word-wrap: normal;
+  font-family: monospace;
+  color: rgba(0,0,0,0.3);
+}
+
+<div>
+  <div
+    class="c0"
+  />
+  <div
+    class="c1"
+  >
+    @@ -1,9 +1,14 @@
+  </div>
+  <div
+    class="c2"
+  >
+    -Remote SSH server version: SSH-2.0-OpenSSH_7.6p1 Ubuntu-4
+  </div>
+  <div
+    class="c3"
+  >
+    +Remote SSH server banner: SSH-2.0-OpenSSH_7.6p1 Ubuntu-4ubuntu0.3
+  </div>
+  <div
+    class="c0"
+  >
+     Remote SSH supported authentication: password,publickey
+  </div>
+  <div
+    class="c2"
+  >
+    -Remote SSH banner: (not available)
+  </div>
+  <div
+    class="c3"
+  >
+    +Remote SSH text/login banner: (not available)
+  </div>
+  <div
+    class="c3"
+  >
+    +
+  </div>
+  <div
+    class="c3"
+  >
+    +This is probably:
+  </div>
+  <div
+    class="c3"
+  >
+    +
+  </div>
+  <div
+    class="c3"
+  >
+    +- OpenSSH
+  </div>
+  <div
+    class="c0"
+  />
+  <div
+    class="c0"
+  >
+     CPE: cpe:/a:openbsd:openssh:7.6p1
+  </div>
+  <div
+    class="c0"
+  />
+  <div
+    class="c0"
+  >
+     Concluded from remote connection attempt with credentials:
+  </div>
+  <div
+    class="c2"
+  >
+    -  Login: VulnScan
+  </div>
+  <div
+    class="c2"
+  >
+    -  Password: VulnScan
+  </div>
+  <div
+    class="c3"
+  >
+    +
+  </div>
+  <div
+    class="c3"
+  >
+    +Login:    OpenVAS-VT
+  </div>
+  <div
+    class="c3"
+  >
+    +Password: OpenVAS-VT
+  </div>
+  <div
+    class="c0"
+  />
+</div>
+`;

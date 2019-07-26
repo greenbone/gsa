@@ -48,6 +48,8 @@ import References from '../nvts/references';
 import Solution from '../nvts/solution';
 import P from '../nvts/preformatted';
 
+import Diff from './diff';
+
 /*
  security and log messages from nvts are converted to results
  results should preserve newlines AND whitespaces for formatting
@@ -72,6 +74,7 @@ const ResultDetails = ({className, links = true, entity}) => {
     : undefined;
 
   const result2 = isDefined(result.delta) ? result.delta.result : undefined;
+  const result2Id = isDefined(result2) ? result2.id : undefined;
   const result2Description = isDefined(result2)
     ? result2.description
     : undefined;
@@ -85,16 +88,32 @@ const ResultDetails = ({className, links = true, entity}) => {
       {result.hasDelta() ? (
         <DetailsBlock title={_('Detection Results')}>
           <div>
-            <h3>Result 1</h3>
-            <Pre>{result.description}</Pre>
+            <DetailsLink id={result.id} type="result">
+              <h3>{_('Result 1')}</h3>
+            </DetailsLink>
+            <Pre>
+              {isDefined(result.description) ? result.description : _('N/A')}
+            </Pre>
           </div>
           <div>
-            <h3>Result 2</h3>
-            <Pre>{result2Description}</Pre>
+            {isDefined(result2Id) ? (
+              <DetailsLink id={result2Id} type="result">
+                <h3>{_('Result 2')}</h3>
+              </DetailsLink>
+            ) : (
+              <h3>{_('Result 2')}</h3>
+            )}
+            <Pre>
+              {isDefined(result2Description) ? result2Description : _('N/A')}
+            </Pre>
           </div>
           <div>
-            <h3>Different Lines</h3>
-            <Pre>{result.delta.diff}</Pre>
+            <h3>{_('Different Lines')}</h3>
+            {isDefined(result.delta.diff) ? (
+              <Diff>{result.delta.diff}</Diff>
+            ) : (
+              <Pre>{_('N/A')}</Pre>
+            )}
           </div>
         </DetailsBlock>
       ) : (

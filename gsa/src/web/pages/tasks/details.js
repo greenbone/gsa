@@ -46,7 +46,7 @@ import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
 import {renderYesNo} from 'web/utils/render';
 
-import Divider from 'web/components/layout/divider';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -57,8 +57,6 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
-
-import HorizontalSep from 'web/components/layout/horizontalsep';
 
 const compareAlerts = (alertA, alertB) => {
   const nameA = alertA.name.toLowerCase();
@@ -101,8 +99,10 @@ class TaskDetails extends React.Component {
       scanner,
       schedule_periods,
       target,
+      max_checks,
+      max_hosts,
     } = entity;
-    const {max_checks = {}, iface = {}, max_hosts = {}} = preferences;
+    const {iface = {}} = preferences;
 
     let dur;
     const has_duration =
@@ -133,19 +133,15 @@ class TaskDetails extends React.Component {
 
         {isDefined(alerts) && (
           <DetailsBlock title={_('Alerts')}>
-            <Divider>
-              {alerts.sort(compareAlerts).map((alert, index) => (
-                <DetailsLink
-                  key={alert.id}
-                  textOnly={!links}
-                  type="alert"
-                  id={alert.id}
-                >
-                  {index > 0 && <HorizontalSep />}
-                  {alert.name}
-                </DetailsLink>
+            <HorizontalSep>
+              {alerts.sort(compareAlerts).map(alert => (
+                <span key={alert.id}>
+                  <DetailsLink textOnly={!links} type="alert" id={alert.id}>
+                    {alert.name}
+                  </DetailsLink>
+                </span>
               ))}
-            </Divider>
+            </HorizontalSep>
           </DetailsBlock>
         )}
 
@@ -203,22 +199,22 @@ class TaskDetails extends React.Component {
                   )}
                 {isDefined(scanConfig) &&
                   scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(max_checks.name) && (
+                  isDefined(max_checks) && (
                     <TableRow>
                       <TableData>
                         {_('Maximum concurrently executed NVTs per host')}
                       </TableData>
-                      <TableData>{max_checks.value}</TableData>
+                      <TableData>{max_checks}</TableData>
                     </TableRow>
                   )}
                 {isDefined(scanConfig) &&
                   scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(max_hosts.name) && (
+                  isDefined(max_hosts) && (
                     <TableRow>
                       <TableData>
                         {_('Maximum concurrently scanned hosts')}
                       </TableData>
-                      <TableData>{max_hosts.value}</TableData>
+                      <TableData>{max_hosts}</TableData>
                     </TableRow>
                   )}
               </TableBody>
