@@ -51,7 +51,7 @@ const Header = ({
   return (
     <TableHeader>
       <TableRow>
-        <TableHead {...sortProps} sortBy="name" width="60%" title={_('Name')} />
+        <TableHead {...sortProps} sortBy="name" width="52%" title={_('Name')} />
         <TableHead
           {...sortProps}
           width="8%"
@@ -90,7 +90,7 @@ export default createEntitiesTable({
   rowDetails: withRowDetails('audit', 10)(AuditDetails),
   header: withEntitiesHeader(actionsColumn)(Header),
   footer: createEntitiesFooter({
-    span: 10,
+    span: 5,
     trash: true,
     tags: false,
     download: 'audits.xml',
