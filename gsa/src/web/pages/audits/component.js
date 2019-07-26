@@ -66,11 +66,13 @@ import {
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
+import {getUsername} from 'web/store/usersettings/selectors';
+
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
-import {UNSET_VALUE} from 'web/utils/render';
+import {UNSET_VALUE, generateFilename} from 'web/utils/render';
 
 import EntityComponent from 'web/entity/component';
 
@@ -387,8 +389,13 @@ class AuditComponent extends React.Component {
   }
 
   handleReportDownload(audit) {
-    // TODO: use generateFilename when it becomes available for master
-    const {gmp, reportFormats = [], onDownload} = this.props;
+    const {
+      gmp,
+      reportExportFileName,
+      username,
+      reportFormats = [],
+      onDownload,
+    } = this.props;
 
     const [reportFormat] = reportFormats;
 
@@ -411,7 +418,15 @@ class AuditComponent extends React.Component {
       )
       .then(response => {
         const {data} = response;
-        const filename = 'report-' + id + '.' + extension;
+        const filename = generateFilename({
+          extension,
+          fileNameFormat: reportExportFileName,
+          id: id,
+          reportFormat: reportFormat.name,
+          resourceName: audit.name,
+          resourceType: 'report',
+          username,
+        });
         onDownload({filename, data});
       }, this.handleError);
   }
@@ -560,9 +575,11 @@ AuditComponent.propTypes = {
   loadTargets: PropTypes.func.isRequired,
   loadUserSettingsDefaults: PropTypes.func.isRequired,
   policies: PropTypes.arrayOf(PropTypes.model),
+  reportExportFileName: PropTypes.object,
   reportFormats: PropTypes.array,
   schedules: PropTypes.arrayOf(PropTypes.model),
   targets: PropTypes.arrayOf(PropTypes.model),
+  username: PropTypes.string,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -589,6 +606,8 @@ const mapStateToProps = (rootState, {match}) => {
   const policiesSel = policiesSelector(rootState);
   const scheduleSel = scheduleSelector(rootState);
   const targetSel = targetSelector(rootState);
+  const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const username = getUsername(rootState);
 
   const reportFormatsSel = reportFormatsSelector(rootState);
 
@@ -597,10 +616,14 @@ const mapStateToProps = (rootState, {match}) => {
     defaultAlertId: userDefaults.getValueByName('defaultalert'),
     defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
+    reportExportFileName: userDefaultsSelector.getValueByName(
+      'reportexportfilename',
+    ),
     reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
     policies: policiesSel.getEntities(ALL_FILTER),
     schedules: scheduleSel.getEntities(ALL_FILTER),
     targets: targetSel.getEntities(ALL_FILTER),
+    username,
   };
 };
 
