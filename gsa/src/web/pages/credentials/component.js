@@ -18,6 +18,8 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -29,6 +31,15 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
+
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {getUsername} from 'web/store/usersettings/selectors';
+
+import compose from 'web/utils/compose';
+
+import {generateFilename} from 'web/utils/render';
 
 import CredentialsDialog from './dialog';
 
@@ -96,15 +107,36 @@ class CredentialsComponent extends React.Component {
   }
 
   handleDownloadInstaller(credential, format) {
-    const {gmp, onInstallerDownloaded, onInstallerDownloadError} = this.props;
+    const {
+      detailsExportFileName,
+      gmp,
+      username,
+      onInstallerDownloaded,
+      onInstallerDownloadError,
+    } = this.props;
 
     this.handleInteraction();
 
     return gmp.credential
       .download(credential, format)
       .then(response => {
-        const {id, name} = credential;
-        const filename = 'credential-' + name + '-' + id + '.' + format;
+        const {
+          creationTime,
+          entityType,
+          id,
+          modificationTime,
+          name,
+        } = credential;
+        const filename = generateFilename({
+          creationTime: creationTime,
+          extension: format,
+          fileNameFormat: detailsExportFileName,
+          id: id,
+          modificationTime,
+          resourceName: name,
+          resourceType: entityType,
+          username,
+        });
         return {filename, data: response.data};
       })
       .then(onInstallerDownloaded, onInstallerDownloadError);
@@ -178,7 +210,9 @@ class CredentialsComponent extends React.Component {
 
 CredentialsComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  detailsExportFileName: PropTypes.object,
   gmp: PropTypes.gmp.isRequired,
+  username: PropTypes.string,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -194,6 +228,29 @@ CredentialsComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default withGmp(CredentialsComponent);
+const mapStateToProps = rootState => {
+  const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const username = getUsername(rootState);
+  const detailsExportFileName = userDefaultsSelector.getValueByName(
+    'detailsexportfilename',
+  );
+  return {
+    detailsExportFileName,
+    username,
+  };
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+)(CredentialsComponent);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -16,33 +16,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import styled from 'styled-components';
+
 import PropTypes from 'web/utils/proptypes';
 
-const HorizontalSep = ({separator, spacing}) => {
-  let sep;
-  if (separator === 'pipe') {
-    sep = <>|</>;
-  } else {
-    sep = <>&bull;</>;
-  }
+import Divider from './divider';
 
-  let space;
-  if (spacing === 'wide') {
-    space = <>&emsp;</>;
-  } else if (spacing === 'thin') {
-    space = <>&thinsp;</>;
-  } else {
-    space = <>&ensp;</>;
+const HorizontalSep = styled(Divider)`
+  & > *:not(:first-child)::before {
+    content: ${({separator = '•'}) => `'${separator}'`};
+    margin-right: ${({spacing = '5px'}) => spacing};
   }
-
-  return (
-    <React.Fragment>
-      {sep}
-      {space}
-    </React.Fragment>
-  );
-};
+`;
 
 HorizontalSep.propTypes = {
   separator: PropTypes.string,

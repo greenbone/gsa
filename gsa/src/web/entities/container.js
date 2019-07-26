@@ -20,6 +20,8 @@ import 'core-js/fn/set';
 
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
@@ -39,8 +41,16 @@ import Filter, {RESET_FILTER} from 'gmp/models/filter';
 
 import {YES_VALUE} from 'gmp/parser';
 
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {getUsername} from 'web/store/usersettings/selectors';
+
+import compose from 'web/utils/compose';
+
 import {LOAD_TIME_FACTOR} from 'web/utils/constants';
 import PropTypes from 'web/utils/proptypes';
+import {generateFilename} from 'web/utils/render';
 import SelectionType from 'web/utils/selectiontype';
 
 import SortBy from 'web/components/sortby/sortby';
@@ -131,6 +141,8 @@ class EntitiesContainer extends React.Component {
   componentDidMount() {
     this.isRunning = true;
     const {filter} = this.props.location.query;
+
+    this.props.loadSettings();
 
     if (isDefined(filter)) {
       // use filter from url
@@ -283,10 +295,10 @@ class EntitiesContainer extends React.Component {
     this.handleInteraction();
   }
 
-  handleDownloadBulk(filename = 'export.xml') {
+  handleDownloadBulk() {
     const {entitiesCommand} = this;
-    const {loadedFilter, selected, selectionType} = this.state;
-    const {onDownload} = this.props;
+    const {entities = [], loadedFilter, selected, selectionType} = this.state;
+    const {listExportFileName, username, onDownload} = this.props;
 
     let promise;
 
@@ -301,6 +313,11 @@ class EntitiesContainer extends React.Component {
     this.handleInteraction();
 
     promise.then(response => {
+      const filename = generateFilename({
+        fileNameFormat: listExportFileName,
+        resourceType: pluralizeType(getEntityType(entities[0])),
+        username,
+      });
       const {data} = response;
       onDownload({filename, data});
     }, this.handleError);
@@ -679,7 +696,9 @@ EntitiesContainer.propTypes = {
   gmpname: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  listExportFileName: PropTypes.object,
   loadEntities: PropTypes.func.isRequired,
+  loadSettings: PropTypes.func.isRequired,
   loadedFilter: PropTypes.filter,
   notify: PropTypes.func.isRequired,
   reloadInterval: PropTypes.func,
@@ -687,10 +706,33 @@ EntitiesContainer.propTypes = {
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   updateFilter: PropTypes.func.isRequired,
+  username: PropTypes.string,
   onDownload: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
 
-export default EntitiesContainer;
+const mapStateToProps = rootState => {
+  const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const username = getUsername(rootState);
+  const listExportFileName = userDefaultsSelector.getValueByName(
+    'listexportfilename',
+  );
+  return {
+    listExportFileName,
+    username,
+  };
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+)(EntitiesContainer);
 
 // vim: set ts=2 sw=2 tw=80:

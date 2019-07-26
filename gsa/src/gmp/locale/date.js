@@ -47,7 +47,7 @@ export const ensureDate = date => {
   return date;
 };
 
-const dateFormat = (date, format, tz) => {
+export const dateFormat = (date, format, tz) => {
   date = ensureDate(date);
   if (!isDefined(date)) {
     return undefined;

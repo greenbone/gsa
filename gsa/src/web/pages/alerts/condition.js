@@ -31,7 +31,10 @@ import {
   CONDITION_DIRECTION_DECREASED,
 } from 'gmp/models/alert';
 
-const Condition = ({condition, event}) => {
+const Condition = ({condition = {}, event}) => {
+  if (!isDefined(condition.type)) {
+    return null;
+  }
   if (condition.type === CONDITION_TYPE_FILTER_COUNT_AT_LEAST) {
     const count = parseInt(condition.data.count.value);
     let type;

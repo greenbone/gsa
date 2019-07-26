@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -19,23 +19,36 @@
 
 import React from 'react';
 
-import HorizontalSep from 'web/components/layout/horizontalsep';
-
 import {render} from 'web/utils/testing';
 
-describe('HorizontalSep tests', () => {
+import Diff from '../diff';
+
+const diff = `
+@@ -1,9 +1,14 @@
+-Remote SSH server version: SSH-2.0-OpenSSH_7.6p1 Ubuntu-4
++Remote SSH server banner: SSH-2.0-OpenSSH_7.6p1 Ubuntu-4ubuntu0.3
+ Remote SSH supported authentication: password,publickey
+-Remote SSH banner: (not available)
++Remote SSH text/login banner: (not available)
++
++This is probably:
++
++- OpenSSH
+
+ CPE: cpe:/a:openbsd:openssh:7.6p1
+
+ Concluded from remote connection attempt with credentials:
+-  Login: VulnScan
+-  Password: VulnScan
++
++Login:    OpenVAS-VT
++Password: OpenVAS-VT
+`;
+
+describe('Diff component tests', () => {
   test('should render', () => {
-    const {element} = render(<HorizontalSep />);
-    expect(element).toMatchSnapshot();
-  });
+    const {container} = render(<Diff>{diff}</Diff>);
 
-  test('should render with separator option', () => {
-    const {element} = render(<HorizontalSep separator="|" />);
-    expect(element).toMatchSnapshot();
-  });
-
-  test('should render with spacing', () => {
-    const {element} = render(<HorizontalSep separator="|" spacing="10px" />);
-    expect(element).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });

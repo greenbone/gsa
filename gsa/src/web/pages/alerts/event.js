@@ -30,7 +30,10 @@ import {
   EVENT_TYPE_OWNED_TICKET_CHANGED,
 } from 'gmp/models/alert';
 
-const Event = ({event}) => {
+const Event = ({event = {}}) => {
+  if (!isDefined(event.type)) {
+    return null;
+  }
   if (event.type === EVENT_TYPE_NEW_SECINFO) {
     const type = secInfoTypeName(event.data.secinfo_type.value, _('SecInfo'));
     return _('New {{secinfo_type}} arrived', {secinfo_type: type});

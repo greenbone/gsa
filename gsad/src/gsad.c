@@ -3066,8 +3066,7 @@ main (int argc, char **argv)
                        " %s\n",
                        __FUNCTION__, strerror (errno));
 #endif
-          redirect_location =
-            g_strdup_printf ("https://%%s:%i/login/login.html", gsad_port);
+          redirect_location = g_strdup_printf ("https://%%s:%i/", gsad_port);
           break;
         case -1:
           /* Parent when error. */

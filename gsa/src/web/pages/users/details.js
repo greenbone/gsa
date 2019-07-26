@@ -29,7 +29,7 @@ import {
 
 import PropTypes from 'web/utils/proptypes';
 
-import Divider from 'web/components/layout/divider';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -41,13 +41,11 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-import HorizontalSep from 'web/components/layout/horizontalsep';
-
-export const convert_auth_method = authMethod => {
-  if (authMethod === AUTH_METHOD_LDAP) {
+export const convert_auth_method = auth_method => {
+  if (auth_method === AUTH_METHOD_LDAP) {
     return _('LDAP');
   }
-  if (authMethod === AUTH_METHOD_RADIUS) {
+  if (auth_method === AUTH_METHOD_RADIUS) {
     return _('RADIUS');
   }
   return _('Local');
@@ -75,7 +73,7 @@ export const convert_allow = ({addresses, allow}) => {
 
 const UserDetails = ({entity, links = true}) => {
   const {
-    authMethod,
+    auth_method,
     comment,
     groups = [],
     hosts = {},
@@ -98,38 +96,35 @@ const UserDetails = ({entity, links = true}) => {
           <TableRow>
             <TableData>{_('Roles')}</TableData>
             <TableData>
-              <Divider>
-                {roles.map((role, index) => (
-                  <DetailsLink
-                    textOnly={!links}
-                    key={role.id}
-                    type="role"
-                    id={role.id}
-                  >
-                    {index > 0 && <HorizontalSep />}
-                    {role.name}
-                  </DetailsLink>
+              <HorizontalSep>
+                {roles.map(role => (
+                  <span key={role.id}>
+                    <DetailsLink textOnly={!links} type="role" id={role.id}>
+                      {role.name}
+                    </DetailsLink>
+                  </span>
                 ))}
-              </Divider>
+              </HorizontalSep>
             </TableData>
           </TableRow>
 
           <TableRow>
             <TableData>{_('Groups')}</TableData>
             <TableData>
-              <Divider>
-                {groups.map((group, index) => (
-                  <DetailsLink
-                    textOnly={!links}
-                    type="group"
-                    key={group.id}
-                    id={group.id}
-                  >
-                    {index > 0 && <HorizontalSep />}
-                    {group.name}
-                  </DetailsLink>
+              <HorizontalSep>
+                {groups.map(group => (
+                  <span key={group.id}>
+                    <DetailsLink
+                      textOnly={!links}
+                      type="group"
+                      key={group.id}
+                      id={group.id}
+                    >
+                      {group.name}
+                    </DetailsLink>
+                  </span>
                 ))}
-              </Divider>
+              </HorizontalSep>
             </TableData>
           </TableRow>
 
@@ -145,7 +140,7 @@ const UserDetails = ({entity, links = true}) => {
 
           <TableRow>
             <TableData>{_('Authentication Type')}</TableData>
-            <TableData>{convert_auth_method(authMethod)}</TableData>
+            <TableData>{convert_auth_method(auth_method)}</TableData>
           </TableRow>
         </TableBody>
       </InfoTable>
