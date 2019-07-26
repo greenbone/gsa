@@ -14,6 +14,7 @@ exports[`RemoveFromAssetsIcon component tests should render 1`] = `
 
 <span
   class="c0 "
+  data-testid="svg-icon"
 >
   <svg>
     remove_from_assets.svg

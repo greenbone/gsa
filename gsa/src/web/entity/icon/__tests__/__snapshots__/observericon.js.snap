@@ -15,6 +15,7 @@ exports[`Entity ObserverIcon component tests should render if the owner is not t
 <span
   alt="Entity owned by foo"
   class="c0 "
+  data-testid="svg-icon"
   title="Entity owned by foo"
 >
   <svg>

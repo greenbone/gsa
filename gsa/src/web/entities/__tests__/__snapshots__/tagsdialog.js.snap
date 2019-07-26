@@ -637,6 +637,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
                           </div>
                           <span
                             class="c20 c21"
+                            data-testid="svg-icon"
                             title="Create a new Tag"
                           >
                             <svg>
@@ -1349,6 +1350,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
                           </div>
                           <span
                             class="c20 c21"
+                            data-testid="svg-icon"
                             title="Create a new Tag"
                           >
                             <svg>

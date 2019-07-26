@@ -15,6 +15,7 @@ exports[`SolutionTypeIcon component tests should render correct image 1`] = `
 <span
   alt="Workaround"
   class="c0 "
+  data-testid="svg-icon"
   title="Workaround"
 >
   <svg>
@@ -40,6 +41,7 @@ exports[`SolutionTypeIcon component tests should render correct image 3`] = `
 <span
   alt="None available"
   class="c0 "
+  data-testid="svg-icon"
   title="None available"
 >
   <svg>
@@ -63,6 +65,7 @@ exports[`SolutionTypeIcon component tests should render correct image 4`] = `
 <span
   alt="Vendorfix"
   class="c0 "
+  data-testid="svg-icon"
   title="Vendorfix"
 >
   <svg>
@@ -86,6 +89,7 @@ exports[`SolutionTypeIcon component tests should render correct image 5`] = `
 <span
   alt="Will not fix"
   class="c0 "
+  data-testid="svg-icon"
   title="Will not fix"
 >
   <svg>
@@ -109,6 +113,7 @@ exports[`SolutionTypeIcon component tests should render correct image 6`] = `
 <span
   alt="Workaround"
   class="c0 "
+  data-testid="svg-icon"
   title="Workaround"
 >
   <svg>
@@ -132,6 +137,7 @@ exports[`SolutionTypeIcon component tests should render correct image 7`] = `
 <span
   alt=""
   class="c0 "
+  data-testid="svg-icon"
   title=""
 >
   <svg>

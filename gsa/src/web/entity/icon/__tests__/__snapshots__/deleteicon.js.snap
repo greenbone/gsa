@@ -18,6 +18,7 @@ exports[`Entity DeleteIcon component tests should deactivate if wrong command le
 
 <span
   class="c0 c1"
+  data-testid="svg-icon"
   title="Permission to delete Task denied"
 >
   <svg>
@@ -44,6 +45,7 @@ exports[`Entity DeleteIcon component tests should deactivate if wrong resource l
 
 <span
   class="c0 c1"
+  data-testid="svg-icon"
   title="Permission to delete Task denied"
 >
   <svg>
@@ -76,6 +78,7 @@ exports[`Entity DeleteIcon component tests should render in active state with co
 
 <span
   class="c0 c1"
+  data-testid="svg-icon"
   title="Delete Task"
 >
   <svg>

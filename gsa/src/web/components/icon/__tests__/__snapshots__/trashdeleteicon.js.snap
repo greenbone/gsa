@@ -22,6 +22,7 @@ exports[`TrashDeleteIcon component tests should render 1`] = `
 
 <span
   class="c0 c1 "
+  data-testid="svg-icon"
 >
   <svg>
     delete.svg

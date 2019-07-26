@@ -24,6 +24,7 @@ exports[`Entity CreateIcon component tests should render in active state with co
 
 <span
   class="c0 c1"
+  data-testid="svg-icon"
   title="Create new Task"
 >
   <svg>

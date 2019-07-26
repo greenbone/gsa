@@ -14,6 +14,7 @@ exports[`PortListIcon component tests should render 1`] = `
 
 <span
   class="c0 "
+  data-testid="svg-icon"
 >
   <svg>
     port_list.svg

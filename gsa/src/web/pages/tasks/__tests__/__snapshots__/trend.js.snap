@@ -15,6 +15,7 @@ exports[`Task Trend tests should render 1`] = `
 <span
   alt="Severity increased"
   class="c0 "
+  data-testid="svg-icon"
   title="Severity increased"
 >
   <svg>

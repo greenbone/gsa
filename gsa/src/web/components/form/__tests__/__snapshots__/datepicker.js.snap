@@ -42,6 +42,7 @@ exports[`DatePicker component tests should render 1`] = `
       2018/11/11
       <span
         class="c1 c2 "
+        data-testid="svg-icon"
       >
         <svg>
           calendar.svg
@@ -66,6 +67,7 @@ exports[`DatePicker component tests should render 2`] = `
       2018/11/11
       <span
         class="sc-drMfKT cMdjax sc-jzJRlG lcpYA sc-fjdhpX iICojt"
+        data-testid="svg-icon"
       >
         <svg>
           calendar.svg

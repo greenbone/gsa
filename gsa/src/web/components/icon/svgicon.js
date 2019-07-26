@@ -57,6 +57,7 @@ const SvgIcon = ({
 }) => (
   <Styled
     {...other}
+    data-testid="svg-icon"
     active={active}
     onClick={
       isDefined(onClick) && !disabled
