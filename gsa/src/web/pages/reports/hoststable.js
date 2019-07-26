@@ -192,28 +192,28 @@ const renderAuthIcons = authSuccess => {
   return (
     <IconDivider>
       {showSmbSuccess && (
-        <VerifyIcon title={_('SMB authentification was successful')} />
+        <VerifyIcon title={_('SMB authentication was successful')} />
       )}
       {showSmbFailure && (
-        <VerifyNoIcon title={_('SMB authentification was unsuccessful')} />
+        <VerifyNoIcon title={_('SMB authentication was unsuccessful')} />
       )}
       {showSnmpSuccess && (
-        <VerifyIcon title={_('SNMP authentification was successful')} />
+        <VerifyIcon title={_('SNMP authentication was successful')} />
       )}
       {showSnmpFailure && (
-        <VerifyNoIcon title={_('SNMP authentification was unsuccessful')} />
+        <VerifyNoIcon title={_('SNMP authentication was unsuccessful')} />
       )}
       {showEsxiSuccess && (
-        <VerifyIcon title={_('ESXi authentification was successful')} />
+        <VerifyIcon title={_('ESXi authentication was successful')} />
       )}
       {showEsxiFailure && (
-        <VerifyNoIcon title={_('ESXi authentification was unsuccessful')} />
+        <VerifyNoIcon title={_('ESXi authentication was unsuccessful')} />
       )}
       {showSshSuccess && (
-        <VerifyIcon title={_('SSH authentification was successful')} />
+        <VerifyIcon title={_('SSH authentication was successful')} />
       )}
       {showSshFailure && (
-        <VerifyNoIcon title={_('SSH authentification was unsuccessful')} />
+        <VerifyNoIcon title={_('SSH authentication was unsuccessful')} />
       )}
     </IconDivider>
   );
