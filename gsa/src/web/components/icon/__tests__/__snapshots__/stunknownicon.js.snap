@@ -14,6 +14,7 @@ exports[`StUnknownIcon component tests should render 1`] = `
 
 <span
   class="c0 "
+  data-testid="svg-icon"
 >
   <svg>
     st_unknown.svg

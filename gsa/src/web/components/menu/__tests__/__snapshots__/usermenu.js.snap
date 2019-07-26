@@ -184,6 +184,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
 >
   <span
     class="c2 c3 "
+    data-testid="svg-icon"
   >
     <svg>
       user.svg
@@ -208,6 +209,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
           >
             <span
               class="c9 "
+              data-testid="svg-icon"
             >
               <svg>
                 user.svg
@@ -229,6 +231,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
           >
             <span
               class="c9 "
+              data-testid="svg-icon"
             >
               <svg>
                 schedule.svg
@@ -257,6 +260,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
             >
               <span
                 class="c9 "
+                data-testid="svg-icon"
               >
                 <svg>
                   my_setting.svg
@@ -282,6 +286,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
           >
             <span
               class="c9 "
+              data-testid="svg-icon"
             >
               <svg>
                 logout.svg

@@ -18,6 +18,7 @@ exports[`Entity CloneIcon component tests should deactivate if wrong command lev
 
 <span
   class="c0 c1"
+  data-testid="svg-icon"
   title="Permission to clone Task denied"
 >
   <svg>
@@ -44,6 +45,7 @@ exports[`Entity CloneIcon component tests should deactivate if wrong resource le
 
 <span
   class="c0 c1"
+  data-testid="svg-icon"
   title="Permission to clone Task denied"
 >
   <svg>
@@ -76,6 +78,7 @@ exports[`Entity CloneIcon component tests should render in active state with cor
 
 <span
   class="c0 c1"
+  data-testid="svg-icon"
   title="Clone Task"
 >
   <svg>

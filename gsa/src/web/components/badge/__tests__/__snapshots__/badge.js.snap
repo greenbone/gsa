@@ -62,6 +62,7 @@ exports[`Badge tests should render badge 1`] = `
 >
   <span
     class="c1 "
+    data-testid="svg-icon"
   >
     <svg>
       report.svg

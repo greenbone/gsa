@@ -290,6 +290,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                       <span
                         alt="Workaround"
                         class="c11 "
+                        data-testid="svg-icon"
                         title="Workaround"
                       >
                         <svg>
@@ -328,6 +329,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                       <span
                         alt="Mitigation"
                         class="c11 "
+                        data-testid="svg-icon"
                         title="Mitigation"
                       >
                         <svg>
@@ -368,6 +370,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                       <span
                         alt="Vendorfix"
                         class="c11 "
+                        data-testid="svg-icon"
                         title="Vendorfix"
                       >
                         <svg>
@@ -406,6 +409,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                       <span
                         alt="None available"
                         class="c11 "
+                        data-testid="svg-icon"
                         title="None available"
                       >
                         <svg>
@@ -444,6 +448,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                       <span
                         alt="Will not fix"
                         class="c11 "
+                        data-testid="svg-icon"
                         title="Will not fix"
                       >
                         <svg>

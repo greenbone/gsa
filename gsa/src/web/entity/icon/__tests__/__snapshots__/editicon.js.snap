@@ -18,6 +18,7 @@ exports[`Entity EditIcon component tests should deactivate if wrong command leve
 
 <span
   class="c0 c1"
+  data-testid="svg-icon"
   title="Permission to edit Task denied"
 >
   <svg>
@@ -44,6 +45,7 @@ exports[`Entity EditIcon component tests should deactivate if wrong resource lev
 
 <span
   class="c0 c1"
+  data-testid="svg-icon"
   title="Permission to edit Task denied"
 >
   <svg>
@@ -76,6 +78,7 @@ exports[`Entity EditIcon component tests should render in active state with corr
 
 <span
   class="c0 c1"
+  data-testid="svg-icon"
   title="Edit Task"
 >
   <svg>

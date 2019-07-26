@@ -29,6 +29,7 @@ const DetailsLink = ({capabilities, id, type, textOnly = false, ...props}) => {
   return (
     <Link
       {...props}
+      data-testid="details-link"
       textOnly={textOnly}
       to={`/${type}/${encodeURIComponent(id)}`}
     />

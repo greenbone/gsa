@@ -374,6 +374,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
       >
         <span
           class="c8 c9 "
+          data-testid="svg-icon"
         >
           <svg>
             user.svg
@@ -398,6 +399,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
                 >
                   <span
                     class="c15 "
+                    data-testid="svg-icon"
                   >
                     <svg>
                       user.svg
@@ -421,6 +423,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
                 >
                   <span
                     class="c15 "
+                    data-testid="svg-icon"
                   >
                     <svg>
                       schedule.svg
@@ -449,6 +452,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
                   >
                     <span
                       class="c15 "
+                      data-testid="svg-icon"
                     >
                       <svg>
                         my_setting.svg
@@ -474,6 +478,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
                 >
                   <span
                     class="c15 "
+                    data-testid="svg-icon"
                   >
                     <svg>
                       logout.svg

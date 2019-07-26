@@ -426,6 +426,7 @@ exports[`StartTimeSelection tests should render 1`] = `
                 01/01/2019
                 <span
                   class="c7 c8 "
+                  data-testid="svg-icon"
                 >
                   <svg>
                     calendar.svg
@@ -537,6 +538,7 @@ exports[`StartTimeSelection tests should render 1`] = `
                 01/01/2019
                 <span
                   class="c7 c8 "
+                  data-testid="svg-icon"
                 >
                   <svg>
                     calendar.svg
