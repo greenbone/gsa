@@ -43,7 +43,7 @@ macro (MAKE_TRANSLATION _LANG)
 endmacro ()
 
 if (GETTEXT_FOUND)
-  if (PY_POLIB_FOUND)
+  if (POLIB_FOUND)
 
     file (MAKE_DIRECTORY ${GSA_LOCALE_DIR})
 
@@ -104,9 +104,9 @@ if (GETTEXT_FOUND)
              ${GSA_LOCALE_DIR}
              DESTINATION ${GSA_DEST_DIR})
 
-  else (PY_POLIB_FOUND)
+  else (POLIB_FOUND)
     message (WARNING "Could not build translation files: Python interpreter or polib Python module not found.")
-  endif (PY_POLIB_FOUND)
+  endif (POLIB_FOUND)
 
 else (GETTEXT_FOUND)
   message (WARNING "Could not build translation files: gettext not found.")

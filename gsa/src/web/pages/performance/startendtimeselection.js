@@ -59,6 +59,8 @@ class StartTimeSelection extends React.Component {
       (isDefined(endDate) && props.endDate !== state.prevEndDate)
     ) {
       return {
+        startDate,
+        endDate,
         endHour: endDate.hour(),
         endMinute: endDate.minute(),
         prevStartDate: startDate,
@@ -75,8 +77,15 @@ class StartTimeSelection extends React.Component {
   }
 
   handleUpdate() {
-    const {startDate, endDate, onChanged} = this.props;
-    const {startHour, startMinute, endHour, endMinute} = this.state;
+    const {onChanged} = this.props;
+    const {
+      startDate,
+      endDate,
+      startHour,
+      startMinute,
+      endHour,
+      endMinute,
+    } = this.state;
 
     onChanged({
       startDate: startDate
@@ -91,8 +100,15 @@ class StartTimeSelection extends React.Component {
   }
 
   render() {
-    const {endDate, startDate, timezone} = this.props;
-    const {startHour, startMinute, endHour, endMinute} = this.state;
+    const {timezone} = this.props;
+    const {
+      endDate,
+      startDate,
+      startHour,
+      startMinute,
+      endHour,
+      endMinute,
+    } = this.state;
     return (
       <Layout flex="column">
         <FormGroup data-testid="timezone" title={_('Timezone')}>

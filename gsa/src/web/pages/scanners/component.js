@@ -18,6 +18,8 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -31,7 +33,14 @@ import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {getUsername} from 'web/store/usersettings/selectors';
+
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
+import {generateFilename} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
@@ -198,24 +207,58 @@ class ScannerComponent extends React.Component {
   }
 
   handleDownloadCertificate(scanner) {
-    const {onCertificateDownloaded} = this.props;
-    const {id, name, ca_pub} = scanner;
-
-    const filename = 'scanner-' + name + '-' + id + '-ca-pub.pem';
+    const {
+      detailsExportFileName,
+      username,
+      onCertificateDownloaded,
+    } = this.props;
+    const {
+      creationTime,
+      entityType,
+      id,
+      modificationTime,
+      name,
+      ca_pub,
+    } = scanner;
+    const filename = generateFilename({
+      creationTime: creationTime,
+      extension: 'pem',
+      fileNameFormat: detailsExportFileName,
+      id: id,
+      modificationTime,
+      resourceName: name,
+      resourceType: entityType,
+      username,
+    });
     return onCertificateDownloaded({filename, data: ca_pub.certificate});
   }
 
   handleDownloadCredential(scanner) {
-    const {onCredentialDownloaded, onCredentialDownloadError, gmp} = this.props;
+    const {
+      detailsExportFileName,
+      username,
+      onCredentialDownloaded,
+      onCredentialDownloadError,
+      gmp,
+    } = this.props;
     const {credential} = scanner;
-    const {name, id} = credential;
+    const {creationTime, entityType, id, modificationTime, name} = credential;
 
     this.handleInteraction();
 
     return gmp.credential
       .download(credential, 'pem')
       .then(response => {
-        const filename = 'scanner-credential-' + name + '-' + id + '.pem';
+        const filename = generateFilename({
+          creationTime: creationTime,
+          extension: 'pem',
+          fileNameFormat: detailsExportFileName,
+          id: id,
+          modificationTime,
+          resourceName: name,
+          resourceType: entityType,
+          username,
+        });
         return {filename, data: response.data};
       })
       .then(onCredentialDownloaded, onCredentialDownloadError);
@@ -329,7 +372,9 @@ class ScannerComponent extends React.Component {
 
 ScannerComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  detailsExportFileName: PropTypes.object,
   gmp: PropTypes.gmp.isRequired,
+  username: PropTypes.string,
   onCertificateDownloadError: PropTypes.func,
   onCertificateDownloaded: PropTypes.func,
   onCloneError: PropTypes.func,
@@ -349,6 +394,29 @@ ScannerComponent.propTypes = {
   onVerifyError: PropTypes.func,
 };
 
-export default withGmp(ScannerComponent);
+const mapStateToProps = rootState => {
+  const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const username = getUsername(rootState);
+  const detailsExportFileName = userDefaultsSelector.getValueByName(
+    'detailsexportfilename',
+  );
+  return {
+    detailsExportFileName,
+    username,
+  };
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+)(ScannerComponent);
 
 // vim: set ts=2 sw=2 tw=80:

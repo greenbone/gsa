@@ -19,12 +19,21 @@
 
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
+
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {getUsername} from 'web/store/usersettings/selectors';
 
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
+import {generateFilename} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
@@ -52,15 +61,29 @@ class AgentComponent extends React.Component {
   }
 
   handleDownloadInstaller(agent) {
-    const {gmp, onInstallerDownloadError, onInstallerDownloaded} = this.props;
-    const {id, name} = agent;
+    const {
+      detailsExportFileName,
+      gmp,
+      username,
+      onInstallerDownloadError,
+      onInstallerDownloaded,
+    } = this.props;
+    const {creationTime, entityType, id, modificationTime, name} = agent;
 
     this.handleInteraction();
 
     return gmp.agent
       .downloadInstaller(agent)
       .then(response => {
-        const filename = 'agent-' + name + '-' + id + '-installer';
+        const filename = generateFilename({
+          creationTime: creationTime,
+          fileNameFormat: detailsExportFileName,
+          id: id,
+          modificationTime,
+          resourceName: name,
+          resourceType: entityType,
+          username,
+        });
         return {filename, data: response.data};
       })
       .then(onInstallerDownloaded, onInstallerDownloadError);
@@ -162,7 +185,9 @@ class AgentComponent extends React.Component {
 
 AgentComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  detailsExportFileName: PropTypes.object,
   gmp: PropTypes.gmp.isRequired,
+  username: PropTypes.string,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -180,6 +205,29 @@ AgentComponent.propTypes = {
   onVerifyError: PropTypes.func,
 };
 
-export default withGmp(AgentComponent);
+const mapStateToProps = rootState => {
+  const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const username = getUsername(rootState);
+  const detailsExportFileName = userDefaultsSelector.getValueByName(
+    'detailsexportfilename',
+  );
+  return {
+    detailsExportFileName,
+    username,
+  };
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+)(AgentComponent);
 
 // vim: set ts=2 sw=2 tw=80:

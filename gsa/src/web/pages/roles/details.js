@@ -22,7 +22,7 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Divider from 'web/components/layout/divider';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
 
 import InfoTable from 'web/components/table/infotable';
@@ -50,11 +50,11 @@ const RoleDetails = ({entity, links = true}) => {
           <TableRow>
             <TableData>{_('Users')}</TableData>
             <TableData>
-              <Divider>
+              <HorizontalSep>
                 {users.map(user => (
                   <span key={user}>{user}</span>
                 ))}
-              </Divider>
+              </HorizontalSep>
             </TableData>
           </TableRow>
         </TableBody>

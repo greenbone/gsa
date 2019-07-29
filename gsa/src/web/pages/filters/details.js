@@ -24,7 +24,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Divider from 'web/components/layout/divider';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -67,13 +67,15 @@ const FilterDetails = ({entity}) => {
             <TableRow>
               <TableData>{_('Alerts using this Filter')}</TableData>
               <TableData>
-                <Divider wrap>
+                <HorizontalSep wrap>
                   {alerts.map(alert => (
-                    <DetailsLink key={alert.id} id={alert.id} type="alert">
-                      {alert.name}
-                    </DetailsLink>
+                    <span key={alert.id}>
+                      <DetailsLink id={alert.id} type="alert">
+                        {alert.name}
+                      </DetailsLink>
+                    </span>
                   ))}
-                </Divider>
+                </HorizontalSep>
               </TableData>
             </TableRow>
           )}

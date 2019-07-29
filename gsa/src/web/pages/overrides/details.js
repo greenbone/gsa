@@ -28,7 +28,7 @@ import {
   LOG_VALUE,
 } from 'web/utils/severity';
 
-import Divider from 'web/components/layout/divider';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
 
 import InfoTable from 'web/components/table/infotable';
@@ -57,11 +57,11 @@ const OverrideDetails = ({entity}) => {
               <TableData>{_('Hosts')}</TableData>
               <TableData>
                 {hosts.length > 0 ? (
-                  <Divider>
+                  <HorizontalSep>
                     {hosts.map(host => (
                       <span key={host}>{host}</span>
                     ))}
-                  </Divider>
+                  </HorizontalSep>
                 ) : (
                   _('Any')
                 )}

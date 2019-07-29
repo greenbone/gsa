@@ -150,4 +150,30 @@ describe('LoginPagetests', () => {
     const error = await waitForElement(() => getByTestId('error'));
     expect(error).toHaveTextContent('Just a test');
   });
+
+  test('should redirect to main page if already logged in', () => {
+    const login = jest.fn().mockResolvedValue({
+      locale: 'locale',
+      username: 'username',
+      token: 'token',
+      timezone: 'timezone',
+    });
+    const isLoggedIn = jest.fn().mockReturnValue(true);
+    const clearToken = jest.fn();
+    const setLocale = jest.fn();
+    const setTimezone = jest.fn();
+    const gmp = {
+      setTimezone,
+      setLocale,
+      login,
+      isLoggedIn,
+      clearToken,
+      settings: {},
+    };
+    const {render, history} = rendererWith({gmp, router: true, store: true});
+
+    render(<LoginPage />);
+
+    expect(history.location.pathname).toMatch(/^\/$/);
+  });
 });

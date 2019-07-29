@@ -32,8 +32,8 @@ import {
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -149,7 +149,7 @@ const AlertDetails = ({capabilities, entity, links = true}) => {
             <TableRow>
               <TableData>{_('Task using this Alert')}</TableData>
               <TableData>
-                <Divider wrap>
+                <HorizontalSep wrap>
                   {tasks.map(task => (
                     <span key={task.id}>
                       <DetailsLink id={task.id} type="task">
@@ -157,7 +157,7 @@ const AlertDetails = ({capabilities, entity, links = true}) => {
                       </DetailsLink>
                     </span>
                   ))}
-                </Divider>
+                </HorizontalSep>
               </TableData>
             </TableRow>
           )}

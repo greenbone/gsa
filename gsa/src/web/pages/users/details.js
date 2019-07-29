@@ -29,7 +29,7 @@ import {
 
 import PropTypes from 'web/utils/proptypes';
 
-import Divider from 'web/components/layout/divider';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -96,36 +96,35 @@ const UserDetails = ({entity, links = true}) => {
           <TableRow>
             <TableData>{_('Roles')}</TableData>
             <TableData>
-              <Divider>
+              <HorizontalSep>
                 {roles.map(role => (
-                  <DetailsLink
-                    textOnly={!links}
-                    key={role.id}
-                    type="role"
-                    id={role.id}
-                  >
-                    {role.name}
-                  </DetailsLink>
+                  <span key={role.id}>
+                    <DetailsLink textOnly={!links} type="role" id={role.id}>
+                      {role.name}
+                    </DetailsLink>
+                  </span>
                 ))}
-              </Divider>
+              </HorizontalSep>
             </TableData>
           </TableRow>
 
           <TableRow>
             <TableData>{_('Groups')}</TableData>
             <TableData>
-              <Divider>
+              <HorizontalSep>
                 {groups.map(group => (
-                  <DetailsLink
-                    textOnly={!links}
-                    type="group"
-                    key={group.id}
-                    id={group.id}
-                  >
-                    {group.name}
-                  </DetailsLink>
+                  <span key={group.id}>
+                    <DetailsLink
+                      textOnly={!links}
+                      type="group"
+                      key={group.id}
+                      id={group.id}
+                    >
+                      {group.name}
+                    </DetailsLink>
+                  </span>
                 ))}
-              </Divider>
+              </HorizontalSep>
             </TableData>
           </TableRow>
 

@@ -4,9 +4,33 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [8.0.1] - (unreleased)
+## [8.0.2] - unreleased
 
 ### Added
+- Highlight result diffs at delta reports [#1513](https://github.com/greenbone/gsa/pull/1513)
+- Added HorizontalSep component for horizontal lists
+  [#1506](https://github.com/greenbone/gsa/pull/1506),
+  [#1507](https://github.com/greenbone/gsa/pull/1507)
+
+### Changed
+- Redirect to main page when visiting the login page and the user is already
+  logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
+
+### Fixed
+- Fix showing details for tasks [#1515](https://github.com/greenbone/gsa/pull/1515)
+- Fix using filename templates from usersettings [#1512](https://github.com/greenbone/gsa/pull/1512)
+- Allow to use additional options for starting gsad via systemd
+  [#1514](https://github.com/greenbone/gsa/pull/1514)
+- Redirect to root URL by default [#1517](https://github.com/greenbone/gsa/pull/1517)
+
+[8.0.2]: https://github.com/greenbone/gsa/compare/v8.0.1...gsa-8.0
+
+## [8.0.1] - 2019-07-17
+
+### Added
+- Added systemd service file and logrotate config to gsad [#1486](https://github.com/greenbone/gsa/pull/1486)
+- Additional report-host information [#1468](https://github.com/greenbone/gsa/pull/1468)
+- New VerifyNoIcon [#1468](https://github.com/greenbone/gsa/pull/1468)
 - Add tests for filter groups [#1419](https://github.com/greenbone/gsa/pull/1419)
 - Add tests for severitylevelsgroup, radio button and task trend [#1413](https://github.com/greenbone/gsa/pull/1413)
 - Allow to show error details [#1403](https://github.com/greenbone/gsa/pull/1403)
@@ -30,6 +54,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add tooltips to deactivated text fields in AlertDialog [#1269](https://github.com/greenbone/gsa/pull/1269)
 
 ### Changed
+- Always load notes and overrides when getting results [#1446](https://github.com/greenbone/gsa/pull/1446)
 - Disable some FileFields when RadioButton is not checked [#1430](https://github.com/greenbone/gsa/pull/1430)
 - Change checkboxes for solution types to radio buttons [#1398](https://github.com/greenbone/gsa/pull/1398)
 - Link to search in the manual for vulnerabilities [#1391](https://github.com/greenbone/gsa/pull/1391)
@@ -52,6 +77,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleanup get_report function in gsad [#1263](https://github.com/greenbone/gsa/pull/1263)
 
 ### Fixed
+- Displaying delta information at result details [#1499](https://github.com/greenbone/gsa/pull/1499)
+- Don't crash Alerts listpage and trashcan when Alert data is missing [#1498](https://github.com/greenbone/gsa/pull/1498)
+- Show full filter term in content composer [#1496](https://github.com/greenbone/gsa/pull/1496)
+- Fix finding python modules
+  [#1483](https://github.com/greenbone/gsa/pull/1483)
+  [#1484](https://github.com/greenbone/gsa/pull/1484)
+- Fix displaying schedules created during migration [#1479](https://github.com/greenbone/gsa/pull/1478)
+- Fix showing Loading indicator at entities pages [#1469](https://github.com/greenbone/gsa/pull/1469)
+- Show notes and overrides for results and their icon indicator in results rows [#1446](https://github.com/greenbone/gsa/pull/1446)
 - Display text if gvm-libs is build without LDAP and/or Radius support [#1437](https://github.com/greenbone/gsa/pull/1437)
 - Fix sending related resources in permission.create() [#1432](https://github.com/greenbone/gsa/pull/1432)
 - Don't allow bulk tagging vulnerabilities [#1429](https://github.com/greenbone/gsa/pull/1429)
@@ -138,7 +172,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - --guest-username
   - --guest-password
 
-[8.0.1]: https://github.com/greenbone/gsa/compare/v8.0.0...gsa-8.0
+[8.0.1]: https://github.com/greenbone/gsa/compare/v8.0.0...v8.0.1
 
 ## [8.0.0] - 2018-04-05
 

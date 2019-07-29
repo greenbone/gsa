@@ -39,6 +39,8 @@ import TableRow from 'web/components/table/row';
 import DetailsBlock from 'web/entity/block';
 import {Col} from 'web/entity/page';
 
+import HorizontalSep from 'web/components/layout/horizontalsep';
+
 const MAX_HOSTS_LISTINGS = 70;
 
 const TargetDetails = ({capabilities, entity, links = true}) => {
@@ -59,11 +61,11 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
 
   const hostsListing = hosts
     .slice(0, MAX_HOSTS_LISTINGS)
-    .map(host => <span key={host}>{host}</span>);
+    .map(host => <span key={host}>{host + ','}</span>);
 
   const excludeHostsListing = exclude_hosts
     .slice(0, MAX_HOSTS_LISTINGS)
-    .map(host => <span key={host}>{host}</span>);
+    .map(host => <span key={host}>{host + ','}</span>);
 
   return (
     <Layout grow="1" flex="column">
@@ -200,13 +202,15 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
             count: tasks.length,
           })}
         >
-          <Divider>
+          <HorizontalSep>
             {tasks.map(task => (
-              <DetailsLink key={task.id} id={task.id} type="task">
-                {task.name}
-              </DetailsLink>
+              <span key={task.id}>
+                <DetailsLink id={task.id} type="task">
+                  {task.name}
+                </DetailsLink>
+              </span>
             ))}
-          </Divider>
+          </HorizontalSep>
         </DetailsBlock>
       )}
     </Layout>
