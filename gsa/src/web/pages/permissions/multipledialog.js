@@ -48,7 +48,7 @@ const MultiplePermissionDialog = withCapabilities(
     groupId,
     groups = [],
     id,
-    includeRelated = CURRENT_RESOURCE_ONLY,
+    includeRelated = INCLUDE_RELATED_RESOURCES,
     permission = 'read',
     related = [],
     roleId,
