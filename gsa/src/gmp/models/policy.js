@@ -24,10 +24,7 @@ import {isEmpty} from '../utils/string';
 import {parseInt} from '../parser';
 
 import Model from '../model';
-
-export const parse_count = count => {
-  return !isEmpty(count) && count !== '-1' ? parseInt(count) : undefined;
-};
+import {parse_count} from './scanconfig';
 
 class Policy extends Model {
   static entityType = 'policy';

@@ -37,7 +37,7 @@ import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.scanconfigs');
 
-const convert = (values, prefix) => {
+export const convert = (values, prefix) => {
   const ret = {};
   for (const [key, value] of Object.entries(values)) {
     ret[prefix + key] = value;
@@ -45,7 +45,7 @@ const convert = (values, prefix) => {
   return ret;
 };
 
-const convert_select = (values, prefix) => {
+export const convert_select = (values, prefix) => {
   const ret = {};
   for (const [key, value] of Object.entries(values)) {
     if (value === YES_VALUE) {
@@ -55,7 +55,7 @@ const convert_select = (values, prefix) => {
   return ret;
 };
 
-const convert_preferences = (values, nvt_oid) => {
+export const convert_preferences = (values, nvt_oid) => {
   const ret = {};
   for (const prop in values) {
     const data = values[prop];

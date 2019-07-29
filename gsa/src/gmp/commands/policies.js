@@ -21,7 +21,6 @@ import 'core-js/fn/object/entries';
 import logger from '../log';
 
 import {forEach, map} from '../utils/array';
-import {isDefined} from '../utils/identity';
 
 import Model from '../model';
 import registerCommand from '../command';
@@ -34,44 +33,9 @@ import Policy from '../models/policy';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
+import {convert, convert_select, convert_preferences} from './scanconfigs';
 
 const log = logger.getLogger('gmp.commands.policies');
-
-const convert = (values, prefix) => {
-  const ret = {};
-  for (const [key, value] of Object.entries(values)) {
-    ret[prefix + key] = value;
-  }
-  return ret;
-};
-
-const convert_select = (values, prefix) => {
-  const ret = {};
-  for (const [key, value] of Object.entries(values)) {
-    if (value === YES_VALUE) {
-      ret[prefix + key] = value;
-    }
-  }
-  return ret;
-};
-
-const convert_preferences = (values, nvt_oid) => {
-  const ret = {};
-  for (const prop in values) {
-    const data = values[prop];
-    const {id, type, value} = data;
-    if (isDefined(value)) {
-      const typestring = nvt_oid + ':' + id + ':' + type + ':' + prop;
-      if (type === 'password') {
-        ret['password:' + typestring] = 'yes';
-      } else if (type === 'file') {
-        ret['file:' + typestring] = 'yes';
-      }
-      ret['preference:' + typestring] = value;
-    }
-  }
-  return ret;
-};
 
 class PolicyCommand extends EntityCommand {
   constructor(http) {
