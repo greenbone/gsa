@@ -42,8 +42,8 @@ import {
   HOSTS_ORDERING_SEQUENTIAL,
   HOSTS_ORDERING_RANDOM,
   HOSTS_ORDERING_REVERSE,
-  TASK_STATUS,
-  getTranslatableTaskStatus,
+  TASK_STATUS as AUDIT_STATUS,
+  getTranslatableTaskStatus as getTranslatableAuditStatus,
   isActive,
   parse_yes,
 } from './task';
@@ -55,8 +55,8 @@ export {
   HOSTS_ORDERING_SEQUENTIAL,
   HOSTS_ORDERING_RANDOM,
   HOSTS_ORDERING_REVERSE,
-  TASK_STATUS as AUDIT_STATUS,
-  getTranslatableTaskStatus as getTranslatableAuditStatus,
+  AUDIT_STATUS,
+  getTranslatableAuditStatus,
   isActive,
 };
 
@@ -68,19 +68,19 @@ class Audit extends Model {
   }
 
   isRunning() {
-    return this.status === TASK_STATUS.running;
+    return this.status === AUDIT_STATUS.running;
   }
 
   isStopped() {
-    return this.status === TASK_STATUS.stopped;
+    return this.status === AUDIT_STATUS.stopped;
   }
 
   isInterrupted() {
-    return this.status === TASK_STATUS.interrupted;
+    return this.status === AUDIT_STATUS.interrupted;
   }
 
   isNew() {
-    return this.status === TASK_STATUS.new;
+    return this.status === AUDIT_STATUS.new;
   }
 
   isChangeable() {
@@ -96,7 +96,7 @@ class Audit extends Model {
   }
 
   getTranslatableStatus() {
-    return getTranslatableTaskStatus(this.status);
+    return getTranslatableAuditStatus(this.status);
   }
 
   parseProperties(elem) {
