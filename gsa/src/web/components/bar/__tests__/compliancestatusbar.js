@@ -82,7 +82,7 @@ describe('ComplianceStatusBar tests', () => {
     const {getByTestId} = render(<ComplianceStatusBar complianceStatus={75} />);
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', Theme.warnYellow);
+    expect(progress).toHaveStyleRule('background', Theme.goldYellow);
   });
 
   test('should render background for low compliance', () => {

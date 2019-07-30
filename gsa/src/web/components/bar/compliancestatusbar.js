@@ -41,7 +41,7 @@ const ComplianceStatusBar = ({complianceStatus}) => {
   } else if (complianceStatus <= 50) {
     type = Theme.errorRed;
   } else {
-    type = Theme.warnYellow;
+    type = Theme.goldYellow;
   }
   return (
     <ProgressBar title={text} progress={complianceStatus} background={type}>
