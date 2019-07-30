@@ -40,7 +40,7 @@ const PoliciesTable = createEntitiesTable({
   rowDetails: withRowDetails('policy')(PolicyDetails),
   footer: createEntitiesFooter({
     download: 'policies.xml',
-    span: 7,
+    span: 2,
     trash: true,
     tags: false,
   }),

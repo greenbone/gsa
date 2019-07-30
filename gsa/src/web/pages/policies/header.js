@@ -39,7 +39,6 @@ const Header = ({
       <TableRow>
         <TableHead
           width="92%"
-          rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
@@ -47,7 +46,7 @@ const Header = ({
           title={_('Name')}
         />
         {actions && (
-          <TableHead rowSpan="2" width="8%" align="center">
+          <TableHead width="8%" align="center">
             {_('Actions')}
           </TableHead>
         )}
