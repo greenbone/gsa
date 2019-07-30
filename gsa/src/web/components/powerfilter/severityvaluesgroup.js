@@ -19,6 +19,7 @@
 import React, {useState} from 'react';
 
 import PropTypes from 'web/utils/proptypes.js';
+import {isDefined} from 'gmp/utils/identity';
 
 import FormGroup from 'web/components/form/formgroup.js';
 import {parseSeverity} from 'gmp/parser.js';
@@ -27,14 +28,31 @@ import NumberField from 'web/components/form/numberfield';
 import Divider from 'web/components/layout/divider';
 
 const SeverityValuesGroup = ({filter, name, title, onChange}) => {
-  const [rel, setRel] = useState('=');
-  const severity = parseSeverity(filter.get(name));
+  /* useState is analogous to setState in class commponents.
+   * the first argument is the state variable.
+   * the second argument can be thought of as the handler.
+   * we call the second argument when we "set state", so to speak.
+   * state variables don't disappear once we finish calling the hook.
+   * so they're functionally very similar to a state in a class component.
+   * you can have more than one state
+   */
+
+  const term = filter.getTerm(name);
+  const severity = isDefined(term) ? parseSeverity(term.value) : undefined;
+
+  const [rel, setRel] = useState(isDefined(term) ? term.relation : '='); // here rel is set to '='
   const keyword = name;
 
   return (
     <FormGroup title={title}>
       <Divider>
-        <RelationSelector relation={rel} onChange={newRel => setRel(newRel)} />
+        <RelationSelector
+          relation={rel}
+          onChange={newRel => {
+            setRel(newRel);
+            onChange(severity, keyword, newRel);
+          }}
+        />
         <NumberField
           name={keyword}
           type="int"
