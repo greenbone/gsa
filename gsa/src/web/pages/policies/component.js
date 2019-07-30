@@ -72,7 +72,7 @@ import EntityComponent from 'web/entity/component';
 import EditPolicyFamilyDialog from 'web/pages/policies/editpolicyfamilydialog';
 import EditPolicyDialog from 'web/pages/policies/editdialog';
 import EditNvtDetailsDialog from 'web/pages/policies/editnvtdetailsdialog';
-import AuditDialog from './createauditdialog';
+import AuditDialog from 'web/pages/audits/dialog';
 import ImportDialog from 'web/pages/policies/importdialog';
 import PolicyDialog from 'web/pages/policies/dialog';
 
@@ -123,24 +123,15 @@ class PolicyComponent extends React.Component {
       this,
     );
     this.handleSaveAudit = this.handleSaveAudit.bind(this);
-    this.handleAlertsChange = this.handleAlertsChange.bind(this);
     this.handleAlertCreated = this.handleAlertCreated.bind(this);
-    this.handleScheduleChange = this.handleScheduleChange.bind(this);
     this.handleScheduleCreated = this.handleScheduleCreated.bind(this);
-    this.handleTargetChange = this.handleTargetChange.bind(this);
     this.handleTargetCreated = this.handleTargetCreated.bind(this);
+
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleAlertsChange(alertIds) {
-    this.setState({alertIds});
-  }
-
-  handleScheduleChange(scheduleId) {
-    this.setState({scheduleId});
-  }
-
-  handleTargetChange(targetId) {
-    this.setState({targetId});
+  handleChange(value, name) {
+    this.setState({[name]: value});
   }
 
   handleAlertCreated(resp) {
@@ -243,7 +234,8 @@ class PolicyComponent extends React.Component {
       auto_delete: undefined,
       auto_delete_data: undefined,
       comment: '',
-      policy_id: isDefined(policy) ? policy.id : undefined,
+      policyId: isDefined(policy) ? policy.id : undefined,
+      policyName: policy.name,
       hostsOrdering: undefined,
       id: undefined,
       in_assets: undefined,
@@ -286,7 +278,7 @@ class PolicyComponent extends React.Component {
     targetId,
   }) {
     const {gmp} = this.props;
-    const policyId = this.state.policy_id;
+    const {policyId} = this.state;
 
     const scannerId = OPENVAS_DEFAULT_SCANNER_ID;
     const scannerType = OPENVAS_SCANNER_TYPE;
@@ -601,6 +593,7 @@ class PolicyComponent extends React.Component {
       comment,
       policy,
       policyName,
+      policyId,
       createPolicyDialogVisible,
       createAuditDialogVisible,
       editPolicyDialogVisible,
@@ -683,12 +676,15 @@ class PolicyComponent extends React.Component {
                               auto_delete={auto_delete}
                               auto_delete_data={auto_delete_data}
                               comment={comment}
+                              fromPolicy={true}
                               hostsOrdering={hostsOrdering}
                               id={id}
                               in_assets={in_assets}
                               maxChecks={maxChecks}
                               maxHosts={maxHosts}
                               name={name}
+                              policies={[{name: policyName, id: policyId}]}
+                              policyId={policyId}
                               scheduleId={scheduleId}
                               schedulePeriods={schedulePeriods}
                               schedules={schedules}
@@ -696,12 +692,10 @@ class PolicyComponent extends React.Component {
                               targetId={targetId}
                               targets={targets}
                               title={title}
-                              onAlertsChange={this.handleAlertsChange}
+                              onChange={this.handleChange}
                               onNewAlertClick={createalert}
                               onNewTargetClick={createtarget}
                               onNewScheduleClick={createschedule}
-                              onScheduleChange={this.handleScheduleChange}
-                              onTargetChange={this.handleTargetChange}
                               onClose={this.handleCloseCreateAuditDialog}
                               onSave={this.handleSaveAudit}
                             />

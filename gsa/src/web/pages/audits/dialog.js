@@ -65,13 +65,14 @@ const AuditDialog = ({
   auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   capabilities,
   comment = '',
-  policyId,
+  fromPolicy = false,
   hostsOrdering = HOSTS_ORDERING_SEQUENTIAL,
   in_assets = YES_VALUE,
   maxChecks = DEFAULT_MAX_CHECKS,
   maxHosts = DEFAULT_MAX_HOSTS,
   name = _('Unnamed'),
   policies = [],
+  policyId,
   scheduleId = UNSET_VALUE,
   schedulePeriods = NO_VALUE,
   schedules = [],
@@ -248,7 +249,7 @@ const AuditDialog = ({
               <FormGroup titleSize="2" title={_('Policy')}>
                 <Select
                   name="policyId"
-                  disabled={!changeAudit || hasAudit}
+                  disabled={!changeAudit || hasAudit || fromPolicy}
                   items={policyItems}
                   value={currentPolicyId}
                   onChange={onChange}
@@ -326,6 +327,7 @@ AuditDialog.propTypes = {
   auto_delete_data: PropTypes.number,
   capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
+  fromPolicy: PropTypes.bool,
   hostsOrdering: PropTypes.oneOf(['sequential', 'random', 'reverse']),
   in_assets: PropTypes.yesno,
   maxChecks: PropTypes.number,
