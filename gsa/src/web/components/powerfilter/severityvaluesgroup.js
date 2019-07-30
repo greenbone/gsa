@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import React, {useState} from 'react';
 
 import PropTypes from 'web/utils/proptypes.js';
 
@@ -26,54 +26,31 @@ import RelationSelector from 'web/components/powerfilter/relationselector';
 import NumberField from 'web/components/form/numberfield';
 import Divider from '../layout/divider';
 
-class SeverityValuesGroup extends React.Component {
-  constructor(props) {
-    super(props);
+const SeverityValuesGroup = ({filter, name, title, onChange}) => {
+  const [rel, setRel] = useState('=');
+  const severity = parseSeverity(filter.get(name));
+  const keyword = name;
 
-    this.state = {
-      relation: '=',
-    };
-
-    this.handleRelationChange = this.handleRelationChange.bind(this);
-  }
-
-  handleRelationChange(rel) {
-    this.setState({
-      relation: rel,
-    });
-    const severity = parseSeverity(this.props.filter.get(this.props.name));
-    const keyword = this.props.name;
-
-    this.props.onChange(severity, keyword, rel);
-  }
-
-  render() {
-    const severity = parseSeverity(this.props.filter.get(this.props.name));
-    const newRelation = this.state.relation;
-    const keyword = this.props.name;
-    return (
-      <FormGroup title={this.props.title}>
-        <Divider>
-          <RelationSelector
-            relation={newRelation}
-            onChange={this.handleRelationChange}
-          />
-          <NumberField
-            name={this.props.name}
-            type="int"
-            min={0}
-            max={10}
-            value={severity}
-            size="5"
-            onChange={(value = severity, name = keyword) =>
-              this.props.onChange(value, name, newRelation)
-            }
-          />
-        </Divider>
-      </FormGroup>
-    );
-  }
-}
+  return (
+    <FormGroup title={title}>
+      <Divider>
+        <RelationSelector relation={rel} onChange={newRel => setRel(newRel)} />
+        <NumberField
+          name={keyword}
+          type="int"
+          min={0}
+          max={10}
+          value={severity}
+          size="5"
+          // eslint-disable-next-line no-shadow
+          onChange={(value = severity, name = keyword) =>
+            onChange(value, name, rel)
+          }
+        />
+      </Divider>
+    </FormGroup>
+  );
+};
 
 SeverityValuesGroup.propTypes = {
   filter: PropTypes.filter,
