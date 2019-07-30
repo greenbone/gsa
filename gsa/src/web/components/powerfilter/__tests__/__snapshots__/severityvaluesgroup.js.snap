@@ -393,9 +393,9 @@ exports[`Severity Values Group Tests should render 1`] = `
             <div
               class="c7"
               data-testid="select-selected-value"
-              title="is equal to"
+              title="is greater than"
             >
-              is equal to
+              is greater than
             </div>
             <div
               class="c8"

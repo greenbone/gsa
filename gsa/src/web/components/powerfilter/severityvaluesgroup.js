@@ -16,64 +16,59 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import React, {useState} from 'react';
 
 import PropTypes from 'web/utils/proptypes.js';
+import {isDefined} from 'gmp/utils/identity';
 
 import FormGroup from 'web/components/form/formgroup.js';
 import {parseSeverity} from 'gmp/parser.js';
 import RelationSelector from 'web/components/powerfilter/relationselector';
 import NumberField from 'web/components/form/numberfield';
-import Divider from '../layout/divider';
+import Divider from 'web/components/layout/divider';
 
-class SeverityValuesGroup extends React.Component {
-  constructor(props) {
-    super(props);
+const SeverityValuesGroup = ({filter, name, title, onChange}) => {
+  /* useState is analogous to setState in class commponents.
+   * the first argument is the state variable.
+   * the second argument can be thought of as the handler.
+   * we call the second argument when we "set state", so to speak.
+   * state variables don't disappear once we finish calling the hook.
+   * so they're functionally very similar to a state in a class component.
+   * you can have more than one state
+   */
 
-    this.state = {
-      relation: '=',
-    };
+  const term = filter.getTerm(name);
+  const severity = isDefined(term) ? parseSeverity(term.value) : undefined;
 
-    this.handleRelationChange = this.handleRelationChange.bind(this);
-  }
+  const [rel, setRel] = useState(isDefined(term) ? term.relation : '='); // here rel is set to '='
+  const keyword = name;
 
-  handleRelationChange(rel) {
-    this.setState({
-      relation: rel,
-    });
-    const severity = parseSeverity(this.props.filter.get(this.props.name));
-    const keyword = this.props.name;
-
-    this.props.onChange(severity, keyword, rel);
-  }
-
-  render() {
-    const severity = parseSeverity(this.props.filter.get(this.props.name));
-    const newRelation = this.state.relation;
-    const keyword = this.props.name;
-    return (
-      <FormGroup title={this.props.title}>
-        <Divider>
-          <RelationSelector
-            relation={newRelation}
-            onChange={this.handleRelationChange}
-          />
-          <NumberField
-            name={this.props.name}
-            type="int"
-            min={0}
-            max={10}
-            value={severity}
-            size="5"
-            onChange={(value = severity, name = keyword) =>
-              this.props.onChange(value, name, newRelation)
-            }
-          />
-        </Divider>
-      </FormGroup>
-    );
-  }
-}
+  return (
+    <FormGroup title={title}>
+      <Divider>
+        <RelationSelector
+          relation={rel}
+          onChange={newRel => {
+            setRel(newRel);
+            onChange(severity, keyword, newRel);
+          }}
+        />
+        <NumberField
+          name={keyword}
+          type="int"
+          min={0}
+          max={10}
+          value={severity}
+          size="5"
+          // eslint-disable-next-line no-shadow
+          onChange={(value = severity, name = keyword) =>
+            onChange(value, name, rel)
+          }
+        />
+      </Divider>
+    </FormGroup>
+  );
+};
 
 SeverityValuesGroup.propTypes = {
   filter: PropTypes.filter,
