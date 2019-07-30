@@ -23,7 +23,7 @@ import Audit, {
   HOSTS_ORDERING_RANDOM,
   HOSTS_ORDERING_REVERSE,
   HOSTS_ORDERING_SEQUENTIAL,
-  TASK_STATUS,
+  AUDIT_STATUS,
 } from 'gmp/models/audit';
 import {testModelProperties} from '../testing';
 
@@ -60,18 +60,18 @@ describe('Audit model tests', () => {
 describe(`Audit Model methods tests`, () => {
   test('should use status for isActive', () => {
     const statusList = {
-      [TASK_STATUS.running]: true,
-      [TASK_STATUS.stoprequested]: true,
-      [TASK_STATUS.deleterequested]: true,
-      [TASK_STATUS.ultimatedeleterequested]: true,
-      [TASK_STATUS.resumerequested]: true,
-      [TASK_STATUS.requested]: true,
-      [TASK_STATUS.stopped]: false,
-      [TASK_STATUS.new]: false,
-      [TASK_STATUS.interrupted]: false,
-      [TASK_STATUS.container]: false,
-      [TASK_STATUS.uploading]: false,
-      [TASK_STATUS.done]: false,
+      [AUDIT_STATUS.running]: true,
+      [AUDIT_STATUS.stoprequested]: true,
+      [AUDIT_STATUS.deleterequested]: true,
+      [AUDIT_STATUS.ultimatedeleterequested]: true,
+      [AUDIT_STATUS.resumerequested]: true,
+      [AUDIT_STATUS.requested]: true,
+      [AUDIT_STATUS.stopped]: false,
+      [AUDIT_STATUS.new]: false,
+      [AUDIT_STATUS.interrupted]: false,
+      [AUDIT_STATUS.container]: false,
+      [AUDIT_STATUS.uploading]: false,
+      [AUDIT_STATUS.done]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -82,18 +82,18 @@ describe(`Audit Model methods tests`, () => {
 
   test('should use status for isRunning', () => {
     const statusList = {
-      [TASK_STATUS.running]: true,
-      [TASK_STATUS.stoprequested]: false,
-      [TASK_STATUS.deleterequested]: false,
-      [TASK_STATUS.ultimatedeleterequested]: false,
-      [TASK_STATUS.resumerequested]: false,
-      [TASK_STATUS.requested]: false,
-      [TASK_STATUS.stopped]: false,
-      [TASK_STATUS.new]: false,
-      [TASK_STATUS.interrupted]: false,
-      [TASK_STATUS.container]: false,
-      [TASK_STATUS.uploading]: false,
-      [TASK_STATUS.done]: false,
+      [AUDIT_STATUS.running]: true,
+      [AUDIT_STATUS.stoprequested]: false,
+      [AUDIT_STATUS.deleterequested]: false,
+      [AUDIT_STATUS.ultimatedeleterequested]: false,
+      [AUDIT_STATUS.resumerequested]: false,
+      [AUDIT_STATUS.requested]: false,
+      [AUDIT_STATUS.stopped]: false,
+      [AUDIT_STATUS.new]: false,
+      [AUDIT_STATUS.interrupted]: false,
+      [AUDIT_STATUS.container]: false,
+      [AUDIT_STATUS.uploading]: false,
+      [AUDIT_STATUS.done]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -104,18 +104,18 @@ describe(`Audit Model methods tests`, () => {
 
   test('should use status for isStopped', () => {
     const statusList = {
-      [TASK_STATUS.running]: false,
-      [TASK_STATUS.stoprequested]: false,
-      [TASK_STATUS.deleterequested]: false,
-      [TASK_STATUS.ultimatedeleterequested]: false,
-      [TASK_STATUS.resumerequested]: false,
-      [TASK_STATUS.requested]: false,
-      [TASK_STATUS.stopped]: true,
-      [TASK_STATUS.new]: false,
-      [TASK_STATUS.interrupted]: false,
-      [TASK_STATUS.container]: false,
-      [TASK_STATUS.uploading]: false,
-      [TASK_STATUS.done]: false,
+      [AUDIT_STATUS.running]: false,
+      [AUDIT_STATUS.stoprequested]: false,
+      [AUDIT_STATUS.deleterequested]: false,
+      [AUDIT_STATUS.ultimatedeleterequested]: false,
+      [AUDIT_STATUS.resumerequested]: false,
+      [AUDIT_STATUS.requested]: false,
+      [AUDIT_STATUS.stopped]: true,
+      [AUDIT_STATUS.new]: false,
+      [AUDIT_STATUS.interrupted]: false,
+      [AUDIT_STATUS.container]: false,
+      [AUDIT_STATUS.uploading]: false,
+      [AUDIT_STATUS.done]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -126,18 +126,18 @@ describe(`Audit Model methods tests`, () => {
 
   test('should use status for isInterrupted', () => {
     const statusList = {
-      [TASK_STATUS.running]: false,
-      [TASK_STATUS.stoprequested]: false,
-      [TASK_STATUS.deleterequested]: false,
-      [TASK_STATUS.ultimatedeleterequested]: false,
-      [TASK_STATUS.resumerequested]: false,
-      [TASK_STATUS.requested]: false,
-      [TASK_STATUS.stopped]: false,
-      [TASK_STATUS.new]: false,
-      [TASK_STATUS.interrupted]: true,
-      [TASK_STATUS.container]: false,
-      [TASK_STATUS.uploading]: false,
-      [TASK_STATUS.done]: false,
+      [AUDIT_STATUS.running]: false,
+      [AUDIT_STATUS.stoprequested]: false,
+      [AUDIT_STATUS.deleterequested]: false,
+      [AUDIT_STATUS.ultimatedeleterequested]: false,
+      [AUDIT_STATUS.resumerequested]: false,
+      [AUDIT_STATUS.requested]: false,
+      [AUDIT_STATUS.stopped]: false,
+      [AUDIT_STATUS.new]: false,
+      [AUDIT_STATUS.interrupted]: true,
+      [AUDIT_STATUS.container]: false,
+      [AUDIT_STATUS.uploading]: false,
+      [AUDIT_STATUS.done]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -148,18 +148,18 @@ describe(`Audit Model methods tests`, () => {
 
   test('should use status for isNew', () => {
     const statusList = {
-      [TASK_STATUS.running]: false,
-      [TASK_STATUS.stoprequested]: false,
-      [TASK_STATUS.deleterequested]: false,
-      [TASK_STATUS.ultimatedeleterequested]: false,
-      [TASK_STATUS.resumerequested]: false,
-      [TASK_STATUS.requested]: false,
-      [TASK_STATUS.stopped]: false,
-      [TASK_STATUS.new]: true,
-      [TASK_STATUS.interrupted]: false,
-      [TASK_STATUS.container]: false,
-      [TASK_STATUS.uploading]: false,
-      [TASK_STATUS.done]: false,
+      [AUDIT_STATUS.running]: false,
+      [AUDIT_STATUS.stoprequested]: false,
+      [AUDIT_STATUS.deleterequested]: false,
+      [AUDIT_STATUS.ultimatedeleterequested]: false,
+      [AUDIT_STATUS.resumerequested]: false,
+      [AUDIT_STATUS.requested]: false,
+      [AUDIT_STATUS.stopped]: false,
+      [AUDIT_STATUS.new]: true,
+      [AUDIT_STATUS.interrupted]: false,
+      [AUDIT_STATUS.container]: false,
+      [AUDIT_STATUS.uploading]: false,
+      [AUDIT_STATUS.done]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -169,10 +169,10 @@ describe(`Audit Model methods tests`, () => {
   });
 
   test('should be changeable if alterable or new', () => {
-    let audit = new Audit({status: TASK_STATUS.new, alterable: '0'});
+    let audit = new Audit({status: AUDIT_STATUS.new, alterable: '0'});
     expect(audit.isChangeable()).toEqual(true);
 
-    audit = new Audit({status: TASK_STATUS.done, alterable: '1'});
+    audit = new Audit({status: AUDIT_STATUS.done, alterable: '1'});
     expect(audit.isChangeable()).toEqual(true);
   });
 });

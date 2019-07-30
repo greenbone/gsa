@@ -20,7 +20,7 @@ import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import Audit, {TASK_STATUS} from 'gmp/models/audit';
+import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
@@ -31,7 +31,7 @@ import StartIcon from '../starticon';
 describe('Audit StartIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
     const caps = new Capabilities(['everything']);
-    const audit = new Audit({status: TASK_STATUS.new});
+    const audit = new Audit({status: AUDIT_STATUS.new});
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
@@ -54,7 +54,7 @@ describe('Audit StartIcon component tests', () => {
 
   test('should render in inactive state if wrong command level permissions are given', () => {
     const caps = new Capabilities(['authenticate']);
-    const audit = new Audit({status: TASK_STATUS.new});
+    const audit = new Audit({status: AUDIT_STATUS.new});
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
@@ -76,7 +76,7 @@ describe('Audit StartIcon component tests', () => {
 
   test('should render in inactive state if audit is already active', () => {
     const caps = new Capabilities(['everything']);
-    const audit = new Audit({status: TASK_STATUS.requested});
+    const audit = new Audit({status: AUDIT_STATUS.requested});
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
@@ -95,7 +95,7 @@ describe('Audit StartIcon component tests', () => {
 
   test('should not be rendered if audit is running', () => {
     const caps = new Capabilities(['everything']);
-    const audit = new Audit({status: TASK_STATUS.running});
+    const audit = new Audit({status: AUDIT_STATUS.running});
 
     const {render} = rendererWith({capabilities: caps});
 

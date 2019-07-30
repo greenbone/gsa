@@ -78,7 +78,7 @@ const TASK_STATUS_TRANSLATIONS = {
 };
 /* eslint-disable quote-props */
 
-function parse_yes(value) {
+export function parse_yes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
 }
 

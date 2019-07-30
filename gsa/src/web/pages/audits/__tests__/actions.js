@@ -26,7 +26,7 @@ import {rendererWith, fireEvent} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
 
 import Actions from '../actions';
-import Audit, {TASK_STATUS} from 'gmp/models/audit';
+import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 
 setLocale('en');
 
@@ -41,7 +41,7 @@ describe('Audit Actions tests', () => {
 
   test('should render', () => {
     const audit = new Audit({
-      status: TASK_STATUS.new,
+      status: AUDIT_STATUS.new,
       alterable: '0',
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'everything'}]},
@@ -79,7 +79,7 @@ describe('Audit Actions tests', () => {
 
   test('should call click handlers', () => {
     const audit = new Audit({
-      status: TASK_STATUS.done,
+      status: AUDIT_STATUS.done,
       alterable: '0',
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'everything'}]},
@@ -148,7 +148,7 @@ describe('Audit Actions tests', () => {
 
   test('should not call click handlers without permissions', () => {
     const audit = new Audit({
-      status: TASK_STATUS.done,
+      status: AUDIT_STATUS.done,
       alterable: '0',
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'authenticate'}]},
@@ -229,7 +229,7 @@ describe('Audit Actions tests', () => {
 
   test('should call click handlers for running audit', () => {
     const audit = new Audit({
-      status: TASK_STATUS.running,
+      status: AUDIT_STATUS.running,
       alterable: '0',
       in_use: true,
       permissions: {permission: [{name: 'everything'}]},
@@ -296,7 +296,7 @@ describe('Audit Actions tests', () => {
 
   test('should call click handlers for stopped audit', () => {
     const audit = new Audit({
-      status: TASK_STATUS.stopped,
+      status: AUDIT_STATUS.stopped,
       alterable: '0',
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'everything'}]},
@@ -365,7 +365,7 @@ describe('Audit Actions tests', () => {
 
   test('should disable report download if grc format is not defined', () => {
     const audit = new Audit({
-      status: TASK_STATUS.stopped,
+      status: AUDIT_STATUS.stopped,
       alterable: '0',
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'everything'}]},
@@ -410,7 +410,7 @@ describe('Audit Actions tests', () => {
 
   test('should render schedule icon if task is scheduled', () => {
     const audit = new Audit({
-      status: TASK_STATUS.stopped,
+      status: AUDIT_STATUS.stopped,
       alterable: '0',
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'everything'}]},

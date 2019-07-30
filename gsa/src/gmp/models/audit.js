@@ -16,8 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {_l} from 'gmp/locale/lang';
-
 import {isDefined, isArray} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
@@ -29,7 +27,6 @@ import {
   parseYesNo,
   parseDuration,
   NO_VALUE,
-  YES_VALUE,
 } from '../parser';
 
 import Model from '../model';
@@ -38,60 +35,30 @@ import Report from './report';
 import Schedule from './schedule';
 import Scanner from './scanner';
 
-export const AUTO_DELETE_KEEP = 'keep';
-export const AUTO_DELETE_NO = 'no';
-export const AUTO_DELETE_KEEP_DEFAULT_VALUE = 5;
+import {
+  AUTO_DELETE_KEEP,
+  AUTO_DELETE_NO,
+  AUTO_DELETE_KEEP_DEFAULT_VALUE,
+  HOSTS_ORDERING_SEQUENTIAL,
+  HOSTS_ORDERING_RANDOM,
+  HOSTS_ORDERING_REVERSE,
+  TASK_STATUS,
+  getTranslatableTaskStatus,
+  isActive,
+  parse_yes,
+} from './task';
 
-export const HOSTS_ORDERING_SEQUENTIAL = 'sequential';
-export const HOSTS_ORDERING_RANDOM = 'random';
-export const HOSTS_ORDERING_REVERSE = 'reverse';
-
-export const TASK_STATUS = {
-  running: 'Running',
-  stoprequested: 'Stop Requested',
-  deleterequested: 'Delete Requested',
-  ultimatedeleterequested: 'Ultimate Delete Requested',
-  resumerequested: 'Resume Requested',
-  requested: 'Requested',
-  stopped: 'Stopped',
-  new: 'New',
-  interrupted: 'Interrupted',
-  container: 'Container',
-  uploading: 'Uploading',
-  done: 'Done',
+export {
+  AUTO_DELETE_KEEP,
+  AUTO_DELETE_NO,
+  AUTO_DELETE_KEEP_DEFAULT_VALUE,
+  HOSTS_ORDERING_SEQUENTIAL,
+  HOSTS_ORDERING_RANDOM,
+  HOSTS_ORDERING_REVERSE,
+  TASK_STATUS as AUDIT_STATUS,
+  getTranslatableTaskStatus as getTranslatableAuditStatus,
+  isActive,
 };
-
-/* eslint-disable quote-props */
-const TASK_STATUS_TRANSLATIONS = {
-  Running: _l('Running'),
-  'Stop Requested': _l('Stop Requested'),
-  'Delete Requested': _l('Delete Requested'),
-  'Ultimate Delete Requested': _l('Ultimate Delete Requested'),
-  'Resume Requested': _l('Resume Requested'),
-  Requested: _l('Requested'),
-  Stopped: _l('Stopped'),
-  New: _l('New'),
-  Interrupted: _l('Interrupted'),
-  Container: _l('Container'),
-  Uploading: _l('Uploading'),
-  Done: _l('Done'),
-};
-/* eslint-disable quote-props */
-
-function parse_yes(value) {
-  return value === 'yes' ? YES_VALUE : NO_VALUE;
-}
-
-export const getTranslatableTaskStatus = status =>
-  `${TASK_STATUS_TRANSLATIONS[status]}`;
-
-export const isActive = status =>
-  status === TASK_STATUS.running ||
-  status === TASK_STATUS.stoprequested ||
-  status === TASK_STATUS.deleterequested ||
-  status === TASK_STATUS.ultimatedeleterequested ||
-  status === TASK_STATUS.resumerequested ||
-  status === TASK_STATUS.requested;
 
 class Audit extends Model {
   static entityType = 'audit';

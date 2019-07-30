@@ -20,7 +20,7 @@ import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import Audit, {TASK_STATUS} from 'gmp/models/audit';
+import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
@@ -31,7 +31,7 @@ import ResumeIcon from '../resumeicon';
 describe('Audit ResumeIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
     const caps = new Capabilities(['everything']);
-    const audit = new Audit({status: TASK_STATUS.stopped});
+    const audit = new Audit({status: AUDIT_STATUS.stopped});
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
@@ -54,7 +54,7 @@ describe('Audit ResumeIcon component tests', () => {
 
   test('should render in inactive state if wrong command level permissions are given', () => {
     const caps = new Capabilities(['authenticate']);
-    const audit = new Audit({status: TASK_STATUS.stopped});
+    const audit = new Audit({status: AUDIT_STATUS.stopped});
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
@@ -76,7 +76,7 @@ describe('Audit ResumeIcon component tests', () => {
 
   test('should render in inactive state if audit is not stopped', () => {
     const caps = new Capabilities(['everything']);
-    const audit = new Audit({status: TASK_STATUS.new});
+    const audit = new Audit({status: AUDIT_STATUS.new});
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
@@ -96,7 +96,7 @@ describe('Audit ResumeIcon component tests', () => {
   test('should render in inactive state if audit is scheduled', () => {
     const caps = new Capabilities(['everything']);
     const elem = {
-      status: TASK_STATUS.new,
+      status: AUDIT_STATUS.new,
       schedule: {
         _id: 'schedule1',
       },
