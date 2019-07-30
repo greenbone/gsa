@@ -96,7 +96,7 @@ describe('Severity Values Group Tests', () => {
     const filter = Filter.fromString('cvss_base=3');
     const name = 'cvss_base';
 
-    const {element, baseElement} = render(
+    const {element, baseElement, getByTestId} = render(
       <SeverityValuesGroup
         filter={filter}
         name={name}
@@ -111,7 +111,8 @@ describe('Severity Values Group Tests', () => {
 
     fireEvent.click(domItems[2]);
 
-    expect(onChange).toBeCalled();
-    expect(onChange).toBeCalledWith(3, 'cvss_base', '<');
+    const displayedValue = getByTestId('select-selected-value');
+
+    expect(displayedValue).toHaveTextContent('is less than');
   });
 });

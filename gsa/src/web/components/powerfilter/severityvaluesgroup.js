@@ -24,7 +24,7 @@ import FormGroup from 'web/components/form/formgroup.js';
 import {parseSeverity} from 'gmp/parser.js';
 import RelationSelector from 'web/components/powerfilter/relationselector';
 import NumberField from 'web/components/form/numberfield';
-import Divider from '../layout/divider';
+import Divider from 'web/components/layout/divider';
 
 const SeverityValuesGroup = ({filter, name, title, onChange}) => {
   const [rel, setRel] = useState('=');
