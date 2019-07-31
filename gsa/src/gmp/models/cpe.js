@@ -17,19 +17,20 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {isDefined} from '../utils/identity';
-import {isEmpty} from '../utils/string';
-import {map} from '../utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
+import {map} from 'gmp/utils/array';
 
 import Info from './info';
 
-import {parseSeverity, parseDate} from '../parser';
+import {parseSeverity, parseDate} from 'gmp/parser';
 
 class Cpe extends Info {
   static entityType = 'cpe';
 
   parseProperties(elem) {
-    const ret = super.parseProperties(elem, 'cpe');
+    elem = super.parseProperties(elem, 'cpe');
+    const ret = {...elem};
 
     ret.severity = parseSeverity(elem.max_cvss);
     delete ret.max_cvss;
