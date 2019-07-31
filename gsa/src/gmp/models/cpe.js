@@ -29,7 +29,8 @@ class Cpe extends Info {
   static entityType = 'cpe';
 
   parseProperties(elem) {
-    const ret = super.parseProperties(elem, 'cpe');
+    elem = super.parseProperties(elem, 'cpe');
+    const ret = {...elem};
 
     ret.severity = parseSeverity(elem.max_cvss);
     delete ret.max_cvss;

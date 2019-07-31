@@ -27,7 +27,8 @@ class DfnCertAdv extends Info {
   static entityType = 'dfncert';
 
   parseProperties(elem) {
-    const ret = super.parseProperties(elem, 'dfn_cert_adv');
+    elem = super.parseProperties(elem, 'dfn_cert_adv');
+    const ret = {...elem};
 
     ret.severity = parseSeverity(elem.max_cvss);
     delete ret.max_cvss;

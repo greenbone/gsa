@@ -74,7 +74,8 @@ class Ovaldef extends Info {
   static entityType = 'ovaldef';
 
   parseProperties(elem) {
-    const ret = super.parseProperties(elem, 'ovaldef');
+    elem = super.parseProperties(elem, 'ovaldef');
+    const ret = {...elem};
 
     ret.severity = parseSeverity(elem.max_cvss);
     delete ret.max_cvss;

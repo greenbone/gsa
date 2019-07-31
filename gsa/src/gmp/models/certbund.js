@@ -27,7 +27,8 @@ class CertBundAdv extends Info {
   static entityType = 'certbund';
 
   parseProperties(elem) {
-    const ret = super.parseProperties(elem, 'cert_bund_adv');
+    elem = super.parseProperties(elem, 'cert_bund_adv');
+    const ret = {...elem};
 
     ret.severity = parseSeverity(elem.max_cvss);
     delete ret.max_cvss;
@@ -38,7 +39,7 @@ class CertBundAdv extends Info {
     ret.additionalInformation = [];
 
     if (isDefined(elem.raw_data) && isDefined(elem.raw_data.Advisory)) {
-       const {raw_data} = elem;
+      const {raw_data} = elem;
       const {Advisory: advisory} = raw_data;
 
       ret.version = advisory.Version;

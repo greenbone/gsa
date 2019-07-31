@@ -52,7 +52,8 @@ class Cve extends Info {
   static entityType = 'cve';
 
   parseProperties(elem) {
-    const ret = super.parseProperties(elem, 'cve');
+    elem = super.parseProperties(elem, 'cve');
+    const ret = {...elem};
 
     if (isDefined(elem.update_time)) {
       ret.updateTime = parseDate(elem.update_time);
