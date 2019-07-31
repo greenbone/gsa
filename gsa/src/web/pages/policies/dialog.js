@@ -40,7 +40,6 @@ const Dialog = ({
   comment = '',
   name = _('Unnamed'),
   scanner_id,
-  scanners = [],
   title = _('New Policy'),
   onClose,
   onSave,
@@ -50,7 +49,6 @@ const Dialog = ({
     comment,
     name,
     scanner_id,
-    usage_type: 'policy',
   };
 
   return (
@@ -98,7 +96,6 @@ Dialog.propTypes = {
   comment: PropTypes.string,
   name: PropTypes.string,
   scanner_id: PropTypes.id,
-  scanners: PropTypes.array,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
