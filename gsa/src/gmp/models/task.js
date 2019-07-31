@@ -46,6 +46,10 @@ export const HOSTS_ORDERING_SEQUENTIAL = 'sequential';
 export const HOSTS_ORDERING_RANDOM = 'random';
 export const HOSTS_ORDERING_REVERSE = 'reverse';
 
+export const DEFAULT_MAX_CHECKS = 4;
+export const DEFAULT_MAX_HOSTS = 20;
+export const DEFAULT_MIN_QOD = 70;
+
 export const TASK_STATUS = {
   running: 'Running',
   stoprequested: 'Stop Requested',

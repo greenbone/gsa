@@ -23,6 +23,7 @@ import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 
 import {ALL_FILTER} from 'gmp/models/filter';
+import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -79,8 +80,6 @@ import PolicyDialog from 'web/pages/policies/dialog';
 import ScheduleComponent from 'web/pages/schedules/component';
 import AlertComponent from 'web/pages/alerts/component';
 import TargetComponent from 'web/pages/targets/component';
-
-const DEFAULT_MIN_QOD = 70;
 
 class PolicyComponent extends React.Component {
   constructor(...args) {

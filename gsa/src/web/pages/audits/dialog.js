@@ -30,6 +30,8 @@ import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_NO,
+  DEFAULT_MAX_CHECKS,
+  DEFAULT_MAX_HOSTS,
 } from 'gmp/models/audit';
 
 import PropTypes from 'web/utils/proptypes';
@@ -53,9 +55,6 @@ import Layout from 'web/components/layout/layout';
 
 import AddResultsToAssetsGroup from 'web/pages/tasks/addresultstoassetsgroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/autodeletereportsgroup';
-
-const DEFAULT_MAX_CHECKS = 4;
-const DEFAULT_MAX_HOSTS = 20;
 
 const AuditDialog = ({
   alertIds = [],

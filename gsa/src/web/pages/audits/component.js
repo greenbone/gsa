@@ -23,6 +23,7 @@ import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
+import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
@@ -86,8 +87,6 @@ import AuditDialog from 'web/pages/audits/dialog';
 const REPORT_FORMATS_FILTER = Filter.fromString(
   'name="GCR PDF" and active=1 and trust=1 and rows=-1',
 );
-
-const DEFAULT_MIN_QOD = 70;
 
 class AuditComponent extends React.Component {
   constructor(...args) {
