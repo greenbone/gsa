@@ -102,7 +102,8 @@ class Nvt extends Info {
   static entityType = 'nvt';
 
   parseProperties(elem) {
-    const ret = super.parseProperties(elem, 'nvt');
+    elem = super.parseProperties(elem, 'nvt');
+    const ret = {...elem};
 
     ret.nvtType = elem._type;
 
