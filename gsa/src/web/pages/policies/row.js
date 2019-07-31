@@ -89,6 +89,7 @@ const PoliciesActions = compose(
 
 PoliciesActions.propTypes = {
   entity: PropTypes.model.isRequired,
+  onCreateAuditClick: PropTypes.func.isRequired,
   onPolicyCloneClick: PropTypes.func.isRequired,
   onPolicyDeleteClick: PropTypes.func.isRequired,
   onPolicyDownloadClick: PropTypes.func.isRequired,
@@ -104,7 +105,6 @@ const PoliciesRow = ({
 }) => (
   <TableRow>
     <EntityNameTableData
-      test-id={'table-data'}
       entity={entity}
       link={links}
       type="policy"
