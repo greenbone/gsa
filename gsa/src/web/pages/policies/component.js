@@ -74,7 +74,7 @@ import EditPolicyFamilyDialog from 'web/pages/policies/editpolicyfamilydialog';
 import EditPolicyDialog from 'web/pages/policies/editdialog';
 import EditNvtDetailsDialog from 'web/pages/policies/editnvtdetailsdialog';
 import AuditDialog from 'web/pages/audits/dialog';
-import ImportDialog from 'web/pages/policies/importdialog';
+import ImportDialog from 'web/pages/scanconfigs/importdialog';
 import PolicyDialog from 'web/pages/policies/dialog';
 
 import ScheduleComponent from 'web/pages/schedules/component';
@@ -743,6 +743,8 @@ class PolicyComponent extends React.Component {
         </EntityComponent>
         {importDialogVisible && (
           <ImportDialog
+            title={_('Import Policy')}
+            text={_('Import XML policy')}
             onClose={this.handleCloseImportDialog}
             onSave={this.handleImportPolicy}
           />

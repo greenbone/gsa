@@ -491,6 +491,8 @@ class ScanConfigComponent extends React.Component {
         </EntityComponent>
         {importDialogVisible && (
           <ImportDialog
+            title={_('Import Scan Config')}
+            text={_('Import XML config')}
             onClose={this.handleCloseImportDialog}
             onSave={this.handleImportConfig}
           />

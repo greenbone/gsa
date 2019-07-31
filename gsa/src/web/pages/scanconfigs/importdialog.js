@@ -29,11 +29,11 @@ import FormGroup from 'web/components/form/formgroup';
 
 import Layout from 'web/components/layout/layout';
 
-const ImportDialog = ({onClose, onSave}) => {
+const ImportDialog = ({title, text, onClose, onSave}) => {
   return (
     <SaveDialog
       buttonTitle={_('Import')}
-      title={_('Import Scan Config')}
+      title={title}
       width="500"
       onClose={onClose}
       onSave={onSave}
@@ -41,7 +41,7 @@ const ImportDialog = ({onClose, onSave}) => {
       {({onValueChange}) => {
         return (
           <Layout flex="column">
-            <FormGroup title={_('Import XML config')} titleSize="4">
+            <FormGroup title={text} titleSize="4">
               <FileField name="xml_file" onChange={onValueChange} />
             </FormGroup>
           </Layout>
@@ -52,6 +52,8 @@ const ImportDialog = ({onClose, onSave}) => {
 };
 
 ImportDialog.propTypes = {
+  text: PropTypes.string,
+  title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
