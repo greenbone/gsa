@@ -33,6 +33,9 @@ import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   HOSTS_ORDERING_SEQUENTIAL,
   AUTO_DELETE_NO,
+  DEFAULT_MAX_CHECKS,
+  DEFAULT_MAX_HOSTS,
+  DEFAULT_MIN_QOD,
 } from 'gmp/models/task';
 
 import {
@@ -171,10 +174,6 @@ ScannerSelect.propTypes = {
   onScanConfigChange: PropTypes.func.isRequired,
   onScannerChange: PropTypes.func.isRequired,
 };
-
-const DEFAULT_MAX_CHECKS = 4;
-const DEFAULT_MAX_HOSTS = 20;
-const DEFAULT_MIN_QOD = 70;
 
 const TaskDialog = ({
   add_tag = NO_VALUE,

@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -24,25 +25,60 @@ import PropTypes from 'web/utils/proptypes';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
-import FileField from 'web/components/form/filefield';
 import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
 
 import Layout from 'web/components/layout/layout';
 
-const ImportDialog = ({title, text, onClose, onSave}) => {
+import {
+  FULL_AND_FAST_SCAN_CONFIG_ID,
+  EMPTY_SCAN_CONFIG_ID,
+} from 'gmp/models/scanconfig';
+
+const Dialog = ({
+  base = EMPTY_SCAN_CONFIG_ID,
+  comment = '',
+  name = _('Unnamed'),
+  scanner_id,
+  title = _('New Policy'),
+  onClose,
+  onSave,
+}) => {
+  const data = {
+    base,
+    comment,
+    name,
+    scanner_id,
+  };
+
   return (
     <SaveDialog
-      buttonTitle={_('Import')}
       title={title}
-      width="500"
       onClose={onClose}
       onSave={onSave}
+      defaultValues={data}
     >
-      {({onValueChange}) => {
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
-            <FormGroup title={text} titleSize="4">
-              <FileField name="xml_file" onChange={onValueChange} />
+            <FormGroup title={_('Name')}>
+              <TextField
+                name="name"
+                grow="1"
+                value={state.name}
+                size="30"
+                onChange={onValueChange}
+              />
+            </FormGroup>
+
+            <FormGroup title={_('Comment')}>
+              <TextField
+                name="comment"
+                value={state.comment}
+                grow="1"
+                size="30"
+                onChange={onValueChange}
+              />
             </FormGroup>
           </Layout>
         );
@@ -51,13 +87,20 @@ const ImportDialog = ({title, text, onClose, onSave}) => {
   );
 };
 
-ImportDialog.propTypes = {
-  text: PropTypes.string,
+Dialog.propTypes = {
+  base: PropTypes.oneOf([
+    FULL_AND_FAST_SCAN_CONFIG_ID,
+    EMPTY_SCAN_CONFIG_ID,
+    '0',
+  ]),
+  comment: PropTypes.string,
+  name: PropTypes.string,
+  scanner_id: PropTypes.id,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
 
-export default ImportDialog;
+export default Dialog;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -37,6 +37,8 @@ import AgentsPage from './pages/agents/listpage';
 import AgentDetailsPage from './pages/agents/detailspage';
 import AlertsPage from './pages/alerts/listpage';
 import AlertDetailsPage from './pages/alerts/detailspage';
+import AuditsPage from './pages/audits/listpage';
+import AuditsDetailsPage from './pages/audits/detailspage';
 import SecInfosPage from './pages/secinfo/listpage';
 import CertBundsPage from './pages/certbund/listpage';
 import CertBundDetailsPage from './pages/certbund/detailspage';
@@ -71,6 +73,8 @@ import OverrideDetailsPage from './pages/overrides/detailspage';
 import PerformancePage from './pages/performance/performancepage';
 import PermissionsPage from './pages/permissions/listpage';
 import PermissionDetailsPage from './pages/permissions/detailspage';
+import PoliciesPage from './pages/policies/listpage';
+import PoliciesDetailsPage from './pages/policies/detailspage';
 import PortListsPage from './pages/portlists/listpage';
 import PortListDetailsPage from './pages/portlists/detailspage';
 import RadiusPage from './pages/radius/radiuspage';
@@ -168,6 +172,8 @@ const Routes = () => (
               <Route path="/users" component={UsersPage} />
               <Route path="/groups" component={GroupsPage} />
               <Route path="/roles" component={RolesPage} />
+              <Route path="/policies" component={PoliciesPage} />
+              <Route path="/audits" component={AuditsPage} />
               <Route path="/result/:id" component={ResultDetailsPage} />
               <Route path="/task/:id" component={TaskDetailsPage} />
               <Route path="/target/:id" component={TargetDetailsPage} />
@@ -207,6 +213,8 @@ const Routes = () => (
               <Route path="/tag/:id" component={TagDetailsPage} />
               <Route path="/permission/:id" component={PermissionDetailsPage} />
               <Route path="/scanconfig/:id" component={ScanConfigDetailsPage} />
+              <Route path="/policy/:id" component={PoliciesDetailsPage} />
+              <Route path="/audit/:id" component={AuditsDetailsPage} />
               <Route path="/notfound" component={PageNotFound} />
               <Route component={PageNotFound} />
             </Switch>

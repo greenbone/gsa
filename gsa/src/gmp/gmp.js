@@ -25,6 +25,7 @@ import logger from './log.js';
 
 import './commands/agents.js';
 import './commands/alerts.js';
+import './commands/audits.js';
 import './commands/auth.js';
 import './commands/certbund.js';
 import './commands/credentials.js';
@@ -45,6 +46,7 @@ import './commands/ovaldefs.js';
 import './commands/overrides.js';
 import './commands/performance.js';
 import './commands/permissions.js';
+import './commands/policies.js';
 import './commands/portlists.js';
 import './commands/reportformats.js';
 import './commands/reports.js';

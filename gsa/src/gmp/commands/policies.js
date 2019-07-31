@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -21,7 +21,6 @@ import 'core-js/fn/object/entries';
 import logger from '../log';
 
 import {forEach, map} from '../utils/array';
-import {isDefined} from '../utils/identity';
 
 import Model from '../model';
 import registerCommand from '../command';
@@ -30,52 +29,17 @@ import {YES_VALUE, NO_VALUE} from '../parser';
 import {parseCounts} from '../collection/parser';
 
 import Nvt from '../models/nvt';
-import ScanConfig from '../models/scanconfig';
+import Policy from '../models/policy';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
+import {convert, convert_select, convert_preferences} from './scanconfigs';
 
-const log = logger.getLogger('gmp.commands.scanconfigs');
+const log = logger.getLogger('gmp.commands.policies');
 
-export const convert = (values, prefix) => {
-  const ret = {};
-  for (const [key, value] of Object.entries(values)) {
-    ret[prefix + key] = value;
-  }
-  return ret;
-};
-
-export const convert_select = (values, prefix) => {
-  const ret = {};
-  for (const [key, value] of Object.entries(values)) {
-    if (value === YES_VALUE) {
-      ret[prefix + key] = value;
-    }
-  }
-  return ret;
-};
-
-export const convert_preferences = (values, nvt_oid) => {
-  const ret = {};
-  for (const prop in values) {
-    const data = values[prop];
-    const {id, type, value} = data;
-    if (isDefined(value)) {
-      const typestring = nvt_oid + ':' + id + ':' + type + ':' + prop;
-      if (type === 'password') {
-        ret['password:' + typestring] = 'yes';
-      } else if (type === 'file') {
-        ret['file:' + typestring] = 'yes';
-      }
-      ret['preference:' + typestring] = value;
-    }
-  }
-  return ret;
-};
-
-class ScanConfigCommand extends EntityCommand {
+class PolicyCommand extends EntityCommand {
   constructor(http) {
-    super(http, 'config', ScanConfig);
+    super(http, 'config', Policy);
   }
 
   import({xml_file}) {
@@ -83,7 +47,7 @@ class ScanConfigCommand extends EntityCommand {
       cmd: 'import_config',
       xml_file,
     };
-    log.debug('Importing scan config', data);
+    log.debug('Importing policy', data);
     return this.httpPost(data);
   }
 
@@ -94,9 +58,9 @@ class ScanConfigCommand extends EntityCommand {
       comment,
       name,
       scanner_id,
-      usage_type: 'scan',
+      usage_type: 'policy',
     };
-    log.debug('Creating scanconfig', data);
+    log.debug('Creating policy', data);
     return this.action(data);
   }
 
@@ -114,43 +78,43 @@ class ScanConfigCommand extends EntityCommand {
       comment,
       name,
     };
-    log.debug('Saving scanconfig', data);
+    log.debug('Saving policy', data);
     return this.action(data);
   }
 
-  saveScanConfigFamily({config_name, family_name, id, selected}) {
+  savePolicyFamily({policy_name, family_name, id, selected}) {
     const data = {
       ...convert_select(selected, 'nvt:'),
       cmd: 'save_config_family',
       no_redirect: '1',
       id,
       family: family_name,
-      name: config_name,
+      name: policy_name,
     };
     log.debug('Saving scanconfigfamily', data);
     return this.httpPost(data);
   }
 
-  editScanConfigFamilySettings({id, family_name, config_name}) {
+  editPolicyFamilySettings({id, family_name, policy_name}) {
     return this.httpGet({
       cmd: 'edit_config_family',
       id,
-      name: config_name,
+      name: policy_name,
       family: family_name,
     }).then(response => {
       const {data} = response;
-      const config_resp = data.get_config_family_response;
+      const policy_resp = data.get_config_family_response;
       const settings = {};
 
-      settings.config = new Model(config_resp.config, 'config');
+      settings.policy = new Model(policy_resp.config, 'policy');
 
       const nvts = {};
-      forEach(config_resp.get_nvts_response.nvt, nvt => {
+      forEach(policy_resp.get_nvts_response.nvt, nvt => {
         const oid = nvt._oid;
         nvts[oid] = true;
       });
 
-      settings.nvts = map(config_resp.all.get_nvts_response.nvt, nvt => {
+      settings.nvts = map(policy_resp.all.get_nvts_response.nvt, nvt => {
         nvt.oid = nvt._oid;
         delete nvt._oid;
 
@@ -165,8 +129,8 @@ class ScanConfigCommand extends EntityCommand {
     });
   }
 
-  saveScanConfigNvt({
-    config_name,
+  savePolicyNvt({
+    policy_name,
     family_name,
     id,
     manual_timeout,
@@ -181,31 +145,31 @@ class ScanConfigCommand extends EntityCommand {
       no_redirect: '1',
       id,
       oid,
-      name: config_name,
+      name: policy_name,
       family: family_name,
       timeout,
     };
 
     data['preference:scanner:0:scanner:timeout.' + oid] = manual_timeout;
 
-    log.debug('Saving scanconfignvt', data);
+    log.debug('Saving policynvt', data);
     return this.httpPost(data);
   }
 
-  editScanConfigNvtSettings({config_name, family_name, id, oid}) {
+  editPolicyNvtSettings({policy_name, family_name, id, oid}) {
     return this.httpGet({
       cmd: 'edit_config_nvt',
       id,
       oid,
-      name: config_name,
+      name: policy_name,
       family: family_name,
     }).then(response => {
       const {data} = response;
       const settings = {};
-      const config_resp = data.get_config_nvt_response;
+      const policy_resp = data.get_config_nvt_response;
 
-      settings.config = new Model(config_resp.config, 'config');
-      settings.nvt = new Nvt(config_resp.get_nvts_response.nvt);
+      settings.policy = new Model(policy_resp.config, 'policy');
+      settings.nvt = new Nvt(policy_resp.get_nvts_response.nvt);
 
       settings.nvt.notes_counts = parseCounts(data.get_notes_response, 'note');
       settings.nvt.overrides_counts = parseCounts(
@@ -222,9 +186,9 @@ class ScanConfigCommand extends EntityCommand {
   }
 }
 
-class ScanConfigsCommand extends EntitiesCommand {
+class PoliciesCommand extends EntitiesCommand {
   constructor(http) {
-    super(http, 'config', ScanConfig);
+    super(http, 'config', Policy);
   }
 
   getEntitiesResponse(root) {
@@ -232,7 +196,7 @@ class ScanConfigsCommand extends EntitiesCommand {
   }
 
   get(params, options) {
-    params = {...params, usage_type: 'scan'};
+    params = {...params, usage_type: 'policy'};
     return this.httpGet(params, options).then(response => {
       const {entities, filter, counts} = this.getCollectionListFromRoot(
         response.data,
@@ -242,7 +206,7 @@ class ScanConfigsCommand extends EntitiesCommand {
   }
 }
 
-registerCommand('scanconfig', ScanConfigCommand);
-registerCommand('scanconfigs', ScanConfigsCommand);
+registerCommand('policy', PolicyCommand);
+registerCommand('policies', PoliciesCommand);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -24,6 +24,8 @@ import {map} from '../utils/array';
 import {pluralizeType} from '../utils/entitytype';
 
 const types = {
+  audit: 'task',
+  audits: 'task',
   host: 'asset',
   hosts: 'asset',
   os: 'asset',
@@ -43,6 +45,8 @@ const types = {
   certbunds: 'info',
   secinfo: 'info',
   secinfos: 'info',
+  policy: 'config',
+  policies: 'config',
   portlist: 'port_list',
   portlists: 'port_list',
   reportformat: 'report_format',

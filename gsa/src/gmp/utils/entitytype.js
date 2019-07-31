@@ -36,9 +36,14 @@ export const getEntityType = (model = {}) => model.entityType;
  *
  * @returns {String} The pluralized entity type
  */
-export const pluralizeType = type =>
-  type[type.length - 1] === 's' || type === 'info' ? type : type + 's';
-
+export const pluralizeType = type => {
+  if (type[type.length - 1] === 's' || type === 'info') {
+    return type;
+  } else if (type === 'policy') {
+    return 'policies';
+  }
+  return type + 's';
+};
 const TYPES = {
   config: 'scanconfig',
   cert_bund_adv: 'certbund',

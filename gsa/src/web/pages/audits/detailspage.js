@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -40,12 +40,10 @@ import Link from 'web/components/link/link';
 import AlterableIcon from 'web/components/icon/alterableicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
-import ManualIcon from 'web/components/icon/manualicon';
 import NoteIcon from 'web/components/icon/noteicon';
-import OverrideIcon from 'web/components/icon/overrideicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
-import TaskIcon from 'web/components/icon/taskicon';
+import AuditIcon from 'web/components/icon/auditicon';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -63,7 +61,6 @@ import EntityPage, {Col} from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
-import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
@@ -85,73 +82,73 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 import {
-  selector as taskSelector,
-  loadEntity as loadTask,
-} from 'web/store/entities/tasks';
+  selector as auditSelector,
+  loadEntity as loadAudit,
+} from 'web/store/entities/audits';
 
 import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
 
-import ImportReportIcon from './icons/importreporticon';
-import NewIconMenu from './icons/newiconmenu';
 import ResumeIcon from './icons/resumeicon';
-import ScheduleIcon from './icons/scheduleicon';
+import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
 import StartIcon from './icons/starticon';
-import StopIcon from './icons/stopicon';
+import StopIcon from 'web/pages/tasks/icons/stopicon';
 
-import TaskDetails from './details';
-import TaskStatus from './status';
-import TaskComponent from './component';
+import AuditDetails from './details';
+import AuditStatus from 'web/pages/tasks/status';
+import AuditComponent from './component';
 
 const ToolBarIcons = ({
   entity,
   links,
   notes = [],
-  overrides = [],
-  onTaskDeleteClick,
-  onTaskCloneClick,
-  onTaskDownloadClick,
-  onTaskEditClick,
-  onReportImportClick,
-  onTaskCreateClick,
-  onContainerTaskCreateClick,
-  onTaskStartClick,
-  onTaskStopClick,
-  onTaskResumeClick,
+  onAuditDeleteClick,
+  onAuditCloneClick,
+  onAuditDownloadClick,
+  onAuditEditClick,
+  onAuditStartClick,
+  onAuditStopClick,
+  onAuditResumeClick,
 }) => {
   return (
     <Divider margin="10px">
       <IconDivider align={['start', 'start']}>
-        <ManualIcon
-          page="vulnerabilitymanagement"
-          anchor="creating-a-task"
-          title={_('Help: Tasks')}
-        />
-        <ListIcon title={_('Task List')} page="tasks" />
+        <ListIcon title={_('Audit List')} page="audits" />
         {entity.isAlterable() && !entity.isNew() && (
           <AlterableIcon
             title={_(
-              'This is an Alterable Task. Reports may not relate to ' +
-                'current Scan Config or Target!',
+              'This is an Alterable Audit. Reports may not relate to ' +
+                'current Policy or Target!',
             )}
           />
         )}
       </IconDivider>
 
       <IconDivider>
-        <NewIconMenu
-          onNewClick={onTaskCreateClick}
-          onNewContainerClick={onContainerTaskCreateClick}
+        <CloneIcon
+          displayName={_('Audit')}
+          entity={entity}
+          name="task"
+          onClick={onAuditCloneClick}
         />
-        <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
-        <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
-        <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
+        <EditIcon
+          displayName={_('Audit')}
+          entity={entity}
+          name="task"
+          onClick={onAuditEditClick}
+        />
+        <TrashIcon
+          displayName={_('Audit')}
+          entity={entity}
+          name="task"
+          onClick={onAuditDeleteClick}
+        />
         <ExportIcon
           value={entity}
-          title={_('Export Task as XML')}
-          onClick={onTaskDownloadClick}
+          title={_('Export Audit as XML')}
+          onClick={onAuditDownloadClick}
         />
       </IconDivider>
 
@@ -163,14 +160,12 @@ const ToolBarIcons = ({
             links={links}
           />
         )}
-        <StartIcon task={entity} onClick={onTaskStartClick} />
+        <StartIcon audit={entity} onClick={onAuditStartClick} />
 
-        <ImportReportIcon task={entity} onClick={onReportImportClick} />
-
-        <StopIcon task={entity} onClick={onTaskStopClick} />
+        <StopIcon task={entity} onClick={onAuditStopClick} />
 
         {!entity.isContainer() && (
-          <ResumeIcon task={entity} onClick={onTaskResumeClick} />
+          <ResumeIcon audit={entity} onClick={onAuditResumeClick} />
         )}
       </IconDivider>
 
@@ -180,7 +175,7 @@ const ToolBarIcons = ({
             <DetailsLink
               type="report"
               id={entity.current_report.id}
-              title={_('Current Report for Task {{- name}} from {{- date}}', {
+              title={_('Current Report for Audit {{- name}} from {{- date}}', {
                 name: entity.name,
                 date: shortDate(entity.current_report.scan_start),
               })}
@@ -193,7 +188,7 @@ const ToolBarIcons = ({
             <DetailsLink
               type="report"
               id={entity.last_report.id}
-              title={_('Last Report for Task {{- name}} from {{- date}}', {
+              title={_('Last Report for Audit {{- name}} from {{- date}}', {
                 name: entity.name,
                 date: shortDate(entity.last_report.scan_start),
               })}
@@ -205,7 +200,7 @@ const ToolBarIcons = ({
           <Link
             to="reports"
             filter={'task_id=' + entity.id}
-            title={_('Total Reports for Task {{- name}}', entity)}
+            title={_('Total Reports for Audit {{- name}}', entity)}
           >
             <Badge content={entity.report_count.total}>
               <ReportIcon />
@@ -216,7 +211,7 @@ const ToolBarIcons = ({
         <Link
           to="results"
           filter={'task_id=' + entity.id}
-          title={_('Results for Task {{- name}}', entity)}
+          title={_('Results for Audit {{- name}}', entity)}
         >
           <Badge content={entity.result_count}>
             <ResultIcon />
@@ -227,20 +222,10 @@ const ToolBarIcons = ({
           <Link
             to="notes"
             filter={'task_id=' + entity.id}
-            title={_('Notes for Task {{- name}}', entity)}
+            title={_('Notes for Audit {{- name}}', entity)}
           >
             <Badge content={notes.length}>
               <NoteIcon />
-            </Badge>
-          </Link>
-
-          <Link
-            to="overrides"
-            filter={'task_id=' + entity.id}
-            title={_('Overrides for Task {{- name}}', entity)}
-          >
-            <Badge content={overrides.length}>
-              <OverrideIcon />
             </Badge>
           </Link>
         </IconDivider>
@@ -254,16 +239,13 @@ ToolBarIcons.propTypes = {
   links: PropTypes.bool,
   notes: PropTypes.array,
   overrides: PropTypes.array,
-  onContainerTaskCreateClick: PropTypes.func.isRequired,
-  onReportImportClick: PropTypes.func.isRequired,
-  onTaskCloneClick: PropTypes.func.isRequired,
-  onTaskCreateClick: PropTypes.func.isRequired,
-  onTaskDeleteClick: PropTypes.func.isRequired,
-  onTaskDownloadClick: PropTypes.func.isRequired,
-  onTaskEditClick: PropTypes.func.isRequired,
-  onTaskResumeClick: PropTypes.func.isRequired,
-  onTaskStartClick: PropTypes.func.isRequired,
-  onTaskStopClick: PropTypes.func.isRequired,
+  onAuditCloneClick: PropTypes.func.isRequired,
+  onAuditDeleteClick: PropTypes.func.isRequired,
+  onAuditDownloadClick: PropTypes.func.isRequired,
+  onAuditEditClick: PropTypes.func.isRequired,
+  onAuditResumeClick: PropTypes.func.isRequired,
+  onAuditStartClick: PropTypes.func.isRequired,
+  onAuditStopClick: PropTypes.func.isRequired,
 };
 
 const Details = ({entity, ...props}) => {
@@ -293,13 +275,13 @@ const Details = ({entity, ...props}) => {
           <TableRow>
             <TableData>{_('Status')}</TableData>
             <TableData>
-              <TaskStatus task={entity} />
+              <AuditStatus task={entity} />
             </TableData>
           </TableRow>
         </TableBody>
       </InfoTable>
 
-      <TaskDetails entity={entity} {...props} />
+      <AuditDetails entity={entity} {...props} />
     </Layout>
   );
 };
@@ -308,135 +290,93 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-class Page extends React.Component {
-  componentDidUpdate() {
-    // eslint-disable-next-line no-unused-vars
-    const {entity, history, ...props} = this.props;
-    if (isDefined(entity) && entity.usageType === 'audit') {
-      return history.replace('/audit/' + entity.id);
-    }
-  }
-
-  render() {
-    const {
-      entity,
-      permissions = [],
-      onChanged,
-      onDownloaded,
-      onError,
-      onInteraction,
-      ...props
-    } = this.props;
-    return (
-      <TaskComponent
-        onCloned={goto_details('task', props)}
-        onCloneError={onError}
-        onCreated={goto_details('task', props)}
-        onContainerCreated={goto_details('task', props)}
-        onContainerSaved={onChanged}
-        onDeleted={goto_list('tasks', props)}
-        onDeleteError={onError}
-        onDownloaded={onDownloaded}
-        onDownloadError={onError}
+const Page = ({
+  entity,
+  permissions = [],
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => (
+  <AuditComponent
+    onCloned={goto_details('audit', props)}
+    onCloneError={onError}
+    onContainerSaved={onChanged}
+    onDeleted={goto_list('audits', props)}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onInteraction={onInteraction}
+    onResumed={onChanged}
+    onResumeError={onError}
+    onSaved={onChanged}
+    onStarted={onChanged}
+    onStartError={onError}
+    onStopped={onChanged}
+    onStopError={onError}
+  >
+    {({clone, delete: delete_func, download, edit, start, stop, resume}) => (
+      <EntityPage
+        {...props}
+        entity={entity}
+        sectionIcon={<AuditIcon size="large" />}
+        title={_('Audit')}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onError={onError}
         onInteraction={onInteraction}
-        onReportImported={onChanged}
-        onResumed={onChanged}
-        onResumeError={onError}
-        onSaved={onChanged}
-        onStarted={onChanged}
-        onStartError={onError}
-        onStopped={onChanged}
-        onStopError={onError}
+        onAuditCloneClick={clone}
+        onAuditDeleteClick={delete_func}
+        onAuditDownloadClick={download}
+        onAuditEditClick={edit}
+        onAuditResumeClick={resume}
+        onAuditStartClick={start}
+        onAuditStopClick={stop}
       >
-        {({
-          clone,
-          create,
-          createcontainer,
-          delete: delete_func,
-          download,
-          edit,
-          start,
-          stop,
-          resume,
-          reportimport,
-        }) => (
-          <EntityPage
-            {...props}
-            entity={entity}
-            sectionIcon={<TaskIcon size="large" />}
-            title={_('Task')}
-            toolBarIcons={ToolBarIcons}
-            onChanged={onChanged}
-            onContainerTaskCreateClick={createcontainer}
-            onError={onError}
-            onInteraction={onInteraction}
-            onReportImportClick={reportimport}
-            onTaskCloneClick={clone}
-            onTaskCreateClick={create}
-            onTaskDeleteClick={delete_func}
-            onTaskDownloadClick={download}
-            onTaskEditClick={edit}
-            onTaskResumeClick={resume}
-            onTaskStartClick={start}
-            onTaskStopClick={stop}
-          >
-            {({activeTab = 0, onActivateTab}) => {
-              return (
-                <Layout grow="1" flex="column">
-                  <TabLayout grow="1" align={['start', 'end']}>
-                    <TabList
-                      active={activeTab}
-                      align={['start', 'stretch']}
-                      onActivateTab={onActivateTab}
-                    >
-                      <Tab>{_('Information')}</Tab>
-                      <EntitiesTab entities={entity.userTags}>
-                        {_('User Tags')}
-                      </EntitiesTab>
-                      <EntitiesTab entities={permissions}>
-                        {_('Permissions')}
-                      </EntitiesTab>
-                    </TabList>
-                  </TabLayout>
+        {({activeTab = 0, onActivateTab}) => {
+          return (
+            <Layout grow="1" flex="column">
+              <TabLayout grow="1" align={['start', 'end']}>
+                <TabList
+                  active={activeTab}
+                  align={['start', 'stretch']}
+                  onActivateTab={onActivateTab}
+                >
+                  <Tab>{_('Information')}</Tab>
+                  <EntitiesTab entities={permissions}>
+                    {_('Permissions')}
+                  </EntitiesTab>
+                </TabList>
+              </TabLayout>
 
-                  <Tabs active={activeTab}>
-                    <TabPanels>
-                      <TabPanel>
-                        <Details entity={entity} />
-                      </TabPanel>
-                      <TabPanel>
-                        <EntityTags
-                          entity={entity}
-                          onChanged={onChanged}
-                          onError={onError}
-                          onInteraction={onInteraction}
-                        />
-                      </TabPanel>
-                      <TabPanel>
-                        <TaskPermissions
-                          entity={entity}
-                          permissions={permissions}
-                          onChanged={onChanged}
-                          onDownloaded={onDownloaded}
-                          onInteraction={onInteraction}
-                          onError={onError}
-                        />
-                      </TabPanel>
-                    </TabPanels>
-                  </Tabs>
-                </Layout>
-              );
-            }}
-          </EntityPage>
-        )}
-      </TaskComponent>
-    );
-  }
-}
+              <Tabs active={activeTab}>
+                <TabPanels>
+                  <TabPanel>
+                    <Details entity={entity} />
+                  </TabPanel>
+                  <TabPanel>
+                    <AuditPermissions
+                      entity={entity}
+                      permissions={permissions}
+                      onChanged={onChanged}
+                      onDownloaded={onDownloaded}
+                      onInteraction={onInteraction}
+                      onError={onError}
+                    />
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </Layout>
+          );
+        }}
+      </EntityPage>
+    )}
+  </AuditComponent>
+);
 
 Page.propTypes = {
   entity: PropTypes.model,
-  history: PropTypes.object.isRequired,
   permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
@@ -444,7 +384,7 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const TaskPermissions = withComponentDefaults({
+const AuditPermissions = withComponentDefaults({
   relatedResourcesLoaders: [
     ({entity, gmp}) =>
       isDefined(entity.alerts)
@@ -481,30 +421,30 @@ const TaskPermissions = withComponentDefaults({
   ],
 })(EntityPermissions);
 
-const taskIdFilter = id => Filter.fromString('task_id=' + id).all();
+const auditIdFilter = id => Filter.fromString('task_id=' + id).all();
 
 const mapStateToProps = (rootState, {id}) => {
   const permSel = permissionsSelector(rootState);
   const notesSel = notesSelector(rootState);
   const overridesSel = overridesSelector(rootState);
   return {
-    notes: notesSel.getEntities(taskIdFilter(id)),
-    overrides: overridesSel.getEntities(taskIdFilter(id)),
+    notes: notesSel.getEntities(auditIdFilter(id)),
+    overrides: overridesSel.getEntities(auditIdFilter(id)),
     permissions: permSel.getEntities(permissionsResourceFilter(id)),
   };
 };
 
 const load = gmp => {
-  const loadTaskFunc = loadTask(gmp);
+  const loadAuditFunc = loadAudit(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
   const loadNotesFunc = loadNotes(gmp);
   const loadOverridesFunc = loadOverrides(gmp);
   return id => dispatch =>
     Promise.all([
-      dispatch(loadTaskFunc(id)),
+      dispatch(loadAuditFunc(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-      dispatch(loadNotesFunc(taskIdFilter(id))),
-      dispatch(loadOverridesFunc(taskIdFilter(id))),
+      dispatch(loadNotesFunc(auditIdFilter(id))),
+      dispatch(loadOverridesFunc(auditIdFilter(id))),
     ]);
 };
 
@@ -517,9 +457,9 @@ const reloadInterval = ({defaultReloadInterval, entity}) => {
     : defaultReloadInterval;
 };
 
-export default withEntityContainer('task', {
+export default withEntityContainer('audit', {
   load,
-  entitySelector: taskSelector,
+  entitySelector: auditSelector,
   mapStateToProps,
   reloadInterval,
 })(Page);

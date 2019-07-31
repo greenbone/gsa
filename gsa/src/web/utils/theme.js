@@ -40,10 +40,13 @@ const Theme = {
   mediumLightRed: '#ebccd1', // used by: dialog errors border
   warningRed: '#d83636', // used for warning font color at login dialog
   darkRed: '#a94442', // used by: dialog errors font
+  errorRed: '#c83814', // used by: compliance status bar
 
   lightBlue: '#bce8f1', // used by InfoPanel and dashboard hovering
   mediumBlue: '#5897fb', // used by active/hovered items in Select
   blue: '#0000ff', // used by: links
+
+  paleGreen: '#99BE48', // used by: compliance status bar
 
   /* source ? */
   darkGreen: '#519032', // RGB: 81, 144, 50

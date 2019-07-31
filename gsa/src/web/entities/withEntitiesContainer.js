@@ -37,7 +37,7 @@ import EntitiesContainer from './container';
 
 const withEntitiesContainer = (
   gmpname,
-  {entitiesSelector, loadEntities, reloadInterval},
+  {entitiesSelector, loadEntities, reloadInterval, defaultFilter},
 ) => Component => {
   let EntitiesContainerWrapper = props => (
     <SubscriptionProvider>
@@ -57,7 +57,10 @@ const withEntitiesContainer = (
   const mapStateToProps = (state, {gmp}) => {
     const eSelector = entitiesSelector(state);
     const pSelector = getPage(state);
-    const filter = pSelector.getFilter(gmpname);
+    let filter = pSelector.getFilter(gmpname);
+    if (!isDefined(filter)) {
+      filter = defaultFilter;
+    }
     const entities = eSelector.getEntities(filter);
     return {
       defaultReloadInterval: gmp.reloadInterval,

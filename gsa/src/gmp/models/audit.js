@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,8 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {_l} from 'gmp/locale/lang';
-
 import {isDefined, isArray} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
@@ -29,7 +27,6 @@ import {
   parseYesNo,
   parseDuration,
   NO_VALUE,
-  YES_VALUE,
 } from '../parser';
 
 import Model from '../model';
@@ -38,86 +35,58 @@ import Report from './report';
 import Schedule from './schedule';
 import Scanner from './scanner';
 
-export const AUTO_DELETE_KEEP = 'keep';
-export const AUTO_DELETE_NO = 'no';
-export const AUTO_DELETE_KEEP_DEFAULT_VALUE = 5;
+import {
+  AUTO_DELETE_KEEP,
+  AUTO_DELETE_NO,
+  AUTO_DELETE_KEEP_DEFAULT_VALUE,
+  HOSTS_ORDERING_SEQUENTIAL,
+  HOSTS_ORDERING_RANDOM,
+  HOSTS_ORDERING_REVERSE,
+  DEFAULT_MAX_CHECKS,
+  DEFAULT_MAX_HOSTS,
+  DEFAULT_MIN_QOD,
+  TASK_STATUS as AUDIT_STATUS,
+  getTranslatableTaskStatus as getTranslatableAuditStatus,
+  isActive,
+  parse_yes,
+} from './task';
 
-export const HOSTS_ORDERING_SEQUENTIAL = 'sequential';
-export const HOSTS_ORDERING_RANDOM = 'random';
-export const HOSTS_ORDERING_REVERSE = 'reverse';
-
-export const DEFAULT_MAX_CHECKS = 4;
-export const DEFAULT_MAX_HOSTS = 20;
-export const DEFAULT_MIN_QOD = 70;
-
-export const TASK_STATUS = {
-  running: 'Running',
-  stoprequested: 'Stop Requested',
-  deleterequested: 'Delete Requested',
-  ultimatedeleterequested: 'Ultimate Delete Requested',
-  resumerequested: 'Resume Requested',
-  requested: 'Requested',
-  stopped: 'Stopped',
-  new: 'New',
-  interrupted: 'Interrupted',
-  container: 'Container',
-  uploading: 'Uploading',
-  done: 'Done',
+export {
+  AUTO_DELETE_KEEP,
+  AUTO_DELETE_NO,
+  AUTO_DELETE_KEEP_DEFAULT_VALUE,
+  HOSTS_ORDERING_SEQUENTIAL,
+  HOSTS_ORDERING_RANDOM,
+  HOSTS_ORDERING_REVERSE,
+  DEFAULT_MAX_CHECKS,
+  DEFAULT_MAX_HOSTS,
+  DEFAULT_MIN_QOD,
+  AUDIT_STATUS,
+  getTranslatableAuditStatus,
+  isActive,
 };
 
-/* eslint-disable quote-props */
-const TASK_STATUS_TRANSLATIONS = {
-  Running: _l('Running'),
-  'Stop Requested': _l('Stop Requested'),
-  'Delete Requested': _l('Delete Requested'),
-  'Ultimate Delete Requested': _l('Ultimate Delete Requested'),
-  'Resume Requested': _l('Resume Requested'),
-  Requested: _l('Requested'),
-  Stopped: _l('Stopped'),
-  New: _l('New'),
-  Interrupted: _l('Interrupted'),
-  Container: _l('Container'),
-  Uploading: _l('Uploading'),
-  Done: _l('Done'),
-};
-/* eslint-disable quote-props */
-
-export function parse_yes(value) {
-  return value === 'yes' ? YES_VALUE : NO_VALUE;
-}
-
-export const getTranslatableTaskStatus = status =>
-  `${TASK_STATUS_TRANSLATIONS[status]}`;
-
-export const isActive = status =>
-  status === TASK_STATUS.running ||
-  status === TASK_STATUS.stoprequested ||
-  status === TASK_STATUS.deleterequested ||
-  status === TASK_STATUS.ultimatedeleterequested ||
-  status === TASK_STATUS.resumerequested ||
-  status === TASK_STATUS.requested;
-
-class Task extends Model {
-  static entityType = 'task';
+class Audit extends Model {
+  static entityType = 'audit';
 
   isActive() {
     return isActive(this.status);
   }
 
   isRunning() {
-    return this.status === TASK_STATUS.running;
+    return this.status === AUDIT_STATUS.running;
   }
 
   isStopped() {
-    return this.status === TASK_STATUS.stopped;
+    return this.status === AUDIT_STATUS.stopped;
   }
 
   isInterrupted() {
-    return this.status === TASK_STATUS.interrupted;
+    return this.status === AUDIT_STATUS.interrupted;
   }
 
   isNew() {
-    return this.status === TASK_STATUS.new;
+    return this.status === AUDIT_STATUS.new;
   }
 
   isChangeable() {
@@ -133,7 +102,7 @@ class Task extends Model {
   }
 
   getTranslatableStatus() {
-    return getTranslatableTaskStatus(this.status);
+    return getTranslatableAuditStatus(this.status);
   }
 
   parseProperties(elem) {
@@ -150,7 +119,12 @@ class Task extends Model {
     copy.alterable = parseYesNo(elem.alterable);
     copy.result_count = parseInt(elem.result_count);
 
-    const reports = ['last_report', 'current_report'];
+    const reports = [
+      'first_report',
+      'last_report',
+      'second_last_report',
+      'current_report',
+    ];
 
     reports.forEach(name => {
       const report = elem[name];
@@ -246,12 +220,10 @@ class Task extends Model {
       delete copy.hosts_ordering;
     }
 
-    copy.usageType = elem.usage_type;
-
     return copy;
   }
 }
 
-export default Task;
+export default Audit;
 
 // vim: set ts=2 sw=2 tw=80:

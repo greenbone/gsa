@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- Added Explicit Compliance [#1495](https://github.com/greenbone/gsa/pull/1495)
 - added tasktrendgroup component for tasks filter dialog [#1511](https://github.com/greenbone/gsa/pull/1511)
 - Added HorizontalSep component for horizontal lists. [#1494](https://github.com/greenbone/gsa/pull/1494)
 - added BooleanFilterGroup and changed notes filter dialog [#1493](https://github.com/greenbone/gsa/pull/1493)

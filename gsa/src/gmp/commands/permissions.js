@@ -48,6 +48,12 @@ class PermissionCommand extends EntityCommand {
     resourceType,
     subjectType,
   }) {
+    if (resourceType === 'policy') {
+      resourceType = 'config';
+    } else if (resourceType === 'audit') {
+      resourceType = 'task';
+    }
+
     const data = {
       cmd: 'create_permission',
       comment,
@@ -109,6 +115,12 @@ class PermissionsCommand extends EntitiesCommand {
     includeRelated,
     related = [],
   }) {
+    if (entityType === 'policy') {
+      entityType = 'config';
+    } else if (entityType === 'audit') {
+      entityType = 'task';
+    }
+
     const data = {
       cmd: 'create_permissions',
       comment,

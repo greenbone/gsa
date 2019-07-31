@@ -112,7 +112,7 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
     false,
   );
 
-  const mayOpResilience = ['tickets'].reduce(
+  const mayOpResilience = ['tickets', 'policies', 'audits'].reduce(
     (sum, cur) => sum || capabilities.mayAccess(cur),
     false,
   );
@@ -160,6 +160,14 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
               {capabilities.mayAccess('tickets') && (
                 <MenuEntry title={_('Remediation Tickets')} to="tickets" />
               )}
+              <MenuSection>
+                {capabilities.mayAccess('policies') && (
+                  <MenuEntry title={_('Compliance Policies')} to="policies" />
+                )}
+                {capabilities.mayAccess('audits') && (
+                  <MenuEntry title={_('Compliance Audits')} to="audits" />
+                )}
+              </MenuSection>
             </Menu>
           )}
           {capabilities.mayAccess('info') && (
