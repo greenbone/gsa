@@ -18,11 +18,11 @@
  */
 import 'core-js/fn/string/starts-with';
 
-import {isDefined, isArray, isString} from '../utils/identity';
-import {isEmpty, split} from '../utils/string';
-import {map} from '../utils/array';
+import {isDefined, isArray, isString} from 'gmp/utils/identity';
+import {isEmpty, split} from 'gmp/utils/string';
+import {map} from 'gmp/utils/array';
 
-import {parseFloat, parseSeverity} from '../parser';
+import {parseFloat, parseSeverity} from 'gmp/parser';
 
 import Info from './info';
 

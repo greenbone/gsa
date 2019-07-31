@@ -18,9 +18,9 @@
  */
 import 'core-js/fn/object/entries';
 
-import {map} from '../utils/array';
-import {isDefined} from '../utils/identity';
-import {isEmpty} from '../utils/string';
+import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 import {parseSeverity, parseYesNo, YES_VALUE, parseDate} from '../parser';
 
