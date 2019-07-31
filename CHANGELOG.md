@@ -38,6 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   requests in gsad [#1355](https://github.com/greenbone/gsa/pull/1355)
 
 ### Fixed
+- fixed secinfo severitybars not displaying severity.[#1530](https://github.com/greenbone/gsa/pull/1530)
 - Fixed outer click issues for multi select and select boxes
   [#1504](https://github.com/greenbone/gsa/pull/1504)
 
