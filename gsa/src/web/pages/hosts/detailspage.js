@@ -16,6 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
+import 'core-js/library/fn/array/find';
+
 import React from 'react';
 
 import styled from 'styled-components';
@@ -164,13 +167,23 @@ const Hop = styled.div`
 `;
 
 const Details = ({entity, ...props}) => {
-  const {details = {}, routes = [], severity} = entity;
+  const {details = {}, identifiers = [], routes = [], severity} = entity;
+
   const os_cpe = isDefined(details.best_os_cpe)
     ? details.best_os_cpe.value
     : undefined;
   const os_txt = isDefined(details.best_os_txt)
     ? details.best_os_txt.value
     : undefined;
+
+  const bestOsMatchingIdentifier = identifiers.find(
+    identifier => identifier.name === 'OS' && identifier.value === os_cpe,
+  );
+
+  const bestMatchingOsId = isDefined(bestOsMatchingIdentifier)
+    ? bestOsMatchingIdentifier.os.id
+    : undefined;
+
   return (
     <Layout flex="column">
       <InfoTable>
@@ -199,9 +212,9 @@ const Details = ({entity, ...props}) => {
             <TableData>
               <span>
                 <DetailsLink
-                  type="cpe"
-                  textOnly={!isDefined(os_cpe)}
-                  id={os_cpe}
+                  type="operatingsystem"
+                  textOnly={!isDefined(bestMatchingOsId)}
+                  id={bestMatchingOsId}
                 >
                   <OsIcon displayOsName osCpe={os_cpe} osTxt={os_txt} />
                 </DetailsLink>

@@ -68,7 +68,7 @@ const withEntitiesContainer = (
       entitiesCounts: eSelector.getEntitiesCounts(filter),
       entitiesError: eSelector.getEntitiesError(filter),
       filter,
-      isLoading: !isDefined(entities) || eSelector.isLoadingEntities(filter),
+      isLoading: eSelector.isLoadingEntities(filter),
       loadedFilter: eSelector.getLoadedFilter(filter),
     };
   };
