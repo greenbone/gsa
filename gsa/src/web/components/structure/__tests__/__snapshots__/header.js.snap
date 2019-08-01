@@ -73,7 +73,7 @@ exports[`Header tests should render header 1`] = `
       <img
         alt="Greenbone Security Assistant"
         class="c3"
-        src="/img/greenbone.svg"
+        src="greenbone.svg"
       />
       <img
         alt="Greenbone Security Assistant"

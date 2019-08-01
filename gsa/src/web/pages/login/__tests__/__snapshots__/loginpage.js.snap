@@ -489,7 +489,7 @@ exports[`LoginPagetests should render Loginpage 1`] = `
             <img
               alt="Greenbone Security Assistant"
               class="c4"
-              src="/img/greenbone.svg"
+              src="greenbone.svg"
             />
             <img
               alt="Greenbone Security Assistant"
@@ -515,7 +515,7 @@ exports[`LoginPagetests should render Loginpage 1`] = `
           <img
             alt="Greenbone Security Assistant"
             class="c10"
-            src="/img/greenbone.svg"
+            src="greenbone.svg"
           />
           <div
             class="c3"

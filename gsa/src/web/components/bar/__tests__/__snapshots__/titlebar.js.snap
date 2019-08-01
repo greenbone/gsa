@@ -77,7 +77,7 @@ exports[`Titlebar tests should not render content if user is logged out 1`] = `
         <img
           alt="Greenbone Security Assistant"
           class="c3"
-          src="/img/greenbone.svg"
+          src="greenbone.svg"
         />
         <img
           alt="Greenbone Security Assistant"
@@ -359,7 +359,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
           <img
             alt="Greenbone Security Assistant"
             class="c4"
-            src="/img/greenbone.svg"
+            src="greenbone.svg"
           />
           <img
             alt="Greenbone Security Assistant"
