@@ -20,6 +20,8 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
 import withDownload from 'web/components/form/withDownload';
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
