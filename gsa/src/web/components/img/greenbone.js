@@ -19,12 +19,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
-import Img from './img';
+import GbLogo from 'web/components/icon/svg/greenbone.svg';
 
 const GreenboneLogo = props => (
-  <Img alt={_('Greenbone Security Assistant')} {...props} src="greenbone.svg" />
+  <img alt="Greenbone Security Assistant" {...props} src={GbLogo} />
 );
 
 export default GreenboneLogo;
