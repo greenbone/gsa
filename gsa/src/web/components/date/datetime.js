@@ -38,8 +38,10 @@ DateTime.propTypes = {
   timezone: PropTypes.string,
 };
 
-const mapStateToProps = rootState => ({
-  timezone: getTimezone(rootState),
+const mapStateToProps = (rootState, ownProps) => ({
+  timezone: isDefined(ownProps.timezone)
+    ? ownProps.timezone
+    : getTimezone(rootState),
 });
 
 export default connect(mapStateToProps)(DateTime);
