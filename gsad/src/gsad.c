@@ -359,6 +359,7 @@ init_validator ()
                      "|(get_alerts)"
                      "|(get_asset)"
                      "|(get_assets)"
+                     "|(get_capabilities)"
                      "|(get_config)"
                      "|(get_config_family)"
                      "|(get_config_nvt)"
@@ -2058,6 +2059,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (get_aggregate)
   ELSE (get_alert)
   ELSE (get_alerts)
+  ELSE (get_capabilities)
   ELSE (get_config)
   ELSE (get_configs)
   ELSE (get_config_family)

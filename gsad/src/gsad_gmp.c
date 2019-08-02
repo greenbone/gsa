@@ -18468,6 +18468,64 @@ ping_gmp (gvm_connection_t *connection, credentials_t *credentials,
                         "pong", NULL, NULL);
 }
 
+char *
+get_capabilities_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                      params_t *params, cmd_response_data_t *response_data)
+{
+  entity_t entity = NULL;
+  GString *xml;
+
+  if (gvm_connection_sendf (connection,
+                            "<help format=\"XML\" type=\"brief\"/>"))
+    {
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __FUNCTION__, __LINE__,
+        "An internal error occurred while getting the user credentials. "
+        "Diagnostics: Failure to send command to manager daemon.",
+        response_data);
+    }
+
+  xml = g_string_new ("");
+  g_string_append (xml, "<get_capabilities>");
+
+  /* Read the response. */
+  if (read_entity_and_string_c (connection, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __FUNCTION__, __LINE__,
+        "An internal error occurred while getting the user credentials. "
+        "Diagnostics: Failure to receive response from manager daemon.",
+        response_data);
+    }
+
+  if (gmp_success (entity) != 1)
+    {
+      gchar *message;
+
+      set_http_status_from_entity (entity, response_data);
+
+      message =
+        gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
+                      entity_attribute (entity, "status_text"), response_data);
+
+      g_string_free (xml, TRUE);
+      free_entity (entity);
+      return message;
+    }
+
+  /* Cleanup, and return transformed XML. */
+  free_entity (entity);
+
+  g_string_append (xml, "</get_capabilities>");
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
+}
+
 /* Manager communication. */
 
 /**
