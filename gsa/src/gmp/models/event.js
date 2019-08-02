@@ -370,7 +370,13 @@ class Event {
           // month are set in the rrule. Therefore ignore error and retry to get
           // a new date. Fail after 5 unsuccessful attempts
           retries++;
-          log.warn('Error raised while calculating next date', err);
+          if (retries >= 5) {
+            log.error(
+              'Error raised while calculating next date.',
+              'ical event was:\n' + this.event + '\n',
+              err,
+            );
+          }
         }
       }
     }
