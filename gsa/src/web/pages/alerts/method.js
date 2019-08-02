@@ -219,7 +219,7 @@ const Method = ({method = {}, details = false}) => {
       );
     }
 
-    if (isDefined(credential) && isDefined(credential)) {
+    if (isDefined(credential)) {
       url += credential.login;
     } else {
       url += _('(Credential unavailable)');
@@ -249,7 +249,8 @@ const Method = ({method = {}, details = false}) => {
   }
 
   if (method.type === METHOD_TYPE_SNMP) {
-    const {data} = method;
+    const {data = {}} = method;
+    const {snmp_agent = {}} = data;
     if (details) {
       return (
         <div>
@@ -262,7 +263,7 @@ const Method = ({method = {}, details = false}) => {
             <TableBody>
               <TableRow>
                 <TableData>{_('Agent')}</TableData>
-                <TableData>{data.snmp_agent.value}</TableData>
+                <TableData>{snmp_agent.value}</TableData>
               </TableRow>
 
               {isDefined(data.snmp_community) &&
@@ -273,7 +274,7 @@ const Method = ({method = {}, details = false}) => {
                   </TableRow>
                 )}
 
-              {isDefined(data.snmp_agent) && isDefined(data.snmp_agent.value) && (
+              {isDefined(snmp_agent.value) && (
                 <TableRow>
                   <TableData>{_('Message {{name}}')}</TableData>
                   <TableData>{data.snmp_message.value}</TableData>
@@ -284,11 +285,12 @@ const Method = ({method = {}, details = false}) => {
         </div>
       );
     }
-    return _('SNMP to {{agent}}', {agent: data.snmp_agent.value});
+    return _('SNMP to {{agent}}', {agent: snmp_agent.value});
   }
 
   if (method.type === METHOD_TYPE_EMAIL && isDefined(method.data.to_address)) {
-    const {data} = method;
+    const {data = {}} = method;
+    const {to_address = {}, from_address = {}} = data;
     // TODO improve email content info. the info depends on the event type :-/
     if (details) {
       return (
@@ -302,12 +304,12 @@ const Method = ({method = {}, details = false}) => {
             <TableBody>
               <TableRow>
                 <TableData>{_('To address')}</TableData>
-                <TableData>{data.to_address.value}</TableData>
+                <TableData>{to_address.value}</TableData>
               </TableRow>
 
               <TableRow>
                 <TableData>{_('From address')}</TableData>
-                <TableData>{data.from_address.value}</TableData>
+                <TableData>{from_address.value}</TableData>
               </TableRow>
 
               {details && isDefined(data.recipient_credential) && (
