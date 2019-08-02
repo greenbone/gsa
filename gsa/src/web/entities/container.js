@@ -696,7 +696,7 @@ EntitiesContainer.propTypes = {
   gmpname: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  listExportFileName: PropTypes.object,
+  listExportFileName: PropTypes.string,
   loadEntities: PropTypes.func.isRequired,
   loadSettings: PropTypes.func.isRequired,
   loadedFilter: PropTypes.filter,

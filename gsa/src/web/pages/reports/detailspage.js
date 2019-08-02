@@ -685,7 +685,7 @@ ReportDetails.propTypes = {
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   reportComposerDefaults: PropTypes.object,
-  reportExportFileName: PropTypes.object,
+  reportExportFileName: PropTypes.string,
   reportFilter: PropTypes.filter,
   reportFormats: PropTypes.array,
   reportId: PropTypes.id,
