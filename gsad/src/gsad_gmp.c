@@ -473,11 +473,7 @@ envelope_gmp (gvm_connection_t *connection, credentials_t *credentials,
       g_free (warning_elem);
     }
 
-  g_string_append_printf (string,
-                          "<capabilities>%s</capabilities>"
-                          "%s"
-                          "</envelope>",
-                          user_get_capabilities (user), xml);
+  g_string_append_printf (string, "%s</envelope>", xml);
   g_free (xml);
 
   cmd_response_data_set_content_type (response_data, GSAD_CONTENT_TYPE_APP_XML);
