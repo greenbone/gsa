@@ -41,9 +41,9 @@ exports[`HorizontalSep tests should render 1`] = `
   display: inline-flex;
 }
 
-.c2 > *:not(:first-child)::before {
+.c2 > *:not(:last-child)::after {
   content: '•';
-  margin-right: 5px;
+  margin-left: 5px;
 }
 
 <div
@@ -97,9 +97,9 @@ exports[`HorizontalSep tests should render with separator option 1`] = `
   display: inline-flex;
 }
 
-.c2 > *:not(:first-child)::before {
+.c2 > *:not(:last-child)::after {
   content: '|';
-  margin-right: 5px;
+  margin-left: 5px;
 }
 
 <div
@@ -154,9 +154,9 @@ exports[`HorizontalSep tests should render with spacing 1`] = `
   display: inline-flex;
 }
 
-.c2 > *:not(:first-child)::before {
+.c2 > *:not(:last-child)::after {
   content: '|';
-  margin-right: 10px;
+  margin-left: 10px;
 }
 
 <div

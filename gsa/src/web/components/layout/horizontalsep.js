@@ -23,9 +23,9 @@ import PropTypes from 'web/utils/proptypes';
 import Divider from './divider';
 
 const HorizontalSep = styled(Divider)`
-  & > *:not(:first-child)::before {
+  & > *:not(:last-child)::after {
     content: ${({separator = '•'}) => `'${separator}'`};
-    margin-right: ${({spacing = '5px'}) => spacing};
+    margin-left: ${({spacing = '5px'}) => spacing};
   }
 `;
 
