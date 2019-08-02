@@ -31,16 +31,23 @@ import {
 } from 'gmp/models/alert';
 
 const Event = ({event = {}}) => {
-  if (!isDefined(event.type)) {
+  if (!isDefined(event.type) || !isDefined(event.data)) {
     return null;
   }
+
+  let type = _('undefined');
+
   if (event.type === EVENT_TYPE_NEW_SECINFO) {
-    const type = secInfoTypeName(event.data.secinfo_type.value, _('SecInfo'));
+    if (isDefined(event.data.secinfo_type)) {
+      type = secInfoTypeName(event.data.secinfo_type.value, _('SecInfo'));
+    }
     return _('New {{secinfo_type}} arrived', {secinfo_type: type});
   }
 
   if (event.type === EVENT_TYPE_UPDATED_SECINFO) {
-    const type = secInfoTypeName(event.data.secinfo_type.value, _('SecInfo'));
+    if (isDefined(event.data.secinfo_type)) {
+      type = secInfoTypeName(event.data.secinfo_type.value, _('SecInfo'));
+    }
     return _('Updated {{secinfo_type}} arrived', {secinfo_type: type});
   }
 
