@@ -352,14 +352,14 @@ class Event {
 
   get nextDate() {
     if (this.isRecurring()) {
-      const now = ical.Time.now();
+      const now = date();
       const it = this.event.iterator();
 
       let retries = 0;
       while (true && retries <= 5) {
         try {
           const next = it.next();
-          if (next.compare(now) >= 0) {
+          if (next.toUnixTime() >= now.unix()) {
             return convertIcalDate(next, this.timezone);
           }
           retries = 0;
