@@ -60,7 +60,10 @@ const Row = ({
   ...props
 }) => {
   const {host} = entity;
-  const shown_name = isDefined(entity.name) ? entity.name : entity.nvt.oid;
+  let shownName = isDefined(entity.name) ? entity.name : entity.nvt.oid;
+  if (!isDefined(shownName)) {
+    shownName = entity.id;
+  }
   const has_tags = isDefined(entity.nvt) && isDefined(entity.nvt.tags);
   const hasActiveNotes =
     entity.notes.filter(note => note.isActive()).length > 0;
@@ -77,7 +80,7 @@ const Row = ({
       <TableData>
         <Layout align="space-between">
           <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-            <span>{shown_name}</span>
+            <span>{shownName}</span>
           </RowDetailsToggle>
           <IconDivider>
             {hasActiveNotes && (
