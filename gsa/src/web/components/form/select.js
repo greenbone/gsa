@@ -30,8 +30,6 @@ import ArrowIcon from '../icon/arrowicon';
 
 import Layout from '../../components/layout/layout';
 
-import styled from 'styled-components';
-
 import {
   Box,
   caseInsensitiveFilter,
@@ -42,10 +40,6 @@ import {
   SelectContainer,
   SelectedValue,
 } from './selectelements.js';
-
-const SingleSelectedValue = styled(SelectedValue)`
-  cursor: default;
-`;
 
 const SelectValueValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
@@ -176,30 +170,30 @@ class Select extends React.Component {
               width={width}
             >
               <Box
+                {...getButtonProps({
+                  disabled,
+                  onClick: isOpen
+                    ? undefined
+                    : event => {
+                        event.preventDefault(); // don't call default handler from downshift
+                        openMenu(
+                          () => isDefined(this.input) && this.input.focus(),
+                        ); // set focus to input field after menu is opened
+                      },
+                })}
                 isOpen={isOpen}
                 title={toolTipTitle}
                 innerRef={ref => (this.box = ref)}
               >
-                <SingleSelectedValue
+                <SelectedValue
                   data-testid="select-selected-value"
                   disabled={disabled}
                   title={toolTipTitle ? toolTipTitle : label}
                 >
                   {label}
-                </SingleSelectedValue>
+                </SelectedValue>
                 <Layout align={['center', 'center']}>
                   <ArrowIcon
-                    {...getButtonProps({
-                      disabled,
-                      onClick: isOpen
-                        ? undefined
-                        : event => {
-                            event.preventDefault(); // don't call default handler from downshift
-                            openMenu(
-                              () => isDefined(this.input) && this.input.focus(),
-                            ); // set focus to input field after menu is opened
-                          },
-                    })}
                     data-testid="select-open-button"
                     disabled={disabled}
                     down={!isOpen}
