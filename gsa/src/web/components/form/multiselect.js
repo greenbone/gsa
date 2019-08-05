@@ -74,6 +74,11 @@ const Label = styled.span`
   overflow: hidden;
 `;
 
+const ClickableLayout = styled(Layout)`
+  justify-content: flex-end;
+  cursor: pointer;
+`;
+
 class MultiSelect extends React.Component {
   constructor(...args) {
     super(...args);
@@ -200,6 +205,7 @@ class MultiSelect extends React.Component {
           openMenu,
           selectItem,
         }) => {
+          const itemsAreSelected = selectedItems.length > 0;
           return (
             <SelectContainer
               {...getRootProps({refKey: 'innerRef'})}
@@ -212,26 +218,25 @@ class MultiSelect extends React.Component {
                 disabled={disabled}
                 innerRef={ref => (this.box = ref)}
               >
-                <Layout grow="1" wrap>
+                <Layout grow={itemsAreSelected} wrap>
                   {selectedItems.map(item => this.renderItem(item, items))}
                 </Layout>
-                <Layout align={['center', 'center']}>
-                  <ArrowIcon
-                    {...getButtonProps({
-                      disabled,
-                      down: !isOpen,
-                      onClick: isOpen
-                        ? undefined
-                        : event => {
-                            event.preventDefault(); // don't call default handler from downshift
-                            openMenu(
-                              () => isDefined(this.input) && this.input.focus(),
-                            ); // set focus to input field after menu is opened
-                          },
-                    })}
-                    size="small"
-                  />
-                </Layout>
+                <ClickableLayout
+                  grow={!itemsAreSelected}
+                  {...getButtonProps({
+                    disabled,
+                    onClick: isOpen
+                      ? undefined
+                      : event => {
+                          event.preventDefault(); // don't call default handler from downshift
+                          openMenu(
+                            () => isDefined(this.input) && this.input.focus(),
+                          ); // set focus to input field after menu is opened
+                        },
+                  })}
+                >
+                  <ArrowIcon down={!isOpen} size="small" />
+                </ClickableLayout>
               </Box>
               {isOpen && !disabled && (
                 <Menu position={menuPosition} target={this.box}>
