@@ -69,7 +69,7 @@ const withLayout = (defaults = {}) => Component => {
     basis: PropTypes.string,
     flex: PropTypes.oneOf([true, 'column', 'row']),
     grow: PropTypes.oneOfType([
-      PropTypes.oneOf([true]),
+      PropTypes.oneOf([true, false]),
       PropTypes.numberOrNumberString,
     ]),
     shrink: PropTypes.oneOfType([
