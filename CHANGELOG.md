@@ -19,12 +19,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 - Don't crash Alerts listpage and trashcan when Alert data is missing [#1541](https://github.com/greenbone/gsa/pull/1541)
+- Fix calculating the next date of schedules [#1539](https://github.com/greenbone/gsa/pull/1539)
 - Fix linking to best OS in host details [#1528](https://github.com/greenbone/gsa/pull/1528)
+- Redirect to root URL by default [#1517](https://github.com/greenbone/gsa/pull/1517)
 - Fix showing details for tasks [#1515](https://github.com/greenbone/gsa/pull/1515)
-- Fix using filename templates from usersettings [#1512](https://github.com/greenbone/gsa/pull/1512)
 - Allow to use additional options for starting gsad via systemd
   [#1514](https://github.com/greenbone/gsa/pull/1514)
-- Redirect to root URL by default [#1517](https://github.com/greenbone/gsa/pull/1517)
+- Fix using filename templates from usersettings [#1512](https://github.com/greenbone/gsa/pull/1512)
 
 [8.0.2]: https://github.com/greenbone/gsa/compare/v8.0.1...gsa-8.0
 
