@@ -468,8 +468,9 @@ class ReportDetails extends React.Component {
       .then(response => {
         this.setState({showDownloadReportDialog: false});
         const {data} = response;
-        let filename = generateFilename({
+        const filename = generateFilename({
           creationTime: entity.creationTime,
+          extension,
           fileNameFormat: reportExportFileName,
           id: entity.id,
           modificationTime: entity.modificationTime,
@@ -478,7 +479,6 @@ class ReportDetails extends React.Component {
           resourceType: 'report',
           username,
         });
-        filename += '.' + extension;
 
         onDownload({filename, data});
       }, this.handleError);
@@ -685,7 +685,7 @@ ReportDetails.propTypes = {
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   reportComposerDefaults: PropTypes.object,
-  reportExportFileName: PropTypes.object,
+  reportExportFileName: PropTypes.string,
   reportFilter: PropTypes.filter,
   reportFormats: PropTypes.array,
   reportId: PropTypes.id,

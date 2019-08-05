@@ -144,7 +144,7 @@ class EntityComponent extends React.Component {
 
 EntityComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  detailsExportFileName: PropTypes.object,
+  detailsExportFileName: PropTypes.string,
   gmp: PropTypes.gmp.isRequired,
   loadSettings: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,

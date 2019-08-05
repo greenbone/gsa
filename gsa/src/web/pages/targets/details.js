@@ -26,7 +26,6 @@ import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -61,11 +60,11 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
 
   const hostsListing = hosts
     .slice(0, MAX_HOSTS_LISTINGS)
-    .map(host => <span key={host}>{host + ','}</span>);
+    .map(host => <span key={host}>{host}</span>);
 
   const excludeHostsListing = exclude_hosts
     .slice(0, MAX_HOSTS_LISTINGS)
-    .map(host => <span key={host}>{host + ','}</span>);
+    .map(host => <span key={host}>{host}</span>);
 
   return (
     <Layout grow="1" flex="column">
@@ -79,10 +78,10 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
             <TableRow>
               <TableDataAlignTop>{_('Included')}</TableDataAlignTop>
               <TableData>
-                <Divider wrap>
+                <HorizontalSep separator="," wrap spacing="0">
                   {hostsListing}
                   {hosts.length > MAX_HOSTS_LISTINGS && '[...]'}
-                </Divider>
+                </HorizontalSep>
               </TableData>
             </TableRow>
 
@@ -90,10 +89,10 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
               <TableRow>
                 <TableDataAlignTop>{_('Excluded')}</TableDataAlignTop>
                 <TableData>
-                  <Divider wrap>
+                  <HorizontalSep separator="," wrap spacing="0">
                     {excludeHostsListing}
                     {exclude_hosts.length > MAX_HOSTS_LISTINGS && '[...]'}
-                  </Divider>
+                  </HorizontalSep>
                 </TableData>
               </TableRow>
             )}

@@ -161,12 +161,12 @@ export class UserCommand extends EntityCommand {
   currentCapabilities(options = {}) {
     return this.httpGet(
       {
-        cmd: 'get_settings',
+        cmd: 'get_capabilities',
       },
       options,
     ).then(response => {
       const {data} = response;
-      const {command: commands} = data.capabilities.help_response.schema;
+      const {command: commands} = data.get_capabilities.help_response.schema;
       const caps = map(commands, command => command.name);
       return response.setData(new Capabilities(caps));
     });

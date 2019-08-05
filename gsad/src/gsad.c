@@ -360,6 +360,7 @@ init_validator ()
                      "|(get_alerts)"
                      "|(get_asset)"
                      "|(get_assets)"
+                     "|(get_capabilities)"
                      "|(get_config)"
                      "|(get_config_family)"
                      "|(get_config_nvt)"
@@ -1926,14 +1927,11 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   if (!strcmp (cmd, "cvss_calculator"))
     res = cvss_calculator (&connection, credentials, params, response_data);
 
-  ELSE (new_alert)
-  ELSE (get_task)
-  ELSE (get_tasks)
+  ELSE (auth_settings)
   ELSE (edit_alert)
   ELSE (edit_config_family)
   ELSE (edit_config_nvt)
   ELSE (edit_role)
-  ELSE (auth_settings)
   ELSE (export_agent)
   ELSE (export_agents)
   ELSE (export_alert)
@@ -2066,8 +2064,14 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (get_aggregate)
   ELSE (get_alert)
   ELSE (get_alerts)
+  ELSE (get_capabilities)
+  ELSE (get_config)
+  ELSE (get_configs)
+  ELSE (get_config_family)
+  ELSE (get_config_nvt)
   ELSE (get_credential)
   ELSE (get_credentials)
+  ELSE (get_feeds)
   ELSE (get_filter)
   ELSE (get_filters)
   ELSE (get_group)
@@ -2101,6 +2105,8 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (get_tags)
   ELSE (get_target)
   ELSE (get_targets)
+  ELSE (get_task)
+  ELSE (get_tasks)
   ELSE (get_ticket)
   ELSE (get_tickets)
   ELSE (get_tls_certificate)
@@ -2109,11 +2115,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (get_user)
   ELSE (get_users)
   ELSE (get_vulns)
-  ELSE (get_feeds)
-  ELSE (get_config)
-  ELSE (get_configs)
-  ELSE (get_config_family)
-  ELSE (get_config_nvt)
+  ELSE (new_alert)
   ELSE (ping)
   ELSE (wizard)
   ELSE (wizard_get)

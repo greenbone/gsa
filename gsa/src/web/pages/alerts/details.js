@@ -147,7 +147,7 @@ const AlertDetails = ({capabilities, entity, links = true}) => {
 
           {tasks.length > 0 && (
             <TableRow>
-              <TableData>{_('Task using this Alert')}</TableData>
+              <TableData>{_('Tasks using this Alert')}</TableData>
               <TableData>
                 <HorizontalSep wrap>
                   {tasks.map(task => (
