@@ -44,8 +44,8 @@ import NvtsDashboard, {NVTS_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = () => (
   <ManualIcon
-    page="vulnerabilitymanagement"
-    anchor="network-vulnerability-tests"
+    page="managing-secinfo"
+    anchor="network-vulnerability-tests-nvt"
     title={_('Help: NVTs')}
   />
 );

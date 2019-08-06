@@ -51,8 +51,8 @@ const ToolBarIcons = withCapabilities(
   ({capabilities, onOverrideCreateClick}) => (
     <IconDivider>
       <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="overrides-and-false-positives"
+        page="reports"
+        anchor="managing-overrides"
         title={_('Help: Overrides')}
       />
 

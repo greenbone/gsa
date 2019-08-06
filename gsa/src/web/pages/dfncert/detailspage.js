@@ -58,8 +58,8 @@ const ToolBarIcons = ({entity, onDfnCertAdvDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="id15"
+        page="managing-secinfo"
+        anchor="dfn-cert-advisories"
         title={_('Help: DFN-CERT Advisories')}
       />
       <ListIcon title={_('DFN-CERT Advisories')} page="dfncerts" />

@@ -125,8 +125,8 @@ const ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider align={['start', 'start']}>
         <ManualIcon
-          page="vulnerabilitymanagement"
-          anchor="creating-a-task"
+          page="scanning"
+          anchor="managing-tasks"
           title={_('Help: Tasks')}
         />
         <ListIcon title={_('Task List')} page="tasks" />

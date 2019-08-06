@@ -48,8 +48,8 @@ const ToolBarIcons = withCapabilities(
   ({capabilities, onScannerCreateClick}) => (
     <IconDivider>
       <ManualIcon
-        page="search"
-        searchTerm="scanner"
+        page="scanning"
+        anchor="managing-scanners"
         title={_('Help: Scanners')}
       />
       {capabilities.mayCreate('scanner') && (

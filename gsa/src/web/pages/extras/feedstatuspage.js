@@ -53,8 +53,8 @@ import withGmp from 'web/utils/withGmp';
 
 const ToolBarIcons = () => (
   <ManualIcon
-    page="search"
-    searchTerm="feed"
+    page="web-interface"
+    anchor="displaying-the-feed-status"
     size="small"
     title={_('Help: Feed Status')}
   />

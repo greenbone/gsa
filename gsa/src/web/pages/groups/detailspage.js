@@ -73,9 +73,9 @@ const ToolBarIcons = ({
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="gui_administration"
-        anchor="groups"
-        title={_('Help: Group Details')}
+        page="web-interface-access"
+        anchor="managing-groups"
+        title={_('Help: Groups')}
       />
       <ListIcon title={_('Groups List')} page="groups" />
     </IconDivider>

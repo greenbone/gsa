@@ -89,8 +89,8 @@ const ToolBarIcons = ({
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="notes"
+        page="reports"
+        anchor="managing-notes"
         title={_('Help: Notes')}
       />
       <ListIcon title={_('Note List')} page="notes" />

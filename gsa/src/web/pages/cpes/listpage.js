@@ -43,11 +43,7 @@ import CpesTable from './table';
 import CpesDashboard, {CPES_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = props => (
-  <ManualIcon
-    page="vulnerabilitymanagement"
-    anchor="cpe"
-    title={_('Help: CPEs')}
-  />
+  <ManualIcon page="managing-secinfo" anchor="cpe" title={_('Help: CPEs')} />
 );
 
 const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
