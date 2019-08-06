@@ -28,7 +28,7 @@ import NumberField from 'web/components/form/numberfield';
 import Divider from 'web/components/layout/divider';
 
 const SeverityValuesGroup = ({filter, name, title, onChange}) => {
-  /* useState is analogous to setState in class commponents.
+  /* useState is analogous to setState in class components.
    * the first argument is the state variable.
    * the second argument can be thought of as the handler.
    * we call the second argument when we "set state", so to speak.
