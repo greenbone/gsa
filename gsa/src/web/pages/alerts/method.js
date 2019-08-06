@@ -371,7 +371,7 @@ const Method = ({method = {}, details = false}) => {
   }
 
   if (method.type === METHOD_TYPE_START_TASK) {
-    // FIXME task name ist missing
+    // FIXME task name is missing
     // in xslt the tasks have been added to the response
     // we should improve the backend to return the name for the task id here too
     return _('Start Task');
