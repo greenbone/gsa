@@ -205,7 +205,6 @@ class MultiSelect extends React.Component {
           openMenu,
           selectItem,
         }) => {
-          const itemsAreSelected = selectedItems.length > 0;
           return (
             <SelectContainer
               {...getRootProps({refKey: 'innerRef'})}
@@ -218,11 +217,11 @@ class MultiSelect extends React.Component {
                 disabled={disabled}
                 innerRef={ref => (this.box = ref)}
               >
-                <Layout grow={itemsAreSelected} wrap>
+                <Layout grow={selectedItems.length > 0 ? 1 : 0} wrap>
                   {selectedItems.map(item => this.renderItem(item, items))}
                 </Layout>
                 <ClickableLayout
-                  grow={!itemsAreSelected}
+                  grow={selectedItems.length > 0 ? 0 : 1}
                   {...getButtonProps({
                     disabled,
                     onClick: isOpen
