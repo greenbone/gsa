@@ -128,7 +128,7 @@ const Footer = createEntitiesFooter({
 });
 
 export const VulnsTable = createEntitiesTable({
-  emptyTitle: _l('No Vulnerabilites available'),
+  emptyTitle: _l('No Vulnerabilities available'),
   header: VulnsHeader,
   footer: Footer,
   row: VulnsRow,
