@@ -19,7 +19,7 @@ exports[`SortByGroup tests should render 1`] = `
   align-items: center;
 }
 
-.c8 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -37,22 +37,22 @@ exports[`SortByGroup tests should render 1`] = `
   align-items: center;
 }
 
-.c13 {
+.c12 {
   margin-left: -5px;
 }
 
-.c13 > * {
+.c12 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c13 > * {
+.c12 > * {
   margin-left: 5px;
 }
 
-.c12 {
+.c11 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -92,7 +92,7 @@ exports[`SortByGroup tests should render 1`] = `
   padding-right: 10px;
 }
 
-.c10 {
+.c9 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -117,13 +117,13 @@ exports[`SortByGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c9 {
+.c8 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c9 * {
+.c8 * {
   height: inherit;
   width: inherit;
 }
@@ -164,7 +164,7 @@ exports[`SortByGroup tests should render 1`] = `
   width: 180px;
 }
 
-.c7 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -183,11 +183,7 @@ exports[`SortByGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c6 {
-  cursor: default;
-}
-
-.c11 {
+.c10 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -203,7 +199,7 @@ exports[`SortByGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c15 {
+.c14 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -214,11 +210,11 @@ exports[`SortByGroup tests should render 1`] = `
   height: auto;
 }
 
-.c16 {
+.c15 {
   opacity: 1;
 }
 
-.c14 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -255,24 +251,24 @@ exports[`SortByGroup tests should render 1`] = `
       width="180px"
     >
       <div
+        aria-expanded="false"
+        aria-haspopup="true"
+        aria-label="open menu"
         class="c5"
+        data-toggle="true"
+        role="button"
+        type="button"
       >
         <div
-          class="c6 c7"
+          class="c6"
           data-testid="select-selected-value"
         />
         <div
-          class="c8"
+          class="c7"
         >
           <span
-            aria-expanded="false"
-            aria-haspopup="true"
-            aria-label="open menu"
-            class="c9 c10"
+            class="c8 c9"
             data-testid="select-open-button"
-            data-toggle="true"
-            role="button"
-            type="button"
           >
             ▼
           </span>
@@ -280,25 +276,25 @@ exports[`SortByGroup tests should render 1`] = `
       </div>
     </div>
     <label
-      class="c11"
+      class="c10"
     >
       <div
-        class="c12 c3"
+        class="c11 c3"
       >
         <div
-          class="c13 c3"
+          class="c12 c3"
           margin="5px"
         >
           <input
             checked=""
-            class="c14 c15"
+            class="c13 c14"
             data-testid="radio-input"
             name="sort_order"
             type="radio"
             value="sort"
           />
           <span
-            class="c16"
+            class="c15"
             data-testid="radio-title"
           >
             Ascending
@@ -307,24 +303,24 @@ exports[`SortByGroup tests should render 1`] = `
       </div>
     </label>
     <label
-      class="c11"
+      class="c10"
     >
       <div
-        class="c12 c3"
+        class="c11 c3"
       >
         <div
-          class="c13 c3"
+          class="c12 c3"
           margin="5px"
         >
           <input
-            class="c14 c15"
+            class="c13 c14"
             data-testid="radio-input"
             name="sort_order"
             type="radio"
             value="sort-reverse"
           />
           <span
-            class="c16"
+            class="c15"
             data-testid="radio-title"
           >
             Descending
