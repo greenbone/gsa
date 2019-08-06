@@ -57,7 +57,7 @@ class Nvt extends Info {
 
     ret.nvt_type = elem._type;
 
-    ret.oid = ret._oid;
+    ret.oid = isEmpty(ret._oid) ? undefined : ret._oid;
     ret.id = ret.oid;
     ret.tags = parse_tags(ret.tags);
 

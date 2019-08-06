@@ -127,7 +127,7 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 export default createEntitiesTable({
-  emptyTitle: _l('No Vulnerabilites available'),
+  emptyTitle: _l('No Vulnerabilities available'),
   header: Header,
   row: Row,
 });
