@@ -165,8 +165,8 @@ const ToolBarIcons = ({disableEditIcon, onEditSettingsClick}) => (
     <IconDivider>
       <ManualIcon
         size="small"
-        page="gui_introduction"
-        anchor="my-settings"
+        page="web-interface"
+        anchor="changing-the-user-settings"
         title={_('Help: My Settings')}
       />
       <EditIcon

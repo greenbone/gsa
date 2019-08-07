@@ -66,8 +66,8 @@ const ToolBarIcons = ({entity, onCertBundAdvDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="cert-bund"
+        page="managing-secinfo"
+        anchor="cert-bund-advisories"
         title={_('Help:  CERT-Bund Advisories')}
       />
       <ListIcon title={_('CERT-Bund Advisories')} page="certbunds" />

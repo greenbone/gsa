@@ -49,8 +49,8 @@ const ToolBarIcons = withCapabilities(
   ({capabilities, onPermissionCreateClick}) => (
     <IconDivider>
       <ManualIcon
-        page="gui_administration"
-        anchor="permissions"
+        page="web-interface-access"
+        anchor="managing-permissions"
         title={_('Help: Permissions')}
       />
       {capabilities.mayCreate('permission') && (

@@ -49,7 +49,7 @@ const ToolBarIcons = withCapabilities(
     <IconDivider>
       <ManualIcon
         page="reports"
-        anchor="report-plugins"
+        anchor="managing-report-formats"
         title={_('Help: Report Formats')}
       />
       {capabilities.mayCreate('report_format') && (

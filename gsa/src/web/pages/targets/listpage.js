@@ -46,8 +46,8 @@ import TargetComponent from './component';
 const ToolBarIcons = withCapabilities(({capabilities, onTargetCreateClick}) => (
   <IconDivider>
     <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="creating-a-target"
+      page="scanning"
+      anchor="managing-targets"
       title={_('Help: Targets')}
     />
     {capabilities.mayCreate('target') && (

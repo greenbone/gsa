@@ -92,8 +92,8 @@ const ToolBarIcons = withCapabilities(
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="vulnerabilitymanagement"
-          anchor="scan-configuration"
+          page="scanning"
+          anchor="managing-scan-configurations"
           title={_('Help: ScanConfigs')}
         />
         <ListIcon title={_('ScanConfig List')} page="scanconfigs" />

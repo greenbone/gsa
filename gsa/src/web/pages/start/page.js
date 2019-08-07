@@ -53,6 +53,7 @@ import {
 import DashboardIcon from 'web/components/icon/dashboardicon';
 import DeleteIcon from 'web/components/icon/deleteicon';
 import EditIcon from 'web/components/icon/editicon';
+import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -106,6 +107,14 @@ const StyledTab = styled(Tab)`
     opacity: 1;
   }
 `;
+
+const ToolBarIcons = () => (
+  <ManualIcon
+    page="web-interface"
+    anchor="dashboards-and-dashboard-displays"
+    title={_('Help: Dashboards')}
+  />
+);
 
 class StartPage extends React.Component {
   constructor(...args) {
@@ -391,6 +400,7 @@ class StartPage extends React.Component {
     const canAdd = dashboards.length < MAX_DASHBOARDS;
     return (
       <React.Fragment>
+        <ToolBarIcons />
         <Section title={_('Dashboards')} img={<DashboardIcon size="large" />}>
           {isLoading ? (
             <Loading />

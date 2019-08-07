@@ -49,8 +49,8 @@ const ToolBarIcons = withCapabilities(
   ({capabilities, onScanConfigCreateClick, onScanConfigImportClick}) => (
     <IconDivider>
       <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="scan-configuration"
+        page="scanning"
+        anchor="managing-scan-configurations"
         title={_('Help: Scan Configs')}
       />
       {capabilities.mayCreate('config') && (

@@ -102,8 +102,8 @@ let ToolBarIcons = ({
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="results"
+        page="reports"
+        anchor="displaying-all-existing-results"
         title={_('Help: Results')}
       />
       <ListIcon title={_('Results List')} page="results" />

@@ -50,8 +50,8 @@ import NoteIcon from 'web/components/icon/noteicon';
 const ToolBarIcons = withCapabilities(({capabilities, onNoteCreateClick}) => (
   <IconDivider>
     <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="notes"
+      page="reports"
+      anchor="managing-notes"
       title={_('Help: Notes')}
     />
     {capabilities.mayCreate('note') && (

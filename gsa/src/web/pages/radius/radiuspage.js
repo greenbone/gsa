@@ -53,7 +53,7 @@ import RadiusDialog from './dialog';
 const ToolBarIcons = ({onOpenDialogClick}) => (
   <IconDivider>
     <ManualIcon
-      page="gui_administration"
+      page="web-interface-access"
       anchor="radius"
       size="small"
       title={_('Help: RADIUS Authentication')}

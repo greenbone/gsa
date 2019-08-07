@@ -47,8 +47,8 @@ import VulnerabilitiesDashboard, {VULNS_DASHBOARD_ID} from './dashboard';
 const ToolBarIcons = () => (
   <Layout>
     <ManualIcon
-      page="search"
-      searchTerm="vulnerabilities"
+      page="reports"
+      anchor="displaying-all-existing-vulnerabilities"
       title={_('Vulnerabilities')}
     />
   </Layout>

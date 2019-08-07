@@ -93,9 +93,9 @@ const ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="vulnerabilitymanagement"
-          anchor="host-details"
-          title={_('Help: Host Details')}
+          page="managing-assets"
+          anchor="managing-hosts"
+          title={_('Help: Hosts')}
         />
         <ListIcon title={_('Host List')} page="hosts" />
       </IconDivider>

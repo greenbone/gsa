@@ -52,8 +52,8 @@ import HostsDashboard, {HOSTS_DASHBOARD_ID} from './dashboard';
 const ToolBarIcons = withCapabilities(({capabilities, onHostCreateClick}) => (
   <IconDivider>
     <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="hosts-view"
+      page="managing-assets"
+      anchor="managing-hosts"
       title={_('Help: Hosts')}
     />
     {capabilities.mayCreate('host') && (

@@ -28,6 +28,7 @@ import Comment from 'web/components/comment/comment';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
 import SolutionType from 'web/components/icon/solutiontypeicon';
 import TicketIcon from 'web/components/icon/ticketicon';
 
@@ -77,6 +78,11 @@ const ToolBarIcons = ({
   onTicketEditClick,
 }) => (
   <Divider margin="10px">
+    <ManualIcon
+      page="reports"
+      anchor="managing-tickets"
+      title={_('Help: Remediation Tickets')}
+    />
     <ListIcon title={_('Ticket List')} page="tickets" />
     <IconDivider>
       <EntityCloneIcon

@@ -85,8 +85,8 @@ const ToolBarIcons = ({
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="gui_administration"
-        anchor="user-roles"
+        page="web-interface-access"
+        anchor="managing-roles"
         title={_('Help: Roles')}
       />
       <ListIcon title={_('Roles List')} page="roles" />

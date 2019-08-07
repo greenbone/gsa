@@ -83,7 +83,7 @@ const ToolBar = ({onDurationChangeClick}) => {
     <IconDivider>
       <ManualIcon
         page="performance"
-        anchor="appliance-performance"
+        anchor="optimizing-the-appliance-performance"
         size="small"
         title={_('Help: Performance')}
       />
