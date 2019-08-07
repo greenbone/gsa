@@ -335,6 +335,7 @@ const TaskDialog = ({
                   disabled={!change_task}
                   items={target_items}
                   value={state.target_id}
+                  width="260px"
                   onChange={onTargetChange}
                 />
                 {change_task && (
@@ -355,6 +356,7 @@ const TaskDialog = ({
                     name="alert_ids"
                     items={alert_items}
                     value={state.alert_ids}
+                    width="260px"
                     onChange={onAlertsChange}
                   />
                   <Layout>
@@ -374,6 +376,7 @@ const TaskDialog = ({
                     name="schedule_id"
                     value={state.schedule_id}
                     items={schedule_items}
+                    width="201px"
                     onChange={onScheduleChange}
                   />
                   <Checkbox
