@@ -89,7 +89,9 @@ import FilterDialog from './detailsfilterdialog';
 
 const log = logger.getLogger('web.pages.report.detailspage');
 
-const DEFAULT_FILTER = Filter.fromString('rows=100');
+const DEFAULT_FILTER = Filter.fromString(
+  'levels=hm rows=100 min_qod=70 first=1 sort-reverse=severity',
+);
 
 const REPORT_FORMATS_FILTER = Filter.fromString('active=1 trust=1 rows=-1');
 
