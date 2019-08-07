@@ -116,7 +116,7 @@ class ReportDetails extends React.Component {
       showDownloadReportDialog: false,
       sorting: {
         results: {
-          sortField: 'created',
+          sortField: 'severity',
           sortReverse: true,
         },
         apps: {
