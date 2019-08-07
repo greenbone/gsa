@@ -72,6 +72,7 @@ const ScannersPage = ({
   onDownloaded,
   onError,
   onInteraction,
+  showSuccess,
   ...props
 }) => (
   <ScannerComponent
@@ -88,7 +89,10 @@ const ScannersPage = ({
     onDownloaded={onDownloaded}
     onDownloadError={onError}
     onInteraction={onInteraction}
-    onVerified={onChanged}
+    onVerified={() => {
+      onChanged();
+      showSuccess(_('Scanner Verified'));
+    }}
     onVerifyError={onError}
   >
     {({
@@ -129,6 +133,7 @@ const ScannersPage = ({
 );
 
 ScannersPage.propTypes = {
+  showSuccess: PropTypes.func.isRequired,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
