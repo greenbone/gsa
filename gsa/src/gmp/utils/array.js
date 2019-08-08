@@ -16,9 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import 'core-js/fn/array/includes';
-import 'core-js/fn/object/is';
-import 'core-js/fn/symbol';
+import 'core-js/features/array/includes';
+import 'core-js/features/object/is';
+import 'core-js/features/symbol';
 
 import {hasValue, isDefined, isArray} from './identity';
 

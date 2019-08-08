@@ -16,8 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import 'core-js/fn/array/some';
-import 'core-js/fn/object/values';
+import 'core-js/features/array/some';
+import 'core-js/features/object/values';
 
 import React from 'react';
 
