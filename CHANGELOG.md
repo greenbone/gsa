@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1466](https://github.com/greenbone/gsa/pull/1466) [#1467](https://github.com/greenbone/gsa/pull/1467)
 
 ### Changed
+- Use fast xml parser by default [#1556](https://github.com/greenbone/gsa/pull/1556)
 - Updated dependencies [#1555](https://github.com/greenbone/gsa/pull/1555)
 - Changed schedule dialog (added Now button) to help users jump to current time ASAP [#1519](https://github.com/greenbone/gsa/pull/1519)
 - Changed the filter dialogues for tasks and overrides [#1511](https://github.com/greenbone/gsa/pull/1511)
