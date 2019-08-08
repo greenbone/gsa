@@ -16,10 +16,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import 'core-js/fn/object/entries';
-import 'core-js/fn/object/values';
-import 'core-js/fn/string/includes';
-import 'core-js/fn/string/starts-with';
+import 'core-js/features/object/entries';
+import 'core-js/features/object/values';
+import 'core-js/features/string/includes';
+import 'core-js/features/string/starts-with';
 
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';

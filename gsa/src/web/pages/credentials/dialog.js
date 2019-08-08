@@ -16,10 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/features/array/includes';
 
 import React from 'react';
-
-import 'core-js/fn/array/includes';
 
 import {_} from 'gmp/locale/lang';
 
