@@ -27,7 +27,6 @@ import Report from '../models/report';
 import {ALL_FILTER} from '../models/filter';
 
 import DefaultTransform from '../http/transform/default';
-import FastXmlTransform from '../http/transform/fastxml';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
@@ -123,7 +122,7 @@ class ReportCommand extends EntityCommand {
         filter,
         ignore_pagination: 1,
       },
-      {...options, transform: FastXmlTransform},
+      options,
     ).then(this.transformResponse);
   }
 
@@ -134,7 +133,7 @@ class ReportCommand extends EntityCommand {
         filter,
         ignore_pagination: 1,
       },
-      {...options, transform: FastXmlTransform},
+      options,
     ).then(this.transformResponse);
   }
 
