@@ -499,6 +499,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/img/product.js
      ${GSA_SRC_DIR}/src/web/components/label/severityclass.js
      ${GSA_SRC_DIR}/src/web/components/layout/divider.js
+     ${GSA_SRC_DIR}/src/web/components/layout/globalstyles.js
      ${GSA_SRC_DIR}/src/web/components/layout/icondivider.js
      ${GSA_SRC_DIR}/src/web/components/layout/layout.js
      ${GSA_SRC_DIR}/src/web/components/layout/withLayout.js
@@ -1075,7 +1076,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/utils/compose.js
      ${GSA_SRC_DIR}/src/web/utils/constants.js
      ${GSA_SRC_DIR}/src/web/utils/cpe.js
-     ${GSA_SRC_DIR}/src/web/utils/globalcss.js
      ${GSA_SRC_DIR}/src/web/utils/os.js
      ${GSA_SRC_DIR}/src/web/utils/proptypes.js
      ${GSA_SRC_DIR}/src/web/utils/render.js
