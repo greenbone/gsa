@@ -31,6 +31,8 @@ import {isDefined} from 'gmp/utils/identity';
 
 import ErrorBoundary from 'web/components/error/errorboundary';
 
+import GlobalStyles from 'web/components/layout/globalstyles';
+
 import LocaleObserver from 'web/components/observer/localeobserver';
 
 import GmpProvider from 'web/components/provider/gmpprovider';
@@ -40,8 +42,6 @@ import {
   setTimezone,
   setIsLoggedIn,
 } from 'web/store/usersettings/actions';
-
-import globalcss from 'web/utils/globalcss';
 
 import configureStore from './store';
 
@@ -57,8 +57,6 @@ const gmp = new Gmp(settings);
 const store = configureStore(settings.loglevel === LOG_LEVEL_DEBUG);
 
 window.gmp = gmp;
-
-globalcss();
 
 const initStore = () => {
   const {timezone, username} = gmp.settings;
@@ -98,15 +96,18 @@ class App extends React.Component {
 
   render() {
     return (
-      <ErrorBoundary message={_('An error occurred on this page')}>
-        <GmpProvider gmp={gmp}>
-          <StoreProvider store={store}>
-            <LocaleObserver>
-              <Routes />
-            </LocaleObserver>
-          </StoreProvider>
-        </GmpProvider>
-      </ErrorBoundary>
+      <React.Fragment>
+        <GlobalStyles />
+        <ErrorBoundary message={_('An error occurred on this page')}>
+          <GmpProvider gmp={gmp}>
+            <StoreProvider store={store}>
+              <LocaleObserver>
+                <Routes />
+              </LocaleObserver>
+            </StoreProvider>
+          </GmpProvider>
+        </ErrorBoundary>
+      </React.Fragment>
     );
   }
 }
