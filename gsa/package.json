@@ -85,7 +85,7 @@
     "husky": "^2.7.0",
     "jest-junit": "^7.0.0",
     "jest-styled-components": "^6.3.3",
-    "lint-staged": "^9.2.1",
+    "lint-staged": "^8.2.1",
     "prettier": "^1.18.2"
   },
   "jest": {
