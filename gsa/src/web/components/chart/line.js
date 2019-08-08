@@ -23,8 +23,6 @@ import memoize from 'memoize-one';
 
 import React from 'react';
 
-import {css} from 'glamor';
-
 import styled from 'styled-components';
 
 import {scaleLinear, scaleUtc} from 'd3-scale';
@@ -64,9 +62,9 @@ const MIN_TICK_WIDTH = 75;
 const findX = (timeline, value) => d =>
   timeline ? d.x.isSame(value) : d.x === value;
 
-const lineCss = css({
-  shapeRendering: 'crispEdges',
-});
+const CrispEdgesLine = styled(Line)`
+  shape-rendering: crisp-edges;
+`;
 
 const LINE_HEIGHT = 15;
 
@@ -385,11 +383,7 @@ class LineChart extends React.Component {
     const infoMargin = 20;
     return (
       <Group>
-        <Line
-          from={{x, y: 0}}
-          to={{x, y: maxHeight(height)}}
-          className={`${lineCss}`}
-        />
+        <CrispEdgesLine from={{x, y: 0}} to={{x, y: maxHeight(height)}} />
         <Group left={x + infoMargin} top={mouseY}>
           <rect
             x={0}
@@ -456,11 +450,10 @@ class LineChart extends React.Component {
     const rangeWidth = rightDirection ? endX - startX : startX - endX;
     return (
       <Group>
-        <Line
+        <CrispEdgesLine
           from={{x: startX, y: 0}}
           to={{x: startX, y: maxHeight(height)}}
           stroke={Theme.green}
-          className={`${lineCss}`}
         />
         <rect
           x={rightDirection ? startX : endX}
