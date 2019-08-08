@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1466](https://github.com/greenbone/gsa/pull/1466) [#1467](https://github.com/greenbone/gsa/pull/1467)
 
 ### Changed
-- Use styled-component to render global styles [#1557](https://github.com/greenbone/gsa/pull/1557)
+- Use styled-components to render global styles [#1557](https://github.com/greenbone/gsa/pull/1557)
 - Use fast xml parser by default [#1556](https://github.com/greenbone/gsa/pull/1556)
 - Updated dependencies [#1555](https://github.com/greenbone/gsa/pull/1555)
 - Changed schedule dialog (added Now button) to help users jump to current time ASAP [#1519](https://github.com/greenbone/gsa/pull/1519)
