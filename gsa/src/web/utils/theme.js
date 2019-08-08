@@ -64,6 +64,7 @@ const Theme = {
   Font: {
     default: 'Verdana, sans-serif',
     dialog: 'Trebuchet MS, Tahoma, Verdana, Arial, sans-serif',
+    defaultSize: '12px',
   },
 };
 
