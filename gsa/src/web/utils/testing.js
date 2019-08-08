@@ -19,7 +19,7 @@
 /* eslint-disable react/prop-types */
 
 import 'jest-styled-components';
-import 'jest-dom/extend-expect';
+import '@testing-library/jest-dom/extend-expect';
 
 import React from 'react';
 
@@ -28,7 +28,7 @@ import {
   cleanup,
   queryAllByAttribute,
   getElementError,
-} from 'react-testing-library';
+} from '@testing-library/react';
 
 import {Router} from 'react-router-dom';
 
@@ -46,7 +46,7 @@ import CapabilitiesProvider from 'web/components/provider/capabilitiesprovider';
 import {createQueryHistory} from 'web/routes';
 import configureStore from 'web/store';
 
-export * from 'react-testing-library';
+export * from '@testing-library/react';
 
 afterEach(cleanup);
 
