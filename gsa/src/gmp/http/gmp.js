@@ -16,16 +16,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import Http from './http.js';
-import {buildServerUrl} from './utils.js';
+import Http from './http';
+import {buildServerUrl} from './utils';
 
-import X2JsTransform from './transform/x2js.js';
+import transform from './transform/fastxml';
 
 class GmpHttp extends Http {
   constructor(settings) {
     const {server, protocol, timeout} = settings;
     const url = buildServerUrl(server, 'gmp', protocol);
-    super(url, {timeout, transform: X2JsTransform});
+    super(url, {timeout, transform});
     this.settings = settings;
   }
 

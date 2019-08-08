@@ -104,7 +104,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/http/response.js
      ${GSA_SRC_DIR}/src/gmp/http/transform/default.js
      ${GSA_SRC_DIR}/src/gmp/http/transform/fastxml.js
-     ${GSA_SRC_DIR}/src/gmp/http/transform/x2js.js
      ${GSA_SRC_DIR}/src/gmp/http/utils.js
      ${GSA_SRC_DIR}/src/gmp/index.js
      ${GSA_SRC_DIR}/src/gmp/locale/date.js
