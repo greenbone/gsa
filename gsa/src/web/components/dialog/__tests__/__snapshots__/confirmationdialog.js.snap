@@ -92,7 +92,7 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   width: inherit;
 }
 
-.c10 {
+.c11 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -112,12 +112,12 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   z-index: 1;
 }
 
-.c10:focus,
-.c10:hover {
+.c11:focus,
+.c11:hover {
   border: 1px solid #393637;
 }
 
-.c10:hover {
+.c11:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -125,26 +125,26 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   color: #fff;
 }
 
-.c10[disabled] {
+.c11[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c10 img {
+.c11 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c10:link {
+.c11:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c9 {
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -160,6 +160,9 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c9 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
@@ -317,14 +320,14 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
               class="c8"
             >
               <button
-                class="c9 c10"
+                class="c9 c10 c11"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c9 c10"
+                class="c9 c10 c11"
                 data-testid="dialog-save-button"
                 title="OK"
               >

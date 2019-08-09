@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import React from 'react';
 
 import styled from 'styled-components';
 
@@ -23,7 +24,7 @@ import Button from 'web/components/form/button';
 
 import Theme from 'web/utils/theme';
 
-const DialogButton = styled(Button)`
+const DialogButton = styled(({loading, ...props}) => <Button {...props} />)`
   border: 1px solid ${Theme.mediumGray};
   color: ${props => (props.loading ? 'rgba(0, 0, 0, 0.0)' : Theme.darkGreen)};
   background: ${props =>
