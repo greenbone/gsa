@@ -52,7 +52,7 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   height: 100%;
 }
 
-.c18 {
+.c19 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -61,7 +61,7 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c17 {
+.c18 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -128,7 +128,7 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   width: inherit;
 }
 
-.c16 {
+.c17 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -148,12 +148,12 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   z-index: 1;
 }
 
-.c16:focus,
-.c16:hover {
+.c17:focus,
+.c17:hover {
   border: 1px solid #393637;
 }
 
-.c16:hover {
+.c17:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -161,26 +161,26 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   color: #fff;
 }
 
-.c16[disabled] {
+.c17[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c16 img {
+.c17 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c16:link {
+.c17:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c15 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -196,6 +196,9 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c15 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
@@ -490,14 +493,14 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
               class="c14"
             >
               <button
-                class="c15 c16"
+                class="c15 c16 c17"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c15 c16"
+                class="c15 c16 c17"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -506,10 +509,10 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
             </div>
           </div>
           <div
-            class="c17"
+            class="c18"
           >
             <div
-              class="c18"
+              class="c19"
             />
           </div>
         </div>
@@ -646,7 +649,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   height: 100%;
 }
 
-.c30 {
+.c31 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -655,7 +658,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c29 {
+.c30 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -722,7 +725,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   width: inherit;
 }
 
-.c28 {
+.c29 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -742,12 +745,12 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   z-index: 1;
 }
 
-.c28:focus,
-.c28:hover {
+.c29:focus,
+.c29:hover {
   border: 1px solid #393637;
 }
 
-.c28:hover {
+.c29:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -755,26 +758,26 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   color: #fff;
 }
 
-.c28[disabled] {
+.c29[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c28 img {
+.c29 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c28:link {
+.c29:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c27 {
+.c28 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -790,6 +793,9 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c27 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
@@ -1444,14 +1450,14 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
               class="c26"
             >
               <button
-                class="c27 c28"
+                class="c27 c28 c29"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c27 c28"
+                class="c27 c28 c29"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -1460,10 +1466,10 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
             </div>
           </div>
           <div
-            class="c29"
+            class="c30"
           >
             <div
-              class="c30"
+              class="c31"
             />
           </div>
         </div>
