@@ -505,6 +505,7 @@ class ScanConfigComponent extends React.Component {
             id={id}
             nvts={nvts}
             selected={selected}
+            text={_('Config')}
             title={editConfigFamilyDialogTitle}
             onClose={this.handleCloseEditConfigFamilyDialog}
             onEditNvtDetailsClick={this.openEditNvtDetailsDialog}

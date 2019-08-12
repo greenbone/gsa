@@ -70,7 +70,7 @@ import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
 
-import EditPolicyFamilyDialog from 'web/pages/policies/editpolicyfamilydialog';
+import EditPolicyFamilyDialog from 'web/pages/scanconfigs/editconfigfamilydialog';
 import EditPolicyDialog from 'web/pages/policies/editdialog';
 import EditNvtDetailsDialog from 'web/pages/policies/editnvtdetailsdialog';
 import AuditDialog from 'web/pages/audits/dialog';
@@ -342,7 +342,7 @@ class PolicyComponent extends React.Component {
     this.handleInteraction();
   }
 
-  openEditNvtDetailsDialog({policy, nvt}) {
+  openEditNvtDetailsDialog({config: policy, nvt}) {
     this.loadEditPolicyNvtSettings(policy, nvt).then(state => {
       this.setState({
         ...state,
@@ -378,13 +378,14 @@ class PolicyComponent extends React.Component {
 
   handleSavePolicyFamily(data) {
     const {gmp} = this.props;
+    const policy = data.config;
 
     this.handleInteraction();
 
     return gmp.policy
       .savePolicyFamily(data)
       .then(() => {
-        return this.loadEditPolicySettings(data.policy);
+        return this.loadEditPolicySettings(policy);
       })
       .then(state => {
         this.closeEditPolicyFamilyDialog();
@@ -519,7 +520,8 @@ class PolicyComponent extends React.Component {
       });
   }
 
-  loadEditPolicyNvtSettings(policy, nvt) {
+  loadEditPolicyNvtSettings(config, nvt) {
+    const policy = config;
     const {gmp} = this.props;
 
     return gmp.policy
@@ -751,12 +753,13 @@ class PolicyComponent extends React.Component {
         )}
         {editPolicyFamilyDialogVisible && (
           <EditPolicyFamilyDialog
-            policy={policy}
-            policyName={policyName}
+            config={policy}
+            config_name={policyName}
             family_name={family_name}
             id={id}
             nvts={nvts}
             selected={selected}
+            text={_('Policy')}
             title={editPolicyFamilyDialogTitle}
             onClose={this.handleCloseEditPolicyFamilyDialog}
             onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
