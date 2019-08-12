@@ -72,7 +72,7 @@ import EntityComponent from 'web/entity/component';
 
 import EditPolicyFamilyDialog from 'web/pages/scanconfigs/editconfigfamilydialog';
 import EditPolicyDialog from 'web/pages/policies/editdialog';
-import EditNvtDetailsDialog from 'web/pages/policies/editnvtdetailsdialog';
+import EditNvtDetailsDialog from 'web/pages/scanconfigs/editnvtdetailsdialog';
 import AuditDialog from 'web/pages/audits/dialog';
 import ImportDialog from 'web/pages/scanconfigs/importdialog';
 import PolicyDialog from 'web/pages/policies/dialog';
@@ -395,6 +395,7 @@ class PolicyComponent extends React.Component {
 
   handleSavePolicyNvt(values) {
     const {gmp} = this.props;
+    const {config: policy, family_name} = values;
 
     this.handleInteraction();
 
@@ -402,15 +403,12 @@ class PolicyComponent extends React.Component {
       .savePolicyNvt(values)
       .then(response => {
         // update nvt timeouts in nvt family dialog
-        this.loadEditPolicyFamilySettings(
-          values.policy,
-          values.family_name,
-        ).then(state => {
+        this.loadEditPolicyFamilySettings(policy, family_name).then(state => {
           this.setState({state});
         });
 
         // update nvt preference values in edit dialog
-        this.loadEditPolicySettings(values.policy).then(state => {
+        this.loadEditPolicySettings(policy).then(state => {
           this.setState({state});
         });
       })
@@ -768,12 +766,13 @@ class PolicyComponent extends React.Component {
         )}
         {editNvtDetailsDialogVisible && (
           <EditNvtDetailsDialog
-            policy={policy}
-            policyName={policyName}
+            config={policy}
+            config_name={policyName}
             family_name={family_name}
             manual_timeout={manual_timeout}
             nvt={nvt}
             preference_values={preference_values}
+            text={_('Policy')}
             timeout={timeout}
             title={editNvtDetailsDialogTitle}
             onClose={this.handleCloseEditNvtDetailsDialog}

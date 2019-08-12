@@ -71,6 +71,7 @@ class EditDialog extends React.Component {
       timeout,
       manual_timeout = '',
       preference_values,
+      text,
       title,
       onClose,
       onSave,
@@ -113,7 +114,7 @@ class EditDialog extends React.Component {
                     </TableData>
                   </TableRow>
                   <TableRow>
-                    <TableData>{_('Config')}</TableData>
+                    <TableData>{text}</TableData>
                     <TableData>{config.name}</TableData>
                   </TableRow>
                   <TableRow>
@@ -263,6 +264,7 @@ EditDialog.propTypes = {
   manual_timeout: PropTypes.string,
   nvt: PropTypes.object.isRequired,
   preference_values: PropTypes.object.isRequired,
+  text: PropTypes.string.isRequired,
   timeout: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,

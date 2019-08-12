@@ -520,6 +520,7 @@ class ScanConfigComponent extends React.Component {
             manual_timeout={manual_timeout}
             nvt={nvt}
             preference_values={preference_values}
+            text={_('Config')}
             timeout={timeout}
             title={editNvtDetailsDialogTitle}
             onClose={this.handleCloseEditNvtDetailsDialog}
