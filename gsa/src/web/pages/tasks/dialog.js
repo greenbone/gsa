@@ -268,6 +268,7 @@ const TaskDialog = ({
     name,
     scanner_type,
     scanner_id,
+    schedule_periods,
     source_iface,
     tag_id,
     tags,
