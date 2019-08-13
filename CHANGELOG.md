@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.2] - unreleased
 
 ### Added
+- Added success dialog to report formats listpage [#1566](https://github.com/greenbone/gsa/pull/1566)
 - Added an explicit get_capabilities command to gsad [#1538](https://github.com/greenbone/gsa/pull/1538)
 - Highlight result diffs at delta reports [#1513](https://github.com/greenbone/gsa/pull/1513)
 - Added HorizontalSep component for horizontal lists
@@ -21,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Fix title in Operating Systems table of Reports [#1567](https://github.com/greenbone/gsa/pull/1567)
 - Fix displaying only usable report formats at report download [#1565](https://github.com/greenbone/gsa/pull/1565)
 - Fix handling schedule_periods ("once" option) in TaskDialog [#1563](https://github.com/greenbone/gsa/pull/1563)
 - Fix showing inactive VerifyIcon at ReportFormats detailspage [#1554](https://github.com/greenbone/gsa/pull/1554)
