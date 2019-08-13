@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Fix displaying only usable report formats at report download [#1565](https://github.com/greenbone/gsa/pull/1565)
 - Fix handling schedule_periods ("once" option) in TaskDialog [#1563](https://github.com/greenbone/gsa/pull/1563)
 - Fix showing inactive VerifyIcon at ReportFormats detailspage [#1554](https://github.com/greenbone/gsa/pull/1554)
 - Fix showing SensorIcon for tasks [#1548](https://github.com/greenbone/gsa/pull/1548)
