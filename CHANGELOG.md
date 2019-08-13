@@ -67,6 +67,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Fix showing ScanConfig trends [#1562](https://github.com/greenbone/gsa/pull/1562)
 - Always show an identifier for results [#1543](https://github.com/greenbone/gsa/pull/1543)
 - Don't crash Alerts listpage and trashcan when Alert data is missing [#1541](https://github.com/greenbone/gsa/pull/1541)
 - Fix calculating the next date of schedules [#1539](https://github.com/greenbone/gsa/pull/1539)

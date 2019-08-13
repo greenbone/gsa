@@ -34,6 +34,9 @@ export const FULL_AND_FAST_SCAN_CONFIG_ID =
 export const OSP_SCAN_CONFIG_TYPE = 1;
 export const OPENVAS_SCAN_CONFIG_TYPE = 0;
 
+export const SCANCONFIG_TREND_DYNAMIC = 1;
+export const SCANCONFIG_TREND_STATIC = 0;
+
 export const getTranslatedType = config => {
   return config.scan_config_type === OSP_SCAN_CONFIG_TYPE
     ? _('OSP')
