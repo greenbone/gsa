@@ -74,6 +74,11 @@ class NvtPreferenceDisplay extends React.Component {
 
   render() {
     const {config, preference, onEditNvtDetailsClick} = this.props;
+    const title =
+      config.usage_type === 'policy'
+        ? _('Edit Policy NVT Details')
+        : _('Edit Scan Config NVT Details');
+
     return (
       <TableRow>
         <StyledTableData>{preference.nvt.name}</StyledTableData>
@@ -81,7 +86,7 @@ class NvtPreferenceDisplay extends React.Component {
         <StyledTableData>{preference.value}</StyledTableData>
         <TableData align={['center', 'center']}>
           <EditIcon
-            title={_('Edit Scan Config NVT Details')}
+            title={title}
             value={{config, nvt: preference.nvt}}
             onClick={onEditNvtDetailsClick}
           />
@@ -296,6 +301,11 @@ class NvtFamily extends React.Component {
       counts.max = config_family.nvts.max;
     }
 
+    const title =
+      config.usage_type === 'policy'
+        ? _('Edit Policy Family')
+        : _('Edit Scan Config Family');
+
     return (
       <TableRow key={name}>
         <TableData>{name}</TableData>
@@ -334,7 +344,7 @@ class NvtFamily extends React.Component {
         </TableData>
         <TableData align={['center', 'center']}>
           <EditIcon
-            title={_('Edit Scan Config Family')}
+            title={title}
             value={{name, config}}
             onClick={onEditConfigFamilyClick}
           />
@@ -464,8 +474,13 @@ const EditDialog = ({
   onEditNvtDetailsClick,
   onSave,
 }) => {
+  const scanConfigType =
+    config.usage_type === 'policy'
+      ? config.policy_type
+      : config.scan_config_type;
+
   const uncontrolledData = {
-    base: config.scan_config_type,
+    base: scanConfigType,
     comment,
     name,
     scanner_id,
@@ -509,20 +524,19 @@ const EditDialog = ({
               />
             </FormGroup>
 
-            {!config.isInUse() &&
-              config.scan_config_type === OSP_SCAN_CONFIG_TYPE && (
-                <FormGroup title={_('Scanner')}>
-                  <Select
-                    name="scanner_id"
-                    items={renderSelectItems(scanners)}
-                    value={state.scanner_id}
-                    onChange={onValueChange}
-                  />
-                </FormGroup>
-              )}
+            {!config.isInUse() && scanConfigType === OSP_SCAN_CONFIG_TYPE && (
+              <FormGroup title={_('Scanner')}>
+                <Select
+                  name="scanner_id"
+                  items={renderSelectItems(scanners)}
+                  value={state.scanner_id}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+            )}
 
             {!config.isInUse() &&
-              config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
+              scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
                 <NvtFamilies
                   config={config}
                   families={families}
@@ -542,7 +556,7 @@ const EditDialog = ({
             )}
 
             {!config.isInUse() &&
-              config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
+              scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
                 <NvtPreferences
                   config={config}
                   preferences={config.preferences.nvt}

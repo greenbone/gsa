@@ -71,7 +71,7 @@ import withGmp from 'web/utils/withGmp';
 import EntityComponent from 'web/entity/component';
 
 import EditPolicyFamilyDialog from 'web/pages/scanconfigs/editconfigfamilydialog';
-import EditPolicyDialog from 'web/pages/policies/editdialog';
+import EditPolicyDialog from 'web/pages/scanconfigs/editdialog';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/editnvtdetailsdialog';
 import AuditDialog from 'web/pages/audits/dialog';
 import ImportDialog from 'web/pages/scanconfigs/importdialog';
@@ -319,7 +319,7 @@ class PolicyComponent extends React.Component {
       .then(() => this.closeCreateAuditDialog());
   }
 
-  openEditPolicyFamilyDialog({policy, name}) {
+  openEditPolicyFamilyDialog({config: policy, name}) {
     this.loadEditPolicyFamilySettings(policy, name).then(state => {
       this.setState({
         ...state,
@@ -518,8 +518,7 @@ class PolicyComponent extends React.Component {
       });
   }
 
-  loadEditPolicyNvtSettings(config, nvt) {
-    const policy = config;
+  loadEditPolicyNvtSettings(policy, nvt) {
     const {gmp} = this.props;
 
     return gmp.policy
@@ -720,7 +719,7 @@ class PolicyComponent extends React.Component {
                 <EditPolicyDialog
                   base={base}
                   comment={comment}
-                  policy={policy}
+                  config={policy}
                   families={families}
                   name={name}
                   scanner_id={scanner_id}
@@ -730,7 +729,7 @@ class PolicyComponent extends React.Component {
                   title={title}
                   trend={trend}
                   onClose={this.handleCloseEditPolicyDialog}
-                  onEditPolicyFamilyClick={this.openEditPolicyFamilyDialog}
+                  onEditConfigFamilyClick={this.openEditPolicyFamilyDialog}
                   onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
                   onSave={d => {
                     this.handleInteraction();
