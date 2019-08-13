@@ -75,6 +75,7 @@ const ReportFormatsPage = ({
   onDownloaded,
   onError,
   onInteraction,
+  showSuccess,
   ...props
 }) => (
   <ReportFormatComponent
@@ -87,7 +88,10 @@ const ReportFormatsPage = ({
     onDownloadError={onError}
     onImported={onChanged}
     onInteraction={onInteraction}
-    onVerified={onChanged}
+    onVerified={() => {
+      onChanged();
+      showSuccess(_('Report Format has been verified.'));
+    }}
     onVerifyError={onError}
   >
     {({
@@ -123,6 +127,7 @@ const ReportFormatsPage = ({
 );
 
 ReportFormatsPage.propTypes = {
+  showSuccess: PropTypes.func.isRequired,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
