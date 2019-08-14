@@ -65,6 +65,7 @@ describe('entities reducer tests', () => {
       target: initState,
       task: initState,
       ticket: initState,
+      tlscertificate: initState,
       user: initState,
       vuln: initState,
     });

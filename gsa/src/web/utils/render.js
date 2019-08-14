@@ -186,6 +186,8 @@ const getPermissionTypeName = type => {
       return _('Tasks');
     case 'tickets':
       return _('Tickets');
+    case 'tlscertificates':
+      return _('TLS Certificates');
     case 'users':
       return _('Users');
     case 'vulns':

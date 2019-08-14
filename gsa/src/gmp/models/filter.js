@@ -749,6 +749,9 @@ export const TARGETS_FILTER_FILTER = Filter.fromString('type=target');
 export const TASKS_FILTER_FILTER = Filter.fromString('type=task');
 export const TAGS_FILTER_FILTER = Filter.fromString('type=tag');
 export const TICKETS_FILTER_FILTER = Filter.fromString('type=ticket');
+export const TLS_CERTIFICATES_FILTER_FILTER = Filter.fromString(
+  'type=tls_certificate',
+);
 export const USERS_FILTER_FILTER = Filter.fromString('type=user');
 export const VULNS_FILTER_FILTER = Filter.fromString('type=vuln');
 

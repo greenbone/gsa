@@ -49,6 +49,7 @@ import {reducer as tag} from './tags';
 import {reducer as target} from './targets';
 import {reducer as task} from './tasks';
 import {reducer as ticket} from './tickets';
+import {reducer as tlscertificate} from './tlscertificates';
 import {reducer as user} from './users';
 import {reducer as vuln} from './vulns';
 
@@ -85,6 +86,7 @@ const entitiesReducer = combineReducers({
   target,
   task,
   ticket,
+  tlscertificate,
   user,
   vuln,
 });
