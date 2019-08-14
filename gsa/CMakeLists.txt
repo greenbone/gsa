@@ -163,6 +163,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/models/target.js
      ${GSA_SRC_DIR}/src/gmp/models/task.js
      ${GSA_SRC_DIR}/src/gmp/models/ticket.js
+     ${GSA_SRC_DIR}/src/gmp/models/tlscertificate.js
      ${GSA_SRC_DIR}/src/gmp/models/user.js
      ${GSA_SRC_DIR}/src/gmp/models/vulnerability.js
      ${GSA_SRC_DIR}/src/gmp/parser.js
