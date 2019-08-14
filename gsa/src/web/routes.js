@@ -100,6 +100,7 @@ import TasksPage from './pages/tasks/listpage';
 import TaskDetailsPage from './pages/tasks/detailspage';
 import TicketsPage from './pages/tickets/listpage';
 import TicketDetailsPage from './pages/tickets/detailspage';
+import TlsCertificatesPage from './pages/tlscertificates/listpage';
 import TrashcanPage from './pages/extras/trashcanpage';
 import UserDetailsPage from './pages/users/detailspage';
 import UserSettingsPage from './pages/usersettings/usersettingspage';
@@ -140,6 +141,7 @@ const Routes = () => (
               <Route path="/performance" component={PerformancePage} />
               <Route path="/tasks" component={TasksPage} />
               <Route path="/tickets" component={TicketsPage} />
+              <Route path="/tlscertificates" component={TlsCertificatesPage} />
               <Route path="/results" component={ResultsPage} />
               <Route path="/notes" component={NotesPage} />
               <Route path="/overrides" component={OverridesPage} />

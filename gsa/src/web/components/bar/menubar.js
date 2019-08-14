@@ -153,6 +153,7 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
             <Menu title={_('Assets')}>
               <MenuEntry title={_('Hosts')} to="hosts" />
               <MenuEntry title={_('Operating Systems')} to="operatingsystems" />
+              <MenuEntry title={_('TLS Certificates')} to="tlscertificates" />
             </Menu>
           )}
           {mayOpResilience && (
