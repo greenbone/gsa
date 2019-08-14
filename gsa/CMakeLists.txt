@@ -373,6 +373,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/targeticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/taskicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/ticketicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/tlscertificateicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/toggle3dicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashcanicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashdeleteicon.js
@@ -482,6 +483,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/target.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/task.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/ticket.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/tlscertificate.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/toggle3d.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trashcan.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_down.svg
