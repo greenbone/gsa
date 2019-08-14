@@ -93,6 +93,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/commands/targets.js
      ${GSA_SRC_DIR}/src/gmp/commands/tasks.js
      ${GSA_SRC_DIR}/src/gmp/commands/tickets.js
+     ${GSA_SRC_DIR}/src/gmp/commands/tlscertificates.js
      ${GSA_SRC_DIR}/src/gmp/commands/trashcan.js
      ${GSA_SRC_DIR}/src/gmp/commands/users.js
      ${GSA_SRC_DIR}/src/gmp/commands/vulns.js
