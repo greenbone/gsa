@@ -331,14 +331,24 @@ const TaskDialog = ({
 
             <FormGroup title={_('Scan Targets')}>
               <Divider>
-                <Select
-                  name="target_id"
-                  disabled={!change_task}
-                  items={target_items}
-                  value={state.target_id}
-                  width="260px"
-                  onChange={onTargetChange}
-                />
+                <div
+                  title={
+                    change_task
+                      ? null
+                      : _(
+                          'This setting is not alterable once task has been run at least once.',
+                        )
+                  }
+                >
+                  <Select
+                    name="target_id"
+                    disabled={!change_task}
+                    items={target_items}
+                    value={state.target_id}
+                    width="260px"
+                    onChange={onTargetChange}
+                  />
+                </div>
                 {change_task && (
                   <Layout>
                     <NewIcon
@@ -442,26 +452,44 @@ const TaskDialog = ({
               autoDeleteData={state.auto_delete_data}
               onChange={onValueChange}
             />
-
-            <ScannerSelect
-              scanConfigs={sorted_scan_configs}
-              scanners={scanners}
-              scannerId={state.scanner_id}
-              changeTask={change_task}
-              onScanConfigChange={onScanConfigChange}
-              onScannerChange={onScannerChange}
-            />
-
+            <div
+              title={
+                change_task
+                  ? null
+                  : _(
+                      'This setting is not alterable once task has been run at least once.',
+                    )
+              }
+            >
+              <ScannerSelect
+                scanConfigs={sorted_scan_configs}
+                scanners={scanners}
+                scannerId={state.scanner_id}
+                changeTask={change_task}
+                onScanConfigChange={onScanConfigChange}
+                onScannerChange={onScannerChange}
+              />
+            </div>
             {use_openvas_scan_config && (
               <Layout flex="column" grow="1">
                 <FormGroup titleSize="2" title={_('Scan Config')}>
-                  <Select
-                    name="config_id"
-                    disabled={!change_task}
-                    items={openvas_scan_config_items}
-                    value={openvas_config_id}
-                    onChange={onScanConfigChange}
-                  />
+                  <div
+                    title={
+                      change_task
+                        ? null
+                        : _(
+                            'This setting is not alterable once task has been run at least once.',
+                          )
+                    }
+                  >
+                    <Select
+                      name="config_id"
+                      disabled={!change_task}
+                      items={openvas_scan_config_items}
+                      value={openvas_config_id}
+                      onChange={onScanConfigChange}
+                    />
+                  </div>
                 </FormGroup>
                 <FormGroup titleSize="4" title={_('Network Source Interface')}>
                   <TextField
