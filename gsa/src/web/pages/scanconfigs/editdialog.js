@@ -61,6 +61,8 @@ import Trend from './trend';
 import {
   OPENVAS_SCAN_CONFIG_TYPE,
   OSP_SCAN_CONFIG_TYPE,
+  SCANCONFIG_TREND_DYNAMIC,
+  SCANCONFIG_TREND_STATIC,
 } from 'gmp/models/scanconfig';
 
 const StyledTableData = styled(TableData)`
@@ -320,7 +322,7 @@ class NvtFamily extends React.Component {
               value={YES_VALUE}
               onChange={onTrendChange}
             />
-            <Trend trend="1" />
+            <Trend trend={SCANCONFIG_TREND_DYNAMIC} />
             <Radio
               flex
               name={name}
@@ -329,7 +331,7 @@ class NvtFamily extends React.Component {
               value={NO_VALUE}
               onChange={onTrendChange}
             />
-            <Trend trend="0" />
+            <Trend trend={SCANCONFIG_TREND_STATIC} />
           </Divider>
         </TableData>
         <TableData align={['start', 'center']}>
