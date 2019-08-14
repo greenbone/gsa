@@ -761,7 +761,7 @@ init_http_handlers ()
   url_handler_add_func (url_handlers, "^/robots\\.txt$", handle_static_file);
 
   url_handler_add_func (url_handlers, "^/config\\.*js$", handle_static_config);
-  url_handler_add_func (url_handlers, "^/static/(img|js|css)/.+$",
+  url_handler_add_func (url_handlers, "^/static/(img|js|css|media)/.+$",
                         handle_static_file);
   url_handler_add_func (url_handlers, "^/manual/.+$", handle_static_file);
 
