@@ -70,8 +70,6 @@ import Layout from 'web/components/layout/layout';
 
 import AddResultsToAssetsGroup from './addresultstoassetsgroup';
 import AutoDeleteReportsGroup from './autodeletereportsgroup';
-import styled from 'styled-components';
-import Theme from 'web/utils/theme';
 
 const log = logger.getLogger('web.tasks.dialog');
 
