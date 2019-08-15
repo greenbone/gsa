@@ -22,7 +22,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import DateTime from 'web/components/date/datetime';
 
