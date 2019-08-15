@@ -18,6 +18,7 @@
  */
 import Model from '../model';
 
+import {parseBoolean} from 'gmp/parser';
 import {forEach, unique} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -66,6 +67,9 @@ class TlsCertificate extends Model {
     ret.sourcePorts = unique(sourcePorts);
 
     delete ret.sources;
+
+    ret.valid = parseBoolean(elem.valid);
+    ret.trust = parseBoolean(elem.trust);
 
     return ret;
   }
