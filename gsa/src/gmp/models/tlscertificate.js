@@ -16,9 +16,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import Model from '../model';
 
-import {parseBoolean} from 'gmp/parser';
+import {parseBoolean, parseDate} from 'gmp/parser';
 import {forEach, unique} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -31,13 +32,13 @@ class TlsCertificate extends Model {
     ret.issuerDn = elem.issuer_dn;
     delete ret.issuer_dn;
 
-    ret.activationTime = elem.activation_time;
+    ret.activationTime = parseDate(elem.activation_time);
     delete ret.activation_time;
 
-    ret.expirationTime = elem.expiration_time;
+    ret.expirationTime = parseDate(elem.expiration_time);
     delete ret.expiration_time;
 
-    ret.lastCollected = elem.last_collected;
+    ret.lastCollected = parseDate(elem.last_collected);
     delete ret.last_collected;
 
     const sourceReportIds = [];
