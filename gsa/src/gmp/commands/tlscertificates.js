@@ -29,7 +29,7 @@ class TlsCertificateCommand extends EntityCommand {
   }
 
   getElementFromRoot(root) {
-    return root.get_tls_certificate.get_tls_certificate_response.asset;
+    return root.get_tls_certificate.get_tls_certificates_response;
   }
 }
 
