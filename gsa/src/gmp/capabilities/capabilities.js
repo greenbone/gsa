@@ -53,6 +53,8 @@ const types = {
   reportformats: 'report_format',
   scanconfig: 'config',
   scanconfigs: 'config',
+  tlsCertificate: 'tls_certificate',
+  tlsCertificates: 'tls_certificate',
 };
 
 const convertType = type => {

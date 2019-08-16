@@ -52,6 +52,7 @@ const TYPES = {
   port_list: 'portlist',
   port_range: 'portrange',
   report_format: 'reportformat',
+  tls_certificate: 'tlscertificate',
   vuln: 'vulnerability',
 };
 
@@ -100,6 +101,7 @@ const ENTITY_TYPES = {
   target: _l('Target'),
   task: _l('Task'),
   ticket: _l('Ticket'),
+  tlscertificate: _l('TLS Certificate'),
   user: _l('User'),
   vulnerability: _l('Vulnerability'),
 };
@@ -125,6 +127,7 @@ const CMD_TYPES = {
   portlist: 'port_list',
   portrange: 'port_range',
   reportformat: 'report_format',
+  tlscertificate: 'tls_certificate',
   vulnerability: 'vuln',
 };
 

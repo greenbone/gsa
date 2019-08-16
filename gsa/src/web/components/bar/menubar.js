@@ -117,6 +117,11 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
     false,
   );
 
+  const mayOpAssets = ['assets', 'tls_certificates'].reduce(
+    (sum, cur) => sum || capabilities.mayAccess(cur),
+    false,
+  );
+
   return (
     <React.Fragment>
       <MenuBarPlaceholder />
@@ -149,10 +154,20 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
               )}
             </Menu>
           )}
-          {capabilities.mayAccess('assets') && (
+          {mayOpAssets && (
             <Menu title={_('Assets')}>
-              <MenuEntry title={_('Hosts')} to="hosts" />
-              <MenuEntry title={_('Operating Systems')} to="operatingsystems" />
+              {capabilities.mayAccess('assets') && (
+                <MenuEntry title={_('Hosts')} to="hosts" />
+              )}
+              {capabilities.mayAccess('assets') && (
+                <MenuEntry
+                  title={_('Operating Systems')}
+                  to="operatingsystems"
+                />
+              )}
+              {capabilities.mayAccess('tls_certificates') && (
+                <MenuEntry title={_('TLS Certificates')} to="tlscertificates" />
+              )}
             </Menu>
           )}
           {mayOpResilience && (

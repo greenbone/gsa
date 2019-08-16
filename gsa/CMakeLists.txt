@@ -93,6 +93,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/commands/targets.js
      ${GSA_SRC_DIR}/src/gmp/commands/tasks.js
      ${GSA_SRC_DIR}/src/gmp/commands/tickets.js
+     ${GSA_SRC_DIR}/src/gmp/commands/tlscertificates.js
      ${GSA_SRC_DIR}/src/gmp/commands/trashcan.js
      ${GSA_SRC_DIR}/src/gmp/commands/users.js
      ${GSA_SRC_DIR}/src/gmp/commands/vulns.js
@@ -163,6 +164,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/models/target.js
      ${GSA_SRC_DIR}/src/gmp/models/task.js
      ${GSA_SRC_DIR}/src/gmp/models/ticket.js
+     ${GSA_SRC_DIR}/src/gmp/models/tlscertificate.js
      ${GSA_SRC_DIR}/src/gmp/models/user.js
      ${GSA_SRC_DIR}/src/gmp/models/vulnerability.js
      ${GSA_SRC_DIR}/src/gmp/parser.js
@@ -371,6 +373,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/targeticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/taskicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/ticketicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/tlscertificateicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/toggle3dicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashcanicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashdeleteicon.js
@@ -480,6 +483,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/target.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/task.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/ticket.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/tlscertificate.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/toggle3d.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trashcan.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_down.svg
@@ -990,6 +994,16 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/tickets/editdialog.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/listpage.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/table.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/component.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/details.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/filterdialog.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/listpage.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/row.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/table.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/dashboard/index.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/dashboard/loaders.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/dashboard/modifieddisplay.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/dashboard/timestatusdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/users/component.js
      ${GSA_SRC_DIR}/src/web/pages/users/confirmdeletedialog.js
      ${GSA_SRC_DIR}/src/web/pages/users/details.js
