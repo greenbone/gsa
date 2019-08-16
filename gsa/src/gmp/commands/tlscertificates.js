@@ -29,7 +29,8 @@ class TlsCertificateCommand extends EntityCommand {
   }
 
   getElementFromRoot(root) {
-    return root.get_tls_certificate.get_tls_certificates_response;
+    return root.get_tls_certificate.get_tls_certificates_response
+      .tls_certificate;
   }
 }
 
@@ -38,6 +39,21 @@ class TlsCertificatesCommand extends EntitiesCommand {
     super(http, 'tls_certificate', TlsCertificate);
   }
 
+  getTimeStatusAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'tls_certificate',
+      group_column: 'time_status',
+      filter,
+    });
+  }
+
+  getModifiedAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'tls_certificate',
+      group_column: 'modified',
+      filter,
+    });
+  }
   getEntitiesResponse(root) {
     return root.get_tls_certificates.get_tls_certificates_response;
   }
