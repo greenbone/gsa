@@ -29,6 +29,8 @@ import Layout from 'web/components/layout/layout';
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
+import DashboardControls from 'web/components/dashboard/controls';
+
 import ManualIcon from 'web/components/icon/manualicon';
 import TlsCertificateIcon from 'web/components/icon/tlscertificateicon';
 
@@ -37,6 +39,9 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/tlscertificates';
 
+import TlsCertificatesDashboard, {
+  TLS_CERTIFICATES_DASHBOARD_ID,
+} from './dashboard';
 import TlsCertificateFilterDialog from './filterdialog';
 import TlsCertificateTable from './table';
 import TlsCertificateComponent from './component';
@@ -71,6 +76,19 @@ const Page = ({
       <EntitiesPage
         {...props}
         createFilterType="tlscertificate"
+        dashboard={() => (
+          <TlsCertificatesDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
+        )}
+        dashboardControls={() => (
+          <DashboardControls
+            dashboardId={TLS_CERTIFICATES_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
+        )}
         filter={filter}
         filtersFilter={TLS_CERTIFICATES_FILTER_FILTER}
         filterEditDialog={TlsCertificateFilterDialog}
