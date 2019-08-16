@@ -197,7 +197,7 @@ class EditDialogComponent extends React.Component {
       config_name,
       family_name,
       id,
-      text,
+      configNameLabel,
       title,
       onClose,
       onEditNvtDetailsClick,
@@ -228,7 +228,7 @@ class EditDialogComponent extends React.Component {
             <SimpleTable>
               <TableBody>
                 <TableRow>
-                  <TableData>{text}</TableData>
+                  <TableData>{configNameLabel}</TableData>
                   <TableData>{config_name}</TableData>
                 </TableRow>
                 <TableRow>
@@ -308,12 +308,12 @@ class EditDialogComponent extends React.Component {
 
 EditDialogComponent.propTypes = {
   config: PropTypes.model.isRequired,
+  configNameLabel: PropTypes.string.isRequired,
   config_name: PropTypes.string,
   family_name: PropTypes.string,
   id: PropTypes.string,
   nvts: PropTypes.array.isRequired,
   selected: PropTypes.object.isRequired,
-  text: PropTypes.string,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onEditNvtDetailsClick: PropTypes.func,

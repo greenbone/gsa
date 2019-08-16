@@ -751,12 +751,12 @@ class PolicyComponent extends React.Component {
         {editPolicyFamilyDialogVisible && (
           <EditPolicyFamilyDialog
             config={policy}
+            configNameLabel={_('Policy')}
             config_name={policyName}
             family_name={family_name}
             id={id}
             nvts={nvts}
             selected={selected}
-            text={_('Policy')}
             title={editPolicyFamilyDialogTitle}
             onClose={this.handleCloseEditPolicyFamilyDialog}
             onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
@@ -766,12 +766,12 @@ class PolicyComponent extends React.Component {
         {editNvtDetailsDialogVisible && (
           <EditNvtDetailsDialog
             config={policy}
+            configNameLabel={_('Policy')}
             config_name={policyName}
             family_name={family_name}
             manual_timeout={manual_timeout}
             nvt={nvt}
             preference_values={preference_values}
-            text={_('Policy')}
             timeout={timeout}
             title={editNvtDetailsDialogTitle}
             onClose={this.handleCloseEditNvtDetailsDialog}

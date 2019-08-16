@@ -500,12 +500,12 @@ class ScanConfigComponent extends React.Component {
         {editConfigFamilyDialogVisible && (
           <EditConfigFamilyDialog
             config={config}
+            configNameLabel={_('Config')}
             config_name={config_name}
             family_name={family_name}
             id={id}
             nvts={nvts}
             selected={selected}
-            text={_('Config')}
             title={editConfigFamilyDialogTitle}
             onClose={this.handleCloseEditConfigFamilyDialog}
             onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
@@ -515,12 +515,12 @@ class ScanConfigComponent extends React.Component {
         {editNvtDetailsDialogVisible && (
           <EditNvtDetailsDialog
             config={config}
+            configNameLabel={_('Config')}
             config_name={config_name}
             family_name={family_name}
             manual_timeout={manual_timeout}
             nvt={nvt}
             preference_values={preference_values}
-            text={_('Config')}
             timeout={timeout}
             title={editNvtDetailsDialogTitle}
             onClose={this.handleCloseEditNvtDetailsDialog}
