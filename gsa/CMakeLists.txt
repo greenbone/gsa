@@ -55,6 +55,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/command.js
      ${GSA_SRC_DIR}/src/gmp/commands/agents.js
      ${GSA_SRC_DIR}/src/gmp/commands/alerts.js
+     ${GSA_SRC_DIR}/src/gmp/commands/audits.js
      ${GSA_SRC_DIR}/src/gmp/commands/auth.js
      ${GSA_SRC_DIR}/src/gmp/commands/certbund.js
      ${GSA_SRC_DIR}/src/gmp/commands/cpes.js
@@ -80,6 +81,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/commands/ovaldefs.js
      ${GSA_SRC_DIR}/src/gmp/commands/overrides.js
      ${GSA_SRC_DIR}/src/gmp/commands/permissions.js
+     ${GSA_SRC_DIR}/src/gmp/commands/policies.js
      ${GSA_SRC_DIR}/src/gmp/commands/portlists.js
      ${GSA_SRC_DIR}/src/gmp/commands/reportformats.js
      ${GSA_SRC_DIR}/src/gmp/commands/reports.js
@@ -118,6 +120,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/models/agent.js
      ${GSA_SRC_DIR}/src/gmp/models/alert.js
      ${GSA_SRC_DIR}/src/gmp/models/asset.js
+     ${GSA_SRC_DIR}/src/gmp/models/audit.js
      ${GSA_SRC_DIR}/src/gmp/models/certbund.js
      ${GSA_SRC_DIR}/src/gmp/models/cpe.js
      ${GSA_SRC_DIR}/src/gmp/models/credential.js
@@ -140,6 +143,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/models/ovaldef.js
      ${GSA_SRC_DIR}/src/gmp/models/override.js
      ${GSA_SRC_DIR}/src/gmp/models/permission.js
+     ${GSA_SRC_DIR}/src/gmp/models/policy.js
      ${GSA_SRC_DIR}/src/gmp/models/portlist.js
      ${GSA_SRC_DIR}/src/gmp/models/reportformat.js
      ${GSA_SRC_DIR}/src/gmp/models/report.js
@@ -179,6 +183,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/utils/string.js
      ${GSA_SRC_DIR}/src/web/app.js
      ${GSA_SRC_DIR}/src/web/components/badge/badge.js
+     ${GSA_SRC_DIR}/src/web/components/bar/compliancestatusbar.js
      ${GSA_SRC_DIR}/src/web/components/bar/menubar.js
      ${GSA_SRC_DIR}/src/web/components/bar/progressbar.js
      ${GSA_SRC_DIR}/src/web/components/bar/severitybar.js
@@ -645,6 +650,16 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/alerts/ticketeventpart.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/tippingpointmethodpart.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/verinicemethodpart.js
+     ${GSA_SRC_DIR}/src/web/pages/audits/actions.js
+     ${GSA_SRC_DIR}/src/web/pages/audits/component.js
+     ${GSA_SRC_DIR}/src/web/pages/audits/details.js
+     ${GSA_SRC_DIR}/src/web/pages/audits/detailspage.js
+     ${GSA_SRC_DIR}/src/web/pages/audits/dialog.js
+     ${GSA_SRC_DIR}/src/web/pages/audits/icons/resumeicon.js
+     ${GSA_SRC_DIR}/src/web/pages/audits/icons/starticon.js
+     ${GSA_SRC_DIR}/src/web/pages/audits/listpage.js
+     ${GSA_SRC_DIR}/src/web/pages/audits/row.js
+     ${GSA_SRC_DIR}/src/web/pages/audits/table.js
      ${GSA_SRC_DIR}/src/web/pages/credentials/component.js
      ${GSA_SRC_DIR}/src/web/pages/credentials/details.js
      ${GSA_SRC_DIR}/src/web/pages/credentials/detailspage.js
@@ -819,6 +834,14 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/permissions/multipledialog.js
      ${GSA_SRC_DIR}/src/web/pages/permissions/row.js
      ${GSA_SRC_DIR}/src/web/pages/permissions/table.js
+     ${GSA_SRC_DIR}/src/web/pages/policies/component.js
+     ${GSA_SRC_DIR}/src/web/pages/policies/details.js
+     ${GSA_SRC_DIR}/src/web/pages/policies/detailspage.js
+     ${GSA_SRC_DIR}/src/web/pages/policies/dialog.js
+     ${GSA_SRC_DIR}/src/web/pages/policies/header.js
+     ${GSA_SRC_DIR}/src/web/pages/policies/listpage.js
+     ${GSA_SRC_DIR}/src/web/pages/policies/row.js
+     ${GSA_SRC_DIR}/src/web/pages/policies/table.js
      ${GSA_SRC_DIR}/src/web/pages/portlists/component.js
      ${GSA_SRC_DIR}/src/web/pages/portlists/details.js
      ${GSA_SRC_DIR}/src/web/pages/portlists/detailspage.js
@@ -904,6 +927,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/scanconfigs/importdialog.js
      ${GSA_SRC_DIR}/src/web/pages/scanconfigs/listpage.js
      ${GSA_SRC_DIR}/src/web/pages/scanconfigs/row.js
+     ${GSA_SRC_DIR}/src/web/pages/scanconfigs/table.js
      ${GSA_SRC_DIR}/src/web/pages/scanconfigs/trend.js
      ${GSA_SRC_DIR}/src/web/pages/scanners/component.js
      ${GSA_SRC_DIR}/src/web/pages/scanners/details.js
@@ -968,6 +992,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/tasks/dashboard/severityclassdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/dashboard/statusdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/details.js
+     ${GSA_SRC_DIR}/src/web/pages/tasks/detailspage.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/dialog.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/filterdialog.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/icons/importreporticon.js
@@ -1041,6 +1066,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/agents.js
      ${GSA_SRC_DIR}/src/web/store/entities/alerts.js
+     ${GSA_SRC_DIR}/src/web/store/entities/audits.js
      ${GSA_SRC_DIR}/src/web/store/entities/certbund.js
      ${GSA_SRC_DIR}/src/web/store/entities/cpes.js
      ${GSA_SRC_DIR}/src/web/store/entities/credentials.js
@@ -1055,6 +1081,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/ovaldefs.js
      ${GSA_SRC_DIR}/src/web/store/entities/overrides.js
      ${GSA_SRC_DIR}/src/web/store/entities/permissions.js
+     ${GSA_SRC_DIR}/src/web/store/entities/policies.js
      ${GSA_SRC_DIR}/src/web/store/entities/portlists.js
      ${GSA_SRC_DIR}/src/web/store/entities/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/reportformats.js
