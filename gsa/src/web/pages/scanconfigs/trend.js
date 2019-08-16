@@ -45,7 +45,7 @@ const Trend = ({trend, titleDynamic, titleStatic, ...props}) => {
 Trend.propTypes = {
   titleDynamic: PropTypes.string,
   titleStatic: PropTypes.string,
-  trend: PropTypes.string,
+  trend: PropTypes.oneOf([0, 1]),
 };
 
 export default Trend;
