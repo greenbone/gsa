@@ -1000,6 +1000,10 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/tlscertificates/listpage.js
      ${GSA_SRC_DIR}/src/web/pages/tlscertificates/row.js
      ${GSA_SRC_DIR}/src/web/pages/tlscertificates/table.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/dashboard/index.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/dashboard/loaders.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/dashboard/modifieddisplay.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/dashboard/timestatusdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/users/component.js
      ${GSA_SRC_DIR}/src/web/pages/users/confirmdeletedialog.js
      ${GSA_SRC_DIR}/src/web/pages/users/details.js
