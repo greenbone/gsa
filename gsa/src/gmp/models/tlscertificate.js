@@ -17,11 +17,30 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import {_l} from 'gmp/locale/lang';
+
 import Model from '../model';
 
 import {parseBoolean, parseDate} from 'gmp/parser';
 import {forEach, unique} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
+
+export const TIME_STATUS = {
+  inactive: 'inactive',
+  valid: 'valid',
+  expired: 'expired',
+  unknown: 'unknown',
+};
+
+export const TIME_STATUS_TRANSLATIONS = {
+  [TIME_STATUS.expired]: _l('Expired'),
+  [TIME_STATUS.inactive]: _l('Inactive'),
+  [TIME_STATUS.unknown]: _l('Unknown'),
+  [TIME_STATUS.valid]: _l('Valid'),
+};
+
+export const getTranslatableTimeStatus = status =>
+  `${TIME_STATUS_TRANSLATIONS[status]}`;
 
 class TlsCertificate extends Model {
   static entityType = 'tlscertificate';
@@ -40,6 +59,9 @@ class TlsCertificate extends Model {
 
     ret.lastCollected = parseDate(elem.last_collected);
     delete ret.last_collected;
+
+    ret.timeStatus = elem.time_status;
+    delete ret.time_status;
 
     const sourceReportIds = [];
     const sourceHostIps = [];
