@@ -22,7 +22,7 @@ import {_l} from 'gmp/locale/lang';
 import Model from '../model';
 
 import {parseBoolean, parseDate} from 'gmp/parser';
-import {forEach, unique} from 'gmp/utils/array';
+import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
 export const TIME_STATUS = {
@@ -63,31 +63,31 @@ class TlsCertificate extends Model {
     ret.timeStatus = elem.time_status;
     delete ret.time_status;
 
-    const sourceReportIds = [];
-    const sourceHostIps = [];
-    const sourcePorts = [];
+    const sourceReportIds = new Set();
+    const sourceHostIps = new Set();
+    const sourcePorts = new Set();
 
     if (isDefined(ret.sources)) {
       forEach(ret.sources.source, source => {
         if (isDefined(source.origin)) {
           if (source.origin.origin_type === 'Report') {
-            sourceReportIds.push(source.origin.origin_id);
+            sourceReportIds.add(source.origin.origin_id);
           }
         }
         if (isDefined(source.location)) {
           if (isDefined(source.location.host)) {
-            sourceHostIps.push(source.location.host.ip);
+            sourceHostIps.add(source.location.host.ip);
           }
           if (isDefined(source.location.port)) {
-            sourcePorts.push(source.location.port);
+            sourcePorts.add(source.location.port);
           }
         }
       });
     }
 
-    ret.sourceReportIds = unique(sourceReportIds);
-    ret.sourceHostIps = unique(sourceHostIps);
-    ret.sourcePorts = unique(sourcePorts);
+    ret.sourceReportIds = [...sourceReportIds];
+    ret.sourceHostIps = [...sourceHostIps];
+    ret.sourcePorts = [...sourcePorts];
 
     delete ret.sources;
 
