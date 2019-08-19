@@ -53,6 +53,7 @@ import {
 } from 'web/store/usersettings/actions';
 
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
+import Capabilities from 'gmp/capabilities/capabilities';
 
 const log = logger.getLogger('web.report.alertactions');
 
@@ -62,6 +63,7 @@ class AlertActions extends React.Component {
 
     this.state = {
       showTriggerAlertDialog: false,
+      capabilities: new Capabilities(),
     };
 
     this.handleAlertChange = this.handleAlertChange.bind(this);
@@ -77,6 +79,22 @@ class AlertActions extends React.Component {
 
   componentDidMount() {
     this.props.loadReportComposerDefaults();
+
+    const {gmp} = this.props;
+
+    gmp.user
+      .currentCapabilities()
+      .then(response => {
+        const capabilities = response.data;
+        log.debug('User capabilities', capabilities);
+        this.setState({capabilities: capabilities});
+        console.log(this.state.capabilities);
+      })
+      .catch(rejection => {
+        log.error('An error occurred during fetching capabilities', rejection);
+        // use empty capabilities
+        this.setState({capabilities: new Capabilities()});
+      });
   }
 
   handleAlertChange(alertId) {
@@ -166,7 +184,14 @@ class AlertActions extends React.Component {
       showError,
       onInteraction,
     } = this.props;
-    const {alertId, showTriggerAlertDialog, storeAsDefault} = this.state;
+    const {
+      alertId,
+      capabilities,
+      showTriggerAlertDialog,
+      storeAsDefault,
+    } = this.state;
+    const mayAccessAlerts = capabilities.has('get_alerts');
+    console.log('boolean', mayAccessAlerts);
     return (
       <AlertComponent
         onCreated={this.onAlertCreated}
@@ -177,7 +202,12 @@ class AlertActions extends React.Component {
           <React.Fragment>
             <IconDivider>
               <StartIcon
-                title={_('Trigger Alert')}
+                disabled={!mayAccessAlerts}
+                title={
+                  mayAccessAlerts
+                    ? _('Trigger Alert')
+                    : _('You do not have permission to use alerts.')
+                }
                 onClick={this.handleOpenTriggerAlertDialog}
               />
             </IconDivider>
