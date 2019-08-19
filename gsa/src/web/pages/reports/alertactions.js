@@ -88,7 +88,6 @@ class AlertActions extends React.Component {
         const capabilities = response.data;
         log.debug('User capabilities', capabilities);
         this.setState({capabilities: capabilities});
-        console.log(this.state.capabilities);
       })
       .catch(rejection => {
         log.error('An error occurred during fetching capabilities', rejection);
@@ -190,8 +189,7 @@ class AlertActions extends React.Component {
       showTriggerAlertDialog,
       storeAsDefault,
     } = this.state;
-    const mayAccessAlerts = capabilities.has('get_alerts');
-    console.log('boolean', mayAccessAlerts);
+    const mayAccessAlerts = capabilities.mayOp('get_alerts');
     return (
       <AlertComponent
         onCreated={this.onAlertCreated}
@@ -200,17 +198,14 @@ class AlertActions extends React.Component {
       >
         {({create}) => (
           <React.Fragment>
-            <IconDivider>
-              <StartIcon
-                disabled={!mayAccessAlerts}
-                title={
-                  mayAccessAlerts
-                    ? _('Trigger Alert')
-                    : _('You do not have permission to use alerts.')
-                }
-                onClick={this.handleOpenTriggerAlertDialog}
-              />
-            </IconDivider>
+            {mayAccessAlerts && (
+              <IconDivider>
+                <StartIcon
+                  title={_('Trigger Alert')}
+                  onClick={this.handleOpenTriggerAlertDialog}
+                />
+              </IconDivider>
+            )}
             {showTriggerAlertDialog && (
               <TriggerAlertDialog
                 alertId={alertId}
