@@ -96,7 +96,7 @@ describe('EditNvtDetailsDialog component tests', () => {
         manual_timeout=""
         nvt={nvt}
         preference_values={preferenceValues}
-        text={_('Config')}
+        configNameLabel={_('Config')}
         timeout=""
         title={_('Edit Scan Config NVT {{name}}', {
           name: nvt.name,
@@ -126,7 +126,7 @@ describe('EditNvtDetailsDialog component tests', () => {
         manual_timeout=""
         nvt={nvt}
         preference_values={preferenceValues}
-        text={_('Policy')}
+        configNameLabel={_('Policy')}
         timeout=""
         title={_('Edit Policy NVT {{name}}', {
           name: nvt.name,
@@ -156,7 +156,7 @@ describe('EditNvtDetailsDialog component tests', () => {
         manual_timeout=""
         nvt={nvt}
         preference_values={preferenceValues}
-        text={_('Config')}
+        configNameLabel={_('Config')}
         timeout=""
         title={_('Edit Scan Config NVT {{name}}', {
           name: nvt.name,
@@ -196,7 +196,7 @@ describe('EditNvtDetailsDialog component tests', () => {
         manual_timeout=""
         nvt={nvt}
         preference_values={preferenceValues}
-        text={_('Config')}
+        configNameLabel={_('Config')}
         timeout=""
         title={_('Edit Scan Config NVT {{name}}', {
           name: nvt.name,
@@ -227,7 +227,7 @@ describe('EditNvtDetailsDialog component tests', () => {
         manual_timeout=""
         nvt={nvt}
         preference_values={preferenceValues}
-        text={_('Config')}
+        configNameLabel={_('Config')}
         timeout=""
         title={_('Edit Scan Config NVT {{name}}', {
           name: nvt.name,

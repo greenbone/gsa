@@ -83,7 +83,7 @@ describe('EditConfigFamilyDialog component tests', () => {
         id="0"
         nvts={[nvt, nvt2]}
         selected={selected}
-        text={_('Config')}
+        configNameLabel={_('Config')}
         timeout=""
         title={_('Edit Scan Config NVT {{name}}', {
           name: nvt.name,
@@ -114,7 +114,7 @@ describe('EditConfigFamilyDialog component tests', () => {
         id="0"
         nvts={[nvt, nvt2]}
         selected={selected}
-        text={_('Policy')}
+        configNameLabel={_('Policy')}
         timeout=""
         title={_('Edit Policy NVT {{name}}', {
           name: nvt.name,
@@ -144,7 +144,7 @@ describe('EditConfigFamilyDialog component tests', () => {
         id="0"
         nvts={[nvt, nvt2]}
         selected={selected}
-        text={_('Config')}
+        configNameLabel={_('Config')}
         timeout=""
         title={_('Edit Config NVT {{name}}', {
           name: nvt.name,
@@ -181,7 +181,7 @@ describe('EditConfigFamilyDialog component tests', () => {
         id="0"
         nvts={[nvt, nvt2]}
         selected={selected}
-        text={_('Config')}
+        configNameLabel={_('Config')}
         timeout=""
         title={_('Edit Config NVT {{name}}', {
           name: nvt.name,
@@ -214,7 +214,7 @@ describe('EditConfigFamilyDialog component tests', () => {
         id="0"
         nvts={[nvt, nvt2]}
         selected={selected}
-        text={_('Config')}
+        configNameLabel={_('Config')}
         timeout=""
         title={_('Edit Config NVT {{name}}', {
           name: nvt.name,
@@ -259,7 +259,7 @@ describe('EditConfigFamilyDialog component tests', () => {
         id="0"
         nvts={[nvt, nvt2]}
         selected={selected}
-        text={_('Config')}
+        configNameLabel={_('Config')}
         timeout=""
         title={_('Edit Config NVT {{name}}', {
           name: nvt.name,
@@ -299,7 +299,7 @@ describe('EditConfigFamilyDialog component tests', () => {
         id="0"
         nvts={[nvt, nvt2, nvt3]}
         selected={newSelected}
-        text={_('Config')}
+        configNameLabel={_('Config')}
         timeout=""
         title={_('Edit Config NVT {{name}}', {
           name: nvt.name,

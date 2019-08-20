@@ -782,7 +782,9 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                         <td>
                           <div
                             class="c8"
-                          />
+                          >
+                            Config
+                          </div>
                         </td>
                         <td>
                           <div
