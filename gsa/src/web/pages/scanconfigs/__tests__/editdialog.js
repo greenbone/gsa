@@ -106,6 +106,18 @@ const config = new ScanConfig({
   preferences: preferences,
 });
 
+const config2 = new ScanConfig({
+  name: 'foo',
+  comment: 'bar',
+  writable: '1',
+  in_use: '1',
+  permissions: {permission: [{name: 'everything'}]},
+  type: 0,
+  usage_type: 'scan',
+  families: {family: families},
+  preferences: preferences,
+});
+
 const ospConfig = new ScanConfig({
   name: 'foo',
   comment: 'bar',
@@ -184,6 +196,52 @@ describe('EditDialog component tests', () => {
     expect(baseElement).toMatchSnapshot();
     expect(baseElement).toHaveTextContent('Edit Scan Config');
     expect(baseElement).not.toHaveTextContent('Policy');
+    expect(baseElement).toHaveTextContent(
+      'Edit Network Vulnerability Test Families',
+    );
+    expect(baseElement).toHaveTextContent('Edit Scanner Preferences');
+    expect(baseElement).toHaveTextContent(
+      'Network Vulnerability Test Preferences',
+    );
+  });
+
+  test('should render dialog for config in use', () => {
+    const handleClose = jest.fn();
+    const handleSave = jest.fn();
+    const handleOpenEditConfigFamilyDialog = jest.fn();
+    const handleOpenEditNvtDetailsDialog = jest.fn();
+
+    const {render} = rendererWith({capabilities: true});
+    const {baseElement} = render(
+      <EditDialog
+        comment={config2.comment}
+        config={config2}
+        families={families}
+        name={config2.name}
+        scanner_id={'0'}
+        scanner_preference_values={scannerPreferenceValues}
+        scanners={scanners}
+        select={select}
+        title={_('Edit Scan Config {{name}}', {
+          name: config2.name,
+        })}
+        trend={trend}
+        onClose={handleClose}
+        onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
+        onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
+        onSave={handleSave}
+      />,
+    );
+
+    expect(baseElement).toHaveTextContent('Edit Scan Config');
+    expect(baseElement).not.toHaveTextContent('Policy');
+    expect(baseElement).not.toHaveTextContent(
+      'Edit Network Vulnerability Test Families',
+    );
+    expect(baseElement).not.toHaveTextContent('Edit Scanner Preferences');
+    expect(baseElement).not.toHaveTextContent(
+      'Network Vulnerability Test Preferences',
+    );
   });
 
   test('should render dialog for osp config', () => {
@@ -217,6 +275,13 @@ describe('EditDialog component tests', () => {
     expect(baseElement).toMatchSnapshot();
     expect(baseElement).toHaveTextContent('Edit Scan Config');
     expect(baseElement).not.toHaveTextContent('Policy');
+    expect(baseElement).not.toHaveTextContent(
+      'Edit Network Vulnerability Test Families',
+    );
+    expect(baseElement).toHaveTextContent('Edit Scanner Preferences');
+    expect(baseElement).not.toHaveTextContent(
+      'Network Vulnerability Test Preferences',
+    );
   });
 
   test('should render dialog for policy', () => {
@@ -250,6 +315,13 @@ describe('EditDialog component tests', () => {
     expect(baseElement).toMatchSnapshot();
     expect(baseElement).toHaveTextContent('Edit Policy');
     expect(baseElement).not.toHaveTextContent('Config');
+    expect(baseElement).toHaveTextContent(
+      'Edit Network Vulnerability Test Families',
+    );
+    expect(baseElement).toHaveTextContent('Edit Scanner Preferences');
+    expect(baseElement).toHaveTextContent(
+      'Network Vulnerability Test Preferences',
+    );
 
     const icons = getAllByTestId('svg-icon');
     expect(icons[3]).toHaveAttribute('title', 'Edit Policy Family');
