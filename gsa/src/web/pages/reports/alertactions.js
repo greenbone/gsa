@@ -53,7 +53,7 @@ import {
 } from 'web/store/usersettings/actions';
 
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
-import Capabilities from 'gmp/capabilities/capabilities';
+import withCapabilities from 'web/utils/withCapabilities';
 
 const log = logger.getLogger('web.report.alertactions');
 
@@ -63,7 +63,6 @@ class AlertActions extends React.Component {
 
     this.state = {
       showTriggerAlertDialog: false,
-      capabilities: new Capabilities(),
     };
 
     this.handleAlertChange = this.handleAlertChange.bind(this);
@@ -79,21 +78,6 @@ class AlertActions extends React.Component {
 
   componentDidMount() {
     this.props.loadReportComposerDefaults();
-
-    const {gmp} = this.props;
-
-    gmp.user
-      .currentCapabilities()
-      .then(response => {
-        const capabilities = response.data;
-        log.debug('User capabilities', capabilities);
-        this.setState({capabilities: capabilities});
-      })
-      .catch(rejection => {
-        log.error('An error occurred during fetching capabilities', rejection);
-        // use empty capabilities
-        this.setState({capabilities: new Capabilities()});
-      });
   }
 
   handleAlertChange(alertId) {
@@ -178,17 +162,13 @@ class AlertActions extends React.Component {
   render() {
     const {
       alerts,
+      capabilities,
       reportComposerDefaults,
       filter,
       showError,
       onInteraction,
     } = this.props;
-    const {
-      alertId,
-      capabilities,
-      showTriggerAlertDialog,
-      storeAsDefault,
-    } = this.state;
+    const {alertId, showTriggerAlertDialog, storeAsDefault} = this.state;
     const mayAccessAlerts = capabilities.mayOp('get_alerts');
     return (
       <AlertComponent
@@ -230,6 +210,7 @@ class AlertActions extends React.Component {
 
 AlertActions.propTypes = {
   alerts: PropTypes.array,
+  capabilities: PropTypes.array,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
@@ -263,6 +244,7 @@ const mapStateToProps = rootState => {
 
 export default compose(
   withGmp,
+  withCapabilities,
   connect(
     mapStateToProps,
     mapDispatchToProps,
