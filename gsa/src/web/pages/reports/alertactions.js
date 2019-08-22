@@ -210,7 +210,7 @@ class AlertActions extends React.Component {
 
 AlertActions.propTypes = {
   alerts: PropTypes.array,
-  capabilities: PropTypes.array,
+  capabilities: PropTypes.capabilities.isRequired,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
