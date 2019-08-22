@@ -100,7 +100,7 @@ class HostComponent extends React.Component {
 
   openCreateTargetSelectionDialog(data) {
     const {entities, entitiesSelected, selectionType, filter} = data;
-
+    const {entitiesCounts} = this.props;
     let size;
     let filterstring;
 
@@ -112,7 +112,7 @@ class HostComponent extends React.Component {
       size = entities.length;
       filterstring = filter.toFilterString();
     } else {
-      const counts = entities.getCounts();
+      const counts = entitiesCounts;
       size = counts.filtered;
       filterstring = filter.all().toFilterString();
     }
@@ -192,6 +192,7 @@ class HostComponent extends React.Component {
 HostComponent.propTypes = {
   children: PropTypes.func.isRequired,
   createtarget: PropTypes.func.isRequired,
+  entitiesCounts: PropTypes.counts,
   gmp: PropTypes.gmp.isRequired,
   selectionType: PropTypes.string,
   onCloneError: PropTypes.func,

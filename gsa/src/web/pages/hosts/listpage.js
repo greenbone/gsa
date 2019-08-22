@@ -68,6 +68,7 @@ ToolBarIcons.propTypes = {
 };
 
 const Page = ({
+  entitiesCounts,
   filter,
   onChanged,
   onDownloaded,
@@ -77,6 +78,7 @@ const Page = ({
   ...props
 }) => (
   <HostComponent
+    entitiesCounts={entitiesCounts}
     onTargetCreated={goto_details('target', props)}
     onTargetCreateError={onError}
     onCreated={onChanged}
@@ -131,6 +133,7 @@ const Page = ({
 );
 
 Page.propTypes = {
+  entitiesCounts: PropTypes.counts,
   filter: PropTypes.filter,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
