@@ -111,6 +111,7 @@ const Page = ({
             onInteraction={onInteraction}
           />
         )}
+        entitiesCounts={entitiesCounts}
         filter={filter}
         filterEditDialog={HostsFilterDialog}
         filtersFilter={HOSTS_FILTER_FILTER}

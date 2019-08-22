@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Show HostsCount at SectionTitle [#1576](https://github.com/greenbone/gsa/pull/1576)
 - Fixed creating target from hosts [#1575](https://github.com/greenbone/gsa/pull/1575)
 - Fixed CVSSBaseCalculatorv2 [#1572](https://github.com/greenbone/gsa/pull/1572)
 - Fix title in Operating Systems table of Reports [#1567](https://github.com/greenbone/gsa/pull/1567)
