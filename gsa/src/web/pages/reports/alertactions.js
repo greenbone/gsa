@@ -53,6 +53,7 @@ import {
 } from 'web/store/usersettings/actions';
 
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
+import withCapabilities from 'web/utils/withCapabilities';
 
 const log = logger.getLogger('web.report.alertactions');
 
@@ -161,12 +162,14 @@ class AlertActions extends React.Component {
   render() {
     const {
       alerts,
+      capabilities,
       reportComposerDefaults,
       filter,
       showError,
       onInteraction,
     } = this.props;
     const {alertId, showTriggerAlertDialog, storeAsDefault} = this.state;
+    const mayAccessAlerts = capabilities.mayOp('get_alerts');
     return (
       <AlertComponent
         onCreated={this.onAlertCreated}
@@ -175,12 +178,14 @@ class AlertActions extends React.Component {
       >
         {({create}) => (
           <React.Fragment>
-            <IconDivider>
-              <StartIcon
-                title={_('Trigger Alert')}
-                onClick={this.handleOpenTriggerAlertDialog}
-              />
-            </IconDivider>
+            {mayAccessAlerts && (
+              <IconDivider>
+                <StartIcon
+                  title={_('Trigger Alert')}
+                  onClick={this.handleOpenTriggerAlertDialog}
+                />
+              </IconDivider>
+            )}
             {showTriggerAlertDialog && (
               <TriggerAlertDialog
                 alertId={alertId}
@@ -205,6 +210,7 @@ class AlertActions extends React.Component {
 
 AlertActions.propTypes = {
   alerts: PropTypes.array,
+  capabilities: PropTypes.capabilities.isRequired,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
@@ -238,6 +244,7 @@ const mapStateToProps = rootState => {
 
 export default compose(
   withGmp,
+  withCapabilities,
   connect(
     mapStateToProps,
     mapDispatchToProps,

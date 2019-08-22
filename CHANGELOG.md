@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- trigger alert button disabled in report details page when no permission [#1574](https://github.com/greenbone/gsa/pull/1574)
 - Update default filter for report details page [#1552](https://github.com/greenbone/gsa/pull/1552)
 - Adjust HelpIcons to use GOS 5 manual [#1549](https://github.com/greenbone/gsa/pull/1549) [#1550](https://github.com/greenbone/gsa/pull/1550)
 - Adjust clickable areas for Select and MultiSelect [#1545](https://github.com/greenbone/gsa/pull/1545)
