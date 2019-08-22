@@ -1,0 +1,1285 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
+.c8 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c18 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c10 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c20 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  margin-top: -5px;
+}
+
+.c20 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c20 > * {
+  margin-top: 5px;
+}
+
+.c21 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c21 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c21 > * {
+  margin-left: 5px;
+}
+
+.c19 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c1 {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin: 10% auto;
+  border: 0;
+  outline: 0;
+  width: 800px;
+  height: px;
+}
+
+.c0 {
+  position: fixed;
+  font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+  font-size: 1.1em;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  background: rgba(102,102,102,0.5);
+  z-index: 600;
+  -webkit-transition: opacity 1s ease-in;
+  transition: opacity 1s ease-in;
+  width: 100%;
+  height: 100%;
+}
+
+.c33 {
+  width: 0;
+  height: 0;
+  cursor: nwse-resize;
+  border-right: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-top: 20px solid #fff;
+}
+
+.c32 {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+  background: repeating-linear-gradient( -45deg, transparent, transparent 2px, #000 2px, #000 3px );
+}
+
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: inherit;
+  padding: 0;
+  background: #fff;
+  box-shadow: 5px 5px 10px #787878;
+  border-radius: 3px;
+  border: 1px solid #787878;
+}
+
+.c5 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  border: 1px solid #519032;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: Verdana,sans-serif;
+  color: #519032;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+.c5:hover {
+  color: #fff;
+  background: #519032;
+}
+
+.c4 {
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+}
+
+.c4 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c31 {
+  display: inline-block;
+  padding: 0 15px;
+  color: #393637;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 30px;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: #fff;
+  border-radius: 2px;
+  border: 1px solid #aaaaaa;
+  cursor: pointer;
+  overflow: visible;
+  z-index: 1;
+}
+
+.c31:focus,
+.c31:hover {
+  border: 1px solid #393637;
+}
+
+.c31:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background: #66c430;
+  font-weight: bold;
+  color: #fff;
+}
+
+.c31[disabled] {
+  cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+.c31 img {
+  height: 32px;
+  width: 32px;
+  margin-top: 5px 10px 5px -10px;
+  vertical-align: middle;
+}
+
+.c31:link {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #393637;
+}
+
+.c30 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c29 {
+  border: 1px solid #787878;
+  color: #519032;
+  background: #87d050;
+}
+
+.c29:hover {
+  color: #fff;
+  background: #519032;
+}
+
+.c28 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: #c8d3d9;
+  margin-top: 15px;
+  padding: 10px 20px 10px 20px;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 5px 5px 5px 10px;
+  margin-bottom: 15px;
+  border-radius: 2px 2px 0 0;
+  border-bottom: 1px solid #787878;
+  color: #fff;
+  font-weight: bold;
+  background: #66c430;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+}
+
+.c7 {
+  overflow: auto;
+  padding: 0 15px;
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
+}
+
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+  overflow: hidden;
+  height: 100%;
+}
+
+.c9 {
+  border: 0;
+  border-spacing: 0px;
+  font-size: 12px;
+  text-align: left;
+  table-layout: auto;
+}
+
+.c15 {
+  border: 0;
+  border-spacing: 0px;
+  font-size: 12px;
+  text-align: left;
+  table-layout: auto;
+  width: 100%;
+}
+
+.c15 th,
+.c15 td {
+  padding: 4px 10px;
+  border-bottom: 1px solid #c8d3d9;
+}
+
+.c15 tfoot tr {
+  background: #fff;
+}
+
+.c15 tfoot tr td {
+  border-bottom: 1px solid #c8d3d9;
+}
+
+.c16 a {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #000;
+}
+
+.c16 a:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  color: #000;
+}
+
+.c17 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+}
+
+.c26 {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  display: block;
+  height: 22px;
+  color: #393637;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #aaaaaa;
+  border-radius: 2px;
+  padding: 1px 8px;
+}
+
+.c26:-webkit-autofill {
+  box-shadow: 0 0 0 1000px white inset;
+}
+
+.c25 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c22 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.c24 {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  margin-left: 10px;
+  line-height: normal;
+  width: auto;
+  height: auto;
+}
+
+.c27 {
+  opacity: 1;
+}
+
+.c23 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c12 {
+  height: 13px;
+  box-sizing: content-box;
+  display: inline-block;
+  width: 100px;
+  background: #393637;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.c14 {
+  z-index: 1;
+  font-weight: bold;
+  color: #fff;
+  font-size: 9px;
+  margin: 0;
+  position: relative;
+  top: -13px;
+  padding-top: 1px;
+}
+
+.c13 {
+  height: 13px;
+  width: 0%;
+  background: #4F91C7;
+}
+
+.c11 {
+  white-space: pre-line;
+}
+
+@media print {
+  .c9 {
+    border-collapse: collapse;
+  }
+}
+
+@media print {
+  .c15 {
+    border-collapse: collapse;
+  }
+}
+
+@media screen {
+  .c15 > tbody:nth-of-type(even),
+  .c15 > tbody:only-of-type > tr:nth-of-type(even) {
+    background: #eeeeee;
+  }
+
+  .c15 > tbody:not(:only-of-type):hover,
+  .c15 > tbody:only-of-type > tr:hover {
+    background: #c8d3d9;
+  }
+}
+
+@media print {
+  .c16 {
+    border-bottom: 1px solid black;
+  }
+
+  .c16 a,
+  .c16 a:hover {
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    color: #000;
+  }
+}
+
+@media print {
+  .c17 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c12 {
+    background: none;
+    border: 0;
+  }
+}
+
+@media print {
+  .c14 {
+    color: black;
+  }
+}
+
+@media print {
+  .c13 {
+    background: none;
+  }
+}
+
+<body>
+  <div
+    id="portals"
+  >
+    <div>
+      <div
+        class="c0"
+      >
+        <div
+          class="c1"
+          height="px"
+          role="dialog"
+          tabindex="1"
+          width="800px"
+        >
+          <div
+            class="c2"
+          >
+            <div
+              class="c3"
+              data-testid="dialog-title-bar"
+            >
+              <span>
+                Edit Scan Config NVT nvt
+              </span>
+              <div
+                class="c4 c5"
+                data-testid="dialog-title-close-button"
+                title="Close"
+              >
+                ×
+              </div>
+            </div>
+            <div
+              class="c6"
+            >
+              <div
+                class="c7"
+              >
+                <div
+                  class="c8"
+                >
+                  <table
+                    class="c9"
+                  >
+                    <tbody
+                      class=""
+                    >
+                      <tr>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            Name
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            <span>
+                              <a
+                                class="c10"
+                                data-testid="details-link"
+                                href="/nvt/1234"
+                              >
+                                nvt
+                              </a>
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            Config
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            foo
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            Family
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            family
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            OID
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            1234
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            Version
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            0
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            Notes
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            1
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            Overrides
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            1
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div>
+                    <h1>
+                      Summary
+                    </h1>
+                    <div
+                      class="c11"
+                    >
+                      This is a test.
+                    </div>
+                  </div>
+                  <div>
+                    <h1>
+                      Vulnerability Scoring
+                    </h1>
+                    <table
+                      class="c9"
+                    >
+                      <tbody
+                        class=""
+                      >
+                        <tr>
+                          <td>
+                            <div
+                              class="c8"
+                            >
+                              CVSS base
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="c8"
+                            >
+                              <div
+                                class="c12"
+                                data-testid="progressbar-box"
+                                title="N/A"
+                              >
+                                <div
+                                  class="c13"
+                                  data-testid="progress"
+                                />
+                                <div
+                                  class="c14"
+                                >
+                                  N/A
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div
+                              class="c8"
+                            >
+                              CVSS base vector
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="c8"
+                            >
+                              <a
+                                class="c10"
+                                href="/cvsscalculator?cvssVector=AV%3AN%2FAC%3AL%2FAu%3AN%2FC%3AN%2FI%3AN%2FA%3AN"
+                              >
+                                AV:N/AC:L/Au:N/C:N/I:N/A:N
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <table
+                    class="c15"
+                  >
+                    <thead
+                      class="c16"
+                    >
+                      <tr>
+                        <th
+                          class="c17"
+                        >
+                          <div
+                            class="c18"
+                          >
+                            Name
+                          </div>
+                        </th>
+                        <th
+                          class="c17"
+                        >
+                          <div
+                            class="c18"
+                          >
+                            New Value
+                          </div>
+                        </th>
+                        <th
+                          class="c17"
+                        >
+                          <div
+                            class="c18"
+                          >
+                            Default Value
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      class=""
+                    >
+                      <tr>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            Timeout
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            <div
+                              class="c19"
+                            >
+                              <div
+                                class="c20"
+                                margin="5px"
+                              >
+                                <div
+                                  class="c19"
+                                >
+                                  <div
+                                    class="c21"
+                                    margin="5px"
+                                  >
+                                    <label
+                                      class="c22"
+                                    >
+                                      <div
+                                        class="c19"
+                                      >
+                                        <div
+                                          class="c21"
+                                          margin="5px"
+                                        >
+                                          <input
+                                            class="c23 c24"
+                                            data-testid="radio-input"
+                                            name="timeout"
+                                            type="radio"
+                                            value="0"
+                                          />
+                                        </div>
+                                      </div>
+                                    </label>
+                                    <span>
+                                      Apply default timeout
+                                      
+                                    </span>
+                                  </div>
+                                </div>
+                                <div
+                                  class="c19"
+                                >
+                                  <div
+                                    class="c21"
+                                    margin="5px"
+                                  >
+                                    <label
+                                      class="c22"
+                                    >
+                                      <div
+                                        class="c19"
+                                      >
+                                        <div
+                                          class="c21"
+                                          margin="5px"
+                                        >
+                                          <input
+                                            checked=""
+                                            class="c23 c24"
+                                            data-testid="radio-input"
+                                            name="timeout"
+                                            type="radio"
+                                            value="1"
+                                          />
+                                        </div>
+                                      </div>
+                                    </label>
+                                    <input
+                                      class="c25 c26"
+                                      name="manual_timeout"
+                                      type="text"
+                                      value=""
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            preference0
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            <div
+                              class="c18"
+                            >
+                              <div
+                                class="c19"
+                              >
+                                <div
+                                  class="c21"
+                                  margin="5px"
+                                >
+                                  <label
+                                    class="c22"
+                                  >
+                                    <div
+                                      class="c19"
+                                    >
+                                      <div
+                                        class="c21"
+                                        margin="5px"
+                                      >
+                                        <input
+                                          class="c23 c24"
+                                          data-testid="radio-input"
+                                          type="radio"
+                                          value="yes"
+                                        />
+                                        <span
+                                          class="c27"
+                                          data-testid="radio-title"
+                                        >
+                                          Yes
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </label>
+                                  <label
+                                    class="c22"
+                                  >
+                                    <div
+                                      class="c19"
+                                    >
+                                      <div
+                                        class="c21"
+                                        margin="5px"
+                                      >
+                                        <input
+                                          checked=""
+                                          class="c23 c24"
+                                          data-testid="radio-input"
+                                          type="radio"
+                                          value="no"
+                                        />
+                                        <span
+                                          class="c27"
+                                          data-testid="radio-title"
+                                        >
+                                          No
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            no
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            preference1
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            <div
+                              class="c8"
+                            >
+                              <label
+                                class="c22"
+                              >
+                                <div
+                                  class="c19"
+                                >
+                                  <div
+                                    class="c21"
+                                    margin="5px"
+                                  >
+                                    <input
+                                      checked=""
+                                      class="c23 c24"
+                                      data-testid="radio-input"
+                                      type="radio"
+                                      value="1"
+                                    />
+                                    <span
+                                      class="c27"
+                                      data-testid="radio-title"
+                                    >
+                                      1
+                                    </span>
+                                  </div>
+                                </div>
+                              </label>
+                              <label
+                                class="c22"
+                              >
+                                <div
+                                  class="c19"
+                                >
+                                  <div
+                                    class="c21"
+                                    margin="5px"
+                                  >
+                                    <input
+                                      class="c23 c24"
+                                      data-testid="radio-input"
+                                      type="radio"
+                                      value="2"
+                                    />
+                                    <span
+                                      class="c27"
+                                      data-testid="radio-title"
+                                    >
+                                      2
+                                    </span>
+                                  </div>
+                                </div>
+                              </label>
+                              <label
+                                class="c22"
+                              >
+                                <div
+                                  class="c19"
+                                >
+                                  <div
+                                    class="c21"
+                                    margin="5px"
+                                  >
+                                    <input
+                                      class="c23 c24"
+                                      data-testid="radio-input"
+                                      type="radio"
+                                      value="3"
+                                    />
+                                    <span
+                                      class="c27"
+                                      data-testid="radio-title"
+                                    >
+                                      3
+                                    </span>
+                                  </div>
+                                </div>
+                              </label>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            1
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            preference2
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            <input
+                              class="c25 c26"
+                              name="preference2"
+                              type="text"
+                              value="foo"
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            foo
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c28"
+            >
+              <button
+                class="c29 c30 c31"
+                data-testid="dialog-close-button"
+                title="Cancel"
+              >
+                Cancel
+              </button>
+              <button
+                class="c29 c30 c31"
+                data-testid="dialog-save-button"
+                title="Save"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+          <div
+            class="c32"
+          >
+            <div
+              class="c33"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div />
+</body>
+`;

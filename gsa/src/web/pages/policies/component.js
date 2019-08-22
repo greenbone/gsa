@@ -70,9 +70,9 @@ import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
 
-import EditPolicyFamilyDialog from 'web/pages/policies/editpolicyfamilydialog';
-import EditPolicyDialog from 'web/pages/policies/editdialog';
-import EditNvtDetailsDialog from 'web/pages/policies/editnvtdetailsdialog';
+import EditPolicyFamilyDialog from 'web/pages/scanconfigs/editconfigfamilydialog';
+import EditPolicyDialog from 'web/pages/scanconfigs/editdialog';
+import EditNvtDetailsDialog from 'web/pages/scanconfigs/editnvtdetailsdialog';
 import AuditDialog from 'web/pages/audits/dialog';
 import ImportDialog from 'web/pages/scanconfigs/importdialog';
 import PolicyDialog from 'web/pages/policies/dialog';
@@ -319,7 +319,7 @@ class PolicyComponent extends React.Component {
       .then(() => this.closeCreateAuditDialog());
   }
 
-  openEditPolicyFamilyDialog({policy, name}) {
+  openEditPolicyFamilyDialog({config: policy, name}) {
     this.loadEditPolicyFamilySettings(policy, name).then(state => {
       this.setState({
         ...state,
@@ -342,7 +342,7 @@ class PolicyComponent extends React.Component {
     this.handleInteraction();
   }
 
-  openEditNvtDetailsDialog({policy, nvt}) {
+  openEditNvtDetailsDialog({config: policy, nvt}) {
     this.loadEditPolicyNvtSettings(policy, nvt).then(state => {
       this.setState({
         ...state,
@@ -378,13 +378,14 @@ class PolicyComponent extends React.Component {
 
   handleSavePolicyFamily(data) {
     const {gmp} = this.props;
+    const policy = data.config;
 
     this.handleInteraction();
 
     return gmp.policy
       .savePolicyFamily(data)
       .then(() => {
-        return this.loadEditPolicySettings(data.policy);
+        return this.loadEditPolicySettings(policy);
       })
       .then(state => {
         this.closeEditPolicyFamilyDialog();
@@ -394,6 +395,7 @@ class PolicyComponent extends React.Component {
 
   handleSavePolicyNvt(values) {
     const {gmp} = this.props;
+    const {config: policy, family_name} = values;
 
     this.handleInteraction();
 
@@ -401,15 +403,12 @@ class PolicyComponent extends React.Component {
       .savePolicyNvt(values)
       .then(response => {
         // update nvt timeouts in nvt family dialog
-        this.loadEditPolicyFamilySettings(
-          values.policy,
-          values.family_name,
-        ).then(state => {
+        this.loadEditPolicyFamilySettings(policy, family_name).then(state => {
           this.setState({state});
         });
 
         // update nvt preference values in edit dialog
-        this.loadEditPolicySettings(values.policy).then(state => {
+        this.loadEditPolicySettings(policy).then(state => {
           this.setState({state});
         });
       })
@@ -720,7 +719,7 @@ class PolicyComponent extends React.Component {
                 <EditPolicyDialog
                   base={base}
                   comment={comment}
-                  policy={policy}
+                  config={policy}
                   families={families}
                   name={name}
                   scanner_id={scanner_id}
@@ -730,7 +729,7 @@ class PolicyComponent extends React.Component {
                   title={title}
                   trend={trend}
                   onClose={this.handleCloseEditPolicyDialog}
-                  onEditPolicyFamilyClick={this.openEditPolicyFamilyDialog}
+                  onEditConfigFamilyClick={this.openEditPolicyFamilyDialog}
                   onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
                   onSave={d => {
                     this.handleInteraction();
@@ -751,8 +750,9 @@ class PolicyComponent extends React.Component {
         )}
         {editPolicyFamilyDialogVisible && (
           <EditPolicyFamilyDialog
-            policy={policy}
-            policyName={policyName}
+            config={policy}
+            configNameLabel={_('Policy')}
+            config_name={policyName}
             family_name={family_name}
             id={id}
             nvts={nvts}
@@ -765,8 +765,9 @@ class PolicyComponent extends React.Component {
         )}
         {editNvtDetailsDialogVisible && (
           <EditNvtDetailsDialog
-            policy={policy}
-            policyName={policyName}
+            config={policy}
+            configNameLabel={_('Policy')}
+            config_name={policyName}
             family_name={family_name}
             manual_timeout={manual_timeout}
             nvt={nvt}
