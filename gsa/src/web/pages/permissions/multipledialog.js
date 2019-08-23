@@ -19,6 +19,8 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
@@ -39,6 +41,11 @@ import Layout from 'web/components/layout/layout';
 export const CURRENT_RESOURCE_ONLY = '0';
 export const INCLUDE_RELATED_RESOURCES = '1';
 export const RELATED_RESOURCES_ONLY = '2';
+
+const EntityName = styled.div`
+  font-style: italic;
+  word-break: break-all;
+`;
 
 const MultiplePermissionDialog = withCapabilities(
   ({
@@ -188,7 +195,7 @@ const MultiplePermissionDialog = withCapabilities(
               <FormGroup title={_('on')} flex="column">
                 <Divider>
                   <span>{typeName(getEntityType(state))}</span>
-                  <i>{entityName}</i>
+                  <EntityName>{entityName}</EntityName>
                   <Select
                     name="includeRelated"
                     value={state.includeRelated}
