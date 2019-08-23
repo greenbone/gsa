@@ -26,7 +26,7 @@ import _ from 'gmp/locale';
 import DateTime from 'web/components/date/datetime';
 
 import DeleteIcon from 'web/components/icon/deleteicon';
-import DownloadIcon from 'web/components/icon/downloadicon';
+import ExportIcon from 'web/components/icon/exporticon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -46,19 +46,19 @@ const Div = styled.div`
 const Actions = withEntitiesActions(
   ({entity, onTlsCertificateDeleteClick, onTlsCertificateDownloadClick}) => (
     <IconDivider align={['center', 'center']} grow>
-      <DeleteIcon
-        disabled={true} // TODO remove this once function is implemented
-        entity={entity}
-        name="tlscertificate"
-        displayName={_('TLS Certificate')}
-        title={'Delete TLS Certificate'}
-        onClick={onTlsCertificateDeleteClick}
-      />
-      <DownloadIcon
-        disabled={true} // TODO remove this once function is implemented
+      {entity.isInUse() ? (
+        <DeleteIcon disabled={true} title={_('TLS Certificate is in use')} />
+      ) : (
+        <DeleteIcon
+          value={entity}
+          title={'Delete TLS Certificate'}
+          onClick={onTlsCertificateDeleteClick}
+        />
+      )}
+      <ExportIcon
         value={entity}
-        onClick={onTlsCertificateDownloadClick}
         title={_('Export TLS Certificate')}
+        onClick={onTlsCertificateDownloadClick}
       />
     </IconDivider>
   ),
