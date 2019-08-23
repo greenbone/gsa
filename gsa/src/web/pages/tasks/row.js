@@ -55,7 +55,7 @@ import Trend from './trend';
 
 import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
-const render_report = (report, links) => {
+export const renderReport = (report, links) => {
   if (!isDefined(report)) {
     return null;
   }
@@ -68,7 +68,7 @@ const render_report = (report, links) => {
   );
 };
 
-const render_report_total = (entity, links) => {
+const renderReportTotal = (entity, links) => {
   if (entity.report_count.total <= 0) {
     return null;
   }
@@ -153,8 +153,8 @@ const Row = ({
       <TableData>
         <TaskStatus task={entity} links={links} />
       </TableData>
-      <TableData>{render_report_total(entity, links)}</TableData>
-      <TableData>{render_report(entity.last_report, links)}</TableData>
+      <TableData>{renderReportTotal(entity, links)}</TableData>
+      <TableData>{renderReport(entity.last_report, links)}</TableData>
       <TableData>
         {!entity.isContainer() && isDefined(entity.last_report) && (
           <SeverityBar severity={entity.last_report.severity} />
