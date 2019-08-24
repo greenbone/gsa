@@ -52,7 +52,7 @@ const Header = ({
           title={_('Issuer DN')}
         />
         <TableHead
-          width="15%"
+          width="26%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'serial' : false}
