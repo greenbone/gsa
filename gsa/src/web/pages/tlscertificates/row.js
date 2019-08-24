@@ -86,7 +86,7 @@ const Row = ({
           </RowDetailsToggle>
         </span>
       </TableData>
-      <TableData>{entity.name}</TableData>
+      <TableData>{entity.serial}</TableData>
       <TableData>
         <DateTime date={entity.activationTime} />
       </TableData>
