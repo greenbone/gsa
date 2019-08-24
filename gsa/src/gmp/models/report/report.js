@@ -71,7 +71,7 @@ class ReportReport extends Model {
 
     copy.hosts = parse_hosts(elem, filter);
 
-    copy.tls_certificates = parse_tls_certificates(elem, filter);
+    copy.tlsCertificates = parse_tls_certificates(elem, filter);
 
     delete copy.host;
 
