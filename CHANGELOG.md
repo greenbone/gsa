@@ -7,10 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- Added DetailsPage and more funtionalities to TLS Certificate assets [#1578](https://github.com/greenbone/gsa/pull/1578)
 - Added Explicit Compliance [#1495](https://github.com/greenbone/gsa/pull/1495)
-- added tasktrendgroup component for tasks filter dialog [#1511](https://github.com/greenbone/gsa/pull/1511)
+- Added tasktrendgroup component for tasks filter dialog [#1511](https://github.com/greenbone/gsa/pull/1511)
 - Added HorizontalSep component for horizontal lists. [#1494](https://github.com/greenbone/gsa/pull/1494)
-- added BooleanFilterGroup and changed notes filter dialog [#1493](https://github.com/greenbone/gsa/pull/1493)
+- Added BooleanFilterGroup and changed notes filter dialog [#1493](https://github.com/greenbone/gsa/pull/1493)
 - Added grow option to multiselect component [#1485](https://github.com/greenbone/gsa/pull/1485)
 - Add LogoutIcon [#1481](https://github.com/greenbone/gsa/pull/1481)
 - Added a component "SeverityValuesGroup" enabling user choose the relation they want [#1477](https://github.com/greenbone/gsa/pull/1477)
