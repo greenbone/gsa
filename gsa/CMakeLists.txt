@@ -1021,6 +1021,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/tickets/table.js
      ${GSA_SRC_DIR}/src/web/pages/tlscertificates/component.js
      ${GSA_SRC_DIR}/src/web/pages/tlscertificates/details.js
+     ${GSA_SRC_DIR}/src/web/pages/tlscertificates/detailspage.js
      ${GSA_SRC_DIR}/src/web/pages/tlscertificates/filterdialog.js
      ${GSA_SRC_DIR}/src/web/pages/tlscertificates/listpage.js
      ${GSA_SRC_DIR}/src/web/pages/tlscertificates/row.js
