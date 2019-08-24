@@ -61,12 +61,12 @@ exports[`DatePicker component tests should render 2`] = `
     class="react-datepicker__input-container"
   >
     <div
-      class="sc-jKVCRD gBWRoO"
+      class="sc-kaNhvL crkLgP"
       width="auto"
     >
       2018/11/11
       <span
-        class="sc-ebFjAB vqWoD sc-jzJRlG lcpYA sc-fjdhpX iICojt"
+        class="sc-jKVCRD GjcaI sc-jzJRlG lcpYA sc-fjdhpX iICojt"
         data-testid="svg-icon"
       >
         <svg>
