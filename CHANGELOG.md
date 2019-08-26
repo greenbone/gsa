@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- don't allow to clone hosts [#1581](https://github.com/greenbone/gsa/pull/1581)
 - trigger alert button disabled in report details page when no permission [#1574](https://github.com/greenbone/gsa/pull/1574)
 - Update default filter for report details page [#1552](https://github.com/greenbone/gsa/pull/1552)
 - Adjust HelpIcons to use GOS 5 manual [#1549](https://github.com/greenbone/gsa/pull/1549) [#1550](https://github.com/greenbone/gsa/pull/1550)
