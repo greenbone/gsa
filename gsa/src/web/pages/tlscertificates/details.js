@@ -54,18 +54,6 @@ const TlsCertificateDetails = ({entity, links = true}) => {
           <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(entity.comment) && (
-            <TableRow>
-              <TableData>{_('Comment')}</TableData>
-              <TableData>{entity.comment}</TableData>
-            </TableRow>
-          )}
-          {isDefined(entity.trust) && (
-            <TableRow>
-              <TableData>{_('Trusted')}</TableData>
-              <TableData>{renderYesNo(entity.trust)}</TableData>
-            </TableRow>
-          )}
           {isDefined(entity.valid) && (
             <TableRow>
               <TableData>{_('Valid')}</TableData>
