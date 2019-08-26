@@ -32,16 +32,12 @@ import ObserverIcon from 'web/entity/icon/observericon';
 
 import Comment from 'web/components/comment/comment';
 
-import DateTime from 'web/components/date/datetime';
-
 import AlterableIcon from 'web/components/icon/alterableicon';
 import ProvideViewIcon from 'web/components/icon/provideviewicon';
 import SensorIcon from 'web/components/icon/sensoricon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
-
-import DetailsLink from 'web/components/link/detailslink';
 
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
@@ -53,18 +49,7 @@ import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import ComplianceStatusBar from 'web/components/bar/compliancestatusbar';
 
-const renderReport = (report, links) => {
-  if (!isDefined(report)) {
-    return null;
-  }
-  return (
-    <span>
-      <DetailsLink type="report" id={report.id} textOnly={!links}>
-        <DateTime date={report.timestamp} />
-      </DetailsLink>
-    </span>
-  );
-};
+import {renderReport} from 'web/pages/tasks/row';
 
 const getComplianceStatus = report => {
   if (!isDefined(report)) {
@@ -121,7 +106,7 @@ const Row = ({
             {entity.alterable === 1 && (
               <AlterableIcon size="small" title={_('Audit is alterable')} />
             )}
-            {isDefined(scanner) && scanner.type === GMP_SCANNER_TYPE && (
+            {isDefined(scanner) && scanner.scannerType === GMP_SCANNER_TYPE && (
               <SensorIcon
                 size="small"
                 title={_('Audit is configured to run on sensor {{name}}', {

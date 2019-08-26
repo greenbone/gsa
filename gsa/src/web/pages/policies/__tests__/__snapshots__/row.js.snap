@@ -1,0 +1,256 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Row tests should render 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c5 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c5 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c5 > * {
+  margin-left: 5px;
+}
+
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c7 {
+  cursor: pointer;
+}
+
+.c6 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c6 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c2 {
+  cursor: pointer;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #0000ff;
+}
+
+.c2:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  color: #0000ff;
+}
+
+@media print {
+  .c7 {
+    display: none;
+  }
+}
+
+@media print {
+  .c2 {
+    color: #000;
+  }
+}
+
+<body>
+  <div
+    id="portals"
+  />
+  <div>
+    <tr>
+      <td>
+        <div
+          class="c0"
+        >
+          <div
+            class="c1"
+          >
+            <div
+              class="c0"
+            >
+              <span>
+                <span
+                  class="c2"
+                  name="1234"
+                >
+                  foo
+                </span>
+              </span>
+            </div>
+          </div>
+          <div
+            class="comment"
+          >
+            (
+            bar
+            )
+          </div>
+        </div>
+      </td>
+      <td>
+        <div
+          class="c3"
+        >
+          <div
+            class="c4"
+          >
+            <div
+              class="c5"
+              margin="5px"
+            >
+              <span
+                class="c6 c7"
+                data-testid="svg-icon"
+                title="Move Policy to trashcan"
+              >
+                <svg>
+                  trashcan.svg
+                </svg>
+              </span>
+              <span
+                class="c6 c7"
+                data-testid="svg-icon"
+                title="Edit Policy"
+              >
+                <svg>
+                  edit.svg
+                </svg>
+              </span>
+              <span
+                class="c6 c7"
+                data-testid="svg-icon"
+                title="Clone Policy"
+              >
+                <svg>
+                  clone.svg
+                </svg>
+              </span>
+              <span
+                class="c6 c7"
+                data-testid="svg-icon"
+                title="Create Audit from Policy"
+              >
+                <svg>
+                  new.svg
+                </svg>
+              </span>
+              <span
+                class="c6 c7"
+                data-testid="svg-icon"
+                title="Export Policy"
+              >
+                <svg>
+                  export.svg
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </div>
+</body>
+`;
