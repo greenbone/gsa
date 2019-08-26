@@ -24,6 +24,10 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import DateTime from 'web/components/date/datetime';
+
+import Layout from 'web/components/layout/layout';
+
 import InfoTable from 'web/components/table/infotable';
 import TableData from 'web/components/table/data';
 import TableBody from 'web/components/table/body';
@@ -43,7 +47,7 @@ import {renderYesNo} from 'web/utils/render';
 
 const TlsCertificateDetails = ({entity, links = true}) => {
   return (
-    <React.Fragment>
+    <Layout grow="1" flex="column">
       <InfoTable>
         <colgroup>
           <Col width="10%" />
@@ -68,15 +72,31 @@ const TlsCertificateDetails = ({entity, links = true}) => {
               <TableData>{renderYesNo(entity.valid)}</TableData>
             </TableRow>
           )}
+          {isDefined(entity.activationTime) && (
+            <TableRow>
+              <TableData>{_('Activates')}</TableData>
+              <TableData>
+                <DateTime date={entity.activationTime} />
+              </TableData>
+            </TableRow>
+          )}
+          {isDefined(entity.expirationTime) && (
+            <TableRow>
+              <TableData>{_('Expires')}</TableData>
+              <TableData>
+                <DateTime date={entity.expirationTime} />
+              </TableData>
+            </TableRow>
+          )}
         </TableBody>
       </InfoTable>
-    </React.Fragment>
+    </Layout>
   );
 };
 
 TlsCertificateDetails.propTypes = {
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool.isRequired,
+  links: PropTypes.bool,
 };
 
 const mapStateToProps = (rootState, {entity = {}}) => {

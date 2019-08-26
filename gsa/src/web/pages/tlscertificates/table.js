@@ -49,10 +49,10 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'dn' : false}
           onSortChange={onSortChange}
-          title={_('DN')}
+          title={_('Issuer DN')}
         />
         <TableHead
-          width="15%"
+          width="26%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'serial' : false}
@@ -65,7 +65,7 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hosts' : false}
           onSortChange={onSortChange}
-          title={_('Not valid before')}
+          title={_('Activates')}
         />
         <TableHead
           width="12%"
@@ -73,7 +73,7 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'modified' : false}
           onSortChange={onSortChange}
-          title={_('Not valid after')}
+          title={_('Expires')}
         />
         <TableHead
           width="12%"
@@ -108,7 +108,7 @@ export const TlsCertificatesTable = createEntitiesTable({
   header: Header,
   footer: Footer,
   row: TlsCertificateRow,
-  rowDetails: withRowDetails('tlscertificate')(TlsCertificateDetails),
+  rowDetails: withRowDetails('tlscertificate', 6)(TlsCertificateDetails),
 });
 
 export default TlsCertificatesTable;
