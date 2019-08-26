@@ -82,7 +82,7 @@ const Row = ({
       <TableData>
         <span>
           <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-            <Div>{entity.issuerDn}</Div>
+            <Div>{entity.name}</Div>
           </RowDetailsToggle>
         </span>
       </TableData>
