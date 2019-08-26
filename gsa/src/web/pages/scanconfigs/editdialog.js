@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import styled from 'styled-components';
 
@@ -40,6 +40,7 @@ import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 import Select from 'web/components/form/select';
 import YesNoRadio from 'web/components/form/yesnoradio';
+import Loading from 'web/components/loading/loading';
 import {noop_convert} from 'web/components/form/withChangeHandler';
 
 import EditIcon from 'web/components/icon/editicon';
@@ -478,6 +479,18 @@ const EditDialog = ({
     trend,
   };
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    // we want to show loading indicator while the content of the dialog is loading. 500ms is arbitrary, but the loading indicator will not disappear until rerender with the required content.
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
   return (
     <SaveDialog
       title={title}
@@ -487,6 +500,10 @@ const EditDialog = ({
       values={controlledData}
     >
       {({values: state, onValueChange}) => {
+        if (isLoading) {
+          return <Loading />;
+        }
+
         return (
           <Layout flex="column">
             <FormGroup title={_('Name')}>
