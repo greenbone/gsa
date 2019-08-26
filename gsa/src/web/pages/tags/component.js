@@ -67,6 +67,7 @@ const TYPES = [
   'schedule',
   'target',
   'task',
+  'tlscertificate',
   'user',
 ];
 

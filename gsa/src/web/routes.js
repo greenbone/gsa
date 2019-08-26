@@ -101,6 +101,7 @@ import TaskDetailsPage from './pages/tasks/detailspage';
 import TicketsPage from './pages/tickets/listpage';
 import TicketDetailsPage from './pages/tickets/detailspage';
 import TlsCertificatesPage from './pages/tlscertificates/listpage';
+import TlsCertificateDetailsPage from './pages/tlscertificates/detailspage';
 import TrashcanPage from './pages/extras/trashcanpage';
 import UserDetailsPage from './pages/users/detailspage';
 import UserSettingsPage from './pages/usersettings/usersettingspage';
@@ -180,6 +181,10 @@ const Routes = () => (
               <Route path="/task/:id" component={TaskDetailsPage} />
               <Route path="/target/:id" component={TargetDetailsPage} />
               <Route path="/ticket/:id" component={TicketDetailsPage} />
+              <Route
+                path="/tlscertificate/:id"
+                component={TlsCertificateDetailsPage}
+              />
               <Route path="/alert/:id" component={AlertDetailsPage} />
               <Route path="/note/:id" component={NoteDetailsPage} />
               <Route path="/override/:id" component={OverrideDetailsPage} />
