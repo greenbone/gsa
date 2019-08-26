@@ -76,6 +76,18 @@ const TlsCertificateDetails = ({entity, links = true}) => {
               </TableData>
             </TableRow>
           )}
+          {isDefined(entity.sha256Fingerprint) && (
+            <TableRow>
+              <TableData>{_('SHA-256 Fingerprint')}</TableData>
+              <TableData>{entity.sha256Fingerprint}</TableData>
+            </TableRow>
+          )}
+          {isDefined(entity.md5Fingerprint) && (
+            <TableRow>
+              <TableData>{_('MD5 Fingerprint')}</TableData>
+              <TableData>{entity.md5Fingerprint}</TableData>
+            </TableRow>
+          )}
         </TableBody>
       </InfoTable>
     </Layout>

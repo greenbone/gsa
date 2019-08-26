@@ -94,6 +94,12 @@ class TlsCertificate extends Model {
     ret.valid = parseBoolean(elem.valid);
     ret.trust = parseBoolean(elem.trust);
 
+    ret.sha256Fingerprint = elem.sha256_fingerprint;
+    delete ret.sha256_fingerprint;
+
+    ret.md5Fingerprint = elem.md5_fingerprint;
+    delete ret.md5_fingerprint;
+
     return ret;
   }
 }
