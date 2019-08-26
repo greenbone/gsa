@@ -25,7 +25,7 @@ import {setLocale} from 'gmp/locale/lang';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
-import {setUsername} from 'web/store/usersettings/actions';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
@@ -87,6 +87,7 @@ describe('Audit Row tests', () => {
       router: true,
     });
 
+    store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
@@ -124,7 +125,7 @@ describe('Audit Row tests', () => {
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
 
     // Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM');
+    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Compliance Status
@@ -178,6 +179,7 @@ describe('Audit Row tests', () => {
       router: true,
     });
 
+    store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
     const {getAllByTestId} = render(
@@ -239,6 +241,7 @@ describe('Audit Row tests', () => {
       router: true,
     });
 
+    store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId, queryAllByTestId} = render(
@@ -340,6 +343,7 @@ describe('Audit Row tests', () => {
       router: true,
     });
 
+    store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
@@ -446,6 +450,7 @@ describe('Audit Row tests', () => {
       router: true,
     });
 
+    store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
@@ -482,7 +487,7 @@ describe('Audit Row tests', () => {
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/5678');
 
     // Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM');
+    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Compliance Status
@@ -554,6 +559,7 @@ describe('Audit Row tests', () => {
       router: true,
     });
 
+    store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
@@ -590,7 +596,7 @@ describe('Audit Row tests', () => {
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
 
     // Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM');
+    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Compliance Status
@@ -662,6 +668,7 @@ describe('Audit Row tests', () => {
       router: true,
     });
 
+    store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
@@ -701,7 +708,7 @@ describe('Audit Row tests', () => {
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
 
     // Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM');
+    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Compliance Status
