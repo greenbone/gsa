@@ -119,7 +119,7 @@ describe('ScanConfig model tests', () => {
     const scanConfig = new ScanConfig(elem);
 
     expect(scanConfig.families.count).toEqual(42);
-    expect(scanConfig.families.trend).toEqual('1');
+    expect(scanConfig.families.trend).toEqual(1);
     expect(scanConfig.family_count).toBeUndefined();
   });
 
@@ -134,7 +134,7 @@ describe('ScanConfig model tests', () => {
     };
     const res = {
       count: 42,
-      trend: '1',
+      trend: 1,
       known: 21,
       max: 1337,
     };
