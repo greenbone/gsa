@@ -54,18 +54,6 @@ const TlsCertificateDetails = ({entity, links = true}) => {
           <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(entity.comment) && (
-            <TableRow>
-              <TableData>{_('Comment')}</TableData>
-              <TableData>{entity.comment}</TableData>
-            </TableRow>
-          )}
-          {isDefined(entity.trust) && (
-            <TableRow>
-              <TableData>{_('Trusted')}</TableData>
-              <TableData>{renderYesNo(entity.trust)}</TableData>
-            </TableRow>
-          )}
           {isDefined(entity.valid) && (
             <TableRow>
               <TableData>{_('Valid')}</TableData>
@@ -86,6 +74,18 @@ const TlsCertificateDetails = ({entity, links = true}) => {
               <TableData>
                 <DateTime date={entity.expirationTime} />
               </TableData>
+            </TableRow>
+          )}
+          {isDefined(entity.sha256Fingerprint) && (
+            <TableRow>
+              <TableData>{_('SHA-256 Fingerprint')}</TableData>
+              <TableData>{entity.sha256Fingerprint}</TableData>
+            </TableRow>
+          )}
+          {isDefined(entity.md5Fingerprint) && (
+            <TableRow>
+              <TableData>{_('MD5 Fingerprint')}</TableData>
+              <TableData>{entity.md5Fingerprint}</TableData>
             </TableRow>
           )}
         </TableBody>

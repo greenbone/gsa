@@ -44,6 +44,7 @@ import RemoveFromAssetsIcon from 'web/components/icon/removefromassetsicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
 import TaskIcon from 'web/components/icon/taskicon';
+import TlsCertificateIcon from 'web/components/icon/tlscertificateicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import Divider from 'web/components/layout/divider';
@@ -190,6 +191,15 @@ const ToolBarIcons = ({
             >
               <VulnerabilityIcon />
             </Link>
+            {!delta && (
+              <Link
+                to="tlscertificates"
+                filter={'report_id=' + report.id}
+                title={_('Corresponding TLS Certificates')}
+              >
+                <TlsCertificateIcon />
+              </Link>
+            )}
             {isDefined(task) && !task.isContainer() && (
               <Link
                 to="performance"
@@ -294,7 +304,7 @@ const PageContent = ({
     ports,
     results,
     result_count = {},
-    tls_certificates,
+    tlsCertificates,
     timestamp,
     scan_run_status,
   } = report;
@@ -437,7 +447,7 @@ const PageContent = ({
                   <Tab>
                     <TabTitle
                       title={_('TLS Certificates')}
-                      counts={tls_certificates.counts}
+                      counts={tlsCertificates.counts}
                     />
                   </Tab>
                 )}
@@ -727,8 +737,8 @@ const PageContent = ({
                   </TabPanel>
                   <TabPanel>
                     <ReportEntitiesContainer
-                      counts={tls_certificates.counts}
-                      entities={tls_certificates.entities}
+                      counts={tlsCertificates.counts}
+                      entities={tlsCertificates.entities}
                       filter={filter}
                       sortFunctions={tlsCertificatesSortFunctions}
                       sortField={sorting.tlscerts.sortField}

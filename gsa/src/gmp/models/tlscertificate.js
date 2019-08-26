@@ -48,7 +48,7 @@ class TlsCertificate extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
-    ret.issuerDn = elem.issuer_dn;
+    ret.name = elem.issuer_dn;
     delete ret.issuer_dn;
 
     ret.activationTime = parseDate(elem.activation_time);
@@ -93,6 +93,12 @@ class TlsCertificate extends Model {
 
     ret.valid = parseBoolean(elem.valid);
     ret.trust = parseBoolean(elem.trust);
+
+    ret.sha256Fingerprint = elem.sha256_fingerprint;
+    delete ret.sha256_fingerprint;
+
+    ret.md5Fingerprint = elem.md5_fingerprint;
+    delete ret.md5_fingerprint;
 
     return ret;
   }

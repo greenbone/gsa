@@ -66,8 +66,8 @@ const Actions = withEntitiesActions(
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
-  onOsDeleteClick: PropTypes.func.isRequired,
-  onOsDownloadClick: PropTypes.func.isRequired,
+  onTlsCertificateDeleteClick: PropTypes.func.isRequired,
+  onTlsCertificateDownloadClick: PropTypes.func.isRequired,
 };
 
 const Row = ({
@@ -82,7 +82,7 @@ const Row = ({
       <TableData>
         <span>
           <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-            <Div>{entity.issuerDn}</Div>
+            <Div>{entity.name}</Div>
           </RowDetailsToggle>
         </span>
       </TableData>
