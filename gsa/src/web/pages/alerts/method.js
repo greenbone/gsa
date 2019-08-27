@@ -70,8 +70,7 @@ const Method = ({method = {}, details = false, reportFormats}) => {
     }
     return null;
   };
-
-  console.log(getReportFormatName('a684c02c-b531-11e1-bdc2-406186ea4fc5'));
+  console.log(method);
   let url = '';
   if (method.type === METHOD_TYPE_ALEMBA_VFIRE) {
     const {data = {}} = method;
@@ -300,7 +299,6 @@ const Method = ({method = {}, details = false, reportFormats}) => {
   if (method.type === METHOD_TYPE_EMAIL && isDefined(method.data.to_address)) {
     const {data = {}} = method;
     const {to_address = {}, from_address = {}} = data;
-    console.log(data);
     // TODO improve email content info. the info depends on the event type :-/
     if (details) {
       return (
@@ -360,6 +358,17 @@ const Method = ({method = {}, details = false, reportFormats}) => {
                     <TableData>{_('Report Format')}</TableData>
                     <TableData>
                       {getReportFormatName(data.notice_report_format.value)}
+                    </TableData>
+                  </TableRow>
+                )}
+
+              {details &&
+                isDefined(data.notice_attach_format) &&
+                isDefined(data.notice_attach_format.value) && (
+                  <TableRow>
+                    <TableData>{_('Report Format')}</TableData>
+                    <TableData>
+                      {getReportFormatName(data.notice_attach_format.value)}
                     </TableData>
                   </TableRow>
                 )}
@@ -486,6 +495,18 @@ const Method = ({method = {}, details = false, reportFormats}) => {
                   <TableData>{credential.login}</TableData>
                 </TableRow>
               )}
+
+              {isDefined(data.verinice_server_report_format) &&
+                isDefined(data.verinice_server_report_format.value) && (
+                  <TableRow>
+                    <TableData>{_('verinice.PRO Report')}</TableData>
+                    <TableData>
+                      {getReportFormatName(
+                        data.verinice_server_report_format.value,
+                      )}
+                    </TableData>
+                  </TableRow>
+                )}
             </TableBody>
           </Table>
         </div>
