@@ -41,6 +41,8 @@ import {
 
 import PropTypes from 'web/utils/proptypes';
 
+import HorizontalSep from 'web/components/layout/horizontalsep';
+
 import DetailsLink from 'web/components/link/detailslink';
 
 import SimpleTable from 'web/components/table/simpletable';
@@ -74,6 +76,7 @@ const Method = ({method = {}, details = false, reportFormats}) => {
   let url = '';
   if (method.type === METHOD_TYPE_ALEMBA_VFIRE) {
     const {data = {}} = method;
+
     if (details) {
       return (
         <div>
@@ -84,6 +87,18 @@ const Method = ({method = {}, details = false, reportFormats}) => {
               <Col width="88%" />
             </colgroup>
             <TableBody>
+              {isDefined(data.report_formats) && (
+                <TableRow>
+                  <TableData>{_('Report Formats')}</TableData>
+                  <TableData>
+                    <HorizontalSep separator="," wrap spacing="0">
+                      {data.report_formats.map(id => (
+                        <span key={id}>{getReportFormatName(id)}</span>
+                      ))}
+                    </HorizontalSep>
+                  </TableData>
+                </TableRow>
+              )}
               {isDefined(data.vfire_base_url) &&
                 isDefined(data.vfire_base_url.value) && (
                   <TableRow>
