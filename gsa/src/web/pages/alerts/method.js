@@ -65,7 +65,10 @@ const Method = ({method = {}, details = false, reportFormats}) => {
   }
 
   const getReportFormatName = id => {
-    return reportFormats.find(format => format.id === id).name;
+    if (isDefined(reportFormats)) {
+      return reportFormats.find(format => format.id === id).name;
+    }
+    return null;
   };
 
   console.log(getReportFormatName('a684c02c-b531-11e1-bdc2-406186ea4fc5'));
@@ -297,6 +300,7 @@ const Method = ({method = {}, details = false, reportFormats}) => {
   if (method.type === METHOD_TYPE_EMAIL && isDefined(method.data.to_address)) {
     const {data = {}} = method;
     const {to_address = {}, from_address = {}} = data;
+    console.log(data);
     // TODO improve email content info. the info depends on the event type :-/
     if (details) {
       return (
@@ -345,6 +349,17 @@ const Method = ({method = {}, details = false, reportFormats}) => {
                         : data.notice.value === EMAIL_NOTICE_ATTACH
                         ? _('Attach Content')
                         : _('Simple Notice')}
+                    </TableData>
+                  </TableRow>
+                )}
+
+              {details &&
+                isDefined(data.notice_report_format) &&
+                isDefined(data.notice_report_format.value) && (
+                  <TableRow>
+                    <TableData>{_('Report Format')}</TableData>
+                    <TableData>
+                      {getReportFormatName(data.notice_report_format.value)}
                     </TableData>
                   </TableRow>
                 )}
