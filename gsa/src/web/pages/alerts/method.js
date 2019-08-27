@@ -221,6 +221,16 @@ const Method = ({method = {}, details = false, reportFormats}) => {
                   <TableData>{data.scp_path.value}</TableData>
                 </TableRow>
               )}
+
+              {isDefined(data.scp_report_format) &&
+                isDefined(data.scp_report_format.value) && (
+                  <TableRow>
+                    <TableData>{_('Report Format')}</TableData>
+                    <TableData>
+                      {getReportFormatName(data.scp_report_format.value)}
+                    </TableData>
+                  </TableRow>
+                )}
             </TableBody>
           </Table>
         </div>
