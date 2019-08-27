@@ -59,10 +59,16 @@ const Table = styled(SimpleTable)`
   }
 `;
 
-const Method = ({method = {}, details = false}) => {
+const Method = ({method = {}, details = false, reportFormats}) => {
   if (!isDefined(method.type)) {
     return null;
   }
+
+  const getReportFormatName = id => {
+    return reportFormats.find(format => format.id === id).name;
+  };
+
+  console.log(getReportFormatName('a684c02c-b531-11e1-bdc2-406186ea4fc5'));
   let url = '';
   if (method.type === METHOD_TYPE_ALEMBA_VFIRE) {
     const {data = {}} = method;
@@ -479,6 +485,7 @@ const Method = ({method = {}, details = false}) => {
 Method.propTypes = {
   details: PropTypes.bool,
   method: PropTypes.object.isRequired,
+  reportFormats: PropTypes.array,
 };
 
 export default Method;
