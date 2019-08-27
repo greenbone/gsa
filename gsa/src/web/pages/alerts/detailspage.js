@@ -33,6 +33,7 @@ import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
+import {ALL_FILTER} from 'gmp/models/filter';
 
 import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
@@ -56,6 +57,11 @@ import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
+
+import {
+  loadAllEntities as loadReportFormats,
+  selector as reportFormatsSelector,
+} from 'web/store/entities/reportformats';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -105,6 +111,7 @@ ToolBarIcons.propTypes = {
 const Page = ({
   entity,
   permissions = [],
+  reportFormats,
   onChanged,
   onDownloaded,
   onError,
@@ -158,7 +165,10 @@ const Page = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <AlertDetails entity={entity} />
+                    <AlertDetails
+                      entity={entity}
+                      reportFormats={reportFormats}
+                    />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags
@@ -191,6 +201,7 @@ const Page = ({
 Page.propTypes = {
   entity: PropTypes.model,
   permissions: PropTypes.array,
+  reportFormats: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
@@ -200,17 +211,21 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
+  const loadReportFormatsFunc = loadReportFormats(gmp);
   return id => dispatch =>
     Promise.all([
       dispatch(loadEntityFunc(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+      dispatch(loadReportFormatsFunc(ALL_FILTER)),
     ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {
   const permissionsSel = permissionsSelector(rootState);
+  const reportFormatsSel = reportFormatsSelector(rootState);
   return {
     permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
+    reportFormats: reportFormatsSel.getAllEntities(ALL_FILTER),
   };
 };
 
