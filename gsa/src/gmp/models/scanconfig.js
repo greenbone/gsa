@@ -34,6 +34,9 @@ export const FULL_AND_FAST_SCAN_CONFIG_ID =
 export const OSP_SCAN_CONFIG_TYPE = 1;
 export const OPENVAS_SCAN_CONFIG_TYPE = 0;
 
+export const SCANCONFIG_TREND_DYNAMIC = 1;
+export const SCANCONFIG_TREND_STATIC = 0;
+
 export const getTranslatedType = config => {
   return config.scan_config_type === OSP_SCAN_CONFIG_TYPE
     ? _('OSP')
@@ -51,6 +54,8 @@ export const openVasScanConfigsFilter = config =>
   config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE;
 export const ospScanConfigsFilter = config =>
   config.scan_config_type === OSP_SCAN_CONFIG_TYPE;
+
+const parseTrend = parseInt;
 
 class ScanConfig extends Model {
   static entityType = 'scanconfig';
@@ -82,7 +87,7 @@ class ScanConfig extends Model {
 
     if (isDefined(ret.family_count)) {
       families.count = parse_count(ret.family_count.__text);
-      families.trend = ret.family_count.growing;
+      families.trend = parseTrend(ret.family_count.growing);
 
       delete ret.family_count;
     } else {
@@ -94,7 +99,7 @@ class ScanConfig extends Model {
     if (isDefined(ret.nvt_count)) {
       ret.nvts = {
         count: parse_count(ret.nvt_count.__text),
-        trend: ret.nvt_count.growing,
+        trend: parseTrend(ret.nvt_count.growing),
       };
 
       delete ret.nvt_count;
