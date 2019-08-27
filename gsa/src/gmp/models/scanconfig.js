@@ -55,7 +55,7 @@ export const openVasScanConfigsFilter = config =>
 export const ospScanConfigsFilter = config =>
   config.scan_config_type === OSP_SCAN_CONFIG_TYPE;
 
-const parseTrend = trend => parseInt(trend);
+const parseTrend = parseInt;
 
 class ScanConfig extends Model {
   static entityType = 'scanconfig';
