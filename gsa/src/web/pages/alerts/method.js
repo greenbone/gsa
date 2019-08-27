@@ -78,7 +78,6 @@ const Method = ({method = {}, details = false, reportFormats}) => {
     }
     return null;
   };
-  console.log(method);
   let url = '';
   if (method.type === METHOD_TYPE_ALEMBA_VFIRE) {
     const {data = {}} = method;
