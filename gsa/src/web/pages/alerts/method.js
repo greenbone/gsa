@@ -30,6 +30,7 @@ import {
   METHOD_TYPE_ALEMBA_VFIRE,
   METHOD_TYPE_SCP,
   METHOD_TYPE_SEND,
+  METHOD_TYPE_SMB,
   METHOD_TYPE_SNMP,
   METHOD_TYPE_SYSLOG,
   METHOD_TYPE_EMAIL,
@@ -59,6 +60,11 @@ const Table = styled(SimpleTable)`
   & td {
     padding: 0;
   }
+`;
+
+const Pre = styled.pre`
+  white-space: pre-wrap;
+  word-wrap: normal;
 `;
 
 const Method = ({method = {}, details = false, reportFormats}) => {
@@ -269,6 +275,34 @@ const Method = ({method = {}, details = false, reportFormats}) => {
     return _('SCP to {{- url}}', {url});
   }
 
+  if (method.type === METHOD_TYPE_SMB) {
+    const {data = {}} = method;
+    if (details) {
+      return (
+        <div>
+          <div>{_('SMP')}</div>
+          <Table>
+            <colgroup>
+              <Col width="12%" />
+              <Col width="88%" />
+            </colgroup>
+            <TableBody>
+              {isDefined(data.smb_report_format) &&
+                isDefined(data.smb_report_format.value) && (
+                  <TableRow>
+                    <TableData>{_('Report Format')}</TableData>
+                    <TableData>
+                      {getReportFormatName(data.smb_report_format.value)}
+                    </TableData>
+                  </TableRow>
+                )}
+            </TableBody>
+          </Table>
+        </div>
+      );
+    }
+  }
+
   if (method.type === METHOD_TYPE_SEND) {
     // need to make this prettier
     const {data = {}} = method;
@@ -334,7 +368,9 @@ const Method = ({method = {}, details = false, reportFormats}) => {
               {isDefined(snmp_agent.value) && (
                 <TableRow>
                   <TableData>{_('Message {{name}}')}</TableData>
-                  <TableData>{data.snmp_message.value}</TableData>
+                  <TableData>
+                    <Pre>{data.snmp_message.value}</Pre>
+                  </TableData>
                 </TableRow>
               )}
             </TableBody>
@@ -436,7 +472,9 @@ const Method = ({method = {}, details = false, reportFormats}) => {
                 isDefined(data.message.value) && (
                   <TableRow>
                     <TableData>{_('Message')}</TableData>
-                    <TableData>{data.message.value}</TableData>
+                    <TableData>
+                      <Pre>{data.message.value}</Pre>
+                    </TableData>
                   </TableRow>
                 )}
             </TableBody>
