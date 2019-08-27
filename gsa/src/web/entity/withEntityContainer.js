@@ -80,9 +80,10 @@ const withEntityContainer = (
     load: id => dispatch(load(gmp)(id)),
   });
 
-  const mapStateToProps = (rootState, {gmp, match, ...props}) => {
-    let {id} = match.params;
-    id = decodeURIComponent(id); // needs to be done for CPE IDs
+  const mapStateToProps = (rootState, {gmp, id, match, ...props}) => {
+    if (!isDefined(id)) {
+      id = decodeURIComponent(match.params.id); // decodeURIComponent needs to be done for CPE IDs
+    }
     const entitySel = entitySelector(rootState);
     const otherProps = isDefined(componentMapStateToProps)
       ? componentMapStateToProps(rootState, {
