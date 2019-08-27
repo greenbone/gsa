@@ -255,8 +255,32 @@ const Method = ({method = {}, details = false, reportFormats}) => {
   }
 
   if (method.type === METHOD_TYPE_SEND) {
-    url += method.data.send_host.value + ':' + method.data.send_port.value;
-    return _('Send to {{- url}}', {url});
+    // need to make this prettier
+    const {data = {}} = method;
+    url += data.send_host.value + ':' + data.send_port.value;
+    return (
+      <div>
+        <div>{_('Send to {{- url}}', {url})}</div>
+        <Table>
+          <colgroup>
+            <Col width="12%" />
+            <Col width="88%" />
+          </colgroup>
+          <TableBody>
+            {details &&
+              isDefined(data.send_report_format) &&
+              isDefined(data.send_report_format.value) && (
+                <TableRow>
+                  <TableData>{_('Report Format')}</TableData>
+                  <TableData>
+                    {getReportFormatName(data.send_report_format.value)}
+                  </TableData>
+                </TableRow>
+              )}
+          </TableBody>
+        </Table>
+      </div>
+    );
   }
 
   if (
