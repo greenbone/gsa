@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- disable EditIcon for My Settings if permission denied [#1588](https://github.com/greenbone/gsa/pull/1588)
 - don't allow to clone hosts [#1581](https://github.com/greenbone/gsa/pull/1581)
 - trigger alert button disabled in report details page when no permission [#1574](https://github.com/greenbone/gsa/pull/1574)
 - Update default filter for report details page [#1552](https://github.com/greenbone/gsa/pull/1552)

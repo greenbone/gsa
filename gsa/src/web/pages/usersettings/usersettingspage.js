@@ -160,26 +160,34 @@ SettingTableRow.propTypes = {
   type: PropTypes.string.isRequired,
 };
 
-const ToolBarIcons = ({disableEditIcon, onEditSettingsClick}) => (
-  <Layout>
-    <IconDivider>
-      <ManualIcon
-        size="small"
-        page="web-interface"
-        anchor="changing-the-user-settings"
-        title={_('Help: My Settings')}
-      />
-      <EditIcon
-        disabled={disableEditIcon}
-        size="small"
-        title={_('Edit My Settings')}
-        onClick={onEditSettingsClick}
-      />
-    </IconDivider>
-  </Layout>
-);
+const ToolBarIcons = ({capabilities, disableEditIcon, onEditSettingsClick}) => {
+  const mayEdit = capabilities.mayEdit('setting');
+  const editIconTitle = mayEdit
+    ? _('Edit My Settings')
+    : _('Permission to edit settings denied');
+
+  return (
+    <Layout>
+      <IconDivider>
+        <ManualIcon
+          size="small"
+          page="web-interface"
+          anchor="changing-the-user-settings"
+          title={_('Help: My Settings')}
+        />
+        <EditIcon
+          disabled={disableEditIcon || !mayEdit}
+          size="small"
+          title={editIconTitle}
+          onClick={onEditSettingsClick}
+        />
+      </IconDivider>
+    </Layout>
+  );
+};
 
 ToolBarIcons.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   disableEditIcon: PropTypes.bool.isRequired,
   onEditSettingsClick: PropTypes.func.isRequired,
 };
@@ -366,6 +374,7 @@ class UserSettings extends React.Component {
     return (
       <Layout flex="column">
         <ToolBarIcons
+          capabilities={capabilities}
           disableEditIcon={disableEditIcon}
           onEditSettingsClick={this.openDialog}
         />
