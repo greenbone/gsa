@@ -44,8 +44,7 @@ import {SecInfoDashboard, SECINFO_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = () => (
   <ManualIcon
-    page="vulnerabilitymanagement"
-    anchor="secinfo-management"
+    page="managing-secinfo"
     title={_('Help: All SecInfo Information')}
   />
 );

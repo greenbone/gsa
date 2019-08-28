@@ -19,8 +19,7 @@
 import {isDefined} from './utils/identity';
 
 export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
-export const DEFAULT_MANUAL_URL =
-  'https://docs.greenbone.net/GSM-Manual/gos-4/';
+export const DEFAULT_MANUAL_URL = 'http://docs.greenbone.net/GSM-Manual/gos-5/';
 export const DEFAULT_PROTOCOLDOC_URL =
   'https://docs.greenbone.net/API/GMP/gmp-8.0.html';
 export const DEFAULT_LOG_LEVEL = 'warn';

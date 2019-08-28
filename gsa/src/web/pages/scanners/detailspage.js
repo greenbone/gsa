@@ -83,8 +83,8 @@ const ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="search"
-          searchTerm="scanner"
+          page="scanning"
+          anchor="managing-scanners"
           title={_('Help: Scanners')}
         />
         <ListIcon title={_('Scanner List')} page="scanners" />

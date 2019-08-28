@@ -162,23 +162,28 @@ class ScannerComponent extends React.Component {
     this.handleInteraction();
   }
 
+  handleVerifyFailure(response) {
+    const {onVerifyError} = this.props;
+    const message =
+      isDefined(response.root) &&
+      isDefined(response.root.action_result) &&
+      isDefined(response.root.action_result.message)
+        ? response.root.action_result.message
+        : _('Unknown Error');
+
+    if (isDefined(onVerifyError)) {
+      onVerifyError(new Error(message));
+    }
+  }
+
   handleVerifyScanner(scanner) {
-    const {gmp, onVerified, onVerifyError} = this.props;
+    const {gmp, onVerified} = this.props;
 
     this.handleInteraction();
 
-    return gmp.scanner.verify(scanner).then(onVerified, response => {
-      const message =
-        isDefined(response.root) &&
-        isDefined(response.root.get_scanner) &&
-        isDefined(response.root.get_scanner.verify_scanner_response)
-          ? response.root.get_scanner.verify_scanner_response._status_text
-          : _('Unkown Error');
-
-      if (isDefined(onVerifyError)) {
-        onVerifyError(new Error(message));
-      }
-    });
+    return gmp.scanner
+      .verify(scanner)
+      .then(onVerified, response => this.handleVerifyFailure(response));
   }
 
   handleCreateCredential(data) {

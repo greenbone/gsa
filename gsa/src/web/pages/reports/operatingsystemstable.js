@@ -52,7 +52,7 @@ const Header = ({currentSortDir, currentSortBy, sort = true, onSortChange}) => (
         currentSortBy={currentSortBy}
         sortBy={sort ? 'cpe' : false}
         onSortChange={onSortChange}
-        title={_('Hostname')}
+        title={_('CPE')}
       />
       <TableHead
         currentSortDir={currentSortDir}

@@ -676,7 +676,7 @@ describe('parseCvssBaseFromVector tests', () => {
     expect(parseCvssBaseFromVector('AU:S')).toEqual({
       accessVector: undefined,
       accessComplexity: undefined,
-      authentication: 'SINGLE_INSTANCES',
+      authentication: 'SINGLE_INSTANCE',
       availabilityImpact: undefined,
       confidentialityImpact: undefined,
       integrityImpact: undefined,
@@ -776,7 +776,7 @@ describe('parseCvssBaseFromVector tests', () => {
     expect(parseCvssBaseFromVector('AV:N/AC:H/AU:S/C:C/I:C/A:C')).toEqual({
       accessVector: 'NETWORK',
       accessComplexity: 'HIGH',
-      authentication: 'SINGLE_INSTANCES',
+      authentication: 'SINGLE_INSTANCE',
       availabilityImpact: 'COMPLETE',
       confidentialityImpact: 'COMPLETE',
       integrityImpact: 'COMPLETE',

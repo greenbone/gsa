@@ -48,7 +48,7 @@ import Condition from './condition';
 import Event from './event';
 import Method from './method';
 
-const AlertDetails = ({capabilities, entity, links = true}) => {
+const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
   const {comment, condition, event, method, tasks = [], filter} = entity;
   return (
     <Layout flex="column" grow>
@@ -112,7 +112,11 @@ const AlertDetails = ({capabilities, entity, links = true}) => {
           <TableRow>
             <TableData>{_('Method')}</TableData>
             <TableData>
-              <Method method={method} details={true} />
+              <Method
+                method={method}
+                details={true}
+                reportFormats={reportFormats}
+              />
             </TableData>
           </TableRow>
 
@@ -171,6 +175,7 @@ AlertDetails.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  reportFormats: PropTypes.array,
 };
 
 export default withCapabilities(AlertDetails);

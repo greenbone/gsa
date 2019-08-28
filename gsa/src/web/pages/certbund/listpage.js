@@ -44,8 +44,8 @@ import CertBundDashboard, {CERTBUND_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = props => (
   <ManualIcon
-    page="vulnerabilitymanagement"
-    anchor="cert-bund"
+    page="managing-secinfo"
+    anchor="cert-bund-advisories"
     title={_('Help: CERT-Bund Advisories')}
   />
 );

@@ -43,11 +43,7 @@ import CvesTable from './table';
 import CvesDashboard, {CVES_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = () => (
-  <ManualIcon
-    page="vulnerabilitymanagement"
-    anchor="cve"
-    title={_('Help: CVEs')}
-  />
+  <ManualIcon page="managing-secinfo" anchor="cve" title={_('Help: CVEs')} />
 );
 
 const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (

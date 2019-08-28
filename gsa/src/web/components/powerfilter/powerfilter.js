@@ -226,8 +226,8 @@ class PowerFilter extends React.Component {
 
               <ManualIcon
                 title={_('Help: Powerfilter')}
-                page="gui_introduction"
-                anchor="powerfilter"
+                page="web-interface"
+                anchor="filtering-the-page-content"
               />
 
               {onEditClick && (

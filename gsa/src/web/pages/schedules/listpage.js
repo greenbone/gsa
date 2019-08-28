@@ -48,8 +48,8 @@ const ToolBarIcons = withCapabilities(
   ({capabilities, onScheduleCreateClick}) => (
     <IconDivider>
       <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="scheduled-scan"
+        page="scanning"
+        anchor="managing-schedules"
         title={_('Help: Schedules')}
       />
       {capabilities.mayCreate('schedule') && (

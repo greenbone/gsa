@@ -53,7 +53,7 @@ import LdapDialog from './dialog';
 const ToolBarIcons = ({onOpenDialogClick}) => (
   <IconDivider>
     <ManualIcon
-      page="gui_administration"
+      page="web-interface-access"
       anchor="ldap"
       size="small"
       title={_('Help: LDAP per-User Authentication')}

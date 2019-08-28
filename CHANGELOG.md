@@ -60,6 +60,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.2] - unreleased
 
 ### Added
+- Added loading indicator for edit config dialog [#1579](https://github.com/greenbone/gsa/pull/1579)
+- Added tooltip for settings in task edit dialog that can't be changed once the task has been run [#1568](https://github.com/greenbone/gsa/pull/1568)
+- Added success dialog to report formats listpage [#1566](https://github.com/greenbone/gsa/pull/1566)
 - Added an explicit get_capabilities command to gsad [#1538](https://github.com/greenbone/gsa/pull/1538)
 - Highlight result diffs at delta reports [#1513](https://github.com/greenbone/gsa/pull/1513)
 - Added HorizontalSep component for horizontal lists
@@ -67,11 +70,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- word-wrap in pre component [#1586](https://github.com/greenbone/gsa/pull/1586)
+- Disable EditIcon for My Settings if permission denied [#1588](https://github.com/greenbone/gsa/pull/1588)
+- Don't allow to clone hosts [#1581](https://github.com/greenbone/gsa/pull/1581)
+- Trigger alert button disabled in report details page when no permission [#1574](https://github.com/greenbone/gsa/pull/1574)
+- Update default filter for report details page [#1552](https://github.com/greenbone/gsa/pull/1552)
+- Adjust HelpIcons to use GOS 5 manual [#1549](https://github.com/greenbone/gsa/pull/1549) [#1550](https://github.com/greenbone/gsa/pull/1550)
+- Adjust clickable areas for Select and MultiSelect [#1545](https://github.com/greenbone/gsa/pull/1545)
 - Redirect to main page when visiting the login page and the user is already
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
-- Fix showing ScanConfig trends [#1562](https://github.com/greenbone/gsa/pull/1562)
+- Fix and improve editing of roles [#1587](https://github.com/greenbone/gsa/pull/1587)
+- Fix showing ScanConfig trends [#1582](https://github.com/greenbone/gsa/pull/1582) [#1554](https://github.com/greenbone/gsa/pull/1554)
+- Show HostsCount at SectionTitle [#1576](https://github.com/greenbone/gsa/pull/1576)
+- Fixed creating target from hosts [#1575](https://github.com/greenbone/gsa/pull/1575)
+- Fixed CVSSBaseCalculatorv2 [#1572](https://github.com/greenbone/gsa/pull/1572)
+- Fix title in Operating Systems table of Reports [#1567](https://github.com/greenbone/gsa/pull/1567)
+- Fix displaying only usable report formats at report download [#1565](https://github.com/greenbone/gsa/pull/1565)
+- Fix handling schedule_periods ("once" option) in TaskDialog [#1563](https://github.com/greenbone/gsa/pull/1563)
+- Fix showing inactive VerifyIcon at ReportFormats detailspage [#1554](https://github.com/greenbone/gsa/pull/1554)
+- Fix showing SensorIcon for tasks [#1548](https://github.com/greenbone/gsa/pull/1548)
 - Always show an identifier for results [#1543](https://github.com/greenbone/gsa/pull/1543)
 - Don't crash Alerts listpage and trashcan when Alert data is missing [#1541](https://github.com/greenbone/gsa/pull/1541)
 - Fix calculating the next date of schedules [#1539](https://github.com/greenbone/gsa/pull/1539)

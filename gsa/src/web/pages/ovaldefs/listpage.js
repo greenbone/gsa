@@ -44,8 +44,8 @@ import OvaldefDashboard, {OVALDEF_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = () => (
   <ManualIcon
-    page="vulnerabilitymanagement"
-    anchor="oval"
+    page="managing-secinfo"
+    anchor="oval-definitions"
     title={_('Help: OVAL Definitions')}
   />
 );

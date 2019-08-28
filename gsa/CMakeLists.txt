@@ -257,6 +257,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/folding/folding.js
      ${GSA_SRC_DIR}/src/web/components/footnote/footnote.js
      ${GSA_SRC_DIR}/src/web/components/form/button.js
+     ${GSA_SRC_DIR}/src/web/components/form/loadingbutton.js
      ${GSA_SRC_DIR}/src/web/components/form/checkbox.js
      ${GSA_SRC_DIR}/src/web/components/form/datepicker.js
      ${GSA_SRC_DIR}/src/web/components/form/download.js

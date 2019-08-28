@@ -30,6 +30,7 @@ import {
   METHOD_TYPE_ALEMBA_VFIRE,
   METHOD_TYPE_SCP,
   METHOD_TYPE_SEND,
+  METHOD_TYPE_SMB,
   METHOD_TYPE_SNMP,
   METHOD_TYPE_SYSLOG,
   METHOD_TYPE_EMAIL,
@@ -40,6 +41,8 @@ import {
 } from 'gmp/models/alert';
 
 import PropTypes from 'web/utils/proptypes';
+
+import HorizontalSep from 'web/components/layout/horizontalsep';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -59,13 +62,27 @@ const Table = styled(SimpleTable)`
   }
 `;
 
-const Method = ({method = {}, details = false}) => {
+const Pre = styled.pre`
+  white-space: pre-wrap;
+  word-wrap: break-word;
+`;
+
+const Method = ({method = {}, details = false, reportFormats = []}) => {
   if (!isDefined(method.type)) {
     return null;
   }
+
+  const getReportFormatName = id => {
+    const reportFormat = reportFormats.find(format => format.id === id);
+    if (isDefined(reportFormat)) {
+      return reportFormat.name;
+    }
+    return null;
+  };
   let url = '';
   if (method.type === METHOD_TYPE_ALEMBA_VFIRE) {
     const {data = {}} = method;
+
     if (details) {
       return (
         <div>
@@ -76,6 +93,18 @@ const Method = ({method = {}, details = false}) => {
               <Col width="88%" />
             </colgroup>
             <TableBody>
+              {isDefined(data.report_formats) && (
+                <TableRow>
+                  <TableData>{_('Report Formats')}</TableData>
+                  <TableData>
+                    <HorizontalSep separator="," wrap spacing="0">
+                      {data.report_formats.map(id => (
+                        <span key={id}>{getReportFormatName(id)}</span>
+                      ))}
+                    </HorizontalSep>
+                  </TableData>
+                </TableRow>
+              )}
               {isDefined(data.vfire_base_url) &&
                 isDefined(data.vfire_base_url.value) && (
                   <TableRow>
@@ -213,6 +242,16 @@ const Method = ({method = {}, details = false}) => {
                   <TableData>{data.scp_path.value}</TableData>
                 </TableRow>
               )}
+
+              {isDefined(data.scp_report_format) &&
+                isDefined(data.scp_report_format.value) && (
+                  <TableRow>
+                    <TableData>{_('Report Format')}</TableData>
+                    <TableData>
+                      {getReportFormatName(data.scp_report_format.value)}
+                    </TableData>
+                  </TableRow>
+                )}
             </TableBody>
           </Table>
         </div>
@@ -236,9 +275,61 @@ const Method = ({method = {}, details = false}) => {
     return _('SCP to {{- url}}', {url});
   }
 
+  if (method.type === METHOD_TYPE_SMB) {
+    const {data = {}} = method;
+    if (details) {
+      return (
+        <div>
+          <div>{_('SMP')}</div>
+          <Table>
+            <colgroup>
+              <Col width="12%" />
+              <Col width="88%" />
+            </colgroup>
+            <TableBody>
+              {isDefined(data.smb_report_format) &&
+                isDefined(data.smb_report_format.value) && (
+                  <TableRow>
+                    <TableData>{_('Report Format')}</TableData>
+                    <TableData>
+                      {getReportFormatName(data.smb_report_format.value)}
+                    </TableData>
+                  </TableRow>
+                )}
+            </TableBody>
+          </Table>
+        </div>
+      );
+    }
+  }
+
   if (method.type === METHOD_TYPE_SEND) {
-    url += method.data.send_host.value + ':' + method.data.send_port.value;
-    return _('Send to {{- url}}', {url});
+    // need to make this prettier
+    const {data = {}} = method;
+    url += data.send_host.value + ':' + data.send_port.value;
+    return (
+      <div>
+        <div>{_('Send to {{- url}}', {url})}</div>
+        <Table>
+          <colgroup>
+            <Col width="12%" />
+            <Col width="88%" />
+          </colgroup>
+          <TableBody>
+            {details &&
+              isDefined(data.send_report_format) &&
+              isDefined(data.send_report_format.value) && (
+                <TableRow>
+                  <TableData>{_('Report Format')}</TableData>
+                  <TableData>
+                    {getReportFormatName(data.send_report_format.value)}
+                  </TableData>
+                </TableRow>
+              )}
+          </TableBody>
+        </Table>
+      </div>
+    );
   }
 
   if (
@@ -344,6 +435,28 @@ const Method = ({method = {}, details = false}) => {
                 )}
 
               {details &&
+                isDefined(data.notice_report_format) &&
+                isDefined(data.notice_report_format.value) && (
+                  <TableRow>
+                    <TableData>{_('Report Format')}</TableData>
+                    <TableData>
+                      {getReportFormatName(data.notice_report_format.value)}
+                    </TableData>
+                  </TableRow>
+                )}
+
+              {details &&
+                isDefined(data.notice_attach_format) &&
+                isDefined(data.notice_attach_format.value) && (
+                  <TableRow>
+                    <TableData>{_('Report Format')}</TableData>
+                    <TableData>
+                      {getReportFormatName(data.notice_attach_format.value)}
+                    </TableData>
+                  </TableRow>
+                )}
+
+              {details &&
                 isDefined(data.subject) &&
                 isDefined(data.subject.value) && (
                   <TableRow>
@@ -357,7 +470,9 @@ const Method = ({method = {}, details = false}) => {
                 isDefined(data.message.value) && (
                   <TableRow>
                     <TableData>{_('Message')}</TableData>
-                    <TableData>{data.message.value}</TableData>
+                    <TableData>
+                      <Pre>{data.message.value}</Pre>
+                    </TableData>
                   </TableRow>
                 )}
             </TableBody>
@@ -465,6 +580,18 @@ const Method = ({method = {}, details = false}) => {
                   <TableData>{credential.login}</TableData>
                 </TableRow>
               )}
+
+              {isDefined(data.verinice_server_report_format) &&
+                isDefined(data.verinice_server_report_format.value) && (
+                  <TableRow>
+                    <TableData>{_('verinice.PRO Report')}</TableData>
+                    <TableData>
+                      {getReportFormatName(
+                        data.verinice_server_report_format.value,
+                      )}
+                    </TableData>
+                  </TableRow>
+                )}
             </TableBody>
           </Table>
         </div>
@@ -479,6 +606,7 @@ const Method = ({method = {}, details = false}) => {
 Method.propTypes = {
   details: PropTypes.bool,
   method: PropTypes.object.isRequired,
+  reportFormats: PropTypes.array,
 };
 
 export default Method;

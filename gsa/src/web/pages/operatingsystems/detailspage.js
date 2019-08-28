@@ -86,8 +86,8 @@ let ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="vulnerabilitymanagement"
-          anchor="operating-systems-view"
+          page="managing-assets"
+          anchor="managing-operating-systems"
           title={_('Help: Operating Systems')}
         />
         <ListIcon title={_('Operating System List')} page="operatingsystems" />

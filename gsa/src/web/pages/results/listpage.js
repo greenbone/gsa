@@ -46,8 +46,8 @@ import ResultsDashboard, {RESULTS_DASHBOARD_ID} from './dashboard';
 const ToolBarIcons = () => (
   <Layout>
     <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="results"
+      page="reports"
+      anchor="displaying-all-existing-results"
       title={_('Help: Results')}
     />
   </Layout>
