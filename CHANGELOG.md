@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.2] - unreleased
 
 ### Added
+- Added details to alert details page [#1591](https://github.com/greenbone/gsa/pull/1591)
 - Added loading indicator for edit config dialog [#1579](https://github.com/greenbone/gsa/pull/1579)
 - Added tooltip for settings in task edit dialog that can't be changed once the task has been run [#1568](https://github.com/greenbone/gsa/pull/1568)
 - Added success dialog to report formats listpage [#1566](https://github.com/greenbone/gsa/pull/1566)
