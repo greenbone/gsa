@@ -21,7 +21,6 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import ManualIcon from 'web/components/icon/manualicon';
-import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
 import ReportFormatIcon from 'web/components/icon/reportformaticon';
 import VerifyIcon from 'web/components/icon/verifyicon';
@@ -87,8 +86,8 @@ const ToolBarIcons = withCapabilities(
       <IconDivider>
         <ManualIcon
           page="reports"
-          anchor="report-plugins"
-          title={_('Help: Report Format Details')}
+          anchor="managing-report-formats"
+          title={_('Help: Report Formats')}
         />
         <ListIcon title={_('Report Formats List')} page="reportformats" />
       </IconDivider>
@@ -118,18 +117,16 @@ const ToolBarIcons = withCapabilities(
           title={_('Export Report Format as XML')}
           onClick={onReportFormatDownloadClick}
         />
-        {capabilities.mayOp('verify_report_format') ? (
-          <VerifyIcon
-            value={entity}
-            title={_('Verify Report Format')}
-            onClick={onReportFormatVerifyClick}
-          />
-        ) : (
-          <Icon
-            img="verify_inactive.svg"
-            title={_('Permission to verify Report Format denied')}
-          />
-        )}
+        <VerifyIcon
+          disabled={!capabilities.mayOp('verify_report_format')}
+          value={entity}
+          title={
+            capabilities.mayOp('verify_report_format')
+              ? _('Verify Report Format')
+              : _('Permission to verify Report Format denied')
+          }
+          onClick={onReportFormatVerifyClick}
+        />
       </IconDivider>
     </Divider>
   ),

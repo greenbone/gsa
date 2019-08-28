@@ -18,15 +18,30 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-import {first} from 'gmp/utils/array';
+import Filter from 'gmp/models/filter.js';
 
+import {isDefined} from 'gmp/utils/identity';
+
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
+
+import {
+  loadAllEntities as loadAllGroups,
+  selector as groupSelector,
+} from 'web/store/entities/groups';
+
+import {
+  loadAllEntities as loadAllUsers,
+  selector as userSelector,
+} from 'web/store/entities/users';
 
 import RoleDialog from './dialog.js';
 
@@ -51,40 +66,25 @@ class RoleComponent extends React.Component {
   }
 
   openRoleDialog(role) {
-    const {gmp} = this.props;
-
     this.handleInteraction();
 
-    let allUsers = [];
-    gmp.users.getAll().then(response => {
-      allUsers = response.data;
-      this.setState({allUsers});
-    });
+    this.props.loadAllUsers();
 
     if (isDefined(role)) {
+      this.loadSettings(role.id);
+
       this.setState({
-        allUsers,
         dialogVisible: true,
         isInUse: role.isInUse(),
         role,
         title: _('Edit Role {{name}}', role),
       });
-
-      gmp.role.editRoleSettings(role).then(response => {
-        const settings = response.data;
-        this.setState({
-          permissions: settings.permissions,
-          allGroups: settings.groups,
-          allPermissions: settings.all_permissions,
-          groupId: first(settings.groups).id,
-          permissionName: first(settings.all_permissions).name,
-        });
-      });
     } else {
       this.setState({
-        allUsers,
+        allPermissions: undefined,
         dialogVisible: true,
-        role,
+        permissions: undefined,
+        role: undefined,
         isInUse: false,
         title: _('New Role'),
       });
@@ -103,31 +103,37 @@ class RoleComponent extends React.Component {
   handleCreateSuperPermission({roleId, groupId}) {
     const {gmp} = this.props;
 
-    const promise = gmp.permission.create({
-      name: 'Super',
-      resourceType: 'group',
-      resourceId: groupId,
-      roleId,
-      subjectType: 'role',
-    });
-
     this.handleInteraction();
 
-    return this.loadSettings(promise, roleId);
+    this.setState({isCreatingSuperPermission: true});
+
+    return gmp.permission
+      .create({
+        name: 'Super',
+        resourceType: 'group',
+        resourceId: groupId,
+        roleId,
+        subjectType: 'role',
+      })
+      .then(() => this.loadSettings(roleId), error => this.setError(error))
+      .then(() => this.setState({isCreatingSuperPermission: false}));
   }
 
   handleCreatePermission({roleId, name}) {
     const {gmp} = this.props;
 
-    const promise = gmp.permission.create({
-      name,
-      roleId,
-      subjectType: 'role',
-    });
-
     this.handleInteraction();
 
-    return this.loadSettings(promise, roleId);
+    this.setState({isCreatingPermission: true});
+
+    return gmp.permission
+      .create({
+        name,
+        roleId,
+        subjectType: 'role',
+      })
+      .then(() => this.loadSettings(roleId), error => this.setError(error))
+      .then(() => this.setState({isCreatingPermission: false}));
   }
 
   handleDeletePermission({roleId, permissionId}) {
@@ -135,7 +141,9 @@ class RoleComponent extends React.Component {
 
     this.handleInteraction();
 
-    return this.loadSettings(gmp.permission.delete({id: permissionId}), roleId);
+    return gmp.permission
+      .delete({id: permissionId})
+      .then(() => this.loadSettings(roleId), error => this.setError(error));
   }
 
   handleErrorClose() {
@@ -146,22 +154,41 @@ class RoleComponent extends React.Component {
     this.setState({error: error.message});
   }
 
-  loadSettings(promise, roleId) {
-    const {gmp} = this.props;
+  loadSettings(roleId) {
+    const {gmp, capabilities} = this.props;
 
-    return promise
-      .then(() => gmp.role.editRoleSettings({id: roleId}))
-      .then(response => {
-        const settings = response.data;
-        this.setState({
-          permissions: settings.permissions,
-          allPermissions: settings.all_permissions,
-          permissionName: first(settings.all_permissions).name,
-        });
-      })
-      .catch(error => {
-        this.setError(error);
-      });
+    if (capabilities.mayAccess('groups')) {
+      this.props.loadAllGroups(); // groups are only used in edit dialog
+    }
+
+    if (capabilities.mayAccess('permissions')) {
+      this.setState({isLoadingPermissions: true});
+      gmp.permissions
+        .getAll({
+          filter: Filter.fromString(
+            `subject_type=role and subject_uuid=${roleId}`,
+          ),
+        })
+        .then(response => {
+          const allPermissions = [];
+          const {data: permissions = []} = response;
+
+          const perm_names = new Set(
+            permissions
+              .filter(perm => !isDefined(perm.resource))
+              .map(perm => perm.name),
+          );
+
+          for (const cap of capabilities) {
+            if (cap !== 'get_version' && !perm_names.has(cap)) {
+              allPermissions.push(cap);
+            }
+          }
+          this.setState({permissions, allPermissions});
+        })
+        .catch(error => this.setError(error))
+        .then(() => this.setState({isLoadingPermissions: false}));
+    }
   }
 
   handleInteraction() {
@@ -173,6 +200,8 @@ class RoleComponent extends React.Component {
 
   render() {
     const {
+      allGroups,
+      allUsers,
       children,
       onCloned,
       onCloneError,
@@ -188,14 +217,13 @@ class RoleComponent extends React.Component {
     } = this.props;
 
     const {
-      allUsers,
-      allGroups,
       allPermissions,
       dialogVisible,
       error,
-      groupId,
+      isCreatingPermission,
+      isCreatingSuperPermission,
       isInUse,
-      permissionName,
+      isLoadingPermissions,
       permissions,
       role,
       title,
@@ -229,9 +257,10 @@ class RoleComponent extends React.Component {
                 allGroups={allGroups}
                 allPermissions={allPermissions}
                 error={error}
+                isCreatingPermission={isCreatingPermission}
+                isCreatingSuperPermission={isCreatingSuperPermission}
                 isInUse={isInUse}
-                groupId={groupId}
-                permissionName={permissionName}
+                isLoadingPermissions={isLoadingPermissions}
                 permissions={permissions}
                 role={role}
                 title={title}
@@ -256,8 +285,13 @@ class RoleComponent extends React.Component {
 }
 
 RoleComponent.propTypes = {
+  allGroups: PropTypes.arrayOf(PropTypes.model),
+  allUsers: PropTypes.arrayOf(PropTypes.model),
+  capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
   gmp: PropTypes.gmp.isRequired,
+  loadAllGroups: PropTypes.func.isRequired,
+  loadAllUsers: PropTypes.func.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -271,6 +305,27 @@ RoleComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default withGmp(RoleComponent);
+const mapStateToProps = rootState => {
+  const usersSel = userSelector(rootState);
+  const groupsSel = groupSelector(rootState);
+  return {
+    allUsers: usersSel.getAllEntities(),
+    allGroups: groupsSel.getAllEntities(),
+  };
+};
+
+const mapDispatchToProp = (dispatch, {gmp}) => ({
+  loadAllGroups: () => dispatch(loadAllGroups(gmp)()),
+  loadAllUsers: () => dispatch(loadAllUsers(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  withCapabilities,
+  connect(
+    mapStateToProps,
+    mapDispatchToProp,
+  ),
+)(RoleComponent);
 
 // vim: set ts=2 sw=2 tw=80:

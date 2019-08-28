@@ -47,8 +47,8 @@ import Table, {SORT_FIELDS} from './table';
 const ToolBarIcons = withCapabilities(({capabilities, onRoleCreateClick}) => (
   <IconDivider>
     <ManualIcon
-      page="gui_administration"
-      anchor="user-roles"
+      page="web-interface-access"
+      anchor="managing-roles"
       title={_('Help: Roles')}
     />
     {capabilities.mayCreate('role') && (

@@ -69,8 +69,8 @@ const ToolBarIcons = ({entity, onOvaldefDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="oval"
+        page="managing-secinfo"
+        anchor="oval-definitions"
         title={_('Help: OVAL Definitions')}
       />
       <ListIcon title={_('OVAL Definitions List')} page="ovaldefs" />

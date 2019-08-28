@@ -64,8 +64,8 @@ const ToolBarIcons = withCapabilities(
   }) => (
     <IconDivider>
       <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="creating-a-task"
+        page="scanning"
+        anchor="managing-tasks"
         title={_('Help: Tasks')}
       />
       {capabilities.mayOp('run_wizard') && (

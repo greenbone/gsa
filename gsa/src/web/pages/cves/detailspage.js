@@ -65,7 +65,7 @@ const ToolBarIcons = ({entity, onCveDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="vulnerabilitymanagement"
+        page="managing-secinfo"
         anchor="cve"
         title={_('Help: CVEs')}
       />

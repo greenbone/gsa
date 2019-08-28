@@ -48,8 +48,8 @@ const ToolBarIcons = withCapabilities(
   ({capabilities, onPortListCreateClick, onPortListImportClick}) => (
     <IconDivider>
       <ManualIcon
-        page="search"
-        searchTerm="port list"
+        page="performance"
+        anchor="managing-port-lists"
         title={_('Help: Port Lists')}
       />
       {capabilities.mayCreate('port_list') && (

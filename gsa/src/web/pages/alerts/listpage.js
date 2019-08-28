@@ -48,8 +48,8 @@ import AlertTable, {SORT_FIELDS} from './table.js';
 const ToolBarIcons = withCapabilities(({capabilities, onAlertCreateClick}) => (
   <IconDivider>
     <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="alerts"
+      page="scanning"
+      anchor="managing-alerts"
       title={_('Help: Alerts')}
     />
     {capabilities.mayCreate('alert') && (

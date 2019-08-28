@@ -308,7 +308,6 @@ init_validator ()
                      "|(edit_alert)"
                      "|(edit_config_family)"
                      "|(edit_config_nvt)"
-                     "|(edit_role)"
                      "|(auth_settings)"
                      "|(empty_trashcan)"
                      "|(export_agent)"
@@ -1931,7 +1930,6 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (edit_alert)
   ELSE (edit_config_family)
   ELSE (edit_config_nvt)
-  ELSE (edit_role)
   ELSE (export_agent)
   ELSE (export_agents)
   ELSE (export_alert)

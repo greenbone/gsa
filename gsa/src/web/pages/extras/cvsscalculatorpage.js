@@ -54,7 +54,7 @@ const StyledTextField = styled(TextField)`
 
 const ToolBarIcons = () => (
   <ManualIcon
-    page="vulnerabilitymanagement"
+    page="managing-secinfo"
     anchor="cvss"
     size="small"
     title={_('Help: CVSS Base Score Calculator')}

@@ -103,8 +103,8 @@ const ToolBarIcons = withCapabilties(
       <Divider margin="10px">
         <IconDivider>
           <ManualIcon
-            page="gui_introduction"
-            anchor="tags"
+            page="web-interface"
+            anchor="managing-tags"
             title={_('Help: Tags')}
           />
           <ListIcon title={_('Tag List')} page="tags" />

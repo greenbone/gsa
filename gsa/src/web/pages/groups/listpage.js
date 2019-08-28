@@ -47,8 +47,8 @@ import Table, {SORT_FIELDS} from './table';
 const ToolBarIcons = withCapabilities(({capabilities, onGroupCreateClick}) => (
   <IconDivider>
     <ManualIcon
-      page="gui_administration"
-      anchor="groups"
+      page="web-interface-access"
+      anchor="managing-groups"
       title={_('Help: Groups')}
     />
     {capabilities.mayCreate('group') && (

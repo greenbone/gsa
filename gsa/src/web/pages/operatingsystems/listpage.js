@@ -48,8 +48,8 @@ import OsDashboard, {OS_DASHBOARD_ID} from './dashboard';
 const ToolBarIcons = () => (
   <Layout>
     <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="operating-systems-view"
+      page="managing-assets"
+      anchor="managing-operating-systems"
       title={_('Help: Operating Systems')}
     />
   </Layout>

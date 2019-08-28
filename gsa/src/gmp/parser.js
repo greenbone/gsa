@@ -336,7 +336,7 @@ export const parseCvssBaseFromVector = vector => {
         if (value === 'm') {
           au = 'MULTIPLE_INSTANCES';
         } else if (value === 's') {
-          au = 'SINGLE_INSTANCES';
+          au = 'SINGLE_INSTANCE';
         } else if (value === 'n') {
           au = 'NONE';
         }

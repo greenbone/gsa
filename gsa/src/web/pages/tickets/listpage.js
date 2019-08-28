@@ -22,6 +22,7 @@ import _ from 'gmp/locale';
 
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
 
+import ManualIcon from 'web/components/icon/manualicon';
 import TicketIcon from 'web/components/icon/ticketicon';
 
 import DashboardControls from 'web/components/dashboard/controls';
@@ -40,6 +41,14 @@ import TicketComponent from './component';
 import TicketsDashboard, {TICKETS_DASHBOARD_ID} from './dashboard';
 import Table from './table';
 import TicketsFilterDialogComponent from './filterdialog';
+
+const ToolBarIcons = () => (
+  <ManualIcon
+    page="reports"
+    anchor="managing-tickets"
+    title={_('Help: Remediation Tickets')}
+  />
+);
 
 const Page = ({
   filter,
@@ -87,6 +96,7 @@ const Page = ({
         sectionIcon={<TicketIcon size="large" />}
         table={Table}
         title={_('Tickets')}
+        toolBarIcons={ToolBarIcons}
         onChanged={onChanged}
         onError={onError}
         onFilterChanged={onFilterChanged}

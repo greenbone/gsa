@@ -74,9 +74,9 @@ const ToolBarIcons = ({
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="search"
-        searchTerm="port list"
-        title={_('Help: PortList Details')}
+        page="performance"
+        anchor="managing-port-lists"
+        title={_('Help: Port Lists')}
       />
       <ListIcon title={_('PortList List')} page="portlists" />
     </IconDivider>
