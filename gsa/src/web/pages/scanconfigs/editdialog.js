@@ -25,7 +25,7 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
@@ -63,6 +63,7 @@ import {
   OSP_SCAN_CONFIG_TYPE,
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
+  parseTrend,
 } from 'gmp/models/scanconfig';
 
 const noop_convert = value => value;
@@ -319,18 +320,18 @@ class NvtFamily extends React.Component {
             <Radio
               flex
               name={name}
-              checked={trend === YES_VALUE}
-              convert={parseYesNo}
-              value={YES_VALUE}
+              checked={trend === SCANCONFIG_TREND_DYNAMIC}
+              convert={parseTrend}
+              value={SCANCONFIG_TREND_DYNAMIC}
               onChange={onTrendChange}
             />
             <Trend trend={SCANCONFIG_TREND_DYNAMIC} />
             <Radio
               flex
               name={name}
-              checked={trend === NO_VALUE}
-              convert={parseYesNo}
-              value={NO_VALUE}
+              checked={trend === SCANCONFIG_TREND_STATIC}
+              convert={parseTrend}
+              value={SCANCONFIG_TREND_STATIC}
               onChange={onTrendChange}
             />
             <Trend trend={SCANCONFIG_TREND_STATIC} />
