@@ -72,7 +72,7 @@ class ScanConfig extends Model {
         const {name} = family;
         const new_family = {
           name,
-          trend: family.growing,
+          trend: parseTrend(family.growing),
           nvts: {
             count: parseCount(family.nvt_count),
             max: parseCount(family.max_nvt_count),
