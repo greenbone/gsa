@@ -58,8 +58,8 @@ import UsersTable, {SORT_FIELDS} from './table';
 const ToolBarIcons = withCapabilities(({capabilities, onUserCreateClick}) => (
   <IconDivider>
     <ManualIcon
-      page="gui_administration"
-      anchor="user-management"
+      page="web-interface-access"
+      anchor="managing-users"
       title={_('Help: Users')}
     />
     {capabilities.mayCreate('user') && (

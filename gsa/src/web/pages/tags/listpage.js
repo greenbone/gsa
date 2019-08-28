@@ -74,7 +74,11 @@ export const SORT_FIELDS = [
 
 const ToolBarIcons = withCapabilities(({capabilities, onTagCreateClick}) => (
   <IconDivider>
-    <ManualIcon page="gui_introduction" anchor="tags" title={_('Help: Tags')} />
+    <ManualIcon
+      page="web-interface"
+      anchor="managing-tags"
+      title={_('Help: Tags')}
+    />
     {capabilities.mayCreate('tag') && (
       <NewIcon title={_('New Tag')} onClick={onTagCreateClick} />
     )}

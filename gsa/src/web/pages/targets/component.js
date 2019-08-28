@@ -309,6 +309,8 @@ class TargetComponent extends React.Component {
       credential,
       credentials,
       hosts,
+      hosts_count,
+      hosts_filter,
       id,
       in_use,
       name,
@@ -357,6 +359,8 @@ class TargetComponent extends React.Component {
                 esxi_credential_id={esxi_credential_id}
                 exclude_hosts={exclude_hosts}
                 hosts={hosts}
+                hosts_count={hosts_count}
+                hosts_filter={hosts_filter}
                 id={id}
                 in_use={in_use}
                 name={name}

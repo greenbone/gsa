@@ -83,7 +83,11 @@ const Col = styled.col`
 `;
 
 const ToolBarIcons = () => (
-  <ManualIcon page="search" searchTerm="trashcan" title={_('Help: Trashcan')} />
+  <ManualIcon
+    page="web-interface"
+    anchor="using-the-trashcan"
+    title={_('Help: Trashcan')}
+  />
 );
 
 const EmptyTrashButton = withCapabilities(({onClick, capabilities}) => {

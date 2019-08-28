@@ -46,7 +46,11 @@ import FiltersTable, {SORT_FIELDS} from './table';
 
 const ToolBarIcons = withCapabilities(({capabilities, onFilterCreateClick}) => (
   <IconDivider>
-    <ManualIcon page="search" searchTerm="filter" title={_('Help: Filters')} />
+    <ManualIcon
+      page="web-interface"
+      anchor="managing-powerfilters"
+      title={_('Help: Filters')}
+    />
     {capabilities.mayCreate('filter') && (
       <NewIcon title={_('New Filter')} onClick={onFilterCreateClick} />
     )}

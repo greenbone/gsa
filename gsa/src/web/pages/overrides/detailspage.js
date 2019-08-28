@@ -92,8 +92,8 @@ const ToolBarIcons = ({
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="overrides-and-false-positives"
+        page="reports"
+        anchor="managing-overrides"
         title={_('Help: Overrides')}
       />
       <ListIcon title={_('Override List')} page="overrides" />

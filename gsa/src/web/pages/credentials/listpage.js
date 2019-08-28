@@ -48,8 +48,8 @@ const ToolBarIcons = withCapabilities(
   ({capabilities, onCredentialCreateClick}) => (
     <IconDivider>
       <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="credentials"
+        page="scanning"
+        anchor="managing-credentials"
         title={_('Help: Credentials')}
       />
       {capabilities.mayCreate('credential') && (

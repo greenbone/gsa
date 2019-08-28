@@ -39,7 +39,7 @@ import TableRow from 'web/components/table/row';
 
 const Pre = styled.pre`
   white-space: pre-wrap;
-  word-wrap: normal;
+  word-wrap: break-word;
 `;
 
 const BoxLayout = styled(Layout)`

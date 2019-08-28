@@ -46,8 +46,8 @@ import DfnCertDashboard, {DFNCERT_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = () => (
   <ManualIcon
-    page="vulnerabilitymanagement"
-    anchor="id15"
+    page="managing-secinfo"
+    anchor="dfn-cert-advisories"
     title={_('Help: DFN-CERT Advisories')}
   />
 );

@@ -68,8 +68,8 @@ const CONTAINER_TASK_FILTER = Filter.fromString('target=""');
 const ToolBarIcons = ({onUploadReportClick}) => (
   <IconDivider>
     <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="reading-of-the-reports"
+      page="reports"
+      anchor="using-and-managing-reports"
       title={_('Help: Reports')}
     />
     <UploadIcon title={_('Upload report')} onClick={onUploadReportClick} />

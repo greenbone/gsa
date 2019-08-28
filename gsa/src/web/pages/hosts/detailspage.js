@@ -64,7 +64,6 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 
-import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
@@ -83,7 +82,6 @@ import HostComponent from './component';
 
 const ToolBarIcons = ({
   entity,
-  onHostCloneClick,
   onHostCreateClick,
   onHostDeleteClick,
   onHostDownloadClick,
@@ -93,9 +91,9 @@ const ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="vulnerabilitymanagement"
-          anchor="host-details"
-          title={_('Help: Host Details')}
+          page="managing-assets"
+          anchor="managing-hosts"
+          title={_('Help: Hosts')}
         />
         <ListIcon title={_('Host List')} page="hosts" />
       </IconDivider>
@@ -104,11 +102,6 @@ const ToolBarIcons = ({
           entity={entity}
           displayName={_('Host')}
           onClick={onHostCreateClick}
-        />
-        <CloneIcon
-          entity={entity}
-          displayName={_('Host')}
-          onClick={onHostCloneClick}
         />
         <EditIcon
           entity={entity}
@@ -141,7 +134,6 @@ const ToolBarIcons = ({
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
-  onHostCloneClick: PropTypes.func.isRequired,
   onHostCreateClick: PropTypes.func.isRequired,
   onHostDeleteClick: PropTypes.func.isRequired,
   onHostDownloadClick: PropTypes.func.isRequired,
@@ -279,8 +271,6 @@ const Page = ({
     <HostComponent
       onTargetCreated={goto_details('target', props)}
       onTargetCreateError={onError}
-      onCloned={goto_host}
-      onCloneError={onError}
       onCreated={goto_host}
       onDeleted={goto_list('hosts', props)}
       onDownloaded={onDownloaded}
@@ -290,14 +280,7 @@ const Page = ({
       onInteraction={onInteraction}
       onSaved={onChanged}
     >
-      {({
-        clone,
-        create,
-        delete: delete_func,
-        deleteidentifier,
-        download,
-        edit,
-      }) => (
+      {({create, delete: delete_func, deleteidentifier, download, edit}) => (
         <EntityPage
           {...props}
           entity={entity}
@@ -308,7 +291,6 @@ const Page = ({
           onDownloaded={onDownloaded}
           onError={onError}
           onInteraction={onInteraction}
-          onHostCloneClick={clone}
           onHostCreateClick={create}
           onHostDeleteClick={delete_func}
           onHostDownloadClick={download}
