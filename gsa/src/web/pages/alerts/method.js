@@ -73,12 +73,9 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
   }
 
   const getReportFormatName = id => {
-    if (isDefined(reportFormats)) {
-      reportFormat = reportFormats.find(format => format.id === id);
-      if (isDefined(reportFormat)) {
-        return reportFormat.name;
-      }
-      return null;
+    const reportFormat = reportFormats.find(format => format.id === id);
+    if (isDefined(reportFormat)) {
+      return reportFormat.name;
     }
     return null;
   };

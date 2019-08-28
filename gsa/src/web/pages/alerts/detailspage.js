@@ -33,7 +33,6 @@ import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-import {ALL_FILTER} from 'gmp/models/filter';
 
 import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
