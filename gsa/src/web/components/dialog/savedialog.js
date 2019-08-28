@@ -162,6 +162,7 @@ const SaveDialog = ({
   children,
   defaultValues,
   error,
+  initialHeight,
   minHeight,
   minWidth,
   title,
@@ -174,6 +175,7 @@ const SaveDialog = ({
 }) => {
   return (
     <Dialog
+      height={initialHeight}
       width={width}
       minHeight={minHeight}
       minWidth={minWidth}
@@ -204,6 +206,7 @@ SaveDialog.propTypes = {
   buttonTitle: PropTypes.string,
   defaultValues: PropTypes.object, // default values for uncontrolled values
   error: PropTypes.string, // for errors controlled from parent (onErrorClose must be used if set)
+  initialHeight: PropTypes.string,
   minHeight: PropTypes.numberOrNumberString,
   minWidth: PropTypes.numberOrNumberString,
   title: PropTypes.string.isRequired,
