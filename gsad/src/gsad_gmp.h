@@ -481,9 +481,6 @@ char *
 delete_role_gmp (gvm_connection_t *, credentials_t *, params_t *,
                  cmd_response_data_t *);
 char *
-edit_role_gmp (gvm_connection_t *, credentials_t *, params_t *,
-               cmd_response_data_t *);
-char *
 export_role_gmp (gvm_connection_t *, credentials_t *, params_t *,
                  cmd_response_data_t *);
 char *

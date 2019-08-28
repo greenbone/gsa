@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.2] - unreleased
 
 ### Added
+- Added loading indicator for edit config dialog [#1579](https://github.com/greenbone/gsa/pull/1579)
 - Added tooltip for settings in task edit dialog that can't be changed once the task has been run [#1568](https://github.com/greenbone/gsa/pull/1568)
 - Added success dialog to report formats listpage [#1566](https://github.com/greenbone/gsa/pull/1566)
 - Added an explicit get_capabilities command to gsad [#1538](https://github.com/greenbone/gsa/pull/1538)
@@ -17,6 +18,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - word-wrap in pre component [#1586](https://github.com/greenbone/gsa/pull/1586)
+- Disable EditIcon for My Settings if permission denied [#1588](https://github.com/greenbone/gsa/pull/1588)
+- Don't allow to clone hosts [#1581](https://github.com/greenbone/gsa/pull/1581)
+- Trigger alert button disabled in report details page when no permission [#1574](https://github.com/greenbone/gsa/pull/1574)
 - Update default filter for report details page [#1552](https://github.com/greenbone/gsa/pull/1552)
 - Adjust HelpIcons to use GOS 5 manual [#1549](https://github.com/greenbone/gsa/pull/1549) [#1550](https://github.com/greenbone/gsa/pull/1550)
 - Adjust clickable areas for Select and MultiSelect [#1545](https://github.com/greenbone/gsa/pull/1545)
@@ -24,6 +28,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Fix and improve editing of roles [#1587](https://github.com/greenbone/gsa/pull/1587)
+- Fix showing ScanConfig trends [#1582](https://github.com/greenbone/gsa/pull/1582) [#1554](https://github.com/greenbone/gsa/pull/1554)
+- Show HostsCount at SectionTitle [#1576](https://github.com/greenbone/gsa/pull/1576)
+- Fixed creating target from hosts [#1575](https://github.com/greenbone/gsa/pull/1575)
 - Fixed CVSSBaseCalculatorv2 [#1572](https://github.com/greenbone/gsa/pull/1572)
 - Fix title in Operating Systems table of Reports [#1567](https://github.com/greenbone/gsa/pull/1567)
 - Fix displaying only usable report formats at report download [#1565](https://github.com/greenbone/gsa/pull/1565)
