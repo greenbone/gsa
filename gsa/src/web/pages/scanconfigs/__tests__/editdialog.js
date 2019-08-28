@@ -23,7 +23,7 @@ import _ from 'gmp/locale';
 import ScanConfig from 'gmp/models/scanconfig';
 import Policy from 'gmp/models/policy';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, act} from 'web/utils/testing';
 
 import EditDialog from '../editdialog';
 
@@ -164,14 +164,17 @@ const scannerPreferenceValues = {
   scannerpref0: {name: 'scannerpref0', value: 0},
 };
 
+jest.useFakeTimers();
+
 describe('EditDialog component tests', () => {
-  test('should render dialog', () => {
+  test('should render dialog', async () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
     const handleOpenEditNvtDetailsDialog = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
+
     const {baseElement} = render(
       <EditDialog
         comment={config.comment}
@@ -193,6 +196,10 @@ describe('EditDialog component tests', () => {
       />,
     );
 
+    await act(async () => {
+      jest.runAllTimers();
+    });
+
     expect(baseElement).toMatchSnapshot();
     expect(baseElement).toHaveTextContent('Edit Scan Config');
     expect(baseElement).not.toHaveTextContent('Policy');
@@ -205,7 +212,7 @@ describe('EditDialog component tests', () => {
     );
   });
 
-  test('should render dialog for config in use', () => {
+  test('should render dialog for config in use', async () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
@@ -233,6 +240,10 @@ describe('EditDialog component tests', () => {
       />,
     );
 
+    await act(async () => {
+      jest.runAllTimers();
+    });
+
     expect(baseElement).toHaveTextContent('Edit Scan Config');
     expect(baseElement).not.toHaveTextContent('Policy');
     expect(baseElement).not.toHaveTextContent(
@@ -244,7 +255,7 @@ describe('EditDialog component tests', () => {
     );
   });
 
-  test('should render dialog for osp config', () => {
+  test('should render dialog for osp config', async () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
@@ -272,6 +283,10 @@ describe('EditDialog component tests', () => {
       />,
     );
 
+    await act(async () => {
+      jest.runAllTimers();
+    });
+
     expect(baseElement).toMatchSnapshot();
     expect(baseElement).toHaveTextContent('Edit Scan Config');
     expect(baseElement).not.toHaveTextContent('Policy');
@@ -284,7 +299,7 @@ describe('EditDialog component tests', () => {
     );
   });
 
-  test('should render dialog for policy', () => {
+  test('should render dialog for policy', async () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
@@ -312,6 +327,10 @@ describe('EditDialog component tests', () => {
       />,
     );
 
+    await act(async () => {
+      jest.runAllTimers();
+    });
+
     expect(baseElement).toMatchSnapshot();
     expect(baseElement).toHaveTextContent('Edit Policy');
     expect(baseElement).not.toHaveTextContent('Config');
@@ -328,7 +347,7 @@ describe('EditDialog component tests', () => {
     expect(icons[12]).toHaveAttribute('title', 'Edit Policy NVT Details');
   });
 
-  test('should save data', () => {
+  test('should save data', async () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
@@ -355,6 +374,10 @@ describe('EditDialog component tests', () => {
         onSave={handleSave}
       />,
     );
+
+    await act(async () => {
+      jest.runAllTimers();
+    });
 
     const saveButton = getByTestId('dialog-save-button');
     fireEvent.click(saveButton);
@@ -371,7 +394,7 @@ describe('EditDialog component tests', () => {
     });
   });
 
-  test('should allow to close the dialog', () => {
+  test('should allow to close the dialog', async () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
@@ -399,6 +422,10 @@ describe('EditDialog component tests', () => {
       />,
     );
 
+    await act(async () => {
+      jest.runAllTimers();
+    });
+
     const closeButton = getByTestId('dialog-close-button');
 
     fireEvent.click(closeButton);
@@ -407,7 +434,7 @@ describe('EditDialog component tests', () => {
     expect(handleSave).not.toHaveBeenCalled();
   });
 
-  test('should allow to change name and comment', () => {
+  test('should allow to change name and comment', async () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
@@ -434,6 +461,10 @@ describe('EditDialog component tests', () => {
         onSave={handleSave}
       />,
     );
+
+    await act(async () => {
+      jest.runAllTimers();
+    });
 
     const inputs = baseElement.querySelectorAll('input');
     fireEvent.change(inputs[0], {target: {value: 'lorem'}});
@@ -454,7 +485,7 @@ describe('EditDialog component tests', () => {
     });
   });
 
-  test('should allow to edit nvt families for openvas configs', () => {
+  test('should allow to edit nvt families for openvas configs', async () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
@@ -481,6 +512,10 @@ describe('EditDialog component tests', () => {
         onSave={handleSave}
       />,
     );
+
+    await act(async () => {
+      jest.runAllTimers();
+    });
 
     const inputs = baseElement.querySelectorAll('input');
     fireEvent.click(inputs[3]);
@@ -513,7 +548,7 @@ describe('EditDialog component tests', () => {
     });
   });
 
-  test('should call click handlers for edit families and edit nvt details', () => {
+  test('should call click handlers for edit families and edit nvt details', async () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
@@ -540,6 +575,10 @@ describe('EditDialog component tests', () => {
         onSave={handleSave}
       />,
     );
+
+    await act(async () => {
+      jest.runAllTimers();
+    });
 
     const icons = getAllByTestId('svg-icon');
     fireEvent.click(icons[3]);
