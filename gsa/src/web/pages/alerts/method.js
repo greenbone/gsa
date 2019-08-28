@@ -56,7 +56,7 @@ import {Col} from 'web/entity/page';
 const Table = styled(SimpleTable)`
   margin-top: 5px;
   margin-left: 45px;
-  width: 100%;
+  width: 90%;
   & td {
     padding: 0;
   }
@@ -71,6 +71,8 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
   if (!isDefined(method.type)) {
     return null;
   }
+
+  console.log(method);
 
   const getReportFormatName = id => {
     const reportFormat = reportFormats.find(format => format.id === id);
@@ -93,18 +95,6 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
               <Col width="88%" />
             </colgroup>
             <TableBody>
-              {isDefined(data.report_formats) && (
-                <TableRow>
-                  <TableData>{_('Report Formats')}</TableData>
-                  <TableData>
-                    <HorizontalSep separator="," wrap spacing="0">
-                      {data.report_formats.map(id => (
-                        <span key={id}>{getReportFormatName(id)}</span>
-                      ))}
-                    </HorizontalSep>
-                  </TableData>
-                </TableRow>
-              )}
               {isDefined(data.vfire_base_url) &&
                 isDefined(data.vfire_base_url.value) && (
                   <TableRow>
@@ -112,15 +102,7 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                     <TableData>{data.vfire_base_url.value}</TableData>
                   </TableRow>
                 )}
-
-              {isDefined(data.vfire_call_description) &&
-                isDefined(data.vfire_call_description.value) && (
-                  <TableRow>
-                    <TableData>{_('Call Description')}</TableData>
-                    <TableData>{data.vfire_call_description.value}</TableData>
-                  </TableRow>
-                )}
-
+              {console.log(isDefined(data.vfire_call_description))}
               {isDefined(data.vfire_call_impact_name) &&
                 isDefined(data.vfire_call_impact_name.value) && (
                   <TableRow>
@@ -176,6 +158,28 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                   <TableRow>
                     <TableData>{_('Session Type')}</TableData>
                     <TableData>{data.vfire_session_type.value}</TableData>
+                  </TableRow>
+                )}
+
+              {isDefined(data.report_formats) && (
+                <TableRow>
+                  <TableData>{_('Report Formats')}</TableData>
+                  <TableData>
+                    <HorizontalSep separator="," wrap spacing="0">
+                      {data.report_formats.map(id => (
+                        <span key={id}>{getReportFormatName(id)}</span>
+                      ))}
+                    </HorizontalSep>
+                  </TableData>
+                </TableRow>
+              )}
+              {isDefined(data.vfire_call_description) &&
+                isDefined(data.vfire_call_description.value) && (
+                  <TableRow>
+                    <TableData>{_('Call Description')}</TableData>
+                    <Pre>
+                      <TableData>{data.vfire_call_description.value}</TableData>
+                    </Pre>
                   </TableRow>
                 )}
             </TableBody>
