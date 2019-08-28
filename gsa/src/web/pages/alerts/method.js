@@ -57,7 +57,6 @@ import {Col} from 'web/entity/page';
 const Table = styled(SimpleTable)`
   margin-top: 5px;
   margin-left: 45px;
-  width: 90%;
   & td {
     padding: 0;
   }
@@ -72,8 +71,6 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
   if (!isDefined(method.type)) {
     return null;
   }
-
-  console.log(method);
 
   const getReportFormatName = id => {
     const reportFormat = reportFormats.find(format => format.id === id);
@@ -103,7 +100,6 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                     <TableData>{data.vfire_base_url.value}</TableData>
                   </TableRow>
                 )}
-              {console.log(isDefined(data.vfire_call_description))}
               {isDefined(data.vfire_call_impact_name) &&
                 isDefined(data.vfire_call_impact_name.value) && (
                   <TableRow>
@@ -178,9 +174,9 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                 isDefined(data.vfire_call_description.value) && (
                   <TableRow>
                     <TableData>{_('Call Description')}</TableData>
-                    <Pre>
-                      <TableData>{data.vfire_call_description.value}</TableData>
-                    </Pre>
+                    <TableData>
+                      <Pre>{data.vfire_call_description.value}</Pre>
+                    </TableData>
                   </TableRow>
                 )}
             </TableBody>
@@ -576,8 +572,6 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
     const {credential} = verinice_server_credential;
 
     if (details) {
-      // TODO add verinice report format.
-      // Currently we can't get the report format details
       return (
         <div>
           <div>{_('verinice Connector')}</div>
@@ -635,7 +629,6 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
   }
 
   if (method.type === METHOD_TYPE_TIPPING_POINT) {
-    // TLS Certificate name not passed to GSA? Only the content?
     // data.tp_sms_credential has no name, only id!
     const {data = {}} = method;
     if (details) {
