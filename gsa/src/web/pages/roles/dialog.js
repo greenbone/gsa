@@ -22,20 +22,21 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
 
 import PropTypes from 'web/utils/proptypes';
 import {permissionDescription} from 'web/utils/render';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
-import Button from 'web/components/form/button';
 import FormGroup from 'web/components/form/formgroup';
+import LoadingButton from 'web/components/form/loadingbutton';
 import MultiSelect from 'web/components/form/multiselect';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 
 import TrashIcon from 'web/components/icon/trashicon';
+
+import Loading from 'web/components/loading/loading';
 
 import Layout from 'web/components/layout/layout';
 
@@ -47,14 +48,15 @@ import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
 const Dialog = ({
-  allGroups,
-  allPermissions,
-  allUsers,
+  allGroups = [],
+  allPermissions = [],
+  allUsers = [],
   error,
-  groupId,
+  isCreatingPermission = false,
+  isCreatingSuperPermission = false,
   isInUse = false,
-  permissions,
-  permissionName,
+  isLoadingPermissions = false,
+  permissions = [],
   role,
   title = _('New Role'),
   onClose,
@@ -67,24 +69,24 @@ const Dialog = ({
   const DEFAULTS = {name: _('Unnamed')};
 
   const isEdit = isDefined(role);
-  const hasGroups = isDefined(allGroups) && allGroups.length > 0;
-  const hasPermissions = isDefined(allPermissions) && allPermissions.length > 0;
+  const hasGroups = allGroups.length > 0;
+  const hasPermissions = allPermissions.length > 0;
 
-  const groupOptions = map(allGroups, group => ({
+  const groupOptions = allGroups.map(group => ({
     label: group.name,
     value: group.id,
   }));
 
-  const permissionsOptions = map(allPermissions, permission => {
+  const permissionsOptions = allPermissions.map(permission => {
     const labelString =
-      permission.name + ' (' + permissionDescription(permission.name) + ')';
+      permission + ' (' + permissionDescription(permission) + ')';
     return {
       label: labelString,
-      value: permission.name,
+      value: permission,
     };
   });
 
-  const usersOptions = map(allUsers, user => ({
+  const usersOptions = allUsers.map(user => ({
     label: user.name,
     value: user.name,
   }));
@@ -98,6 +100,7 @@ const Dialog = ({
     <SaveDialog
       defaultValues={defaultValues}
       error={error}
+      initialHeight={isEdit ? '600px' : undefined}
       title={title}
       onClose={onClose}
       onErrorClose={onErrorClose}
@@ -148,9 +151,14 @@ const Dialog = ({
                     value={state.permissionName}
                     onChange={onValueChange}
                   />
-                  <Button
+                  <LoadingButton
                     title={_('Create Permission')}
-                    disabled={isInUse || !hasPermissions}
+                    disabled={
+                      isInUse ||
+                      !hasPermissions ||
+                      !isDefined(state.permissionName)
+                    }
+                    loading={isCreatingPermission}
                     value={{roleId: state.id, name: state.permissionName}}
                     onClick={onCreatePermission}
                   />
@@ -168,26 +176,29 @@ const Dialog = ({
                     value={state.groupId}
                     onChange={onValueChange}
                   />
-                  <Button
+                  <LoadingButton
                     title={_('Create Permission')}
-                    disabled={!hasGroups}
+                    disabled={!hasGroups || !isDefined(state.groupId)}
+                    loading={isCreatingSuperPermission}
                     value={{roleId: state.id, groupId: state.groupId}}
                     onClick={onCreateSuperPermission}
                   />
                 </FormGroup>
 
                 <h2>{_('General Command Permissions')}</h2>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>{_('Name')}</TableHead>
-                      <TableHead>{_('Description')}</TableHead>
-                      <TableHead width="2em">{_('Actions')}</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {map(permissions, permission => {
-                      return (
+                {isLoadingPermissions && permissions.length === 0 ? (
+                  <Loading />
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>{_('Name')}</TableHead>
+                        <TableHead>{_('Description')}</TableHead>
+                        <TableHead width="2em">{_('Actions')}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {permissions.map(permission => (
                         <TableRow key={permission.id}>
                           <TableData>{permission.name}</TableData>
                           <TableData>
@@ -209,10 +220,10 @@ const Dialog = ({
                             )}
                           </TableData>
                         </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
               </Layout>
             )}
           </Layout>
@@ -223,12 +234,14 @@ const Dialog = ({
 };
 
 Dialog.propTypes = {
-  allGroups: PropTypes.array,
-  allPermissions: PropTypes.array,
-  allUsers: PropTypes.array,
+  allGroups: PropTypes.arrayOf(PropTypes.model),
+  allPermissions: PropTypes.arrayOf(PropTypes.string),
+  allUsers: PropTypes.arrayOf(PropTypes.model),
   error: PropTypes.string,
-  groupId: PropTypes.id,
+  isCreatingPermission: PropTypes.bool,
+  isCreatingSuperPermission: PropTypes.bool,
   isInUse: PropTypes.bool,
+  isLoadingPermissions: PropTypes.bool,
   permissionName: PropTypes.string,
   permissions: PropTypes.array,
   role: PropTypes.model,

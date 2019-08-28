@@ -17,8 +17,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
-- don't allow to clone hosts [#1581](https://github.com/greenbone/gsa/pull/1581)
-- trigger alert button disabled in report details page when no permission [#1574](https://github.com/greenbone/gsa/pull/1574)
+- word-wrap in pre component [#1586](https://github.com/greenbone/gsa/pull/1586)
+- Disable EditIcon for My Settings if permission denied [#1588](https://github.com/greenbone/gsa/pull/1588)
+- Don't allow to clone hosts [#1581](https://github.com/greenbone/gsa/pull/1581)
+- Trigger alert button disabled in report details page when no permission [#1574](https://github.com/greenbone/gsa/pull/1574)
 - Update default filter for report details page [#1552](https://github.com/greenbone/gsa/pull/1552)
 - Adjust HelpIcons to use GOS 5 manual [#1549](https://github.com/greenbone/gsa/pull/1549) [#1550](https://github.com/greenbone/gsa/pull/1550)
 - Adjust clickable areas for Select and MultiSelect [#1545](https://github.com/greenbone/gsa/pull/1545)
@@ -26,6 +28,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Fix and improve editing of roles [#1587](https://github.com/greenbone/gsa/pull/1587)
+- Fix showing ScanConfig trends [#1582](https://github.com/greenbone/gsa/pull/1582) [#1554](https://github.com/greenbone/gsa/pull/1554)
 - Show HostsCount at SectionTitle [#1576](https://github.com/greenbone/gsa/pull/1576)
 - Fixed creating target from hosts [#1575](https://github.com/greenbone/gsa/pull/1575)
 - Fixed CVSSBaseCalculatorv2 [#1572](https://github.com/greenbone/gsa/pull/1572)
