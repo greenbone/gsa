@@ -55,6 +55,8 @@ export const openVasScanConfigsFilter = config =>
 export const ospScanConfigsFilter = config =>
   config.scan_config_type === OSP_SCAN_CONFIG_TYPE;
 
+const parseTrend = parseInt;
+
 class ScanConfig extends Model {
   static entityType = 'scanconfig';
 
@@ -85,7 +87,7 @@ class ScanConfig extends Model {
 
     if (isDefined(ret.family_count)) {
       families.count = parse_count(ret.family_count.__text);
-      families.trend = ret.family_count.growing;
+      families.trend = parseTrend(ret.family_count.growing);
 
       delete ret.family_count;
     } else {
@@ -97,7 +99,7 @@ class ScanConfig extends Model {
     if (isDefined(ret.nvt_count)) {
       ret.nvts = {
         count: parse_count(ret.nvt_count.__text),
-        trend: ret.nvt_count.growing,
+        trend: parseTrend(ret.nvt_count.growing),
       };
 
       delete ret.nvt_count;
