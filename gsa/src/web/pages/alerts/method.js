@@ -284,13 +284,42 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
     if (details) {
       return (
         <div>
-          <div>{_('SMP')}</div>
+          <div>{_('SMB')}</div>
           <Table>
             <colgroup>
               <Col width="12%" />
               <Col width="88%" />
             </colgroup>
             <TableBody>
+              {isDefined(data.smb_credential) && (
+                <TableRow>
+                  <TableData>{_('Credential')}</TableData>
+                  <TableData>
+                    <span>
+                      <DetailsLink
+                        id={data.smb_credential.value}
+                        type="credential"
+                      >
+                        {_('Credential')}
+                      </DetailsLink>
+                    </span>
+                  </TableData>
+                </TableRow>
+              )}
+              {isDefined(data.smb_share_path) &&
+                isDefined(data.smb_share_path.value) && (
+                  <TableRow>
+                    <TableData>{_('Share path')}</TableData>
+                    <TableData>{data.smb_share_path.value}</TableData>
+                  </TableRow>
+                )}
+              {isDefined(data.smb_file_path) &&
+                isDefined(data.smb_file_path.value) && (
+                  <TableRow>
+                    <TableData>{_('File path')}</TableData>
+                    <TableData>{data.smb_file_path.value}</TableData>
+                  </TableRow>
+                )}
               {isDefined(data.smb_report_format) &&
                 isDefined(data.smb_report_format.value) && (
                   <TableRow>
