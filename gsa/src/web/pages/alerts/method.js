@@ -64,7 +64,7 @@ const Table = styled(SimpleTable)`
 
 const Pre = styled.pre`
   white-space: pre-wrap;
-  word-wrap: normal;
+  word-wrap: break-word;
 `;
 
 const Method = ({method = {}, details = false, reportFormats}) => {
@@ -367,9 +367,7 @@ const Method = ({method = {}, details = false, reportFormats}) => {
               {isDefined(snmp_agent.value) && (
                 <TableRow>
                   <TableData>{_('Message {{name}}')}</TableData>
-                  <TableData>
-                    <Pre>{data.snmp_message.value}</Pre>
-                  </TableData>
+                  <TableData>{data.snmp_message.value}</TableData>
                 </TableRow>
               )}
             </TableBody>
