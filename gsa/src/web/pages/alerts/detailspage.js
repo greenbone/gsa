@@ -57,6 +57,11 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 
+import {
+  loadAllEntities as loadAllReportFormats,
+  selector as reportFormatsSelector,
+} from 'web/store/entities/reportformats';
+
 import PropTypes from 'web/utils/proptypes';
 
 import AlertComponent from './component';
@@ -105,6 +110,7 @@ ToolBarIcons.propTypes = {
 const Page = ({
   entity,
   permissions = [],
+  reportFormats,
   onChanged,
   onDownloaded,
   onError,
@@ -158,7 +164,10 @@ const Page = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <AlertDetails entity={entity} />
+                    <AlertDetails
+                      entity={entity}
+                      reportFormats={reportFormats}
+                    />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags
@@ -191,6 +200,7 @@ const Page = ({
 Page.propTypes = {
   entity: PropTypes.model,
   permissions: PropTypes.array,
+  reportFormats: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
@@ -200,17 +210,21 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
+  const loadAllReportFormatsFunc = loadAllReportFormats(gmp);
   return id => dispatch =>
     Promise.all([
       dispatch(loadEntityFunc(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+      dispatch(loadAllReportFormatsFunc()),
     ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {
   const permissionsSel = permissionsSelector(rootState);
+  const reportFormatsSel = reportFormatsSelector(rootState);
   return {
     permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
+    reportFormats: reportFormatsSel.getAllEntities(),
   };
 };
 
