@@ -59,7 +59,7 @@ import {
 } from 'web/store/entities/permissions';
 
 import {
-  loadAllEntities as loadReportFormats,
+  loadAllEntities as loadAllReportFormats,
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 
@@ -211,12 +211,12 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  const loadReportFormatsFunc = loadReportFormats(gmp);
+  const loadAllReportFormatsFunc = loadAllReportFormats(gmp);
   return id => dispatch =>
     Promise.all([
       dispatch(loadEntityFunc(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-      dispatch(loadReportFormatsFunc(ALL_FILTER)),
+      dispatch(loadAllReportFormatsFunc()),
     ]);
 };
 
@@ -225,7 +225,7 @@ const mapStateToProps = (rootState, {id}) => {
   const reportFormatsSel = reportFormatsSelector(rootState);
   return {
     permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
-    reportFormats: reportFormatsSel.getAllEntities(ALL_FILTER),
+    reportFormats: reportFormatsSel.getAllEntities(),
   };
 };
 

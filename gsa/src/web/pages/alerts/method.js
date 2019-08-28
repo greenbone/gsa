@@ -67,14 +67,18 @@ const Pre = styled.pre`
   word-wrap: break-word;
 `;
 
-const Method = ({method = {}, details = false, reportFormats}) => {
+const Method = ({method = {}, details = false, reportFormats = []}) => {
   if (!isDefined(method.type)) {
     return null;
   }
 
   const getReportFormatName = id => {
     if (isDefined(reportFormats)) {
-      return reportFormats.find(format => format.id === id).name;
+      reportFormat = reportFormats.find(format => format.id === id);
+      if (isDefined(reportFormat)) {
+        return reportFormat.name;
+      }
+      return null;
     }
     return null;
   };
