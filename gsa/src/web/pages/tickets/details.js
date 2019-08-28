@@ -42,7 +42,7 @@ import PropTypes from 'web/utils/proptypes';
 const TicketDetails = ({entity, links = true}) => (
   <React.Fragment>
     <DetailsBlock title={_('References')}>
-      <InfoTable>
+      <InfoTable size="full">
         <colgroup>
           <Col width="10%" />
           <Col width="90%" />
@@ -95,7 +95,7 @@ const TicketDetails = ({entity, links = true}) => (
     </DetailsBlock>
 
     <DetailsBlock title={_('Status Details')}>
-      <InfoTable>
+      <InfoTable size="full">
         <colgroup>
           <Col width="10%" />
           <Col width="90%" />
