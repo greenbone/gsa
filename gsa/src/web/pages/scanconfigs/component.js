@@ -20,14 +20,15 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {SCANCONFIG_TREND_STATIC} from 'gmp/models/scanconfig';
+import {ospScannersFilter} from 'gmp/models/scanner';
+
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty, shorten} from 'gmp/utils/string';
 import {selectSaveId} from 'gmp/utils/id';
 
-import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
-
-import {ospScannersFilter} from 'gmp/models/scanner';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -39,6 +40,30 @@ import EditScanConfigDialog from './editdialog';
 import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
+
+const getTrendAndSelect = (scanConfig, families = []) => {
+  const trend = {};
+  const select = {};
+
+  families.forEach(family => {
+    const {name} = family;
+    const configFamily = scanConfig.families[name];
+
+    if (isDefined(configFamily)) {
+      trend[name] = configFamily.trend;
+      select[name] =
+        configFamily.nvts.count === family.maxNvtCount ? YES_VALUE : NO_VALUE;
+    } else {
+      trend[name] = SCANCONFIG_TREND_STATIC;
+      select[name] = NO_VALUE;
+    }
+  });
+
+  return {
+    trend,
+    select,
+  };
+};
 
 class ScanConfigComponent extends React.Component {
   constructor(...args) {
@@ -263,24 +288,10 @@ class ScanConfigComponent extends React.Component {
     ]).then(([configResponse, familiesResponse]) => {
       const {data: scanconfig} = configResponse;
       const {data: families} = familiesResponse;
-      const trend = {};
-      const select = {};
-
-      forEach(families, family => {
-        const {name} = family;
-        const config_family = scanconfig.families[name];
-
-        if (isDefined(config_family)) {
-          trend[name] = parseYesNo(config_family.trend);
-          select[name] =
-            config_family.nvts.count === family.max ? YES_VALUE : NO_VALUE;
-        } else {
-          trend[name] = NO_VALUE;
-          select[name] = NO_VALUE;
-        }
-      });
 
       const scanner_preference_values = {};
+
+      const {trend, select} = getTrendAndSelect(scanconfig, families);
 
       forEach(scanconfig.preferences.scanner, preference => {
         scanner_preference_values[preference.name] = preference.value;
