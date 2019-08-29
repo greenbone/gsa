@@ -47,10 +47,10 @@ const TicketStatusFilterGroup = ({
         value={status}
         onChange={onChange}
         items={[
-          {label: _('Open'), value: '0'},
-          {label: _('Fixed'), value: '1'},
-          {label: _('Fix Verified'), value: '2'},
-          {label: _('Closed'), value: '3'},
+          {label: _('Open'), value: 'Open'},
+          {label: _('Fixed'), value: 'Fixed'},
+          {label: _('Fix Verified'), value: '"Fix Verified"'}, // this is the way I found that has the filter returned as status="Fix Verified". All the single word terms are fine.
+          {label: _('Closed'), value: 'Closed'},
         ]}
       />
     </FormGroup>
