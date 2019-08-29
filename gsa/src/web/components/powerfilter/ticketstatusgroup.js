@@ -60,7 +60,7 @@ const TicketStatusFilterGroup = ({
 TicketStatusFilterGroup.propTypes = {
   filter: PropTypes.filter.isRequired,
   name: PropTypes.string,
-  status: PropTypes.number,
+  status: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 };
 

@@ -45,7 +45,7 @@ describe('TicketStatusGroup tests', () => {
   });
 
   test('should render value from filter and change it', () => {
-    const filter = Filter.fromString('status=0');
+    const filter = Filter.fromString('status=Open');
     const handleChange = jest.fn();
 
     // eslint-disable-next-line no-shadow
@@ -67,7 +67,7 @@ describe('TicketStatusGroup tests', () => {
     fireEvent.click(domItems[2]);
 
     expect(handleChange).toBeCalled();
-    expect(handleChange).toBeCalledWith('2', 'status');
+    expect(handleChange).toBeCalledWith('"Fix Verified"', 'status');
   });
   test('should process title', () => {
     const filter = Filter.fromString('status=0');
