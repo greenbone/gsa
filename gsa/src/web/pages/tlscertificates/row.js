@@ -26,6 +26,7 @@ import _ from 'gmp/locale';
 import DateTime from 'web/components/date/datetime';
 
 import DeleteIcon from 'web/components/icon/deleteicon';
+import DownloadIcon from 'web/components/icon/downloadicon';
 import ExportIcon from 'web/components/icon/exporticon';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -44,7 +45,12 @@ const Div = styled.div`
 `;
 
 const Actions = withEntitiesActions(
-  ({entity, onTlsCertificateDeleteClick, onTlsCertificateDownloadClick}) => (
+  ({
+    entity,
+    onTlsCertificateDeleteClick,
+    onTlsCertificateDownloadClick,
+    onTlsCertificateExportClick,
+  }) => (
     <IconDivider align={['center', 'center']} grow>
       {entity.isInUse() ? (
         <DeleteIcon disabled={true} title={_('TLS Certificate is in use')} />
@@ -55,10 +61,15 @@ const Actions = withEntitiesActions(
           onClick={onTlsCertificateDeleteClick}
         />
       )}
+      <DownloadIcon
+        value={entity}
+        title={_('Download TLS Certificate as .pem')}
+        onClick={onTlsCertificateDownloadClick}
+      />
       <ExportIcon
         value={entity}
-        title={_('Export TLS Certificate')}
-        onClick={onTlsCertificateDownloadClick}
+        title={_('Export TLS Certificate as XML')}
+        onClick={onTlsCertificateExportClick}
       />
     </IconDivider>
   ),
@@ -68,6 +79,7 @@ Actions.propTypes = {
   entity: PropTypes.model.isRequired,
   onTlsCertificateDeleteClick: PropTypes.func.isRequired,
   onTlsCertificateDownloadClick: PropTypes.func.isRequired,
+  onTlsCertificateExportClick: PropTypes.func.isRequired,
 };
 
 const Row = ({

@@ -27,6 +27,7 @@ import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
 
+import DownloadIcon from 'web/components/icon/downloadicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
@@ -72,6 +73,7 @@ const ToolBarIcons = ({
   entity,
   onTlsCertificateDeleteClick,
   onTlsCertificateDownloadClick,
+  onTlsCertificateExportClick,
 }) => {
   return (
     <Divider margin="10px">
@@ -85,10 +87,15 @@ const ToolBarIcons = ({
       </IconDivider>
       <IconDivider>
         <DeleteIcon entity={entity} onClick={onTlsCertificateDeleteClick} />
+        <DownloadIcon
+          value={entity}
+          title={_('Download TLS Certififcate as .pem')}
+          onClick={onTlsCertificateDownloadClick}
+        />
         <ExportIcon
           value={entity}
           title={_('Export TLS Certififcate as XML')}
-          onClick={onTlsCertificateDownloadClick}
+          onClick={onTlsCertificateExportClick}
         />
       </IconDivider>
     </Divider>
@@ -99,6 +106,7 @@ ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
   onTlsCertificateDeleteClick: PropTypes.func.isRequired,
   onTlsCertificateDownloadClick: PropTypes.func.isRequired,
+  onTlsCertificateExportClick: PropTypes.func.isRequired,
 };
 
 const Details = ({entity, ...props}) => {
@@ -193,7 +201,7 @@ const Page = ({
       onDownloadError={onError}
       onInteraction={onInteraction}
     >
-      {({delete: delete_func, download}) => (
+      {({delete: delete_func, download, exportFunc}) => (
         <EntityPage
           {...props}
           entity={entity}
@@ -203,6 +211,7 @@ const Page = ({
           onInteraction={onInteraction}
           onTlsCertificateDeleteClick={delete_func}
           onTlsCertificateDownloadClick={download}
+          onTlsCertificateExportClick={exportFunc}
         >
           {({activeTab = 0, onActivateTab}) => {
             return (
