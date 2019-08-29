@@ -191,6 +191,8 @@ const policy4 = new Policy({
   },
 });
 
+const scanners = [{name: 'scanner1'}, {name: 'scanner2'}];
+
 const caps = new Capabilities(['everything']);
 
 const entityType = 'policy';
@@ -477,7 +479,7 @@ describe('Policy Detailspage tests', () => {
     );
     const clone = jest.fn().mockReturnValue(
       Promise.resolve({
-        foo: 'bar',
+        data: {id: 'foo'},
       }),
     );
     const getNvtFamilies = jest.fn().mockReturnValue(
@@ -487,7 +489,7 @@ describe('Policy Detailspage tests', () => {
     );
     const getAllScanners = jest.fn().mockReturnValue(
       Promise.resolve({
-        foo: 'bar',
+        data: scanners,
       }),
     );
     const deleteFunc = jest.fn().mockReturnValue(
@@ -569,7 +571,7 @@ describe('Policy Detailspage tests', () => {
 
     const clone = jest.fn().mockReturnValue(
       Promise.resolve({
-        foo: 'bar',
+        data: {id: 'foo'},
       }),
     );
     const getNvtFamilies = jest.fn().mockReturnValue(
@@ -579,7 +581,7 @@ describe('Policy Detailspage tests', () => {
     );
     const getAllScanners = jest.fn().mockReturnValue(
       Promise.resolve({
-        foo: 'bar',
+        data: scanners,
       }),
     );
     const deleteFunc = jest.fn().mockReturnValue(
@@ -670,7 +672,7 @@ describe('Policy Detailspage tests', () => {
 
     const clone = jest.fn().mockReturnValue(
       Promise.resolve({
-        foo: 'bar',
+        data: {id: 'foo'},
       }),
     );
     const getNvtFamilies = jest.fn().mockReturnValue(
@@ -680,7 +682,7 @@ describe('Policy Detailspage tests', () => {
     );
     const getAllScanners = jest.fn().mockReturnValue(
       Promise.resolve({
-        foo: 'bar',
+        data: scanners,
       }),
     );
     const deleteFunc = jest.fn().mockReturnValue(
@@ -762,7 +764,7 @@ describe('Policy Detailspage tests', () => {
 
     const clone = jest.fn().mockReturnValue(
       Promise.resolve({
-        foo: 'bar',
+        data: {id: 'foo'},
       }),
     );
     const getNvtFamilies = jest.fn().mockReturnValue(
@@ -772,7 +774,7 @@ describe('Policy Detailspage tests', () => {
     );
     const getAllScanners = jest.fn().mockReturnValue(
       Promise.resolve({
-        foo: 'bar',
+        data: scanners,
       }),
     );
     const deleteFunc = jest.fn().mockReturnValue(
