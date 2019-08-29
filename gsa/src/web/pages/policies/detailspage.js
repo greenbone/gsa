@@ -20,10 +20,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import styled from 'styled-components';
-
-import DetailsLink from 'web/components/link/detailslink';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
@@ -31,15 +27,6 @@ import Layout from 'web/components/layout/layout';
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
 import PolicyIcon from 'web/components/icon/policyicon';
-
-import Link from 'web/components/link/link';
-
-import StripedTable from 'web/components/table/stripedtable';
-import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
-import TableHead from 'web/components/table/head';
-import TableHeader from 'web/components/table/header';
-import TableRow from 'web/components/table/row';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -72,9 +59,14 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import PolicyDetails from './details';
 import PolicyComponent from './component';
-import Trend from 'web/pages/scanconfigs/trend';
 
-const ToolBarIcons = withCapabilities(
+import {
+  NvtFamilies,
+  ScannerPreferences,
+  NvtPreferences,
+} from 'web/pages/scanconfigs/detailspage';
+
+export const ToolBarIcons = withCapabilities(
   ({
     capabilities,
     entity,
@@ -119,155 +111,6 @@ ToolBarIcons.propTypes = {
   onPolicyDeleteClick: PropTypes.func.isRequired,
   onPolicyDownloadClick: PropTypes.func.isRequired,
   onPolicyEditClick: PropTypes.func.isRequired,
-};
-
-const NvtFamilies = ({entity}) => {
-  const {family_list = [], families} = entity;
-  return (
-    <Layout>
-      {family_list.length > 0 && (
-        <StripedTable>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{_('Family')}</TableHead>
-              <TableHead>{_('NVTs selected')}</TableHead>
-              <TableHead align={['center', 'center']}>
-                <Divider>
-                  {_('Trend')}
-                  <Trend
-                    trend={families.trend}
-                    titleDynamic={_(
-                      'The families selection is DYNAMIC. New ' +
-                        'families will automatically be added and considered.',
-                    )}
-                    titleStatic={_(
-                      'The families selection is STATIC. New ' +
-                        'families will NOT automatically be added and considered.',
-                    )}
-                  />
-                </Divider>
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {family_list.map(family => (
-              <TableRow key={family.name}>
-                <TableData>
-                  <span>
-                    <Link
-                      to="nvts"
-                      filter={'family="' + family.name + '"'}
-                      title={_('NVTs of family {{name}}', {name: family.name})}
-                    >
-                      {family.name}
-                    </Link>
-                  </span>
-                </TableData>
-                <TableData align={['center', 'start']}>
-                  <Layout>{_('{{count}} of {{max}}', family.nvts)}</Layout>
-                </TableData>
-                <TableData align={['center', 'center']}>
-                  <Trend
-                    trend={family.trend}
-                    titleDynamic={_(
-                      'The NVT selection is DYNAMIC. New ' +
-                        'NVTs will automatically be added and considered.',
-                    )}
-                    titleStatic={_(
-                      'The NVT selection is STATIC. New ' +
-                        'NVTs will NOT automatically be added and considered.',
-                    )}
-                  />
-                </TableData>
-              </TableRow>
-            ))}
-          </TableBody>
-        </StripedTable>
-      )}
-    </Layout>
-  );
-};
-
-NvtFamilies.propTypes = {
-  entity: PropTypes.model.isRequired,
-};
-
-const ScannerPreferences = ({entity}) => {
-  const {preferences} = entity;
-
-  return (
-    <Layout>
-      {preferences.scanner.length > 0 && (
-        <StripedTable>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{_('Name')}</TableHead>
-              <TableHead>{_('Value')}</TableHead>
-              <TableHead>{_('Default Value')}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {preferences.scanner.map(pref => (
-              <TableRow key={pref.name}>
-                <TableData>{pref.name}</TableData>
-                <TableData>{pref.value}</TableData>
-                <TableData>{pref.default}</TableData>
-              </TableRow>
-            ))}
-          </TableBody>
-        </StripedTable>
-      )}
-    </Layout>
-  );
-};
-
-ScannerPreferences.propTypes = {
-  entity: PropTypes.model.isRequired,
-};
-
-const StyledTableData = styled(TableData)`
-  word-break: break-all;
-`;
-
-const NvtPreferences = ({entity}) => {
-  const {preferences} = entity;
-
-  return (
-    <Layout>
-      {preferences.nvt.length > 0 && (
-        <StripedTable>
-          <TableHeader>
-            <TableRow>
-              <TableHead width="25%">{_('NVT')}</TableHead>
-              <TableHead width="25%">{_('Name')}</TableHead>
-              <TableHead width="15%">{_('Value')}</TableHead>
-              <TableHead>{_('Default Value')}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {preferences.nvt.map(pref => (
-              <TableRow key={pref.nvt.oid + pref.nvt.name + pref.name}>
-                <TableData>
-                  <span>
-                    <DetailsLink id={pref.nvt.oid} type="nvt">
-                      {pref.nvt.name}
-                    </DetailsLink>
-                  </span>
-                </TableData>
-                <TableData>{pref.name}</TableData>
-                <StyledTableData>{pref.value}</StyledTableData>
-                <StyledTableData>{pref.default}</StyledTableData>
-              </TableRow>
-            ))}
-          </TableBody>
-        </StripedTable>
-      )}
-    </Layout>
-  );
-};
-
-NvtPreferences.propTypes = {
-  entity: PropTypes.model.isRequired,
 };
 
 const Details = ({entity, ...props}) => {
