@@ -38,8 +38,8 @@ class Download extends React.Component {
     this.anchor.download = name;
   }
 
-  setData(data) {
-    const blob = new Blob([data], {type: 'application/octet-stream'});
+  setData(data, mimetype = 'application/octet-stream') {
+    const blob = new Blob([data], {type: mimetype});
 
     this.release();
 
