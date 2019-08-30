@@ -22,6 +22,8 @@ import {_l, _} from 'gmp/locale/lang';
 
 import {getTranslatableTicketStatus} from 'gmp/models/ticket';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import SeverityBar from 'web/components/bar/severitybar';
 
 import DateTime from 'web/components/date/datetime';
@@ -46,6 +48,8 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import withRowDetails from 'web/entities/withRowDetails';
 
 import PropTypes from 'web/utils/proptypes';
+
+import {NA_VALUE} from 'web/utils/severity';
 
 import TicketDetails from './details';
 
@@ -124,29 +128,46 @@ const Row = ({
   links = true,
   onToggleDetailsClick,
   ...props
-}) => (
-  <TableRow>
-    <EntityNameTableData
-      entity={entity}
-      link={links}
-      displayName={_('Ticket')}
-      onToggleDetailsClick={onToggleDetailsClick}
-    />
-    <TableData>
-      <SeverityBar severity={entity.severity} />
-    </TableData>
-    <TableData>{entity.host}</TableData>
-    <TableData align={['center', 'center']}>
-      <SolutionType type={entity.solutionType} />
-    </TableData>
-    <TableData>{entity.assignedTo.user.name}</TableData>
-    <TableData>
-      <DateTime date={entity.modificationTime} />
-    </TableData>
-    <TableData>{getTranslatableTicketStatus(entity.status)}</TableData>
-    <ActionsComponent {...props} entity={entity} />
-  </TableRow>
-);
+}) => {
+  const {task = {}} = entity;
+  const taskIsInTrash = isDefined(task.isInTrash) ? task.isInTrash() : false;
+
+  const showNa = taskIsInTrash || entity.isOrphan();
+
+  let toolTip;
+  if (taskIsInTrash) {
+    toolTip = _('Corresponding task is in trashcan');
+  } else if (entity.isOrphan()) {
+    toolTip = _('No severity available, the ticket is orphaned');
+  }
+
+  return (
+    <TableRow>
+      <EntityNameTableData
+        entity={entity}
+        link={links}
+        displayName={_('Ticket')}
+        onToggleDetailsClick={onToggleDetailsClick}
+      />
+      <TableData>
+        <SeverityBar
+          severity={showNa ? NA_VALUE : entity.severity}
+          toolTip={toolTip}
+        />
+      </TableData>
+      <TableData>{entity.host}</TableData>
+      <TableData align={['center', 'center']}>
+        <SolutionType type={entity.solutionType} />
+      </TableData>
+      <TableData>{entity.assignedTo.user.name}</TableData>
+      <TableData>
+        <DateTime date={entity.modificationTime} />
+      </TableData>
+      <TableData>{getTranslatableTicketStatus(entity.status)}</TableData>
+      <ActionsComponent {...props} entity={entity} />
+    </TableRow>
+  );
+};
 
 Row.propTypes = {
   actionsComponent: PropTypes.component,

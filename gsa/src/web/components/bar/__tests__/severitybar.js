@@ -41,6 +41,14 @@ describe('SeverityBar tests', () => {
     expect(progressbarBox).toHaveAttribute('title', 'High');
   });
 
+  test('should allow to overwrite title with toolTip', () => {
+    const {element} = render(
+      <SeverityBar severity="9.5" toolTip="tooltip text" />,
+    );
+
+    expect(element).toHaveAttribute('title', 'tooltip text');
+  });
+
   test('should render progress', () => {
     const {getByTestId} = render(<SeverityBar severity="9.5" />);
     const progress = getByTestId('progress');
