@@ -16935,8 +16935,22 @@ get_tls_certificates_gmp (gvm_connection_t *connection,
                           credentials_t *credentials, params_t *params,
                           cmd_response_data_t *response_data)
 {
-  return get_many (connection, "tls_certificates", credentials, params, NULL,
-                   response_data);
+  gmp_arguments_t *arguments = gmp_arguments_new ();
+  const char *include_certificate_data;
+
+  if (params_given (params, "include_certificate_data"))
+    {
+      include_certificate_data = params_value (params,
+                                               "include_certificate_data");
+      CHECK_VARIABLE_INVALID (include_certificate_data,
+                              "Get TLS Certificate");
+      gmp_arguments_add (arguments,
+                         "include_certificate_data",
+                         include_certificate_data);
+    }
+
+  return get_many (connection, "tls_certificates", credentials, params,
+                   arguments, response_data);
 }
 
 /**
@@ -16954,8 +16968,22 @@ get_tls_certificate_gmp (gvm_connection_t *connection,
                          credentials_t *credentials, params_t *params,
                          cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments = gmp_arguments_new ();
+  const char *include_certificate_data;
+
+  if (params_given (params, "include_certificate_data"))
+    {
+      include_certificate_data = params_value (params,
+                                               "include_certificate_data");
+      CHECK_VARIABLE_INVALID (include_certificate_data,
+                              "Get TLS Certificate");
+      gmp_arguments_add (arguments,
+                         "include_certificate_data",
+                         include_certificate_data);
+    }
+
   return get_one (connection, "tls_certificate", credentials, params, NULL,
-                  NULL, response_data);
+                  arguments, response_data);
 }
 
 /**
