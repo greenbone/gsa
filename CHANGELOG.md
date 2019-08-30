@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Added parseTrend() function to ScanConfig model [#1583](https://github.com/greenbone/gsa/pull/1583)
-- Added DetailsPage and more funtionalities to TLS Certificate assets [#1578](https://github.com/greenbone/gsa/pull/1578)
+- Added DetailsPage and more functionalities to TLS Certificate assets [#1578](https://github.com/greenbone/gsa/pull/1578)
 - Added Explicit Compliance [#1495](https://github.com/greenbone/gsa/pull/1495)
 - Added tasktrendgroup component for tasks filter dialog [#1511](https://github.com/greenbone/gsa/pull/1511)
 - Added HorizontalSep component for horizontal lists. [#1494](https://github.com/greenbone/gsa/pull/1494)
