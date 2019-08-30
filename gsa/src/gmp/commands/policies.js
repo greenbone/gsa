@@ -37,7 +37,7 @@ import {convert, convert_select, convert_preferences} from './scanconfigs';
 
 const log = logger.getLogger('gmp.commands.policies');
 
-class PolicyCommand extends EntityCommand {
+export class PolicyCommand extends EntityCommand {
   constructor(http) {
     super(http, 'config', Policy);
   }
@@ -186,7 +186,7 @@ class PolicyCommand extends EntityCommand {
   }
 }
 
-class PoliciesCommand extends EntitiesCommand {
+export class PoliciesCommand extends EntitiesCommand {
   constructor(http) {
     super(http, 'config', Policy);
   }
