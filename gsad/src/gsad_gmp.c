@@ -16940,12 +16940,10 @@ get_tls_certificates_gmp (gvm_connection_t *connection,
 
   if (params_given (params, "include_certificate_data"))
     {
-      include_certificate_data = params_value (params,
-                                               "include_certificate_data");
-      CHECK_VARIABLE_INVALID (include_certificate_data,
-                              "Get TLS Certificate");
-      gmp_arguments_add (arguments,
-                         "include_certificate_data",
+      include_certificate_data =
+        params_value (params, "include_certificate_data");
+      CHECK_VARIABLE_INVALID (include_certificate_data, "Get TLS Certificate");
+      gmp_arguments_add (arguments, "include_certificate_data",
                          include_certificate_data);
     }
 
@@ -16973,12 +16971,10 @@ get_tls_certificate_gmp (gvm_connection_t *connection,
 
   if (params_given (params, "include_certificate_data"))
     {
-      include_certificate_data = params_value (params,
-                                               "include_certificate_data");
-      CHECK_VARIABLE_INVALID (include_certificate_data,
-                              "Get TLS Certificate");
-      gmp_arguments_add (arguments,
-                         "include_certificate_data",
+      include_certificate_data =
+        params_value (params, "include_certificate_data");
+      CHECK_VARIABLE_INVALID (include_certificate_data, "Get TLS Certificate");
+      gmp_arguments_add (arguments, "include_certificate_data",
                          include_certificate_data);
     }
 
