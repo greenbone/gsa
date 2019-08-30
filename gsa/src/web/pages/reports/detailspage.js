@@ -495,6 +495,7 @@ class ReportDetails extends React.Component {
 
     onDownload({
       filename: 'tls-cert-' + serial + '.pem',
+      mimetype: 'application/x-x509-ca-cert',
       data: create_pem_certificate(data),
     });
   }
