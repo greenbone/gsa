@@ -18,7 +18,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
-- word-wrap in pre component [#1586](https://github.com/greenbone/gsa/pull/1586)
+- Adjust ProtList manual links [#1599](https://github.com/greenbone/gsa/pull/1599)
+- Word-wrap in pre component [#1586](https://github.com/greenbone/gsa/pull/1586)
 - Disable EditIcon for My Settings if permission denied [#1588](https://github.com/greenbone/gsa/pull/1588)
 - Don't allow to clone hosts [#1581](https://github.com/greenbone/gsa/pull/1581)
 - Trigger alert button disabled in report details page when no permission [#1574](https://github.com/greenbone/gsa/pull/1574)
