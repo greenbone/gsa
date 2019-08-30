@@ -28,9 +28,9 @@ const withDownload = Component => {
       this.handleDownload = this.handleDownload.bind(this);
     }
 
-    handleDownload({filename, data}) {
+    handleDownload({filename, data, mimetype}) {
       this.download.setFilename(filename);
-      this.download.setData(data);
+      this.download.setData(data, mimetype);
       this.download.download();
     }
 
