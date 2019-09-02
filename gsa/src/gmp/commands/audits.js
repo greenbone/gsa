@@ -193,7 +193,7 @@ export class AuditCommand extends EntityCommand {
   }
 }
 
-class AuditsCommand extends EntitiesCommand {
+export class AuditsCommand extends EntitiesCommand {
   constructor(http) {
     super(http, 'task', Audit);
   }

@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Added parseTrend() function to ScanConfig model [#1583](https://github.com/greenbone/gsa/pull/1583)
-- Added DetailsPage and more funtionalities to TLS Certificate assets [#1578](https://github.com/greenbone/gsa/pull/1578)
+- Added DetailsPage and more functionalities to TLS Certificate assets [#1578](https://github.com/greenbone/gsa/pull/1578)
 - Added Explicit Compliance [#1495](https://github.com/greenbone/gsa/pull/1495)
 - Added tasktrendgroup component for tasks filter dialog [#1511](https://github.com/greenbone/gsa/pull/1511)
 - Added HorizontalSep component for horizontal lists. [#1494](https://github.com/greenbone/gsa/pull/1494)
@@ -20,11 +20,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add storybook [#1272](https://github.com/greenbone/gsa/pull/1286)
 - Added TLS certificates to the asset management.
   [#1455](https://github.com/greenbone/gsa/pull/1455),
-  [#1461](https://github.com/greenbone/gsa/pull/1461)
+  [#1461](https://github.com/greenbone/gsa/pull/1461),
+  [#1600](https://github.com/greenbone/gsa/pull/1600)
 - Add usage type to task and scanconfig commands [#1460](https://github.com/greenbone/gsa/pull/1460)
   [#1466](https://github.com/greenbone/gsa/pull/1466) [#1467](https://github.com/greenbone/gsa/pull/1467)
 
 ### Changed
+- Reuse NvtFamilies, NvtPreferences and ScannerPreferences from scanconfig detailspage for policy detailspage [#1593](https://github.com/greenbone/gsa/pull/1593)
 - Fix sensor icon not visible in audit row and reuse renderReport from tasks for audits [#1577](https://github.com/greenbone/gsa/pull/1577)
 - Reuse scanconfig edit dialogs for policies [#1573](https://github.com/greenbone/gsa/pull/1573)
 - Use styled-components to render global styles [#1557](https://github.com/greenbone/gsa/pull/1557)

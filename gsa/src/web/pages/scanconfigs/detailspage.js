@@ -78,7 +78,7 @@ import ScanConfigDetails from './details';
 import ScanConfigComponent from './component';
 import Trend from './trend';
 
-const ToolBarIcons = withCapabilities(
+export const ToolBarIcons = withCapabilities(
   ({
     capabilities,
     entity,
@@ -129,7 +129,7 @@ ToolBarIcons.propTypes = {
   onScanConfigImportClick: PropTypes.func.isRequired,
 };
 
-const NvtFamilies = ({entity}) => {
+export const NvtFamilies = ({entity}) => {
   const {family_list = [], families} = entity;
   return (
     <Layout>
@@ -200,7 +200,7 @@ NvtFamilies.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const ScannerPreferences = ({entity}) => {
+export const ScannerPreferences = ({entity}) => {
   const {preferences} = entity;
 
   return (
@@ -237,7 +237,7 @@ const StyledTableData = styled(TableData)`
   word-break: break-all;
 `;
 
-const NvtPreferences = ({entity}) => {
+export const NvtPreferences = ({entity}) => {
   const {preferences} = entity;
 
   return (
