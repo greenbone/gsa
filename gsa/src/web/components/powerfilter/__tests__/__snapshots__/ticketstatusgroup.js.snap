@@ -334,9 +334,9 @@ exports[`TicketStatusGroup tests should render 1`] = `
         <div
           class="c5"
           data-testid="select-selected-value"
-          title="0"
+          title="Closed"
         >
-          0
+          Closed
         </div>
         <div
           class="c6"
