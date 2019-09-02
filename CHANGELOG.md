@@ -20,7 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add storybook [#1272](https://github.com/greenbone/gsa/pull/1286)
 - Added TLS certificates to the asset management.
   [#1455](https://github.com/greenbone/gsa/pull/1455),
-  [#1461](https://github.com/greenbone/gsa/pull/1461)
+  [#1461](https://github.com/greenbone/gsa/pull/1461),
+  [#1600](https://github.com/greenbone/gsa/pull/1600)
 - Add usage type to task and scanconfig commands [#1460](https://github.com/greenbone/gsa/pull/1460)
   [#1466](https://github.com/greenbone/gsa/pull/1466) [#1467](https://github.com/greenbone/gsa/pull/1467)
 

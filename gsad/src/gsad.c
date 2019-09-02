@@ -816,6 +816,7 @@ init_validator ()
   gvm_validator_alias (validator, "in_assets", "boolean");
   gvm_validator_alias (validator, "in_use", "boolean");
   gvm_validator_alias (validator, "include_related", "number");
+  gvm_validator_alias (validator, "include_certificate_data", "boolean");
   gvm_validator_alias (validator, "inheritor_id", "id");
   gvm_validator_alias (validator, "ignore_pagination", "boolean");
   gvm_validator_alias (validator, "event", "condition");
