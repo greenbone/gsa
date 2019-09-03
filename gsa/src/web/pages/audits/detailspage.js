@@ -22,8 +22,6 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import Filter from 'gmp/models/filter';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
@@ -40,7 +38,6 @@ import Link from 'web/components/link/link';
 import AlterableIcon from 'web/components/icon/alterableicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
-import NoteIcon from 'web/components/icon/noteicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
 import AuditIcon from 'web/components/icon/auditicon';
@@ -70,14 +67,6 @@ import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
 import {
-  selector as notesSelector,
-  loadEntities as loadNotes,
-} from 'web/store/entities/notes';
-import {
-  selector as overridesSelector,
-  loadEntities as loadOverrides,
-} from 'web/store/entities/overrides';
-import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
@@ -100,10 +89,9 @@ import AuditDetails from './details';
 import AuditStatus from 'web/pages/tasks/status';
 import AuditComponent from './component';
 
-const ToolBarIcons = ({
+export const ToolBarIcons = ({
   entity,
   links,
-  notes = [],
   onAuditDeleteClick,
   onAuditCloneClick,
   onAuditDownloadClick,
@@ -217,18 +205,6 @@ const ToolBarIcons = ({
             <ResultIcon />
           </Badge>
         </Link>
-
-        <IconDivider>
-          <Link
-            to="notes"
-            filter={'task_id=' + entity.id}
-            title={_('Notes for Audit {{- name}}', entity)}
-          >
-            <Badge content={notes.length}>
-              <NoteIcon />
-            </Badge>
-          </Link>
-        </IconDivider>
       </Divider>
     </Divider>
   );
@@ -237,8 +213,6 @@ const ToolBarIcons = ({
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  notes: PropTypes.array,
-  overrides: PropTypes.array,
   onAuditCloneClick: PropTypes.func.isRequired,
   onAuditDeleteClick: PropTypes.func.isRequired,
   onAuditDownloadClick: PropTypes.func.isRequired,
@@ -421,15 +395,9 @@ const AuditPermissions = withComponentDefaults({
   ],
 })(EntityPermissions);
 
-const auditIdFilter = id => Filter.fromString('task_id=' + id).all();
-
 const mapStateToProps = (rootState, {id}) => {
   const permSel = permissionsSelector(rootState);
-  const notesSel = notesSelector(rootState);
-  const overridesSel = overridesSelector(rootState);
   return {
-    notes: notesSel.getEntities(auditIdFilter(id)),
-    overrides: overridesSel.getEntities(auditIdFilter(id)),
     permissions: permSel.getEntities(permissionsResourceFilter(id)),
   };
 };
@@ -437,14 +405,10 @@ const mapStateToProps = (rootState, {id}) => {
 const load = gmp => {
   const loadAuditFunc = loadAudit(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  const loadNotesFunc = loadNotes(gmp);
-  const loadOverridesFunc = loadOverrides(gmp);
   return id => dispatch =>
     Promise.all([
       dispatch(loadAuditFunc(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-      dispatch(loadNotesFunc(auditIdFilter(id))),
-      dispatch(loadOverridesFunc(auditIdFilter(id))),
     ]);
 };
 

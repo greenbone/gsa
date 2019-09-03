@@ -25,8 +25,6 @@ import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {YES_VALUE} from 'gmp/parser';
-
 import {duration} from 'gmp/models/date';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
@@ -86,7 +84,6 @@ class AuditDetails extends React.Component {
     const {links = true, entity, policy, schedule} = this.props;
     const {
       alerts,
-      apply_overrides,
       auto_delete,
       auto_delete_data,
       average_duration,
@@ -94,7 +91,6 @@ class AuditDetails extends React.Component {
       hosts_ordering,
       in_assets,
       last_report,
-      min_qod,
       preferences,
       scanner,
       schedule_periods,
@@ -232,20 +228,6 @@ class AuditDetails extends React.Component {
                 <TableData>{_('Add to Assets')}</TableData>
                 <TableData>{renderYesNo(in_assets)}</TableData>
               </TableRow>
-
-              {in_assets === YES_VALUE && (
-                <TableRow>
-                  <TableData>{_('Apply to Overrides')}</TableData>
-                  <TableData>{renderYesNo(apply_overrides)}</TableData>
-                </TableRow>
-              )}
-
-              {in_assets === YES_VALUE && (
-                <TableRow>
-                  <TableData>{_('Min QoD')}</TableData>
-                  <TableData>{min_qod + ' %'}</TableData>
-                </TableRow>
-              )}
             </TableBody>
           </DetailsTable>
         </DetailsBlock>
