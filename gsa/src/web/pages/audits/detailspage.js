@@ -24,8 +24,6 @@ import {shortDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
-
 import Badge from 'web/components/badge/badge';
 
 import Divider from 'web/components/layout/divider';
@@ -55,7 +53,6 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import EntityPage, {Col} from 'web/entity/page';
-import EntityPermissions from 'web/entity/permissions';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
 import withEntityContainer, {
@@ -75,10 +72,8 @@ import {
   loadEntity as loadAudit,
 } from 'web/store/entities/audits';
 
-import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
-import withComponentDefaults from 'web/utils/withComponentDefaults';
 
 import ResumeIcon from './icons/resumeicon';
 import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
@@ -88,6 +83,11 @@ import StopIcon from 'web/pages/tasks/icons/stopicon';
 import AuditDetails from './details';
 import AuditStatus from 'web/pages/tasks/status';
 import AuditComponent from './component';
+
+import {
+  TaskPermissions as AuditPermissions,
+  reloadInterval,
+} from 'web/pages/tasks/detailspage';
 
 export const ToolBarIcons = ({
   entity,
@@ -290,7 +290,7 @@ const Page = ({
     onStopped={onChanged}
     onStopError={onError}
   >
-    {({clone, delete: delete_func, download, edit, start, stop, resume}) => (
+    {({clone, delete: deleteFunc, download, edit, start, stop, resume}) => (
       <EntityPage
         {...props}
         entity={entity}
@@ -301,7 +301,7 @@ const Page = ({
         onError={onError}
         onInteraction={onInteraction}
         onAuditCloneClick={clone}
-        onAuditDeleteClick={delete_func}
+        onAuditDeleteClick={deleteFunc}
         onAuditDownloadClick={download}
         onAuditEditClick={edit}
         onAuditResumeClick={resume}
@@ -358,43 +358,6 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const AuditPermissions = withComponentDefaults({
-  relatedResourcesLoaders: [
-    ({entity, gmp}) =>
-      isDefined(entity.alerts)
-        ? Promise.resolve([...entity.alerts])
-        : Promise.resolve([]),
-    ({entity, gmp}) => {
-      const resources = [];
-      const names = ['config', 'scanner', 'schedule'];
-
-      for (const name of names) {
-        if (isDefined(entity[name])) {
-          resources.push(entity[name]);
-        }
-      }
-      return Promise.resolve(resources);
-    },
-    ({entity, gmp}) => {
-      if (isDefined(entity.target)) {
-        return gmp.target.get(entity.target).then(response => {
-          const target = response.data;
-          const resources = [target];
-
-          for (const name of ['port_list', ...TARGET_CREDENTIAL_NAMES]) {
-            const cred = target[name];
-            if (isDefined(cred)) {
-              resources.push(cred);
-            }
-          }
-          return resources;
-        });
-      }
-      return Promise.resolve([]);
-    },
-  ],
-})(EntityPermissions);
-
 const mapStateToProps = (rootState, {id}) => {
   const permSel = permissionsSelector(rootState);
   return {
@@ -410,15 +373,6 @@ const load = gmp => {
       dispatch(loadAuditFunc(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
     ]);
-};
-
-const reloadInterval = ({defaultReloadInterval, entity}) => {
-  if (!isDefined(entity)) {
-    return 0;
-  }
-  return entity.isActive()
-    ? DEFAULT_RELOAD_INTERVAL_ACTIVE
-    : defaultReloadInterval;
 };
 
 export default withEntityContainer('audit', {
