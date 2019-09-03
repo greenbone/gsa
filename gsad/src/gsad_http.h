@@ -150,9 +150,6 @@ int
 handler_send_response (http_connection_t *connection, http_response_t *response,
                        cmd_response_data_t *response_data, const gchar *sid);
 
-int
-handler_send_not_found (http_connection_t *connection, const gchar *url);
-
 /**
  * @brief Content types.
  */

@@ -37,7 +37,7 @@ import {
 
 import ProgressBar from './progressbar.js';
 
-const SeverityBar = ({severity}) => {
+const SeverityBar = ({severity, toolTip}) => {
   let cvss;
   let threat;
   let title;
@@ -69,8 +69,11 @@ const SeverityBar = ({severity}) => {
   } else {
     type = 'low';
   }
+
+  const toolTipText = isDefined(toolTip) ? toolTip : title;
+
   return (
-    <ProgressBar title={title} progress={fill} background={type}>
+    <ProgressBar title={toolTipText} progress={fill} background={type}>
       {text}
     </ProgressBar>
   );
@@ -78,6 +81,7 @@ const SeverityBar = ({severity}) => {
 
 SeverityBar.propTypes = {
   severity: PropTypes.numberOrNumberString,
+  toolTip: PropTypes.string,
 };
 
 export default SeverityBar;
