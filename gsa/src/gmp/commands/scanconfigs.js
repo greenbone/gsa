@@ -188,12 +188,11 @@ class ScanConfigCommand extends EntityCommand {
       name: '', // don't matter
     }).then(response => {
       const {data} = response;
-      const settings = {};
       const config_resp = data.get_config_nvt_response;
 
-      settings.nvt = new Nvt(config_resp.get_nvts_response.nvt);
+      const nvt = new Nvt(config_resp.get_nvts_response.nvt);
 
-      return response.setData(settings);
+      return response.setData(nvt);
     });
   }
 

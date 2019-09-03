@@ -354,10 +354,10 @@ class ScanConfigComponent extends React.Component {
         oid: nvt.oid,
       })
       .then(response => {
-        const {data} = response;
+        const {data: loadedNvt} = response;
         const preferenceValues = {};
 
-        forEach(data.nvt.preferences, pref => {
+        loadedNvt.preferences.forEach(pref => {
           let {id, value, type} = pref;
 
           if (type === 'password' || type === 'file') {
@@ -372,7 +372,7 @@ class ScanConfigComponent extends React.Component {
         });
 
         const state = {
-          nvt: data.nvt,
+          nvt: loadedNvt,
           preferenceValues,
         };
 
