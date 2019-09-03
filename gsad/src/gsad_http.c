@@ -397,7 +397,7 @@ create_not_found_response (const gchar *url, cmd_response_data_t *response_data)
 
   cmd_response_data_set_status_code (response_data, MHD_HTTP_NOT_FOUND);
 
-  gchar *msg = g_strdup_printf (
+  gchar *msg = g_markup_printf_escaped (
     "<!DOCTYPE html>"
     "<html>"
     "<head>"
