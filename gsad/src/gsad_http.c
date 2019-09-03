@@ -397,7 +397,7 @@ create_not_found_response (const gchar *url, cmd_response_data_t *response_data)
 
   cmd_response_data_set_status_code (response_data, MHD_HTTP_NOT_FOUND);
 
-  gchar *msg = g_markup_printf_escaped (
+  gchar *msg =
     "<!DOCTYPE html>"
     "<html>"
     "<head>"
@@ -408,12 +408,10 @@ create_not_found_response (const gchar *url, cmd_response_data_t *response_data)
     "<body>"
     "<h1>URL not found</h1>"
     "<p>"
-    "The requested URL %s is not available"
+    "The requested URL is not available"
     "</p>"
     "</body>"
-    "</html>",
-    url
-  );
+    "</html>";
 
   cmd_response_data_set_content_type (response_data,
                                       GSAD_CONTENT_TYPE_TEXT_HTML);
@@ -422,7 +420,6 @@ create_not_found_response (const gchar *url, cmd_response_data_t *response_data)
 
   len = cmd_response_data_get_content_length (response_data);
   response = MHD_create_response_from_buffer (len, msg, MHD_RESPMEM_MUST_COPY);
-  g_free (msg);
   return response;
 }
 
