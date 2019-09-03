@@ -26,6 +26,8 @@ import PropTypes from 'web/utils/proptypes';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
+import DateTime from 'web/components/date/datetime';
+
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import Radio from 'web/components/form/radio';
@@ -120,8 +122,10 @@ class EditDialog extends React.Component {
                     <TableData>{nvt.oid}</TableData>
                   </TableRow>
                   <TableRow>
-                    <TableData>{_('Version')}</TableData>
-                    <TableData>{nvt.version}</TableData>
+                    <TableData>{_('Last Modified')}</TableData>
+                    <TableData>
+                      <DateTime date={nvt.modificationTime} />
+                    </TableData>
                   </TableRow>
                   <TableRow>
                     <TableData>{_('Notes')}</TableData>
