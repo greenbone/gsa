@@ -165,24 +165,12 @@ class ScanConfigCommand extends EntityCommand {
     });
   }
 
-  saveScanConfigNvt({
-    config_name,
-    family_name,
-    id,
-    manual_timeout,
-    nvt_name,
-    oid,
-    preference_values,
-    timeout,
-  }) {
+  saveScanConfigNvt({id, manual_timeout, timeout, oid, preference_values}) {
     const data = {
       ...convert_preferences(preference_values, oid),
       cmd: 'save_config_nvt',
-      no_redirect: '1',
       id,
       oid,
-      name: config_name,
-      family: family_name,
       timeout,
     };
 
@@ -192,19 +180,17 @@ class ScanConfigCommand extends EntityCommand {
     return this.httpPost(data);
   }
 
-  editScanConfigNvtSettings({config_name, family_name, id, oid}) {
+  editScanConfigNvtSettings({id, oid}) {
     return this.httpGet({
       cmd: 'edit_config_nvt',
       id,
       oid,
-      name: config_name,
-      family: family_name,
+      name: '', // don't matter
     }).then(response => {
       const {data} = response;
       const settings = {};
       const config_resp = data.get_config_nvt_response;
 
-      settings.config = new Model(config_resp.config, 'config');
       settings.nvt = new Nvt(config_resp.get_nvts_response.nvt);
 
       settings.nvt.notes_counts = parseCounts(data.get_notes_response, 'note');

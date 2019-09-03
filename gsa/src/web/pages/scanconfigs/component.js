@@ -235,26 +235,18 @@ class ScanConfigComponent extends React.Component {
       });
   }
 
-  handleSaveConfigNvt(values) {
+  handleSaveConfigNvt({id, manual_timeout, timeout, oid, preference_values}) {
     const {gmp} = this.props;
 
     this.handleInteraction();
 
     return gmp.scanconfig
-      .saveScanConfigNvt(values)
-      .then(response => {
-        // update nvt timeouts in nvt family dialog
-        this.loadEditScanConfigFamilySettings(
-          values.config,
-          values.family_name,
-        ).then(state => {
-          this.setState({state});
-        });
-
-        // update nvt preference values in edit dialog
-        this.loadEditScanConfigSettings(values.config).then(state => {
-          this.setState({state});
-        });
+      .saveScanConfigNvt({
+        id,
+        manual_timeout,
+        timeout,
+        oid,
+        preference_values,
       })
       .then(() => this.closeEditNvtDetailsDialog());
   }
@@ -337,7 +329,6 @@ class ScanConfigComponent extends React.Component {
         }
 
         const state = {
-          config: data.config,
           config_name: config.name,
           family_name: name,
           id: config.id,
@@ -356,8 +347,6 @@ class ScanConfigComponent extends React.Component {
       .editScanConfigNvtSettings({
         id: config.id,
         oid: nvt.oid,
-        config_name: config.name,
-        name: nvt.name,
       })
       .then(response => {
         const {data} = response;
@@ -378,10 +367,7 @@ class ScanConfigComponent extends React.Component {
         });
 
         const state = {
-          config: data.config,
-          config_name: data.config.name,
           family_name: data.nvt.family,
-          id: data.config.id,
           oid: data.nvt.oid,
           manual_timeout: data.nvt.timeout,
           nvt: data.nvt,
@@ -525,9 +511,9 @@ class ScanConfigComponent extends React.Component {
         )}
         {editNvtDetailsDialogVisible && (
           <EditNvtDetailsDialog
-            config={config}
+            configId={config.id}
+            configName={config.name}
             configNameLabel={_('Config')}
-            config_name={config_name}
             family_name={family_name}
             manual_timeout={manual_timeout}
             nvt={nvt}
