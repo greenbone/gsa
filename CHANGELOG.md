@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1466](https://github.com/greenbone/gsa/pull/1466) [#1467](https://github.com/greenbone/gsa/pull/1467)
 
 ### Changed
+- Replaced savedialogcontent class with hooks [#1602](https://github.com/greenbone/gsa/pull/1602)
 - TicketStatusGroup updated with new filter strings [#1594](https://github.com/greenbone/gsa/pull/1594)
 - Reuse NvtFamilies, NvtPreferences and ScannerPreferences from scanconfig detailspage for policy detailspage [#1593](https://github.com/greenbone/gsa/pull/1593)
 - Fix sensor icon not visible in audit row and reuse renderReport from tasks for audits [#1577](https://github.com/greenbone/gsa/pull/1577)

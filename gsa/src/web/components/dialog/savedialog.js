@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -34,113 +34,91 @@ import DialogFooter from '../dialog/twobuttonfooter';
 import DialogTitle from '../dialog/title';
 import ScrollableContent from '../dialog/scrollablecontent';
 
-class SaveDialogContent extends React.Component {
-  constructor(...args) {
-    super(...args);
+const SaveDialogContent = ({
+  onSave,
+  error,
+  onError,
+  onErrorClose = undefined,
+  ...props
+}) => {
+  const [loading, setLoading] = useState(false);
+  const [stateError, setStateError] = useState(undefined);
 
-    this.state = {
-      loading: false,
-    };
+  useEffect(() => {
+    setStateError(error);
+    setLoading(false);
+  }, [error]);
 
-    this.handleSaveClick = this.handleSaveClick.bind(this);
-    this.handleErrorClose = this.handleErrorClose.bind(this);
-  }
+  const setError = err => {
+    setLoading(false);
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.error !== state.prevError) {
-      return {
-        error: props.error,
-        prevError: props.error,
-        loading: false,
-      };
+    if (onError) {
+      onError(err);
+    } else {
+      setStateError(err.message);
     }
-    return null;
-  }
+  };
 
-  handleSaveClick(state) {
-    const {onSave} = this.props;
-
-    if (onSave && !this.state.loading) {
+  const handleSaveClick = state => {
+    if (onSave && !loading) {
       const promise = onSave(state);
       if (isDefined(promise)) {
-        this.setState({loading: true});
-
-        promise.catch(error => this.setError(error));
+        setLoading(true);
+        // eslint-disable-next-line no-shadow
+        promise.catch(error => setError(error));
       }
     }
-  }
+  };
 
-  handleErrorClose() {
-    const {onErrorClose} = this.props;
+  const handleErrorClose = () => {
     if (isDefined(onErrorClose)) {
       onErrorClose();
     } else {
-      this.setState({error: undefined});
+      setStateError(undefined);
     }
-  }
+  };
 
-  setError(error) {
-    const {onError} = this.props;
+  const {
+    buttonTitle,
+    children,
+    close,
+    defaultValues,
+    moveProps,
+    heightProps,
+    title,
+    values,
+  } = props;
 
-    this.setState({
-      loading: false,
-    });
-
-    if (onError) {
-      onError(error);
-    } else {
-      this.setState({
-        error: error.message,
-      });
-    }
-  }
-
-  render() {
-    const {
-      buttonTitle,
-      children,
-      close,
-      defaultValues,
-      moveProps,
-      heightProps,
-      title,
-      values,
-    } = this.props;
-    const {error} = this.state;
-    return (
-      <State {...defaultValues}>
-        {({state, onValueChange}) => {
-          const childValues = {...state, ...values};
-          return (
-            <DialogContent>
-              <DialogTitle title={title} onCloseClick={close} {...moveProps} />
-              {error && (
-                <DialogError
-                  error={error}
-                  onCloseClick={this.handleErrorClose}
-                />
-              )}
-              <ErrorBoundary message={_('An error occurred in this dialog.')}>
-                <ScrollableContent {...heightProps}>
-                  {children({
-                    values: childValues,
-                    onValueChange,
-                  })}
-                </ScrollableContent>
-              </ErrorBoundary>
-              <DialogFooter
-                loading={this.state.loading}
-                rightButtonTitle={buttonTitle}
-                onLeftButtonClick={close}
-                onRightButtonClick={() => this.handleSaveClick(childValues)}
-              />
-            </DialogContent>
-          );
-        }}
-      </State>
-    );
-  }
-}
+  return (
+    <State {...defaultValues}>
+      {({state, onValueChange}) => {
+        const childValues = {...state, ...values};
+        return (
+          <DialogContent>
+            <DialogTitle title={title} onCloseClick={close} {...moveProps} />
+            {stateError && (
+              <DialogError error={stateError} onCloseClick={handleErrorClose} />
+            )}
+            <ErrorBoundary message={_('An error occurred in this dialog.')}>
+              <ScrollableContent {...heightProps}>
+                {children({
+                  values: childValues,
+                  onValueChange,
+                })}
+              </ScrollableContent>
+            </ErrorBoundary>
+            <DialogFooter
+              loading={loading}
+              rightButtonTitle={buttonTitle}
+              onLeftButtonClick={close}
+              onRightButtonClick={() => handleSaveClick(childValues)}
+            />
+          </DialogContent>
+        );
+      }}
+    </State>
+  );
+};
 
 SaveDialogContent.propTypes = {
   buttonTitle: PropTypes.string,
