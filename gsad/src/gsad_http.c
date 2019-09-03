@@ -384,20 +384,19 @@ handler_create_response (http_connection_t *connection, gchar *data,
 /**
  * @brief Create a default 404 (not found) http response
  *
- * @param[in]   url                 Requested (not found) url
  * @param[out]  response_data       Response data to return
  *
  * @return A http response
  */
 http_response_t *
-create_not_found_response (const gchar *url, cmd_response_data_t *response_data)
+create_not_found_response (cmd_response_data_t *response_data)
 {
   http_response_t *response;
   int len;
 
   cmd_response_data_set_status_code (response_data, MHD_HTTP_NOT_FOUND);
 
-  gchar *msg = g_strdup_printf (
+  gchar *msg =
     "<!DOCTYPE html>"
     "<html>"
     "<head>"
@@ -408,11 +407,10 @@ create_not_found_response (const gchar *url, cmd_response_data_t *response_data)
     "<body>"
     "<h1>URL not found</h1>"
     "<p>"
-    "The requested URL %s is not available"
+    "The requested URL is not available"
     "</p>"
     "</body>"
-    "</html>",
-    url);
+    "</html>";
 
   cmd_response_data_set_content_type (response_data,
                                       GSAD_CONTENT_TYPE_TEXT_HTML);
@@ -421,28 +419,7 @@ create_not_found_response (const gchar *url, cmd_response_data_t *response_data)
 
   len = cmd_response_data_get_content_length (response_data);
   response = MHD_create_response_from_buffer (len, msg, MHD_RESPMEM_MUST_COPY);
-  g_free (msg);
   return response;
-}
-
-/**
- * @brief Send a 404 response for a request
- *
- * @param[in]  connection  Connection handle, e.g. used to send response.
- * @param[in]  url         Requested url.
- *
- * @return MHD_YES on success. MHD_NO on errors.
- */
-int
-handler_send_not_found (http_connection_t *connection, const gchar *url)
-{
-  http_response_t *response;
-  cmd_response_data_t *response_data;
-
-  response_data = cmd_response_data_new ();
-
-  response = create_not_found_response (url, response_data);
-  return handler_send_response (connection, response, response_data, NULL);
 }
 
 /**
@@ -717,7 +694,7 @@ file_content_response (http_connection_t *connection, const char *url,
   if (file == NULL)
     {
       g_debug ("File %s failed, ", path);
-      return create_not_found_response (url, response_data);
+      return create_not_found_response (response_data);
     }
 
   /* Guess content type. */
@@ -728,14 +705,14 @@ file_content_response (http_connection_t *connection, const char *url,
       /* File information could not be retrieved. */
       g_critical ("%s: file <%s> can not be stat'ed.\n", __FUNCTION__, path);
       fclose (file);
-      return create_not_found_response (url, response_data);
+      return create_not_found_response (response_data);
     }
 
   /* Make sure the requested path really is a file. */
   if ((buf.st_mode & S_IFMT) != S_IFREG)
     {
       fclose (file);
-      return create_not_found_response (url, response_data);
+      return create_not_found_response (response_data);
     }
 
   response = MHD_create_response_from_callback (

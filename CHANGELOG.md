@@ -63,6 +63,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.2] - unreleased
 
 ### Added
+- Added details to alert details page [#1591](https://github.com/greenbone/gsa/pull/1591)
 - Added loading indicator for edit config dialog [#1579](https://github.com/greenbone/gsa/pull/1579)
 - Added tooltip for settings in task edit dialog that can't be changed once the task has been run [#1568](https://github.com/greenbone/gsa/pull/1568)
 - Added success dialog to report formats listpage [#1566](https://github.com/greenbone/gsa/pull/1566)
@@ -73,7 +74,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
-- word-wrap in pre component [#1586](https://github.com/greenbone/gsa/pull/1586)
+- Adjust ProtList manual links [#1599](https://github.com/greenbone/gsa/pull/1599)
+- Word-wrap in pre component [#1586](https://github.com/greenbone/gsa/pull/1586)
 - Disable EditIcon for My Settings if permission denied [#1588](https://github.com/greenbone/gsa/pull/1588)
 - Don't allow to clone hosts [#1581](https://github.com/greenbone/gsa/pull/1581)
 - Trigger alert button disabled in report details page when no permission [#1574](https://github.com/greenbone/gsa/pull/1574)
@@ -84,6 +86,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Fixed 404 URL handling in gsad which caused a XSS vulnerability [#1603](https://github.com/greenbone/gsa/pull/1603)
+- Fixed status of Tickets for task.isInTrash() and isOrphan [#1592](https://github.com/greenbone/gsa/pull/1592)
 - Fix and improve editing of roles [#1587](https://github.com/greenbone/gsa/pull/1587)
 - Fix showing ScanConfig trends [#1582](https://github.com/greenbone/gsa/pull/1582) [#1554](https://github.com/greenbone/gsa/pull/1554)
 - Show HostsCount at SectionTitle [#1576](https://github.com/greenbone/gsa/pull/1576)

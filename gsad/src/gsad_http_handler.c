@@ -313,7 +313,9 @@ handle_validate (http_connection_t *connection, const char *method,
   /* Prevent guest link from leading to URL redirection. */
   if (url && (url[0] == '/') && (url[1] == '/'))
     {
-      return handler_send_not_found (connection, url);
+      send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_BAD_REQUEST, NULL,
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+      return MHD_YES;
     }
 
   /* Many Glib functions require valid UTF-8. */
@@ -325,14 +327,6 @@ handle_validate (http_connection_t *connection, const char *method,
     }
 
   return http_handler_next (connection, method, url, con_info, handler, data);
-}
-
-int
-handle_not_found (http_connection_t *connection, const char *method,
-                  const char *url, gsad_connection_info_t *con_info,
-                  http_handler_t *handler, void *data)
-{
-  return handler_send_not_found (connection, url);
 }
 
 int
@@ -740,7 +734,6 @@ http_handler_t *
 init_http_handlers ()
 {
   http_handler_t *method_router;
-  http_handler_t *not_found_handler;
   http_handler_t *gmp_post_handler;
   http_handler_t *url_handlers;
 
@@ -751,7 +744,6 @@ init_http_handlers ()
   handlers = http_handler_new (handle_validate);
 
   method_router = method_router_new ();
-  not_found_handler = http_handler_new (handle_not_found);
   gmp_post_handler = http_handler_new (handle_gmp_post);
 
   http_handler_add (handlers, method_router);
@@ -787,8 +779,7 @@ init_http_handlers ()
   http_handler_add (url_handlers, system_report_url_handler);
   http_handler_add (url_handlers, logout_url_handler);
 
-  url_handler_add_func (url_handlers, "^/.*$", handle_index);
-  http_handler_add (url_handlers, not_found_handler);
+  http_handler_add (url_handlers, http_handler_new (handle_index));
 
   method_router_set_get_handler (method_router, url_handlers);
   method_router_set_post_handler (method_router, gmp_post_handler);

@@ -37,6 +37,7 @@ import {
   METHOD_TYPE_START_TASK,
   METHOD_TYPE_HTTP_GET,
   METHOD_TYPE_SOURCEFIRE,
+  METHOD_TYPE_TIPPING_POINT,
   METHOD_TYPE_VERINICE,
 } from 'gmp/models/alert';
 
@@ -56,7 +57,6 @@ import {Col} from 'web/entity/page';
 const Table = styled(SimpleTable)`
   margin-top: 5px;
   margin-left: 45px;
-  width: 100%;
   & td {
     padding: 0;
   }
@@ -93,18 +93,6 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
               <Col width="88%" />
             </colgroup>
             <TableBody>
-              {isDefined(data.report_formats) && (
-                <TableRow>
-                  <TableData>{_('Report Formats')}</TableData>
-                  <TableData>
-                    <HorizontalSep separator="," wrap spacing="0">
-                      {data.report_formats.map(id => (
-                        <span key={id}>{getReportFormatName(id)}</span>
-                      ))}
-                    </HorizontalSep>
-                  </TableData>
-                </TableRow>
-              )}
               {isDefined(data.vfire_base_url) &&
                 isDefined(data.vfire_base_url.value) && (
                   <TableRow>
@@ -112,15 +100,6 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                     <TableData>{data.vfire_base_url.value}</TableData>
                   </TableRow>
                 )}
-
-              {isDefined(data.vfire_call_description) &&
-                isDefined(data.vfire_call_description.value) && (
-                  <TableRow>
-                    <TableData>{_('Call Description')}</TableData>
-                    <TableData>{data.vfire_call_description.value}</TableData>
-                  </TableRow>
-                )}
-
               {isDefined(data.vfire_call_impact_name) &&
                 isDefined(data.vfire_call_impact_name.value) && (
                   <TableRow>
@@ -176,6 +155,28 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                   <TableRow>
                     <TableData>{_('Session Type')}</TableData>
                     <TableData>{data.vfire_session_type.value}</TableData>
+                  </TableRow>
+                )}
+
+              {isDefined(data.report_formats) && (
+                <TableRow>
+                  <TableData>{_('Report Formats')}</TableData>
+                  <TableData>
+                    <HorizontalSep separator="," wrap spacing="0">
+                      {data.report_formats.map(id => (
+                        <span key={id}>{getReportFormatName(id)}</span>
+                      ))}
+                    </HorizontalSep>
+                  </TableData>
+                </TableRow>
+              )}
+              {isDefined(data.vfire_call_description) &&
+                isDefined(data.vfire_call_description.value) && (
+                  <TableRow>
+                    <TableData>{_('Call Description')}</TableData>
+                    <TableData>
+                      <Pre>{data.vfire_call_description.value}</Pre>
+                    </TableData>
                   </TableRow>
                 )}
             </TableBody>
@@ -280,13 +281,42 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
     if (details) {
       return (
         <div>
-          <div>{_('SMP')}</div>
+          <div>{_('SMB')}</div>
           <Table>
             <colgroup>
               <Col width="12%" />
               <Col width="88%" />
             </colgroup>
             <TableBody>
+              {isDefined(data.smb_credential) && (
+                <TableRow>
+                  <TableData>{_('Credential')}</TableData>
+                  <TableData>
+                    <span>
+                      <DetailsLink
+                        id={data.smb_credential.value}
+                        type="credential"
+                      >
+                        {_('Credential')}
+                      </DetailsLink>
+                    </span>
+                  </TableData>
+                </TableRow>
+              )}
+              {isDefined(data.smb_share_path) &&
+                isDefined(data.smb_share_path.value) && (
+                  <TableRow>
+                    <TableData>{_('Share path')}</TableData>
+                    <TableData>{data.smb_share_path.value}</TableData>
+                  </TableRow>
+                )}
+              {isDefined(data.smb_file_path) &&
+                isDefined(data.smb_file_path.value) && (
+                  <TableRow>
+                    <TableData>{_('File path')}</TableData>
+                    <TableData>{data.smb_file_path.value}</TableData>
+                  </TableRow>
+                )}
               {isDefined(data.smb_report_format) &&
                 isDefined(data.smb_report_format.value) && (
                   <TableRow>
@@ -542,8 +572,6 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
     const {credential} = verinice_server_credential;
 
     if (details) {
-      // TODO add verinice report format.
-      // Currently we can't get the report format details
       return (
         <div>
           <div>{_('verinice Connector')}</div>
@@ -598,6 +626,45 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
       );
     }
     return _('verinice Connector');
+  }
+
+  if (method.type === METHOD_TYPE_TIPPING_POINT) {
+    // data.tp_sms_credential has no name, only id!
+    const {data = {}} = method;
+    if (details) {
+      return (
+        <div>
+          <div>{_('TippingPoint SMS')}</div>
+          <Table>
+            <colgroup>
+              <Col width="12%" />
+              <Col width="88%" />
+            </colgroup>
+            <TableBody>
+              {isDefined(data.tp_sms_hostname) &&
+                isDefined(data.tp_sms_hostname.value) && (
+                  <TableRow>
+                    <TableData>{_('Hostname / IP')}</TableData>
+                    <TableData>{data.tp_sms_hostname.value}</TableData>
+                  </TableRow>
+                )}
+              {isDefined(data.tp_sms_tls_workaround) &&
+                isDefined(data.tp_sms_tls_workaround.value) && (
+                  <TableRow>
+                    <TableData>
+                      {_('Use workaround for default certificate')}
+                    </TableData>
+                    <TableData>
+                      {data.tp_sms_tls_workaround.value === '1' ? 'Yes' : 'No'}
+                    </TableData>
+                  </TableRow>
+                )}
+            </TableBody>
+          </Table>
+        </div>
+      );
+    }
+    return _('TippingPoint SMS');
   }
 
   return method.type;
