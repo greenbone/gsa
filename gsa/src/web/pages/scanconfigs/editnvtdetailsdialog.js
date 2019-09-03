@@ -56,10 +56,10 @@ class EditDialog extends React.Component {
   }
 
   handlePreferenceChange(value, name, onValueChange) {
-    const {preference_values} = this.props;
-    preference_values[name].value = value.value;
+    const {preferenceValues} = this.props;
+    preferenceValues[name].value = value.value;
 
-    onValueChange(preference_values, 'preference_values');
+    onValueChange(preferenceValues, 'preferenceValues');
   }
 
   render() {
@@ -69,17 +69,16 @@ class EditDialog extends React.Component {
       configNameLabel,
       nvt,
       timeout,
-      manual_timeout = '',
-      preference_values,
+      preferenceValues,
       title,
       onClose,
       onSave,
     } = this.props;
 
     const controlledData = {
-      id: configId,
-      oid: nvt.oid,
-      preference_values,
+      configId,
+      nvtOid: nvt.oid,
+      preferenceValues,
     };
 
     return (
@@ -88,8 +87,8 @@ class EditDialog extends React.Component {
         onClose={onClose}
         onSave={onSave}
         defaultValues={{
-          timeout,
-          manual_timeout,
+          timeout: isDefined(timeout) ? timeout : '',
+          useDefaultTimeout: isDefined(timeout) ? '0' : '1',
         }}
         values={controlledData}
       >
@@ -191,9 +190,9 @@ class EditDialog extends React.Component {
                       <Divider flex="column">
                         <Divider>
                           <Radio
-                            value="0"
-                            name="timeout"
-                            checked={state.timeout === '0'}
+                            value="1"
+                            name="useDefaultTimeout"
+                            checked={state.useDefaultTimeout === '1'}
                             onChange={onValueChange}
                           />
                           <span>
@@ -205,15 +204,15 @@ class EditDialog extends React.Component {
                         </Divider>
                         <Divider>
                           <Radio
-                            value="1"
-                            name="timeout"
-                            checked={state.timeout !== '0'}
+                            value="0"
+                            name="useDefaultTimeout"
+                            checked={state.useDefaultTimeout === '0'}
                             onChange={onValueChange}
                           />
                           <TextField
-                            disabled={state.timeout === '0'}
-                            name="manual_timeout"
-                            value={state.manual_timeout}
+                            disabled={state.useDefaultTimeout === '1'}
+                            name="timeout"
+                            value={state.timeout}
                             onChange={onValueChange}
                           />
                         </Divider>
@@ -224,8 +223,8 @@ class EditDialog extends React.Component {
                     </TableData>
                   </TableRow>
                   {nvt.preferences.map(pref => {
-                    const prefValue = isDefined(preference_values[pref.name])
-                      ? preference_values[pref.name].value
+                    const prefValue = isDefined(preferenceValues[pref.name])
+                      ? preferenceValues[pref.name].value
                       : undefined;
                     return (
                       <NvtPreference
@@ -256,10 +255,9 @@ EditDialog.propTypes = {
   configId: PropTypes.string.isRequired,
   configName: PropTypes.string.isRequired,
   configNameLabel: PropTypes.string.isRequired,
-  manual_timeout: PropTypes.string,
-  nvt: PropTypes.object.isRequired,
-  preference_values: PropTypes.object.isRequired,
-  timeout: PropTypes.string.isRequired,
+  nvt: PropTypes.model.isRequired,
+  preferenceValues: PropTypes.object.isRequired,
+  timeout: PropTypes.number,
   title: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,

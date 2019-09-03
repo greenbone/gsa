@@ -25,7 +25,7 @@ import {ospScannersFilter} from 'gmp/models/scanner';
 
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-import {isEmpty, shorten} from 'gmp/utils/string';
+import {shorten} from 'gmp/utils/string';
 import {selectSaveId} from 'gmp/utils/id';
 
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
@@ -235,18 +235,23 @@ class ScanConfigComponent extends React.Component {
       });
   }
 
-  handleSaveConfigNvt({id, manual_timeout, timeout, oid, preference_values}) {
+  handleSaveConfigNvt({
+    configId,
+    timeout,
+    useDefaultTimeout,
+    nvtOid,
+    preferenceValues,
+  }) {
     const {gmp} = this.props;
 
     this.handleInteraction();
 
     return gmp.scanconfig
       .saveScanConfigNvt({
-        id,
-        manual_timeout,
-        timeout,
-        oid,
-        preference_values,
+        id: configId,
+        timeout: useDefaultTimeout === '1' ? undefined : timeout,
+        oid: nvtOid,
+        preferenceValues,
       })
       .then(() => this.closeEditNvtDetailsDialog());
   }
@@ -350,7 +355,7 @@ class ScanConfigComponent extends React.Component {
       })
       .then(response => {
         const {data} = response;
-        const preference_values = {};
+        const preferenceValues = {};
 
         forEach(data.nvt.preferences, pref => {
           let {id, value, type} = pref;
@@ -359,7 +364,7 @@ class ScanConfigComponent extends React.Component {
             value = undefined;
           }
 
-          preference_values[pref.name] = {
+          preferenceValues[pref.name] = {
             id,
             value,
             type,
@@ -367,13 +372,8 @@ class ScanConfigComponent extends React.Component {
         });
 
         const state = {
-          family_name: data.nvt.family,
-          oid: data.nvt.oid,
-          manual_timeout: data.nvt.timeout,
           nvt: data.nvt,
-          nvt_name: data.nvt.name,
-          preference_values,
-          timeout: isEmpty(data.nvt.timeout) ? '0' : '1',
+          preferenceValues,
         };
 
         return state;
@@ -411,17 +411,15 @@ class ScanConfigComponent extends React.Component {
       family_name,
       id,
       importDialogVisible,
-      manual_timeout,
       name,
       nvt,
       nvts,
-      preference_values,
+      preferenceValues,
       scanner_id,
       scanner_preference_values,
       scanners,
       select,
       selected,
-      timeout,
       title,
       trend,
     } = this.state;
@@ -514,11 +512,9 @@ class ScanConfigComponent extends React.Component {
             configId={config.id}
             configName={config.name}
             configNameLabel={_('Config')}
-            family_name={family_name}
-            manual_timeout={manual_timeout}
             nvt={nvt}
-            preference_values={preference_values}
-            timeout={timeout}
+            preferenceValues={preferenceValues}
+            timeout={nvt.timeout}
             title={editNvtDetailsDialogTitle}
             onClose={this.handleCloseEditNvtDetailsDialog}
             onSave={this.handleSaveConfigNvt}

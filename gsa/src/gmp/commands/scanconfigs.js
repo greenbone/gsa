@@ -165,16 +165,18 @@ class ScanConfigCommand extends EntityCommand {
     });
   }
 
-  saveScanConfigNvt({id, manual_timeout, timeout, oid, preference_values}) {
+  saveScanConfigNvt({id, timeout, oid, preferenceValues}) {
     const data = {
-      ...convert_preferences(preference_values, oid),
+      ...convert_preferences(preferenceValues, oid),
       cmd: 'save_config_nvt',
       id,
       oid,
-      timeout,
+      timeout: isDefined(timeout) ? 1 : 0,
     };
 
-    data['preference:scanner:0:scanner:timeout.' + oid] = manual_timeout;
+    data['preference:scanner:0:scanner:timeout.' + oid] = isDefined(timeout)
+      ? timeout
+      : '';
 
     log.debug('Saving scanconfignvt', data);
     return this.httpPost(data);
