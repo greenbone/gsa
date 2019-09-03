@@ -127,14 +127,6 @@ class EditDialog extends React.Component {
                       <DateTime date={nvt.modificationTime} />
                     </TableData>
                   </TableRow>
-                  <TableRow>
-                    <TableData>{_('Notes')}</TableData>
-                    <TableData>{nvt.notes_counts.length}</TableData>
-                  </TableRow>
-                  <TableRow>
-                    <TableData>{_('Overrides')}</TableData>
-                    <TableData>{nvt.overrides_counts.length}</TableData>
-                  </TableRow>
                 </TableBody>
               </SimpleTable>
 

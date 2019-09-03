@@ -27,8 +27,6 @@ import Model from '../model';
 import registerCommand from '../command';
 import {YES_VALUE, NO_VALUE} from '../parser';
 
-import {parseCounts} from '../collection/parser';
-
 import Nvt from '../models/nvt';
 import ScanConfig from '../models/scanconfig';
 
@@ -194,12 +192,6 @@ class ScanConfigCommand extends EntityCommand {
       const config_resp = data.get_config_nvt_response;
 
       settings.nvt = new Nvt(config_resp.get_nvts_response.nvt);
-
-      settings.nvt.notes_counts = parseCounts(data.get_notes_response, 'note');
-      settings.nvt.overrides_counts = parseCounts(
-        data.get_overrides_response,
-        'override',
-      );
 
       return response.setData(settings);
     });
