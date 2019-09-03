@@ -424,26 +424,6 @@ create_not_found_response (const gchar *url, cmd_response_data_t *response_data)
 }
 
 /**
- * @brief Send a 404 response for a request
- *
- * @param[in]  connection  Connection handle, e.g. used to send response.
- * @param[in]  url         Requested url.
- *
- * @return MHD_YES on success. MHD_NO on errors.
- */
-int
-handler_send_not_found (http_connection_t *connection, const gchar *url)
-{
-  http_response_t *response;
-  cmd_response_data_t *response_data;
-
-  response_data = cmd_response_data_new ();
-
-  response = create_not_found_response (url, response_data);
-  return handler_send_response (connection, response, response_data, NULL);
-}
-
-/**
  * @brief Allow for reauthentication of a user
  *
  * @param[in]  connection        Connection handle, e.g. used to send response.
