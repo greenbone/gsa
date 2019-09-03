@@ -313,7 +313,9 @@ handle_validate (http_connection_t *connection, const char *method,
   /* Prevent guest link from leading to URL redirection. */
   if (url && (url[0] == '/') && (url[1] == '/'))
     {
-      return handler_send_not_found (connection, url);
+      send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_BAD_REQUEST, NULL,
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+      return MHD_YES;
     }
 
   /* Many Glib functions require valid UTF-8. */
