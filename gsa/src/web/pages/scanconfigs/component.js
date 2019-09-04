@@ -186,17 +186,25 @@ class ScanConfigComponent extends React.Component {
   }
 
   openEditNvtDetailsDialog({config, nvt}) {
-    this.loadEditScanConfigNvtSettings(config, nvt).then(state => {
-      this.setState({
-        ...state,
-        config,
-        editNvtDetailsDialogVisible: true,
-        editNvtDetailsDialogTitle: _('Edit Scan Config NVT {{name}}', {
-          name: shorten(nvt.name),
-        }),
-      });
-    });
+    const {gmp} = this.props;
+
     this.handleInteraction();
+
+    return gmp.nvt
+      .getConfigNvt({
+        configId: config.id,
+        oid: nvt.oid,
+      })
+      .then(response => response.data)
+      .then(loadedNvt => {
+        this.setState({
+          nvt: loadedNvt,
+          editNvtDetailsDialogVisible: true,
+          editNvtDetailsDialogTitle: _('Edit Scan Config NVT {{name}}', {
+            name: shorten(nvt.name),
+          }),
+        });
+      });
   }
 
   closeEditNvtDetailsDialog() {
@@ -345,23 +353,6 @@ class ScanConfigComponent extends React.Component {
           selected,
         };
 
-        return state;
-      });
-  }
-
-  loadEditScanConfigNvtSettings(config, nvt) {
-    const {gmp} = this.props;
-
-    return gmp.nvt
-      .getConfigNvt({
-        configId: config.id,
-        oid: nvt.oid,
-      })
-      .then(response => {
-        const {data: loadedNvt} = response;
-        const state = {
-          nvt: loadedNvt,
-        };
         return state;
       });
   }
