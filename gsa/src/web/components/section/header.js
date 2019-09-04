@@ -49,6 +49,11 @@ const HeaderIconLayout = styled(Layout)`
   margin-right: 5px;
 `;
 
+const WordbreakLayout = styled(Layout)`
+  word-break: break-all;
+  min-width: 100px;
+`;
+
 const SectionHeader = ({
   children,
   align = ['space-between', 'end'],
@@ -63,7 +68,9 @@ const SectionHeader = ({
             {isString(img) ? <Icon size="large" img={img} /> : img}
           </HeaderIconLayout>
         )}
-        {isDefined(title) && <Layout align={['start', 'end']}>{title}</Layout>}
+        {isDefined(title) && (
+          <WordbreakLayout align={['start', 'end']}>{title}</WordbreakLayout>
+        )}
       </HeaderHeading>
       {children}
     </HeaderLayout>
