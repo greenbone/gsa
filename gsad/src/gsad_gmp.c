@@ -7592,31 +7592,15 @@ get_config_family (gvm_connection_t *connection, credentials_t *credentials,
                    cmd_response_data_t *response_data)
 {
   GString *xml;
-  const char *config_id, *name, *family, *sort_field, *sort_order;
+  const char *config_id, *family, *sort_field, *sort_order;
 
   config_id = params_value (params, "config_id");
-  name = params_value (params, "name");
   family = params_value (params, "family");
 
-  if ((config_id == NULL) || (name == NULL) || (family == NULL))
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting config family. "
-        "Diagnostics: Required parameter was NULL.",
-        response_data);
-    }
+  CHECK_VARIABLE_INVALID (config_id, "Get Scan Config Family")
+  CHECK_VARIABLE_INVALID (family, "Get Scan Config Family")
 
   xml = g_string_new ("<get_config_family_response>");
-  if (edit)
-    g_string_append (xml, "<edit/>");
-  /* @todo Would it be better include this in the get_nvts response? */
-  g_string_append_printf (xml,
-                          "<config id=\"%s\">"
-                          "<name>%s</name><family>%s</family>"
-                          "</config>",
-                          config_id, name, family);
 
   /* Get the details for all NVT's in the config in the family. */
 
