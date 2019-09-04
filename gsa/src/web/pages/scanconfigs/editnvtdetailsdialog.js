@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -50,6 +50,26 @@ import TableRow from 'web/components/table/row';
 import NvtPreference from '../nvts/nvtpreference';
 import Preformatted from '../nvts/preformatted';
 
+const createPrefValues = preferences => {
+  const preferenceValues = {};
+
+  preferences.forEach(pref => {
+    let {id, value, type} = pref;
+
+    if (type === 'password' || type === 'file') {
+      value = undefined;
+    }
+
+    preferenceValues[pref.name] = {
+      id,
+      value,
+      type,
+    };
+  });
+
+  return preferenceValues;
+};
+
 const EditDialog = ({
   configId,
   configName,
@@ -65,11 +85,18 @@ const EditDialog = ({
   nvtSummary,
   timeout,
   preferences,
-  preferenceValues,
   title,
   onClose,
   onSave,
 }) => {
+  const [preferenceValues, setPreferenceValues] = useState(
+    createPrefValues(preferences),
+  );
+
+  useEffect(() => {
+    setPreferenceValues(createPrefValues(preferences));
+  }, [preferences]);
+
   const controlledData = {
     configId,
     nvtOid,
@@ -246,7 +273,6 @@ EditDialog.propTypes = {
   nvtOid: PropTypes.string,
   nvtSeverity: PropTypes.number,
   nvtSummary: PropTypes.string,
-  preferenceValues: PropTypes.object.isRequired,
   preferences: PropTypes.arrayOf(
     PropTypes.shape({
       default: PropTypes.any,

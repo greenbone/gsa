@@ -359,27 +359,9 @@ class ScanConfigComponent extends React.Component {
       })
       .then(response => {
         const {data: loadedNvt} = response;
-        const preferenceValues = {};
-
-        loadedNvt.preferences.forEach(pref => {
-          let {id, value, type} = pref;
-
-          if (type === 'password' || type === 'file') {
-            value = undefined;
-          }
-
-          preferenceValues[pref.name] = {
-            id,
-            value,
-            type,
-          };
-        });
-
         const state = {
           nvt: loadedNvt,
-          preferenceValues,
         };
-
         return state;
       });
   }
@@ -418,7 +400,6 @@ class ScanConfigComponent extends React.Component {
       name,
       nvt,
       nvts,
-      preferenceValues,
       scanner_id,
       scanner_preference_values,
       scanners,
@@ -527,7 +508,6 @@ class ScanConfigComponent extends React.Component {
             nvtSummary={nvt.tags.summary}
             nvtTags={nvt.tags}
             preferences={nvt.preferences}
-            preferenceValues={preferenceValues}
             timeout={nvt.timeout}
             title={editNvtDetailsDialogTitle}
             onClose={this.handleCloseEditNvtDetailsDialog}
