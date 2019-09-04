@@ -55,8 +55,7 @@ export const convertSelect = (values, prefix) => {
 
 export const convertPreferences = (values, nvtOid) => {
   const ret = {};
-  for (const prop in values) {
-    const data = values[prop];
+  for (const [prop, data] of Object.entries(values)) {
     const {id, type, value} = data;
     if (isDefined(value)) {
       const typestring = nvtOid + ':' + id + ':' + type + ':' + prop;
