@@ -53,7 +53,7 @@ export const convertSelect = (values, prefix) => {
   return ret;
 };
 
-export const convertPreferences = (values, nvtOid) => {
+export const convertPreferences = (values = {}, nvtOid) => {
   const ret = {};
   for (const [prop, data] of Object.entries(values)) {
     const {id, type, value} = data;

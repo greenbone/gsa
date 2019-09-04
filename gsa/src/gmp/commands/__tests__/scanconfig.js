@@ -52,4 +52,9 @@ describe('convertPreferences tests', () => {
       'preference:1.2.3:4:file:foo': 'ABC',
     });
   });
+
+  test('should return empty object if preferences are empty', () => {
+    expect(convertPreferences(undefined, '1.2.3')).toEqual({});
+    expect(convertPreferences({}, '1.2.3')).toEqual({});
+  });
 });
