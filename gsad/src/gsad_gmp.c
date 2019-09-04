@@ -7835,37 +7835,25 @@ save_config_family_gmp (gvm_connection_t *connection,
  * @brief Get details of an NVT for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  edit         0 for config view page, else config edit page.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
  */
-static char *
-get_config_nvt (gvm_connection_t *connection, credentials_t *credentials,
-                params_t *params, int edit, cmd_response_data_t *response_data)
+char *
+get_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                    params_t *params, cmd_response_data_t *response_data)
 {
   GString *xml;
-  const char *config_id, *name, *family, *sort_field, *sort_order, *nvt;
+  const char *config_id, *sort_field, *sort_order, *nvt;
 
   config_id = params_value (params, "config_id");
-  name = params_value (params, "name");
-  family = params_value (params, "family");
   nvt = params_value (params, "oid");
 
-  CHECK_VARIABLE_INVALID (name, "Get Config")
   CHECK_VARIABLE_INVALID (config_id, "Get Config")
 
   xml = g_string_new ("<get_config_nvt_response>");
-  if (edit)
-    g_string_append (xml, "<edit/>");
-  /* @todo Would it be better include this in the get_nvts response? */
-  g_string_append_printf (xml,
-                          "<config id=\"%s\">"
-                          "<name>%s</name><family>%s</family>"
-                          "</config>",
-                          config_id, name, family ? family : "");
 
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
@@ -7973,23 +7961,6 @@ get_config_nvt (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get details of an NVT for a config, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                    params_t *params, cmd_response_data_t *response_data)
-{
-  return get_config_nvt (connection, credentials, params, 0, response_data);
-}
-
-/**
  * @brief Get all nvt_families, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -8005,23 +7976,6 @@ get_nvt_families_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   return get_entities (connection, "nvt_families", credentials, params, NULL,
                        response_data);
-}
-
-/**
- * @brief Edit details of an NVT for a config, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-edit_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                     params_t *params, cmd_response_data_t *response_data)
-{
-  return get_config_nvt (connection, credentials, params, 1, response_data);
 }
 
 /**
@@ -8224,7 +8178,7 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
           modify_config_ret = check_modify_config (
             connection, credentials, params, "get_config_nvt",
-            "edit_config_nvt", &success, response_data);
+            "save_config_nvt", &success, response_data);
           if (success == 0)
             {
               return modify_config_ret;
