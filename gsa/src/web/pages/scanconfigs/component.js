@@ -173,8 +173,7 @@ class ScanConfigComponent extends React.Component {
     return gmp.scanconfig
       .editScanConfigFamilySettings({
         id: config.id,
-        family_name: name,
-        config_name: config.name,
+        familyName: name,
       })
       .then(response => {
         const {data} = response;
@@ -195,7 +194,6 @@ class ScanConfigComponent extends React.Component {
           familyName: name,
           nvts: data.nvts,
           selected,
-          config,
           editConfigFamilyDialogVisible: true,
           editConfigFamilyDialogTitle: _('Edit Scan Config Family {{name}}', {
             name: shorten(name),

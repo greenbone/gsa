@@ -23,7 +23,6 @@ import logger from '../log';
 import {forEach, map} from '../utils/array';
 import {isDefined} from '../utils/identity';
 
-import Model from '../model';
 import registerCommand from '../command';
 import {YES_VALUE, NO_VALUE} from '../parser';
 
@@ -126,18 +125,15 @@ class ScanConfigCommand extends EntityCommand {
     return this.httpPost(data);
   }
 
-  editScanConfigFamilySettings({id, family_name, config_name}) {
+  editScanConfigFamilySettings({id, familyName}) {
     return this.httpGet({
       cmd: 'edit_config_family',
       id,
-      name: config_name,
-      family: family_name,
+      family: familyName,
     }).then(response => {
       const {data} = response;
       const config_resp = data.get_config_family_response;
       const settings = {};
-
-      settings.config = new Model(config_resp.config, 'config');
 
       const nvts = {};
       forEach(config_resp.get_nvts_response.nvt, nvt => {
