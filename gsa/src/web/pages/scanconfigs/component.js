@@ -426,7 +426,7 @@ class ScanConfigComponent extends React.Component {
               })}
               {createConfigDialogVisible && (
                 <ScanConfigDialog
-                  scanner_id={scanner_id}
+                  scannerId={scanner_id}
                   scanners={scanners}
                   onClose={this.handleCloseCreateConfigDialog}
                   onSave={d => {

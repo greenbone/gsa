@@ -84,13 +84,13 @@ class ScanConfigCommand extends EntityCommand {
     return this.httpPost(data);
   }
 
-  create({base, name, comment, scanner_id}) {
+  create({baseScanConfig, name, comment, scannerId}) {
     const data = {
       cmd: 'create_config',
-      base,
+      base: baseScanConfig,
       comment,
       name,
-      scanner_id,
+      scanner_id: scannerId,
       usage_type: 'scan',
     };
     log.debug('Creating scanconfig', data);
