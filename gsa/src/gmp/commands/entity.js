@@ -38,9 +38,9 @@ class EntityCommand extends GmpCommand {
     this.transformResponse = this.transformResponse.bind(this);
   }
 
-  getParams(params, extraParams) {
+  getParams(params, extraParams, options) {
     const {id, ...other} = params;
-    const rparams = super.getParams(other, extraParams);
+    const rparams = super.getParams(other, extraParams, options);
 
     if (isDefined(id)) {
       rparams[this.id_name] = id;
