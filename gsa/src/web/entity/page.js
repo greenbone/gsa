@@ -22,6 +22,8 @@ import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import {shorten} from 'gmp/utils/string';
+
 import PropTypes from 'web/utils/proptypes';
 
 import Toolbar from 'web/components/bar/toolbar';
@@ -85,7 +87,7 @@ class EntityPage extends React.Component {
 
     let section_title = title;
     if (isDefined(entity)) {
-      section_title = title + ': ' + entity.name;
+      section_title = title + ': ' + shorten(entity.name, 80);
     }
 
     return (

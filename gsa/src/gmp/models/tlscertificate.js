@@ -48,6 +48,8 @@ class TlsCertificate extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
+    ret.certificate = elem.certificate.__text;
+
     ret.name = elem.issuer_dn;
     delete ret.issuer_dn;
 
