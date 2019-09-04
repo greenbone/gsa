@@ -43,7 +43,7 @@ export const convert = (values, prefix) => {
   return ret;
 };
 
-export const convert_select = (values, prefix) => {
+export const convertSelect = (values, prefix) => {
   const ret = {};
   for (const [key, value] of Object.entries(values)) {
     if (value === YES_VALUE) {
@@ -53,13 +53,13 @@ export const convert_select = (values, prefix) => {
   return ret;
 };
 
-export const convert_preferences = (values, nvt_oid) => {
+export const convertPreferences = (values, nvtOid) => {
   const ret = {};
   for (const prop in values) {
     const data = values[prop];
     const {id, type, value} = data;
     if (isDefined(value)) {
-      const typestring = nvt_oid + ':' + id + ':' + type + ':' + prop;
+      const typestring = nvtOid + ':' + id + ':' + type + ':' + prop;
       if (type === 'password') {
         ret['password:' + typestring] = 'yes';
       } else if (type === 'file') {
@@ -105,7 +105,7 @@ class ScanConfigCommand extends EntityCommand {
         scanner_preference_values,
         'preference:scanner:scanner:scanner:',
       ),
-      ...convert_select(select, 'select:'),
+      ...convertSelect(select, 'select:'),
 
       cmd: 'save_config',
       id,
@@ -118,7 +118,7 @@ class ScanConfigCommand extends EntityCommand {
 
   saveScanConfigFamily({config_name, family_name, id, selected}) {
     const data = {
-      ...convert_select(selected, 'nvt:'),
+      ...convertSelect(selected, 'nvt:'),
       cmd: 'save_config_family',
       no_redirect: '1',
       id,
@@ -165,7 +165,7 @@ class ScanConfigCommand extends EntityCommand {
 
   saveScanConfigNvt({id, timeout, oid, preferenceValues}) {
     const data = {
-      ...convert_preferences(preferenceValues, oid),
+      ...convertPreferences(preferenceValues, oid),
       cmd: 'save_config_nvt',
       id,
       oid,

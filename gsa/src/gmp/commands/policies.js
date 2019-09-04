@@ -33,7 +33,7 @@ import Policy from '../models/policy';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
-import {convert, convert_select, convert_preferences} from './scanconfigs';
+import {convert, convertSelect, convertPreferences} from './scanconfigs';
 
 const log = logger.getLogger('gmp.commands.policies');
 
@@ -71,7 +71,7 @@ export class PolicyCommand extends EntityCommand {
         scanner_preference_values,
         'preference:scanner:scanner:scanner:',
       ),
-      ...convert_select(select, 'select:'),
+      ...convertSelect(select, 'select:'),
 
       cmd: 'save_config',
       id,
@@ -84,7 +84,7 @@ export class PolicyCommand extends EntityCommand {
 
   savePolicyFamily({policy_name, family_name, id, selected}) {
     const data = {
-      ...convert_select(selected, 'nvt:'),
+      ...convertSelect(selected, 'nvt:'),
       cmd: 'save_config_family',
       no_redirect: '1',
       id,
@@ -140,7 +140,7 @@ export class PolicyCommand extends EntityCommand {
     timeout,
   }) {
     const data = {
-      ...convert_preferences(preference_values, oid),
+      ...convertPreferences(preference_values, oid),
       cmd: 'save_config_nvt',
       no_redirect: '1',
       id,
