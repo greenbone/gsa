@@ -182,7 +182,7 @@ class ScanConfigCommand extends EntityCommand {
 
   editScanConfigNvtSettings({id, oid}) {
     return this.httpGet({
-      cmd: 'edit_config_nvt',
+      cmd: 'get_config_nvt',
       id,
       oid,
       name: '', // don't matter
