@@ -192,9 +192,7 @@ class ScanConfigComponent extends React.Component {
         }
 
         this.setState({
-          config_name: config.name,
-          family_name: name,
-          id: config.id,
+          familyName: name,
           nvts: data.nvts,
           selected,
           config,
@@ -370,7 +368,6 @@ class ScanConfigComponent extends React.Component {
       base,
       comment,
       config,
-      config_name,
       createConfigDialogVisible,
       editConfigDialogVisible,
       editConfigFamilyDialogVisible,
@@ -378,8 +375,7 @@ class ScanConfigComponent extends React.Component {
       editNvtDetailsDialogVisible,
       editNvtDetailsDialogTitle,
       families,
-      family_name,
-      id,
+      familyName,
       importDialogVisible,
       name,
       nvt,
@@ -463,11 +459,10 @@ class ScanConfigComponent extends React.Component {
         )}
         {editConfigFamilyDialogVisible && (
           <EditConfigFamilyDialog
-            config={config}
             configId={config.id}
             configNameLabel={_('Config')}
-            config_name={config_name}
-            family_name={family_name}
+            configName={config.name}
+            familyName={familyName}
             nvts={nvts}
             selected={selected}
             title={editConfigFamilyDialogTitle}

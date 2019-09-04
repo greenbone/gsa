@@ -193,10 +193,9 @@ class EditDialogComponent extends React.Component {
   render() {
     const {sortBy, sortReverse, selected} = this.state;
     const {
-      config,
-      config_name,
-      family_name,
       configId,
+      configName,
+      familyName,
       configNameLabel,
       title,
       onClose,
@@ -205,9 +204,7 @@ class EditDialogComponent extends React.Component {
     } = this.props;
 
     const data = {
-      config,
-      config_name,
-      family_name,
+      familyName,
       configId,
       selected,
     };
@@ -229,11 +226,11 @@ class EditDialogComponent extends React.Component {
               <TableBody>
                 <TableRow>
                   <TableData>{configNameLabel}</TableData>
-                  <TableData>{config_name}</TableData>
+                  <TableData>{configName}</TableData>
                 </TableRow>
                 <TableRow>
                   <TableData>{_('Family')}</TableData>
-                  <TableData>{family_name}</TableData>
+                  <TableData>{familyName}</TableData>
                 </TableRow>
               </TableBody>
             </SimpleTable>
@@ -307,11 +304,10 @@ class EditDialogComponent extends React.Component {
 }
 
 EditDialogComponent.propTypes = {
-  config: PropTypes.model.isRequired,
   configId: PropTypes.id,
+  configName: PropTypes.string,
   configNameLabel: PropTypes.string.isRequired,
-  config_name: PropTypes.string,
-  family_name: PropTypes.string,
+  familyName: PropTypes.string,
   nvts: PropTypes.array.isRequired,
   selected: PropTypes.object.isRequired,
   title: PropTypes.string,
