@@ -174,6 +174,26 @@ const Details = ({entity, ...props}) => {
               </TableBody>
             </InfoTable>
           )}
+          {entity.sourcePorts.length > 0 && (
+            <InfoTable size="full">
+              <colgroup>
+                <Col width="10%" />
+                <Col width="90%" />
+              </colgroup>
+              <TableBody>
+                <TableRow>
+                  <TableDataAlignTop>{_('Ports')}</TableDataAlignTop>
+                  <TableData>
+                    <HorizontalSep>
+                      {entity.sourcePorts.map(port => (
+                        <span key={port}>{port}</span>
+                      ))}
+                    </HorizontalSep>
+                  </TableData>
+                </TableRow>
+              </TableBody>
+            </InfoTable>
+          )}
         </DetailsBlock>
       )}
     </Layout>
