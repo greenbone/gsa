@@ -63,7 +63,7 @@ const Actions = withEntitiesActions(
       )}
       <DownloadIcon
         value={entity}
-        title={_('Download TLS Certificate as .pem')}
+        title={_('Download TLS Certificate')}
         onClick={onTlsCertificateDownloadClick}
       />
       <ExportIcon

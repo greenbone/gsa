@@ -77,8 +77,10 @@ class TlsCertificateComponent extends React.Component {
       resourceType: entityType,
       username,
     });
+
     onDownloaded({
       filename,
+      mimetype: 'application/x-x509-ca-cert',
       data: create_pem_certificate(certificate),
     });
   }
@@ -118,7 +120,7 @@ class TlsCertificateComponent extends React.Component {
 
 TlsCertificateComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  detailsExportFileName: PropTypes.object,
+  detailsExportFileName: PropTypes.string,
   gmp: PropTypes.gmp.isRequired,
   username: PropTypes.string,
   onDeleteError: PropTypes.func,
