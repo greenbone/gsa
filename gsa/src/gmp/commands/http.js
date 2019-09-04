@@ -32,26 +32,26 @@ class HttpCommand {
     return this;
   }
 
-  getParams(params, extra_params = {}) {
+  getParams(params, extraParams = {}) {
     return {
       ...this._params,
       ...params,
-      ...extra_params,
+      ...extraParams,
     };
   }
 
   httpGet(params, options = {}) {
-    const {extra_params, ...other} = options;
+    const {extraParams, ...other} = options;
     return this.http.request('get', {
-      args: this.getParams(params, extra_params),
+      args: this.getParams(params, extraParams),
       ...other,
     });
   }
 
   httpPost(params, options = {}) {
-    const {extra_params, ...other} = options;
+    const {extraParams, ...other} = options;
     return this.http.request('post', {
-      data: this.getParams(params, extra_params),
+      data: this.getParams(params, extraParams),
       ...other,
     });
   }

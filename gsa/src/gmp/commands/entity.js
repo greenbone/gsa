@@ -38,9 +38,9 @@ class EntityCommand extends GmpCommand {
     this.transformResponse = this.transformResponse.bind(this);
   }
 
-  getParams(params, extra_params = {}) {
+  getParams(params, extraParams) {
     const {id, ...other} = params;
-    const rparams = super.getParams(other, extra_params);
+    const rparams = super.getParams(other, extraParams);
 
     if (isDefined(id)) {
       rparams[this.id_name] = id;
@@ -66,7 +66,7 @@ class EntityCommand extends GmpCommand {
   }
 
   clone({id}) {
-    const extra_params = {
+    const extraParams = {
       id, // we need plain 'id' in the submitted form data not 'xyz_id'
     };
     return this.action(
@@ -75,7 +75,7 @@ class EntityCommand extends GmpCommand {
         resource_type: this.name,
       },
       {
-        extra_params,
+        extraParams,
       },
     )
       .then(response => {
