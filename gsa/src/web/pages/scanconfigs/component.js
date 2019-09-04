@@ -104,7 +104,7 @@ class ScanConfigComponent extends React.Component {
 
   openEditConfigDialog(config) {
     Promise.all([
-      this.loadEditScanConfigSettings(config),
+      this.loadEditScanConfigSettings(config.id),
       this.loadScanners(),
     ]).then(([scanConfigState, {scanners, scannerId}]) => {
       this.setState({
@@ -263,7 +263,7 @@ class ScanConfigComponent extends React.Component {
     return gmp.scanconfig
       .saveScanConfigFamily(data)
       .then(() => {
-        return this.loadEditScanConfigSettings(data.config);
+        return this.loadEditScanConfigSettings(data.config.id);
       })
       .then(state => {
         this.closeEditConfigFamilyDialog();
@@ -316,11 +316,11 @@ class ScanConfigComponent extends React.Component {
     });
   }
 
-  loadEditScanConfigSettings(config) {
+  loadEditScanConfigSettings(configId) {
     const {gmp} = this.props;
 
     return Promise.all([
-      gmp.scanconfig.get(config),
+      gmp.scanconfig.get({id: configId}),
       gmp.nvtfamilies.get(),
     ]).then(([configResponse, familiesResponse]) => {
       const {data: scanconfig} = configResponse;
