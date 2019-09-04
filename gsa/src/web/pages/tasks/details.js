@@ -58,7 +58,7 @@ import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
 
-const compareAlerts = (alertA, alertB) => {
+export const compareAlerts = (alertA, alertB) => {
   const nameA = alertA.name.toLowerCase();
   const nameB = alertB.name.toLowerCase();
   if (nameA > nameB) {

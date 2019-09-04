@@ -22,11 +22,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import Filter from 'gmp/models/filter';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 
 import Badge from 'web/components/badge/badge';
 
@@ -40,7 +36,6 @@ import Link from 'web/components/link/link';
 import AlterableIcon from 'web/components/icon/alterableicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
-import NoteIcon from 'web/components/icon/noteicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
 import AuditIcon from 'web/components/icon/auditicon';
@@ -58,7 +53,6 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import EntityPage, {Col} from 'web/entity/page';
-import EntityPermissions from 'web/entity/permissions';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
 import withEntityContainer, {
@@ -70,14 +64,6 @@ import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
 import {
-  selector as notesSelector,
-  loadEntities as loadNotes,
-} from 'web/store/entities/notes';
-import {
-  selector as overridesSelector,
-  loadEntities as loadOverrides,
-} from 'web/store/entities/overrides';
-import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
@@ -86,10 +72,8 @@ import {
   loadEntity as loadAudit,
 } from 'web/store/entities/audits';
 
-import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
-import withComponentDefaults from 'web/utils/withComponentDefaults';
 
 import ResumeIcon from './icons/resumeicon';
 import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
@@ -100,10 +84,14 @@ import AuditDetails from './details';
 import AuditStatus from 'web/pages/tasks/status';
 import AuditComponent from './component';
 
-const ToolBarIcons = ({
+import {
+  TaskPermissions as AuditPermissions,
+  reloadInterval,
+} from 'web/pages/tasks/detailspage';
+
+export const ToolBarIcons = ({
   entity,
   links,
-  notes = [],
   onAuditDeleteClick,
   onAuditCloneClick,
   onAuditDownloadClick,
@@ -217,18 +205,6 @@ const ToolBarIcons = ({
             <ResultIcon />
           </Badge>
         </Link>
-
-        <IconDivider>
-          <Link
-            to="notes"
-            filter={'task_id=' + entity.id}
-            title={_('Notes for Audit {{- name}}', entity)}
-          >
-            <Badge content={notes.length}>
-              <NoteIcon />
-            </Badge>
-          </Link>
-        </IconDivider>
       </Divider>
     </Divider>
   );
@@ -237,8 +213,6 @@ const ToolBarIcons = ({
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  notes: PropTypes.array,
-  overrides: PropTypes.array,
   onAuditCloneClick: PropTypes.func.isRequired,
   onAuditDeleteClick: PropTypes.func.isRequired,
   onAuditDownloadClick: PropTypes.func.isRequired,
@@ -316,7 +290,7 @@ const Page = ({
     onStopped={onChanged}
     onStopError={onError}
   >
-    {({clone, delete: delete_func, download, edit, start, stop, resume}) => (
+    {({clone, delete: deleteFunc, download, edit, start, stop, resume}) => (
       <EntityPage
         {...props}
         entity={entity}
@@ -327,7 +301,7 @@ const Page = ({
         onError={onError}
         onInteraction={onInteraction}
         onAuditCloneClick={clone}
-        onAuditDeleteClick={delete_func}
+        onAuditDeleteClick={deleteFunc}
         onAuditDownloadClick={download}
         onAuditEditClick={edit}
         onAuditResumeClick={resume}
@@ -384,52 +358,9 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const AuditPermissions = withComponentDefaults({
-  relatedResourcesLoaders: [
-    ({entity, gmp}) =>
-      isDefined(entity.alerts)
-        ? Promise.resolve([...entity.alerts])
-        : Promise.resolve([]),
-    ({entity, gmp}) => {
-      const resources = [];
-      const names = ['config', 'scanner', 'schedule'];
-
-      for (const name of names) {
-        if (isDefined(entity[name])) {
-          resources.push(entity[name]);
-        }
-      }
-      return Promise.resolve(resources);
-    },
-    ({entity, gmp}) => {
-      if (isDefined(entity.target)) {
-        return gmp.target.get(entity.target).then(response => {
-          const target = response.data;
-          const resources = [target];
-
-          for (const name of ['port_list', ...TARGET_CREDENTIAL_NAMES]) {
-            const cred = target[name];
-            if (isDefined(cred)) {
-              resources.push(cred);
-            }
-          }
-          return resources;
-        });
-      }
-      return Promise.resolve([]);
-    },
-  ],
-})(EntityPermissions);
-
-const auditIdFilter = id => Filter.fromString('task_id=' + id).all();
-
 const mapStateToProps = (rootState, {id}) => {
   const permSel = permissionsSelector(rootState);
-  const notesSel = notesSelector(rootState);
-  const overridesSel = overridesSelector(rootState);
   return {
-    notes: notesSel.getEntities(auditIdFilter(id)),
-    overrides: overridesSel.getEntities(auditIdFilter(id)),
     permissions: permSel.getEntities(permissionsResourceFilter(id)),
   };
 };
@@ -437,24 +368,11 @@ const mapStateToProps = (rootState, {id}) => {
 const load = gmp => {
   const loadAuditFunc = loadAudit(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  const loadNotesFunc = loadNotes(gmp);
-  const loadOverridesFunc = loadOverrides(gmp);
   return id => dispatch =>
     Promise.all([
       dispatch(loadAuditFunc(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-      dispatch(loadNotesFunc(auditIdFilter(id))),
-      dispatch(loadOverridesFunc(auditIdFilter(id))),
     ]);
-};
-
-const reloadInterval = ({defaultReloadInterval, entity}) => {
-  if (!isDefined(entity)) {
-    return 0;
-  }
-  return entity.isActive()
-    ? DEFAULT_RELOAD_INTERVAL_ACTIVE
-    : defaultReloadInterval;
 };
 
 export default withEntityContainer('audit', {

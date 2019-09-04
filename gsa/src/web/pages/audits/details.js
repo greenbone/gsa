@@ -25,8 +25,6 @@ import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {YES_VALUE} from 'gmp/parser';
-
 import {duration} from 'gmp/models/date';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
@@ -46,7 +44,7 @@ import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
 import {renderYesNo} from 'web/utils/render';
 
-import Divider from 'web/components/layout/divider';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -58,17 +56,7 @@ import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
 
-const compareAlerts = (alertA, alertB) => {
-  const nameA = alertA.name.toLowerCase();
-  const nameB = alertB.name.toLowerCase();
-  if (nameA > nameB) {
-    return 1;
-  }
-  if (nameA < nameB) {
-    return -1;
-  }
-  return 0;
-};
+import {compareAlerts} from 'web/pages/tasks/details';
 
 class AuditDetails extends React.Component {
   componentDidMount() {
@@ -86,7 +74,6 @@ class AuditDetails extends React.Component {
     const {links = true, entity, policy, schedule} = this.props;
     const {
       alerts,
-      apply_overrides,
       auto_delete,
       auto_delete_data,
       average_duration,
@@ -94,7 +81,6 @@ class AuditDetails extends React.Component {
       hosts_ordering,
       in_assets,
       last_report,
-      min_qod,
       preferences,
       scanner,
       schedule_periods,
@@ -105,9 +91,9 @@ class AuditDetails extends React.Component {
     const {iface = {}} = preferences;
 
     let dur;
-    const has_duration =
+    const hasDuration =
       isDefined(last_report) && isDefined(last_report.scan_start);
-    if (has_duration) {
+    if (hasDuration) {
       if (isDefined(last_report.scan_end)) {
         const diff = last_report.scan_end.diff(last_report.scan_start);
         dur = duration(diff).humanize();
@@ -118,8 +104,8 @@ class AuditDetails extends React.Component {
       dur = _('No scans yet');
     }
 
-    const has_av_duration = isDefined(average_duration) && average_duration > 0;
-    const av_duration = has_av_duration ? average_duration.humanize() : '';
+    const hasAvDuration = isDefined(average_duration) && average_duration > 0;
+    const avDuration = hasAvDuration ? average_duration.humanize() : '';
 
     return (
       <Layout grow="1" flex="column">
@@ -133,18 +119,15 @@ class AuditDetails extends React.Component {
 
         {isDefined(alerts) && (
           <DetailsBlock title={_('Alerts')}>
-            <Divider>
+            <HorizontalSep>
               {alerts.sort(compareAlerts).map(alert => (
-                <DetailsLink
-                  key={alert.id}
-                  textOnly={!links}
-                  type="alert"
-                  id={alert.id}
-                >
-                  {alert.name}
-                </DetailsLink>
+                <span key={alert.id}>
+                  <DetailsLink textOnly={!links} type="alert" id={alert.id}>
+                    {alert.name}
+                  </DetailsLink>
+                </span>
               ))}
-            </Divider>
+            </HorizontalSep>
           </DetailsBlock>
         )}
 
@@ -232,20 +215,6 @@ class AuditDetails extends React.Component {
                 <TableData>{_('Add to Assets')}</TableData>
                 <TableData>{renderYesNo(in_assets)}</TableData>
               </TableRow>
-
-              {in_assets === YES_VALUE && (
-                <TableRow>
-                  <TableData>{_('Apply to Overrides')}</TableData>
-                  <TableData>{renderYesNo(apply_overrides)}</TableData>
-                </TableRow>
-              )}
-
-              {in_assets === YES_VALUE && (
-                <TableRow>
-                  <TableData>{_('Min QoD')}</TableData>
-                  <TableData>{min_qod + ' %'}</TableData>
-                </TableRow>
-              )}
             </TableBody>
           </DetailsTable>
         </DetailsBlock>
@@ -288,10 +257,10 @@ class AuditDetails extends React.Component {
                 <TableData>{_('Duration of last Scan')}</TableData>
                 <TableData>{dur}</TableData>
               </TableRow>
-              {has_av_duration && (
+              {hasAvDuration && (
                 <TableRow>
                   <TableData>{_('Average Scan duration')}</TableData>
-                  <TableData>{av_duration}</TableData>
+                  <TableData>{avDuration}</TableData>
                 </TableRow>
               )}
               {schedule_periods > 0 && (
