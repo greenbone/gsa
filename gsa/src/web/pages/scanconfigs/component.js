@@ -106,10 +106,11 @@ class ScanConfigComponent extends React.Component {
     Promise.all([
       this.loadEditScanConfigSettings(config),
       this.loadScanners(),
-    ]).then(([scanConfigState, scannerState]) => {
+    ]).then(([scanConfigState, {scanners, scannerId}]) => {
       this.setState({
-        ...scannerState,
         ...scanConfigState,
+        scanners,
+        scannerId,
         base: config.base,
         editConfigDialogVisible: true,
         title: _('Edit Scan Config {{name}}', {name: shorten(config.name)}),
@@ -129,9 +130,10 @@ class ScanConfigComponent extends React.Component {
   }
 
   openCreateConfigDialog() {
-    this.loadScanners().then(state =>
+    this.loadScanners().then(({scanners, scannerId}) =>
       this.setState({
-        ...state,
+        scanners,
+        scannerId,
         createConfigDialogVisible: true,
       }),
     );
@@ -283,7 +285,7 @@ class ScanConfigComponent extends React.Component {
       scanners = scanners.filter(ospScannersFilter);
       return {
         scanners,
-        scanner_id: selectSaveId(scanners),
+        scannerId: selectSaveId(scanners),
       };
     });
   }
@@ -391,7 +393,7 @@ class ScanConfigComponent extends React.Component {
       name,
       nvt,
       nvts,
-      scanner_id,
+      scannerId,
       scanner_preference_values,
       scanners,
       select,
@@ -426,7 +428,7 @@ class ScanConfigComponent extends React.Component {
               })}
               {createConfigDialogVisible && (
                 <ScanConfigDialog
-                  scannerId={scanner_id}
+                  scannerId={scannerId}
                   scanners={scanners}
                   onClose={this.handleCloseCreateConfigDialog}
                   onSave={d => {
@@ -442,7 +444,7 @@ class ScanConfigComponent extends React.Component {
                   config={config}
                   families={families}
                   name={name}
-                  scanner_id={scanner_id}
+                  scanner_id={scannerId}
                   scanner_preference_values={scanner_preference_values}
                   scanners={scanners}
                   select={select}
