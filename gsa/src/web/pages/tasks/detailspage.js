@@ -444,7 +444,7 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const TaskPermissions = withComponentDefaults({
+export const TaskPermissions = withComponentDefaults({
   relatedResourcesLoaders: [
     ({entity, gmp}) =>
       isDefined(entity.alerts)
@@ -508,7 +508,7 @@ const load = gmp => {
     ]);
 };
 
-const reloadInterval = ({defaultReloadInterval, entity}) => {
+export const reloadInterval = ({defaultReloadInterval, entity}) => {
   if (!isDefined(entity)) {
     return 0;
   }
