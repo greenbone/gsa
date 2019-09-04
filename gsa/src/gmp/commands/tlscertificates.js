@@ -23,7 +23,7 @@ import TlsCertificate from '../models/tlscertificate';
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
 
-class TlsCertificateCommand extends EntityCommand {
+export class TlsCertificateCommand extends EntityCommand {
   constructor(http) {
     super(http, 'tls_certificate', TlsCertificate);
   }
@@ -34,7 +34,7 @@ class TlsCertificateCommand extends EntityCommand {
   }
 }
 
-class TlsCertificatesCommand extends EntitiesCommand {
+export class TlsCertificatesCommand extends EntitiesCommand {
   constructor(http) {
     super(http, 'tls_certificate', TlsCertificate);
   }
