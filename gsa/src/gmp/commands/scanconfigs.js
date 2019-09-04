@@ -115,14 +115,12 @@ class ScanConfigCommand extends EntityCommand {
     return this.action(data);
   }
 
-  saveScanConfigFamily({config_name, family_name, id, selected}) {
+  saveScanConfigFamily({family_name, id, selected}) {
     const data = {
       ...convertSelect(selected, 'nvt:'),
       cmd: 'save_config_family',
-      no_redirect: '1',
       id,
       family: family_name,
-      name: config_name,
     };
     log.debug('Saving scanconfigfamily', data);
     return this.httpPost(data);
