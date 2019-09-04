@@ -255,15 +255,19 @@ class ScanConfigComponent extends React.Component {
       .then(() => this.closeImportDialog());
   }
 
-  handleSaveConfigFamily(data) {
+  handleSaveConfigFamily({familyName, configId, selected}) {
     const {gmp} = this.props;
 
     this.handleInteraction();
 
     return gmp.scanconfig
-      .saveScanConfigFamily(data)
+      .saveScanConfigFamily({
+        id: configId,
+        familyName,
+        selected,
+      })
       .then(() => {
-        return this.loadEditScanConfigSettings(data.config.id);
+        return this.loadEditScanConfigSettings(configId);
       })
       .then(state => {
         this.closeEditConfigFamilyDialog();
