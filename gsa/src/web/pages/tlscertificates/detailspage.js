@@ -26,6 +26,7 @@ import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
+import Link from 'web/components/link/link';
 
 import DownloadIcon from 'web/components/icon/downloadicon';
 import ExportIcon from 'web/components/icon/exporticon';
@@ -164,9 +165,9 @@ const Details = ({entity, ...props}) => {
                   <TableData>
                     <HorizontalSep>
                       {entity.sourceHostIps.map((hostIp, index) => (
-                        <DetailsLink key={hostIp} id={hostIp} type="host">
+                        <Link key={hostIp} to={'hosts'} filter={hostIp}>
                           {hostIp}
-                        </DetailsLink>
+                        </Link>
                       ))}
                     </HorizontalSep>
                   </TableData>
