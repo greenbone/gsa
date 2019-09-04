@@ -521,18 +521,16 @@ class PolicyComponent extends React.Component {
   loadEditPolicyNvtSettings(policy, nvt) {
     const {gmp} = this.props;
 
-    return gmp.policy
-      .editPolicyNvtSettings({
-        id: policy.id,
+    return gmp.nvt
+      .getConfigNvt({
+        configId: policy.id,
         oid: nvt.oid,
-        policy_name: policy.name,
-        name: nvt.name,
       })
       .then(response => {
-        const {data} = response;
+        const {data: loadedNvt} = response;
         const preference_values = {};
 
-        forEach(data.nvt.preferences, pref => {
+        forEach(loadedNvt.preferences, pref => {
           let {id, value, type} = pref;
 
           if (type === 'password' || type === 'file') {
@@ -547,16 +545,13 @@ class PolicyComponent extends React.Component {
         });
 
         const state = {
-          policy: data.policy,
-          policyName: data.policy.name,
-          family_name: data.nvt.family,
-          id: data.policy.id,
-          oid: data.nvt.oid,
-          manual_timeout: data.nvt.timeout,
-          nvt: data.nvt,
-          nvt_name: data.nvt.name,
+          family_name: loadedNvt.family,
+          oid: loadedNvt.oid,
+          manual_timeout: loadedNvt.timeout,
+          nvt: loadedNvt,
+          nvt_name: loadedNvt.name,
           preference_values,
-          timeout: isEmpty(data.nvt.timeout) ? '0' : '1',
+          timeout: isEmpty(loadedNvt.timeout) ? '0' : '1',
         };
 
         return state;

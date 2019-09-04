@@ -348,9 +348,9 @@ class ScanConfigComponent extends React.Component {
   loadEditScanConfigNvtSettings(config, nvt) {
     const {gmp} = this.props;
 
-    return gmp.scanconfig
-      .editScanConfigNvtSettings({
-        id: config.id,
+    return gmp.nvt
+      .getConfigNvt({
+        configId: config.id,
         oid: nvt.oid,
       })
       .then(response => {

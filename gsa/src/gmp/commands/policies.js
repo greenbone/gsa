@@ -156,31 +156,6 @@ export class PolicyCommand extends EntityCommand {
     return this.httpPost(data);
   }
 
-  editPolicyNvtSettings({policy_name, family_name, id, oid}) {
-    return this.httpGet({
-      cmd: 'edit_config_nvt',
-      id,
-      oid,
-      name: policy_name,
-      family: family_name,
-    }).then(response => {
-      const {data} = response;
-      const settings = {};
-      const policy_resp = data.get_config_nvt_response;
-
-      settings.policy = new Model(policy_resp.config, 'policy');
-      settings.nvt = new Nvt(policy_resp.get_nvts_response.nvt);
-
-      settings.nvt.notes_counts = parseCounts(data.get_notes_response, 'note');
-      settings.nvt.overrides_counts = parseCounts(
-        data.get_overrides_response,
-        'override',
-      );
-
-      return response.setData(settings);
-    });
-  }
-
   getElementFromRoot(root) {
     return root.get_config.get_configs_response.config;
   }
