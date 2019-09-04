@@ -165,17 +165,45 @@ class ScanConfigComponent extends React.Component {
   }
 
   openEditConfigFamilyDialog({config, name}) {
-    this.loadEditScanConfigFamilySettings(config, name).then(state => {
-      this.setState({
-        ...state,
-        config,
-        editConfigFamilyDialogVisible: true,
-        editConfigFamilyDialogTitle: _('Edit Scan Config Family {{name}}', {
-          name: shorten(name),
-        }),
-      });
-    });
+    const {gmp} = this.props;
+    const {select} = this.state;
+
     this.handleInteraction();
+
+    return gmp.scanconfig
+      .editScanConfigFamilySettings({
+        id: config.id,
+        family_name: name,
+        config_name: config.name,
+      })
+      .then(response => {
+        const {data} = response;
+        const {nvts} = data;
+        const selected = {};
+
+        if (select[name]) {
+          forEach(nvts, nvt => {
+            selected[nvt.oid] = YES_VALUE;
+          });
+        } else {
+          forEach(nvts, nvt => {
+            selected[nvt.oid] = nvt.selected;
+          });
+        }
+
+        this.setState({
+          config_name: config.name,
+          family_name: name,
+          id: config.id,
+          nvts: data.nvts,
+          selected,
+          config,
+          editConfigFamilyDialogVisible: true,
+          editConfigFamilyDialogTitle: _('Edit Scan Config Family {{name}}', {
+            name: shorten(name),
+          }),
+        });
+      });
   }
 
   closeEditConfigFamilyDialog() {
@@ -320,43 +348,6 @@ class ScanConfigComponent extends React.Component {
       };
       return state;
     });
-  }
-
-  loadEditScanConfigFamilySettings(config, name) {
-    const {gmp} = this.props;
-    const {select} = this.state;
-
-    return gmp.scanconfig
-      .editScanConfigFamilySettings({
-        id: config.id,
-        family_name: name,
-        config_name: config.name,
-      })
-      .then(response => {
-        const {data} = response;
-        const {nvts} = data;
-        const selected = {};
-
-        if (select[name]) {
-          forEach(nvts, nvt => {
-            selected[nvt.oid] = YES_VALUE;
-          });
-        } else {
-          forEach(nvts, nvt => {
-            selected[nvt.oid] = nvt.selected;
-          });
-        }
-
-        const state = {
-          config_name: config.name,
-          family_name: name,
-          id: config.id,
-          nvts: data.nvts,
-          selected,
-        };
-
-        return state;
-      });
   }
 
   render() {
