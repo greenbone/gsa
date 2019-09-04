@@ -62,7 +62,7 @@ const ComposerContent = ({
   onValueChange,
 }) => (
   <Layout flex="column">
-    <FormGroup title={_('Filter')} titleSize="3">
+    <FormGroup title={_('Results Filter')} titleSize="3">
       <FilterField title={filterFieldTitle}>{filterString}</FilterField>
     </FormGroup>
     <FormGroup title={_('Include')} titleSize="3">
@@ -82,6 +82,16 @@ const ComposerContent = ({
           checkedValue={YES_VALUE}
           unCheckedValue={NO_VALUE}
           title={_('Overrides')}
+          onChange={onValueChange}
+        />
+        <CheckBox
+          disabled={true}
+          name="includeTlsCertificates"
+          checked={true}
+          checkedValue={YES_VALUE}
+          unCheckedValue={NO_VALUE}
+          title={_('TLS Certificates')}
+          toolTipTitle={_('TLS Certificates are always included for now')}
           onChange={onValueChange}
         />
       </Divider>

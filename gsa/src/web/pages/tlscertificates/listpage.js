@@ -72,7 +72,7 @@ const Page = ({
     onDownloadError={onError}
     onInteraction={onInteraction}
   >
-    {({clone, create, delete: delete_func, download, edit}) => (
+    {({clone, create, delete: delete_func, download, edit, exportFunc}) => (
       <EntitiesPage
         {...props}
         createFilterType="tlscertificate"
@@ -101,6 +101,7 @@ const Page = ({
         onInteraction={onInteraction}
         onTlsCertificateDeleteClick={delete_func}
         onTlsCertificateDownloadClick={download}
+        onTlsCertificateExportClick={exportFunc}
       />
     )}
   </TlsCertificateComponent>
