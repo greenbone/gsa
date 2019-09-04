@@ -23,35 +23,36 @@ class HttpCommand {
     this._params = params;
   }
 
-  getParam(name) {
+  getDefaultParam(name) {
     return this._params[name];
   }
 
-  setParam(name, value) {
+  setDefaultParam(name, value) {
     this._params[name] = value;
     return this;
   }
 
-  getParams(params, extra_params = {}) {
+  getParams(params, extraParams = {}, {includeDefaultParams = true} = {}) {
+    const defaultParams = includeDefaultParams ? this._params : undefined;
     return {
-      ...this._params,
+      ...defaultParams,
       ...params,
-      ...extra_params,
+      ...extraParams,
     };
   }
 
   httpGet(params, options = {}) {
-    const {extra_params, ...other} = options;
+    const {extraParams, includeDefaultParams, ...other} = options;
     return this.http.request('get', {
-      args: this.getParams(params, extra_params),
+      args: this.getParams(params, extraParams, {includeDefaultParams}),
       ...other,
     });
   }
 
   httpPost(params, options = {}) {
-    const {extra_params, ...other} = options;
+    const {extraParams, includeDefaultParams, ...other} = options;
     return this.http.request('post', {
-      data: this.getParams(params, extra_params),
+      data: this.getParams(params, extraParams, {includeDefaultParams}),
       ...other,
     });
   }

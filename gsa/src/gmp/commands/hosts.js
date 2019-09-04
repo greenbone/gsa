@@ -30,7 +30,7 @@ const log = logger.getLogger('gmp.commands.hosts');
 class HostCommand extends EntityCommand {
   constructor(http) {
     super(http, 'asset', Host);
-    this.setParam('asset_type', 'host');
+    this.setDefaultParam('asset_type', 'host');
   }
 
   create(args) {
@@ -69,7 +69,7 @@ class HostCommand extends EntityCommand {
 class HostsCommand extends EntitiesCommand {
   constructor(http) {
     super(http, 'asset', Host);
-    this.setParam('asset_type', 'host');
+    this.setDefaultParam('asset_type', 'host');
   }
 
   getEntitiesResponse(root) {

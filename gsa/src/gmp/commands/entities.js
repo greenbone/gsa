@@ -96,16 +96,16 @@ class EntitiesCommand extends GmpCommand {
     return this.httpPost(params, {transform: DefaultTransform});
   }
 
-  delete(entities, extra_params) {
+  delete(entities, extraParams) {
     return this.deleteByIds(
       map(entities, entity => entity.id),
-      extra_params,
+      extraParams,
     ).then(response => response.setData(entities));
   }
 
-  deleteByIds(ids, extra_params = {}) {
+  deleteByIds(ids, extraParams = {}) {
     const params = {
-      ...extra_params,
+      ...extraParams,
       cmd: 'bulk_delete',
       resource_type: this.name,
     };
@@ -115,13 +115,13 @@ class EntitiesCommand extends GmpCommand {
     return this.httpPost(params).then(response => response.setData(ids));
   }
 
-  deleteByFilter(filter, extra_params) {
+  deleteByFilter(filter, extraParams) {
     // FIXME change gmp to allow deletion by filter
     let deleted;
     return this.get({filter})
       .then(entities => {
         deleted = entities.data;
-        return this.delete(deleted, extra_params);
+        return this.delete(deleted, extraParams);
       })
       .then(response => response.setData(deleted));
   }
