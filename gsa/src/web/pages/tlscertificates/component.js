@@ -25,6 +25,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import EntityComponent from 'web/entity/component';
 
+import {loadEntity, selector} from 'web/store/entities/tlscertificates';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
@@ -56,6 +57,8 @@ class TlsCertificateComponent extends React.Component {
   handleTlsCertificateDownload(cert) {
     const {detailsExportFileName, username, onDownloaded} = this.props;
 
+    const fullCert = loadEntity(cert.id);
+
     const {
       creationTime,
       certificate,
@@ -63,7 +66,7 @@ class TlsCertificateComponent extends React.Component {
       id,
       modificationTime,
       name,
-    } = cert;
+    } = fullCert;
 
     this.handleInteraction();
 
@@ -119,9 +122,11 @@ class TlsCertificateComponent extends React.Component {
 }
 
 TlsCertificateComponent.propTypes = {
+  certificate: PropTypes.model,
   children: PropTypes.func.isRequired,
   detailsExportFileName: PropTypes.string,
   gmp: PropTypes.gmp.isRequired,
+  loadEntity: PropTypes.func.isRequired,
   username: PropTypes.string,
   onDeleteError: PropTypes.func,
   onDeleted: PropTypes.func,
@@ -130,19 +135,22 @@ TlsCertificateComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = rootState => {
+const mapStateToProps = (rootState, {id}) => {
+  const tlsCertificateSelector = selector(rootState);
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
   const username = getUsername(rootState);
   const detailsExportFileName = userDefaultsSelector.getValueByName(
     'detailsexportfilename',
   );
   return {
+    certificate: tlsCertificateSelector.getEntity(id),
     detailsExportFileName,
     username,
   };
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadEntity: id => dispatch(loadEntity(gmp)(id)),
   loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
   onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
 });
