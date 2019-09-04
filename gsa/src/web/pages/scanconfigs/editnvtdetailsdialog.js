@@ -69,7 +69,15 @@ class EditDialog extends React.Component {
       configId,
       configName,
       configNameLabel,
-      nvt,
+      defaultTimeout,
+      nvtAffectedSoftware,
+      nvtCvssVector,
+      nvtFamily,
+      nvtLastModified,
+      nvtName,
+      nvtOid,
+      nvtSeverity,
+      nvtSummary,
       timeout,
       preferences,
       preferenceValues,
@@ -80,7 +88,7 @@ class EditDialog extends React.Component {
 
     const controlledData = {
       configId,
-      nvtOid: nvt.oid,
+      nvtOid,
       preferenceValues,
     };
 
@@ -104,8 +112,8 @@ class EditDialog extends React.Component {
                     <TableData>{_('Name')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={nvt.oid} type="nvt">
-                          {nvt.name}
+                        <DetailsLink id={nvtOid} type="nvt">
+                          {nvtName}
                         </DetailsLink>
                       </span>
                     </TableData>
@@ -116,32 +124,32 @@ class EditDialog extends React.Component {
                   </TableRow>
                   <TableRow>
                     <TableData>{_('Family')}</TableData>
-                    <TableData>{nvt.family}</TableData>
+                    <TableData>{nvtFamily}</TableData>
                   </TableRow>
                   <TableRow>
                     <TableData>{_('OID')}</TableData>
-                    <TableData>{nvt.oid}</TableData>
+                    <TableData>{nvtOid}</TableData>
                   </TableRow>
                   <TableRow>
                     <TableData>{_('Last Modified')}</TableData>
                     <TableData>
-                      <DateTime date={nvt.modificationTime} />
+                      <DateTime date={nvtLastModified} />
                     </TableData>
                   </TableRow>
                 </TableBody>
               </SimpleTable>
 
-              {isDefined(nvt.tags.summary) && (
+              {isDefined(nvtSummary) && (
                 <div>
                   <h1>{_('Summary')}</h1>
-                  <Preformatted>{nvt.tags.summary}</Preformatted>
+                  <Preformatted>{nvtSummary}</Preformatted>
                 </div>
               )}
 
-              {isDefined(nvt.tags.affected) && (
+              {isDefined(nvtAffectedSoftware) && (
                 <div>
                   <h1>{_('Affected Software/OS')}</h1>
-                  <Preformatted>{nvt.tags.affected}</Preformatted>
+                  <Preformatted>{nvtAffectedSoftware}</Preformatted>
                 </div>
               )}
 
@@ -152,18 +160,18 @@ class EditDialog extends React.Component {
                     <TableRow>
                       <TableData>{_('CVSS base')}</TableData>
                       <TableData>
-                        <SeverityBar severity={nvt.severity} />
+                        <SeverityBar severity={nvtSeverity} />
                       </TableData>
                     </TableRow>
-                    {isDefined(nvt.tags.cvss_base_vector) && (
+                    {isDefined(nvtCvssVector) && (
                       <TableRow>
                         <TableData>{_('CVSS base vector')}</TableData>
                         <TableData>
                           <Link
                             to="cvsscalculator"
-                            query={{cvssVector: nvt.tags.cvss_base_vector}}
+                            query={{cvssVector: nvtCvssVector}}
                           >
-                            {nvt.tags.cvss_base_vector}
+                            {nvtCvssVector}
                           </Link>
                         </TableData>
                       </TableRow>
@@ -194,8 +202,8 @@ class EditDialog extends React.Component {
                           />
                           <span>
                             {_('Apply default timeout')}
-                            {isDefined(nvt.defaultTimeout)
-                              ? ' (' + nvt.defaultTimeout + ')'
+                            {isDefined(defaultTimeout)
+                              ? ' (' + defaultTimeout + ')'
                               : ''}
                           </span>
                         </Divider>
@@ -216,7 +224,7 @@ class EditDialog extends React.Component {
                       </Divider>
                     </TableData>
                     <TableData>
-                      {isDefined(nvt.defaultTimeout) ? nvt.defaultTimeout : ''}
+                      {isDefined(defaultTimeout) ? defaultTimeout : ''}
                     </TableData>
                   </TableRow>
                   {preferences.map(pref => {
@@ -252,7 +260,15 @@ EditDialog.propTypes = {
   configId: PropTypes.string.isRequired,
   configName: PropTypes.string.isRequired,
   configNameLabel: PropTypes.string.isRequired,
-  nvt: PropTypes.model.isRequired,
+  defaultTimeout: PropTypes.number,
+  nvtAffectedSoftware: PropTypes.string,
+  nvtCvssVector: PropTypes.string,
+  nvtFamily: PropTypes.string,
+  nvtLastModified: PropTypes.date,
+  nvtName: PropTypes.string,
+  nvtOid: PropTypes.string,
+  nvtSeverity: PropTypes.number,
+  nvtSummary: PropTypes.string,
   preferenceValues: PropTypes.object.isRequired,
   preferences: PropTypes.arrayOf(
     PropTypes.shape({

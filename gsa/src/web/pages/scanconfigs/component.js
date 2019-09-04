@@ -512,7 +512,16 @@ class ScanConfigComponent extends React.Component {
             configId={config.id}
             configName={config.name}
             configNameLabel={_('Config')}
-            nvt={nvt}
+            defaultTimeout={nvt.defaultTimeout}
+            nvtAffectedSoftware={nvt.tags.affected}
+            nvtCvssVector={nvt.tags.cvss_base_vector}
+            nvtFamily={nvt.family}
+            nvtName={nvt.name}
+            nvtLastModified={nvt.modificationTime}
+            nvtOid={nvt.oid}
+            nvtSeverity={nvt.severity}
+            nvtSummary={nvt.tags.summary}
+            nvtTags={nvt.tags}
             preferences={nvt.preferences}
             preferenceValues={preferenceValues}
             timeout={nvt.timeout}
