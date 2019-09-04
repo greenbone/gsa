@@ -157,7 +157,12 @@ class NvtPreference extends React.Component {
 }
 
 NvtPreference.propTypes = {
-  preference: PropTypes.object.isRequired,
+  preference: PropTypes.shape({
+    default: PropTypes.any,
+    hr_name: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.any,
+  }).isRequired,
   value: PropTypes.any,
   onChange: PropTypes.func.isRequired,
 };
