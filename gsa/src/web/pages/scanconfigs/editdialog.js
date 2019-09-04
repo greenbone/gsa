@@ -350,7 +350,7 @@ class NvtFamily extends React.Component {
         <TableData align={['center', 'center']}>
           <EditIcon
             title={title}
-            value={{name, config}}
+            value={{familyName: name, configId: config.id}}
             onClick={onEditConfigFamilyClick}
           />
         </TableData>

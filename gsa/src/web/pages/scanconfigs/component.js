@@ -164,7 +164,7 @@ class ScanConfigComponent extends React.Component {
     this.handleInteraction();
   }
 
-  openEditConfigFamilyDialog({config, name}) {
+  openEditConfigFamilyDialog({configId, familyName}) {
     const {gmp} = this.props;
     const {select} = this.state;
 
@@ -172,15 +172,15 @@ class ScanConfigComponent extends React.Component {
 
     return gmp.scanconfig
       .editScanConfigFamilySettings({
-        id: config.id,
-        familyName: name,
+        id: configId,
+        familyName,
       })
       .then(response => {
         const {data} = response;
         const {nvts} = data;
         const selected = {};
 
-        if (select[name]) {
+        if (select[familyName]) {
           forEach(nvts, nvt => {
             selected[nvt.oid] = YES_VALUE;
           });
@@ -191,12 +191,12 @@ class ScanConfigComponent extends React.Component {
         }
 
         this.setState({
-          familyName: name,
+          familyName,
           nvts: data.nvts,
           selected,
           editConfigFamilyDialogVisible: true,
           editConfigFamilyDialogTitle: _('Edit Scan Config Family {{name}}', {
-            name: shorten(name),
+            name: shorten(familyName),
           }),
         });
       });
