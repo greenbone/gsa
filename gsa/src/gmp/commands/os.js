@@ -26,7 +26,7 @@ import EntityCommand from './entity';
 class OperatingSystemCommand extends EntityCommand {
   constructor(http) {
     super(http, 'asset', OperatingSystem);
-    this.setParam('asset_type', 'os');
+    this.setDefaultParam('asset_type', 'os');
   }
 
   getElementFromRoot(root) {
@@ -37,7 +37,7 @@ class OperatingSystemCommand extends EntityCommand {
 class OperatingSystemsCommand extends EntitiesCommand {
   constructor(http) {
     super(http, 'asset', OperatingSystem);
-    this.setParam('asset_type', 'os');
+    this.setDefaultParam('asset_type', 'os');
   }
 
   getEntitiesResponse(root) {

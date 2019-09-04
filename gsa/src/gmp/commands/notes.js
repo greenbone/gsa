@@ -92,7 +92,7 @@ class NoteCommand extends EntityCommand {
 class NotesCommand extends EntitiesCommand {
   constructor(http) {
     super(http, 'note', Note);
-    this.setParam('details', 1);
+    this.setDefaultParam('details', 1);
   }
 
   getEntitiesResponse(root) {

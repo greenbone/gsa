@@ -28,8 +28,8 @@ import EntitiesCommand from './entities';
 class InfoEntitiesCommand extends EntitiesCommand {
   constructor(http, name, clazz, entities_filter_func) {
     super(http, 'info', clazz);
-    this.setParam('cmd', 'get_info');
-    this.setParam('info_type', name);
+    this.setDefaultParam('cmd', 'get_info');
+    this.setDefaultParam('info_type', name);
     this.entities_filter_func = entities_filter_func;
 
     this.parseInfoEntities = this.parseInfoEntities.bind(this);

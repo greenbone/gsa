@@ -101,7 +101,7 @@ class OverrideCommand extends EntityCommand {
 class OverridesCommand extends EntitiesCommand {
   constructor(http) {
     super(http, 'override', Override);
-    this.setParam('details', 1);
+    this.setDefaultParam('details', 1);
   }
 
   getEntitiesResponse(root) {

@@ -21,8 +21,8 @@ import EntityCommand from './entity';
 class InfoEntityCommand extends EntityCommand {
   constructor(http, info_type, model) {
     super(http, 'info', model);
-    this.setParam('info_type', info_type);
-    this.setParam('details', '1');
+    this.setDefaultParam('info_type', info_type);
+    this.setDefaultParam('details', '1');
   }
 
   getElementFromRoot(root) {

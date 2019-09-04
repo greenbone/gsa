@@ -23,11 +23,11 @@ class HttpCommand {
     this._params = params;
   }
 
-  getParam(name) {
+  getDefaultParam(name) {
     return this._params[name];
   }
 
-  setParam(name, value) {
+  setDefaultParam(name, value) {
     this._params[name] = value;
     return this;
   }
