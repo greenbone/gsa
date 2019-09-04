@@ -253,7 +253,11 @@ class ScanConfigComponent extends React.Component {
         oid: nvtOid,
         preferenceValues,
       })
-      .then(() => this.closeEditNvtDetailsDialog());
+      .then(() => {
+        this.closeEditNvtDetailsDialog();
+        return gmp.scanconfig.get({id: configId});
+      })
+      .then(response => this.setState({config: response.data}));
   }
 
   handleInteraction() {
