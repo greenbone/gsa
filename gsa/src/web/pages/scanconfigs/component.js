@@ -335,9 +335,6 @@ class ScanConfigComponent extends React.Component {
       });
 
       const state = {
-        comment: scanconfig.comment,
-        id: config.id,
-        name: config.name,
         config: scanconfig,
         families,
         trend,
@@ -366,7 +363,6 @@ class ScanConfigComponent extends React.Component {
 
     const {
       base,
-      comment,
       config,
       createConfigDialogVisible,
       editConfigDialogVisible,
@@ -377,7 +373,6 @@ class ScanConfigComponent extends React.Component {
       families,
       familyName,
       importDialogVisible,
-      name,
       nvt,
       nvts,
       scannerId,
@@ -427,10 +422,10 @@ class ScanConfigComponent extends React.Component {
               {editConfigDialogVisible && (
                 <EditScanConfigDialog
                   base={base}
-                  comment={comment}
+                  comment={config.comment}
                   config={config}
                   families={families}
-                  name={name}
+                  name={config.name}
                   scanner_id={scannerId}
                   scanner_preference_values={scanner_preference_values}
                   scanners={scanners}
