@@ -62,7 +62,7 @@ class Nvt extends React.Component {
 
   render() {
     const {
-      config,
+      configId,
       nvt,
       selected,
       onSelectedChange,
@@ -102,7 +102,7 @@ class Nvt extends React.Component {
         <TableData align={['center', 'center']}>
           <EditIcon
             title={_('Select and edit NVT details')}
-            value={{config, nvt}}
+            value={{configId, nvtOid: nvt.oid}}
             onClick={onEditNvtDetailsClick}
           />
         </TableData>
@@ -112,7 +112,7 @@ class Nvt extends React.Component {
 }
 
 Nvt.propTypes = {
-  config: PropTypes.model.isRequired,
+  configId: PropTypes.id.isRequired,
   nvt: PropTypes.object.isRequired,
   selected: PropTypes.yesno.isRequired,
   onEditNvtDetailsClick: PropTypes.func,
@@ -196,7 +196,7 @@ class EditDialogComponent extends React.Component {
       config,
       config_name,
       family_name,
-      id,
+      configId,
       configNameLabel,
       title,
       onClose,
@@ -208,7 +208,7 @@ class EditDialogComponent extends React.Component {
       config,
       config_name,
       family_name,
-      id,
+      configId,
       selected,
     };
 
@@ -289,7 +289,7 @@ class EditDialogComponent extends React.Component {
                       <Nvt
                         key={oid}
                         nvt={nvt}
-                        config={config}
+                        configId={configId}
                         selected={selected[oid]}
                         onSelectedChange={this.handleSelectedChange}
                         onEditNvtDetailsClick={onEditNvtDetailsClick}
@@ -308,10 +308,10 @@ class EditDialogComponent extends React.Component {
 
 EditDialogComponent.propTypes = {
   config: PropTypes.model.isRequired,
+  configId: PropTypes.id,
   configNameLabel: PropTypes.string.isRequired,
   config_name: PropTypes.string,
   family_name: PropTypes.string,
-  id: PropTypes.string,
   nvts: PropTypes.array.isRequired,
   selected: PropTypes.object.isRequired,
   title: PropTypes.string,

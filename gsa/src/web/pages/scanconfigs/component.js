@@ -215,15 +215,15 @@ class ScanConfigComponent extends React.Component {
     this.handleInteraction();
   }
 
-  openEditNvtDetailsDialog({config, nvt}) {
+  openEditNvtDetailsDialog({configId, nvtOid}) {
     const {gmp} = this.props;
 
     this.handleInteraction();
 
     return gmp.nvt
       .getConfigNvt({
-        configId: config.id,
-        oid: nvt.oid,
+        configId,
+        oid: nvtOid,
       })
       .then(response => response.data)
       .then(loadedNvt => {
@@ -231,7 +231,7 @@ class ScanConfigComponent extends React.Component {
           nvt: loadedNvt,
           editNvtDetailsDialogVisible: true,
           editNvtDetailsDialogTitle: _('Edit Scan Config NVT {{name}}', {
-            name: shorten(nvt.name),
+            name: shorten(loadedNvt.name),
           }),
         });
       });
@@ -464,10 +464,10 @@ class ScanConfigComponent extends React.Component {
         {editConfigFamilyDialogVisible && (
           <EditConfigFamilyDialog
             config={config}
+            configId={config.id}
             configNameLabel={_('Config')}
             config_name={config_name}
             family_name={family_name}
-            id={id}
             nvts={nvts}
             selected={selected}
             title={editConfigFamilyDialogTitle}
