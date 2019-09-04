@@ -513,6 +513,7 @@ class ScanConfigComponent extends React.Component {
             configName={config.name}
             configNameLabel={_('Config')}
             nvt={nvt}
+            preferences={nvt.preferences}
             preferenceValues={preferenceValues}
             timeout={nvt.timeout}
             title={editNvtDetailsDialogTitle}

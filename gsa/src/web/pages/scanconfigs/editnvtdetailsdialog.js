@@ -71,6 +71,7 @@ class EditDialog extends React.Component {
       configNameLabel,
       nvt,
       timeout,
+      preferences,
       preferenceValues,
       title,
       onClose,
@@ -218,7 +219,7 @@ class EditDialog extends React.Component {
                       {isDefined(nvt.defaultTimeout) ? nvt.defaultTimeout : ''}
                     </TableData>
                   </TableRow>
-                  {nvt.preferences.map(pref => {
+                  {preferences.map(pref => {
                     const prefValue = isDefined(preferenceValues[pref.name])
                       ? preferenceValues[pref.name].value
                       : undefined;
@@ -253,6 +254,14 @@ EditDialog.propTypes = {
   configNameLabel: PropTypes.string.isRequired,
   nvt: PropTypes.model.isRequired,
   preferenceValues: PropTypes.object.isRequired,
+  preferences: PropTypes.arrayOf(
+    PropTypes.shape({
+      default: PropTypes.any,
+      hr_name: PropTypes.string,
+      name: PropTypes.string.isRequired,
+      value: PropTypes.any,
+    }),
+  ),
   timeout: PropTypes.number,
   title: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
