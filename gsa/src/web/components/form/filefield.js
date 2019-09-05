@@ -25,28 +25,20 @@ import withLayout from 'web/components/layout/withLayout';
 
 import PropTypes from 'web/utils/proptypes';
 
-class FileFieldComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(event) {
-    const {onChange, disabled, name} = this.props;
+const FileFieldComponent = props => {
+  const handleChange = event => {
+    const {onChange, disabled, name} = props;
 
     event.preventDefault();
 
     if (!disabled && isDefined(onChange)) {
       onChange(event.target.files[0], name);
     }
-  }
+  };
 
-  render() {
-    const {onChange, ...props} = this.props;
-    return <input {...props} type="file" onChange={this.handleChange} />;
-  }
-}
+  const {onChange, ...args} = props;
+  return <input {...args} type="file" onChange={handleChange} />;
+};
 
 FileFieldComponent.propTypes = {
   disabled: PropTypes.bool,
