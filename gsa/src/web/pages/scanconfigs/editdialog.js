@@ -348,6 +348,7 @@ const createScannerPreferenceValues = (preferences = []) => {
 const EditDialog = ({
   comment = '',
   config,
+  configIsInUse = false,
   configType,
   families,
   name,
@@ -433,43 +434,45 @@ const EditDialog = ({
               />
             </FormGroup>
 
-            {!config.isInUse() && configType === OSP_SCAN_CONFIG_TYPE && (
-              <FormGroup title={_('Scanner')}>
-                <Select
-                  name="scannerId"
-                  items={renderSelectItems(scanners)}
-                  value={state.scannerId}
-                  onChange={onValueChange}
+            {!configIsInUse && (
+              <React.Fragment>
+                {configType === OSP_SCAN_CONFIG_TYPE && (
+                  <FormGroup title={_('Scanner')}>
+                    <Select
+                      name="scannerId"
+                      items={renderSelectItems(scanners)}
+                      value={state.scannerId}
+                      onChange={onValueChange}
+                    />
+                  </FormGroup>
+                )}
+
+                {configType === OPENVAS_SCAN_CONFIG_TYPE && (
+                  <NvtFamilies
+                    config={config}
+                    families={families}
+                    trend={trend}
+                    select={select}
+                    onEditConfigFamilyClick={onEditConfigFamilyClick}
+                    onValueChange={onValueChange}
+                  />
+                )}
+
+                <ScannerPreferences
+                  values={scannerPreferenceValues}
+                  preferences={scannerPreferences}
+                  onValuesChange={values => setScannerPreferenceValues(values)}
                 />
-              </FormGroup>
-            )}
 
-            {!config.isInUse() && configType === OPENVAS_SCAN_CONFIG_TYPE && (
-              <NvtFamilies
-                config={config}
-                families={families}
-                trend={trend}
-                select={select}
-                onEditConfigFamilyClick={onEditConfigFamilyClick}
-                onValueChange={onValueChange}
-              />
-            )}
-
-            {!config.isInUse() && (
-              <ScannerPreferences
-                values={scannerPreferenceValues}
-                preferences={scannerPreferences}
-                onValuesChange={values => setScannerPreferenceValues(values)}
-              />
-            )}
-
-            {!config.isInUse() && configType === OPENVAS_SCAN_CONFIG_TYPE && (
-              <NvtPreferences
-                config={config}
-                preferences={nvtPreferences}
-                onValueChange={onValueChange}
-                onEditNvtDetailsClick={onEditNvtDetailsClick}
-              />
+                {configType === OPENVAS_SCAN_CONFIG_TYPE && (
+                  <NvtPreferences
+                    config={config}
+                    preferences={nvtPreferences}
+                    onValueChange={onValueChange}
+                    onEditNvtDetailsClick={onEditNvtDetailsClick}
+                  />
+                )}
+              </React.Fragment>
             )}
           </Layout>
         );
@@ -481,6 +484,7 @@ const EditDialog = ({
 EditDialog.propTypes = {
   comment: PropTypes.string,
   config: PropTypes.model.isRequired,
+  configIsInUse: PropTypes.bool,
   configType: PropTypes.number,
   families: PropTypes.array,
   name: PropTypes.string,

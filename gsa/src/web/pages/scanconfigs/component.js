@@ -415,6 +415,7 @@ class ScanConfigComponent extends React.Component {
                 <EditScanConfigDialog
                   comment={config.comment}
                   config={config}
+                  configIsInUse={config.isInUse()}
                   configType={config.scan_config_type}
                   families={families}
                   name={config.name}
