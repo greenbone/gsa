@@ -23,6 +23,14 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
+import {
+  OPENVAS_SCAN_CONFIG_TYPE,
+  OSP_SCAN_CONFIG_TYPE,
+  SCANCONFIG_TREND_DYNAMIC,
+  SCANCONFIG_TREND_STATIC,
+  parseTrend,
+} from 'gmp/models/scanconfig';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
@@ -39,7 +47,6 @@ import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 import Select from 'web/components/form/select';
-import YesNoRadio from 'web/components/form/yesnoradio';
 import Loading from 'web/components/loading/loading';
 
 import EditIcon from 'web/components/icon/editicon';
@@ -56,17 +63,8 @@ import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
+import ScannerPreferences from './scannerpreferences';
 import Trend from './trend';
-
-import {
-  OPENVAS_SCAN_CONFIG_TYPE,
-  OSP_SCAN_CONFIG_TYPE,
-  SCANCONFIG_TREND_DYNAMIC,
-  SCANCONFIG_TREND_STATIC,
-  parseTrend,
-} from 'gmp/models/scanconfig';
-
-const noop_convert = value => value;
 
 const StyledTableData = styled(TableData)`
   overflow-wrap: break-word;
@@ -146,132 +144,6 @@ NvtPreferences.propTypes = {
   config: PropTypes.model.isRequired,
   preferences: PropTypes.array.isRequired,
   onEditNvtDetailsClick: PropTypes.func.isRequired,
-};
-
-class ScannerPreference extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return (
-      nextProps.preference !== this.props.preference ||
-      nextProps.value !== this.props.value
-    );
-  }
-
-  render() {
-    const {preference, value, onPreferenceChange} = this.props;
-    const {hr_name, name} = preference;
-    const is_radio =
-      name === 'ping_hosts' ||
-      name === 'reverse_lookup' ||
-      name === 'unscanned_closed' ||
-      name === 'nasl_no_signature_check' ||
-      name === 'reverse_lookup' ||
-      name === 'unscanned_closed_udp' ||
-      name === 'auto_enable_dependencies' ||
-      name === 'kb_dont_replay_attacks' ||
-      name === 'kb_dont_replay_denials' ||
-      name === 'kb_dont_replay_info_gathering' ||
-      name === 'kb_dont_replay_scanners' ||
-      name === 'kb_restore' ||
-      name === 'log_whole_attack' ||
-      name === 'test_empty_vhost' ||
-      name === 'only_test_hosts_whose_kb_we_dont_have' ||
-      name === 'only_test_hosts_whose_kb_we_have' ||
-      name === 'optimize_test' ||
-      name === 'safe_checks' ||
-      name === 'save_knowledge_base' ||
-      name === 'silent_dependencies' ||
-      name === 'slice_network_addresses' ||
-      name === 'drop_privileges' ||
-      name === 'network_scan' ||
-      name === 'report_host_details';
-    return (
-      <TableRow>
-        <TableData>{hr_name}</TableData>
-        <TableData>
-          {is_radio ? (
-            <Layout>
-              <YesNoRadio
-                yesValue="yes"
-                noValue="no"
-                name={name}
-                value={value}
-                convert={noop_convert}
-                onChange={onPreferenceChange}
-              />
-            </Layout>
-          ) : (
-            <TextField
-              name={name}
-              value={value}
-              onChange={onPreferenceChange}
-            />
-          )}
-        </TableData>
-        <TableData>{preference.default}</TableData>
-      </TableRow>
-    );
-  }
-}
-
-ScannerPreference.propTypes = {
-  preference: PropTypes.object.isRequired,
-  value: PropTypes.any.isRequired,
-  onPreferenceChange: PropTypes.func,
-};
-
-class ScannerPreferences extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.onPreferenceChange = this.onPreferenceChange.bind(this);
-  }
-
-  onPreferenceChange(value, name) {
-    const {values, onValueChange} = this.props;
-
-    values[name] = value;
-
-    onValueChange(values, 'scanner_preference_values');
-  }
-
-  render() {
-    const {preferences = [], values} = this.props;
-    return (
-      <Section
-        foldable
-        initialFoldState={FoldState.FOLDED}
-        title={_('Edit Scanner Preferences ({{counts}})', {
-          counts: preferences.length,
-        })}
-      >
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{_('Name')}</TableHead>
-              <TableHead>{_('New Value')}</TableHead>
-              <TableHead>{_('Default Value')}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {preferences.map(pref => (
-              <ScannerPreference
-                key={pref.name}
-                preference={pref}
-                value={values[pref.name]}
-                onPreferenceChange={this.onPreferenceChange}
-              />
-            ))}
-          </TableBody>
-        </Table>
-      </Section>
-    );
-  }
-}
-
-ScannerPreferences.propTypes = {
-  preferences: PropTypes.array.isRequired,
-  values: PropTypes.object.isRequired,
-  onValueChange: PropTypes.func,
 };
 
 class NvtFamily extends React.Component {
