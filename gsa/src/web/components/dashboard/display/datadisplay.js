@@ -329,7 +329,7 @@ class DataDisplay extends React.Component {
                     showCsvDownload,
                     showSvgDownload,
                     showToggleLegend,
-                    onDownloadCsvClick: this.handleDownloadSvg,
+                    onDownloadCsvClick: this.handleDownloadCsv,
                     onDownloadSvgClick: this.handleDownloadSvg,
                     onSelectFilterClick,
                   })}
