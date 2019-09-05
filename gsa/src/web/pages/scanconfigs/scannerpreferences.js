@@ -111,59 +111,47 @@ ScannerPreference.propTypes = {
   onPreferenceChange: PropTypes.func,
 };
 
-class ScannerPreferences extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.onPreferenceChange = this.onPreferenceChange.bind(this);
-  }
-
-  onPreferenceChange(value, name) {
-    const {values, onValueChange} = this.props;
-
-    values[name] = value;
-
-    onValueChange(values, 'scanner_preference_values');
-  }
-
-  render() {
-    const {preferences = [], values} = this.props;
-    return (
-      <Section
-        foldable
-        initialFoldState={FoldState.FOLDED}
-        title={_('Edit Scanner Preferences ({{counts}})', {
-          counts: preferences.length,
-        })}
-      >
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{_('Name')}</TableHead>
-              <TableHead>{_('New Value')}</TableHead>
-              <TableHead>{_('Default Value')}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {preferences.map(pref => (
-              <ScannerPreference
-                key={pref.name}
-                preference={pref}
-                value={values[pref.name]}
-                onPreferenceChange={this.onPreferenceChange}
-              />
-            ))}
-          </TableBody>
-        </Table>
-      </Section>
-    );
-  }
-}
+const ScannerPreferences = ({
+  preferences = [],
+  values = {},
+  onValuesChange,
+}) => (
+  <Section
+    foldable
+    initialFoldState={FoldState.FOLDED}
+    title={_('Edit Scanner Preferences ({{counts}})', {
+      counts: preferences.length,
+    })}
+  >
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>{_('Name')}</TableHead>
+          <TableHead>{_('New Value')}</TableHead>
+          <TableHead>{_('Default Value')}</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {preferences.map(pref => (
+          <ScannerPreference
+            key={pref.name}
+            preference={pref}
+            value={values[pref.name]}
+            onPreferenceChange={(value, name) => {
+              values[name] = value;
+              onValuesChange(values);
+            }}
+          />
+        ))}
+      </TableBody>
+    </Table>
+  </Section>
+);
 
 ScannerPreferences.propTypes = {
   preferences: PropTypes.array.isRequired,
   values: PropTypes.object.isRequired,
-  onValueChange: PropTypes.func,
+  onValuesChange: PropTypes.func.isRequired,
 };
 
 export default ScannerPreferences;

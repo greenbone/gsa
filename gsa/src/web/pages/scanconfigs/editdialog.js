@@ -465,7 +465,7 @@ const EditDialog = ({
               <ScannerPreferences
                 values={scannerPreferenceValues}
                 preferences={scannerPreferences}
-                onValueChange={values => setScannerPreferenceValues(values)}
+                onValuesChange={values => setScannerPreferenceValues(values)}
               />
             )}
 
