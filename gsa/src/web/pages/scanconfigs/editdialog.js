@@ -340,6 +340,8 @@ const EditDialog = ({
   config,
   families,
   name,
+  nvtPreferences,
+  scannerPreferences,
   scanner_id,
   scanner_preference_values,
   scanners,
@@ -443,7 +445,7 @@ const EditDialog = ({
             {!config.isInUse() && (
               <ScannerPreferences
                 values={scanner_preference_values}
-                preferences={config.preferences.scanner}
+                preferences={scannerPreferences}
                 onValueChange={onValueChange}
               />
             )}
@@ -452,7 +454,7 @@ const EditDialog = ({
               scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
                 <NvtPreferences
                   config={config}
-                  preferences={config.preferences.nvt}
+                  preferences={nvtPreferences}
                   onValueChange={onValueChange}
                   onEditNvtDetailsClick={onEditNvtDetailsClick}
                 />
@@ -469,6 +471,8 @@ EditDialog.propTypes = {
   config: PropTypes.model.isRequired,
   families: PropTypes.array,
   name: PropTypes.string,
+  nvtPreferences: PropTypes.arrayOf(PropTypes.object),
+  scannerPreferences: PropTypes.arrayOf(PropTypes.object),
   scanner_id: PropTypes.id,
   scanner_preference_values: PropTypes.object,
   scanners: PropTypes.array,

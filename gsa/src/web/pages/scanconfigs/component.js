@@ -428,8 +428,10 @@ class ScanConfigComponent extends React.Component {
                   config={config}
                   families={families}
                   name={config.name}
+                  nvtPreferences={config.preferences.nvt}
                   scanner_id={scannerId}
                   scanner_preference_values={scanner_preference_values}
+                  scannerPreferences={config.preferences.scanner}
                   scanners={scanners}
                   select={select}
                   title={title}
