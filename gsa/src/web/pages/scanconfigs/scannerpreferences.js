@@ -40,73 +40,66 @@ import PropTypes from 'web/utils/proptypes';
 
 const noop_convert = value => value;
 
-class ScannerPreference extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return (
-      nextProps.preference !== this.props.preference ||
-      nextProps.value !== this.props.value
-    );
-  }
-
-  render() {
-    const {preference, value, onPreferenceChange} = this.props;
-    const {hr_name, name} = preference;
-    const is_radio =
-      name === 'ping_hosts' ||
-      name === 'reverse_lookup' ||
-      name === 'unscanned_closed' ||
-      name === 'nasl_no_signature_check' ||
-      name === 'reverse_lookup' ||
-      name === 'unscanned_closed_udp' ||
-      name === 'auto_enable_dependencies' ||
-      name === 'kb_dont_replay_attacks' ||
-      name === 'kb_dont_replay_denials' ||
-      name === 'kb_dont_replay_info_gathering' ||
-      name === 'kb_dont_replay_scanners' ||
-      name === 'kb_restore' ||
-      name === 'log_whole_attack' ||
-      name === 'test_empty_vhost' ||
-      name === 'only_test_hosts_whose_kb_we_dont_have' ||
-      name === 'only_test_hosts_whose_kb_we_have' ||
-      name === 'optimize_test' ||
-      name === 'safe_checks' ||
-      name === 'save_knowledge_base' ||
-      name === 'silent_dependencies' ||
-      name === 'slice_network_addresses' ||
-      name === 'drop_privileges' ||
-      name === 'network_scan' ||
-      name === 'report_host_details';
-    return (
-      <TableRow>
-        <TableData>{hr_name}</TableData>
-        <TableData>
-          {is_radio ? (
-            <Layout>
-              <YesNoRadio
-                yesValue="yes"
-                noValue="no"
-                name={name}
-                value={value}
-                convert={noop_convert}
-                onChange={onPreferenceChange}
-              />
-            </Layout>
-          ) : (
-            <TextField
+const ScannerPreference = ({
+  displayName,
+  defaultValue,
+  name,
+  value,
+  onPreferenceChange,
+}) => {
+  const is_radio =
+    name === 'ping_hosts' ||
+    name === 'reverse_lookup' ||
+    name === 'unscanned_closed' ||
+    name === 'nasl_no_signature_check' ||
+    name === 'reverse_lookup' ||
+    name === 'unscanned_closed_udp' ||
+    name === 'auto_enable_dependencies' ||
+    name === 'kb_dont_replay_attacks' ||
+    name === 'kb_dont_replay_denials' ||
+    name === 'kb_dont_replay_info_gathering' ||
+    name === 'kb_dont_replay_scanners' ||
+    name === 'kb_restore' ||
+    name === 'log_whole_attack' ||
+    name === 'test_empty_vhost' ||
+    name === 'only_test_hosts_whose_kb_we_dont_have' ||
+    name === 'only_test_hosts_whose_kb_we_have' ||
+    name === 'optimize_test' ||
+    name === 'safe_checks' ||
+    name === 'save_knowledge_base' ||
+    name === 'silent_dependencies' ||
+    name === 'slice_network_addresses' ||
+    name === 'drop_privileges' ||
+    name === 'network_scan' ||
+    name === 'report_host_details';
+  return (
+    <TableRow>
+      <TableData>{displayName}</TableData>
+      <TableData>
+        {is_radio ? (
+          <Layout>
+            <YesNoRadio
+              yesValue="yes"
+              noValue="no"
               name={name}
               value={value}
+              convert={noop_convert}
               onChange={onPreferenceChange}
             />
-          )}
-        </TableData>
-        <TableData>{preference.default}</TableData>
-      </TableRow>
-    );
-  }
-}
+          </Layout>
+        ) : (
+          <TextField name={name} value={value} onChange={onPreferenceChange} />
+        )}
+      </TableData>
+      <TableData>{defaultValue}</TableData>
+    </TableRow>
+  );
+};
 
 ScannerPreference.propTypes = {
-  preference: PropTypes.object.isRequired,
+  defaultValue: PropTypes.any,
+  displayName: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   value: PropTypes.any.isRequired,
   onPreferenceChange: PropTypes.func,
 };
@@ -135,7 +128,9 @@ const ScannerPreferences = ({
         {preferences.map(pref => (
           <ScannerPreference
             key={pref.name}
-            preference={pref}
+            defaultValue={pref.default}
+            displayName={pref.hr_name}
+            name={pref.name}
             value={values[pref.name]}
             onPreferenceChange={(value, name) => {
               values[name] = value;
