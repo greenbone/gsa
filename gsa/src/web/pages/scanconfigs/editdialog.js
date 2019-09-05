@@ -352,7 +352,7 @@ const EditDialog = ({
   name,
   nvtPreferences,
   scannerPreferences,
-  scanner_id,
+  scannerId,
   scanners,
   select,
   title,
@@ -380,7 +380,7 @@ const EditDialog = ({
   const uncontrolledData = {
     comment,
     name,
-    scanner_id,
+    scannerId,
   };
 
   const controlledData = {
@@ -440,9 +440,9 @@ const EditDialog = ({
             {!config.isInUse() && scanConfigType === OSP_SCAN_CONFIG_TYPE && (
               <FormGroup title={_('Scanner')}>
                 <Select
-                  name="scanner_id"
+                  name="scannerId"
                   items={renderSelectItems(scanners)}
-                  value={state.scanner_id}
+                  value={state.scannerId}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -490,8 +490,8 @@ EditDialog.propTypes = {
   families: PropTypes.array,
   name: PropTypes.string,
   nvtPreferences: PropTypes.arrayOf(PropTypes.object),
+  scannerId: PropTypes.id,
   scannerPreferences: PropTypes.arrayOf(PropTypes.object),
-  scanner_id: PropTypes.id,
   scanners: PropTypes.array,
   select: PropTypes.object,
   title: PropTypes.string.isRequired,
