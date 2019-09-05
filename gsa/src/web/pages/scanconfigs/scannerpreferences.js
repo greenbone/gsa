@@ -144,8 +144,15 @@ const ScannerPreferences = ({
 );
 
 ScannerPreferences.propTypes = {
-  preferences: PropTypes.array.isRequired,
-  values: PropTypes.object.isRequired,
+  preferences: PropTypes.arrayOf(
+    PropTypes.shape({
+      default: PropTypes.any,
+      hr_name: PropTypes.string,
+      name: PropTypes.string,
+      value: PropTypes.any,
+    }),
+  ),
+  values: PropTypes.object,
   onValuesChange: PropTypes.func.isRequired,
 };
 
