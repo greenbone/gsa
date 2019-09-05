@@ -42,7 +42,7 @@ import {
 import PoliciesComponent from './component';
 import Table from './table';
 
-const ToolBarIcons = withCapabilities(
+export const ToolBarIcons = withCapabilities(
   ({capabilities, onPolicyCreateClick, onPolicyImportClick}) => (
     <IconDivider>
       {capabilities.mayCreate('config') && (
