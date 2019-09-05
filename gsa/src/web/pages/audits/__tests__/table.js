@@ -25,7 +25,7 @@ import {setLocale} from 'gmp/locale/lang';
 import Filter from 'gmp/models/filter';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 
-import {setUsername} from 'web/store/usersettings/actions';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
@@ -126,6 +126,7 @@ describe('Table tests', () => {
       store: true,
     });
 
+    store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(

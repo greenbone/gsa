@@ -914,7 +914,7 @@ exports[`Table tests should render 1`] = `
                     data-testid="details-link"
                     href="/report/1234"
                   >
-                    Sat, Aug 10, 2019 2:51 PM 
+                    Sat, Aug 10, 2019 2:51 PM CEST
                   </a>
                 </span>
               </div>
@@ -1266,7 +1266,7 @@ exports[`Table tests should render 1`] = `
                     data-testid="details-link"
                     href="/report/1234"
                   >
-                    Wed, Jul 10, 2019 2:51 PM 
+                    Wed, Jul 10, 2019 2:51 PM CEST
                   </a>
                 </span>
               </div>
