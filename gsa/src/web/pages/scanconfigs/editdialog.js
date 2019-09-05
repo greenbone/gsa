@@ -378,7 +378,6 @@ const EditDialog = ({
       : config.scan_config_type;
 
   const uncontrolledData = {
-    base: scanConfigType,
     comment,
     name,
     scanner_id,

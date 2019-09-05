@@ -111,7 +111,6 @@ class ScanConfigComponent extends React.Component {
         ...scanConfigState,
         scanners,
         scannerId,
-        base: config.base,
         editConfigDialogVisible: true,
         title: _('Edit Scan Config {{name}}', {name: shorten(config.name)}),
       });
@@ -357,7 +356,6 @@ class ScanConfigComponent extends React.Component {
     } = this.props;
 
     const {
-      base,
       config,
       createConfigDialogVisible,
       editConfigDialogVisible,
@@ -415,7 +413,6 @@ class ScanConfigComponent extends React.Component {
               )}
               {editConfigDialogVisible && (
                 <EditScanConfigDialog
-                  base={base}
                   comment={config.comment}
                   config={config}
                   families={families}
