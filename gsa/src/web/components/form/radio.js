@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import React, {useState} from 'react';
 
 import styled from 'styled-components';
 
@@ -27,8 +27,6 @@ import PropTypes from 'web/utils/proptypes';
 
 import Divider from 'web/components/layout/divider';
 import withLayout from 'web/components/layout/withLayout';
-
-import withChangeHandler from './withChangeHandler';
 
 export const StyledElement = styled.label`
   display: inline-flex;
@@ -64,24 +62,50 @@ export const StyledTitle = styled.span`
   opacity: ${props => (props.disabled ? '0.5' : '1')};
 `;
 
-const RadioComponent = ({title, children, disabled, ...other}) => (
-  <StyledElement disabled={disabled}>
-    <Divider>
-      <StyledInput
-        {...other}
-        disabled={disabled}
-        type="radio"
-        data-testid="radio-input"
-      />
-      {isDefined(title) && (
-        <StyledTitle data-testid="radio-title" disabled={disabled}>
-          {title}
-        </StyledTitle>
-      )}
-      {children}
-    </Divider>
-  </StyledElement>
-);
+const RadioComponent = ({title, children, disabled, ...other}) => {
+  const {value: initVal, convert} = other;
+  const [val, setVal] = useState(initVal);
+
+  const notifyChange = value => {
+    const {name, onChange} = other;
+
+    if (isDefined(onChange) && !disabled) {
+      onChange(value, name);
+    }
+  };
+
+  const handleChange = event => {
+    let newVal;
+    if (isDefined(convert)) {
+      newVal = convert(event.target.value);
+    } else {
+      newVal = event.target.value;
+    }
+    setVal(newVal);
+    notifyChange(newVal);
+  };
+
+  return (
+    <StyledElement disabled={disabled}>
+      <Divider>
+        <StyledInput
+          {...other}
+          disabled={disabled}
+          type="radio"
+          value={val}
+          data-testid="radio-input"
+          onChange={handleChange}
+        />
+        {isDefined(title) && (
+          <StyledTitle data-testid="radio-title" disabled={disabled}>
+            {title}
+          </StyledTitle>
+        )}
+        {children}
+      </Divider>
+    </StyledElement>
+  );
+};
 
 RadioComponent.propTypes = {
   disabled: PropTypes.bool,
@@ -95,7 +119,6 @@ export default compose(
     align: ['start', 'center'],
     flex: 'row',
   }),
-  withChangeHandler(),
 )(RadioComponent);
 
 // vim: set ts=2 sw=2 tw=80:
