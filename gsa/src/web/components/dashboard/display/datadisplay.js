@@ -241,7 +241,7 @@ class DataDisplay extends React.Component {
       escapeCsv(title),
       dataTitles.map(t => escapeCsv(t)).join(','),
       ...data.map(row =>
-        dataRow({row})
+        dataRow(row)
           .map(val => escapeCsv(val))
           .join(','),
       ),
