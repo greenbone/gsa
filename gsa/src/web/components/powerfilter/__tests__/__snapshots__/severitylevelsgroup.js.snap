@@ -126,7 +126,7 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   color: white;
   padding: 1px;
   display: inline-block;
-  width: 60px;
+  width: 70px;
   height: 1.5em;
   font-size: 0.8em;
   background-color: #C83814;
@@ -140,7 +140,7 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   color: white;
   padding: 1px;
   display: inline-block;
-  width: 60px;
+  width: 70px;
   height: 1.5em;
   font-size: 0.8em;
   background-color: #F0A519;
@@ -154,7 +154,7 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   color: white;
   padding: 1px;
   display: inline-block;
-  width: 60px;
+  width: 70px;
   height: 1.5em;
   font-size: 0.8em;
   background-color: #4F91C7;
@@ -168,7 +168,7 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   color: white;
   padding: 1px;
   display: inline-block;
-  width: 60px;
+  width: 70px;
   height: 1.5em;
   font-size: 0.8em;
   background-color: #191919;
