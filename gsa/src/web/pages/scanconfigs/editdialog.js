@@ -348,6 +348,7 @@ const createScannerPreferenceValues = (preferences = []) => {
 const EditDialog = ({
   comment = '',
   config,
+  configType,
   families,
   name,
   nvtPreferences,
@@ -371,11 +372,6 @@ const EditDialog = ({
       createScannerPreferenceValues(scannerPreferences),
     );
   }, [scannerPreferences]);
-
-  const scanConfigType =
-    config.usage_type === 'policy'
-      ? config.policy_type
-      : config.scan_config_type;
 
   const uncontrolledData = {
     comment,
@@ -437,7 +433,7 @@ const EditDialog = ({
               />
             </FormGroup>
 
-            {!config.isInUse() && scanConfigType === OSP_SCAN_CONFIG_TYPE && (
+            {!config.isInUse() && configType === OSP_SCAN_CONFIG_TYPE && (
               <FormGroup title={_('Scanner')}>
                 <Select
                   name="scannerId"
@@ -448,17 +444,16 @@ const EditDialog = ({
               </FormGroup>
             )}
 
-            {!config.isInUse() &&
-              scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
-                <NvtFamilies
-                  config={config}
-                  families={families}
-                  trend={trend}
-                  select={select}
-                  onEditConfigFamilyClick={onEditConfigFamilyClick}
-                  onValueChange={onValueChange}
-                />
-              )}
+            {!config.isInUse() && configType === OPENVAS_SCAN_CONFIG_TYPE && (
+              <NvtFamilies
+                config={config}
+                families={families}
+                trend={trend}
+                select={select}
+                onEditConfigFamilyClick={onEditConfigFamilyClick}
+                onValueChange={onValueChange}
+              />
+            )}
 
             {!config.isInUse() && (
               <ScannerPreferences
@@ -468,15 +463,14 @@ const EditDialog = ({
               />
             )}
 
-            {!config.isInUse() &&
-              scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
-                <NvtPreferences
-                  config={config}
-                  preferences={nvtPreferences}
-                  onValueChange={onValueChange}
-                  onEditNvtDetailsClick={onEditNvtDetailsClick}
-                />
-              )}
+            {!config.isInUse() && configType === OPENVAS_SCAN_CONFIG_TYPE && (
+              <NvtPreferences
+                config={config}
+                preferences={nvtPreferences}
+                onValueChange={onValueChange}
+                onEditNvtDetailsClick={onEditNvtDetailsClick}
+              />
+            )}
           </Layout>
         );
       }}
@@ -487,6 +481,7 @@ const EditDialog = ({
 EditDialog.propTypes = {
   comment: PropTypes.string,
   config: PropTypes.model.isRequired,
+  configType: PropTypes.number,
   families: PropTypes.array,
   name: PropTypes.string,
   nvtPreferences: PropTypes.arrayOf(PropTypes.object),
