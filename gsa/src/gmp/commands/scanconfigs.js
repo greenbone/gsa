@@ -96,11 +96,11 @@ class ScanConfigCommand extends EntityCommand {
     return this.action(data);
   }
 
-  save({id, name, comment = '', trend, select, scanner_preference_values}) {
+  save({id, name, comment = '', trend, select, scannerPreferenceValues}) {
     const data = {
       ...convert(trend, 'trend:'),
       ...convert(
-        scanner_preference_values,
+        scannerPreferenceValues,
         'preference:scanner:scanner:scanner:',
       ),
       ...convertSelect(select, 'select:'),

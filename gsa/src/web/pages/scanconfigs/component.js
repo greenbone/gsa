@@ -328,20 +328,13 @@ class ScanConfigComponent extends React.Component {
       const {data: scanconfig} = configResponse;
       const {data: families} = familiesResponse;
 
-      const scanner_preference_values = {};
-
       const {trend, select} = getTrendAndSelect(scanconfig, families);
-
-      forEach(scanconfig.preferences.scanner, preference => {
-        scanner_preference_values[preference.name] = preference.value;
-      });
 
       const state = {
         config: scanconfig,
         families,
         trend,
         select,
-        scanner_preference_values,
       };
       return state;
     });
@@ -378,7 +371,6 @@ class ScanConfigComponent extends React.Component {
       nvt,
       nvts,
       scannerId,
-      scanner_preference_values,
       scanners,
       select,
       selected,
@@ -430,7 +422,6 @@ class ScanConfigComponent extends React.Component {
                   name={config.name}
                   nvtPreferences={config.preferences.nvt}
                   scanner_id={scannerId}
-                  scanner_preference_values={scanner_preference_values}
                   scannerPreferences={config.preferences.scanner}
                   scanners={scanners}
                   select={select}

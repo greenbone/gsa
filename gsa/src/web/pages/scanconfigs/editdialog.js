@@ -335,6 +335,16 @@ NvtFamilies.propTypes = {
   onValueChange: PropTypes.func,
 };
 
+const createScannerPreferenceValues = (preferences = []) => {
+  const values = {};
+
+  preferences.forEach(preference => {
+    values[preference.name] = preference.value;
+  });
+
+  return values;
+};
+
 const EditDialog = ({
   comment = '',
   config,
@@ -343,7 +353,6 @@ const EditDialog = ({
   nvtPreferences,
   scannerPreferences,
   scanner_id,
-  scanner_preference_values,
   scanners,
   select,
   title,
@@ -353,6 +362,16 @@ const EditDialog = ({
   onEditNvtDetailsClick,
   onSave,
 }) => {
+  const [scannerPreferenceValues, setScannerPreferenceValues] = useState(
+    createScannerPreferenceValues(scannerPreferences),
+  );
+
+  useEffect(() => {
+    setScannerPreferenceValues(
+      createScannerPreferenceValues(scannerPreferences),
+    );
+  }, [scannerPreferences]);
+
   const scanConfigType =
     config.usage_type === 'policy'
       ? config.policy_type
@@ -367,7 +386,7 @@ const EditDialog = ({
 
   const controlledData = {
     id: config.id,
-    scanner_preference_values,
+    scannerPreferenceValues,
     select,
     trend,
   };
@@ -444,9 +463,9 @@ const EditDialog = ({
 
             {!config.isInUse() && (
               <ScannerPreferences
-                values={scanner_preference_values}
+                values={scannerPreferenceValues}
                 preferences={scannerPreferences}
-                onValueChange={onValueChange}
+                onValueChange={values => setScannerPreferenceValues(values)}
               />
             )}
 
@@ -474,7 +493,6 @@ EditDialog.propTypes = {
   nvtPreferences: PropTypes.arrayOf(PropTypes.object),
   scannerPreferences: PropTypes.arrayOf(PropTypes.object),
   scanner_id: PropTypes.id,
-  scanner_preference_values: PropTypes.object,
   scanners: PropTypes.array,
   select: PropTypes.object,
   title: PropTypes.string.isRequired,
