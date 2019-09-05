@@ -19,8 +19,6 @@
 
 import React, {useState, useEffect} from 'react';
 
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
 
 import {
@@ -39,8 +37,6 @@ import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
 import SaveDialog from 'web/components/dialog/savedialog';
-
-import {FoldState} from 'web/components/folding/folding';
 
 import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
@@ -63,88 +59,9 @@ import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
+import NvtPreferences from './nvtpreferences';
 import ScannerPreferences from './scannerpreferences';
 import Trend from './trend';
-
-const StyledTableData = styled(TableData)`
-  overflow-wrap: break-word;
-`;
-
-class NvtPreferenceDisplay extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return nextProps.preference !== this.props.preference;
-  }
-
-  render() {
-    const {config, preference, onEditNvtDetailsClick} = this.props;
-    const title =
-      config.usage_type === 'policy'
-        ? _('Edit Policy NVT Details')
-        : _('Edit Scan Config NVT Details');
-
-    return (
-      <TableRow>
-        <StyledTableData>{preference.nvt.name}</StyledTableData>
-        <StyledTableData>{preference.name}</StyledTableData>
-        <StyledTableData>{preference.value}</StyledTableData>
-        <TableData align={['center', 'center']}>
-          <EditIcon
-            title={title}
-            value={preference.nvt.oid}
-            onClick={onEditNvtDetailsClick}
-          />
-        </TableData>
-      </TableRow>
-    );
-  }
-}
-
-NvtPreferenceDisplay.propTypes = {
-  config: PropTypes.model.isRequired,
-  preference: PropTypes.object.isRequired,
-  onEditNvtDetailsClick: PropTypes.func.isRequired,
-};
-
-const NvtPreferences = ({config, preferences = [], onEditNvtDetailsClick}) => {
-  return (
-    <Section
-      foldable
-      initialFoldState={FoldState.FOLDED}
-      title={_('Network Vulnerability Test Preferences ({{counts}})', {
-        counts: preferences.length,
-      })}
-    >
-      <Table fixed>
-        <TableHeader>
-          <TableRow>
-            <TableHead width="30%">{_('NVT')}</TableHead>
-            <TableHead width="30%">{_('Name')}</TableHead>
-            <TableHead width="30%">{_('Value')}</TableHead>
-            <TableHead width="10%" align="center">
-              {_('Actions')}
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {preferences.map(pref => (
-            <NvtPreferenceDisplay
-              key={pref.nvt.name + pref.name}
-              config={config}
-              preference={pref}
-              onEditNvtDetailsClick={onEditNvtDetailsClick}
-            />
-          ))}
-        </TableBody>
-      </Table>
-    </Section>
-  );
-};
-
-NvtPreferences.propTypes = {
-  config: PropTypes.model.isRequired,
-  preferences: PropTypes.array.isRequired,
-  onEditNvtDetailsClick: PropTypes.func.isRequired,
-};
 
 class NvtFamily extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
