@@ -77,7 +77,11 @@ NvtPreferenceDisplay.propTypes = {
   onEditNvtDetailsClick: PropTypes.func.isRequired,
 };
 
-const NvtPreferences = ({config, preferences = [], onEditNvtDetailsClick}) => (
+const NvtPreferences = ({
+  editTitle,
+  preferences = [],
+  onEditNvtDetailsClick,
+}) => (
   <Section
     foldable
     initialFoldState={FoldState.FOLDED}
@@ -100,11 +104,7 @@ const NvtPreferences = ({config, preferences = [], onEditNvtDetailsClick}) => (
         {preferences.map(pref => (
           <NvtPreferenceDisplay
             key={pref.nvt.name + pref.name}
-            title={
-              config.usage_type === 'policy'
-                ? _('Edit Policy NVT Details')
-                : _('Edit Scan Config NVT Details')
-            }
+            title={editTitle}
             preference={pref}
             onEditNvtDetailsClick={onEditNvtDetailsClick}
           />
@@ -115,7 +115,7 @@ const NvtPreferences = ({config, preferences = [], onEditNvtDetailsClick}) => (
 );
 
 NvtPreferences.propTypes = {
-  config: PropTypes.model.isRequired,
+  editTitle: PropTypes.string,
   preferences: PropTypes.array.isRequired,
   onEditNvtDetailsClick: PropTypes.func.isRequired,
 };

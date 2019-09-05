@@ -385,6 +385,11 @@ const EditDialog = ({
                   <NvtPreferences
                     config={config}
                     preferences={nvtPreferences}
+                    editTitle={
+                      config.usage_type === 'policy'
+                        ? _('Edit Policy NVT Details')
+                        : _('Edit Scan Config NVT Details')
+                    }
                     onEditNvtDetailsClick={onEditNvtDetailsClick}
                   />
                 )}
