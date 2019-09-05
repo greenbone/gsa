@@ -468,7 +468,6 @@ const EditDialog = ({
                   <NvtPreferences
                     config={config}
                     preferences={nvtPreferences}
-                    onValueChange={onValueChange}
                     onEditNvtDetailsClick={onEditNvtDetailsClick}
                   />
                 )}
