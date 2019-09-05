@@ -61,13 +61,7 @@ class Nvt extends React.Component {
   }
 
   render() {
-    const {
-      configId,
-      nvt,
-      selected,
-      onSelectedChange,
-      onEditNvtDetailsClick,
-    } = this.props;
+    const {nvt, selected, onSelectedChange, onEditNvtDetailsClick} = this.props;
 
     let pref_count = nvt.preference_count;
     if (pref_count === '0') {
@@ -112,7 +106,6 @@ class Nvt extends React.Component {
 }
 
 Nvt.propTypes = {
-  configId: PropTypes.id.isRequired,
   nvt: PropTypes.object.isRequired,
   selected: PropTypes.yesno.isRequired,
   onEditNvtDetailsClick: PropTypes.func,
@@ -286,7 +279,6 @@ class EditDialogComponent extends React.Component {
                       <Nvt
                         key={oid}
                         nvt={nvt}
-                        configId={configId}
                         selected={selected[oid]}
                         onSelectedChange={this.handleSelectedChange}
                         onEditNvtDetailsClick={onEditNvtDetailsClick}
