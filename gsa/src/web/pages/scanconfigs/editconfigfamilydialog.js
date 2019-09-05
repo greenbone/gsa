@@ -102,7 +102,7 @@ class Nvt extends React.Component {
         <TableData align={['center', 'center']}>
           <EditIcon
             title={_('Select and edit NVT details')}
-            value={{configId, nvtOid: nvt.oid}}
+            value={nvt.oid}
             onClick={onEditNvtDetailsClick}
           />
         </TableData>

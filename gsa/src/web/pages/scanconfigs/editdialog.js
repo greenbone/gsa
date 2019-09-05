@@ -90,7 +90,7 @@ class NvtPreferenceDisplay extends React.Component {
         <TableData align={['center', 'center']}>
           <EditIcon
             title={title}
-            value={{configId: config.id, nvtOid: preference.nvt.oid}}
+            value={preference.nvt.oid}
             onClick={onEditNvtDetailsClick}
           />
         </TableData>

@@ -210,14 +210,15 @@ class ScanConfigComponent extends React.Component {
     this.handleInteraction();
   }
 
-  openEditNvtDetailsDialog({configId, nvtOid}) {
+  openEditNvtDetailsDialog(nvtOid) {
     const {gmp} = this.props;
+    const {config} = this.state;
 
     this.handleInteraction();
 
     return gmp.nvt
       .getConfigNvt({
-        configId,
+        configId: config.id,
         oid: nvtOid,
       })
       .then(response => response.data)
