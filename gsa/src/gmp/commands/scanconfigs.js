@@ -96,7 +96,15 @@ class ScanConfigCommand extends EntityCommand {
     return this.action(data);
   }
 
-  save({id, name, comment = '', trend, select, scannerPreferenceValues}) {
+  save({
+    id,
+    name,
+    comment = '',
+    trend,
+    select,
+    scannerId,
+    scannerPreferenceValues,
+  }) {
     const data = {
       ...convert(trend, 'trend:'),
       ...convert(
@@ -109,6 +117,7 @@ class ScanConfigCommand extends EntityCommand {
       id,
       comment,
       name,
+      scanner_id: scannerId, // seems to be used for osp scan configs only
     };
     log.debug('Saving scanconfig', data);
     return this.action(data);
