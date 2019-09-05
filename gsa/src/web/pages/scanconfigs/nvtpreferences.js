@@ -68,6 +68,7 @@ class NvtPreferenceDisplay extends React.Component {
 NvtPreferenceDisplay.propTypes = {
   preference: PropTypes.shape({
     nvt: PropTypes.shape({
+      oid: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
     }).isRequired,
     name: PropTypes.string.isRequired,
