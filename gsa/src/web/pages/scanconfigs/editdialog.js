@@ -24,7 +24,12 @@ import _ from 'gmp/locale';
 import {
   OPENVAS_SCAN_CONFIG_TYPE,
   OSP_SCAN_CONFIG_TYPE,
+  SCANCONFIG_TREND_STATIC,
 } from 'gmp/models/scanconfig';
+
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
@@ -42,6 +47,30 @@ import NvtFamilies from './nvtfamilies';
 import NvtPreferences from './nvtpreferences';
 import ScannerPreferences from './scannerpreferences';
 
+const createTrendAndSelect = (scanConfigFamilies = {}, allFamilies = []) => {
+  const trend = {};
+  const select = {};
+
+  allFamilies.forEach(family => {
+    const {name} = family;
+    const configFamily = scanConfigFamilies[name];
+
+    if (isDefined(configFamily)) {
+      trend[name] = configFamily.trend;
+      select[name] =
+        configFamily.nvts.count === family.maxNvtCount ? YES_VALUE : NO_VALUE;
+    } else {
+      trend[name] = SCANCONFIG_TREND_STATIC;
+      select[name] = NO_VALUE;
+    }
+  });
+
+  return {
+    trend,
+    select,
+  };
+};
+
 const createScannerPreferenceValues = (preferences = []) => {
   const values = {};
 
@@ -55,6 +84,7 @@ const createScannerPreferenceValues = (preferences = []) => {
 const EditDialog = ({
   comment = '',
   config,
+  configFamilies,
   configIsInUse = false,
   configType,
   editNvtDetailsTitle,
@@ -64,9 +94,7 @@ const EditDialog = ({
   scannerPreferences,
   scannerId,
   scanners,
-  select,
   title,
-  trend,
   onClose,
   onEditConfigFamilyClick,
   onEditNvtDetailsClick,
@@ -81,6 +109,14 @@ const EditDialog = ({
       createScannerPreferenceValues(scannerPreferences),
     );
   }, [scannerPreferences]);
+
+  const [{select, trend}, setTrendAndSelect] = useState(
+    createTrendAndSelect(configFamilies, families),
+  );
+
+  useEffect(() => {
+    setTrendAndSelect(createTrendAndSelect(configFamilies, families));
+  }, [configFamilies, families]);
 
   const uncontrolledData = {
     comment,
@@ -191,6 +227,7 @@ const EditDialog = ({
 EditDialog.propTypes = {
   comment: PropTypes.string,
   config: PropTypes.model.isRequired,
+  configFamilies: PropTypes.object,
   configIsInUse: PropTypes.bool,
   configType: PropTypes.number,
   editNvtDetailsTitle: PropTypes.string,

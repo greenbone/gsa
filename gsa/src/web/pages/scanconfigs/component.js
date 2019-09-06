@@ -20,7 +20,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {SCANCONFIG_TREND_STATIC} from 'gmp/models/scanconfig';
 import {ospScannersFilter} from 'gmp/models/scanner';
 
 import {forEach} from 'gmp/utils/array';
@@ -28,7 +27,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {selectSaveId} from 'gmp/utils/id';
 
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {YES_VALUE} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -40,30 +39,6 @@ import EditScanConfigDialog from './editdialog';
 import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
-
-const getTrendAndSelect = (scanConfigFamilies = {}, allFamilies = []) => {
-  const trend = {};
-  const select = {};
-
-  allFamilies.forEach(family => {
-    const {name} = family;
-    const configFamily = scanConfigFamilies[name];
-
-    if (isDefined(configFamily)) {
-      trend[name] = configFamily.trend;
-      select[name] =
-        configFamily.nvts.count === family.maxNvtCount ? YES_VALUE : NO_VALUE;
-    } else {
-      trend[name] = SCANCONFIG_TREND_STATIC;
-      select[name] = NO_VALUE;
-    }
-  });
-
-  return {
-    trend,
-    select,
-  };
-};
 
 class ScanConfigComponent extends React.Component {
   constructor(...args) {
@@ -165,7 +140,7 @@ class ScanConfigComponent extends React.Component {
 
   openEditConfigFamilyDialog({configId, familyName}) {
     const {gmp} = this.props;
-    const {select} = this.state;
+    const {config} = this.state;
 
     this.handleInteraction();
 
@@ -178,8 +153,10 @@ class ScanConfigComponent extends React.Component {
         const {data} = response;
         const {nvts} = data;
         const selected = {};
+        const configFamily = config.families[familyName];
+        const nvtsCount = isDefined(configFamily) ? configFamily.nvts.count : 0;
 
-        if (select[familyName]) {
+        if (nvtsCount === nvts.length) {
           forEach(nvts, nvt => {
             selected[nvt.oid] = YES_VALUE;
           });
@@ -328,15 +305,10 @@ class ScanConfigComponent extends React.Component {
       const {data: scanconfig} = configResponse;
       const {data: families} = familiesResponse;
 
-      const {trend, select} = getTrendAndSelect(scanconfig.families, families);
-
-      const state = {
+      return {
         config: scanconfig,
         families,
-        trend,
-        select,
       };
-      return state;
     });
   }
 
@@ -416,6 +388,7 @@ class ScanConfigComponent extends React.Component {
                 <EditScanConfigDialog
                   comment={config.comment}
                   config={config}
+                  configFamilies={config.families}
                   configIsInUse={config.isInUse()}
                   configType={config.scan_config_type}
                   editNvtDetailsTitle={_('Edit Scan Config NVT Details')}
