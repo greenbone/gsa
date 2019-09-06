@@ -84,6 +84,7 @@ const createScannerPreferenceValues = (preferences = []) => {
 const EditDialog = ({
   comment = '',
   config,
+  configId,
   configFamilies,
   configIsInUse = false,
   configType,
@@ -125,7 +126,7 @@ const EditDialog = ({
   };
 
   const controlledData = {
-    id: config.id,
+    id: configId,
     scannerPreferenceValues,
     select,
     trend,
@@ -228,6 +229,7 @@ EditDialog.propTypes = {
   comment: PropTypes.string,
   config: PropTypes.model.isRequired,
   configFamilies: PropTypes.object,
+  configId: PropTypes.id.isRequired,
   configIsInUse: PropTypes.bool,
   configType: PropTypes.number,
   editNvtDetailsTitle: PropTypes.string,
