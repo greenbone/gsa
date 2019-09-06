@@ -53,8 +53,9 @@ import Trend from './trend';
 class NvtFamily extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     return (
+      nextProps.familyMaxNvtCount !== this.props.familyMaxNvtCount ||
+      nextProps.familyName !== this.props.familyName ||
       nextProps.config !== this.props.config ||
-      nextProps.family !== this.props.family ||
       nextProps.select !== this.props.select ||
       nextProps.trend !== this.props.trend
     );
@@ -63,18 +64,18 @@ class NvtFamily extends React.Component {
   render() {
     const {
       config,
-      family,
+      familyMaxNvtCount,
+      familyName,
       select,
       trend,
       onEditConfigFamilyClick,
       onSelectChange,
       onTrendChange,
     } = this.props;
-    const {name} = family;
-    const config_family = config.families[name];
+    const config_family = config.families[familyName];
     const counts = {
       count: 0,
-      max: family.maxNvtCount,
+      max: familyMaxNvtCount,
     };
 
     if (isDefined(config_family)) {
@@ -88,14 +89,14 @@ class NvtFamily extends React.Component {
         : _('Edit Scan Config Family');
 
     return (
-      <TableRow key={name}>
-        <TableData>{name}</TableData>
+      <TableRow key={familyName}>
+        <TableData>{familyName}</TableData>
         <TableData align="start">{_('{{count}} of {{max}}', counts)}</TableData>
         <TableData align={['center', 'start']}>
           <Divider>
             <Radio
               flex
-              name={name}
+              name={familyName}
               checked={trend === SCANCONFIG_TREND_DYNAMIC}
               convert={parseTrend}
               value={SCANCONFIG_TREND_DYNAMIC}
@@ -104,7 +105,7 @@ class NvtFamily extends React.Component {
             <Trend trend={SCANCONFIG_TREND_DYNAMIC} />
             <Radio
               flex
-              name={name}
+              name={familyName}
               checked={trend === SCANCONFIG_TREND_STATIC}
               convert={parseTrend}
               value={SCANCONFIG_TREND_STATIC}
@@ -116,7 +117,7 @@ class NvtFamily extends React.Component {
         <TableData align={['start', 'center']}>
           <Checkbox
             flex
-            name={name}
+            name={familyName}
             checked={select === YES_VALUE}
             checkedValue={YES_VALUE}
             unCheckedValue={NO_VALUE}
@@ -126,7 +127,7 @@ class NvtFamily extends React.Component {
         <TableData align={['center', 'center']}>
           <EditIcon
             title={title}
-            value={{familyName: name, configId: config.id}}
+            value={{familyName, configId: config.id}}
             onClick={onEditConfigFamilyClick}
           />
         </TableData>
@@ -137,7 +138,8 @@ class NvtFamily extends React.Component {
 
 NvtFamily.propTypes = {
   config: PropTypes.model.isRequired,
-  family: PropTypes.object.isRequired,
+  familyMaxNvtCount: PropTypes.number.isRequired,
+  familyName: PropTypes.string.isRequired,
   select: PropTypes.yesno.isRequired,
   trend: PropTypes.yesno.isRequired,
   onEditConfigFamilyClick: PropTypes.func,
@@ -202,7 +204,8 @@ class NvtFamilies extends React.Component {
                 <NvtFamily
                   key={name}
                   config={config}
-                  family={family}
+                  familyName={family.name}
+                  familyMaxNvtCount={family.maxNvtCount}
                   trend={trend[name]}
                   select={select[name]}
                   onEditConfigFamilyClick={onEditConfigFamilyClick}
