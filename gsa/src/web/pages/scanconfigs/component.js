@@ -350,10 +350,8 @@ class ScanConfigComponent extends React.Component {
       nvts,
       scannerId,
       scanners,
-      select,
       selected,
       title,
-      trend,
     } = this.state;
 
     return (
@@ -406,9 +404,7 @@ class ScanConfigComponent extends React.Component {
                   scannerId={scannerId}
                   scannerPreferences={config.preferences.scanner}
                   scanners={scanners}
-                  select={select}
                   title={title}
-                  trend={trend}
                   onClose={this.handleCloseEditConfigDialog}
                   onEditConfigFamilyClick={this.openEditConfigFamilyDialog}
                   onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
