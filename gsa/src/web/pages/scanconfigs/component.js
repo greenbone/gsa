@@ -175,8 +175,8 @@ class ScanConfigComponent extends React.Component {
 
         this.setState({
           familyName,
-          nvts: data.nvts,
-          selected,
+          familyNvts: data.nvts,
+          familySelectedNvts: selected,
           editConfigFamilyDialogVisible: true,
           editConfigFamilyDialogTitle: _('Edit Scan Config Family {{name}}', {
             name: shorten(familyName),
@@ -345,12 +345,12 @@ class ScanConfigComponent extends React.Component {
       editNvtDetailsDialogTitle,
       families,
       familyName,
+      familyNvts,
+      familySelectedNvts,
       importDialogVisible,
       nvt,
-      nvts,
       scannerId,
       scanners,
-      selected,
       title,
     } = this.state;
 
@@ -431,8 +431,8 @@ class ScanConfigComponent extends React.Component {
             configNameLabel={_('Config')}
             configName={config.name}
             familyName={familyName}
-            nvts={nvts}
-            selected={selected}
+            nvts={familyNvts}
+            selected={familySelectedNvts}
             title={editConfigFamilyDialogTitle}
             onClose={this.handleCloseEditConfigFamilyDialog}
             onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
