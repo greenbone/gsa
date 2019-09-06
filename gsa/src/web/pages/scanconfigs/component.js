@@ -40,6 +40,23 @@ import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
 
+const createSelectedNvts = (configFamily, nvts) => {
+  const selected = {};
+  const nvtsCount = isDefined(configFamily) ? configFamily.nvts.count : 0;
+
+  if (nvtsCount === nvts.length) {
+    forEach(nvts, nvt => {
+      selected[nvt.oid] = YES_VALUE;
+    });
+  } else {
+    forEach(nvts, nvt => {
+      selected[nvt.oid] = nvt.selected;
+    });
+  }
+
+  return selected;
+};
+
 class ScanConfigComponent extends React.Component {
   constructor(...args) {
     super(...args);
@@ -152,19 +169,9 @@ class ScanConfigComponent extends React.Component {
       .then(response => {
         const {data} = response;
         const {nvts} = data;
-        const selected = {};
-        const configFamily = config.families[familyName];
-        const nvtsCount = isDefined(configFamily) ? configFamily.nvts.count : 0;
 
-        if (nvtsCount === nvts.length) {
-          forEach(nvts, nvt => {
-            selected[nvt.oid] = YES_VALUE;
-          });
-        } else {
-          forEach(nvts, nvt => {
-            selected[nvt.oid] = nvt.selected;
-          });
-        }
+        const configFamily = config.families[familyName];
+        const selected = createSelectedNvts(configFamily, nvts);
 
         this.setState({
           familyName,
