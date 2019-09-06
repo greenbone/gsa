@@ -155,7 +155,7 @@ class ScanConfigComponent extends React.Component {
     this.handleInteraction();
   }
 
-  openEditConfigFamilyDialog({configId, familyName}) {
+  openEditConfigFamilyDialog(familyName) {
     const {gmp} = this.props;
     const {config} = this.state;
 
@@ -163,7 +163,7 @@ class ScanConfigComponent extends React.Component {
 
     return gmp.scanconfig
       .editScanConfigFamilySettings({
-        id: configId,
+        id: config.id,
         familyName,
       })
       .then(response => {
