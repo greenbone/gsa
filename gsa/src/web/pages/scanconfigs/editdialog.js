@@ -195,6 +195,11 @@ const EditDialog = ({
                 {configType === OPENVAS_SCAN_CONFIG_TYPE && (
                   <NvtFamilies
                     config={config}
+                    editTitle={
+                      config.usage_type === 'policy'
+                        ? _('Edit Policy Family')
+                        : _('Edit Scan Config Family')
+                    }
                     families={families}
                     trend={trend}
                     select={select}

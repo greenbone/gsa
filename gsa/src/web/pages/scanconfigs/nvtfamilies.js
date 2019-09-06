@@ -67,6 +67,7 @@ class NvtFamily extends React.Component {
       familyMaxNvtCount,
       familyName,
       select,
+      title,
       trend,
       onEditConfigFamilyClick,
       onSelectChange,
@@ -82,11 +83,6 @@ class NvtFamily extends React.Component {
       counts.count = config_family.nvts.count;
       counts.max = config_family.nvts.max;
     }
-
-    const title =
-      config.usage_type === 'policy'
-        ? _('Edit Policy Family')
-        : _('Edit Scan Config Family');
 
     return (
       <TableRow key={familyName}>
@@ -141,6 +137,7 @@ NvtFamily.propTypes = {
   familyMaxNvtCount: PropTypes.number.isRequired,
   familyName: PropTypes.string.isRequired,
   select: PropTypes.yesno.isRequired,
+  title: PropTypes.string,
   trend: PropTypes.yesno.isRequired,
   onEditConfigFamilyClick: PropTypes.func,
   onSelectChange: PropTypes.func,
@@ -174,6 +171,7 @@ class NvtFamilies extends React.Component {
   render() {
     const {
       config,
+      editTitle,
       families = [],
       trend,
       select,
@@ -206,6 +204,7 @@ class NvtFamilies extends React.Component {
                   config={config}
                   familyName={family.name}
                   familyMaxNvtCount={family.maxNvtCount}
+                  title={editTitle}
                   trend={trend[name]}
                   select={select[name]}
                   onEditConfigFamilyClick={onEditConfigFamilyClick}
@@ -235,6 +234,7 @@ class NvtFamilies extends React.Component {
 
 NvtFamilies.propTypes = {
   config: PropTypes.model.isRequired,
+  editTitle: PropTypes.string,
   families: PropTypes.array.isRequired,
   select: PropTypes.object.isRequired,
   trend: PropTypes.object.isRequired,
