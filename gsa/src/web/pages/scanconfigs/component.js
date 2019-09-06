@@ -41,13 +41,13 @@ import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
 
-const getTrendAndSelect = (scanConfig, families = []) => {
+const getTrendAndSelect = (scanConfigFamilies = {}, allFamilies = []) => {
   const trend = {};
   const select = {};
 
-  families.forEach(family => {
+  allFamilies.forEach(family => {
     const {name} = family;
-    const configFamily = scanConfig.families[name];
+    const configFamily = scanConfigFamilies[name];
 
     if (isDefined(configFamily)) {
       trend[name] = configFamily.trend;
@@ -328,7 +328,7 @@ class ScanConfigComponent extends React.Component {
       const {data: scanconfig} = configResponse;
       const {data: families} = familiesResponse;
 
-      const {trend, select} = getTrendAndSelect(scanconfig, families);
+      const {trend, select} = getTrendAndSelect(scanconfig.families, families);
 
       const state = {
         config: scanconfig,
