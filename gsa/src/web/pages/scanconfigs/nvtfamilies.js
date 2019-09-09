@@ -55,7 +55,7 @@ class NvtFamily extends React.Component {
     return (
       nextProps.familyMaxNvtCount !== this.props.familyMaxNvtCount ||
       nextProps.familyName !== this.props.familyName ||
-      nextProps.config !== this.props.config ||
+      nextProps.familyNvtCount !== this.props.familyNvtCount ||
       nextProps.select !== this.props.select ||
       nextProps.trend !== this.props.trend
     );
@@ -63,9 +63,9 @@ class NvtFamily extends React.Component {
 
   render() {
     const {
-      config,
       familyMaxNvtCount,
       familyName,
+      familyNvtCount = 0,
       select,
       title,
       trend,
@@ -73,15 +73,10 @@ class NvtFamily extends React.Component {
       onSelectChange,
       onTrendChange,
     } = this.props;
-    const config_family = config.families[familyName];
     const counts = {
-      count: 0,
+      count: familyNvtCount,
       max: familyMaxNvtCount,
     };
-
-    if (isDefined(config_family)) {
-      counts.count = config_family.nvts.count;
-    }
 
     return (
       <TableRow key={familyName}>
@@ -132,9 +127,9 @@ class NvtFamily extends React.Component {
 }
 
 NvtFamily.propTypes = {
-  config: PropTypes.model.isRequired,
   familyMaxNvtCount: PropTypes.number.isRequired,
   familyName: PropTypes.string.isRequired,
+  familyNvtCount: PropTypes.number,
   select: PropTypes.yesno.isRequired,
   title: PropTypes.string,
   trend: PropTypes.yesno.isRequired,
@@ -197,12 +192,15 @@ class NvtFamilies extends React.Component {
           <TableBody>
             {families.map(family => {
               const {name} = family;
+              const configFamily = config.families[name];
               return (
                 <NvtFamily
                   key={name}
-                  config={config}
                   familyName={family.name}
                   familyMaxNvtCount={family.maxNvtCount}
+                  familyNvtCount={
+                    isDefined(configFamily) ? configFamily.nvts.count : 0
+                  }
                   title={editTitle}
                   trend={trend[name]}
                   select={select[name]}
