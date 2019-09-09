@@ -34,7 +34,7 @@ import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.reports');
 
-class ReportsCommand extends EntitiesCommand {
+export class ReportsCommand extends EntitiesCommand {
   constructor(http) {
     super(http, 'report', Report);
   }
