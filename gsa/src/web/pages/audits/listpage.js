@@ -44,13 +44,15 @@ import Table from './table';
 
 import AuditIcon from 'web/components/icon/auditicon';
 
-const ToolBarIcons = withCapabilities(({capabilities, onAuditCreateClick}) => (
-  <IconDivider>
-    {capabilities.mayCreate('task') && (
-      <NewIcon title={_('New Audit')} onClick={onAuditCreateClick} />
-    )}
-  </IconDivider>
-));
+export const ToolBarIcons = withCapabilities(
+  ({capabilities, onAuditCreateClick}) => (
+    <IconDivider>
+      {capabilities.mayCreate('task') && (
+        <NewIcon title={_('New Audit')} onClick={onAuditCreateClick} />
+      )}
+    </IconDivider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   onAuditCreateClick: PropTypes.func.isRequired,
