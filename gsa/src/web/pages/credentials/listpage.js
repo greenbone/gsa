@@ -33,6 +33,7 @@ import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
@@ -99,26 +100,29 @@ const CredentialsPage = ({
       edit,
       save,
     }) => (
-      <EntitiesPage
-        {...props}
-        filterEditDialog={CredentialsFilterDialog}
-        filtersFilter={CREDENTIALS_FILTER_FILTER}
-        sectionIcon={<CredentialIcon size="large" />}
-        table={CredentialsTable}
-        title={_('Credentials')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onCredentialCloneClick={clone}
-        onCredentialCreateClick={create}
-        onCredentialDeleteClick={delete_func}
-        onCredentialDownloadClick={download}
-        onCredentialEditClick={edit}
-        onCredentialSaveClick={save}
-        onCredentialInstallerDownloadClick={downloadinstaller}
-        onDownloaded={onDownloaded}
-        onError={onError}
-        onInteraction={onInteraction}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Credentials')} />
+        <EntitiesPage
+          {...props}
+          filterEditDialog={CredentialsFilterDialog}
+          filtersFilter={CREDENTIALS_FILTER_FILTER}
+          sectionIcon={<CredentialIcon size="large" />}
+          table={CredentialsTable}
+          title={_('Credentials')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onCredentialCloneClick={clone}
+          onCredentialCreateClick={create}
+          onCredentialDeleteClick={delete_func}
+          onCredentialDownloadClick={download}
+          onCredentialEditClick={edit}
+          onCredentialSaveClick={save}
+          onCredentialInstallerDownloadClick={downloadinstaller}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onInteraction={onInteraction}
+        />
+      </React.Fragment>
     )}
   </CredentialComponent>
 );
