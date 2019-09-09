@@ -81,6 +81,31 @@ describe('ResultsCommand tests', () => {
     });
   });
 
+  test('should allow to overwrite details parameter', () => {
+    const response = createEntitiesResponse('result', [
+      {
+        _id: '1',
+      },
+      {
+        _id: '2',
+      },
+    ]);
+
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new ResultsCommand(fakeHttp);
+    return cmd.get({details: 0}).then(resp => {
+      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+        args: {
+          cmd: 'get_results',
+          details: 0,
+        },
+      });
+    });
+  });
+
   test('should aggregate Description Word Counts', () => {
     const response = createAggregatesResponse();
     const fakeHttp = createHttp(response);

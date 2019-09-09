@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Allow to overwrite details=1 for command results.get() [#1618](https://github.com/greenbone/gsa/pull/1618)
 - Ensure not to request the report details when loading a list of reports [#1617](https://github.com/greenbone/gsa/pull/1617)
 - Adjust ProtList manual links [#1599](https://github.com/greenbone/gsa/pull/1599)
 - Word-wrap in pre component [#1586](https://github.com/greenbone/gsa/pull/1586)
