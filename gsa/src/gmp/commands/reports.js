@@ -34,7 +34,7 @@ import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.reports');
 
-class ReportsCommand extends EntitiesCommand {
+export class ReportsCommand extends EntitiesCommand {
   constructor(http) {
     super(http, 'report', Report);
   }
@@ -58,6 +58,16 @@ class ReportsCommand extends EntitiesCommand {
       dataColumns: ['high', 'high_per_host'],
       filter,
     });
+  }
+
+  get(params, options) {
+    return super.get(
+      {
+        details: 0, // ensure to request no details by default
+        ...params,
+      },
+      options,
+    );
   }
 }
 
