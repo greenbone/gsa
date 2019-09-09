@@ -28,7 +28,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import ErrorDialog from 'web/components/dialog/errordialog';
 
-import Button from 'web/components/form/button';
+import LoadingButton from 'web/components/form/loadingbutton';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import TrashcanIcon from 'web/components/icon/trashcanicon';
@@ -90,16 +90,20 @@ const ToolBarIcons = () => (
   />
 );
 
-const EmptyTrashButton = withCapabilities(({onClick, capabilities}) => {
-  if (!capabilities.mayOp('empty_trashcan')) {
-    return null;
-  }
-  return (
-    <Layout align="end">
-      <Button onClick={onClick}>{_('Empty Trash')}</Button>
-    </Layout>
-  );
-});
+const EmptyTrashButton = withCapabilities(
+  ({onClick, capabilities, loading}) => {
+    if (!capabilities.mayOp('empty_trashcan')) {
+      return null;
+    }
+    return (
+      <Layout align="end">
+        <LoadingButton onClick={onClick} loading={loading}>
+          {_('Empty Trash')}
+        </LoadingButton>
+      </Layout>
+    );
+  },
+);
 
 const separateByUsageType = inputList => {
   const scan = [];
@@ -121,6 +125,7 @@ class Trashcan extends React.Component {
     super(...args);
     this.state = {
       trash: undefined,
+      loading: false,
     };
 
     this.createContentRow = this.createContentRow.bind(this);
@@ -189,15 +194,20 @@ class Trashcan extends React.Component {
 
   handleEmpty() {
     const {gmp} = this.props;
-
     this.handleInteraction();
+
+    this.setState({loading: true});
 
     gmp.trashcan
       .empty()
-      .then(this.getTrash)
+      .then(() => {
+        this.getTrash();
+        this.setState({loading: false});
+      })
       .catch(error => {
         this.setState({
           error: error,
+          loading: false,
         });
       });
   }
@@ -323,7 +333,7 @@ class Trashcan extends React.Component {
   }
 
   render() {
-    const {error, trash} = this.state;
+    const {error, trash, loading} = this.state;
 
     if (!isDefined(trash) && !isDefined(error)) {
       return <Loading />;
@@ -358,8 +368,7 @@ class Trashcan extends React.Component {
           />
         )}
         <Section img={<TrashcanIcon size="large" />} title={_('Trashcan')} />
-        <EmptyTrashButton onClick={this.handleEmpty} />
-
+        <EmptyTrashButton onClick={this.handleEmpty} loading={loading} />
         <LinkTarget id="Contents" />
         <h1>{_('Contents')}</h1>
         <Table>

@@ -468,7 +468,7 @@ class ReportDetails extends React.Component {
 
     this.handleInteraction();
 
-    gmp.report
+    return gmp.report
       .download(entity, {
         reportFormatId,
         deltaReportId,
