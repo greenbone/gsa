@@ -26,6 +26,14 @@ import PropTypes from 'web/utils/proptypes';
 
 const log = logger.getLogger('web.entity.container');
 
+export const handleDefaultReloadIntervalFunc = func => ({
+  defaultReloadInterval,
+  ...args
+}) =>
+  defaultReloadInterval <= 0
+    ? defaultReloadInterval
+    : func({...args, defaultReloadInterval});
+
 const defaultReloadIntervalFunc = ({defaultReloadInterval, entity}) =>
   isDefined(entity) ? defaultReloadInterval : 0;
 
@@ -82,7 +90,7 @@ class EntityContainer extends React.Component {
   getReloadInterval() {
     const {reloadInterval = defaultReloadIntervalFunc} = this.props;
 
-    return reloadInterval(this.props);
+    return handleDefaultReloadIntervalFunc(reloadInterval)(this.props);
   }
 
   startTimer() {
@@ -96,16 +104,19 @@ class EntityContainer extends React.Component {
 
     const interval = this.getReloadInterval();
 
-    if (interval > 0) {
-      this.timer = global.setTimeout(this.handleTimer, interval);
-      log.debug(
-        'Started reload timer with id',
-        this.timer,
-        'and interval of',
-        interval,
-        'milliseconds',
-      );
+    if (interval <= 0) {
+      log.debug('No reload timer will be started.');
+      return;
     }
+
+    this.timer = global.setTimeout(this.handleTimer, interval);
+    log.debug(
+      'Started reload timer with id',
+      this.timer,
+      'and interval of',
+      interval,
+      'milliseconds',
+    );
   }
 
   resetTimer() {
