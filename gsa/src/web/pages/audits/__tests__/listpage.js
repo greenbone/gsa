@@ -139,10 +139,7 @@ describe('AuditPage ToolBarIcons test', () => {
     });
 
     const {element} = render(
-      <ToolBarIcons
-        entity={audit}
-        onAuditCreateClick={handleAuditCreateClick}
-      />,
+      <ToolBarIcons onAuditCreateClick={handleAuditCreateClick} />,
     );
     expect(element).toMatchSnapshot();
   });
@@ -156,10 +153,7 @@ describe('AuditPage ToolBarIcons test', () => {
     });
 
     const {getAllByTestId} = render(
-      <ToolBarIcons
-        entity={audit}
-        onAuditCreateClick={handleAuditCreateClick}
-      />,
+      <ToolBarIcons onAuditCreateClick={handleAuditCreateClick} />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -169,7 +163,7 @@ describe('AuditPage ToolBarIcons test', () => {
     expect(icons[0]).toHaveAttribute('title', 'New Audit');
   });
 
-  test('should not call click handlers without permission', () => {
+  test('should not show icons if user does not have the right permissions', () => {
     const handleAuditCreateClick = jest.fn();
 
     const {render} = rendererWith({

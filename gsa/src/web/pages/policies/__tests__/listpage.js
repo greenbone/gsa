@@ -136,7 +136,6 @@ describe('PoliciesPage ToolBarIcons test', () => {
 
     const {element} = render(
       <ToolBarIcons
-        entity={policy}
         onPolicyCreateClick={handlePolicyCreateClick}
         onPolicyImportClick={handlePolicyImportClick}
       />,
@@ -155,7 +154,6 @@ describe('PoliciesPage ToolBarIcons test', () => {
 
     const {getAllByTestId} = render(
       <ToolBarIcons
-        entity={policy}
         onPolicyCreateClick={handlePolicyCreateClick}
         onPolicyImportClick={handlePolicyImportClick}
       />,
@@ -172,7 +170,7 @@ describe('PoliciesPage ToolBarIcons test', () => {
     expect(icons[1]).toHaveAttribute('title', 'Import Policy');
   });
 
-  test('should not call click handlers without permission', () => {
+  test('should not show icons if user does not have the right permissions', () => {
     const handlePolicyCreateClick = jest.fn();
     const handlePolicyImportClick = jest.fn();
 

@@ -63,7 +63,7 @@ const counts = new CollectionCounts({
 
 const filter = Filter.fromString('rows=2');
 
-describe('Table tests', () => {
+describe('Policies table tests', () => {
   test('should render', () => {
     const handlePolicyCloneClick = jest.fn();
     const handleCreateAuditClick = jest.fn();

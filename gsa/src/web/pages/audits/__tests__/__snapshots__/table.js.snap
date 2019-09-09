@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Table tests should render 1`] = `
+exports[`Audits table tests should render 1`] = `
 .c1 {
   display: -webkit-box;
   display: -webkit-flex;
