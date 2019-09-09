@@ -35,6 +35,12 @@ const Span = styled.span`
 `;
 
 const StatusBar = ({status = 'Unknown', progress = '0'}) => {
+  if (progress > 100) {
+    progress = 100;
+  } else if (progress < 0) {
+    progress = 0;
+  }
+
   let text = getTranslatableTaskStatus(status);
   if (
     status === 'Unknown' ||
