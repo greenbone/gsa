@@ -33,6 +33,8 @@ import UploadIcon from 'web/components/icon/uploadicon';
 import NewIcon from 'web/components/icon/newicon';
 import ScanConfigIcon from 'web/components/icon/scanconfigicon';
 
+import PageTitle from 'web/components/layout/pagetitle';
+
 import IconDivider from 'web/components/layout/icondivider';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
@@ -105,23 +107,26 @@ const ScanConfigsPage = ({
       edit,
       import: import_func,
     }) => (
-      <EntitiesPage
-        {...props}
-        filterEditDialog={ScanConfigFilterDialog}
-        filtersFilter={SCANCONFIGS_FILTER_FILTER}
-        sectionIcon={<ScanConfigIcon size="large" />}
-        table={Table}
-        title={_('Scan Configs')}
-        toolBarIcons={ToolBarIcons}
-        onError={onError}
-        onInteraction={onInteraction}
-        onScanConfigImportClick={import_func}
-        onScanConfigCloneClick={clone}
-        onScanConfigCreateClick={create}
-        onScanConfigDeleteClick={delete_func}
-        onScanConfigDownloadClick={download}
-        onScanConfigEditClick={edit}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Scan Configs')} />
+        <EntitiesPage
+          {...props}
+          filterEditDialog={ScanConfigFilterDialog}
+          filtersFilter={SCANCONFIGS_FILTER_FILTER}
+          sectionIcon={<ScanConfigIcon size="large" />}
+          table={Table}
+          title={_('Scan Configs')}
+          toolBarIcons={ToolBarIcons}
+          onError={onError}
+          onInteraction={onInteraction}
+          onScanConfigImportClick={import_func}
+          onScanConfigCloneClick={clone}
+          onScanConfigCreateClick={create}
+          onScanConfigDeleteClick={delete_func}
+          onScanConfigDownloadClick={download}
+          onScanConfigEditClick={edit}
+        />
+      </React.Fragment>
     )}
   </ScanConfigComponent>
 );
