@@ -9073,11 +9073,12 @@ char *
 get_reports_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  const gchar *filter, *filter_id;
+  const gchar *filter, *filter_id, *details;
   gmp_arguments_t *arguments;
 
   filter = params_value (params, "filter");
   filter_id = params_value (params, "filter_id");
+  details = params_value (params, "details");
 
   arguments = gmp_arguments_new ();
 
@@ -9093,6 +9094,11 @@ get_reports_gmp (gvm_connection_t *connection, credentials_t *credentials,
   if (filter_id)
     {
       gmp_arguments_add (arguments, "report_filt_id", filter_id);
+    }
+
+  if (details && !str_equal (details, ""))
+    {
+      gmp_arguments_add (arguments, "details", details);
     }
 
   params_remove (params, "filter");
