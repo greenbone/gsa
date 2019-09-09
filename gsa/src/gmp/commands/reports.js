@@ -59,6 +59,16 @@ class ReportsCommand extends EntitiesCommand {
       filter,
     });
   }
+
+  get(params, options) {
+    return super.get(
+      {
+        details: 0, // ensure to request no details by default
+        ...params,
+      },
+      options,
+    );
+  }
 }
 
 class ReportCommand extends EntityCommand {
