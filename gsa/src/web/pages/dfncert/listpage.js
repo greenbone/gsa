@@ -30,6 +30,8 @@ import DashboardControls from 'web/components/dashboard/controls';
 import DfnCertAdvIcon from 'web/components/icon/dfncertadvicon';
 import ManualIcon from 'web/components/icon/manualicon';
 
+import PageTitle from 'web/components/layout/pagetitle';
+
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -53,32 +55,35 @@ const ToolBarIcons = () => (
 );
 
 const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
-  <EntitiesPage
-    {...props}
-    createFilterType="info"
-    dashboard={() => (
-      <DfnCertDashboard
-        filter={filter}
-        onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
-      />
-    )}
-    dashboardControls={() => (
-      <DashboardControls
-        dashboardId={DFNCERT_DASHBOARD_ID}
-        onInteraction={onInteraction}
-      />
-    )}
-    filter={filter}
-    filterEditDialog={FilterDialog}
-    filtersFilter={DFNCERT_FILTER_FILTER}
-    sectionIcon={<DfnCertAdvIcon size="large" />}
-    table={DfnCertTable}
-    title={_('DFN-CERT Advisories')}
-    toolBarIcons={ToolBarIcons}
-    onFilterChanged={onFilterChanged}
-    onInteraction={onInteraction}
-  />
+  <React.Fragment>
+    <PageTitle title={_('DFN-CERT Advisories')} />
+    <EntitiesPage
+      {...props}
+      createFilterType="info"
+      dashboard={() => (
+        <DfnCertDashboard
+          filter={filter}
+          onFilterChanged={onFilterChanged}
+          onInteraction={onInteraction}
+        />
+      )}
+      dashboardControls={() => (
+        <DashboardControls
+          dashboardId={DFNCERT_DASHBOARD_ID}
+          onInteraction={onInteraction}
+        />
+      )}
+      filter={filter}
+      filterEditDialog={FilterDialog}
+      filtersFilter={DFNCERT_FILTER_FILTER}
+      sectionIcon={<DfnCertAdvIcon size="large" />}
+      table={DfnCertTable}
+      title={_('DFN-CERT Advisories')}
+      toolBarIcons={ToolBarIcons}
+      onFilterChanged={onFilterChanged}
+      onInteraction={onInteraction}
+    />
+  </React.Fragment>
 );
 
 Page.propTypes = {
