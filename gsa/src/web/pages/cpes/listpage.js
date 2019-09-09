@@ -30,6 +30,8 @@ import DashboardControls from 'web/components/dashboard/controls';
 import CpeLogoIcon from 'web/components/icon/cpelogoicon';
 import ManualIcon from 'web/components/icon/manualicon';
 
+import PageTitle from 'web/components/layout/pagetitle';
+
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -47,32 +49,35 @@ const ToolBarIcons = props => (
 );
 
 const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
-  <EntitiesPage
-    {...props}
-    createFilterType="info"
-    dashboard={() => (
-      <CpesDashboard
-        filter={filter}
-        onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
-      />
-    )}
-    dashboardControls={() => (
-      <DashboardControls
-        dashboardId={CPES_DASHBOARD_ID}
-        onInteraction={onInteraction}
-      />
-    )}
-    filter={filter}
-    filterEditDialog={CpeFilterDialog}
-    filtersFilter={CPES_FILTER_FILTER}
-    sectionIcon={<CpeLogoIcon size="large" />}
-    table={CpesTable}
-    title={_('CPEs')}
-    toolBarIcons={ToolBarIcons}
-    onFilterChanged={onFilterChanged}
-    onInteraction={onInteraction}
-  />
+  <React.Fragment>
+    <PageTitle title={_('CPEs')} />
+    <EntitiesPage
+      {...props}
+      createFilterType="info"
+      dashboard={() => (
+        <CpesDashboard
+          filter={filter}
+          onFilterChanged={onFilterChanged}
+          onInteraction={onInteraction}
+        />
+      )}
+      dashboardControls={() => (
+        <DashboardControls
+          dashboardId={CPES_DASHBOARD_ID}
+          onInteraction={onInteraction}
+        />
+      )}
+      filter={filter}
+      filterEditDialog={CpeFilterDialog}
+      filtersFilter={CPES_FILTER_FILTER}
+      sectionIcon={<CpeLogoIcon size="large" />}
+      table={CpesTable}
+      title={_('CPEs')}
+      toolBarIcons={ToolBarIcons}
+      onFilterChanged={onFilterChanged}
+      onInteraction={onInteraction}
+    />
+  </React.Fragment>
 );
 
 Page.propTypes = {
