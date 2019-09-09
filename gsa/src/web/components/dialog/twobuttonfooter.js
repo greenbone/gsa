@@ -43,6 +43,7 @@ const DialogTwoButtonFooter = ({
   <StyledLayout align={['end', 'center']} shrink="0">
     <Button
       data-testid="dialog-close-button"
+      disabled={loading}
       onClick={onLeftButtonClick}
       title={leftButtonTitle}
     >

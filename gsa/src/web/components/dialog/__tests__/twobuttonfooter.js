@@ -34,7 +34,7 @@ describe('DialogTwoButtonFooter tests', () => {
     expect(button).toHaveStyleRule('background', Theme.lightGreen);
   });
 
-  test('should render loading', () => {
+  test('should render loading and disable cancel button', () => {
     const {element} = render(
       <DialogTwoButtonFooter rightButtonTitle="Foo" loading={true} />,
     );
@@ -42,11 +42,13 @@ describe('DialogTwoButtonFooter tests', () => {
     expect(element).toMatchSnapshot();
 
     const button = element.querySelector('button[title="Foo"]');
+    const buttonLeft = element.querySelector('button[title="Cancel"]');
 
     expect(button).toHaveStyleRule(
       'background',
       `${Theme.lightGreen} url(/img/loading.gif) center center no-repeat`,
     );
+    expect(buttonLeft).toHaveAttribute('disabled');
   });
 
   test('should render footer with default title', () => {

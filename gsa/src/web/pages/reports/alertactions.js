@@ -117,7 +117,7 @@ class AlertActions extends React.Component {
       });
     }
 
-    gmp.report
+    return gmp.report
       .alert({
         report_id: report.id,
         alert_id: alertId,

@@ -29,7 +29,7 @@ const Label = styled.div`
   color: white;
   padding: 1px;
   display: inline-block;
-  width: 60px;
+  width: 70px;
   height: 1.5em;
   font-size: 0.8em;
   background-color: ${props => props.backgroundColor};

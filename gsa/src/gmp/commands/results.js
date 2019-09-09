@@ -33,7 +33,7 @@ export class ResultsCommand extends EntitiesCommand {
   }
 
   get(params = {}, options) {
-    return super.get({...params, details: 1}, options);
+    return super.get({details: 1, ...params}, options);
   }
 
   getDescriptionWordCountsAggregates({filter} = {}) {

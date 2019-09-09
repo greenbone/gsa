@@ -132,7 +132,7 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
 </div>
 `;
 
-exports[`DialogTwoButtonFooter tests should render loading 1`] = `
+exports[`DialogTwoButtonFooter tests should render loading and disable cancel button 1`] = `
 .c3 {
   display: inline-block;
   padding: 0 15px;
@@ -261,6 +261,7 @@ exports[`DialogTwoButtonFooter tests should render loading 1`] = `
   <button
     class="c1 c2 c3"
     data-testid="dialog-close-button"
+    disabled=""
     title="Cancel"
   >
     Cancel
