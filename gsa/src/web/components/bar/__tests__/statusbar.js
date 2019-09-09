@@ -20,6 +20,8 @@ import React from 'react';
 
 import {render} from 'web/utils/testing';
 
+import Theme from 'web/utils/theme.js';
+
 import StatusBar from '../statusbar';
 
 import {TASK_STATUS} from 'gmp/models/task';
@@ -82,7 +84,7 @@ describe('StatusBar tests', () => {
     );
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', '#F0A519');
+    expect(progress).toHaveStyleRule('background', Theme.severityWarnYellow);
   });
 });
 

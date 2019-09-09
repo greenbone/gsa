@@ -40,10 +40,17 @@ const Theme = {
   mediumLightRed: '#ebccd1', // used by: dialog errors border
   warningRed: '#d83636', // used for warning font color at login dialog
   darkRed: '#a94442', // used by: dialog errors font
+  errorRed: '#c83814', // used by: progressbar
 
   lightBlue: '#bce8f1', // used by InfoPanel and dashboard hovering
   mediumBlue: '#5897fb', // used by active/hovered items in Select
   blue: '#0000ff', // used by: links
+  severityLowBlue: '#4f91c7', // used by: progressbar
+
+  severityWarnYellow: '#f0a519', // used by: progressbar
+
+  statusNewGreen: '#99be48', // used by: progressbar
+  statusRunGreen: '#70c000', // used by: progressbar
 
   /* source ? */
   darkGreen: '#519032', // RGB: 81, 144, 50

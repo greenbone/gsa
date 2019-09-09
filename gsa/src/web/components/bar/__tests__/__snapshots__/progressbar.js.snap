@@ -25,7 +25,7 @@ exports[`ProgressBar tests should render 1`] = `
 .c1 {
   height: 13px;
   width: 10%;
-  background: #4F91C7;
+  background: #4f91c7;
 }
 
 @media print {
