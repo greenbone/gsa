@@ -85,6 +85,7 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 import TargetComponent from '../targets/component';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import Page from './detailscontent';
 import FilterDialog from './detailsfilterdialog';
@@ -610,45 +611,50 @@ class ReportDetails extends React.Component {
     const {report} = entity || {};
     return (
       <React.Fragment>
+        <PageTitle title={_('Report Details')} />
         <TargetComponent
           onError={this.handleError}
           onInteraction={onInteraction}
         >
           {({edit}) => (
-            <Page
-              activeTab={activeTab}
-              entity={entity}
-              entityError={entityError}
-              filter={reportFilter}
-              filters={filters}
-              isLoading={isLoading}
-              isUpdating={isUpdating}
-              sorting={sorting}
-              task={isDefined(report) ? report.task : undefined}
-              onActivateTab={this.handleActivateTab}
-              onAddToAssetsClick={this.handleAddToAssets}
-              onError={this.handleError}
-              onFilterAddLogLevelClick={this.handleFilterAddLogLevel}
-              onFilterDecreaseMinQoDClick={this.handleFilterDecreaseMinQoD}
-              onFilterChanged={this.handleFilterChange}
-              onFilterCreated={this.handleFilterCreated}
-              onFilterEditClick={this.handleFilterEditClick}
-              onFilterRemoveSeverityClick={this.handleFilterRemoveSeverity}
-              onFilterResetClick={this.handleFilterResetClick}
-              onFilterRemoveClick={this.handleFilterRemoveClick}
-              onInteraction={onInteraction}
-              onRemoveFromAssetsClick={this.handleRemoveFromAssets}
-              onReportDownloadClick={this.handleOpenDownloadReportDialog}
-              onSortChange={this.handleSortChange}
-              onTagSuccess={this.handleChanged}
-              onTargetEditClick={() =>
-                this.loadTarget().then(response => edit(response.data))
-              }
-              onTlsCertificateDownloadClick={this.handleTlsCertificateDownload}
-              showError={showError}
-              showErrorMessage={showErrorMessage}
-              showSuccessMessage={showSuccessMessage}
-            />
+            <React.Fragment>
+              <Page
+                activeTab={activeTab}
+                entity={entity}
+                entityError={entityError}
+                filter={reportFilter}
+                filters={filters}
+                isLoading={isLoading}
+                isUpdating={isUpdating}
+                sorting={sorting}
+                task={isDefined(report) ? report.task : undefined}
+                onActivateTab={this.handleActivateTab}
+                onAddToAssetsClick={this.handleAddToAssets}
+                onError={this.handleError}
+                onFilterAddLogLevelClick={this.handleFilterAddLogLevel}
+                onFilterDecreaseMinQoDClick={this.handleFilterDecreaseMinQoD}
+                onFilterChanged={this.handleFilterChange}
+                onFilterCreated={this.handleFilterCreated}
+                onFilterEditClick={this.handleFilterEditClick}
+                onFilterRemoveSeverityClick={this.handleFilterRemoveSeverity}
+                onFilterResetClick={this.handleFilterResetClick}
+                onFilterRemoveClick={this.handleFilterRemoveClick}
+                onInteraction={onInteraction}
+                onRemoveFromAssetsClick={this.handleRemoveFromAssets}
+                onReportDownloadClick={this.handleOpenDownloadReportDialog}
+                onSortChange={this.handleSortChange}
+                onTagSuccess={this.handleChanged}
+                onTargetEditClick={() =>
+                  this.loadTarget().then(response => edit(response.data))
+                }
+                onTlsCertificateDownloadClick={
+                  this.handleTlsCertificateDownload
+                }
+                showError={showError}
+                showErrorMessage={showErrorMessage}
+                showSuccessMessage={showSuccessMessage}
+              />
+            </React.Fragment>
           )}
         </TargetComponent>
         {showFilterDialog && (

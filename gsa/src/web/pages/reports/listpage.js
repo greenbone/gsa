@@ -39,6 +39,7 @@ import UploadIcon from 'web/components/icon/uploadicon';
 import ReportIcon from 'web/components/icon/reporticon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import ContainerTaskDialog from 'web/pages/tasks/containerdialog';
 
@@ -207,6 +208,7 @@ class Page extends React.Component {
 
     return (
       <React.Fragment>
+        <PageTitle title={_('Reports')} />
         <EntitiesPage
           {...this.props}
           {...this.state}
