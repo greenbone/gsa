@@ -23,6 +23,7 @@ import _ from 'gmp/locale';
 import {PORTLISTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -97,26 +98,29 @@ const PortListsPage = ({
       save,
       import: import_func,
     }) => (
-      <EntitiesPage
-        {...props}
-        filterEditDialog={PortListsFilterDialog}
-        filtersFilter={PORTLISTS_FILTER_FILTER}
-        sectionIcon={<PortListIcon size="large" />}
-        table={PortListsTable}
-        title={_('Portlists')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onDownloaded={onDownloaded}
-        onError={onError}
-        onInteraction={onInteraction}
-        onPortListCloneClick={clone}
-        onPortListCreateClick={create}
-        onPortListDeleteClick={delete_func}
-        onPortListDownloadClick={download}
-        onPortListEditClick={edit}
-        onPortListSaveClick={save}
-        onPortListImportClick={import_func}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Portlists')} />
+        <EntitiesPage
+          {...props}
+          filterEditDialog={PortListsFilterDialog}
+          filtersFilter={PORTLISTS_FILTER_FILTER}
+          sectionIcon={<PortListIcon size="large" />}
+          table={PortListsTable}
+          title={_('Portlists')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onInteraction={onInteraction}
+          onPortListCloneClick={clone}
+          onPortListCreateClick={create}
+          onPortListDeleteClick={delete_func}
+          onPortListDownloadClick={download}
+          onPortListEditClick={edit}
+          onPortListSaveClick={save}
+          onPortListImportClick={import_func}
+        />
+      </React.Fragment>
     )}
   </PortListComponent>
 );
