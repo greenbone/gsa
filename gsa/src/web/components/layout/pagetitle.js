@@ -20,14 +20,20 @@ import {useEffect} from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 
+const defaultTitle = 'Greenbone Security Assistant';
+
 const PageTitle = ({title}) => {
   useEffect(() => {
     if (isDefined(title)) {
-      document.title = 'Greeenbone Security Assistant - ' + title;
+      document.title = defaultTitle + ' - ' + title;
     } else {
-      document.title = 'Greenbone Security Assistant';
+      document.title = defaultTitle;
     }
-  });
+
+    return () => {
+      document.title = defaultTitle;
+    };
+  }, [title]);
   return null;
 };
 
