@@ -23,6 +23,7 @@ import _ from 'gmp/locale';
 import {NOTES_FILTER_FILTER} from 'gmp/models/filter';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -85,37 +86,40 @@ const Page = ({
     onSaved={onChanged}
   >
     {({clone, create, delete: delete_func, download, edit}) => (
-      <EntitiesPage
-        {...props}
-        dashboard={() => (
-          <NotesDashboard
-            filter={filter}
-            onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
-          />
-        )}
-        dashboardControls={() => (
-          <DashboardControls
-            dashboardId={NOTES_DASHBOARD_ID}
-            onInteraction={onInteraction}
-          />
-        )}
-        filter={filter}
-        filterEditDialog={FilterDialog}
-        filtersFilter={NOTES_FILTER_FILTER}
-        sectionIcon={<NoteIcon size="large" />}
-        table={NotesTable}
-        title={_('Notes')}
-        toolBarIcons={ToolBarIcons}
-        onError={onError}
-        onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
-        onNoteCloneClick={clone}
-        onNoteCreateClick={create}
-        onNoteDeleteClick={delete_func}
-        onNoteDownloadClick={download}
-        onNoteEditClick={edit}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Notes')} />
+        <EntitiesPage
+          {...props}
+          dashboard={() => (
+            <NotesDashboard
+              filter={filter}
+              onFilterChanged={onFilterChanged}
+              onInteraction={onInteraction}
+            />
+          )}
+          dashboardControls={() => (
+            <DashboardControls
+              dashboardId={NOTES_DASHBOARD_ID}
+              onInteraction={onInteraction}
+            />
+          )}
+          filter={filter}
+          filterEditDialog={FilterDialog}
+          filtersFilter={NOTES_FILTER_FILTER}
+          sectionIcon={<NoteIcon size="large" />}
+          table={NotesTable}
+          title={_('Notes')}
+          toolBarIcons={ToolBarIcons}
+          onError={onError}
+          onFilterChanged={onFilterChanged}
+          onInteraction={onInteraction}
+          onNoteCloneClick={clone}
+          onNoteCreateClick={create}
+          onNoteDeleteClick={delete_func}
+          onNoteDownloadClick={download}
+          onNoteEditClick={edit}
+        />
+      </React.Fragment>
     )}
   </NoteComponent>
 );
