@@ -32,6 +32,7 @@ import ManualIcon from 'web/components/icon/manualicon.js';
 import NewIcon from 'web/components/icon/newicon.js';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import AlertIcon from 'web/components/icon/alerticon';
 
@@ -89,27 +90,30 @@ const AlertsPage = ({
     onTestError={showError}
   >
     {({clone, create, delete: delete_func, download, edit, save, test}) => (
-      <EntitiesPage
-        {...props}
-        filterEditDialog={AlertFilterDialog}
-        filtersFilter={ALERTS_FILTER_FILTER}
-        sectionIcon={<AlertIcon size="large" />}
-        table={AlertTable}
-        title={_('Alerts')}
-        toolBarIcons={ToolBarIcons}
-        onAlertCloneClick={clone}
-        onAlertCreateClick={create}
-        onAlertDeleteClick={delete_func}
-        onAlertDownloadClick={download}
-        onAlertEditClick={edit}
-        onAlertTestClick={test}
-        onAlertSaveClick={save}
-        onError={onError}
-        onInteraction={onInteraction}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Alerts')} />
+        <EntitiesPage
+          {...props}
+          filterEditDialog={AlertFilterDialog}
+          filtersFilter={ALERTS_FILTER_FILTER}
+          sectionIcon={<AlertIcon size="large" />}
+          table={AlertTable}
+          title={_('Alerts')}
+          toolBarIcons={ToolBarIcons}
+          onAlertCloneClick={clone}
+          onAlertCreateClick={create}
+          onAlertDeleteClick={delete_func}
+          onAlertDownloadClick={download}
+          onAlertEditClick={edit}
+          onAlertTestClick={test}
+          onAlertSaveClick={save}
+          onError={onError}
+          onInteraction={onInteraction}
+          onPermissionChanged={onChanged}
+          onPermissionDownloaded={onDownloaded}
+          onPermissionDownloadError={onError}
+        />
+      </React.Fragment>
     )}
   </AlertComponent>
 );
