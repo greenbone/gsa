@@ -41,6 +41,7 @@ describe('CreatePolicyDialog component tests', () => {
 
     expect(baseElement).toMatchSnapshot();
   });
+
   test('should allow to close the dialog', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
@@ -55,9 +56,30 @@ describe('CreatePolicyDialog component tests', () => {
       />,
     );
 
-    const closeButton = getByTestId('dialog-close-button');
+    const closeButton = getByTestId('dialog-title-close-button');
 
     fireEvent.click(closeButton);
+
+    expect(handleClose).toHaveBeenCalled();
+  });
+
+  test('should allow to cancel the dialog', () => {
+    const handleClose = jest.fn();
+    const handleSave = jest.fn();
+
+    const {getByTestId} = render(
+      <CreatePolicyDialog
+        base={EMPTY_SCAN_CONFIG_ID}
+        scanner_id={'1'}
+        title={'New Policy'}
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
+
+    const cancelButton = getByTestId('dialog-close-button');
+
+    fireEvent.click(cancelButton);
 
     expect(handleClose).toHaveBeenCalled();
   });
