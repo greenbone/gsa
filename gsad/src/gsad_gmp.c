@@ -9091,6 +9091,12 @@ get_reports_gmp (gvm_connection_t *connection, credentials_t *credentials,
     {
       gmp_arguments_add (arguments, "report_filter", filter);
     }
+
+  if (!filter_id && !filter)
+    {
+      filter_id = FILT_ID_USER_SETTING;
+    }
+
   if (filter_id)
     {
       gmp_arguments_add (arguments, "report_filt_id", filter_id);
