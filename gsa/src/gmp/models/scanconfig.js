@@ -98,6 +98,7 @@ class ScanConfig extends Model {
 
     if (isDefined(ret.nvt_count)) {
       ret.nvts = {
+        // number of selected nvts
         count: parseCount(ret.nvt_count.__text),
         trend: parseTrend(ret.nvt_count.growing),
       };
@@ -105,11 +106,16 @@ class ScanConfig extends Model {
       delete ret.nvt_count;
 
       if (isDefined(ret.known_nvt_count)) {
+        // number of known nvts by the scanner from last sync. should always be
+        // equal or less then nvt_count because only the db may contain nvts not
+        // known nvts by the scanner e.g. a imported scan config contains
+        // private nvts
         ret.nvts.known = parseCount(ret.known_nvt_count);
         delete ret.known_nvt_count;
       }
 
       if (isDefined(ret.max_nvt_count)) {
+        // sum of all available nvts of all selected families
         ret.nvts.max = parseCount(ret.max_nvt_count);
         delete ret.max_nvt_count;
       }
