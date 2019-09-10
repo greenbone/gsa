@@ -95,16 +95,17 @@ class ScanConfigComponent extends React.Component {
   }
 
   openEditConfigDialog(config) {
-    Promise.all([
-      this.loadEditScanConfigSettings(config.id),
-      this.loadScanners(),
-    ]).then(([scanConfigState, {scanners, scannerId}]) => {
+    this.loadEditScanConfigSettings(config.id).then(() => {
       this.setState({
-        ...scanConfigState,
-        scanners,
-        scannerId,
         editConfigDialogVisible: true,
         title: _('Edit Scan Config {{name}}', {name: shorten(config.name)}),
+      });
+    });
+
+    this.loadScanners().then(({scanners, scannerId}) => {
+      this.setState({
+        scanners,
+        scannerId,
       });
     });
 
@@ -248,12 +249,9 @@ class ScanConfigComponent extends React.Component {
         familyName,
         selected,
       })
+      .then(() => this.loadEditScanConfigSettings(configId))
       .then(() => {
-        return this.loadEditScanConfigSettings(configId);
-      })
-      .then(state => {
         this.closeEditConfigFamilyDialog();
-        this.setState({...state});
       });
   }
 
@@ -312,10 +310,10 @@ class ScanConfigComponent extends React.Component {
       const {data: scanconfig} = configResponse;
       const {data: families} = familiesResponse;
 
-      return {
+      this.setState({
         config: scanconfig,
         families,
-      };
+      });
     });
   }
 
