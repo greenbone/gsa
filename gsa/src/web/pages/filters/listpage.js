@@ -33,6 +33,7 @@ import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
@@ -84,25 +85,29 @@ const FiltersPage = ({
     onInteraction={onInteraction}
   >
     {({clone, create, delete: delete_func, download, edit, save}) => (
-      <EntitiesPage
-        {...props}
-        filterEditDialog={FiltersFilterDialog}
-        filtersFilter={FILTERS_FILTER_FILTER}
-        sectionIcon={<FilterIcon size="large" />}
-        table={FiltersTable}
-        title={_('Filters')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onDownloaded={onDownloaded}
-        onError={onError}
-        onFilterCloneClick={clone}
-        onFilterCreateClick={create}
-        onFilterDeleteClick={delete_func}
-        onFilterDownloadClick={download}
-        onFilterEditClick={edit}
-        onFilterSaveClick={save}
-        onInteraction={onInteraction}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Filters')} />
+
+        <EntitiesPage
+          {...props}
+          filterEditDialog={FiltersFilterDialog}
+          filtersFilter={FILTERS_FILTER_FILTER}
+          sectionIcon={<FilterIcon size="large" />}
+          table={FiltersTable}
+          title={_('Filters')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onFilterCloneClick={clone}
+          onFilterCreateClick={create}
+          onFilterDeleteClick={delete_func}
+          onFilterDownloadClick={download}
+          onFilterEditClick={edit}
+          onFilterSaveClick={save}
+          onInteraction={onInteraction}
+        />
+      </React.Fragment>
     )}
   </FilterComponent>
 );
