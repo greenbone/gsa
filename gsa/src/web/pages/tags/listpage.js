@@ -33,6 +33,7 @@ import NewIcon from 'web/components/icon/newicon';
 import TagIcon from 'web/components/icon/tagicon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
@@ -125,28 +126,31 @@ const TagsPage = ({
       enable,
       disable,
     }) => (
-      <EntitiesPage
-        {...props}
-        filterEditDialog={TagsFilterDialog}
-        filterFilter={TAGS_FILTER_FILTER}
-        sectionIcon={<TagIcon size="large" />}
-        table={TagsTable}
-        tags={false}
-        title={_('Tags')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onDownloaded={onDownloaded}
-        onError={onError}
-        onInteraction={onInteraction}
-        onTagCloneClick={clone}
-        onTagCreateClick={create}
-        onTagDeleteClick={delete_func}
-        onTagDownloadClick={download}
-        onTagEditClick={edit}
-        onTagSaveClick={save}
-        onTagEnableClick={enable}
-        onTagDisableClick={disable}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Tags')} />
+        <EntitiesPage
+          {...props}
+          filterEditDialog={TagsFilterDialog}
+          filterFilter={TAGS_FILTER_FILTER}
+          sectionIcon={<TagIcon size="large" />}
+          table={TagsTable}
+          tags={false}
+          title={_('Tags')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onInteraction={onInteraction}
+          onTagCloneClick={clone}
+          onTagCreateClick={create}
+          onTagDeleteClick={delete_func}
+          onTagDownloadClick={download}
+          onTagEditClick={edit}
+          onTagSaveClick={save}
+          onTagEnableClick={enable}
+          onTagDisableClick={disable}
+        />
+      </React.Fragment>
     )}
   </TagComponent>
 );
