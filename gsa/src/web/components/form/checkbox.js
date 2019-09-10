@@ -20,7 +20,6 @@ import React, {useState} from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 
 import {StyledElement, StyledInput, StyledTitle} from './radio';
@@ -101,6 +100,6 @@ CheckboxComponent.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default withLayout(CheckboxComponent);
+export default withLayout()(CheckboxComponent);
 
 // vim: set ts=2 sw=2 tw=80:
