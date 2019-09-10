@@ -20,6 +20,8 @@ import React from 'react';
 
 import {render} from 'web/utils/testing';
 
+import Theme from 'web/utils/theme.js';
+
 import ProgressBar from '../progressbar';
 
 describe('ProgressBar tests', () => {
@@ -72,7 +74,7 @@ describe('ProgressBar tests', () => {
     );
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', '#F0A519');
+    expect(progress).toHaveStyleRule('background', Theme.severityWarnYellow);
   });
 
   test('should render background = error', () => {
@@ -81,7 +83,7 @@ describe('ProgressBar tests', () => {
     );
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', '#C83814');
+    expect(progress).toHaveStyleRule('background', Theme.errorRed);
   });
 
   test('should render background = low', () => {
@@ -90,7 +92,7 @@ describe('ProgressBar tests', () => {
     );
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', '#4F91C7');
+    expect(progress).toHaveStyleRule('background', Theme.severityLowBlue);
   });
 
   test('should render background = new', () => {
@@ -99,7 +101,7 @@ describe('ProgressBar tests', () => {
     );
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', '#99BE48');
+    expect(progress).toHaveStyleRule('background', Theme.statusNewGreen);
   });
 
   test('should render background = run', () => {
@@ -108,7 +110,7 @@ describe('ProgressBar tests', () => {
     );
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', '#70C000');
+    expect(progress).toHaveStyleRule('background', Theme.statusRunGreen);
   });
 
   test('should render background = log', () => {

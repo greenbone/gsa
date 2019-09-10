@@ -20,6 +20,8 @@ import React from 'react';
 
 import {render} from 'web/utils/testing';
 
+import Theme from 'web/utils/theme.js';
+
 import StatusBar from '../statusbar';
 
 import {TASK_STATUS} from 'gmp/models/task';
@@ -57,21 +59,23 @@ describe('StatusBar tests', () => {
   });
 
   test('should not render progress > 100', () => {
-    const {getByTestId} = render(
+    const {element, getByTestId} = render(
       <StatusBar progress="101" status={TASK_STATUS.stopped} />,
     );
     const progress = getByTestId('progress');
 
     expect(progress).toHaveStyleRule('width', '100%');
+    expect(element).toHaveTextContent('Stopped at 100 %');
   });
 
   test('should not render progress < 0', () => {
-    const {getByTestId} = render(
+    const {element, getByTestId} = render(
       <StatusBar progress="-1" status={TASK_STATUS.stopped} />,
     );
     const progress = getByTestId('progress');
 
     expect(progress).toHaveStyleRule('width', '0%');
+    expect(element).toHaveTextContent('Stopped at 0 %');
   });
 
   test('should render background', () => {
@@ -80,7 +84,7 @@ describe('StatusBar tests', () => {
     );
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', '#F0A519');
+    expect(progress).toHaveStyleRule('background', Theme.severityWarnYellow);
   });
 });
 
