@@ -194,7 +194,6 @@ const EditDialog = ({
 
                 {configType === OPENVAS_SCAN_CONFIG_TYPE && (
                   <NvtFamilies
-                    config={config}
                     configFamilies={config.families}
                     editTitle={
                       config.usage_type === 'policy'

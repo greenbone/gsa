@@ -164,7 +164,6 @@ class NvtFamilies extends React.Component {
 
   render() {
     const {
-      config,
       configFamilies,
       editTitle,
       families = [],
@@ -218,7 +217,6 @@ class NvtFamilies extends React.Component {
 }
 
 NvtFamilies.propTypes = {
-  config: PropTypes.model.isRequired,
   configFamilies: PropTypes.object.isRequired,
   editTitle: PropTypes.string,
   families: PropTypes.array.isRequired,
