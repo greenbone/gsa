@@ -36,6 +36,7 @@ import CpeLogoIcon from 'web/components/icon/cpelogoicon';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import Link from 'web/components/link/link';
 
@@ -105,85 +106,88 @@ class FeedStatus extends React.Component {
   render() {
     const {feeds} = this.state;
     return (
-      <Layout flex="column">
-        <ToolBarIcons />
-        <Section img={<FeedIcon size="large" />} title={_('Feed Status')} />
-        <Table>
-          <TableBody>
-            <TableRow>
-              <TableHead width="3rem">{_('Type')}</TableHead>
-              <TableHead width="21rem">{_('Content')}</TableHead>
-              <TableHead width="9rem">{_('Origin')}</TableHead>
-              <TableHead width="7rem">{_('Version')}</TableHead>
-              <TableHead>{_('Status')}</TableHead>
-            </TableRow>
-
-            {feeds.map(feed => (
-              <TableRow key={feed.feed_type}>
-                <TableData>{feed.feed_type}</TableData>
-                <TableData>
-                  {feed.feed_type === NVT_FEED && (
-                    <IconDivider>
-                      <Link to="nvts">
-                        <IconDivider align={['start', 'center']}>
-                          <NvtIcon size="medium" />
-                          <span>NVTs</span>
-                        </IconDivider>
-                      </Link>
-                    </IconDivider>
-                  )}
-                  {feed.feed_type === SCAP_FEED && (
-                    <IconDivider>
-                      <Link to="cves">
-                        <IconDivider align={['start', 'center']}>
-                          <CveIcon size="medium" />
-                          <span>CVEs</span>
-                        </IconDivider>
-                      </Link>
-                      <Link to="cpes">
-                        <IconDivider align={['start', 'center']}>
-                          <CpeLogoIcon size="medium" />
-                          <span>CPEs</span>
-                        </IconDivider>
-                      </Link>
-                      <Link to="ovaldefs">
-                        <IconDivider align={['start', 'center']}>
-                          <OvalDefIcon size="medium" />
-                          <span>OVAL Definitions</span>
-                        </IconDivider>
-                      </Link>
-                    </IconDivider>
-                  )}
-                  {feed.feed_type === CERT_FEED && (
-                    <IconDivider>
-                      <Link to="certbunds">
-                        <IconDivider align={['start', 'center']}>
-                          <CertBundAdvIcon size="medium" />
-                          <span>CERT-Bund Advisories</span>
-                        </IconDivider>
-                      </Link>
-                      <Link to="dfncerts">
-                        <IconDivider align={['start', 'center']}>
-                          <DfnCertAdvIcon size="medium" />
-                          <span>DFN-CERT Advisories</span>
-                        </IconDivider>
-                      </Link>
-                    </IconDivider>
-                  )}
-                </TableData>
-                <TableData>{feed.name}</TableData>
-                <TableData>{feed.version}</TableData>
-                <TableData>
-                  <Divider wrap>
-                    <strong>{renderFeedStatus(feed)}</strong>
-                    <span>{renderCheck(feed)}</span>
-                  </Divider>
-                </TableData>
+      <React.Fragment>
+        <PageTitle title={_('Feed Status')} />
+        <Layout flex="column">
+          <ToolBarIcons />
+          <Section img={<FeedIcon size="large" />} title={_('Feed Status')} />
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableHead width="3rem">{_('Type')}</TableHead>
+                <TableHead width="21rem">{_('Content')}</TableHead>
+                <TableHead width="9rem">{_('Origin')}</TableHead>
+                <TableHead width="7rem">{_('Version')}</TableHead>
+                <TableHead>{_('Status')}</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Layout>
+
+              {feeds.map(feed => (
+                <TableRow key={feed.feed_type}>
+                  <TableData>{feed.feed_type}</TableData>
+                  <TableData>
+                    {feed.feed_type === NVT_FEED && (
+                      <IconDivider>
+                        <Link to="nvts">
+                          <IconDivider align={['start', 'center']}>
+                            <NvtIcon size="medium" />
+                            <span>NVTs</span>
+                          </IconDivider>
+                        </Link>
+                      </IconDivider>
+                    )}
+                    {feed.feed_type === SCAP_FEED && (
+                      <IconDivider>
+                        <Link to="cves">
+                          <IconDivider align={['start', 'center']}>
+                            <CveIcon size="medium" />
+                            <span>CVEs</span>
+                          </IconDivider>
+                        </Link>
+                        <Link to="cpes">
+                          <IconDivider align={['start', 'center']}>
+                            <CpeLogoIcon size="medium" />
+                            <span>CPEs</span>
+                          </IconDivider>
+                        </Link>
+                        <Link to="ovaldefs">
+                          <IconDivider align={['start', 'center']}>
+                            <OvalDefIcon size="medium" />
+                            <span>OVAL Definitions</span>
+                          </IconDivider>
+                        </Link>
+                      </IconDivider>
+                    )}
+                    {feed.feed_type === CERT_FEED && (
+                      <IconDivider>
+                        <Link to="certbunds">
+                          <IconDivider align={['start', 'center']}>
+                            <CertBundAdvIcon size="medium" />
+                            <span>CERT-Bund Advisories</span>
+                          </IconDivider>
+                        </Link>
+                        <Link to="dfncerts">
+                          <IconDivider align={['start', 'center']}>
+                            <DfnCertAdvIcon size="medium" />
+                            <span>DFN-CERT Advisories</span>
+                          </IconDivider>
+                        </Link>
+                      </IconDivider>
+                    )}
+                  </TableData>
+                  <TableData>{feed.name}</TableData>
+                  <TableData>{feed.version}</TableData>
+                  <TableData>
+                    <Divider wrap>
+                      <strong>{renderFeedStatus(feed)}</strong>
+                      <span>{renderCheck(feed)}</span>
+                    </Divider>
+                  </TableData>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Layout>
+      </React.Fragment>
     );
   }
 }
