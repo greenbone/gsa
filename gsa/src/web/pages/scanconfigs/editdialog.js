@@ -89,6 +89,7 @@ const EditDialog = ({
   configIsInUse = false,
   configType,
   editNvtDetailsTitle,
+  editNvtFamiliesTitle,
   families,
   name,
   nvtPreferences,
@@ -195,11 +196,7 @@ const EditDialog = ({
                 {configType === OPENVAS_SCAN_CONFIG_TYPE && (
                   <NvtFamilies
                     configFamilies={config.families}
-                    editTitle={
-                      config.usage_type === 'policy'
-                        ? _('Edit Policy Family')
-                        : _('Edit Scan Config Family')
-                    }
+                    editTitle={editNvtFamiliesTitle}
                     families={families}
                     trend={trend}
                     select={select}
@@ -237,7 +234,8 @@ EditDialog.propTypes = {
   configId: PropTypes.id.isRequired,
   configIsInUse: PropTypes.bool,
   configType: PropTypes.number,
-  editNvtDetailsTitle: PropTypes.string,
+  editNvtDetailsTitle: PropTypes.string.isRequired,
+  editNvtFamiliesTitle: PropTypes.string.isRequired,
   families: PropTypes.array,
   name: PropTypes.string,
   nvtPreferences: PropTypes.arrayOf(PropTypes.object),
