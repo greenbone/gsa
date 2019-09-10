@@ -210,18 +210,6 @@ class NvtFamilies extends React.Component {
                 />
               );
             })}
-            <TableRow>
-              <TableData>
-                {_('Total: {{count}}', {count: configFamilies.count})}
-              </TableData>
-              <TableData align="start">
-                {_('{{known}} of {{max}}', config.nvts)}
-              </TableData>
-              {/* add empty cells to spread row to end of table */}
-              <TableData />
-              <TableData />
-              <TableData />
-            </TableRow>
           </TableBody>
         </Table>
       </Section>
