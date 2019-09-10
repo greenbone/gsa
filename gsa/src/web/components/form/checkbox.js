@@ -101,6 +101,6 @@ CheckboxComponent.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default compose(withLayout())(CheckboxComponent);
+export default withLayout(CheckboxComponent);
 
 // vim: set ts=2 sw=2 tw=80:
