@@ -55,6 +55,8 @@ import SelectionType from 'web/utils/selectiontype';
 
 import SortBy from 'web/components/sortby/sortby';
 
+import {handleDefaultReloadIntervalFunc} from 'web/entity/container';
+
 import TagDialog from 'web/pages/tags/dialog';
 
 import TagsDialog from './tagsdialog';
@@ -212,7 +214,7 @@ class EntitiesContainer extends React.Component {
     const {defaultReloadInterval, reloadInterval} = this.props;
 
     return isDefined(reloadInterval)
-      ? reloadInterval(this.props)
+      ? handleDefaultReloadIntervalFunc(reloadInterval)(this.props)
       : defaultReloadInterval;
   }
 
@@ -230,23 +232,26 @@ class EntitiesContainer extends React.Component {
     log.debug('Loading time was', loadTime, 'milliseconds');
 
     let interval = this.getReloadInterval();
+    if (interval <= 0) {
+      log.debug('No reload timer will be started.');
+      return;
+    }
 
     if (loadTime > interval) {
       // ensure timer is longer then the loading procedure
       interval = loadTime * LOAD_TIME_FACTOR;
     }
 
-    if (interval > 0) {
-      this.timer = global.setTimeout(this.handleTimer, interval);
-      log.debug(
-        'Started reload timer with id',
-        this.timer,
-        'and interval of',
-        interval,
-        'milliseconds for',
-        this.props.gmpname,
-      );
-    }
+    this.timer = global.setTimeout(this.handleTimer, interval);
+
+    log.debug(
+      'Started reload timer with id',
+      this.timer,
+      'and interval of',
+      interval,
+      'milliseconds for',
+      this.props.gmpname,
+    );
   }
 
   resetTimer() {

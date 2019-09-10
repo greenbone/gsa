@@ -1,13 +1,13 @@
-.TH gsad 8 User Manuals
+.TH gsad 8 "September 2019" "Greenbone Vulnerability Management" "User Manuals"
 .SH NAME
-gsad \- Greenbone Security Assistant for the Open Vulnerability Assessment System (OpenVAS)
+gsad \- Greenbone Security Assistant of the Greenbone Vulnerability Management
 .SH SYNOPSIS
 \fBgsad OPTIONS
 \f1
 .SH DESCRIPTION
-Together, OpenVAS Scanner (openvassd(8)) and OpenVAS Manager (openvasmd(8)) provide the core functionality of the Open Vulnerability Assessment System (OpenVAS), with OpenVAS Scanner handling the actual scan process and OpenVAS Manager adding various management functionalities to handle and organise scan results. 
+Together, OpenVAS Scanner (openvassd(8)) and Greenbone Vulnerability Manager daemon (gvmd(8)) provide the core functionality of the Greenbone Vulnerability Management (GVM), with OpenVAS Scanner handling the actual scan process and Greenbone Vulnerability Manager daemon adding various management functionalities to handle and organise scan results.
 
-The Greenbone Security Assistant Daemon (gsad) is a web application that connects to the OpenVAS Manager to provide for a full-featured user interface for vulnerability management. 
+The Greenbone Security Assistant Daemon (gsad) is a web application that connects to the Greenbone Vulnerability Manager to provide for a full-featured user interface for vulnerability management.
 .SH OPTIONS
 .TP
 .BR -f ", " --foreground
@@ -53,6 +53,9 @@ Libmicrohttpd 0.9.35 and higher.
 .BR --unix-socket=\fIFILE\fR
 Listen for HTTP requests on the provided unix socket file.
 .TP
+.BR --munix-socket=\fIFILE\fR
+Path to Manager unix socket.
+.TP
 .BR -v ", " --verbose
 Print progress messages.
 .TP
@@ -64,11 +67,6 @@ X-Frame-Options HTTP header. Defaults to "SAMEORIGIN".
 .TP
 .BR --http-csp=\fICSP\fR
 Content-Security-Policy HTTP header. Defaults to "default-src 'self' 'unsafe-inline'; img-src 'self' blob:; frame-ancestors 'self'"
-.BR --http-frame-opts=\fIFRAME-OPTS\fR
-X-Frame-Options HTTP header. Defaults to ""
-.TP
-.BR --http-csp=\fICSP\fR
-Content-Security-Policy HTTP header. Defaults to "default-src 'self' 'unsafe-inline'; img-src 'self' blob:; frame-ancestors *"
 .TP
 .BR --http-sts
 Enable HTTP Strict-Tranport-Security header.
@@ -76,19 +74,52 @@ Enable HTTP Strict-Tranport-Security header.
 .BR --http-sts-max-age=\fImax-age\fR
 max-age in seconds for HTTP Strict-Tranport-Security header.  Defaults to 31536000.
 .TP
+.BR --drop-privileges=\fIuser\fR
+Drop privileges to <user>.
+.TP
+.BR --vendor-version=\fIstring\fR
+Use string as version in interface.
+.TP
+.BR --secure-cookie
+Use a secure cookie (implied when using HTTPS).
+.TP
+.BR --timeout=\fIminutes\fR
+Minutes of user idle time before session expires. Defaults to 15 minutes.
+.TP
+.BR --client-watch-interval=\fInumber\fR
+Check if client connection was closed every <number> seconds. 0 to disable. Defaults to 1.
+.TP
+.BR --debug-tls=\fInumber\fR
+Enable TLS debugging at level.
+.TP
+.BR --ignore-x-real-ip
+Do not use X-Real-IP to determine the client address.
+.TP
+.BR --per-ip-connection-limit=\fInumber\fR
+Sets the maximum number of connections per ip. Use 0 for unlimited.
+.TP
+.BR --http-cors=\fICORS\fR
+Set Cross-Origin Resource Sharing (CORS) allow origin http header.
+.TP
 .BR -? ", " --help
 Show help.
 .SH EXAMPLES
 gsad
 
-Start gsad with the default port configuration and listen on port 443 for HTTPS requests. 
+Start gsad with the default port configuration and listen on port 443 for HTTPS requests.
 .SH SEE ALSO
 .BR openvassd (8),
-.BR Bopenvasad (8),
-.BR omp (8),
-.BR openvasmd (8),
-.BR gsd (8)
-.SH MORE INFORMATION ABOUT THE OPENVAS PROJECT
-The canonical places where you will find more information about the OpenVAS project are: \fBhttp://www.openvas.org/\f1 (Official site) \fBhttp://wald.intevation.org/projects/openvas/\f1 (Development Platform) 
+.BR gmp (8),
+.BR gvmd (8),
+.BR gsad (8)
+.SH MORE INFORMATION ABOUT GREENBONE VULNERABILITY MANAGEMENT
+The canonical places where you will find more information about the Greenbone Vulnerability Manager are:
+
+\fBhttps://community.greenbone.net\f1 (Community portal)
+
+\fBhttps://github.com/greenbone\f1 (Development Platform)
+
+\fBhttps://greenbone.net\f1 (Greenbone website)
+
 .SH COPYRIGHT
-The Greenbone Security Assistant is released under the GNU GPL, version 2, or, at your option, any later version. 
+The Greenbone Security Assistant is released under the GNU GPL, version 2, or, at your option, any later version.

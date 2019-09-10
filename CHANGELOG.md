@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- Allow to disable reload timers [#1619](https://github.com/greenbone/gsa/pull/1619)
+- Added missing withRouter to withEntitiesContainer [#1614](https://github.com/greenbone/gsa/pull/1614)
 - Added parseTrend() function to ScanConfig model [#1583](https://github.com/greenbone/gsa/pull/1583)
 - Added DetailsPage and more functionalities to TLS Certificate assets [#1578](https://github.com/greenbone/gsa/pull/1578)
 - Added Explicit Compliance [#1495](https://github.com/greenbone/gsa/pull/1495)
@@ -65,6 +67,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.2] - unreleased
 
 ### Added
+- Added a loading timer for empty trash button [#1604](https://github.com/greenbone/gsa/pull/1604)
 - Added details to alert details page [#1591](https://github.com/greenbone/gsa/pull/1591)
 - Added loading indicator for edit config dialog [#1579](https://github.com/greenbone/gsa/pull/1579)
 - Added tooltip for settings in task edit dialog that can't be changed once the task has been run [#1568](https://github.com/greenbone/gsa/pull/1568)
@@ -76,6 +79,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Allow to overwrite details=1 for command results.get() [#1618](https://github.com/greenbone/gsa/pull/1618)
+- Ensure not to request the report details when loading a list of reports [#1617](https://github.com/greenbone/gsa/pull/1617)
 - Adjust ProtList manual links [#1599](https://github.com/greenbone/gsa/pull/1599)
 - Word-wrap in pre component [#1586](https://github.com/greenbone/gsa/pull/1586)
 - Disable EditIcon for My Settings if permission denied [#1588](https://github.com/greenbone/gsa/pull/1588)
@@ -88,6 +93,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Fix showing loading indicator in content composers [#1613](https://github.com/greenbone/gsa/pull/1613)
+- Enable downloading csv in table dashboard [#1611](https://github.com/greenbone/gsa/pull/1611)
 - Fixed 404 URL handling in gsad which caused a XSS vulnerability [#1603](https://github.com/greenbone/gsa/pull/1603)
 - Fixed status of Tickets for task.isInTrash() and isOrphan [#1592](https://github.com/greenbone/gsa/pull/1592)
 - Fix and improve editing of roles [#1587](https://github.com/greenbone/gsa/pull/1587)
@@ -109,6 +116,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Allow to use additional options for starting gsad via systemd
   [#1514](https://github.com/greenbone/gsa/pull/1514)
 - Fix using filename templates from usersettings [#1512](https://github.com/greenbone/gsa/pull/1512)
+- Update manpage [#1616](https://github.com/greenbone/gsa/pull/1616)
 
 [8.0.2]: https://github.com/greenbone/gsa/compare/v8.0.1...gsa-8.0
 

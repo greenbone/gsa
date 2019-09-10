@@ -18,6 +18,8 @@
  */
 import React from 'react';
 
+import {withRouter} from 'react-router-dom';
+
 import {connect} from 'react-redux';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -83,6 +85,7 @@ const withEntitiesContainer = (
     withDialogNotification,
     withDownload,
     withGmp,
+    withRouter,
     connect(
       mapStateToProps,
       mapDispatchToProps,

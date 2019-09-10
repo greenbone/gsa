@@ -37,6 +37,8 @@ import withDownload from 'web/components/form/withDownload';
 
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
 
+import {handleDefaultReloadIntervalFunc} from 'web/entity/container';
+
 import withDefaultFilter from 'web/entities/withDefaultFilter';
 
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
@@ -105,6 +107,11 @@ const getFilter = (entity = {}) => {
   const {report = {}} = entity;
   return report.filter;
 };
+
+const reloadReportFunc = ({entity}) =>
+  isDefined(entity) && isActive(entity.report.scan_run_status)
+    ? DEFAULT_RELOAD_INTERVAL_ACTIVE
+    : 0; // report doesn't change anymore. no need to reload
 
 class ReportDetails extends React.Component {
   constructor(...args) {
@@ -280,10 +287,7 @@ class ReportDetails extends React.Component {
   }
 
   getReloadInterval() {
-    const {entity} = this.props;
-    return isDefined(entity) && isActive(entity.report.scan_run_status)
-      ? DEFAULT_RELOAD_INTERVAL_ACTIVE
-      : 0; // report doesn't change anymore. no need to reload
+    return handleDefaultReloadIntervalFunc(reloadReportFunc)(this.props);
   }
 
   startTimer() {
@@ -301,21 +305,24 @@ class ReportDetails extends React.Component {
 
     let interval = this.getReloadInterval();
 
-    if (loadTime > interval && interval !== 0) {
+    if (interval <= 0) {
+      log.debug('No reload timer will be started.');
+      return;
+    }
+
+    if (loadTime > interval) {
       // ensure timer is longer then the loading procedure
       interval = loadTime * LOAD_TIME_FACTOR;
     }
 
-    if (interval > 0) {
-      this.timer = global.setTimeout(this.handleTimer, interval);
-      log.debug(
-        'Started reload timer with id',
-        this.timer,
-        'and interval of',
-        interval,
-        'milliseconds',
-      );
-    }
+    this.timer = global.setTimeout(this.handleTimer, interval);
+    log.debug(
+      'Started reload timer with id',
+      this.timer,
+      'and interval of',
+      interval,
+      'milliseconds',
+    );
   }
 
   resetTimer() {
@@ -461,7 +468,7 @@ class ReportDetails extends React.Component {
 
     this.handleInteraction();
 
-    gmp.report
+    return gmp.report
       .download(entity, {
         reportFormatId,
         deltaReportId,
@@ -672,6 +679,7 @@ class ReportDetails extends React.Component {
 }
 
 ReportDetails.propTypes = {
+  defaultReloadInterval: PropTypes.number,
   deltaReportId: PropTypes.id,
   entity: PropTypes.model,
   entityError: PropTypes.object,
@@ -723,7 +731,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
   };
 };
 
-const mapStateToProps = (rootState, {match}) => {
+const mapStateToProps = (rootState, {gmp, match}) => {
   const {id, deltaid} = match.params;
   const filterSel = filterSelector(rootState);
   const reportSel = reportSelector(rootState);
@@ -745,6 +753,7 @@ const mapStateToProps = (rootState, {match}) => {
 
   return {
     deltaReportId: deltaid,
+    defaultReloadInterval: gmp.reloadInterval,
     entity,
     entityError,
     filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
