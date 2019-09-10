@@ -50,81 +50,66 @@ import PropTypes from 'web/utils/proptypes';
 
 import Trend from './trend';
 
-class NvtFamily extends React.Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      nextProps.familyMaxNvtCount !== this.props.familyMaxNvtCount ||
-      nextProps.familyName !== this.props.familyName ||
-      nextProps.familyNvtCount !== this.props.familyNvtCount ||
-      nextProps.select !== this.props.select ||
-      nextProps.trend !== this.props.trend
-    );
-  }
-
-  render() {
-    const {
-      familyMaxNvtCount,
-      familyName,
-      familyNvtCount = 0,
-      select,
-      title,
-      trend,
-      onEditConfigFamilyClick,
-      onSelectChange,
-      onTrendChange,
-    } = this.props;
-    const counts = {
-      count: familyNvtCount,
-      max: familyMaxNvtCount,
-    };
-
-    return (
-      <TableRow key={familyName}>
-        <TableData>{familyName}</TableData>
-        <TableData align="start">{_('{{count}} of {{max}}', counts)}</TableData>
-        <TableData align={['center', 'start']}>
-          <Divider>
-            <Radio
-              flex
-              name={familyName}
-              checked={trend === SCANCONFIG_TREND_DYNAMIC}
-              convert={parseTrend}
-              value={SCANCONFIG_TREND_DYNAMIC}
-              onChange={onTrendChange}
-            />
-            <Trend trend={SCANCONFIG_TREND_DYNAMIC} />
-            <Radio
-              flex
-              name={familyName}
-              checked={trend === SCANCONFIG_TREND_STATIC}
-              convert={parseTrend}
-              value={SCANCONFIG_TREND_STATIC}
-              onChange={onTrendChange}
-            />
-            <Trend trend={SCANCONFIG_TREND_STATIC} />
-          </Divider>
-        </TableData>
-        <TableData align={['start', 'center']}>
-          <Checkbox
-            flex
-            name={familyName}
-            checked={select === YES_VALUE}
-            checkedValue={YES_VALUE}
-            unCheckedValue={NO_VALUE}
-            onChange={onSelectChange}
-          />
-        </TableData>
-        <TableData align={['center', 'center']}>
-          <EditIcon
-            title={title}
-            value={familyName}
-            onClick={onEditConfigFamilyClick}
-          />
-        </TableData>
-      </TableRow>
-    );
-  }
-}
+const NvtFamily = ({
+  familyMaxNvtCount,
+  familyName,
+  familyNvtCount = 0,
+  select,
+  title,
+  trend,
+  onEditConfigFamilyClick,
+  onSelectChange,
+  onTrendChange,
+}) => (
+  <TableRow key={familyName}>
+    <TableData>{familyName}</TableData>
+    <TableData align="start">
+      {_('{{count}} of {{max}}', {
+        count: familyNvtCount,
+        max: familyMaxNvtCount,
+      })}
+    </TableData>
+    <TableData align={['center', 'start']}>
+      <Divider>
+        <Radio
+          flex
+          name={familyName}
+          checked={trend === SCANCONFIG_TREND_DYNAMIC}
+          convert={parseTrend}
+          value={SCANCONFIG_TREND_DYNAMIC}
+          onChange={onTrendChange}
+        />
+        <Trend trend={SCANCONFIG_TREND_DYNAMIC} />
+        <Radio
+          flex
+          name={familyName}
+          checked={trend === SCANCONFIG_TREND_STATIC}
+          convert={parseTrend}
+          value={SCANCONFIG_TREND_STATIC}
+          onChange={onTrendChange}
+        />
+        <Trend trend={SCANCONFIG_TREND_STATIC} />
+      </Divider>
+    </TableData>
+    <TableData align={['start', 'center']}>
+      <Checkbox
+        flex
+        name={familyName}
+        checked={select === YES_VALUE}
+        checkedValue={YES_VALUE}
+        unCheckedValue={NO_VALUE}
+        onChange={onSelectChange}
+      />
+    </TableData>
+    <TableData align={['center', 'center']}>
+      <EditIcon
+        title={title}
+        value={familyName}
+        onClick={onEditConfigFamilyClick}
+      />
+    </TableData>
+  </TableRow>
+);
 
 NvtFamily.propTypes = {
   familyMaxNvtCount: PropTypes.number.isRequired,
