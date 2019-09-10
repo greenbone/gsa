@@ -156,6 +156,15 @@ class ScanConfigComponent extends React.Component {
 
     this.handleInteraction();
 
+    this.setState({
+      isLoadingFamily: true,
+      editConfigFamilyDialogVisible: true,
+      editConfigFamilyDialogTitle: _('Edit Scan Config Family {{name}}', {
+        name: shorten(familyName),
+      }),
+      familyName,
+    });
+
     return gmp.scanconfig
       .editScanConfigFamilySettings({
         id: config.id,
@@ -169,13 +178,15 @@ class ScanConfigComponent extends React.Component {
         const selected = createSelectedNvts(configFamily, nvts);
 
         this.setState({
-          familyName,
           familyNvts: data.nvts,
           familySelectedNvts: selected,
-          editConfigFamilyDialogVisible: true,
-          editConfigFamilyDialogTitle: _('Edit Scan Config Family {{name}}', {
-            name: shorten(familyName),
-          }),
+          isLoadingFamily: false,
+        });
+      })
+      .catch(error => {
+        this.setState({
+          isLoadingFamily: false,
+          selected: {}, // ensure selected is defined to stop loading indicator
         });
       });
   }
@@ -372,6 +383,7 @@ class ScanConfigComponent extends React.Component {
       importDialogVisible,
       isLoadingConfig,
       isLoadingFamilies,
+      isLoadingFamily,
       isLoadingScanners,
       nvt,
       scannerId,
@@ -461,6 +473,7 @@ class ScanConfigComponent extends React.Component {
             configNameLabel={_('Config')}
             configName={config.name}
             familyName={familyName}
+            isLoadingFamily={isLoadingFamily}
             nvts={familyNvts}
             selected={familySelectedNvts}
             title={editConfigFamilyDialogTitle}

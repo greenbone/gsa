@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -35,6 +35,8 @@ import SaveDialog from 'web/components/dialog/savedialog';
 import Checkbox from 'web/components/form/checkbox';
 
 import EditIcon from 'web/components/icon/editicon';
+
+import Loading from 'web/components/loading/loading';
 
 import Layout from 'web/components/layout/layout';
 
@@ -159,6 +161,7 @@ const EditScanConfigFamilyDialog = ({
   configName,
   configNameLabel,
   familyName,
+  isLoadingFamily = true,
   nvts,
   selected,
   title,
@@ -182,6 +185,10 @@ const EditScanConfigFamilyDialog = ({
     }));
   };
 
+  useEffect(() => {
+    setSelectedNvts(selected);
+  }, [selected]);
+
   const data = {
     familyName,
     configId,
@@ -194,83 +201,87 @@ const EditScanConfigFamilyDialog = ({
 
   return (
     <SaveDialog title={title} onClose={onClose} onSave={onSave} values={data}>
-      {() => (
-        <Layout flex="column">
-          <SimpleTable>
-            <TableBody>
-              <TableRow>
-                <TableData>{configNameLabel}</TableData>
-                <TableData>{configName}</TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('Family')}</TableData>
-                <TableData>{familyName}</TableData>
-              </TableRow>
-            </TableBody>
-          </SimpleTable>
-
-          <Section title={_('Edit Network Vulnerability Tests')}>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead
-                    currentSortBy={sortBy}
-                    currentSortDir={sortDir}
-                    sortBy="name"
-                    onSortChange={handleSortChange}
-                    title={_('Name')}
-                  />
-                  <TableHead
-                    currentSortBy={sortBy}
-                    currentSortDir={sortDir}
-                    sortBy="oid"
-                    onSortChange={handleSortChange}
-                    title={_('OID')}
-                  />
-                  <TableHead
-                    currentSortBy={sortBy}
-                    currentSortDir={sortDir}
-                    sortBy="severity"
-                    onSortChange={handleSortChange}
-                    title={_('Severity')}
-                  />
-                  <TableHead
-                    currentSortBy={sortBy}
-                    currentSortDir={sortDir}
-                    sortBy="timeout"
-                    onSortChange={handleSortChange}
-                    title={_('Timeout')}
-                  />
-                  <TableHead>{_('Prefs')}</TableHead>
-                  <TableHead
-                    currentSortBy={sortBy}
-                    currentSortDir={sortDir}
-                    sortBy="selected"
-                    onSortChange={handleSortChange}
-                    align="center"
-                    title={_('Selected')}
-                  />
-                  <TableHead align="center">{_('Actions')}</TableHead>
-                </TableRow>
-              </TableHeader>
+      {() =>
+        isLoadingFamily || !isDefined(selectedNvts) ? (
+          <Loading />
+        ) : (
+          <Layout flex="column">
+            <SimpleTable>
               <TableBody>
-                {sortedNvts.map(nvt => {
-                  const {oid} = nvt;
-                  return (
-                    <Nvt
-                      key={oid}
-                      nvt={nvt}
-                      selected={selectedNvts[oid]}
-                      onSelectedChange={handleSelectedChange}
-                      onEditNvtDetailsClick={onEditNvtDetailsClick}
-                    />
-                  );
-                })}
+                <TableRow>
+                  <TableData>{configNameLabel}</TableData>
+                  <TableData>{configName}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Family')}</TableData>
+                  <TableData>{familyName}</TableData>
+                </TableRow>
               </TableBody>
-            </Table>
-          </Section>
-        </Layout>
-      )}
+            </SimpleTable>
+
+            <Section title={_('Edit Network Vulnerability Tests')}>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead
+                      currentSortBy={sortBy}
+                      currentSortDir={sortDir}
+                      sortBy="name"
+                      onSortChange={handleSortChange}
+                      title={_('Name')}
+                    />
+                    <TableHead
+                      currentSortBy={sortBy}
+                      currentSortDir={sortDir}
+                      sortBy="oid"
+                      onSortChange={handleSortChange}
+                      title={_('OID')}
+                    />
+                    <TableHead
+                      currentSortBy={sortBy}
+                      currentSortDir={sortDir}
+                      sortBy="severity"
+                      onSortChange={handleSortChange}
+                      title={_('Severity')}
+                    />
+                    <TableHead
+                      currentSortBy={sortBy}
+                      currentSortDir={sortDir}
+                      sortBy="timeout"
+                      onSortChange={handleSortChange}
+                      title={_('Timeout')}
+                    />
+                    <TableHead>{_('Prefs')}</TableHead>
+                    <TableHead
+                      currentSortBy={sortBy}
+                      currentSortDir={sortDir}
+                      sortBy="selected"
+                      onSortChange={handleSortChange}
+                      align="center"
+                      title={_('Selected')}
+                    />
+                    <TableHead align="center">{_('Actions')}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {sortedNvts.map(nvt => {
+                    const {oid} = nvt;
+                    return (
+                      <Nvt
+                        key={oid}
+                        nvt={nvt}
+                        selected={selectedNvts[oid]}
+                        onSelectedChange={handleSelectedChange}
+                        onEditNvtDetailsClick={onEditNvtDetailsClick}
+                      />
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </Section>
+          </Layout>
+        )
+      }
     </SaveDialog>
   );
 };
@@ -280,6 +291,7 @@ EditScanConfigFamilyDialog.propTypes = {
   configName: PropTypes.string,
   configNameLabel: PropTypes.string.isRequired,
   familyName: PropTypes.string,
+  isLoadingFamily: PropTypes.bool,
   nvts: PropTypes.array.isRequired,
   selected: PropTypes.object.isRequired,
   title: PropTypes.string,
