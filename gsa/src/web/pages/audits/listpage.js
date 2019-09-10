@@ -34,6 +34,7 @@ import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 
@@ -88,26 +89,29 @@ const Page = ({onInteraction, onChanged, onDownloaded, onError, ...props}) => (
       reportDownload,
       gcrFormatDefined,
     }) => (
-      <EntitiesPage
-        {...props}
-        filtersFilter={TASKS_FILTER_FILTER}
-        gcrFormatDefined={gcrFormatDefined}
-        sectionIcon={<AuditIcon size="large" />}
-        table={Table}
-        title={_('Audits')}
-        toolBarIcons={ToolBarIcons}
-        onError={onError}
-        onInteraction={onInteraction}
-        onReportDownloadClick={reportDownload}
-        onAuditCloneClick={clone}
-        onAuditCreateClick={create}
-        onAuditDeleteClick={deleteFunc}
-        onAuditDownloadClick={download}
-        onAuditEditClick={edit}
-        onAuditResumeClick={resume}
-        onAuditStartClick={start}
-        onAuditStopClick={stop}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Audits')} />
+        <EntitiesPage
+          {...props}
+          filtersFilter={TASKS_FILTER_FILTER}
+          gcrFormatDefined={gcrFormatDefined}
+          sectionIcon={<AuditIcon size="large" />}
+          table={Table}
+          title={_('Audits')}
+          toolBarIcons={ToolBarIcons}
+          onError={onError}
+          onInteraction={onInteraction}
+          onReportDownloadClick={reportDownload}
+          onAuditCloneClick={clone}
+          onAuditCreateClick={create}
+          onAuditDeleteClick={deleteFunc}
+          onAuditDownloadClick={download}
+          onAuditEditClick={edit}
+          onAuditResumeClick={resume}
+          onAuditStartClick={start}
+          onAuditStopClick={stop}
+        />
+      </React.Fragment>
     )}
   </AuditComponent>
 );
