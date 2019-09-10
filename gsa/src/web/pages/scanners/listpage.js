@@ -33,6 +33,7 @@ import NewIcon from 'web/components/icon/newicon';
 import ScannerIcon from 'web/components/icon/scannericon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
@@ -106,28 +107,31 @@ const ScannersPage = ({
       save,
       verify,
     }) => (
-      <EntitiesPage
-        {...props}
-        filterEditDialog={ScannersFilterDialog}
-        filtersFilter={SCANNERS_FILTER_FILTER}
-        sectionIcon={<ScannerIcon size="large" />}
-        table={ScannersTable}
-        title={_('Scanners')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onDownloaded={onDownloaded}
-        onError={onError}
-        onInteraction={onInteraction}
-        onScannerCertificateDownloadClick={downloadcertificate}
-        onScannerCloneClick={clone}
-        onScannerCreateClick={create}
-        onScannerCredentialDownloadClick={downloadcredential}
-        onScannerDeleteClick={delete_func}
-        onScannerDownloadClick={download}
-        onScannerEditClick={edit}
-        onScannerSaveClick={save}
-        onScannerVerifyClick={verify}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Scanners')} />
+        <EntitiesPage
+          {...props}
+          filterEditDialog={ScannersFilterDialog}
+          filtersFilter={SCANNERS_FILTER_FILTER}
+          sectionIcon={<ScannerIcon size="large" />}
+          table={ScannersTable}
+          title={_('Scanners')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onInteraction={onInteraction}
+          onScannerCertificateDownloadClick={downloadcertificate}
+          onScannerCloneClick={clone}
+          onScannerCreateClick={create}
+          onScannerCredentialDownloadClick={downloadcredential}
+          onScannerDeleteClick={delete_func}
+          onScannerDownloadClick={download}
+          onScannerEditClick={edit}
+          onScannerSaveClick={save}
+          onScannerVerifyClick={verify}
+        />
+      </React.Fragment>
     )}
   </ScannerComponent>
 );
