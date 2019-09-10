@@ -95,19 +95,15 @@ class ScanConfigComponent extends React.Component {
   }
 
   openEditConfigDialog(config) {
-    this.loadEditScanConfigSettings(config.id).then(() => {
-      this.setState({
-        editConfigDialogVisible: true,
-        title: _('Edit Scan Config {{name}}', {name: shorten(config.name)}),
-      });
+    this.setState({
+      config, // put config from list with reduced data in state
+      editConfigDialogVisible: true,
+      title: _('Edit Scan Config {{name}}', {name: shorten(config.name)}),
     });
 
-    this.loadScanners().then(({scanners, scannerId}) => {
-      this.setState({
-        scanners,
-        scannerId,
-      });
-    });
+    this.loadEditScanConfigSettings(config.id);
+
+    this.loadScanners();
 
     this.handleInteraction();
   }
@@ -122,13 +118,11 @@ class ScanConfigComponent extends React.Component {
   }
 
   openCreateConfigDialog() {
-    this.loadScanners().then(({scanners, scannerId}) =>
-      this.setState({
-        scanners,
-        scannerId,
-        createConfigDialogVisible: true,
-      }),
-    );
+    this.loadScanners();
+
+    this.setState({
+      createConfigDialogVisible: true,
+    });
 
     this.handleInteraction();
   }
@@ -290,31 +284,61 @@ class ScanConfigComponent extends React.Component {
   loadScanners(dialog) {
     const {gmp} = this.props;
 
-    return gmp.scanners.getAll().then(response => {
-      let {data: scanners} = response;
-      scanners = scanners.filter(ospScannersFilter);
-      return {
-        scanners,
-        scannerId: selectSaveId(scanners),
-      };
-    });
+    this.setState({isLoadingScanners: true});
+
+    return gmp.scanners
+      .getAll()
+      .then(response => {
+        let {data: scanners} = response;
+        scanners = scanners.filter(ospScannersFilter);
+        this.setState({
+          scanners,
+          scannerId: selectSaveId(scanners),
+          isLoadingScanners: false,
+        });
+      })
+      .catch(error => {
+        this.setState({
+          isLoadingScanners: false,
+        });
+      });
   }
 
   loadEditScanConfigSettings(configId) {
     const {gmp} = this.props;
 
-    return Promise.all([
-      gmp.scanconfig.get({id: configId}),
-      gmp.nvtfamilies.get(),
-    ]).then(([configResponse, familiesResponse]) => {
-      const {data: scanconfig} = configResponse;
-      const {data: families} = familiesResponse;
-
-      this.setState({
-        config: scanconfig,
-        families,
-      });
+    this.setState({
+      isLoadingConfig: true,
+      isLoadingFamilies: true,
     });
+
+    gmp.scanconfig
+      .get({id: configId})
+      .then(response => {
+        this.setState({
+          config: response.data,
+          isLoadingConfig: false,
+        });
+      })
+      .catch(error => {
+        this.setState({
+          isLoadingConfig: false,
+        });
+      });
+
+    gmp.nvtfamilies
+      .get()
+      .then(familiesResponse => {
+        this.setState({
+          families: familiesResponse.data,
+          isLoadingFamilies: false,
+        });
+      })
+      .catch(error => {
+        this.setState({
+          isLoadingConfig: false,
+        });
+      });
   }
 
   render() {
@@ -346,6 +370,9 @@ class ScanConfigComponent extends React.Component {
       familyNvts,
       familySelectedNvts,
       importDialogVisible,
+      isLoadingConfig,
+      isLoadingFamilies,
+      isLoadingScanners,
       nvt,
       scannerId,
       scanners,
@@ -378,6 +405,7 @@ class ScanConfigComponent extends React.Component {
               })}
               {createConfigDialogVisible && (
                 <ScanConfigDialog
+                  isLoadingScanners={isLoadingScanners}
                   scannerId={scannerId}
                   scanners={scanners}
                   onClose={this.handleCloseCreateConfigDialog}
@@ -398,6 +426,9 @@ class ScanConfigComponent extends React.Component {
                   editNvtDetailsTitle={_('Edit Scan Config NVT Details')}
                   editNvtFamiliesTitle={_('Edit Scan Config Family')}
                   families={families}
+                  isLoadingConfig={isLoadingConfig}
+                  isLoadingFamilies={isLoadingFamilies}
+                  isLoadingScanners={isLoadingScanners}
                   name={config.name}
                   nvtPreferences={config.preferences.nvt}
                   scannerId={scannerId}

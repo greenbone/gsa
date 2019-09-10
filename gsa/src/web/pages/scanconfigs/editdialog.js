@@ -91,6 +91,9 @@ const EditDialog = ({
   editNvtDetailsTitle,
   editNvtFamiliesTitle,
   families,
+  isLoadingConfig = true,
+  isLoadingFamilies = true,
+  isLoadingScanners = true,
   name,
   nvtPreferences,
   scannerPreferences,
@@ -112,13 +115,7 @@ const EditDialog = ({
     );
   }, [scannerPreferences]);
 
-  const [{select, trend}, setTrendAndSelect] = useState(
-    createTrendAndSelect(configFamilies, families),
-  );
-
-  useEffect(() => {
-    setTrendAndSelect(createTrendAndSelect(configFamilies, families));
-  }, [configFamilies, families]);
+  const {trend, select} = createTrendAndSelect(configFamilies, families);
 
   const uncontrolledData = {
     comment,
@@ -133,56 +130,43 @@ const EditDialog = ({
     trend,
   };
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-    // we want to show loading indicator while the content of the dialog is loading. 500ms is arbitrary, but the loading indicator will not disappear until rerender with the required content.
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
-
   return (
     <SaveDialog
+      loading={isLoadingConfig}
       title={title}
       onClose={onClose}
       onSave={onSave}
       defaultValues={uncontrolledData}
       values={controlledData}
     >
-      {({values: state, onValueChange}) => {
-        if (isLoading) {
-          return <Loading />;
-        }
+      {({values: state, onValueChange}) => (
+        <Layout flex="column">
+          <FormGroup title={_('Name')}>
+            <TextField
+              name="name"
+              grow="1"
+              value={state.name}
+              size="30"
+              onChange={onValueChange}
+            />
+          </FormGroup>
 
-        return (
-          <Layout flex="column">
-            <FormGroup title={_('Name')}>
-              <TextField
-                name="name"
-                grow="1"
-                value={state.name}
-                size="30"
-                onChange={onValueChange}
-              />
-            </FormGroup>
+          <FormGroup title={_('Comment')}>
+            <TextField
+              name="comment"
+              value={state.comment}
+              grow="1"
+              size="30"
+              onChange={onValueChange}
+            />
+          </FormGroup>
 
-            <FormGroup title={_('Comment')}>
-              <TextField
-                name="comment"
-                value={state.comment}
-                grow="1"
-                size="30"
-                onChange={onValueChange}
-              />
-            </FormGroup>
-
-            {!configIsInUse && (
-              <React.Fragment>
-                {configType === OSP_SCAN_CONFIG_TYPE && (
+          {!configIsInUse && (
+            <React.Fragment>
+              {configType === OSP_SCAN_CONFIG_TYPE &&
+                (isLoadingScanners ? (
+                  <Loading />
+                ) : (
                   <FormGroup title={_('Scanner')}>
                     <Select
                       name="scannerId"
@@ -191,9 +175,12 @@ const EditDialog = ({
                       onChange={onValueChange}
                     />
                   </FormGroup>
-                )}
+                ))}
 
-                {configType === OPENVAS_SCAN_CONFIG_TYPE && (
+              {isLoadingConfig || isLoadingFamilies ? (
+                <Loading />
+              ) : (
+                configType === OPENVAS_SCAN_CONFIG_TYPE && (
                   <NvtFamilies
                     configFamilies={config.families}
                     editTitle={editNvtFamiliesTitle}
@@ -203,26 +190,34 @@ const EditDialog = ({
                     onEditConfigFamilyClick={onEditConfigFamilyClick}
                     onValueChange={onValueChange}
                   />
-                )}
+                )
+              )}
 
+              {isLoadingConfig ? (
+                <Loading />
+              ) : (
                 <ScannerPreferences
                   values={scannerPreferenceValues}
                   preferences={scannerPreferences}
                   onValuesChange={values => setScannerPreferenceValues(values)}
                 />
+              )}
 
-                {configType === OPENVAS_SCAN_CONFIG_TYPE && (
+              {isLoadingConfig ? (
+                <Loading />
+              ) : (
+                configType === OPENVAS_SCAN_CONFIG_TYPE && (
                   <NvtPreferences
                     editTitle={editNvtDetailsTitle}
                     preferences={nvtPreferences}
                     onEditNvtDetailsClick={onEditNvtDetailsClick}
                   />
-                )}
-              </React.Fragment>
-            )}
-          </Layout>
-        );
-      }}
+                )
+              )}
+            </React.Fragment>
+          )}
+        </Layout>
+      )}
     </SaveDialog>
   );
 };
@@ -237,6 +232,9 @@ EditDialog.propTypes = {
   editNvtDetailsTitle: PropTypes.string.isRequired,
   editNvtFamiliesTitle: PropTypes.string.isRequired,
   families: PropTypes.array,
+  isLoadingConfig: PropTypes.bool,
+  isLoadingFamilies: PropTypes.bool,
+  isLoadingScanners: PropTypes.bool,
   name: PropTypes.string,
   nvtPreferences: PropTypes.arrayOf(PropTypes.object),
   scannerId: PropTypes.id,
