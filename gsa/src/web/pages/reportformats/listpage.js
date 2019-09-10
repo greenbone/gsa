@@ -33,6 +33,7 @@ import ImportIcon from 'web/components/icon/importicon';
 import ReportFormatIcon from 'web/components/icon/reportformaticon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
@@ -103,25 +104,28 @@ const ReportFormatsPage = ({
       save,
       verify,
     }) => (
-      <EntitiesPage
-        {...props}
-        filterEditDialog={ReportFormatsFilterDialog}
-        filtersFilter={REPORT_FORMATS_FILTER_FILTER}
-        sectionIcon={<ReportFormatIcon size="large" />}
-        table={ReportFormatsTable}
-        title={_('Report Formats')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onDownloaded={onDownloaded}
-        onError={onError}
-        onInteraction={onInteraction}
-        onReportFormatCloneClick={clone}
-        onReportFormatImportClick={import_func}
-        onReportFormatDeleteClick={delete_func}
-        onReportFormatDownloadClick={download}
-        onReportFormatEditClick={edit}
-        onReportFormatVerifyClick={verify}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Report Formats')} />
+        <EntitiesPage
+          {...props}
+          filterEditDialog={ReportFormatsFilterDialog}
+          filtersFilter={REPORT_FORMATS_FILTER_FILTER}
+          sectionIcon={<ReportFormatIcon size="large" />}
+          table={ReportFormatsTable}
+          title={_('Report Formats')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onInteraction={onInteraction}
+          onReportFormatCloneClick={clone}
+          onReportFormatImportClick={import_func}
+          onReportFormatDeleteClick={delete_func}
+          onReportFormatDownloadClick={download}
+          onReportFormatEditClick={edit}
+          onReportFormatVerifyClick={verify}
+        />
+      </React.Fragment>
     )}
   </ReportFormatComponent>
 );
