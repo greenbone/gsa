@@ -165,13 +165,13 @@ class NvtFamilies extends React.Component {
   render() {
     const {
       config,
+      configFamilies,
       editTitle,
       families = [],
       trend,
       select,
       onEditConfigFamilyClick,
     } = this.props;
-
     return (
       <Section
         foldable
@@ -192,7 +192,7 @@ class NvtFamilies extends React.Component {
           <TableBody>
             {families.map(family => {
               const {name} = family;
-              const configFamily = config.families[name];
+              const configFamily = configFamilies[name];
               return (
                 <NvtFamily
                   key={name}
@@ -212,7 +212,7 @@ class NvtFamilies extends React.Component {
             })}
             <TableRow>
               <TableData>
-                {_('Total: {{count}}', {count: config.families.count})}
+                {_('Total: {{count}}', {count: configFamilies.count})}
               </TableData>
               <TableData align="start">
                 {_('{{known}} of {{max}}', config.nvts)}
@@ -231,6 +231,7 @@ class NvtFamilies extends React.Component {
 
 NvtFamilies.propTypes = {
   config: PropTypes.model.isRequired,
+  configFamilies: PropTypes.object.isRequired,
   editTitle: PropTypes.string,
   families: PropTypes.array.isRequired,
   select: PropTypes.object.isRequired,
