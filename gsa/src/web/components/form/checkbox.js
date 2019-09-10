@@ -29,13 +29,15 @@ import withLayout from 'web/components/layout/withLayout';
 
 const convertChecked = (value, props) => {
   const {checkedValue, unCheckedValue} = props;
-
+  let val;
   if (value && isDefined(checkedValue)) {
-    value = checkedValue;
+    val = checkedValue;
   } else if (!value && isDefined(unCheckedValue)) {
-    value = unCheckedValue;
+    val = unCheckedValue;
+  } else {
+    val = value;
   }
-  return value;
+  return val;
 };
 
 const valueFunc = event => event.target.checked;
@@ -59,11 +61,13 @@ const CheckboxComponent = ({
     }
   };
 
+  const getCheckboxValues = () => {
+    return {checkedValue, unCheckedValue};
+  };
+
   const handleChange = event => {
-    const val = convertChecked(valueFunc(event), {
-      checkedValue,
-      unCheckedValue,
-    });
+    const val = convertChecked(valueFunc(event), getCheckboxValues());
+
     setValue(val);
 
     notifyChange(val);
