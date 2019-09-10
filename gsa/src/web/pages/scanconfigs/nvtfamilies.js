@@ -123,83 +123,68 @@ NvtFamily.propTypes = {
   onTrendChange: PropTypes.func,
 };
 
-class NvtFamilies extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.onSelectChange = this.onSelectChange.bind(this);
-    this.onTrendChange = this.onTrendChange.bind(this);
-  }
-
-  onSelectChange(value, name) {
-    const {select, onValueChange} = this.props;
-
-    select[name] = value;
-
-    onValueChange(select, 'select');
-  }
-
-  onTrendChange(value, name) {
-    const {trend, onValueChange} = this.props;
-
+const NvtFamilies = ({
+  configFamilies,
+  editTitle,
+  families = [],
+  trend,
+  select,
+  onEditConfigFamilyClick,
+  onValueChange,
+}) => {
+  const onTrendChange = (value, name) => {
     trend[name] = value;
 
     onValueChange(trend, 'trend');
-  }
+  };
+  const onSelectChange = (value, name) => {
+    select[name] = value;
 
-  render() {
-    const {
-      configFamilies,
-      editTitle,
-      families = [],
-      trend,
-      select,
-      onEditConfigFamilyClick,
-    } = this.props;
-    return (
-      <Section
-        foldable
-        title={_('Edit Network Vulnerability Test Families ({{counts}})', {
-          counts: families.length,
-        })}
-      >
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{_('Family')}</TableHead>
-              <TableHead>{_('NVTs selected')}</TableHead>
-              <TableHead>{_('Trend')}</TableHead>
-              <TableHead width="9em">{_('Select all NVTs')}</TableHead>
-              <TableHead align="center">{_('Actions')}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {families.map(family => {
-              const {name} = family;
-              const configFamily = configFamilies[name];
-              return (
-                <NvtFamily
-                  key={name}
-                  familyName={family.name}
-                  familyMaxNvtCount={family.maxNvtCount}
-                  familyNvtCount={
-                    isDefined(configFamily) ? configFamily.nvts.count : 0
-                  }
-                  title={editTitle}
-                  trend={trend[name]}
-                  select={select[name]}
-                  onEditConfigFamilyClick={onEditConfigFamilyClick}
-                  onSelectChange={this.onSelectChange}
-                  onTrendChange={this.onTrendChange}
-                />
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Section>
-    );
-  }
-}
+    onValueChange(select, 'select');
+  };
+  return (
+    <Section
+      foldable
+      title={_('Edit Network Vulnerability Test Families ({{counts}})', {
+        counts: families.length,
+      })}
+    >
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{_('Family')}</TableHead>
+            <TableHead>{_('NVTs selected')}</TableHead>
+            <TableHead>{_('Trend')}</TableHead>
+            <TableHead width="9em">{_('Select all NVTs')}</TableHead>
+            <TableHead align="center">{_('Actions')}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {families.map(family => {
+            const {name} = family;
+            const configFamily = configFamilies[name];
+            return (
+              <NvtFamily
+                key={name}
+                familyName={family.name}
+                familyMaxNvtCount={family.maxNvtCount}
+                familyNvtCount={
+                  isDefined(configFamily) ? configFamily.nvts.count : 0
+                }
+                title={editTitle}
+                trend={trend[name]}
+                select={select[name]}
+                onEditConfigFamilyClick={onEditConfigFamilyClick}
+                onSelectChange={onSelectChange}
+                onTrendChange={onTrendChange}
+              />
+            );
+          })}
+        </TableBody>
+      </Table>
+    </Section>
+  );
+};
 
 NvtFamilies.propTypes = {
   configFamilies: PropTypes.object.isRequired,
@@ -208,7 +193,7 @@ NvtFamilies.propTypes = {
   select: PropTypes.object.isRequired,
   trend: PropTypes.object.isRequired,
   onEditConfigFamilyClick: PropTypes.func,
-  onValueChange: PropTypes.func,
+  onValueChange: PropTypes.func.isRequired,
 };
 
 export default NvtFamilies;
