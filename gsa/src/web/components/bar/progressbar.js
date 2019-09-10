@@ -54,6 +54,16 @@ const Content = styled.div`
   }
 `;
 
+export const adjustProgress = progress => {
+  if (parseInt(progress) > 100) {
+    progress = '100';
+  }
+  if (parseInt(progress) < 0) {
+    progress = '0';
+  }
+  return progress;
+};
+
 const Progress = styled.div`
   height: 13px;
 
@@ -77,12 +87,8 @@ const Progress = styled.div`
       background = 'gray';
     }
 
-    if (progress > 100) {
-      progress = 100;
-    }
-    if (progress < 0) {
-      progress = 0;
-    }
+    progress = adjustProgress(progress);
+
     return {
       width: progress + '%',
       background,
