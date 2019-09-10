@@ -33,6 +33,7 @@ import UploadIcon from 'web/components/icon/uploadicon';
 import NewIcon from 'web/components/icon/newicon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import {
   loadEntities,
@@ -88,23 +89,26 @@ const PoliciesPage = ({
       edit,
       import: importFunc,
     }) => (
-      <EntitiesPage
-        {...props}
-        filtersFilter={SCANCONFIGS_FILTER_FILTER}
-        sectionIcon={<PolicyIcon size="large" />}
-        table={Table}
-        title={_('Policies')}
-        toolBarIcons={ToolBarIcons}
-        onError={onError}
-        onInteraction={onInteraction}
-        onPolicyImportClick={importFunc}
-        onPolicyCloneClick={clone}
-        onPolicyCreateClick={create}
-        onCreateAuditClick={createAudit}
-        onPolicyDeleteClick={deleteFunc}
-        onPolicyDownloadClick={download}
-        onPolicyEditClick={edit}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Policies')} />
+        <EntitiesPage
+          {...props}
+          filtersFilter={SCANCONFIGS_FILTER_FILTER}
+          sectionIcon={<PolicyIcon size="large" />}
+          table={Table}
+          title={_('Policies')}
+          toolBarIcons={ToolBarIcons}
+          onError={onError}
+          onInteraction={onInteraction}
+          onPolicyImportClick={importFunc}
+          onPolicyCloneClick={clone}
+          onPolicyCreateClick={create}
+          onCreateAuditClick={createAudit}
+          onPolicyDeleteClick={deleteFunc}
+          onPolicyDownloadClick={download}
+          onPolicyEditClick={edit}
+        />
+      </React.Fragment>
     )}
   </PoliciesComponent>
 );
