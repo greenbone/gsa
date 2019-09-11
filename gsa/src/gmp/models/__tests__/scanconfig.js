@@ -47,7 +47,7 @@ describe('ScanConfig model tests', () => {
     const res = [
       {
         name: 'foo',
-        trend: '1',
+        trend: 1,
         nvts: {
           count: 42,
           max: 42,
@@ -93,7 +93,7 @@ describe('ScanConfig model tests', () => {
     };
     const res = {
       name: 'foo',
-      trend: '1',
+      trend: 1,
       nvts: {
         count: 42,
         max: 42,
