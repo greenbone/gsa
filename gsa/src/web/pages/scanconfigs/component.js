@@ -109,7 +109,11 @@ class ScanConfigComponent extends React.Component {
   }
 
   closeEditConfigDialog() {
-    this.setState({editConfigDialogVisible: false});
+    this.setState({
+      editConfigDialogVisible: false,
+      config: undefined,
+      families: undefined,
+    });
   }
 
   handleCloseEditConfigDialog() {
@@ -192,7 +196,11 @@ class ScanConfigComponent extends React.Component {
   }
 
   closeEditConfigFamilyDialog() {
-    this.setState({editConfigFamilyDialogVisible: false});
+    this.setState({
+      editConfigFamilyDialogVisible: false,
+      familyName: undefined,
+      selected: undefined,
+    });
   }
 
   handleCloseEditConfigFamilyDialog() {
@@ -224,7 +232,10 @@ class ScanConfigComponent extends React.Component {
   }
 
   closeEditNvtDetailsDialog() {
-    this.setState({editNvtDetailsDialogVisible: false});
+    this.setState({
+      editNvtDetailsDialogVisible: false,
+      nvt: undefined,
+    });
   }
 
   handleCloseEditNvtDetailsDialog() {
