@@ -25,6 +25,7 @@ import {TLS_CERTIFICATES_FILTER_FILTER} from 'gmp/models/filter';
 import PropTypes from 'web/utils/proptypes';
 
 import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -73,36 +74,39 @@ const Page = ({
     onInteraction={onInteraction}
   >
     {({clone, create, delete: delete_func, download, edit, exportFunc}) => (
-      <EntitiesPage
-        {...props}
-        createFilterType="tlscertificate"
-        dashboard={() => (
-          <TlsCertificatesDashboard
-            filter={filter}
-            onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
-          />
-        )}
-        dashboardControls={() => (
-          <DashboardControls
-            dashboardId={TLS_CERTIFICATES_DASHBOARD_ID}
-            onInteraction={onInteraction}
-          />
-        )}
-        filter={filter}
-        filtersFilter={TLS_CERTIFICATES_FILTER_FILTER}
-        filterEditDialog={TlsCertificateFilterDialog}
-        sectionIcon={<TlsCertificateIcon size="large" />}
-        table={TlsCertificateTable}
-        title={_('TLS Certificates')}
-        toolBarIcons={ToolBarIcons}
-        onError={onError}
-        onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
-        onTlsCertificateDeleteClick={delete_func}
-        onTlsCertificateDownloadClick={download}
-        onTlsCertificateExportClick={exportFunc}
-      />
+      <React.Fragment>
+        <PageTitle title={_('TLS Certificates')} />
+        <EntitiesPage
+          {...props}
+          createFilterType="tlscertificate"
+          dashboard={() => (
+            <TlsCertificatesDashboard
+              filter={filter}
+              onFilterChanged={onFilterChanged}
+              onInteraction={onInteraction}
+            />
+          )}
+          dashboardControls={() => (
+            <DashboardControls
+              dashboardId={TLS_CERTIFICATES_DASHBOARD_ID}
+              onInteraction={onInteraction}
+            />
+          )}
+          filter={filter}
+          filtersFilter={TLS_CERTIFICATES_FILTER_FILTER}
+          filterEditDialog={TlsCertificateFilterDialog}
+          sectionIcon={<TlsCertificateIcon size="large" />}
+          table={TlsCertificateTable}
+          title={_('TLS Certificates')}
+          toolBarIcons={ToolBarIcons}
+          onError={onError}
+          onFilterChanged={onFilterChanged}
+          onInteraction={onInteraction}
+          onTlsCertificateDeleteClick={delete_func}
+          onTlsCertificateDownloadClick={download}
+          onTlsCertificateExportClick={exportFunc}
+        />
+      </React.Fragment>
     )}
   </TlsCertificateComponent>
 );
