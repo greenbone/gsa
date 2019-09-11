@@ -159,7 +159,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   height: 100%;
 }
 
-.c33 {
+.c34 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -168,7 +168,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c32 {
+.c33 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -235,7 +235,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   width: inherit;
 }
 
-.c31 {
+.c32 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -255,12 +255,12 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c31:focus,
-.c31:hover {
+.c32:focus,
+.c32:hover {
   border: 1px solid #393637;
 }
 
-.c31:hover {
+.c32:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -268,26 +268,26 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c31[disabled] {
+.c32[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c31 img {
+.c32 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c31:link {
+.c32:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c30 {
+.c31 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -305,18 +305,18 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c29 {
+.c30 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c29:hover {
+.c30:hover {
   color: #fff;
   background: #519032;
 }
 
-.c28 {
+.c29 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -479,9 +479,30 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   padding: 1px 8px;
+  cursor: not-allowed;
+  background-color: #eeeeee;
+  opacity: 0.65;
 }
 
 .c26:-webkit-autofill {
+  box-shadow: 0 0 0 1000px white inset;
+}
+
+.c28 {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  display: block;
+  height: 22px;
+  color: #393637;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #aaaaaa;
+  border-radius: 2px;
+  padding: 1px 8px;
+}
+
+.c28:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
@@ -575,8 +596,8 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
 
 .c13 {
   height: 13px;
-  width: 0%;
-  background: #4F91C7;
+  width: 70%;
+  background: #C83814;
 }
 
 .c11 {
@@ -671,7 +692,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
               data-testid="dialog-title-bar"
             >
               <span>
-                Edit Scan Config NVT nvt
+                Edit Scan Config NVT
               </span>
               <div
                 class="c4 c5"
@@ -712,9 +733,9 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
                               <a
                                 class="c10"
                                 data-testid="details-link"
-                                href="/nvt/1234"
+                                href="/nvt/1.2.3"
                               >
-                                nvt
+                                foo
                               </a>
                             </span>
                           </div>
@@ -764,7 +785,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
                           <div
                             class="c8"
                           >
-                            1234
+                            1.2.3
                           </div>
                         </td>
                       </tr>
@@ -773,46 +794,14 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
                           <div
                             class="c8"
                           >
-                            Version
+                            Last Modified
                           </div>
                         </td>
                         <td>
                           <div
                             class="c8"
                           >
-                            0
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div
-                            class="c8"
-                          >
-                            Notes
-                          </div>
-                        </td>
-                        <td>
-                          <div
-                            class="c8"
-                          >
-                            1
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div
-                            class="c8"
-                          >
-                            Overrides
-                          </div>
-                        </td>
-                        <td>
-                          <div
-                            class="c8"
-                          >
-                            1
+                            Sun, Sep 8, 2019 10:00 PM UTC
                           </div>
                         </td>
                       </tr>
@@ -826,6 +815,16 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
                       class="c11"
                     >
                       This is a test.
+                    </div>
+                  </div>
+                  <div>
+                    <h1>
+                      Affected Software/OS
+                    </h1>
+                    <div
+                      class="c11"
+                    >
+                      Foo
                     </div>
                   </div>
                   <div>
@@ -853,7 +852,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
                               <div
                                 class="c12"
                                 data-testid="progressbar-box"
-                                title="N/A"
+                                title="High"
                               >
                                 <div
                                   class="c13"
@@ -862,7 +861,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
                                 <div
                                   class="c14"
                                 >
-                                  N/A
+                                  7.0 (High)
                                 </div>
                               </div>
                             </div>
@@ -968,11 +967,12 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
                                           margin="5px"
                                         >
                                           <input
+                                            checked=""
                                             class="c23 c24"
                                             data-testid="radio-input"
-                                            name="timeout"
+                                            name="useDefaultTimeout"
                                             type="radio"
-                                            value="0"
+                                            value="1"
                                           />
                                         </div>
                                       </div>
@@ -1001,19 +1001,19 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
                                           margin="5px"
                                         >
                                           <input
-                                            checked=""
                                             class="c23 c24"
                                             data-testid="radio-input"
-                                            name="timeout"
+                                            name="useDefaultTimeout"
                                             type="radio"
-                                            value="1"
+                                            value="0"
                                           />
                                         </div>
                                       </div>
                                     </label>
                                     <input
                                       class="c25 c26"
-                                      name="manual_timeout"
+                                      disabled=""
+                                      name="timeout"
                                       type="text"
                                       value=""
                                     />
@@ -1033,9 +1033,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
                         <td>
                           <div
                             class="c8"
-                          >
-                            preference0
-                          </div>
+                          />
                         </td>
                         <td>
                           <div
@@ -1110,18 +1108,14 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
                         <td>
                           <div
                             class="c8"
-                          >
-                            no
-                          </div>
+                          />
                         </td>
                       </tr>
                       <tr>
                         <td>
                           <div
                             class="c8"
-                          >
-                            preference1
-                          </div>
+                          />
                         </td>
                         <td>
                           <div
@@ -1212,26 +1206,22 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
                         <td>
                           <div
                             class="c8"
-                          >
-                            1
-                          </div>
+                          />
                         </td>
                       </tr>
                       <tr>
                         <td>
                           <div
                             class="c8"
-                          >
-                            preference2
-                          </div>
+                          />
                         </td>
                         <td>
                           <div
                             class="c8"
                           >
                             <input
-                              class="c25 c26"
-                              name="preference2"
+                              class="c25 c28"
+                              name="pref 3"
                               type="text"
                               value="foo"
                             />
@@ -1240,9 +1230,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
                         <td>
                           <div
                             class="c8"
-                          >
-                            foo
-                          </div>
+                          />
                         </td>
                       </tr>
                     </tbody>
@@ -1251,17 +1239,17 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c28"
+              class="c29"
             >
               <button
-                class="c29 c30 c31"
+                class="c30 c31 c32"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c29 c30 c31"
+                class="c30 c31 c32"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -1270,10 +1258,10 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c32"
+            class="c33"
           >
             <div
-              class="c33"
+              class="c34"
             />
           </div>
         </div>
