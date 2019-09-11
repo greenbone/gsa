@@ -755,7 +755,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
               data-testid="dialog-title-bar"
             >
               <span>
-                Edit Scan Config NVT nvt
+                Foo title
               </span>
               <div
                 class="c4 c5"
