@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React, {useState} from 'react';
+import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -51,8 +51,6 @@ const CheckboxComponent = ({
   unCheckedValue,
   ...other
 }) => {
-  const [value, setValue] = useState(undefined);
-
   const notifyChange = val => {
     const {name, onChange} = other;
 
@@ -68,8 +66,6 @@ const CheckboxComponent = ({
   const handleChange = event => {
     const val = convertChecked(valueFunc(event), getCheckboxValues());
 
-    setValue(val);
-
     notifyChange(val);
   };
 
@@ -79,7 +75,6 @@ const CheckboxComponent = ({
         <StyledInput
           {...other}
           disabled={disabled}
-          value={value}
           type="checkbox"
           onChange={handleChange}
         />
