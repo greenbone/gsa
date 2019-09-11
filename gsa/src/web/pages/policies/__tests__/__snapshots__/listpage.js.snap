@@ -800,6 +800,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
         >
           <div
             class="c27"
+            data-testid="loading"
           >
             <div
               class="c28"

@@ -50,7 +50,7 @@ const StyledLayout = styled(Layout)`
 `;
 
 const Loading = () => (
-  <StyledLayout align={['center', 'center']}>
+  <StyledLayout data-testid="loading" align={['center', 'center']}>
     <Loader />
   </StyledLayout>
 );
