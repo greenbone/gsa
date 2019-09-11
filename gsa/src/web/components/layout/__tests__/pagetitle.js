@@ -43,4 +43,17 @@ describe('PageTitle tests', () => {
 
     expect(global.window.document.title).toBe(defaultTitle + ' - ' + title);
   });
+
+  test('should update value', () => {
+    const title1 = 'foo';
+    const title2 = 'bar';
+    const defaultTitle = 'Greenbone Security Assistant';
+    const {rerender} = render(<PageTitle title={title1} />);
+
+    expect(global.window.document.title).toBe(defaultTitle + ' - ' + title1);
+
+    rerender(<PageTitle title={title2} />);
+
+    expect(global.window.document.title).toBe(defaultTitle + ' - ' + title2);
+  });
 });
