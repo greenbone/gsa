@@ -68,7 +68,7 @@ class NvtPreference extends React.Component {
   }
 
   render() {
-    const {preference, value} = this.props;
+    const {preference, value = ''} = this.props;
 
     const {checked} = this.state;
     const {type} = preference;
