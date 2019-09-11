@@ -83,6 +83,36 @@ describe('EditConfigFamilyDialog component tests', () => {
     expect(baseElement).toHaveTextContent('foo');
   });
 
+  test('should render loading indicator', () => {
+    const handleClose = jest.fn();
+    const handleSave = jest.fn();
+    const handleOpenEditNvtDetailsDialog = jest.fn();
+
+    const {render} = rendererWith({capabilities: true});
+    const {baseElement, getByTestId} = render(
+      <EditConfigFamilyDialog
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        familyName="family"
+        isLoadingFamily={true}
+        nvts={[nvt, nvt2]}
+        selected={selected}
+        title="Foo title"
+        onClose={handleClose}
+        onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
+        onSave={handleSave}
+      />,
+    );
+
+    expect(baseElement).toMatchSnapshot();
+
+    expect(getByTestId('loading')).toBeInTheDocument();
+
+    expect(baseElement).not.toHaveTextContent('Config');
+    expect(baseElement).not.toHaveTextContent('foo');
+  });
+
   test('should save data', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
