@@ -72,7 +72,7 @@ const createPrefValues = (preferences = []) => {
   return preferenceValues;
 };
 
-const EditDialog = ({
+const EditNvtDetailsDialog = ({
   configId,
   configName,
   configNameLabel,
@@ -277,7 +277,7 @@ const EditDialog = ({
   );
 };
 
-EditDialog.propTypes = {
+EditNvtDetailsDialog.propTypes = {
   configId: PropTypes.string.isRequired,
   configName: PropTypes.string.isRequired,
   configNameLabel: PropTypes.string.isRequired,
@@ -305,6 +305,6 @@ EditDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-export default EditDialog;
+export default EditNvtDetailsDialog;
 
 // vim: set ts=2 sw=2 tw=80:
