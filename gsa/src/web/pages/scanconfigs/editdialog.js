@@ -83,7 +83,6 @@ const createScannerPreferenceValues = (preferences = []) => {
 
 const EditScanConfigDialog = ({
   comment = '',
-  config,
   configId,
   configFamilies,
   configIsInUse = false,
@@ -182,7 +181,7 @@ const EditScanConfigDialog = ({
               ) : (
                 configType === OPENVAS_SCAN_CONFIG_TYPE && (
                   <NvtFamilies
-                    configFamilies={config.families}
+                    configFamilies={configFamilies}
                     editTitle={editNvtFamiliesTitle}
                     families={families}
                     trend={trend}
@@ -224,7 +223,6 @@ const EditScanConfigDialog = ({
 
 EditScanConfigDialog.propTypes = {
   comment: PropTypes.string,
-  config: PropTypes.model.isRequired,
   configFamilies: PropTypes.object,
   configId: PropTypes.id.isRequired,
   configIsInUse: PropTypes.bool,
