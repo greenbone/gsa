@@ -563,7 +563,6 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
                               data-testid="enable-checkbox"
                               name="enable"
                               type="checkbox"
-                              value=""
                             />
                           </div>
                         </div>

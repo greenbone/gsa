@@ -1257,7 +1257,6 @@ exports[`EditDialog component tests should render dialog 1`] = `
                                           class="c38 c36"
                                           name="family1"
                                           type="checkbox"
-                                          value=""
                                         />
                                       </div>
                                     </div>
@@ -1387,7 +1386,6 @@ exports[`EditDialog component tests should render dialog 1`] = `
                                           class="c38 c36"
                                           name="family2"
                                           type="checkbox"
-                                          value=""
                                         />
                                       </div>
                                     </div>
@@ -1517,7 +1515,6 @@ exports[`EditDialog component tests should render dialog 1`] = `
                                           class="c38 c36"
                                           name="family3"
                                           type="checkbox"
-                                          value=""
                                         />
                                       </div>
                                     </div>
@@ -4257,7 +4254,6 @@ exports[`EditDialog component tests should render dialog for policy 1`] = `
                                           class="c38 c36"
                                           name="family1"
                                           type="checkbox"
-                                          value=""
                                         />
                                       </div>
                                     </div>
@@ -4387,7 +4383,6 @@ exports[`EditDialog component tests should render dialog for policy 1`] = `
                                           class="c38 c36"
                                           name="family2"
                                           type="checkbox"
-                                          value=""
                                         />
                                       </div>
                                     </div>
@@ -4517,7 +4512,6 @@ exports[`EditDialog component tests should render dialog for policy 1`] = `
                                           class="c38 c36"
                                           name="family3"
                                           type="checkbox"
-                                          value=""
                                         />
                                       </div>
                                     </div>

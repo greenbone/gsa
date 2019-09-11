@@ -185,7 +185,6 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
               data-testid="createnamedfiltergroup-checkbox"
               name="saveNamedFilter"
               type="checkbox"
-              value=""
             />
             <span
               class="c6"
