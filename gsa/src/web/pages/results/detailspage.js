@@ -182,7 +182,7 @@ const Details = ({entity, ...props}) => {
   const active_overrides = overrides.filter(active_filter);
   return (
     <React.Fragment>
-      <PageTitle title={_(`Result: ${entity.name}`)} />
+      <PageTitle title={_('Result: {{name}}', {name: entity.name})} />
       <Layout flex="column">
         <DetailsBlock title={_('Vulnerability')}>
           <Layout flex="column">

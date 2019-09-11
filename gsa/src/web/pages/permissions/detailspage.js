@@ -133,7 +133,9 @@ const Page = ({
           {({activeTab = 0, onActivateTab}) => {
             return (
               <React.Fragment>
-                <PageTitle title={_(`Permission: ${entity.name}`)} />
+                <PageTitle
+                  title={_('Permission: {{name}}', {name: entity.name})}
+                />
                 <Layout grow="1" flex="column">
                   <TabLayout grow="1" align={['start', 'end']}>
                     <TabList

@@ -314,7 +314,9 @@ const OvaldefPage = ({
         {({activeTab = 0, onActivateTab}) => {
           return (
             <React.Fragment>
-              <PageTitle title={_(`OVAL Definition: ${entity.title}`)} />
+              <PageTitle
+                title={_('OVAL Definition: {{title}}', {title: entity.title})}
+              />
               <Layout grow="1" flex="column">
                 <TabLayout grow="1" align={['start', 'end']}>
                   <TabList

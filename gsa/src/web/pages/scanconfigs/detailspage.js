@@ -341,7 +341,9 @@ const Page = ({
             const {preferences} = entity;
             return (
               <React.Fragment>
-                <PageTitle title={_(`Scan Config: ${entity.name}`)} />
+                <PageTitle
+                  title={_('Scan Config: {{name}}', {name: entity.name})}
+                />
                 <Layout grow="1" flex="column">
                   <TabLayout grow="1" align={['start', 'end']}>
                     <TabList

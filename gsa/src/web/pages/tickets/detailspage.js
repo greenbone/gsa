@@ -217,7 +217,7 @@ const Page = ({
       >
         {({activeTab = 0, onActivateTab}) => (
           <React.Fragment>
-            <PageTitle title={_(`Ticket: ${entity.name}`)} />
+            <PageTitle title={_('Ticket: {{name}}', {name: entity.name})} />
             <Layout grow="1" flex="column">
               <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
