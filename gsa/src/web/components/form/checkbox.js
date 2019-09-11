@@ -20,26 +20,27 @@ import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import compose from '../../utils/compose.js';
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import {StyledElement, StyledInput, StyledTitle} from './radio.js';
+import {StyledElement, StyledInput, StyledTitle} from './radio';
 
-import Divider from '../layout/divider.js';
-import withLayout from '../layout/withLayout.js';
+import Divider from 'web/components/layout/divider';
+import withLayout from 'web/components/layout/withLayout';
 
-import withChangeHandler from './withChangeHandler.js';
-
-const convert_checked = (value, props) => {
+const convertChecked = (value, props) => {
   const {checkedValue, unCheckedValue} = props;
-
+  let val;
   if (value && isDefined(checkedValue)) {
-    value = checkedValue;
+    val = checkedValue;
   } else if (!value && isDefined(unCheckedValue)) {
-    value = unCheckedValue;
+    val = unCheckedValue;
+  } else {
+    val = value;
   }
-  return value;
+  return val;
 };
+
+const valueFunc = event => event.target.checked;
 
 const CheckboxComponent = ({
   title,
@@ -49,19 +50,44 @@ const CheckboxComponent = ({
   toolTipTitle,
   unCheckedValue,
   ...other
-}) => (
-  <StyledElement>
-    <Divider title={toolTipTitle}>
-      <StyledInput {...other} disabled={disabled} type="checkbox" />
-      {isDefined(title) && (
-        <StyledTitle data-testid="checkbox-title" disabled={disabled}>
-          {title}
-        </StyledTitle>
-      )}
-      {children}
-    </Divider>
-  </StyledElement>
-);
+}) => {
+  const notifyChange = val => {
+    const {name, onChange} = other;
+
+    if (isDefined(onChange) && !disabled) {
+      onChange(val, name);
+    }
+  };
+
+  const getCheckboxValues = () => {
+    return {checkedValue, unCheckedValue};
+  };
+
+  const handleChange = event => {
+    const val = convertChecked(valueFunc(event), getCheckboxValues());
+
+    notifyChange(val);
+  };
+
+  return (
+    <StyledElement>
+      <Divider title={toolTipTitle}>
+        <StyledInput
+          {...other}
+          disabled={disabled}
+          type="checkbox"
+          onChange={handleChange}
+        />
+        {isDefined(title) && (
+          <StyledTitle data-testid="checkbox-title" disabled={disabled}>
+            {title}
+          </StyledTitle>
+        )}
+        {children}
+      </Divider>
+    </StyledElement>
+  );
+};
 
 CheckboxComponent.propTypes = {
   checkedValue: PropTypes.any,
@@ -73,12 +99,6 @@ CheckboxComponent.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default compose(
-  withLayout(),
-  withChangeHandler({
-    convert_func: convert_checked,
-    value_func: event => event.target.checked,
-  }),
-)(CheckboxComponent);
+export default withLayout()(CheckboxComponent);
 
 // vim: set ts=2 sw=2 tw=80:

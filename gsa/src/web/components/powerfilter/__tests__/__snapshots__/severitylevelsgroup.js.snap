@@ -238,7 +238,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
                 class="c6 c7"
                 name="h"
                 type="checkbox"
-                value=""
               />
               <div
                 class="c8"
@@ -262,7 +261,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
                 class="c6 c7"
                 name="m"
                 type="checkbox"
-                value=""
               />
               <div
                 class="c9"
@@ -286,7 +284,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
                 class="c6 c7"
                 name="l"
                 type="checkbox"
-                value=""
               />
               <div
                 class="c10"
@@ -310,7 +307,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
                 class="c6 c7"
                 name="g"
                 type="checkbox"
-                value=""
               />
               <div
                 class="c11"
@@ -334,7 +330,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
                 class="c6 c7"
                 name="f"
                 type="checkbox"
-                value=""
               />
               <div
                 class="c11"

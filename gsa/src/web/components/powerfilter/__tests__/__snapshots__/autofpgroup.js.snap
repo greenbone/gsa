@@ -234,7 +234,6 @@ exports[`AutoFpGroup tests should render 1`] = `
                 class="c7 c8"
                 name="autofp"
                 type="checkbox"
-                value=""
               />
               <span
                 class="c9"
