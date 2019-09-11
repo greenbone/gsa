@@ -206,7 +206,7 @@ const CvePage = ({
         {({activeTab = 0, onActivateTab}) => {
           return (
             <React.Fragment>
-              <PageTitle title={_(`CVE: ${entity.name}`)} />
+              <PageTitle title={_('CVE: {{name}}', {name: entity.name})} />
               <Layout grow="1" flex="column">
                 <TabLayout grow="1" align={['start', 'end']}>
                   <TabList

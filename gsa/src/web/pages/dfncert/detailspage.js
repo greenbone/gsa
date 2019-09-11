@@ -151,7 +151,9 @@ const DfnCertAdvPage = ({
         {({activeTab = 0, onActivateTab}) => {
           return (
             <React.Fragment>
-              <PageTitle title={_(`DFN-CERT Advisory: ${entity.title}`)} />
+              <PageTitle
+                title={_('DFN-CERT Advisory: {{title}}', {title: entity.title})}
+              />
               <Layout grow="1" flex="column">
                 <TabLayout grow="1" align={['start', 'end']}>
                   <TabList
