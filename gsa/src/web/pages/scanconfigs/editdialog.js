@@ -81,7 +81,7 @@ const createScannerPreferenceValues = (preferences = []) => {
   return values;
 };
 
-const EditDialog = ({
+const EditScanConfigDialog = ({
   comment = '',
   config,
   configId,
@@ -222,7 +222,7 @@ const EditDialog = ({
   );
 };
 
-EditDialog.propTypes = {
+EditScanConfigDialog.propTypes = {
   comment: PropTypes.string,
   config: PropTypes.model.isRequired,
   configFamilies: PropTypes.object,
@@ -249,6 +249,6 @@ EditDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-export default EditDialog;
+export default EditScanConfigDialog;
 
 // vim: set ts=2 sw=2 tw=80:
