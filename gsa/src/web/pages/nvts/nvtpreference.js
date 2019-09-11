@@ -32,13 +32,14 @@ import PasswordField from 'web/components/form/passwordfield';
 import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 import YesNoRadio from 'web/components/form/yesnoradio';
-import {noop_convert} from 'web/components/form/withChangeHandler';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+
+const noop_convert = value => value;
 
 class NvtPreference extends React.Component {
   constructor(...args) {
