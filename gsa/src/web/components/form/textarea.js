@@ -17,16 +17,17 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import React, {useState} from 'react';
+import {isDefined} from 'gmp/utils/identity';
+import PropTypes from 'web/utils/proptypes';
+
 import styled from 'styled-components';
 
-import compose from 'web/utils/compose';
 import Theme from 'web/utils/theme';
 
 import withLayout from 'web/components/layout/withLayout';
 
 import {DISABLED_OPACTIY} from './field';
-
-import withChangeHandler from './withChangeHandler';
 
 const StyledTextArea = styled.textarea`
   display: block;
@@ -42,9 +43,33 @@ const StyledTextArea = styled.textarea`
   opacity: ${props => (props.disabled ? DISABLED_OPACTIY : undefined)};
 `;
 
-export default compose(
-  withLayout(),
-  withChangeHandler(),
-)(StyledTextArea);
+const TextArea = props => {
+  const [value, setValue] = useState(props.value);
+  const notifyChange = val => {
+    const {name, onChange, disabled = false} = props;
+
+    if (isDefined(onChange) && !disabled) {
+      onChange(val, name);
+    }
+  };
+  const handleChange = event => {
+    const val = event.target.value;
+
+    setValue(val);
+
+    notifyChange(val);
+  };
+
+  return <StyledTextArea {...props} value={value} onChange={handleChange} />;
+};
+
+TextArea.propTypes = {
+  disabled: PropTypes.bool,
+  name: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+};
+
+export default withLayout()(TextArea);
 
 // vim: set ts=2 sw=2 tw=80:
