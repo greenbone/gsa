@@ -30,6 +30,8 @@ import DashboardControls from 'web/components/dashboard/controls';
 import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
 import ManualIcon from 'web/components/icon/manualicon';
 
+import PageTitle from 'web/components/layout/pagetitle';
+
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -51,32 +53,35 @@ const ToolBarIcons = props => (
 );
 
 const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
-  <EntitiesPage
-    {...props}
-    createFilterType="info"
-    dashboard={() => (
-      <CertBundDashboard
-        filter={filter}
-        onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
-      />
-    )}
-    dashboardControls={() => (
-      <DashboardControls
-        dashboardId={CERTBUND_DASHBOARD_ID}
-        onInteraction={onInteraction}
-      />
-    )}
-    filter={filter}
-    filterEditDialog={CertBundFilterDialog}
-    filtersFilter={CERTBUND_FILTER_FILTER}
-    sectionIcon={<CertBundAdvIcon size="large" />}
-    table={CertBundTable}
-    title={_('CERT-Bund Advisories')}
-    toolBarIcons={ToolBarIcons}
-    onFilterChanged={onFilterChanged}
-    onInteraction={onInteraction}
-  />
+  <React.Fragment>
+    <PageTitle title={_('CERT-Bund Advisories')} />
+    <EntitiesPage
+      {...props}
+      createFilterType="info"
+      dashboard={() => (
+        <CertBundDashboard
+          filter={filter}
+          onFilterChanged={onFilterChanged}
+          onInteraction={onInteraction}
+        />
+      )}
+      dashboardControls={() => (
+        <DashboardControls
+          dashboardId={CERTBUND_DASHBOARD_ID}
+          onInteraction={onInteraction}
+        />
+      )}
+      filter={filter}
+      filterEditDialog={CertBundFilterDialog}
+      filtersFilter={CERTBUND_FILTER_FILTER}
+      sectionIcon={<CertBundAdvIcon size="large" />}
+      table={CertBundTable}
+      title={_('CERT-Bund Advisories')}
+      toolBarIcons={ToolBarIcons}
+      onFilterChanged={onFilterChanged}
+      onInteraction={onInteraction}
+    />
+  </React.Fragment>
 );
 
 Page.propTypes = {
