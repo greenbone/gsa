@@ -293,10 +293,13 @@ EditNvtDetailsDialog.propTypes = {
   nvtSummary: PropTypes.string,
   preferences: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.string.isRequired,
       default: PropTypes.any,
       hr_name: PropTypes.string,
       name: PropTypes.string.isRequired,
       value: PropTypes.any,
+      alt: PropTypes.array,
+      type: PropTypes.string,
     }),
   ),
   timeout: PropTypes.number,
