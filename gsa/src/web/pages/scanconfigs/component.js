@@ -384,6 +384,7 @@ class ScanConfigComponent extends React.Component {
       isLoadingConfig,
       isLoadingFamilies,
       isLoadingFamily,
+      isLoadingNvt,
       isLoadingScanners,
       nvt,
       scannerId,
@@ -487,18 +488,20 @@ class ScanConfigComponent extends React.Component {
             configId={config.id}
             configName={config.name}
             configNameLabel={_('Config')}
-            defaultTimeout={nvt.defaultTimeout}
-            nvtAffectedSoftware={nvt.tags.affected}
-            nvtCvssVector={nvt.tags.cvss_base_vector}
-            nvtFamily={nvt.family}
-            nvtName={nvt.name}
-            nvtLastModified={nvt.modificationTime}
-            nvtOid={nvt.oid}
-            nvtSeverity={nvt.severity}
-            nvtSummary={nvt.tags.summary}
-            nvtTags={nvt.tags}
-            preferences={nvt.preferences}
-            timeout={nvt.timeout}
+            defaultTimeout={isDefined(nvt) ? nvt.defaultTimeout : undefined}
+            isLoadingNvt={isLoadingNvt}
+            nvtAffectedSoftware={isDefined(nvt) ? nvt.tags.affected : undefined}
+            nvtCvssVector={
+              isDefined(nvt) ? nvt.tags.cvss_base_vector : undefined
+            }
+            nvtFamily={isDefined(nvt) ? nvt.family : undefined}
+            nvtName={isDefined(nvt) ? nvt.name : undefined}
+            nvtLastModified={isDefined(nvt) ? nvt.modificationTime : undefined}
+            nvtOid={isDefined(nvt) ? nvt.oid : undefined}
+            nvtSeverity={isDefined(nvt) ? nvt.severity : undefined}
+            nvtSummary={isDefined(nvt) ? nvt.tags.summary : undefined}
+            preferences={isDefined(nvt) ? nvt.preferences : undefined}
+            timeout={isDefined(nvt) ? nvt.timeout : undefined}
             title={editNvtDetailsDialogTitle}
             onClose={this.handleCloseEditNvtDetailsDialog}
             onSave={this.handleSaveConfigNvt}
