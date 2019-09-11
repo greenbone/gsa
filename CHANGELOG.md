@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- Added change method to Field and TextArea component, removed withChangeHandler [#1625](https://github.com/greenbone/gsa/pull/1625)
 - Added custom page title to all pages [#1623](https://github.com/greenbone/gsa/pull/1623/files)
 - Allow to disable reload timers [#1619](https://github.com/greenbone/gsa/pull/1619)
 - Added missing withRouter to withEntitiesContainer [#1614](https://github.com/greenbone/gsa/pull/1614)
