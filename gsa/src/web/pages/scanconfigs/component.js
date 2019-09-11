@@ -155,19 +155,26 @@ class ScanConfigComponent extends React.Component {
   }
 
   openEditConfigFamilyDialog(familyName) {
-    const {gmp} = this.props;
-    const {config} = this.state;
-
     this.handleInteraction();
 
     this.setState({
-      isLoadingFamily: true,
       editConfigFamilyDialogVisible: true,
       editConfigFamilyDialogTitle: _('Edit Scan Config Family {{name}}', {
         name: shorten(familyName),
       }),
       familyName,
     });
+
+    return this.loadFamily(familyName);
+  }
+
+  loadFamily(familyName, silent = false) {
+    const {gmp} = this.props;
+    const {config} = this.state;
+
+    this.setState(({isLoadingFamily}) => ({
+      isLoadingFamily: silent ? isLoadingFamily : true,
+    }));
 
     return gmp.scanconfig
       .editScanConfigFamilySettings({
@@ -192,6 +199,7 @@ class ScanConfigComponent extends React.Component {
           isLoadingFamily: false,
           selected: {}, // ensure selected is defined to stop loading indicator
         });
+        throw error;
       });
   }
 
@@ -209,24 +217,42 @@ class ScanConfigComponent extends React.Component {
   }
 
   openEditNvtDetailsDialog(nvtOid) {
+    this.handleInteraction();
+
+    this.setState({
+      editNvtDetailsDialogVisible: true,
+      editNvtDetailsDialogTitle: _('Edit Scan Config NVT {{nvtOid}}', {nvtOid}),
+    });
+
+    this.loadNvt(nvtOid);
+  }
+
+  loadNvt(nvtOid) {
     const {gmp} = this.props;
     const {config} = this.state;
 
-    this.handleInteraction();
+    this.setState({
+      isLoadingNvt: true,
+    });
 
     return gmp.nvt
       .getConfigNvt({
         configId: config.id,
         oid: nvtOid,
       })
-      .then(response => response.data)
-      .then(loadedNvt => {
+      .then(response => {
+        const {data: loadedNvt} = response;
+
         this.setState({
           nvt: loadedNvt,
-          editNvtDetailsDialogVisible: true,
           editNvtDetailsDialogTitle: _('Edit Scan Config NVT {{name}}', {
             name: shorten(loadedNvt.name),
           }),
+        });
+      })
+      .finally(() => {
+        this.setState({
+          isLoadingNvt: false,
         });
       });
   }
@@ -265,7 +291,7 @@ class ScanConfigComponent extends React.Component {
         familyName,
         selected,
       })
-      .then(() => this.loadEditScanConfigSettings(configId))
+      .then(() => this.loadEditScanConfigSettings(configId, true))
       .then(() => {
         this.closeEditConfigFamilyDialog();
       });
@@ -279,6 +305,7 @@ class ScanConfigComponent extends React.Component {
     preferenceValues,
   }) {
     const {gmp} = this.props;
+    const {editConfigFamilyDialogVisible, familyName} = this.state;
 
     this.handleInteraction();
 
@@ -290,10 +317,21 @@ class ScanConfigComponent extends React.Component {
         preferenceValues,
       })
       .then(() => {
-        this.closeEditNvtDetailsDialog();
-        return gmp.scanconfig.get({id: configId});
+        let promise;
+
+        const configPromise = this.loadScanConfig(configId, true);
+
+        if (editConfigFamilyDialogVisible) {
+          promise = this.loadFamily(familyName, true);
+        } else {
+          promise = configPromise;
+        }
+
+        return promise;
       })
-      .then(response => this.setState({config: response.data}));
+      .then(() => {
+        this.closeEditNvtDetailsDialog();
+      });
   }
 
   handleInteraction() {
@@ -319,48 +357,60 @@ class ScanConfigComponent extends React.Component {
           isLoadingScanners: false,
         });
       })
-      .catch(error => {
+      .finally(() => {
         this.setState({
           isLoadingScanners: false,
         });
       });
   }
 
-  loadEditScanConfigSettings(configId) {
+  loadScanConfig(configId, silent = false) {
     const {gmp} = this.props;
 
-    this.setState({
-      isLoadingConfig: true,
-      isLoadingFamilies: true,
-    });
+    this.setState(({isLoadingConfig}) => ({
+      isLoadingConfig: silent ? isLoadingConfig : true,
+    }));
 
-    gmp.scanconfig
+    return gmp.scanconfig
       .get({id: configId})
       .then(response => {
         this.setState({
           config: response.data,
-          isLoadingConfig: false,
         });
       })
-      .catch(error => {
+      .finally(() => {
         this.setState({
           isLoadingConfig: false,
         });
       });
+  }
 
-    gmp.nvtfamilies
+  loadFamilies(silent = false) {
+    const {gmp} = this.props;
+
+    this.setState(({isLoadingFamilies}) => ({
+      isLoadingFamilies: silent ? isLoadingFamilies : true,
+    }));
+
+    return gmp.nvtfamilies
       .get()
       .then(familiesResponse => {
         this.setState({
           families: familiesResponse.data,
-          isLoadingFamilies: false,
         });
       })
-      .catch(error => {
+      .finally(() => {
         this.setState({
-          isLoadingConfig: false,
+          isLoadingFamilies: false,
         });
       });
+  }
+
+  loadEditScanConfigSettings(configId, silent) {
+    return Promise.all([
+      this.loadScanConfig(configId, silent),
+      this.loadFamilies(silent),
+    ]);
   }
 
   render() {
