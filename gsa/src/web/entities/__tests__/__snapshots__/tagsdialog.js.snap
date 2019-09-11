@@ -579,6 +579,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
             >
               <div
                 class="c7"
+                data-testid="save-dialog-content"
               >
                 <div
                   class="c8"
@@ -1297,6 +1298,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
             >
               <div
                 class="c7"
+                data-testid="save-dialog-content"
               >
                 <div
                   class="c8"

@@ -770,6 +770,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
             >
               <div
                 class="c7"
+                data-testid="save-dialog-content"
               >
                 <div
                   class="c8"
@@ -1518,6 +1519,7 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
             >
               <div
                 class="c7"
+                data-testid="save-dialog-content"
               >
                 <div
                   class="c8"

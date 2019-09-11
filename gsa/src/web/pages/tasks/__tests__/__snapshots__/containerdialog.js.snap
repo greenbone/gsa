@@ -436,6 +436,7 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
             >
               <div
                 class="c7"
+                data-testid="save-dialog-content"
               >
                 <div
                   class="c8"
@@ -1205,6 +1206,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
             >
               <div
                 class="c7"
+                data-testid="save-dialog-content"
               >
                 <div
                   class="c8"

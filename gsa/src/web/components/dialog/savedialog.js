@@ -100,7 +100,10 @@ const SaveDialogContent = ({
               <DialogError error={stateError} onCloseClick={handleErrorClose} />
             )}
             <ErrorBoundary message={_('An error occurred in this dialog.')}>
-              <ScrollableContent {...heightProps}>
+              <ScrollableContent
+                data-testid="save-dialog-content"
+                {...heightProps}
+              >
                 {children({
                   values: childValues,
                   onValueChange,
