@@ -30,6 +30,7 @@ import NewIcon from 'web/components/icon/newicon';
 import TargetIcon from 'web/components/icon/targeticon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -79,25 +80,28 @@ const TargetsPage = ({
     onInteraction={onInteraction}
   >
     {({clone, create, delete: delete_func, download, edit, save}) => (
-      <EntitiesPage
-        {...props}
-        filterEditDialog={TargetsFilterDialog}
-        filtersFilter={TARGETS_FILTER_FILTER}
-        sectionIcon={<TargetIcon size="large" />}
-        table={TargetsTable}
-        title={_('Targets')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onDownloaded={onDownloaded}
-        onError={onError}
-        onInteraction={onInteraction}
-        onTargetCloneClick={clone}
-        onTargetCreateClick={create}
-        onTargetDeleteClick={delete_func}
-        onTargetDownloadClick={download}
-        onTargetEditClick={edit}
-        onTargetSaveClick={save}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Targets')} />
+        <EntitiesPage
+          {...props}
+          filterEditDialog={TargetsFilterDialog}
+          filtersFilter={TARGETS_FILTER_FILTER}
+          sectionIcon={<TargetIcon size="large" />}
+          table={TargetsTable}
+          title={_('Targets')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onInteraction={onInteraction}
+          onTargetCloneClick={clone}
+          onTargetCreateClick={create}
+          onTargetDeleteClick={delete_func}
+          onTargetDownloadClick={download}
+          onTargetEditClick={edit}
+          onTargetSaveClick={save}
+        />
+      </React.Fragment>
     )}
   </TargetComponent>
 );

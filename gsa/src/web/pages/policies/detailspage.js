@@ -23,6 +23,7 @@ import _ from 'gmp/locale';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
@@ -162,56 +163,59 @@ const Page = ({
           {({activeTab = 0, onActivateTab}) => {
             const {preferences} = entity;
             return (
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={preferences.scanner}>
-                      {_('Scanner Preferences')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={entity.family_list}>
-                      {_('NVT Families')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={preferences.nvt}>
-                      {_('NVT Preferences')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+              <React.Fragment>
+                <PageTitle title={_('Policy: {{name}}', {name: entity.name})} />
+                <Layout grow="1" flex="column">
+                  <TabLayout grow="1" align={['start', 'end']}>
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={preferences.scanner}>
+                        {_('Scanner Preferences')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={entity.family_list}>
+                        {_('NVT Families')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={preferences.nvt}>
+                        {_('NVT Preferences')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <Details entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <ScannerPreferences entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <NvtFamilies entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <NvtPreferences entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onDownloaded={onDownloaded}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <ScannerPreferences entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <NvtFamilies entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <NvtPreferences entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onDownloaded={onDownloaded}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
             );
           }}
         </EntityPage>

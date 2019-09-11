@@ -42,6 +42,7 @@ import EditIcon from 'web/components/icon/editicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -372,459 +373,464 @@ class UserSettings extends React.Component {
     const ospScanners = scanners.filter(ospScannersFilter);
 
     return (
-      <Layout flex="column">
-        <ToolBarIcons
-          capabilities={capabilities}
-          disableEditIcon={disableEditIcon}
-          onEditSettingsClick={this.openDialog}
-        />
-        <Section
-          img={<MySettingsIcon size="large" />}
-          title={_('My Settings')}
-        />
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <React.Fragment>
-            <TabLayout grow="1" align={['start', 'end']}>
-              <TabList
-                active={activeTab}
-                align={['start', 'stretch']}
-                onActivateTab={this.handleActivateTab}
-              >
-                <Tab>{_('General')}</Tab>
-                <Tab>{_('Severity')}</Tab>
-                <Tab>{_('Defaults')}</Tab>
-                {capabilities.mayAccess('filter') && <Tab>{_('Filters')}</Tab>}
-              </TabList>
-            </TabLayout>
+      <React.Fragment>
+        <PageTitle title={_('My Settings')} />
+        <Layout flex="column">
+          <ToolBarIcons
+            capabilities={capabilities}
+            disableEditIcon={disableEditIcon}
+            onEditSettingsClick={this.openDialog}
+          />
+          <Section
+            img={<MySettingsIcon size="large" />}
+            title={_('My Settings')}
+          />
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <React.Fragment>
+              <TabLayout grow="1" align={['start', 'end']}>
+                <TabList
+                  active={activeTab}
+                  align={['start', 'stretch']}
+                  onActivateTab={this.handleActivateTab}
+                >
+                  <Tab>{_('General')}</Tab>
+                  <Tab>{_('Severity')}</Tab>
+                  <Tab>{_('Defaults')}</Tab>
+                  {capabilities.mayAccess('filter') && (
+                    <Tab>{_('Filters')}</Tab>
+                  )}
+                </TabList>
+              </TabLayout>
 
-            <Tabs active={activeTab}>
-              <TabPanels>
-                <TabPanel>
-                  <Table>
-                    <colgroup width={FIRST_COL_WIDTH} />
-                    <TableBody>
-                      <TableRow>
-                        <TableData>{_('Timezone')}</TableData>
-                        <TableData>{timezone}</TableData>
-                      </TableRow>
-                      <TableRow>
-                        <TableData>{_('Password')}</TableData>
-                        <TableData>********</TableData>
-                      </TableRow>
-                      <TableRow title={userInterfaceLanguage.comment}>
-                        <TableData>{_('User Interface Language')}</TableData>
-                        <TableData>
-                          {getLangNameByCode(userInterfaceLanguage.value)}
-                        </TableData>
-                      </TableRow>
-                      <TableRow title={rowsPerPage.comment}>
-                        <TableData>{_('Rows Per Page')}</TableData>
-                        <TableData>{rowsPerPage.value}</TableData>
-                      </TableRow>
-                      <TableRow title={detailsExportFileName.comment}>
-                        <TableData>{_('Details Export File Name')}</TableData>
-                        <TableData>{detailsExportFileName.value}</TableData>
-                      </TableRow>
-                      <TableRow title={listExportFileName.comment}>
-                        <TableData>{_('List Export File Name')}</TableData>
-                        <TableData>{listExportFileName.value}</TableData>
-                      </TableRow>
-                      <TableRow title={reportExportFileName.comment}>
-                        <TableData>{_('Report Export File Name')}</TableData>
-                        <TableData>{reportExportFileName.value}</TableData>
-                      </TableRow>
-                      <TableRow title={maxRowsPerPage.comment}>
-                        <TableData>
-                          {_('Max Rows Per Page (immutable)')}
-                        </TableData>
-                        <TableData>{maxRowsPerPage.value}</TableData>
-                      </TableRow>
-                      <TableRow title={autoCacheRebuild.comment}>
-                        <TableData>{_('Auto Cache Rebuild')}</TableData>
-                        <TableData>
-                          {isDefined(autoCacheRebuild.value)
-                            ? parseYesNo(autoCacheRebuild.value) === YES_VALUE
-                              ? _('Yes')
-                              : _('No')
-                            : ''}
-                        </TableData>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TabPanel>
-                <TabPanel>
-                  <Table>
-                    <colgroup width={FIRST_COL_WIDTH} />
-                    <TableBody>
-                      <TableRow title={severityClass.comment}>
-                        <TableData>{_('Severity Class')}</TableData>
-                        <TableData>
-                          {this.getSeverityClassNameById(severityClass.value)}
-                        </TableData>
-                      </TableRow>
-                      <TableRow title={dynamicSeverity.comment}>
-                        <TableData>{_('Dynamic Severity')}</TableData>
-                        <TableData>
-                          {isDefined(dynamicSeverity.value)
-                            ? parseYesNo(dynamicSeverity.value) === YES_VALUE
-                              ? _('Yes')
-                              : _('No')
-                            : ''}
-                        </TableData>
-                      </TableRow>
-                      <TableRow title={defaultSeverity.comment}>
-                        <TableData>{_('Default Severity')}</TableData>
-                        <TableData>{defaultSeverity.value}</TableData>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TabPanel>
-
-                <TabPanel>
-                  <Table>
-                    <colgroup width={FIRST_COL_WIDTH} />
-                    <TableBody>
-                      {capabilities.mayAccess('alert') && (
-                        <SettingTableRow
-                          setting={defaultAlert}
-                          title={_('Default Alert')}
-                          type="alert"
-                        />
-                      )}
-                      {capabilities.mayAccess('credential') && (
-                        <SettingTableRow
-                          setting={defaultEsxiCredential}
-                          title={_('Default ESXi Credential')}
-                          type="credential"
-                        />
-                      )}
-                      {capabilities.mayAccess('scanconfig') && (
-                        <SettingTableRow
-                          setting={defaultOspScanConfig}
-                          title={_('Default OSP Scan Config')}
-                          type="scanconfig"
-                        />
-                      )}
-                      {capabilities.mayAccess('scanner') && (
-                        <SettingTableRow
-                          setting={defaultOspScanner}
-                          title={_('Default OSP Scanner')}
-                          type="scanner"
-                        />
-                      )}
-                      {capabilities.mayAccess('scanconfig') && (
-                        <SettingTableRow
-                          setting={defaultOpenvasScanConfig}
-                          title={_('Default OpenVAS Scan Config')}
-                          type="scanconfig"
-                        />
-                      )}
-                      {capabilities.mayAccess('scanner') && (
-                        <SettingTableRow
-                          setting={defaultOpenvasScanner}
-                          title={_('Default OpenVAS Scanner')}
-                          type="scanner"
-                        />
-                      )}
-                      {capabilities.mayAccess('portlist') && (
-                        <SettingTableRow
-                          setting={defaultPortList}
-                          title={_('Default Port List')}
-                          type="portlist"
-                        />
-                      )}
-                      {capabilities.mayAccess('reportformat') && (
-                        <SettingTableRow
-                          setting={defaultReportFormat}
-                          title={_('Default Report Format')}
-                          type="reportformat"
-                        />
-                      )}
-                      {capabilities.mayAccess('credential') && (
-                        <SettingTableRow
-                          setting={defaultSmbCredential}
-                          title={_('Default SMB Credential')}
-                          type="credential"
-                        />
-                      )}
-                      {capabilities.mayAccess('credential') && (
-                        <SettingTableRow
-                          setting={defaultSnmpCredential}
-                          title={_('Default SNMP Credential')}
-                          type="credential"
-                        />
-                      )}
-                      {capabilities.mayAccess('credential') && (
-                        <SettingTableRow
-                          setting={defaultSshCredential}
-                          title={_('Default SSH Credential')}
-                          type="credential"
-                        />
-                      )}
-                      {capabilities.mayAccess('schedule') && (
-                        <SettingTableRow
-                          setting={defaultSchedule}
-                          title={_('Default Schedule')}
-                          type="schedule"
-                        />
-                      )}
-                      {capabilities.mayAccess('target') && (
-                        <SettingTableRow
-                          setting={defaultTarget}
-                          title={_('Default Target')}
-                          type="target"
-                        />
-                      )}
-                    </TableBody>
-                  </Table>
-                </TabPanel>
-
-                {capabilities.mayAccess('filter') && (
+              <Tabs active={activeTab}>
+                <TabPanels>
                   <TabPanel>
                     <Table>
                       <colgroup width={FIRST_COL_WIDTH} />
                       <TableBody>
-                        <SettingTableRow
-                          setting={agentsFilter}
-                          title={_('Agents Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={alertsFilter}
-                          title={_('Alerts Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={configsFilter}
-                          title={_('Configs Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={credentialsFilter}
-                          title={_('Credentials Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={filtersFilter}
-                          title={_('Filters Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={groupsFilter}
-                          title={_('Groups Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={hostsFilter}
-                          title={_('Hosts Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={notesFilter}
-                          title={_('Notes Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={operatingSystemsFilter}
-                          title={_('Operating Systems Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={overridesFilter}
-                          title={_('Overrides Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={permissionsFilter}
-                          title={_('Permissions Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={portListsFilter}
-                          title={_('Port Lists Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={reportsFilter}
-                          title={_('Reports Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={reportFormatsFilter}
-                          title={_('Report Formats Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={resultsFilter}
-                          title={_('Results Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={rolesFilter}
-                          title={_('Roles Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={scannersFilter}
-                          title={_('Scanners Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={schedulesFilter}
-                          title={_('Schedules Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={tagsFilter}
-                          title={_('Tags Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={targetsFilter}
-                          title={_('Targets Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={tasksFilter}
-                          title={_('Tasks Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={ticketsFilter}
-                          title={_('Tickets Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={usersFilter}
-                          title={_('Users Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={vulnerabilitiesFilter}
-                          title={_('Vulnerabilities Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={cpeFilter}
-                          title={_('CPE Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={cveFilter}
-                          title={_('CVE Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={nvtFilter}
-                          title={_('NVT Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={ovalFilter}
-                          title={_('OVAL Definitions Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={certBundFilter}
-                          title={_('CERT-Bund Advisories Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={dfnCertFilter}
-                          title={_('DFN-CERT Advisories Filter')}
-                          type="filter"
-                        />
-                        <SettingTableRow
-                          setting={secInfoFilter}
-                          title={_('SecInfo Filter')}
-                          type="filter"
-                        />
+                        <TableRow>
+                          <TableData>{_('Timezone')}</TableData>
+                          <TableData>{timezone}</TableData>
+                        </TableRow>
+                        <TableRow>
+                          <TableData>{_('Password')}</TableData>
+                          <TableData>********</TableData>
+                        </TableRow>
+                        <TableRow title={userInterfaceLanguage.comment}>
+                          <TableData>{_('User Interface Language')}</TableData>
+                          <TableData>
+                            {getLangNameByCode(userInterfaceLanguage.value)}
+                          </TableData>
+                        </TableRow>
+                        <TableRow title={rowsPerPage.comment}>
+                          <TableData>{_('Rows Per Page')}</TableData>
+                          <TableData>{rowsPerPage.value}</TableData>
+                        </TableRow>
+                        <TableRow title={detailsExportFileName.comment}>
+                          <TableData>{_('Details Export File Name')}</TableData>
+                          <TableData>{detailsExportFileName.value}</TableData>
+                        </TableRow>
+                        <TableRow title={listExportFileName.comment}>
+                          <TableData>{_('List Export File Name')}</TableData>
+                          <TableData>{listExportFileName.value}</TableData>
+                        </TableRow>
+                        <TableRow title={reportExportFileName.comment}>
+                          <TableData>{_('Report Export File Name')}</TableData>
+                          <TableData>{reportExportFileName.value}</TableData>
+                        </TableRow>
+                        <TableRow title={maxRowsPerPage.comment}>
+                          <TableData>
+                            {_('Max Rows Per Page (immutable)')}
+                          </TableData>
+                          <TableData>{maxRowsPerPage.value}</TableData>
+                        </TableRow>
+                        <TableRow title={autoCacheRebuild.comment}>
+                          <TableData>{_('Auto Cache Rebuild')}</TableData>
+                          <TableData>
+                            {isDefined(autoCacheRebuild.value)
+                              ? parseYesNo(autoCacheRebuild.value) === YES_VALUE
+                                ? _('Yes')
+                                : _('No')
+                              : ''}
+                          </TableData>
+                        </TableRow>
                       </TableBody>
                     </Table>
                   </TabPanel>
-                )}
-              </TabPanels>
-            </Tabs>
-          </React.Fragment>
-        )}
-        {dialogVisible && !isLoading && (
-          <SettingsDialog
-            alerts={alerts}
-            filters={filters}
-            credentials={credentials}
-            openVasScanConfigs={openVasScanConfigs}
-            ospScanConfigs={ospScanConfigs}
-            openVasScanners={openVasScanners}
-            ospScanners={ospScanners}
-            portLists={portlists}
-            reportFormats={reportformats}
-            schedules={schedules}
-            targets={targets}
-            timezone={timezone}
-            userInterfaceLanguage={userInterfaceLanguage.value}
-            rowsPerPage={rowsPerPage.value}
-            maxRowsPerPage={maxRowsPerPage.value}
-            detailsExportFileName={detailsExportFileName.value}
-            listExportFileName={listExportFileName.value}
-            reportExportFileName={reportExportFileName.value}
-            autoCacheRebuild={autoCacheRebuild.value}
-            severityClass={
-              severityClass.value === '' ? undefined : severityClass.value
-            }
-            dynamicSeverity={dynamicSeverity.value}
-            defaultSeverity={defaultSeverity.value}
-            defaultAlert={defaultAlert.id}
-            defaultEsxiCredential={defaultEsxiCredential.id}
-            defaultOspScanConfig={defaultOspScanConfig.id}
-            defaultOspScanner={defaultOspScanner.id}
-            defaultOpenvasScanConfig={defaultOpenvasScanConfig.id}
-            defaultOpenvasScanner={defaultOpenvasScanner.id}
-            defaultPortList={defaultPortList.id}
-            defaultReportFormat={defaultReportFormat.id}
-            defaultSmbCredential={defaultSmbCredential.id}
-            defaultSnmpCredential={defaultSnmpCredential.id}
-            defaultSshCredential={defaultSshCredential.id}
-            defaultSchedule={defaultSchedule.id}
-            defaultTarget={defaultTarget.id}
-            agentsFilter={agentsFilter.id}
-            alertsFilter={alertsFilter.id}
-            configsFilter={configsFilter.id}
-            credentialsFilter={credentialsFilter.id}
-            filtersFilter={filtersFilter.id}
-            groupsFilter={groupsFilter.id}
-            hostsFilter={hostsFilter.id}
-            notesFilter={notesFilter.id}
-            operatingSystemsFilter={operatingSystemsFilter.id}
-            overridesFilter={overridesFilter.id}
-            permissionsFilter={permissionsFilter.id}
-            portListsFilter={portListsFilter.id}
-            reportsFilter={reportsFilter.id}
-            reportFormatsFilter={reportFormatsFilter.id}
-            resultsFilter={resultsFilter.id}
-            rolesFilter={rolesFilter.id}
-            scannersFilter={scannersFilter.id}
-            schedulesFilter={schedulesFilter.id}
-            tagsFilter={tagsFilter.id}
-            targetsFilter={targetsFilter.id}
-            tasksFilter={tasksFilter.id}
-            ticketsFilter={ticketsFilter.id}
-            usersFilter={usersFilter.id}
-            vulnerabilitiesFilter={vulnerabilitiesFilter.id}
-            cpeFilter={cpeFilter.id}
-            cveFilter={cveFilter.id}
-            nvtFilter={nvtFilter.id}
-            ovalFilter={ovalFilter.id}
-            certBundFilter={certBundFilter.id}
-            dfnCertFilter={dfnCertFilter.id}
-            secInfoFilter={secInfoFilter.id}
-            onClose={this.handleCloseDialog}
-            onSave={this.handleSaveSettings}
-            onValueChange={this.handleValueChange}
-          />
-        )}
-      </Layout>
+                  <TabPanel>
+                    <Table>
+                      <colgroup width={FIRST_COL_WIDTH} />
+                      <TableBody>
+                        <TableRow title={severityClass.comment}>
+                          <TableData>{_('Severity Class')}</TableData>
+                          <TableData>
+                            {this.getSeverityClassNameById(severityClass.value)}
+                          </TableData>
+                        </TableRow>
+                        <TableRow title={dynamicSeverity.comment}>
+                          <TableData>{_('Dynamic Severity')}</TableData>
+                          <TableData>
+                            {isDefined(dynamicSeverity.value)
+                              ? parseYesNo(dynamicSeverity.value) === YES_VALUE
+                                ? _('Yes')
+                                : _('No')
+                              : ''}
+                          </TableData>
+                        </TableRow>
+                        <TableRow title={defaultSeverity.comment}>
+                          <TableData>{_('Default Severity')}</TableData>
+                          <TableData>{defaultSeverity.value}</TableData>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TabPanel>
+
+                  <TabPanel>
+                    <Table>
+                      <colgroup width={FIRST_COL_WIDTH} />
+                      <TableBody>
+                        {capabilities.mayAccess('alert') && (
+                          <SettingTableRow
+                            setting={defaultAlert}
+                            title={_('Default Alert')}
+                            type="alert"
+                          />
+                        )}
+                        {capabilities.mayAccess('credential') && (
+                          <SettingTableRow
+                            setting={defaultEsxiCredential}
+                            title={_('Default ESXi Credential')}
+                            type="credential"
+                          />
+                        )}
+                        {capabilities.mayAccess('scanconfig') && (
+                          <SettingTableRow
+                            setting={defaultOspScanConfig}
+                            title={_('Default OSP Scan Config')}
+                            type="scanconfig"
+                          />
+                        )}
+                        {capabilities.mayAccess('scanner') && (
+                          <SettingTableRow
+                            setting={defaultOspScanner}
+                            title={_('Default OSP Scanner')}
+                            type="scanner"
+                          />
+                        )}
+                        {capabilities.mayAccess('scanconfig') && (
+                          <SettingTableRow
+                            setting={defaultOpenvasScanConfig}
+                            title={_('Default OpenVAS Scan Config')}
+                            type="scanconfig"
+                          />
+                        )}
+                        {capabilities.mayAccess('scanner') && (
+                          <SettingTableRow
+                            setting={defaultOpenvasScanner}
+                            title={_('Default OpenVAS Scanner')}
+                            type="scanner"
+                          />
+                        )}
+                        {capabilities.mayAccess('portlist') && (
+                          <SettingTableRow
+                            setting={defaultPortList}
+                            title={_('Default Port List')}
+                            type="portlist"
+                          />
+                        )}
+                        {capabilities.mayAccess('reportformat') && (
+                          <SettingTableRow
+                            setting={defaultReportFormat}
+                            title={_('Default Report Format')}
+                            type="reportformat"
+                          />
+                        )}
+                        {capabilities.mayAccess('credential') && (
+                          <SettingTableRow
+                            setting={defaultSmbCredential}
+                            title={_('Default SMB Credential')}
+                            type="credential"
+                          />
+                        )}
+                        {capabilities.mayAccess('credential') && (
+                          <SettingTableRow
+                            setting={defaultSnmpCredential}
+                            title={_('Default SNMP Credential')}
+                            type="credential"
+                          />
+                        )}
+                        {capabilities.mayAccess('credential') && (
+                          <SettingTableRow
+                            setting={defaultSshCredential}
+                            title={_('Default SSH Credential')}
+                            type="credential"
+                          />
+                        )}
+                        {capabilities.mayAccess('schedule') && (
+                          <SettingTableRow
+                            setting={defaultSchedule}
+                            title={_('Default Schedule')}
+                            type="schedule"
+                          />
+                        )}
+                        {capabilities.mayAccess('target') && (
+                          <SettingTableRow
+                            setting={defaultTarget}
+                            title={_('Default Target')}
+                            type="target"
+                          />
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TabPanel>
+
+                  {capabilities.mayAccess('filter') && (
+                    <TabPanel>
+                      <Table>
+                        <colgroup width={FIRST_COL_WIDTH} />
+                        <TableBody>
+                          <SettingTableRow
+                            setting={agentsFilter}
+                            title={_('Agents Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={alertsFilter}
+                            title={_('Alerts Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={configsFilter}
+                            title={_('Configs Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={credentialsFilter}
+                            title={_('Credentials Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={filtersFilter}
+                            title={_('Filters Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={groupsFilter}
+                            title={_('Groups Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={hostsFilter}
+                            title={_('Hosts Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={notesFilter}
+                            title={_('Notes Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={operatingSystemsFilter}
+                            title={_('Operating Systems Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={overridesFilter}
+                            title={_('Overrides Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={permissionsFilter}
+                            title={_('Permissions Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={portListsFilter}
+                            title={_('Port Lists Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={reportsFilter}
+                            title={_('Reports Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={reportFormatsFilter}
+                            title={_('Report Formats Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={resultsFilter}
+                            title={_('Results Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={rolesFilter}
+                            title={_('Roles Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={scannersFilter}
+                            title={_('Scanners Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={schedulesFilter}
+                            title={_('Schedules Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={tagsFilter}
+                            title={_('Tags Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={targetsFilter}
+                            title={_('Targets Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={tasksFilter}
+                            title={_('Tasks Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={ticketsFilter}
+                            title={_('Tickets Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={usersFilter}
+                            title={_('Users Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={vulnerabilitiesFilter}
+                            title={_('Vulnerabilities Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={cpeFilter}
+                            title={_('CPE Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={cveFilter}
+                            title={_('CVE Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={nvtFilter}
+                            title={_('NVT Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={ovalFilter}
+                            title={_('OVAL Definitions Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={certBundFilter}
+                            title={_('CERT-Bund Advisories Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={dfnCertFilter}
+                            title={_('DFN-CERT Advisories Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
+                            setting={secInfoFilter}
+                            title={_('SecInfo Filter')}
+                            type="filter"
+                          />
+                        </TableBody>
+                      </Table>
+                    </TabPanel>
+                  )}
+                </TabPanels>
+              </Tabs>
+            </React.Fragment>
+          )}
+          {dialogVisible && !isLoading && (
+            <SettingsDialog
+              alerts={alerts}
+              filters={filters}
+              credentials={credentials}
+              openVasScanConfigs={openVasScanConfigs}
+              ospScanConfigs={ospScanConfigs}
+              openVasScanners={openVasScanners}
+              ospScanners={ospScanners}
+              portLists={portlists}
+              reportFormats={reportformats}
+              schedules={schedules}
+              targets={targets}
+              timezone={timezone}
+              userInterfaceLanguage={userInterfaceLanguage.value}
+              rowsPerPage={rowsPerPage.value}
+              maxRowsPerPage={maxRowsPerPage.value}
+              detailsExportFileName={detailsExportFileName.value}
+              listExportFileName={listExportFileName.value}
+              reportExportFileName={reportExportFileName.value}
+              autoCacheRebuild={autoCacheRebuild.value}
+              severityClass={
+                severityClass.value === '' ? undefined : severityClass.value
+              }
+              dynamicSeverity={dynamicSeverity.value}
+              defaultSeverity={defaultSeverity.value}
+              defaultAlert={defaultAlert.id}
+              defaultEsxiCredential={defaultEsxiCredential.id}
+              defaultOspScanConfig={defaultOspScanConfig.id}
+              defaultOspScanner={defaultOspScanner.id}
+              defaultOpenvasScanConfig={defaultOpenvasScanConfig.id}
+              defaultOpenvasScanner={defaultOpenvasScanner.id}
+              defaultPortList={defaultPortList.id}
+              defaultReportFormat={defaultReportFormat.id}
+              defaultSmbCredential={defaultSmbCredential.id}
+              defaultSnmpCredential={defaultSnmpCredential.id}
+              defaultSshCredential={defaultSshCredential.id}
+              defaultSchedule={defaultSchedule.id}
+              defaultTarget={defaultTarget.id}
+              agentsFilter={agentsFilter.id}
+              alertsFilter={alertsFilter.id}
+              configsFilter={configsFilter.id}
+              credentialsFilter={credentialsFilter.id}
+              filtersFilter={filtersFilter.id}
+              groupsFilter={groupsFilter.id}
+              hostsFilter={hostsFilter.id}
+              notesFilter={notesFilter.id}
+              operatingSystemsFilter={operatingSystemsFilter.id}
+              overridesFilter={overridesFilter.id}
+              permissionsFilter={permissionsFilter.id}
+              portListsFilter={portListsFilter.id}
+              reportsFilter={reportsFilter.id}
+              reportFormatsFilter={reportFormatsFilter.id}
+              resultsFilter={resultsFilter.id}
+              rolesFilter={rolesFilter.id}
+              scannersFilter={scannersFilter.id}
+              schedulesFilter={schedulesFilter.id}
+              tagsFilter={tagsFilter.id}
+              targetsFilter={targetsFilter.id}
+              tasksFilter={tasksFilter.id}
+              ticketsFilter={ticketsFilter.id}
+              usersFilter={usersFilter.id}
+              vulnerabilitiesFilter={vulnerabilitiesFilter.id}
+              cpeFilter={cpeFilter.id}
+              cveFilter={cveFilter.id}
+              nvtFilter={nvtFilter.id}
+              ovalFilter={ovalFilter.id}
+              certBundFilter={certBundFilter.id}
+              dfnCertFilter={dfnCertFilter.id}
+              secInfoFilter={secInfoFilter.id}
+              onClose={this.handleCloseDialog}
+              onSave={this.handleSaveSettings}
+              onValueChange={this.handleValueChange}
+            />
+          )}
+        </Layout>
+      </React.Fragment>
     );
   }
 }

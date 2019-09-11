@@ -29,6 +29,7 @@ import VerifyIcon from 'web/components/icon/verifyicon';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -173,49 +174,52 @@ const Page = ({
         onInteraction={onInteraction}
       >
         {({activeTab = 0, onActivateTab}) => (
-          <Layout grow="1" flex="column">
-            <TabLayout grow="1" align={['start', 'end']}>
-              <TabList
-                active={activeTab}
-                align={['start', 'stretch']}
-                onActivateTab={onActivateTab}
-              >
-                <Tab>{_('Information')}</Tab>
-                <EntitiesTab entities={entity.userTags}>
-                  {_('User Tags')}
-                </EntitiesTab>
-                <EntitiesTab entities={permissions}>
-                  {_('Permissions')}
-                </EntitiesTab>
-              </TabList>
-            </TabLayout>
+          <React.Fragment>
+            <PageTitle title={_('Agent: {{name}}', {name: entity.name})} />
+            <Layout grow="1" flex="column">
+              <TabLayout grow="1" align={['start', 'end']}>
+                <TabList
+                  active={activeTab}
+                  align={['start', 'stretch']}
+                  onActivateTab={onActivateTab}
+                >
+                  <Tab>{_('Information')}</Tab>
+                  <EntitiesTab entities={entity.userTags}>
+                    {_('User Tags')}
+                  </EntitiesTab>
+                  <EntitiesTab entities={permissions}>
+                    {_('Permissions')}
+                  </EntitiesTab>
+                </TabList>
+              </TabLayout>
 
-            <Tabs active={activeTab}>
-              <TabPanels>
-                <TabPanel>
-                  <AgentDetails entity={entity} />
-                </TabPanel>
-                <TabPanel>
-                  <EntityTags
-                    entity={entity}
-                    onChanged={onChanged}
-                    onError={onError}
-                    onInteraction={onInteraction}
-                  />
-                </TabPanel>
-                <TabPanel>
-                  <EntityPermissions
-                    entity={entity}
-                    permissions={permissions}
-                    onChanged={onChanged}
-                    onDownloaded={onDownloaded}
-                    onError={onError}
-                    onInteraction={onInteraction}
-                  />
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </Layout>
+              <Tabs active={activeTab}>
+                <TabPanels>
+                  <TabPanel>
+                    <AgentDetails entity={entity} />
+                  </TabPanel>
+                  <TabPanel>
+                    <EntityTags
+                      entity={entity}
+                      onChanged={onChanged}
+                      onError={onError}
+                      onInteraction={onInteraction}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <EntityPermissions
+                      entity={entity}
+                      permissions={permissions}
+                      onChanged={onChanged}
+                      onDownloaded={onDownloaded}
+                      onError={onError}
+                      onInteraction={onInteraction}
+                    />
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </Layout>
+          </React.Fragment>
         )}
       </EntityPage>
     )}

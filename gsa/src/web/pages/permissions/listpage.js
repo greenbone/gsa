@@ -33,6 +33,7 @@ import NewIcon from 'web/components/icon/newicon';
 import PermissionIcon from 'web/components/icon/permissionicon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
@@ -84,22 +85,25 @@ const Page = ({onChanged, onDownloaded, onError, onInteraction, ...props}) => (
     onInteraction={onInteraction}
   >
     {({clone, create, delete: delete_func, download, edit}) => (
-      <EntitiesPage
-        {...props}
-        sectionIcon={<PermissionIcon size="large" />}
-        table={Table}
-        filterEditDialog={FilterDialog}
-        filtersFilter={PERMISSIONS_FILTER_FILTER}
-        title={_('Permissions')}
-        toolBarIcons={ToolBarIcons}
-        onError={onError}
-        onInteraction={onInteraction}
-        onPermissionCloneClick={clone}
-        onPermissionCreateClick={create}
-        onPermissionDeleteClick={delete_func}
-        onPermissionDownloadClick={download}
-        onPermissionEditClick={edit}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Permissions')} />
+        <EntitiesPage
+          {...props}
+          sectionIcon={<PermissionIcon size="large" />}
+          table={Table}
+          filterEditDialog={FilterDialog}
+          filtersFilter={PERMISSIONS_FILTER_FILTER}
+          title={_('Permissions')}
+          toolBarIcons={ToolBarIcons}
+          onError={onError}
+          onInteraction={onInteraction}
+          onPermissionCloneClick={clone}
+          onPermissionCreateClick={create}
+          onPermissionDeleteClick={delete_func}
+          onPermissionDownloadClick={download}
+          onPermissionEditClick={edit}
+        />
+      </React.Fragment>
     )}
   </PermissionComponent>
 );

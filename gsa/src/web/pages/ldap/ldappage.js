@@ -31,6 +31,7 @@ import ManualIcon from 'web/components/icon/manualicon';
 import Layout from 'web/components/layout/layout';
 import IconDivider from 'web/components/layout/icondivider';
 import Section from 'web/components/section/section';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import Table from 'web/components/table/simpletable';
 import TableBody from 'web/components/table/body';
@@ -159,6 +160,7 @@ class LdapAuthentication extends React.Component {
 
     return (
       <React.Fragment>
+        <PageTitle title={_('LDAP per-User Authentication')} />
         <Layout flex="column">
           {hasLdapSupport && (
             <ToolBarIcons onOpenDialogClick={this.openDialog} />

@@ -27,6 +27,8 @@ import TicketIcon from 'web/components/icon/ticketicon';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
+import PageTitle from 'web/components/layout/pagetitle';
+
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
@@ -75,38 +77,41 @@ const Page = ({
     onSolveError={onError}
   >
     {({clone, close, delete: deleteTicket, edit, solve}) => (
-      <EntitiesPage
-        {...props}
-        dashboard={() => (
-          <TicketsDashboard
-            filter={filter}
-            onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
-          />
-        )}
-        dashboardControls={() => (
-          <DashboardControls
-            dashboardId={TICKETS_DASHBOARD_ID}
-            onInteraction={onInteraction}
-          />
-        )}
-        filter={filter}
-        filterEditDialog={TicketsFilterDialogComponent}
-        filtersFilter={TICKETS_FILTER_FILTER}
-        sectionIcon={<TicketIcon size="large" />}
-        table={Table}
-        title={_('Tickets')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onError={onError}
-        onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
-        onTicketClone={clone}
-        onTicketClose={close}
-        onTicketDelete={deleteTicket}
-        onTicketEdit={edit}
-        onTicketSolve={solve}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Tickets')} />
+        <EntitiesPage
+          {...props}
+          dashboard={() => (
+            <TicketsDashboard
+              filter={filter}
+              onFilterChanged={onFilterChanged}
+              onInteraction={onInteraction}
+            />
+          )}
+          dashboardControls={() => (
+            <DashboardControls
+              dashboardId={TICKETS_DASHBOARD_ID}
+              onInteraction={onInteraction}
+            />
+          )}
+          filter={filter}
+          filterEditDialog={TicketsFilterDialogComponent}
+          filtersFilter={TICKETS_FILTER_FILTER}
+          sectionIcon={<TicketIcon size="large" />}
+          table={Table}
+          title={_('Tickets')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onError={onError}
+          onFilterChanged={onFilterChanged}
+          onInteraction={onInteraction}
+          onTicketClone={clone}
+          onTicketClose={close}
+          onTicketDelete={deleteTicket}
+          onTicketEdit={edit}
+          onTicketSolve={solve}
+        />
+      </React.Fragment>
     )}
   </TicketComponent>
 );

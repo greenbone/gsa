@@ -28,6 +28,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import DashboardControls from 'web/components/dashboard/controls';
 
 import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
@@ -55,32 +56,35 @@ const ToolBarIcons = () => (
 );
 
 const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
-  <EntitiesPage
-    {...props}
-    dashboard={() => (
-      <VulnerabilitiesDashboard
-        filter={filter}
-        onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
-      />
-    )}
-    dashboardControls={() => (
-      <DashboardControls
-        dashboardId={VULNS_DASHBOARD_ID}
-        onInteraction={onInteraction}
-      />
-    )}
-    filter={filter}
-    filterEditDialog={VulnsFilterDialog}
-    filtersFilter={VULNS_FILTER_FILTER}
-    table={VulnsTable}
-    tags={false}
-    title={_('Vulnerabilities')}
-    sectionIcon={<VulnerabilityIcon size="large" />}
-    toolBarIcons={ToolBarIcons}
-    onFilterChanged={onFilterChanged}
-    onInteraction={onInteraction}
-  />
+  <React.Fragment>
+    <PageTitle title={_('Vulnerabilities')} />
+    <EntitiesPage
+      {...props}
+      dashboard={() => (
+        <VulnerabilitiesDashboard
+          filter={filter}
+          onFilterChanged={onFilterChanged}
+          onInteraction={onInteraction}
+        />
+      )}
+      dashboardControls={() => (
+        <DashboardControls
+          dashboardId={VULNS_DASHBOARD_ID}
+          onInteraction={onInteraction}
+        />
+      )}
+      filter={filter}
+      filterEditDialog={VulnsFilterDialog}
+      filtersFilter={VULNS_FILTER_FILTER}
+      table={VulnsTable}
+      tags={false}
+      title={_('Vulnerabilities')}
+      sectionIcon={<VulnerabilityIcon size="large" />}
+      toolBarIcons={ToolBarIcons}
+      onFilterChanged={onFilterChanged}
+      onInteraction={onInteraction}
+    />
+  </React.Fragment>
 );
 
 Page.propTypes = {

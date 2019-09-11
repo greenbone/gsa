@@ -58,6 +58,7 @@ import NewIcon from 'web/components/icon/newicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import Loading from 'web/components/loading/loading';
 
@@ -400,6 +401,7 @@ class StartPage extends React.Component {
     const canAdd = dashboards.length < MAX_DASHBOARDS;
     return (
       <React.Fragment>
+        <PageTitle title={_('Dashboards')} />
         <ToolBarIcons />
         <Section title={_('Dashboards')} img={<DashboardIcon size="large" />}>
           {isLoading ? (

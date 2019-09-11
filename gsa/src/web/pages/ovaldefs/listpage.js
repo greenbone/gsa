@@ -29,6 +29,7 @@ import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import OvalDefIcon from 'web/components/icon/ovaldeficon';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import {
   loadEntities,
@@ -51,32 +52,35 @@ const ToolBarIcons = () => (
 );
 
 const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
-  <EntitiesPage
-    {...props}
-    createFilterType="info"
-    dashboard={() => (
-      <OvaldefDashboard
-        filter={filter}
-        onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
-      />
-    )}
-    dashboardControls={() => (
-      <DashboardControls
-        dashboardId={OVALDEF_DASHBOARD_ID}
-        onInteraction={onInteraction}
-      />
-    )}
-    filter={filter}
-    filterEditDialog={OvaldefFilterDialog}
-    filtersFilter={OVALDEFS_FILTER_FILTER}
-    sectionIcon={<OvalDefIcon size="large" />}
-    table={OvaldefsTable}
-    title={_('OVAL Definitions')}
-    toolBarIcons={ToolBarIcons}
-    onFilterChanged={onFilterChanged}
-    onInteraction={onInteraction}
-  />
+  <React.Fragment>
+    <PageTitle title={_('OVAL Definitions')} />
+    <EntitiesPage
+      {...props}
+      createFilterType="info"
+      dashboard={() => (
+        <OvaldefDashboard
+          filter={filter}
+          onFilterChanged={onFilterChanged}
+          onInteraction={onInteraction}
+        />
+      )}
+      dashboardControls={() => (
+        <DashboardControls
+          dashboardId={OVALDEF_DASHBOARD_ID}
+          onInteraction={onInteraction}
+        />
+      )}
+      filter={filter}
+      filterEditDialog={OvaldefFilterDialog}
+      filtersFilter={OVALDEFS_FILTER_FILTER}
+      sectionIcon={<OvalDefIcon size="large" />}
+      table={OvaldefsTable}
+      title={_('OVAL Definitions')}
+      toolBarIcons={ToolBarIcons}
+      onFilterChanged={onFilterChanged}
+      onInteraction={onInteraction}
+    />
+  </React.Fragment>
 );
 
 Page.propTypes = {

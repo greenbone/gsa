@@ -43,6 +43,7 @@ import NewIcon from 'web/components/icon/newicon';
 import UserIcon from 'web/components/icon/usericon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
@@ -196,26 +197,29 @@ class UsersPage extends React.Component {
           onInteraction={onInteraction}
         >
           {({clone, create, download, edit, save}) => (
-            <EntitiesPage
-              {...props}
-              filterEditDialog={UsersFilterDialog}
-              filtersFilter={USERS_FILTER_FILTER}
-              sectionIcon={<UserIcon size="large" />}
-              table={UsersTable}
-              title={_('Users')}
-              toolBarIcons={ToolBarIcons}
-              onChanged={onChanged}
-              onDeleteBulk={this.openConfirmDeleteDialog}
-              onDownloaded={onDownloaded}
-              onError={onError}
-              onInteraction={onInteraction}
-              onUserCloneClick={clone}
-              onUserCreateClick={create}
-              onUserDeleteClick={this.openConfirmDeleteDialog}
-              onUserDownloadClick={download}
-              onUserEditClick={edit}
-              onUserSaveClick={save}
-            />
+            <React.Fragment>
+              <PageTitle title={_('Users')} />
+              <EntitiesPage
+                {...props}
+                filterEditDialog={UsersFilterDialog}
+                filtersFilter={USERS_FILTER_FILTER}
+                sectionIcon={<UserIcon size="large" />}
+                table={UsersTable}
+                title={_('Users')}
+                toolBarIcons={ToolBarIcons}
+                onChanged={onChanged}
+                onDeleteBulk={this.openConfirmDeleteDialog}
+                onDownloaded={onDownloaded}
+                onError={onError}
+                onInteraction={onInteraction}
+                onUserCloneClick={clone}
+                onUserCreateClick={create}
+                onUserDeleteClick={this.openConfirmDeleteDialog}
+                onUserDownloadClick={download}
+                onUserEditClick={edit}
+                onUserSaveClick={save}
+              />
+            </React.Fragment>
           )}
         </UserComponent>
         {confirmDeleteDialogVisible && (

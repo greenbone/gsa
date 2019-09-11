@@ -42,6 +42,7 @@ import WizardIcon from 'web/components/icon/wizardicon';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import LinkTarget from 'web/components/link/target';
 
@@ -272,83 +273,86 @@ class PerformancePage extends React.Component {
     const {duration, reports, scannerId, startDate, endDate} = this.state;
     const sensorId = selectSaveId(scanners, scannerId, 0);
     return (
-      <Layout flex="column">
-        <ToolBar onDurationChangeClick={this.handleDurationChange} />
-        <Section
-          img={<PerformanceIcon size="large" />}
-          title={_('Performance')}
-        >
-          <StartEndTimeSelection
-            endDate={endDate}
-            timezone={this.props.timezone}
-            startDate={startDate}
-            onChanged={this.handleStartEndChange}
-          />
-
-          <FormGroup title={_('Report for Last')}>
-            <Divider>
-              <Selector
-                value="hour"
-                duration={duration}
-                onClick={this.handleDurationChange}
-              >
-                {_('Hour')}
-              </Selector>
-              <Selector
-                value="day"
-                duration={duration}
-                onClick={this.handleDurationChange}
-              >
-                {_('Day')}
-              </Selector>
-              <Selector
-                value="week"
-                duration={duration}
-                onClick={this.handleDurationChange}
-              >
-                {_('Week')}
-              </Selector>
-              <Selector
-                value="month"
-                duration={duration}
-                onClick={this.handleDurationChange}
-              >
-                {_('Month')}
-              </Selector>
-              <Selector
-                value="year"
-                duration={duration}
-                onClick={this.handleDurationChange}
-              >
-                {_('Year')}
-              </Selector>
-            </Divider>
-          </FormGroup>
-
-          <FormGroup title={_('Report for GMP Scanner')}>
-            <Select
-              name="scannerId"
-              value={sensorId}
-              items={renderSelectItems(scanners, 0)}
-              onChange={this.handleValueChange}
+      <React.Fragment>
+        <PageTitle title={_('Performance')} />
+        <Layout flex="column">
+          <ToolBar onDurationChangeClick={this.handleDurationChange} />
+          <Section
+            img={<PerformanceIcon size="large" />}
+            title={_('Performance')}
+          >
+            <StartEndTimeSelection
+              endDate={endDate}
+              timezone={this.props.timezone}
+              startDate={startDate}
+              onChanged={this.handleStartEndChange}
             />
-          </FormGroup>
 
-          {reports.map(report => (
-            <div key={report.name}>
-              <LinkTarget id={report.name} />
-              <h2>{report.title}</h2>
-              <ReportImage
-                name={report.name}
-                duration={duration}
-                scannerId={sensorId}
-                startDate={startDate}
-                endDate={endDate}
+            <FormGroup title={_('Report for Last')}>
+              <Divider>
+                <Selector
+                  value="hour"
+                  duration={duration}
+                  onClick={this.handleDurationChange}
+                >
+                  {_('Hour')}
+                </Selector>
+                <Selector
+                  value="day"
+                  duration={duration}
+                  onClick={this.handleDurationChange}
+                >
+                  {_('Day')}
+                </Selector>
+                <Selector
+                  value="week"
+                  duration={duration}
+                  onClick={this.handleDurationChange}
+                >
+                  {_('Week')}
+                </Selector>
+                <Selector
+                  value="month"
+                  duration={duration}
+                  onClick={this.handleDurationChange}
+                >
+                  {_('Month')}
+                </Selector>
+                <Selector
+                  value="year"
+                  duration={duration}
+                  onClick={this.handleDurationChange}
+                >
+                  {_('Year')}
+                </Selector>
+              </Divider>
+            </FormGroup>
+
+            <FormGroup title={_('Report for GMP Scanner')}>
+              <Select
+                name="scannerId"
+                value={sensorId}
+                items={renderSelectItems(scanners, 0)}
+                onChange={this.handleValueChange}
               />
-            </div>
-          ))}
-        </Section>
-      </Layout>
+            </FormGroup>
+
+            {reports.map(report => (
+              <div key={report.name}>
+                <LinkTarget id={report.name} />
+                <h2>{report.title}</h2>
+                <ReportImage
+                  name={report.name}
+                  duration={duration}
+                  scannerId={sensorId}
+                  startDate={startDate}
+                  endDate={endDate}
+                />
+              </div>
+            ))}
+          </Section>
+        </Layout>
+      </React.Fragment>
     );
   }
 }

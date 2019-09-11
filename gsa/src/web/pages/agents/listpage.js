@@ -32,6 +32,7 @@ import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import AgentIcon from 'web/components/icon/agenticon';
 
@@ -94,27 +95,31 @@ const AgentsPage = ({
       save,
       verify,
     }) => (
-      <EntitiesPage
-        {...props}
-        filterEditDialog={AgentsFilterDialog}
-        filtersFilter={AGENTS_FILTER_FILTER}
-        sectionIcon={<AgentIcon size="large" />}
-        table={AgentsTable}
-        title={_('Agents')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onDownloaded={onDownloaded}
-        onError={onError}
-        onAgentCloneClick={clone}
-        onAgentCreateClick={create}
-        onAgentDeleteClick={delete_func}
-        onAgentDownloadClick={download}
-        onAgentEditClick={edit}
-        onAgentInstallerDownloadClick={downloadinstaller}
-        onAgentSaveClick={save}
-        onAgentVerifyClick={verify}
-        onInteraction={onInteraction}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Agents')} />
+
+        <EntitiesPage
+          {...props}
+          filterEditDialog={AgentsFilterDialog}
+          filtersFilter={AGENTS_FILTER_FILTER}
+          sectionIcon={<AgentIcon size="large" />}
+          table={AgentsTable}
+          title={_('Agents')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onAgentCloneClick={clone}
+          onAgentCreateClick={create}
+          onAgentDeleteClick={delete_func}
+          onAgentDownloadClick={download}
+          onAgentEditClick={edit}
+          onAgentInstallerDownloadClick={downloadinstaller}
+          onAgentSaveClick={save}
+          onAgentVerifyClick={verify}
+          onInteraction={onInteraction}
+        />
+      </React.Fragment>
     )}
   </AgentComponent>
 );

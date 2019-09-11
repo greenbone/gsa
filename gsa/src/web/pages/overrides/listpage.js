@@ -35,6 +35,7 @@ import NewIcon from 'web/components/icon/newicon';
 import OverrideIcon from 'web/components/icon/overrideicon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import {
   loadEntities,
@@ -88,40 +89,43 @@ const Page = ({
     onSaved={onChanged}
   >
     {({clone, create, delete: delete_func, download, edit, save}) => (
-      <EntitiesPage
-        {...props}
-        dashboard={() => (
-          <OverridesDashboard
-            filter={filter}
-            onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
-          />
-        )}
-        dashboardControls={() => (
-          <DashboardControls
-            dashboardId={OVERRIDES_DASHBOARD_ID}
-            onInteraction={onInteraction}
-          />
-        )}
-        filter={filter}
-        filterEditDialog={FilterDialog}
-        filtersFilter={OVERRIDES_FILTER_FILTER}
-        sectionIcon={<OverrideIcon size="large" />}
-        table={OverridesTable}
-        title={_('Overrides')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onDownloaded={onDownloaded}
-        onError={onError}
-        onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
-        onOverrideCloneClick={clone}
-        onOverrideCreateClick={create}
-        onOverrideDeleteClick={delete_func}
-        onOverrideDownloadClick={download}
-        onOverrideEditClick={edit}
-        onOverrideSaveClick={save}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Overrides')} />
+        <EntitiesPage
+          {...props}
+          dashboard={() => (
+            <OverridesDashboard
+              filter={filter}
+              onFilterChanged={onFilterChanged}
+              onInteraction={onInteraction}
+            />
+          )}
+          dashboardControls={() => (
+            <DashboardControls
+              dashboardId={OVERRIDES_DASHBOARD_ID}
+              onInteraction={onInteraction}
+            />
+          )}
+          filter={filter}
+          filterEditDialog={FilterDialog}
+          filtersFilter={OVERRIDES_FILTER_FILTER}
+          sectionIcon={<OverrideIcon size="large" />}
+          table={OverridesTable}
+          title={_('Overrides')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onFilterChanged={onFilterChanged}
+          onInteraction={onInteraction}
+          onOverrideCloneClick={clone}
+          onOverrideCreateClick={create}
+          onOverrideDeleteClick={delete_func}
+          onOverrideDownloadClick={download}
+          onOverrideEditClick={edit}
+          onOverrideSaveClick={save}
+        />
+      </React.Fragment>
     )}
   </OverrideComponent>
 );
