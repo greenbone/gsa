@@ -109,7 +109,7 @@ class Nvt extends React.Component {
 
 Nvt.propTypes = {
   nvt: PropTypes.object.isRequired,
-  selected: PropTypes.yesno.isRequired,
+  selected: PropTypes.yesno,
   onEditNvtDetailsClick: PropTypes.func,
   onSelectedChange: PropTypes.func,
 };
@@ -292,8 +292,8 @@ EditScanConfigFamilyDialog.propTypes = {
   configNameLabel: PropTypes.string.isRequired,
   familyName: PropTypes.string,
   isLoadingFamily: PropTypes.bool,
-  nvts: PropTypes.array.isRequired,
-  selected: PropTypes.object.isRequired,
+  nvts: PropTypes.array,
+  selected: PropTypes.object,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onEditNvtDetailsClick: PropTypes.func,
