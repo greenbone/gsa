@@ -292,7 +292,7 @@ class ScanConfigComponent extends React.Component {
     }
   }
 
-  loadScanners(dialog) {
+  loadScanners() {
     const {gmp} = this.props;
 
     this.setState({isLoadingScanners: true});
