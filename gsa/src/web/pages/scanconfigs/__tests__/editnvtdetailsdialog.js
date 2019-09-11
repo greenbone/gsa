@@ -51,7 +51,7 @@ describe('EditNvtDetailsDialog component tests', () => {
 
     store.dispatch(setTimezone('UTC'));
 
-    const {baseElement} = render(
+    const {baseElement, getByTestId} = render(
       <EditNvtDetailsDialog
         configId="c1"
         configName="foo"
@@ -74,9 +74,57 @@ describe('EditNvtDetailsDialog component tests', () => {
 
     expect(baseElement).toMatchSnapshot();
 
-    expect(baseElement).toHaveTextContent('Config');
-    expect(baseElement).toHaveTextContent('foo');
-    expect(baseElement).toHaveTextContent('Edit Scan Config NVT');
+    const titleBar = getByTestId('dialog-title-bar');
+    expect(titleBar).toHaveTextContent('Edit Scan Config NVT');
+
+    const content = getByTestId('save-dialog-content');
+
+    expect(content).toHaveTextContent('Config');
+    expect(content).toHaveTextContent('foo');
+  });
+
+  test('should render loading indicator', () => {
+    const handleClose = jest.fn();
+    const handleSave = jest.fn();
+
+    const {render, store} = rendererWith({
+      capabilities: true,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(setTimezone('UTC'));
+
+    const {baseElement, getByTestId} = render(
+      <EditNvtDetailsDialog
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        isLoadingNvt={true}
+        nvtAffectedSoftware="Foo"
+        nvtCvssVector="AV:N/AC:L/Au:N/C:N/I:N/A:N"
+        nvtFamily="family"
+        nvtLastModified={modified}
+        nvtName="foo"
+        nvtOid="1.2.3"
+        nvtSeverity={7.0}
+        nvtSummary="This is a test."
+        preferences={preferences}
+        title="Edit Scan Config NVT"
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
+
+    expect(baseElement).toMatchSnapshot();
+
+    const titleBar = getByTestId('dialog-title-bar');
+    expect(titleBar).toHaveTextContent('Edit Scan Config NVT');
+
+    const content = getByTestId('save-dialog-content');
+
+    expect(content).not.toHaveTextContent('Config');
+    expect(content).not.toHaveTextContent('foo');
   });
 
   test('should save data', () => {
