@@ -19,6 +19,7 @@
 import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
+  EMPTY_SCAN_CONFIG_ID,
 } from 'gmp/models/scanconfig';
 
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
@@ -42,7 +43,6 @@ describe('PolicyCommand tests', () => {
     const cmd = new PolicyCommand(fakeHttp);
     return cmd
       .create({
-        basePolicy: 'uuid1',
         comment: 'bar',
         name: 'foo',
       })
@@ -50,41 +50,9 @@ describe('PolicyCommand tests', () => {
         expect(fakeHttp.request).toHaveBeenCalledWith('post', {
           data: {
             cmd: 'create_config',
-            base: 'uuid1',
+            base: EMPTY_SCAN_CONFIG_ID,
             comment: 'bar',
             name: 'foo',
-            scanner_id: undefined,
-            usage_type: 'policy',
-          },
-        });
-
-        const {data} = resp;
-        expect(data.id).toEqual('foo');
-      });
-  });
-
-  test('should create new policy with all parameters', () => {
-    const response = createActionResultResponse();
-    const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
-    const cmd = new PolicyCommand(fakeHttp);
-    return cmd
-      .create({
-        basePolicy: 'uuid1',
-        comment: 'bar',
-        name: 'foo',
-        scannerId: 's1',
-      })
-      .then(resp => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'create_config',
-            base: 'uuid1',
-            comment: 'bar',
-            name: 'foo',
-            scanner_id: 's1',
             usage_type: 'policy',
           },
         });
