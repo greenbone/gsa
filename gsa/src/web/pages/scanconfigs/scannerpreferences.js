@@ -143,15 +143,15 @@ const ScannerPreferences = ({
   </Section>
 );
 
+export const ScannerPreferencePropType = PropTypes.shape({
+  default: PropTypes.any,
+  hr_name: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.any,
+});
+
 ScannerPreferences.propTypes = {
-  preferences: PropTypes.arrayOf(
-    PropTypes.shape({
-      default: PropTypes.any,
-      hr_name: PropTypes.string,
-      name: PropTypes.string,
-      value: PropTypes.any,
-    }),
-  ),
+  preferences: PropTypes.arrayOf(ScannerPreferencePropType),
   values: PropTypes.object,
   onValuesChange: PropTypes.func.isRequired,
 };

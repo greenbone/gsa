@@ -45,7 +45,9 @@ import Layout from 'web/components/layout/layout';
 
 import NvtFamilies from './nvtfamilies';
 import NvtPreferences, {NvtPreferencePropType} from './nvtpreferences';
-import ScannerPreferences from './scannerpreferences';
+import ScannerPreferences, {
+  ScannerPreferencePropType,
+} from './scannerpreferences';
 
 const createTrendAndSelect = (scanConfigFamilies = {}, allFamilies = []) => {
   const trend = {};
@@ -236,7 +238,7 @@ EditScanConfigDialog.propTypes = {
   name: PropTypes.string,
   nvtPreferences: PropTypes.arrayOf(NvtPreferencePropType),
   scannerId: PropTypes.id,
-  scannerPreferences: PropTypes.arrayOf(PropTypes.object),
+  scannerPreferences: PropTypes.arrayOf(ScannerPreferencePropType),
   scanners: PropTypes.array,
   select: PropTypes.object,
   title: PropTypes.string.isRequired,
