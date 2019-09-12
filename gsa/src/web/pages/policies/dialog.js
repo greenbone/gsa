@@ -30,7 +30,7 @@ import TextField from 'web/components/form/textfield';
 
 import Layout from 'web/components/layout/layout';
 
-const Dialog = ({
+const CreatePolicyDialog = ({
   comment = '',
   name = _('Unnamed'),
   title = _('New Policy'),
@@ -77,7 +77,7 @@ const Dialog = ({
   );
 };
 
-Dialog.propTypes = {
+CreatePolicyDialog.propTypes = {
   comment: PropTypes.string,
   name: PropTypes.string,
   title: PropTypes.string,
@@ -85,6 +85,6 @@ Dialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-export default Dialog;
+export default CreatePolicyDialog;
 
 // vim: set ts=2 sw=2 tw=80:
