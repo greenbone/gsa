@@ -701,8 +701,6 @@ class PolicyComponent extends React.Component {
               )}
               {createPolicyDialogVisible && (
                 <PolicyDialog
-                  scanner_id={scanner_id}
-                  scanners={scanners}
                   onClose={this.handleCloseCreatePolicyDialog}
                   onSave={d => {
                     this.handleInteraction();
