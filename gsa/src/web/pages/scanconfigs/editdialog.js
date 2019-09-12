@@ -41,7 +41,6 @@ import TextField from 'web/components/form/textfield';
 import Select from 'web/components/form/select';
 import YesNoRadio from 'web/components/form/yesnoradio';
 import Loading from 'web/components/loading/loading';
-import {noop_convert} from 'web/components/form/withChangeHandler';
 
 import EditIcon from 'web/components/icon/editicon';
 
@@ -65,6 +64,8 @@ import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
 } from 'gmp/models/scanconfig';
+
+const noop_convert = value => value;
 
 const StyledTableData = styled(TableData)`
   overflow-wrap: break-word;

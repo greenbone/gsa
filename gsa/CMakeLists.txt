@@ -275,7 +275,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/form/textfield.js
      ${GSA_SRC_DIR}/src/web/components/form/timezoneselect.js
      ${GSA_SRC_DIR}/src/web/components/form/togglebutton.js
-     ${GSA_SRC_DIR}/src/web/components/form/withChangeHandler.js
      ${GSA_SRC_DIR}/src/web/components/form/withClickHandler.js
      ${GSA_SRC_DIR}/src/web/components/form/withDownload.js
      ${GSA_SRC_DIR}/src/web/components/form/yesnoradio.js
