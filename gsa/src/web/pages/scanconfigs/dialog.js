@@ -39,7 +39,7 @@ import {
   EMPTY_SCAN_CONFIG_ID,
 } from 'gmp/models/scanconfig';
 
-const Dialog = ({
+const CreateScanConfigDialog = ({
   baseScanConfig = EMPTY_SCAN_CONFIG_ID,
   comment = '',
   name = _('Unnamed'),
@@ -128,7 +128,7 @@ const Dialog = ({
   );
 };
 
-Dialog.propTypes = {
+CreateScanConfigDialog.propTypes = {
   baseScanConfig: PropTypes.oneOf([
     FULL_AND_FAST_SCAN_CONFIG_ID,
     EMPTY_SCAN_CONFIG_ID,
@@ -143,6 +143,6 @@ Dialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-export default Dialog;
+export default CreateScanConfigDialog;
 
 // vim: set ts=2 sw=2 tw=80:
