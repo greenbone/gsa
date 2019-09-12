@@ -24,7 +24,8 @@ import {isEmpty} from '../utils/string';
 import {parseInt} from '../parser';
 
 import Model from '../model';
-import {parseCount} from './scanconfig';
+
+import {parseCount, parseTrend} from './scanconfig';
 
 class Policy extends Model {
   static entityType = 'policy';
@@ -41,7 +42,7 @@ class Policy extends Model {
         const {name} = family;
         const new_family = {
           name,
-          trend: family.growing,
+          trend: parseTrend(family.growing),
           nvts: {
             count: parseCount(family.nvt_count),
             max: parseCount(family.max_nvt_count),
@@ -56,7 +57,7 @@ class Policy extends Model {
 
     if (isDefined(ret.family_count)) {
       families.count = parseCount(ret.family_count.__text);
-      families.trend = ret.family_count.growing;
+      families.trend = parseTrend(ret.family_count.growing);
 
       delete ret.family_count;
     } else {
@@ -68,7 +69,7 @@ class Policy extends Model {
     if (isDefined(ret.nvt_count)) {
       ret.nvts = {
         count: parseCount(ret.nvt_count.__text),
-        trend: ret.nvt_count.growing,
+        trend: parseTrend(ret.nvt_count.growing),
       };
 
       delete ret.nvt_count;
