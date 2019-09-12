@@ -18,8 +18,6 @@
  */
 import React from 'react';
 
-import {EMPTY_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
-
 import {render, fireEvent} from 'web/utils/testing';
 
 import CreatePolicyDialog from '../dialog';
@@ -31,8 +29,6 @@ describe('CreatePolicyDialog component tests', () => {
 
     const {baseElement} = render(
       <CreatePolicyDialog
-        base={EMPTY_SCAN_CONFIG_ID}
-        scanner_id={'1'}
         title={'New Policy'}
         onClose={handleClose}
         onSave={handleSave}
@@ -48,8 +44,6 @@ describe('CreatePolicyDialog component tests', () => {
 
     const {getByTestId} = render(
       <CreatePolicyDialog
-        base={EMPTY_SCAN_CONFIG_ID}
-        scanner_id={'1'}
         title={'New Policy'}
         onClose={handleClose}
         onSave={handleSave}
@@ -69,8 +63,6 @@ describe('CreatePolicyDialog component tests', () => {
 
     const {getByTestId} = render(
       <CreatePolicyDialog
-        base={EMPTY_SCAN_CONFIG_ID}
-        scanner_id={'1'}
         title={'New Policy'}
         onClose={handleClose}
         onSave={handleSave}
@@ -90,8 +82,6 @@ describe('CreatePolicyDialog component tests', () => {
 
     const {getByName, getByTestId} = render(
       <CreatePolicyDialog
-        base={EMPTY_SCAN_CONFIG_ID}
-        scanner_id={'1'}
         title={'New Policy'}
         onClose={handleClose}
         onSave={handleSave}
@@ -108,10 +98,8 @@ describe('CreatePolicyDialog component tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      base: EMPTY_SCAN_CONFIG_ID,
       comment: 'bar',
       name: 'foo',
-      scanner_id: '1',
     });
   });
 });
