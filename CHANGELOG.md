@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Switch tooltips for fold and unfold icon, change task trend options in filter dialog to make them easier to understand [#1627](https://github.com/greenbone/gsa/pull/1627)
+- Improve edit scanconfig dialogs to open immediately and show loading indicators [#1624](https://github.com/greenbone/gsa/pull/1624)
 - Reuse permissions, reloadInterval and compareAlerts from task details and detailspage for audit details and detailspage [#1607](https://github.com/greenbone/gsa/pull/1607)
 - Replaced savedialogcontent class with hooks [#1602](https://github.com/greenbone/gsa/pull/1602)
 - TicketStatusGroup updated with new filter strings [#1594](https://github.com/greenbone/gsa/pull/1594)
