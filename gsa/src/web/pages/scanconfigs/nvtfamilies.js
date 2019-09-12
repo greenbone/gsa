@@ -51,7 +51,7 @@ import PropTypes from 'web/utils/proptypes';
 import Trend from './trend';
 
 const NvtFamily = ({
-  familyMaxNvtCount,
+  familyMaxNvtCount = 0,
   familyName,
   familyNvtCount = 0,
   select,
@@ -112,7 +112,7 @@ const NvtFamily = ({
 );
 
 NvtFamily.propTypes = {
-  familyMaxNvtCount: PropTypes.number.isRequired,
+  familyMaxNvtCount: PropTypes.number,
   familyName: PropTypes.string.isRequired,
   familyNvtCount: PropTypes.number,
   select: PropTypes.yesno.isRequired,
@@ -189,7 +189,12 @@ const NvtFamilies = ({
 NvtFamilies.propTypes = {
   configFamilies: PropTypes.object.isRequired,
   editTitle: PropTypes.string,
-  families: PropTypes.array.isRequired,
+  families: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      maxNvtCount: PropTypes.number,
+    }),
+  ),
   select: PropTypes.object.isRequired,
   trend: PropTypes.object.isRequired,
   onEditConfigFamilyClick: PropTypes.func,

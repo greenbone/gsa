@@ -231,7 +231,12 @@ EditScanConfigDialog.propTypes = {
   configType: PropTypes.number,
   editNvtDetailsTitle: PropTypes.string.isRequired,
   editNvtFamiliesTitle: PropTypes.string.isRequired,
-  families: PropTypes.array,
+  families: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      maxNvtCount: PropTypes.number,
+    }),
+  ),
   isLoadingConfig: PropTypes.bool,
   isLoadingFamilies: PropTypes.bool,
   isLoadingScanners: PropTypes.bool,
