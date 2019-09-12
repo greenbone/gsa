@@ -240,7 +240,6 @@ EditScanConfigDialog.propTypes = {
   scanners: PropTypes.array,
   select: PropTypes.object,
   title: PropTypes.string.isRequired,
-  trend: PropTypes.object,
   onClose: PropTypes.func.isRequired,
   onEditConfigFamilyClick: PropTypes.func,
   onEditNvtDetailsClick: PropTypes.func,
