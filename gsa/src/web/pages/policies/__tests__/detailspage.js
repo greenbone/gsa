@@ -103,7 +103,13 @@ const preferences = {
         name: 'nvt2',
       },
     },
-    {name: 'scannerpref0', value: 0, nvt: {}},
+    {
+      name: 'scannerpref0',
+      hr_name: 'Scanner Preference 1',
+      value: 0,
+      default: 0,
+      nvt: {},
+    },
   ],
 };
 
