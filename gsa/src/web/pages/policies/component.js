@@ -25,12 +25,11 @@ import _ from 'gmp/locale';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 
-import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-import {isEmpty, shorten} from 'gmp/utils/string';
+import {shorten} from 'gmp/utils/string';
 import {selectSaveId} from 'gmp/utils/id';
 
-import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import {
   ospScannersFilter,
@@ -70,16 +69,21 @@ import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
 
+import AlertComponent from 'web/pages/alerts/component';
+
+import AuditDialog from 'web/pages/audits/dialog';
+
+import {createSelectedNvts} from 'web/pages/scanconfigs/component';
 import EditPolicyFamilyDialog from 'web/pages/scanconfigs/editconfigfamilydialog';
 import EditPolicyDialog from 'web/pages/scanconfigs/editdialog';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/editnvtdetailsdialog';
-import AuditDialog from 'web/pages/audits/dialog';
 import ImportDialog from 'web/pages/scanconfigs/importdialog';
-import PolicyDialog from 'web/pages/policies/dialog';
 
 import ScheduleComponent from 'web/pages/schedules/component';
-import AlertComponent from 'web/pages/alerts/component';
+
 import TargetComponent from 'web/pages/targets/component';
+
+import PolicyDialog from './dialog';
 
 class PolicyComponent extends React.Component {
   constructor(...args) {
@@ -158,24 +162,25 @@ class PolicyComponent extends React.Component {
   }
 
   openEditPolicyDialog(policy) {
-    Promise.all([
-      this.loadEditPolicySettings(policy),
-      this.loadScanners(),
-    ]).then(([policyState, scannerState]) => {
-      this.setState({
-        ...scannerState,
-        ...policyState,
-        base: policy.base,
-        editPolicyDialogVisible: true,
-        title: _('Edit Policy {{name}}', {name: shorten(policy.name)}),
-      });
+    this.setState({
+      policy, // put policy from list with reduced data in state
+      editPolicyDialogVisible: true,
+      title: _('Edit Policy {{name}}', {name: shorten(policy.name)}),
     });
+
+    this.loadEditPolicySettings(policy.id);
+
+    this.loadScanners();
 
     this.handleInteraction();
   }
 
   closeEditPolicyDialog() {
-    this.setState({editPolicyDialogVisible: false});
+    this.setState({
+      editPolicyDialogVisible: false,
+      policy: undefined,
+      families: undefined,
+    });
   }
 
   handleCloseEditPolicyDialog() {
@@ -184,12 +189,11 @@ class PolicyComponent extends React.Component {
   }
 
   openCreatePolicyDialog() {
-    this.loadScanners().then(state =>
-      this.setState({
-        ...state,
-        createPolicyDialogVisible: true,
-      }),
-    );
+    this.loadScanners();
+
+    this.setState({
+      createPolicyDialogVisible: true,
+    });
 
     this.handleInteraction();
   }
@@ -319,22 +323,61 @@ class PolicyComponent extends React.Component {
       .then(() => this.closeCreateAuditDialog());
   }
 
-  openEditPolicyFamilyDialog({config: policy, name}) {
-    this.loadEditPolicyFamilySettings(policy, name).then(state => {
-      this.setState({
-        ...state,
-        policy: policy,
-        editPolicyFamilyDialogVisible: true,
-        editPolicyFamilyDialogTitle: _('Edit Policy Family {{name}}', {
-          name: shorten(name),
-        }),
-      });
-    });
+  openEditPolicyFamilyDialog(familyName) {
     this.handleInteraction();
+
+    this.setState({
+      editPolicyFamilyDialogVisible: true,
+      editPolicyFamilyDialogTitle: _('Edit Policy Family {{name}}', {
+        name: shorten(familyName),
+      }),
+      familyName,
+    });
+
+    return this.loadFamily(familyName);
+  }
+
+  loadFamily(familyName, silent = false) {
+    const {gmp} = this.props;
+    const {policy} = this.state;
+
+    this.setState(({isLoadingFamily}) => ({
+      isLoadingFamily: silent ? isLoadingFamily : true,
+    }));
+
+    return gmp.policy
+      .editPolicyFamilySettings({
+        id: policy.id,
+        familyName,
+      })
+      .then(response => {
+        const {data} = response;
+        const {nvts} = data;
+
+        const policyFamily = policy.families[familyName];
+        const selected = createSelectedNvts(policyFamily, nvts);
+
+        this.setState({
+          familyNvts: data.nvts,
+          familySelectedNvts: selected,
+          isLoadingFamily: false,
+        });
+      })
+      .catch(error => {
+        this.setState({
+          isLoadingFamily: false,
+          selected: {}, // ensure selected is defined to stop loading indicator
+        });
+        throw error;
+      });
   }
 
   closeEditPolicyFamilyDialog() {
-    this.setState({editPolicyFamilyDialogVisible: false});
+    this.setState({
+      editPolicyFamilyDialogVisible: false,
+      familyName: undefined,
+      selected: undefined,
+    });
   }
 
   handleCloseEditPolicyFamilyDialog() {
@@ -342,22 +385,52 @@ class PolicyComponent extends React.Component {
     this.handleInteraction();
   }
 
-  openEditNvtDetailsDialog({config: policy, nvt}) {
-    this.loadEditPolicyNvtSettings(policy, nvt).then(state => {
-      this.setState({
-        ...state,
-        policy: policy,
-        editNvtDetailsDialogVisible: true,
-        editNvtDetailsDialogTitle: _('Edit Policy NVT {{name}}', {
-          name: shorten(nvt.name),
-        }),
-      });
-    });
+  openEditNvtDetailsDialog(nvtOid) {
     this.handleInteraction();
+
+    this.setState({
+      editNvtDetailsDialogVisible: true,
+      editNvtDetailsDialogTitle: _('Edit Policy NVT {{nvtOid}}', {nvtOid}),
+    });
+
+    this.loadNvt(nvtOid);
+  }
+
+  loadNvt(nvtOid) {
+    const {gmp} = this.props;
+    const {policy} = this.state;
+
+    this.setState({
+      isLoadingNvt: true,
+    });
+
+    return gmp.nvt
+      .getConfigNvt({
+        configId: policy.id,
+        oid: nvtOid,
+      })
+      .then(response => {
+        const {data: loadedNvt} = response;
+
+        this.setState({
+          nvt: loadedNvt,
+          editNvtDetailsDialogTitle: _('Edit Policy NVT {{name}}', {
+            name: shorten(loadedNvt.name),
+          }),
+        });
+      })
+      .finally(() => {
+        this.setState({
+          isLoadingNvt: false,
+        });
+      });
   }
 
   closeEditNvtDetailsDialog() {
-    this.setState({editNvtDetailsDialogVisible: false});
+    this.setState({
+      editNvtDetailsDialogVisible: false,
+      nvt: undefined,
+    });
   }
 
   handleCloseEditNvtDetailsDialog() {
@@ -376,43 +449,58 @@ class PolicyComponent extends React.Component {
       .then(() => this.closeImportDialog());
   }
 
-  handleSavePolicyFamily(data) {
+  handleSavePolicyFamily({familyName, configId, selected}) {
     const {gmp} = this.props;
-    const policy = data.config;
 
     this.handleInteraction();
 
     return gmp.policy
-      .savePolicyFamily(data)
-      .then(() => {
-        return this.loadEditPolicySettings(policy);
+      .savePolicyFamily({
+        id: configId,
+        familyName,
+        selected,
       })
-      .then(state => {
+      .then(() => this.loadEditPolicySettings(configId, true))
+      .then(() => {
         this.closeEditPolicyFamilyDialog();
-        this.setState({...state});
       });
   }
 
-  handleSavePolicyNvt(values) {
+  handleSavePolicyNvt({
+    configId,
+    timeout,
+    useDefaultTimeout,
+    nvtOid,
+    preferenceValues,
+  }) {
     const {gmp} = this.props;
-    const {config: policy, family_name} = values;
+    const {editPolicyFamilyDialogVisible, familyName} = this.state;
 
     this.handleInteraction();
 
     return gmp.policy
-      .savePolicyNvt(values)
-      .then(response => {
-        // update nvt timeouts in nvt family dialog
-        this.loadEditPolicyFamilySettings(policy, family_name).then(state => {
-          this.setState({state});
-        });
-
-        // update nvt preference values in edit dialog
-        this.loadEditPolicySettings(policy).then(state => {
-          this.setState({state});
-        });
+      .savePolicyNvt({
+        id: configId,
+        timeout: useDefaultTimeout === '1' ? undefined : timeout,
+        oid: nvtOid,
+        preferenceValues,
       })
-      .then(() => this.closeEditNvtDetailsDialog());
+      .then(() => {
+        let promise;
+
+        const policyPromise = this.loadPolicy(configId, true);
+
+        if (editPolicyFamilyDialogVisible) {
+          promise = this.loadFamily(familyName, true);
+        } else {
+          promise = policyPromise;
+        }
+
+        return promise;
+      })
+      .then(() => {
+        this.closeEditNvtDetailsDialog();
+      });
   }
 
   handleInteraction() {
@@ -422,140 +510,76 @@ class PolicyComponent extends React.Component {
     }
   }
 
-  loadScanners(dialog) {
+  loadScanners() {
     const {gmp} = this.props;
 
-    return gmp.scanners.getAll().then(response => {
-      let {data: scanners} = response;
-      scanners = scanners.filter(ospScannersFilter);
-      return {
-        scanners,
-        scanner_id: selectSaveId(scanners),
-      };
-    });
-  }
+    this.setState({isLoadingScanners: true});
 
-  loadEditPolicySettings(policy) {
-    const {gmp} = this.props;
-
-    return Promise.all([gmp.policy.get(policy), gmp.nvtfamilies.get()]).then(
-      ([policyResponse, familiesResponse]) => {
-        const {data: responsePolicy} = policyResponse;
-        const {data: families} = familiesResponse;
-        const trend = {};
-        const select = {};
-
-        forEach(families, family => {
-          const {name} = family;
-          const policyFamily = responsePolicy.families[name];
-
-          if (isDefined(policyFamily)) {
-            trend[name] = parseYesNo(policyFamily.trend);
-            select[name] =
-              policyFamily.nvts.count === family.max ? YES_VALUE : NO_VALUE;
-          } else {
-            trend[name] = NO_VALUE;
-            select[name] = NO_VALUE;
-          }
-        });
-
-        const scanner_preference_values = {};
-
-        forEach(responsePolicy.preferences.scanner, preference => {
-          scanner_preference_values[preference.name] = preference.value;
-        });
-
-        const state = {
-          comment: responsePolicy.comment,
-          id: policy.id,
-          name: policy.name,
-          policy: responsePolicy,
-          families,
-          trend,
-          select,
-          scanner_preference_values,
+    return gmp.scanners
+      .getAll()
+      .then(response => {
+        let {data: scanners} = response;
+        scanners = scanners.filter(ospScannersFilter);
+        return {
+          scanners,
+          scannerId: selectSaveId(scanners),
+          isLoadingScanners: false,
         };
-        return state;
-      },
-    );
+      })
+      .finally(() => {
+        this.setState({
+          isLoadingScanners: false,
+        });
+      });
   }
 
-  loadEditPolicyFamilySettings(policy, name) {
+  loadPolicy(policyId, silent = false) {
     const {gmp} = this.props;
-    const {select} = this.state;
+
+    this.setState(({isLoadingConfig}) => ({
+      isLoadingPolicy: silent ? isLoadingConfig : true,
+    }));
 
     return gmp.policy
-      .editPolicyFamilySettings({
-        id: policy.id,
-        family_name: name,
-        policy_name: policy.name,
-      })
+      .get({id: policyId})
       .then(response => {
-        const {data} = response;
-        const {nvts} = data;
-        const selected = {};
-
-        if (select[name]) {
-          forEach(nvts, nvt => {
-            selected[nvt.oid] = YES_VALUE;
-          });
-        } else {
-          forEach(nvts, nvt => {
-            selected[nvt.oid] = nvt.selected;
-          });
-        }
-
-        const state = {
-          policy: data.policy,
-          policyName: policy.name,
-          family_name: name,
-          id: policy.id,
-          nvts: data.nvts,
-          selected,
-        };
-
-        return state;
+        this.setState({
+          policy: response.data,
+        });
+      })
+      .finally(() => {
+        this.setState({
+          isLoadingPolicy: false,
+        });
       });
   }
 
-  loadEditPolicyNvtSettings(policy, nvt) {
+  loadFamilies(silent = false) {
     const {gmp} = this.props;
 
-    return gmp.nvt
-      .getConfigNvt({
-        configId: policy.id,
-        oid: nvt.oid,
-      })
-      .then(response => {
-        const {data: loadedNvt} = response;
-        const preference_values = {};
+    this.setState(({isLoadingFamilies}) => ({
+      isLoadingFamilies: silent ? isLoadingFamilies : true,
+    }));
 
-        forEach(loadedNvt.preferences, pref => {
-          let {id, value, type} = pref;
-
-          if (type === 'password' || type === 'file') {
-            value = undefined;
-          }
-
-          preference_values[pref.name] = {
-            id,
-            value,
-            type,
-          };
+    return gmp.nvtfamilies
+      .get()
+      .then(familiesResponse => {
+        this.setState({
+          families: familiesResponse.data,
         });
-
-        const state = {
-          family_name: loadedNvt.family,
-          oid: loadedNvt.oid,
-          manual_timeout: loadedNvt.timeout,
-          nvt: loadedNvt,
-          nvt_name: loadedNvt.name,
-          preference_values,
-          timeout: isEmpty(loadedNvt.timeout) ? '0' : '1',
-        };
-
-        return state;
+      })
+      .finally(() => {
+        this.setState({
+          isLoadingFamilies: false,
+        });
       });
+  }
+
+  loadEditPolicySettings(policyId, silent) {
+    return Promise.all([
+      this.loadPolicy(policyId, silent),
+      this.loadFamilies(silent),
+    ]);
   }
 
   render() {
@@ -582,11 +606,7 @@ class PolicyComponent extends React.Component {
       alterable,
       auto_delete,
       auto_delete_data,
-      base,
       comment,
-      policy,
-      policyName,
-      policyId,
       createPolicyDialogVisible,
       createAuditDialogVisible,
       editPolicyDialogVisible,
@@ -595,30 +615,32 @@ class PolicyComponent extends React.Component {
       editNvtDetailsDialogVisible,
       editNvtDetailsDialogTitle,
       families,
-      family_name,
+      familyName,
+      familyNvts,
+      familySelectedNvts,
       hostsOrdering,
       id,
       importDialogVisible,
       in_assets,
-      manual_timeout,
+      isLoadingFamilies,
+      isLoadingFamily,
+      isLoadingNvt,
+      isLoadingPolicy,
+      isLoadingScanners,
       maxChecks,
       maxHosts,
       name,
       nvt,
-      nvts,
-      preference_values,
-      scanner_id,
-      scanner_preference_values,
+      policy,
+      policyName,
+      policyId,
+      scannerId,
       scanners,
       scheduleId,
       schedulePeriods,
       sourceIface,
-      select,
-      selected,
       targetId,
-      timeout,
       title,
-      trend,
     } = this.state;
 
     return (
@@ -710,17 +732,23 @@ class PolicyComponent extends React.Component {
               )}
               {editPolicyDialogVisible && (
                 <EditPolicyDialog
-                  base={base}
-                  comment={comment}
-                  config={policy}
+                  comment={policy.comment}
+                  configFamilies={policy.families}
+                  configId={policy.id}
+                  configIsInUse={policy.isInUse()}
+                  configType={policy.policy_type}
+                  editNvtDetailsTitle={_('Edit Policy NVT Details')}
+                  editNvtFamiliesTitle={_('Edit Policy Family')}
                   families={families}
-                  name={name}
-                  scanner_id={scanner_id}
-                  scanner_preference_values={scanner_preference_values}
+                  isLoadingConfig={isLoadingPolicy}
+                  isLoadingFamilies={isLoadingFamilies}
+                  isLoadingScanners={isLoadingScanners}
+                  name={policy.name}
+                  nvtPreferences={policy.preferences.nvt}
+                  scannerId={scannerId}
+                  scannerPreferences={policy.preferences.scanner}
                   scanners={scanners}
-                  select={select}
                   title={title}
-                  trend={trend}
                   onClose={this.handleCloseEditPolicyDialog}
                   onEditConfigFamilyClick={this.openEditPolicyFamilyDialog}
                   onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
@@ -743,13 +771,13 @@ class PolicyComponent extends React.Component {
         )}
         {editPolicyFamilyDialogVisible && (
           <EditPolicyFamilyDialog
-            config={policy}
+            configId={policy.id}
             configNameLabel={_('Policy')}
-            config_name={policyName}
-            family_name={family_name}
-            id={id}
-            nvts={nvts}
-            selected={selected}
+            configName={policy.name}
+            familyName={familyName}
+            isLoadingFamily={isLoadingFamily}
+            nvts={familyNvts}
+            selected={familySelectedNvts}
             title={editPolicyFamilyDialogTitle}
             onClose={this.handleCloseEditPolicyFamilyDialog}
             onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
@@ -758,14 +786,23 @@ class PolicyComponent extends React.Component {
         )}
         {editNvtDetailsDialogVisible && (
           <EditNvtDetailsDialog
-            config={policy}
+            configId={policy.id}
+            configName={policy.name}
             configNameLabel={_('Policy')}
-            config_name={policyName}
-            family_name={family_name}
-            manual_timeout={manual_timeout}
-            nvt={nvt}
-            preference_values={preference_values}
-            timeout={timeout}
+            defaultTimeout={isDefined(nvt) ? nvt.defaultTimeout : undefined}
+            isLoadingNvt={isLoadingNvt}
+            nvtAffectedSoftware={isDefined(nvt) ? nvt.tags.affected : undefined}
+            nvtCvssVector={
+              isDefined(nvt) ? nvt.tags.cvss_base_vector : undefined
+            }
+            nvtFamily={isDefined(nvt) ? nvt.family : undefined}
+            nvtName={isDefined(nvt) ? nvt.name : undefined}
+            nvtLastModified={isDefined(nvt) ? nvt.modificationTime : undefined}
+            nvtOid={isDefined(nvt) ? nvt.oid : undefined}
+            nvtSeverity={isDefined(nvt) ? nvt.severity : undefined}
+            nvtSummary={isDefined(nvt) ? nvt.tags.summary : undefined}
+            preferences={isDefined(nvt) ? nvt.preferences : undefined}
+            timeout={isDefined(nvt) ? nvt.timeout : undefined}
             title={editNvtDetailsDialogTitle}
             onClose={this.handleCloseEditNvtDetailsDialog}
             onSave={this.handleSavePolicyNvt}

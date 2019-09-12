@@ -40,7 +40,7 @@ import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
 
-const createSelectedNvts = (configFamily, nvts) => {
+export const createSelectedNvts = (configFamily, nvts) => {
   const selected = {};
   const nvtsCount = isDefined(configFamily) ? configFamily.nvts.count : 0;
 
