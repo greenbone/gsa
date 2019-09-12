@@ -65,15 +65,17 @@ class NvtPreferenceDisplay extends React.Component {
   }
 }
 
-NvtPreferenceDisplay.propTypes = {
-  preference: PropTypes.shape({
-    nvt: PropTypes.shape({
-      oid: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-    }).isRequired,
+export const NvtPreferencePropType = PropTypes.shape({
+  nvt: PropTypes.shape({
+    oid: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    value: PropTypes.any.isRequired,
   }).isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.any.isRequired,
+});
+
+NvtPreferenceDisplay.propTypes = {
+  preference: NvtPreferencePropType.isRequired,
   title: PropTypes.string.isRequired,
   onEditNvtDetailsClick: PropTypes.func.isRequired,
 };
@@ -117,7 +119,7 @@ const NvtPreferences = ({
 
 NvtPreferences.propTypes = {
   editTitle: PropTypes.string,
-  preferences: PropTypes.array.isRequired,
+  preferences: PropTypes.arrayOf(NvtPreferencePropType),
   onEditNvtDetailsClick: PropTypes.func.isRequired,
 };
 
