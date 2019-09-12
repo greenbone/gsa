@@ -20,15 +20,12 @@ import 'core-js/features/object/entries';
 
 import logger from '../log';
 
-import {forEach, map} from '../utils/array';
+import {forEach, map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 
-import Model from '../model';
 import registerCommand from '../command';
 import {YES_VALUE, NO_VALUE} from '../parser';
 
-import {parseCounts} from '../collection/parser';
-
-import Nvt from '../models/nvt';
 import Policy from '../models/policy';
 
 import EntitiesCommand from './entities';
@@ -51,24 +48,24 @@ export class PolicyCommand extends EntityCommand {
     return this.httpPost(data);
   }
 
-  create({base, name, comment, scanner_id}) {
+  create({basePolicy, name, comment, scannerId}) {
     const data = {
       cmd: 'create_config',
-      base,
+      base: basePolicy,
       comment,
       name,
-      scanner_id,
+      scanner_id: scannerId,
       usage_type: 'policy',
     };
     log.debug('Creating policy', data);
     return this.action(data);
   }
 
-  save({id, name, comment = '', trend, select, scanner_preference_values}) {
+  save({id, name, comment = '', trend, select, scannerPreferenceValues}) {
     const data = {
       ...convert(trend, 'trend:'),
       ...convert(
-        scanner_preference_values,
+        scannerPreferenceValues,
         'preference:scanner:scanner:scanner:',
       ),
       ...convertSelect(select, 'select:'),
@@ -82,31 +79,26 @@ export class PolicyCommand extends EntityCommand {
     return this.action(data);
   }
 
-  savePolicyFamily({policy_name, family_name, id, selected}) {
+  savePolicyFamily({id, familyName, selected}) {
     const data = {
       ...convertSelect(selected, 'nvt:'),
       cmd: 'save_config_family',
-      no_redirect: '1',
       id,
-      family: family_name,
-      name: policy_name,
+      family: familyName,
     };
     log.debug('Saving scanconfigfamily', data);
     return this.httpPost(data);
   }
 
-  editPolicyFamilySettings({id, family_name, policy_name}) {
+  editPolicyFamilySettings({id, familyName}) {
     return this.httpGet({
       cmd: 'edit_config_family',
       id,
-      name: policy_name,
-      family: family_name,
+      family: familyName,
     }).then(response => {
       const {data} = response;
       const policy_resp = data.get_config_family_response;
       const settings = {};
-
-      settings.policy = new Model(policy_resp.config, 'policy');
 
       const nvts = {};
       forEach(policy_resp.get_nvts_response.nvt, nvt => {
@@ -129,28 +121,18 @@ export class PolicyCommand extends EntityCommand {
     });
   }
 
-  savePolicyNvt({
-    policy_name,
-    family_name,
-    id,
-    manual_timeout,
-    nvt_name,
-    oid,
-    preference_values,
-    timeout,
-  }) {
+  savePolicyNvt({id, timeout, oid, preferenceValues}) {
     const data = {
-      ...convertPreferences(preference_values, oid),
+      ...convertPreferences(preferenceValues, oid),
       cmd: 'save_config_nvt',
-      no_redirect: '1',
       id,
       oid,
-      name: policy_name,
-      family: family_name,
-      timeout,
+      timeout: isDefined(timeout) ? 1 : 0,
     };
 
-    data['preference:scanner:0:scanner:timeout.' + oid] = manual_timeout;
+    data['preference:scanner:0:scanner:timeout.' + oid] = isDefined(timeout)
+      ? timeout
+      : '';
 
     log.debug('Saving policynvt', data);
     return this.httpPost(data);

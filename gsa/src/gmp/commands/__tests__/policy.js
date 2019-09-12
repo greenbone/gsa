@@ -17,9 +17,17 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
+  SCANCONFIG_TREND_DYNAMIC,
+  SCANCONFIG_TREND_STATIC,
+} from 'gmp/models/scanconfig';
+
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+
+import {
   createActionResultResponse,
   createEntityResponse,
   createHttp,
+  createResponse,
 } from '../testing';
 
 import {PolicyCommand} from '../policies';
@@ -34,7 +42,7 @@ describe('PolicyCommand tests', () => {
     const cmd = new PolicyCommand(fakeHttp);
     return cmd
       .create({
-        base: 0,
+        basePolicy: 'uuid1',
         comment: 'bar',
         name: 'foo',
       })
@@ -42,7 +50,7 @@ describe('PolicyCommand tests', () => {
         expect(fakeHttp.request).toHaveBeenCalledWith('post', {
           data: {
             cmd: 'create_config',
-            base: 0,
+            base: 'uuid1',
             comment: 'bar',
             name: 'foo',
             scanner_id: undefined,
@@ -64,19 +72,19 @@ describe('PolicyCommand tests', () => {
     const cmd = new PolicyCommand(fakeHttp);
     return cmd
       .create({
-        base: 0,
+        basePolicy: 'uuid1',
         comment: 'bar',
         name: 'foo',
-        scanner_id: 1,
+        scannerId: 's1',
       })
       .then(resp => {
         expect(fakeHttp.request).toHaveBeenCalledWith('post', {
           data: {
             cmd: 'create_config',
-            base: 0,
+            base: 'uuid1',
             comment: 'bar',
             name: 'foo',
-            scanner_id: 1,
+            scanner_id: 's1',
             usage_type: 'policy',
           },
         });
@@ -92,57 +100,41 @@ describe('PolicyCommand tests', () => {
 
     expect.hasAssertions();
 
+    const trend = {
+      'AIX Local Security Checks': SCANCONFIG_TREND_DYNAMIC,
+      'Family Foo': SCANCONFIG_TREND_STATIC,
+    };
+    const select = {
+      'AIX Local Security Checks': YES_VALUE,
+      'Brute force attacks': YES_VALUE,
+      'Foo Family': NO_VALUE,
+    };
+    const scannerPreferenceValues = {
+      foo: 'bar',
+    };
+
     const cmd = new PolicyCommand(fakeHttp);
     return cmd
       .save({
-        id: '123',
+        id: 'c1',
         name: 'foo',
-        comment: 'bar',
-        trend: {},
-        select: {},
-        scanner_preference_values: {},
+        comment: 'somecomment',
+        trend,
+        select,
+        scannerPreferenceValues,
       })
       .then(resp => {
         expect(fakeHttp.request).toHaveBeenCalledWith('post', {
           data: {
             cmd: 'save_config',
-            config_id: '123',
+            config_id: 'c1',
             name: 'foo',
-            comment: 'bar',
-          },
-        });
-
-        const {data} = resp;
-        expect(data.id).toEqual('foo');
-      });
-  });
-
-  test('should save policy with all parameters', () => {
-    const response = createActionResultResponse();
-    const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
-    const cmd = new PolicyCommand(fakeHttp);
-    return cmd
-      .save({
-        id: '123',
-        name: 'foo',
-        comment: 'bar',
-        trend: {family1: 0, family2: 1},
-        select: {family1: 1, family2: 0},
-        scanner_preference_values: {},
-      })
-      .then(resp => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-          data: {
-            cmd: 'save_config',
-            config_id: '123',
-            name: 'foo',
-            comment: 'bar',
-            'select:family1': 1,
-            'trend:family1': 0,
-            'trend:family2': 1,
+            comment: 'somecomment',
+            'preference:scanner:scanner:scanner:foo': 'bar',
+            'select:AIX Local Security Checks': 1,
+            'select:Brute force attacks': 1,
+            'trend:AIX Local Security Checks': 1,
+            'trend:Family Foo': 0,
           },
         });
 
@@ -169,5 +161,108 @@ describe('PolicyCommand tests', () => {
       const {data} = resp;
       expect(data.id).toEqual('foo');
     });
+  });
+
+  test('should save a policy nvt', () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const preferenceValues = {
+      Foo: {
+        id: 1,
+        value: 'bar',
+        type: 'entry',
+      },
+      Bar: {
+        id: 2,
+        value: 'foo',
+        type: 'password',
+      },
+    };
+
+    const cmd = new PolicyCommand(fakeHttp);
+    return cmd
+      .savePolicyNvt({
+        id: 'c1',
+        oid: '1.2.3',
+        timeout: 123,
+        preferenceValues,
+      })
+      .then(() => {
+        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+          data: {
+            cmd: 'save_config_nvt',
+            config_id: 'c1',
+            oid: '1.2.3',
+            'password:1.2.3:2:password:Bar': 'yes',
+            'preference:scanner:0:scanner:timeout.1.2.3': 123,
+            'preference:1.2.3:1:entry:Foo': 'bar',
+            'preference:1.2.3:2:password:Bar': 'foo',
+            timeout: 1,
+          },
+        });
+      });
+  });
+
+  test('should request policy family data', () => {
+    const response = createResponse({
+      get_config_family_response: {
+        get_nvts_response: {
+          nvt: [
+            {
+              _oid: 1,
+            },
+            {
+              _oid: 2,
+            },
+          ],
+        },
+        all: {
+          get_nvts_response: {
+            nvt: [
+              {
+                _oid: 1,
+                cvss_base: 1.1,
+              },
+              {
+                _oid: 2,
+                cvss_base: 2.2,
+              },
+              {
+                _oid: 3,
+                cvss_base: 3.3,
+              },
+            ],
+          },
+        },
+      },
+    });
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new PolicyCommand(fakeHttp);
+    return cmd
+      .editPolicyFamilySettings({id: 'foo', familyName: 'bar'})
+      .then(resp => {
+        expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+          args: {
+            cmd: 'edit_config_family',
+            config_id: 'foo',
+            family: 'bar',
+          },
+        });
+
+        const {nvts} = resp.data;
+        expect(nvts.length).toEqual(3);
+        expect(nvts[0].selected).toEqual(YES_VALUE);
+        expect(nvts[0].severity).toEqual(1.1);
+        expect(nvts[1].selected).toEqual(YES_VALUE);
+        expect(nvts[1].severity).toEqual(2.2);
+        expect(nvts[2].selected).toEqual(NO_VALUE);
+        expect(nvts[2].severity).toEqual(3.3);
+      });
   });
 });
