@@ -92,7 +92,6 @@ const Dialog = ({
                 onChange={onValueChange}
               />
             </FormGroup>
-
             {!is_edit && (
               <FormGroup title={_('Special Groups')}>
                 <Checkbox
