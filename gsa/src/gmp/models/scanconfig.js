@@ -108,7 +108,7 @@ class ScanConfig extends Model {
       if (isDefined(ret.known_nvt_count)) {
         // number of known nvts by the scanner from last sync. should always be
         // equal or less then nvt_count because only the db may contain nvts not
-        // known nvts by the scanner e.g. a imported scan config contains
+        // known nvts by the scanner e.g. an imported scan config contains
         // private nvts
         ret.nvts.known = parseCount(ret.known_nvt_count);
         delete ret.known_nvt_count;
