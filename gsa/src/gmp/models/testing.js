@@ -34,16 +34,6 @@ const testId = modelClass => {
   });
 };
 
-const testNvtId = modelClass => {
-  test('NVT ID test', () => {
-    const nvt1 = new modelClass({_oid: '42.1337'});
-    const nvt2 = new modelClass({});
-
-    expect(nvt1.id).toEqual('42.1337');
-    expect(nvt2.id).toBeUndefined();
-  });
-};
-
 export const testModelProperties = (
   modelClass,
   type,
@@ -296,12 +286,6 @@ export const testModel = (modelClass, type, options) => {
   testModelProperties(modelClass, type, options);
   testModelMethods(modelClass, type);
   testId(modelClass);
-};
-
-export const testNvtModel = (modelClass, options) => {
-  testModelProperties(modelClass, 'nvt', options);
-  testModelMethods(modelClass, 'nvt');
-  testNvtId(modelClass);
 };
 
 // vim: set ts=2 sw=2 tw=80:

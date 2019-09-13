@@ -21,11 +21,28 @@
 
 import Nvt from 'gmp/models/nvt';
 import Info from 'gmp/models/info';
-import {testNvtModel} from 'gmp/models/testing';
+import {testModelProperties, testModelMethods} from 'gmp/models/testing';
 
-testNvtModel(Nvt, 'nvt');
+describe('nvt Model tests', () => {
+  testModelProperties(Nvt, 'nvt');
+  testModelMethods(Nvt, 'nvt');
 
-describe('NVT model tests', () => {
+  test('should parse NVT oid as id', () => {
+    const nvt1 = new Nvt({_oid: '42.1337'});
+    const nvt2 = new Nvt({});
+
+    expect(nvt1.id).toEqual('42.1337');
+    expect(nvt1.oid).toEqual('42.1337');
+    expect(nvt2.id).toBeUndefined();
+    expect(nvt2.oid).toBeUndefined();
+  });
+
+  test('should not allow to overwrite id', () => {
+    const nvt = new Nvt({_oid: 'foo'});
+
+    expect(() => (nvt.id = 'bar')).toThrow();
+  });
+
   test('should be instance of Info', () => {
     const nvt = new Nvt({});
 
