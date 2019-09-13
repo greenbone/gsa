@@ -62,6 +62,8 @@ import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
+import usePageTurn from 'web/components/hooks/usepageturn';
+
 const SCANNER_TYPES = [GMP_SCANNER_TYPE, OSP_SCANNER_TYPE];
 
 const client_cert_credentials_filter = credential => {
@@ -119,16 +121,30 @@ CertStatus.propTypes = {
   info: PropTypes.object.isRequired,
 };
 
-class ScannerDialog extends React.Component {
-  constructor(...args) {
-    super(...args);
+const pageTitles = ['Basic Data', 'Scanner Type'];
+const [firstPage, lastPage] = [0, 1]; // [0, N - 1] instead of [1, N]. Want to be able to use the index directly along with pageTitles[i].
 
-    this.handleTypeChange = this.handleTypeChange.bind(this);
-  }
-
-  handleTypeChange(value, name) {
-    const {credentials, credential_id, onScannerTypeChange} = this.props;
-
+const ScannerDialog = ({
+  ca_pub,
+  comment = '',
+  scanner,
+  credential_id,
+  credentials,
+  host = 'localhost',
+  id,
+  name = _('Unnamed'),
+  port = '9391',
+  title = _('New Scanner'),
+  type = OSP_SCANNER_TYPE,
+  which_cert,
+  onClose,
+  onCredentialChange,
+  onNewCredentialClick,
+  onSave,
+  onScannerTypeChange,
+}) => {
+  // eslint-disable-next-line no-shadow
+  const handleTypeChange = (value, name) => {
     if (onScannerTypeChange) {
       value = parseInt(value);
       const scan_credentials = filter_credentials(credentials, value);
@@ -139,189 +155,192 @@ class ScannerDialog extends React.Component {
         'credential_id',
       );
     }
-  }
+  };
 
-  render() {
-    const {
-      ca_pub,
-      comment = '',
-      scanner,
-      credential_id,
-      credentials,
-      host = 'localhost',
-      id,
-      name = _('Unnamed'),
-      port = '9391',
-      title = _('New Scanner'),
-      type = OSP_SCANNER_TYPE,
-      which_cert,
-      onClose,
-      onCredentialChange,
-      onNewCredentialClick,
-      onSave,
-    } = this.props;
+  const data = {
+    ca_pub,
+    comment,
+    host,
+    id,
+    name,
+    port,
+    which_cert,
+  };
 
-    const data = {
-      ca_pub,
-      comment,
-      host,
-      id,
-      name,
-      port,
-      which_cert,
-    };
+  const scannerTypesOptions = map(SCANNER_TYPES, scannerType => ({
+    label: scannerTypeName(scannerType),
+    value: scannerType,
+  }));
 
-    const scannerTypesOptions = map(SCANNER_TYPES, scannerType => ({
-      label: scannerTypeName(scannerType),
-      value: scannerType,
-    }));
+  const scanner_credentials = filter_credentials(credentials, type);
+  const is_edit = isDefined(scanner);
+  const isInUse = isDefined(scanner) && scanner.isInUse();
+  const show_cred_info =
+    isDefined(scanner) &&
+    isDefined(scanner.credential) &&
+    scanner.credential.type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
+  const isGmpScannerType = type === GMP_SCANNER_TYPE;
 
-    const scanner_credentials = filter_credentials(credentials, type);
-    const is_edit = isDefined(scanner);
-    const isInUse = isDefined(scanner) && scanner.isInUse();
-    const show_cred_info =
-      isDefined(scanner) &&
-      isDefined(scanner.credential) &&
-      scanner.credential.type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
-    const isGmpScannerType = type === GMP_SCANNER_TYPE;
+  const {
+    prevTitle,
+    nextTitle,
+    page,
+    prevDisabled,
+    nextDisabled,
+    handlePageTurn,
+  } = usePageTurn(firstPage, lastPage, pageTitles);
+  // pageTitles is *not* required. Without it the titles are 'Previous' and 'Next'. firstPage and lastPage are required so we don't, say, have negative pages, or somehow go to a ridiculously large page and have to click all the way back.
 
-    return (
-      <SaveDialog
-        title={title}
-        onClose={onClose}
-        onSave={onSave}
-        defaultValues={data}
-        values={{
-          credential_id,
-          type,
-        }}
-      >
-        {({values: state, onValueChange}) => {
-          return (
-            <Layout flex="column">
-              <FormGroup title={_('Name')}>
-                <TextField
-                  name="name"
-                  grow="1"
-                  value={state.name}
-                  size="30"
-                  onChange={onValueChange}
-                />
-              </FormGroup>
+  return (
+    <SaveDialog
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      multiStep={true} // the option to switch to the MultiStepFooter. Leaving it out defaults to false
+      prevDisabled={prevDisabled}
+      nextDisabled={nextDisabled}
+      prevTitle={prevTitle} // undefined => 'Previous'
+      nextTitle={nextTitle} // undefined => 'Next'
+      onNext={() => handlePageTurn('Next')} // 'Next' turns the next page
+      onPrev={() => handlePageTurn('Previous')} // 'Previous' goes back
+      defaultValues={data}
+      values={{
+        credential_id,
+        type,
+      }}
+    >
+      {({values: state, onValueChange}) => {
+        return (
+          <Layout flex="column">
+            {page === 0 && (
+              <React.Fragment>
+                <FormGroup title={_('Name')}>
+                  <TextField
+                    name="name"
+                    grow="1"
+                    value={state.name}
+                    size="30"
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
 
-              <FormGroup title={_('Comment')}>
-                <TextField
-                  name="comment"
-                  value={state.comment}
-                  grow="1"
-                  size="30"
-                  onChange={onValueChange}
-                />
-              </FormGroup>
+                <FormGroup title={_('Comment')}>
+                  <TextField
+                    name="comment"
+                    value={state.comment}
+                    grow="1"
+                    size="30"
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
+              </React.Fragment>
+            )}
+            {page === 1 && (
+              <React.Fragment>
+                <FormGroup title={_('Type')}>
+                  <Select
+                    name="type"
+                    value={state.type}
+                    items={scannerTypesOptions}
+                    disabled={isInUse}
+                    onChange={handleTypeChange}
+                  />
+                </FormGroup>
 
-              <FormGroup title={_('Type')}>
-                <Select
-                  name="type"
-                  value={state.type}
-                  items={scannerTypesOptions}
-                  disabled={isInUse}
-                  onChange={this.handleTypeChange}
-                />
-              </FormGroup>
+                <FormGroup title={_('Host')}>
+                  <TextField
+                    name="host"
+                    value={state.host}
+                    disabled={isInUse}
+                    grow="1"
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
 
-              <FormGroup title={_('Host')}>
-                <TextField
-                  name="host"
-                  value={state.host}
-                  disabled={isInUse}
-                  grow="1"
-                  onChange={onValueChange}
-                />
-              </FormGroup>
+                {!isGmpScannerType && (
+                  <React.Fragment>
+                    <FormGroup title={_('Port')}>
+                      <TextField
+                        name="port"
+                        value={state.port}
+                        disabled={isInUse}
+                        grow="1"
+                        onChange={onValueChange}
+                      />
+                    </FormGroup>
 
-              {!isGmpScannerType && (
-                <React.Fragment>
-                  <FormGroup title={_('Port')}>
-                    <TextField
-                      name="port"
-                      value={state.port}
-                      disabled={isInUse}
-                      grow="1"
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
-
-                  <FormGroup title={_('CA Certificate')} flex="column">
-                    <Layout>
-                      <Divider>
-                        {is_edit && (
-                          <Layout>
-                            {isDefined(state.ca_pub) && (
+                    <FormGroup title={_('CA Certificate')} flex="column">
+                      <Layout>
+                        <Divider>
+                          {is_edit && (
+                            <Layout>
+                              {isDefined(state.ca_pub) && (
+                                <Radio
+                                  title={_('Existing')}
+                                  name="which_cert"
+                                  value="existing"
+                                  checked={state.which_cert === 'existing'}
+                                  onChange={onValueChange}
+                                />
+                              )}
                               <Radio
-                                title={_('Existing')}
+                                title={_('Default')}
                                 name="which_cert"
-                                value="existing"
-                                checked={state.which_cert === 'existing'}
+                                value="default"
+                                checked={state.which_cert === 'default'}
                                 onChange={onValueChange}
                               />
-                            )}
-                            <Radio
-                              title={_('Default')}
-                              name="which_cert"
-                              value="default"
-                              checked={state.which_cert === 'default'}
-                              onChange={onValueChange}
-                            />
-                            <Radio
-                              title={_('New:')}
-                              name="which_cert"
-                              value="new"
-                              checked={state.which_cert === 'new'}
-                              onChange={onValueChange}
-                            />
-                          </Layout>
-                        )}
-                        <FileField
-                          disabled={is_edit && state.which_cert !== 'new'}
-                          name="ca_pub"
-                          onChange={onValueChange}
-                        />
-                      </Divider>
-                    </Layout>
-                    {is_edit && isDefined(state.ca_pub) && (
-                      <CertStatus info={state.ca_pub_info} />
-                    )}
-                  </FormGroup>
-                </React.Fragment>
-              )}
-
-              <FormGroup title={_('Credential')} flex="column">
-                <Divider>
-                  <Select
-                    name="credential_id"
-                    items={renderSelectItems(scanner_credentials)}
-                    value={credential_id}
-                    onChange={onCredentialChange}
-                  />
-                  <Layout>
-                    <NewIcon
-                      value={type}
-                      title={_('Create a new Credential')}
-                      onClick={onNewCredentialClick}
-                    />
-                  </Layout>
-                </Divider>
-                {show_cred_info && (
-                  <CertStatus info={scanner.credential.certificate_info} />
+                              <Radio
+                                title={_('New:')}
+                                name="which_cert"
+                                value="new"
+                                checked={state.which_cert === 'new'}
+                                onChange={onValueChange}
+                              />
+                            </Layout>
+                          )}
+                          <FileField
+                            disabled={is_edit && state.which_cert !== 'new'}
+                            name="ca_pub"
+                            onChange={onValueChange}
+                          />
+                        </Divider>
+                      </Layout>
+                      {is_edit && isDefined(state.ca_pub) && (
+                        <CertStatus info={state.ca_pub_info} />
+                      )}
+                    </FormGroup>
+                  </React.Fragment>
                 )}
-              </FormGroup>
-            </Layout>
-          );
-        }}
-      </SaveDialog>
-    );
-  }
-}
+
+                <FormGroup title={_('Credential')} flex="column">
+                  <Divider>
+                    <Select
+                      name="credential_id"
+                      items={renderSelectItems(scanner_credentials)}
+                      value={credential_id}
+                      onChange={onCredentialChange}
+                    />
+                    <Layout>
+                      <NewIcon
+                        value={type}
+                        title={_('Create a new Credential')}
+                        onClick={onNewCredentialClick}
+                      />
+                    </Layout>
+                  </Divider>
+                  {show_cred_info && (
+                    <CertStatus info={scanner.credential.certificate_info} />
+                  )}
+                </FormGroup>
+              </React.Fragment>
+            )}
+          </Layout>
+        );
+      }}
+    </SaveDialog>
+  );
+};
 
 ScannerDialog.propTypes = {
   ca_pub: PropTypes.string,
