@@ -27,22 +27,24 @@ import PropTypes from 'web/utils/proptypes';
 
 import ErrorBoundary from 'web/components/error/errorboundary';
 
-import Dialog from '../dialog/dialog';
-import DialogContent from '../dialog/content';
-import DialogError from '../dialog/error';
-import DialogFooter from '../dialog/twobuttonfooter';
+import Dialog from 'web/components/dialog/dialog';
+import DialogContent from 'web/components/dialog/content';
+import DialogError from 'web/components/dialog/error';
+import DialogFooter from 'web/components/dialog/twobuttonfooter';
+import MultiStepFooter from 'web/components/dialog/multistepfooter';
 import DialogTitle from '../dialog/title';
-import ScrollableContent from '../dialog/scrollablecontent';
+import ScrollableContent from 'web/components/dialog/scrollablecontent';
 
 const SaveDialogContent = ({
   onSave,
   error,
+  multiStep = false,
   onError,
   onErrorClose = undefined,
   ...props
 }) => {
   const [loading, setLoading] = useState(false);
-  const [stateError, setStateError] = useState(undefined);
+  const [stateError, setStateError] = useState(error);
 
   useEffect(() => {
     setStateError(error);
@@ -84,9 +86,15 @@ const SaveDialogContent = ({
     close,
     defaultValues,
     moveProps,
+    onNext,
+    onPrev,
     heightProps,
     title,
     values,
+    prevDisabled,
+    nextDisabled,
+    nextTitle,
+    prevTitle,
   } = props;
 
   return (
@@ -107,12 +115,27 @@ const SaveDialogContent = ({
                 })}
               </ScrollableContent>
             </ErrorBoundary>
-            <DialogFooter
-              loading={loading}
-              rightButtonTitle={buttonTitle}
-              onLeftButtonClick={close}
-              onRightButtonClick={() => handleSaveClick(childValues)}
-            />
+            {multiStep ? (
+              <MultiStepFooter
+                loading={loading}
+                prevDisabled={prevDisabled}
+                nextDisabled={nextDisabled}
+                rightButtonTitle={buttonTitle}
+                nextButtonTitle={nextTitle}
+                previousButtonTitle={prevTitle}
+                onNextButtonClick={onNext}
+                onLeftButtonClick={close}
+                onPreviousButtonClick={onPrev}
+                onRightButtonClick={() => handleSaveClick(childValues)}
+              />
+            ) : (
+              <DialogFooter
+                loading={loading}
+                rightButtonTitle={buttonTitle}
+                onLeftButtonClick={close}
+                onRightButtonClick={() => handleSaveClick(childValues)}
+              />
+            )}
           </DialogContent>
         );
       }}
@@ -127,10 +150,17 @@ SaveDialogContent.propTypes = {
   error: PropTypes.string,
   heightProps: PropTypes.object,
   moveProps: PropTypes.object,
+  multiStep: PropTypes.bool,
+  nextDisabled: PropTypes.bool,
+  nextTitle: PropTypes.string,
+  prevDisabled: PropTypes.bool,
+  prevTitle: PropTypes.string,
   title: PropTypes.string.isRequired,
   values: PropTypes.object,
   onError: PropTypes.func,
   onErrorClose: PropTypes.func,
+  onNext: PropTypes.func,
+  onPrev: PropTypes.func,
   onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
 };
@@ -143,6 +173,7 @@ const SaveDialog = ({
   initialHeight,
   minHeight,
   minWidth,
+  multiStep = false,
   title,
   values,
   width,
@@ -150,7 +181,17 @@ const SaveDialog = ({
   onError,
   onErrorClose,
   onSave,
+  ...props
 }) => {
+  const {
+    onNext,
+    onPrev,
+    prevDisabled,
+    nextDisabled,
+    nextTitle,
+    prevTitle,
+  } = props;
+
   return (
     <Dialog
       height={initialHeight}
@@ -166,11 +207,18 @@ const SaveDialog = ({
           defaultValues={defaultValues}
           error={error}
           moveProps={moveProps}
+          multiStep={multiStep}
+          prevDisabled={prevDisabled}
+          nextDisabled={nextDisabled}
+          nextTitle={nextTitle}
+          prevTitle={prevTitle}
           heightProps={heightProps}
           title={title}
           values={values}
           onErrorClose={onErrorClose}
           onError={onError}
+          onNext={onNext}
+          onPrev={onPrev}
           onSave={onSave}
         >
           {children}
@@ -187,12 +235,19 @@ SaveDialog.propTypes = {
   initialHeight: PropTypes.string,
   minHeight: PropTypes.numberOrNumberString,
   minWidth: PropTypes.numberOrNumberString,
+  multiStep: PropTypes.bool,
+  nextDisabled: PropTypes.bool,
+  nextTitle: PropTypes.string,
+  prevDisabled: PropTypes.bool,
+  prevTitle: PropTypes.string,
   title: PropTypes.string.isRequired,
   values: PropTypes.object, // should be used for controlled values
   width: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onError: PropTypes.func,
   onErrorClose: PropTypes.func,
+  onNext: PropTypes.func,
+  onPrev: PropTypes.func,
   onSave: PropTypes.func.isRequired,
 };
 
