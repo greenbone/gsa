@@ -25,11 +25,11 @@ import Task, {
   HOSTS_ORDERING_SEQUENTIAL,
   TASK_STATUS,
 } from 'gmp/models/task';
-import {testModelProperties} from '../testing';
+import {testModel} from '../testing';
 
-testModelProperties(Task, 'task', {testIsActive: false});
+describe('Task Model parse tests', () => {
+  testModel(Task, 'task', {testIsActive: false});
 
-describe('Task model tests', () => {
   test('should parse undefined hosts_ordering', () => {
     const obj = {hosts_ordering: undefined};
     const task = new Task(obj);
