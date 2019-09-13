@@ -48,7 +48,7 @@ class Feed {
   }
 }
 
-class FeedStatus extends HttpCommand {
+export class FeedStatus extends HttpCommand {
   constructor(http) {
     super(http, {cmd: 'get_feeds'});
   }
