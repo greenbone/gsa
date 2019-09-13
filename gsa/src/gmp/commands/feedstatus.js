@@ -27,7 +27,7 @@ import date, {duration} from '../models/date';
 import HttpCommand from './http';
 
 const convertVersion = version =>
-  version.slice(0, 8) + 'T' + version.slice(8, 12);
+  `${version}`.slice(0, 8) + 'T' + `${version}`.slice(8, 12);
 
 export const NVT_FEED = 'NVT';
 export const CERT_FEED = 'CERT';
