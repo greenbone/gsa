@@ -334,9 +334,9 @@ exports[`Task Trend Selector Tests should render 1`] = `
         <div
           class="c5"
           data-testid="select-selected-value"
-          title="Down"
+          title="Severity decreased"
         >
-          Down
+          Severity decreased
         </div>
         <div
           class="c6"
