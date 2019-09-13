@@ -1078,7 +1078,7 @@ exports[`EditDialog component tests should render dialog 1`] = `
                           <span
                             class="section-fold-icon c20 c21"
                             data-testid="svg-icon"
-                            title="Unfold"
+                            title="Fold"
                           >
                             <svg>
                               unfold.svg
@@ -1595,7 +1595,7 @@ exports[`EditDialog component tests should render dialog 1`] = `
                           <span
                             class="section-fold-icon c20 c21"
                             data-testid="svg-icon"
-                            title="Fold"
+                            title="Unfold"
                           >
                             <svg>
                               fold.svg
@@ -1700,7 +1700,7 @@ exports[`EditDialog component tests should render dialog 1`] = `
                           <span
                             class="section-fold-icon c20 c21"
                             data-testid="svg-icon"
-                            title="Fold"
+                            title="Unfold"
                           >
                             <svg>
                               fold.svg
@@ -2877,7 +2877,7 @@ exports[`EditDialog component tests should render dialog for osp config 1`] = `
                           <span
                             class="section-fold-icon c26 c27"
                             data-testid="svg-icon"
-                            title="Fold"
+                            title="Unfold"
                           >
                             <svg>
                               fold.svg
@@ -4075,7 +4075,7 @@ exports[`EditDialog component tests should render dialog for policy 1`] = `
                           <span
                             class="section-fold-icon c20 c21"
                             data-testid="svg-icon"
-                            title="Unfold"
+                            title="Fold"
                           >
                             <svg>
                               unfold.svg
@@ -4592,7 +4592,7 @@ exports[`EditDialog component tests should render dialog for policy 1`] = `
                           <span
                             class="section-fold-icon c20 c21"
                             data-testid="svg-icon"
-                            title="Fold"
+                            title="Unfold"
                           >
                             <svg>
                               fold.svg
@@ -4697,7 +4697,7 @@ exports[`EditDialog component tests should render dialog for policy 1`] = `
                           <span
                             class="section-fold-icon c20 c21"
                             data-testid="svg-icon"
-                            title="Fold"
+                            title="Unfold"
                           >
                             <svg>
                               fold.svg

@@ -57,7 +57,7 @@ const Actions = withEntitiesActions(
       ) : (
         <DeleteIcon
           value={entity}
-          title={'Delete TLS Certificate'}
+          title={_('Delete TLS Certificate')}
           onClick={onTlsCertificateDeleteClick}
         />
       )}

@@ -55,9 +55,9 @@ describe('Task Trend Selector Tests', () => {
     domItems = getItemElements(baseElement);
 
     expect(domItems.length).toEqual(5);
-    expect(domItems[0]).toHaveTextContent('Up');
-    expect(domItems[1]).toHaveTextContent('Down');
-    expect(domItems[2]).toHaveTextContent('More');
+    expect(domItems[0]).toHaveTextContent('Severity increased');
+    expect(domItems[1]).toHaveTextContent('Severity decreased');
+    expect(domItems[2]).toHaveTextContent('Vulnerability count increased');
   });
 
   test('should parse filter', () => {
@@ -69,7 +69,7 @@ describe('Task Trend Selector Tests', () => {
     );
 
     const displayedValue = getByTestId('select-selected-value');
-    expect(displayedValue).toHaveTextContent('Same');
+    expect(displayedValue).toHaveTextContent('Vulnerabilities did not change');
   });
 
   test('should call onChange handler', () => {
@@ -98,7 +98,7 @@ describe('Task Trend Selector Tests', () => {
     );
 
     const displayedValue = getByTestId('select-selected-value');
-    expect(displayedValue).toHaveTextContent('Up');
+    expect(displayedValue).toHaveTextContent('Severity increased');
 
     openSelectElement(element);
 

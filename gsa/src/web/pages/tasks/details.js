@@ -232,7 +232,7 @@ class TaskDetails extends React.Component {
 
               {in_assets === YES_VALUE && (
                 <TableRow>
-                  <TableData>{_('Apply to Overrides')}</TableData>
+                  <TableData>{_('Apply Overrides')}</TableData>
                   <TableData>{renderYesNo(apply_overrides)}</TableData>
                 </TableRow>
               )}

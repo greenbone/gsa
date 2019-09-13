@@ -91,12 +91,12 @@ const ToolBarIcons = ({
         <DeleteIcon entity={entity} onClick={onTlsCertificateDeleteClick} />
         <DownloadIcon
           value={entity}
-          title={_('Download TLS Certififcate as .pem')}
+          title={_('Download TLS Certificate as .pem')}
           onClick={onTlsCertificateDownloadClick}
         />
         <ExportIcon
           value={entity}
-          title={_('Export TLS Certififcate as XML')}
+          title={_('Export TLS Certificate as XML')}
           onClick={onTlsCertificateExportClick}
         />
       </IconDivider>

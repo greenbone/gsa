@@ -40,11 +40,11 @@ const TaskTrendGroup = ({trend, name = 'trend', filter, onChange}) => {
         value={trend}
         onChange={onChange}
         items={[
-          {label: _('Up'), value: 'up'},
-          {label: _('Down'), value: 'down'},
-          {label: _('More'), value: 'more'},
-          {label: _('Less'), value: 'less'},
-          {label: _('Same'), value: 'same'},
+          {label: _('Severity increased'), value: 'up'},
+          {label: _('Severity decreased'), value: 'down'},
+          {label: _('Vulnerability count increased'), value: 'more'},
+          {label: _('Vulnerability count decreased'), value: 'less'},
+          {label: _('Vulnerabilities did not change'), value: 'same'},
         ]}
       />
     </FormGroup>
