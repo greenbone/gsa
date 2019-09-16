@@ -21,10 +21,10 @@
 
 import Nvt from 'gmp/models/nvt';
 import Info from 'gmp/models/info';
-import {testModelProperties, testModelMethods} from 'gmp/models/testing';
+import {testModelFromElement, testModelMethods} from 'gmp/models/testing';
 
 describe('nvt Model tests', () => {
-  testModelProperties(Nvt, 'nvt');
+  testModelFromElement(Nvt, 'nvt');
   testModelMethods(Nvt);
 
   test('should parse NVT oid as id', () => {

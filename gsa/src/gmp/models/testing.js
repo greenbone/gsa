@@ -24,9 +24,9 @@ import {parseDate, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 const testId = modelClass => {
   test('should set ID only for proper ID', () => {
-    const model1 = new modelClass({_id: '1337'});
-    const model2 = new modelClass({});
-    const model3 = new modelClass({_id: ''});
+    const model1 = modelClass.fromElement({_id: '1337'});
+    const model2 = modelClass.fromElement({});
+    const model3 = modelClass.fromElement({_id: ''});
 
     expect(model1.id).toEqual('1337');
     expect(model2.id).toBeUndefined();
@@ -34,16 +34,15 @@ const testId = modelClass => {
   });
 
   test('should not allow to overwrite id', () => {
-    const model = new modelClass({_id: 'foo'});
+    const model = modelClass.fromElement({_id: 'foo'});
 
     expect(() => (model.id = 'bar')).toThrow();
   });
 };
 
-export const testModelProperties = (modelClass, type) => {
+export const testModelFromElement = (modelClass, type) => {
   test('should create instance of modelclass in fromElement', () => {
     const model = modelClass.fromElement();
-    console.log(model, typeof model);
     expect(model).toBeInstanceOf(modelClass);
   });
 
@@ -51,7 +50,7 @@ export const testModelProperties = (modelClass, type) => {
     const elem = {
       end_time: '2018-10-10T11:41:23.022Z',
     };
-    const model = new modelClass(elem);
+    const model = modelClass.fromElement(elem);
 
     expect(model.endTime).toBeDefined();
     expect(model.end_time).toBeUndefined();
@@ -64,7 +63,7 @@ export const testModelProperties = (modelClass, type) => {
         permission: [{name: 'everything'}, {name: 'may_foo'}],
       },
     };
-    const model = new modelClass(elem);
+    const model = modelClass.fromElement(elem);
 
     expect(model.userCapabilities).toBeDefined();
     expect(model.user_capabilities).toBeUndefined();
@@ -72,7 +71,7 @@ export const testModelProperties = (modelClass, type) => {
     expect(model.userCapabilities.mayAccess('foo')).toEqual(true);
   });
 
-  test('should return undefined for userCapabilities if no permissions are given', () => {
+  test('should return undefined for userCapabilities if no permissions are given to the constructor', () => {
     const model = new modelClass();
 
     expect(model.userCapabilities).toBeUndefined();
@@ -84,7 +83,7 @@ export const testModelProperties = (modelClass, type) => {
         tag: [{name: 'foo'}],
       },
     };
-    const model = new modelClass(elem);
+    const model = modelClass.fromElement(elem);
 
     expect(model.userTags).toBeDefined();
     expect(model.user_tags).toBeUndefined();
@@ -93,35 +92,29 @@ export const testModelProperties = (modelClass, type) => {
   });
 
   test('should return empty array for userTags if no tags are given', () => {
-    const model = new modelClass({});
+    const model = modelClass.fromElement({});
 
     expect(model.userTags).toEqual([]);
   });
 
   test('should delete owner if owners name is empty', () => {
     const elem = {owner: {name: ''}};
-    const model = new modelClass(elem);
+    const model = modelClass.fromElement(elem);
 
     expect(model.owner).toBeUndefined();
   });
 
   test('should delete comment if comment is empty', () => {
     const elem = {comment: ''};
-    const model = new modelClass(elem);
+    const model = modelClass.fromElement(elem);
 
     expect(model.comment).toBeUndefined();
   });
 
   test('entityType is applied correctly', () => {
-    const model = new modelClass({});
+    const model = modelClass.fromElement({});
 
     expect(model.entityType).toEqual(type);
-  });
-
-  test('entityType equals type of entity that was used to initialize', () => {
-    const model = new modelClass({}, 'foo');
-
-    expect(model.entityType).toBe('foo');
   });
 
   test('should parse props as YES_VALUE/NO_VALUE', () => {
@@ -131,7 +124,7 @@ export const testModelProperties = (modelClass, type) => {
       active: '0',
       trash: '1',
     };
-    const model = new modelClass(elem);
+    const model = modelClass.fromElement(elem);
 
     expect(model.writable).toEqual(NO_VALUE);
     expect(model.orphan).toEqual(YES_VALUE);
@@ -140,33 +133,37 @@ export const testModelProperties = (modelClass, type) => {
   });
 
   test('should parse creation_time as date', () => {
-    const model = new modelClass({creation_time: '2018-10-10T08:48:46Z'});
+    const model = modelClass.fromElement({
+      creation_time: '2018-10-10T08:48:46Z',
+    });
 
     expect(model.creationTime).toEqual(parseDate('2018-10-10T08:48:46Z'));
     expect(model.creation_time).toBeUndefined();
   });
 
   test('should parse no given creation_time as undefined', () => {
-    const model = new modelClass({});
+    const model = modelClass.fromElement({});
 
     expect(model.creationTime).toBeUndefined();
   });
 
   test('should parse modification_time as date', () => {
-    const model = new modelClass({modification_time: '2018-10-10T08:48:46Z'});
+    const model = modelClass.fromElement({
+      modification_time: '2018-10-10T08:48:46Z',
+    });
 
     expect(model.modificationTime).toEqual(parseDate('2018-10-10T08:48:46Z'));
     expect(model.modification_time).toBeUndefined();
   });
 
   test('should parse no given modification_time as undefined', () => {
-    const model = new modelClass({});
+    const model = modelClass.fromElement({});
 
     expect(model.modificationTime).toBeUndefined();
   });
 
   test('should privatize type from Model', () => {
-    const model = new modelClass({type: 'foo'});
+    const model = modelClass.fromElement({type: 'foo'});
 
     expect(model.type).toBeUndefined();
   });
@@ -174,10 +171,10 @@ export const testModelProperties = (modelClass, type) => {
 
 export const testModelMethods = (modelClass, {testIsActive = true} = {}) => {
   test('isInUse() should return correct true/false', () => {
-    const model1 = new modelClass({in_use: '1'});
-    const model2 = new modelClass({in_use: '0'});
-    const model3 = new modelClass({in_use: '2'});
-    const model4 = new modelClass();
+    const model1 = modelClass.fromElement({in_use: '1'});
+    const model2 = modelClass.fromElement({in_use: '0'});
+    const model3 = modelClass.fromElement({in_use: '2'});
+    const model4 = modelClass.fromElement();
 
     expect(model1.isInUse()).toBe(true);
     expect(model2.isInUse()).toBe(false);
@@ -186,10 +183,10 @@ export const testModelMethods = (modelClass, {testIsActive = true} = {}) => {
   });
 
   test('isInTrash() should return correct true/false', () => {
-    const model1 = new modelClass({trash: '1'});
-    const model2 = new modelClass({trash: '0'});
-    const model3 = new modelClass({trash: '2'});
-    const model4 = new modelClass();
+    const model1 = modelClass.fromElement({trash: '1'});
+    const model2 = modelClass.fromElement({trash: '0'});
+    const model3 = modelClass.fromElement({trash: '2'});
+    const model4 = modelClass.fromElement();
 
     expect(model1.isInTrash()).toBe(true);
     expect(model2.isInTrash()).toBe(false);
@@ -198,10 +195,10 @@ export const testModelMethods = (modelClass, {testIsActive = true} = {}) => {
   });
 
   test('isWritable() should return correct true/false', () => {
-    const model1 = new modelClass({writable: '1'});
-    const model2 = new modelClass({writable: '0'});
-    const model3 = new modelClass({writable: '2'});
-    const model4 = new modelClass();
+    const model1 = modelClass.fromElement({writable: '1'});
+    const model2 = modelClass.fromElement({writable: '0'});
+    const model3 = modelClass.fromElement({writable: '2'});
+    const model4 = modelClass.fromElement();
 
     expect(model1.isWritable()).toBe(true);
     expect(model2.isWritable()).toBe(false);
@@ -210,10 +207,10 @@ export const testModelMethods = (modelClass, {testIsActive = true} = {}) => {
   });
 
   test('isOrphan() should return correct true/false', () => {
-    const model1 = new modelClass({orphan: '1'});
-    const model2 = new modelClass({orphan: '0'});
-    const model3 = new modelClass({orphan: '2'});
-    const model4 = new modelClass();
+    const model1 = modelClass.fromElement({orphan: '1'});
+    const model2 = modelClass.fromElement({orphan: '0'});
+    const model3 = modelClass.fromElement({orphan: '2'});
+    const model4 = modelClass.fromElement();
 
     expect(model1.isOrphan()).toBe(true);
     expect(model2.isOrphan()).toBe(false);
@@ -223,10 +220,10 @@ export const testModelMethods = (modelClass, {testIsActive = true} = {}) => {
 
   if (testIsActive) {
     test('isActive() should return correct true/false', () => {
-      const model1 = new modelClass({active: '1'});
-      const model2 = new modelClass({active: '0'});
-      const model3 = new modelClass({active: '2'});
-      const model4 = new modelClass();
+      const model1 = modelClass.fromElement({active: '1'});
+      const model2 = modelClass.fromElement({active: '0'});
+      const model3 = modelClass.fromElement({active: '2'});
+      const model4 = modelClass.fromElement();
 
       expect(model1.isActive()).toBe(true);
       expect(model2.isActive()).toBe(false);
@@ -237,7 +234,7 @@ export const testModelMethods = (modelClass, {testIsActive = true} = {}) => {
 };
 
 export const testModel = (modelClass, type, options) => {
-  testModelProperties(modelClass, type);
+  testModelFromElement(modelClass, type);
   testModelMethods(modelClass, options);
   testId(modelClass);
 };
