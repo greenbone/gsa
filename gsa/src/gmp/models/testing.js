@@ -41,6 +41,12 @@ const testId = modelClass => {
 };
 
 export const testModelProperties = (modelClass, type) => {
+  test('should create instance of modelclass in fromElement', () => {
+    const model = modelClass.fromElement();
+    console.log(model, typeof model);
+    expect(model).toBeInstanceOf(modelClass);
+  });
+
   test('end_time is parsed correctly', () => {
     const elem = {
       end_time: '2018-10-10T11:41:23.022Z',
