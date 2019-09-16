@@ -103,6 +103,7 @@ let UserSettingsDialog = ({
   targetsFilter,
   tasksFilter,
   ticketsFilter,
+  tlsCertificatesFilter,
   usersFilter,
   vulnerabilitiesFilter,
   cpeFilter,
@@ -165,6 +166,7 @@ let UserSettingsDialog = ({
     targetsFilter,
     tasksFilter,
     ticketsFilter,
+    tlsCertificatesFilter,
     usersFilter,
     vulnerabilitiesFilter,
     cpeFilter,
@@ -270,6 +272,7 @@ let UserSettingsDialog = ({
                     targetsFilter={values.targetsFilter}
                     tasksFilter={values.tasksFilter}
                     ticketsFilter={values.ticketsFilter}
+                    tlsCertificatesFilter={values.tlsCertificatesFilter}
                     usersFilter={values.usersFilter}
                     vulnerabilitiesFilter={values.vulnerabilitiesFilter}
                     cpeFilter={values.cpeFilter}
@@ -357,6 +360,7 @@ UserSettingsDialog.propTypes = {
   tasksFilter: PropTypes.string,
   ticketsFilter: PropTypes.string,
   timezone: PropTypes.string,
+  tlsCertificatesFilter: PropTypes.string,
   userInterfaceLanguage: PropTypes.string,
   usersFilter: PropTypes.string,
   vulnerabilitiesFilter: PropTypes.string,

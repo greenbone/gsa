@@ -355,6 +355,7 @@ class UserSettings extends React.Component {
       targetsFilter = {},
       tasksFilter = {},
       ticketsFilter = {},
+      tlsCertificatesFilter = {},
       usersFilter = {},
       vulnerabilitiesFilter = {},
       cpeFilter = {},
@@ -702,6 +703,11 @@ class UserSettings extends React.Component {
                             type="filter"
                           />
                           <SettingTableRow
+                            setting={tlsCertificatesFilter}
+                            title={_('TLS Certificates Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
                             setting={usersFilter}
                             title={_('Users Filter')}
                             type="filter"
@@ -815,6 +821,7 @@ class UserSettings extends React.Component {
               targetsFilter={targetsFilter.id}
               tasksFilter={tasksFilter.id}
               ticketsFilter={ticketsFilter.id}
+              tlsCertificatesFilter={tlsCertificatesFilter.id}
               usersFilter={usersFilter.id}
               vulnerabilitiesFilter={vulnerabilitiesFilter.id}
               cpeFilter={cpeFilter.id}
@@ -913,6 +920,7 @@ UserSettings.propTypes = {
   tasksFilter: PropTypes.object,
   ticketsFilter: PropTypes.object,
   timezone: PropTypes.string,
+  tlsCertificatesFilter: PropTypes.object,
   userInterfaceLanguage: PropTypes.object,
   usersFilter: PropTypes.object,
   vulnerabilitiesFilter: PropTypes.object,
@@ -1036,6 +1044,9 @@ const mapStateToProps = rootState => {
   const targetsFilter = userDefaultFilterSelector.getFilter('target');
   const tasksFilter = userDefaultFilterSelector.getFilter('task');
   const ticketsFilter = userDefaultFilterSelector.getFilter('ticket');
+  const tlsCertificatesFilter = userDefaultFilterSelector.getFilter(
+    'tlscertificate',
+  );
   const usersFilter = userDefaultFilterSelector.getFilter('user');
   const vulnerabilitiesFilter = userDefaultFilterSelector.getFilter(
     'vulnerability',
@@ -1109,6 +1120,7 @@ const mapStateToProps = rootState => {
     targetsFilter,
     tasksFilter,
     ticketsFilter,
+    tlsCertificatesFilter,
     usersFilter,
     vulnerabilitiesFilter,
     cpeFilter,
@@ -1150,6 +1162,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
       dispatch(loadUserSettingsDefaultFilter(gmp)('target')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('task')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('ticket')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('tlscertificate')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('user')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('vulnerability')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('cpe')),
