@@ -28,6 +28,10 @@ class Setting {
         ? element.value
         : undefined;
   }
+
+  static fromElement(element) {
+    return new Setting(element);
+  }
 }
 
 export default Setting;
