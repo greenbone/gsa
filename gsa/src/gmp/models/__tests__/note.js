@@ -24,9 +24,9 @@ import {testModel} from 'gmp/models/testing';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-testModel(Note, 'note');
-
 describe('Note model tests', () => {
+  testModel(Note, 'note', {testIsActive: false});
+
   test('should parse severity', () => {
     const note = new Note({severity: '8.5'});
     const note2 = new Note({severity: '10'});
