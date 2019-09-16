@@ -30,23 +30,23 @@ testModel(Ovaldef, 'ovaldef');
 
 describe('Ovaldef model tests', () => {
   test('should parse severity', () => {
-    const ovaldef = new Ovaldef({max_cvss: '8.5'});
+    const ovaldef = Ovaldef.fromElement({max_cvss: '8.5'});
 
     expect(ovaldef.severity).toEqual(8.5);
     expect(ovaldef.max_cvss).toBeUndefined();
   });
 
   test('should parse deprecated', () => {
-    const ovaldef1 = new Ovaldef({deprecated: '0'});
-    const ovaldef2 = new Ovaldef({deprecated: '1'});
+    const ovaldef1 = Ovaldef.fromElement({deprecated: '0'});
+    const ovaldef2 = Ovaldef.fromElement({deprecated: '1'});
 
     expect(ovaldef1.deprecated).toEqual(NO_VALUE);
     expect(ovaldef2.deprecated).toEqual(YES_VALUE);
   });
 
   test('isDeprecated() should return correct true/false', () => {
-    const ovaldef1 = new Ovaldef({deprecated: '0'});
-    const ovaldef2 = new Ovaldef({deprecated: '1'});
+    const ovaldef1 = Ovaldef.fromElement({deprecated: '0'});
+    const ovaldef2 = Ovaldef.fromElement({deprecated: '1'});
 
     expect(ovaldef1.isDeprecated()).toEqual(false);
     expect(ovaldef2.isDeprecated()).toEqual(true);
@@ -63,9 +63,9 @@ describe('Ovaldef model tests', () => {
         },
       },
     };
-    const ovaldef = new Ovaldef(elem);
-    const ovaldef2 = new Ovaldef({});
-    const ovaldef3 = new Ovaldef({raw_data: {}});
+    const ovaldef = Ovaldef.fromElement(elem);
+    const ovaldef2 = Ovaldef.fromElement({});
+    const ovaldef3 = Ovaldef.fromElement({raw_data: {}});
 
     expect(ovaldef.short_id).toEqual('123abc');
     expect(ovaldef.version).toEqual('42');
@@ -115,7 +115,7 @@ describe('Ovaldef model tests', () => {
         },
       },
     };
-    const ovaldef = new Ovaldef(elem);
+    const ovaldef = Ovaldef.fromElement(elem);
 
     expect(ovaldef.affecteds[0].products).toEqual(['foo', 'bar']);
     expect(ovaldef.affecteds[0].platforms).toEqual(['lorem', 'ipsum']);
@@ -134,7 +134,7 @@ describe('Ovaldef model tests', () => {
   });
 
   test('should return empty arrays if no metadata is given', () => {
-    const ovaldef = new Ovaldef({});
+    const ovaldef = Ovaldef.fromElement({});
 
     expect(ovaldef.affecteds).toEqual([]);
     expect(ovaldef.references).toEqual([]);
@@ -167,7 +167,7 @@ describe('Ovaldef model tests', () => {
         },
       },
     };
-    const ovaldef = new Ovaldef(elem);
+    const ovaldef = Ovaldef.fromElement(elem);
 
     expect(ovaldef.criterias[0].criterions[0].applicability_check).toEqual(
       'foo',
@@ -206,7 +206,7 @@ describe('Ovaldef model tests', () => {
         },
       },
     };
-    const ovaldef = new Ovaldef(elem);
+    const ovaldef = Ovaldef.fromElement(elem);
 
     expect(
       ovaldef.criterias[0].extend_definitions[0].applicability_check,
@@ -228,7 +228,7 @@ describe('Ovaldef model tests', () => {
         },
       },
     };
-    const ovaldef = new Ovaldef(elem);
+    const ovaldef = Ovaldef.fromElement(elem);
 
     expect(ovaldef.criterias[0].comment).toEqual('lorem');
   });
@@ -243,7 +243,7 @@ describe('Ovaldef model tests', () => {
         },
       },
     };
-    const ovaldef = new Ovaldef(elem);
+    const ovaldef = Ovaldef.fromElement(elem);
 
     expect(ovaldef.criterias[0].operator).toEqual('and');
   });
@@ -267,15 +267,15 @@ describe('Ovaldef model tests', () => {
         },
       },
     };
-    const ovaldef = new Ovaldef(elem);
-    const ovaldef2 = new Ovaldef(elem2);
+    const ovaldef = Ovaldef.fromElement(elem);
+    const ovaldef2 = Ovaldef.fromElement(elem2);
 
     expect(ovaldef.criterias[0].negate).toEqual(true);
     expect(ovaldef2.criterias[0].negate).toEqual(false);
   });
 
   test('should return empty arrays if no definition is given', () => {
-    const ovaldef = new Ovaldef({});
+    const ovaldef = Ovaldef.fromElement({});
 
     expect(ovaldef.affecteds).toEqual([]);
     expect(ovaldef.references).toEqual([]);
@@ -283,22 +283,22 @@ describe('Ovaldef model tests', () => {
   });
 
   test('should delete raw_data', () => {
-    const ovaldef = new Ovaldef({});
+    const ovaldef = Ovaldef.fromElement({});
 
     expect(ovaldef.raw_data).toBeUndefined();
   });
 
   test('should return deprecated as yes/no', () => {
-    const ovaldef1 = new Ovaldef({deprecated: '0'});
-    const ovaldef2 = new Ovaldef({deprecated: '1'});
+    const ovaldef1 = Ovaldef.fromElement({deprecated: '0'});
+    const ovaldef2 = Ovaldef.fromElement({deprecated: '1'});
 
     expect(ovaldef1.deprecated).toEqual(NO_VALUE);
     expect(ovaldef2.deprecated).toEqual(YES_VALUE);
   });
 
   test('isDeprecated() should return correct true/false', () => {
-    const ovaldef1 = new Ovaldef({deprecated: '0'});
-    const ovaldef2 = new Ovaldef({deprecated: '1'});
+    const ovaldef1 = Ovaldef.fromElement({deprecated: '0'});
+    const ovaldef2 = Ovaldef.fromElement({deprecated: '1'});
 
     expect(ovaldef1.isDeprecated()).toEqual(false);
     expect(ovaldef2.isDeprecated()).toEqual(true);

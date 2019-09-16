@@ -33,7 +33,7 @@ describe('Permission model tests', () => {
         type: 'alert',
       },
     };
-    const permission = new Permission(elem);
+    const permission = Permission.fromElement(elem);
 
     expect(permission.resource.entityType).toEqual('alert');
     expect(permission.resource.id).toEqual('123');
@@ -45,7 +45,7 @@ describe('Permission model tests', () => {
         type: 'alert',
       },
     };
-    const permission = new Permission(elem);
+    const permission = Permission.fromElement(elem);
 
     expect(permission.resource).toBeUndefined();
   });
@@ -57,7 +57,7 @@ describe('Permission model tests', () => {
         type: 'alert',
       },
     };
-    const permission = new Permission(elem);
+    const permission = Permission.fromElement(elem);
 
     expect(permission.subject).toEqual(
       new Model(elem.subject, elem.subject.type),
@@ -70,7 +70,7 @@ describe('Permission model tests', () => {
         type: 'alert',
       },
     };
-    const permission = new Permission(elem);
+    const permission = Permission.fromElement(elem);
 
     expect(permission.subject).toBeUndefined();
   });
