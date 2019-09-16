@@ -33,6 +33,28 @@ import {EXTRA_KEYWORDS} from './filter/keywords.js';
 export const UNKNOWN_FILTER_ID = '0';
 
 /**
+ * Parses FilterTerms from filterstring
+ *
+ * @param {String} filterstring  Filter representation as a string
+ *
+ * @return {Array} Array of parsed FilterTerms
+ */
+const parseFilterTermsFromString = filterstring => {
+  const terms = [];
+  if (isString(filterstring)) {
+    const fterms = filterstring.split(' ');
+    for (let fterm of fterms) {
+      // strip whitespace
+      fterm = fterm.trim();
+      if (fterm.length > 0) {
+        terms.push(FilterTerm.fromString(fterm));
+      }
+    }
+  }
+  return terms;
+};
+
+/**
  * Represents a filter
  *
  * @extends Model
@@ -75,6 +97,7 @@ class Filter extends Model {
     if (ret.id === UNKNOWN_FILTER_ID) {
       ret.id = undefined;
     }
+    ret.terms = [];
 
     if (isDefined(ret.keywords)) {
       forEach(ret.keywords.keyword, keyword => {
@@ -82,11 +105,11 @@ class Filter extends Model {
 
         const converted = convert(key, value, relation);
 
-        this._addTerm(new FilterTerm(converted));
+        ret.terms.push(new FilterTerm(converted));
       });
       delete ret.keywords;
     } else if (isDefined(ret.term)) {
-      this._parseString(ret.term);
+      ret.terms = parseFilterTermsFromString(ret.term);
 
       // ret.term should not be part of the public api
       // but it's helpful for debug purposes
@@ -664,29 +687,6 @@ class Filter extends Model {
   }
 
   /**
-   * Parses FilterTerms from filterstring and adds them to this Filter
-   *
-   * @private
-   *
-   * @param {String} filterstring  Filter representation as a string
-   *
-   * @return {Filter} This filter.
-   */
-  _parseString(filterstring) {
-    if (isString(filterstring)) {
-      const fterms = filterstring.split(' ');
-      for (let fterm of fterms) {
-        // strip whitespace
-        fterm = fterm.trim();
-        if (fterm.length > 0) {
-          this._addTerm(FilterTerm.fromString(fterm));
-        }
-      }
-    }
-    return this;
-  }
-
-  /**
    * Creates a new Filter from filterstring
    *
    * @param {String} filterstring  String to parse FilterTerms from.
@@ -698,7 +698,7 @@ class Filter extends Model {
   static fromString(filterstring, filter) {
     const f = new Filter();
 
-    f._parseString(filterstring);
+    f._setTerms(parseFilterTermsFromString(filterstring));
     f._mergeExtraKeywords(filter);
 
     return f;
