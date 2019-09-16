@@ -22,6 +22,35 @@ import {render, fireEvent} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
 
 import MultiStepFooter from 'web/components/dialog/multistepfooter';
+import usePageTurn from 'web/components/hooks/usepageturn';
+
+const pageTitles = ['dog', 'goat', 'wyvern'];
+
+const [firstPage, lastPage] = [0, 2];
+
+// eslint-disable-next-line react/prop-types
+const DummyPage = ({customHook}) => {
+  // hooks MUST be called inside functions
+  const {
+    handlePageTurn,
+    prevDisabled,
+    nextDisabled,
+    prevTitle,
+    nextTitle,
+  } = customHook(firstPage, lastPage, pageTitles);
+
+  return (
+    <MultiStepFooter
+      prevDisabled={prevDisabled}
+      nextDisabled={nextDisabled}
+      nextButtonTitle={nextTitle}
+      previousButtonTitle={prevTitle}
+      rightButtonTitle={'Save'}
+      onNextButtonClick={() => handlePageTurn('Next')}
+      onPreviousButtonClick={() => handlePageTurn('Previous')}
+    />
+  );
+};
 
 describe('MultiStepFooter tests', () => {
   test('should render', () => {
@@ -144,6 +173,51 @@ describe('MultiStepFooter tests', () => {
 
     expect(prevButton).toHaveAttribute('disabled');
     expect(nextButton).toHaveAttribute('disabled');
+  });
+
+  test('should use usePageTurner', () => {
+    const {element} = render(<DummyPage customHook={usePageTurn} />);
+    expect(element).toMatchSnapshot();
+
+    const buttons = element.querySelectorAll('button');
+
+    expect(buttons[1]).toHaveAttribute('title', 'Previous');
+    expect(buttons[1]).toHaveAttribute('disabled');
+    expect(buttons[1]).toHaveTextContent('Previous');
+    expect(buttons[2]).toHaveAttribute('title', 'goat');
+    expect(buttons[2]).toHaveTextContent('goat');
+  });
+
+  test('should handle previous/next click', () => {
+    const {element} = render(<DummyPage customHook={usePageTurn} />);
+
+    const buttons = element.querySelectorAll('button');
+
+    fireEvent.click(buttons[2]);
+
+    expect(buttons[1]).toHaveAttribute('title', 'dog');
+    expect(buttons[1]).toHaveTextContent('dog');
+    expect(buttons[1]).not.toHaveAttribute('disabled');
+    expect(buttons[2]).toHaveAttribute('title', 'wyvern');
+    expect(buttons[2]).toHaveTextContent('wyvern');
+
+    fireEvent.click(buttons[2]);
+
+    expect(buttons[1]).toHaveAttribute('title', 'goat');
+    expect(buttons[1]).toHaveTextContent('goat');
+    expect(buttons[2]).toHaveAttribute('disabled');
+    expect(buttons[2]).toHaveAttribute('title', 'Next');
+    expect(buttons[2]).toHaveTextContent('Next');
+
+    fireEvent.click(buttons[1]);
+
+    fireEvent.click(buttons[1]);
+
+    expect(buttons[1]).toHaveAttribute('title', 'Previous');
+    expect(buttons[1]).toHaveAttribute('disabled');
+    expect(buttons[1]).toHaveTextContent('Previous');
+    expect(buttons[2]).toHaveAttribute('title', 'goat');
+    expect(buttons[2]).toHaveTextContent('goat');
   });
 });
 
