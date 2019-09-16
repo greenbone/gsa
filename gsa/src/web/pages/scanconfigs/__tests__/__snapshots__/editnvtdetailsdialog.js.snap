@@ -802,7 +802,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
                           <div
                             class="c8"
                           >
-                            Sun, Sep 8, 2019 10:00 PM UTC
+                            Mon, Sep 9, 2019 12:00 PM UTC
                           </div>
                         </td>
                       </tr>

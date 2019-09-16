@@ -36,7 +36,7 @@ const preferences = [
   {name: 'pref 3', value: 'foo', id: '3', type: 'entry'},
 ];
 
-const modified = date('2019-09-09');
+const modified = date('2019-09-09T12:00:00Z');
 
 describe('EditNvtDetailsDialog component tests', () => {
   test('should render dialog', () => {
