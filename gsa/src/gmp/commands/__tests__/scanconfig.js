@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -17,52 +17,127 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
-  SCANCONFIG_TREND_DYNAMIC,
-  SCANCONFIG_TREND_STATIC,
-  EMPTY_SCAN_CONFIG_ID,
-} from 'gmp/models/scanconfig';
-
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
-import {
-  createActionResultResponse,
   createEntityResponse,
   createHttp,
+  createActionResultResponse,
   createResponse,
 } from '../testing';
 
-import {PolicyCommand} from '../policies';
+import {
+  SCANCONFIG_TREND_STATIC,
+  SCANCONFIG_TREND_DYNAMIC,
+} from 'gmp/models/scanconfig';
 
-describe('PolicyCommand tests', () => {
-  test('should create new policy', () => {
+import {convertPreferences, ScanConfigCommand} from '../scanconfigs';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+
+describe('convertPreferences tests', () => {
+  test('should convert preferences', () => {
+    const prefenceValues = {
+      'foo Password:': {
+        id: 1,
+        value: undefined,
+        type: 'password',
+      },
+      'foo Username:': {
+        id: 2,
+        value: 'user',
+        type: 'entry',
+      },
+      bar: {
+        id: 3,
+        value: 'foo',
+        type: 'password',
+      },
+      foo: {
+        id: 4,
+        type: 'file',
+        value: 'ABC',
+      },
+    };
+
+    expect(convertPreferences(prefenceValues, '1.2.3')).toEqual({
+      'file:1.2.3:4:file:foo': 'yes',
+      'password:1.2.3:3:password:bar': 'yes',
+      'preference:1.2.3:2:entry:foo Username:': 'user',
+      'preference:1.2.3:3:password:bar': 'foo',
+      'preference:1.2.3:4:file:foo': 'ABC',
+    });
+  });
+
+  test('should return empty object if preferences are empty', () => {
+    expect(convertPreferences(undefined, '1.2.3')).toEqual({});
+    expect(convertPreferences({}, '1.2.3')).toEqual({});
+  });
+});
+
+describe('ScanConfigCommand tests', () => {
+  test('should return single config', () => {
+    const response = createEntityResponse('config', {_id: 'foo'});
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new ScanConfigCommand(fakeHttp);
+    return cmd.get({id: 'foo'}).then(resp => {
+      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+        args: {
+          cmd: 'get_config',
+          config_id: 'foo',
+        },
+      });
+
+      const {data} = resp;
+      expect(data.id).toEqual('foo');
+    });
+  });
+
+  test('should import a config', () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
 
     expect.hasAssertions();
 
-    const cmd = new PolicyCommand(fakeHttp);
+    const cmd = new ScanConfigCommand(fakeHttp);
+    return cmd.import({xml_file: 'content'}).then(() => {
+      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+        data: {
+          cmd: 'import_config',
+          xml_file: 'content',
+        },
+      });
+    });
+  });
+
+  test('should create a config', () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new ScanConfigCommand(fakeHttp);
     return cmd
       .create({
-        comment: 'bar',
+        baseScanConfig: 'uuid1',
         name: 'foo',
+        scannerId: 's1',
+        comment: 'somecomment',
       })
-      .then(resp => {
+      .then(() => {
         expect(fakeHttp.request).toHaveBeenCalledWith('post', {
           data: {
             cmd: 'create_config',
-            base: EMPTY_SCAN_CONFIG_ID,
-            comment: 'bar',
+            base: 'uuid1',
+            comment: 'somecomment',
             name: 'foo',
-            usage_type: 'policy',
+            usage_type: 'scan',
+            scanner_id: 's1',
           },
         });
-
-        const {data} = resp;
-        expect(data.id).toEqual('foo');
       });
   });
 
-  test('should save policy', () => {
+  test('should save a config', () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
 
@@ -81,7 +156,7 @@ describe('PolicyCommand tests', () => {
       foo: 'bar',
     };
 
-    const cmd = new PolicyCommand(fakeHttp);
+    const cmd = new ScanConfigCommand(fakeHttp);
     return cmd
       .save({
         id: 'c1',
@@ -89,15 +164,17 @@ describe('PolicyCommand tests', () => {
         comment: 'somecomment',
         trend,
         select,
+        scannerId: 's1',
         scannerPreferenceValues,
       })
-      .then(resp => {
+      .then(() => {
         expect(fakeHttp.request).toHaveBeenCalledWith('post', {
           data: {
             cmd: 'save_config',
+            comment: 'somecomment',
             config_id: 'c1',
             name: 'foo',
-            comment: 'somecomment',
+            scanner_id: 's1',
             'preference:scanner:scanner:scanner:foo': 'bar',
             'select:AIX Local Security Checks': 1,
             'select:Brute force attacks': 1,
@@ -105,33 +182,42 @@ describe('PolicyCommand tests', () => {
             'trend:Family Foo': 0,
           },
         });
-
-        const {data} = resp;
-        expect(data.id).toEqual('foo');
       });
   });
 
-  test('should return single policy', () => {
-    const response = createEntityResponse('config', {_id: 'foo'});
+  test('should save a config family', () => {
+    const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
 
     expect.hasAssertions();
 
-    const cmd = new PolicyCommand(fakeHttp);
-    return cmd.get({id: 'foo'}).then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-        args: {
-          cmd: 'get_config',
-          config_id: 'foo',
-        },
-      });
+    const selected = {
+      'oid:1': YES_VALUE,
+      'oid:2': NO_VALUE,
+      'oid:3': YES_VALUE,
+    };
 
-      const {data} = resp;
-      expect(data.id).toEqual('foo');
-    });
+    const cmd = new ScanConfigCommand(fakeHttp);
+    return cmd
+      .saveScanConfigFamily({
+        id: 'c1',
+        familyName: 'foo',
+        selected,
+      })
+      .then(() => {
+        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+          data: {
+            cmd: 'save_config_family',
+            config_id: 'c1',
+            family: 'foo',
+            'nvt:oid:1': 1,
+            'nvt:oid:3': 1,
+          },
+        });
+      });
   });
 
-  test('should save a policy nvt', () => {
+  test('should save a config nvt', () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
 
@@ -150,9 +236,9 @@ describe('PolicyCommand tests', () => {
       },
     };
 
-    const cmd = new PolicyCommand(fakeHttp);
+    const cmd = new ScanConfigCommand(fakeHttp);
     return cmd
-      .savePolicyNvt({
+      .saveScanConfigNvt({
         id: 'c1',
         oid: '1.2.3',
         timeout: 123,
@@ -174,7 +260,7 @@ describe('PolicyCommand tests', () => {
       });
   });
 
-  test('should request policy family data', () => {
+  test('should request scan config family data', () => {
     const response = createResponse({
       get_config_family_response: {
         get_nvts_response: {
@@ -211,9 +297,9 @@ describe('PolicyCommand tests', () => {
 
     expect.hasAssertions();
 
-    const cmd = new PolicyCommand(fakeHttp);
+    const cmd = new ScanConfigCommand(fakeHttp);
     return cmd
-      .editPolicyFamilySettings({id: 'foo', familyName: 'bar'})
+      .editScanConfigFamilySettings({id: 'foo', familyName: 'bar'})
       .then(resp => {
         expect(fakeHttp.request).toHaveBeenCalledWith('get', {
           args: {
@@ -231,6 +317,38 @@ describe('PolicyCommand tests', () => {
         expect(nvts[1].severity).toEqual(2.2);
         expect(nvts[2].selected).toEqual(NO_VALUE);
         expect(nvts[2].severity).toEqual(3.3);
+      });
+  });
+
+  test('should request scan config nvt data', () => {
+    const response = createResponse({
+      get_config_nvt_response: {
+        get_nvts_response: {
+          nvt: {
+            _oid: '1.2.3',
+          },
+        },
+      },
+    });
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new ScanConfigCommand(fakeHttp);
+    return cmd
+      .editScanConfigNvtSettings({id: 'foo', oid: '1.2.3'})
+      .then(resp => {
+        expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+          args: {
+            cmd: 'get_config_nvt',
+            config_id: 'foo',
+            oid: '1.2.3',
+            name: '',
+          },
+        });
+
+        const {data: nvt} = resp;
+        expect(nvt.id).toEqual('1.2.3');
       });
   });
 });

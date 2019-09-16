@@ -929,6 +929,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/scanconfigs/row.js
      ${GSA_SRC_DIR}/src/web/pages/scanconfigs/table.js
      ${GSA_SRC_DIR}/src/web/pages/scanconfigs/trend.js
+     ${GSA_SRC_DIR}/src/web/pages/scanconfigs/scannerpreferences.js
      ${GSA_SRC_DIR}/src/web/pages/scanners/component.js
      ${GSA_SRC_DIR}/src/web/pages/scanners/details.js
      ${GSA_SRC_DIR}/src/web/pages/scanners/detailspage.js

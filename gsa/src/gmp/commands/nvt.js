@@ -32,6 +32,24 @@ class NvtCommand extends InfoEntityCommand {
   constructor(http) {
     super(http, 'nvt', Nvt);
   }
+
+  getConfigNvt({oid, configId}) {
+    return this.httpGet(
+      {
+        cmd: 'get_config_nvt',
+        config_id: configId,
+        oid,
+      },
+      {includeDefaultParams: false},
+    ).then(response => {
+      const {data} = response;
+      const config_resp = data.get_config_nvt_response;
+
+      const nvt = new Nvt(config_resp.get_nvts_response.nvt);
+
+      return response.setData(nvt);
+    });
+  }
 }
 
 class NvtsCommand extends InfoEntitiesCommand {

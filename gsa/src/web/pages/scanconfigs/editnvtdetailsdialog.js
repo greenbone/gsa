@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -25,6 +25,8 @@ import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 
 import SeverityBar from 'web/components/bar/severitybar';
+
+import DateTime from 'web/components/date/datetime';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -37,6 +39,8 @@ import Layout from 'web/components/layout/layout';
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
 
+import Loading from 'web/components/loading/loading';
+
 import SimpleTable from 'web/components/table/simpletable';
 import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
@@ -48,229 +52,262 @@ import TableRow from 'web/components/table/row';
 import NvtPreference from '../nvts/nvtpreference';
 import Preformatted from '../nvts/preformatted';
 
-class EditDialog extends React.Component {
-  constructor(...args) {
-    super(...args);
+const createPrefValues = (preferences = []) => {
+  const preferenceValues = {};
 
-    this.handlePreferenceChange = this.handlePreferenceChange.bind(this);
-  }
+  preferences.forEach(pref => {
+    let {id, value, type} = pref;
 
-  handlePreferenceChange(value, name, onValueChange) {
-    const {preference_values} = this.props;
-    preference_values[name].value = value.value;
+    if (type === 'password' || type === 'file') {
+      value = undefined;
+    }
 
-    onValueChange(preference_values, 'preference_values');
-  }
-
-  render() {
-    const {
-      config,
-      config_name,
-      family_name,
-      nvt,
-      timeout,
-      manual_timeout = '',
-      preference_values,
-      configNameLabel,
-      title,
-      onClose,
-      onSave,
-    } = this.props;
-
-    const controlledData = {
-      config,
-      config_name,
-      family_name,
-      id: config.id,
-      nvt_name: nvt.name,
-      oid: nvt.oid,
-      preference_values,
+    preferenceValues[pref.name] = {
+      id,
+      value,
+      type,
     };
+  });
 
-    return (
-      <SaveDialog
-        title={title}
-        onClose={onClose}
-        onSave={onSave}
-        defaultValues={{
-          timeout,
-          manual_timeout,
-        }}
-        values={controlledData}
-      >
-        {({values: state, onValueChange}) => {
-          return (
-            <Layout flex="column">
+  return preferenceValues;
+};
+
+const EditNvtDetailsDialog = ({
+  configId,
+  configName,
+  configNameLabel,
+  defaultTimeout,
+  isLoadingNvt = true,
+  nvtAffectedSoftware,
+  nvtCvssVector,
+  nvtFamily,
+  nvtLastModified,
+  nvtName,
+  nvtOid,
+  nvtSeverity,
+  nvtSummary,
+  timeout,
+  preferences,
+  title,
+  onClose,
+  onSave,
+}) => {
+  const [preferenceValues, setPreferenceValues] = useState(
+    createPrefValues(preferences),
+  );
+
+  const [controlledTimeout, setControlledTimeout] = useState(
+    isDefined(timeout) ? timeout : '',
+  );
+  const [useDefaultTimeout, setDefaultTimeout] = useState(
+    isDefined(timeout) ? '0' : '1',
+  );
+
+  useEffect(() => {
+    setPreferenceValues(createPrefValues(preferences));
+  }, [preferences]);
+
+  useEffect(() => {
+    setControlledTimeout(timeout);
+    setDefaultTimeout(isDefined(timeout) ? '0' : '1');
+  }, [timeout]);
+
+  const controlledData = {
+    configId,
+    nvtOid,
+    preferenceValues,
+    timeout: controlledTimeout,
+    useDefaultTimeout,
+  };
+
+  return (
+    <SaveDialog
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      values={controlledData}
+    >
+      {({values: state, onValueChange}) =>
+        isLoadingNvt ? (
+          <Loading />
+        ) : (
+          <Layout flex="column">
+            <SimpleTable>
+              <TableBody>
+                <TableRow>
+                  <TableData>{_('Name')}</TableData>
+                  <TableData>
+                    <span>
+                      <DetailsLink id={nvtOid} type="nvt">
+                        {nvtName}
+                      </DetailsLink>
+                    </span>
+                  </TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{configNameLabel}</TableData>
+                  <TableData>{configName}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Family')}</TableData>
+                  <TableData>{nvtFamily}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('OID')}</TableData>
+                  <TableData>{nvtOid}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Last Modified')}</TableData>
+                  <TableData>
+                    <DateTime date={nvtLastModified} />
+                  </TableData>
+                </TableRow>
+              </TableBody>
+            </SimpleTable>
+
+            {isDefined(nvtSummary) && (
+              <div>
+                <h1>{_('Summary')}</h1>
+                <Preformatted>{nvtSummary}</Preformatted>
+              </div>
+            )}
+
+            {isDefined(nvtAffectedSoftware) && (
+              <div>
+                <h1>{_('Affected Software/OS')}</h1>
+                <Preformatted>{nvtAffectedSoftware}</Preformatted>
+              </div>
+            )}
+
+            <div>
+              <h1>{_('Vulnerability Scoring')}</h1>
               <SimpleTable>
                 <TableBody>
                   <TableRow>
-                    <TableData>{_('Name')}</TableData>
+                    <TableData>{_('CVSS base')}</TableData>
                     <TableData>
-                      <span>
-                        <DetailsLink id={nvt.oid} type="nvt">
-                          {nvt.name}
-                        </DetailsLink>
-                      </span>
+                      <SeverityBar severity={nvtSeverity} />
                     </TableData>
                   </TableRow>
-                  <TableRow>
-                    <TableData>{configNameLabel}</TableData>
-                    <TableData>{config.name}</TableData>
-                  </TableRow>
-                  <TableRow>
-                    <TableData>{_('Family')}</TableData>
-                    <TableData>{nvt.family}</TableData>
-                  </TableRow>
-                  <TableRow>
-                    <TableData>{_('OID')}</TableData>
-                    <TableData>{nvt.oid}</TableData>
-                  </TableRow>
-                  <TableRow>
-                    <TableData>{_('Version')}</TableData>
-                    <TableData>{nvt.version}</TableData>
-                  </TableRow>
-                  <TableRow>
-                    <TableData>{_('Notes')}</TableData>
-                    <TableData>{nvt.notes_counts.length}</TableData>
-                  </TableRow>
-                  <TableRow>
-                    <TableData>{_('Overrides')}</TableData>
-                    <TableData>{nvt.overrides_counts.length}</TableData>
-                  </TableRow>
-                </TableBody>
-              </SimpleTable>
-
-              {isDefined(nvt.tags.summary) && (
-                <div>
-                  <h1>{_('Summary')}</h1>
-                  <Preformatted>{nvt.tags.summary}</Preformatted>
-                </div>
-              )}
-
-              {isDefined(nvt.tags.affected) && (
-                <div>
-                  <h1>{_('Affected Software/OS')}</h1>
-                  <Preformatted>{nvt.tags.affected}</Preformatted>
-                </div>
-              )}
-
-              <div>
-                <h1>{_('Vulnerability Scoring')}</h1>
-                <SimpleTable>
-                  <TableBody>
+                  {isDefined(nvtCvssVector) && (
                     <TableRow>
-                      <TableData>{_('CVSS base')}</TableData>
+                      <TableData>{_('CVSS base vector')}</TableData>
                       <TableData>
-                        <SeverityBar severity={nvt.severity} />
+                        <Link
+                          to="cvsscalculator"
+                          query={{cvssVector: nvtCvssVector}}
+                        >
+                          {nvtCvssVector}
+                        </Link>
                       </TableData>
                     </TableRow>
-                    {isDefined(nvt.tags.cvss_base_vector) && (
-                      <TableRow>
-                        <TableData>{_('CVSS base vector')}</TableData>
-                        <TableData>
-                          <Link
-                            to="cvsscalculator"
-                            query={{cvssVector: nvt.tags.cvss_base_vector}}
-                          >
-                            {nvt.tags.cvss_base_vector}
-                          </Link>
-                        </TableData>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </SimpleTable>
-              </div>
-
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>{_('Name')}</TableHead>
-                    <TableHead>{_('New Value')}</TableHead>
-                    <TableHead>{_('Default Value')}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableData>{_('Timeout')}</TableData>
-                    <TableData>
-                      <Divider flex="column">
-                        <Divider>
-                          <Radio
-                            value="0"
-                            name="timeout"
-                            checked={state.timeout === '0'}
-                            onChange={onValueChange}
-                          />
-                          <span>
-                            {_('Apply default timeout')}
-                            {isDefined(nvt.defaultTimeout)
-                              ? ' (' + nvt.defaultTimeout + ')'
-                              : ''}
-                          </span>
-                        </Divider>
-                        <Divider>
-                          <Radio
-                            value="1"
-                            name="timeout"
-                            checked={state.timeout !== '0'}
-                            onChange={onValueChange}
-                          />
-                          <TextField
-                            disabled={state.timeout === '0'}
-                            name="manual_timeout"
-                            value={state.manual_timeout}
-                            onChange={onValueChange}
-                          />
-                        </Divider>
-                      </Divider>
-                    </TableData>
-                    <TableData>
-                      {isDefined(nvt.defaultTimeout) ? nvt.defaultTimeout : ''}
-                    </TableData>
-                  </TableRow>
-                  {nvt.preferences.map(pref => {
-                    const prefValue = isDefined(preference_values[pref.name])
-                      ? preference_values[pref.name].value
-                      : undefined;
-                    return (
-                      <NvtPreference
-                        key={pref.name}
-                        preference={pref}
-                        value={prefValue}
-                        onChange={value =>
-                          this.handlePreferenceChange(
-                            value,
-                            pref.name,
-                            onValueChange,
-                          )
-                        }
-                      />
-                    );
-                  })}
+                  )}
                 </TableBody>
-              </Table>
-            </Layout>
-          );
-        }}
-      </SaveDialog>
-    );
-  }
-}
+              </SimpleTable>
+            </div>
 
-EditDialog.propTypes = {
-  config: PropTypes.model.isRequired,
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{_('Name')}</TableHead>
+                  <TableHead>{_('New Value')}</TableHead>
+                  <TableHead>{_('Default Value')}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableData>{_('Timeout')}</TableData>
+                  <TableData>
+                    <Divider flex="column">
+                      <Divider>
+                        <Radio
+                          value="1"
+                          name="useDefaultTimeout"
+                          checked={state.useDefaultTimeout === '1'}
+                          onChange={value => setDefaultTimeout(value)}
+                        />
+                        <span>
+                          {_('Apply default timeout')}
+                          {isDefined(defaultTimeout)
+                            ? ' (' + defaultTimeout + ')'
+                            : ''}
+                        </span>
+                      </Divider>
+                      <Divider>
+                        <Radio
+                          value="0"
+                          name="useDefaultTimeout"
+                          checked={state.useDefaultTimeout === '0'}
+                          onChange={value => setDefaultTimeout(value)}
+                        />
+                        <TextField
+                          disabled={state.useDefaultTimeout === '1'}
+                          name="timeout"
+                          value={state.timeout}
+                          onChange={value => setControlledTimeout(value)}
+                        />
+                      </Divider>
+                    </Divider>
+                  </TableData>
+                  <TableData>
+                    {isDefined(defaultTimeout) ? defaultTimeout : ''}
+                  </TableData>
+                </TableRow>
+                {preferences.map(pref => {
+                  const prefValue = isDefined(preferenceValues[pref.name])
+                    ? preferenceValues[pref.name].value
+                    : undefined;
+                  return (
+                    <NvtPreference
+                      key={pref.name}
+                      preference={pref}
+                      value={prefValue}
+                      onChange={value => {
+                        preferenceValues[pref.name].value = value.value;
+                      }}
+                    />
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </Layout>
+        )
+      }
+    </SaveDialog>
+  );
+};
+
+EditNvtDetailsDialog.propTypes = {
+  configId: PropTypes.string.isRequired,
+  configName: PropTypes.string.isRequired,
   configNameLabel: PropTypes.string.isRequired,
-  config_name: PropTypes.string,
-  family_name: PropTypes.string,
-  manual_timeout: PropTypes.string,
-  nvt: PropTypes.object.isRequired,
-  preference_values: PropTypes.object.isRequired,
-  timeout: PropTypes.string.isRequired,
+  defaultTimeout: PropTypes.number,
+  isLoadingNvt: PropTypes.bool,
+  nvtAffectedSoftware: PropTypes.string,
+  nvtCvssVector: PropTypes.string,
+  nvtFamily: PropTypes.string,
+  nvtLastModified: PropTypes.date,
+  nvtName: PropTypes.string,
+  nvtOid: PropTypes.string,
+  nvtSeverity: PropTypes.number,
+  nvtSummary: PropTypes.string,
+  preferences: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      default: PropTypes.any,
+      hr_name: PropTypes.string,
+      name: PropTypes.string.isRequired,
+      value: PropTypes.any,
+      alt: PropTypes.array,
+      type: PropTypes.string,
+    }),
+  ),
+  timeout: PropTypes.number,
   title: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
 
-export default EditDialog;
+export default EditNvtDetailsDialog;
 
 // vim: set ts=2 sw=2 tw=80:

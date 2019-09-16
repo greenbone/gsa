@@ -18,149 +18,141 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {setLocale} from 'gmp/locale/lang';
 
-import ScanConfig from 'gmp/models/scanconfig';
-import Policy from 'gmp/models/policy';
-import Nvt from 'gmp/models/nvt';
+import date from 'gmp/models/date';
+
+import {setTimezone} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import EditNvtDetailsDialog from '../editnvtdetailsdialog';
 
-const config = new ScanConfig({
-  name: 'foo',
-});
+setLocale('en');
 
-const policy = new Policy({
-  name: 'foo policy',
-});
+const preferences = [
+  {name: 'pref 1', value: 'no', id: '1', type: 'checkbox'},
+  {name: 'pref 2', value: '1', id: '2', type: 'radio', alt: ['2', '3']},
+  {name: 'pref 3', value: 'foo', id: '3', type: 'entry'},
+];
 
-const nvt = new Nvt({
-  _oid: '1234',
-  name: 'nvt',
-  family: 'family',
-  version: 0,
-  notes_counts: '0',
-  overrides_counts: '0',
-  preferences: {
-    preference: [
-      {
-        id: '0',
-        hr_name: 'preference0',
-        name: 'preference0',
-        type: 'checkbox',
-        value: 'no',
-        default: 'no',
-      },
-      {
-        id: '1',
-        hr_name: 'preference1',
-        name: 'preference1',
-        type: 'radio',
-        value: '1',
-        alt: ['2', '3'],
-        default: '1',
-      },
-      {
-        id: '2',
-        hr_name: 'preference2',
-        name: 'preference2',
-        type: 'entry',
-        value: 'foo',
-        default: 'foo',
-      },
-    ],
-  },
-  tags:
-    'cvss_base_vector=AV:N/AC:L/Au:N/C:N/I:N/A:N|qod_type=general_note|summary=This is a test.|solution_type=',
-});
-
-const preferenceValues = {
-  preference0: {id: 0, value: 'no', type: 'checkbox'},
-  preference1: {id: 1, value: '1', type: 'radio'},
-  preference2: {id: 2, value: 'foo', type: 'entry'},
-};
+const modified = date('2019-09-09T12:00:00Z');
 
 describe('EditNvtDetailsDialog component tests', () => {
   test('should render dialog', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
 
-    const {render} = rendererWith({capabilities: true, router: true});
-    const {baseElement} = render(
+    const {render, store} = rendererWith({
+      capabilities: true,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(setTimezone('UTC'));
+
+    const {baseElement, getByTestId} = render(
       <EditNvtDetailsDialog
-        config={config}
-        config_name="foo"
-        family_name="family"
-        manual_timeout=""
-        nvt={nvt}
-        preference_values={preferenceValues}
-        configNameLabel={_('Config')}
-        timeout=""
-        title={_('Edit Scan Config NVT {{name}}', {
-          name: nvt.name,
-        })}
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        isLoadingNvt={false}
+        nvtAffectedSoftware="Foo"
+        nvtCvssVector="AV:N/AC:L/Au:N/C:N/I:N/A:N"
+        nvtFamily="family"
+        nvtLastModified={modified}
+        nvtName="foo"
+        nvtOid="1.2.3"
+        nvtSeverity={7.0}
+        nvtSummary="This is a test."
+        preferences={preferences}
+        title="Edit Scan Config NVT"
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
     expect(baseElement).toMatchSnapshot();
-    expect(baseElement).toHaveTextContent('Config');
-    expect(baseElement).not.toHaveTextContent('Policy');
-    expect(baseElement).toHaveTextContent('foo');
-    expect(baseElement).toHaveTextContent('Edit Scan Config NVT nvt');
+
+    const titleBar = getByTestId('dialog-title-bar');
+    expect(titleBar).toHaveTextContent('Edit Scan Config NVT');
+
+    const content = getByTestId('save-dialog-content');
+
+    expect(content).toHaveTextContent('Config');
+    expect(content).toHaveTextContent('foo');
   });
 
-  test('should render dialog for policies', () => {
+  test('should render loading indicator', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
 
-    const {render} = rendererWith({capabilities: true, router: true});
-    const {baseElement} = render(
+    const {render, store} = rendererWith({
+      capabilities: true,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(setTimezone('UTC'));
+
+    const {baseElement, getByTestId} = render(
       <EditNvtDetailsDialog
-        config={policy}
-        config_name="foo policy"
-        family_name="family"
-        manual_timeout=""
-        nvt={nvt}
-        preference_values={preferenceValues}
-        configNameLabel={_('Policy')}
-        timeout=""
-        title={_('Edit Policy NVT {{name}}', {
-          name: nvt.name,
-        })}
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        isLoadingNvt={true}
+        nvtAffectedSoftware="Foo"
+        nvtCvssVector="AV:N/AC:L/Au:N/C:N/I:N/A:N"
+        nvtFamily="family"
+        nvtLastModified={modified}
+        nvtName="foo"
+        nvtOid="1.2.3"
+        nvtSeverity={7.0}
+        nvtSummary="This is a test."
+        preferences={preferences}
+        title="Edit Scan Config NVT"
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
-    expect(baseElement).toHaveTextContent('Policy');
-    expect(baseElement).not.toHaveTextContent('Config');
-    expect(baseElement).toHaveTextContent('foo policy');
-    expect(baseElement).toHaveTextContent('Edit Policy NVT nvt');
+    expect(baseElement).toMatchSnapshot();
+
+    const titleBar = getByTestId('dialog-title-bar');
+    expect(titleBar).toHaveTextContent('Edit Scan Config NVT');
+
+    const content = getByTestId('save-dialog-content');
+
+    expect(content).not.toHaveTextContent('Config');
+    expect(content).not.toHaveTextContent('foo');
   });
 
   test('should save data', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
 
-    const {render} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({
+      capabilities: true,
+      store: true,
+      router: true,
+    });
 
     const {getByTestId} = render(
       <EditNvtDetailsDialog
-        config={config}
-        config_name="foo"
-        family_name="family"
-        manual_timeout=""
-        nvt={nvt}
-        preference_values={preferenceValues}
-        configNameLabel={_('Config')}
-        timeout=""
-        title={_('Edit Scan Config NVT {{name}}', {
-          name: nvt.name,
-        })}
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        isLoadingNvt={false}
+        nvtAffectedSoftware="Foo"
+        nvtCvssVector="AV:N/AC:L/Au:N/C:N/I:N/A:N"
+        nvtFamily="family"
+        nvtLastModified={modified}
+        nvtName="foo"
+        nvtOid="1.2.3"
+        nvtSeverity={7.0}
+        nvtSummary="This is a test."
+        preferences={preferences}
+        title="Edit Scan Config NVT"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -170,15 +162,27 @@ describe('EditNvtDetailsDialog component tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      config: config,
-      config_name: 'foo',
-      family_name: 'family',
-      id: undefined,
-      manual_timeout: '',
-      nvt_name: nvt.name,
-      oid: '1234',
-      preference_values: preferenceValues,
-      timeout: '',
+      configId: 'c1',
+      nvtOid: '1.2.3',
+      preferenceValues: {
+        'pref 1': {
+          id: '1',
+          value: 'no',
+          type: 'checkbox',
+        },
+        'pref 2': {
+          id: '2',
+          value: '1',
+          type: 'radio',
+        },
+        'pref 3': {
+          id: '3',
+          value: 'foo',
+          type: 'entry',
+        },
+      },
+      timeout: undefined,
+      useDefaultTimeout: '1',
     });
   });
 
@@ -186,21 +190,28 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
 
-    const {render} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({
+      capabilities: true,
+      store: true,
+      router: true,
+    });
 
     const {getByTestId} = render(
       <EditNvtDetailsDialog
-        config={config}
-        config_name="foo"
-        family_name="family"
-        manual_timeout=""
-        nvt={nvt}
-        preference_values={preferenceValues}
-        configNameLabel={_('Config')}
-        timeout=""
-        title={_('Edit Scan Config NVT {{name}}', {
-          name: nvt.name,
-        })}
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        isLoadingNvt={false}
+        nvtAffectedSoftware="Foo"
+        nvtCvssVector="AV:N/AC:L/Au:N/C:N/I:N/A:N"
+        nvtFamily="family"
+        nvtLastModified={modified}
+        nvtName="foo"
+        nvtOid="1.2.3"
+        nvtSeverity={7.0}
+        nvtSummary="This is a test."
+        preferences={preferences}
+        title="Edit Scan Config NVT"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -217,21 +228,28 @@ describe('EditNvtDetailsDialog component tests', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
 
-    const {render} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({
+      capabilities: true,
+      store: true,
+      router: true,
+    });
 
     const {baseElement, getByTestId, getAllByTestId} = render(
       <EditNvtDetailsDialog
-        config={config}
-        config_name="foo"
-        family_name="family"
-        manual_timeout=""
-        nvt={nvt}
-        preference_values={preferenceValues}
-        configNameLabel={_('Config')}
-        timeout=""
-        title={_('Edit Scan Config NVT {{name}}', {
-          name: nvt.name,
-        })}
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        isLoadingNvt={false}
+        nvtAffectedSoftware="Foo"
+        nvtCvssVector="AV:N/AC:L/Au:N/C:N/I:N/A:N"
+        nvtFamily="family"
+        nvtLastModified={modified}
+        nvtName="foo"
+        nvtOid="1.2.3"
+        nvtSeverity={7.0}
+        nvtSummary="This is a test."
+        preferences={preferences}
+        title="Edit Scan Config NVT"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -241,28 +259,24 @@ describe('EditNvtDetailsDialog component tests', () => {
     fireEvent.click(radios[2]);
     fireEvent.click(radios[5]);
 
-    const inputs = baseElement.querySelectorAll('input');
-    fireEvent.change(inputs[8], {target: {value: 'bar'}});
+    const inputs = baseElement.querySelectorAll('input[type="text"]');
+    fireEvent.change(inputs[1], {target: {value: 'bar'}});
 
     const saveButton = getByTestId('dialog-save-button');
     fireEvent.click(saveButton);
 
     const newPreferenceValues = {
-      preference0: {id: 0, value: 'yes', type: 'checkbox'},
-      preference1: {id: 1, value: '2', type: 'radio'},
-      preference2: {id: 2, value: 'bar', type: 'entry'},
+      'pref 1': {id: '1', value: 'yes', type: 'checkbox'},
+      'pref 2': {id: '2', value: '2', type: 'radio'},
+      'pref 3': {id: '3', value: 'bar', type: 'entry'},
     };
 
     expect(handleSave).toHaveBeenCalledWith({
-      config: config,
-      config_name: 'foo',
-      family_name: 'family',
-      id: undefined,
-      manual_timeout: '',
-      nvt_name: nvt.name,
-      oid: '1234',
-      preference_values: newPreferenceValues,
-      timeout: '',
+      configId: 'c1',
+      timeout: undefined,
+      nvtOid: '1.2.3',
+      preferenceValues: newPreferenceValues,
+      useDefaultTimeout: '1',
     });
   });
 });

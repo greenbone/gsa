@@ -23,6 +23,8 @@ import Model from 'gmp/model';
 import Policy from 'gmp/models/policy';
 import {testModel} from 'gmp/models/testing';
 
+import {SCANCONFIG_TREND_DYNAMIC} from '../scanconfig';
+
 testModel(Policy, 'policy');
 
 describe('Policy model tests', () => {
@@ -42,7 +44,7 @@ describe('Policy model tests', () => {
     const res = [
       {
         name: 'foo',
-        trend: '1',
+        trend: SCANCONFIG_TREND_DYNAMIC,
         nvts: {
           count: 42,
           max: 42,
@@ -88,7 +90,7 @@ describe('Policy model tests', () => {
     };
     const res = {
       name: 'foo',
-      trend: '1',
+      trend: SCANCONFIG_TREND_DYNAMIC,
       nvts: {
         count: 42,
         max: 42,
@@ -115,7 +117,7 @@ describe('Policy model tests', () => {
     const policy = new Policy(elem);
 
     expect(policy.families.count).toEqual(42);
-    expect(policy.families.trend).toEqual('1');
+    expect(policy.families.trend).toEqual(SCANCONFIG_TREND_DYNAMIC);
     expect(policy.family_count).toBeUndefined();
   });
 
@@ -130,7 +132,7 @@ describe('Policy model tests', () => {
     };
     const res = {
       count: 42,
-      trend: '1',
+      trend: SCANCONFIG_TREND_DYNAMIC,
       known: 21,
       max: 1337,
     };

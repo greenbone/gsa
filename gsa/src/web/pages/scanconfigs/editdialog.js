@@ -19,595 +19,240 @@
 
 import React, {useState, useEffect} from 'react';
 
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {
+  OPENVAS_SCAN_CONFIG_TYPE,
+  OSP_SCAN_CONFIG_TYPE,
+  SCANCONFIG_TREND_STATIC,
+} from 'gmp/models/scanconfig';
 
-import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
-import {FoldState} from 'web/components/folding/folding';
-
-import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
-import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 import Select from 'web/components/form/select';
-import YesNoRadio from 'web/components/form/yesnoradio';
 import Loading from 'web/components/loading/loading';
 
-import EditIcon from 'web/components/icon/editicon';
-
-import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import Section from 'web/components/section/section';
+import NvtFamilies from './nvtfamilies';
+import NvtPreferences, {NvtPreferencePropType} from './nvtpreferences';
+import ScannerPreferences, {
+  ScannerPreferencePropType,
+} from './scannerpreferences';
 
-import Table from 'web/components/table/stripedtable';
-import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
-import TableHeader from 'web/components/table/header';
-import TableHead from 'web/components/table/head';
-import TableRow from 'web/components/table/row';
+const createTrendAndSelect = (scanConfigFamilies = {}, allFamilies = []) => {
+  const trend = {};
+  const select = {};
 
-import Trend from './trend';
-
-import {
-  OPENVAS_SCAN_CONFIG_TYPE,
-  OSP_SCAN_CONFIG_TYPE,
-  SCANCONFIG_TREND_DYNAMIC,
-  SCANCONFIG_TREND_STATIC,
-} from 'gmp/models/scanconfig';
-
-const noop_convert = value => value;
-
-const StyledTableData = styled(TableData)`
-  overflow-wrap: break-word;
-`;
-
-class NvtPreferenceDisplay extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return nextProps.preference !== this.props.preference;
-  }
-
-  render() {
-    const {config, preference, onEditNvtDetailsClick} = this.props;
-    const title =
-      config.usage_type === 'policy'
-        ? _('Edit Policy NVT Details')
-        : _('Edit Scan Config NVT Details');
-
-    return (
-      <TableRow>
-        <StyledTableData>{preference.nvt.name}</StyledTableData>
-        <StyledTableData>{preference.name}</StyledTableData>
-        <StyledTableData>{preference.value}</StyledTableData>
-        <TableData align={['center', 'center']}>
-          <EditIcon
-            title={title}
-            value={{config, nvt: preference.nvt}}
-            onClick={onEditNvtDetailsClick}
-          />
-        </TableData>
-      </TableRow>
-    );
-  }
-}
-
-NvtPreferenceDisplay.propTypes = {
-  config: PropTypes.model.isRequired,
-  preference: PropTypes.object.isRequired,
-  onEditNvtDetailsClick: PropTypes.func.isRequired,
-};
-
-const NvtPreferences = ({config, preferences = [], onEditNvtDetailsClick}) => {
-  return (
-    <Section
-      foldable
-      initialFoldState={FoldState.FOLDED}
-      title={_('Network Vulnerability Test Preferences ({{counts}})', {
-        counts: preferences.length,
-      })}
-    >
-      <Table fixed>
-        <TableHeader>
-          <TableRow>
-            <TableHead width="30%">{_('NVT')}</TableHead>
-            <TableHead width="30%">{_('Name')}</TableHead>
-            <TableHead width="30%">{_('Value')}</TableHead>
-            <TableHead width="10%" align="center">
-              {_('Actions')}
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {preferences.map(pref => (
-            <NvtPreferenceDisplay
-              key={pref.nvt.name + pref.name}
-              config={config}
-              preference={pref}
-              onEditNvtDetailsClick={onEditNvtDetailsClick}
-            />
-          ))}
-        </TableBody>
-      </Table>
-    </Section>
-  );
-};
-
-NvtPreferences.propTypes = {
-  config: PropTypes.model.isRequired,
-  preferences: PropTypes.array.isRequired,
-  onEditNvtDetailsClick: PropTypes.func.isRequired,
-};
-
-class ScannerPreference extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return (
-      nextProps.preference !== this.props.preference ||
-      nextProps.value !== this.props.value
-    );
-  }
-
-  render() {
-    const {preference, value, onPreferenceChange} = this.props;
-    const {hr_name, name} = preference;
-    const is_radio =
-      name === 'ping_hosts' ||
-      name === 'reverse_lookup' ||
-      name === 'unscanned_closed' ||
-      name === 'nasl_no_signature_check' ||
-      name === 'reverse_lookup' ||
-      name === 'unscanned_closed_udp' ||
-      name === 'auto_enable_dependencies' ||
-      name === 'kb_dont_replay_attacks' ||
-      name === 'kb_dont_replay_denials' ||
-      name === 'kb_dont_replay_info_gathering' ||
-      name === 'kb_dont_replay_scanners' ||
-      name === 'kb_restore' ||
-      name === 'log_whole_attack' ||
-      name === 'test_empty_vhost' ||
-      name === 'only_test_hosts_whose_kb_we_dont_have' ||
-      name === 'only_test_hosts_whose_kb_we_have' ||
-      name === 'optimize_test' ||
-      name === 'safe_checks' ||
-      name === 'save_knowledge_base' ||
-      name === 'silent_dependencies' ||
-      name === 'slice_network_addresses' ||
-      name === 'drop_privileges' ||
-      name === 'network_scan' ||
-      name === 'report_host_details';
-    return (
-      <TableRow>
-        <TableData>{hr_name}</TableData>
-        <TableData>
-          {is_radio ? (
-            <Layout>
-              <YesNoRadio
-                yesValue="yes"
-                noValue="no"
-                name={name}
-                value={value}
-                convert={noop_convert}
-                onChange={onPreferenceChange}
-              />
-            </Layout>
-          ) : (
-            <TextField
-              name={name}
-              value={value}
-              onChange={onPreferenceChange}
-            />
-          )}
-        </TableData>
-        <TableData>{preference.default}</TableData>
-      </TableRow>
-    );
-  }
-}
-
-ScannerPreference.propTypes = {
-  preference: PropTypes.object.isRequired,
-  value: PropTypes.any.isRequired,
-  onPreferenceChange: PropTypes.func,
-};
-
-class ScannerPreferences extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.onPreferenceChange = this.onPreferenceChange.bind(this);
-  }
-
-  onPreferenceChange(value, name) {
-    const {values, onValueChange} = this.props;
-
-    values[name] = value;
-
-    onValueChange(values, 'scanner_preference_values');
-  }
-
-  render() {
-    const {preferences = [], values} = this.props;
-    return (
-      <Section
-        foldable
-        initialFoldState={FoldState.FOLDED}
-        title={_('Edit Scanner Preferences ({{counts}})', {
-          counts: preferences.length,
-        })}
-      >
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{_('Name')}</TableHead>
-              <TableHead>{_('New Value')}</TableHead>
-              <TableHead>{_('Default Value')}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {preferences.map(pref => (
-              <ScannerPreference
-                key={pref.name}
-                preference={pref}
-                value={values[pref.name]}
-                onPreferenceChange={this.onPreferenceChange}
-              />
-            ))}
-          </TableBody>
-        </Table>
-      </Section>
-    );
-  }
-}
-
-ScannerPreferences.propTypes = {
-  preferences: PropTypes.array.isRequired,
-  values: PropTypes.object.isRequired,
-  onValueChange: PropTypes.func,
-};
-
-class NvtFamily extends React.Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      nextProps.config !== this.props.config ||
-      nextProps.family !== this.props.family ||
-      nextProps.select !== this.props.select ||
-      nextProps.trend !== this.props.trend
-    );
-  }
-
-  render() {
-    const {
-      config,
-      family,
-      select,
-      trend,
-      onEditConfigFamilyClick,
-      onSelectChange,
-      onTrendChange,
-    } = this.props;
+  allFamilies.forEach(family => {
     const {name} = family;
-    const config_family = config.families[name];
-    const counts = {
-      count: 0,
-      max: family.maxNvtCount,
-    };
+    const configFamily = scanConfigFamilies[name];
 
-    if (isDefined(config_family)) {
-      counts.count = config_family.nvts.count;
-      counts.max = config_family.nvts.max;
+    if (isDefined(configFamily)) {
+      trend[name] = configFamily.trend;
+      select[name] =
+        configFamily.nvts.count === family.maxNvtCount ? YES_VALUE : NO_VALUE;
+    } else {
+      trend[name] = SCANCONFIG_TREND_STATIC;
+      select[name] = NO_VALUE;
     }
+  });
 
-    const title =
-      config.usage_type === 'policy'
-        ? _('Edit Policy Family')
-        : _('Edit Scan Config Family');
-
-    return (
-      <TableRow key={name}>
-        <TableData>{name}</TableData>
-        <TableData align="start">{_('{{count}} of {{max}}', counts)}</TableData>
-        <TableData align={['center', 'start']}>
-          <Divider>
-            <Radio
-              flex
-              name={name}
-              checked={trend === YES_VALUE}
-              convert={parseYesNo}
-              value={YES_VALUE}
-              onChange={onTrendChange}
-            />
-            <Trend trend={SCANCONFIG_TREND_DYNAMIC} />
-            <Radio
-              flex
-              name={name}
-              checked={trend === NO_VALUE}
-              convert={parseYesNo}
-              value={NO_VALUE}
-              onChange={onTrendChange}
-            />
-            <Trend trend={SCANCONFIG_TREND_STATIC} />
-          </Divider>
-        </TableData>
-        <TableData align={['start', 'center']}>
-          <Checkbox
-            flex
-            name={name}
-            checked={select === YES_VALUE}
-            checkedValue={YES_VALUE}
-            unCheckedValue={NO_VALUE}
-            onChange={onSelectChange}
-          />
-        </TableData>
-        <TableData align={['center', 'center']}>
-          <EditIcon
-            title={title}
-            value={{name, config}}
-            onClick={onEditConfigFamilyClick}
-          />
-        </TableData>
-      </TableRow>
-    );
-  }
-}
-
-NvtFamily.propTypes = {
-  config: PropTypes.model.isRequired,
-  family: PropTypes.object.isRequired,
-  select: PropTypes.yesno.isRequired,
-  trend: PropTypes.yesno.isRequired,
-  onEditConfigFamilyClick: PropTypes.func,
-  onSelectChange: PropTypes.func,
-  onTrendChange: PropTypes.func,
+  return {
+    trend,
+    select,
+  };
 };
 
-class NvtFamilies extends React.Component {
-  constructor(...args) {
-    super(...args);
+const createScannerPreferenceValues = (preferences = []) => {
+  const values = {};
 
-    this.onSelectChange = this.onSelectChange.bind(this);
-    this.onTrendChange = this.onTrendChange.bind(this);
-  }
+  preferences.forEach(preference => {
+    values[preference.name] = preference.value;
+  });
 
-  onSelectChange(value, name) {
-    const {select, onValueChange} = this.props;
-
-    select[name] = value;
-
-    onValueChange(select, 'select');
-  }
-
-  onTrendChange(value, name) {
-    const {trend, onValueChange} = this.props;
-
-    trend[name] = value;
-
-    onValueChange(trend, 'trend');
-  }
-
-  render() {
-    const {
-      config,
-      families = [],
-      trend,
-      select,
-      onEditConfigFamilyClick,
-    } = this.props;
-
-    return (
-      <Section
-        foldable
-        title={_('Edit Network Vulnerability Test Families ({{counts}})', {
-          counts: families.length,
-        })}
-      >
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{_('Family')}</TableHead>
-              <TableHead>{_('NVTs selected')}</TableHead>
-              <TableHead>{_('Trend')}</TableHead>
-              <TableHead width="9em">{_('Select all NVTs')}</TableHead>
-              <TableHead align="center">{_('Actions')}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {families.map(family => {
-              const {name} = family;
-              return (
-                <NvtFamily
-                  key={name}
-                  config={config}
-                  family={family}
-                  trend={trend[name]}
-                  select={select[name]}
-                  onEditConfigFamilyClick={onEditConfigFamilyClick}
-                  onSelectChange={this.onSelectChange}
-                  onTrendChange={this.onTrendChange}
-                />
-              );
-            })}
-            <TableRow>
-              <TableData>
-                {_('Total: {{count}}', {count: config.families.count})}
-              </TableData>
-              <TableData align="start">
-                {_('{{known}} of {{max}}', config.nvts)}
-              </TableData>
-              {/* add empty cells to spread row to end of table */}
-              <TableData />
-              <TableData />
-              <TableData />
-            </TableRow>
-          </TableBody>
-        </Table>
-      </Section>
-    );
-  }
-}
-
-NvtFamilies.propTypes = {
-  config: PropTypes.model.isRequired,
-  families: PropTypes.array.isRequired,
-  select: PropTypes.object.isRequired,
-  trend: PropTypes.object.isRequired,
-  onEditConfigFamilyClick: PropTypes.func,
-  onValueChange: PropTypes.func,
+  return values;
 };
 
-const EditDialog = ({
+const EditScanConfigDialog = ({
   comment = '',
-  config,
+  configId,
+  configFamilies,
+  configIsInUse = false,
+  configType,
+  editNvtDetailsTitle,
+  editNvtFamiliesTitle,
   families,
+  isLoadingConfig = true,
+  isLoadingFamilies = true,
+  isLoadingScanners = true,
   name,
-  scanner_id,
-  scanner_preference_values,
+  nvtPreferences,
+  scannerPreferences,
+  scannerId,
   scanners,
-  select,
   title,
-  trend,
   onClose,
   onEditConfigFamilyClick,
   onEditNvtDetailsClick,
   onSave,
 }) => {
-  const scanConfigType =
-    config.usage_type === 'policy'
-      ? config.policy_type
-      : config.scan_config_type;
+  const [scannerPreferenceValues, setScannerPreferenceValues] = useState(
+    createScannerPreferenceValues(scannerPreferences),
+  );
+
+  useEffect(() => {
+    setScannerPreferenceValues(
+      createScannerPreferenceValues(scannerPreferences),
+    );
+  }, [scannerPreferences]);
+
+  const {trend, select} = createTrendAndSelect(configFamilies, families);
 
   const uncontrolledData = {
-    base: scanConfigType,
     comment,
     name,
-    scanner_id,
+    scannerId,
   };
 
   const controlledData = {
-    id: config.id,
-    scanner_preference_values,
+    id: configId,
+    scannerPreferenceValues,
     select,
     trend,
   };
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-    // we want to show loading indicator while the content of the dialog is loading. 500ms is arbitrary, but the loading indicator will not disappear until rerender with the required content.
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
-
   return (
     <SaveDialog
+      loading={isLoadingConfig}
       title={title}
       onClose={onClose}
       onSave={onSave}
       defaultValues={uncontrolledData}
       values={controlledData}
     >
-      {({values: state, onValueChange}) => {
-        if (isLoading) {
-          return <Loading />;
-        }
+      {({values: state, onValueChange}) => (
+        <Layout flex="column">
+          <FormGroup title={_('Name')}>
+            <TextField
+              name="name"
+              grow="1"
+              value={state.name}
+              size="30"
+              onChange={onValueChange}
+            />
+          </FormGroup>
 
-        return (
-          <Layout flex="column">
-            <FormGroup title={_('Name')}>
-              <TextField
-                name="name"
-                grow="1"
-                value={state.name}
-                size="30"
-                onChange={onValueChange}
-              />
-            </FormGroup>
+          <FormGroup title={_('Comment')}>
+            <TextField
+              name="comment"
+              value={state.comment}
+              grow="1"
+              size="30"
+              onChange={onValueChange}
+            />
+          </FormGroup>
 
-            <FormGroup title={_('Comment')}>
-              <TextField
-                name="comment"
-                value={state.comment}
-                grow="1"
-                size="30"
-                onChange={onValueChange}
-              />
-            </FormGroup>
+          {!configIsInUse && (
+            <React.Fragment>
+              {configType === OSP_SCAN_CONFIG_TYPE &&
+                (isLoadingScanners ? (
+                  <Loading />
+                ) : (
+                  <FormGroup title={_('Scanner')}>
+                    <Select
+                      name="scannerId"
+                      items={renderSelectItems(scanners)}
+                      value={state.scannerId}
+                      onChange={onValueChange}
+                    />
+                  </FormGroup>
+                ))}
 
-            {!config.isInUse() && scanConfigType === OSP_SCAN_CONFIG_TYPE && (
-              <FormGroup title={_('Scanner')}>
-                <Select
-                  name="scanner_id"
-                  items={renderSelectItems(scanners)}
-                  value={state.scanner_id}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-            )}
+              {isLoadingConfig || isLoadingFamilies ? (
+                <Loading />
+              ) : (
+                configType === OPENVAS_SCAN_CONFIG_TYPE && (
+                  <NvtFamilies
+                    configFamilies={configFamilies}
+                    editTitle={editNvtFamiliesTitle}
+                    families={families}
+                    trend={trend}
+                    select={select}
+                    onEditConfigFamilyClick={onEditConfigFamilyClick}
+                    onValueChange={onValueChange}
+                  />
+                )
+              )}
 
-            {!config.isInUse() &&
-              scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
-                <NvtFamilies
-                  config={config}
-                  families={families}
-                  trend={trend}
-                  select={select}
-                  onEditConfigFamilyClick={onEditConfigFamilyClick}
-                  onValueChange={onValueChange}
+              {isLoadingConfig ? (
+                <Loading />
+              ) : (
+                <ScannerPreferences
+                  values={scannerPreferenceValues}
+                  preferences={scannerPreferences}
+                  onValuesChange={values => setScannerPreferenceValues(values)}
                 />
               )}
 
-            {!config.isInUse() && (
-              <ScannerPreferences
-                values={scanner_preference_values}
-                preferences={config.preferences.scanner}
-                onValueChange={onValueChange}
-              />
-            )}
-
-            {!config.isInUse() &&
-              scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
-                <NvtPreferences
-                  config={config}
-                  preferences={config.preferences.nvt}
-                  onValueChange={onValueChange}
-                  onEditNvtDetailsClick={onEditNvtDetailsClick}
-                />
+              {isLoadingConfig ? (
+                <Loading />
+              ) : (
+                configType === OPENVAS_SCAN_CONFIG_TYPE && (
+                  <NvtPreferences
+                    editTitle={editNvtDetailsTitle}
+                    preferences={nvtPreferences}
+                    onEditNvtDetailsClick={onEditNvtDetailsClick}
+                  />
+                )
               )}
-          </Layout>
-        );
-      }}
+            </React.Fragment>
+          )}
+        </Layout>
+      )}
     </SaveDialog>
   );
 };
 
-EditDialog.propTypes = {
+EditScanConfigDialog.propTypes = {
   comment: PropTypes.string,
-  config: PropTypes.model.isRequired,
-  families: PropTypes.array,
+  configFamilies: PropTypes.object,
+  configId: PropTypes.id.isRequired,
+  configIsInUse: PropTypes.bool,
+  configType: PropTypes.number,
+  editNvtDetailsTitle: PropTypes.string.isRequired,
+  editNvtFamiliesTitle: PropTypes.string.isRequired,
+  families: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      maxNvtCount: PropTypes.number,
+    }),
+  ),
+  isLoadingConfig: PropTypes.bool,
+  isLoadingFamilies: PropTypes.bool,
+  isLoadingScanners: PropTypes.bool,
   name: PropTypes.string,
-  scanner_id: PropTypes.id,
-  scanner_preference_values: PropTypes.object,
+  nvtPreferences: PropTypes.arrayOf(NvtPreferencePropType),
+  scannerId: PropTypes.id,
+  scannerPreferences: PropTypes.arrayOf(ScannerPreferencePropType),
   scanners: PropTypes.array,
   select: PropTypes.object,
   title: PropTypes.string.isRequired,
-  trend: PropTypes.object,
   onClose: PropTypes.func.isRequired,
   onEditConfigFamilyClick: PropTypes.func,
   onEditNvtDetailsClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,
 };
 
-export default EditDialog;
+export default EditScanConfigDialog;
 
 // vim: set ts=2 sw=2 tw=80:

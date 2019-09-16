@@ -39,29 +39,28 @@ import {
   EMPTY_SCAN_CONFIG_ID,
 } from 'gmp/models/scanconfig';
 
-const Dialog = ({
-  base = EMPTY_SCAN_CONFIG_ID,
+const CreateScanConfigDialog = ({
+  baseScanConfig = EMPTY_SCAN_CONFIG_ID,
   comment = '',
   name = _('Unnamed'),
-  scanner_id,
+  scannerId,
   scanners = [],
   title = _('New Scan Config'),
   onClose,
   onSave,
 }) => {
-  const data = {
-    base,
+  const defaultValues = {
+    baseScanConfig,
     comment,
     name,
-    scanner_id,
+    scannerId,
   };
-
   return (
     <SaveDialog
       title={title}
       onClose={onClose}
       onSave={onSave}
-      defaultValues={data}
+      defaultValues={defaultValues}
     >
       {({values: state, onValueChange}) => {
         return (
@@ -89,30 +88,32 @@ const Dialog = ({
             <FormGroup title={_('Base')} flex="column">
               <Divider flex="column">
                 <Radio
-                  name="base"
+                  name="baseScanConfig"
                   value={EMPTY_SCAN_CONFIG_ID}
-                  checked={state.base === EMPTY_SCAN_CONFIG_ID}
+                  checked={state.baseScanConfig === EMPTY_SCAN_CONFIG_ID}
                   title={_('Empty, static and fast')}
                   onChange={onValueChange}
                 />
                 <Radio
-                  name="base"
+                  name="baseScanConfig"
                   value={FULL_AND_FAST_SCAN_CONFIG_ID}
-                  checked={state.base === FULL_AND_FAST_SCAN_CONFIG_ID}
+                  checked={
+                    state.baseScanConfig === FULL_AND_FAST_SCAN_CONFIG_ID
+                  }
                   title={_('Full and fast')}
                   onChange={onValueChange}
                 />
                 {scanners.length > 0 && (
                   <Divider>
                     <Radio
-                      name="base"
+                      name="baseScanConfig"
                       value="0"
-                      checked={state.base === '0'}
+                      checked={state.baseScanConfig === '0'}
                       onChange={onValueChange}
                     />
                     <Select
-                      value={state.scanner_id}
-                      name="scanner_id"
+                      value={state.scannerId}
+                      name="scannerId"
                       items={renderSelectItems(scanners)}
                       onChange={onValueChange}
                     />
@@ -127,21 +128,21 @@ const Dialog = ({
   );
 };
 
-Dialog.propTypes = {
-  base: PropTypes.oneOf([
+CreateScanConfigDialog.propTypes = {
+  baseScanConfig: PropTypes.oneOf([
     FULL_AND_FAST_SCAN_CONFIG_ID,
     EMPTY_SCAN_CONFIG_ID,
     '0',
   ]),
   comment: PropTypes.string,
   name: PropTypes.string,
-  scanner_id: PropTypes.id,
+  scannerId: PropTypes.id,
   scanners: PropTypes.array,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
 
-export default Dialog;
+export default CreateScanConfigDialog;
 
 // vim: set ts=2 sw=2 tw=80:

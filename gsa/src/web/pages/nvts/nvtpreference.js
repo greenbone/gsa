@@ -68,7 +68,7 @@ class NvtPreference extends React.Component {
   }
 
   render() {
-    const {preference, value} = this.props;
+    const {preference, value = ''} = this.props;
 
     const {checked} = this.state;
     const {type} = preference;
@@ -157,7 +157,13 @@ class NvtPreference extends React.Component {
 }
 
 NvtPreference.propTypes = {
-  preference: PropTypes.object.isRequired,
+  preference: PropTypes.shape({
+    default: PropTypes.any,
+    hr_name: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.any,
+    alt: PropTypes.array,
+  }).isRequired,
   value: PropTypes.any,
   onChange: PropTypes.func.isRequired,
 };

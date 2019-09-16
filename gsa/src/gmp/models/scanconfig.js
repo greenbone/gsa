@@ -43,7 +43,7 @@ export const getTranslatedType = config => {
     : _('OpenVAS');
 };
 
-export const parse_count = count => {
+export const parseCount = count => {
   return !isEmpty(count) && count !== '-1' ? parseInt(count) : undefined;
 };
 
@@ -55,7 +55,7 @@ export const openVasScanConfigsFilter = config =>
 export const ospScanConfigsFilter = config =>
   config.scan_config_type === OSP_SCAN_CONFIG_TYPE;
 
-const parseTrend = parseInt;
+export const parseTrend = parseInt;
 
 class ScanConfig extends Model {
   static entityType = 'scanconfig';
@@ -72,10 +72,10 @@ class ScanConfig extends Model {
         const {name} = family;
         const new_family = {
           name,
-          trend: family.growing,
+          trend: parseTrend(family.growing),
           nvts: {
-            count: parse_count(family.nvt_count),
-            max: parse_count(family.max_nvt_count),
+            count: parseCount(family.nvt_count),
+            max: parseCount(family.max_nvt_count),
           },
         };
         families[name] = new_family;
@@ -86,7 +86,7 @@ class ScanConfig extends Model {
     }
 
     if (isDefined(ret.family_count)) {
-      families.count = parse_count(ret.family_count.__text);
+      families.count = parseCount(ret.family_count.__text);
       families.trend = parseTrend(ret.family_count.growing);
 
       delete ret.family_count;
@@ -98,19 +98,25 @@ class ScanConfig extends Model {
 
     if (isDefined(ret.nvt_count)) {
       ret.nvts = {
-        count: parse_count(ret.nvt_count.__text),
+        // number of selected nvts
+        count: parseCount(ret.nvt_count.__text),
         trend: parseTrend(ret.nvt_count.growing),
       };
 
       delete ret.nvt_count;
 
       if (isDefined(ret.known_nvt_count)) {
-        ret.nvts.known = parse_count(ret.known_nvt_count);
+        // number of known nvts by the scanner from last sync. should always be
+        // equal or less then nvt_count because only the db may contain nvts not
+        // known nvts by the scanner e.g. an imported scan config contains
+        // private nvts
+        ret.nvts.known = parseCount(ret.known_nvt_count);
         delete ret.known_nvt_count;
       }
 
       if (isDefined(ret.max_nvt_count)) {
-        ret.nvts.max = parse_count(ret.max_nvt_count);
+        // sum of all available nvts of all selected families
+        ret.nvts.max = parseCount(ret.max_nvt_count);
         delete ret.max_nvt_count;
       }
     } else {

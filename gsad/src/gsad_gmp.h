@@ -332,9 +332,6 @@ char *
 save_config_family_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t *);
 char *
-edit_config_nvt_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                     cmd_response_data_t *);
-char *
 get_config_nvt_gmp (gvm_connection_t *, credentials_t *, params_t *,
                     cmd_response_data_t *);
 char *

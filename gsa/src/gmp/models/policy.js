@@ -24,7 +24,8 @@ import {isEmpty} from '../utils/string';
 import {parseInt} from '../parser';
 
 import Model from '../model';
-import {parse_count} from './scanconfig';
+
+import {parseCount, parseTrend} from './scanconfig';
 
 class Policy extends Model {
   static entityType = 'policy';
@@ -41,10 +42,10 @@ class Policy extends Model {
         const {name} = family;
         const new_family = {
           name,
-          trend: family.growing,
+          trend: parseTrend(family.growing),
           nvts: {
-            count: parse_count(family.nvt_count),
-            max: parse_count(family.max_nvt_count),
+            count: parseCount(family.nvt_count),
+            max: parseCount(family.max_nvt_count),
           },
         };
         families[name] = new_family;
@@ -55,8 +56,8 @@ class Policy extends Model {
     }
 
     if (isDefined(ret.family_count)) {
-      families.count = parse_count(ret.family_count.__text);
-      families.trend = ret.family_count.growing;
+      families.count = parseCount(ret.family_count.__text);
+      families.trend = parseTrend(ret.family_count.growing);
 
       delete ret.family_count;
     } else {
@@ -67,19 +68,19 @@ class Policy extends Model {
 
     if (isDefined(ret.nvt_count)) {
       ret.nvts = {
-        count: parse_count(ret.nvt_count.__text),
-        trend: ret.nvt_count.growing,
+        count: parseCount(ret.nvt_count.__text),
+        trend: parseTrend(ret.nvt_count.growing),
       };
 
       delete ret.nvt_count;
 
       if (isDefined(ret.known_nvt_count)) {
-        ret.nvts.known = parse_count(ret.known_nvt_count);
+        ret.nvts.known = parseCount(ret.known_nvt_count);
         delete ret.known_nvt_count;
       }
 
       if (isDefined(ret.max_nvt_count)) {
-        ret.nvts.max = parse_count(ret.max_nvt_count);
+        ret.nvts.max = parseCount(ret.max_nvt_count);
         delete ret.max_nvt_count;
       }
     } else {

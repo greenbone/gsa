@@ -30,27 +30,17 @@ import TextField from 'web/components/form/textfield';
 
 import Layout from 'web/components/layout/layout';
 
-import {
-  FULL_AND_FAST_SCAN_CONFIG_ID,
-  EMPTY_SCAN_CONFIG_ID,
-} from 'gmp/models/scanconfig';
-
-const Dialog = ({
-  base = EMPTY_SCAN_CONFIG_ID,
+const CreatePolicyDialog = ({
   comment = '',
   name = _('Unnamed'),
-  scanner_id,
   title = _('New Policy'),
   onClose,
   onSave,
 }) => {
   const data = {
-    base,
     comment,
     name,
-    scanner_id,
   };
-
   return (
     <SaveDialog
       title={title}
@@ -87,20 +77,14 @@ const Dialog = ({
   );
 };
 
-Dialog.propTypes = {
-  base: PropTypes.oneOf([
-    FULL_AND_FAST_SCAN_CONFIG_ID,
-    EMPTY_SCAN_CONFIG_ID,
-    '0',
-  ]),
+CreatePolicyDialog.propTypes = {
   comment: PropTypes.string,
   name: PropTypes.string,
-  scanner_id: PropTypes.id,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
 
-export default Dialog;
+export default CreatePolicyDialog;
 
 // vim: set ts=2 sw=2 tw=80:

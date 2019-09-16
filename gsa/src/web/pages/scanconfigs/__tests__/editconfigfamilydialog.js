@@ -18,25 +18,11 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
-import ScanConfig from 'gmp/models/scanconfig';
-import Policy from 'gmp/models/policy';
 import Nvt from 'gmp/models/nvt';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import EditConfigFamilyDialog from '../editconfigfamilydialog';
-
-const config = new ScanConfig({
-  name: 'foo',
-  family: 'bar',
-});
-
-const policy = new Policy({
-  name: 'foo policy',
-  family: 'bar',
-});
 
 const nvt = new Nvt({
   _oid: '1234',
@@ -77,17 +63,14 @@ describe('EditConfigFamilyDialog component tests', () => {
     const {render} = rendererWith({capabilities: true});
     const {baseElement} = render(
       <EditConfigFamilyDialog
-        config={config}
-        config_name="foo"
-        family_name="family"
-        id="0"
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        familyName="family"
+        isLoadingFamily={false}
         nvts={[nvt, nvt2]}
         selected={selected}
-        configNameLabel={_('Config')}
-        timeout=""
-        title={_('Edit Scan Config NVT {{name}}', {
-          name: nvt.name,
-        })}
+        title="Foo title"
         onClose={handleClose}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
         onSave={handleSave}
@@ -95,39 +78,39 @@ describe('EditConfigFamilyDialog component tests', () => {
     );
 
     expect(baseElement).toMatchSnapshot();
+
     expect(baseElement).toHaveTextContent('Config');
     expect(baseElement).toHaveTextContent('foo');
-    expect(baseElement).not.toHaveTextContent('Policy');
   });
 
-  test('should render dialog for policies', () => {
+  test('should render loading indicator', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditNvtDetailsDialog = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {baseElement} = render(
+    const {baseElement, getByTestId} = render(
       <EditConfigFamilyDialog
-        config={policy}
-        config_name="foo policy"
-        family_name="family"
-        id="0"
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        familyName="family"
+        isLoadingFamily={true}
         nvts={[nvt, nvt2]}
         selected={selected}
-        configNameLabel={_('Policy')}
-        timeout=""
-        title={_('Edit Policy NVT {{name}}', {
-          name: nvt.name,
-        })}
+        title="Foo title"
         onClose={handleClose}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
         onSave={handleSave}
       />,
     );
 
-    expect(baseElement).toHaveTextContent('Policy');
-    expect(baseElement).toHaveTextContent('foo policy');
+    expect(baseElement).toMatchSnapshot();
+
+    expect(getByTestId('loading')).toBeInTheDocument();
+
     expect(baseElement).not.toHaveTextContent('Config');
+    expect(baseElement).not.toHaveTextContent('foo');
   });
 
   test('should save data', () => {
@@ -138,17 +121,14 @@ describe('EditConfigFamilyDialog component tests', () => {
     const {render} = rendererWith({capabilities: true});
     const {getByTestId} = render(
       <EditConfigFamilyDialog
-        config={config}
-        config_name="foo"
-        family_name="family"
-        id="0"
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        familyName="family"
+        isLoadingFamily={false}
         nvts={[nvt, nvt2]}
         selected={selected}
-        configNameLabel={_('Config')}
-        timeout=""
-        title={_('Edit Config NVT {{name}}', {
-          name: nvt.name,
-        })}
+        title="Foo title"
         onClose={handleClose}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
         onSave={handleSave}
@@ -159,10 +139,8 @@ describe('EditConfigFamilyDialog component tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      config: config,
-      config_name: 'foo',
-      family_name: 'family',
-      id: '0',
+      configId: 'c1',
+      familyName: 'family',
       selected: selected,
     });
   });
@@ -175,17 +153,14 @@ describe('EditConfigFamilyDialog component tests', () => {
     const {render} = rendererWith({capabilities: true});
     const {getByTestId} = render(
       <EditConfigFamilyDialog
-        config={config}
-        config_name="foo"
-        family_name="family"
-        id="0"
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        familyName="family"
+        isLoadingFamily={false}
         nvts={[nvt, nvt2]}
         selected={selected}
-        configNameLabel={_('Config')}
-        timeout=""
-        title={_('Edit Config NVT {{name}}', {
-          name: nvt.name,
-        })}
+        title="Foo title"
         onClose={handleClose}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
         onSave={handleSave}
@@ -208,17 +183,14 @@ describe('EditConfigFamilyDialog component tests', () => {
     const {render} = rendererWith({capabilities: true});
     const {baseElement, getByTestId} = render(
       <EditConfigFamilyDialog
-        config={config}
-        config_name="foo"
-        family_name="family"
-        id="0"
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        familyName="family"
+        isLoadingFamily={false}
         nvts={[nvt, nvt2]}
         selected={selected}
-        configNameLabel={_('Config')}
-        timeout=""
-        title={_('Edit Config NVT {{name}}', {
-          name: nvt.name,
-        })}
+        title="Foo title"
         onClose={handleClose}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
         onSave={handleSave}
@@ -237,10 +209,8 @@ describe('EditConfigFamilyDialog component tests', () => {
     };
 
     expect(handleSave).toHaveBeenCalledWith({
-      config: config,
-      config_name: 'foo',
-      family_name: 'family',
-      id: '0',
+      configId: 'c1',
+      familyName: 'family',
       selected: newSelected,
     });
   });
@@ -253,17 +223,14 @@ describe('EditConfigFamilyDialog component tests', () => {
     const {render} = rendererWith({capabilities: true});
     const {getAllByTestId} = render(
       <EditConfigFamilyDialog
-        config={config}
-        config_name="foo"
-        family_name="family"
-        id="0"
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        familyName="family"
+        isLoadingFamily={false}
         nvts={[nvt, nvt2]}
         selected={selected}
-        configNameLabel={_('Config')}
-        timeout=""
-        title={_('Edit Config NVT {{name}}', {
-          name: nvt.name,
-        })}
+        title="Foo title"
         onClose={handleClose}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
         onSave={handleSave}
@@ -273,10 +240,7 @@ describe('EditConfigFamilyDialog component tests', () => {
     const editButtons = getAllByTestId('svg-icon');
     fireEvent.click(editButtons[0]);
 
-    expect(handleOpenEditNvtDetailsDialog).toHaveBeenCalledWith({
-      config: config,
-      nvt: nvt,
-    });
+    expect(handleOpenEditNvtDetailsDialog).toHaveBeenCalledWith(nvt.id);
   });
 
   test('should sort table', () => {
@@ -293,17 +257,14 @@ describe('EditConfigFamilyDialog component tests', () => {
     const {render} = rendererWith({capabilities: true});
     const {baseElement} = render(
       <EditConfigFamilyDialog
-        config={config}
-        config_name="foo"
-        family_name="family"
-        id="0"
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        familyName="family"
+        isLoadingFamily={false}
         nvts={[nvt, nvt2, nvt3]}
         selected={newSelected}
-        configNameLabel={_('Config')}
-        timeout=""
-        title={_('Edit Config NVT {{name}}', {
-          name: nvt.name,
-        })}
+        title="Foo title"
         onClose={handleClose}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
         onSave={handleSave}

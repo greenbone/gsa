@@ -18,129 +18,94 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {setLocale} from 'gmp/locale/lang';
 
-import ScanConfig from 'gmp/models/scanconfig';
-import Policy from 'gmp/models/policy';
+import {
+  OPENVAS_SCAN_CONFIG_TYPE,
+  OSP_SCAN_CONFIG_TYPE,
+  SCANCONFIG_TREND_STATIC,
+  SCANCONFIG_TREND_DYNAMIC,
+} from 'gmp/models/scanconfig';
 
-import {rendererWith, fireEvent, act} from 'web/utils/testing';
+import {rendererWith, fireEvent, getAllByTestId} from 'web/utils/testing';
 
-import EditDialog from '../editdialog';
+import EditScanConfigDialog from '../editdialog';
+
+setLocale('en');
 
 const families = [
   {
     name: 'family1',
-    nvt_count: '1',
-    max_nvt_count: '1',
-    growing: '0',
+    maxNvtCount: 1,
   },
   {
     name: 'family2',
-    nvt_count: '2',
-    max_nvt_count: '4',
-    growing: '0',
+    maxNvtCount: 4,
   },
   {
     name: 'family3',
-    nvt_count: '0',
-    max_nvt_count: '2',
-    growing: '0',
+    maxNvtCount: 2,
+  },
+  {
+    name: 'family4',
+    maxNvtCount: 6,
   },
 ];
 
-const preferences = {
-  preference: [
-    {
-      name: 'preference',
-      value: '3',
-      nvt: {
-        _oid: '0',
-        id: '0',
-        hr_name: 'preference0',
-        name: 'preference0',
-        type: 'checkbox',
-        value: 'no',
-        default: 'no',
-      },
+const configFamilies = {
+  family1: {
+    name: 'family1',
+    nvts: {
+      count: 1,
+      max: 1,
     },
-    {
-      name: 'preference',
-      value: '4',
-      nvt: {
-        _oid: '1',
-        id: '1',
-        hr_name: 'preference1',
-        name: 'preference1',
-        type: 'radio',
-        value: '1',
-        alt: ['2', '3'],
-        default: '1',
-      },
+    trend: SCANCONFIG_TREND_DYNAMIC,
+  },
+  family2: {
+    name: 'family2',
+    nvts: {
+      count: 2,
+      max: 4,
     },
-    {
-      name: 'preference',
-      value: '5',
-      nvt: {
-        _oid: '2',
-        id: '2',
-        hr_name: 'preference2',
-        name: 'preference2',
-        type: 'entry',
-        value: 'foo',
-        default: 'foo',
-      },
+    trend: SCANCONFIG_TREND_STATIC,
+  },
+  family3: {
+    name: 'family3',
+    nvts: {
+      count: 0,
+      max: 2,
     },
-    {name: 'scannerpref0', value: 0, nvt: {}},
-  ],
+    trend: SCANCONFIG_TREND_STATIC,
+  },
 };
 
-const config = new ScanConfig({
-  name: 'foo',
-  comment: 'bar',
-  writable: '1',
-  in_use: '0',
-  permissions: {permission: [{name: 'everything'}]},
-  type: 0,
-  usage_type: 'scan',
-  families: {family: families},
-  preferences: preferences,
-});
-
-const config2 = new ScanConfig({
-  name: 'foo',
-  comment: 'bar',
-  writable: '1',
-  in_use: '1',
-  permissions: {permission: [{name: 'everything'}]},
-  type: 0,
-  usage_type: 'scan',
-  families: {family: families},
-  preferences: preferences,
-});
-
-const ospConfig = new ScanConfig({
-  name: 'foo',
-  comment: 'bar',
-  writable: '1',
-  in_use: '0',
-  permissions: {permission: [{name: 'everything'}]},
-  type: 1,
-  usage_type: 'scan',
-  families: {family: families},
-  preferences: preferences,
-});
-
-const policy = new Policy({
-  name: 'foo',
-  comment: 'bar',
-  writable: '1',
-  in_use: '0',
-  permissions: {permission: [{name: 'everything'}]},
-  type: 0,
-  usage_type: 'policy',
-  families: {family: families},
-  preferences: preferences,
-});
+const nvtPreferences = [
+  {
+    name: 'preference1',
+    value: '3',
+    nvt: {
+      oid: '1.2.1',
+      name: 'preference0',
+    },
+  },
+  {
+    name: 'preference2',
+    value: '4',
+    nvt: {
+      oid: '1.2.2',
+      name: 'preference1',
+    },
+  },
+  {
+    name: 'preference',
+    value: '5',
+    nvt: {
+      oid: '1.2.3',
+      name: 'preference2',
+      value: 'foo',
+    },
+  },
+];
 
 const scanners = [
   {name: 'scanner1', id: '1'},
@@ -149,25 +114,29 @@ const scanners = [
 ];
 
 const select = {
-  family1: 0,
-  family2: 0,
-  family3: 0,
-};
-
-const trend = {
   family1: 1,
   family2: 0,
   family3: 0,
+  family4: 0,
 };
 
-const scannerPreferenceValues = {
-  scannerpref0: {name: 'scannerpref0', value: 0},
+const trend = {
+  family1: SCANCONFIG_TREND_DYNAMIC,
+  family2: SCANCONFIG_TREND_STATIC,
+  family3: SCANCONFIG_TREND_STATIC,
+  family4: SCANCONFIG_TREND_STATIC,
 };
 
-jest.useFakeTimers();
+const scannerPreferences = [
+  {
+    name: 'scannerpref0',
+    hr_name: 'Scanner Preference 1',
+    value: 0,
+  },
+];
 
-describe('EditDialog component tests', () => {
-  test('should render dialog', async () => {
+describe('EditScanConfigDialog component tests', () => {
+  test('should render dialog', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
@@ -175,20 +144,24 @@ describe('EditDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true});
 
-    const {baseElement} = render(
-      <EditDialog
-        comment={config.comment}
-        config={config}
+    const {baseElement, getByTestId} = render(
+      <EditScanConfigDialog
+        comment="bar"
+        configFamilies={configFamilies}
+        configId="c1"
+        configIsInUse={false}
+        configType={OPENVAS_SCAN_CONFIG_TYPE}
+        editNvtDetailsTitle="Edit Scan Config NVT Details"
+        editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
-        name={config.name}
-        scanner_id={'0'}
-        scanner_preference_values={scannerPreferenceValues}
+        isLoadingConfig={false}
+        isLoadingFamilies={false}
+        isLoadingScanners={false}
+        name="Config"
+        nvtPreferences={nvtPreferences}
+        scannerPreferences={scannerPreferences}
         scanners={scanners}
-        select={select}
-        title={_('Edit Scan Config {{name}}', {
-          name: config.name,
-        })}
-        trend={trend}
+        title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
@@ -196,43 +169,47 @@ describe('EditDialog component tests', () => {
       />,
     );
 
-    await act(async () => {
-      jest.runAllTimers();
-    });
-
     expect(baseElement).toMatchSnapshot();
-    expect(baseElement).toHaveTextContent('Edit Scan Config');
-    expect(baseElement).not.toHaveTextContent('Policy');
-    expect(baseElement).toHaveTextContent(
+
+    const titleBar = getByTestId('dialog-title-bar');
+    expect(titleBar).toHaveTextContent('Edit Scan Config');
+
+    const content = getByTestId('save-dialog-content');
+    expect(content).toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
-    expect(baseElement).toHaveTextContent('Edit Scanner Preferences');
-    expect(baseElement).toHaveTextContent(
-      'Network Vulnerability Test Preferences',
-    );
+    expect(content).toHaveTextContent('Edit Scanner Preferences');
+    expect(content).toHaveTextContent('Network Vulnerability Test Preferences');
+
+    const scannerSelection = content.querySelector('[role=combobox]');
+    expect(scannerSelection).toBeNull();
   });
 
-  test('should render dialog for config in use', async () => {
+  test('should render dialog for config in use', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
     const handleOpenEditNvtDetailsDialog = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {baseElement} = render(
-      <EditDialog
-        comment={config2.comment}
-        config={config2}
+    const {baseElement, getByTestId} = render(
+      <EditScanConfigDialog
+        comment="bar"
+        configFamilies={configFamilies}
+        configId="c1"
+        configIsInUse={true}
+        configType={OPENVAS_SCAN_CONFIG_TYPE}
+        editNvtDetailsTitle="Edit Scan Config NVT Details"
+        editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
-        name={config2.name}
-        scanner_id={'0'}
-        scanner_preference_values={scannerPreferenceValues}
+        isLoadingConfig={false}
+        isLoadingFamilies={false}
+        isLoadingScanners={false}
+        name="Config"
+        nvtPreferences={nvtPreferences}
+        scannerPreferences={scannerPreferences}
         scanners={scanners}
-        select={select}
-        title={_('Edit Scan Config {{name}}', {
-          name: config2.name,
-        })}
-        trend={trend}
+        title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
@@ -240,42 +217,50 @@ describe('EditDialog component tests', () => {
       />,
     );
 
-    await act(async () => {
-      jest.runAllTimers();
-    });
+    expect(baseElement).toMatchSnapshot();
 
-    expect(baseElement).toHaveTextContent('Edit Scan Config');
-    expect(baseElement).not.toHaveTextContent('Policy');
-    expect(baseElement).not.toHaveTextContent(
+    const titleBar = getByTestId('dialog-title-bar');
+    expect(titleBar).toHaveTextContent('Edit Scan Config');
+
+    const content = getByTestId('save-dialog-content');
+    expect(content).not.toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
-    expect(baseElement).not.toHaveTextContent('Edit Scanner Preferences');
-    expect(baseElement).not.toHaveTextContent(
+    expect(content).not.toHaveTextContent('Edit Scanner Preferences');
+    expect(content).not.toHaveTextContent(
       'Network Vulnerability Test Preferences',
     );
+
+    const scannerSelection = content.querySelector('[role=combobox]');
+    expect(scannerSelection).toBeNull();
   });
 
-  test('should render dialog for osp config', async () => {
+  test('should render dialog for osp config', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
     const handleOpenEditNvtDetailsDialog = jest.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
-    const {baseElement} = render(
-      <EditDialog
-        comment={ospConfig.comment}
-        config={ospConfig}
+    const {baseElement, getByTestId} = render(
+      <EditScanConfigDialog
+        comment="bar"
+        configFamilies={configFamilies}
+        configId="c1"
+        configIsInUse={false}
+        configType={OSP_SCAN_CONFIG_TYPE}
+        editNvtDetailsTitle="Edit Scan Config NVT Details"
+        editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
-        name={ospConfig.name}
-        scanner_id={'1'}
-        scanner_preference_values={scannerPreferenceValues}
+        isLoadingConfig={false}
+        isLoadingFamilies={false}
+        isLoadingScanners={false}
+        name="Config"
+        nvtPreferences={nvtPreferences}
+        scannerPreferences={scannerPreferences}
         scanners={scanners}
-        select={select}
-        title={_('Edit Scan Config {{name}}', {
-          name: ospConfig.name,
-        })}
-        trend={trend}
+        scannerId="1"
+        title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
@@ -283,71 +268,25 @@ describe('EditDialog component tests', () => {
       />,
     );
 
-    await act(async () => {
-      jest.runAllTimers();
-    });
-
     expect(baseElement).toMatchSnapshot();
-    expect(baseElement).toHaveTextContent('Edit Scan Config');
-    expect(baseElement).not.toHaveTextContent('Policy');
-    expect(baseElement).not.toHaveTextContent(
+
+    const titleBar = getByTestId('dialog-title-bar');
+    expect(titleBar).toHaveTextContent('Edit Scan Config');
+
+    const content = getByTestId('save-dialog-content');
+    expect(content).not.toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
-    expect(baseElement).toHaveTextContent('Edit Scanner Preferences');
-    expect(baseElement).not.toHaveTextContent(
-      'Network Vulnerability Test Preferences',
-    );
-  });
-
-  test('should render dialog for policy', async () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditConfigFamilyDialog = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
-
-    const {render} = rendererWith({capabilities: true, router: true});
-    const {baseElement, getAllByTestId} = render(
-      <EditDialog
-        comment={policy.comment}
-        config={policy}
-        families={families}
-        name={policy.name}
-        scanner_id={'0'}
-        scanner_preference_values={scannerPreferenceValues}
-        scanners={scanners}
-        select={select}
-        title={_('Edit Policy {{name}}', {
-          name: policy.name,
-        })}
-        trend={trend}
-        onClose={handleClose}
-        onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
-        onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
-        onSave={handleSave}
-      />,
-    );
-
-    await act(async () => {
-      jest.runAllTimers();
-    });
-
-    expect(baseElement).toMatchSnapshot();
-    expect(baseElement).toHaveTextContent('Edit Policy');
-    expect(baseElement).not.toHaveTextContent('Config');
-    expect(baseElement).toHaveTextContent(
-      'Edit Network Vulnerability Test Families',
-    );
-    expect(baseElement).toHaveTextContent('Edit Scanner Preferences');
-    expect(baseElement).toHaveTextContent(
+    expect(content).toHaveTextContent('Edit Scanner Preferences');
+    expect(content).not.toHaveTextContent(
       'Network Vulnerability Test Preferences',
     );
 
-    const icons = getAllByTestId('svg-icon');
-    expect(icons[3]).toHaveAttribute('title', 'Edit Policy Family');
-    expect(icons[12]).toHaveAttribute('title', 'Edit Policy NVT Details');
+    const scannerSelection = content.querySelector('[role=combobox]');
+    expect(scannerSelection).toBeInTheDocument();
   });
 
-  test('should save data', async () => {
+  test('should save data', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
@@ -355,46 +294,47 @@ describe('EditDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {getByTestId} = render(
-      <EditDialog
-        comment={config.comment}
-        config={config}
+      <EditScanConfigDialog
+        comment="bar"
+        configFamilies={configFamilies}
+        configId="c1"
+        configIsInUse={false}
+        configType={OPENVAS_SCAN_CONFIG_TYPE}
+        editNvtDetailsTitle="Edit Scan Config NVT Details"
+        editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
-        name={config.name}
-        scanner_id={'0'}
-        scanner_preference_values={scannerPreferenceValues}
+        isLoadingConfig={false}
+        isLoadingFamilies={false}
+        isLoadingScanners={false}
+        name="Config"
+        nvtPreferences={nvtPreferences}
+        scannerPreferences={scannerPreferences}
         scanners={scanners}
-        select={select}
-        title={_('Edit Scan Config {{name}}', {
-          name: config.name,
-        })}
-        trend={trend}
+        title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
         onSave={handleSave}
       />,
     );
-
-    await act(async () => {
-      jest.runAllTimers();
-    });
 
     const saveButton = getByTestId('dialog-save-button');
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      base: 0,
       comment: 'bar',
-      id: undefined,
-      name: 'foo',
-      scanner_id: '0',
-      scanner_preference_values: scannerPreferenceValues,
-      select: select,
-      trend: trend,
+      id: 'c1',
+      name: 'Config',
+      scannerId: undefined,
+      scannerPreferenceValues: {
+        scannerpref0: 0,
+      },
+      select,
+      trend,
     });
   });
 
-  test('should allow to close the dialog', async () => {
+  test('should allow to close the dialog', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
@@ -402,29 +342,29 @@ describe('EditDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {getByTestId} = render(
-      <EditDialog
-        comment={config.comment}
-        config={config}
+      <EditScanConfigDialog
+        comment="bar"
+        configFamilies={configFamilies}
+        configId="c1"
+        configIsInUse={false}
+        configType={OPENVAS_SCAN_CONFIG_TYPE}
+        editNvtDetailsTitle="Edit Scan Config NVT Details"
+        editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
-        name={config.name}
-        scanner_id={'0'}
-        scanner_preference_values={scannerPreferenceValues}
+        isLoadingConfig={false}
+        isLoadingFamilies={false}
+        isLoadingScanners={false}
+        name="Config"
+        nvtPreferences={nvtPreferences}
+        scannerPreferences={scannerPreferences}
         scanners={scanners}
-        select={select}
-        title={_('Edit Scan Config {{name}}', {
-          name: config.name,
-        })}
-        trend={trend}
+        title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
         onSave={handleSave}
       />,
     );
-
-    await act(async () => {
-      jest.runAllTimers();
-    });
 
     const closeButton = getByTestId('dialog-close-button');
 
@@ -434,27 +374,31 @@ describe('EditDialog component tests', () => {
     expect(handleSave).not.toHaveBeenCalled();
   });
 
-  test('should allow to change name and comment', async () => {
+  test('should allow to change name and comment', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
     const handleOpenEditNvtDetailsDialog = jest.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
-    const {baseElement, getByTestId} = render(
-      <EditDialog
-        comment={config.comment}
-        config={config}
+    const {getByTestId} = render(
+      <EditScanConfigDialog
+        comment="bar"
+        configFamilies={configFamilies}
+        configId="c1"
+        configIsInUse={false}
+        configType={OPENVAS_SCAN_CONFIG_TYPE}
+        editNvtDetailsTitle="Edit Scan Config NVT Details"
+        editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
-        name={config.name}
-        scanner_id={'0'}
-        scanner_preference_values={scannerPreferenceValues}
+        isLoadingConfig={false}
+        isLoadingFamilies={false}
+        isLoadingScanners={false}
+        name="Config"
+        nvtPreferences={nvtPreferences}
+        scannerPreferences={scannerPreferences}
         scanners={scanners}
-        select={select}
-        title={_('Edit Scan Config {{name}}', {
-          name: config.name,
-        })}
-        trend={trend}
+        title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
@@ -462,11 +406,9 @@ describe('EditDialog component tests', () => {
       />,
     );
 
-    await act(async () => {
-      jest.runAllTimers();
-    });
+    const content = getByTestId('save-dialog-content');
+    const inputs = content.querySelectorAll('input');
 
-    const inputs = baseElement.querySelectorAll('input');
     fireEvent.change(inputs[0], {target: {value: 'lorem'}});
     fireEvent.change(inputs[1], {target: {value: 'ipsum'}});
 
@@ -474,38 +416,43 @@ describe('EditDialog component tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      base: 0,
       comment: 'ipsum',
-      id: undefined,
+      id: 'c1',
       name: 'lorem',
-      scanner_id: '0',
-      scanner_preference_values: scannerPreferenceValues,
-      select: select,
-      trend: trend,
+      scannerId: undefined,
+      scannerPreferenceValues: {
+        scannerpref0: 0,
+      },
+      select,
+      trend,
     });
   });
 
-  test('should allow to edit nvt families for openvas configs', async () => {
+  test('should allow to edit nvt families for openvas configs', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
     const handleOpenEditNvtDetailsDialog = jest.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
-    const {baseElement, getByTestId} = render(
-      <EditDialog
-        comment={config.comment}
-        config={config}
+    const {getByTestId, queryAllByName} = render(
+      <EditScanConfigDialog
+        comment="bar"
+        configFamilies={configFamilies}
+        configId="c1"
+        configIsInUse={false}
+        configType={OPENVAS_SCAN_CONFIG_TYPE}
+        editNvtDetailsTitle="Edit Scan Config NVT Details"
+        editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
-        name={config.name}
-        scanner_id={'0'}
-        scanner_preference_values={scannerPreferenceValues}
+        isLoadingConfig={false}
+        isLoadingFamilies={false}
+        isLoadingScanners={false}
+        name="Config"
+        nvtPreferences={nvtPreferences}
+        scannerPreferences={scannerPreferences}
         scanners={scanners}
-        select={select}
-        title={_('Edit Scan Config {{name}}', {
-          name: config.name,
-        })}
-        trend={trend}
+        title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
@@ -513,62 +460,69 @@ describe('EditDialog component tests', () => {
       />,
     );
 
-    await act(async () => {
-      jest.runAllTimers();
-    });
+    const family1Inputs = queryAllByName('family1');
+    expect(family1Inputs.length).toEqual(3);
+    fireEvent.click(family1Inputs[1]);
 
-    const inputs = baseElement.querySelectorAll('input');
-    fireEvent.click(inputs[3]);
-    fireEvent.click(inputs[4]);
+    const family2Inputs = queryAllByName('family2');
+    expect(family2Inputs.length).toEqual(3);
+    fireEvent.click(family2Inputs[2]);
 
     const saveButton = getByTestId('dialog-save-button');
     fireEvent.click(saveButton);
 
     const newSelect = {
       family1: 1,
-      family2: 0,
+      family2: 1,
       family3: 0,
+      family4: 0,
     };
 
     const newTrend = {
-      family1: 0,
-      family2: 0,
-      family3: 0,
+      family1: SCANCONFIG_TREND_STATIC,
+      family2: SCANCONFIG_TREND_STATIC,
+      family3: SCANCONFIG_TREND_STATIC,
+      family4: SCANCONFIG_TREND_STATIC,
     };
 
     expect(handleSave).toHaveBeenCalledWith({
-      base: 0,
       comment: 'bar',
-      id: undefined,
-      name: 'foo',
-      scanner_id: '0',
-      scanner_preference_values: scannerPreferenceValues,
+      id: 'c1',
+      name: 'Config',
+      scannerId: undefined,
+      scannerPreferenceValues: {
+        scannerpref0: 0,
+      },
       select: newSelect,
       trend: newTrend,
     });
   });
 
-  test('should call click handlers for edit families and edit nvt details', async () => {
+  test('should call click handlers for edit families and edit nvt details', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
     const handleOpenEditNvtDetailsDialog = jest.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
-    const {getAllByTestId} = render(
-      <EditDialog
-        comment={config.comment}
-        config={config}
+    const {getByTestId} = render(
+      <EditScanConfigDialog
+        comment="bar"
+        configFamilies={configFamilies}
+        configId="c1"
+        configIsInUse={false}
+        configType={OPENVAS_SCAN_CONFIG_TYPE}
+        editNvtDetailsTitle="Edit Scan Config NVT Details"
+        editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
-        name={config.name}
-        scanner_id={''}
-        scanner_preference_values={scannerPreferenceValues}
+        isLoadingConfig={false}
+        isLoadingFamilies={false}
+        isLoadingScanners={false}
+        name="Config"
+        nvtPreferences={nvtPreferences}
+        scannerPreferences={scannerPreferences}
         scanners={scanners}
-        select={select}
-        title={_('Edit Scan Config {{name}}', {
-          name: config.name,
-        })}
-        trend={trend}
+        title="Edit Scan Config"
         onClose={handleClose}
         onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
         onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
@@ -576,33 +530,28 @@ describe('EditDialog component tests', () => {
       />,
     );
 
-    await act(async () => {
-      jest.runAllTimers();
-    });
+    const content = getByTestId('save-dialog-content');
+    const sections = content.querySelectorAll('section');
 
-    const icons = getAllByTestId('svg-icon');
-    fireEvent.click(icons[3]);
-    fireEvent.click(icons[12]);
+    const editFamilyIcons = getAllByTestId(sections[0], 'svg-icon');
+    fireEvent.click(editFamilyIcons[3]);
 
-    expect(icons[3]).toHaveAttribute('title', 'Edit Scan Config Family');
-    expect(icons[12]).toHaveAttribute('title', 'Edit Scan Config NVT Details');
+    expect(editFamilyIcons[3]).toHaveAttribute(
+      'title',
+      'Edit Scan Config Family',
+    );
 
-    expect(handleOpenEditConfigFamilyDialog).toHaveBeenCalledWith({
-      config: config,
-      name: 'family1',
-    });
-    expect(handleOpenEditNvtDetailsDialog).toHaveBeenCalledWith({
-      config: config,
-      nvt: {
-        oid: '0',
-        id: '0',
-        hr_name: 'preference0',
-        name: 'preference0',
-        type: 'checkbox',
-        value: 'no',
-        default: 'no',
-      },
-    });
+    const editNvtIcons = getAllByTestId(sections[2], 'svg-icon');
+    fireEvent.click(editNvtIcons[1]);
+
+    expect(editNvtIcons[1]).toHaveAttribute(
+      'title',
+      'Edit Scan Config NVT Details',
+    );
+
+    expect(handleOpenEditConfigFamilyDialog).toHaveBeenCalledWith('family1');
+
+    expect(handleOpenEditNvtDetailsDialog).toHaveBeenCalledWith('1.2.1');
   });
 
   // TODO: should allow to change scanner preferences

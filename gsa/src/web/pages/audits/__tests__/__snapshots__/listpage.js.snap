@@ -782,6 +782,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
         >
           <div
             class="c27"
+            data-testid="loading"
           >
             <div
               class="c28"
