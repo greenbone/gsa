@@ -109,8 +109,12 @@ export const getCredentialTypeName = type => `${TYPE_NAMES[type]}`;
 class Credential extends Model {
   static entityType = 'credential';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  parseProperties(element) {
+    return Credential.parseElement(element);
+  }
+
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
     if (isDefined(ret.certificate_info)) {
       ret.certificate_info.activationTime = parseDate(
@@ -123,22 +127,22 @@ class Credential extends Model {
       delete ret.certificate_info.expiration_time;
     }
 
-    ret.credential_type = elem.type;
+    ret.credential_type = element.type;
 
-    ret.allow_insecure = parseYesNo(elem.allow_insecure);
+    ret.allow_insecure = parseYesNo(element.allow_insecure);
 
-    if (isDefined(elem.targets)) {
+    if (isDefined(element.targets)) {
       ret.targets = map(
-        elem.targets.target,
+        element.targets.target,
         target => new Model(target, 'target'),
       );
     } else {
       ret.targets = [];
     }
 
-    if (isDefined(elem.scanners)) {
+    if (isDefined(element.scanners)) {
       ret.scanners = map(
-        elem.scanners.scanner,
+        element.scanners.scanner,
         scanner => new Model(scanner, 'scanner'),
       );
     }

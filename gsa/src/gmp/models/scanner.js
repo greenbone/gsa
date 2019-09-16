@@ -75,10 +75,14 @@ const parse_scanner_info = (info = {}) => {
 class Scanner extends Model {
   static entityType = 'scanner';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  parseProperties(element) {
+    return Scanner.parseElement(element);
+  }
 
-    ret.scannerType = parseInt(elem.type);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
+
+    ret.scannerType = parseInt(element.type);
 
     ret.credential =
       isDefined(ret.credential) && !isEmpty(ret.credential._id)

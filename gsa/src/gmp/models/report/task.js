@@ -30,17 +30,21 @@ import Model from '../../model';
 class ReportTask extends Model {
   static entityType = 'task';
 
-  parseProperties(elem) {
-    const copy = super.parseProperties(elem);
+  parseProperties(element) {
+    return ReportTask.parseElement(element);
+  }
 
-    const {target} = elem;
+  static parseElement(element) {
+    const copy = super.parseElement(element);
+
+    const {target} = element;
     if (isDefined(target) && !isEmpty(target._id)) {
       copy.target = new Model(target, 'target');
     } else {
       delete copy.target;
     }
 
-    copy.progress = parseProgressElement(elem.progress);
+    copy.progress = parseProgressElement(element.progress);
 
     return copy;
   }

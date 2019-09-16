@@ -93,8 +93,12 @@ const create_values = data => {
 class Alert extends Model {
   static entityType = 'alert';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  parseProperties(element) {
+    return Alert.parseElement(element);
+  }
+
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
     const types = ['condition', 'method', 'event'];
 
@@ -122,8 +126,8 @@ class Alert extends Model {
       ret.filter = new Model(ret.filter, 'filter');
     }
 
-    if (isDefined(elem.tasks)) {
-      ret.tasks = map(elem.tasks.task, task => new Model(task, 'task'));
+    if (isDefined(element.tasks)) {
+      ret.tasks = map(element.tasks.task, task => new Model(task, 'task'));
     } else {
       ret.tasks = [];
     }
@@ -137,7 +141,7 @@ class Alert extends Model {
       ret.method.data.report_formats = [];
     }
 
-    ret.active = parseYesNo(elem.active);
+    ret.active = parseYesNo(element.active);
 
     return ret;
   }

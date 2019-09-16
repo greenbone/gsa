@@ -28,8 +28,12 @@ import {parseSeverity, parseDate} from '../parser';
 class Cpe extends Info {
   static entityType = 'cpe';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem, 'cpe');
+  parseProperties(element) {
+    return Cpe.parseElement(element);
+  }
+
+  static parseElement(element) {
+    const ret = super.parseElement(element, 'cpe');
 
     ret.severity = parseSeverity(ret.max_cvss);
     delete ret.max_cvss;

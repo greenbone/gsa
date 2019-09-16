@@ -26,9 +26,13 @@ import {parseInt} from '../parser';
 class PortRange extends Model {
   static entityType = 'portrange';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
-    ret.protocol_type = elem.type;
+  parseProperties(element) {
+    return PortRange.parseElement(element);
+  }
+
+  static parseElement(element) {
+    const ret = super.parseElement(element);
+    ret.protocol_type = element.type;
     return ret;
   }
 }
@@ -36,8 +40,12 @@ class PortRange extends Model {
 class PortList extends Model {
   static entityType = 'portlist';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  parseProperties(element) {
+    return PortList.parseElement(element);
+  }
+
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
     const ranges = isDefined(ret.port_ranges) ? ret.port_ranges.port_range : [];
 
@@ -46,7 +54,7 @@ class PortList extends Model {
       return new PortRange(range);
     });
 
-    const {port_count} = elem;
+    const {port_count} = element;
     if (isDefined(port_count)) {
       ret.port_count = {
         all: isDefined(port_count.all) ? parseInt(port_count.all) : 0,
@@ -61,9 +69,9 @@ class PortList extends Model {
       };
     }
 
-    if (isDefined(elem.targets) && isDefined(elem.targets.target)) {
+    if (isDefined(element.targets) && isDefined(element.targets.target)) {
       ret.targets = map(
-        elem.targets.target,
+        element.targets.target,
         target => new Model(target, 'target'),
       );
     } else {

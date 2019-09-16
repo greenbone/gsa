@@ -36,8 +36,12 @@ export const NOTE_INACTIVE_VALUE = '-1';
 class Note extends Model {
   static entityType = 'note';
 
-  parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+  parseProperties(element) {
+    return Note.parseElement(element);
+  }
+
+  static parseElement(element) {
+    let ret = super.parseElement(element);
 
     if (ret.nvt) {
       ret.nvt = new Nvt(ret.nvt);
@@ -60,12 +64,12 @@ class Note extends Model {
       delete ret.result;
     }
 
-    ret.active = parseYesNo(elem.active);
-    ret.text_excerpt = parseYesNo(elem.text_excerpt);
+    ret.active = parseYesNo(element.active);
+    ret.text_excerpt = parseYesNo(element.text_excerpt);
 
-    ret.hosts = parseCsv(elem.hosts);
+    ret.hosts = parseCsv(element.hosts);
 
-    if (isEmpty(elem.port)) {
+    if (isEmpty(element.port)) {
       delete ret.port;
     }
 

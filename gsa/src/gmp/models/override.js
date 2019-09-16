@@ -52,8 +52,12 @@ export const SEVERITY_FALSE_POSITIVE = -1;
 class Override extends Model {
   static entityType = 'override';
 
-  parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+  parseProperties(element) {
+    return Override.parseElement(element);
+  }
+
+  static parseElement(element) {
+    let ret = super.parseElement(element);
 
     if (ret.nvt) {
       ret.nvt = new Nvt(ret.nvt);
@@ -78,12 +82,12 @@ class Override extends Model {
       delete ret.result;
     }
 
-    ret.active = parseYesNo(elem.active);
-    ret.text_excerpt = parseYesNo(elem.text_excerpt);
+    ret.active = parseYesNo(element.active);
+    ret.text_excerpt = parseYesNo(element.text_excerpt);
 
     ret.hosts = parseCsv(ret.hosts);
 
-    if (isEmpty(elem.port)) {
+    if (isEmpty(element.port)) {
       delete ret.port;
     }
 

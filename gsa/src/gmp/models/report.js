@@ -29,8 +29,12 @@ import ReportReport from './report/report';
 class Report extends Model {
   static entityType = 'report';
 
-  parseProperties(elem) {
-    const copy = super.parseProperties(elem);
+  parseProperties(element) {
+    return Report.parseElement(element);
+  }
+
+  static parseElement(element) {
+    const copy = super.parseElement(element);
 
     const {
       report,
@@ -42,7 +46,7 @@ class Report extends Model {
       scan_start,
       scan_end,
       timestamp,
-    } = elem;
+    } = element;
 
     if (isDefined(report)) {
       copy.report = new ReportReport(report);

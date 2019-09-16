@@ -25,6 +25,10 @@ class Info extends Model {
   static entityType = 'info';
 
   parseProperties(elem, infoType) {
+    return Info.parseElement(elem, infoType);
+  }
+
+  static parseElement(elem, infoType) {
     const info_elem = elem[infoType];
 
     if (isDefined(info_elem)) {
@@ -37,7 +41,7 @@ class Info extends Model {
       delete elem[infoType];
     }
 
-    return super.parseProperties(elem);
+    return super.parseElement(elem);
   }
 }
 

@@ -26,8 +26,12 @@ import Info from './info';
 class CertBundAdv extends Info {
   static entityType = 'certbund';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem, 'cert_bund_adv');
+  parseProperties(element) {
+    return CertBundAdv.parseElement(element);
+  }
+
+  static parseElement(element) {
+    const ret = super.parseElement(element, 'cert_bund_adv');
 
     ret.severity = parseSeverity(ret.max_cvss);
     delete ret.max_cvss;
@@ -59,12 +63,12 @@ class CertBundAdv extends Info {
         isDefined(advisory.Description) &&
         isDefined(advisory.Description.Element)
       ) {
-        forEach(advisory.Description.Element, element => {
-          if (isDefined(element.TextBlock)) {
-            ret.description.push(element.TextBlock);
-          } else if (isDefined(element.Infos)) {
+        forEach(advisory.Description.Element, desciptionElement => {
+          if (isDefined(desciptionElement.TextBlock)) {
+            ret.description.push(desciptionElement.TextBlock);
+          } else if (isDefined(desciptionElement.Infos)) {
             ret.additional_information = ret.additional_information.concat(
-              map(element.Infos.Info, info => ({
+              map(desciptionElement.Infos.Info, info => ({
                 issuer: info._Info_Issuer,
                 url: info._Info_URL,
               })),

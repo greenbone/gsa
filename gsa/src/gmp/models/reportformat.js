@@ -58,8 +58,12 @@ class Param {
 class ReportFormat extends Model {
   static entityType = 'reportformat';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  parseProperties(element) {
+    return ReportFormat.parseElement(element);
+  }
+
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
     if (isDefined(ret.trust)) {
       ret.trust = {
@@ -82,9 +86,9 @@ class ReportFormat extends Model {
       ret.alerts = [];
     }
 
-    ret.active = parseYesNo(elem.active);
+    ret.active = parseYesNo(element.active);
 
-    ret.predefined = parseYesNo(elem.predefined);
+    ret.predefined = parseYesNo(element.predefined);
 
     return ret;
   }

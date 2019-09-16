@@ -25,17 +25,21 @@ import Model from '../model';
 class Permission extends Model {
   static entityType = 'permission';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  parseProperties(element) {
+    return Permission.parseElement(element);
+  }
 
-    if (isDefined(elem.resource) && !isEmpty(elem.resource._id)) {
-      ret.resource = new Model(elem.resource, elem.resource.type);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
+
+    if (isDefined(element.resource) && !isEmpty(element.resource._id)) {
+      ret.resource = new Model(element.resource, element.resource.type);
     } else {
       delete ret.resource;
     }
 
-    if (isDefined(elem.subject) && !isEmpty(elem.subject._id)) {
-      ret.subject = new Model(elem.subject, elem.subject.type);
+    if (isDefined(element.subject) && !isEmpty(element.subject._id)) {
+      ret.subject = new Model(element.subject, element.subject.type);
     } else {
       delete ret.subject;
     }

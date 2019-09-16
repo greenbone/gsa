@@ -52,10 +52,14 @@ const parse_ids = (ids, no) => {
 class Nvt extends Info {
   static entityType = 'nvt';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem, 'nvt');
+  parseProperties(element) {
+    return Nvt.parseElement(element);
+  }
 
-    ret.nvt_type = elem._type;
+  static parseElement(element) {
+    const ret = super.parseElement(element, 'nvt');
+
+    ret.nvt_type = element._type;
 
     ret.oid = isEmpty(ret._oid) ? undefined : ret._oid;
     ret.id = ret.oid;
@@ -135,28 +139,28 @@ class Nvt extends Info {
 
     delete ret.xref;
 
-    if (isDefined(elem.qod)) {
-      if (isEmpty(elem.qod.value)) {
+    if (isDefined(element.qod)) {
+      if (isEmpty(element.qod.value)) {
         delete ret.qod.value;
       } else {
-        ret.qod.value = parseFloat(elem.qod.value);
+        ret.qod.value = parseFloat(element.qod.value);
       }
 
-      if (isEmpty(elem.qod.type)) {
+      if (isEmpty(element.qod.type)) {
         delete ret.qod.type;
       }
     }
 
-    if (isEmpty(elem.default_timeout)) {
+    if (isEmpty(element.default_timeout)) {
       delete ret.default_timeout;
     } else {
-      ret.default_timeout = parseFloat(elem.default_timeout);
+      ret.default_timeout = parseFloat(element.default_timeout);
     }
 
-    if (isEmpty(elem.timeout)) {
+    if (isEmpty(element.timeout)) {
       delete ret.timeout;
     } else {
-      ret.timeout = parseFloat(elem.timeout);
+      ret.timeout = parseFloat(element.timeout);
     }
 
     return ret;

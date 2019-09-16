@@ -43,16 +43,28 @@ import {
 class ReportReport extends Model {
   static entityType = 'report';
 
-  parseProperties(elem) {
-    const copy = super.parseProperties(elem);
+  parseProperties(element) {
+    return ReportReport.parseElement(element);
+  }
 
-    const {delta, severity, scan_start, scan_end, task, scan, timestamp} = elem;
+  static parseElement(element) {
+    const copy = super.parseElement(element);
 
-    const filter = parseFilter(elem);
+    const {
+      delta,
+      severity,
+      scan_start,
+      scan_end,
+      task,
+      scan,
+      timestamp,
+    } = element;
+
+    const filter = parseFilter(element);
 
     copy.filter = filter;
 
-    copy.report_type = elem._type;
+    copy.report_type = element._type;
 
     delete copy.filters;
 
@@ -67,27 +79,27 @@ class ReportReport extends Model {
 
     copy.task = new ReportTask(task, 'task');
 
-    copy.results = parse_results(elem, filter);
+    copy.results = parse_results(element, filter);
 
-    copy.hosts = parse_hosts(elem, filter);
+    copy.hosts = parse_hosts(element, filter);
 
-    copy.tls_certificates = parse_tls_certificates(elem, filter);
+    copy.tls_certificates = parse_tls_certificates(element, filter);
 
     delete copy.host;
 
-    copy.applications = parse_apps(elem, filter);
+    copy.applications = parse_apps(element, filter);
 
-    copy.vulnerabilities = parse_vulnerabilities(elem, filter);
+    copy.vulnerabilities = parse_vulnerabilities(element, filter);
 
-    copy.operatingsystems = parse_operatingsystems(elem, filter);
+    copy.operatingsystems = parse_operatingsystems(element, filter);
 
-    copy.ports = parse_ports(elem, filter);
+    copy.ports = parse_ports(element, filter);
 
-    copy.cves = parse_cves(elem, filter);
+    copy.cves = parse_cves(element, filter);
 
-    copy.closed_cves = parse_closed_cves(elem, filter);
+    copy.closed_cves = parse_closed_cves(element, filter);
 
-    copy.errors = parse_errors(elem, filter);
+    copy.errors = parse_errors(element, filter);
 
     copy.scan_start = parseDate(scan_start);
 

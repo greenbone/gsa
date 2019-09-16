@@ -50,8 +50,12 @@ export class Delta {
 class Result extends Model {
   static entityType = 'result';
 
-  parseProperties(elem) {
-    const copy = super.parseProperties(elem);
+  parseProperties(element) {
+    return Result.parseElement(element);
+  }
+
+  static parseElement(element) {
+    const copy = super.parseElement(element);
 
     const {
       description,
@@ -68,7 +72,7 @@ class Result extends Model {
       delta,
       qod = {},
       tickets,
-    } = elem;
+    } = element;
 
     if (isString(host)) {
       // openvas 8

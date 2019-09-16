@@ -26,10 +26,14 @@ import Event from './event';
 class Schedule extends Model {
   static entityType = 'schedule';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  parseProperties(element) {
+    return Schedule.parseElement(element);
+  }
 
-    const {timezone, icalendar} = elem;
+  static parseElement(element) {
+    const ret = super.parseElement(element);
+
+    const {timezone, icalendar} = element;
 
     if (isDefined(icalendar)) {
       ret.event = Event.fromIcal(icalendar, timezone);
