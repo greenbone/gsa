@@ -81,16 +81,19 @@ class Filter extends Model {
     this.id = id;
   }
 
+  parseProperties(element) {
+    return Filter.parseElement(element);
+  }
+
   /**
-   * Parse properties from the passed element object for being set in this
-   * Filter model.
+   * Parse properties from the passed element object
    *
-   * @param {Object} elem  Element object to parse properties from.
+   * @param {Object} element  Element object to parse properties from.
    *
    * @return {Object} An object with properties for the new Filter model
    */
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
     ret.filter_type = ret._type;
 
