@@ -77,6 +77,7 @@ describe('Task Model parse tests', () => {
 
     expect(task.first_report).toBeInstanceOf(Report);
     expect(task.first_report.id).toEqual('r1');
+    expect(task.first_report.entityType).toEqual('report');
   });
 
   test('should parse last_report', () => {
@@ -95,6 +96,7 @@ describe('Task Model parse tests', () => {
 
     expect(task.last_report).toBeInstanceOf(Report);
     expect(task.last_report.id).toEqual('r1');
+    expect(task.last_report.entityType).toEqual('report');
   });
 
   test('should parse second_last_report', () => {
@@ -113,6 +115,7 @@ describe('Task Model parse tests', () => {
 
     expect(task.second_last_report).toBeInstanceOf(Report);
     expect(task.second_last_report.id).toEqual('r1');
+    expect(task.second_last_report.entityType).toEqual('report');
   });
 
   test('should parse current_report', () => {
@@ -131,6 +134,7 @@ describe('Task Model parse tests', () => {
 
     expect(task.current_report).toBeInstanceOf(Report);
     expect(task.current_report.id).toEqual('r1');
+    expect(task.current_report.entityType).toEqual('report');
   });
 
   test('should parse config', () => {
@@ -147,6 +151,7 @@ describe('Task Model parse tests', () => {
 
     expect(task.config).toBeInstanceOf(Model);
     expect(task.config.id).toEqual('c1');
+    expect(task.config.entityType).toEqual('scanconfig');
   });
 
   test('should parse slave', () => {
@@ -163,6 +168,7 @@ describe('Task Model parse tests', () => {
 
     expect(task.slave).toBeInstanceOf(Model);
     expect(task.slave.id).toEqual('s1');
+    expect(task.slave.entityType).toEqual('slave');
   });
 
   test('should parse target', () => {
@@ -179,6 +185,7 @@ describe('Task Model parse tests', () => {
 
     expect(task.target).toBeInstanceOf(Model);
     expect(task.target.id).toEqual('t1');
+    expect(task.target.entityType).toEqual('target');
   });
 });
 
