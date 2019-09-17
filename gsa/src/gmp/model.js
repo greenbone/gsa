@@ -32,8 +32,12 @@ import {
 
 import Capabilities from './capabilities/capabilities.js';
 
-export const parseModelFromElement = (element, entityType) =>
-  new Model(entityType).updateFromElement(element);
+export const parseModelFromElement = (element, entityType) => {
+  const m = new Model(entityType);
+  const props = Model.parseElement(element);
+  m.setProperties(props);
+  return m;
+};
 
 class Model {
   static entityType = 'unknown';
@@ -44,14 +48,6 @@ class Model {
 
   setProperties(properties) {
     return setProperties(properties, this);
-  }
-
-  updateFromElement(elem) {
-    if (isDefined(elem)) {
-      const properties = this.parseProperties(elem);
-      this.setProperties(properties);
-    }
-    return this;
   }
 
   parseProperties(element) {
