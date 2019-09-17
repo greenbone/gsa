@@ -28,16 +28,16 @@ import Model from '../../model';
 import ReportTask from './task';
 
 import {
-  parse_apps,
-  parse_closed_cves,
-  parse_cves,
+  parseApps,
+  parseClosedCves,
+  parseCves,
   parse_errors,
-  parse_hosts,
-  parse_operatingsystems,
-  parse_ports,
-  parse_results,
-  parse_tls_certificates,
-  parse_vulnerabilities,
+  parseHosts,
+  parseOperatingSystems,
+  parsePorts,
+  parseResults,
+  parseTlsCertificates,
+  parseVulnerabilities,
 } from './parser';
 
 class ReportReport extends Model {
@@ -79,25 +79,25 @@ class ReportReport extends Model {
 
     copy.task = ReportTask.fromElement(task);
 
-    copy.results = parse_results(element, filter);
+    copy.results = parseResults(element, filter);
 
-    copy.hosts = parse_hosts(element, filter);
+    copy.hosts = parseHosts(element, filter);
 
-    copy.tls_certificates = parse_tls_certificates(element, filter);
+    copy.tls_certificates = parseTlsCertificates(element, filter);
 
     delete copy.host;
 
-    copy.applications = parse_apps(element, filter);
+    copy.applications = parseApps(element, filter);
 
-    copy.vulnerabilities = parse_vulnerabilities(element, filter);
+    copy.vulnerabilities = parseVulnerabilities(element, filter);
 
-    copy.operatingsystems = parse_operatingsystems(element, filter);
+    copy.operatingsystems = parseOperatingSystems(element, filter);
 
-    copy.ports = parse_ports(element, filter);
+    copy.ports = parsePorts(element, filter);
 
-    copy.cves = parse_cves(element, filter);
+    copy.cves = parseCves(element, filter);
 
-    copy.closed_cves = parse_closed_cves(element, filter);
+    copy.closed_cves = parseClosedCves(element, filter);
 
     copy.errors = parse_errors(element, filter);
 

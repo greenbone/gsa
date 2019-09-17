@@ -45,7 +45,7 @@ import ReportVulnerability from './vulnerability';
 
 import Result from '../result';
 
-const empty_collection_list = filter => {
+const emptyCollectionList = filter => {
   return {
     filter,
     counts: new CollectionCounts(),
@@ -53,7 +53,7 @@ const empty_collection_list = filter => {
   };
 };
 
-const get_cert = (certs, fingerprint) => {
+const getTlsCertificate = (certs, fingerprint) => {
   let cert = certs[fingerprint];
 
   if (!isDefined(cert)) {
@@ -63,11 +63,11 @@ const get_cert = (certs, fingerprint) => {
   return cert;
 };
 
-export const parse_tls_certificates = (report, filter) => {
+export const parseTlsCertificates = (report, filter) => {
   const {host: hosts, ssl_certs} = report;
 
   if (!isDefined(ssl_certs)) {
-    return empty_collection_list(filter);
+    return emptyCollectionList(filter);
   }
 
   const {count: full_count} = ssl_certs;
@@ -84,7 +84,7 @@ export const parse_tls_certificates = (report, filter) => {
       if (name.startsWith('SSLInfo')) {
         const [port, fingerprint] = value.split('::');
 
-        const cert = get_cert(host_certs, fingerprint);
+        const cert = getTlsCertificate(host_certs, fingerprint);
 
         cert.ip = host.ip;
 
@@ -92,7 +92,7 @@ export const parse_tls_certificates = (report, filter) => {
       } else if (name.startsWith('SSLDetails')) {
         const [, fingerprint] = name.split(':');
 
-        const cert = get_cert(host_certs, fingerprint);
+        const cert = getTlsCertificate(host_certs, fingerprint);
 
         value.split('|').reduce((c, v) => {
           let [key, val] = v.split(':');
@@ -107,7 +107,7 @@ export const parse_tls_certificates = (report, filter) => {
       } else if (name.startsWith('Cert')) {
         const [, fingerprint] = name.split(':');
 
-        const cert = get_cert(host_certs, fingerprint);
+        const cert = getTlsCertificate(host_certs, fingerprint);
 
         // currently cert data starts with x509:
         // not sure if there are other types of certs
@@ -168,12 +168,12 @@ export const parse_tls_certificates = (report, filter) => {
   };
 };
 
-export const parse_ports = (report, filter) => {
+export const parsePorts = (report, filter) => {
   const temp_ports = {};
   const {ports} = report;
 
   if (!isDefined(ports)) {
-    return empty_collection_list(filter);
+    return emptyCollectionList(filter);
   }
 
   const {count: full_count} = ports;
@@ -215,12 +215,12 @@ export const parse_ports = (report, filter) => {
   };
 };
 
-export const parse_vulnerabilities = (report, filter) => {
+export const parseVulnerabilities = (report, filter) => {
   const temp_vulns = {};
   const {vulns, results = {}} = report;
 
   if (!isDefined(vulns)) {
-    return empty_collection_list(filter);
+    return emptyCollectionList(filter);
   }
 
   const {count: full_count} = vulns;
@@ -264,13 +264,13 @@ export const parse_vulnerabilities = (report, filter) => {
   };
 };
 
-export const parse_apps = (report, filter) => {
+export const parseApps = (report, filter) => {
   const {host: hosts, apps, results = {}} = report;
   const apps_temp = {};
   const cpe_host_details = {};
 
   if (!isDefined(apps)) {
-    return empty_collection_list(filter);
+    return emptyCollectionList(filter);
   }
 
   const {count: full_count} = apps;
@@ -360,7 +360,7 @@ export const parse_apps = (report, filter) => {
   };
 };
 
-export const parse_host_severities = (results = {}) => {
+export const parseHostSeverities = (results = {}) => {
   const severities = {};
 
   // if the there are several results find the highest severity for the ip
@@ -385,16 +385,16 @@ export const parse_host_severities = (results = {}) => {
   return severities;
 };
 
-export const parse_operatingsystems = (report, filter) => {
+export const parseOperatingSystems = (report, filter) => {
   const {host: hosts, results, os: os_count} = report;
 
   if (!isDefined(os_count)) {
-    return empty_collection_list(filter);
+    return emptyCollectionList(filter);
   }
 
   const operating_systems = {};
 
-  const severities = parse_host_severities(results);
+  const severities = parseHostSeverities(results);
 
   forEach(hosts, host => {
     const {detail: details, ip} = host;
@@ -447,14 +447,14 @@ export const parse_operatingsystems = (report, filter) => {
   };
 };
 
-export const parse_hosts = (report, filter) => {
+export const parseHosts = (report, filter) => {
   const {host: hosts, results, hosts: hosts_count} = report;
 
   if (!isDefined(hosts_count)) {
-    return empty_collection_list(filter);
+    return emptyCollectionList(filter);
   }
 
-  const severities = parse_host_severities(results);
+  const severities = parseHostSeverities(results);
 
   const hosts_array = map(hosts, host => {
     const {port_count = {}} = host;
@@ -495,7 +495,7 @@ const parse_report_report_counts = elem => {
   return new CollectionCounts(counts);
 };
 
-export const parse_results = (report, filter) => {
+export const parseResults = (report, filter) => {
   const {results} = report;
 
   if (!isDefined(results)) {
@@ -516,7 +516,7 @@ export const parse_errors = (report, filter) => {
   const {host: hosts, errors} = report;
 
   if (!isDefined(errors)) {
-    return empty_collection_list(filter);
+    return emptyCollectionList(filter);
   }
 
   const {count: full_count} = errors;
@@ -580,11 +580,11 @@ export const parse_errors = (report, filter) => {
   };
 };
 
-export const parse_closed_cves = (report, filter) => {
+export const parseClosedCves = (report, filter) => {
   const {host: hosts, closed_cves} = report;
 
   if (!isDefined(closed_cves)) {
-    return empty_collection_list(filter);
+    return emptyCollectionList(filter);
   }
 
   // count doesn't fit to our counting of cves. we split the db rows with a csv
@@ -648,11 +648,11 @@ export const parse_closed_cves = (report, filter) => {
   };
 };
 
-export const parse_cves = (report, filter) => {
+export const parseCves = (report, filter) => {
   const {results} = report;
 
   if (!isDefined(results)) {
-    return empty_collection_list(filter);
+    return emptyCollectionList(filter);
   }
 
   const cves = {};
