@@ -19,7 +19,7 @@
 import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 import {parseInt} from '../parser';
 
@@ -51,7 +51,7 @@ class PortList extends Model {
 
     ret.port_ranges = map(ranges, range => {
       range.port_list_id = ret.id;
-      return new PortRange(range);
+      return PortRange.fromElement(range);
     });
 
     const {port_count} = element;
@@ -70,9 +70,8 @@ class PortList extends Model {
     }
 
     if (isDefined(element.targets) && isDefined(element.targets.target)) {
-      ret.targets = map(
-        element.targets.target,
-        target => new Model(target, 'target'),
+      ret.targets = map(element.targets.target, target =>
+        parseModelFromElement(target, 'target'),
       );
     } else {
       ret.targets = [];

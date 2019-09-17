@@ -22,7 +22,7 @@ import {isEmpty} from '../utils/string';
 
 import {parseDate, parseYesNo, YES_VALUE} from '../parser';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 const get_value = val => {
   return isObject(val) ? val.__text : val;
@@ -81,7 +81,9 @@ class ReportFormat extends Model {
     delete ret.param;
 
     if (isDefined(ret.alerts)) {
-      ret.alerts = map(ret.alerts.alert, alert => new Model(alert, 'alert'));
+      ret.alerts = map(ret.alerts.alert, alert =>
+        parseModelFromElement(alert, 'alert'),
+      );
     } else {
       ret.alerts = [];
     }

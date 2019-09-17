@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 import {_l} from '../locale/lang';
 
@@ -132,18 +132,16 @@ class Credential extends Model {
     ret.allow_insecure = parseYesNo(element.allow_insecure);
 
     if (isDefined(element.targets)) {
-      ret.targets = map(
-        element.targets.target,
-        target => new Model(target, 'target'),
+      ret.targets = map(element.targets.target, target =>
+        parseModelFromElement(target, 'target'),
       );
     } else {
       ret.targets = [];
     }
 
     if (isDefined(element.scanners)) {
-      ret.scanners = map(
-        element.scanners.scanner,
-        scanner => new Model(scanner, 'scanner'),
+      ret.scanners = map(element.scanners.scanner, scanner =>
+        parseModelFromElement(scanner, 'scanner'),
       );
     }
 

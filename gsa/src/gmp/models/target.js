@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
@@ -44,7 +44,7 @@ class Target extends Model {
     const ret = super.parseElement(element);
 
     if (isDefined(element.port_list) && !isEmpty(element.port_list._id)) {
-      ret.port_list = new PortList(ret.port_list);
+      ret.port_list = PortList.fromElement(ret.port_list);
     } else {
       delete ret.port_list;
     }
@@ -52,7 +52,7 @@ class Target extends Model {
     for (const name of TARGET_CREDENTIAL_NAMES) {
       const cred = ret[name];
       if (isDefined(cred) && !isEmpty(cred._id)) {
-        ret[name] = new Model(cred, 'credential');
+        ret[name] = parseModelFromElement(cred, 'credential');
       } else {
         delete ret[name];
       }
@@ -67,7 +67,9 @@ class Target extends Model {
     ret.reverse_lookup_unify = parseYesNo(element.reverse_lookup_unify);
 
     if (isDefined(element.tasks)) {
-      ret.tasks = map(element.tasks.task, task => new Model(task, 'task'));
+      ret.tasks = map(element.tasks.task, task =>
+        parseModelFromElement(task, 'task'),
+      );
     }
 
     return ret;

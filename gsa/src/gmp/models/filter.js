@@ -22,7 +22,7 @@ import 'core-js/fn/array/includes';
 import {isDefined, isString} from '../utils/identity';
 import {forEach, map} from '../utils/array';
 
-import Model from '../model.js';
+import Model, {parseModelFromElement} from '../model.js';
 
 import {setProperties} from '../parser';
 
@@ -121,7 +121,9 @@ class Filter extends Model {
     }
 
     if (isDefined(ret.alerts)) {
-      ret.alerts = map(ret.alerts.alert, alert => new Model(alert, 'alert'));
+      ret.alerts = map(ret.alerts.alert, alert =>
+        parseModelFromElement(alert, 'alert'),
+      );
     }
 
     return ret;

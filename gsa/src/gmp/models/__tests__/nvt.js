@@ -44,7 +44,7 @@ describe('nvt Model tests', () => {
   });
 
   test('should be instance of Info', () => {
-    const nvt = new Nvt({});
+    const nvt = new Nvt();
     const nvt2 = Nvt.fromElement({});
 
     expect(nvt).toBeInstanceOf(Info);

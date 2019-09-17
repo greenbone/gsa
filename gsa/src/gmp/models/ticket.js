@@ -23,7 +23,7 @@ import {parseSeverity, parseDate, parseText} from 'gmp/parser';
 import {isDefined, isModelElement} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 export const TICKET_STATUS = {
   open: 'Open',
@@ -53,30 +53,35 @@ class Ticket extends Model {
     const ret = super.parseElement(element);
 
     if (isDefined(element.assigned_to) && isDefined(element.assigned_to.user)) {
-      ret.assignedTo = {user: new Model(element.assigned_to.user, 'user')};
+      ret.assignedTo = {
+        user: parseModelFromElement(element.assigned_to.user, 'user'),
+      };
     }
     delete ret.assigned_to;
 
     if (isModelElement(element.result)) {
-      ret.result = new Model(element.result, 'result');
+      ret.result = parseModelFromElement(element.result, 'result');
     } else {
       delete ret.result;
     }
 
     if (isModelElement(element.report)) {
-      ret.report = new Model(element.report, 'report');
+      ret.report = parseModelFromElement(element.report, 'report');
     } else {
       delete ret.report;
     }
 
     if (isModelElement(element.task)) {
-      ret.task = new Model(element.task, 'task');
+      ret.task = parseModelFromElement(element.task, 'task');
     } else {
       delete ret.task;
     }
 
     if (isModelElement(element.fix_verified_report)) {
-      ret.fixVerifiedReport = new Model(element.fix_verified_report, 'report');
+      ret.fixVerifiedReport = parseModelFromElement(
+        element.fix_verified_report,
+        'report',
+      );
     }
     delete ret.fix_verified_report;
 

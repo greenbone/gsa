@@ -20,7 +20,7 @@
 import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 class Permission extends Model {
   static entityType = 'permission';
@@ -33,13 +33,19 @@ class Permission extends Model {
     const ret = super.parseElement(element);
 
     if (isDefined(element.resource) && !isEmpty(element.resource._id)) {
-      ret.resource = new Model(element.resource, element.resource.type);
+      ret.resource = parseModelFromElement(
+        element.resource,
+        element.resource.type,
+      );
     } else {
       delete ret.resource;
     }
 
     if (isDefined(element.subject) && !isEmpty(element.subject._id)) {
-      ret.subject = new Model(element.subject, element.subject.type);
+      ret.subject = parseModelFromElement(
+        element.subject,
+        element.subject.type,
+      );
     } else {
       delete ret.subject;
     }

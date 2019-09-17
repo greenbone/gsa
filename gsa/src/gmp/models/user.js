@@ -21,7 +21,7 @@ import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
-import Model from '../model.js';
+import Model, {parseModelFromElement} from '../model.js';
 import {parseCsv} from '../parser';
 
 export const AUTH_METHOD_PASSWORD = 'password';
@@ -42,18 +42,16 @@ class User extends Model {
   static parseElement(element) {
     const ret = super.parseElement(element);
 
-    ret.roles = map(element.role, role => {
-      return new Model(role, 'role');
-    });
+    ret.roles = map(element.role, role => parseModelFromElement(role, 'role'));
 
     delete ret.role;
 
     if (isEmpty(element.groups)) {
       ret.groups = [];
     } else {
-      ret.groups = map(element.groups.group, group => {
-        return new Model(group, 'group');
-      });
+      ret.groups = map(element.groups.group, group =>
+        parseModelFromElement(group, 'group'),
+      );
     }
 
     if (isDefined(element.hosts)) {

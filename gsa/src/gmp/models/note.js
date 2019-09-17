@@ -19,7 +19,7 @@
 import {isModelElement} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 import {
   parseCsv,
   parseSeverity,
@@ -44,7 +44,7 @@ class Note extends Model {
     let ret = super.parseElement(element);
 
     if (ret.nvt) {
-      ret.nvt = new Nvt(ret.nvt);
+      ret.nvt = Nvt.fromElement(ret.nvt);
       ret.name = ret.nvt.name;
     }
 
@@ -53,13 +53,13 @@ class Note extends Model {
     ret.severity = parseSeverity(ret.severity);
 
     if (isModelElement(ret.task)) {
-      ret.task = new Model(ret.task, 'task');
+      ret.task = parseModelFromElement(ret.task, 'task');
     } else {
       delete ret.task;
     }
 
     if (isModelElement(ret.result)) {
-      ret.result = new Model(ret.result, 'result');
+      ret.result = parseModelFromElement(ret.result, 'result');
     } else {
       delete ret.result;
     }

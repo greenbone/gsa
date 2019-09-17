@@ -93,7 +93,7 @@ class Model {
 
     if (isDefined(element.user_tags)) {
       copy.userTags = map(element.user_tags.tag, tag => {
-        return new Model(tag, 'tag');
+        return parseModelFromElement(tag, 'tag');
       });
       delete copy.user_tags;
     } else {

@@ -24,7 +24,7 @@ import {map} from '../utils/array';
 
 import {parseInt, parseYesNo, parseDate} from '../parser';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 import Credential from './credential';
 
@@ -86,7 +86,7 @@ class Scanner extends Model {
 
     ret.credential =
       isDefined(ret.credential) && !isEmpty(ret.credential._id)
-        ? new Credential(ret.credential)
+        ? Credential.fromElement(ret.credential)
         : undefined;
 
     if (isEmpty(ret.ca_pub)) {
@@ -111,7 +111,9 @@ class Scanner extends Model {
     }
 
     if (isDefined(ret.tasks)) {
-      ret.tasks = map(ret.tasks.task, task => new Model(task, 'task'));
+      ret.tasks = map(ret.tasks.task, task =>
+        parseModelFromElement(task, 'task'),
+      );
     } else {
       ret.tasks = [];
     }
@@ -119,9 +121,8 @@ class Scanner extends Model {
     if (isEmpty(ret.configs)) {
       ret.configs = [];
     } else {
-      ret.configs = map(
-        ret.configs.config,
-        config => new Model(config, 'scanconfig'),
+      ret.configs = map(ret.configs.config, config =>
+        parseModelFromElement(config, 'scanconfig'),
       );
     }
 

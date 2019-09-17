@@ -23,7 +23,7 @@ import {isEmpty} from '../utils/string';
 
 import {parseInt} from '../parser';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 import _ from '../locale';
 
@@ -154,11 +154,13 @@ class ScanConfig extends Model {
         ...element.scanner,
         name: element.scanner.__text,
       };
-      ret.scanner = new Model(scanner, 'scanner');
+      ret.scanner = parseModelFromElement(scanner, 'scanner');
     }
 
     if (isDefined(element.tasks)) {
-      ret.tasks = map(element.tasks.task, task => new Model(task, 'task'));
+      ret.tasks = map(element.tasks.task, task =>
+        parseModelFromElement(task, 'task'),
+      );
     } else {
       ret.tasks = [];
     }

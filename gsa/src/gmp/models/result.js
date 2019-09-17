@@ -21,7 +21,7 @@ import {forEach, map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 import {parseSeverity, parseQod} from '../parser';
 
 import Nvt from './nvt';
@@ -42,7 +42,7 @@ export class Delta {
     } else {
       this.delta_type = elem.__text;
       this.diff = elem.diff;
-      this.result = new Model(elem.result, 'result');
+      this.result = parseModelFromElement(elem.result, 'result');
     }
   }
 }
@@ -91,7 +91,7 @@ class Result extends Model {
       };
     }
 
-    copy.nvt = new Nvt(nvt);
+    copy.nvt = Nvt.fromElement(nvt);
 
     if (isDefined(description)) {
       copy.description = description;
@@ -104,11 +104,11 @@ class Result extends Model {
     copy.vulnerability = isDefined(name) ? name : nvt._oid;
 
     if (isDefined(report)) {
-      copy.report = new Model(report, 'report');
+      copy.report = parseModelFromElement(report, 'report');
     }
 
     if (isDefined(task)) {
-      copy.task = new Model(task, 'task');
+      copy.task = parseModelFromElement(task, 'task');
     }
 
     if (isDefined(detection) && isDefined(detection.result)) {
@@ -138,15 +138,15 @@ class Result extends Model {
 
     copy.qod = parseQod(qod);
     copy.notes = isDefined(notes)
-      ? map(notes.note, note => new Note(note))
+      ? map(notes.note, note => Note.fromElement(note))
       : [];
     copy.overrides = isDefined(overrides)
-      ? map(overrides.override, override => new Override(override))
+      ? map(overrides.override, override => Override.fromElement(override))
       : [];
 
     // parse tickets as models only. we don't have other data then the id here
     copy.tickets = isDefined(tickets)
-      ? map(tickets.ticket, ticket => new Model(ticket, 'ticket'))
+      ? map(tickets.ticket, ticket => parseModelFromElement(ticket, 'ticket'))
       : [];
 
     return copy;

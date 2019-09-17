@@ -21,7 +21,7 @@ import {isEmpty} from '../../utils/string';
 
 import {parseProgressElement} from '../../parser';
 
-import Model from '../../model';
+import Model, {parseModelFromElement} from '../../model';
 
 /*
  * Use own task model for reports to avoid cyclic dependencies
@@ -39,7 +39,7 @@ class ReportTask extends Model {
 
     const {target} = element;
     if (isDefined(target) && !isEmpty(target._id)) {
-      copy.target = new Model(target, 'target');
+      copy.target = parseModelFromElement(target, 'target');
     } else {
       delete copy.target;
     }

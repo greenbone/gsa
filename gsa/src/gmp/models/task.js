@@ -32,7 +32,7 @@ import {
   YES_VALUE,
 } from '../parser';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 import Report from './report';
 import Schedule from './schedule';
@@ -160,35 +160,38 @@ class Task extends Model {
     reports.forEach(name => {
       const report = element[name];
       if (isDefined(report)) {
-        copy[name] = new Report(report.report);
+        copy[name] = Report.fromElement(report.report);
       }
     });
 
+    // slave isn't really an entity type but it has an id
     const models = ['config', 'slave', 'target'];
     models.forEach(item => {
       const name = item;
 
       const data = element[name];
       if (isDefined(data) && !isEmpty(data._id)) {
-        copy[name] = new Model(data, normalizeType(name));
+        copy[name] = parseModelFromElement(data, normalizeType(name));
       } else {
         delete copy[name];
       }
     });
 
     if (isDefined(element.alert)) {
-      copy.alerts = map(element.alert, alert => new Model(alert, 'alert'));
+      copy.alerts = map(element.alert, alert =>
+        parseModelFromElement(alert, 'alert'),
+      );
       delete copy.alert;
     }
 
     if (isDefined(element.scanner) && !isEmpty(element.scanner._id)) {
-      copy.scanner = new Scanner(element.scanner);
+      copy.scanner = Scanner.fromElement(element.scanner);
     } else {
       delete copy.scanner;
     }
 
     if (isDefined(element.schedule) && !isEmpty(element.schedule._id)) {
-      copy.schedule = new Schedule(element.schedule);
+      copy.schedule = Schedule.fromElement(element.schedule);
     } else {
       delete copy.schedule;
     }

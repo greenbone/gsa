@@ -20,7 +20,7 @@ import {isDefined} from '../utils/identity';
 
 import {parseSeverity, parseDate} from '../parser';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 import ReportReport from './report/report';
 
@@ -49,11 +49,11 @@ class Report extends Model {
     } = element;
 
     if (isDefined(report)) {
-      copy.report = new ReportReport(report);
+      copy.report = ReportReport.fromElement(report);
     }
 
-    copy.report_format = new Model(report_format, 'reportformat');
-    copy.task = new Model(task, 'task');
+    copy.report_format = parseModelFromElement(report_format, 'reportformat');
+    copy.task = parseModelFromElement(task, 'task');
 
     if (isDefined(severity)) {
       copy.severity = parseSeverity(severity);

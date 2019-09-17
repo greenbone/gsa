@@ -24,7 +24,7 @@ import {forEach, map} from '../utils/array';
 
 import {parseYesNo, YES_VALUE} from '../parser.js';
 
-import Model from '../model.js';
+import Model, {parseModelFromElement} from '../model.js';
 
 export const EVENT_TYPE_UPDATED_SECINFO = 'Updated SecInfo arrived';
 export const EVENT_TYPE_NEW_SECINFO = 'New SecInfo arrived';
@@ -123,11 +123,13 @@ class Alert extends Model {
     }
 
     if (isDefined(ret.filter)) {
-      ret.filter = new Model(ret.filter, 'filter');
+      ret.filter = parseModelFromElement(ret.filter, 'filter');
     }
 
     if (isDefined(element.tasks)) {
-      ret.tasks = map(element.tasks.task, task => new Model(task, 'task'));
+      ret.tasks = map(element.tasks.task, task =>
+        parseModelFromElement(task, 'task'),
+      );
     } else {
       ret.tasks = [];
     }

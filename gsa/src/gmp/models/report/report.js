@@ -75,9 +75,9 @@ class ReportReport extends Model {
       };
     }
 
-    copy.severity_class = new Model(copy.severity_class);
+    copy.severity_class = Model.fromElement(copy.severity_class);
 
-    copy.task = new ReportTask(task, 'task');
+    copy.task = ReportTask.fromElement(task);
 
     copy.results = parse_results(element, filter);
 
