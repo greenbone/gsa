@@ -54,6 +54,7 @@ const FilterPart = ({
   targetsFilter,
   tasksFilter,
   ticketsFilter,
+  tlsCertificatesFilter,
   usersFilter,
   vulnerabilitiesFilter,
   cveFilter,
@@ -292,6 +293,17 @@ const FilterPart = ({
           onChange={onChange}
         />
       </FormGroup>
+      <FormGroup title={_('TLS Certificates Filter')} titleSize="3">
+        <Select
+          name="tlsCertificatesFilter"
+          value={tlsCertificatesFilter}
+          items={renderSelectItems(
+            filterFilters(filters, 'tls_certificate'),
+            UNSET_VALUE,
+          )}
+          onChange={onChange}
+        />
+      </FormGroup>
       <FormGroup title={_('Users Filter')} titleSize="3">
         <Select
           name="usersFilter"
@@ -399,6 +411,7 @@ FilterPart.propTypes = {
   targetsFilter: PropTypes.string,
   tasksFilter: PropTypes.string,
   ticketsFilter: PropTypes.string,
+  tlsCertificatesFilter: PropTypes.string,
   usersFilter: PropTypes.string,
   vulnerabilitiesFilter: PropTypes.string,
   onChange: PropTypes.func,

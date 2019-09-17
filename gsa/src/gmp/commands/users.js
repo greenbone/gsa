@@ -77,12 +77,16 @@ export const DEFAULT_FILTER_SETTINGS = {
   target: '236e2e41-9771-4e7a-8124-c432045985e0',
   task: '1c981851-8244-466c-92c4-865ffe05e721',
   ticket: '801544de-f06d-4377-bb77-bbb23369bad4',
+  tlscertificate: '34a176c1-0278-4c29-b84d-3d72117b2169',
   user: 'a33635be-7263-4549-bd80-c04d2dba89b4',
   vulnerability: '17c9d269-95e7-4bfa-b1b2-bc106a2175c7',
 };
 
 const saveDefaultFilterSettingId = entityType =>
   `settings_filter:${DEFAULT_FILTER_SETTINGS[entityType]}`;
+
+export const transformSettingName = name =>
+  name.toLowerCase().replace(/ |-/g, '');
 
 export class UserCommand extends EntityCommand {
   constructor(http) {
@@ -151,7 +155,7 @@ export class UserCommand extends EntityCommand {
       const {data} = response;
       forEach(data.get_settings.get_settings_response.setting, setting => {
         // set setting keys to lowercase and remove '-'
-        const keyName = setting.name.toLowerCase().replace(/ |-/g, '');
+        const keyName = transformSettingName(setting.name);
         settings[keyName] = new Setting(setting);
       });
       return response.setData(settings);
@@ -324,6 +328,9 @@ export class UserCommand extends EntityCommand {
       [saveDefaultFilterSettingId('target')]: data.targetsFilter,
       [saveDefaultFilterSettingId('task')]: data.tasksFilter,
       [saveDefaultFilterSettingId('ticket')]: data.ticketsFilter,
+      [saveDefaultFilterSettingId(
+        'tlscertificate',
+      )]: data.tlsCertificatesFilter,
       [saveDefaultFilterSettingId('user')]: data.usersFilter,
       [saveDefaultFilterSettingId('vulnerability')]: data.vulnerabilitiesFilter,
       [saveDefaultFilterSettingId('cpe')]: data.cpeFilter,

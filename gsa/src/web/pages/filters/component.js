@@ -55,6 +55,7 @@ const FILTER_OPTIONS = [
   ['target', _l('Target')],
   ['task', _l('Task')],
   ['ticket', _l('Ticket')],
+  ['tls_certificate', _l('TLS Certificate')],
   ['user', _l('User')],
   ['vulnerability', _l('Vulnerability')],
 ];

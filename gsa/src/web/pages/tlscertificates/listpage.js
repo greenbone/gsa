@@ -78,7 +78,6 @@ const Page = ({
         <PageTitle title={_('TLS Certificates')} />
         <EntitiesPage
           {...props}
-          createFilterType="tlscertificate"
           dashboard={() => (
             <TlsCertificatesDashboard
               filter={filter}

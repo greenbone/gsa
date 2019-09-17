@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {UserCommand} from '../users';
+import {UserCommand, transformSettingName} from '../users';
 
 import {createResponse, createHttp} from '../testing';
 describe('UserCommand tests', () => {
@@ -76,5 +76,18 @@ describe('UserCommand tests', () => {
       expect(barSettings.foo).toEqual('true');
       expect(barSettings.certificateInfo).toEqual('ipsum');
     });
+  });
+});
+
+describe('UserCommand transformSettingName() function tests', () => {
+  test('should transform string to lower case and remove -', () => {
+    const str1 = 'foo';
+    const str2 = 'fooBar';
+    const str3 = 'foo-bar';
+    const str4 = 'foo-Bar';
+    expect(transformSettingName(str1)).toEqual('foo');
+    expect(transformSettingName(str2)).toEqual('foobar');
+    expect(transformSettingName(str3)).toEqual('foobar');
+    expect(transformSettingName(str4)).toEqual('foobar');
   });
 });
