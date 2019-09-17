@@ -109,10 +109,6 @@ export const getCredentialTypeName = type => `${TYPE_NAMES[type]}`;
 class Credential extends Model {
   static entityType = 'credential';
 
-  parseProperties(element) {
-    return Credential.parseElement(element);
-  }
-
   static parseElement(element) {
     const ret = super.parseElement(element);
 

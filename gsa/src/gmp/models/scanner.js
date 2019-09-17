@@ -75,10 +75,6 @@ const parse_scanner_info = (info = {}) => {
 class Scanner extends Model {
   static entityType = 'scanner';
 
-  parseProperties(element) {
-    return Scanner.parseElement(element);
-  }
-
   static parseElement(element) {
     const ret = super.parseElement(element);
 

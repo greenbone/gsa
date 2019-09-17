@@ -25,10 +25,6 @@ import {parseDate} from '../parser';
 class Agent extends Model {
   static entityType = 'agent';
 
-  parseProperties(element) {
-    return Agent.parseElement(element);
-  }
-
   static parseElement(element) {
     const ret = super.parseElement(element);
 

@@ -29,10 +29,6 @@ import ReportReport from './report/report';
 class Report extends Model {
   static entityType = 'report';
 
-  parseProperties(element) {
-    return Report.parseElement(element);
-  }
-
   static parseElement(element) {
     const copy = super.parseElement(element);
 

@@ -40,10 +40,6 @@ class PortRange extends Model {
 class PortList extends Model {
   static entityType = 'portlist';
 
-  parseProperties(element) {
-    return PortList.parseElement(element);
-  }
-
   static parseElement(element) {
     const ret = super.parseElement(element);
 

@@ -26,10 +26,6 @@ import Event from './event';
 class Schedule extends Model {
   static entityType = 'schedule';
 
-  parseProperties(element) {
-    return Schedule.parseElement(element);
-  }
-
   static parseElement(element) {
     const ret = super.parseElement(element);
 

@@ -35,10 +35,6 @@ export const ACCESS_DENY_ALL = '1';
 class User extends Model {
   static entityType = 'user';
 
-  parseProperties(element) {
-    return User.parseElement(element);
-  }
-
   static parseElement(element) {
     const ret = super.parseElement(element);
 

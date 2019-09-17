@@ -27,10 +27,6 @@ import Model from '../model';
 class Tag extends Model {
   static entityType = 'tag';
 
-  parseProperties(element) {
-    return Tag.parseElement(element);
-  }
-
   static parseElement(element) {
     const ret = super.parseElement(element);
 

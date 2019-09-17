@@ -50,10 +50,6 @@ class Model {
     return setProperties(properties, this);
   }
 
-  parseProperties(element) {
-    return Model.parseElement(element);
-  }
-
   static fromElement(element = {}) {
     const f = new this();
     f.setProperties(this.parseElement(element));

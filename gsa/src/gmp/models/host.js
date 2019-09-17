@@ -58,10 +58,6 @@ class Identifier {
 class Host extends Asset {
   static entityType = 'host';
 
-  parseProperties(element) {
-    return Host.parseElement(element);
-  }
-
   static parseElement(element) {
     const ret = super.parseElement(element);
 

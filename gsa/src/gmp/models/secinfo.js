@@ -52,10 +52,6 @@ export const secInfoType = entity => entity.infoType;
 class SecInfo extends Info {
   static entityType = 'allinfo';
 
-  parseProperties(element) {
-    return SecInfo.parseElement(element);
-  }
-
   static parseElement(element) {
     let ret = super.parseElement(element);
 

@@ -60,10 +60,6 @@ const parseTrend = parseInt;
 class ScanConfig extends Model {
   static entityType = 'scanconfig';
 
-  parseProperties(element) {
-    return ScanConfig.parseElement(element);
-  }
-
   static parseElement(element) {
     const ret = super.parseElement(element);
 

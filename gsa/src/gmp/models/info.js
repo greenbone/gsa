@@ -24,10 +24,6 @@ import Model from '../model.js';
 class Info extends Model {
   static entityType = 'info';
 
-  parseProperties(elem, infoType) {
-    return Info.parseElement(elem, infoType);
-  }
-
   static parseElement(elem, infoType) {
     const info_elem = elem[infoType];
 

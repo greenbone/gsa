@@ -25,10 +25,6 @@ import Model, {parseModelFromElement} from '../model';
 class Permission extends Model {
   static entityType = 'permission';
 
-  parseProperties(element) {
-    return Permission.parseElement(element);
-  }
-
   static parseElement(element) {
     const ret = super.parseElement(element);
 

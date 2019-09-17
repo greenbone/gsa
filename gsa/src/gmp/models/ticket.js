@@ -45,10 +45,6 @@ export const getTranslatableTicketStatus = status =>
 class Ticket extends Model {
   static entityType = 'ticket';
 
-  parseProperties(element) {
-    return Ticket.parseElement(element);
-  }
-
   static parseElement(element) {
     const ret = super.parseElement(element);
 

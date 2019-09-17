@@ -52,10 +52,6 @@ const parse_ids = (ids, no) => {
 class Nvt extends Info {
   static entityType = 'nvt';
 
-  parseProperties(element) {
-    return Nvt.parseElement(element);
-  }
-
   static parseElement(element) {
     const ret = super.parseElement(element, 'nvt');
 

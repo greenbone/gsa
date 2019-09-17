@@ -28,10 +28,6 @@ import {parseSeverity, parseDate} from '../parser';
 class Cpe extends Info {
   static entityType = 'cpe';
 
-  parseProperties(element) {
-    return Cpe.parseElement(element);
-  }
-
   static parseElement(element) {
     const ret = super.parseElement(element, 'cpe');
 

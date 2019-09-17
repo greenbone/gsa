@@ -50,10 +50,6 @@ export class Delta {
 class Result extends Model {
   static entityType = 'result';
 
-  parseProperties(element) {
-    return Result.parseElement(element);
-  }
-
   static parseElement(element) {
     const copy = super.parseElement(element);
 

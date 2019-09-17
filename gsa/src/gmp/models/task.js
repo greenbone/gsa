@@ -132,10 +132,6 @@ class Task extends Model {
     return getTranslatableTaskStatus(this.status);
   }
 
-  parseProperties(elem) {
-    return Task.parseElement(elem);
-  }
-
   static parseElement(element) {
     const copy = super.parseElement(element);
 

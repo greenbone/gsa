@@ -78,10 +78,6 @@ class Filter extends Model {
     this.id = id;
   }
 
-  parseProperties(element) {
-    return Filter.parseElement(element);
-  }
-
   /**
    * Parse properties from the passed element object
    *
