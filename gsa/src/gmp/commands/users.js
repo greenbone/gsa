@@ -21,7 +21,7 @@ import logger from '../log';
 import registerCommand from '../command';
 
 import {forEach, map} from '../utils/array';
-import {isDefined} from '../utils/identity';
+import {isArray, isDefined} from '../utils/identity';
 import {severityValue} from '../utils/number';
 
 import Capabilities from '../capabilities/capabilities';
@@ -138,9 +138,14 @@ export class UserCommand extends EntityCommand {
     }).then(response => {
       const {data} = response;
       const {setting} = data.get_settings.get_settings_response;
-      return response.setData(
-        isDefined(setting) ? new Setting(setting) : undefined,
-      );
+      let settings = {};
+      // used for the rowsPerPage setting which returns two settings with the same id
+      if (isDefined(setting) && isArray(setting)) {
+        settings = new Setting(setting[0]);
+      } else if (isDefined(setting)) {
+        settings = new Setting(setting);
+      }
+      return response.setData(settings);
     });
   }
 
