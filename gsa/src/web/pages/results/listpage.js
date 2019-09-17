@@ -20,7 +20,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
+import Filter, {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -91,9 +91,12 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
+const fallbackFilter = Filter.fromString('sort-reverse=severity');
+
 export default withEntitiesContainer('result', {
   entitiesSelector,
   loadEntities,
+  fallbackFilter,
 })(Page);
 
 // export default ResultsPage;
