@@ -19,6 +19,8 @@
 
 import 'core-js/fn/object/entries';
 
+import Model from 'gmp/model';
+
 import Task, {
   HOSTS_ORDERING_RANDOM,
   HOSTS_ORDERING_REVERSE,
@@ -129,6 +131,54 @@ describe('Task Model parse tests', () => {
 
     expect(task.current_report).toBeInstanceOf(Report);
     expect(task.current_report.id).toEqual('r1');
+  });
+
+  test('should parse config', () => {
+    const element = {
+      _id: 't1',
+      config: {
+        _id: 'c1',
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.config).toBeInstanceOf(Model);
+    expect(task.config.id).toEqual('c1');
+  });
+
+  test('should parse slave', () => {
+    const element = {
+      _id: 't1',
+      slave: {
+        _id: 's1',
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.slave).toBeInstanceOf(Model);
+    expect(task.slave.id).toEqual('s1');
+  });
+
+  test('should parse target', () => {
+    const element = {
+      _id: 't1',
+      target: {
+        _id: 't1',
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.target).toBeInstanceOf(Model);
+    expect(task.target.id).toEqual('t1');
   });
 });
 
