@@ -33,19 +33,15 @@ import {
 import Capabilities from './capabilities/capabilities.js';
 
 export const parseModelFromElement = (element, entityType) =>
-  new Model(undefined, entityType).updateFromElement(element);
+  new Model(entityType).updateFromElement(element);
 
 class Model {
   static entityType = 'unknown';
 
-  constructor(element, type) {
+  constructor(type) {
     this.init();
 
     this.entityType = isDefined(type) ? type : this.constructor.entityType;
-
-    if (element) {
-      this.updateFromElement(element);
-    }
   }
 
   init() {}
