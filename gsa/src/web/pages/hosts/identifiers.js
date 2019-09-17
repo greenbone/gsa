@@ -18,7 +18,7 @@
  */
 import 'core-js/features/string/starts-with';
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -26,22 +26,22 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 import DateTime from 'web/components/date/datetime';
 
-import DeleteIcon from '../../components/icon/deleteicon.js';
+import DeleteIcon from 'web/components/icon/deleteicon';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import Table from '../../components/table/stripedtable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableHeader from '../../components/table/header.js';
-import TableHead from '../../components/table/head.js';
-import TableRow from '../../components/table/row.js';
+import Table from 'web/components/table/stripedtable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableHeader from 'web/components/table/header';
+import TableHead from 'web/components/table/head';
+import TableRow from 'web/components/table/row';
 
-import DetailsBlock from '../../entity/block.js';
+import DetailsBlock from 'web/entity/block';
 
 const Action = styled.a`
   cursor: pointer;
@@ -118,127 +118,105 @@ Source.propTypes = {
   source: PropTypes.object.isRequired,
 };
 
-class Identifiers extends React.Component {
-  constructor(...args) {
-    super(...args);
+const Identifiers = props => {
+  const {identifiers} = props;
+  const filtered = filter_identifiers(identifiers, true);
+  const equal = filtered.length === identifiers.length;
 
-    const {identifiers} = this.props;
-    const filtered = filter_identifiers(identifiers, true);
-    const equal = filtered.length === identifiers.length;
+  const [ids, setIds] = useState(filtered);
+  const [latest, setLatest] = useState(!equal);
+  const [stateEqual, setStateEqual] = useState(equal);
 
-    this.state = {
-      identifiers: filtered,
-      latest: !equal,
-      equal,
-    };
+  useEffect(() => {
+    const newFiltered = filter_identifiers(props.identifiers, latest);
+    const newEqual = !latest && newFiltered.length === props.identifiers.length;
+    setLatest(!newEqual);
+    setIds(newFiltered);
+    setStateEqual(newEqual);
+  }, [props.identifiers, latest]);
 
-    this.handleToggleLatest = this.handleToggleLatest.bind(this);
-  }
+  const handleToggleLatest = () => {
+    const {identifiers: newIds} = props;
+    const newFiltered = filter_identifiers(newIds, !latest);
+    const newEqual = !latest && newFiltered.length === newIds.length;
 
-  componentWillReceiveProps(next) {
-    const {identifiers} = next;
+    setLatest(!latest && newFiltered.length !== newIds.length);
+    setIds(newFiltered);
+    setStateEqual(newEqual);
+  };
 
-    if (identifiers !== this.props.identifiers) {
-      const {latest} = this.state;
-      const filtered = filter_identifiers(identifiers, latest);
-      const equal = !latest && filtered.length === identifiers.length;
+  let {displayActions = false, onDelete} = props;
 
-      this.setState({
-        latest: !equal,
-        identifiers: filtered,
-        equal,
-      });
-    }
-  }
+  const title = latest ? _('Latest Identifiers') : _('All Identifiers');
+  const footer = (
+    <TableRow>
+      <TableData flex align={['center', 'center']} colSpan="5">
+        {!stateEqual && (
+          <Action onClick={handleToggleLatest}>
+            {latest ? _('Show all Identifiers') : _('Show latest Identifiers')}
+          </Action>
+        )}
+      </TableData>
+    </TableRow>
+  );
 
-  handleToggleLatest() {
-    const {latest} = this.state;
-    const {identifiers} = this.props;
-    const filtered = filter_identifiers(identifiers, !latest);
-    const equal = !latest && filtered.length === identifiers.length;
-    this.setState({
-      latest: !latest && filtered.length !== identifiers.length,
-      identifiers: filtered,
-      equal,
-    });
-  }
-
-  render() {
-    let {displayActions = false, onDelete} = this.props;
-    const {identifiers, latest, equal} = this.state;
-    const title = latest ? _('Latest Identifiers') : _('All Identifiers');
-    const footer = (
-      <TableRow>
-        <TableData flex align={['center', 'center']} colSpan="5">
-          {!equal && (
-            <Action onClick={this.handleToggleLatest}>
-              {latest
-                ? _('Show all Identifiers')
-                : _('Show latest Identifiers')}
-            </Action>
-          )}
-        </TableData>
-      </TableRow>
-    );
-
-    displayActions = displayActions && isDefined(onDelete);
-    return (
-      <DetailsBlock title={title}>
-        <Table footer={footer}>
-          <colgroup>
-            <Col width="15%" />
-            <Col width="40%" />
-            <Col width="10%" />
-            <Col width={displayActions ? '30%' : '35%'} />
-            {displayActions && <Col width="5%" />}
-          </colgroup>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{_('Name')}</TableHead>
-              <TableHead>{_('Value')}</TableHead>
-              <TableHead>{_('Created')}</TableHead>
-              <TableHead>{_('Source')}</TableHead>
-              {displayActions && <TableHead>{_('Actions')}</TableHead>}
+  displayActions = displayActions && isDefined(onDelete);
+  return (
+    <DetailsBlock title={title}>
+      <Table footer={footer}>
+        <colgroup>
+          <Col width="15%" />
+          <Col width="40%" />
+          <Col width="10%" />
+          <Col width={displayActions ? '30%' : '35%'} />
+          {displayActions && <Col width="5%" />}
+        </colgroup>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{_('Name')}</TableHead>
+            <TableHead>{_('Value')}</TableHead>
+            <TableHead>{_('Created')}</TableHead>
+            <TableHead>{_('Source')}</TableHead>
+            {displayActions && <TableHead>{_('Actions')}</TableHead>}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {ids.map(identifier => (
+            <TableRow key={identifier.id}>
+              <TableData>{identifier.name}</TableData>
+              <TableData>
+                <span>
+                  <DetailsLink
+                    type="operatingsystem"
+                    id={isDefined(identifier.os) ? identifier.os.id : ''}
+                    textOnly={identifier.name !== 'OS'}
+                  >
+                    <Div>{identifier.value}</Div>
+                  </DetailsLink>
+                </span>
+              </TableData>
+              <TableData>
+                <DateTime date={identifier.creationTime} />
+              </TableData>
+              <TableData>
+                <Source source={identifier.source} />
+              </TableData>
+              {displayActions && (
+                <TableData align={['center', 'center']}>
+                  <DeleteIcon
+                    title={_('Delete Identifier')}
+                    value={identifier}
+                    onClick={onDelete}
+                  />
+                </TableData>
+              )}
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {identifiers.map(identifier => (
-              <TableRow key={identifier.id}>
-                <TableData>{identifier.name}</TableData>
-                <TableData>
-                  <span>
-                    <DetailsLink
-                      type="operatingsystem"
-                      id={isDefined(identifier.os) ? identifier.os.id : ''}
-                      textOnly={identifier.name !== 'OS'}
-                    >
-                      <Div>{identifier.value}</Div>
-                    </DetailsLink>
-                  </span>
-                </TableData>
-                <TableData>
-                  <DateTime date={identifier.creationTime} />
-                </TableData>
-                <TableData>
-                  <Source source={identifier.source} />
-                </TableData>
-                {displayActions && (
-                  <TableData align={['center', 'center']}>
-                    <DeleteIcon
-                      title={_('Delete Identifier')}
-                      value={identifier}
-                      onClick={onDelete}
-                    />
-                  </TableData>
-                )}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </DetailsBlock>
-    );
-  }
-}
+          ))}
+        </TableBody>
+      </Table>
+    </DetailsBlock>
+  );
+};
 
 Identifiers.propTypes = {
   displayActions: PropTypes.bool,
