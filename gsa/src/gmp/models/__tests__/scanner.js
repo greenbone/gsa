@@ -60,6 +60,7 @@ describe('Scanner model tests', () => {
 
     expect(scanner.credential).toBeInstanceOf(Credential);
     expect(scanner.credential.id).toEqual('123abc');
+    expect(scanner.credential.entityType).toEqual('credential');
     expect(scanner2.credential).toBeUndefined();
   });
 
@@ -101,6 +102,7 @@ describe('Scanner model tests', () => {
 
     expect(scanner.tasks[0]).toBeInstanceOf(Model);
     expect(scanner.tasks[0].entityType).toEqual('task');
+    expect(scanner.tasks[0].id).toEqual('123');
   });
 
   test('should return empty array if no tasks are given', () => {
@@ -119,6 +121,7 @@ describe('Scanner model tests', () => {
 
     expect(scanner.configs[0]).toBeInstanceOf(Model);
     expect(scanner.configs[0].entityType).toEqual('scanconfig');
+    expect(scanner.configs[0].id).toEqual('123');
   });
 
   test('should return empty array if no configs are given', () => {

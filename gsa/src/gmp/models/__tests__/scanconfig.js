@@ -242,6 +242,7 @@ describe('ScanConfig model tests', () => {
     const scanConfig = ScanConfig.fromElement(elem);
 
     expect(scanConfig.tasks[0]).toBeInstanceOf(Model);
+    expect(scanConfig.tasks[0].id).toEqual('123');
     expect(scanConfig.tasks[0].entityType).toEqual('task');
   });
 

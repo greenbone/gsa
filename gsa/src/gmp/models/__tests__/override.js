@@ -98,6 +98,8 @@ describe('Note model tests', () => {
     const override3 = Override.fromElement({});
 
     expect(override1.task).toBeInstanceOf(Model);
+    expect(override1.task.id).toEqual('123abc');
+    expect(override1.task.entityType).toEqual('task');
     expect(override2.task).toBeUndefined();
     expect(override3.task).toBeUndefined();
   });
@@ -118,6 +120,8 @@ describe('Note model tests', () => {
     const override3 = Override.fromElement({});
 
     expect(override1.result).toBeInstanceOf(Model);
+    expect(override1.result.id).toEqual('123abc');
+    expect(override1.result.entityType).toEqual('result');
     expect(override2.result).toBeUndefined();
     expect(override3.result).toBeUndefined();
   });

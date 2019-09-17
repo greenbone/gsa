@@ -96,6 +96,8 @@ describe('Note model tests', () => {
     const note3 = Note.fromElement({});
 
     expect(note1.task).toBeInstanceOf(Model);
+    expect(note1.task.id).toEqual('123abc');
+    expect(note1.task.entityType).toEqual('task');
     expect(note2.task).toBeUndefined();
     expect(note3.task).toBeUndefined();
   });
@@ -116,6 +118,8 @@ describe('Note model tests', () => {
     const note3 = Note.fromElement({});
 
     expect(note1.result).toBeInstanceOf(Model);
+    expect(note1.result.id).toEqual('123abc');
+    expect(note1.result.entityType).toEqual('result');
     expect(note2.result).toBeUndefined();
     expect(note3.result).toBeUndefined();
   });

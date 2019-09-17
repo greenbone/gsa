@@ -90,6 +90,7 @@ describe('Result model tests', () => {
     const result = Result.fromElement(elem);
 
     expect(result.nvt).toBeInstanceOf(Nvt);
+    expect(result.nvt.oid).toEqual('bar');
   });
 
   test('should parse severity', () => {
@@ -231,7 +232,9 @@ describe('Result model tests', () => {
     const result = Result.fromElement(elem);
 
     expect(result.notes[0]).toBeInstanceOf(Note);
+    expect(result.notes[0].entityType).toEqual('note');
     expect(result.notes[1]).toBeInstanceOf(Note);
+    expect(result.notes[1].entityType).toEqual('note');
   });
 
   test('should return empty array if no notes are given', () => {
@@ -249,7 +252,9 @@ describe('Result model tests', () => {
     const result = Result.fromElement(elem);
 
     expect(result.overrides[0]).toBeInstanceOf(Override);
+    expect(result.overrides[0].entityType).toEqual('override');
     expect(result.overrides[1]).toBeInstanceOf(Override);
+    expect(result.overrides[1].entityType).toEqual('override');
   });
 
   test('should return empty array if no overrides are given', () => {

@@ -105,29 +105,40 @@ describe('Credential Model tests', () => {
   test('should return given targets as array of instances of target model', () => {
     const elem = {
       targets: {
-        target: {},
+        target: {_id: 't1'},
       },
     };
     const credential = Credential.fromElement(elem);
 
-    expect(credential.targets).toEqual([new Model({}, 'target')]);
+    expect(credential.targets.length).toEqual(1);
+
+    const [target] = credential.targets;
+    expect(target).toBeInstanceOf(Model);
+    expect(target.id).toEqual('t1');
+    expect(target.entityType).toEqual('target');
   });
 
   test('should return empty array if no targets are given', () => {
     const credential = Credential.fromElement({});
 
+    expect(credential.targets.length).toEqual(0);
     expect(credential.targets).toEqual([]);
   });
 
   test('should return given scanners as array of instances of scanner model', () => {
     const elem = {
       scanners: {
-        scanner: {},
+        scanner: {_id: 's1'},
       },
     };
     const credential = Credential.fromElement(elem);
 
-    expect(credential.scanners).toEqual([new Model({}, 'scanner')]);
+    expect(credential.scanners.length).toEqual(1);
+
+    const [scanner] = credential.scanners;
+    expect(scanner).toBeInstanceOf(Model);
+    expect(scanner.id).toEqual('s1');
+    expect(scanner.entityType).toEqual('scanner');
   });
 
   test('isAllowInsecure() should return correct true/false', () => {

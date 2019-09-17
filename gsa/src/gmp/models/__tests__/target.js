@@ -42,6 +42,8 @@ describe('Target model tests', () => {
     const target3 = Target.fromElement({});
 
     expect(target1.port_list).toBeInstanceOf(PortList);
+    expect(target1.port_list.entityType).toEqual('portlist');
+    expect(target1.port_list.id).toEqual('123');
     expect(target2.port_list).toBeUndefined();
     expect(target3.port_list).toBeUndefined();
   });
@@ -53,6 +55,7 @@ describe('Target model tests', () => {
 
     expect(target1.smb_credential).toBeInstanceOf(Model);
     expect(target1.smb_credential.entityType).toEqual('credential');
+    expect(target1.smb_credential.id).toEqual('123');
     expect(target2.smb_credential).toBeUndefined();
     expect(target3.smb_credential).toBeUndefined();
   });
@@ -111,6 +114,7 @@ describe('Target model tests', () => {
 
     expect(target.tasks[0]).toBeInstanceOf(Model);
     expect(target.tasks[0].entityType).toEqual('task');
+    expect(target.tasks[0].id).toEqual('123');
   });
 });
 

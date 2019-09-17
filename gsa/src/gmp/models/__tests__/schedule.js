@@ -59,6 +59,7 @@ describe('Schedule model tests', () => {
 
     expect(schedule.tasks[0]).toBeInstanceOf(Model);
     expect(schedule.tasks[0].entityType).toEqual('task');
+    expect(schedule.tasks[0].id).toEqual('123');
   });
 });
 // vim: set ts=2 sw=2 tw=80:

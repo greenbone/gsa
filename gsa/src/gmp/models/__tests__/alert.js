@@ -110,18 +110,24 @@ describe('Alert Model tests', () => {
     const elem = {filter: 'rows=1337'};
     const alert = Alert.fromElement(elem);
 
-    expect(alert.filter).toEqual(new Model('rows=1337', 'filter'));
+    expect(alert.filter).toBeInstanceOf(Model);
+    expect(alert.filter.entityType).toEqual('filter');
   });
 
   test('should return given tasks as array of instances of task model', () => {
     const elem = {
       tasks: {
-        task: {},
+        task: {_id: 't1'},
       },
     };
     const alert = Alert.fromElement(elem);
 
-    expect(alert.tasks).toEqual([new Model({}, 'task')]);
+    expect(alert.tasks.length).toEqual(1);
+
+    const [task] = alert.tasks;
+    expect(task).toBeInstanceOf(Model);
+    expect(task.entityType).toEqual('task');
+    expect(task.id).toEqual('t1');
   });
 
   test('should return empty array if no tasks are given', () => {
