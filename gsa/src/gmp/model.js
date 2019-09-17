@@ -50,6 +50,13 @@ class Model {
     return setProperties(properties, this);
   }
 
+  getProperties() {
+    return Object.entries(this).reduce((prev, [key, value]) => {
+      prev[key] = value;
+      return prev;
+    }, {});
+  }
+
   static fromElement(element = {}) {
     const f = new this();
     f.setProperties(this.parseElement(element));
