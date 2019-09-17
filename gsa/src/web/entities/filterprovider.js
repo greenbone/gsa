@@ -110,8 +110,7 @@ const FilterProvider = ({
 };
 
 FilterProvider.propTypes = {
-  fallbackFilter: PropTypes.oneOfType([PropTypes.filter, PropTypes.string]),
-  filter: PropTypes.filter,
+  fallbackFilter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   gmpname: PropTypes.string,
   locationQuery: PropTypes.object,
