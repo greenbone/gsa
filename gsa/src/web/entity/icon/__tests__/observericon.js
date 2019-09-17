@@ -26,7 +26,7 @@ import ObserverIcon from '../observericon';
 
 describe('Entity ObserverIcon component tests', () => {
   test('should render if the owner is not the current user', () => {
-    const entity = new Task({owner: {name: 'foo'}});
+    const entity = Task.fromElement({owner: {name: 'foo'}});
 
     const {element} = render(<ObserverIcon entity={entity} userName={'bar'} />);
 
@@ -34,7 +34,7 @@ describe('Entity ObserverIcon component tests', () => {
   });
 
   test('should not render if the owner is the current user', () => {
-    const entity = new Task({owner: {name: 'foo'}});
+    const entity = Task.fromElement({owner: {name: 'foo'}});
 
     const {element} = render(<ObserverIcon entity={entity} userName={'foo'} />);
 

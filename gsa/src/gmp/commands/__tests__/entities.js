@@ -42,7 +42,7 @@ describe('EntitiesCommand tests', () => {
   });
 
   test('should add filter_id parameter', () => {
-    const filter = new Filter({_id: 'bar'});
+    const filter = Filter.fromElement({_id: 'bar'});
     const response = createEntitiesResponse('foo', []);
     const fakeHttp = createHttp(response);
 
@@ -60,7 +60,7 @@ describe('EntitiesCommand tests', () => {
   });
 
   test('should prefer filter_id over filter parameter', () => {
-    const filter = new Filter({
+    const filter = Filter.fromElement({
       _id: 'bar',
       keywords: {
         keyword: {relation: '=', value: 'bar', column: 'foo'},

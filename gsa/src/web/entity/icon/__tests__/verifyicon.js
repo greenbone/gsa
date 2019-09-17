@@ -31,7 +31,7 @@ import VerifyIcon from '../verifyicon';
 describe('Entity VerifyIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
     const caps = new Capabilities(['everything']);
-    const entity = new ReportFormat({
+    const entity = ReportFormat.fromElement({
       permissions: {permission: [{name: 'verify_report_format'}]},
     });
     const clickHandler = jest.fn();
@@ -55,7 +55,7 @@ describe('Entity VerifyIcon component tests', () => {
 
   test('should render in active state with correct permissions and name given', () => {
     const caps = new Capabilities(['everything']);
-    const entity = new ReportFormat({
+    const entity = ReportFormat.fromElement({
       permissions: {permission: [{name: 'verify_report_format'}]},
     });
     const clickHandler = jest.fn();
@@ -83,7 +83,7 @@ describe('Entity VerifyIcon component tests', () => {
 
   test('should deactivate if wrong command level permissions are given', () => {
     const caps = new Capabilities(['authenticate']);
-    const entity = new ReportFormat({
+    const entity = ReportFormat.fromElement({
       permissions: {permission: [{name: 'verify_report_format'}]},
     });
     const clickHandler = jest.fn();
@@ -106,7 +106,7 @@ describe('Entity VerifyIcon component tests', () => {
 
   test('should deactivate if wrong resource level permissions are given', () => {
     const caps = new Capabilities(['everything']);
-    const entity = new ReportFormat({
+    const entity = ReportFormat.fromElement({
       permissions: {permission: [{name: 'verify_scanner'}]},
     });
     const clickHandler = jest.fn();

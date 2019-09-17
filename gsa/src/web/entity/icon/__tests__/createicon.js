@@ -31,7 +31,7 @@ import CreateIcon from '../createicon';
 describe('Entity CreateIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
     const caps = new Capabilities(['everything']);
-    const entity = new Task({});
+    const entity = Task.fromElement({});
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
@@ -53,7 +53,7 @@ describe('Entity CreateIcon component tests', () => {
 
   test('should not be rendered if wrong command level permissions are given', () => {
     const caps = new Capabilities(['authenticate']);
-    const entity = new Task({});
+    const entity = Task.fromElement({});
 
     const {render} = rendererWith({capabilities: caps});
 
