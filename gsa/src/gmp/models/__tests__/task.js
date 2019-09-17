@@ -278,6 +278,47 @@ describe('Task Model parse tests', () => {
 
     expect(task.result_count).toEqual(666);
   });
+
+  test('should parse schedule periods', () => {
+    const element = {
+      _id: 't1',
+      schedule_periods: '666',
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.schedule_periods).toEqual(666);
+  });
+
+  test('should parse progress', () => {
+    const task1 = Task.fromElement({
+      _id: 't1',
+    });
+
+    expect(task1.progress).toEqual(0);
+
+    const task2 = Task.fromElement({
+      _id: 't1',
+      progress: {},
+    });
+    expect(task2.progress).toEqual(0);
+
+    const task3 = Task.fromElement({
+      _id: 't1',
+      progress: {
+        __text: '66',
+      },
+    });
+    expect(task3.progress).toEqual(66);
+
+    const task4 = Task.fromElement({
+      _id: 't1',
+      progress: '66',
+    });
+    expect(task4.progress).toEqual(66);
+  });
 });
 
 describe(`Task Model methods tests`, () => {
