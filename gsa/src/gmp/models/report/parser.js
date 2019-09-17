@@ -35,13 +35,13 @@ import {
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
-import App from './app';
-import Cve from './cve';
-import Host from './host';
-import OperatingSystem from './os';
-import Port from './port';
-import TLSCertificate from './tlscertificate';
-import Vulnerability from './vulnerability';
+import ReportApp from './app';
+import ReportCve from './cve';
+import ReportHost from './host';
+import ReportOperatingSystem from './os';
+import ReportPort from './port';
+import ReportTLSCertificate from './tlscertificate';
+import ReportVulnerability from './vulnerability';
 
 import Result from '../result';
 
@@ -57,7 +57,7 @@ const get_cert = (certs, fingerprint) => {
   let cert = certs[fingerprint];
 
   if (!isDefined(cert)) {
-    cert = new TLSCertificate(fingerprint);
+    cert = new ReportTLSCertificate(fingerprint);
     certs[fingerprint] = cert;
   }
   return cert;
@@ -189,7 +189,7 @@ export const parse_ports = (report, filter) => {
 
         tport.setSeverity(severity);
       } else {
-        tport = new Port(port);
+        tport = new ReportPort(port);
         temp_ports[id] = tport;
       }
 
@@ -237,7 +237,7 @@ export const parse_vulnerabilities = (report, filter) => {
       if (isDefined(vuln)) {
         vuln.addResult(results);
       } else {
-        vuln = new Vulnerability(result);
+        vuln = new ReportVulnerability(result);
         temp_vulns[oid] = vuln;
       }
 
@@ -318,7 +318,7 @@ export const parse_apps = (report, filter) => {
         let app = apps_temp[cpe];
 
         if (!isDefined(app)) {
-          app = new App({...detail, severity: severities[cpe]});
+          app = new ReportApp({...detail, severity: severities[cpe]});
           apps_temp[cpe] = app;
         }
 
@@ -417,7 +417,7 @@ export const parse_operatingsystems = (report, filter) => {
         const severity = severities[ip];
 
         if (!isDefined(os)) {
-          os = operating_systems[best_os_cpe] = new OperatingSystem({
+          os = operating_systems[best_os_cpe] = new ReportOperatingSystem({
             best_os_cpe,
             best_os_txt,
           });
@@ -459,7 +459,7 @@ export const parse_hosts = (report, filter) => {
   const hosts_array = map(hosts, host => {
     const {port_count = {}} = host;
     const severity = severities[host.ip];
-    return new Host({...host, severity, portsCount: port_count.page});
+    return new ReportHost({...host, severity, portsCount: port_count.page});
   });
 
   const {length: filtered_count} = hosts_array;
@@ -670,7 +670,7 @@ export const parse_cves = (report, filter) => {
       let cve = cves[id];
 
       if (!isDefined(cve)) {
-        cve = new Cve(nvt);
+        cve = new ReportCve(nvt);
         cves[id] = cve;
       }
 
