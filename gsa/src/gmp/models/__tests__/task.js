@@ -248,6 +248,36 @@ describe('Task Model parse tests', () => {
     expect(task.schedule.id).toEqual('s1');
     expect(task.schedule.entityType).toEqual('schedule');
   });
+
+  test('should parse report counts', () => {
+    const element = {
+      _id: 't1',
+      report_count: {
+        __text: '13',
+        finished: '14',
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.report_count.total).toEqual(13);
+    expect(task.report_count.finished).toEqual(14);
+  });
+
+  test('should parse result counts', () => {
+    const element = {
+      _id: 't1',
+      result_count: '666',
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.result_count).toEqual(666);
+  });
 });
 
 describe(`Task Model methods tests`, () => {
