@@ -68,7 +68,7 @@ class Model {
     return f;
   }
 
-  static parseElement(element) {
+  static parseElement(element = {}) {
     const copy = parseDefaultProperties(element);
 
     if (isDefined(element.end_time)) {
