@@ -25,6 +25,9 @@ import Task, {
   HOSTS_ORDERING_SEQUENTIAL,
   TASK_STATUS,
 } from 'gmp/models/task';
+
+import Report from '../report';
+
 import {testModel} from '../testing';
 
 describe('Task Model parse tests', () => {
@@ -54,6 +57,78 @@ describe('Task Model parse tests', () => {
     obj = {hosts_ordering: HOSTS_ORDERING_SEQUENTIAL};
     task = Task.fromElement(obj);
     expect(task.hosts_ordering).toEqual(HOSTS_ORDERING_SEQUENTIAL);
+  });
+
+  test('should parse first_report', () => {
+    const element = {
+      _id: 't1',
+      first_report: {
+        report: {
+          _id: 'r1',
+        },
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.first_report).toBeInstanceOf(Report);
+    expect(task.first_report.id).toEqual('r1');
+  });
+
+  test('should parse last_report', () => {
+    const element = {
+      _id: 't1',
+      last_report: {
+        report: {
+          _id: 'r1',
+        },
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.last_report).toBeInstanceOf(Report);
+    expect(task.last_report.id).toEqual('r1');
+  });
+
+  test('should parse second_last_report', () => {
+    const element = {
+      _id: 't1',
+      second_last_report: {
+        report: {
+          _id: 'r1',
+        },
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.second_last_report).toBeInstanceOf(Report);
+    expect(task.second_last_report.id).toEqual('r1');
+  });
+
+  test('should parse current_report', () => {
+    const element = {
+      _id: 't1',
+      current_report: {
+        report: {
+          _id: 'r1',
+        },
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.current_report).toBeInstanceOf(Report);
+    expect(task.current_report.id).toEqual('r1');
   });
 });
 
