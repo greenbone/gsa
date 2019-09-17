@@ -62,17 +62,14 @@ const parseFilterTermsFromString = filterstring => {
 class Filter extends Model {
   static entityType = 'filter';
 
-  get length() {
-    return this.terms.length;
+  constructor() {
+    super();
+
+    this.terms = [];
   }
 
-  /**
-   * Init the Filter
-   *
-   * Creates the internal data structure.
-   */
-  init() {
-    this.terms = [];
+  get length() {
+    return this.terms.length;
   }
 
   setProperties({id, ...properties}) {

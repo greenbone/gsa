@@ -39,12 +39,8 @@ class Model {
   static entityType = 'unknown';
 
   constructor(type) {
-    this.init();
-
     this.entityType = isDefined(type) ? type : this.constructor.entityType;
   }
-
-  init() {}
 
   setProperties(properties) {
     return setProperties(properties, this);
