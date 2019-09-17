@@ -29,6 +29,8 @@ import Task, {
 } from 'gmp/models/task';
 
 import Report from '../report';
+import Scanner from '../scanner';
+import Schedule from '../schedule';
 
 import {testModel} from '../testing';
 
@@ -186,6 +188,65 @@ describe('Task Model parse tests', () => {
     expect(task.target).toBeInstanceOf(Model);
     expect(task.target.id).toEqual('t1');
     expect(task.target.entityType).toEqual('target');
+  });
+
+  test('should parse alerts', () => {
+    const element = {
+      _id: 't1',
+      alert: [
+        {
+          _id: 'a1',
+        },
+        {
+          _id: 'a2',
+        },
+      ],
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.alerts[0]).toBeInstanceOf(Model);
+    expect(task.alerts[0].id).toEqual('a1');
+    expect(task.alerts[0].entityType).toEqual('alert');
+    expect(task.alerts[1]).toBeInstanceOf(Model);
+    expect(task.alerts[1].entityType).toEqual('alert');
+    expect(task.alerts[1].id).toEqual('a2');
+  });
+
+  test('should parse scanner', () => {
+    const element = {
+      _id: 't1',
+      scanner: {
+        _id: 's1',
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.scanner).toBeInstanceOf(Scanner);
+    expect(task.scanner.id).toEqual('s1');
+    expect(task.scanner.entityType).toEqual('scanner');
+  });
+
+  test('should parse schedule', () => {
+    const element = {
+      _id: 't1',
+      schedule: {
+        _id: 's1',
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.schedule).toBeInstanceOf(Schedule);
+    expect(task.schedule.id).toEqual('s1');
+    expect(task.schedule.entityType).toEqual('schedule');
   });
 });
 
