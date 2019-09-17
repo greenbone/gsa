@@ -32,6 +32,9 @@ import {
 
 import Capabilities from './capabilities/capabilities.js';
 
+export const parseModelFromElement = (element, entityType) =>
+  new Model(undefined, entityType).updateFromElement(element);
+
 class Model {
   static entityType = 'unknown';
 
