@@ -18,23 +18,18 @@
  */
 import 'core-js/features/object/entries';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 /**
  * Return a unique identifier string for a filter
  *
- * @param {Filter} filter A Filter model (may be undefined)
+ * @param {Filter} filter A Filter model (may be undefined or null)
  *
  * @returns {String} A filter identifier to be used in the store
  */
-export const filterIdentifier = filter => {
-  if (filter === null) {
-    return `filter:null`;
-  } else if (isDefined(filter)) {
-    return `filter:${filter.toFilterString()}`;
-  }
-  return 'default';
-};
+
+export const filterIdentifier = filter =>
+  hasValue(filter) ? `filter:${filter.toFilterString()}` : 'default';
 
 /**
  * A combineReducers version to allow to return undefined for a state.
