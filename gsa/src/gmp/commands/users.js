@@ -138,14 +138,11 @@ export class UserCommand extends EntityCommand {
     }).then(response => {
       const {data} = response;
       const {setting} = data.get_settings.get_settings_response;
-      let settings = {};
-      // used for the rowsPerPage setting which returns two settings with the same id
-      if (isDefined(setting) && isArray(setting)) {
-        settings = new Setting(setting[0]);
-      } else if (isDefined(setting)) {
-        settings = new Setting(setting);
+      if (!isDefined(setting)) {
+        return response.setData(undefined);
       }
-      return response.setData(settings);
+      // used for the rowsPerPage setting which returns two settings with the same id
+      return response.setData(isArray(setting) ? setting[0] : setting);
     });
   }
 

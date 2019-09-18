@@ -68,12 +68,9 @@ export const loadUserSettingsDefaultFilter = gmp => entityType => (
       const {data: setting} = resp;
       return isDefined(setting) ? setting.value : undefined;
     })
-    .then(filterId => {
-      if (!isDefined(filterId)) {
-        return null;
-      }
-      return gmp.filter.get({id: filterId});
-    })
+    .then(filterId =>
+      isDefined(filterId) ? gmp.filter.get({id: filterId}) : null,
+    )
     .then(resp => {
       if (resp === null) {
         dispatch(defaultFilterLoadingActions.success(entityType, null));

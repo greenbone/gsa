@@ -75,17 +75,11 @@ export const loadUserSettingDefault = gmp => id => (dispatch, getState) => {
 
   return gmp.user
     .getSetting(id)
-    .then(response => {
-      if (!isDefined(response)) {
-        return null;
-      }
-      const {data} = response;
-      return data;
-    })
-    .then(resp => {
-      const setting = {};
-      setting[transformSettingName(resp.name)] = resp;
-      dispatch(loadingActions.success(setting));
+    .then(response => (isDefined(response) ? response.data : null))
+    .then(setting => {
+      const settings = {};
+      settings[transformSettingName(setting.name)] = setting;
+      dispatch(loadingActions.success(settings));
     })
     .catch(err => {
       if (isDefined(err)) {
