@@ -16,14 +16,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import TabPanels from './tabpanels.js';
-import TabList from './tablist.js';
+import TabPanels from './tabpanels';
+import TabList from './tablist';
 
 /*
  * Tabs and its sub components are using the "compound components" pattern
@@ -32,51 +32,36 @@ import TabList from './tablist.js';
  * https://www.youtube.com/watch?v=hEGg-3pIHlE
  */
 
-class Tabs extends React.Component {
-  constructor(...args) {
-    super(...args);
+const Tabs = props => {
+  const [active, setActive] = useState(
+    isDefined(props.active) ? props.active : 0,
+  );
 
-    this.state = {
-      active: isDefined(this.props.active) ? this.props.active : 0,
-    };
+  const setActiveTab = index => {
+    setActive(index);
+  };
 
-    this.handleActivateTab = this.handleActivateTab.bind(this);
-  }
+  useEffect(() => {
+    setActiveTab(props.active);
+  }, [props.active]);
 
-  componentWillReceiveProps(next) {
-    const {active} = next;
+  const handleActivateTab = index => {
+    setActiveTab(index);
+  };
 
-    if (active !== this.props.active) {
-      this.setActiveTab(active);
+  const children = React.Children.map(props.children, child => {
+    if (child.type === TabPanels) {
+      return React.cloneElement(child, {active});
+    } else if (child.type === TabList) {
+      return React.cloneElement(child, {
+        active,
+        onActivateTab: handleActivateTab,
+      });
     }
-  }
-
-  setActiveTab(index) {
-    this.setState({
-      active: index,
-    });
-  }
-
-  handleActivateTab(index) {
-    this.setActiveTab(index);
-  }
-
-  render() {
-    const {active} = this.state;
-    const children = React.Children.map(this.props.children, child => {
-      if (child.type === TabPanels) {
-        return React.cloneElement(child, {active});
-      } else if (child.type === TabList) {
-        return React.cloneElement(child, {
-          active,
-          onActivateTab: this.handleActivateTab,
-        });
-      }
-      return child;
-    });
-    return <React.Fragment>{children}</React.Fragment>;
-  }
-}
+    return child;
+  });
+  return <React.Fragment>{children}</React.Fragment>;
+};
 
 Tabs.propTypes = {
   active: PropTypes.number,
