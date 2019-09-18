@@ -54,7 +54,7 @@ describe('UserSetting Defaults reducer tests', () => {
     });
   });
 
-  test('should override existing settings', () => {
+  test('should not overwrite existing settings', () => {
     const action = loadingActions.success({foo: 'bar'});
     const state = {
       byName: {
@@ -63,6 +63,7 @@ describe('UserSetting Defaults reducer tests', () => {
     };
     expect(reducer(state, action)).toEqual({
       byName: {
+        bar: 'foo',
         foo: 'bar',
       },
       isLoading: false,
