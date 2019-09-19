@@ -8462,13 +8462,13 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   const char *format_id;
   const char *filter;
   const char *filter_id;
+  gboolean lean, ignore_pagination, details;
   int ret;
-  int ignore_pagination;
-  int details;
   gchar *fname_format;
   const gchar *extension, *requested_content_type;
 
   ignore_pagination = params_value_bool (params, "ignore_pagination");
+  lean = params_value_bool (params, "lean");
 
   report_id = params_value (params, "report_id");
 
@@ -8489,14 +8489,15 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
     connection,
     "<get_reports"
     " ignore_pagination=\"%d\""
+    " lean=\"%d\""
     " filter=\"%s\""
     " filt_id=\"%s\""
     " report_id=\"%s\""
     " delta_report_id=\"%s\""
     " details=\"%d\""
     " format_id=\"%s\"/>",
-    ignore_pagination, filter, filter_id ? filter_id : FILT_ID_NONE, report_id,
-    delta_report_id ? delta_report_id : "0", details,
+    ignore_pagination, lean, filter, filter_id ? filter_id : FILT_ID_NONE,
+    report_id, delta_report_id ? delta_report_id : "0", details,
     format_id ? format_id : "");
 
   if (ret == -1)
