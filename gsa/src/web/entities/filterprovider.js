@@ -37,7 +37,7 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 const ROWS_PER_PAGE_SETTING_ID = '5f5a8712-8017-11e1-8556-406186ea4fc5';
-const DEFAULT_FALLBACK_FILTER = Filter.fromString('sort=name first=1');
+export const DEFAULT_FALLBACK_FILTER = Filter.fromString('sort=name first=1');
 
 const FilterProvider = ({
   children,
@@ -104,7 +104,14 @@ const FilterProvider = ({
 
   return (
     <React.Fragment>
-      {showChildren ? children({filter: returnedFilter}) : <Loading />}
+      {showChildren ? (
+        <React.Fragment>
+          <span data-testid="awaiting-span" />
+          {children({filter: returnedFilter})}
+        </React.Fragment>
+      ) : (
+        <Loading />
+      )}
     </React.Fragment>
   );
 };

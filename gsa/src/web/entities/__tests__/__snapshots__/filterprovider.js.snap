@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterProvider component tests should not overwrite rows keyword 1`] = `
+<body>
+  <div
+    id="portals"
+  />
+  <div>
+    <span
+      data-testid="awaiting-span"
+    />
+    <div />
+  </div>
+</body>
+`;
+
+exports[`FilterProvider component tests should return default fallbackFilter 1`] = `
+<body>
+  <div
+    id="portals"
+  />
+  <div>
+    <span
+      data-testid="awaiting-span"
+    />
+    <div />
+  </div>
+</body>
+`;
+
+exports[`FilterProvider component tests should return defaultSettingFilter 1`] = `
+<body>
+  <div
+    id="portals"
+  />
+  <div>
+    <span
+      data-testid="awaiting-span"
+    />
+    <div />
+  </div>
+</body>
+`;
+
+exports[`FilterProvider component tests should return fallbackFilter if given 1`] = `
+<body>
+  <div
+    id="portals"
+  />
+  <div>
+    <span
+      data-testid="awaiting-span"
+    />
+    <div />
+  </div>
+</body>
+`;
+
+exports[`FilterProvider component tests should return locationQuery filter 1`] = `
+<body>
+  <div
+    id="portals"
+  />
+  <div>
+    <span
+      data-testid="awaiting-span"
+    />
+    <div />
+  </div>
+</body>
+`;
+
+exports[`FilterProvider component tests should return pageFilter 1`] = `
+<body>
+  <div
+    id="portals"
+  />
+  <div>
+    <span
+      data-testid="awaiting-span"
+    />
+    <div />
+  </div>
+</body>
+`;
