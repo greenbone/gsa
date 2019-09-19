@@ -120,7 +120,9 @@ FilterProvider.propTypes = {
   fallbackFilter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   gmpname: PropTypes.string,
-  locationQuery: PropTypes.object,
+  locationQuery: PropTypes.shape({
+    filter: PropTypes.string,
+  }),
 };
 
 export default withGmp(FilterProvider);
