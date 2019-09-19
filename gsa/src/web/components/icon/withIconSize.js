@@ -19,10 +19,11 @@
 
 import styled from 'styled-components';
 
+import hoistStatics from 'hoist-non-react-statics';
+
 import {isArray} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
-import withContext from 'web/utils/withContext';
 
 export const ICON_SIZE_LARGE_PIXELS = '50px';
 export const ICON_SIZE_MEDIUM_PIXELS = '24px';
@@ -68,7 +69,11 @@ const withIconSize = (defaultSize = 'small') => Component => {
     size: PropTypes.iconSize,
   };
 
-  return withContext({iconSize: PropTypes.iconSize})(IconSizeWrapper);
+  IconSizeWrapper.contextTypes = {
+    iconSize: PropTypes.iconSize,
+  };
+
+  return hoistStatics(IconSizeWrapper, Component);
 };
 
 export default withIconSize;

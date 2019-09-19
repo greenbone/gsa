@@ -16,13 +16,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import React from 'react';
 
-import PropTypes from './proptypes.js';
-import withContext from './withContext.js';
+import hoistStatics from 'hoist-non-react-statics';
 
-const withCapabilities = withContext({
-  capabilities: PropTypes.capabilities.isRequired,
-});
+import PropTypes from './proptypes';
+
+const withCapabilities = Component => {
+  const CapabilitiesWrapper = (props, {capabilities}) => (
+    <Component {...props} capabilities={capabilities} />
+  );
+
+  CapabilitiesWrapper.contextTypes = {
+    capabilities: PropTypes.capabilities.isRequired,
+  };
+
+  return hoistStatics(CapabilitiesWrapper, Component);
+};
 
 export default withCapabilities;
 
