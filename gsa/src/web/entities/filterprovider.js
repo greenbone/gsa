@@ -21,7 +21,9 @@ import React, {useEffect} from 'react';
 
 import {useSelector, useDispatch} from 'react-redux';
 
-import Filter from 'gmp/models/filter';
+import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/users';
+
+import Filter, {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -35,9 +37,6 @@ import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilter
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
-
-const ROWS_PER_PAGE_SETTING_ID = '5f5a8712-8017-11e1-8556-406186ea4fc5';
-export const DEFAULT_FALLBACK_FILTER = Filter.fromString('sort=name first=1');
 
 const FilterProvider = ({
   children,
@@ -60,10 +59,9 @@ const FilterProvider = ({
     }
   }, [defaultSettingFilter, dispatch, gmp, gmpname]);
 
-  const rowsPerPage = useSelector(state => {
-    const rows = getUserSettingsDefaults(state).getValueByName('rowsperpage');
-    return rows;
-  });
+  const rowsPerPage = useSelector(state =>
+    getUserSettingsDefaults(state).getValueByName('rowsperpage'),
+  );
 
   useEffect(() => {
     if (!isDefined(rowsPerPage)) {
@@ -71,10 +69,7 @@ const FilterProvider = ({
     }
   }, [returnedFilter, rowsPerPage, gmp, dispatch]);
 
-  const pageFilter = useSelector(state => {
-    const pFilter = getPage(state).getFilter(gmpname);
-    return pFilter;
-  });
+  const pageFilter = useSelector(state => getPage(state).getFilter(gmpname));
 
   if (isDefined(locationQuery.filter)) {
     returnedFilter = Filter.fromString(locationQuery.filter);

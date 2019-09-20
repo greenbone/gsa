@@ -46,6 +46,8 @@ const log = logger.getLogger('gmp.commands.users');
 const REPORT_COMPOSER_DEFAULTS_SETTING_ID =
   'b6b449ee-5d90-4ff0-af20-7e838c389d39';
 
+export const ROWS_PER_PAGE_SETTING_ID = '5f5a8712-8017-11e1-8556-406186ea4fc5';
+
 export const DEFAULT_FILTER_SETTINGS = {
   agent: '4a1334c1-cb93-4a79-8634-103b0a50bdcd',
   alert: 'b833a6f2-dcdc-4535-bfb0-a5154b5b5092',
