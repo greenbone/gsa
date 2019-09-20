@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 
@@ -53,6 +53,11 @@ const StyledInput = styled.input`
 
 const Field = props => {
   const [value, setValue] = useState(props.value);
+
+  useEffect(() => {
+    setValue(props.value);
+  }, [props.value]);
+
   const notifyChange = val => {
     const {name, onChange, disabled = false} = props;
 
