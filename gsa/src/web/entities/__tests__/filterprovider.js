@@ -18,7 +18,7 @@
  */
 import React from 'react';
 
-import Filter from 'gmp/models/filter';
+import Filter, {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
 
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
@@ -26,11 +26,10 @@ import {pageFilter} from 'web/store/pages/actions';
 
 import {rendererWith, waitForElement} from 'web/utils/testing';
 
-import FilterProvider, {DEFAULT_FALLBACK_FILTER} from '../filterprovider';
+import FilterProvider from '../filterprovider';
 
 describe('FilterProvider component tests', () => {
-  test('should return locationQuery filter', async () => {
-    // if FilterProvider gets a locationQuery as prop, use its filter
+  test('should prefer locationQuery filter over defaultSettingFilter', async () => {
     const resultingFilter = Filter.fromString('location=query rows=42');
 
     const locationQuery = {filter: 'location=query'};
@@ -69,8 +68,7 @@ describe('FilterProvider component tests', () => {
     expect(baseElement).toMatchSnapshot();
   });
 
-  test('should return pageFilter', async () => {
-    // if no query is given and a pageFilter exists, use that one
+  test('should prefer pageFilter over defaultSettingFilter', async () => {
     const resultingFilter = Filter.fromString('page=filter rows=42');
 
     const pFilter = Filter.fromString('page=filter');
@@ -98,18 +96,16 @@ describe('FilterProvider component tests', () => {
 
     const renderFunc = jest.fn().mockReturnValue(<div />);
 
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <FilterProvider gmpname="task">{renderFunc}</FilterProvider>,
     );
 
     await waitForElement(() => getByTestId('awaiting-span'));
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
-    expect(baseElement).toMatchSnapshot();
   });
 
-  test('should return defaultSettingFilter', async () => {
-    // if no pageFilter exists use the user default from the usersettings
+  test('should use defaultSettingFilter', async () => {
     const resultingFilter = Filter.fromString('foo=bar rows=42');
 
     const defaultSettingfilter = Filter.fromString('foo=bar');
@@ -134,17 +130,16 @@ describe('FilterProvider component tests', () => {
 
     const renderFunc = jest.fn().mockReturnValue(<div />);
 
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <FilterProvider gmpname="task">{renderFunc}</FilterProvider>,
     );
 
     await waitForElement(() => getByTestId('awaiting-span'));
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
-    expect(baseElement).toMatchSnapshot();
   });
 
-  test('should return fallbackFilter if given', async () => {
+  test('should use fallbackFilter if given', async () => {
     // if no usersettings defaultFilter exists use the given fallbackFilter
     const resultingFilter = Filter.fromString('fall=back rows=42');
 
@@ -170,7 +165,7 @@ describe('FilterProvider component tests', () => {
 
     const renderFunc = jest.fn().mockReturnValue(<div />);
 
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <FilterProvider gmpname="task" fallbackFilter={fallbackFilter}>
         {renderFunc}
       </FilterProvider>,
@@ -179,11 +174,9 @@ describe('FilterProvider component tests', () => {
     await waitForElement(() => getByTestId('awaiting-span'));
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
-    expect(baseElement).toMatchSnapshot();
   });
 
-  test('should return default fallbackFilter', async () => {
-    // if no fallbackFilter is given use the default fallbackFilter
+  test('should use default fallbackFilter as last resort', async () => {
     const resultingFilter = DEFAULT_FALLBACK_FILTER.set('rows', 42);
 
     const getSetting = jest.fn().mockResolvedValue({});
@@ -206,14 +199,13 @@ describe('FilterProvider component tests', () => {
 
     const renderFunc = jest.fn().mockReturnValue(<div />);
 
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <FilterProvider gmpname="task">{renderFunc}</FilterProvider>,
     );
 
     await waitForElement(() => getByTestId('awaiting-span'));
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
-    expect(baseElement).toMatchSnapshot();
   });
 
   test('should not overwrite rows keyword', async () => {
@@ -243,7 +235,7 @@ describe('FilterProvider component tests', () => {
 
     const renderFunc = jest.fn().mockReturnValue(<div />);
 
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <FilterProvider fallbackFilter={fallbackFilter} gmpname="task">
         {renderFunc}
       </FilterProvider>,
@@ -252,6 +244,5 @@ describe('FilterProvider component tests', () => {
     await waitForElement(() => getByTestId('awaiting-span'));
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
-    expect(baseElement).toMatchSnapshot();
   });
 });
