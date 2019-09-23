@@ -142,6 +142,7 @@ class ReportCommand extends EntityCommand {
         id,
         filter,
         ignore_pagination: 1,
+        details: 1,
       },
       options,
     ).then(this.transformResponse);

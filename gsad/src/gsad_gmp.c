@@ -8464,6 +8464,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   const char *filter_id;
   int ret;
   int ignore_pagination;
+  int details;
   gchar *fname_format;
   const gchar *extension, *requested_content_type;
 
@@ -8479,6 +8480,8 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   filter = params_value (params, "filter");
   filter_id = params_value (params, "filter_id");
 
+  details = params_value_bool (params, "details");
+
   if (filter == NULL || filter_id)
     filter = "";
 
@@ -8490,9 +8493,10 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
     " filt_id=\"%s\""
     " report_id=\"%s\""
     " delta_report_id=\"%s\""
+    " details=\"%d\""
     " format_id=\"%s\"/>",
     ignore_pagination, filter, filter_id ? filter_id : FILT_ID_NONE, report_id,
-    delta_report_id ? delta_report_id : "0", format_id ? format_id : "");
+    delta_report_id ? delta_report_id : "0", details, format_id ? format_id : "");
 
   if (ret == -1)
     {
