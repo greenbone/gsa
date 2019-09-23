@@ -8496,7 +8496,8 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
     " details=\"%d\""
     " format_id=\"%s\"/>",
     ignore_pagination, filter, filter_id ? filter_id : FILT_ID_NONE, report_id,
-    delta_report_id ? delta_report_id : "0", details, format_id ? format_id : "");
+    delta_report_id ? delta_report_id : "0", details, 
+    format_id ? format_id : "");
 
   if (ret == -1)
     {
