@@ -65,7 +65,6 @@ const ScanConfigActions = withEntitiesActions(
         displayName={_('Scan Config')}
         name="config"
         entity={entity}
-        title={_('Clone Scan Config')}
         value={entity}
         onClick={onScanConfigCloneClick}
       />
