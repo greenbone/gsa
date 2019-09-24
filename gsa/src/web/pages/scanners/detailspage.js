@@ -148,6 +148,7 @@ const Page = ({
   onDownloaded,
   onError,
   onInteraction,
+  showSuccess,
   ...props
 }) => (
   <ScannerComponent
@@ -164,7 +165,10 @@ const Page = ({
     onDownloadError={onError}
     onInteraction={onInteraction}
     onSaved={onChanged}
-    onVerified={onChanged}
+    onVerified={() => {
+      onChanged();
+      showSuccess(_('Scanner Verified'));
+    }}
     onVerifyError={onError}
   >
     {({
@@ -250,6 +254,7 @@ const Page = ({
 Page.propTypes = {
   entity: PropTypes.model,
   permissions: PropTypes.array,
+  showSuccess: PropTypes.func.isRequired,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
