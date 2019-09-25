@@ -94,6 +94,7 @@ class ReportCommand extends EntityCommand {
         report_id: id,
         report_format_id: reportFormatId,
         filter: isDefined(filter) ? filter.all() : ALL_FILTER,
+        details: 1,
       },
       {transform: DefaultTransform, responseType: 'arraybuffer'},
     );
