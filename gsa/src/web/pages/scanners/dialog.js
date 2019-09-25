@@ -54,6 +54,7 @@ import {getTimezone} from 'web/store/usersettings/selectors';
 import {
   OSP_SCANNER_TYPE,
   GMP_SCANNER_TYPE,
+  OSP_SENSOR_SCANNER_TYPE,
   scannerTypeName,
 } from 'gmp/models/scanner';
 
@@ -62,7 +63,11 @@ import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
-const SCANNER_TYPES = [GMP_SCANNER_TYPE, OSP_SCANNER_TYPE];
+const SCANNER_TYPES = [
+  GMP_SCANNER_TYPE,
+  OSP_SCANNER_TYPE,
+  OSP_SENSOR_SCANNER_TYPE,
+];
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
@@ -182,8 +187,9 @@ class ScannerDialog extends React.Component {
     const show_cred_info =
       isDefined(scanner) &&
       isDefined(scanner.credential) &&
-      scanner.credential.type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
+      scanner.credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
     const isGmpScannerType = type === GMP_SCANNER_TYPE;
+    const isOspSensorType = type === OSP_SENSOR_SCANNER_TYPE;
 
     return (
       <SaveDialog
@@ -239,7 +245,7 @@ class ScannerDialog extends React.Component {
                 />
               </FormGroup>
 
-              {!isGmpScannerType && (
+              {!isGmpScannerType && !isOspSensorType && (
                 <React.Fragment>
                   <FormGroup title={_('Port')}>
                     <TextField
@@ -251,47 +257,49 @@ class ScannerDialog extends React.Component {
                     />
                   </FormGroup>
 
-                  <FormGroup title={_('CA Certificate')} flex="column">
-                    <Layout>
-                      <Divider>
-                        {is_edit && (
-                          <Layout>
-                            {isDefined(state.ca_pub) && (
+                  {!isOspSensorType && (
+                    <FormGroup title={_('CA Certificate')} flex="column">
+                      <Layout>
+                        <Divider>
+                          {is_edit && (
+                            <Layout>
+                              {isDefined(state.ca_pub) && (
+                                <Radio
+                                  title={_('Existing')}
+                                  name="which_cert"
+                                  value="existing"
+                                  checked={state.which_cert === 'existing'}
+                                  onChange={onValueChange}
+                                />
+                              )}
                               <Radio
-                                title={_('Existing')}
+                                title={_('Default')}
                                 name="which_cert"
-                                value="existing"
-                                checked={state.which_cert === 'existing'}
+                                value="default"
+                                checked={state.which_cert === 'default'}
                                 onChange={onValueChange}
                               />
-                            )}
-                            <Radio
-                              title={_('Default')}
-                              name="which_cert"
-                              value="default"
-                              checked={state.which_cert === 'default'}
-                              onChange={onValueChange}
-                            />
-                            <Radio
-                              title={_('New:')}
-                              name="which_cert"
-                              value="new"
-                              checked={state.which_cert === 'new'}
-                              onChange={onValueChange}
-                            />
-                          </Layout>
-                        )}
-                        <FileField
-                          disabled={is_edit && state.which_cert !== 'new'}
-                          name="ca_pub"
-                          onChange={onValueChange}
-                        />
-                      </Divider>
-                    </Layout>
-                    {is_edit && isDefined(state.ca_pub) && (
-                      <CertStatus info={state.ca_pub_info} />
-                    )}
-                  </FormGroup>
+                              <Radio
+                                title={_('New:')}
+                                name="which_cert"
+                                value="new"
+                                checked={state.which_cert === 'new'}
+                                onChange={onValueChange}
+                              />
+                            </Layout>
+                          )}
+                          <FileField
+                            disabled={is_edit && state.which_cert !== 'new'}
+                            name="ca_pub"
+                            onChange={onValueChange}
+                          />
+                        </Divider>
+                      </Layout>
+                      {is_edit && isDefined(state.ca_pub) && (
+                        <CertStatus info={state.ca_pub_info} />
+                      )}
+                    </FormGroup>
+                  )}
                 </React.Fragment>
               )}
 
