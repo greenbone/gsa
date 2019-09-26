@@ -73,8 +73,8 @@ class Criteria {
 class Ovaldef extends Info {
   static entityType = 'ovaldef';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem, 'ovaldef');
+  static parseElement(element) {
+    const ret = super.parseElement(element, 'ovaldef');
 
     ret.severity = parseSeverity(ret.max_cvss);
     delete ret.max_cvss;

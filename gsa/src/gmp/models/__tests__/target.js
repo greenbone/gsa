@@ -37,22 +37,25 @@ describe('Target model tests', () => {
         _id: '',
       },
     };
-    const target1 = new Target(elem1);
-    const target2 = new Target(elem2);
-    const target3 = new Target({});
+    const target1 = Target.fromElement(elem1);
+    const target2 = Target.fromElement(elem2);
+    const target3 = Target.fromElement({});
 
     expect(target1.port_list).toBeInstanceOf(PortList);
+    expect(target1.port_list.entityType).toEqual('portlist');
+    expect(target1.port_list.id).toEqual('123');
     expect(target2.port_list).toBeUndefined();
     expect(target3.port_list).toBeUndefined();
   });
 
   test('should parse credentials', () => {
-    const target1 = new Target({smb_credential: {_id: '123'}});
-    const target2 = new Target({smb_credential: {_id: ''}});
-    const target3 = new Target({});
+    const target1 = Target.fromElement({smb_credential: {_id: '123'}});
+    const target2 = Target.fromElement({smb_credential: {_id: ''}});
+    const target3 = Target.fromElement({});
 
     expect(target1.smb_credential).toBeInstanceOf(Model);
     expect(target1.smb_credential.entityType).toEqual('credential');
+    expect(target1.smb_credential.id).toEqual('123');
     expect(target2.smb_credential).toBeUndefined();
     expect(target3.smb_credential).toBeUndefined();
   });
@@ -61,8 +64,8 @@ describe('Target model tests', () => {
     const elem = {
       hosts: '123.456.789.42, 987.654.321.1',
     };
-    const target1 = new Target(elem);
-    const target2 = new Target({hosts: ''});
+    const target1 = Target.fromElement(elem);
+    const target2 = Target.fromElement({hosts: ''});
 
     expect(target1.hosts).toEqual(['123.456.789.42', '987.654.321.1']);
     expect(target2.hosts).toEqual([]);
@@ -72,27 +75,27 @@ describe('Target model tests', () => {
     const elem = {
       exclude_hosts: '123.456.789.42, 987.654.321.1',
     };
-    const target1 = new Target(elem);
-    const target2 = new Target({exclude_hosts: ''});
+    const target1 = Target.fromElement(elem);
+    const target2 = Target.fromElement({exclude_hosts: ''});
 
     expect(target1.exclude_hosts).toEqual(['123.456.789.42', '987.654.321.1']);
     expect(target2.exclude_hosts).toEqual([]);
   });
 
   test('should parse max_hosts', () => {
-    const target = new Target({max_hosts: '42'});
+    const target = Target.fromElement({max_hosts: '42'});
 
     expect(target.max_hosts).toEqual(42);
   });
 
   test('should parse reverse_lookup_only', () => {
-    const target = new Target({reverse_lookup_only: '0'});
+    const target = Target.fromElement({reverse_lookup_only: '0'});
 
     expect(target.reverse_lookup_only).toEqual(0);
   });
 
   test('should parse reverse_lookup_unify', () => {
-    const target = new Target({reverse_lookup_unify: '1'});
+    const target = Target.fromElement({reverse_lookup_unify: '1'});
 
     expect(target.reverse_lookup_unify).toEqual(1);
   });
@@ -107,10 +110,11 @@ describe('Target model tests', () => {
         ],
       },
     };
-    const target = new Target(elem);
+    const target = Target.fromElement(elem);
 
     expect(target.tasks[0]).toBeInstanceOf(Model);
     expect(target.tasks[0].entityType).toEqual('task');
+    expect(target.tasks[0].id).toEqual('123');
   });
 });
 

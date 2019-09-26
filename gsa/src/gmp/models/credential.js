@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 import {_l} from '../locale/lang';
 
@@ -109,8 +109,8 @@ export const getCredentialTypeName = type => `${TYPE_NAMES[type]}`;
 class Credential extends Model {
   static entityType = 'credential';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
     if (isDefined(ret.certificate_info)) {
       ret.certificate_info.activationTime = parseDate(
@@ -123,23 +123,21 @@ class Credential extends Model {
       delete ret.certificate_info.expiration_time;
     }
 
-    ret.credential_type = elem.type;
+    ret.credential_type = element.type;
 
-    ret.allow_insecure = parseYesNo(elem.allow_insecure);
+    ret.allow_insecure = parseYesNo(element.allow_insecure);
 
-    if (isDefined(elem.targets)) {
-      ret.targets = map(
-        elem.targets.target,
-        target => new Model(target, 'target'),
+    if (isDefined(element.targets)) {
+      ret.targets = map(element.targets.target, target =>
+        parseModelFromElement(target, 'target'),
       );
     } else {
       ret.targets = [];
     }
 
-    if (isDefined(elem.scanners)) {
-      ret.scanners = map(
-        elem.scanners.scanner,
-        scanner => new Model(scanner, 'scanner'),
+    if (isDefined(element.scanners)) {
+      ret.scanners = map(element.scanners.scanner, scanner =>
+        parseModelFromElement(scanner, 'scanner'),
       );
     }
 

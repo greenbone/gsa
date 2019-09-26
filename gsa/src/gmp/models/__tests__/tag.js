@@ -33,27 +33,27 @@ describe('Tag model tests', () => {
         },
       },
     };
-    const tag = new Tag(elem);
+    const tag = Tag.fromElement(elem);
 
     expect(tag.resourceType).toEqual('foo');
     expect(tag.resourceCount).toEqual(42);
   });
 
   test('should return count of 0 and no type if no resources are given', () => {
-    const tag = new Tag({});
+    const tag = Tag.fromElement({});
 
     expect(tag.resourceType).toBeUndefined();
     expect(tag.resourceCount).toEqual(0);
   });
 
   test('should parse value to undefined, if no value is given', () => {
-    const tag = new Tag({});
+    const tag = Tag.fromElement({});
 
     expect(tag.value).toBeUndefined();
   });
 
   test('should parse value', () => {
-    const tag = new Tag({value: 'foo'});
+    const tag = Tag.fromElement({value: 'foo'});
 
     expect(tag.value).toEqual('foo');
   });

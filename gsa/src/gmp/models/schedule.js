@@ -19,17 +19,17 @@
 import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 import Event from './event';
 
 class Schedule extends Model {
   static entityType = 'schedule';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
-    const {timezone, icalendar} = elem;
+    const {timezone, icalendar} = element;
 
     if (isDefined(icalendar)) {
       ret.event = Event.fromIcal(icalendar, timezone);
@@ -48,7 +48,9 @@ class Schedule extends Model {
     delete ret.simple_period;
 
     if (isDefined(ret.tasks)) {
-      ret.tasks = map(ret.tasks.task, task => new Model(task, 'task'));
+      ret.tasks = map(ret.tasks.task, task =>
+        parseModelFromElement(task, 'task'),
+      );
     } else {
       ret.tasks = [];
     }

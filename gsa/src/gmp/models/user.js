@@ -21,7 +21,7 @@ import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
-import Model from '../model.js';
+import Model, {parseModelFromElement} from '../model.js';
 import {parseCsv} from '../parser';
 
 export const AUTH_METHOD_PASSWORD = 'password';
@@ -35,27 +35,25 @@ export const ACCESS_DENY_ALL = '1';
 class User extends Model {
   static entityType = 'user';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
-    ret.roles = map(elem.role, role => {
-      return new Model(role, 'role');
-    });
+    ret.roles = map(element.role, role => parseModelFromElement(role, 'role'));
 
     delete ret.role;
 
-    if (isEmpty(elem.groups)) {
+    if (isEmpty(element.groups)) {
       ret.groups = [];
     } else {
-      ret.groups = map(elem.groups.group, group => {
-        return new Model(group, 'group');
-      });
+      ret.groups = map(element.groups.group, group =>
+        parseModelFromElement(group, 'group'),
+      );
     }
 
-    if (isDefined(elem.hosts)) {
+    if (isDefined(element.hosts)) {
       ret.hosts = {
-        addresses: parseCsv(elem.hosts.__text),
-        allow: elem.hosts._allow,
+        addresses: parseCsv(element.hosts.__text),
+        allow: element.hosts._allow,
       };
     } else {
       ret.hosts = {
@@ -63,10 +61,10 @@ class User extends Model {
       };
     }
 
-    if (isDefined(elem.ifaces)) {
+    if (isDefined(element.ifaces)) {
       ret.ifaces = {
-        addresses: parseCsv(elem.ifaces.__text),
-        allow: elem.ifaces._allow,
+        addresses: parseCsv(element.ifaces.__text),
+        allow: element.ifaces._allow,
       };
     } else {
       ret.ifaces = {
@@ -74,8 +72,8 @@ class User extends Model {
       };
     }
 
-    if (isDefined(elem.sources)) {
-      const {source} = elem.sources;
+    if (isDefined(element.sources)) {
+      const {source} = element.sources;
       if (source === 'ldap_connect') {
         ret.auth_method = AUTH_METHOD_LDAP;
       } else if (source === 'radius_connect') {

@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import Model from 'gmp/model';
+import {parseModelFromElement} from 'gmp/model';
 import Nvt from 'gmp/models/nvt';
 import Host from 'gmp/models/host';
 
@@ -40,19 +40,19 @@ describe('getEntityType function tests', () => {
   });
 
   test('should return entity type of model', () => {
-    const model = new Model({}, 'foo');
+    const model = parseModelFromElement({}, 'foo');
 
     expect(getEntityType(model)).toEqual('foo');
   });
 
   test('should return entity type for info models', () => {
-    const model = new Nvt({});
+    const model = Nvt.fromElement({});
 
     expect(getEntityType(model)).toEqual('nvt');
   });
 
   test('should return entity type for asset models', () => {
-    const model = new Host({});
+    const model = Host.fromElement({});
 
     expect(getEntityType(model)).toEqual('host');
   });
