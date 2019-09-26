@@ -234,12 +234,12 @@ export const testModelMethods = (modelClass, {testIsActive = true} = {}) => {
 };
 
 const testModelSetProperties = modelClass => {
-  test('should ignore setting undefinied properties', () => {
+  test('should not throw when setting undefined properties', () => {
     const model = new modelClass();
     model.setProperties();
   });
 
-  test('should ignore setting empty properties', () => {
+  test('should not throw when setting empty properties', () => {
     const model = new modelClass();
     model.setProperties({});
   });
