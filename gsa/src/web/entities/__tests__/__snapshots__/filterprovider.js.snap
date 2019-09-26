@@ -9,7 +9,6 @@ exports[`FilterProvider component tests should prefer locationQuery filter over 
     <span
       data-testid="awaiting-span"
     />
-    <div />
   </div>
 </body>
 `;

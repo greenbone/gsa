@@ -17,9 +17,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {useSelector, useDispatch} from 'react-redux';
+
+import {withRouter} from 'react-router-dom';
 
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/users';
 
@@ -30,6 +32,7 @@ import {isDefined} from 'gmp/utils/identity';
 import Loading from 'web/components/loading/loading';
 
 import getPage from 'web/store/pages/selectors';
+import {pageFilter as setPageFilter} from 'web/store/pages/actions';
 import {loadUserSettingDefault} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
@@ -37,6 +40,7 @@ import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilter
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
+import compose from 'web/utils/compose';
 
 const FilterProvider = ({
   children,
@@ -49,7 +53,7 @@ const FilterProvider = ({
 
   let returnedFilter;
 
-  let defaultSettingFilter = useSelector(state =>
+  const defaultSettingFilter = useSelector(state =>
     getUserSettingsDefaultFilter(state, gmpname).getFilter(),
   );
 
@@ -69,10 +73,21 @@ const FilterProvider = ({
     }
   }, [returnedFilter, rowsPerPage, gmp, dispatch]);
 
+  const [locationQueryFilter, setLocationQueryFilter] = useState(
+    Filter.fromString(locationQuery.filter),
+  );
+
+  useEffect(() => {
+    if (isDefined(locationQuery.filter)) {
+      dispatch(setPageFilter(gmpname, Filter.fromString(locationQuery.filter)));
+    }
+    setLocationQueryFilter(undefined);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const pageFilter = useSelector(state => getPage(state).getFilter(gmpname));
 
-  if (isDefined(locationQuery.filter)) {
-    returnedFilter = Filter.fromString(locationQuery.filter);
+  if (isDefined(locationQueryFilter)) {
+    returnedFilter = locationQueryFilter;
   } else if (isDefined(pageFilter)) {
     returnedFilter = pageFilter;
   } else if (isDefined(defaultSettingFilter) && defaultSettingFilter !== null) {
@@ -81,11 +96,6 @@ const FilterProvider = ({
     returnedFilter = fallbackFilter;
   } else {
     returnedFilter = DEFAULT_FALLBACK_FILTER;
-  }
-
-  // TODO remove the following line once the resultsfilter is working correctly
-  if (gmpname === 'result') {
-    defaultSettingFilter = null;
   }
 
   if (!returnedFilter.has('rows') && isDefined(rowsPerPage)) {
@@ -99,14 +109,7 @@ const FilterProvider = ({
 
   return (
     <React.Fragment>
-      {showChildren ? (
-        <React.Fragment>
-          <span data-testid="awaiting-span" />
-          {children({filter: returnedFilter})}
-        </React.Fragment>
-      ) : (
-        <Loading />
-      )}
+      {showChildren ? children({filter: returnedFilter}) : <Loading />}
     </React.Fragment>
   );
 };
@@ -115,11 +118,15 @@ FilterProvider.propTypes = {
   fallbackFilter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   gmpname: PropTypes.string,
+  history: PropTypes.object.isRequired,
   locationQuery: PropTypes.shape({
     filter: PropTypes.string,
   }),
 };
 
-export default withGmp(FilterProvider);
+export default compose(
+  withGmp,
+  withRouter,
+)(FilterProvider);
 
 // vim: set ts=2 sw=2 tw=80:

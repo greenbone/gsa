@@ -54,7 +54,9 @@ describe('FilterProvider component tests', () => {
       defaultFilterLoadingActions.success('task', defaultSettingfilter),
     );
 
-    const renderFunc = jest.fn().mockReturnValue(<div />);
+    const renderFunc = jest
+      .fn()
+      .mockReturnValue(<span data-testid="awaiting-span" />);
 
     const {baseElement, getByTestId} = render(
       <FilterProvider locationQuery={locationQuery} gmpname="task">
@@ -94,7 +96,9 @@ describe('FilterProvider component tests', () => {
     );
     store.dispatch(pageFilter('task', pFilter));
 
-    const renderFunc = jest.fn().mockReturnValue(<div />);
+    const renderFunc = jest
+      .fn()
+      .mockReturnValue(<span data-testid="awaiting-span" />);
 
     const {getByTestId} = render(
       <FilterProvider gmpname="task">{renderFunc}</FilterProvider>,
@@ -128,7 +132,9 @@ describe('FilterProvider component tests', () => {
       defaultFilterLoadingActions.success('task', defaultSettingfilter),
     );
 
-    const renderFunc = jest.fn().mockReturnValue(<div />);
+    const renderFunc = jest
+      .fn()
+      .mockReturnValue(<span data-testid="awaiting-span" />);
 
     const {getByTestId} = render(
       <FilterProvider gmpname="task">{renderFunc}</FilterProvider>,
@@ -163,7 +169,9 @@ describe('FilterProvider component tests', () => {
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
 
-    const renderFunc = jest.fn().mockReturnValue(<div />);
+    const renderFunc = jest
+      .fn()
+      .mockReturnValue(<span data-testid="awaiting-span" />);
 
     const {getByTestId} = render(
       <FilterProvider gmpname="task" fallbackFilter={fallbackFilter}>
@@ -197,7 +205,9 @@ describe('FilterProvider component tests', () => {
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
 
-    const renderFunc = jest.fn().mockReturnValue(<div />);
+    const renderFunc = jest
+      .fn()
+      .mockReturnValue(<span data-testid="awaiting-span" />);
 
     const {getByTestId} = render(
       <FilterProvider gmpname="task">{renderFunc}</FilterProvider>,
@@ -233,7 +243,9 @@ describe('FilterProvider component tests', () => {
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
 
-    const renderFunc = jest.fn().mockReturnValue(<div />);
+    const renderFunc = jest
+      .fn()
+      .mockReturnValue(<span data-testid="awaiting-span" />);
 
     const {getByTestId} = render(
       <FilterProvider fallbackFilter={fallbackFilter} gmpname="task">
