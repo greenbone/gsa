@@ -35,19 +35,19 @@ export const UNKNOWN_FILTER_ID = '0';
 /**
  * Parses FilterTerms from filterstring
  *
- * @param {String} filterstring  Filter representation as a string
+ * @param {String} filterString  Filter representation as a string
  *
  * @return {Array} Array of parsed FilterTerms
  */
-const parseFilterTermsFromString = filterstring => {
+const parseFilterTermsFromString = filterString => {
   const terms = [];
-  if (isString(filterstring)) {
-    const fterms = filterstring.split(' ');
-    for (let fterm of fterms) {
+  if (isString(filterString)) {
+    const filterTerms = filterString.split(' ');
+    for (let filterTerm of filterTerms) {
       // strip whitespace
-      fterm = fterm.trim();
-      if (fterm.length > 0) {
-        terms.push(FilterTerm.fromString(fterm));
+      filterTerm = filterTerm.trim();
+      if (filterTerm.length > 0) {
+        terms.push(FilterTerm.fromString(filterTerm));
       }
     }
   }
