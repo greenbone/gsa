@@ -25,12 +25,12 @@ testModel(Ticket, 'ticket');
 
 describe('Additional Ticket Model tests', () => {
   test('should parse assignedTo', () => {
-    let ticket = new Ticket({assigned_to: {}});
+    let ticket = Ticket.fromElement({assigned_to: {}});
 
     expect(ticket.assigned_to).toBeUndefined();
     expect(ticket.assignedTo).toBeUndefined();
 
-    ticket = new Ticket({assigned_to: {user: {_id: 'foo'}}});
+    ticket = Ticket.fromElement({assigned_to: {user: {_id: 'foo'}}});
 
     expect(ticket.assigned_to).toBeUndefined();
     expect(ticket.assignedTo).toBeDefined();
@@ -39,60 +39,60 @@ describe('Additional Ticket Model tests', () => {
   });
 
   test('should parse result', () => {
-    let ticket = new Ticket({});
+    let ticket = Ticket.fromElement({});
     expect(ticket.result).toBeUndefined();
 
-    ticket = new Ticket({result: {_id: 'foo'}});
+    ticket = Ticket.fromElement({result: {_id: 'foo'}});
     expect(ticket.result).toBeDefined();
     expect(ticket.result.id).toEqual('foo');
   });
 
   test('should parse report', () => {
-    let ticket = new Ticket({});
+    let ticket = Ticket.fromElement({});
     expect(ticket.report).toBeUndefined();
 
-    ticket = new Ticket({report: {_id: 'foo'}});
+    ticket = Ticket.fromElement({report: {_id: 'foo'}});
     expect(ticket.report).toBeDefined();
     expect(ticket.report.id).toEqual('foo');
   });
 
   test('should parse task', () => {
-    let ticket = new Ticket({});
+    let ticket = Ticket.fromElement({});
     expect(ticket.task).toBeUndefined();
 
-    ticket = new Ticket({task: {_id: 'foo'}});
+    ticket = Ticket.fromElement({task: {_id: 'foo'}});
     expect(ticket.task).toBeDefined();
     expect(ticket.task.id).toEqual('foo');
   });
 
   test('should parse confirmedReport', () => {
-    let ticket = new Ticket({});
+    let ticket = Ticket.fromElement({});
     expect(ticket.fixVerifiedReport).toBeUndefined();
     expect(ticket.fix_verified_report).toBeUndefined();
 
-    ticket = new Ticket({fix_verified_report: {_id: 'foo'}});
+    ticket = Ticket.fromElement({fix_verified_report: {_id: 'foo'}});
     expect(ticket.fixVerifiedReport).toBeDefined();
     expect(ticket.fix_verified_report).toBeUndefined();
     expect(ticket.fixVerifiedReport.id).toEqual('foo');
   });
 
   test('should parse severity', () => {
-    const ticket = new Ticket({severity: '10.0'});
+    const ticket = Ticket.fromElement({severity: '10.0'});
 
     expect(ticket.severity).toBe(10);
   });
 
   test('should parse nvt', () => {
-    let ticket = new Ticket({});
+    let ticket = Ticket.fromElement({});
     expect(ticket.nvt).toBeUndefined();
 
-    ticket = new Ticket({nvt: {_oid: 'foo'}});
+    ticket = Ticket.fromElement({nvt: {_oid: 'foo'}});
     expect(ticket.nvt).toBeDefined();
     expect(ticket.nvt.oid).toEqual('foo');
   });
 
   test('should parse openTime', () => {
-    const ticket = new Ticket({open_time: '2019-01-01T12:00:00Z'});
+    const ticket = Ticket.fromElement({open_time: '2019-01-01T12:00:00Z'});
 
     expect(ticket.open_time).toBeUndefined();
     expect(ticket.openTime).toBeDefined();
@@ -100,7 +100,9 @@ describe('Additional Ticket Model tests', () => {
   });
 
   test('should parse fixVerifiedTime', () => {
-    const ticket = new Ticket({fix_verified_time: '2019-01-01T12:00:00Z'});
+    const ticket = Ticket.fromElement({
+      fix_verified_time: '2019-01-01T12:00:00Z',
+    });
 
     expect(ticket.fix_verified_time).toBeUndefined();
     expect(ticket.fixVerifiedTime).toBeDefined();
@@ -108,7 +110,7 @@ describe('Additional Ticket Model tests', () => {
   });
 
   test('should parse fixedTime', () => {
-    const ticket = new Ticket({fixed_time: '2019-01-01T12:00:00Z'});
+    const ticket = Ticket.fromElement({fixed_time: '2019-01-01T12:00:00Z'});
 
     expect(ticket.fixed_time).toBeUndefined();
     expect(ticket.fixedTime).toBeDefined();
@@ -116,7 +118,7 @@ describe('Additional Ticket Model tests', () => {
   });
 
   test('should parse closedTime', () => {
-    const ticket = new Ticket({closed_time: '2019-01-01T12:00:00Z'});
+    const ticket = Ticket.fromElement({closed_time: '2019-01-01T12:00:00Z'});
 
     expect(ticket.closed_time).toBeUndefined();
     expect(ticket.closedTime).toBeDefined();
@@ -124,7 +126,7 @@ describe('Additional Ticket Model tests', () => {
   });
 
   test('should parse solutionType', () => {
-    const ticket = new Ticket({solution_type: 'foo'});
+    const ticket = Ticket.fromElement({solution_type: 'foo'});
 
     expect(ticket.solution_type).toBeUndefined();
     expect(ticket.solutionType).toBeDefined();
@@ -132,33 +134,33 @@ describe('Additional Ticket Model tests', () => {
   });
 
   test('should parse openNote', () => {
-    let ticket = new Ticket({open_note: ''});
+    let ticket = Ticket.fromElement({open_note: ''});
     expect(ticket.open_note).toBeUndefined();
     expect(ticket.openNote).toBeUndefined();
 
-    ticket = new Ticket({open_note: 'foo'});
+    ticket = Ticket.fromElement({open_note: 'foo'});
     expect(ticket.open_note).toBeUndefined();
     expect(ticket.openNote).toBeDefined();
     expect(ticket.openNote).toEqual('foo');
   });
 
   test('should parse fixedNote', () => {
-    let ticket = new Ticket({fixed_note: ''});
+    let ticket = Ticket.fromElement({fixed_note: ''});
     expect(ticket.fixed_note).toBeUndefined();
     expect(ticket.fixedNote).toBeUndefined();
 
-    ticket = new Ticket({fixed_note: 'foo'});
+    ticket = Ticket.fromElement({fixed_note: 'foo'});
     expect(ticket.fixed_note).toBeUndefined();
     expect(ticket.fixedNote).toBeDefined();
     expect(ticket.fixedNote).toEqual('foo');
   });
 
   test('should parse closedNote', () => {
-    let ticket = new Ticket({closed_note: ''});
+    let ticket = Ticket.fromElement({closed_note: ''});
     expect(ticket.closed_note).toBeUndefined();
     expect(ticket.closedNote).toBeUndefined();
 
-    ticket = new Ticket({closed_note: 'foo'});
+    ticket = Ticket.fromElement({closed_note: 'foo'});
     expect(ticket.closed_note).toBeUndefined();
     expect(ticket.closedNote).toBeDefined();
     expect(ticket.closedNote).toEqual('foo');

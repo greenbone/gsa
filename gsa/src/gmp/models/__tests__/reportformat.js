@@ -42,8 +42,8 @@ describe('ReportFormat model tests', () => {
         __text: 'bar',
       },
     };
-    const reportFormat = new ReportFormat(elem);
-    const reportFormat2 = new ReportFormat(elem2);
+    const reportFormat = ReportFormat.fromElement(elem);
+    const reportFormat2 = ReportFormat.fromElement(elem2);
 
     expect(reportFormat.trust.value).toEqual('foo');
     expect(isDate(reportFormat.trust.time)).toEqual(true);
@@ -52,22 +52,22 @@ describe('ReportFormat model tests', () => {
   });
 
   test('should return empty object if no trust is given', () => {
-    const reportFormat = new ReportFormat({});
+    const reportFormat = ReportFormat.fromElement({});
 
     expect(reportFormat.trust).toEqual({});
   });
 
   test('should parse active as yes/no correctly', () => {
-    const reportFormat = new ReportFormat({active: '0'});
-    const reportFormat2 = new ReportFormat({active: '1'});
+    const reportFormat = ReportFormat.fromElement({active: '0'});
+    const reportFormat2 = ReportFormat.fromElement({active: '1'});
 
     expect(reportFormat.active).toEqual(NO_VALUE);
     expect(reportFormat2.active).toEqual(YES_VALUE);
   });
 
   test('should parse predefined as yes/no correctly', () => {
-    const reportFormat = new ReportFormat({predefined: '0'});
-    const reportFormat2 = new ReportFormat({predefined: '1'});
+    const reportFormat = ReportFormat.fromElement({predefined: '0'});
+    const reportFormat2 = ReportFormat.fromElement({predefined: '1'});
 
     expect(reportFormat.predefined).toEqual(NO_VALUE);
     expect(reportFormat2.predefined).toEqual(YES_VALUE);
@@ -79,7 +79,7 @@ describe('ReportFormat model tests', () => {
         alert: [{id: '12'}],
       },
     };
-    const reportFormat = new ReportFormat(elem);
+    const reportFormat = ReportFormat.fromElement(elem);
 
     expect(reportFormat.alerts[0]).toBeInstanceOf(Model);
     expect(reportFormat.alerts[0].entityType).toEqual('alert');
@@ -87,7 +87,7 @@ describe('ReportFormat model tests', () => {
   });
 
   test('should return empty array if no alerts are given', () => {
-    const reportFormat = new ReportFormat({});
+    const reportFormat = ReportFormat.fromElement({});
 
     expect(reportFormat.alerts).toEqual([]);
   });
@@ -109,7 +109,7 @@ describe('ReportFormat model tests', () => {
           },
         ],
       };
-      const reportFormat = new ReportFormat(elem);
+      const reportFormat = ReportFormat.fromElement(elem);
 
       expect(reportFormat.param).toBeUndefined();
       expect(reportFormat.params[0].default).toEqual('ipsum');
@@ -132,7 +132,7 @@ describe('ReportFormat model tests', () => {
           },
         ],
       };
-      const reportFormat = new ReportFormat(elem);
+      const reportFormat = ReportFormat.fromElement(elem);
 
       expect(reportFormat.params[0].default).toEqual('ipsum');
       expect(reportFormat.params[0].name).toEqual('foo');
@@ -156,7 +156,7 @@ describe('ReportFormat model tests', () => {
         {value: 'opt1', name: 'opt1'},
         {value: 'opt2', name: 'opt2'},
       ];
-      const reportFormat = new ReportFormat(elem);
+      const reportFormat = ReportFormat.fromElement(elem);
 
       expect(reportFormat.params[0].options).toEqual(res);
     });
@@ -172,7 +172,7 @@ describe('ReportFormat model tests', () => {
           },
         ],
       };
-      const reportFormat = new ReportFormat(elem);
+      const reportFormat = ReportFormat.fromElement(elem);
 
       expect(reportFormat.params[0].options).toEqual([]);
     });
@@ -216,9 +216,9 @@ describe('ReportFormat model tests', () => {
           },
         ],
       };
-      const reportFormat = new ReportFormat(elem);
-      const reportFormat2 = new ReportFormat(elem2);
-      const reportFormat3 = new ReportFormat(elem3);
+      const reportFormat = ReportFormat.fromElement(elem);
+      const reportFormat2 = ReportFormat.fromElement(elem2);
+      const reportFormat3 = ReportFormat.fromElement(elem3);
 
       expect(reportFormat.params[0].value).toEqual('foo');
       expect(reportFormat2.params[0].value).toEqual('bar');
@@ -228,16 +228,16 @@ describe('ReportFormat model tests', () => {
 
   describe('ReportFormat model method tests', () => {
     test('isPredefined() returns correct true/false', () => {
-      const reportFormat = new ReportFormat({predefined: '0'});
-      const reportFormat2 = new ReportFormat({predefined: '1'});
+      const reportFormat = ReportFormat.fromElement({predefined: '0'});
+      const reportFormat2 = ReportFormat.fromElement({predefined: '1'});
 
       expect(reportFormat.isPredefined()).toBe(false);
       expect(reportFormat2.isPredefined()).toBe(true);
     });
 
     test('isActive() returns correct true/false', () => {
-      const reportFormat = new ReportFormat({active: '0'});
-      const reportFormat2 = new ReportFormat({active: '1'});
+      const reportFormat = ReportFormat.fromElement({active: '0'});
+      const reportFormat2 = ReportFormat.fromElement({active: '1'});
 
       expect(reportFormat.isActive()).toBe(false);
       expect(reportFormat2.isActive()).toBe(true);
@@ -254,8 +254,8 @@ describe('ReportFormat model tests', () => {
           __text: 'yes',
         },
       };
-      const reportFormat = new ReportFormat(elem);
-      const reportFormat2 = new ReportFormat(elem2);
+      const reportFormat = ReportFormat.fromElement(elem);
+      const reportFormat2 = ReportFormat.fromElement(elem2);
 
       expect(reportFormat.isTrusted()).toBe(false);
       expect(reportFormat2.isTrusted()).toBe(true);

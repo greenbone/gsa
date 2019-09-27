@@ -20,7 +20,7 @@ import Setting from '../setting';
 
 describe('Setting tests', () => {
   test('should create setting from an element', () => {
-    const setting = new Setting({
+    const setting = Setting.fromElement({
       _id: 'foo',
       comment: 'a comment',
       name: 'bar',
@@ -36,7 +36,7 @@ describe('Setting tests', () => {
   });
 
   test('should not set empty value', () => {
-    const setting = new Setting({
+    const setting = Setting.fromElement({
       value: '',
     });
 
@@ -44,7 +44,7 @@ describe('Setting tests', () => {
   });
 
   test('should consider 0 as undefined value', () => {
-    const setting = new Setting({
+    const setting = Setting.fromElement({
       value: '0',
     });
 
@@ -52,7 +52,7 @@ describe('Setting tests', () => {
   });
 
   test('should ignore (null) in comment', () => {
-    const setting = new Setting({
+    const setting = Setting.fromElement({
       comment: '(null)',
     });
 

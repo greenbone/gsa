@@ -22,8 +22,8 @@ import {parseSeverity} from '../parser';
 class OperatingSystem extends Asset {
   static entityType = 'operatingsystem';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
     if (ret.os) {
       ret.average_severity = ret.os.average_severity

@@ -25,11 +25,11 @@ import User from 'gmp/models/user';
 
 import EditTicketDialog from '../editdialog';
 
-const u1 = new User({
+const u1 = User.fromElement({
   _id: 'u1',
   name: 'foo',
 });
-const u2 = new User({
+const u2 = User.fromElement({
   _id: 'u2',
   name: 'bar',
 });
