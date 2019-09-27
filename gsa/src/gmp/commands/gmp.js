@@ -16,13 +16,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined} from '../utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
-import ActionResult from '../models/actionresult';
+import ActionResult from 'gmp/models/actionresult';
 
-import {filter_string} from '../models/filter/utils.js';
+import {filter_string} from 'gmp/models/filter/utils';
 
-import HttpCommand from './http.js';
+import HttpCommand from './http';
 
 export const BULK_SELECT_BY_IDS = 1;
 export const BULK_SELECT_BY_FILTER = 0;
@@ -32,7 +32,7 @@ class GmpCommand extends HttpCommand {
     const {filter, ...other} = params;
     const rparams = super.getParams(other, extraParams, options);
 
-    if (isDefined(filter)) {
+    if (hasValue(filter)) {
       if (isDefined(filter.id)) {
         rparams.filter_id = filter.id;
       } else {
