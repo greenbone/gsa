@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Use new [React context API](https://reactjs.org/docs/context.html#api) [#1637](https://github.com/greenbone/gsa/pull/1637)
 - Update response data parsing in Model classes [#1633](https://github.com/greenbone/gsa/pull/1633)
 - Fix statusbar content can be more than 100% and add progressbar colors to theme [1621](https://github.com/greenbone/gsa/pull/1621)
 - Allow to overwrite details=1 for command results.get() [#1618](https://github.com/greenbone/gsa/pull/1618)

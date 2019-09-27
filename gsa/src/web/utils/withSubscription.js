@@ -18,16 +18,14 @@
  */
 import React from 'react';
 
-import PropTypes from './proptypes.js';
+import {SubscriptionContext} from 'web/components/provider/subscriptionprovider';
 
 const withSubscription = Component => {
-  const SubscriptionWrapper = (props, context) => (
-    <Component {...props} subscribe={context.subscribe} />
+  const SubscriptionWrapper = props => (
+    <SubscriptionContext.Consumer>
+      {subscribe => <Component {...props} subscribe={subscribe} />}
+    </SubscriptionContext.Consumer>
   );
-
-  SubscriptionWrapper.contextTypes = {
-    subscribe: PropTypes.func.isRequired,
-  };
 
   return SubscriptionWrapper;
 };
