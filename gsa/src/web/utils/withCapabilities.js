@@ -20,16 +20,14 @@ import React from 'react';
 
 import hoistStatics from 'hoist-non-react-statics';
 
-import PropTypes from './proptypes';
+import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
 
 const withCapabilities = Component => {
-  const CapabilitiesWrapper = (props, {capabilities}) => (
-    <Component {...props} capabilities={capabilities} />
+  const CapabilitiesWrapper = props => (
+    <CapabilitiesContext.Consumer>
+      {capabilities => <Component {...props} capabilities={capabilities} />}
+    </CapabilitiesContext.Consumer>
   );
-
-  CapabilitiesWrapper.contextTypes = {
-    capabilities: PropTypes.capabilities.isRequired,
-  };
 
   return hoistStatics(CapabilitiesWrapper, Component);
 };

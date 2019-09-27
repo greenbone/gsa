@@ -41,7 +41,7 @@ import EverythingCapabilities from 'gmp/capabilities/everything';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import GmpContext from 'web/components/provider/gmpprovider';
-import CapabilitiesProvider from 'web/components/provider/capabilitiesprovider';
+import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
 
 import {createQueryHistory} from 'web/routes';
 import configureStore from 'web/store';
@@ -98,8 +98,8 @@ const withProvider = (name, key = name) => Component => ({
 const TestingGmpPropvider = withProvider('gmp', 'value')(GmpContext.Provider);
 const TestingStoreProvider = withProvider('store')(Provider);
 const TestingRouter = withProvider('history')(Router);
-const TestingCapabilitiesProvider = withProvider('capabilities')(
-  CapabilitiesProvider,
+const TestingCapabilitiesProvider = withProvider('capabilities', 'value')(
+  CapabilitiesContext.Provider,
 );
 
 export const rendererWith = (

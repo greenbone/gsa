@@ -38,7 +38,7 @@ import ErrorBoundary from 'web/components/error/errorboundary';
 
 import Layout from 'web/components/layout/layout';
 
-import CapabilitiesProvider from 'web/components/provider/capabilitiesprovider'; // eslint-disable-line max-len
+import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
 
 import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
@@ -85,7 +85,7 @@ class Page extends React.Component {
     }
 
     return (
-      <CapabilitiesProvider capabilities={capabilities}>
+      <CapabilitiesContext.Provider value={capabilities}>
         <StyledLayout flex="column" align={['start', 'stretch']}>
           <Header />
           <MenuBar />
@@ -96,7 +96,7 @@ class Page extends React.Component {
           </Main>
           <Footer />
         </StyledLayout>
-      </CapabilitiesProvider>
+      </CapabilitiesContext.Provider>
     );
   }
 }

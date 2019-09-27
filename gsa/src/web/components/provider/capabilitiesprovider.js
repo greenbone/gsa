@@ -19,33 +19,8 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+const CapabilitiesContext = React.createContext();
 
-import {renderChildren} from '../../utils/render.js';
-
-class CapabilitiesProvider extends React.Component {
-  getChildContext() {
-    const {capabilities} = this.props;
-
-    return {
-      capabilities,
-    };
-  }
-
-  render() {
-    const {children} = this.props;
-    return renderChildren(children);
-  }
-}
-
-CapabilitiesProvider.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-CapabilitiesProvider.childContextTypes = {
-  capabilities: PropTypes.capabilities,
-};
-
-export default CapabilitiesProvider;
+export default CapabilitiesContext;
 
 // vim: set ts=2 sw=2 tw=80:
