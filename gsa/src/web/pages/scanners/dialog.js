@@ -151,7 +151,6 @@ class ScannerDialog extends React.Component {
       ca_pub,
       comment = '',
       scanner,
-      credential_id,
       credentials,
       host = 'localhost',
       id,
@@ -191,6 +190,12 @@ class ScannerDialog extends React.Component {
 
     const isOspSensorType = type === OSP_SENSOR_SCANNER_TYPE;
     const isOspScannerType = type === OSP_SCANNER_TYPE;
+
+    let {credential_id} = this.props;
+
+    if (isOspSensorType) {
+      credential_id = '';
+    }
 
     return (
       <SaveDialog
