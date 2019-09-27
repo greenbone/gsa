@@ -16,12 +16,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import React from 'react';
 
 import styled from 'styled-components';
 
 import hoistStatics from 'hoist-non-react-statics';
 
 import {isArray} from 'gmp/utils/identity';
+
+import {IconSizeContext} from 'web/components/provider/iconsizeprovider';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -30,7 +33,7 @@ export const ICON_SIZE_MEDIUM_PIXELS = '24px';
 export const ICON_SIZE_SMALL_PIXELS = '16px';
 
 const withIconSize = (defaultSize = 'small') => Component => {
-  const IconSizeWrapper = styled(Component)`
+  const IconSize = styled(Component)`
     ${props => {
       const {iconSize = defaultSize, size = iconSize} = props;
 
@@ -62,15 +65,17 @@ const withIconSize = (defaultSize = 'small') => Component => {
     }}
   `;
 
+  const IconSizeWrapper = props => (
+    <IconSizeContext.Consumer>
+      {iconSize => <IconSize {...props} iconSize={iconSize} />}
+    </IconSizeContext.Consumer>
+  );
+
   IconSizeWrapper.displayName = 'withIconSize';
 
   IconSizeWrapper.propTypes = {
     iconSize: PropTypes.iconSize,
     size: PropTypes.iconSize,
-  };
-
-  IconSizeWrapper.contextTypes = {
-    iconSize: PropTypes.iconSize,
   };
 
   return hoistStatics(IconSizeWrapper, Component);
