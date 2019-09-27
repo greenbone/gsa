@@ -181,6 +181,9 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
                   <MenuEntry title={_('Compliance Audits')} to="audits" />
                 )}
               </MenuSection>
+              <MenuSection>
+                <MenuEntry title={_('Business Process Map')} to="processmaps" />
+              </MenuSection>
             </Menu>
           )}
           {capabilities.mayAccess('info') && (
