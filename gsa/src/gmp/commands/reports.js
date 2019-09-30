@@ -70,7 +70,7 @@ export class ReportsCommand extends EntitiesCommand {
   }
 }
 
-class ReportCommand extends EntityCommand {
+export class ReportCommand extends EntityCommand {
   constructor(http) {
     super(http, 'report', Report);
   }
