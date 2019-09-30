@@ -32,6 +32,7 @@ export const OSP_SCANNER_TYPE = 1;
 export const OPENVAS_SCANNER_TYPE = 2;
 export const CVE_SCANNER_TYPE = 3;
 export const GMP_SCANNER_TYPE = 4;
+export const OSP_SENSOR_SCANNER_TYPE = 5;
 
 export const OPENVAS_DEFAULT_SCANNER_ID =
   '08b69003-5fc2-4037-a479-93b440211c73';
@@ -55,6 +56,8 @@ export function scannerTypeName(scannerType) {
     return _('CVE Scanner');
   } else if (scannerType === GMP_SCANNER_TYPE) {
     return _('GMP Scanner');
+  } else if (scannerType === OSP_SENSOR_SCANNER_TYPE) {
+    return _('OSP Sensor');
   }
   return _('Unknown type ({{type}})', {type: scannerType});
 }

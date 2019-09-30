@@ -30,6 +30,7 @@ import Scanner, {
   OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
   GMP_SCANNER_TYPE,
+  OSP_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {testModel} from 'gmp/models/testing';
 
@@ -187,16 +188,19 @@ describe('Scanner model tests', () => {
     const elem2 = {type: OPENVAS_SCANNER_TYPE};
     const elem3 = {type: GMP_SCANNER_TYPE};
     const elem4 = {type: OSP_SCANNER_TYPE};
+    const elem5 = {type: OSP_SENSOR_SCANNER_TYPE};
 
     const scanner1 = new Scanner(elem1);
     const scanner2 = new Scanner(elem2);
     const scanner3 = new Scanner(elem3);
     const scanner4 = new Scanner(elem4);
+    const scanner5 = new Scanner(elem5);
 
     expect(scanner1.isClonable()).toEqual(false);
     expect(scanner2.isClonable()).toEqual(false);
     expect(scanner3.isClonable()).toEqual(true);
     expect(scanner4.isClonable()).toEqual(true);
+    expect(scanner5.isClonable()).toEqual(true);
   });
 
   test('isWritable() should return correct true/false', () => {
@@ -204,16 +208,19 @@ describe('Scanner model tests', () => {
     const elem2 = {type: OPENVAS_SCANNER_TYPE};
     const elem3 = {type: GMP_SCANNER_TYPE};
     const elem4 = {type: OSP_SCANNER_TYPE};
+    const elem5 = {type: OSP_SENSOR_SCANNER_TYPE};
 
     const scanner1 = new Scanner(elem1);
     const scanner2 = new Scanner(elem2);
     const scanner3 = new Scanner(elem3);
     const scanner4 = new Scanner(elem4);
+    const scanner5 = new Scanner(elem5);
 
     expect(scanner1.isClonable()).toEqual(false);
     expect(scanner2.isClonable()).toEqual(false);
     expect(scanner3.isClonable()).toEqual(true);
     expect(scanner4.isClonable()).toEqual(true);
+    expect(scanner5.isClonable()).toEqual(true);
   });
 
   test('hasUnixSocket() should return correct true/false', () => {
@@ -233,13 +240,15 @@ describe('Scanner model function tests', () => {
     const type2 = scannerTypeName(OPENVAS_SCANNER_TYPE);
     const type3 = scannerTypeName(CVE_SCANNER_TYPE);
     const type4 = scannerTypeName(GMP_SCANNER_TYPE);
-    const type5 = scannerTypeName(42);
+    const type5 = scannerTypeName(OSP_SENSOR_SCANNER_TYPE);
+    const type6 = scannerTypeName(42);
 
     expect(type1).toEqual('OSP Scanner');
     expect(type2).toEqual('OpenVAS Scanner');
     expect(type3).toEqual('CVE Scanner');
     expect(type4).toEqual('GMP Scanner');
-    expect(type5).toEqual('Unknown type (42)');
+    expect(type5).toEqual('OSP Sensor');
+    expect(type6).toEqual('Unknown type (42)');
   });
 
   test('openVasScannersFilter should return filter with correct true/false', () => {

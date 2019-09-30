@@ -54,6 +54,7 @@ import {getTimezone} from 'web/store/usersettings/selectors';
 import {
   OSP_SCANNER_TYPE,
   GMP_SCANNER_TYPE,
+  OSP_SENSOR_SCANNER_TYPE,
   scannerTypeName,
 } from 'gmp/models/scanner';
 
@@ -62,7 +63,11 @@ import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
-const SCANNER_TYPES = [GMP_SCANNER_TYPE, OSP_SCANNER_TYPE];
+const SCANNER_TYPES = [
+  GMP_SCANNER_TYPE,
+  OSP_SCANNER_TYPE,
+  OSP_SENSOR_SCANNER_TYPE,
+];
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
@@ -143,10 +148,9 @@ class ScannerDialog extends React.Component {
 
   render() {
     const {
-      ca_pub,
       comment = '',
       scanner,
-      credential_id,
+      ca_pub,
       credentials,
       host = 'localhost',
       id,
@@ -160,6 +164,8 @@ class ScannerDialog extends React.Component {
       onNewCredentialClick,
       onSave,
     } = this.props;
+
+    let {credential_id} = this.props;
 
     const data = {
       ca_pub,
@@ -182,8 +188,14 @@ class ScannerDialog extends React.Component {
     const show_cred_info =
       isDefined(scanner) &&
       isDefined(scanner.credential) &&
-      scanner.credential.type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
-    const isGmpScannerType = type === GMP_SCANNER_TYPE;
+      scanner.credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
+
+    const isOspSensorType = type === OSP_SENSOR_SCANNER_TYPE;
+    const isOspScannerType = type === OSP_SCANNER_TYPE;
+
+    if (isOspSensorType) {
+      credential_id = '';
+    }
 
     return (
       <SaveDialog
@@ -239,7 +251,7 @@ class ScannerDialog extends React.Component {
                 />
               </FormGroup>
 
-              {!isGmpScannerType && (
+              {isOspScannerType && (
                 <React.Fragment>
                   <FormGroup title={_('Port')}>
                     <TextField
@@ -295,26 +307,28 @@ class ScannerDialog extends React.Component {
                 </React.Fragment>
               )}
 
-              <FormGroup title={_('Credential')} flex="column">
-                <Divider>
-                  <Select
-                    name="credential_id"
-                    items={renderSelectItems(scanner_credentials)}
-                    value={credential_id}
-                    onChange={onCredentialChange}
-                  />
-                  <Layout>
-                    <NewIcon
-                      value={type}
-                      title={_('Create a new Credential')}
-                      onClick={onNewCredentialClick}
+              {!isOspSensorType && (
+                <FormGroup title={_('Credential')} flex="column">
+                  <Divider>
+                    <Select
+                      name="credential_id"
+                      items={renderSelectItems(scanner_credentials)}
+                      value={credential_id}
+                      onChange={onCredentialChange}
                     />
-                  </Layout>
-                </Divider>
-                {show_cred_info && (
-                  <CertStatus info={scanner.credential.certificate_info} />
-                )}
-              </FormGroup>
+                    <Layout>
+                      <NewIcon
+                        value={type}
+                        title={_('Create a new Credential')}
+                        onClick={onNewCredentialClick}
+                      />
+                    </Layout>
+                  </Divider>
+                  {show_cred_info && (
+                    <CertStatus info={scanner.credential.certificate_info} />
+                  )}
+                </FormGroup>
+              )}
             </Layout>
           );
         }}
