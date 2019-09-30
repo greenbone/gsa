@@ -10093,7 +10093,8 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 "<ca_pub>%s</ca_pub>"
                 "<credential id=\"%s\"/>"
                 "</create_scanner>",
-                name, comment, host, port, type, ca_pub, credential_id);
+                name, comment, host, port, type, ca_pub,
+                credential_id ? credential_id : "");
   else
     ret = gmpf (connection, credentials, &response, &entity, response_data,
                 "<create_scanner>"
