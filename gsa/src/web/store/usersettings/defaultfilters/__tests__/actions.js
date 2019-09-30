@@ -133,7 +133,7 @@ describe('loadUserSettingsDefaultFilter tests', () => {
       );
       expect(dispatch).toHaveBeenNthCalledWith(
         2,
-        defaultFilterLoadingActions.success(entityType),
+        defaultFilterLoadingActions.success(entityType, null),
       );
       expect(getSetting).toHaveBeenCalledWith(
         DEFAULT_FILTER_SETTINGS[entityType],

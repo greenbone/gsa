@@ -32,6 +32,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1466](https://github.com/greenbone/gsa/pull/1466) [#1467](https://github.com/greenbone/gsa/pull/1467)
 
 ### Changed
+- Use uuid to get greenbone compliance report format [#1643](https://github.com/greenbone/gsa/pull/1643)
+- Add details=1 to report download command [#1642](https://github.com/greenbone/gsa/pull/1642)
 - Adjust gsa to send details=1 for get_report and change gsad to forward details to gvmd [1640](https://github.com/greenbone/gsa/pull/1640)
 - Switch tooltips for fold and unfold icon, change task trend options in filter dialog to make them easier to understand [#1627](https://github.com/greenbone/gsa/pull/1627)
 - Improve edit scanconfig dialogs to open immediately and show loading indicators [#1624](https://github.com/greenbone/gsa/pull/1624)

@@ -22,6 +22,7 @@ import {
   isObject,
   isString,
   isArray,
+  isNull,
   isNumber,
   isFunction,
   isJsDate,
@@ -155,6 +156,37 @@ describe('isArray function test', () => {
   test('should return true for an array', () => {
     const x = [];
     expect(isArray(x)).toBe(true);
+  });
+});
+
+describe('isNull function tests', () => {
+  test('should return true for null variable', () => {
+    const x = null;
+    expect(isNull(x)).toEqual(true);
+  });
+  test('should return false for undefined variable', () => {
+    let x;
+    expect(isNull(x)).toEqual(false);
+  });
+  test('should return false for empty object variable', () => {
+    const x = {};
+    expect(isNull(x)).toEqual(false);
+  });
+  test('should return false for empty array variable', () => {
+    const x = [];
+    expect(isNull(x)).toEqual(false);
+  });
+  test('should return false for number variable', () => {
+    const x = 42;
+    expect(isNull(x)).toEqual(false);
+  });
+  test('should return false for string variable', () => {
+    const x = 'foo';
+    expect(isNull(x)).toEqual(false);
+  });
+  test('should return false for function variable', () => {
+    const x = () => {};
+    expect(isNull(x)).toEqual(false);
   });
 });
 

@@ -34,7 +34,7 @@ import {openVasScannersFilter, ospScannersFilter} from 'gmp/models/scanner';
 
 import {YES_VALUE, parseYesNo} from 'gmp/parser';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import MySettingsIcon from 'web/components/icon/mysettingsicon';
@@ -298,7 +298,7 @@ class UserSettings extends React.Component {
 
   render() {
     const {activeTab, dialogVisible, disableEditIcon} = this.state;
-    const {
+    let {
       capabilities,
       filters,
       alerts,
@@ -333,40 +333,81 @@ class UserSettings extends React.Component {
       defaultSshCredential = {},
       defaultSchedule = {},
       defaultTarget = {},
-      agentsFilter = {},
-      alertsFilter = {},
-      configsFilter = {},
-      credentialsFilter = {},
-      filtersFilter = {},
-      groupsFilter = {},
-      hostsFilter = {},
-      notesFilter = {},
-      operatingSystemsFilter = {},
-      overridesFilter = {},
-      permissionsFilter = {},
-      portListsFilter = {},
-      reportsFilter = {},
-      reportFormatsFilter = {},
-      resultsFilter = {},
-      rolesFilter = {},
-      scannersFilter = {},
-      schedulesFilter = {},
-      tagsFilter = {},
-      targetsFilter = {},
-      tasksFilter = {},
-      ticketsFilter = {},
-      tlsCertificatesFilter = {},
-      usersFilter = {},
-      vulnerabilitiesFilter = {},
-      cpeFilter = {},
-      cveFilter = {},
-      nvtFilter = {},
-      ovalFilter = {},
-      certBundFilter = {},
-      dfnCertFilter = {},
-      secInfoFilter = {},
+      agentsFilter,
+      alertsFilter,
+      configsFilter,
+      credentialsFilter,
+      filtersFilter,
+      groupsFilter,
+      hostsFilter,
+      notesFilter,
+      operatingSystemsFilter,
+      overridesFilter,
+      permissionsFilter,
+      portListsFilter,
+      reportsFilter,
+      reportFormatsFilter,
+      resultsFilter,
+      rolesFilter,
+      scannersFilter,
+      schedulesFilter,
+      tagsFilter,
+      targetsFilter,
+      tasksFilter,
+      ticketsFilter,
+      tlsCertificatesFilter,
+      usersFilter,
+      vulnerabilitiesFilter,
+      cpeFilter,
+      cveFilter,
+      nvtFilter,
+      ovalFilter,
+      certBundFilter,
+      dfnCertFilter,
+      secInfoFilter,
       autoCacheRebuild = {},
     } = this.props;
+
+    agentsFilter = hasValue(agentsFilter) ? agentsFilter : {};
+    alertsFilter = hasValue(alertsFilter) ? alertsFilter : {};
+    configsFilter = hasValue(configsFilter) ? configsFilter : {};
+    credentialsFilter = hasValue(credentialsFilter) ? credentialsFilter : {};
+    filtersFilter = hasValue(filtersFilter) ? filtersFilter : {};
+    groupsFilter = hasValue(groupsFilter) ? groupsFilter : {};
+    hostsFilter = hasValue(hostsFilter) ? hostsFilter : {};
+    notesFilter = hasValue(notesFilter) ? notesFilter : {};
+    operatingSystemsFilter = hasValue(operatingSystemsFilter)
+      ? operatingSystemsFilter
+      : {};
+    overridesFilter = hasValue(overridesFilter) ? overridesFilter : {};
+    permissionsFilter = hasValue(permissionsFilter) ? permissionsFilter : {};
+    portListsFilter = hasValue(portListsFilter) ? portListsFilter : {};
+    reportsFilter = hasValue(reportsFilter) ? reportsFilter : {};
+    reportFormatsFilter = hasValue(reportFormatsFilter)
+      ? reportFormatsFilter
+      : {};
+    resultsFilter = hasValue(resultsFilter) ? resultsFilter : {};
+    rolesFilter = hasValue(rolesFilter) ? rolesFilter : {};
+    scannersFilter = hasValue(scannersFilter) ? scannersFilter : {};
+    schedulesFilter = hasValue(schedulesFilter) ? schedulesFilter : {};
+    tagsFilter = hasValue(tagsFilter) ? tagsFilter : {};
+    targetsFilter = hasValue(targetsFilter) ? targetsFilter : {};
+    tasksFilter = hasValue(tasksFilter) ? tasksFilter : {};
+    ticketsFilter = hasValue(ticketsFilter) ? ticketsFilter : {};
+    tlsCertificatesFilter = hasValue(tlsCertificatesFilter)
+      ? tlsCertificatesFilter
+      : {};
+    usersFilter = hasValue(usersFilter) ? usersFilter : {};
+    vulnerabilitiesFilter = hasValue(vulnerabilitiesFilter)
+      ? vulnerabilitiesFilter
+      : {};
+    cpeFilter = hasValue(cpeFilter) ? cpeFilter : {};
+    cveFilter = hasValue(cveFilter) ? cveFilter : {};
+    nvtFilter = hasValue(nvtFilter) ? nvtFilter : {};
+    ovalFilter = hasValue(ovalFilter) ? ovalFilter : {};
+    certBundFilter = hasValue(certBundFilter) ? certBundFilter : {};
+    dfnCertFilter = hasValue(dfnCertFilter) ? dfnCertFilter : {};
+    secInfoFilter = hasValue(secInfoFilter) ? secInfoFilter : {};
 
     const openVasScanConfigs = scanconfigs.filter(openVasScanConfigsFilter);
     const ospScanConfigs = scanconfigs.filter(ospScanConfigsFilter);

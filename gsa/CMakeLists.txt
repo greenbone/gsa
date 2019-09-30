@@ -586,6 +586,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/entities/actions.js
      ${GSA_SRC_DIR}/src/web/entities/container.js
      ${GSA_SRC_DIR}/src/web/entities/entitynametabledata.js
+     ${GSA_SRC_DIR}/src/web/entities/filterprovider.js
      ${GSA_SRC_DIR}/src/web/entities/footer.js
      ${GSA_SRC_DIR}/src/web/entities/header.js
      ${GSA_SRC_DIR}/src/web/entities/page.js

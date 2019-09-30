@@ -755,6 +755,8 @@ export const TLS_CERTIFICATES_FILTER_FILTER = Filter.fromString(
 export const USERS_FILTER_FILTER = Filter.fromString('type=user');
 export const VULNS_FILTER_FILTER = Filter.fromString('type=vuln');
 
+export const DEFAULT_FALLBACK_FILTER = Filter.fromString('sort=name first=1');
+
 export const RESET_FILTER = Filter.fromString('first=1');
 
 export default Filter;

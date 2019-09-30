@@ -54,6 +54,12 @@ const currentSettings = jest.fn().mockReturnValue(
   }),
 );
 
+const getSetting = jest.fn().mockReturnValue(
+  Promise.resolve({
+    set: 'ting',
+  }),
+);
+
 const getFilters = jest.fn().mockReturnValue(
   Promise.resolve({
     data: [],
@@ -98,7 +104,7 @@ describe('AuditPage tests', () => {
       },
       reloadInterval,
       settings: {manualUrl},
-      user: {currentSettings},
+      user: {currentSettings, getSetting},
     };
 
     const {render, store} = rendererWith({

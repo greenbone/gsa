@@ -83,9 +83,8 @@ import TargetComponent from 'web/pages/targets/component';
 
 import AuditDialog from 'web/pages/audits/dialog';
 
-// TODO: use id instead of name when a unique id becomes available
 const REPORT_FORMATS_FILTER = Filter.fromString(
-  'name="GCR PDF" and active=1 and trust=1 and rows=-1',
+  'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1',
 );
 
 class AuditComponent extends React.Component {
