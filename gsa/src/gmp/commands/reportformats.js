@@ -18,8 +18,6 @@
  */
 import logger from '../log';
 
-import {isDefined} from '../utils/identity';
-
 import registerCommand from '../command';
 
 import ReportFormat from '../models/reportformat';
