@@ -19,33 +19,8 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+const GmpContext = React.createContext();
 
-import {renderChildren} from '../../utils/render.js';
-
-class GmpProvider extends React.Component {
-  getChildContext() {
-    const {gmp} = this.props;
-
-    return {
-      gmp,
-    };
-  }
-
-  render() {
-    const {children} = this.props;
-    return renderChildren(children);
-  }
-}
-
-GmpProvider.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-GmpProvider.childContextTypes = {
-  gmp: PropTypes.gmp,
-};
-
-export default GmpProvider;
+export default GmpContext;
 
 // vim: set ts=2 sw=2 tw=80:

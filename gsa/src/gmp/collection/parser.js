@@ -33,7 +33,9 @@ export function parseInfoEntities(response, name, modelclass, filter_func) {
   if (!isArray(response.info)) {
     return [];
   }
-  return response.info.filter(filter_func).map(info => new modelclass(info));
+  return response.info
+    .filter(filter_func)
+    .map(info => modelclass.fromElement(info));
 }
 
 export function parseInfoCounts(response) {
@@ -84,7 +86,7 @@ export function parseInfoCounts(response) {
 }
 
 export function parseFilter(element) {
-  return new Filter(element.filters);
+  return Filter.fromElement(element.filters);
 }
 
 export function parseCounts(element, name, plural_name) {
@@ -114,7 +116,9 @@ export function parseCounts(element, name, plural_name) {
 const parseElements = (response, name) => response[name];
 
 const parseEntities = (response, name, modelclass = Model) =>
-  map(parseElements(response, name), element => new modelclass(element));
+  map(parseElements(response, name), element =>
+    modelclass.fromElement(element),
+  );
 
 export const parseReportResultEntities = (response, name, modelclass) =>
   parseEntities(response.results, name, modelclass);

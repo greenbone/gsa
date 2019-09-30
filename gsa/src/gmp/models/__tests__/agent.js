@@ -35,7 +35,7 @@ describe('Agent Model tests', () => {
         },
       },
     };
-    const agent = new Agent(elem);
+    const agent = Agent.fromElement(elem);
 
     expect(agent.installer).toBeUndefined();
     expect(agent.trust.time).toEqual(parseDate('2018-10-10T11:41:23.022Z'));
@@ -43,7 +43,7 @@ describe('Agent Model tests', () => {
   });
 
   test('should return undefined for trust if installer or trust are undefined', () => {
-    const agent = new Agent({});
+    const agent = Agent.fromElement({});
 
     expect(agent.trust).toBeUndefined();
   });

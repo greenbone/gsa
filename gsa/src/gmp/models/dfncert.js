@@ -26,11 +26,10 @@ import Info from './info';
 class DfnCertAdv extends Info {
   static entityType = 'dfncert';
 
-  parseProperties(elem) {
-    elem = super.parseProperties(elem, 'dfn_cert_adv');
-    const ret = {...elem};
+  static parseElement(element) {
+    const ret = super.parseElement(element, 'dfn_cert_adv');
 
-    ret.severity = parseSeverity(elem.max_cvss);
+    ret.severity = parseSeverity(element.max_cvss);
     delete ret.max_cvss;
 
     const {raw_data} = ret;

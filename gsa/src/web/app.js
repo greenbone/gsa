@@ -31,11 +31,9 @@ import {isDefined} from 'gmp/utils/identity';
 
 import ErrorBoundary from 'web/components/error/errorboundary';
 
-import GlobalStyles from 'web/components/layout/globalstyles';
-
 import LocaleObserver from 'web/components/observer/localeobserver';
 
-import GmpProvider from 'web/components/provider/gmpprovider';
+import GmpContext from 'web/components/provider/gmpprovider';
 
 import {
   setUsername,
@@ -96,18 +94,15 @@ class App extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
-        <GlobalStyles />
-        <ErrorBoundary message={_('An error occurred on this page')}>
-          <GmpProvider gmp={gmp}>
-            <StoreProvider store={store}>
-              <LocaleObserver>
-                <Routes />
-              </LocaleObserver>
-            </StoreProvider>
-          </GmpProvider>
-        </ErrorBoundary>
-      </React.Fragment>
+      <ErrorBoundary message={_('An error occurred on this page')}>
+        <GmpContext.Provider value={gmp}>
+          <StoreProvider store={store}>
+            <LocaleObserver>
+              <Routes />
+            </LocaleObserver>
+          </StoreProvider>
+        </GmpContext.Provider>
+      </ErrorBoundary>
     );
   }
 }

@@ -19,7 +19,7 @@
 import {isModelElement} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 import {
   parseCsv,
   parseSeverity,
@@ -36,11 +36,11 @@ export const NOTE_INACTIVE_VALUE = '-1';
 class Note extends Model {
   static entityType = 'note';
 
-  parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+  static parseElement(element) {
+    let ret = super.parseElement(element);
 
     if (ret.nvt) {
-      ret.nvt = new Nvt(ret.nvt);
+      ret.nvt = Nvt.fromElement(ret.nvt);
       ret.name = ret.nvt.name;
     }
 
@@ -49,23 +49,23 @@ class Note extends Model {
     ret.severity = parseSeverity(ret.severity);
 
     if (isModelElement(ret.task)) {
-      ret.task = new Model(ret.task, 'task');
+      ret.task = parseModelFromElement(ret.task, 'task');
     } else {
       delete ret.task;
     }
 
     if (isModelElement(ret.result)) {
-      ret.result = new Model(ret.result, 'result');
+      ret.result = parseModelFromElement(ret.result, 'result');
     } else {
       delete ret.result;
     }
 
-    ret.active = parseYesNo(elem.active);
-    ret.textExcerpt = parseYesNo(elem.textExcerpt);
+    ret.active = parseYesNo(element.active);
+    ret.text_excerpt = parseYesNo(element.text_excerpt);
 
-    ret.hosts = parseCsv(elem.hosts);
+    ret.hosts = parseCsv(element.hosts);
 
-    if (isEmpty(elem.port)) {
+    if (isEmpty(element.port)) {
       delete ret.port;
     }
 

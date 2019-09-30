@@ -22,7 +22,7 @@ import 'core-js/features/array/includes';
 import {isDefined, isString} from '../utils/identity';
 import {forEach, map} from '../utils/array';
 
-import Model from '../model.js';
+import Model, {parseModelFromElement} from '../model.js';
 
 import {setProperties} from '../parser';
 
@@ -33,6 +33,28 @@ import {EXTRA_KEYWORDS} from './filter/keywords.js';
 export const UNKNOWN_FILTER_ID = '0';
 
 /**
+ * Parses FilterTerms from filterstring
+ *
+ * @param {String} filterString  Filter representation as a string
+ *
+ * @return {Array} Array of parsed FilterTerms
+ */
+const parseFilterTermsFromString = filterString => {
+  const terms = [];
+  if (isString(filterString)) {
+    const filterTerms = filterString.split(' ');
+    for (let filterTerm of filterTerms) {
+      // strip whitespace
+      filterTerm = filterTerm.trim();
+      if (filterTerm.length > 0) {
+        terms.push(FilterTerm.fromString(filterTerm));
+      }
+    }
+  }
+  return terms;
+};
+
+/**
  * Represents a filter
  *
  * @extends Model
@@ -40,17 +62,14 @@ export const UNKNOWN_FILTER_ID = '0';
 class Filter extends Model {
   static entityType = 'filter';
 
-  get length() {
-    return this.terms.length;
+  constructor() {
+    super();
+
+    this.terms = [];
   }
 
-  /**
-   * Init the Filter
-   *
-   * Creates the internal data structure.
-   */
-  init() {
-    this.terms = [];
+  get length() {
+    return this.terms.length;
   }
 
   setProperties({id, ...properties}) {
@@ -60,21 +79,21 @@ class Filter extends Model {
   }
 
   /**
-   * Parse properties from the passed element object for being set in this
-   * Filter model.
+   * Parse properties from the passed element object
    *
-   * @param {Object} elem  Element object to parse properties from.
+   * @param {Object} element  Element object to parse properties from.
    *
    * @return {Object} An object with properties for the new Filter model
    */
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
     ret.filter_type = ret._type;
 
     if (ret.id === UNKNOWN_FILTER_ID) {
       ret.id = undefined;
     }
+    ret.terms = [];
 
     if (isDefined(ret.keywords)) {
       forEach(ret.keywords.keyword, keyword => {
@@ -82,11 +101,11 @@ class Filter extends Model {
 
         const converted = convert(key, value, relation);
 
-        this._addTerm(new FilterTerm(converted));
+        ret.terms.push(new FilterTerm(converted));
       });
       delete ret.keywords;
     } else if (isDefined(ret.term)) {
-      this._parseString(ret.term);
+      ret.terms = parseFilterTermsFromString(ret.term);
 
       // ret.term should not be part of the public api
       // but it's helpful for debug purposes
@@ -95,7 +114,9 @@ class Filter extends Model {
     }
 
     if (isDefined(ret.alerts)) {
-      ret.alerts = map(ret.alerts.alert, alert => new Model(alert, 'alert'));
+      ret.alerts = map(ret.alerts.alert, alert =>
+        parseModelFromElement(alert, 'alert'),
+      );
     }
 
     return ret;
@@ -664,29 +685,6 @@ class Filter extends Model {
   }
 
   /**
-   * Parses FilterTerms from filterstring and adds them to this Filter
-   *
-   * @private
-   *
-   * @param {String} filterstring  Filter representation as a string
-   *
-   * @return {Filter} This filter.
-   */
-  _parseString(filterstring) {
-    if (isString(filterstring)) {
-      const fterms = filterstring.split(' ');
-      for (let fterm of fterms) {
-        // strip whitespace
-        fterm = fterm.trim();
-        if (fterm.length > 0) {
-          this._addTerm(FilterTerm.fromString(fterm));
-        }
-      }
-    }
-    return this;
-  }
-
-  /**
    * Creates a new Filter from filterstring
    *
    * @param {String} filterstring  String to parse FilterTerms from.
@@ -698,7 +696,7 @@ class Filter extends Model {
   static fromString(filterstring, filter) {
     const f = new Filter();
 
-    f._parseString(filterstring);
+    f._setTerms(parseFilterTermsFromString(filterstring));
     f._mergeExtraKeywords(filter);
 
     return f;

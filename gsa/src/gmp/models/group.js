@@ -23,10 +23,10 @@ import Model from '../model';
 class Group extends Model {
   static entityType = 'group';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
-    ret.users = parseCsv(elem.users);
+    ret.users = parseCsv(element.users);
 
     return ret;
   }

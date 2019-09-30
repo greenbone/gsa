@@ -25,14 +25,14 @@ testModel(DfnCertAdv, 'dfncert');
 
 describe('DfnCertAdv model tests', () => {
   test('should be instance of Info', () => {
-    const dfnCertAdv = new DfnCertAdv({});
+    const dfnCertAdv = DfnCertAdv.fromElement({});
 
     expect(dfnCertAdv).toBeInstanceOf(Info);
   });
 
   test('should parse severity correctly', () => {
-    const dfnCertAdv = new DfnCertAdv({max_cvss: '5.0'});
-    const dfnCertAdv2 = new DfnCertAdv({max_cvss: '10'});
+    const dfnCertAdv = DfnCertAdv.fromElement({max_cvss: '5.0'});
+    const dfnCertAdv2 = DfnCertAdv.fromElement({max_cvss: '10'});
 
     expect(dfnCertAdv.max_cvss).toBeUndefined();
     expect(dfnCertAdv.severity).toEqual(5.0);
@@ -58,7 +58,7 @@ describe('DfnCertAdv model tests', () => {
         },
       },
     };
-    const dfnCertAdv = new DfnCertAdv(elem);
+    const dfnCertAdv = DfnCertAdv.fromElement(elem);
 
     expect(dfnCertAdv.advisoryLink).toEqual('prot://url');
     expect(dfnCertAdv.additionalLinks).toEqual(['prot://url2', 'prot://url3']);
@@ -74,7 +74,7 @@ describe('DfnCertAdv model tests', () => {
         },
       },
     };
-    const dfnCertAdv = new DfnCertAdv(elem);
+    const dfnCertAdv = DfnCertAdv.fromElement(elem);
 
     expect(dfnCertAdv.summary).toEqual('foo');
   });
@@ -87,7 +87,7 @@ describe('DfnCertAdv model tests', () => {
         },
       },
     };
-    const dfnCertAdv = new DfnCertAdv(elem);
+    const dfnCertAdv = DfnCertAdv.fromElement(elem);
 
     expect(dfnCertAdv.cves).toEqual(['lorem', 'ipsum', 'dolor']);
   });

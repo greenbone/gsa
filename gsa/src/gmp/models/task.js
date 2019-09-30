@@ -32,7 +32,7 @@ import {
   YES_VALUE,
 } from '../parser';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 import Report from './report';
 import Schedule from './schedule';
@@ -136,10 +136,10 @@ class Task extends Model {
     return getTranslatableTaskStatus(this.status);
   }
 
-  parseProperties(elem) {
-    const copy = super.parseProperties(elem);
+  static parseElement(element) {
+    const copy = super.parseElement(element);
 
-    const {report_count} = elem;
+    const {report_count} = element;
 
     if (isDefined(report_count)) {
       copy.report_count = {...report_count};
@@ -147,55 +147,58 @@ class Task extends Model {
       copy.report_count.finished = parseInt(report_count.finished);
     }
 
-    copy.alterable = parseYesNo(elem.alterable);
-    copy.result_count = parseInt(elem.result_count);
+    copy.alterable = parseYesNo(element.alterable);
+    copy.result_count = parseInt(element.result_count);
 
     const reports = ['last_report', 'current_report'];
 
     reports.forEach(name => {
-      const report = elem[name];
+      const report = element[name];
       if (isDefined(report)) {
-        copy[name] = new Report(report.report);
+        copy[name] = Report.fromElement(report.report);
       }
     });
 
+    // slave isn't really an entity type but it has an id
     const models = ['config', 'slave', 'target'];
     models.forEach(item => {
       const name = item;
 
-      const data = elem[name];
+      const data = element[name];
       if (isDefined(data) && !isEmpty(data._id)) {
-        copy[name] = new Model(data, normalizeType(name));
+        copy[name] = parseModelFromElement(data, normalizeType(name));
       } else {
         delete copy[name];
       }
     });
 
-    if (isDefined(elem.alert)) {
-      copy.alerts = map(elem.alert, alert => new Model(alert, 'alert'));
+    if (isDefined(element.alert)) {
+      copy.alerts = map(element.alert, alert =>
+        parseModelFromElement(alert, 'alert'),
+      );
       delete copy.alert;
     }
 
-    if (isDefined(elem.scanner) && !isEmpty(elem.scanner._id)) {
-      copy.scanner = new Scanner(elem.scanner);
+    if (isDefined(element.scanner) && !isEmpty(element.scanner._id)) {
+      copy.scanner = Scanner.fromElement(element.scanner);
     } else {
       delete copy.scanner;
     }
 
-    if (isDefined(elem.schedule) && !isEmpty(elem.schedule._id)) {
-      copy.schedule = new Schedule(elem.schedule);
+    if (isDefined(element.schedule) && !isEmpty(element.schedule._id)) {
+      copy.schedule = Schedule.fromElement(element.schedule);
     } else {
       delete copy.schedule;
     }
 
-    copy.schedule_periods = parseInt(elem.schedule_periods);
+    copy.schedule_periods = parseInt(element.schedule_periods);
 
-    copy.progress = parseProgressElement(elem.progress);
+    copy.progress = parseProgressElement(element.progress);
 
     const prefs = {};
 
-    if (copy.preferences && isArray(elem.preferences.preference)) {
-      for (const pref of elem.preferences.preference) {
+    if (copy.preferences && isArray(element.preferences.preference)) {
+      for (const pref of element.preferences.preference) {
         switch (pref.scanner_name) {
           case 'in_assets':
             copy.in_assets = parse_yes(pref.value);
@@ -234,8 +237,8 @@ class Task extends Model {
 
     copy.preferences = prefs;
 
-    if (isDefined(elem.average_duration)) {
-      copy.average_duration = parseDuration(elem.average_duration);
+    if (isDefined(element.average_duration)) {
+      copy.average_duration = parseDuration(element.average_duration);
     }
 
     if (

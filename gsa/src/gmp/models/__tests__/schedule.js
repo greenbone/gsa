@@ -37,7 +37,7 @@ describe('Schedule model tests', () => {
       simple_duration: 'adipiscing',
       simple_period: 'elit',
     };
-    const schedule = new Schedule(elem);
+    const schedule = Schedule.fromElement(elem);
 
     expect(schedule.first_time).toBeUndefined();
     expect(schedule.next_time).toBeUndefined();
@@ -55,10 +55,11 @@ describe('Schedule model tests', () => {
         task: [{id: '123'}],
       },
     };
-    const schedule = new Schedule(elem);
+    const schedule = Schedule.fromElement(elem);
 
     expect(schedule.tasks[0]).toBeInstanceOf(Model);
     expect(schedule.tasks[0].entityType).toEqual('task');
+    expect(schedule.tasks[0].id).toEqual('123');
   });
 });
 // vim: set ts=2 sw=2 tw=80:

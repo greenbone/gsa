@@ -27,7 +27,7 @@ import {parseSeverity, parseYesNo, YES_VALUE, parseDate} from '../parser';
 import Info from './info';
 
 class Criteria {
-  constructor(elem) {
+  constructor(element) {
     const {
       criterion: criterions,
       criteria: criterias,
@@ -35,7 +35,7 @@ class Criteria {
       _comment: comment,
       _operator: operator,
       _negate: negate,
-    } = elem;
+    } = element;
 
     this.criterions = map(criterions, criterion => ({
       applicabilityCheck: criterion._applicability_check,
@@ -73,14 +73,13 @@ class Criteria {
 class Ovaldef extends Info {
   static entityType = 'ovaldef';
 
-  parseProperties(elem) {
-    elem = super.parseProperties(elem, 'ovaldef');
-    const ret = {...elem};
+  static parseElement(element) {
+    const ret = super.parseElement(element, 'ovaldef');
 
-    ret.severity = parseSeverity(elem.max_cvss);
+    ret.severity = parseSeverity(element.max_cvss);
     delete ret.max_cvss;
 
-    const {raw_data} = elem;
+    const {raw_data} = element;
 
     if (isDefined(raw_data) && isDefined(raw_data.definition)) {
       const {definition} = raw_data;

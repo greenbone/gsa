@@ -23,10 +23,10 @@ import Model from '../model';
 class Role extends Model {
   static entityType = 'role';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
-    ret.users = parseCsv(elem.users);
+    ret.users = parseCsv(element.users);
 
     return ret;
   }

@@ -29,7 +29,7 @@ testModel(CertBundAdv, 'certbund');
 
 describe('CertBundAdv model tests', () => {
   test('should be instance of Info', () => {
-    const certBundAdv = new CertBundAdv({});
+    const certBundAdv = CertBundAdv.fromElement({});
 
     expect(certBundAdv).toBeInstanceOf(Info);
   });
@@ -38,14 +38,14 @@ describe('CertBundAdv model tests', () => {
     const elem = {
       max_cvss: '8.5',
     };
-    const certBundAdv = new CertBundAdv(elem);
+    const certBundAdv = CertBundAdv.fromElement(elem);
 
     expect(certBundAdv.severity).toEqual(8.5);
     expect(certBundAdv.max_cvss).toBeUndefined();
   });
 
   test('should return empty categories array if no advisory is given', () => {
-    const certBundAdv = new CertBundAdv({});
+    const certBundAdv = CertBundAdv.fromElement({});
     expect(certBundAdv.categories).toEqual([]);
   });
 
@@ -57,7 +57,7 @@ describe('CertBundAdv model tests', () => {
         },
       },
     };
-    const certBundAdv = new CertBundAdv(elem);
+    const certBundAdv = CertBundAdv.fromElement(elem);
     expect(certBundAdv.categories).toEqual(['foo', 'bar']);
   });
 
@@ -69,12 +69,12 @@ describe('CertBundAdv model tests', () => {
         },
       },
     };
-    const certBundAdv = new CertBundAdv(elem);
+    const certBundAdv = CertBundAdv.fromElement(elem);
     expect(certBundAdv.categories).toEqual(['foo']);
   });
 
   test('should return empty descriptions array if no advisory is given', () => {
-    const certBundAdv = new CertBundAdv({});
+    const certBundAdv = CertBundAdv.fromElement({});
     expect(certBundAdv.description).toEqual([]);
   });
 
@@ -88,7 +88,7 @@ describe('CertBundAdv model tests', () => {
         },
       },
     };
-    const certBundAdv = new CertBundAdv(elem);
+    const certBundAdv = CertBundAdv.fromElement(elem);
     expect(certBundAdv.description).toEqual(['foo', 'bar']);
   });
 
@@ -104,13 +104,13 @@ describe('CertBundAdv model tests', () => {
         },
       },
     };
-    const certBundAdv = new CertBundAdv(elem);
+    const certBundAdv = CertBundAdv.fromElement(elem);
     expect(certBundAdv.description).toEqual(['foo']);
   });
 
   test('should return empty additional_information array if no advisory is given', () => {
-    const certBundAdv = new CertBundAdv({});
-    expect(certBundAdv.additionalInformation).toEqual([]);
+    const certBundAdv = CertBundAdv.fromElement({});
+    expect(certBundAdv.additional_information).toEqual([]);
   });
 
   test('should return array of additional_information', () => {
@@ -138,7 +138,7 @@ describe('CertBundAdv model tests', () => {
         },
       },
     };
-    const certBundAdv = new CertBundAdv(elem);
+    const certBundAdv = CertBundAdv.fromElement(elem);
     const res = [
       {
         issuer: 'foo',
@@ -171,7 +171,7 @@ describe('CertBundAdv model tests', () => {
         },
       },
     };
-    const certBundAdv = new CertBundAdv(elem);
+    const certBundAdv = CertBundAdv.fromElement(elem);
     const res = [
       {
         issuer: 'foo',
@@ -191,7 +191,7 @@ describe('CertBundAdv model tests', () => {
         },
       },
     };
-    const certBundAdv = new CertBundAdv(elem);
+    const certBundAdv = CertBundAdv.fromElement(elem);
     expect(certBundAdv.version).toEqual('5');
   });
 
@@ -216,7 +216,7 @@ describe('CertBundAdv model tests', () => {
         },
       },
     };
-    const certBundAdv = new CertBundAdv(elem);
+    const certBundAdv = CertBundAdv.fromElement(elem);
     const res = [
       {
         revision: '42',
@@ -233,7 +233,7 @@ describe('CertBundAdv model tests', () => {
   });
 
   test('should return empty cves array if no advisory is given', () => {
-    const certBundAdv = new CertBundAdv({});
+    const certBundAdv = CertBundAdv.fromElement({});
     expect(certBundAdv.cves).toEqual([]);
   });
 
@@ -247,7 +247,7 @@ describe('CertBundAdv model tests', () => {
         },
       },
     };
-    const certBundAdv = new CertBundAdv(elem);
+    const certBundAdv = CertBundAdv.fromElement(elem);
 
     expect(certBundAdv.cves).toEqual(['foo', 'bar']);
   });
@@ -262,7 +262,7 @@ describe('CertBundAdv model tests', () => {
         },
       },
     };
-    const certBundAdv = new CertBundAdv(elem);
+    const certBundAdv = CertBundAdv.fromElement(elem);
 
     expect(certBundAdv.cves).toEqual(['foo']);
   });
