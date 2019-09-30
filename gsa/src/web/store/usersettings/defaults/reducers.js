@@ -49,8 +49,10 @@ const error = (state, action) => {
 
 const byName = (state = {}, action) => {
   switch (action.type) {
-    case USER_SETTINGS_DEFAULTS_LOADING_SUCCESS:
-      return action.data;
+    case USER_SETTINGS_DEFAULTS_LOADING_SUCCESS: {
+      const {data} = action;
+      return {...state, ...data};
+    }
     default:
       return state;
   }

@@ -21,7 +21,7 @@ import logger from '../log';
 import registerCommand from '../command';
 
 import {forEach, map} from '../utils/array';
-import {isDefined} from '../utils/identity';
+import {isArray, isDefined} from '../utils/identity';
 import {severityValue} from '../utils/number';
 
 import Capabilities from '../capabilities/capabilities';
@@ -45,6 +45,8 @@ const log = logger.getLogger('gmp.commands.users');
 
 const REPORT_COMPOSER_DEFAULTS_SETTING_ID =
   'b6b449ee-5d90-4ff0-af20-7e838c389d39';
+
+export const ROWS_PER_PAGE_SETTING_ID = '5f5a8712-8017-11e1-8556-406186ea4fc5';
 
 export const DEFAULT_FILTER_SETTINGS = {
   agent: '4a1334c1-cb93-4a79-8634-103b0a50bdcd',
@@ -138,9 +140,11 @@ export class UserCommand extends EntityCommand {
     }).then(response => {
       const {data} = response;
       const {setting} = data.get_settings.get_settings_response;
-      return response.setData(
-        isDefined(setting) ? new Setting(setting) : undefined,
-      );
+      if (!isDefined(setting)) {
+        return response.setData(undefined);
+      }
+      // used for the rowsPerPage setting which returns two settings with the same id
+      return response.setData(isArray(setting) ? setting[0] : setting);
     });
   }
 

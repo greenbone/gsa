@@ -21,6 +21,7 @@ import {
   USER_SETTINGS_DEFAULTS_LOADING_REQUEST,
   USER_SETTINGS_DEFAULTS_LOADING_SUCCESS,
   USER_SETTINGS_DEFAULTS_LOADING_ERROR,
+  loadUserSettingDefault,
   loadUserSettingDefaults,
 } from '../actions';
 import {isFunction} from 'gmp/utils/identity';
@@ -149,6 +150,115 @@ describe('UserSettings Defaults action tests', () => {
         expect(getState).toBeCalled();
         expect(currentSettings).toBeCalled();
         expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch.mock.calls[0]).toEqual([
+          {
+            type: USER_SETTINGS_DEFAULTS_LOADING_REQUEST,
+          },
+        ]);
+        expect(dispatch.mock.calls[1]).toEqual([
+          {
+            type: USER_SETTINGS_DEFAULTS_LOADING_ERROR,
+            error: 'An Error',
+          },
+        ]);
+      });
+    });
+  });
+
+  describe('loadUserSettingDefault tests', () => {
+    test('should not dispatch an action if isLoading is true', () => {
+      const dispatch = jest.fn();
+      const getState = jest.fn().mockReturnValue({
+        userSettings: {
+          defaults: {
+            isLoading: true,
+          },
+        },
+      });
+
+      const getSetting = jest.fn().mockReturnValue(
+        Promise.resolve({
+          id: '42',
+          name: 'Rows Per Page',
+        }),
+      );
+      const gmp = {
+        user: {
+          getSetting,
+        },
+      };
+
+      expect(isFunction(loadUserSettingDefault)).toBe(true);
+
+      return loadUserSettingDefault(gmp)('42')(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(dispatch).not.toBeCalled();
+        expect(getSetting).not.toBeCalled();
+      });
+    });
+
+    test('should dispatch request and success actions', () => {
+      const dispatch = jest.fn();
+      const getState = jest.fn().mockReturnValue({
+        userSettings: {
+          defaults: {
+            isLoading: false,
+          },
+        },
+      });
+
+      const data = {_id: '123', name: 'Rows Per Page', value: 42};
+      const getSetting = jest.fn().mockReturnValue(Promise.resolve({data}));
+
+      const gmp = {
+        user: {
+          getSetting,
+        },
+      };
+      expect(isFunction(loadUserSettingDefault)).toBe(true);
+
+      return loadUserSettingDefault(gmp)('123')(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(getSetting).toBeCalled();
+        expect(dispatch).toHaveBeenCalledTimes(2);
+
+        expect(dispatch.mock.calls[0]).toEqual([
+          {
+            type: USER_SETTINGS_DEFAULTS_LOADING_REQUEST,
+          },
+        ]);
+        expect(dispatch.mock.calls[1][0].data).toBeDefined();
+        expect(dispatch.mock.calls[1][0].type).toEqual(
+          USER_SETTINGS_DEFAULTS_LOADING_SUCCESS,
+        );
+        expect(dispatch.mock.calls[1][0].data.rowsperpage).toEqual(data);
+      });
+    });
+
+    test('should dispatch request and error actions', () => {
+      const dispatch = jest.fn();
+      const getState = jest.fn().mockReturnValue({
+        userSettings: {
+          defaults: {
+            isLoading: false,
+          },
+        },
+      });
+
+      const getSetting = jest.fn().mockReturnValue(Promise.reject('An Error'));
+
+      const gmp = {
+        user: {
+          getSetting,
+        },
+      };
+      expect(isFunction(loadUserSettingDefault)).toBe(true);
+
+      return loadUserSettingDefault(gmp)('123')(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(getSetting).toBeCalled();
+        expect(dispatch).toHaveBeenCalledTimes(2);
+
         expect(dispatch.mock.calls[0]).toEqual([
           {
             type: USER_SETTINGS_DEFAULTS_LOADING_REQUEST,

@@ -24,6 +24,8 @@ import {connect} from 'react-redux';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import FilterProvider from 'web/entities/filterprovider';
+
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
 import withDownload from 'web/components/form/withDownload';
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
@@ -33,25 +35,42 @@ import {pageFilter} from 'web/store/pages/actions';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 import EntitiesContainer from './container';
 
 const withEntitiesContainer = (
   gmpname,
-  {entitiesSelector, loadEntities, reloadInterval, defaultFilter},
+  {
+    entitiesSelector,
+    loadEntities,
+    reloadInterval,
+    defaultFilter,
+    fallbackFilter,
+  },
 ) => Component => {
   let EntitiesContainerWrapper = props => (
     <SubscriptionProvider>
       {({notify}) => (
-        <EntitiesContainer
-          {...props}
-          notify={notify}
+        <FilterProvider
+          fallbackFilter={fallbackFilter}
           gmpname={gmpname}
-          reloadInterval={reloadInterval}
+          history={props.history}
+          locationQuery={props.location.query}
         >
-          {pageProps => <Component {...pageProps} />}
-        </EntitiesContainer>
+          {({filter}) => (
+            <EntitiesContainer
+              {...props}
+              filter={filter}
+              notify={notify}
+              gmpname={gmpname}
+              reloadInterval={reloadInterval}
+            >
+              {pageProps => <Component {...pageProps} />}
+            </EntitiesContainer>
+          )}
+        </FilterProvider>
       )}
     </SubscriptionProvider>
   );
@@ -80,6 +99,11 @@ const withEntitiesContainer = (
     updateFilter: filter => dispatch(pageFilter(gmpname, filter)),
     onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   });
+
+  EntitiesContainerWrapper.propTypes = {
+    filter: PropTypes.filter,
+    history: PropTypes.object.isRequired,
+  };
 
   EntitiesContainerWrapper = compose(
     withDialogNotification,

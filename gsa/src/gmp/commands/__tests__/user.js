@@ -77,6 +77,46 @@ describe('UserCommand tests', () => {
       expect(barSettings.certificateInfo).toEqual('ipsum');
     });
   });
+
+  test('should return the first single setting value if given an array', () => {
+    const response = createResponse({
+      get_settings: {
+        get_settings_response: {
+          setting: [
+            {
+              _id: '123',
+              name: 'Rows Per Page',
+              value: '42',
+            },
+            {
+              _id: '123',
+              name: 'Rows Per Page',
+              value: '21',
+            },
+          ],
+        },
+      },
+    });
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new UserCommand(fakeHttp);
+    return cmd.getSetting({id: '123'}).then(resp => {
+      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+        args: {
+          cmd: 'get_setting',
+          setting_id: {
+            id: '123',
+          },
+        },
+      });
+
+      const {data} = resp;
+
+      expect(data).toEqual({_id: '123', name: 'Rows Per Page', value: '42'});
+    });
+  });
 });
 
 describe('UserCommand transformSettingName() function tests', () => {

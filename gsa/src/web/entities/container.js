@@ -37,7 +37,7 @@ import {
 } from 'gmp/utils/entitytype';
 import {debounce} from 'gmp/utils/event';
 
-import Filter, {RESET_FILTER} from 'gmp/models/filter';
+import {RESET_FILTER} from 'gmp/models/filter';
 
 import {YES_VALUE} from 'gmp/parser';
 
@@ -142,25 +142,19 @@ class EntitiesContainer extends React.Component {
 
   componentDidMount() {
     this.isRunning = true;
-    const {filter} = this.props.location.query;
+
+    const {filter} = this.props;
 
     this.props.loadSettings();
-
-    if (isDefined(filter)) {
-      // use filter from url
-      this.load(Filter.fromString(filter));
-    } else {
-      // use last filter
-      this.load(this.props.filter);
-    }
+    this.load(filter);
   }
 
   componentDidUpdate() {
     const {entities = [], loadedFilter: filter} = this.state;
-
     if (
       entities.length === 0 &&
       isDefined(filter) &&
+      filter.has('first') &&
       filter.get('first') !== 1
     ) {
       // goto first page if first exceeds the last page
