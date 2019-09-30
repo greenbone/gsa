@@ -130,7 +130,9 @@ const UserDetails = ({entity, links = true}) => {
 
           <TableRow>
             <TableData>{_('Host Access')}</TableData>
-            <TableData>{convert_allow(hosts)}</TableData>
+            <TableData>
+              {convert_allow(hosts).replace(/&#x2F;/g, '/')}
+            </TableData>
           </TableRow>
 
           <TableRow>
