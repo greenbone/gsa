@@ -10084,7 +10084,6 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
   CHECK_VARIABLE_INVALID (type, "Create Scanner");
   if (params_given (params, "ca_pub"))
     CHECK_VARIABLE_INVALID (ca_pub, "Create Scanner");
-  CHECK_VARIABLE_INVALID (credential_id, "Create Scanner");
 
   if (ca_pub)
     ret = gmpf (connection, credentials, &response, &entity, response_data,
@@ -10102,7 +10101,7 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 "<host>%s</host><port>%s</port><type>%s</type>"
                 "<credential id=\"%s\"/>"
                 "</create_scanner>",
-                name, comment, host, port, type, credential_id);
+                name, comment, host, port, type, credential_id ? credential_id : "");
   switch (ret)
     {
     case 0:
