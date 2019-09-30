@@ -255,12 +255,13 @@ export class Dashboard extends React.Component {
       maxRows = DEFAULT_MAX_ROWS,
       ...props
     } = this.props;
+
     const rows = this.getRows();
 
     if (isDefined(error) && !isLoading) {
       return (
         <RowPlaceHolder>
-          {_('Could not load dashboard settings. Reason: {{error}}', {error})}
+          {_('Could not load dashboard settings. Reason: {{error}}', {error: error.message})}
         </RowPlaceHolder>
       );
     } else if (!isDefined(rows) && isLoading) {
