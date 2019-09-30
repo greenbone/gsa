@@ -261,7 +261,7 @@ export class Dashboard extends React.Component {
     if (isDefined(error) && !isLoading) {
       return (
         <RowPlaceHolder>
-          {_(`Could not load dashboard settings. Reason: ${error.message}`)}
+          {_(`Could not load dashboard settings. Reason: {{error}}`, {error: error.message})}
         </RowPlaceHolder>
       );
     } else if (!isDefined(rows) && isLoading) {
