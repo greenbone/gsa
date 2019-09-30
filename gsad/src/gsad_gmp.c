@@ -10101,7 +10101,8 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 "<host>%s</host><port>%s</port><type>%s</type>"
                 "<credential id=\"%s\"/>"
                 "</create_scanner>",
-                name, comment, host, port, type, credential_id ? credential_id : "");
+                name, comment, host, port, type,
+                credential_id ? credential_id : "");
   switch (ret)
     {
     case 0:
