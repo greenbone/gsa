@@ -241,10 +241,6 @@ MultiplePermissionDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-MultiplePermissionDialog.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
 export default MultiplePermissionDialog;
 
 // vim: set ts=2 sw=2 tw=80:

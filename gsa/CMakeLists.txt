@@ -1082,7 +1082,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/utils/urls.js
      ${GSA_SRC_DIR}/src/web/utils/withCapabilities.js
      ${GSA_SRC_DIR}/src/web/utils/withComponentDefaults.js
-     ${GSA_SRC_DIR}/src/web/utils/withContext.js
      ${GSA_SRC_DIR}/src/web/utils/withGmp.js
      ${GSA_SRC_DIR}/src/web/utils/withPrefix.js
      ${GSA_SRC_DIR}/src/web/utils/withSubscription.js
