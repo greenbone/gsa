@@ -20,14 +20,16 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import ManualIcon from 'web/components/icon/manualicon';
-import ListIcon from 'web/components/icon/listicon';
-import ReportFormatIcon from 'web/components/icon/reportformaticon';
-import VerifyIcon from 'web/components/icon/verifyicon';
-
+import CreateIcon from 'web/entity/icon/createicon';
+import DeleteIcon from 'web/entity/icon/deleteicon';
 import Divider from 'web/components/layout/divider';
+import EditIcon from 'web/entity/icon/editicon';
+import ExportIcon from 'web/components/icon/exporticon';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
+import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import ReportFormatIcon from 'web/components/icon/reportformaticon';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -52,12 +54,6 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 
-import ExportIcon from 'web/components/icon/exporticon';
-import CloneIcon from 'web/entity/icon/cloneicon';
-import CreateIcon from 'web/entity/icon/createicon';
-import EditIcon from 'web/entity/icon/editicon';
-import DeleteIcon from 'web/entity/icon/deleteicon';
-
 import {selector, loadEntity} from 'web/store/entities/reportformats';
 
 import {
@@ -75,12 +71,10 @@ const ToolBarIcons = withCapabilities(
   ({
     capabilities,
     entity,
-    onReportFormatCloneClick,
     onReportFormatImportClick,
     onReportFormatDeleteClick,
     onReportFormatDownloadClick,
     onReportFormatEditClick,
-    onReportFormatVerifyClick,
   }) => (
     <Divider margin="10px">
       <IconDivider>
@@ -97,11 +91,6 @@ const ToolBarIcons = withCapabilities(
           entity={entity}
           onClick={onReportFormatImportClick}
         />
-        <CloneIcon
-          displayName={_('Report Format')}
-          entity={entity}
-          onClick={onReportFormatCloneClick}
-        />
         <EditIcon
           displayName={_('Report Format')}
           entity={entity}
@@ -117,16 +106,6 @@ const ToolBarIcons = withCapabilities(
           title={_('Export Report Format as XML')}
           onClick={onReportFormatDownloadClick}
         />
-        <VerifyIcon
-          disabled={!capabilities.mayOp('verify_report_format')}
-          value={entity}
-          title={
-            capabilities.mayOp('verify_report_format')
-              ? _('Verify Report Format')
-              : _('Permission to verify Report Format denied')
-          }
-          onClick={onReportFormatVerifyClick}
-        />
       </IconDivider>
     </Divider>
   ),
@@ -134,7 +113,6 @@ const ToolBarIcons = withCapabilities(
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
-  onReportFormatCloneClick: PropTypes.func.isRequired,
   onReportFormatDeleteClick: PropTypes.func.isRequired,
   onReportFormatDownloadClick: PropTypes.func.isRequired,
   onReportFormatEditClick: PropTypes.func.isRequired,
@@ -197,8 +175,6 @@ const Page = ({
   ...props
 }) => (
   <ReportFormatComponent
-    onCloned={goto_details('reportformat', props)}
-    onCloneError={onError}
     onDeleted={goto_list('reportformats', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
@@ -206,18 +182,8 @@ const Page = ({
     onImported={goto_details('reportformat', props)}
     onInteraction={onInteraction}
     onSaved={onChanged}
-    onVerify={onChanged}
-    onVerifyError={onError}
   >
-    {({
-      clone,
-      delete: delete_func,
-      download,
-      edit,
-      import: import_func,
-      save,
-      verify,
-    }) => (
+    {({delete: delete_func, download, edit, import: import_func, save}) => (
       <EntityPage
         {...props}
         entity={entity}
@@ -225,13 +191,11 @@ const Page = ({
         title={_('Report Format')}
         toolBarIcons={ToolBarIcons}
         onInteraction={onInteraction}
-        onReportFormatCloneClick={clone}
         onReportFormatImportClick={import_func}
         onReportFormatDeleteClick={delete_func}
         onReportFormatDownloadClick={download}
         onReportFormatEditClick={edit}
         onReportFormatSaveClick={save}
-        onReportFormatVerifyClick={verify}
       >
         {({activeTab = 0, onActivateTab}) => {
           return (

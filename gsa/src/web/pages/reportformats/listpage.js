@@ -80,29 +80,14 @@ const ReportFormatsPage = ({
 }) => (
   <ReportFormatComponent
     onSaved={onChanged}
-    onCloned={onChanged}
-    onCloneError={onError}
     onDeleted={onChanged}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
     onImported={onChanged}
     onInteraction={onInteraction}
-    onVerified={() => {
-      onChanged();
-      showSuccess(_('Report Format has been verified.'));
-    }}
-    onVerifyError={onError}
   >
-    {({
-      clone,
-      delete: delete_func,
-      download,
-      edit,
-      import: import_func,
-      save,
-      verify,
-    }) => (
+    {({delete: delete_func, download, edit, import: import_func, save}) => (
       <EntitiesPage
         {...props}
         filterEditDialog={ReportFormatsFilterDialog}
@@ -115,12 +100,10 @@ const ReportFormatsPage = ({
         onDownloaded={onDownloaded}
         onError={onError}
         onInteraction={onInteraction}
-        onReportFormatCloneClick={clone}
         onReportFormatImportClick={import_func}
         onReportFormatDeleteClick={delete_func}
         onReportFormatDownloadClick={download}
         onReportFormatEditClick={edit}
-        onReportFormatVerifyClick={verify}
       />
     )}
   </ReportFormatComponent>
