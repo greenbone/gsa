@@ -18,8 +18,6 @@
  */
 import logger from '../log';
 
-import {isDefined} from '../utils/identity';
-
 import registerCommand from '../command';
 
 import ReportFormat from '../models/reportformat';
@@ -69,27 +67,6 @@ class ReportFormatCommand extends EntityCommand {
 
     log.debug('Saving report format', args, data);
     return this.action(data);
-  }
-
-  verify({id}) {
-    log.debug('Verifying report format', id);
-    return this.httpPost({
-      cmd: 'verify_report_format',
-      id,
-    }).then(this.transformRequest, rej => {
-      const {root} = rej;
-
-      if (
-        isDefined(root) &&
-        isDefined(root.get_report_formats) &&
-        isDefined(root.get_report_formats.verify_report_format_response)
-      ) {
-        const response = root.get_report_formats.verify_report_format_response;
-        rej.setMessage(response._status_text);
-      }
-
-      return Promise.reject(rej);
-    });
   }
 
   getElementFromRoot(root) {
