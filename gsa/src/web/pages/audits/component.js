@@ -94,7 +94,6 @@ class AuditComponent extends React.Component {
     this.state = {
       showDownloadReportDialog: false,
       auditDialogVisible: false,
-      gcrFormatDefined: false,
     };
 
     const {gmp} = this.props;
@@ -125,11 +124,7 @@ class AuditComponent extends React.Component {
 
   componentDidMount() {
     this.props.loadUserSettingsDefaults();
-    this.props.loadReportFormats().then(() => {
-      const {reportFormats} = this.props;
-      const gcrFormatDefined = isDefined(reportFormats[0]);
-      this.setState({gcrFormatDefined});
-    });
+    this.props.loadReportFormats();
   }
 
   handleInteraction() {
@@ -410,8 +405,6 @@ class AuditComponent extends React.Component {
         {id},
         {
           reportFormatId: reportFormat.id,
-          deltaReportId: undefined,
-          filter: undefined,
         },
       )
       .then(response => {
@@ -419,7 +412,7 @@ class AuditComponent extends React.Component {
         const filename = generateFilename({
           extension,
           fileNameFormat: reportExportFileName,
-          id: id,
+          id,
           reportFormat: reportFormat.name,
           resourceName: audit.name,
           resourceType: 'report',
@@ -433,6 +426,7 @@ class AuditComponent extends React.Component {
     const {
       alerts,
       policies,
+      reportFormats = [],
       schedules,
       targets,
       children,
@@ -457,7 +451,6 @@ class AuditComponent extends React.Component {
       hostsOrdering,
       id,
       in_assets,
-      gcrFormatDefined,
       maxChecks,
       maxHosts,
       name,
@@ -469,6 +462,7 @@ class AuditComponent extends React.Component {
       auditDialogVisible,
       title = _('Edit Audit {{name}}', audit),
     } = this.state;
+    const gcrFormatDefined = reportFormats.length > 0;
     return (
       <React.Fragment>
         <EntityComponent
@@ -493,7 +487,7 @@ class AuditComponent extends React.Component {
                 stop: this.handleAuditStop,
                 resume: this.handleAuditResume,
                 reportDownload: this.handleReportDownloadClick,
-                gcrFormatDefined: gcrFormatDefined,
+                gcrFormatDefined,
               })}
 
               {auditDialogVisible && (

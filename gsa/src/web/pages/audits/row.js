@@ -56,10 +56,11 @@ const getComplianceStatus = report => {
     return -1;
   }
 
-  const complianceResultsTotal =
-    parseInt(report.compliance_count.yes) +
-    parseInt(report.compliance_count.no) +
-    parseInt(report.compliance_count.incomplete);
+  const complianceResultsTotal = isDefined(report.compliance_count)
+    ? parseInt(report.compliance_count.yes) +
+      parseInt(report.compliance_count.no) +
+      parseInt(report.compliance_count.incomplete)
+    : 0;
 
   const complianceStatus =
     complianceResultsTotal === 0
