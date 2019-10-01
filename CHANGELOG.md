@@ -38,6 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Don't crash Schedule details and list pages if invalid ical data is loaded [#1656](https://github.com/greenbone/gsa/pull/1656)
 - Fix showing loading indicator in content composers [#1613](https://github.com/greenbone/gsa/pull/1613)
 - Enable downloading csv in table dashboard [#1611](https://github.com/greenbone/gsa/pull/1611)
 - Fixed 404 URL handling in gsad which caused a XSS vulnerability [#1603](https://github.com/greenbone/gsa/pull/1603)
