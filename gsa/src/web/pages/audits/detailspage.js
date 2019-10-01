@@ -37,6 +37,7 @@ import Link from 'web/components/link/link';
 import AlterableIcon from 'web/components/icon/alterableicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
 import AuditIcon from 'web/components/icon/auditicon';
@@ -104,6 +105,11 @@ export const ToolBarIcons = ({
   return (
     <Divider margin="10px">
       <IconDivider align={['start', 'start']}>
+        <ManualIcon
+          page="compliance-and-special-scans"
+          anchor="configuring-and-managing-audits"
+          title={_('Help: Audits')}
+        />
         <ListIcon title={_('Audit List')} page="audits" />
         {entity.isAlterable() && !entity.isNew() && (
           <AlterableIcon
