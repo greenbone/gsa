@@ -80,6 +80,7 @@ class Permissions extends React.Component {
       multiplePermissionDialogVisible: false,
     };
 
+    this.handleChange = this.handleChange.bind(this);
     this.handleMultipleSave = this.handleMultipleSave.bind(this);
     this.openMultiplePermissionDialog = this.openMultiplePermissionDialog.bind(
       this,
@@ -152,6 +153,10 @@ class Permissions extends React.Component {
 
   closeMultiplePermissionDialog() {
     this.setState({multiplePermissionDialogVisible: false});
+  }
+
+  handleChange(value, name) {
+    this.setState({[name]: value});
   }
 
   handleCloseMultiplePermissionDialog() {
@@ -234,6 +239,7 @@ class Permissions extends React.Component {
             title={title}
             userId={userId}
             users={users}
+            onChange={this.handleChange}
             onClose={this.handleCloseMultiplePermissionDialog}
             onSave={this.handleMultipleSave}
           />
