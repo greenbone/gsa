@@ -23,9 +23,9 @@ import Model from 'gmp/model';
 import Schedule from 'gmp/models/schedule';
 import {testModel} from 'gmp/models/testing';
 
-testModel(Schedule, 'schedule');
-
 describe('Schedule model tests', () => {
+  testModel(Schedule, 'schedule');
+
   test('should delete legacy schedule fields', () => {
     const elem = {
       first_time: 'lorem',
@@ -60,6 +60,26 @@ describe('Schedule model tests', () => {
     expect(schedule.tasks[0]).toBeInstanceOf(Model);
     expect(schedule.tasks[0].entityType).toEqual('task');
     expect(schedule.tasks[0].id).toEqual('123');
+  });
+
+  test('should handle invalid ical data safely', () => {
+    /* eslint-disable no-console */
+    const consoleError = console.log;
+    const errorLog = jest.fn();
+
+    console.error = errorLog;
+
+    const elem = {
+      _id: '123',
+      icalendar: 'foobar',
+    };
+    const schedule = Schedule.fromElement(elem);
+
+    expect(errorLog).toHaveBeenCalled();
+    expect(schedule.event).toBeUndefined();
+
+    console.error = consoleError;
+    /* eslint-enable no-console */
   });
 });
 // vim: set ts=2 sw=2 tw=80:
