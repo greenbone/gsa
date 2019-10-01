@@ -41,7 +41,7 @@ import {Col} from 'web/entity/page';
 import {renderDuration, renderRecurrence} from './render';
 
 const ScheduleDetails = ({entity, links = true}) => {
-  const {comment, tasks = [], timezone, timezone_abbrev, event} = entity;
+  const {comment, tasks = [], timezone, timezone_abbrev, event = {}} = entity;
   const {startDate, nextDate, duration, recurrence} = event;
   return (
     <Layout grow flex="column">
@@ -61,7 +61,11 @@ const ScheduleDetails = ({entity, links = true}) => {
           <TableRow>
             <TableData>{_('First Run')}</TableData>
             <TableData>
-              <DateTime date={startDate} timezone={timezone} />
+              {isDefined(nextDate) ? (
+                <DateTime date={startDate} timezone={timezone} />
+              ) : (
+                '-'
+              )}
             </TableData>
           </TableRow>
 

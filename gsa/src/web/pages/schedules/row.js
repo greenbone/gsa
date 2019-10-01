@@ -96,7 +96,7 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
-  const {event, timezone} = entity;
+  const {event = {}, timezone} = entity;
   const {startDate, nextDate, duration, recurrence} = event;
   return (
     <TableRow>
@@ -108,7 +108,11 @@ const Row = ({
         onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
-        <DateTime date={startDate} timezone={timezone} />
+        {isDefined(startDate) ? (
+          <DateTime date={startDate} timezone={timezone} />
+        ) : (
+          '-'
+        )}
       </TableData>
       <TableData>
         {isDefined(nextDate) ? (
