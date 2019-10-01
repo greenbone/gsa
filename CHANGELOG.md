@@ -32,6 +32,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1466](https://github.com/greenbone/gsa/pull/1466) [#1467](https://github.com/greenbone/gsa/pull/1467)
 
 ### Changed
+- Determine the to be applied filter of a list page in GSA and don't rely on the
+  backend [#1631](https://github.com/greenbone/gsa/pull/1631), [#1653](https://github.com/greenbone/gsa/pull/1653)
 - Change gmpname for vulnerability and secinfo pages [#1652](https://github.com/greenbone/gsa/pull/1652)
 - Use "lean" reports by default when requesting a single report [#1635](https://github.com/greenbone/gsa/pull/1635)
 - Use uuid to get greenbone compliance report format [#1643](https://github.com/greenbone/gsa/pull/1643)
