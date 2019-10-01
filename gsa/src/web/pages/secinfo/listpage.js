@@ -85,7 +85,7 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-export default withEntitiesContainer('secinfo', {
+export default withEntitiesContainer('allinfo', {
   entitiesSelector,
   loadEntities,
 })(Page);
