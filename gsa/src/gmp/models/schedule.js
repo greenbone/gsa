@@ -16,12 +16,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
 import Model, {parseModelFromElement} from '../model';
 
 import Event from './event';
+
+const log = logger.getLogger('gmp.models.schedule');
 
 class Schedule extends Model {
   static entityType = 'schedule';
@@ -32,7 +35,16 @@ class Schedule extends Model {
     const {timezone, icalendar} = element;
 
     if (isDefined(icalendar)) {
-      ret.event = Event.fromIcal(icalendar, timezone);
+      try {
+        ret.event = Event.fromIcal(icalendar, timezone);
+      } catch (error) {
+        log.error(
+          'Could not parse ical data of Schedule',
+          ret.id,
+          error,
+          icalendar,
+        );
+      }
 
       delete ret.icalendar;
     }
