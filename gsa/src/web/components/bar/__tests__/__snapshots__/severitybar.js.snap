@@ -25,7 +25,7 @@ exports[`SeverityBar tests should render 1`] = `
 .c1 {
   height: 13px;
   width: 95%;
-  background: #C83814;
+  background: #c83814;
 }
 
 @media print {

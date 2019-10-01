@@ -457,7 +457,6 @@ init_validator ()
                      "|(sync_config)"
                      "|(toggle_tag)"
                      "|(verify_agent)"
-                     "|(verify_report_format)"
                      "|(verify_scanner)"
                      "|(wizard)"
                      "|(wizard_get))$");
@@ -1557,7 +1556,6 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (test_alert)
   ELSE (toggle_tag)
   ELSE (verify_agent)
-  ELSE (verify_report_format)
   ELSE (verify_scanner)
   else
   {

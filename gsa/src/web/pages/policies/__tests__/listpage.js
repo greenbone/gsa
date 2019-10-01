@@ -32,7 +32,7 @@ import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import PoliciesPage, {ToolBarIcons} from '../listpage';
 
-const policy = new Policy({
+const policy = Policy.fromElement({
   _id: '12345',
   name: 'foo',
   comment: 'bar',

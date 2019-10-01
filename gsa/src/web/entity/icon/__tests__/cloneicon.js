@@ -31,7 +31,9 @@ import CloneIcon from '../cloneicon';
 describe('Entity CloneIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
     const caps = new Capabilities(['everything']);
-    const entity = new Task({permissions: {permission: [{name: 'get_tasks'}]}});
+    const entity = Task.fromElement({
+      permissions: {permission: [{name: 'get_tasks'}]},
+    });
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
@@ -53,7 +55,9 @@ describe('Entity CloneIcon component tests', () => {
 
   test('should deactivate if wrong command level permissions are given', () => {
     const caps = new Capabilities(['authenticate']);
-    const entity = new Task({permissions: {permission: [{name: 'get_tasks'}]}});
+    const entity = Task.fromElement({
+      permissions: {permission: [{name: 'get_tasks'}]},
+    });
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
@@ -74,7 +78,7 @@ describe('Entity CloneIcon component tests', () => {
 
   test('should deactivate if wrong resource level permissions are given', () => {
     const caps = new Capabilities(['everything']);
-    const entity = new Task({
+    const entity = Task.fromElement({
       permissions: {permission: [{name: 'get_schedule'}]},
     });
     const clickHandler = jest.fn();

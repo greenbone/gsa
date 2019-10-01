@@ -31,7 +31,7 @@ import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import AuditPage, {ToolBarIcons} from '../listpage';
 
-const audit = new Audit({
+const audit = Audit.fromElement({
   _id: '1234',
   owner: {name: 'admin'},
   name: 'foo',

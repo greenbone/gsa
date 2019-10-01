@@ -51,16 +51,15 @@ const rename_props = (obj, rename = {}) => {
 class Cve extends Info {
   static entityType = 'cve';
 
-  parseProperties(elem) {
-    elem = super.parseProperties(elem, 'cve');
-    const ret = {...elem};
+  static parseElement(element) {
+    const ret = super.parseElement(element, 'cve');
 
-    if (isDefined(elem.update_time)) {
-      ret.updateTime = parseDate(elem.update_time);
+    if (isDefined(ret.update_time)) {
+      ret.updateTime = parseDate(ret.update_time);
       delete ret.update_time;
     }
 
-    ret.severity = parseSeverity(elem.cvss);
+    ret.severity = parseSeverity(ret.cvss);
     delete ret.cvss;
 
     if (isDefined(ret.nvts)) {
@@ -125,7 +124,7 @@ class Cve extends Info {
     if (isDefined(ret.raw_data) && isDefined(ret.raw_data.entry)) {
       const {entry} = ret.raw_data;
 
-      if (isDefined(elem.cwe)) {
+      if (isDefined(ret.cwe)) {
         ret.cweId = entry.cwe._id;
       }
 

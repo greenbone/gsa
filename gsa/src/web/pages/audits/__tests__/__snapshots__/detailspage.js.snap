@@ -560,7 +560,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
 .c35 {
   height: 13px;
   width: 100%;
-  background: #4F91C7;
+  background: #4f91c7;
 }
 
 .c37 {

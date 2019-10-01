@@ -28,31 +28,43 @@ import Model from '../../model';
 import ReportTask from './task';
 
 import {
-  parse_apps,
-  parse_closed_cves,
-  parse_cves,
+  parseApps,
+  parseClosedCves,
+  parseCves,
   parse_errors,
-  parse_hosts,
-  parse_operatingsystems,
-  parse_ports,
-  parse_results,
-  parse_tls_certificates,
-  parse_vulnerabilities,
+  parseHosts,
+  parseOperatingSystems,
+  parsePorts,
+  parseResults,
+  parseTlsCertificates,
+  parseVulnerabilities,
 } from './parser';
 
 class ReportReport extends Model {
   static entityType = 'report';
 
-  parseProperties(elem) {
-    const copy = super.parseProperties(elem);
+  parseProperties(element) {
+    return ReportReport.parseElement(element);
+  }
 
-    const {delta, severity, scan_start, scan_end, task, scan, timestamp} = elem;
+  static parseElement(element) {
+    const copy = super.parseElement(element);
 
-    const filter = parseFilter(elem);
+    const {
+      delta,
+      severity,
+      scan_start,
+      scan_end,
+      task,
+      scan,
+      timestamp,
+    } = element;
+
+    const filter = parseFilter(element);
 
     copy.filter = filter;
 
-    copy.report_type = elem._type;
+    copy.report_type = element._type;
 
     delete copy.filters;
 
@@ -63,31 +75,31 @@ class ReportReport extends Model {
       };
     }
 
-    copy.severity_class = new Model(copy.severity_class);
+    copy.severity_class = Model.fromElement(copy.severity_class);
 
-    copy.task = new ReportTask(task, 'task');
+    copy.task = ReportTask.fromElement(task);
 
-    copy.results = parse_results(elem, filter);
+    copy.results = parseResults(element, filter);
 
-    copy.hosts = parse_hosts(elem, filter);
+    copy.hosts = parseHosts(element, filter);
 
-    copy.tlsCertificates = parse_tls_certificates(elem, filter);
+    copy.tlsCertificates = parseTlsCertificates(element, filter);
 
     delete copy.host;
 
-    copy.applications = parse_apps(elem, filter);
+    copy.applications = parseApps(element, filter);
 
-    copy.vulnerabilities = parse_vulnerabilities(elem, filter);
+    copy.vulnerabilities = parseVulnerabilities(element, filter);
 
-    copy.operatingsystems = parse_operatingsystems(elem, filter);
+    copy.operatingsystems = parseOperatingSystems(element, filter);
 
-    copy.ports = parse_ports(elem, filter);
+    copy.ports = parsePorts(element, filter);
 
-    copy.cves = parse_cves(elem, filter);
+    copy.cves = parseCves(element, filter);
 
-    copy.closed_cves = parse_closed_cves(elem, filter);
+    copy.closed_cves = parseClosedCves(element, filter);
 
-    copy.errors = parse_errors(elem, filter);
+    copy.errors = parse_errors(element, filter);
 
     copy.scan_start = parseDate(scan_start);
 

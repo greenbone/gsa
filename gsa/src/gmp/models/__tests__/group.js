@@ -26,27 +26,27 @@ describe('Group model tests', () => {
   test('should parse multiple users', () => {
     const elem = {};
     elem.users = 'foo, bar';
-    const group = new Group(elem);
+    const group = Group.fromElement(elem);
 
     expect(group.users).toEqual(['foo', 'bar']);
   });
 
   test('should parse single user', () => {
     const elem = {users: 'foo'};
-    const group = new Group(elem);
+    const group = Group.fromElement(elem);
 
     expect(group.users).toEqual(['foo']);
   });
 
   test('should parse empty users string to empty array', () => {
     const elem = {users: ''};
-    const group = new Group(elem);
+    const group = Group.fromElement(elem);
 
     expect(group.users).toEqual([]);
   });
 
   test('should parse empty object to have empty users array', () => {
-    const group = new Group({});
+    const group = Group.fromElement({});
 
     expect(group.users).toEqual([]);
   });

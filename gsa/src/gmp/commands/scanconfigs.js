@@ -192,7 +192,7 @@ export class ScanConfigCommand extends EntityCommand {
       const {data} = response;
       const config_resp = data.get_config_nvt_response;
 
-      const nvt = new Nvt(config_resp.get_nvts_response.nvt);
+      const nvt = Nvt.fromElement(config_resp.get_nvts_response.nvt);
 
       return response.setData(nvt);
     });

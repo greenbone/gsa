@@ -25,8 +25,8 @@ testModel(Cpe, 'cpe');
 
 describe('CPE model tests', () => {
   test('should parse severity correctly', () => {
-    const cpe = new Cpe({max_cvss: '5.0'});
-    const cpe2 = new Cpe({max_cvss: '10'});
+    const cpe = Cpe.fromElement({max_cvss: '5.0'});
+    const cpe2 = Cpe.fromElement({max_cvss: '10'});
 
     expect(cpe.max_cvss).toBeUndefined();
     expect(cpe.severity).toEqual(5.0);
@@ -34,7 +34,7 @@ describe('CPE model tests', () => {
   });
 
   test('should parse "(null)" max_cvss as undefined severity', () => {
-    const cpe = new Cpe({max_cvss: '(null)'});
+    const cpe = Cpe.fromElement({max_cvss: '(null)'});
 
     expect(cpe.severity).toBeUndefined();
   });
@@ -68,7 +68,7 @@ describe('CPE model tests', () => {
         },
       },
     };
-    const cpe = new Cpe(elem);
+    const cpe = Cpe.fromElement(elem);
 
     expect(cpe.cves).toEqual([
       {
@@ -83,21 +83,21 @@ describe('CPE model tests', () => {
   });
 
   test('should return empty array if no cves are defined', () => {
-    const cpe = new Cpe({});
+    const cpe = Cpe.fromElement({});
 
     expect(cpe.cves).toEqual([]);
   });
 
   test('should return undefined if status is empty', () => {
-    const cpe = new Cpe({status: ''});
-    const cpe2 = new Cpe({status: 'foo'});
+    const cpe = Cpe.fromElement({status: ''});
+    const cpe2 = Cpe.fromElement({status: 'foo'});
 
     expect(cpe.status).toBeUndefined();
     expect(cpe2.status).toEqual('foo');
   });
 
   test('should parse update_time as date', () => {
-    const cpe = new Cpe({update_time: '2018-10-10T11:41:23.022Z'});
+    const cpe = Cpe.fromElement({update_time: '2018-10-10T11:41:23.022Z'});
 
     expect(cpe.updateTime).toBeDefined();
     expect(cpe.update_time).toBeUndefined();

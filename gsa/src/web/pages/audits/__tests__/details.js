@@ -36,7 +36,7 @@ import Details from '../details';
 
 setLocale('en');
 
-const policy = new Policy({
+const policy = Policy.fromElement({
   _id: '314',
   name: 'foo',
   comment: 'bar',
@@ -72,7 +72,7 @@ const preferences = {
   ],
 };
 
-const schedule = new Schedule({_id: '121314', name: 'schedule1'});
+const schedule = Schedule.fromElement({_id: '121314', name: 'schedule1'});
 
 const getPolicy = jest.fn().mockReturnValue(
   Promise.resolve({
@@ -97,7 +97,7 @@ const gmp = {
 
 describe('Audit Details tests', () => {
   test('should render full audit details', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       _id: '12345',
       owner: {name: 'username'},
       name: 'foo',

@@ -45,7 +45,7 @@ describe('PortList model tests', () => {
         ],
       },
     };
-    const portList = new PortList(elem);
+    const portList = PortList.fromElement(elem);
 
     expect(portList.port_ranges[0]).toBeInstanceOf(Model);
     expect(portList.port_ranges[0].entityType).toEqual('portrange');
@@ -73,7 +73,7 @@ describe('PortList model tests', () => {
         udp: '1',
       },
     };
-    const portList = new PortList(elem);
+    const portList = PortList.fromElement(elem);
 
     expect(portList.port_count.all).toEqual(42);
     expect(portList.port_count.tcp).toEqual(20);
@@ -81,7 +81,7 @@ describe('PortList model tests', () => {
   });
 
   test('should return counts of zero, if port_count is not defined', () => {
-    const portList = new PortList({});
+    const portList = PortList.fromElement({});
 
     expect(portList.port_count.all).toEqual(0);
     expect(portList.port_count.tcp).toEqual(0);
@@ -94,7 +94,7 @@ describe('PortList model tests', () => {
         target: [{id: '123'}, {id: '456'}],
       },
     };
-    const portList = new PortList(elem);
+    const portList = PortList.fromElement(elem);
 
     expect(portList.targets[0]).toBeInstanceOf(Model);
     expect(portList.targets[0].entityType).toEqual('target');
@@ -105,7 +105,7 @@ describe('PortList model tests', () => {
   });
 
   test('should return empty array if no targets are given', () => {
-    const portList = new PortList({});
+    const portList = PortList.fromElement({});
 
     expect(portList.targets).toEqual([]);
   });

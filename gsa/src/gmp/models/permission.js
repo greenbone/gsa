@@ -20,22 +20,28 @@
 import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 class Permission extends Model {
   static entityType = 'permission';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
-    if (isDefined(elem.resource) && !isEmpty(elem.resource._id)) {
-      ret.resource = new Model(elem.resource, elem.resource.type);
+    if (isDefined(element.resource) && !isEmpty(element.resource._id)) {
+      ret.resource = parseModelFromElement(
+        element.resource,
+        element.resource.type,
+      );
     } else {
       delete ret.resource;
     }
 
-    if (isDefined(elem.subject) && !isEmpty(elem.subject._id)) {
-      ret.subject = new Model(elem.subject, elem.subject.type);
+    if (isDefined(element.subject) && !isEmpty(element.subject._id)) {
+      ret.subject = parseModelFromElement(
+        element.subject,
+        element.subject.type,
+      );
     } else {
       delete ret.subject;
     }

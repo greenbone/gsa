@@ -101,20 +101,19 @@ const getOtherRefs = refs => {
 class Nvt extends Info {
   static entityType = 'nvt';
 
-  parseProperties(elem) {
-    elem = super.parseProperties(elem, 'nvt');
-    const ret = {...elem};
+  static parseElement(element) {
+    const ret = super.parseElement(element, 'nvt');
 
-    ret.nvtType = elem._type;
+    ret.nvtType = element._type;
 
     ret.oid = isEmpty(ret._oid) ? undefined : ret._oid;
     ret.id = ret.oid;
-    ret.tags = parse_tags(elem.tags);
+    ret.tags = parse_tags(element.tags);
 
     let refs = [];
-    if (isDefined(elem.refs) && isArray(elem.refs.ref)) {
+    if (isDefined(element.refs) && isArray(element.refs.ref)) {
       refs = ret.refs.ref;
-    } else if (isDefined(elem.refs) && isDefined(elem.refs.ref)) {
+    } else if (isDefined(element.refs) && isDefined(element.refs.ref)) {
       refs = [ret.refs.ref];
     }
 
@@ -133,10 +132,10 @@ class Nvt extends Info {
 
     delete ret.refs;
 
-    ret.severity = parseSeverity(elem.cvss_base);
+    ret.severity = parseSeverity(element.cvss_base);
     delete ret.cvss_base;
 
-    if (isDefined(elem.preferences)) {
+    if (isDefined(element.preferences)) {
       ret.preferences = map(ret.preferences.preference, preference => {
         const pref = {...preference};
         delete pref.nvt;
@@ -146,29 +145,29 @@ class Nvt extends Info {
       ret.preferences = [];
     }
 
-    if (isDefined(elem.qod)) {
-      if (isEmpty(elem.qod.value)) {
+    if (isDefined(element.qod)) {
+      if (isEmpty(element.qod.value)) {
         delete ret.qod.value;
       } else {
-        ret.qod.value = parseFloat(elem.qod.value);
+        ret.qod.value = parseFloat(element.qod.value);
       }
 
-      if (isEmpty(elem.qod.type)) {
+      if (isEmpty(element.qod.type)) {
         delete ret.qod.type;
       }
     }
 
-    if (isEmpty(elem.default_timeout)) {
+    if (isEmpty(element.default_timeout)) {
       delete ret.default_timeout;
     } else {
-      ret.defaultTimeout = parseFloat(elem.default_timeout);
+      ret.defaultTimeout = parseFloat(element.default_timeout);
       delete ret.default_timeout;
     }
 
-    if (isEmpty(elem.timeout)) {
+    if (isEmpty(element.timeout)) {
       delete ret.timeout;
     } else {
-      ret.timeout = parseFloat(elem.timeout);
+      ret.timeout = parseFloat(element.timeout);
     }
 
     return ret;

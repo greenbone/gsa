@@ -81,6 +81,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.2] - unreleased
 
 ### Added
+- Added text notification when old password is entered but new password isn't [#1636](https://github.com/greenbone/gsa/pull/1636)
 - Added a loading timer for empty trash button [#1604](https://github.com/greenbone/gsa/pull/1604)
 - Added details to alert details page [#1591](https://github.com/greenbone/gsa/pull/1591)
 - Added loading indicator for edit config dialog [#1579](https://github.com/greenbone/gsa/pull/1579)
@@ -93,6 +94,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Removed Clone and Verify functionalities for report formats [#1650](https://github.com/greenbone/gsa/pull/1650)
+- Use new [React context API](https://reactjs.org/docs/context.html#api) [#1637](https://github.com/greenbone/gsa/pull/1637)
+- Update response data parsing in Model classes [#1633](https://github.com/greenbone/gsa/pull/1633)
+- Fix statusbar content can be more than 100% and add progressbar colors to theme [1621](https://github.com/greenbone/gsa/pull/1621)
 - Allow to overwrite details=1 for command results.get() [#1618](https://github.com/greenbone/gsa/pull/1618)
 - Ensure not to request the report details when loading a list of reports [#1617](https://github.com/greenbone/gsa/pull/1617)
 - Adjust ProtList manual links [#1599](https://github.com/greenbone/gsa/pull/1599)
@@ -107,6 +112,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Don't crash Schedule details and list pages if invalid ical data is loaded [#1656](https://github.com/greenbone/gsa/pull/1656)
 - Fix showing loading indicator in content composers [#1613](https://github.com/greenbone/gsa/pull/1613)
 - Enable downloading csv in table dashboard [#1611](https://github.com/greenbone/gsa/pull/1611)
 - Fixed 404 URL handling in gsad which caused a XSS vulnerability [#1603](https://github.com/greenbone/gsa/pull/1603)

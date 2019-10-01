@@ -38,8 +38,8 @@ describe('Login model tests', () => {
         version: '1337',
       },
     };
-    const login = new Login(elem);
-    const login2 = new Login({});
+    const login = Login.fromElement(elem);
+    const login2 = Login.fromElement({});
 
     expect(login.clientAddress).toEqual('1.2.3.4');
     expect(login.guest).toEqual('0');
