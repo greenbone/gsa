@@ -759,6 +759,8 @@ export const DEFAULT_FALLBACK_FILTER = Filter.fromString('sort=name first=1');
 
 export const RESET_FILTER = Filter.fromString('first=1');
 
+export const DEFAULT_ROWS_PER_PAGE = 50;
+
 export default Filter;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -25,7 +25,10 @@ import {withRouter} from 'react-router-dom';
 
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/users';
 
-import Filter, {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
+import Filter, {
+  DEFAULT_FALLBACK_FILTER,
+  DEFAULT_ROWS_PER_PAGE,
+} from 'gmp/models/filter';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -53,19 +56,35 @@ const FilterProvider = ({
 
   let returnedFilter;
 
-  const defaultSettingFilter = useSelector(state =>
-    getUserSettingsDefaultFilter(state, gmpname).getFilter(),
+  const [defaultSettingFilter, defaultSettingsFilterError] = useSelector(
+    state => {
+      const defaultFilterSel = getUserSettingsDefaultFilter(state, gmpname);
+      return [defaultFilterSel.getFilter(), defaultFilterSel.getError()];
+    },
   );
 
   useEffect(() => {
-    if (!isDefined(defaultSettingFilter)) {
+    if (
+      !isDefined(defaultSettingFilter) &&
+      !isDefined(defaultSettingsFilterError)
+    ) {
       dispatch(loadUserSettingsDefaultFilter(gmp)(gmpname));
     }
-  }, [defaultSettingFilter, dispatch, gmp, gmpname]);
+  }, [
+    defaultSettingFilter,
+    defaultSettingsFilterError,
+    dispatch,
+    gmp,
+    gmpname,
+  ]);
 
-  const rowsPerPage = useSelector(state =>
-    getUserSettingsDefaults(state).getValueByName('rowsperpage'),
-  );
+  let [rowsPerPage, rowsPerPageError] = useSelector(state => {
+    const userSettingDefaultSel = getUserSettingsDefaults(state);
+    return [
+      userSettingDefaultSel.getValueByName('rowsperpage'),
+      userSettingDefaultSel.getError(),
+    ];
+  });
 
   useEffect(() => {
     if (!isDefined(rowsPerPage)) {
@@ -90,12 +109,20 @@ const FilterProvider = ({
     returnedFilter = locationQueryFilter;
   } else if (isDefined(pageFilter)) {
     returnedFilter = pageFilter;
-  } else if (isDefined(defaultSettingFilter) && defaultSettingFilter !== null) {
+  } else if (
+    isDefined(defaultSettingFilter) &&
+    !isDefined(defaultSettingsFilterError) &&
+    defaultSettingFilter !== null
+  ) {
     returnedFilter = defaultSettingFilter;
   } else if (isDefined(fallbackFilter)) {
     returnedFilter = fallbackFilter;
   } else {
     returnedFilter = DEFAULT_FALLBACK_FILTER;
+  }
+
+  if (!isDefined(rowsPerPage) && isDefined(rowsPerPageError)) {
+    rowsPerPage = DEFAULT_ROWS_PER_PAGE;
   }
 
   if (!returnedFilter.has('rows') && isDefined(rowsPerPage)) {
@@ -104,7 +131,8 @@ const FilterProvider = ({
 
   const showChildren =
     isDefined(returnedFilter) &&
-    isDefined(defaultSettingFilter) &&
+    (isDefined(defaultSettingFilter) ||
+      isDefined(defaultSettingsFilterError)) &&
     isDefined(rowsPerPage);
 
   return (
