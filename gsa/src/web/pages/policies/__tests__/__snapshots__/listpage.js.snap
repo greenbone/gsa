@@ -81,6 +81,21 @@ exports[`PoliciesPage ToolBarIcons test should render 1`] = `
     class="c1"
     margin="5px"
   >
+    <a
+      href="test/en/compliance-and-special-scans.html#configuring-and-managing-policies"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      <span
+        class="c2 "
+        data-testid="svg-icon"
+        title="Help: Policies"
+      >
+        <svg>
+          help.svg
+        </svg>
+      </span>
+    </a>
     <span
       class="c2 c3"
       data-testid="svg-icon"

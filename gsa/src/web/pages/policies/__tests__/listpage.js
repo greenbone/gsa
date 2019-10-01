@@ -123,25 +123,40 @@ describe('PoliciesPage ToolBarIcons test', () => {
     const handlePolicyCreateClick = jest.fn();
     const handlePolicyImportClick = jest.fn();
 
+    const gmp = {settings: {manualUrl}};
+
     const {render} = rendererWith({
+      gmp,
       capabilities: caps,
       router: true,
     });
 
-    const {element} = render(
+    const {element, getAllByTestId} = render(
       <ToolBarIcons
         onPolicyCreateClick={handlePolicyCreateClick}
         onPolicyImportClick={handlePolicyImportClick}
       />,
     );
     expect(element).toMatchSnapshot();
+
+    const icons = getAllByTestId('svg-icon');
+    const links = element.querySelectorAll('a');
+
+    expect(icons[0]).toHaveAttribute('title', 'Help: Policies');
+    expect(links[0]).toHaveAttribute(
+      'href',
+      'test/en/compliance-and-special-scans.html#configuring-and-managing-policies',
+    );
   });
 
   test('should call click handlers', () => {
     const handlePolicyCreateClick = jest.fn();
     const handlePolicyImportClick = jest.fn();
 
+    const gmp = {settings: {manualUrl}};
+
     const {render} = rendererWith({
+      gmp,
       capabilities: caps,
       router: true,
     });
@@ -155,20 +170,23 @@ describe('PoliciesPage ToolBarIcons test', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(icons[0]);
-    expect(handlePolicyCreateClick).toHaveBeenCalled();
-    expect(icons[0]).toHaveAttribute('title', 'New Policy');
-
     fireEvent.click(icons[1]);
+    expect(handlePolicyCreateClick).toHaveBeenCalled();
+    expect(icons[1]).toHaveAttribute('title', 'New Policy');
+
+    fireEvent.click(icons[2]);
     expect(handlePolicyImportClick).toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Import Policy');
+    expect(icons[2]).toHaveAttribute('title', 'Import Policy');
   });
 
   test('should not show icons if user does not have the right permissions', () => {
     const handlePolicyCreateClick = jest.fn();
     const handlePolicyImportClick = jest.fn();
 
+    const gmp = {settings: {manualUrl}};
+
     const {render} = rendererWith({
+      gmp,
       capabilities: wrongCaps,
       router: true,
     });
@@ -181,6 +199,7 @@ describe('PoliciesPage ToolBarIcons test', () => {
     );
 
     const icons = queryAllByTestId('svg-icon');
-    expect(icons.length).toBe(0);
+    expect(icons.length).toBe(1);
+    expect(icons[0]).toHaveAttribute('title', 'Help: Policies');
   });
 });
