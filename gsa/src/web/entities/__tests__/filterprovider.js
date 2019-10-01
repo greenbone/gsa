@@ -145,6 +145,44 @@ describe('FilterProvider component tests', () => {
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
   });
 
+  test('should use fallbackfilter if defaultSettingFilter could not be loaded', async () => {
+    const resultingFilter = Filter.fromString('fall=back rows=42');
+
+    const fallbackFilter = Filter.fromString('fall=back');
+
+    const getSetting = jest.fn().mockResolvedValue({});
+    const gmp = {
+      user: {
+        getSetting,
+      },
+    };
+
+    const {render, store} = rendererWith({
+      gmp,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.error('task', new Error('an error')),
+    );
+
+    const renderFunc = jest
+      .fn()
+      .mockReturnValue(<span data-testid="awaiting-span" />);
+
+    const {getByTestId} = render(
+      <FilterProvider gmpname="task" fallbackFilter={fallbackFilter}>
+        {renderFunc}
+      </FilterProvider>,
+    );
+
+    await waitForElement(() => getByTestId('awaiting-span'));
+
+    expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
+  });
+
   test('should use fallbackFilter if given', async () => {
     // if no usersettings defaultFilter exists use the given fallbackFilter
     const resultingFilter = Filter.fromString('fall=back rows=42');
