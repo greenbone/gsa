@@ -81,8 +81,8 @@ const ToolBarIcons = ({
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
-          page="search"
-          searchTerm="tls certificates"
+          page="managing-assets"
+          anchor="managing-tls-certificates"
           title={_('Help: TLS Certificate Assets')}
         />
         <ListIcon title={_('TLS Certificates List')} page="tlscertificates" />
