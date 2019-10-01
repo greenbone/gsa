@@ -93,7 +93,7 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-export default withEntitiesContainer('vuln', {
+export default withEntitiesContainer('vulnerability', {
   entitiesSelector,
   loadEntities,
 })(Page);
