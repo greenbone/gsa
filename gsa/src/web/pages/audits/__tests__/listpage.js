@@ -18,6 +18,8 @@
  */
 import React from 'react';
 
+import {setLocale} from 'gmp/locale/lang';
+
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -30,6 +32,8 @@ import {entitiesActions} from 'web/store/entities/audits';
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import AuditPage, {ToolBarIcons} from '../listpage';
+
+setLocale('en');
 
 const audit = new Audit({
   _id: '1234',
