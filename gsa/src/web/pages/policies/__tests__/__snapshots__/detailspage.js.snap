@@ -145,7 +145,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   align-items: stretch;
 }
 
-.c5 {
+.c6 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -271,13 +271,13 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   cursor: pointer;
 }
 
-.c6 {
+.c5 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c6 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
@@ -554,11 +554,26 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
             margin="5px"
           >
             <a
-              class="c5"
+              href="test/en/compliance-and-special-scans.html#configuring-and-managing-policies"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <span
+                class="c5 "
+                data-testid="svg-icon"
+                title="Help: Policies"
+              >
+                <svg>
+                  help.svg
+                </svg>
+              </span>
+            </a>
+            <a
+              class="c6"
               href="/policies"
             >
               <span
-                class="c6 "
+                class="c5 "
                 data-testid="svg-icon"
                 title="Policies List"
               >
@@ -577,7 +592,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
             margin="5px"
           >
             <span
-              class="c6 c7"
+              class="c5 c7"
               data-testid="svg-icon"
               title="Clone Policy"
             >
@@ -586,7 +601,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
               </svg>
             </span>
             <span
-              class="c6 c7"
+              class="c5 c7"
               data-testid="svg-icon"
               title="Edit Policy"
             >
@@ -595,7 +610,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
               </svg>
             </span>
             <span
-              class="c6 c7"
+              class="c5 c7"
               data-testid="svg-icon"
               title="Move Policy to trashcan"
             >
@@ -604,7 +619,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
               </svg>
             </span>
             <span
-              class="c6 c7"
+              class="c5 c7"
               data-testid="svg-icon"
               title="Export Policy as XML"
             >
@@ -835,7 +850,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
                         margin="5px"
                       >
                         <a
-                          class="c5"
+                          class="c6"
                           data-testid="details-link"
                           href="/audit/1234"
                         >
@@ -843,7 +858,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
                         </a>
                         ,
                         <a
-                          class="c5"
+                          class="c6"
                           data-testid="details-link"
                           href="/audit/5678"
                         >
@@ -864,7 +879,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
 `;
 
 exports[`Policy ToolBarIcons tests should render 1`] = `
-.c3 {
+.c4 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -957,13 +972,13 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
   cursor: pointer;
 }
 
-.c4 {
+.c3 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c4 * {
+.c3 * {
   height: inherit;
   width: inherit;
 }
@@ -989,11 +1004,26 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
         margin="5px"
       >
         <a
-          class="c3"
+          href="test/en/compliance-and-special-scans.html#configuring-and-managing-policies"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <span
+            class="c3 "
+            data-testid="svg-icon"
+            title="Help: Policies"
+          >
+            <svg>
+              help.svg
+            </svg>
+          </span>
+        </a>
+        <a
+          class="c4"
           href="/policies"
         >
           <span
-            class="c4 "
+            class="c3 "
             data-testid="svg-icon"
             title="Policies List"
           >
@@ -1012,7 +1042,7 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
         margin="5px"
       >
         <span
-          class="c4 c5"
+          class="c3 c5"
           data-testid="svg-icon"
           title="Clone Policy"
         >
@@ -1021,7 +1051,7 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
           </svg>
         </span>
         <span
-          class="c4 c5"
+          class="c3 c5"
           data-testid="svg-icon"
           title="Edit Policy"
         >
@@ -1030,7 +1060,7 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
           </svg>
         </span>
         <span
-          class="c4 c5"
+          class="c3 c5"
           data-testid="svg-icon"
           title="Move Policy to trashcan"
         >
@@ -1039,7 +1069,7 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
           </svg>
         </span>
         <span
-          class="c4 c5"
+          class="c3 c5"
           data-testid="svg-icon"
           title="Export Policy as XML"
         >

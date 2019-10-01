@@ -18,6 +18,8 @@
  */
 import React from 'react';
 
+import {setLocale} from 'gmp/locale/lang';
+
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -30,6 +32,8 @@ import {entitiesActions} from 'web/store/entities/audits';
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import AuditPage, {ToolBarIcons} from '../listpage';
+
+setLocale('en');
 
 const audit = new Audit({
   _id: '1234',
@@ -139,21 +143,40 @@ describe('AuditPage ToolBarIcons test', () => {
   test('should render', () => {
     const handleAuditCreateClick = jest.fn();
 
+    const gmp = {
+      settings: {manualUrl},
+    };
+
     const {render} = rendererWith({
+      gmp,
       capabilities: caps,
       router: true,
     });
 
-    const {element} = render(
+    const {element, getAllByTestId} = render(
       <ToolBarIcons onAuditCreateClick={handleAuditCreateClick} />,
     );
     expect(element).toMatchSnapshot();
+
+    const icons = getAllByTestId('svg-icon');
+    const links = element.querySelectorAll('a');
+
+    expect(icons[0]).toHaveAttribute('title', 'Help: Audits');
+    expect(links[0]).toHaveAttribute(
+      'href',
+      'test/en/compliance-and-special-scans.html#configuring-and-managing-audits',
+    );
   });
 
   test('should call click handlers', () => {
     const handleAuditCreateClick = jest.fn();
 
+    const gmp = {
+      settings: {manualUrl},
+    };
+
     const {render} = rendererWith({
+      gmp,
       capabilities: caps,
       router: true,
     });
@@ -164,15 +187,20 @@ describe('AuditPage ToolBarIcons test', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(icons[0]);
+    fireEvent.click(icons[1]);
     expect(handleAuditCreateClick).toHaveBeenCalled();
-    expect(icons[0]).toHaveAttribute('title', 'New Audit');
+    expect(icons[1]).toHaveAttribute('title', 'New Audit');
   });
 
   test('should not show icons if user does not have the right permissions', () => {
     const handleAuditCreateClick = jest.fn();
 
+    const gmp = {
+      settings: {manualUrl},
+    };
+
     const {render} = rendererWith({
+      gmp,
       capabilities: wrongCaps,
       router: true,
     });
@@ -182,6 +210,7 @@ describe('AuditPage ToolBarIcons test', () => {
     );
 
     const icons = queryAllByTestId('svg-icon');
-    expect(icons.length).toBe(0);
+    expect(icons.length).toBe(1);
+    expect(icons[0]).toHaveAttribute('title', 'Help: Audits');
   });
 });

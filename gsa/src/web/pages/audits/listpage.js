@@ -39,6 +39,7 @@ import PageTitle from 'web/components/layout/pagetitle';
 import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 
 import NewIcon from 'web/components/icon/newicon';
+import ManualIcon from 'web/components/icon/manualicon';
 
 import AuditComponent from './component';
 import Table from './table';
@@ -48,6 +49,11 @@ import AuditIcon from 'web/components/icon/auditicon';
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAuditCreateClick}) => (
     <IconDivider>
+      <ManualIcon
+        page="compliance-and-special-scans"
+        anchor="configuring-and-managing-audits"
+        title={_('Help: Audits')}
+      />
       {capabilities.mayCreate('task') && (
         <NewIcon title={_('New Audit')} onClick={onAuditCreateClick} />
       )}

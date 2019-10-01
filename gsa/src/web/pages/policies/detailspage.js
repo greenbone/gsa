@@ -27,6 +27,7 @@ import PageTitle from 'web/components/layout/pagetitle';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
 import PolicyIcon from 'web/components/icon/policyicon';
 
 import Tab from 'web/components/tab/tab';
@@ -78,6 +79,11 @@ export const ToolBarIcons = withCapabilities(
   }) => (
     <Divider margin="10px">
       <IconDivider>
+        <ManualIcon
+          page="compliance-and-special-scans"
+          anchor="configuring-and-managing-policies"
+          title={_('Help: Policies')}
+        />
         <ListIcon title={_('Policies List')} page="policies" />
       </IconDivider>
       <IconDivider>
