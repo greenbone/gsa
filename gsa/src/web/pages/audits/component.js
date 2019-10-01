@@ -405,8 +405,6 @@ class AuditComponent extends React.Component {
         {id},
         {
           reportFormatId: reportFormat.id,
-          deltaReportId: undefined,
-          filter: undefined,
         },
       )
       .then(response => {
@@ -414,7 +412,7 @@ class AuditComponent extends React.Component {
         const filename = generateFilename({
           extension,
           fileNameFormat: reportExportFileName,
-          id: id,
+          id,
           reportFormat: reportFormat.name,
           resourceName: audit.name,
           resourceType: 'report',
