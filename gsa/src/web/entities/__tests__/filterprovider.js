@@ -295,4 +295,38 @@ describe('FilterProvider component tests', () => {
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
   });
+
+  test('should use default rows per page if rows per page setting could not be loaded', async () => {
+    const resultingFilter = Filter.fromString('fall=back rows=50');
+    const fallbackFilter = Filter.fromString('fall=back');
+
+    const getSetting = jest.fn().mockRejectedValue(new Error('an error'));
+    const gmp = {
+      user: {
+        getSetting,
+      },
+    };
+
+    const {render, store} = rendererWith({
+      gmp,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(loadingActions.error(new Error('an error')));
+
+    const renderFunc = jest
+      .fn()
+      .mockReturnValue(<span data-testid="awaiting-span" />);
+
+    const {getByTestId} = render(
+      <FilterProvider fallbackFilter={fallbackFilter} gmpname="task">
+        {renderFunc}
+      </FilterProvider>,
+    );
+
+    await waitForElement(() => getByTestId('awaiting-span'));
+
+    expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
+  });
 });

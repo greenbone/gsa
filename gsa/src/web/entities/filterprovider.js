@@ -25,7 +25,10 @@ import {withRouter} from 'react-router-dom';
 
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/users';
 
-import Filter, {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
+import Filter, {
+  DEFAULT_FALLBACK_FILTER,
+  DEFAULT_ROWS_PER_PAGE,
+} from 'gmp/models/filter';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -75,9 +78,13 @@ const FilterProvider = ({
     gmpname,
   ]);
 
-  const rowsPerPage = useSelector(state =>
-    getUserSettingsDefaults(state).getValueByName('rowsperpage'),
-  );
+  let [rowsPerPage, rowsPerPageError] = useSelector(state => {
+    const userSettingDefaultSel = getUserSettingsDefaults(state);
+    return [
+      userSettingDefaultSel.getValueByName('rowsperpage'),
+      userSettingDefaultSel.getError(),
+    ];
+  });
 
   useEffect(() => {
     if (!isDefined(rowsPerPage)) {
@@ -112,6 +119,10 @@ const FilterProvider = ({
     returnedFilter = fallbackFilter;
   } else {
     returnedFilter = DEFAULT_FALLBACK_FILTER;
+  }
+
+  if (!isDefined(rowsPerPage) && isDefined(rowsPerPageError)) {
+    rowsPerPage = DEFAULT_ROWS_PER_PAGE;
   }
 
   if (!returnedFilter.has('rows') && isDefined(rowsPerPage)) {
