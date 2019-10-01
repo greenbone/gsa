@@ -79,7 +79,7 @@ const Field = props => {
 Field.propTypes = {
   disabled: PropTypes.bool,
   name: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.any,
   onChange: PropTypes.func,
 };
 
