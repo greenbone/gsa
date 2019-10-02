@@ -50,8 +50,8 @@ import TlsCertificateComponent from './component';
 const ToolBarIcons = () => (
   <Layout>
     <ManualIcon
-      page="search"
-      searchTerm="tls certificates"
+      page="managing-assets"
+      anchor="managing-tls-certificates"
       title={_('Help: TLS Certificate Assets')}
     />
   </Layout>

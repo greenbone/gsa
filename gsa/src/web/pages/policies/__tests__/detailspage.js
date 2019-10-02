@@ -242,7 +242,7 @@ describe('Policy Detailspage tests', () => {
         get: getPermissions,
       },
       reloadInterval,
-      settings: {},
+      settings: {manualUrl},
       user: {
         currentSettings,
       },
@@ -268,11 +268,16 @@ describe('Policy Detailspage tests', () => {
     expect(element).toHaveTextContent('Policy: foo');
 
     const links = baseElement.querySelectorAll('a');
-    expect(links[0]).toHaveAttribute('href', '/policies');
-
     const icons = getAllByTestId('svg-icon');
 
-    expect(icons[0]).toHaveAttribute('title', 'Policies List');
+    expect(icons[0]).toHaveAttribute('title', 'Help: Policies');
+    expect(links[0]).toHaveAttribute(
+      'href',
+      'test/en/compliance-and-special-scans.html#configuring-and-managing-policies',
+    );
+
+    expect(links[1]).toHaveAttribute('href', '/policies');
+    expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
     expect(element).toHaveTextContent('12345');
     expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:31 AM CEST');
@@ -305,7 +310,7 @@ describe('Policy Detailspage tests', () => {
         get: getPermissions,
       },
       reloadInterval,
-      settings: {},
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
@@ -342,35 +347,37 @@ describe('Policy Detailspage tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    expect(links[1]).toHaveAttribute(
+    expect(links[2]).toHaveAttribute(
       'href',
       '/nvts?filter=family%3D%22family1%22',
     );
-    expect(links[1]).toHaveAttribute('title', 'NVTs of family family1');
-    expect(links[2]).toHaveAttribute(
+    expect(links[2]).toHaveAttribute('title', 'NVTs of family family1');
+
+    expect(links[3]).toHaveAttribute(
       'href',
       '/nvts?filter=family%3D%22family2%22',
     );
-    expect(links[2]).toHaveAttribute('title', 'NVTs of family family2');
-    expect(links[3]).toHaveAttribute(
+    expect(links[3]).toHaveAttribute('title', 'NVTs of family family2');
+
+    expect(links[4]).toHaveAttribute(
       'href',
       '/nvts?filter=family%3D%22family3%22',
     );
-    expect(links[3]).toHaveAttribute('title', 'NVTs of family family3');
+    expect(links[4]).toHaveAttribute('title', 'NVTs of family family3');
 
-    expect(icons[6]).toHaveAttribute(
+    expect(icons[7]).toHaveAttribute(
       'title',
       'The families selection is DYNAMIC. New families will automatically be added and considered.',
     );
-    expect(icons[7]).toHaveAttribute(
+    expect(icons[8]).toHaveAttribute(
       'title',
       'The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.',
     );
-    expect(icons[8]).toHaveAttribute(
+    expect(icons[9]).toHaveAttribute(
       'title',
       'The NVT selection is STATIC. New NVTs will NOT automatically be added and considered.',
     );
-    expect(icons[9]).toHaveAttribute(
+    expect(icons[10]).toHaveAttribute(
       'title',
       'The NVT selection is STATIC. New NVTs will NOT automatically be added and considered.',
     );
@@ -391,7 +398,7 @@ describe('Policy Detailspage tests', () => {
         get: getPermissions,
       },
       reloadInterval,
-      settings: {},
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
@@ -472,7 +479,7 @@ describe('Policy Detailspage tests', () => {
     const {baseElement, element} = render(<Detailspage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[13]);
+    fireEvent.click(spans[14]);
 
     expect(element).toHaveTextContent('No permissions available');
   });
@@ -526,7 +533,7 @@ describe('Policy Detailspage tests', () => {
         getAll: getAllScanners,
       },
       reloadInterval,
-      settings: {},
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
@@ -548,24 +555,24 @@ describe('Policy Detailspage tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    expect(icons[0]).toHaveAttribute('title', 'Policies List');
-
-    fireEvent.click(icons[1]);
-    expect(clone).toHaveBeenCalledWith(policy);
-    expect(icons[1]).toHaveAttribute('title', 'Clone Policy');
+    expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
     fireEvent.click(icons[2]);
-    expect(getNvtFamilies).toHaveBeenCalled();
-    expect(getAllScanners).toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Edit Policy');
+    expect(clone).toHaveBeenCalledWith(policy);
+    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
     fireEvent.click(icons[3]);
-    expect(deleteFunc).toHaveBeenCalledWith(policy);
-    expect(icons[3]).toHaveAttribute('title', 'Move Policy to trashcan');
+    expect(getNvtFamilies).toHaveBeenCalled();
+    expect(getAllScanners).toHaveBeenCalled();
+    expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
 
     fireEvent.click(icons[4]);
+    expect(deleteFunc).toHaveBeenCalledWith(policy);
+    expect(icons[4]).toHaveAttribute('title', 'Move Policy to trashcan');
+
+    fireEvent.click(icons[5]);
     expect(exportFunc).toHaveBeenCalledWith(policy);
-    expect(icons[4]).toHaveAttribute('title', 'Export Policy as XML');
+    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 
   test('should not call commands without permission', () => {
@@ -618,7 +625,7 @@ describe('Policy Detailspage tests', () => {
         getAll: getAllScanners,
       },
       reloadInterval,
-      settings: {},
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
@@ -640,33 +647,33 @@ describe('Policy Detailspage tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    expect(icons[0]).toHaveAttribute('title', 'Policies List');
+    expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    fireEvent.click(icons[1]);
+    fireEvent.click(icons[2]);
     expect(clone).not.toHaveBeenCalledWith(policy2);
-    expect(icons[1]).toHaveAttribute(
+    expect(icons[2]).toHaveAttribute(
       'title',
       'Permission to clone Policy denied',
     );
 
-    fireEvent.click(icons[2]);
+    fireEvent.click(icons[3]);
     expect(getNvtFamilies).not.toHaveBeenCalled();
     expect(getAllScanners).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute(
+    expect(icons[3]).toHaveAttribute(
       'title',
       'Permission to edit Policy denied',
     );
 
-    fireEvent.click(icons[3]);
+    fireEvent.click(icons[4]);
     expect(deleteFunc).not.toHaveBeenCalledWith(policy2);
-    expect(icons[3]).toHaveAttribute(
+    expect(icons[4]).toHaveAttribute(
       'title',
       'Permission to move Policy to trashcan denied',
     );
 
-    fireEvent.click(icons[4]);
+    fireEvent.click(icons[5]);
     expect(exportFunc).toHaveBeenCalledWith(policy2);
-    expect(icons[4]).toHaveAttribute('title', 'Export Policy as XML');
+    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 
   test('should (not) call commands if policy is in use', () => {
@@ -719,7 +726,7 @@ describe('Policy Detailspage tests', () => {
         getAll: getAllScanners,
       },
       reloadInterval,
-      settings: {},
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
@@ -741,24 +748,24 @@ describe('Policy Detailspage tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    expect(icons[0]).toHaveAttribute('title', 'Policies List');
-
-    fireEvent.click(icons[1]);
-    expect(clone).toHaveBeenCalledWith(policy3);
-    expect(icons[1]).toHaveAttribute('title', 'Clone Policy');
+    expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
     fireEvent.click(icons[2]);
-    expect(getNvtFamilies).toHaveBeenCalled();
-    expect(getAllScanners).toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Edit Policy');
+    expect(clone).toHaveBeenCalledWith(policy3);
+    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
     fireEvent.click(icons[3]);
-    expect(deleteFunc).not.toHaveBeenCalledWith(policy3);
-    expect(icons[3]).toHaveAttribute('title', 'Policy is still in use');
+    expect(getNvtFamilies).toHaveBeenCalled();
+    expect(getAllScanners).toHaveBeenCalled();
+    expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
 
     fireEvent.click(icons[4]);
+    expect(deleteFunc).not.toHaveBeenCalledWith(policy3);
+    expect(icons[4]).toHaveAttribute('title', 'Policy is still in use');
+
+    fireEvent.click(icons[5]);
     expect(exportFunc).toHaveBeenCalledWith(policy3);
-    expect(icons[4]).toHaveAttribute('title', 'Export Policy as XML');
+    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 
   test('should (not) call commands if policy is not writable', () => {
@@ -811,7 +818,7 @@ describe('Policy Detailspage tests', () => {
         getAll: getAllScanners,
       },
       reloadInterval,
-      settings: {},
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
@@ -833,24 +840,24 @@ describe('Policy Detailspage tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    expect(icons[0]).toHaveAttribute('title', 'Policies List');
-
-    fireEvent.click(icons[1]);
-    expect(clone).toHaveBeenCalledWith(policy4);
-    expect(icons[1]).toHaveAttribute('title', 'Clone Policy');
+    expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
     fireEvent.click(icons[2]);
-    expect(getNvtFamilies).not.toHaveBeenCalled();
-    expect(getAllScanners).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Policy is not writable');
+    expect(clone).toHaveBeenCalledWith(policy4);
+    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
     fireEvent.click(icons[3]);
-    expect(deleteFunc).not.toHaveBeenCalledWith(policy4);
+    expect(getNvtFamilies).not.toHaveBeenCalled();
+    expect(getAllScanners).not.toHaveBeenCalled();
     expect(icons[3]).toHaveAttribute('title', 'Policy is not writable');
 
     fireEvent.click(icons[4]);
+    expect(deleteFunc).not.toHaveBeenCalledWith(policy4);
+    expect(icons[4]).toHaveAttribute('title', 'Policy is not writable');
+
+    fireEvent.click(icons[5]);
     expect(exportFunc).toHaveBeenCalledWith(policy4);
-    expect(icons[4]).toHaveAttribute('title', 'Export Policy as XML');
+    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 
   // TODO: should render scanner preferences tab
@@ -863,12 +870,15 @@ describe('Policy ToolBarIcons tests', () => {
     const handlePolicyDownloadClick = jest.fn();
     const handlePolicyEditClick = jest.fn();
 
+    const gmp = {settings: {manualUrl}};
+
     const {render} = rendererWith({
+      gmp,
       capabilities: caps,
       router: true,
     });
 
-    const {element} = render(
+    const {element, getAllByTestId} = render(
       <ToolBarIcons
         entity={policy}
         onPolicyCloneClick={handlePolicyCloneClick}
@@ -879,6 +889,18 @@ describe('Policy ToolBarIcons tests', () => {
     );
 
     expect(element).toMatchSnapshot();
+
+    const links = element.querySelectorAll('a');
+    const icons = getAllByTestId('svg-icon');
+
+    expect(icons[0]).toHaveAttribute('title', 'Help: Policies');
+    expect(links[0]).toHaveAttribute(
+      'href',
+      'test/en/compliance-and-special-scans.html#configuring-and-managing-policies',
+    );
+
+    expect(links[1]).toHaveAttribute('href', '/policies');
+    expect(icons[1]).toHaveAttribute('title', 'Policies List');
   });
 
   test('should call click handlers', () => {
@@ -887,7 +909,10 @@ describe('Policy ToolBarIcons tests', () => {
     const handlePolicyDownloadClick = jest.fn();
     const handlePolicyEditClick = jest.fn();
 
+    const gmp = {settings: {manualUrl}};
+
     const {render} = rendererWith({
+      gmp,
       capabilities: caps,
       router: true,
     });
@@ -904,23 +929,21 @@ describe('Policy ToolBarIcons tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    expect(icons[0]).toHaveAttribute('title', 'Policies List');
-
-    fireEvent.click(icons[1]);
-    expect(handlePolicyCloneClick).toHaveBeenCalledWith(policy);
-    expect(icons[1]).toHaveAttribute('title', 'Clone Policy');
-
     fireEvent.click(icons[2]);
-    expect(handlePolicyEditClick).toHaveBeenCalledWith(policy);
-    expect(icons[2]).toHaveAttribute('title', 'Edit Policy');
+    expect(handlePolicyCloneClick).toHaveBeenCalledWith(policy);
+    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
     fireEvent.click(icons[3]);
-    expect(handlePolicyDeleteClick).toHaveBeenCalledWith(policy);
-    expect(icons[3]).toHaveAttribute('title', 'Move Policy to trashcan');
+    expect(handlePolicyEditClick).toHaveBeenCalledWith(policy);
+    expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
 
     fireEvent.click(icons[4]);
+    expect(handlePolicyDeleteClick).toHaveBeenCalledWith(policy);
+    expect(icons[4]).toHaveAttribute('title', 'Move Policy to trashcan');
+
+    fireEvent.click(icons[5]);
     expect(handlePolicyDownloadClick).toHaveBeenCalledWith(policy);
-    expect(icons[4]).toHaveAttribute('title', 'Export Policy as XML');
+    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 
   test('should not call click handlers without permission', () => {
@@ -929,7 +952,10 @@ describe('Policy ToolBarIcons tests', () => {
     const handlePolicyDownloadClick = jest.fn();
     const handlePolicyEditClick = jest.fn();
 
+    const gmp = {settings: {manualUrl}};
+
     const {render} = rendererWith({
+      gmp,
       capabilities: caps,
       router: true,
     });
@@ -946,32 +972,30 @@ describe('Policy ToolBarIcons tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    expect(icons[0]).toHaveAttribute('title', 'Policies List');
-
-    fireEvent.click(icons[1]);
+    fireEvent.click(icons[2]);
     expect(handlePolicyCloneClick).not.toHaveBeenCalledWith(policy2);
-    expect(icons[1]).toHaveAttribute(
+    expect(icons[2]).toHaveAttribute(
       'title',
       'Permission to clone Policy denied',
     );
 
-    fireEvent.click(icons[2]);
+    fireEvent.click(icons[3]);
     expect(handlePolicyEditClick).not.toHaveBeenCalledWith(policy2);
-    expect(icons[2]).toHaveAttribute(
+    expect(icons[3]).toHaveAttribute(
       'title',
       'Permission to edit Policy denied',
     );
 
-    fireEvent.click(icons[3]);
+    fireEvent.click(icons[4]);
     expect(handlePolicyDeleteClick).not.toHaveBeenCalledWith(policy2);
-    expect(icons[3]).toHaveAttribute(
+    expect(icons[4]).toHaveAttribute(
       'title',
       'Permission to move Policy to trashcan denied',
     );
 
-    fireEvent.click(icons[4]);
+    fireEvent.click(icons[5]);
     expect(handlePolicyDownloadClick).toHaveBeenCalledWith(policy2);
-    expect(icons[4]).toHaveAttribute('title', 'Export Policy as XML');
+    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 
   test('should (not) call click handlers if policy is in use', () => {
@@ -980,7 +1004,10 @@ describe('Policy ToolBarIcons tests', () => {
     const handlePolicyDownloadClick = jest.fn();
     const handlePolicyEditClick = jest.fn();
 
+    const gmp = {settings: {manualUrl}};
+
     const {render} = rendererWith({
+      gmp,
       capabilities: caps,
       router: true,
     });
@@ -997,23 +1024,21 @@ describe('Policy ToolBarIcons tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    expect(icons[0]).toHaveAttribute('title', 'Policies List');
-
-    fireEvent.click(icons[1]);
-    expect(handlePolicyCloneClick).toHaveBeenCalledWith(policy3);
-    expect(icons[1]).toHaveAttribute('title', 'Clone Policy');
-
     fireEvent.click(icons[2]);
-    expect(handlePolicyEditClick).toHaveBeenCalledWith(policy3);
-    expect(icons[2]).toHaveAttribute('title', 'Edit Policy');
+    expect(handlePolicyCloneClick).toHaveBeenCalledWith(policy3);
+    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
     fireEvent.click(icons[3]);
-    expect(handlePolicyDeleteClick).not.toHaveBeenCalledWith(policy3);
-    expect(icons[3]).toHaveAttribute('title', 'Policy is still in use');
+    expect(handlePolicyEditClick).toHaveBeenCalledWith(policy3);
+    expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
 
     fireEvent.click(icons[4]);
+    expect(handlePolicyDeleteClick).not.toHaveBeenCalledWith(policy3);
+    expect(icons[4]).toHaveAttribute('title', 'Policy is still in use');
+
+    fireEvent.click(icons[5]);
     expect(handlePolicyDownloadClick).toHaveBeenCalledWith(policy3);
-    expect(icons[4]).toHaveAttribute('title', 'Export Policy as XML');
+    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 
   test('should (not) call click handlers if policy is not writable', () => {
@@ -1022,7 +1047,10 @@ describe('Policy ToolBarIcons tests', () => {
     const handlePolicyDownloadClick = jest.fn();
     const handlePolicyEditClick = jest.fn();
 
+    const gmp = {settings: {manualUrl}};
+
     const {render} = rendererWith({
+      gmp,
       capabilities: caps,
       router: true,
     });
@@ -1039,22 +1067,20 @@ describe('Policy ToolBarIcons tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    expect(icons[0]).toHaveAttribute('title', 'Policies List');
-
-    fireEvent.click(icons[1]);
-    expect(handlePolicyCloneClick).toHaveBeenCalledWith(policy4);
-    expect(icons[1]).toHaveAttribute('title', 'Clone Policy');
-
     fireEvent.click(icons[2]);
-    expect(handlePolicyEditClick).not.toHaveBeenCalledWith(policy4);
-    expect(icons[2]).toHaveAttribute('title', 'Policy is not writable');
+    expect(handlePolicyCloneClick).toHaveBeenCalledWith(policy4);
+    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
     fireEvent.click(icons[3]);
-    expect(handlePolicyDeleteClick).not.toHaveBeenCalledWith(policy4);
+    expect(handlePolicyEditClick).not.toHaveBeenCalledWith(policy4);
     expect(icons[3]).toHaveAttribute('title', 'Policy is not writable');
 
     fireEvent.click(icons[4]);
+    expect(handlePolicyDeleteClick).not.toHaveBeenCalledWith(policy4);
+    expect(icons[4]).toHaveAttribute('title', 'Policy is not writable');
+
+    fireEvent.click(icons[5]);
     expect(handlePolicyDownloadClick).toHaveBeenCalledWith(policy4);
-    expect(icons[4]).toHaveAttribute('title', 'Export Policy as XML');
+    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 });

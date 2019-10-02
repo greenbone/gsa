@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- Added links for GOS 6 manual for audits, policies and TLS certificates [#1657](https://github.com/greenbone/gsa/pull/1657)
 - Added OSP Sensor type to GSA [#1646](https://github.com/greenbone/gsa/pull/1646)
 - Added TLS certificate filter type [#1630](https://github.com/greenbone/gsa/pull/1630)
 - Added change method to Field and TextArea component, removed withChangeHandler [#1625](https://github.com/greenbone/gsa/pull/1625)

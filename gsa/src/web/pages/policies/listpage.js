@@ -31,6 +31,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import PolicyIcon from 'web/components/icon/policyicon';
 import UploadIcon from 'web/components/icon/uploadicon';
 import NewIcon from 'web/components/icon/newicon';
+import ManualIcon from 'web/components/icon/manualicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
@@ -46,6 +47,11 @@ import Table from './table';
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onPolicyCreateClick, onPolicyImportClick}) => (
     <IconDivider>
+      <ManualIcon
+        page="compliance-and-special-scans"
+        anchor="configuring-and-managing-policies"
+        title={_('Help: Policies')}
+      />
       {capabilities.mayCreate('config') && (
         <NewIcon title={_('New Policy')} onClick={onPolicyCreateClick} />
       )}
