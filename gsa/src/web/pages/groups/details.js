@@ -32,7 +32,7 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-const GroupDetails = ({entity, links}) => {
+const GroupDetails = ({entity, isSpecial, links}) => {
   const {users = [], comment} = entity;
   return (
     <Layout flex="column" grow>
@@ -57,6 +57,12 @@ const GroupDetails = ({entity, links}) => {
               </HorizontalSep>
             </TableData>
           </TableRow>
+          {isSpecial && (
+            <TableRow>
+              <TableData>{_('Note: ')}</TableData>
+              <TableData>{_('Special group')}</TableData>
+            </TableRow>
+          )}
         </TableBody>
       </InfoTable>
     </Layout>
@@ -65,6 +71,7 @@ const GroupDetails = ({entity, links}) => {
 
 GroupDetails.propTypes = {
   entity: PropTypes.model.isRequired,
+  isSpecial: PropTypes.bool,
   links: PropTypes.bool,
 };
 
