@@ -106,7 +106,7 @@ import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
 
-const ToolBarIcons = ({
+export const ToolBarIcons = ({
   entity,
   links,
   notes = [],
