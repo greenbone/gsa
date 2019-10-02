@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [20.04] - unreleased
+
+### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+[20.04]: https://github.com/greenbone/gsa/compare/gsa-9.0...master
+
 ## [9.0.0] - unreleased
 
 ### Added
