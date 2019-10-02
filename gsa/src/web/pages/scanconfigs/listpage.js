@@ -47,7 +47,7 @@ import {
 import ScanConfigComponent from './component';
 import Table, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = withCapabilities(
+export const ToolBarIcons = withCapabilities(
   ({capabilities, onScanConfigCreateClick, onScanConfigImportClick}) => (
     <IconDivider>
       <ManualIcon
