@@ -23,31 +23,42 @@ import {isDefined} from '../../utils/identity';
 import {setProperties, parseInt, parseSeverity} from '../../parser';
 
 class ReportPort {
-  constructor(elem) {
-    this.parseProperties(elem);
+  constructor() {
+    this.hosts = {
+      hostsByIp: {},
+      count: 0,
+    };
   }
 
   addHost(host) {
-    if (!(host.ip in this.hosts.hosts_by_ip)) {
-      this.hosts.hosts_by_ip[host.ip] = host;
+    if (!(host.ip in this.hosts.hostsByIp)) {
+      this.hosts.hostsByIp[host.ip] = host;
       this.hosts.count++;
     }
   }
 
   setSeverity(severity) {
-    if (severity > this.severity) {
-      this._severity = severity;
+    if (!isDefined(this.severity) || this.severity < severity) {
+      this.severity = severity;
     }
   }
 
-  parseProperties(elem) {
+  static fromElement(element) {
+    const port = new ReportPort();
+
+    setProperties(this.parseElement(element), port);
+
+    return port;
+  }
+
+  static parseElement(element = {}) {
     const copy = {};
-    const {__text: name} = elem;
+    const {__text: name} = element;
 
     copy.id = name;
-    copy.threat = elem.threat;
+    copy.threat = element.threat;
 
-    if (name.includes('/')) {
+    if (isDefined(name) && name.includes('/')) {
       const [number, protocol] = name.split('/');
 
       copy.number = parseInt(number);
@@ -60,20 +71,9 @@ class ReportPort {
       copy.protocol = protocol;
     }
 
-    copy.hosts = {
-      hosts_by_ip: {},
-      count: 0,
-    };
-
-    setProperties(copy, this);
-
-    this._severity = parseSeverity(elem.severity);
+    copy.severity = parseSeverity(element.severity);
 
     return copy;
-  }
-
-  get severity() {
-    return this._severity;
   }
 }
 
