@@ -59,7 +59,7 @@ class Host {
 
     if (isDefined(result_count)) {
       copy.result_counts = {
-        hole: parse_page_count(result_count.hole),
+        high: parse_page_count(result_count.hole),
         warning: parse_page_count(result_count.warning),
         info: parse_page_count(result_count.info),
         log: parse_page_count(result_count.log),
