@@ -111,87 +111,92 @@ const Page = ({
   onError,
   onInteraction,
   ...props
-}) => (
-  <GroupComponent
-    onCloned={goto_details('group', props)}
-    onCloneError={onError}
-    onCreated={goto_details('group', props)}
-    onDeleted={goto_list('groups', props)}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
-    {({clone, create, delete: delete_func, download, edit, save}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<GroupIcon size="large" />}
-        title={_('Group')}
-        toolBarIcons={ToolBarIcons}
-        onGroupCloneClick={clone}
-        onGroupCreateClick={create}
-        onGroupDeleteClick={delete_func}
-        onGroupDownloadClick={download}
-        onGroupEditClick={edit}
-        onGroupSaveClick={save}
-        onInteraction={onInteraction}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle title={_('Group: {{name}}', {name: entity.name})} />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+}) => {
+  const isSpecial =
+    permissions.filter(permission => permission.name === 'Super').length > 0;
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <GroupDetails entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onDownloaded={onDownloaded}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </GroupComponent>
-);
+  return (
+    <GroupComponent
+      onCloned={goto_details('group', props)}
+      onCloneError={onError}
+      onCreated={goto_details('group', props)}
+      onDeleted={goto_list('groups', props)}
+      onDeleteError={onError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
+    >
+      {({clone, create, delete: delete_func, download, edit, save}) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<GroupIcon size="large" />}
+          title={_('Group')}
+          toolBarIcons={ToolBarIcons}
+          onGroupCloneClick={clone}
+          onGroupCreateClick={create}
+          onGroupDeleteClick={delete_func}
+          onGroupDownloadClick={download}
+          onGroupEditClick={edit}
+          onGroupSaveClick={save}
+          onInteraction={onInteraction}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle title={_('Group: {{name}}', {name: entity.name})} />
+                <Layout grow="1" flex="column">
+                  <TabLayout grow="1" align={['start', 'end']}>
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <GroupDetails entity={entity} isSpecial={isSpecial} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onDownloaded={onDownloaded}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </GroupComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,
