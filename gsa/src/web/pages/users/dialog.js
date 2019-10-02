@@ -94,7 +94,6 @@ class Dialog extends React.Component {
     const {
       accessHosts = '',
       accessIfaces = '',
-      authMethod = AUTH_METHOD_PASSWORD,
       capabilities,
       comment = '',
       groups,
@@ -114,11 +113,16 @@ class Dialog extends React.Component {
 
     const {confirmationDialogVisible, roleIds} = this.state;
 
+    const isEdit = isDefined(user);
+
     const data = {
       ...user,
       access_hosts: accessHosts,
       access_ifaces: accessIfaces,
-      auth_method: authMethod,
+      auth_method:
+        isEdit && isDefined(user.auth_method)
+          ? user.auth_method
+          : AUTH_METHOD_PASSWORD,
       comment,
       group_ids: groupIds,
       groups,
@@ -133,8 +137,6 @@ class Dialog extends React.Component {
     const controlledValues = {
       role_ids: roleIds,
     };
-
-    const isEdit = isDefined(user);
 
     const rolesOptions = map(roles, role => ({
       label: role.name,
