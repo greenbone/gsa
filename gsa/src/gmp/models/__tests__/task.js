@@ -19,48 +19,274 @@
 
 import 'core-js/features/object/entries';
 
+import Model from 'gmp/model';
+
 import Task, {
   HOSTS_ORDERING_RANDOM,
   HOSTS_ORDERING_REVERSE,
   HOSTS_ORDERING_SEQUENTIAL,
   TASK_STATUS,
 } from 'gmp/models/task';
-import {testModelProperties} from '../testing';
 
-testModelProperties(Task, 'task', {testIsActive: false});
+import Report from '../report';
+import Scanner from '../scanner';
+import Schedule from '../schedule';
 
-describe('Task model tests', () => {
+import {testModel} from '../testing';
+
+describe('Task Model parse tests', () => {
+  testModel(Task, 'task', {testIsActive: false});
+
   test('should parse undefined hosts_ordering', () => {
     const obj = {hosts_ordering: undefined};
-    const task = new Task(obj);
+    const task = Task.fromElement(obj);
     expect(task.hosts_ordering).toBeUndefined();
   });
 
   test('should parse unknown hosts_ordering as undefined', () => {
     const obj = {hosts_ordering: 'foo'};
-    const task = new Task(obj);
+    const task = Task.fromElement(obj);
     expect(task.hosts_ordering).toBeUndefined();
   });
 
   test('should parse known hosts_ordering', () => {
     let obj = {hosts_ordering: HOSTS_ORDERING_RANDOM};
-    let task = new Task(obj);
+    let task = Task.fromElement(obj);
     expect(task.hosts_ordering).toEqual(HOSTS_ORDERING_RANDOM);
 
     obj = {hosts_ordering: HOSTS_ORDERING_REVERSE};
-    task = new Task(obj);
+    task = Task.fromElement(obj);
     expect(task.hosts_ordering).toEqual(HOSTS_ORDERING_REVERSE);
 
     obj = {hosts_ordering: HOSTS_ORDERING_SEQUENTIAL};
-    task = new Task(obj);
+    task = Task.fromElement(obj);
     expect(task.hosts_ordering).toEqual(HOSTS_ORDERING_SEQUENTIAL);
+  });
+
+  test('should parse last_report', () => {
+    const element = {
+      _id: 't1',
+      last_report: {
+        report: {
+          _id: 'r1',
+        },
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.last_report).toBeInstanceOf(Report);
+    expect(task.last_report.id).toEqual('r1');
+    expect(task.last_report.entityType).toEqual('report');
+  });
+
+  test('should parse current_report', () => {
+    const element = {
+      _id: 't1',
+      current_report: {
+        report: {
+          _id: 'r1',
+        },
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.current_report).toBeInstanceOf(Report);
+    expect(task.current_report.id).toEqual('r1');
+    expect(task.current_report.entityType).toEqual('report');
+  });
+
+  test('should parse config', () => {
+    const element = {
+      _id: 't1',
+      config: {
+        _id: 'c1',
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.config).toBeInstanceOf(Model);
+    expect(task.config.id).toEqual('c1');
+    expect(task.config.entityType).toEqual('scanconfig');
+  });
+
+  test('should parse slave', () => {
+    const element = {
+      _id: 't1',
+      slave: {
+        _id: 's1',
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.slave).toBeInstanceOf(Model);
+    expect(task.slave.id).toEqual('s1');
+    expect(task.slave.entityType).toEqual('slave');
+  });
+
+  test('should parse target', () => {
+    const element = {
+      _id: 't1',
+      target: {
+        _id: 't1',
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.target).toBeInstanceOf(Model);
+    expect(task.target.id).toEqual('t1');
+    expect(task.target.entityType).toEqual('target');
+  });
+
+  test('should parse alerts', () => {
+    const element = {
+      _id: 't1',
+      alert: [
+        {
+          _id: 'a1',
+        },
+        {
+          _id: 'a2',
+        },
+      ],
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.alerts[0]).toBeInstanceOf(Model);
+    expect(task.alerts[0].id).toEqual('a1');
+    expect(task.alerts[0].entityType).toEqual('alert');
+    expect(task.alerts[1]).toBeInstanceOf(Model);
+    expect(task.alerts[1].entityType).toEqual('alert');
+    expect(task.alerts[1].id).toEqual('a2');
+  });
+
+  test('should parse scanner', () => {
+    const element = {
+      _id: 't1',
+      scanner: {
+        _id: 's1',
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.scanner).toBeInstanceOf(Scanner);
+    expect(task.scanner.id).toEqual('s1');
+    expect(task.scanner.entityType).toEqual('scanner');
+  });
+
+  test('should parse schedule', () => {
+    const element = {
+      _id: 't1',
+      schedule: {
+        _id: 's1',
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.schedule).toBeInstanceOf(Schedule);
+    expect(task.schedule.id).toEqual('s1');
+    expect(task.schedule.entityType).toEqual('schedule');
+  });
+
+  test('should parse report counts', () => {
+    const element = {
+      _id: 't1',
+      report_count: {
+        __text: '13',
+        finished: '14',
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.report_count.total).toEqual(13);
+    expect(task.report_count.finished).toEqual(14);
+  });
+
+  test('should parse result counts', () => {
+    const element = {
+      _id: 't1',
+      result_count: '666',
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.result_count).toEqual(666);
+  });
+
+  test('should parse schedule periods', () => {
+    const element = {
+      _id: 't1',
+      schedule_periods: '666',
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.schedule_periods).toEqual(666);
+  });
+
+  test('should parse progress', () => {
+    const task1 = Task.fromElement({
+      _id: 't1',
+    });
+
+    expect(task1.progress).toEqual(0);
+
+    const task2 = Task.fromElement({
+      _id: 't1',
+      progress: {},
+    });
+    expect(task2.progress).toEqual(0);
+
+    const task3 = Task.fromElement({
+      _id: 't1',
+      progress: {
+        __text: '66',
+      },
+    });
+    expect(task3.progress).toEqual(66);
+
+    const task4 = Task.fromElement({
+      _id: 't1',
+      progress: '66',
+    });
+    expect(task4.progress).toEqual(66);
   });
 });
 
 describe(`Task Model methods tests`, () => {
   test('should be a container if target_id is not set', () => {
-    const task1 = new Task({});
-    const task2 = new Task({target: {_id: 'foo'}});
+    const task1 = Task.fromElement({});
+    const task2 = Task.fromElement({target: {_id: 'foo'}});
 
     expect(task1.isContainer()).toEqual(true);
     expect(task2.isContainer()).toEqual(false);
@@ -83,7 +309,7 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = new Task({status});
+      const task = Task.fromElement({status});
       expect(task.isActive()).toEqual(exp);
     }
   });
@@ -105,7 +331,7 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = new Task({status});
+      const task = Task.fromElement({status});
       expect(task.isRunning()).toEqual(exp);
     }
   });
@@ -127,7 +353,7 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = new Task({status});
+      const task = Task.fromElement({status});
       expect(task.isStopped()).toEqual(exp);
     }
   });
@@ -149,7 +375,7 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = new Task({status});
+      const task = Task.fromElement({status});
       expect(task.isInterrupted()).toEqual(exp);
     }
   });
@@ -171,16 +397,16 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = new Task({status});
+      const task = Task.fromElement({status});
       expect(task.isNew()).toEqual(exp);
     }
   });
 
   test('should be changeable if alterable or new', () => {
-    let task = new Task({status: TASK_STATUS.new, alterable: '0'});
+    let task = Task.fromElement({status: TASK_STATUS.new, alterable: '0'});
     expect(task.isChangeable()).toEqual(true);
 
-    task = new Task({status: TASK_STATUS.done, alterable: '1'});
+    task = Task.fromElement({status: TASK_STATUS.done, alterable: '1'});
     expect(task.isChangeable()).toEqual(true);
   });
 });

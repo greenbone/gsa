@@ -646,13 +646,13 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
 .c22 {
   height: 13px;
   width: 10%;
-  background: #4F91C7;
+  background: #4f91c7;
 }
 
 .c33 {
   height: 13px;
   width: 100%;
-  background: #C83814;
+  background: #c83814;
 }
 
 @media print {

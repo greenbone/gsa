@@ -27,16 +27,16 @@ import Model from '../model';
 class Tag extends Model {
   static entityType = 'tag';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
-    if (isDefined(elem.resources)) {
-      ret.resourceType = normalizeType(elem.resources.type);
-      ret.resourceCount = parseInt(elem.resources.count.total);
+    if (isDefined(element.resources)) {
+      ret.resourceType = normalizeType(element.resources.type);
+      ret.resourceCount = parseInt(element.resources.count.total);
     } else {
       ret.resourceCount = 0;
     }
-    ret.value = isEmpty(elem.value) ? undefined : elem.value;
+    ret.value = isEmpty(element.value) ? undefined : element.value;
 
     return ret;
   }

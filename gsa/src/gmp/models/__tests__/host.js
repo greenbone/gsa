@@ -29,7 +29,7 @@ testModel(Host, 'host');
 
 describe('Host model tests', () => {
   test('should be instance of Asset', () => {
-    const host = new Host({});
+    const host = Host.fromElement({});
 
     expect(host).toBeInstanceOf(Asset);
   });
@@ -49,8 +49,8 @@ describe('Host model tests', () => {
         },
       },
     };
-    const host = new Host(elem);
-    const host2 = new Host(elem2);
+    const host = Host.fromElement(elem);
+    const host2 = Host.fromElement(elem2);
 
     expect(host.severity).toEqual(8.5);
     expect(host2.severity).toEqual(10);
@@ -79,8 +79,8 @@ describe('Host model tests', () => {
         ],
       },
     };
-    const host = new Host(elem);
-    const host2 = new Host({});
+    const host = Host.fromElement(elem);
+    const host2 = Host.fromElement({});
     const res = [
       {
         creationTime: parseDate('2018-10-10T13:31:00+01:00'),
@@ -132,9 +132,9 @@ describe('Host model tests', () => {
         ],
       },
     };
-    const host = new Host(elem);
-    const host2 = new Host(elem2);
-    const host3 = new Host(elem3);
+    const host = Host.fromElement(elem);
+    const host2 = Host.fromElement(elem2);
+    const host3 = Host.fromElement(elem3);
 
     expect(host.hostname).toEqual('foo');
     expect(host2.hostname).toEqual('bar');
@@ -152,7 +152,7 @@ describe('Host model tests', () => {
         ],
       },
     };
-    const host = new Host(elem);
+    const host = Host.fromElement(elem);
 
     expect(host.ip).toEqual('123.456.789.42');
   });
@@ -192,7 +192,7 @@ describe('Host model tests', () => {
         value: 'c:/.3',
       },
     };
-    const host = new Host(elem);
+    const host = Host.fromElement(elem);
 
     expect(host.details).toEqual(res);
   });
@@ -226,13 +226,13 @@ describe('Host model tests', () => {
         },
       ],
     ];
-    const host = new Host(elem);
+    const host = Host.fromElement(elem);
 
     expect(host.routes).toEqual(res);
   });
 
   test('should return empty array if no routes are given', () => {
-    const host = new Host({});
+    const host = Host.fromElement({});
 
     expect(host.routes).toEqual([]);
   });
@@ -241,7 +241,7 @@ describe('Host model tests', () => {
     const elem = {
       host: {},
     };
-    const host = new Host(elem);
+    const host = Host.fromElement(elem);
 
     expect(host.host).toBeUndefined();
   });

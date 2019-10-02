@@ -47,14 +47,14 @@ describe('ScanConfig model tests', () => {
     const res = [
       {
         name: 'foo',
-        trend: 1,
+        trend: SCANCONFIG_TREND_DYNAMIC,
         nvts: {
           count: 42,
           max: 42,
         },
       },
     ];
-    const scanConfig = new ScanConfig(elem);
+    const scanConfig = ScanConfig.fromElement(elem);
 
     expect(scanConfig.family_list).toEqual(res);
   });
@@ -72,7 +72,7 @@ describe('ScanConfig model tests', () => {
         ],
       },
     };
-    const scanConfig = new ScanConfig(elem);
+    const scanConfig = ScanConfig.fromElement(elem);
 
     expect(scanConfig.family_list[0].nvts.count).toBeUndefined();
     expect(scanConfig.family_list[0].nvts.max).toBeUndefined();
@@ -93,19 +93,19 @@ describe('ScanConfig model tests', () => {
     };
     const res = {
       name: 'foo',
-      trend: 1,
+      trend: SCANCONFIG_TREND_DYNAMIC,
       nvts: {
         count: 42,
         max: 42,
       },
     };
-    const scanConfig = new ScanConfig(elem);
+    const scanConfig = ScanConfig.fromElement(elem);
 
     expect(scanConfig.families.foo).toEqual(res);
   });
 
   test('should return empty family_list array if no families are given', () => {
-    const scanConfig = new ScanConfig({});
+    const scanConfig = ScanConfig.fromElement({});
 
     expect(scanConfig.family_list).toEqual([]);
   });
@@ -117,7 +117,7 @@ describe('ScanConfig model tests', () => {
         growing: '1',
       },
     };
-    const scanConfig = new ScanConfig(elem);
+    const scanConfig = ScanConfig.fromElement(elem);
 
     expect(scanConfig.families.count).toEqual(42);
     expect(scanConfig.families.trend).toEqual(SCANCONFIG_TREND_DYNAMIC);
@@ -139,7 +139,7 @@ describe('ScanConfig model tests', () => {
       known: 21,
       max: 1337,
     };
-    const scanConfig = new ScanConfig(elem);
+    const scanConfig = ScanConfig.fromElement(elem);
 
     expect(scanConfig.nvts).toEqual(res);
     expect(scanConfig.nvt_count).toBeUndefined();
@@ -148,7 +148,7 @@ describe('ScanConfig model tests', () => {
   });
 
   test('should return empty object if no nvt_counts are given', () => {
-    const scanConfig = new ScanConfig({});
+    const scanConfig = ScanConfig.fromElement({});
 
     expect(scanConfig.nvts).toEqual({});
   });
@@ -193,21 +193,21 @@ describe('ScanConfig model tests', () => {
       },
     ];
 
-    const scanConfig = new ScanConfig(elem);
+    const scanConfig = ScanConfig.fromElement(elem);
 
     expect(scanConfig.preferences.scanner).toEqual(scannerPreferences);
     expect(scanConfig.preferences.nvt).toEqual(nvtPreferences);
   });
 
   test('should return empty arrays if no preferences are given', () => {
-    const scanConfig = new ScanConfig({});
+    const scanConfig = ScanConfig.fromElement({});
 
     expect(scanConfig.preferences.scanner).toEqual([]);
     expect(scanConfig.preferences.nvt).toEqual([]);
   });
 
   test('should parse type', () => {
-    const scanConfig = new ScanConfig({type: '21'});
+    const scanConfig = ScanConfig.fromElement({type: '21'});
 
     expect(scanConfig.scan_config_type).toEqual(21);
   });
@@ -219,8 +219,8 @@ describe('ScanConfig model tests', () => {
         id: '123abc',
       },
     };
-    const scanConfig = new ScanConfig(elem);
-    const scanConfig2 = new ScanConfig({});
+    const scanConfig = ScanConfig.fromElement(elem);
+    const scanConfig2 = ScanConfig.fromElement({});
 
     expect(scanConfig.scanner).toBeInstanceOf(Model);
     expect(scanConfig.scanner.entityType).toEqual('scanner');
@@ -239,14 +239,15 @@ describe('ScanConfig model tests', () => {
         ],
       },
     };
-    const scanConfig = new ScanConfig(elem);
+    const scanConfig = ScanConfig.fromElement(elem);
 
     expect(scanConfig.tasks[0]).toBeInstanceOf(Model);
+    expect(scanConfig.tasks[0].id).toEqual('123');
     expect(scanConfig.tasks[0].entityType).toEqual('task');
   });
 
   test('should return empty array if no tasks are given', () => {
-    const scanConfig = new ScanConfig({});
+    const scanConfig = ScanConfig.fromElement({});
 
     expect(scanConfig.tasks).toEqual([]);
   });

@@ -40,6 +40,10 @@ class Login {
       ? moment.unix(unixSeconds)
       : undefined;
   }
+
+  static fromElement(element) {
+    return new Login(element);
+  }
 }
 
 export default Login;

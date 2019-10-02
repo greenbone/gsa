@@ -33,8 +33,9 @@ describe('Permission model tests', () => {
         type: 'alert',
       },
     };
-    const permission = new Permission(elem);
+    const permission = Permission.fromElement(elem);
 
+    expect(permission.resource).toBeInstanceOf(Model);
     expect(permission.resource.entityType).toEqual('alert');
     expect(permission.resource.id).toEqual('123');
   });
@@ -45,7 +46,7 @@ describe('Permission model tests', () => {
         type: 'alert',
       },
     };
-    const permission = new Permission(elem);
+    const permission = Permission.fromElement(elem);
 
     expect(permission.resource).toBeUndefined();
   });
@@ -57,11 +58,11 @@ describe('Permission model tests', () => {
         type: 'alert',
       },
     };
-    const permission = new Permission(elem);
+    const permission = Permission.fromElement(elem);
 
-    expect(permission.subject).toEqual(
-      new Model(elem.subject, elem.subject.type),
-    );
+    expect(permission.subject).toBeInstanceOf(Model);
+    expect(permission.subject.id).toEqual('123');
+    expect(permission.subject.entityType).toEqual('alert');
   });
 
   test('should not parse subject if no id is given', () => {
@@ -70,7 +71,7 @@ describe('Permission model tests', () => {
         type: 'alert',
       },
     };
-    const permission = new Permission(elem);
+    const permission = Permission.fromElement(elem);
 
     expect(permission.subject).toBeUndefined();
   });

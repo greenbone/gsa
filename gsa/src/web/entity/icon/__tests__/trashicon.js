@@ -31,7 +31,7 @@ import TrashIcon from '../trashicon';
 describe('Entity TrashIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
     const caps = new Capabilities(['everything']);
-    const entity = new Task({
+    const entity = Task.fromElement({
       permissions: {permission: [{name: 'delete_task'}]},
     });
     const clickHandler = jest.fn();
@@ -56,7 +56,7 @@ describe('Entity TrashIcon component tests', () => {
 
   test('should deactivate if wrong command level permissions are given', () => {
     const caps = new Capabilities(['authenticate']);
-    const entity = new Task({
+    const entity = Task.fromElement({
       permissions: {permission: [{name: 'delete_task'}]},
     });
     const clickHandler = jest.fn();
@@ -80,7 +80,7 @@ describe('Entity TrashIcon component tests', () => {
 
   test('should deactivate if wrong resource level permissions are given', () => {
     const caps = new Capabilities(['everything']);
-    const entity = new Task({
+    const entity = Task.fromElement({
       permissions: {permission: [{name: 'delete_schedule'}]},
     });
     const clickHandler = jest.fn();

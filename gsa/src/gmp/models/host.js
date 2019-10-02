@@ -58,8 +58,8 @@ class Identifier {
 class Host extends Asset {
   static entityType = 'host';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
     if (isDefined(ret.host) && isDefined(ret.host.severity)) {
       ret.severity = parseSeverity(ret.host.severity.value);

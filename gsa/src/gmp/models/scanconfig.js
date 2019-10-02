@@ -23,7 +23,7 @@ import {isEmpty} from '../utils/string';
 
 import {parseInt} from '../parser';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 import _ from '../locale';
 
@@ -60,15 +60,15 @@ export const parseTrend = parseInt;
 class ScanConfig extends Model {
   static entityType = 'scanconfig';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
     // for displaying the selected nvts (1 of 33) an object for accessing the
     // family by name is required
     const families = {};
 
-    if (isDefined(elem.families)) {
-      ret.family_list = map(elem.families.family, family => {
+    if (isDefined(element.families)) {
+      ret.family_list = map(element.families.family, family => {
         const {name} = family;
         const new_family = {
           name,
@@ -126,8 +126,8 @@ class ScanConfig extends Model {
     const nvt_preferences = [];
     const scanner_preferences = [];
 
-    if (isDefined(elem.preferences)) {
-      forEach(elem.preferences.preference, preference => {
+    if (isDefined(element.preferences)) {
+      forEach(element.preferences.preference, preference => {
         const pref = {...preference};
         if (isEmpty(pref.nvt.name)) {
           delete pref.nvt;
@@ -149,18 +149,20 @@ class ScanConfig extends Model {
       nvt: nvt_preferences,
     };
 
-    ret.scan_config_type = parseInt(elem.type);
+    ret.scan_config_type = parseInt(element.type);
 
-    if (isDefined(elem.scanner)) {
+    if (isDefined(element.scanner)) {
       const scanner = {
-        ...elem.scanner,
-        name: elem.scanner.__text,
+        ...element.scanner,
+        name: element.scanner.__text,
       };
-      ret.scanner = new Model(scanner, 'scanner');
+      ret.scanner = parseModelFromElement(scanner, 'scanner');
     }
 
-    if (isDefined(elem.tasks)) {
-      ret.tasks = map(elem.tasks.task, task => new Model(task, 'task'));
+    if (isDefined(element.tasks)) {
+      ret.tasks = map(element.tasks.task, task =>
+        parseModelFromElement(task, 'task'),
+      );
     } else {
       ret.tasks = [];
     }

@@ -26,7 +26,7 @@ testModel(OperatingSystem, 'operatingsystem');
 
 describe('OperatingSystem model tests', () => {
   test('should be an instance of Asset', () => {
-    const os = new OperatingSystem({});
+    const os = OperatingSystem.fromElement({});
 
     expect(os instanceof Asset).toBe(true);
   });
@@ -45,8 +45,8 @@ describe('OperatingSystem model tests', () => {
         },
       },
     };
-    const os1 = new OperatingSystem(elem);
-    const os2 = new OperatingSystem({});
+    const os1 = OperatingSystem.fromElement(elem);
+    const os2 = OperatingSystem.fromElement({});
 
     expect(os1.averageSeverity).toEqual(7);
     expect(os1.latestSeverity).toEqual(8);
@@ -62,7 +62,7 @@ describe('OperatingSystem model tests', () => {
         title: 'foo',
       },
     };
-    const os = new OperatingSystem(elem);
+    const os = OperatingSystem.fromElement(elem);
 
     expect(os.title).toEqual('foo');
   });
@@ -73,7 +73,7 @@ describe('OperatingSystem model tests', () => {
         installs: '42',
       },
     };
-    const os = new OperatingSystem(elem);
+    const os = OperatingSystem.fromElement(elem);
 
     expect(os.hosts.length).toEqual('42');
   });
@@ -84,7 +84,7 @@ describe('OperatingSystem model tests', () => {
         installs: '42',
       },
     };
-    const os = new OperatingSystem(elem);
+    const os = OperatingSystem.fromElement(elem);
 
     expect(os.os).toBeUndefined();
   });

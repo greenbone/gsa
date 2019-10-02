@@ -24,23 +24,23 @@ import {testModel} from 'gmp/models/testing';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-testModel(Override, 'override');
-
 describe('Note model tests', () => {
+  testModel(Override, 'override', {testIsActive: false});
+
   test('should parse severity', () => {
-    const override1 = new Override({severity: '8.5'});
-    const override2 = new Override({severity: '10'});
-    const override3 = new Override({});
+    const override1 = Override.fromElement({severity: '8.5'});
+    const override2 = Override.fromElement({severity: '10'});
+    const override3 = Override.fromElement({});
 
     expect(override1.severity).toEqual(8.5);
     expect(override2.severity).toEqual(10);
     expect(override3.severity).toBeUndefined();
   });
 
-  test('should parse newSeverity', () => {
-    const override1 = new Override({new_severity: '8.5'});
-    const override2 = new Override({new_severity: '10'});
-    const override3 = new Override({});
+  test('should parse new_severity', () => {
+    const override1 = Override.fromElement({new_severity: '8.5'});
+    const override2 = Override.fromElement({new_severity: '10'});
+    const override3 = Override.fromElement({});
 
     expect(override1.newSeverity).toEqual(8.5);
     expect(override2.newSeverity).toEqual(10);
@@ -48,16 +48,16 @@ describe('Note model tests', () => {
   });
 
   test('should parse active as yes/no correctly', () => {
-    const override1 = new Override({active: '0'});
-    const override2 = new Override({active: '1'});
+    const override1 = Override.fromElement({active: '0'});
+    const override2 = Override.fromElement({active: '1'});
 
     expect(override1.active).toEqual(NO_VALUE);
     expect(override2.active).toEqual(YES_VALUE);
   });
 
-  test('should parse textExcerpt as yes/no correctly', () => {
-    const override1 = new Override({textExcerpt: '0'});
-    const override2 = new Override({textExcerpt: '1'});
+  test('should parse text_excerpt as yes/no correctly', () => {
+    const override1 = Override.fromElement({text_excerpt: '0'});
+    const override2 = Override.fromElement({text_excerpt: '1'});
 
     expect(override1.textExcerpt).toEqual(NO_VALUE);
     expect(override2.textExcerpt).toEqual(YES_VALUE);
@@ -67,16 +67,16 @@ describe('Note model tests', () => {
     const elem = {
       hosts: '123.456.789.42, 987.654.321.1',
     };
-    const override1 = new Override(elem);
-    const override2 = new Override({hosts: ''});
+    const override1 = Override.fromElement(elem);
+    const override2 = Override.fromElement({hosts: ''});
 
     expect(override1.hosts).toEqual(['123.456.789.42', '987.654.321.1']);
     expect(override2.hosts).toEqual([]);
   });
 
   test('isExcerpt() should return correct true/false', () => {
-    const override1 = new Override({textExcerpt: '1'});
-    const override2 = new Override({textExcerpt: '0'});
+    const override1 = Override.fromElement({text_excerpt: '1'});
+    const override2 = Override.fromElement({text_excerpt: '0'});
 
     expect(override1.isExcerpt()).toEqual(true);
     expect(override2.isExcerpt()).toEqual(false);
@@ -93,11 +93,13 @@ describe('Note model tests', () => {
         _id: '',
       },
     };
-    const override1 = new Override(elem1);
-    const override2 = new Override(elem2);
-    const override3 = new Override({});
+    const override1 = Override.fromElement(elem1);
+    const override2 = Override.fromElement(elem2);
+    const override3 = Override.fromElement({});
 
     expect(override1.task).toBeInstanceOf(Model);
+    expect(override1.task.id).toEqual('123abc');
+    expect(override1.task.entityType).toEqual('task');
     expect(override2.task).toBeUndefined();
     expect(override3.task).toBeUndefined();
   });
@@ -113,11 +115,13 @@ describe('Note model tests', () => {
         _id: '',
       },
     };
-    const override1 = new Override(elem1);
-    const override2 = new Override(elem2);
-    const override3 = new Override({});
+    const override1 = Override.fromElement(elem1);
+    const override2 = Override.fromElement(elem2);
+    const override3 = Override.fromElement({});
 
     expect(override1.result).toBeInstanceOf(Model);
+    expect(override1.result.id).toEqual('123abc');
+    expect(override1.result.entityType).toEqual('result');
     expect(override2.result).toBeUndefined();
     expect(override3.result).toBeUndefined();
   });
@@ -129,7 +133,7 @@ describe('Note model tests', () => {
         name: 'foo',
       },
     };
-    const override = new Override(elem);
+    const override = Override.fromElement(elem);
 
     expect(override.nvt).toBeInstanceOf(Nvt);
     expect(override.name).toEqual('foo');

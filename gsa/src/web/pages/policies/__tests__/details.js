@@ -29,7 +29,7 @@ import Details from '../details';
 
 describe('Policy Details tests', () => {
   test('should render full Details', () => {
-    const policy = new Policy({
+    const policy = Policy.fromElement({
       name: 'foo',
       comment: 'bar',
       scanner: {name: 'scanner', type: '42'},

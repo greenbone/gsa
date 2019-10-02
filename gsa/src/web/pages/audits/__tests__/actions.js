@@ -40,7 +40,7 @@ describe('Audit Actions tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       status: AUDIT_STATUS.new,
       alterable: '0',
       last_report: {report: {_id: 'id'}},
@@ -78,7 +78,7 @@ describe('Audit Actions tests', () => {
   });
 
   test('should call click handlers', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       status: AUDIT_STATUS.done,
       alterable: '0',
       last_report: {report: {_id: 'id'}},
@@ -147,7 +147,7 @@ describe('Audit Actions tests', () => {
   });
 
   test('should not call click handlers without permissions', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       status: AUDIT_STATUS.done,
       alterable: '0',
       last_report: {report: {_id: 'id'}},
@@ -228,7 +228,7 @@ describe('Audit Actions tests', () => {
   });
 
   test('should call click handlers for running audit', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       status: AUDIT_STATUS.running,
       alterable: '0',
       in_use: true,
@@ -295,7 +295,7 @@ describe('Audit Actions tests', () => {
   });
 
   test('should call click handlers for stopped audit', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       status: AUDIT_STATUS.stopped,
       alterable: '0',
       last_report: {report: {_id: 'id'}},
@@ -364,7 +364,7 @@ describe('Audit Actions tests', () => {
   });
 
   test('should disable report download if grc format is not defined', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       status: AUDIT_STATUS.stopped,
       alterable: '0',
       last_report: {report: {_id: 'id'}},
@@ -409,7 +409,7 @@ describe('Audit Actions tests', () => {
   });
 
   test('should render schedule icon if task is scheduled', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       status: AUDIT_STATUS.stopped,
       alterable: '0',
       last_report: {report: {_id: 'id'}},

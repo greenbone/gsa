@@ -25,13 +25,13 @@ import {parseDate} from '../parser';
 class Agent extends Model {
   static entityType = 'agent';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
-    if (isDefined(elem.installer) && isDefined(elem.installer.trust)) {
+    if (isDefined(element.installer) && isDefined(element.installer.trust)) {
       ret.trust = {
-        time: parseDate(elem.installer.trust.time),
-        status: elem.installer.trust.__text,
+        time: parseDate(element.installer.trust.time),
+        status: element.installer.trust.__text,
       };
 
       delete ret.installer;

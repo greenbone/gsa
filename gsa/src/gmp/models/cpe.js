@@ -28,14 +28,13 @@ import {parseSeverity, parseDate} from 'gmp/parser';
 class Cpe extends Info {
   static entityType = 'cpe';
 
-  parseProperties(elem) {
-    elem = super.parseProperties(elem, 'cpe');
-    const ret = {...elem};
+  static parseElement(element) {
+    const ret = super.parseElement(element, 'cpe');
 
-    ret.severity = parseSeverity(elem.max_cvss);
+    ret.severity = parseSeverity(ret.max_cvss);
     delete ret.max_cvss;
 
-    if (isDefined(elem.cves) && isDefined(elem.cves.cve)) {
+    if (isDefined(ret.cves) && isDefined(ret.cves.cve)) {
       ret.cves = map(ret.cves.cve.entry, cve => ({
         id: cve._id,
         severity: parseSeverity(cve.cvss.base_metrics.score.__text),
@@ -44,11 +43,11 @@ class Cpe extends Info {
       ret.cves = [];
     }
 
-    if (isEmpty(elem.status)) {
+    if (isEmpty(ret.status)) {
       delete ret.status;
     }
 
-    if (isDefined(elem.update_time)) {
+    if (isDefined(ret.update_time)) {
       ret.updateTime = parseDate(ret.update_time);
       delete ret.update_time;
     }

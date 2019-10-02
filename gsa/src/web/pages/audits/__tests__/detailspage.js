@@ -45,7 +45,7 @@ window.URL.createObjectURL = jest.fn();
 
 setLocale('en');
 
-const policy = new Policy({
+const policy = Policy.fromElement({
   _id: '314',
   name: 'foo',
   comment: 'bar',
@@ -56,7 +56,7 @@ const policy = new Policy({
   },
 });
 
-const schedule = new Schedule({
+const schedule = Schedule.fromElement({
   _id: '121314',
   name: 'schedule1',
   permissions: {permission: [{name: 'everything'}]},
@@ -95,7 +95,7 @@ const preferences = {
   ],
 };
 
-const audit = new Audit({
+const audit = Audit.fromElement({
   _id: '12345',
   owner: {name: 'admin'},
   name: 'foo',
@@ -115,7 +115,7 @@ const audit = new Audit({
   preferences: preferences,
 });
 
-const audit2 = new Audit({
+const audit2 = Audit.fromElement({
   _id: '12345',
   owner: {name: 'admin'},
   name: 'foo',
@@ -135,7 +135,7 @@ const audit2 = new Audit({
   preferences: preferences,
 });
 
-const audit3 = new Audit({
+const audit3 = Audit.fromElement({
   _id: '12345',
   owner: {name: 'admin'},
   name: 'foo',
@@ -154,7 +154,7 @@ const audit3 = new Audit({
   preferences: preferences,
 });
 
-const audit4 = new Audit({
+const audit4 = Audit.fromElement({
   _id: '12345',
   owner: {name: 'admin'},
   name: 'foo',
@@ -175,7 +175,7 @@ const audit4 = new Audit({
   preferences: preferences,
 });
 
-const audit5 = new Audit({
+const audit5 = Audit.fromElement({
   _id: '12345',
   owner: {name: 'admin'},
   name: 'foo',
@@ -196,7 +196,7 @@ const audit5 = new Audit({
   preferences: preferences,
 });
 
-const audit6 = new Audit({
+const audit6 = Audit.fromElement({
   _id: '12345',
   owner: {name: 'admin'},
   name: 'foo',
@@ -216,7 +216,7 @@ const audit6 = new Audit({
   preferences: preferences,
 });
 
-const audit7 = new Audit({
+const audit7 = Audit.fromElement({
   _id: '12345',
   owner: {name: 'admin'},
   name: 'foo',

@@ -145,13 +145,14 @@ class EntityContainer extends React.Component {
   }
 
   render() {
-    const {children, onDownload} = this.props;
+    const {children, onDownload, showSuccessMessage} = this.props;
     return children({
       ...this.props,
       onChanged: this.handleChanged,
       onSuccess: this.handleChanged,
       onError: this.handleError,
       onDownloaded: onDownload,
+      showSuccess: showSuccessMessage,
     });
   }
 }

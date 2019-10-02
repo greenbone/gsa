@@ -58,7 +58,7 @@ const currentReport = {
   },
 };
 
-const audit = new Audit({
+const audit = Audit.fromElement({
   _id: '1234',
   owner: {name: 'admin'},
   name: 'foo',
@@ -70,7 +70,7 @@ const audit = new Audit({
   target: {_id: 'id1', name: 'target1'},
 });
 
-const audit2 = new Audit({
+const audit2 = Audit.fromElement({
   _id: '12345',
   owner: {name: 'user'},
   name: 'lorem',
@@ -81,7 +81,7 @@ const audit2 = new Audit({
   target: {_id: 'id2', name: 'target2'},
 });
 
-const audit3 = new Audit({
+const audit3 = Audit.fromElement({
   _id: '123456',
   owner: {name: 'user'},
   name: 'hello',

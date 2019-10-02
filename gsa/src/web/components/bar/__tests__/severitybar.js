@@ -20,6 +20,8 @@ import React from 'react';
 
 import {render} from 'web/utils/testing';
 
+import Theme from 'web/utils/theme.js';
+
 import SeverityBar from '../severitybar';
 
 describe('SeverityBar tests', () => {
@@ -74,14 +76,14 @@ describe('SeverityBar tests', () => {
     const {getByTestId} = render(<SeverityBar severity="9.5" />);
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', '#C83814');
+    expect(progress).toHaveStyleRule('background', Theme.errorRed);
   });
 
   test('should render without severity prop', () => {
     const {getByTestId} = render(<SeverityBar />);
     const progress = getByTestId('progress');
 
-    expect(progress).toHaveStyleRule('background', '#4F91C7');
+    expect(progress).toHaveStyleRule('background', Theme.severityLowBlue);
     expect(progress).toHaveStyleRule('width', '0%');
   });
 });

@@ -58,7 +58,7 @@ describe('Audit Row tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       _id: '314',
       owner: {name: 'username'},
       name: 'foo',
@@ -148,7 +148,7 @@ describe('Audit Row tests', () => {
   });
 
   test('should render icons', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       _id: '314',
       owner: {name: 'username'},
       name: 'foo',
@@ -213,7 +213,7 @@ describe('Audit Row tests', () => {
   });
 
   test('should call click handlers for new audit', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       _id: '314',
       owner: {name: 'username'},
       name: 'foo',
@@ -313,7 +313,7 @@ describe('Audit Row tests', () => {
   });
 
   test('should call click handlers for running audit', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       _id: '314',
       owner: {name: 'username'},
       name: 'foo',
@@ -420,7 +420,7 @@ describe('Audit Row tests', () => {
   });
 
   test('should call click handlers for stopped audit', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       _id: '314',
       owner: {name: 'username'},
       name: 'foo',
@@ -530,7 +530,7 @@ describe('Audit Row tests', () => {
   });
 
   test('should call click handlers for finished audit', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       _id: '314',
       owner: {name: 'username'},
       name: 'foo',
@@ -639,7 +639,7 @@ describe('Audit Row tests', () => {
   });
 
   test('should not call click handlers for audit without permission', () => {
-    const audit = new Audit({
+    const audit = Audit.fromElement({
       _id: '314',
       owner: {name: 'user'},
       name: 'foo',

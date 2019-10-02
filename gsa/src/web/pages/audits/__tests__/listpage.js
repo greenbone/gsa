@@ -35,7 +35,7 @@ import AuditPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
-const audit = new Audit({
+const audit = Audit.fromElement({
   _id: '1234',
   owner: {name: 'admin'},
   name: 'foo',

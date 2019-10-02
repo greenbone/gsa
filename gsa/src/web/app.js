@@ -35,7 +35,7 @@ import GlobalStyles from 'web/components/layout/globalstyles';
 
 import LocaleObserver from 'web/components/observer/localeobserver';
 
-import GmpProvider from 'web/components/provider/gmpprovider';
+import GmpContext from 'web/components/provider/gmpprovider';
 
 import {
   setUsername,
@@ -99,13 +99,13 @@ class App extends React.Component {
       <React.Fragment>
         <GlobalStyles />
         <ErrorBoundary message={_('An error occurred on this page')}>
-          <GmpProvider gmp={gmp}>
+          <GmpContext.Provider value={gmp}>
             <StoreProvider store={store}>
               <LocaleObserver>
                 <Routes />
               </LocaleObserver>
             </StoreProvider>
-          </GmpProvider>
+          </GmpContext.Provider>
         </ErrorBoundary>
       </React.Fragment>
     );

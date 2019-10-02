@@ -28,13 +28,15 @@ import {getTranslatableTaskStatus, TASK_STATUS} from 'gmp/models/task';
 
 import PropTypes from 'web/utils/proptypes.js';
 
-import ProgressBar from './progressbar';
+import ProgressBar, {adjustProgress} from './progressbar';
 
 const Span = styled.span`
   white-space: nowrap;
 `;
 
 const StatusBar = ({status = 'Unknown', progress = '0'}) => {
+  progress = adjustProgress(progress);
+
   let text = getTranslatableTaskStatus(status);
   if (
     status === 'Unknown' ||

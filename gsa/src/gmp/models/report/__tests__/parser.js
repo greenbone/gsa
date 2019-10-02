@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {parse_hosts} from '../parser';
+import {parseHosts} from '../parser';
 
 describe('report parser tests', () => {
   test('parse_hosts tests', () => {
@@ -66,7 +66,7 @@ describe('report parser tests', () => {
       rows: 2,
       last: 2,
     };
-    const parsedHosts = parse_hosts(hosts, 'foo=bar');
+    const parsedHosts = parseHosts(hosts, 'foo=bar');
 
     expect(parsedHosts.entities.length).toEqual(2);
     expect(parsedHosts.entities[0].id).toEqual('1.1.1.1');
