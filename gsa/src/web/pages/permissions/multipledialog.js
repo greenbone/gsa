@@ -64,24 +64,25 @@ const MultiplePermissionDialog = withCapabilities(
     title = _('Create Permission'),
     userId,
     users = [],
+    onChange,
     onClose,
     onSave,
   }) => {
     const hasRelated = related.length > 0;
 
     const defaultValues = {
-      groupId,
       includeRelated,
       permission,
-      roleId,
       subjectType,
-      userId,
     };
 
     const values = {
+      groupId,
       id,
       entityType,
       related,
+      roleId,
+      userId,
     };
 
     const includeRelatedItems = [];
@@ -150,7 +151,7 @@ const MultiplePermissionDialog = withCapabilities(
                         name="userId"
                         value={state.userId}
                         items={renderSelectItems(users)}
-                        onChange={onValueChange}
+                        onChange={onChange}
                       />
                     </Divider>
                   )}
@@ -168,7 +169,7 @@ const MultiplePermissionDialog = withCapabilities(
                         name="roleId"
                         value={state.roleId}
                         items={renderSelectItems(roles)}
-                        onChange={onValueChange}
+                        onChange={onChange}
                       />
                     </Divider>
                   )}
@@ -186,7 +187,7 @@ const MultiplePermissionDialog = withCapabilities(
                         name="groupId"
                         value={state.groupId}
                         items={renderSelectItems(groups)}
-                        onChange={onValueChange}
+                        onChange={onChange}
                       />
                     </Divider>
                   )}
@@ -244,6 +245,7 @@ MultiplePermissionDialog.propTypes = {
   userId: PropTypes.id,
   users: PropTypes.array,
   visible: PropTypes.bool,
+  onChange: PropTypes.func,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
