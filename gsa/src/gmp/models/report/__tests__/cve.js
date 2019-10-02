@@ -44,13 +44,13 @@ describe('ReportCve tests', () => {
     const reportcve = new ReportCve();
 
     expect(reportcve.hosts).toBeDefined();
-    expect(reportcve.hosts.hosts_by_ip).toEqual({});
+    expect(reportcve.hosts.hostsByIp).toEqual({});
     expect(reportcve.hosts.count).toEqual(0);
 
     const host = {name: 'foo', ip: '1.2.3.4'};
     reportcve.addHost(host);
 
-    expect(reportcve.hosts.hosts_by_ip['1.2.3.4']).toEqual(host);
+    expect(reportcve.hosts.hostsByIp['1.2.3.4']).toEqual(host);
     expect(reportcve.hosts.count).toEqual(1);
   });
 
