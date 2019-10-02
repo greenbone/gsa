@@ -26,11 +26,10 @@ import Info from './info';
 class CertBundAdv extends Info {
   static entityType = 'certbund';
 
-  parseProperties(elem) {
-    elem = super.parseProperties(elem, 'cert_bund_adv');
-    const ret = {...elem};
+  static parseElement(element) {
+    const ret = super.parseElement(element, 'cert_bund_adv');
 
-    ret.severity = parseSeverity(elem.max_cvss);
+    ret.severity = parseSeverity(ret.max_cvss);
     delete ret.max_cvss;
 
     ret.categories = [];
@@ -38,8 +37,8 @@ class CertBundAdv extends Info {
     ret.cves = [];
     ret.additionalInformation = [];
 
-    if (isDefined(elem.raw_data) && isDefined(elem.raw_data.Advisory)) {
-      const {raw_data} = elem;
+    if (isDefined(ret.raw_data) && isDefined(ret.raw_data.Advisory)) {
+      const {raw_data} = ret;
       const {Advisory: advisory} = raw_data;
 
       ret.version = advisory.Version;
@@ -60,12 +59,12 @@ class CertBundAdv extends Info {
         isDefined(advisory.Description) &&
         isDefined(advisory.Description.Element)
       ) {
-        forEach(advisory.Description.Element, element => {
-          if (isDefined(element.TextBlock)) {
-            ret.description.push(element.TextBlock);
-          } else if (isDefined(element.Infos)) {
+        forEach(advisory.Description.Element, desciptionElement => {
+          if (isDefined(desciptionElement.TextBlock)) {
+            ret.description.push(desciptionElement.TextBlock);
+          } else if (isDefined(desciptionElement.Infos)) {
             ret.additionalInformation = ret.additionalInformation.concat(
-              map(element.Infos.Info, info => ({
+              map(desciptionElement.Infos.Info, info => ({
                 issuer: info._Info_Issuer,
                 url: info._Info_URL,
               })),

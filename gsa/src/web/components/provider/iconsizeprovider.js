@@ -21,28 +21,14 @@ import React from 'react';
 
 import PropTypes from 'web/utils/proptypes.js';
 
-class IconSizeProvider extends React.Component {
-  getChildContext() {
-    return {
-      iconSize: this.props.size,
-    };
-  }
+export const IconSizeContext = React.createContext();
 
-  render() {
-    const {children} = this.props;
-    if (React.Children.count(children) > 1) {
-      return <React.Fragment>{children}</React.Fragment>;
-    }
-    return children;
-  }
-}
+const IconSizeProvider = ({size, ...props}) => (
+  <IconSizeContext.Provider {...props} value={size} />
+);
 
 IconSizeProvider.propTypes = {
   size: PropTypes.iconSize.isRequired,
-};
-
-IconSizeProvider.childContextTypes = {
-  iconSize: PropTypes.iconSize,
 };
 
 export default IconSizeProvider;

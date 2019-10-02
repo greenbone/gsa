@@ -21,7 +21,7 @@ import {isEmpty} from './utils/string';
 import {map} from './utils/array';
 
 import {
-  parseProperties,
+  parseProperties as parseDefaultProperties,
   parseYesNo,
   parseDate,
   parseBoolean,
@@ -32,55 +32,59 @@ import {
 
 import Capabilities from './capabilities/capabilities.js';
 
+export const parseModelFromElement = (element, entityType) => {
+  const m = new Model(entityType);
+  const props = Model.parseElement(element);
+  m.setProperties(props);
+  return m;
+};
+
 class Model {
   static entityType = 'unknown';
 
-  constructor(element, type) {
-    this.init();
-
+  constructor(type) {
     this.entityType = isDefined(type) ? type : this.constructor.entityType;
-
-    if (element) {
-      this.updateFromElement(element);
-    }
   }
-
-  init() {}
 
   setProperties(properties) {
     return setProperties(properties, this);
   }
 
-  updateFromElement(elem) {
-    if (isDefined(elem)) {
-      const properties = this.parseProperties(elem);
-      this.setProperties(properties);
-    }
-    return this;
+  getProperties() {
+    return Object.entries(this).reduce((prev, [key, value]) => {
+      prev[key] = value;
+      return prev;
+    }, {});
   }
 
-  parseProperties(elem) {
-    const copy = parseProperties(elem);
+  static fromElement(element = {}) {
+    const f = new this();
+    f.setProperties(this.parseElement(element));
+    return f;
+  }
 
-    if (isDefined(elem.end_time)) {
-      if (elem.end_time.length > 0) {
-        copy.endTime = parseDate(elem.end_time);
+  static parseElement(element = {}) {
+    const copy = parseDefaultProperties(element);
+
+    if (isDefined(element.end_time)) {
+      if (element.end_time.length > 0) {
+        copy.endTime = parseDate(element.end_time);
       }
       delete copy.end_time;
     }
 
-    if (isDefined(elem.permissions)) {
+    if (isDefined(element.permissions)) {
       // these are the permissions the current user has on the entity
-      const caps = map(elem.permissions.permission, perm => perm.name);
+      const caps = map(element.permissions.permission, perm => perm.name);
       copy.userCapabilities = new Capabilities(caps);
       delete copy.permissions;
     } else {
       copy.userCapabilities = new Capabilities();
     }
 
-    if (isDefined(elem.user_tags)) {
-      copy.userTags = map(elem.user_tags.tag, tag => {
-        return new Model(tag, 'tag');
+    if (isDefined(element.user_tags)) {
+      copy.userTags = map(element.user_tags.tag, tag => {
+        return parseModelFromElement(tag, 'tag');
       });
       delete copy.user_tags;
     } else {
@@ -90,22 +94,22 @@ class Model {
     const yes_no_props = ['writable', 'orphan', 'active', 'trash'];
 
     for (const name of yes_no_props) {
-      const prop = elem[name];
+      const prop = element[name];
       if (isDefined(prop)) {
         copy[name] = parseYesNo(prop);
       }
     }
 
-    if (isDefined(elem.in_use)) {
-      copy.inUse = parseBoolean(elem.in_use);
+    if (isDefined(element.in_use)) {
+      copy.inUse = parseBoolean(element.in_use);
       delete copy.in_use;
     }
 
-    if (isDefined(elem.owner) && isEmpty(elem.owner.name)) {
+    if (isDefined(element.owner) && isEmpty(element.owner.name)) {
       delete copy.owner;
     }
 
-    if (isEmpty(elem.comment)) {
+    if (isEmpty(element.comment)) {
       delete copy.comment;
     }
 

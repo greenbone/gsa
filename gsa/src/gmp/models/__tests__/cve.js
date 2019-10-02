@@ -31,7 +31,7 @@ testModel(Cve, 'cve');
 
 describe('CVE model tests', () => {
   test('should be instance of Info', () => {
-    const certBundAdv = new Cve({});
+    const certBundAdv = Cve.fromElement({});
 
     expect(certBundAdv).toBeInstanceOf(Info);
   });
@@ -40,7 +40,7 @@ describe('CVE model tests', () => {
     const elem = {
       update_time: '2018-10-10T23:00:00.000+0000',
     };
-    const cve = new Cve(elem);
+    const cve = Cve.fromElement(elem);
 
     expect(cve.update_time).toBeUndefined();
     expect(cve.updateTime).toEqual(parseDate('2018-10-10T23:00:00.000+0000'));
@@ -50,7 +50,7 @@ describe('CVE model tests', () => {
     const elem = {
       cvss: '8.5',
     };
-    const cve = new Cve(elem);
+    const cve = Cve.fromElement(elem);
 
     expect(cve.severity).toEqual(8.5);
     expect(cve.cvss).toBeUndefined();
@@ -85,7 +85,7 @@ describe('CVE model tests', () => {
         oid: '1337.42',
       },
     ];
-    const cve = new Cve(elem);
+    const cve = Cve.fromElement(elem);
 
     expect(cve.nvts).toEqual(res);
   });
@@ -121,13 +121,13 @@ describe('CVE model tests', () => {
         title: 'sit',
       },
     ];
-    const cve = new Cve(elem);
+    const cve = Cve.fromElement(elem);
 
     expect(cve.certs).toEqual(res);
   });
 
   test('should return empty array if no certs are given', () => {
-    const cve = new Cve({});
+    const cve = Cve.fromElement({});
 
     expect(cve.certs).toEqual([]);
   });
@@ -144,7 +144,7 @@ describe('CVE model tests', () => {
         availability_impact: 'COMPLETE',
       },
     };
-    const cve = new Cve(elem);
+    const cve = Cve.fromElement(elem);
 
     expect(cve.cvssBaseVector).toEqual('AV:N/AC:L/Au:N/C:C/I:C/A:C');
     expect(cve.cvssAccessComplexity).toEqual('LOW');
@@ -161,13 +161,13 @@ describe('CVE model tests', () => {
         products: 'foo:bar/dolor ipsum:lorem',
       },
     };
-    const cve = new Cve(elem);
+    const cve = Cve.fromElement(elem);
 
     expect(cve.products).toEqual(['foo:bar/dolor', 'ipsum:lorem']);
   });
 
   test('should return empty array if no vulnerable products are given', () => {
-    const cve = new Cve({});
+    const cve = Cve.fromElement({});
 
     expect(cve.products).toEqual([]);
   });
@@ -185,7 +185,7 @@ describe('CVE model tests', () => {
         },
       },
     };
-    const cve = new Cve(elem);
+    const cve = Cve.fromElement(elem);
 
     expect(cve.cweId).toEqual('123abc');
     expect(isDate(cve.publishedTime)).toBe(true);
@@ -211,7 +211,7 @@ describe('CVE model tests', () => {
         },
       },
     };
-    const cve = new Cve(elem);
+    const cve = Cve.fromElement(elem);
     const res = [
       {
         name: 'lorem',
@@ -239,7 +239,7 @@ describe('CVE model tests', () => {
         },
       },
     };
-    const cve = new Cve(elem);
+    const cve = Cve.fromElement(elem);
 
     expect(cve.source).toEqual('prot://url');
   });
@@ -256,7 +256,7 @@ describe('CVE model tests', () => {
         },
       },
     };
-    const cve = new Cve(elem);
+    const cve = Cve.fromElement(elem);
 
     expect(cve.description).toEqual('lorem ipsum');
   });
@@ -273,7 +273,7 @@ describe('CVE model tests', () => {
         },
       },
     };
-    const cve = new Cve(elem);
+    const cve = Cve.fromElement(elem);
 
     expect(cve.products).toEqual(['lorem', 'ipsum']);
   });
@@ -287,13 +287,13 @@ describe('CVE model tests', () => {
         },
       },
     };
-    const cve = new Cve(elem);
+    const cve = Cve.fromElement(elem);
 
     expect(cve.raw_data).toBeUndefined();
   });
 
   test('should return empty array for references if no raw data is given', () => {
-    const cve = new Cve({});
+    const cve = Cve.fromElement({});
 
     expect(cve.references).toEqual([]);
   });

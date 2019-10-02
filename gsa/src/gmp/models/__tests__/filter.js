@@ -119,7 +119,7 @@ describe('Filter parse from keywords', () => {
         ],
       },
     };
-    const filter = new Filter(elem);
+    const filter = Filter.fromElement(elem);
     expect(filter.toFilterString()).toEqual('~abc');
   });
 
@@ -150,7 +150,7 @@ describe('Filter parse from keywords', () => {
         ],
       },
     };
-    let filter = new Filter(elem);
+    let filter = Filter.fromElement(elem);
     expect(filter.toFilterString()).toEqual('~abc and not ~def');
 
     elem = {
@@ -194,7 +194,7 @@ describe('Filter parse from keywords', () => {
         ],
       },
     };
-    filter = new Filter(elem);
+    filter = Filter.fromElement(elem);
     expect(filter.toFilterString()).toEqual(
       '~abc and not ~def rows=10 first=1 sort=name',
     );
@@ -238,7 +238,7 @@ describe('Filter parse from keywords', () => {
       },
     };
 
-    const filter = new Filter(elem);
+    const filter = Filter.fromElement(elem);
     const filterstring =
       'severity>3.9 and severity<7 first=1 rows=10 sort=name';
     expect(filter.toFilterString()).toEqual(filterstring);
@@ -250,7 +250,7 @@ describe('Filter parse from keywords', () => {
 
 describe('Filter set', () => {
   test('should allow to set a filter term', () => {
-    const filter = new Filter();
+    const filter = Filter.fromElement();
     expect(filter.set('abc', '1', '=').toFilterString()).toEqual('abc=1');
   });
 
@@ -260,7 +260,7 @@ describe('Filter set', () => {
   });
 
   test('should remove sort-reverse when adding sort filter term', () => {
-    const filter = new Filter();
+    const filter = Filter.fromElement();
 
     filter.set('sort-reverse', 'foo', '=');
     expect(filter.has('sort-reverse')).toEqual(true);
@@ -272,7 +272,7 @@ describe('Filter set', () => {
   });
 
   test('should remove sort when adding sort-reverse filter term', () => {
-    const filter = new Filter();
+    const filter = Filter.fromElement();
 
     filter.set('sort', 'foo', '=');
     expect(filter.has('sort')).toEqual(true);
@@ -284,7 +284,7 @@ describe('Filter set', () => {
   });
 
   test('should convert 0 or negative values for first to 1', () => {
-    const filter = new Filter();
+    const filter = Filter.fromElement();
     filter.set('first', '0');
     expect(filter.get('first')).toEqual(1);
 
@@ -293,7 +293,7 @@ describe('Filter set', () => {
   });
 
   test('should reset filter id', () => {
-    const filter = new Filter({_id: 'foo'});
+    const filter = Filter.fromElement({_id: 'foo'});
 
     expect(filter.id).toEqual('foo');
 
@@ -361,7 +361,7 @@ describe('Filter equal', () => {
   test('empty filter should equal itself', () => {
     let filter = Filter.fromString('');
     expect(filter.equals(filter)).toEqual(true);
-    filter = new Filter();
+    filter = Filter.fromElement();
     expect(filter.equals(filter)).toEqual(true);
   });
 
@@ -573,7 +573,7 @@ describe('Filter getTerms', () => {
 
 describe('Filter parse elem', () => {
   test('Should parse public properties', () => {
-    const filter1 = new Filter({
+    const filter1 = Filter.fromElement({
       _id: '100',
       type: 'foo',
     });
@@ -583,7 +583,7 @@ describe('Filter parse elem', () => {
   });
 
   test('Should not parse term as public property', () => {
-    const filter1 = new Filter({
+    const filter1 = Filter.fromElement({
       term: 'abc=1',
     });
 
@@ -591,7 +591,7 @@ describe('Filter parse elem', () => {
   });
 
   test('should parse alerts', () => {
-    const filter1 = new Filter({
+    const filter1 = Filter.fromElement({
       term: 'abc=1',
       alerts: {
         alert: [
@@ -610,7 +610,7 @@ describe('Filter parse elem', () => {
   });
 
   test('should parse id of zero as undefined id', () => {
-    const filter = new Filter({_id: UNKNOWN_FILTER_ID});
+    const filter = Filter.fromElement({_id: UNKNOWN_FILTER_ID});
     expect(filter.id).toBeUndefined();
   });
 });
@@ -625,7 +625,7 @@ describe('Filter copy', () => {
   });
 
   test('should copy public properties', () => {
-    const filter1 = new Filter({
+    const filter1 = Filter.fromElement({
       term: 'abc=1',
       _id: '100',
       type: 'foo',
@@ -1033,7 +1033,7 @@ describe('filter hasTerm', () => {
 });
 
 describe('Filter fromTerm', () => {
-  test('should add FilterTerm to the new Filter', () => {
+  test('should add FilterTerm to the Filter.fromElement', () => {
     const term = new FilterTerm({
       keyword: 'abc',
       relation: '=',
@@ -1044,7 +1044,7 @@ describe('Filter fromTerm', () => {
     expect(filter.toFilterString()).toEqual('abc=1');
   });
 
-  test('should add several FilterTerms to the new Filter', () => {
+  test('should add several FilterTerms to the Filter.fromElement', () => {
     const term1 = new FilterTerm({
       keyword: 'abc',
       relation: '=',
@@ -1134,7 +1134,7 @@ describe('should lower the case of capitalized keywords', () => {
         ],
       },
     };
-    const filter = new Filter(element);
+    const filter = Filter.fromElement(element);
     expect(filter.toFilterString()).toEqual(
       '~abc and not ~def rows=10 first=1 sort=name',
     );

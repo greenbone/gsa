@@ -20,7 +20,7 @@ import {isDefined} from '../utils/identity';
 
 import {parseSeverity, parseDate} from '../parser';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 import ReportReport from './report/report';
 
@@ -29,8 +29,8 @@ import ReportReport from './report/report';
 class Report extends Model {
   static entityType = 'report';
 
-  parseProperties(elem) {
-    const copy = super.parseProperties(elem);
+  static parseElement(element) {
+    const copy = super.parseElement(element);
 
     const {
       report,
@@ -42,14 +42,14 @@ class Report extends Model {
       scan_start,
       scan_end,
       timestamp,
-    } = elem;
+    } = element;
 
     if (isDefined(report)) {
-      copy.report = new ReportReport(report);
+      copy.report = ReportReport.fromElement(report);
     }
 
-    copy.report_format = new Model(report_format, 'reportformat');
-    copy.task = new Model(task, 'task');
+    copy.report_format = parseModelFromElement(report_format, 'reportformat');
+    copy.task = parseModelFromElement(task, 'task');
 
     if (isDefined(severity)) {
       copy.severity = parseSeverity(severity);

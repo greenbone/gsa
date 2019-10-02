@@ -54,7 +54,7 @@ describe('Alert Model tests', () => {
         },
       },
     };
-    const alert = new Alert(elem);
+    const alert = Alert.fromElement(elem);
 
     expect(alert.condition).toEqual({
       data: {},
@@ -90,7 +90,7 @@ describe('Alert Model tests', () => {
       },
     };
 
-    const alert = new Alert(elem);
+    const alert = Alert.fromElement(elem);
     expect(alert.method).toEqual({
       data: {
         bar: {
@@ -108,24 +108,30 @@ describe('Alert Model tests', () => {
 
   test('should return given filter as instance of filter model', () => {
     const elem = {filter: 'rows=1337'};
-    const alert = new Alert(elem);
+    const alert = Alert.fromElement(elem);
 
-    expect(alert.filter).toEqual(new Model('rows=1337', 'filter'));
+    expect(alert.filter).toBeInstanceOf(Model);
+    expect(alert.filter.entityType).toEqual('filter');
   });
 
   test('should return given tasks as array of instances of task model', () => {
     const elem = {
       tasks: {
-        task: {},
+        task: {_id: 't1'},
       },
     };
-    const alert = new Alert(elem);
+    const alert = Alert.fromElement(elem);
 
-    expect(alert.tasks).toEqual([new Model({}, 'task')]);
+    expect(alert.tasks.length).toEqual(1);
+
+    const [task] = alert.tasks;
+    expect(task).toBeInstanceOf(Model);
+    expect(task.entityType).toEqual('task');
+    expect(task.id).toEqual('t1');
   });
 
   test('should return empty array if no tasks are given', () => {
-    const alert = new Alert({});
+    const alert = Alert.fromElement({});
 
     expect(alert.tasks).toEqual([]);
   });
@@ -139,20 +145,20 @@ describe('Alert Model tests', () => {
         },
       },
     };
-    const alert = new Alert(elem);
+    const alert = Alert.fromElement(elem);
 
     expect(alert.method.data.report_formats).toEqual(['123', '456', '789']);
   });
 
   test('should return empty array if no report format ids are given', () => {
-    const alert = new Alert({});
+    const alert = Alert.fromElement({});
 
     expect(alert.method.data.report_formats).toEqual([]);
   });
 
   test('isActive() should return correct true/false', () => {
-    const alert1 = new Alert({active: '0'});
-    const alert2 = new Alert({active: '1'});
+    const alert1 = Alert.fromElement({active: '0'});
+    const alert2 = Alert.fromElement({active: '1'});
 
     expect(alert1.isActive()).toBe(false);
     expect(alert2.isActive()).toBe(true);

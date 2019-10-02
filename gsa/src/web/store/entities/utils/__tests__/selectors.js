@@ -338,7 +338,7 @@ describe('EntitiesSelector getAllEntities tests', () => {
   });
 
   test('getAllEntities should return entities with all-filter if filter is undefined', () => {
-    const filter = new Filter({});
+    const filter = new Filter();
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       byId: {

@@ -25,34 +25,34 @@ import Audit, {
   HOSTS_ORDERING_SEQUENTIAL,
   AUDIT_STATUS,
 } from 'gmp/models/audit';
-import {testModelProperties} from '../testing';
-
-testModelProperties(Audit, 'audit', {testIsActive: false});
+import {testModel} from '../testing';
 
 describe('Audit model tests', () => {
+  testModel(Audit, 'audit', {testIsActive: false});
+
   test('should parse undefined hosts_ordering', () => {
     const obj = {hosts_ordering: undefined};
-    const audit = new Audit(obj);
+    const audit = Audit.fromElement(obj);
     expect(audit.hosts_ordering).toBeUndefined();
   });
 
   test('should parse unknown hosts_ordering as undefined', () => {
     const obj = {hosts_ordering: 'foo'};
-    const audit = new Audit(obj);
+    const audit = Audit.fromElement(obj);
     expect(audit.hosts_ordering).toBeUndefined();
   });
 
   test('should parse known hosts_ordering', () => {
     let obj = {hosts_ordering: HOSTS_ORDERING_RANDOM};
-    let audit = new Audit(obj);
+    let audit = Audit.fromElement(obj);
     expect(audit.hosts_ordering).toEqual(HOSTS_ORDERING_RANDOM);
 
     obj = {hosts_ordering: HOSTS_ORDERING_REVERSE};
-    audit = new Audit(obj);
+    audit = Audit.fromElement(obj);
     expect(audit.hosts_ordering).toEqual(HOSTS_ORDERING_REVERSE);
 
     obj = {hosts_ordering: HOSTS_ORDERING_SEQUENTIAL};
-    audit = new Audit(obj);
+    audit = Audit.fromElement(obj);
     expect(audit.hosts_ordering).toEqual(HOSTS_ORDERING_SEQUENTIAL);
   });
 });
@@ -75,7 +75,7 @@ describe(`Audit Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const audit = new Audit({status});
+      const audit = Audit.fromElement({status});
       expect(audit.isActive()).toEqual(exp);
     }
   });
@@ -97,7 +97,7 @@ describe(`Audit Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const audit = new Audit({status});
+      const audit = Audit.fromElement({status});
       expect(audit.isRunning()).toEqual(exp);
     }
   });
@@ -119,7 +119,7 @@ describe(`Audit Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const audit = new Audit({status});
+      const audit = Audit.fromElement({status});
       expect(audit.isStopped()).toEqual(exp);
     }
   });
@@ -141,7 +141,7 @@ describe(`Audit Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const audit = new Audit({status});
+      const audit = Audit.fromElement({status});
       expect(audit.isInterrupted()).toEqual(exp);
     }
   });
@@ -163,16 +163,16 @@ describe(`Audit Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const audit = new Audit({status});
+      const audit = Audit.fromElement({status});
       expect(audit.isNew()).toEqual(exp);
     }
   });
 
   test('should be changeable if alterable or new', () => {
-    let audit = new Audit({status: AUDIT_STATUS.new, alterable: '0'});
+    let audit = Audit.fromElement({status: AUDIT_STATUS.new, alterable: '0'});
     expect(audit.isChangeable()).toEqual(true);
 
-    audit = new Audit({status: AUDIT_STATUS.done, alterable: '1'});
+    audit = Audit.fromElement({status: AUDIT_STATUS.done, alterable: '1'});
     expect(audit.isChangeable()).toEqual(true);
   });
 });

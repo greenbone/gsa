@@ -17,11 +17,35 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import Model from 'gmp/model';
+import Model, {parseModelFromElement} from 'gmp/model';
 import {testModel} from 'gmp/models/testing';
 
 describe('Model tests', () => {
   testModel(Model, 'unknown');
+});
+
+describe('parseModelFromElement tests', () => {
+  test('should parse model', () => {
+    const element = {
+      _id: '1',
+    };
+    const model = parseModelFromElement(element);
+
+    expect(model.id).toEqual('1');
+    expect(model).toBeInstanceOf(Model);
+    expect(model.entityType).toEqual('unknown');
+  });
+
+  test('should parse model and set entity type', () => {
+    const element = {
+      _id: '1',
+    };
+    const model = parseModelFromElement(element, 'foo');
+
+    expect(model.id).toEqual('1');
+    expect(model).toBeInstanceOf(Model);
+    expect(model.entityType).toEqual('foo');
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:

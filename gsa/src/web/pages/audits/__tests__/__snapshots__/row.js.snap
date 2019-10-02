@@ -230,7 +230,7 @@ exports[`Audit Row tests should render 1`] = `
 .c8 {
   height: 13px;
   width: 100%;
-  background: #4F91C7;
+  background: #4f91c7;
 }
 
 .c11 {

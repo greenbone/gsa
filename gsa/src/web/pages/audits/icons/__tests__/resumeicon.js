@@ -31,7 +31,7 @@ import ResumeIcon from '../resumeicon';
 describe('Audit ResumeIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
     const caps = new Capabilities(['everything']);
-    const audit = new Audit({status: AUDIT_STATUS.stopped});
+    const audit = Audit.fromElement({status: AUDIT_STATUS.stopped});
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
@@ -54,7 +54,7 @@ describe('Audit ResumeIcon component tests', () => {
 
   test('should render in inactive state if wrong command level permissions are given', () => {
     const caps = new Capabilities(['authenticate']);
-    const audit = new Audit({status: AUDIT_STATUS.stopped});
+    const audit = Audit.fromElement({status: AUDIT_STATUS.stopped});
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
@@ -76,7 +76,7 @@ describe('Audit ResumeIcon component tests', () => {
 
   test('should render in inactive state if audit is not stopped', () => {
     const caps = new Capabilities(['everything']);
-    const audit = new Audit({status: AUDIT_STATUS.new});
+    const audit = Audit.fromElement({status: AUDIT_STATUS.new});
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
@@ -101,7 +101,7 @@ describe('Audit ResumeIcon component tests', () => {
         _id: 'schedule1',
       },
     };
-    const audit = new Audit(elem);
+    const audit = Audit.fromElement(elem);
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});

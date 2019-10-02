@@ -51,7 +51,7 @@ describe('Policy model tests', () => {
         },
       },
     ];
-    const policy = new Policy(elem);
+    const policy = Policy.fromElement(elem);
 
     expect(policy.family_list).toEqual(res);
   });
@@ -69,7 +69,7 @@ describe('Policy model tests', () => {
         ],
       },
     };
-    const policy = new Policy(elem);
+    const policy = Policy.fromElement(elem);
 
     expect(policy.family_list[0].nvts.count).toBeUndefined();
     expect(policy.family_list[0].nvts.max).toBeUndefined();
@@ -96,13 +96,13 @@ describe('Policy model tests', () => {
         max: 42,
       },
     };
-    const policy = new Policy(elem);
+    const policy = Policy.fromElement(elem);
 
     expect(policy.families.foo).toEqual(res);
   });
 
   test('should return empty family_list array if no families are given', () => {
-    const policy = new Policy({});
+    const policy = Policy.fromElement({});
 
     expect(policy.family_list).toEqual([]);
   });
@@ -114,7 +114,7 @@ describe('Policy model tests', () => {
         growing: '1',
       },
     };
-    const policy = new Policy(elem);
+    const policy = Policy.fromElement(elem);
 
     expect(policy.families.count).toEqual(42);
     expect(policy.families.trend).toEqual(SCANCONFIG_TREND_DYNAMIC);
@@ -136,7 +136,7 @@ describe('Policy model tests', () => {
       known: 21,
       max: 1337,
     };
-    const policy = new Policy(elem);
+    const policy = Policy.fromElement(elem);
 
     expect(policy.nvts).toEqual(res);
     expect(policy.nvt_count).toBeUndefined();
@@ -145,7 +145,7 @@ describe('Policy model tests', () => {
   });
 
   test('should return empty object if no nvt_counts are given', () => {
-    const policy = new Policy({});
+    const policy = Policy.fromElement({});
 
     expect(policy.nvts).toEqual({});
   });
@@ -190,21 +190,21 @@ describe('Policy model tests', () => {
       },
     ];
 
-    const policy = new Policy(elem);
+    const policy = Policy.fromElement(elem);
 
     expect(policy.preferences.scanner).toEqual(scannerPreferences);
     expect(policy.preferences.nvt).toEqual(nvtPreferences);
   });
 
   test('should return empty arrays if no preferences are given', () => {
-    const policy = new Policy({});
+    const policy = Policy.fromElement({});
 
     expect(policy.preferences.scanner).toEqual([]);
     expect(policy.preferences.nvt).toEqual([]);
   });
 
   test('should parse type', () => {
-    const policy = new Policy({type: '21'});
+    const policy = Policy.fromElement({type: '21'});
 
     expect(policy.policy_type).toEqual(21);
   });
@@ -216,8 +216,8 @@ describe('Policy model tests', () => {
         id: '123abc',
       },
     };
-    const policy = new Policy(elem);
-    const policy2 = new Policy({});
+    const policy = Policy.fromElement(elem);
+    const policy2 = Policy.fromElement({});
 
     expect(policy.scanner).toBeInstanceOf(Model);
     expect(policy.scanner.entityType).toEqual('scanner');
@@ -236,14 +236,14 @@ describe('Policy model tests', () => {
         ],
       },
     };
-    const policy = new Policy(elem);
+    const policy = Policy.fromElement(elem);
 
     expect(policy.audits[0]).toBeInstanceOf(Model);
     expect(policy.audits[0].entityType).toEqual('audit');
   });
 
   test('should return empty array if no tasks are given', () => {
-    const policy = new Policy({});
+    const policy = Policy.fromElement({});
 
     expect(policy.audits).toEqual([]);
   });

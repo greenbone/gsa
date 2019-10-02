@@ -29,7 +29,7 @@ import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Table from '../table';
 
-const policy = new Policy({
+const policy = Policy.fromElement({
   _id: '12345',
   name: 'foo',
   comment: 'bar',
@@ -37,7 +37,7 @@ const policy = new Policy({
   permissions: {permission: [{name: 'everything'}]},
 });
 
-const policy2 = new Policy({
+const policy2 = Policy.fromElement({
   _id: '123456',
   name: 'lorem',
   comment: 'ipsum',
@@ -45,7 +45,7 @@ const policy2 = new Policy({
   permissions: {permission: [{name: 'everything'}]},
 });
 
-const policy3 = new Policy({
+const policy3 = Policy.fromElement({
   _id: '1234567',
   name: 'hello',
   comment: 'world',

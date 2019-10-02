@@ -42,18 +42,18 @@ import {testModel} from 'gmp/models/testing';
 
 import {parseDate, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-const USERNAME_PASSWORD_CREDENTIAL = new Credential({
+const USERNAME_PASSWORD_CREDENTIAL = Credential.fromElement({
   type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
 });
-const USERNAME_SSH_KEY_CREDENTIAL = new Credential({
+const USERNAME_SSH_KEY_CREDENTIAL = Credential.fromElement({
   type: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 });
-const CLIENT_CERTIFICATE_CREDENTIAL = new Credential({
+const CLIENT_CERTIFICATE_CREDENTIAL = Credential.fromElement({
   type: CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
 });
-const SNMP_CREDENTIAL = new Credential({type: SNMP_CREDENTIAL_TYPE});
-const PGP_CREDENTIAL = new Credential({type: PGP_CREDENTIAL_TYPE});
-const SMIME_CREDENTIAL = new Credential({type: SMIME_CREDENTIAL_TYPE});
+const SNMP_CREDENTIAL = Credential.fromElement({type: SNMP_CREDENTIAL_TYPE});
+const PGP_CREDENTIAL = Credential.fromElement({type: PGP_CREDENTIAL_TYPE});
+const SMIME_CREDENTIAL = Credential.fromElement({type: SMIME_CREDENTIAL_TYPE});
 
 const createAllCredentials = () => [
   CLIENT_CERTIFICATE_CREDENTIAL,
@@ -74,7 +74,7 @@ describe('Credential Model tests', () => {
         expiration_time: '2019-10-10T11:41:23.022Z',
       },
     };
-    const credential = new Credential(elem);
+    const credential = Credential.fromElement(elem);
 
     expect(credential.certificate_info.activationTime).toEqual(
       parseDate('2018-10-10T11:41:23.022Z'),
@@ -87,7 +87,7 @@ describe('Credential Model tests', () => {
   });
 
   test('should parse type', () => {
-    const credential = new Credential({type: 'foo'});
+    const credential = Credential.fromElement({type: 'foo'});
 
     expect(credential.credential_type).toEqual('foo');
   });
@@ -95,8 +95,8 @@ describe('Credential Model tests', () => {
   test('should parse allow_insecure as Yes/No', () => {
     const elem1 = {allow_insecure: '1'};
     const elem2 = {allow_insecure: '0'};
-    const cred1 = new Credential(elem1);
-    const cred2 = new Credential(elem2);
+    const cred1 = Credential.fromElement(elem1);
+    const cred2 = Credential.fromElement(elem2);
 
     expect(cred1.allow_insecure).toEqual(YES_VALUE);
     expect(cred2.allow_insecure).toEqual(NO_VALUE);
@@ -105,34 +105,45 @@ describe('Credential Model tests', () => {
   test('should return given targets as array of instances of target model', () => {
     const elem = {
       targets: {
-        target: {},
+        target: {_id: 't1'},
       },
     };
-    const credential = new Credential(elem);
+    const credential = Credential.fromElement(elem);
 
-    expect(credential.targets).toEqual([new Model({}, 'target')]);
+    expect(credential.targets.length).toEqual(1);
+
+    const [target] = credential.targets;
+    expect(target).toBeInstanceOf(Model);
+    expect(target.id).toEqual('t1');
+    expect(target.entityType).toEqual('target');
   });
 
   test('should return empty array if no targets are given', () => {
-    const credential = new Credential({});
+    const credential = Credential.fromElement({});
 
+    expect(credential.targets.length).toEqual(0);
     expect(credential.targets).toEqual([]);
   });
 
   test('should return given scanners as array of instances of scanner model', () => {
     const elem = {
       scanners: {
-        scanner: {},
+        scanner: {_id: 's1'},
       },
     };
-    const credential = new Credential(elem);
+    const credential = Credential.fromElement(elem);
 
-    expect(credential.scanners).toEqual([new Model({}, 'scanner')]);
+    expect(credential.scanners.length).toEqual(1);
+
+    const [scanner] = credential.scanners;
+    expect(scanner).toBeInstanceOf(Model);
+    expect(scanner.id).toEqual('s1');
+    expect(scanner.entityType).toEqual('scanner');
   });
 
   test('isAllowInsecure() should return correct true/false', () => {
-    const cred1 = new Credential({allow_insecure: '0'});
-    const cred2 = new Credential({allow_insecure: '1'});
+    const cred1 = Credential.fromElement({allow_insecure: '0'});
+    const cred2 = Credential.fromElement({allow_insecure: '1'});
 
     expect(cred1.isAllowInsecure()).toBe(false);
     expect(cred2.isAllowInsecure()).toBe(true);

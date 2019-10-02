@@ -183,7 +183,7 @@ const PermissionDialog = ({
 
         const [type] = split(name, '_', 1);
         const resource = isDefined(state.resourceType)
-          ? new Model(
+          ? Model.fromElement(
               {
                 name: isDefined(state.resourceName)
                   ? state.resourceName

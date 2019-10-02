@@ -40,7 +40,7 @@ describe('ContainerDialog tests', () => {
   });
 
   test('should render edit dialog', () => {
-    const task = new Task({name: 'foo', _id: 't1'});
+    const task = Task.fromElement({name: 'foo', _id: 't1'});
     const handleClose = jest.fn();
     const handleSave = jest.fn();
 
@@ -84,7 +84,7 @@ describe('ContainerDialog tests', () => {
   });
 
   test('should change fields in edit dialog', () => {
-    const task = new Task({name: 'foo', _id: 't1'});
+    const task = Task.fromElement({name: 'foo', _id: 't1'});
     const handleClose = jest.fn();
     const handleSave = jest.fn();
 

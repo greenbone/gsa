@@ -113,7 +113,7 @@ const preferences = {
   ],
 };
 
-const policy = new Policy({
+const policy = Policy.fromElement({
   _id: '12345',
   name: 'foo',
   comment: 'bar',
@@ -134,7 +134,7 @@ const policy = new Policy({
   },
 });
 
-const policy2 = new Policy({
+const policy2 = Policy.fromElement({
   _id: '12345',
   name: 'foo',
   comment: 'bar',
@@ -155,7 +155,7 @@ const policy2 = new Policy({
   },
 });
 
-const policy3 = new Policy({
+const policy3 = Policy.fromElement({
   _id: '12345',
   name: 'foo',
   comment: 'bar',
@@ -176,7 +176,7 @@ const policy3 = new Policy({
   },
 });
 
-const policy4 = new Policy({
+const policy4 = Policy.fromElement({
   _id: '12345',
   name: 'foo',
   comment: 'bar',

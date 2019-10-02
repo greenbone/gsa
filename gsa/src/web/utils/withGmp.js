@@ -16,13 +16,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import React from 'react';
 
-import PropTypes from './proptypes.js';
+import hoistStatics from 'hoist-non-react-statics';
 
-import withContext from './withContext.js';
+import GmpContext from '../components/provider/gmpprovider';
 
-export default withContext({
-  gmp: PropTypes.gmp.isRequired,
-});
+const withGmp = Component => {
+  const GmpWrapper = props => (
+    <GmpContext.Consumer>
+      {gmp => <Component {...props} gmp={gmp} />}
+    </GmpContext.Consumer>
+  );
+  return hoistStatics(GmpWrapper, Component);
+};
+
+export default withGmp;
 
 // vim: set ts=4 sw=4 tw=80:

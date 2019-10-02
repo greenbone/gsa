@@ -24,7 +24,7 @@ import {map} from '../utils/array';
 
 import {parseInt, parseYesNo, parseDate} from '../parser';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 import Credential from './credential';
 
@@ -78,37 +78,39 @@ const parse_scanner_info = (info = {}) => {
 class Scanner extends Model {
   static entityType = 'scanner';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
-    ret.scannerType = parseInt(elem.type);
+    ret.scannerType = parseInt(element.type);
 
     ret.credential =
       isDefined(ret.credential) && !isEmpty(ret.credential._id)
-        ? new Credential(ret.credential)
+        ? Credential.fromElement(ret.credential)
         : undefined;
 
-    if (isEmpty(elem.ca_pub)) {
+    if (isEmpty(element.ca_pub)) {
       delete ret.ca_pub;
     } else {
       ret.caPub = {
-        certificate: elem.ca_pub,
+        certificate: element.ca_pub,
       };
 
-      if (isDefined(elem.ca_pub_info)) {
-        ret.caPub.info = elem.ca_pub_info;
+      if (isDefined(element.ca_pub_info)) {
+        ret.caPub.info = element.ca_pub_info;
         ret.caPub.info.activationTime = parseDate(
-          elem.ca_pub_info.activation_time,
+          element.ca_pub_info.activation_time,
         );
         ret.caPub.info.expirationTime = parseDate(
-          elem.ca_pub_info.expiration_time,
+          element.ca_pub_info.expiration_time,
         );
         delete ret.ca_pub_info;
       }
     }
 
     if (isDefined(ret.tasks)) {
-      ret.tasks = map(ret.tasks.task, task => new Model(task, 'task'));
+      ret.tasks = map(ret.tasks.task, task =>
+        parseModelFromElement(task, 'task'),
+      );
     } else {
       ret.tasks = [];
     }
@@ -116,9 +118,8 @@ class Scanner extends Model {
     if (isEmpty(ret.configs)) {
       ret.configs = [];
     } else {
-      ret.configs = map(
-        ret.configs.config,
-        config => new Model(config, 'scanconfig'),
+      ret.configs = map(ret.configs.config, config =>
+        parseModelFromElement(config, 'scanconfig'),
       );
     }
 

@@ -25,13 +25,13 @@ testModel(SecInfo, 'allinfo');
 
 describe('SecInfo model tests', () => {
   test('should be instance of Info', () => {
-    const secInfo = new SecInfo({});
+    const secInfo = SecInfo.fromElement({});
 
     expect(secInfo).toBeInstanceOf(Info);
   });
 
   test('should parse type', () => {
-    const secInfo = new SecInfo({_type: 'nvt'});
+    const secInfo = SecInfo.fromElement({_type: 'nvt'});
 
     expect(secInfo.infoType).toEqual('nvt');
   });
@@ -43,7 +43,7 @@ describe('SecInfo model tests', () => {
         other: {},
       },
     };
-    const secInfo = new SecInfo(elem);
+    const secInfo = SecInfo.fromElement(elem);
 
     expect(secInfo.allInfo).toBeUndefined();
     expect(secInfo._type).toBeUndefined();
@@ -54,8 +54,8 @@ describe('SecInfo model tests', () => {
 
 describe('SecInfo model function tests', () => {
   test('secInfoType should return infoType', () => {
-    const secInfo1 = new SecInfo({allinfo: {type: 'nvt'}});
-    const secInfo2 = new SecInfo({});
+    const secInfo1 = SecInfo.fromElement({allinfo: {type: 'nvt'}});
+    const secInfo2 = SecInfo.fromElement({});
 
     expect(secInfoType(secInfo1)).toEqual('nvt');
     expect(secInfoType(secInfo2)).toBeUndefined();

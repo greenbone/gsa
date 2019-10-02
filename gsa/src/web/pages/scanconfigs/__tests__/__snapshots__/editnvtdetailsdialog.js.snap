@@ -597,7 +597,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
 .c13 {
   height: 13px;
   width: 70%;
-  background: #C83814;
+  background: #c83814;
 }
 
 .c11 {

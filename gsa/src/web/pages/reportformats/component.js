@@ -38,17 +38,8 @@ class ReportFormatComponent extends React.Component {
     this.handleCloseReportFormatDialog = this.handleCloseReportFormatDialog.bind(
       this,
     );
-    this.handleVerify = this.handleVerify.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.openReportFormatDialog = this.openReportFormatDialog.bind(this);
-  }
-
-  handleVerify(format) {
-    const {gmp, onVerified, onVerifyError} = this.props;
-
-    this.handleInteraction();
-
-    gmp.reportformat.verify(format).then(onVerified, onVerifyError);
   }
 
   openReportFormatDialog(reportformat) {
@@ -138,8 +129,6 @@ class ReportFormatComponent extends React.Component {
   render() {
     const {
       children,
-      onCloned,
-      onCloneError,
       onDeleted,
       onDeleteError,
       onDownloaded,
@@ -152,8 +141,6 @@ class ReportFormatComponent extends React.Component {
     return (
       <EntityComponent
         name="reportformat"
-        onCloned={onCloned}
-        onCloneError={onCloneError}
         onDeleted={onDeleted}
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
@@ -166,7 +153,6 @@ class ReportFormatComponent extends React.Component {
               ...other,
               import: this.openReportFormatDialog,
               edit: this.openReportFormatDialog,
-              verify: this.handleVerify,
             })}
             {dialogVisible && (
               <ReportFormatDialog
@@ -186,8 +172,6 @@ class ReportFormatComponent extends React.Component {
 ReportFormatComponent.propTypes = {
   children: PropTypes.func.isRequired,
   gmp: PropTypes.gmp.isRequired,
-  onCloneError: PropTypes.func,
-  onCloned: PropTypes.func,
   onDeleteError: PropTypes.func,
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
@@ -197,8 +181,6 @@ ReportFormatComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
-  onVerified: PropTypes.func,
-  onVerifyError: PropTypes.func,
 };
 
 export default withGmp(ReportFormatComponent);

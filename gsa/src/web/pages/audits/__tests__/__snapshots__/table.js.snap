@@ -548,7 +548,7 @@ exports[`Audits table tests should render 1`] = `
 .c24 {
   height: 13px;
   width: 100%;
-  background: #4F91C7;
+  background: #4f91c7;
 }
 
 .c27 {
@@ -560,13 +560,13 @@ exports[`Audits table tests should render 1`] = `
 .c31 {
   height: 13px;
   width: 100%;
-  background: #99BE48;
+  background: #99be48;
 }
 
 .c32 {
   height: 13px;
   width: 0%;
-  background: #70C000;
+  background: #70c000;
 }
 
 .c26 {

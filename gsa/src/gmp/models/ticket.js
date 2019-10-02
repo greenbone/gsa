@@ -23,7 +23,7 @@ import {parseSeverity, parseDate, parseText} from 'gmp/parser';
 import {isDefined, isModelElement} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 export const TICKET_STATUS = {
   open: 'Open',
@@ -45,75 +45,80 @@ export const getTranslatableTicketStatus = status =>
 class Ticket extends Model {
   static entityType = 'ticket';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
-    if (isDefined(elem.assigned_to) && isDefined(elem.assigned_to.user)) {
-      ret.assignedTo = {user: new Model(elem.assigned_to.user, 'user')};
+    if (isDefined(element.assigned_to) && isDefined(element.assigned_to.user)) {
+      ret.assignedTo = {
+        user: parseModelFromElement(element.assigned_to.user, 'user'),
+      };
     }
     delete ret.assigned_to;
 
-    if (isModelElement(elem.result)) {
-      ret.result = new Model(elem.result, 'result');
+    if (isModelElement(element.result)) {
+      ret.result = parseModelFromElement(element.result, 'result');
     } else {
       delete ret.result;
     }
 
-    if (isModelElement(elem.report)) {
-      ret.report = new Model(elem.report, 'report');
+    if (isModelElement(element.report)) {
+      ret.report = parseModelFromElement(element.report, 'report');
     } else {
       delete ret.report;
     }
 
-    if (isModelElement(elem.task)) {
-      ret.task = new Model(elem.task, 'task');
+    if (isModelElement(element.task)) {
+      ret.task = parseModelFromElement(element.task, 'task');
     } else {
       delete ret.task;
     }
 
-    if (isModelElement(elem.fix_verified_report)) {
-      ret.fixVerifiedReport = new Model(elem.fix_verified_report, 'report');
+    if (isModelElement(element.fix_verified_report)) {
+      ret.fixVerifiedReport = parseModelFromElement(
+        element.fix_verified_report,
+        'report',
+      );
     }
     delete ret.fix_verified_report;
 
-    if (isDefined(elem.severity)) {
-      ret.severity = parseSeverity(elem.severity);
+    if (isDefined(element.severity)) {
+      ret.severity = parseSeverity(element.severity);
     }
 
-    if (isDefined(elem.nvt) && !isEmpty(elem.nvt._oid)) {
-      ret.nvt = {oid: elem.nvt._oid};
+    if (isDefined(element.nvt) && !isEmpty(element.nvt._oid)) {
+      ret.nvt = {oid: element.nvt._oid};
     }
 
-    if (!isEmpty(elem.open_time)) {
-      ret.openTime = parseDate(elem.open_time);
+    if (!isEmpty(element.open_time)) {
+      ret.openTime = parseDate(element.open_time);
     }
     delete ret.open_time;
 
-    if (!isEmpty(elem.fix_verified_time)) {
-      ret.fixVerifiedTime = parseDate(elem.fix_verified_time);
+    if (!isEmpty(element.fix_verified_time)) {
+      ret.fixVerifiedTime = parseDate(element.fix_verified_time);
     }
     delete ret.fix_verified_time;
 
-    if (!isEmpty(elem.fixed_time)) {
-      ret.fixedTime = parseDate(elem.fixed_time);
+    if (!isEmpty(element.fixed_time)) {
+      ret.fixedTime = parseDate(element.fixed_time);
     }
     delete ret.fixed_time;
 
-    if (!isEmpty(elem.closed_time)) {
-      ret.closedTime = parseDate(elem.closed_time);
+    if (!isEmpty(element.closed_time)) {
+      ret.closedTime = parseDate(element.closed_time);
     }
     delete ret.closed_time;
 
-    ret.solutionType = elem.solution_type;
+    ret.solutionType = element.solution_type;
     delete ret.solution_type;
 
-    const openNote = parseText(elem.open_note);
+    const openNote = parseText(element.open_note);
     if (!isEmpty(openNote)) {
       ret.openNote = openNote;
     }
     delete ret.open_note;
 
-    const closedNote = parseText(elem.closed_note);
+    const closedNote = parseText(element.closed_note);
     if (!isEmpty(closedNote)) {
       ret.closedNote = closedNote;
     }

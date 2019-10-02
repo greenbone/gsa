@@ -49,7 +49,7 @@ class EntityCommand extends GmpCommand {
   }
 
   getModelFromResponse(response) {
-    return new this.clazz(this.getElementFromRoot(response.data));
+    return this.clazz.fromElement(this.getElementFromRoot(response.data));
   }
 
   transformResponse(response) {

@@ -25,6 +25,8 @@ import PropTypes from '../../utils/proptypes.js';
 
 const log = Logger.getLogger('web.components.provider.subscription');
 
+export const SubscriptionContext = React.createContext();
+
 class SubscriptionProvider extends React.Component {
   constructor(...args) {
     super(...args);
@@ -72,21 +74,15 @@ class SubscriptionProvider extends React.Component {
     };
   }
 
-  getChildContext() {
-    return {
-      subscribe: this.handleSubscribe,
-    };
-  }
-
   render() {
     const {children} = this.props;
-    return children({notify: this.handleNotify});
+    return (
+      <SubscriptionContext.Provider value={this.handleSubscribe}>
+        {children({notify: this.handleNotify})}
+      </SubscriptionContext.Provider>
+    );
   }
 }
-
-SubscriptionProvider.childContextTypes = {
-  subscribe: PropTypes.func.isRequired,
-};
 
 SubscriptionProvider.propTypes = {
   children: PropTypes.func.isRequired,

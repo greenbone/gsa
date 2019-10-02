@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import Model from '../model';
+import Model, {parseModelFromElement} from '../model';
 
 import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
@@ -36,11 +36,11 @@ export const TARGET_CREDENTIAL_NAMES = [
 class Target extends Model {
   static entityType = 'target';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
-    if (isDefined(elem.port_list) && !isEmpty(elem.port_list._id)) {
-      ret.port_list = new PortList(ret.port_list);
+    if (isDefined(element.port_list) && !isEmpty(element.port_list._id)) {
+      ret.port_list = PortList.fromElement(ret.port_list);
     } else {
       delete ret.port_list;
     }
@@ -48,22 +48,24 @@ class Target extends Model {
     for (const name of TARGET_CREDENTIAL_NAMES) {
       const cred = ret[name];
       if (isDefined(cred) && !isEmpty(cred._id)) {
-        ret[name] = new Model(cred, 'credential');
+        ret[name] = parseModelFromElement(cred, 'credential');
       } else {
         delete ret[name];
       }
     }
 
-    ret.hosts = parseCsv(elem.hosts);
-    ret.exclude_hosts = parseCsv(elem.exclude_hosts);
+    ret.hosts = parseCsv(element.hosts);
+    ret.exclude_hosts = parseCsv(element.exclude_hosts);
 
-    ret.max_hosts = parseInt(elem.max_hosts);
+    ret.max_hosts = parseInt(element.max_hosts);
 
-    ret.reverse_lookup_only = parseYesNo(elem.reverse_lookup_only);
-    ret.reverse_lookup_unify = parseYesNo(elem.reverse_lookup_unify);
+    ret.reverse_lookup_only = parseYesNo(element.reverse_lookup_only);
+    ret.reverse_lookup_unify = parseYesNo(element.reverse_lookup_unify);
 
-    if (isDefined(elem.tasks)) {
-      ret.tasks = map(elem.tasks.task, task => new Model(task, 'task'));
+    if (isDefined(element.tasks)) {
+      ret.tasks = map(element.tasks.task, task =>
+        parseModelFromElement(task, 'task'),
+      );
     }
 
     return ret;

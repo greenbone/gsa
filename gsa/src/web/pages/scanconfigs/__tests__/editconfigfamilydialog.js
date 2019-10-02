@@ -24,7 +24,7 @@ import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import EditConfigFamilyDialog from '../editconfigfamilydialog';
 
-const nvt = new Nvt({
+const nvt = Nvt.fromElement({
   _oid: '1234',
   name: 'nvt',
   family: 'family',
@@ -32,7 +32,7 @@ const nvt = new Nvt({
   preference_count: 3,
 });
 
-const nvt2 = new Nvt({
+const nvt2 = Nvt.fromElement({
   _oid: '5678',
   name: 'nvt2',
   family: 'family',
@@ -41,7 +41,7 @@ const nvt2 = new Nvt({
   preference_count: 4,
 });
 
-const nvt3 = new Nvt({
+const nvt3 = Nvt.fromElement({
   _oid: '2345',
   name: 'nvt3',
   family: 'family',

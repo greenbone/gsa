@@ -33,7 +33,7 @@ import Row from '../row';
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
 
-const entity = new Policy({
+const entity = Policy.fromElement({
   _id: '1234',
   name: 'foo',
   comment: 'bar',
@@ -80,7 +80,7 @@ describe('Row tests', () => {
   });
 
   test('should render observer icon', () => {
-    const policy = new Policy({
+    const policy = Policy.fromElement({
       _id: '1234',
       name: 'foo',
       comment: 'bar',
@@ -182,7 +182,7 @@ describe('Row tests', () => {
     const handlePolicyEdit = jest.fn();
     const handleCreateAudit = jest.fn();
 
-    const policy = new Policy({
+    const policy = Policy.fromElement({
       _id: '1234',
       name: 'foo',
       comment: 'bar',
@@ -253,7 +253,7 @@ describe('Row tests', () => {
     const handlePolicyEdit = jest.fn();
     const handleCreateAudit = jest.fn();
 
-    const policy = new Policy({
+    const policy = Policy.fromElement({
       _id: '1234',
       name: 'foo',
       comment: 'bar',
@@ -315,7 +315,7 @@ describe('Row tests', () => {
     const handlePolicyEdit = jest.fn();
     const handleCreateAudit = jest.fn();
 
-    const policy = new Policy({
+    const policy = Policy.fromElement({
       _id: '1234',
       name: 'foo',
       comment: 'bar',
