@@ -55,7 +55,7 @@ class Host {
       copy.asset.id = asset._asset_id;
     }
 
-    copy.port_count = parse_page_count(port_count.page);
+    copy.port_count = parse_page_count(port_count);
 
     if (isDefined(result_count)) {
       copy.result_counts = {
