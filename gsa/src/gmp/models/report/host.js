@@ -39,14 +39,31 @@ const parse_page_count = value => {
 };
 
 class Host {
-  constructor(elem) {
-    this.parseProperties(elem);
+  constructor() {
+    this.authSuccess = {};
+    this.details = {};
+    this.result_counts = {
+      false_positive: 0,
+      high: 0,
+      info: 0,
+      log: 0,
+      warning: 0,
+      total: 0,
+    };
   }
 
-  parseProperties(elem) {
-    const copy = {...elem};
+  static fromElement(element) {
+    const host = new Host();
 
-    const {asset = {}, port_count = {}, result_count} = elem;
+    setProperties(this.parseElement(element), host);
+
+    return host;
+  }
+
+  static parseElement(element = {}) {
+    const copy = {...element};
+
+    const {asset = {}, port_count = {}, result_count} = element;
 
     if (isEmpty(asset._asset_id)) {
       delete copy.asset;
@@ -77,17 +94,17 @@ class Host {
       };
     }
 
-    copy.start = parseDate(elem.start);
-    copy.end = parseDate(elem.end);
+    copy.start = parseDate(element.start);
+    copy.end = parseDate(element.end);
 
     delete copy.result_count;
 
     copy.authSuccess = {};
     copy.details = {};
 
-    if (isArray(elem.detail)) {
+    if (isArray(element.detail)) {
       let appsCount = 0;
-      elem.detail.forEach(details => {
+      element.detail.forEach(details => {
         const {name, value} = details;
         switch (name) {
           case 'hostname':
@@ -119,11 +136,9 @@ class Host {
 
     delete copy.detail;
 
-    copy.id = elem.ip; // use ip as id. we need an id for react key prop
+    copy.id = element.ip; // use ip as id. we need an id for react key prop
 
-    setProperties(copy, this);
-
-    return this;
+    return copy;
   }
 }
 
