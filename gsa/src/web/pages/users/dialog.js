@@ -146,8 +146,8 @@ class Dialog extends React.Component {
       value: group.id,
     }));
 
-    const hasLdapEnabled = settings.get('method:ldap_connect').enabled;
-    const hasRadiusEnabled = settings.get('method:radius_connect').enabled;
+    const hasLdapEnabled = true;
+    const hasRadiusEnabled = true;
     return (
       <React.Fragment>
         <SaveDialog
