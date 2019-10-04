@@ -459,7 +459,11 @@ export const parseHosts = (report, filter) => {
   const hosts_array = map(hosts, host => {
     const {port_count = {}} = host;
     const severity = severities[host.ip];
-    return new ReportHost({...host, severity, portsCount: port_count.page});
+    return ReportHost.fromElement({
+      ...host,
+      severity,
+      portsCount: port_count.page,
+    });
   });
 
   const {length: filtered_count} = hosts_array;

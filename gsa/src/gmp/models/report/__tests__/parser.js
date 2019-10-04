@@ -20,7 +20,7 @@
 import {parseHosts} from '../parser';
 
 describe('report parser tests', () => {
-  test('parse_hosts tests', () => {
+  test('should parse hosts', () => {
     const hosts = {
       host: [
         {
@@ -77,6 +77,23 @@ describe('report parser tests', () => {
     expect(parsedHosts.entities[1].severity).toEqual(5.5);
     expect(parsedHosts.counts).toEqual(countsResult);
     expect(parsedHosts.filter).toEqual('foo=bar');
+  });
+
+  test('should parse empty hosts', () => {
+    const filterString = 'foo=bar';
+    const hosts = parseHosts({}, filterString);
+    const counts = {
+      first: 0,
+      all: 0,
+      filtered: 0,
+      length: 0,
+      rows: 0,
+      last: 0,
+    };
+
+    expect(hosts.entities.length).toEqual(0);
+    expect(hosts.counts).toEqual(counts);
+    expect(hosts.filter).toEqual('foo=bar');
   });
 });
 
