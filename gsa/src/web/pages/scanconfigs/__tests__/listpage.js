@@ -70,37 +70,25 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
+const currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
 
-const getFilters = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  }),
-);
+const getFilters = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
 
-const getConfigs = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: [config],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  }),
-);
+const getConfigs = jest.fn().mockResolvedValue({
+  data: [config],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
 
-const getSetting = jest.fn().mockReturnValue(
-  Promise.resolve({
-    filter: null,
-  }),
-);
+const getSetting = jest.fn().mockResolvedValue({filter: null});
 
 describe('ScanConfigsPage tests', () => {
   test('should render full ScanConfigsPage', async () => {
