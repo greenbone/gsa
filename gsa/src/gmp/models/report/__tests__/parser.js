@@ -17,7 +17,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {parseHosts, parsePorts, parseVulnerabilities} from '../parser';
+import {
+  parseHosts,
+  parsePorts,
+  parseVulnerabilities,
+  parseApps,
+} from '../parser';
 
 describe('report parser tests', () => {
   test('should parse hosts', () => {
@@ -259,6 +264,167 @@ describe('report parser tests', () => {
     expect(vulnerabilities.entities.length).toEqual(0);
     expect(vulnerabilities.counts).toEqual(counts);
     expect(vulnerabilities.filter).toEqual('foo=bar rows=5');
+  });
+
+  test('should parse apps', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {
+      // apps are gathered from the host details
+      host: [
+        {
+          detail: [
+            {
+              name: 'App',
+              value: 'cpe:/a:foo:bar',
+            },
+          ],
+          ip: '1.1.1.1',
+        },
+        {
+          detail: [
+            {
+              name: 'App',
+              value: 'cpe:/a:foo:bar',
+            },
+            {
+              name: 'cpe:/a:foo:bar',
+              value: '123/tcp',
+            },
+          ],
+          ip: '2.2.2.2',
+        },
+        {
+          detail: [
+            {
+              name: 'App',
+              value: 'cpe:/a:lorem:ipsum',
+            },
+          ],
+          ip: '1.1.1.1',
+        },
+      ],
+      apps: {
+        count: '123',
+      },
+      // results are used to get the app severity
+      results: {
+        result: [
+          {
+            severity: '5.5',
+            detection: {
+              result: {
+                details: {
+                  detail: [
+                    {
+                      name: 'foo', // another details that gets ignored
+                      value: 'foo/bar',
+                    },
+                    {
+                      name: 'product',
+                      value: 'cpe:/a:foo:bar',
+                    },
+                  ],
+                },
+              },
+            },
+          },
+          {
+            severity: '7.5',
+            detection: {
+              result: {
+                details: {
+                  detail: [
+                    {
+                      name: 'product',
+                      value: 'cpe:/a:foo:bar',
+                    },
+                  ],
+                },
+              },
+            },
+          },
+          {
+            severity: '4.5',
+            detection: {
+              result: {
+                details: {
+                  detail: [
+                    {
+                      name: 'product',
+                      value: 'cpe:/a:foo:bar',
+                    },
+                  ],
+                },
+              },
+            },
+          },
+          {
+            severity: '5.5',
+            detection: {
+              result: {
+                details: {
+                  detail: [
+                    {
+                      name: 'product',
+                      value: 'cpe:/a:lorem:ipsum',
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        ],
+      },
+    };
+    const counts = {
+      first: 1,
+      all: 123,
+      filtered: 2,
+      length: 2,
+      rows: 2,
+      last: 2,
+    };
+    const apps = parseApps(report, filterString);
+
+    expect(apps.entities.length).toEqual(2);
+    expect(apps.counts).toEqual(counts);
+    expect(apps.filter).toEqual('foo=bar rows=5');
+
+    const [app1, app2] = apps.entities;
+
+    expect(app1.id).toEqual('cpe:/a:foo:bar');
+    expect(app1.name).toEqual('cpe:/a:foo:bar');
+    expect(app1.severity).toEqual(7.5);
+    expect(app1.hosts.count).toEqual(2);
+    expect(app1.occurrences.details).toEqual(1);
+    expect(app1.occurrences.withoutDetails).toEqual(0);
+    expect(app1.occurrences.total).toEqual(1);
+
+    expect(app2.id).toEqual('cpe:/a:lorem:ipsum');
+    expect(app2.name).toEqual('cpe:/a:lorem:ipsum');
+    expect(app2.severity).toEqual(5.5);
+    expect(app2.hosts.count).toEqual(1);
+    expect(app2.occurrences.details).toEqual(0);
+    expect(app2.occurrences.withoutDetails).toEqual(1);
+    expect(app2.occurrences.total).toEqual(1);
+  });
+
+  test('should parse empty apps', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {};
+    const counts = {
+      first: 0,
+      all: 0,
+      filtered: 0,
+      length: 0,
+      rows: 0,
+      last: 0,
+    };
+    const apps = parseApps(report, filterString);
+
+    expect(apps.entities.length).toEqual(0);
+    expect(apps.counts).toEqual(counts);
+    expect(apps.filter).toEqual('foo=bar rows=5');
   });
 });
 

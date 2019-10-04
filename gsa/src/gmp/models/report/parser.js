@@ -318,7 +318,7 @@ export const parseApps = (report, filter) => {
         let app = apps_temp[cpe];
 
         if (!isDefined(app)) {
-          app = new ReportApp({...detail, severity: severities[cpe]});
+          app = ReportApp.fromElement({...detail, severity: severities[cpe]});
           apps_temp[cpe] = app;
         }
 
