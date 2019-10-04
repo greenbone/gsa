@@ -18,7 +18,7 @@
  */
 import registerCommand from '../command';
 
-import Model from '../model';
+import {parseModelFromElement} from '../model';
 
 import Credential from '../models/credential';
 import Task from '../models/task';
@@ -132,7 +132,7 @@ class WizardCommand extends HttpCommand {
       });
 
       settings.scan_configs = map(resp.get_configs_response.config, config => {
-        return Model.fromElement(config);
+        return parseModelFromElement(config, 'scanconfig');
       });
 
       settings.credentials = map(

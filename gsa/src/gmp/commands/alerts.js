@@ -21,7 +21,7 @@ import logger from '../log';
 import {map} from '../utils/array';
 
 import registerCommand from '../command';
-import Model from '../model';
+import {parseModelFromElement} from '../model';
 
 import Alert from '../models/alert';
 import Credential from '../models/credential';
@@ -186,14 +186,14 @@ class AlertCommand extends EntityCommand {
       const {new_alert} = response.data;
       new_alert.report_formats = map(
         new_alert.get_report_formats_response.report_format,
-        format => Model.fromElement(format),
+        format => parseModelFromElement(format, 'reportformat'),
       );
       new_alert.credentials = map(
         new_alert.get_credentials_response.credential,
         credential => Credential.fromElement(credential),
       );
       new_alert.tasks = map(new_alert.get_tasks_response.task, task =>
-        Model.fromElement(task),
+        parseModelFromElement(task, 'task'),
       ); // don't use Task here to avoid cyclic dependencies
       new_alert.filters = map(new_alert.get_filters_response.filter, filter =>
         Filter.fromElement(filter),
@@ -216,7 +216,7 @@ class AlertCommand extends EntityCommand {
 
       edit_alert.report_formats = map(
         edit_alert.get_report_formats_response.report_format,
-        format => Model.fromElement(format),
+        format => parseModelFromElement(format, 'reportformat'),
       );
       delete edit_alert.get_report_formats_response;
 
@@ -227,7 +227,7 @@ class AlertCommand extends EntityCommand {
       delete edit_alert.get_credentials_response;
 
       edit_alert.tasks = map(edit_alert.get_tasks_response.task, task =>
-        Model.fromElement(task),
+        parseModelFromElement(task, 'task'),
       ); // don't use Task here to avoid cyclic dependencies
       delete edit_alert.get_tasks_response;
 
