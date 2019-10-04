@@ -131,68 +131,62 @@ const StyledLink = styled(Link)`
   }
 `;
 
-class UserMenuContainer extends React.Component {
-  constructor(...args) {
-    super(...args);
-    this.handleLogout = this.handleLogout.bind(this);
-  }
-
-  handleLogout(event) {
-    const {gmp, history} = this.props;
+const UserMenuContainer = props => {
+  const handleLogout = event => {
+    const {gmp, history} = props;
 
     event.preventDefault();
 
     gmp.doLogout().then(() => {
       history.push('/login?type=logout');
     });
-  }
-  render() {
-    const {sessionTimeout, userName} = this.props;
+  };
 
-    return (
-      <UserMenu data-testid="usermenu">
-        <StyledUserIcon size="medium" />
-        <Div>
-          <List>
-            <Entry title={_('Logged in as: {{userName}}', {userName})}>
+  const {sessionTimeout, userName} = props;
+
+  return (
+    <UserMenu data-testid="usermenu">
+      <StyledUserIcon size="medium" />
+      <Div>
+        <List>
+          <Entry title={_('Logged in as: {{userName}}', {userName})}>
+            <Divider>
+              <UserIcon />
+              <span>{userName}</span>
+            </Divider>
+          </Entry>
+          <Entry>
+            <Divider>
+              <ScheduleIcon />
+              <span>
+                {_('Session timeout: {{date}}', {
+                  date: longDate(sessionTimeout),
+                })}
+              </span>
+            </Divider>
+          </Entry>
+          <Entry>
+            <StyledLink to="usersettings" data-testid="usermenu-settings">
               <Divider>
-                <UserIcon />
-                <span>{userName}</span>
+                <MySettingsIcon />
+                <span>{_('My Settings')}</span>
               </Divider>
-            </Entry>
-            <Entry>
-              <Divider>
-                <ScheduleIcon />
-                <span>
-                  {_('Session timeout: {{date}}', {
-                    date: longDate(sessionTimeout),
-                  })}
-                </span>
-              </Divider>
-            </Entry>
-            <Entry>
-              <StyledLink to="usersettings" data-testid="usermenu-settings">
-                <Divider>
-                  <MySettingsIcon />
-                  <span>{_('My Settings')}</span>
-                </Divider>
-              </StyledLink>
-            </Entry>
-            <Entry>
-              <Divider
-                data-testid="usermenu-logout"
-                onClick={event => this.handleLogout(event)}
-              >
-                <LogoutIcon />
-                <span>{_('Log Out')}</span>
-              </Divider>
-            </Entry>
-          </List>
-        </Div>
-      </UserMenu>
-    );
-  }
-}
+            </StyledLink>
+          </Entry>
+          <Entry>
+            <Divider
+              data-testid="usermenu-logout"
+              onClick={event => handleLogout(event)}
+            >
+              <LogoutIcon />
+              <span>{_('Log Out')}</span>
+            </Divider>
+          </Entry>
+        </List>
+      </Div>
+    </UserMenu>
+  );
+};
 
 UserMenuContainer.propTypes = {
   gmp: PropTypes.gmp.isRequired,
