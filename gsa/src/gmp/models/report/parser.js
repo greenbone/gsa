@@ -57,7 +57,7 @@ const getTlsCertificate = (certs, fingerprint) => {
   let cert = certs[fingerprint];
 
   if (!isDefined(cert)) {
-    cert = new ReportTLSCertificate(fingerprint);
+    cert = ReportTLSCertificate.fromElement({fingerprint});
     certs[fingerprint] = cert;
   }
   return cert;

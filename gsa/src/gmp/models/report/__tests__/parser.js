@@ -23,6 +23,7 @@ import {
   parseVulnerabilities,
   parseApps,
   parseOperatingSystems,
+  parseTlsCertificates,
 } from '../parser';
 
 describe('report parser tests', () => {
@@ -561,6 +562,119 @@ describe('report parser tests', () => {
     expect(operatingSystems.entities.length).toEqual(0);
     expect(operatingSystems.counts).toEqual(counts);
     expect(operatingSystems.filter).toEqual('foo=bar rows=5');
+  });
+
+  test('should parse tls certificates', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {
+      host: [
+        {
+          ip: '1.1.1.1',
+          detail: [
+            {
+              name: 'SSLInfo',
+              value: '123::fingerprint1',
+            },
+            {
+              name: 'SSLDetails:fingerprint1',
+              value:
+                'issuer:CN=Foo Bar,O=Foo Bar,C=BM|serial:foobar|notBefore:20150930T144006|notAfter:20120930T145000',
+            },
+            {
+              name: 'Cert:fingerprint1',
+              value: 'x509:foobar',
+            },
+            {
+              name: 'hostname',
+              value: 'foo.bar',
+            },
+          ],
+        },
+
+        {
+          ip: '2.2.2.2',
+          detail: [
+            {
+              name: 'SSLInfo',
+              value: '123::fingerprint2',
+            },
+            {
+              name: 'SSLInfo',
+              value: '234::fingerprint2',
+            },
+            {
+              name: 'SSLInfo',
+              value: '234::fingerprint1',
+            },
+          ],
+        },
+      ],
+      ssl_certs: {count: '123'},
+    };
+    const counts = {
+      first: 1,
+      all: 123,
+      filtered: 4,
+      length: 4,
+      rows: 4,
+      last: 4,
+    };
+    const tlsCerts = parseTlsCertificates(report, filterString);
+
+    expect(tlsCerts.entities.length).toEqual(4);
+    expect(tlsCerts.counts).toEqual(counts);
+    expect(tlsCerts.filter).toEqual('foo=bar rows=5');
+
+    const [cert1, cert2, cert3, cert4] = tlsCerts.entities;
+
+    expect(cert1.fingerprint).toEqual('fingerprint1');
+    expect(cert1.hostname).toEqual('foo.bar');
+    expect(cert1.ip).toEqual('1.1.1.1');
+    expect(cert1.data).toEqual('foobar');
+    expect(cert1._data).toEqual('x509:foobar');
+    expect(cert1.ports).toBeUndefined();
+    expect(cert1.port).toEqual(123);
+
+    expect(cert2.fingerprint).toEqual('fingerprint2');
+    expect(cert2.hostname).toBeUndefined();
+    expect(cert2.ip).toEqual('2.2.2.2');
+    expect(cert2.data).toBeUndefined();
+    expect(cert2._data).toBeUndefined();
+    expect(cert2.ports).toBeUndefined();
+    expect(cert2.port).toEqual(123);
+
+    expect(cert3.fingerprint).toEqual('fingerprint2');
+    expect(cert3.hostname).toBeUndefined();
+    expect(cert3.ip).toEqual('2.2.2.2');
+    expect(cert3.data).toBeUndefined();
+    expect(cert3._data).toBeUndefined();
+    expect(cert3.ports).toBeUndefined();
+    expect(cert3.port).toEqual(234);
+
+    expect(cert4.fingerprint).toEqual('fingerprint1');
+    expect(cert4.ip).toEqual('2.2.2.2');
+    expect(cert4.data).toBeUndefined();
+    expect(cert4._data).toBeUndefined();
+    expect(cert4.ports).toBeUndefined();
+    expect(cert4.port).toEqual(234);
+  });
+
+  test('should parse empty tls certificates', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {};
+    const counts = {
+      first: 0,
+      all: 0,
+      filtered: 0,
+      length: 0,
+      rows: 0,
+      last: 0,
+    };
+    const tlsCerts = parseTlsCertificates(report, filterString);
+
+    expect(tlsCerts.entities.length).toEqual(0);
+    expect(tlsCerts.counts).toEqual(counts);
+    expect(tlsCerts.filter).toEqual('foo=bar rows=5');
   });
 });
 
