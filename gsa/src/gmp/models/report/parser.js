@@ -417,14 +417,16 @@ export const parseOperatingSystems = (report, filter) => {
         const severity = severities[ip];
 
         if (!isDefined(os)) {
-          os = operating_systems[best_os_cpe] = new ReportOperatingSystem({
+          os = operating_systems[
+            best_os_cpe
+          ] = ReportOperatingSystem.fromElement({
             best_os_cpe,
             best_os_txt,
           });
         }
 
         os.addHost(host);
-        os.addSeverity(severity);
+        os.setSeverity(severity);
       }
     }
   });

@@ -22,6 +22,7 @@ import {
   parsePorts,
   parseVulnerabilities,
   parseApps,
+  parseOperatingSystems,
 } from '../parser';
 
 describe('report parser tests', () => {
@@ -425,6 +426,141 @@ describe('report parser tests', () => {
     expect(apps.entities.length).toEqual(0);
     expect(apps.counts).toEqual(counts);
     expect(apps.filter).toEqual('foo=bar rows=5');
+  });
+
+  test('should parse operating systems', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {
+      os: {
+        count: '123',
+      },
+      // os severities are parsed from the results of a host
+      results: {
+        result: [
+          {
+            host: {
+              __text: '1.1.1.1',
+            },
+            severity: '5.5',
+          },
+          {
+            host: {
+              __text: '1.1.1.1',
+            },
+            severity: '9.5',
+          },
+          {
+            host: {
+              __text: '1.1.1.1',
+            },
+            severity: '3.5',
+          },
+          {
+            host: {
+              __text: '2.2.2.2',
+            },
+            severity: '5.5',
+          },
+          {
+            host: {
+              __text: '3.3.3.3',
+            },
+            severity: '6.5',
+          },
+        ],
+      },
+      host: [
+        {
+          ip: '1.1.1.1',
+          detail: [
+            {
+              name: 'best_os_cpe',
+              value: 'cpe:/foo/os',
+            },
+            {
+              name: 'best_os_txt',
+              value: 'Foo OS',
+            },
+            {
+              // will be ignored
+              name: 'foo',
+              value: 'bar',
+            },
+          ],
+        },
+        {
+          ip: '2.2.2.2',
+          detail: [
+            {
+              name: 'best_os_cpe',
+              value: 'cpe:/foo/os',
+            },
+            {
+              name: 'best_os_txt',
+              value: 'Foo OS',
+            },
+          ],
+        },
+        {
+          ip: '3.3.3.3',
+          detail: [
+            {
+              name: 'best_os_cpe',
+              value: 'cpe:/bar/os',
+            },
+            {
+              name: 'best_os_txt',
+              value: 'Bar OS',
+            },
+          ],
+        },
+      ],
+    };
+    const counts = {
+      first: 1,
+      all: 123,
+      filtered: 2,
+      length: 2,
+      rows: 2,
+      last: 2,
+    };
+    const operatingSystems = parseOperatingSystems(report, filterString);
+
+    expect(operatingSystems.entities.length).toEqual(2);
+    expect(operatingSystems.counts).toEqual(counts);
+    expect(operatingSystems.filter).toEqual('foo=bar rows=5');
+
+    const [os1, os2] = operatingSystems.entities;
+
+    expect(os1.name).toEqual('Foo OS');
+    expect(os1.id).toEqual('cpe:/foo/os');
+    expect(os1.cpe).toEqual('cpe:/foo/os');
+    expect(os1.severity).toEqual(9.5);
+    expect(os1.hosts.count).toEqual(2);
+
+    expect(os2.name).toEqual('Bar OS');
+    expect(os2.id).toEqual('cpe:/bar/os');
+    expect(os2.cpe).toEqual('cpe:/bar/os');
+    expect(os2.severity).toEqual(6.5);
+    expect(os2.hosts.count).toEqual(1);
+  });
+
+  test('should parse empty operating systems', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {};
+    const counts = {
+      first: 0,
+      all: 0,
+      filtered: 0,
+      length: 0,
+      rows: 0,
+      last: 0,
+    };
+    const operatingSystems = parseOperatingSystems(report, filterString);
+
+    expect(operatingSystems.entities.length).toEqual(0);
+    expect(operatingSystems.counts).toEqual(counts);
+    expect(operatingSystems.filter).toEqual('foo=bar rows=5');
   });
 });
 
