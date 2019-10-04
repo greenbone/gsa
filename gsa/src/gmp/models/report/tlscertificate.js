@@ -22,6 +22,11 @@ import {isDefined} from '../../utils/identity';
 
 import {parseInt} from '../../parser';
 
+/*
+ Report TLS Certficiate is special because it isn't parsed from an element.
+ Therefore it is not comparable to other model classes and works differently
+*/
+
 class TLSCertificate {
   constructor(fingerprint) {
     this.fingerprint = fingerprint;
