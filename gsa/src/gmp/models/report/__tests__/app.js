@@ -62,7 +62,7 @@ describe('App tests', () => {
   });
 
   test('should add hosts', () => {
-    const app = new App();
+    const app = App.fromElement();
 
     expect(app.hosts).toBeDefined();
     expect(app.hosts.hostsByIp).toEqual({});
@@ -76,7 +76,7 @@ describe('App tests', () => {
   });
 
   test('should allow to add occurrence with details', () => {
-    const app = new App();
+    const app = App.fromElement();
 
     expect(app.occurrences).toBeDefined();
     expect(app.occurrences.details).toEqual(0);
@@ -91,7 +91,7 @@ describe('App tests', () => {
   });
 
   test('should allow to add occurrence without details', () => {
-    const app = new App();
+    const app = App.fromElement();
 
     expect(app.occurrences).toBeDefined();
     expect(app.occurrences.details).toEqual(0);

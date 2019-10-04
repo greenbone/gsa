@@ -34,7 +34,7 @@ describe('ReportPort tests', () => {
   });
 
   test('should add hosts', () => {
-    const port = new ReportPort();
+    const port = ReportPort.fromElement();
 
     expect(port.hosts).toBeDefined();
     expect(port.hosts.hostsByIp).toEqual({});
@@ -48,7 +48,7 @@ describe('ReportPort tests', () => {
   });
 
   test('should allow to set severity', () => {
-    const port = new ReportPort();
+    const port = ReportPort.fromElement();
 
     expect(port.severity).toBeUndefined();
 

@@ -35,7 +35,7 @@ describe('ReportOperatingSystem tests', () => {
   });
 
   test('should add host', () => {
-    const os = new ReportOperatingSystem();
+    const os = ReportOperatingSystem.fromElement();
 
     expect(os.hosts).toBeDefined();
     expect(os.hosts.hostsByIp).toEqual({});
@@ -49,7 +49,7 @@ describe('ReportOperatingSystem tests', () => {
   });
 
   test('should allow to set severity', () => {
-    const os = new ReportOperatingSystem();
+    const os = ReportOperatingSystem.fromElement();
 
     expect(os.severity).toBeUndefined();
 

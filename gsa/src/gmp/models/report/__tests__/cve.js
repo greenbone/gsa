@@ -65,7 +65,7 @@ describe('ReportCve tests', () => {
   });
 
   test('should add hosts', () => {
-    const reportcve = new ReportCve();
+    const reportcve = ReportCve.fromElement();
 
     expect(reportcve.hosts).toBeDefined();
     expect(reportcve.hosts.hostsByIp).toEqual({});
@@ -79,7 +79,7 @@ describe('ReportCve tests', () => {
   });
 
   test('should add result', () => {
-    const reportcve = new ReportCve();
+    const reportcve = ReportCve.fromElement();
 
     expect(reportcve.occurrences).toEqual(0);
     expect(reportcve.severity).toBeUndefined();
