@@ -38,6 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Use new model construction in some commands [#1665](https://github.com/greenbone/gsa/pull/1665)
 - Fixed auth_method preselection for user dialog [#1661](https://github.com/greenbone/gsa/pull/1661)
 - Fixed userId, roleId and groupId not rendering in create entity permissions dialog [#1658](https://github.com/greenbone/gsa/pull/1658)
 - Don't crash Schedule details and list pages if invalid ical data is loaded [#1656](https://github.com/greenbone/gsa/pull/1656)
