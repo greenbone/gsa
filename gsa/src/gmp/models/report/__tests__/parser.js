@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {parseHosts, parsePorts} from '../parser';
+import {parseHosts, parsePorts, parseVulnerabilities} from '../parser';
 
 describe('report parser tests', () => {
   test('should parse hosts', () => {
@@ -163,6 +163,102 @@ describe('report parser tests', () => {
     expect(ports.entities.length).toEqual(0);
     expect(ports.counts).toEqual(counts);
     expect(ports.filter).toEqual('foo=bar');
+  });
+
+  test('should parse vulnerabilities', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {
+      vulns: {
+        count: 123,
+      },
+      results: {
+        result: [
+          {
+            nvt: {
+              _oid: '1.2.3',
+            },
+            severity: '5.5',
+            host: {ip: '1.1.1.1'},
+            name: 'Foo Bar',
+            qod: {type: 'foo', value: '4.5'},
+          },
+          {
+            nvt: {
+              _oid: '1.2.4',
+            },
+            severity: '9.5',
+            host: {ip: '1.1.1.1'},
+            name: 'Lorem Ipsum',
+            qod: {type: 'foo', value: '9.5'},
+          },
+          {
+            nvt: {
+              _oid: '1.2.3',
+            },
+            severity: '6.5',
+            host: {ip: '2.2.2.2'},
+            name: 'Foo bar',
+            qod: {type: 'foo', value: '4.5'},
+          },
+          {
+            nvt: {
+              _oid: '1.2.3',
+            },
+            severity: '3.5',
+            host: {ip: '2.2.2.2'},
+            name: 'Foo bar',
+            qod: {type: 'foo', value: '4.5'},
+          },
+        ],
+      },
+    };
+    const counts = {
+      first: 1,
+      all: 123,
+      filtered: 2,
+      length: 2,
+      rows: 2,
+      last: 2,
+    };
+    const vulnerabilities = parseVulnerabilities(report, filterString);
+
+    expect(vulnerabilities.entities.length).toEqual(2);
+    expect(vulnerabilities.counts).toEqual(counts);
+    expect(vulnerabilities.filter).toEqual('foo=bar rows=5');
+
+    const [vulnerability1, vulnerability2] = vulnerabilities.entities;
+
+    expect(vulnerability1.id).toEqual('1.2.3');
+    expect(vulnerability1.name).toEqual('Foo Bar');
+    expect(vulnerability1.severity).toEqual(6.5);
+    expect(vulnerability1.results.count).toEqual(3);
+    expect(vulnerability1.hosts.count).toEqual(2);
+    expect(vulnerability1.qod).toEqual({type: 'foo', value: 4.5});
+
+    expect(vulnerability2.id).toEqual('1.2.4');
+    expect(vulnerability2.name).toEqual('Lorem Ipsum');
+    expect(vulnerability2.severity).toEqual(9.5);
+    expect(vulnerability2.results.count).toEqual(1);
+    expect(vulnerability2.hosts.count).toEqual(1);
+    expect(vulnerability2.qod).toEqual({type: 'foo', value: 9.5});
+  });
+
+  test('should parse empty vulnerabilities', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {};
+    const counts = {
+      first: 0,
+      all: 0,
+      filtered: 0,
+      length: 0,
+      rows: 0,
+      last: 0,
+    };
+    const vulnerabilities = parseVulnerabilities(report, filterString);
+
+    expect(vulnerabilities.entities.length).toEqual(0);
+    expect(vulnerabilities.counts).toEqual(counts);
+    expect(vulnerabilities.filter).toEqual('foo=bar rows=5');
   });
 });
 

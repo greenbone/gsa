@@ -237,7 +237,7 @@ export const parseVulnerabilities = (report, filter) => {
       if (isDefined(vuln)) {
         vuln.addResult(results);
       } else {
-        vuln = new ReportVulnerability(result);
+        vuln = ReportVulnerability.fromElement(result);
         temp_vulns[oid] = vuln;
       }
 
