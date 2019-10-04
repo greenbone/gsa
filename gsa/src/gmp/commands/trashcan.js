@@ -72,111 +72,100 @@ class Trashcan extends HttpCommand {
       const trash_data = response.data.get_trash;
       const data = {};
       if (isDefined(trash_data.get_agents_response)) {
-        data.agent_list = map(
-          trash_data.get_agents_response.agent,
-          model => new Agent(model),
+        data.agent_list = map(trash_data.get_agents_response.agent, model =>
+          Agent.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_alerts_response)) {
-        data.alert_list = map(
-          trash_data.get_alerts_response.alert,
-          model => new Alert(model),
+        data.alert_list = map(trash_data.get_alerts_response.alert, model =>
+          Alert.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_configs_response)) {
-        data.config_list = map(
-          trash_data.get_configs_response.config,
-          model => new Scanconfig(model),
+        data.config_list = map(trash_data.get_configs_response.config, model =>
+          Scanconfig.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_credentials_response)) {
         data.credential_list = map(
           trash_data.get_credentials_response.credential,
-          model => new Credential(model),
+          model => Credential.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_filters_response)) {
-        data.filter_list = map(
-          trash_data.get_filters_response.filter,
-          model => new Filter(model),
+        data.filter_list = map(trash_data.get_filters_response.filter, model =>
+          Filter.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_groups_response)) {
-        data.group_list = map(
-          trash_data.get_groups_response.group,
-          model => new Group(model),
+        data.group_list = map(trash_data.get_groups_response.group, model =>
+          Group.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_notes_response)) {
-        data.note_list = map(
-          trash_data.get_notes_response.note,
-          model => new Note(model),
+        data.note_list = map(trash_data.get_notes_response.note, model =>
+          Note.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_overrides_response)) {
         data.override_list = map(
           trash_data.get_overrides_response.override,
-          model => new Override(model),
+          model => Override.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_permissions_response)) {
         data.permission_list = map(
           trash_data.get_permissions_response.permission,
-          model => new Permission(model),
+          model => Permission.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_port_lists_response)) {
         data.port_list_list = map(
           trash_data.get_port_lists_response.port_list,
-          model => new PortList(model),
+          model => PortList.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_report_formats_response)) {
         data.report_format_list = map(
           trash_data.get_report_formats_response.report_format,
-          model => new ReportFormat(model),
+          model => ReportFormat.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_roles_response)) {
-        data.role_list = map(
-          trash_data.get_roles_response.role,
-          model => new Role(model),
+        data.role_list = map(trash_data.get_roles_response.role, model =>
+          Role.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_scanners_response)) {
         data.scanner_list = map(
           trash_data.get_scanners_response.scanner,
-          model => new Scanner(model),
+          model => Scanner.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_schedules_response)) {
         data.schedule_list = map(
           trash_data.get_schedules_response.schedule,
-          model => new Schedule(model),
+          model => Schedule.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_tags_response)) {
-        data.tag_list = map(
-          trash_data.get_tags_response.tag,
-          model => new Tag(model),
+        data.tag_list = map(trash_data.get_tags_response.tag, model =>
+          Tag.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_targets_response)) {
-        data.target_list = map(
-          trash_data.get_targets_response.target,
-          model => new Target(model),
+        data.target_list = map(trash_data.get_targets_response.target, model =>
+          Target.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_tasks_response)) {
-        data.task_list = map(
-          trash_data.get_tasks_response.task,
-          model => new Task(model),
+        data.task_list = map(trash_data.get_tasks_response.task, model =>
+          Task.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_tickets_response)) {
-        data.ticket_list = map(
-          trash_data.get_tickets_response.ticket,
-          model => new Ticket(model),
+        data.ticket_list = map(trash_data.get_tickets_response.ticket, model =>
+          Ticket.fromElement(model),
         );
       }
       return response.setData(data);
