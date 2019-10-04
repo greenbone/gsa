@@ -46,7 +46,8 @@ class ReportPort {
   static fromElement(element) {
     const port = new ReportPort();
 
-    setProperties(this.parseElement(element), port);
+    /* use writable=true to allow overriding severity */
+    setProperties(this.parseElement(element), port, {writable: true});
 
     return port;
   }
