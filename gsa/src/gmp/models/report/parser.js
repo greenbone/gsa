@@ -189,7 +189,7 @@ export const parsePorts = (report, filter) => {
 
         tport.setSeverity(severity);
       } else {
-        tport = new ReportPort(port);
+        tport = ReportPort.fromElement(port);
         temp_ports[id] = tport;
       }
 

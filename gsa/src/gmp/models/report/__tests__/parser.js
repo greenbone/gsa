@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {parseHosts} from '../parser';
+import {parseHosts, parsePorts} from '../parser';
 
 describe('report parser tests', () => {
   test('should parse hosts', () => {
@@ -94,6 +94,75 @@ describe('report parser tests', () => {
     expect(hosts.entities.length).toEqual(0);
     expect(hosts.counts).toEqual(counts);
     expect(hosts.filter).toEqual('foo=bar');
+  });
+
+  test('should parse ports', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {
+      ports: {
+        count: 123,
+        port: [
+          {__text: '123/tcp', host: '1.2.3.4', severity: 5.5, threat: 'Medium'},
+          {__text: '234/udp', host: '1.2.3.5', severity: 1.0, threat: 'Log'},
+          {__text: '234/udp', host: '1.2.3.6', severity: 9.0, threat: 'High'},
+          {__text: '234/udp', host: '1.2.3.5', severity: 7.5, threat: 'High'},
+          {
+            __text: 'general/tcp',
+            host: '1.2.3.4',
+            severity: 5,
+            threat: 'Medium',
+          },
+          {host: '1.2.3.4', severity: 9, threat: 'High'},
+        ],
+      },
+    };
+    const counts = {
+      first: 1,
+      all: 123,
+      filtered: 2,
+      length: 2,
+      rows: 2,
+      last: 2,
+    };
+    const ports = parsePorts(report, filterString);
+
+    expect(ports.entities.length).toEqual(2);
+    expect(ports.counts).toEqual(counts);
+    expect(ports.filter).toEqual('foo=bar rows=5');
+
+    const [port1, port2] = ports.entities;
+
+    expect(port1.id).toEqual('123/tcp');
+    expect(port1.threat).toEqual('Medium');
+    expect(port1.severity).toEqual(5.5);
+    expect(port1.number).toEqual(123);
+    expect(port1.protocol).toEqual('tcp');
+    expect(port1.hosts.count).toEqual(1);
+
+    expect(port2.id).toEqual('234/udp');
+    expect(port2.threat).toEqual('Log');
+    expect(port2.severity).toEqual(9.0);
+    expect(port2.number).toEqual(234);
+    expect(port2.protocol).toEqual('udp');
+    expect(port2.hosts.count).toEqual(2);
+  });
+
+  test('should parse empty ports', () => {
+    const filterString = 'foo=bar';
+    const report = {};
+    const counts = {
+      first: 0,
+      all: 0,
+      filtered: 0,
+      length: 0,
+      rows: 0,
+      last: 0,
+    };
+    const ports = parsePorts(report, filterString);
+
+    expect(ports.entities.length).toEqual(0);
+    expect(ports.counts).toEqual(counts);
+    expect(ports.filter).toEqual('foo=bar');
   });
 });
 
