@@ -132,13 +132,13 @@ class WizardCommand extends HttpCommand {
       });
 
       settings.scan_configs = map(resp.get_configs_response.config, config => {
-        return new Model(config);
+        return Model.fromElement(config);
       });
 
       settings.credentials = map(
         resp.get_credentials_response.credential,
         cred => {
-          return new Credential(cred);
+          return Credential.fromElement(cred);
         },
       );
 
@@ -167,9 +167,8 @@ class WizardCommand extends HttpCommand {
         });
       });
 
-      settings.tasks = map(
-        resp.get_tasks_response.task,
-        task => new Task(task),
+      settings.tasks = map(resp.get_tasks_response.task, task =>
+        Task.fromElement(task),
       ).filter(task => !task.isContainer());
 
       return response.setData(settings);
