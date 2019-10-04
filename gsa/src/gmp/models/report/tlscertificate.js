@@ -18,18 +18,12 @@
  */
 import 'core-js/fn/object/entries';
 
-import {isDefined} from '../../utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
-import {parseInt} from '../../parser';
-
-/*
- Report TLS Certficiate is special because it isn't parsed from an element.
- Therefore it is not comparable to other model classes and works differently
-*/
+import {setProperties, parseInt} from 'gmp/parser';
 
 class TLSCertificate {
-  constructor(fingerprint) {
-    this.fingerprint = fingerprint;
+  constructor() {
     this.ports = [];
   }
 
@@ -44,15 +38,33 @@ class TLSCertificate {
   }
 
   copy() {
-    const cert = new TLSCertificate(this.fingerprint);
+    const cert = TLSCertificate.fromElement({fingerprint: this.fingerprint});
+
     for (const [key, value] of Object.entries(this)) {
+      if (key === 'fingerprint') {
+        continue;
+      }
       cert[key] = value;
     }
+
     return cert;
   }
 
   get id() {
     return this.ip + ':' + this.port + ':' + this.fingerprint;
+  }
+
+  static fromElement(element) {
+    const cert = new TLSCertificate();
+
+    setProperties(this.parseElement(element), cert);
+
+    return cert;
+  }
+
+  static parseElement(element = {}) {
+    const {fingerprint} = element;
+    return {fingerprint};
   }
 }
 

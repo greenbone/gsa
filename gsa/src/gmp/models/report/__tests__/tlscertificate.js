@@ -19,8 +19,20 @@
 import ReportTlsCertificate from '../tlscertificate';
 
 describe('ReportTlsCertificate tests', () => {
+  test('should init ports', () => {
+    const cert1 = new ReportTlsCertificate();
+
+    expect(cert1.ports).toBeDefined();
+    expect(cert1.ports.length).toEqual(0);
+
+    const cert2 = ReportTlsCertificate.fromElement();
+
+    expect(cert2.ports).toBeDefined();
+    expect(cert2.ports.length).toEqual(0);
+  });
+
   test('should create new ReportTlsCertificate from fingerprint', () => {
-    const cert = new ReportTlsCertificate('foo');
+    const cert = ReportTlsCertificate.fromElement({fingerprint: 'foo'});
 
     expect(cert.fingerprint).toEqual('foo');
     expect(cert.ports).toEqual([]);
@@ -35,7 +47,7 @@ describe('ReportTlsCertificate tests', () => {
   });
 
   test('should allow to set id data', () => {
-    const cert = new ReportTlsCertificate('foo');
+    const cert = ReportTlsCertificate.fromElement({fingerprint: 'foo'});
 
     cert.ip = '1.2.3.4';
     cert.port = '123';
@@ -44,7 +56,7 @@ describe('ReportTlsCertificate tests', () => {
   });
 
   test('should allow to copy a tls certificate', () => {
-    const cert = new ReportTlsCertificate('foo');
+    const cert = ReportTlsCertificate.fromElement({fingerprint: 'foo'});
 
     cert.ip = '1.2.3.4';
     cert.port = '123';
@@ -65,7 +77,7 @@ describe('ReportTlsCertificate tests', () => {
   });
 
   test('should allow to add a port', () => {
-    const cert = new ReportTlsCertificate('foo');
+    const cert = ReportTlsCertificate.fromElement({fingerprint: 'foo'});
 
     cert.ip = '1.2.3.4';
     cert.port = '123';
