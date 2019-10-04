@@ -28,13 +28,13 @@ class TLSCertificate {
   }
 
   addPort(port) {
-    let c_port = parseInt(port);
-    if (!isDefined(c_port)) {
+    let parsedPort = parseInt(port);
+    if (!isDefined(parsedPort)) {
       // port wasn't a number
-      c_port = port;
+      parsedPort = port;
     }
 
-    this.ports.push(port);
+    this.ports.push(parsedPort);
   }
 
   copy() {

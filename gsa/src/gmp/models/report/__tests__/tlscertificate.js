@@ -88,6 +88,6 @@ describe('ReportTlsCertificate tests', () => {
 
     expect(cert.port).toEqual('123');
     expect(cert.ports.length).toEqual(1);
-    expect(cert.ports[0]).toEqual('234');
+    expect(cert.ports[0]).toEqual(234);
   });
 });
