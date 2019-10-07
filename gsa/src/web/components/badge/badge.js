@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 
 import styled from 'styled-components';
 
@@ -57,62 +57,50 @@ const BadgeIcon = styled.span`
 
 BadgeIcon.displayName = 'BadgeIcon';
 
-class Badge extends React.Component {
-  constructor(...args) {
-    super(...args);
+const Badge = props => {
+  const icon = useRef();
 
-    this.state = {};
+  useEffect(() => {
+    calcMargin();
+  }, [props.content]);
 
-    this.icon = React.createRef();
-  }
+  const [margin, setMargin] = useState(undefined);
 
-  componentDidMount() {
-    this.calcMargin();
-  }
-
-  componentDidUpdate(prev) {
-    if (prev.content !== this.props.content) {
-      this.calcMargin();
+  const calcMargin = () => {
+    if (hasValue(icon.current)) {
+      const {width} = icon.current.getBoundingClientRect();
+      setMargin(width / 2);
     }
-  }
+  };
 
-  calcMargin() {
-    if (hasValue(this.icon.current)) {
-      const {width} = this.icon.current.getBoundingClientRect();
-      this.setState({margin: width / 2});
-    }
-  }
+  const {
+    backgroundColor,
+    children,
+    color,
+    content,
+    dynamic = true,
+    position,
+  } = props;
 
-  render() {
-    const {margin} = this.state;
-    const {
-      backgroundColor,
-      children,
-      color,
-      content,
-      dynamic = true,
-      position,
-    } = this.props;
-    return (
-      <BadgeContainer margin={dynamic ? margin : undefined}>
-        {children}
+  return (
+    <BadgeContainer margin={dynamic ? margin : undefined}>
+      {children}
 
-        {isDefined(content) && (
-          <BadgeIcon
-            data-testid="badge-icon"
-            ref={this.icon}
-            color={color}
-            backgroundColor={backgroundColor}
-            position={position}
-            margin={dynamic ? margin : undefined}
-          >
-            {content}
-          </BadgeIcon>
-        )}
-      </BadgeContainer>
-    );
-  }
-}
+      {isDefined(content) && (
+        <BadgeIcon
+          data-testid="badge-icon"
+          ref={icon}
+          color={color}
+          backgroundColor={backgroundColor}
+          position={position}
+          margin={dynamic ? margin : undefined}
+        >
+          {content}
+        </BadgeIcon>
+      )}
+    </BadgeContainer>
+  );
+};
 
 Badge.propTypes = {
   backgroundColor: PropTypes.string,
