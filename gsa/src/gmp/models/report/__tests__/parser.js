@@ -24,6 +24,7 @@ import {
   parseApps,
   parseOperatingSystems,
   parseTlsCertificates,
+  parseCves,
 } from '../parser';
 
 describe('report parser tests', () => {
@@ -675,6 +676,116 @@ describe('report parser tests', () => {
     expect(tlsCerts.entities.length).toEqual(0);
     expect(tlsCerts.counts).toEqual(counts);
     expect(tlsCerts.filter).toEqual('foo=bar rows=5');
+  });
+
+  test('should parse empty cves', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {};
+    const counts = {
+      first: 0,
+      all: 0,
+      filtered: 0,
+      length: 0,
+      rows: 0,
+      last: 0,
+    };
+    const cves = parseCves(report, filterString);
+
+    expect(cves.entities.length).toEqual(0);
+    expect(cves.counts).toEqual(counts);
+    expect(cves.filter).toEqual('foo=bar rows=5');
+  });
+  test('should parse cves', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {
+      results: {
+        result: [
+          {
+            nvt: {
+              cve: 'NOCVE',
+            },
+          },
+          {
+            nvt: {
+              cve: '',
+            },
+          },
+          {
+            nvt: {
+              cve: 'CVE-123',
+              _oid: '1.2.3',
+            },
+            host: {
+              __text: '1.1.1.1',
+            },
+            severity: '4.5',
+          },
+          {
+            nvt: {
+              cve: 'CVE-123',
+              _oid: '1.2.3',
+            },
+            host: {
+              __text: '2.2.2.2',
+            },
+            severity: '9.5',
+          },
+          {
+            nvt: {
+              cve: 'CVE-234',
+              _oid: '2.2.3',
+            },
+            host: {
+              __text: '1.1.1.1',
+            },
+            severity: '5.5',
+          },
+          {
+            nvt: {
+              cve: 'CVE-234, CVE-334',
+              _oid: '2.3.3',
+            },
+            host: {
+              __text: '1.1.1.1',
+            },
+            severity: '6.5',
+          },
+        ],
+      },
+    };
+    const counts = {
+      first: 1,
+      all: 3,
+      filtered: 3,
+      length: 3,
+      rows: 3,
+      last: 3,
+    };
+    const cves = parseCves(report, filterString);
+
+    expect(cves.entities.length).toEqual(3);
+    expect(cves.counts).toEqual(counts);
+    expect(cves.filter).toEqual('foo=bar rows=5');
+
+    const [cve1, cve2, cve3] = cves.entities;
+
+    expect(cve1.severity).toEqual(9.5);
+    expect(cve1.id).toEqual('1.2.3');
+    expect(cve1.cves).toEqual(['CVE-123']);
+    expect(cve1.hosts.count).toEqual(2);
+    expect(cve1.occurrences).toEqual(2);
+
+    expect(cve2.severity).toEqual(5.5);
+    expect(cve2.id).toEqual('2.2.3');
+    expect(cve2.cves).toEqual(['CVE-234']);
+    expect(cve2.hosts.count).toEqual(1);
+    expect(cve2.occurrences).toEqual(1);
+
+    expect(cve3.severity).toEqual(6.5);
+    expect(cve3.id).toEqual('2.3.3');
+    expect(cve3.cves).toEqual(['CVE-234', 'CVE-334']);
+    expect(cve3.hosts.count).toEqual(1);
+    expect(cve3.occurrences).toEqual(1);
   });
 });
 
