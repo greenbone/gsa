@@ -37,7 +37,6 @@ import {
   parsePorts,
   parseResults,
   parseTlsCertificates,
-  parseVulnerabilities,
 } from './parser';
 
 class ReportReport extends Model {
@@ -88,8 +87,6 @@ class ReportReport extends Model {
     delete copy.host;
 
     copy.applications = parseApps(element, filter);
-
-    copy.vulnerabilities = parseVulnerabilities(element, filter);
 
     copy.operatingsystems = parseOperatingSystems(element, filter);
 

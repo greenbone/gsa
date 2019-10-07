@@ -166,13 +166,17 @@ export const parseProperties = (element = {}, object = {}) => {
   return copy;
 };
 
-export const setProperties = (properties, object = {}) => {
+export const setProperties = (
+  properties,
+  object = {},
+  {writable = false} = {},
+) => {
   if (isDefined(properties)) {
     for (const [key, value] of Object.entries(properties)) {
       if (!key.startsWith('_')) {
         Object.defineProperty(object, key, {
           value,
-          writable: false,
+          writable,
           enumerable: true,
         });
       }

@@ -152,7 +152,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/models/report/report.js
      ${GSA_SRC_DIR}/src/gmp/models/report/task.js
      ${GSA_SRC_DIR}/src/gmp/models/report/tlscertificate.js
-     ${GSA_SRC_DIR}/src/gmp/models/report/vulnerability.js
      ${GSA_SRC_DIR}/src/gmp/models/result.js
      ${GSA_SRC_DIR}/src/gmp/models/role.js
      ${GSA_SRC_DIR}/src/gmp/models/scanconfig.js

@@ -30,10 +30,6 @@ import Model, {parseModelFromElement} from '../../model';
 class ReportTask extends Model {
   static entityType = 'task';
 
-  parseProperties(element) {
-    return ReportTask.parseElement(element);
-  }
-
   static parseElement(element) {
     const copy = super.parseElement(element);
 
