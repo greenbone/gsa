@@ -41,7 +41,6 @@ import ReportHost from './host';
 import ReportOperatingSystem from './os';
 import ReportPort from './port';
 import ReportTLSCertificate from './tlscertificate';
-import ReportVulnerability from './vulnerability';
 
 import Result from '../result';
 
@@ -210,55 +209,6 @@ export const parsePorts = (report, filter) => {
 
   return {
     entities: ports_array.sort((porta, portb) => porta.number > portb.number),
-    filter: isDefined(filter) ? filter : parseFilter(report),
-    counts,
-  };
-};
-
-export const parseVulnerabilities = (report, filter) => {
-  const temp_vulns = {};
-  const {vulns, results = {}} = report;
-
-  if (!isDefined(vulns)) {
-    return emptyCollectionList(filter);
-  }
-
-  const {count: full_count} = vulns;
-
-  forEach(results.result, result => {
-    const {nvt = {}, host} = result;
-    const {_oid: oid} = nvt;
-
-    if (isDefined(oid)) {
-      const severity = parseSeverity(result.severity);
-
-      let vuln = temp_vulns[oid];
-
-      if (isDefined(vuln)) {
-        vuln.addResult(results);
-      } else {
-        vuln = ReportVulnerability.fromElement(result);
-        temp_vulns[oid] = vuln;
-      }
-
-      vuln.setSeverity(severity);
-      vuln.addHost(host);
-    }
-  });
-
-  const vulns_array = Object.values(temp_vulns);
-  const filtered_count = vulns_array.length;
-
-  const counts = new CollectionCounts({
-    all: full_count,
-    filtered: filtered_count,
-    first: 1,
-    length: filtered_count,
-    rows: filtered_count,
-  });
-
-  return {
-    entities: vulns_array,
     filter: isDefined(filter) ? filter : parseFilter(report),
     counts,
   };
