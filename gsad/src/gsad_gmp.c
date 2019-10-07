@@ -10211,7 +10211,6 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
   if (is_unix_socket == 0)
     {
       CHECK_VARIABLE_INVALID (ca_pub, "Edit Scanner");
-      CHECK_VARIABLE_INVALID (credential_id, "Edit Scanner");
       CHECK_VARIABLE_INVALID (which_cert, "Edit Scanner");
     }
 
@@ -10253,7 +10252,8 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 "<credential id=\"%s\"/>"
                 "</modify_scanner>",
                 scanner_id, name, comment ?: "", host, port, type,
-                strcmp (which_cert, "new") == 0 ? ca_pub : "", credential_id);
+                strcmp (which_cert, "new") == 0 ? ca_pub : "", 
+                credential_id ? credential_id : "");
     }
   else
     {
