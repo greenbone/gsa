@@ -109,4 +109,11 @@ describe('ReportCve tests', () => {
     expect(reportcve.occurrences).toEqual(3);
     expect(reportcve.severity).toEqual(9.0);
   });
+
+  test('should parse nvtName', () => {
+    const reportcve = ReportCve.fromElement({
+      nvt: {_oid: '1.2.3', name: 'Foo'},
+    });
+    expect(reportcve.nvtName).toEqual('Foo');
+  });
 });

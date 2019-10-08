@@ -63,6 +63,7 @@ class ReportCve {
     const nvt = Nvt.fromElement(element);
 
     copy.id = nvt.id;
+    copy.nvtName = nvt.name;
     copy.cves = nvt.cves;
 
     return copy;
