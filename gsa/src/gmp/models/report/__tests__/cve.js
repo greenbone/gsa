@@ -19,6 +19,30 @@
 import ReportCve from '../cve';
 
 describe('ReportCve tests', () => {
+  test('should initialize hosts', () => {
+    const cve1 = new ReportCve();
+
+    expect(cve1.hosts).toBeDefined();
+    expect(cve1.hosts.hostsByIp).toBeDefined();
+    expect(cve1.hosts.count).toEqual(0);
+
+    const cve2 = ReportCve.fromElement();
+
+    expect(cve2.hosts).toBeDefined();
+    expect(cve2.hosts.hostsByIp).toBeDefined();
+    expect(cve2.hosts.count).toEqual(0);
+  });
+
+  test('should initialize occurrences', () => {
+    const cve1 = new ReportCve();
+
+    expect(cve1.occurrences).toEqual(0);
+
+    const cve2 = ReportCve.fromElement();
+
+    expect(cve2.occurrences).toEqual(0);
+  });
+
   test('should parse cves', () => {
     const reportcve1 = ReportCve.fromElement({});
     const elem = {
@@ -51,21 +75,21 @@ describe('ReportCve tests', () => {
   });
 
   test('should add hosts', () => {
-    const reportcve = new ReportCve();
+    const reportcve = ReportCve.fromElement();
 
     expect(reportcve.hosts).toBeDefined();
-    expect(reportcve.hosts.hosts_by_ip).toEqual({});
+    expect(reportcve.hosts.hostsByIp).toEqual({});
     expect(reportcve.hosts.count).toEqual(0);
 
     const host = {name: 'foo', ip: '1.2.3.4'};
     reportcve.addHost(host);
 
-    expect(reportcve.hosts.hosts_by_ip['1.2.3.4']).toEqual(host);
+    expect(reportcve.hosts.hostsByIp['1.2.3.4']).toEqual(host);
     expect(reportcve.hosts.count).toEqual(1);
   });
 
   test('should add result', () => {
-    const reportcve = new ReportCve();
+    const reportcve = ReportCve.fromElement();
 
     expect(reportcve.occurrences).toEqual(0);
     expect(reportcve.severity).toBeUndefined();

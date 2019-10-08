@@ -41,7 +41,6 @@ import ReportHost from './host';
 import ReportOperatingSystem from './os';
 import ReportPort from './port';
 import ReportTLSCertificate from './tlscertificate';
-import ReportVulnerability from './vulnerability';
 
 import Result from '../result';
 
@@ -57,7 +56,7 @@ const getTlsCertificate = (certs, fingerprint) => {
   let cert = certs[fingerprint];
 
   if (!isDefined(cert)) {
-    cert = new ReportTLSCertificate(fingerprint);
+    cert = ReportTLSCertificate.fromElement({fingerprint});
     certs[fingerprint] = cert;
   }
   return cert;
@@ -189,7 +188,7 @@ export const parsePorts = (report, filter) => {
 
         tport.setSeverity(severity);
       } else {
-        tport = new ReportPort(port);
+        tport = ReportPort.fromElement(port);
         temp_ports[id] = tport;
       }
 
@@ -210,55 +209,6 @@ export const parsePorts = (report, filter) => {
 
   return {
     entities: ports_array.sort((porta, portb) => porta.number > portb.number),
-    filter: isDefined(filter) ? filter : parseFilter(report),
-    counts,
-  };
-};
-
-export const parseVulnerabilities = (report, filter) => {
-  const temp_vulns = {};
-  const {vulns, results = {}} = report;
-
-  if (!isDefined(vulns)) {
-    return emptyCollectionList(filter);
-  }
-
-  const {count: full_count} = vulns;
-
-  forEach(results.result, result => {
-    const {nvt = {}, host} = result;
-    const {_oid: oid} = nvt;
-
-    if (isDefined(oid)) {
-      const severity = parseSeverity(result.severity);
-
-      let vuln = temp_vulns[oid];
-
-      if (isDefined(vuln)) {
-        vuln.addResult(results);
-      } else {
-        vuln = new ReportVulnerability(result);
-        temp_vulns[oid] = vuln;
-      }
-
-      vuln.setSeverity(severity);
-      vuln.addHost(host);
-    }
-  });
-
-  const vulns_array = Object.values(temp_vulns);
-  const filtered_count = vulns_array.length;
-
-  const counts = new CollectionCounts({
-    all: full_count,
-    filtered: filtered_count,
-    first: 1,
-    length: filtered_count,
-    rows: filtered_count,
-  });
-
-  return {
-    entities: vulns_array,
     filter: isDefined(filter) ? filter : parseFilter(report),
     counts,
   };
@@ -318,7 +268,7 @@ export const parseApps = (report, filter) => {
         let app = apps_temp[cpe];
 
         if (!isDefined(app)) {
-          app = new ReportApp({...detail, severity: severities[cpe]});
+          app = ReportApp.fromElement({...detail, severity: severities[cpe]});
           apps_temp[cpe] = app;
         }
 
@@ -417,14 +367,16 @@ export const parseOperatingSystems = (report, filter) => {
         const severity = severities[ip];
 
         if (!isDefined(os)) {
-          os = operating_systems[best_os_cpe] = new ReportOperatingSystem({
+          os = operating_systems[
+            best_os_cpe
+          ] = ReportOperatingSystem.fromElement({
             best_os_cpe,
             best_os_txt,
           });
         }
 
         os.addHost(host);
-        os.addSeverity(severity);
+        os.setSeverity(severity);
       }
     }
   });
@@ -459,7 +411,11 @@ export const parseHosts = (report, filter) => {
   const hosts_array = map(hosts, host => {
     const {port_count = {}} = host;
     const severity = severities[host.ip];
-    return new ReportHost({...host, severity, portsCount: port_count.page});
+    return ReportHost.fromElement({
+      ...host,
+      severity,
+      portsCount: port_count.page,
+    });
   });
 
   const {length: filtered_count} = hosts_array;
