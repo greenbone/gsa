@@ -42,6 +42,7 @@ export const closedCvesSortFunctions = {
 export const cvesSortFunctions = {
   cve: makeCompareString(entity => entity.cves.join(' ')),
   hosts: makeCompareNumber(entity => entity.hosts.count),
+  nvt: makeCompareString(entity => entity.nvtName),
   occurrences: makeCompareNumber(entity => entity.occurrences),
   severity: makeCompareSeverity(),
 };
