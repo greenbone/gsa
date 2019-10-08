@@ -45,8 +45,8 @@ export const getTranslatableTimeStatus = status =>
 class TlsCertificate extends Model {
   static entityType = 'tlscertificate';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(elem) {
+    const ret = super.parseElement(elem);
 
     ret.certificate = elem.certificate.__text;
 
@@ -59,26 +59,32 @@ class TlsCertificate extends Model {
     ret.expirationTime = parseDate(elem.expiration_time);
     delete ret.expiration_time;
 
-    ret.lastCollected = parseDate(elem.last_collected);
-    delete ret.last_collected;
+    ret.lastSeen = parseDate(elem.last_seen);
+    delete ret.last_seen;
 
     ret.timeStatus = elem.time_status;
     delete ret.time_status;
 
-    const sourceReportIds = new Set();
-    const sourceHostIps = new Set();
+    const sourceReports = new Set();
+    const sourceHosts = new Set();
     const sourcePorts = new Set();
 
     if (isDefined(ret.sources)) {
       forEach(ret.sources.source, source => {
         if (isDefined(source.origin)) {
           if (source.origin.origin_type === 'Report') {
-            sourceReportIds.add(source.origin.origin_id);
+            sourceReports.add({
+              id: source.origin.origin_id,
+              timestamp: source.origin.report.date,
+            });
           }
         }
         if (isDefined(source.location)) {
           if (isDefined(source.location.host)) {
-            sourceHostIps.add(source.location.host.ip);
+            sourceHosts.add({
+              id: source.location.host.asset._id,
+              ip: source.location.host.ip,
+            });
           }
           if (isDefined(source.location.port)) {
             sourcePorts.add(source.location.port);
@@ -87,8 +93,8 @@ class TlsCertificate extends Model {
       });
     }
 
-    ret.sourceReportIds = [...sourceReportIds];
-    ret.sourceHostIps = [...sourceHostIps];
+    ret.sourceReports = [...sourceReports];
+    ret.sourceHosts = [...sourceHosts];
     ret.sourcePorts = [...sourcePorts];
 
     delete ret.sources;

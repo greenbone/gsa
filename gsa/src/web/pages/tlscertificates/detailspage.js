@@ -112,7 +112,8 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, ...props}) => {
-  const showSourceBlock = entity.sourceReportIds.length > 0;
+  const showSourceBlock =
+    entity.sourceReports.length > 0 || entity.sourceHosts.length > 0;
   return (
     <Layout flex="column">
       <InfoTable>
@@ -132,7 +133,7 @@ const Details = ({entity, ...props}) => {
 
       {showSourceBlock && (
         <DetailsBlock title={_('Sources')}>
-          {entity.sourceReportIds.length > 0 && (
+          {entity.sourceReports.length > 0 && (
             <InfoTable size="full">
               <colgroup>
                 <Col width="10%" />
@@ -143,9 +144,13 @@ const Details = ({entity, ...props}) => {
                   <TableDataAlignTop>{_('Reports')}</TableDataAlignTop>
                   <TableData>
                     <HorizontalSep>
-                      {entity.sourceReportIds.map((reportId, index) => (
-                        <DetailsLink key={reportId} id={reportId} type="report">
-                          {reportId}
+                      {entity.sourceReports.map((report, index) => (
+                        <DetailsLink
+                          key={report.id}
+                          id={report.id}
+                          type="report"
+                        >
+                          {report.timestamp}
                         </DetailsLink>
                       ))}
                     </HorizontalSep>
@@ -154,7 +159,7 @@ const Details = ({entity, ...props}) => {
               </TableBody>
             </InfoTable>
           )}
-          {entity.sourceHostIps.length > 0 && (
+          {entity.sourceHosts.length > 0 && (
             <InfoTable size="full">
               <colgroup>
                 <Col width="10%" />
@@ -165,10 +170,10 @@ const Details = ({entity, ...props}) => {
                   <TableDataAlignTop>{_('Hosts')}</TableDataAlignTop>
                   <TableData>
                     <HorizontalSep>
-                      {entity.sourceHostIps.map((hostIp, index) => (
-                        <Link key={hostIp} to={'hosts'} filter={hostIp}>
-                          {hostIp}
-                        </Link>
+                      {entity.sourceHosts.map((host, index) => (
+                        <DetailsLink key={host.id} id={host.id} type="host">
+                          {host.ip}
+                        </DetailsLink>
                       ))}
                     </HorizontalSep>
                   </TableData>
