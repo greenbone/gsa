@@ -164,7 +164,7 @@ class LoginForm extends React.Component {
                       autoComplete="username"
                       name="username"
                       grow="1"
-                      placeholder={_('e.g. johndoe')}
+                      placeholder={_('Username')}
                       value={username}
                       autoFocus="autofocus"
                       tabIndex="1"
