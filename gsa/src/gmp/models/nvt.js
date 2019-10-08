@@ -42,39 +42,51 @@ const parse_tags = tags => {
   return newtags;
 };
 
-const getFilteredRefIds = (refs, type) => {
-  const filteredRefs = refs.filter(ref => ref._type === type);
+export const getRefs = element => {
+  if (
+    !isDefined(element) ||
+    !isDefined(element.refs) ||
+    !isDefined(element.refs.ref)
+  ) {
+    return [];
+  }
+  if (isArray(element.refs.ref)) {
+    return element.refs.ref;
+  }
+  return [element.refs.ref];
+};
+
+export const hasRefType = refType => (ref = {}) =>
+  isString(ref._type) && ref._type.toLowerCase() === refType;
+
+export const getFilteredRefIds = (refs = [], type) => {
+  const filteredRefs = refs.filter(hasRefType(type));
   return filteredRefs.map(ref => ref._id);
 };
 
-const getFilteredRefs = (refs, type) => {
-  const filteredRefs = refs.filter(ref => {
-    const rtype = isString(ref._type) ? ref._type.toLowerCase() : undefined;
-    return rtype === type;
-  });
-  const returnRefs = filteredRefs.map(ref => {
+const getFilteredUrlRefs = refs => {
+  return refs.filter(hasRefType('url')).map(ref => {
     let id = ref._id;
-    if (type === 'url') {
-      if (
-        !id.startsWith('http://') &&
-        !id.startsWith('https://') &&
-        !id.startsWith('ftp://') &&
-        !id.startsWith('ftps://')
-      ) {
-        id = 'http://' + id;
-      }
-      return {
-        ref: id,
-        type: type,
-      };
+    if (
+      !id.startsWith('http://') &&
+      !id.startsWith('https://') &&
+      !id.startsWith('ftp://') &&
+      !id.startsWith('ftps://')
+    ) {
+      id = 'http://' + id;
     }
     return {
-      id: id,
-      type: type,
+      ref: id,
+      type: 'url',
     };
   });
-  return returnRefs;
 };
+
+const getFilteredRefs = (refs, type) =>
+  refs.filter(hasRefType(type)).map(ref => ({
+    id: ref._id,
+    type,
+  }));
 
 const getOtherRefs = refs => {
   const filteredRefs = refs.filter(ref => {
@@ -110,12 +122,7 @@ class Nvt extends Info {
     ret.id = ret.oid;
     ret.tags = parse_tags(ret.tags);
 
-    let refs = [];
-    if (isDefined(ret.refs) && isArray(ret.refs.ref)) {
-      refs = ret.refs.ref;
-    } else if (isDefined(ret.refs) && isDefined(ret.refs.ref)) {
-      refs = [ret.refs.ref];
-    }
+    const refs = getRefs(ret);
 
     ret.cves = getFilteredRefIds(refs, 'cve').concat(
       getFilteredRefIds(refs, 'cve_id'),
@@ -128,7 +135,7 @@ class Nvt extends Info {
       getFilteredRefs(refs, 'cert-bund'),
     );
 
-    ret.xrefs = getFilteredRefs(refs, 'url').concat(getOtherRefs(refs));
+    ret.xrefs = getFilteredUrlRefs(refs, 'url').concat(getOtherRefs(refs));
 
     delete ret.refs;
 

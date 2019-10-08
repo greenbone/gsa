@@ -19,7 +19,7 @@
 
 /* eslint-disable max-len */
 
-import Nvt from 'gmp/models/nvt';
+import Nvt, {getRefs, hasRefType, getFilteredRefIds} from 'gmp/models/nvt';
 import Info from 'gmp/models/info';
 import {testModelFromElement, testModelMethods} from 'gmp/models/testing';
 
@@ -257,5 +257,156 @@ describe('nvt Model tests', () => {
     expect(nvt2.timeout).toBeUndefined();
     expect(nvt3.timeout).toEqual(123);
     expect(nvt4.timeout).toEqual(123);
+  });
+});
+
+describe('getRefs tests', () => {
+  test('should return empty array for undefined element', () => {
+    const refs = getRefs();
+
+    expect(refs).toEqual([]);
+  });
+
+  test('should return empty array for empty object', () => {
+    const refs = getRefs({});
+
+    expect(refs).toEqual([]);
+  });
+
+  test('should return empty array for empty refs', () => {
+    const refs = getRefs({refs: {}});
+
+    expect(refs).toEqual([]);
+  });
+
+  test('should return refs ref', () => {
+    const refs = getRefs({
+      refs: {
+        ref: [],
+      },
+    });
+
+    expect(refs).toEqual([]);
+  });
+
+  test('should return array for single ref', () => {
+    const refs = getRefs({
+      refs: {
+        ref: [
+          {
+            foo: 'bar',
+          },
+        ],
+      },
+    });
+
+    expect(refs.length).toEqual(1);
+    expect(refs[0]).toEqual({foo: 'bar'});
+  });
+
+  test('should return all refs', () => {
+    const refs = getRefs({
+      refs: {
+        ref: [
+          {
+            foo: 'bar',
+          },
+          {
+            lorem: 'ipsum',
+          },
+        ],
+      },
+    });
+
+    expect(refs.length).toEqual(2);
+    expect(refs[0]).toEqual({foo: 'bar'});
+    expect(refs[1]).toEqual({lorem: 'ipsum'});
+  });
+});
+
+describe('hasRefType tests', () => {
+  test('should return false for undefined ref', () => {
+    expect(hasRefType('foo')()).toEqual(false);
+  });
+
+  test('should return false for empty ref', () => {
+    expect(hasRefType('foo')({})).toEqual(false);
+  });
+
+  test('should return false for non string type', () => {
+    expect(hasRefType('foo')({_type: 1})).toEqual(false);
+  });
+
+  test('should return false when searching for other type', () => {
+    expect(hasRefType('foo')({_type: 'bar'})).toEqual(false);
+  });
+
+  test('should return true when searching for same type', () => {
+    expect(hasRefType('foo')({_type: 'foo'})).toEqual(true);
+  });
+
+  test('should ignore case for type', () => {
+    expect(hasRefType('foo')({_type: 'Foo'})).toEqual(true);
+    expect(hasRefType('foo')({_type: 'FOO'})).toEqual(true);
+    expect(hasRefType('foo')({_type: 'FoO'})).toEqual(true);
+  });
+});
+
+describe('getFilteredRefIds tests', () => {
+  test('should return empty array for undefined refs', () => {
+    const refs = getFilteredRefIds(undefined, 'foo');
+
+    expect(refs).toEqual([]);
+  });
+
+  test('should return empty array for for emtpy refs', () => {
+    const refs = getFilteredRefIds([], 'foo');
+
+    expect(refs).toEqual([]);
+  });
+
+  test('should return empty array when searching for other ref types', () => {
+    const refs = getFilteredRefIds(
+      [
+        {
+          _type: 'bar',
+          _id: '1',
+        },
+        {
+          _type: 'ipsum',
+          _id: '2',
+        },
+      ],
+      'foo',
+    );
+
+    expect(refs).toEqual([]);
+  });
+
+  test('should return ids of same type only', () => {
+    const refs = getFilteredRefIds(
+      [
+        {
+          _type: 'bar',
+          _id: '1',
+        },
+        {
+          _type: 'foo',
+          _id: '2',
+        },
+        {
+          _type: 'ipsum',
+          _id: '3',
+        },
+        {
+          _type: 'foo',
+          _id: '4',
+        },
+      ],
+      'foo',
+    );
+
+    expect(refs.length).toEqual(2);
+    expect(refs).toEqual(['2', '4']);
   });
 });
