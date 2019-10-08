@@ -43,6 +43,7 @@ import ReportPort from './port';
 import ReportTLSCertificate from './tlscertificate';
 
 import Result from '../result';
+import {getRefs, hasRefType} from '../nvt';
 
 const emptyCollectionList = filter => {
   return {
@@ -613,30 +614,27 @@ export const parseCves = (report, filter) => {
 
   const cves = {};
 
-  const results_with_cve = filter_func(
-    results.result,
-    result => result.nvt.cve !== 'NOCVE' && !isEmpty(result.nvt.cve),
-  );
+  const results_with_cve = filter_func(results.result, result => {
+    const refs = getRefs(result.nvt);
+    return refs.some(hasRefType('cve'));
+  });
 
   results_with_cve.forEach(result => {
-    const {host = {}, nvt = {}} = result;
-    const {cve: id} = nvt;
+    const {host = {}, nvt} = result;
+    const {_oid: id} = nvt;
+    let cve = cves[id];
 
-    if (isDefined(id)) {
-      let cve = cves[id];
-
-      if (!isDefined(cve)) {
-        cve = ReportCve.fromElement(nvt);
-        cves[id] = cve;
-      }
-
-      const {__text: ip} = host;
-
-      if (isDefined(ip)) {
-        cve.addHost({ip});
-      }
-      cve.addResult(result);
+    if (!isDefined(cve)) {
+      cve = ReportCve.fromElement(nvt);
+      cves[id] = cve;
     }
+
+    const {__text: ip} = host;
+
+    if (isDefined(ip)) {
+      cve.addHost({ip});
+    }
+    cve.addResult(result);
   });
 
   const cves_array = Object.values(cves);

@@ -598,6 +598,7 @@ describe('report parser tests', () => {
     expect(cves.counts).toEqual(counts);
     expect(cves.filter).toEqual('foo=bar rows=5');
   });
+
   test('should parse cves', () => {
     const filterString = 'foo=bar rows=5';
     const report = {
@@ -605,18 +606,33 @@ describe('report parser tests', () => {
         result: [
           {
             nvt: {
-              cve: 'NOCVE',
+              refs: {
+                ref: [{}],
+              },
             },
           },
           {
             nvt: {
-              cve: '',
+              refs: {
+                ref: [
+                  {
+                    _type: '',
+                  },
+                ],
+              },
             },
           },
           {
             nvt: {
-              cve: 'CVE-123',
               _oid: '1.2.3',
+              refs: {
+                ref: [
+                  {
+                    _type: 'cve',
+                    _id: 'CVE-123',
+                  },
+                ],
+              },
             },
             host: {
               __text: '1.1.1.1',
@@ -625,8 +641,19 @@ describe('report parser tests', () => {
           },
           {
             nvt: {
-              cve: 'CVE-123',
               _oid: '1.2.3',
+              refs: {
+                ref: [
+                  {
+                    _type: 'cve',
+                    _id: 'CVE-123',
+                  },
+                  {
+                    _type: 'foo',
+                    _id: 'foo1',
+                  },
+                ],
+              },
             },
             host: {
               __text: '2.2.2.2',
@@ -635,8 +662,15 @@ describe('report parser tests', () => {
           },
           {
             nvt: {
-              cve: 'CVE-234',
               _oid: '2.2.3',
+              refs: {
+                ref: [
+                  {
+                    _type: 'cve',
+                    _id: 'CVE-234',
+                  },
+                ],
+              },
             },
             host: {
               __text: '1.1.1.1',
@@ -645,8 +679,19 @@ describe('report parser tests', () => {
           },
           {
             nvt: {
-              cve: 'CVE-234, CVE-334',
               _oid: '2.3.3',
+              refs: {
+                ref: [
+                  {
+                    _type: 'cve',
+                    _id: 'CVE-234',
+                  },
+                  {
+                    _type: 'cve',
+                    _id: 'CVE-334',
+                  },
+                ],
+              },
             },
             host: {
               __text: '1.1.1.1',
@@ -672,21 +717,21 @@ describe('report parser tests', () => {
 
     const [cve1, cve2, cve3] = cves.entities;
 
-    expect(cve1.severity).toEqual(9.5);
     expect(cve1.id).toEqual('1.2.3');
     expect(cve1.cves).toEqual(['CVE-123']);
+    expect(cve1.severity).toEqual(9.5);
     expect(cve1.hosts.count).toEqual(2);
     expect(cve1.occurrences).toEqual(2);
 
-    expect(cve2.severity).toEqual(5.5);
     expect(cve2.id).toEqual('2.2.3');
     expect(cve2.cves).toEqual(['CVE-234']);
+    expect(cve2.severity).toEqual(5.5);
     expect(cve2.hosts.count).toEqual(1);
     expect(cve2.occurrences).toEqual(1);
 
-    expect(cve3.severity).toEqual(6.5);
     expect(cve3.id).toEqual('2.3.3');
     expect(cve3.cves).toEqual(['CVE-234', 'CVE-334']);
+    expect(cve3.severity).toEqual(6.5);
     expect(cve3.hosts.count).toEqual(1);
     expect(cve3.occurrences).toEqual(1);
   });
