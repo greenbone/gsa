@@ -1201,7 +1201,6 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
       dispatch(loadUserSettingsDefaultFilter(gmp)('dfncert')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('nvt')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('ovaldef')),
-      dispatch(loadUserSettingsDefaultFilter(gmp)('allinfo')),
     ]),
   loadPortLists: () => dispatch(loadPortLists(gmp)(ALL_FILTER)),
   loadReportFormats: () => dispatch(loadReportFormats(gmp)(ALL_FILTER)),
