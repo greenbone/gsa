@@ -23,9 +23,9 @@ import logger from '../log';
 import {forEach, map} from '../utils/array';
 import {isDefined} from '../utils/identity';
 
-import Model from '../model';
+import {parseModelFromElement} from '../model';
 import registerCommand from '../command';
-import {YES_VALUE, NO_VALUE} from '../parser';
+import {YES_VALUE, NO_VALUE, parseSeverity} from '../parser';
 
 import {parseCounts} from '../collection/parser';
 
@@ -55,7 +55,7 @@ const convert_select = (values, prefix) => {
   return ret;
 };
 
-const convert_preferences = (values, nvt_name) => {
+export const convertPreferences = (values, nvt_name) => {
   const ret = {};
   for (const prop in values) {
     const data = values[prop];
@@ -73,7 +73,7 @@ const convert_preferences = (values, nvt_name) => {
   return ret;
 };
 
-class ScanConfigCommand extends EntityCommand {
+export class ScanConfigCommand extends EntityCommand {
   constructor(http) {
     super(http, 'config', ScanConfig);
   }
@@ -124,7 +124,7 @@ class ScanConfigCommand extends EntityCommand {
       const config_resp = data.get_config_response;
       const settings = {};
 
-      settings.scanconfig = new ScanConfig(
+      settings.scanconfig = ScanConfig.fromElement(
         config_resp.get_configs_response.config,
       );
 
@@ -146,7 +146,6 @@ class ScanConfigCommand extends EntityCommand {
     const data = {
       ...convert_select(selected, 'nvt:'),
       cmd: 'save_config_family',
-      no_redirect: '1',
       id,
       family: family_name,
       name: config_name,
@@ -166,7 +165,7 @@ class ScanConfigCommand extends EntityCommand {
       const config_resp = data.get_config_family_response;
       const settings = {};
 
-      settings.config = new Model(config_resp.config, 'config');
+      settings.config = parseModelFromElement(config_resp.config, 'config');
 
       const nvts = {};
       forEach(config_resp.get_nvts_response.nvt, nvt => {
@@ -178,7 +177,7 @@ class ScanConfigCommand extends EntityCommand {
         nvt.oid = nvt._oid;
         delete nvt._oid;
 
-        nvt.severity = nvt.cvss_base;
+        nvt.severity = parseSeverity(nvt.cvss_base);
         delete nvt.cvss_base;
 
         nvt.selected = nvt.oid in nvts ? YES_VALUE : NO_VALUE;
@@ -200,9 +199,8 @@ class ScanConfigCommand extends EntityCommand {
     timeout,
   }) {
     const data = {
-      ...convert_preferences(preference_values, nvt_name),
+      ...convertPreferences(preference_values, nvt_name),
       cmd: 'save_config_nvt',
-      no_redirect: '1',
       id,
       oid,
       name: config_name,
@@ -228,8 +226,8 @@ class ScanConfigCommand extends EntityCommand {
       const settings = {};
       const config_resp = data.get_config_nvt_response;
 
-      settings.config = new Model(config_resp.config, 'config');
-      settings.nvt = new Nvt(config_resp.get_nvts_response.nvt);
+      settings.config = parseModelFromElement(config_resp.config, 'config');
+      settings.nvt = Nvt.fromElement(config_resp.get_nvts_response.nvt);
 
       settings.nvt.notes_counts = parseCounts(data.get_notes_response, 'note');
       settings.nvt.overrides_counts = parseCounts(
