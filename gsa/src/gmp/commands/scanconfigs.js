@@ -25,7 +25,7 @@ import {isDefined} from '../utils/identity';
 
 import {parseModelFromElement} from '../model';
 import registerCommand from '../command';
-import {YES_VALUE, NO_VALUE} from '../parser';
+import {YES_VALUE, NO_VALUE, parseSeverity} from '../parser';
 
 import {parseCounts} from '../collection/parser';
 
@@ -178,7 +178,7 @@ class ScanConfigCommand extends EntityCommand {
         nvt.oid = nvt._oid;
         delete nvt._oid;
 
-        nvt.severity = nvt.cvss_base;
+        nvt.severity = parseSeverity(nvt.cvss_base);
         delete nvt.cvss_base;
 
         nvt.selected = nvt.oid in nvts ? YES_VALUE : NO_VALUE;
