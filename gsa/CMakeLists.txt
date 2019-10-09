@@ -1,4 +1,4 @@
-# Copyright (C) 2016-2018 Greenbone Networks GmbH
+# Copyright (C) 2016-2019 Greenbone Networks GmbH
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 #
@@ -949,17 +949,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/schedules/table.js
      ${GSA_SRC_DIR}/src/web/pages/schedules/timeunitselect.js
      ${GSA_SRC_DIR}/src/web/pages/schedules/weekdayselect.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/details.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/filterdialog.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/listpage.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/row.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/table.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/createddisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/cvssdisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/index.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/loaders.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/severityclassdisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/typedisplay.js
      ${GSA_SRC_DIR}/src/web/pages/start/confirmremovedialog.js
      ${GSA_SRC_DIR}/src/web/pages/start/dashboard.js
      ${GSA_SRC_DIR}/src/web/pages/start/editdashboarddialog.js
