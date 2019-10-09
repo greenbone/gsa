@@ -280,7 +280,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/addtoassetsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/agenticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/alerticon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/allinfoicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/alterableicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/arrowicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/auditicon.js
@@ -400,7 +399,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/add_to_assets.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/agent.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/alert.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/allinfo.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/alterable.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/audit.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/calendar.svg
