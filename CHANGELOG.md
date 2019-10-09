@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [9.0.0] - unreleased
 
 ### Added
+- List NVT of the found CVEs at the report details page [#1673](https://github.com/greenbone/gsa/pull/1673)
 - Added links for GOS 6 manual for audits, policies and TLS certificates [#1657](https://github.com/greenbone/gsa/pull/1657)
 - Added OSP Sensor type to GSA [#1646](https://github.com/greenbone/gsa/pull/1646)
 - Added TLS certificate filter type [#1630](https://github.com/greenbone/gsa/pull/1630)
@@ -67,6 +68,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   requests in gsad [#1355](https://github.com/greenbone/gsa/pull/1355)
 
 ### Fixed
+- Fixed parsing report details data [#1673](https://github.com/greenbone/gsa/pull/1673)
 - Fixed scanconfig clone icon tooltip does not show if permission is denied [#1664](https://github.com/greenbone/gsa/pull/1664)
 - Fixed feed status page does not render [#1628](https://github.com/greenbone/gsa/pull/1628)
 - fixed secinfo severitybars not displaying severity.[#1530](https://github.com/greenbone/gsa/pull/1530)
@@ -98,7 +100,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - Removed Clone and Verify functionalities for report formats [#1650](https://github.com/greenbone/gsa/pull/1650)
 - Use new [React context API](https://reactjs.org/docs/context.html#api) [#1637](https://github.com/greenbone/gsa/pull/1637)
-- Update response data parsing in Model classes [#1633](https://github.com/greenbone/gsa/pull/1633)
+- Update response data parsing in Model classes
+  [#1633](https://github.com/greenbone/gsa/pull/1633),
+  [#1668](https://github.com/greenbone/gsa/pull/1668)
 - Fix statusbar content can be more than 100% and add progressbar colors to theme [1621](https://github.com/greenbone/gsa/pull/1621)
 - Allow to overwrite details=1 for command results.get() [#1618](https://github.com/greenbone/gsa/pull/1618)
 - Ensure not to request the report details when loading a list of reports [#1617](https://github.com/greenbone/gsa/pull/1617)

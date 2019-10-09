@@ -330,6 +330,13 @@ describe('setProperties tests', () => {
     expect(obj.lorem).toEqual('ipsum');
 
     expect(Object.keys(obj)).toEqual(expect.arrayContaining(['foo', 'lorem']));
+  });
+
+  test('should not allow to override set properties', () => {
+    const obj = setProperties({
+      foo: 'bar',
+      lorem: 'ipsum',
+    });
 
     expect(() => {
       obj.foo = 'a';
@@ -337,6 +344,26 @@ describe('setProperties tests', () => {
     expect(() => {
       obj.lorem = 'a';
     }).toThrow();
+  });
+
+  test('should allow to override set properties if requested', () => {
+    const obj = setProperties(
+      {
+        foo: 'bar',
+        lorem: 'ipsum',
+      },
+      {},
+      {writable: true},
+    );
+
+    expect(obj.foo).toEqual('bar');
+    expect(obj.lorem).toEqual('ipsum');
+
+    obj.foo = 'a';
+    obj.lorem = 'b';
+
+    expect(obj.foo).toEqual('a');
+    expect(obj.lorem).toEqual('b');
   });
 
   test('should skip properties starting with underscore', () => {

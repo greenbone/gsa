@@ -18,36 +18,53 @@
  */
 import 'core-js/features/object/entries';
 
-import {isDefined} from '../../utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
-import {parseInt} from '../../parser';
+import {setProperties, parseInt} from 'gmp/parser';
 
 class TLSCertificate {
-  constructor(fingerprint) {
-    this.fingerprint = fingerprint;
+  constructor() {
     this.ports = [];
   }
 
   addPort(port) {
-    let c_port = parseInt(port);
-    if (!isDefined(c_port)) {
+    let parsedPort = parseInt(port);
+    if (!isDefined(parsedPort)) {
       // port wasn't a number
-      c_port = port;
+      parsedPort = port;
     }
 
-    this.ports.push(port);
+    this.ports.push(parsedPort);
   }
 
   copy() {
-    const cert = new TLSCertificate(this.fingerprint);
+    const cert = TLSCertificate.fromElement({fingerprint: this.fingerprint});
+
     for (const [key, value] of Object.entries(this)) {
+      if (key === 'fingerprint') {
+        continue;
+      }
       cert[key] = value;
     }
+
     return cert;
   }
 
   get id() {
     return this.ip + ':' + this.port + ':' + this.fingerprint;
+  }
+
+  static fromElement(element) {
+    const cert = new TLSCertificate();
+
+    setProperties(this.parseElement(element), cert);
+
+    return cert;
+  }
+
+  static parseElement(element = {}) {
+    const {fingerprint} = element;
+    return {fingerprint};
   }
 }
 
