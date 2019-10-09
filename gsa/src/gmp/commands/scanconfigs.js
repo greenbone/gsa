@@ -23,7 +23,7 @@ import logger from '../log';
 import {forEach, map} from '../utils/array';
 import {isDefined} from '../utils/identity';
 
-import Model from '../model';
+import {parseModelFromElement} from '../model';
 import registerCommand from '../command';
 import {YES_VALUE, NO_VALUE} from '../parser';
 
@@ -124,7 +124,7 @@ class ScanConfigCommand extends EntityCommand {
       const config_resp = data.get_config_response;
       const settings = {};
 
-      settings.scanconfig = new ScanConfig(
+      settings.scanconfig = ScanConfig.fromElement(
         config_resp.get_configs_response.config,
       );
 
@@ -166,7 +166,7 @@ class ScanConfigCommand extends EntityCommand {
       const config_resp = data.get_config_family_response;
       const settings = {};
 
-      settings.config = new Model(config_resp.config, 'config');
+      settings.config = parseModelFromElement(config_resp.config, 'config');
 
       const nvts = {};
       forEach(config_resp.get_nvts_response.nvt, nvt => {
@@ -228,8 +228,8 @@ class ScanConfigCommand extends EntityCommand {
       const settings = {};
       const config_resp = data.get_config_nvt_response;
 
-      settings.config = new Model(config_resp.config, 'config');
-      settings.nvt = new Nvt(config_resp.get_nvts_response.nvt);
+      settings.config = parseModelFromElement(config_resp.config, 'config');
+      settings.nvt = Nvt.fromElement(config_resp.get_nvts_response.nvt);
 
       settings.nvt.notes_counts = parseCounts(data.get_notes_response, 'note');
       settings.nvt.overrides_counts = parseCounts(
