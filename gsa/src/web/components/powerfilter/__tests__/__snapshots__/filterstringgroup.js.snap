@@ -105,7 +105,6 @@ exports[`FilterStringGroup tests should render 1`] = `
   >
     <input
       class="c3 c4"
-      maxlength="80"
       name="name"
       size="30"
       type="text"
