@@ -10240,20 +10240,19 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 scanner_id, name, comment ?: "",
                 strcmp (which_cert, "new") == 0 ? ca_pub : "", credential_id);
       else
-        ret =
-          gmpf (connection, credentials, &response, &entity, response_data,
-                "<modify_scanner scanner_id=\"%s\">"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<host>%s</host>"
-                "<port>%s</port>"
-                "<type>%s</type>"
-                "<ca_pub>%s</ca_pub>"
-                "<credential id=\"%s\"/>"
-                "</modify_scanner>",
-                scanner_id, name, comment ?: "", host, port, type,
-                strcmp (which_cert, "new") == 0 ? ca_pub : "", 
-                credential_id ? credential_id : "");
+        ret = gmpf (connection, credentials, &response, &entity, response_data,
+                    "<modify_scanner scanner_id=\"%s\">"
+                    "<name>%s</name>"
+                    "<comment>%s</comment>"
+                    "<host>%s</host>"
+                    "<port>%s</port>"
+                    "<type>%s</type>"
+                    "<ca_pub>%s</ca_pub>"
+                    "<credential id=\"%s\"/>"
+                    "</modify_scanner>",
+                    scanner_id, name, comment ?: "", host, port, type,
+                    strcmp (which_cert, "new") == 0 ? ca_pub : "",
+                    credential_id ? credential_id : "");
     }
   else
     {
