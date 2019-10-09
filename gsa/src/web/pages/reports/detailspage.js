@@ -31,7 +31,7 @@ import Filter, {RESET_FILTER, RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 
 import {first} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import withDownload from 'web/components/form/withDownload';
 
@@ -272,7 +272,7 @@ class ReportDetails extends React.Component {
     this.setState(({lastFilter}) => ({
       reportId,
       deltaReportId,
-      isUpdating: isDefined(lastFilter) && !lastFilter.equals(filter), // show update indicator if filter has changed
+      isUpdating: hasValue(lastFilter) && !lastFilter.equals(filter), // show update indicator if filter has changed
       lastFilter: filter,
     }));
 

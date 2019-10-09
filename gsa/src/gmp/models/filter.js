@@ -19,7 +19,7 @@
 import 'core-js/features/array/find-index';
 import 'core-js/features/array/includes';
 
-import {isDefined, isString} from '../utils/identity';
+import {isDefined, isString, hasValue} from '../utils/identity';
 import {forEach, map} from '../utils/array';
 
 import Model, {parseModelFromElement} from '../model.js';
@@ -205,30 +205,13 @@ class Filter extends Model {
    * @return {Filter} This filter with merged terms.
    */
   _mergeExtraKeywords(filter) {
-    if (isDefined(filter)) {
+    if (hasValue(filter)) {
       filter.forEach(term => {
         const {keyword: key} = term;
         if (isDefined(key) && EXTRA_KEYWORDS.includes(key) && !this.has(key)) {
           this._addTerm(term);
         }
       });
-    }
-    return this;
-  }
-
-  /**
-   * Merges all terms from filter into this Filter
-   *
-   *
-   * @private
-   *
-   * @param {Filter} filter  Terms from filter to be merged.
-   *
-   * @return {Filter} This filter with merged terms.
-   */
-  merge(filter) {
-    if (isDefined(filter)) {
-      this._addTerm(...filter.getAllTerms());
     }
     return this;
   }
@@ -439,7 +422,7 @@ class Filter extends Model {
    * @return {bool} Returns true if this filter equals to the other filter
    */
   equals(filter) {
-    if (!isDefined(filter)) {
+    if (!hasValue(filter)) {
       return false;
     }
 
@@ -609,6 +592,10 @@ class Filter extends Model {
    * @return {Filter} This filter
    */
   and(filter) {
+    if (!hasValue(filter)) {
+      return this;
+    }
+
     const nonExtraTerms = this.getAllTerms().filter(
       term => !EXTRA_KEYWORDS.includes(term.keyword),
     );
@@ -664,6 +651,20 @@ class Filter extends Model {
   setSortBy(value) {
     const order = this.getSortOrder();
     this.set(order, value);
+    return this;
+  }
+
+  /**
+   * Merges all terms from filter into this Filter
+   *
+   * @param {Filter} filter  Terms from filter to be merged.
+   *
+   * @return {Filter} This filter with merged terms.
+   */
+  merge(filter) {
+    if (hasValue(filter)) {
+      this._addTerm(...filter.getAllTerms());
+    }
     return this;
   }
 
