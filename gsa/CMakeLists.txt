@@ -90,7 +90,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/commands/scanconfigs.js
      ${GSA_SRC_DIR}/src/gmp/commands/scanners.js
      ${GSA_SRC_DIR}/src/gmp/commands/schedules.js
-     ${GSA_SRC_DIR}/src/gmp/commands/secinfo.js
      ${GSA_SRC_DIR}/src/gmp/commands/tags.js
      ${GSA_SRC_DIR}/src/gmp/commands/targets.js
      ${GSA_SRC_DIR}/src/gmp/commands/tasks.js
