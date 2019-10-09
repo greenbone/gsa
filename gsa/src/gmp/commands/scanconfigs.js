@@ -55,7 +55,7 @@ const convert_select = (values, prefix) => {
   return ret;
 };
 
-const convert_preferences = (values, nvt_name) => {
+const convertPreferences = (values, nvt_name) => {
   const ret = {};
   for (const prop in values) {
     const data = values[prop];
@@ -199,7 +199,7 @@ class ScanConfigCommand extends EntityCommand {
     timeout,
   }) {
     const data = {
-      ...convert_preferences(preference_values, nvt_name),
+      ...convertPreferences(preference_values, nvt_name),
       cmd: 'save_config_nvt',
       id,
       oid,
