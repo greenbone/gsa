@@ -36,7 +36,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - Decide whether to default to full and fast scan config (task dialog)[#1671](https://github.com/greenbone/gsa/pull/1671)
 - Determine the to be applied filter of a list page in GSA and don't rely on the
-  backend [#1631](https://github.com/greenbone/gsa/pull/1631), [#1653](https://github.com/greenbone/gsa/pull/1653)
+  backend
+  [#1631](https://github.com/greenbone/gsa/pull/1631),
+  [#1653](https://github.com/greenbone/gsa/pull/1653),
+  [#1677](https://github.com/greenbone/gsa/pull/1677)
 - Change gmpname for vulnerability and secinfo pages [#1652](https://github.com/greenbone/gsa/pull/1652)
 - Use "lean" reports by default when requesting a single report [#1635](https://github.com/greenbone/gsa/pull/1635)
 - Use uuid to get greenbone compliance report format [#1643](https://github.com/greenbone/gsa/pull/1643)
