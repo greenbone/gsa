@@ -55,7 +55,7 @@ class Nvt extends Info {
   static parseElement(element) {
     const ret = super.parseElement(element, 'nvt');
 
-    ret.nvt_type = element._type;
+    ret.nvt_type = ret._type;
 
     ret.oid = isEmpty(ret._oid) ? undefined : ret._oid;
     ret.id = ret.oid;
@@ -135,28 +135,28 @@ class Nvt extends Info {
 
     delete ret.xref;
 
-    if (isDefined(element.qod)) {
-      if (isEmpty(element.qod.value)) {
+    if (isDefined(ret.qod)) {
+      if (isEmpty(ret.qod.value)) {
         delete ret.qod.value;
       } else {
-        ret.qod.value = parseFloat(element.qod.value);
+        ret.qod.value = parseFloat(ret.qod.value);
       }
 
-      if (isEmpty(element.qod.type)) {
+      if (isEmpty(ret.qod.type)) {
         delete ret.qod.type;
       }
     }
 
-    if (isEmpty(element.default_timeout)) {
+    if (isEmpty(ret.default_timeout)) {
       delete ret.default_timeout;
     } else {
-      ret.default_timeout = parseFloat(element.default_timeout);
+      ret.default_timeout = parseFloat(ret.default_timeout);
     }
 
-    if (isEmpty(element.timeout)) {
+    if (isEmpty(ret.timeout)) {
       delete ret.timeout;
     } else {
-      ret.timeout = parseFloat(element.timeout);
+      ret.timeout = parseFloat(ret.timeout);
     }
 
     return ret;
