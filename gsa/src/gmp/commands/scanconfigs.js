@@ -55,7 +55,7 @@ const convert_select = (values, prefix) => {
   return ret;
 };
 
-const convertPreferences = (values, nvt_name) => {
+export const convertPreferences = (values, nvt_name) => {
   const ret = {};
   for (const prop in values) {
     const data = values[prop];
@@ -73,7 +73,7 @@ const convertPreferences = (values, nvt_name) => {
   return ret;
 };
 
-class ScanConfigCommand extends EntityCommand {
+export class ScanConfigCommand extends EntityCommand {
   constructor(http) {
     super(http, 'config', ScanConfig);
   }
