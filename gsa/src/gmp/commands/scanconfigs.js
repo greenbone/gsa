@@ -146,7 +146,6 @@ class ScanConfigCommand extends EntityCommand {
     const data = {
       ...convert_select(selected, 'nvt:'),
       cmd: 'save_config_family',
-      no_redirect: '1',
       id,
       family: family_name,
       name: config_name,
@@ -202,7 +201,6 @@ class ScanConfigCommand extends EntityCommand {
     const data = {
       ...convert_preferences(preference_values, nvt_name),
       cmd: 'save_config_nvt',
-      no_redirect: '1',
       id,
       oid,
       name: config_name,
