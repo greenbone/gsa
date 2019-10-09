@@ -1189,4 +1189,31 @@ describe('should lower the case of capitalized keywords', () => {
   });
 });
 
+describe('Filter merge', () => {
+  test('should merge undefined', () => {
+    const filter1 = Filter.fromString('foo=bar');
+    const filter2 = filter1.merge();
+
+    expect(filter1).toBe(filter2);
+    expect(filter2.get('foo')).toEqual('bar');
+  });
+
+  test('should merge null', () => {
+    const filter1 = Filter.fromString('foo=bar');
+    const filter2 = filter1.merge(null);
+
+    expect(filter1).toBe(filter2);
+    expect(filter2.get('foo')).toEqual('bar');
+  });
+
+  test('should merge filter', () => {
+    const filter1 = Filter.fromString('foo=bar');
+    const filter2 = Filter.fromString('rows=10 first=1');
+    const filter3 = filter1.merge(filter2);
+
+    expect(filter1).toBe(filter3);
+    expect(filter3.toFilterString()).toEqual('foo=bar rows=10 first=1');
+  });
+});
+
 // vim: set ts=2 sw=2 tw=80:

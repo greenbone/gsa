@@ -217,23 +217,6 @@ class Filter extends Model {
   }
 
   /**
-   * Merges all terms from filter into this Filter
-   *
-   *
-   * @private
-   *
-   * @param {Filter} filter  Terms from filter to be merged.
-   *
-   * @return {Filter} This filter with merged terms.
-   */
-  merge(filter) {
-    if (hasValue(filter)) {
-      this._addTerm(...filter.getAllTerms());
-    }
-    return this;
-  }
-
-  /**
    * Reset filter id of the current filter
    *
    * @private
@@ -668,6 +651,20 @@ class Filter extends Model {
   setSortBy(value) {
     const order = this.getSortOrder();
     this.set(order, value);
+    return this;
+  }
+
+  /**
+   * Merges all terms from filter into this Filter
+   *
+   * @param {Filter} filter  Terms from filter to be merged.
+   *
+   * @return {Filter} This filter with merged terms.
+   */
+  merge(filter) {
+    if (hasValue(filter)) {
+      this._addTerm(...filter.getAllTerms());
+    }
     return this;
   }
 
