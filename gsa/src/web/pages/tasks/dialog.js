@@ -21,8 +21,6 @@ import React, {useState} from 'react';
 
 import _ from 'gmp/locale';
 
-import logger from 'gmp/log';
-
 import {forEach, first} from 'gmp/utils/array';
 import {isDefined, isArray} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
@@ -74,8 +72,6 @@ import Layout from 'web/components/layout/layout';
 
 import AddResultsToAssetsGroup from './addresultstoassetsgroup';
 import AutoDeleteReportsGroup from './autodeletereportsgroup';
-
-const log = logger.getLogger('web.tasks.dialog');
 
 const sort_scan_configs = (scan_configs = []) => {
   const sorted_scan_configs = {
@@ -202,8 +198,6 @@ const TaskDialog = ({
     } else {
       setConfigType('other');
     }
-
-    log.debug('on scanner change', value, scanner);
 
     if (isDefined(onScannerChange)) {
       onScannerChange(value);
