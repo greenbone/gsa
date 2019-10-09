@@ -51,7 +51,6 @@ export const ROWS_PER_PAGE_SETTING_ID = '5f5a8712-8017-11e1-8556-406186ea4fc5';
 export const DEFAULT_FILTER_SETTINGS = {
   agent: '4a1334c1-cb93-4a79-8634-103b0a50bdcd',
   alert: 'b833a6f2-dcdc-4535-bfb0-a5154b5b5092',
-  allinfo: 'feefe56b-e2da-4913-81cc-1a6ae3b36e64',
   asset: '0f040d06-abf9-43a2-8f94-9de178b0e978',
   certbund: 'e4cf514a-17e2-4ab9-9c90-336f15e24750',
   cpe: '3414a107-ae46-4dea-872d-5c4479a48e8f',
@@ -343,7 +342,6 @@ export class UserCommand extends EntityCommand {
       [saveDefaultFilterSettingId('ovaldef')]: data.ovalFilter,
       [saveDefaultFilterSettingId('certbund')]: data.certBundFilter,
       [saveDefaultFilterSettingId('dfncert')]: data.dfnCertFilter,
-      [saveDefaultFilterSettingId('allinfo')]: data.secInfoFilter,
       auto_cache_rebuild: data.autoCacheRebuild,
     });
   }
