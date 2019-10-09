@@ -30,11 +30,14 @@ describe('nvt Model tests', () => {
   test('should parse NVT oid as id', () => {
     const nvt1 = Nvt.fromElement({_oid: '42.1337'});
     const nvt2 = Nvt.fromElement({});
+    const nvt3 = Nvt.fromElement({nvt: {_oid: '1.2.3'}});
 
     expect(nvt1.id).toEqual('42.1337');
     expect(nvt1.oid).toEqual('42.1337');
     expect(nvt2.id).toBeUndefined();
     expect(nvt2.oid).toBeUndefined();
+    expect(nvt3.id).toEqual('1.2.3');
+    expect(nvt3.oid).toEqual('1.2.3');
   });
 
   test('should not allow to overwrite id', () => {
@@ -60,6 +63,7 @@ describe('nvt Model tests', () => {
   test('should parse tags', () => {
     const nvt1 = Nvt.fromElement({tags: 'bv=/A:P|st=vf'});
     const nvt2 = Nvt.fromElement({});
+    const nvt3 = Nvt.fromElement({nvt: {tags: 'bv=/A:P|st=vf'}});
     const res = {
       bv: '/A:P',
       st: 'vf',
@@ -67,6 +71,7 @@ describe('nvt Model tests', () => {
 
     expect(nvt1.tags).toEqual(res);
     expect(nvt2.tags).toEqual({});
+    expect(nvt3.tags).toEqual(res);
   });
 
   test('should parse cve and cve_id', () => {
@@ -75,6 +80,7 @@ describe('nvt Model tests', () => {
     const nvt3 = Nvt.fromElement({cve: ''});
     const nvt4 = Nvt.fromElement({cve: 'NOCVE'});
     const nvt5 = Nvt.fromElement({});
+    const nvt6 = Nvt.fromElement({nvt: {cve: '42', cve_id: '21'}});
 
     expect(nvt1.cves).toEqual(['42', '21']);
     expect(nvt1.cve).toBeUndefined();
@@ -83,6 +89,7 @@ describe('nvt Model tests', () => {
     expect(nvt3.cves).toEqual([]);
     expect(nvt4.cves).toEqual([]);
     expect(nvt5.cves).toEqual([]);
+    expect(nvt6.cves).toEqual(['42', '21']);
   });
 
   test('should parse bid and bugtraq_id', () => {
@@ -91,6 +98,7 @@ describe('nvt Model tests', () => {
     const nvt3 = Nvt.fromElement({bid: ''});
     const nvt4 = Nvt.fromElement({bid: 'NOBID'});
     const nvt5 = Nvt.fromElement({});
+    const nvt6 = Nvt.fromElement({nvt: {bid: '42', bugtraq_id: '21'}});
 
     expect(nvt1.bids).toEqual(['42', '21']);
     expect(nvt1.bid).toBeUndefined();
@@ -99,15 +107,19 @@ describe('nvt Model tests', () => {
     expect(nvt3.bids).toEqual([]);
     expect(nvt4.bids).toEqual([]);
     expect(nvt5.bids).toEqual([]);
+    expect(nvt6.bids).toEqual(['42', '21']);
   });
 
   test('should parse severity', () => {
     const nvt1 = Nvt.fromElement({cvss_base: '8.5'});
     const nvt2 = Nvt.fromElement({cvss_base: ''});
+    const nvt3 = Nvt.fromElement({nvt: {cvss_base: '8.5'}});
 
     expect(nvt1.severity).toEqual(8.5);
     expect(nvt1.cvss_base).toBeUndefined();
     expect(nvt2.severity).toBeUndefined();
+    expect(nvt3.cvss_base).toBeUndefined();
+    expect(nvt3.severity).toEqual(8.5);
   });
 
   test('should parse preferences', () => {
@@ -130,9 +142,11 @@ describe('nvt Model tests', () => {
     ];
     const nvt1 = Nvt.fromElement({});
     const nvt2 = Nvt.fromElement(elem);
+    const nvt3 = Nvt.fromElement({nvt: elem});
 
     expect(nvt1.preferences).toEqual([]);
     expect(nvt2.preferences).toEqual(res);
+    expect(nvt3.preferences).toEqual(res);
   });
 
   test('should parse cert and cert_refs', () => {
@@ -209,6 +223,7 @@ describe('nvt Model tests', () => {
     const nvt2 = Nvt.fromElement(elem2);
     const nvt3 = Nvt.fromElement(elem3);
     const nvt4 = Nvt.fromElement(elem4);
+    const nvt5 = Nvt.fromElement({nvt: elem4});
 
     expect(nvt1.certs).toEqual([]);
     expect(nvt2.cert).toBeUndefined();
@@ -216,6 +231,7 @@ describe('nvt Model tests', () => {
     expect(nvt3.certs).toEqual(res3);
     expect(nvt3.cert_refs).toBeUndefined();
     expect(nvt4.certs).toEqual(res4);
+    expect(nvt5.certs).toEqual(res4);
   });
 
   test('should parse xrefs with correct protocol', () => {
@@ -227,6 +243,7 @@ describe('nvt Model tests', () => {
     const nvt6 = Nvt.fromElement({xrefs: 'URL:ftp://42'});
     const nvt7 = Nvt.fromElement({xrefs: 'URL:ftps://42'});
     const nvt8 = Nvt.fromElement({xrefs: 'ftps://42'});
+    const nvt9 = Nvt.fromElement({nvt: {xrefs: 'URL:https://42'}});
 
     expect(nvt1.xrefs).toEqual([{ref: '42', type: 'other'}]);
     expect(nvt2.xrefs).toEqual([
@@ -240,6 +257,7 @@ describe('nvt Model tests', () => {
     expect(nvt7.xrefs).toEqual([{ref: 'ftps://42', type: 'URL'}]);
     expect(nvt8.xrefs).toEqual([{ref: 'ftps://42', type: 'other'}]);
     expect(nvt8.xref).toBeUndefined();
+    expect(nvt9.xrefs).toEqual([{ref: 'https://42', type: 'URL'}]);
   });
 
   test('should parse qod', () => {
@@ -249,6 +267,7 @@ describe('nvt Model tests', () => {
     const nvt4 = Nvt.fromElement({qod: {type: ''}});
     const nvt5 = Nvt.fromElement({qod: {type: 'foo'}});
     const nvt6 = Nvt.fromElement({qod: {value: '75.5', type: 'foo'}});
+    const nvt7 = Nvt.fromElement({nvt: {qod: {value: '75.5', type: 'foo'}}});
 
     expect(nvt1.qod).toBeUndefined();
     expect(nvt2.qod.value).toBeUndefined();
@@ -256,25 +275,40 @@ describe('nvt Model tests', () => {
     expect(nvt4.qod.type).toBeUndefined();
     expect(nvt5.qod.type).toEqual('foo');
     expect(nvt6.qod).toEqual({value: 75.5, type: 'foo'});
+    expect(nvt7.qod).toEqual({value: 75.5, type: 'foo'});
   });
 
   test('should parse default_timeout', () => {
     const nvt1 = Nvt.fromElement({});
     const nvt2 = Nvt.fromElement({default_timeout: ''});
     const nvt3 = Nvt.fromElement({default_timeout: '123'});
+    const nvt4 = Nvt.fromElement({nvt: {default_timeout: '123'}});
 
     expect(nvt1.default_timeout).toBeUndefined();
     expect(nvt2.default_timeout).toBeUndefined();
     expect(nvt3.default_timeout).toEqual(123);
+    expect(nvt4.default_timeout).toEqual(123);
   });
 
   test('should parse timeout', () => {
     const nvt1 = Nvt.fromElement({});
     const nvt2 = Nvt.fromElement({timeout: ''});
     const nvt3 = Nvt.fromElement({timeout: '123'});
+    const nvt4 = Nvt.fromElement({nvt: {timeout: '123'}});
 
     expect(nvt1.timeout).toBeUndefined();
     expect(nvt2.timeout).toBeUndefined();
     expect(nvt3.timeout).toEqual(123);
+    expect(nvt4.timeout).toEqual(123);
+  });
+
+  test('should parse nvt type', () => {
+    const nvt1 = Nvt.fromElement({});
+    const nvt2 = Nvt.fromElement({_type: 'foo'});
+    const nvt3 = Nvt.fromElement({nvt: {_type: 'foo'}});
+
+    expect(nvt1.nvt_type).toBeUndefined();
+    expect(nvt2.nvt_type).toEqual('foo');
+    expect(nvt3.nvt_type).toEqual('foo');
   });
 });
