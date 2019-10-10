@@ -53,13 +53,24 @@ class TlsCertificate extends Model {
     ret.name = element.issuer_dn;
     delete ret.issuer_dn;
 
-    ret.activationTime = parseDate(element.activation_time);
+    ret.activationTime =
+      element.activation_time === 'undefined' ||
+      element.activation_time === 'unlimited'
+        ? undefined
+        : parseDate(element.activation_time);
     delete ret.activation_time;
 
-    ret.expirationTime = parseDate(element.expiration_time);
+    ret.expirationTime =
+      element.expiration_time === 'undefined' ||
+      element.expiration_time === 'unlimited'
+        ? undefined
+        : parseDate(element.expiration_time);
     delete ret.expiration_time;
 
-    ret.lastSeen = parseDate(element.last_seen);
+    ret.lastSeen =
+      element.last_seen === 'undefined' || element.last_seen === 'unlimited'
+        ? undefined
+        : parseDate(element.last_seen);
     delete ret.last_seen;
 
     ret.timeStatus = element.time_status;
