@@ -48,7 +48,9 @@ class TlsCertificate extends Model {
   static parseElement(element) {
     const ret = super.parseElement(element);
 
-    ret.certificate = element.certificate.__text;
+    ret.certificate = isDefined(element.certificate)
+      ? element.certificate.__text
+      : undefined;
 
     ret.name = element.issuer_dn;
     delete ret.issuer_dn;
