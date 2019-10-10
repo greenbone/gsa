@@ -45,24 +45,24 @@ export const getTranslatableTimeStatus = status =>
 class TlsCertificate extends Model {
   static entityType = 'tlscertificate';
 
-  static parseElement(elem) {
-    const ret = super.parseElement(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
-    ret.certificate = elem.certificate.__text;
+    ret.certificate = element.certificate.__text;
 
-    ret.name = elem.issuer_dn;
+    ret.name = element.issuer_dn;
     delete ret.issuer_dn;
 
-    ret.activationTime = parseDate(elem.activation_time);
+    ret.activationTime = parseDate(element.activation_time);
     delete ret.activation_time;
 
-    ret.expirationTime = parseDate(elem.expiration_time);
+    ret.expirationTime = parseDate(element.expiration_time);
     delete ret.expiration_time;
 
-    ret.lastSeen = parseDate(elem.last_seen);
+    ret.lastSeen = parseDate(element.last_seen);
     delete ret.last_seen;
 
-    ret.timeStatus = elem.time_status;
+    ret.timeStatus = element.time_status;
     delete ret.time_status;
 
     const sourceReports = new Set();
@@ -99,13 +99,13 @@ class TlsCertificate extends Model {
 
     delete ret.sources;
 
-    ret.valid = parseBoolean(elem.valid);
-    ret.trust = parseBoolean(elem.trust);
+    ret.valid = parseBoolean(element.valid);
+    ret.trust = parseBoolean(element.trust);
 
-    ret.sha256Fingerprint = elem.sha256_fingerprint;
+    ret.sha256Fingerprint = element.sha256_fingerprint;
     delete ret.sha256_fingerprint;
 
-    ret.md5Fingerprint = elem.md5_fingerprint;
+    ret.md5Fingerprint = element.md5_fingerprint;
     delete ret.md5_fingerprint;
 
     return ret;
