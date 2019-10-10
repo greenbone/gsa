@@ -27,7 +27,6 @@ import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
 
 import DetailsLink from 'web/components/link/detailslink';
-import Link from 'web/components/link/link';
 
 import DownloadIcon from 'web/components/icon/downloadicon';
 import ExportIcon from 'web/components/icon/exporticon';
