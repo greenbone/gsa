@@ -26,7 +26,7 @@ import GmpSettings, {
 const createStorage = state => {
   const store = {
     ...state,
-    setItem: jest.fn((name, value) => (store[name] = value)),
+    setItem: jest.fn((name, value) => (store[name] = '' + value)),
     removeItem: jest.fn(name => delete store[name]),
   };
   return store;
