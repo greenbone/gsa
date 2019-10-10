@@ -111,7 +111,7 @@ class ReportDetails extends React.Component {
     super(...args);
 
     this.state = {
-      activeTab: 1,
+      activeTab: 0,
       showFilterDialog: false,
       showDownloadReportDialog: false,
       sorting: {
