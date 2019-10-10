@@ -43,6 +43,7 @@ class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
       disableLoginForm = false,
+      enableStoreDebugLog,
       guestUsername,
       guestPassword,
       loglevel = storage.loglevel,
@@ -116,6 +117,22 @@ class GmpSettings {
 
   set loglevel(value) {
     set(this.storage, 'loglevel', value);
+  }
+
+  get enableStoreDebugLog() {
+    const enabled = this.storage.enableStoreDebugLog;
+    if (isDefined(enabled)) {
+      return enabled === '1';
+    }
+    return enabled;
+  }
+
+  set enableStoreDebugLog(value) {
+    let storeValue;
+    if (isDefined(value)) {
+      storeValue = value ? '1' : '0';
+    }
+    set(this.storage, 'enableStoreDebugLog', storeValue);
   }
 }
 
