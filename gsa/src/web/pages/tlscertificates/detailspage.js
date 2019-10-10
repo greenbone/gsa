@@ -143,7 +143,7 @@ const Details = ({entity, ...props}) => {
                   <TableDataAlignTop>{_('Reports')}</TableDataAlignTop>
                   <TableData>
                     <HorizontalSep>
-                      {entity.sourceReports.map((report, index) => (
+                      {entity.sourceReports.map(report => (
                         <DetailsLink
                           key={report.id}
                           id={report.id}
@@ -169,7 +169,7 @@ const Details = ({entity, ...props}) => {
                   <TableDataAlignTop>{_('Hosts')}</TableDataAlignTop>
                   <TableData>
                     <HorizontalSep>
-                      {entity.sourceHosts.map((host, index) => (
+                      {entity.sourceHosts.map(host => (
                         <DetailsLink key={host.id} id={host.id} type="host">
                           {host.ip}
                         </DetailsLink>
