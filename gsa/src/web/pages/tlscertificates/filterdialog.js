@@ -23,31 +23,23 @@ import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 const SORT_FIELDS = [
   {
     name: 'name',
-    displayName: _l('Name'),
+    displayName: _l('Issuer DN'),
   },
   {
-    name: 'title',
-    displayName: _l('Title'),
+    name: 'serial',
+    displayName: _l('Serial'),
   },
   {
-    name: 'latest_severity',
-    displayName: _l('Severity: Latest'),
+    name: 'activates',
+    displayName: _l('Activates'),
   },
   {
-    name: 'highest_severity',
-    displayName: _l('Severity: Highest'),
+    name: 'expires',
+    displayName: _l('Expires'),
   },
   {
-    name: 'average_severity',
-    displayName: _l('Severity: Average'),
-  },
-  {
-    name: 'hosts',
-    displayName: _l('Hosts'),
-  },
-  {
-    name: 'modified',
-    displayName: _l('Modified'),
+    name: 'lastSeen',
+    displayName: _l('Last Seen'),
   },
 ];
 
