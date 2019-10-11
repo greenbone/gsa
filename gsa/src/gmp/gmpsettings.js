@@ -43,6 +43,9 @@ class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
       disableLoginForm = false,
+      enableStoreDebugLog,
+      guestUsername,
+      guestPassword,
       loglevel = storage.loglevel,
       manualUrl = DEFAULT_MANUAL_URL,
       manualLanguageMapping,
@@ -51,25 +54,27 @@ class GmpSettings {
       reloadinterval = DEFAULT_RELOAD_INTERVAL,
       server = global.location.host,
       timeout,
-      guestUsername,
-      guestPassword,
       vendorVersion,
       vendorLabel,
     } = {...options};
     this.storage = storage;
 
+    if (isDefined(enableStoreDebugLog)) {
+      this.enableStoreDebugLog = enableStoreDebugLog;
+    }
+
     this.loglevel = isDefined(loglevel) ? loglevel : DEFAULT_LOG_LEVEL;
     this.reloadinterval = reloadinterval;
     this.timeout = timeout;
 
-    setAndFreeze(this, 'manualUrl', manualUrl);
-    setAndFreeze(this, 'manualLanguageMapping', manualLanguageMapping);
-    setAndFreeze(this, 'protocoldocurl', protocoldocurl);
-    setAndFreeze(this, 'server', server);
-    setAndFreeze(this, 'protocol', protocol);
+    setAndFreeze(this, 'disableLoginForm', disableLoginForm);
     setAndFreeze(this, 'guestUsername', guestUsername);
     setAndFreeze(this, 'guestPassword', guestPassword);
-    setAndFreeze(this, 'disableLoginForm', disableLoginForm);
+    setAndFreeze(this, 'manualUrl', manualUrl);
+    setAndFreeze(this, 'manualLanguageMapping', manualLanguageMapping);
+    setAndFreeze(this, 'protocol', protocol);
+    setAndFreeze(this, 'protocoldocurl', protocoldocurl);
+    setAndFreeze(this, 'server', server);
     setAndFreeze(this, 'vendorVersion', vendorVersion);
     setAndFreeze(this, 'vendorLabel', vendorLabel);
   }
@@ -112,6 +117,22 @@ class GmpSettings {
 
   set loglevel(value) {
     set(this.storage, 'loglevel', value);
+  }
+
+  get enableStoreDebugLog() {
+    const enabled = this.storage.enableStoreDebugLog;
+    if (isDefined(enabled)) {
+      return enabled === '1';
+    }
+    return enabled;
+  }
+
+  set enableStoreDebugLog(value) {
+    let storeValue;
+    if (isDefined(value)) {
+      storeValue = value ? '1' : '0';
+    }
+    set(this.storage, 'enableStoreDebugLog', storeValue);
   }
 }
 
