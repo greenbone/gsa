@@ -29,11 +29,11 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {entitiesActions} from 'web/store/entities/audits';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
 import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
+import {entitiesLoadingActions} from 'web/store/entities/audits';
 
 import AuditPage, {ToolBarIcons} from '../listpage';
 
@@ -146,7 +146,7 @@ describe('AuditPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesActions.success([audit], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([audit], filter, loadedFilter, counts),
     );
 
     const {baseElement} = render(<AuditPage />);
@@ -208,7 +208,7 @@ describe('AuditPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesActions.success([audit], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([audit], filter, loadedFilter, counts),
     );
 
     const {baseElement, getAllByTestId} = render(<AuditPage />);

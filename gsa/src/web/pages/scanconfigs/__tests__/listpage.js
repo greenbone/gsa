@@ -31,7 +31,7 @@ import ScanConfig, {
 
 import {setUsername} from 'web/store/usersettings/actions';
 
-import {entitiesActions} from 'web/store/entities/scanconfigs';
+import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
@@ -132,7 +132,7 @@ describe('ScanConfigsPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesActions.success([config], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );
 
     const {baseElement} = render(<ScanConfigsPage />);
@@ -190,7 +190,7 @@ describe('ScanConfigsPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesActions.success([config], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );
 
     const {baseElement, getAllByTestId} = render(<ScanConfigsPage />);

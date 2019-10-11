@@ -27,8 +27,8 @@ import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {entityActions as policyActions} from 'web/store/entities/policies';
-import {entityActions as scheduleActions} from 'web/store/entities/schedules';
+import {entityLoadingActions as policyActions} from 'web/store/entities/policies';
+import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
 
 import {rendererWith} from 'web/utils/testing';
 

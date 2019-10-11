@@ -30,7 +30,7 @@ import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {entityActions} from 'web/store/entities/policies';
+import {entityLoadingActions} from 'web/store/entities/policies';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
@@ -252,7 +252,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', policy));
+    store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element, getAllByTestId} = render(
       <Detailspage id="12345" />,
@@ -319,7 +319,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', policy));
+    store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element, getAllByTestId} = render(
       <Detailspage id="12345" />,
@@ -405,7 +405,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', policy));
+    store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element, getAllByTestId} = render(
       <Detailspage id="12345" />,
@@ -462,7 +462,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', policy));
+    store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element} = render(<Detailspage id="12345" />);
 
@@ -537,7 +537,7 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityActions.success('12345', policy));
+    store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 
@@ -631,7 +631,7 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityActions.success('12345', policy2));
+    store.dispatch(entityLoadingActions.success('12345', policy2));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 
@@ -734,7 +734,7 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityActions.success('12345', policy3));
+    store.dispatch(entityLoadingActions.success('12345', policy3));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 
@@ -828,7 +828,7 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityActions.success('12345', policy4));
+    store.dispatch(entityLoadingActions.success('12345', policy4));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 

@@ -32,7 +32,7 @@ import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {entityActions} from 'web/store/entities/audits';
+import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
@@ -311,7 +311,7 @@ describe('Audit Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', audit));
+    store.dispatch(entityLoadingActions.success('12345', audit));
 
     const {baseElement, element, getAllByTestId} = render(
       <Detailspage id="12345" />,
@@ -407,7 +407,7 @@ describe('Audit Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', audit2));
+    store.dispatch(entityLoadingActions.success('12345', audit2));
 
     const {baseElement, element} = render(<Detailspage id="12345" />);
     const spans = baseElement.querySelectorAll('span');
@@ -480,7 +480,7 @@ describe('Audit Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', audit5));
+    store.dispatch(entityLoadingActions.success('12345', audit5));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 

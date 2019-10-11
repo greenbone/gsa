@@ -29,7 +29,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {entityActions} from 'web/store/entities/scanconfigs';
+import {entityLoadingActions} from 'web/store/entities/scanconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
@@ -252,7 +252,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', config));
+    store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element, getAllByTestId} = render(
       <Detailspage id="12345" />,
@@ -320,7 +320,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', config));
+    store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element, getAllByTestId} = render(
       <Detailspage id="12345" />,
@@ -404,7 +404,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', config));
+    store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element, getAllByTestId} = render(
       <Detailspage id="12345" />,
@@ -472,7 +472,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', config));
+    store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element} = render(<Detailspage id="12345" />);
 
@@ -512,7 +512,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', config));
+    store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element} = render(<Detailspage id="12345" />);
 
@@ -587,7 +587,7 @@ describe('Scan Config Detailspage tests', () => {
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityActions.success('12345', config));
+    store.dispatch(entityLoadingActions.success('12345', config));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 
@@ -685,7 +685,7 @@ describe('Scan Config Detailspage tests', () => {
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityActions.success('12345', config2));
+    store.dispatch(entityLoadingActions.success('12345', config2));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 
@@ -793,7 +793,7 @@ describe('Scan Config Detailspage tests', () => {
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityActions.success('12345', config3));
+    store.dispatch(entityLoadingActions.success('12345', config3));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 
@@ -892,7 +892,7 @@ describe('Scan Config Detailspage tests', () => {
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityActions.success('12345', config4));
+    store.dispatch(entityLoadingActions.success('12345', config4));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 

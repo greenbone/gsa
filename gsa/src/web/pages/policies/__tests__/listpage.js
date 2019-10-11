@@ -30,11 +30,11 @@ import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {setUsername} from 'web/store/usersettings/actions';
 
-import {entitiesActions} from 'web/store/entities/audits';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
 import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
+import {entitiesLoadingActions} from 'web/store/entities/audits';
 
 import PoliciesPage, {ToolBarIcons} from '../listpage';
 
@@ -125,7 +125,7 @@ describe('PoliciesPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesActions.success([policy], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([policy], filter, loadedFilter, counts),
     );
 
     const {baseElement} = render(<PoliciesPage />);
@@ -183,7 +183,7 @@ describe('PoliciesPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesActions.success([policy], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([policy], filter, loadedFilter, counts),
     );
 
     const {baseElement, getAllByTestId} = render(<PoliciesPage />);
