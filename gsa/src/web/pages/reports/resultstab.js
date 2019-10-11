@@ -19,13 +19,13 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import ResultsTable from '../results/table.js';
+import ResultsTable from 'web/pages/results/table';
 
-import EmptyReport from './emptyreport.js';
-import EmptyResultsReport from './emptyresultsreport.js';
-import ReportEntitiesContainer from './reportentitiescontainer.js';
+import EmptyReport from './emptyreport';
+import EmptyResultsReport from './emptyresultsreport';
+import ReportEntitiesContainer from './reportentitiescontainer';
 
 import {resultsSortFunctions} from './sort.js';
 
