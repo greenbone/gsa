@@ -19,6 +19,8 @@
 
 import React from 'react';
 
+import {withRouter} from 'react-router-dom';
+
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
@@ -31,6 +33,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
+import compose from 'web/utils/compose';
 
 import MenuBar from 'web/components/bar/menubar';
 
@@ -75,7 +78,7 @@ class Page extends React.Component {
   }
 
   render() {
-    const {children} = this.props;
+    const {children, location} = this.props;
     const {capabilities} = this.state;
 
     if (!isDefined(capabilities)) {
@@ -90,7 +93,10 @@ class Page extends React.Component {
           <MenuBar />
           <Header />
           <Main>
-            <ErrorBoundary message={_('An error occurred on this page.')}>
+            <ErrorBoundary
+              key={location.pathname}
+              message={_('An error occurred on this page.')}
+            >
               {children}
             </ErrorBoundary>
           </Main>
@@ -105,6 +111,9 @@ Page.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default withGmp(Page);
+export default compose(
+  withGmp,
+  withRouter,
+)(Page);
 
 // vim: set ts=2 sw=2 tw=80:
