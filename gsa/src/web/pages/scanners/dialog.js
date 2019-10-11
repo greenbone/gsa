@@ -54,7 +54,7 @@ import {getTimezone} from 'web/store/usersettings/selectors';
 import {
   OSP_SCANNER_TYPE,
   GMP_SCANNER_TYPE,
-  OSP_SENSOR_SCANNER_TYPE,
+  GREENBONE_SENSOR_SCANNER_TYPE,
   scannerTypeName,
 } from 'gmp/models/scanner';
 
@@ -63,11 +63,7 @@ import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
-const SCANNER_TYPES = [
-  GMP_SCANNER_TYPE,
-  OSP_SCANNER_TYPE,
-  OSP_SENSOR_SCANNER_TYPE,
-];
+const SCANNER_TYPES = [GMP_SCANNER_TYPE, OSP_SCANNER_TYPE];
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
@@ -190,10 +186,10 @@ class ScannerDialog extends React.Component {
       isDefined(scanner.credential) &&
       scanner.credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
 
-    const isOspSensorType = type === OSP_SENSOR_SCANNER_TYPE;
+    const isGreenboneSensorType = type === GREENBONE_SENSOR_SCANNER_TYPE;
     const isOspScannerType = type === OSP_SCANNER_TYPE;
 
-    if (isOspSensorType) {
+    if (isGreenboneSensorType) {
       credential_id = '';
     }
 
@@ -307,7 +303,7 @@ class ScannerDialog extends React.Component {
                 </React.Fragment>
               )}
 
-              {!isOspSensorType && (
+              {!isGreenboneSensorType && (
                 <FormGroup title={_('Credential')} flex="column">
                   <Divider>
                     <Select

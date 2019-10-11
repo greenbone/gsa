@@ -1,0 +1,1730 @@
+From 91c618a1a14b8e1d9ce2f2c66a05ba5fc5720c99 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B6rn=20Ricks?= <bjoern.ricks@greenbone.net>
+Date: Wed, 15 May 2019 08:43:18 +0200
+Subject: [PATCH 1/5] Rename action creators to be more specific
+
+Rename createEntitiesActions to createEntitiesLoadingActions and
+createEntityActions to createEntityLoadingActions.
+---
+ gsa/src/web/pages/tags/resourcelist.js        |  4 +-
+ gsa/src/web/store/entities/reports.js         |  4 +-
+ .../store/entities/utils/__tests__/actions.js | 38 ++++++-------
+ .../entities/utils/__tests__/reducers.js      | 55 ++++++++++---------
+ gsa/src/web/store/entities/utils/actions.js   |  4 +-
+ gsa/src/web/store/entities/utils/main.js      |  8 +--
+ 6 files changed, 58 insertions(+), 55 deletions(-)
+
+diff --git a/gsa/src/web/pages/tags/resourcelist.js b/gsa/src/web/pages/tags/resourcelist.js
+index 94ccf5f87..4bbac979a 100644
+--- a/gsa/src/web/pages/tags/resourcelist.js
++++ b/gsa/src/web/pages/tags/resourcelist.js
+@@ -39,7 +39,7 @@ import {MAX_RESOURCES} from 'web/pages/tags/component';
+ 
+ import {
+   createLoadEntities,
+-  createEntitiesActions,
++  createEntitiesLoadingActions,
+ } from 'web/store/entities/utils/actions';
+ import {createSelector} from 'web/store/entities/utils/selectors';
+ 
+@@ -155,7 +155,7 @@ const mapDispatchToProps = (dispatch, {entity, gmp}) => {
+ 
+   const {resourceType: entityType} = entity;
+   const selector = createSelector(entityType);
+-  const actions = createEntitiesActions(entityType);
++  const actions = createEntitiesLoadingActions(entityType);
+   const loadEntities = createLoadEntities({
+     selector,
+     actions,
+diff --git a/gsa/src/web/store/entities/reports.js b/gsa/src/web/store/entities/reports.js
+index 9e8dad3ce..1bed56c86 100644
+--- a/gsa/src/web/store/entities/reports.js
++++ b/gsa/src/web/store/entities/reports.js
+@@ -18,7 +18,7 @@
+  */
+ import {isDefined} from 'gmp/utils/identity';
+ 
+-import {createEntityActions} from './utils/actions';
++import {createEntityLoadingActions} from './utils/actions';
+ 
+ import {createAll} from './utils/main';
+ 
+@@ -65,7 +65,7 @@ const deltaReducer = createReducer(entityType);
+ const deltaSelector = rootState =>
+   new DeltaSelector(rootState.entities[entityType]);
+ 
+-const deltaEntityActions = createEntityActions(entityType);
++const deltaEntityActions = createEntityLoadingActions(entityType);
+ 
+ const loadEntity = gmp => (id, filter) => (dispatch, getState) => {
+   const rootState = getState();
+diff --git a/gsa/src/web/store/entities/utils/__tests__/actions.js b/gsa/src/web/store/entities/utils/__tests__/actions.js
+index d19716b2e..56a8826cf 100644
+--- a/gsa/src/web/store/entities/utils/__tests__/actions.js
++++ b/gsa/src/web/store/entities/utils/__tests__/actions.js
+@@ -22,17 +22,17 @@ import Filter from 'gmp/models/filter';
+ 
+ import {
+   types,
+-  createEntitiesActions,
++  createEntitiesLoadingActions,
+   createLoadAllEntities,
+   createLoadEntities,
+-  createEntityActions,
++  createEntityLoadingActions,
+   createLoadEntity,
+ } from '../actions';
+ 
+-describe('entities actions tests', () => {
+-  describe('createEntitiesActions tests', () => {
++describe('entities loading actions tests', () => {
++  describe('createEntitiesLoadingActions tests', () => {
+     test('should create action creators for loading', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+ 
+       expect(actions.request).toBeDefined();
+       expect(isFunction(actions.request)).toBe(true);
+@@ -43,7 +43,7 @@ describe('entities actions tests', () => {
+     });
+ 
+     test('should create a load request action', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const action = actions.request();
+ 
+       expect(action).toEqual({
+@@ -54,7 +54,7 @@ describe('entities actions tests', () => {
+ 
+     test('should create a load request action with filter', () => {
+       const filter = Filter.fromString('type=abc');
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const action = actions.request(filter);
+ 
+       expect(action).toEqual({
+@@ -65,7 +65,7 @@ describe('entities actions tests', () => {
+     });
+ 
+     test('should create a load success action', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const action = actions.success(['foo', 'bar']);
+ 
+       expect(action).toEqual({
+@@ -77,7 +77,7 @@ describe('entities actions tests', () => {
+ 
+     test('should create a load success action with filter', () => {
+       const filter = Filter.fromString('type=abc');
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const action = actions.success(['foo', 'bar'], filter);
+ 
+       expect(action).toEqual({
+@@ -91,7 +91,7 @@ describe('entities actions tests', () => {
+     test('should create a load success action with meta info', () => {
+       const filter = Filter.fromString('type=abc');
+       const loadedFilter = Filter.fromString('type=abc rows=100');
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const counts = {first: 1};
+       const action = actions.success(
+         ['foo', 'bar'],
+@@ -111,7 +111,7 @@ describe('entities actions tests', () => {
+     });
+ 
+     test('should create a load error action', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const action = actions.error('An error');
+ 
+       expect(action).toEqual({
+@@ -123,7 +123,7 @@ describe('entities actions tests', () => {
+ 
+     test('should create a load error action with filter', () => {
+       const filter = Filter.fromString('type=abc');
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const action = actions.error('An error', filter);
+ 
+       expect(action).toEqual({
+@@ -135,9 +135,9 @@ describe('entities actions tests', () => {
+     });
+   });
+ 
+-  describe('createEntityActions tests', () => {
++  describe('createEntityLoadingActions tests', () => {
+     test('should create actions for loading', () => {
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+ 
+       expect(actions.request).toBeDefined();
+       expect(isFunction(actions.request)).toBe(true);
+@@ -148,7 +148,7 @@ describe('entities actions tests', () => {
+     });
+ 
+     test('should create a load request action', () => {
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const action = actions.request('id1');
+ 
+       expect(action).toEqual({
+@@ -159,7 +159,7 @@ describe('entities actions tests', () => {
+     });
+ 
+     test('should create a load success action', () => {
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const action = actions.success('id1', {foo: 'bar'});
+ 
+       expect(action).toEqual({
+@@ -171,7 +171,7 @@ describe('entities actions tests', () => {
+     });
+ 
+     test('should create a load error action', () => {
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const action = actions.error('id1', 'An error');
+ 
+       expect(action).toEqual({
+@@ -185,7 +185,7 @@ describe('entities actions tests', () => {
+ 
+   describe('createLoadAllEntities tests', () => {
+     test('test isLoading true', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+ 
+       const getState = jest.fn().mockReturnValue({foo: 'bar'});
+ 
+@@ -377,7 +377,7 @@ describe('entities actions tests', () => {
+ 
+   describe('createLoadEntities tests', () => {
+     test('test isLoading true', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+ 
+       const getState = jest.fn().mockReturnValue({foo: 'bar'});
+ 
+diff --git a/gsa/src/web/store/entities/utils/__tests__/reducers.js b/gsa/src/web/store/entities/utils/__tests__/reducers.js
+index 9cdccd56a..4302167de 100644
+--- a/gsa/src/web/store/entities/utils/__tests__/reducers.js
++++ b/gsa/src/web/store/entities/utils/__tests__/reducers.js
+@@ -24,7 +24,10 @@ import Rejection from 'gmp/http/rejection';
+ 
+ import {filterIdentifier} from 'web/store/utils';
+ 
+-import {createEntitiesActions, createEntityActions} from '../actions';
++import {
++  createEntitiesLoadingActions,
++  createEntityLoadingActions,
++} from '../actions';
+ import {createReducer} from '../reducers';
+ 
+ describe('entities reducers test', () => {
+@@ -55,7 +58,7 @@ describe('entities reducers test', () => {
+   });
+ 
+   test('should not override byId accidentially', () => {
+-    const actions = createEntitiesActions('foo');
++    const actions = createEntitiesLoadingActions('foo');
+     const reducer = createReducer('foo');
+     const filter = Filter.fromString('byId');
+     const filterId = filterIdentifier(filter);
+@@ -98,7 +101,7 @@ describe('entities reducers test', () => {
+   });
+ 
+   test('should not override default accidentially', () => {
+-    const actions = createEntitiesActions('foo');
++    const actions = createEntitiesLoadingActions('foo');
+     const reducer = createReducer('foo');
+     const filter = Filter.fromString('default');
+     const filterId = filterIdentifier(filter);
+@@ -142,7 +145,7 @@ describe('entities reducers test', () => {
+ 
+   describe('reducing entities loading request actions', () => {
+     test('should set isLoading with default filter', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const action = actions.request();
+       const reducer = createReducer('foo');
+ 
+@@ -157,7 +160,7 @@ describe('entities reducers test', () => {
+     });
+ 
+     test('should set isLoading for filter', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const reducer = createReducer('foo');
+       const filter = Filter.fromString('name=foo');
+       const filterId = filterIdentifier(filter);
+@@ -174,7 +177,7 @@ describe('entities reducers test', () => {
+     });
+ 
+     test('should set isLoading and not override existing state', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const reducer = createReducer('foo');
+       const filter = Filter.fromString('name=foo');
+       const filterId = filterIdentifier(filter);
+@@ -201,7 +204,7 @@ describe('entities reducers test', () => {
+     });
+ 
+     test('should set isLoading and not override other properties', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const reducer = createReducer('foo');
+       const filter = Filter.fromString('name=foo');
+       const loadedFilter = Filter.fromString('name=foo rows=10');
+@@ -241,7 +244,7 @@ describe('entities reducers test', () => {
+ 
+   describe('reducing entities loading success actions', () => {
+     test('should set isLoading with default filter', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const reducer = createReducer('foo');
+       const action = actions.success([{id: 'foo'}, {id: 'bar'}]);
+ 
+@@ -265,7 +268,7 @@ describe('entities reducers test', () => {
+     });
+ 
+     test('should reset other properties with default filter', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const reducer = createReducer('foo');
+       const action = actions.success([{id: 'foo'}, {id: 'bar'}]);
+       const state = {
+@@ -298,7 +301,7 @@ describe('entities reducers test', () => {
+     });
+ 
+     test('should not override other filters', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const reducer = createReducer('foo');
+       const filter = Filter.fromString('name=bar');
+       const filterId = filterIdentifier(filter);
+@@ -358,7 +361,7 @@ describe('entities reducers test', () => {
+ 
+   describe('reducing entities loading error actions', () => {
+     test('should set isLoading and error with default filter', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const reducer = createReducer('foo');
+       const action = actions.error('An error');
+ 
+@@ -375,7 +378,7 @@ describe('entities reducers test', () => {
+     });
+ 
+     test('should reset isLoading and error with default filter', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const reducer = createReducer('foo');
+       const action = actions.error('An error');
+       const state = {
+@@ -405,7 +408,7 @@ describe('entities reducers test', () => {
+     });
+ 
+     test('should not override other filters', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const reducer = createReducer('foo');
+       const filter = Filter.fromString('name=bar');
+       const filterId = filterIdentifier(filter);
+@@ -457,7 +460,7 @@ describe('entities reducers test', () => {
+     });
+ 
+     test('should not reduce expected errors', () => {
+-      const actions = createEntitiesActions('foo');
++      const actions = createEntitiesLoadingActions('foo');
+       const reducer = createReducer('foo');
+       const filter = Filter.fromString('name=bar');
+       const filterId = filterIdentifier(filter);
+@@ -512,7 +515,7 @@ describe('entities reducers test', () => {
+   describe('reducing entity loading requests', () => {
+     test('should set isLoading', () => {
+       const id = 'a1';
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const action = actions.request(id);
+       const reducer = createReducer('foo');
+ 
+@@ -527,7 +530,7 @@ describe('entities reducers test', () => {
+ 
+     test('should set isLoading and not override other state', () => {
+       const id = 'a1';
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const action = actions.request(id);
+       const reducer = createReducer('foo');
+       const state = {
+@@ -580,7 +583,7 @@ describe('entities reducers test', () => {
+   describe('reducing entity loading success', () => {
+     test('should reduce success action', () => {
+       const id = 'a1';
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const data = {
+         id: 'bar',
+         foo: 'bar',
+@@ -604,7 +607,7 @@ describe('entities reducers test', () => {
+ 
+     test('should reset isLoading', () => {
+       const id = 'a1';
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const data = {
+         id: 'bar',
+         foo: 'bar',
+@@ -633,7 +636,7 @@ describe('entities reducers test', () => {
+ 
+     test('should reset error', () => {
+       const id = 'a1';
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const data = {
+         id: 'bar',
+         foo: 'bar',
+@@ -662,7 +665,7 @@ describe('entities reducers test', () => {
+ 
+     test('should override previous data', () => {
+       const id = 'a1';
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const data = {
+         id: 'bar',
+         foo: 'bar',
+@@ -694,7 +697,7 @@ describe('entities reducers test', () => {
+ 
+     test('should not override other state', () => {
+       const id = 'a1';
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const data = {
+         id: 'bar',
+         foo: 'bar',
+@@ -741,7 +744,7 @@ describe('entities reducers test', () => {
+   describe('reducing entity loading error', () => {
+     test('should reduce error action', () => {
+       const id = 'a1';
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const action = actions.error(id, 'An error');
+       const reducer = createReducer('foo');
+ 
+@@ -758,7 +761,7 @@ describe('entities reducers test', () => {
+ 
+     test('should reset isLoading', () => {
+       const id = 'a1';
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const action = actions.error(id, 'An error');
+       const reducer = createReducer('foo');
+       const state = {
+@@ -780,7 +783,7 @@ describe('entities reducers test', () => {
+ 
+     test('should override previous error', () => {
+       const id = 'a1';
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const action = actions.error(id, 'An error');
+       const reducer = createReducer('foo');
+       const state = {
+@@ -802,7 +805,7 @@ describe('entities reducers test', () => {
+ 
+     test('should not override other state', () => {
+       const id = 'a1';
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const action = actions.error(id, 'An error');
+       const reducer = createReducer('foo');
+       const state = {
+@@ -840,7 +843,7 @@ describe('entities reducers test', () => {
+ 
+     test('should not reduce expected errors', () => {
+       const id = 'a1';
+-      const actions = createEntityActions('foo');
++      const actions = createEntityLoadingActions('foo');
+       const rejection = new Rejection({}, Rejection.REASON_UNAUTHORIZED);
+       const action = actions.error(id, rejection);
+       const reducer = createReducer('foo');
+diff --git a/gsa/src/web/store/entities/utils/actions.js b/gsa/src/web/store/entities/utils/actions.js
+index 5bf605b43..49e7dc7cc 100644
+--- a/gsa/src/web/store/entities/utils/actions.js
++++ b/gsa/src/web/store/entities/utils/actions.js
+@@ -31,7 +31,7 @@ export const types = {
+   ENTITY_LOADING_ERROR: 'ENTITY_LOADING_ERROR',
+ };
+ 
+-export const createEntitiesActions = entityType => ({
++export const createEntitiesLoadingActions = entityType => ({
+   request: filter => ({
+     type: types.ENTITIES_LOADING_REQUEST,
+     entityType,
+@@ -53,7 +53,7 @@ export const createEntitiesActions = entityType => ({
+   }),
+ });
+ 
+-export const createEntityActions = entityType => ({
++export const createEntityLoadingActions = entityType => ({
+   request: id => ({
+     type: types.ENTITY_LOADING_REQUEST,
+     entityType,
+diff --git a/gsa/src/web/store/entities/utils/main.js b/gsa/src/web/store/entities/utils/main.js
+index 37f0f95cf..bb8fb2185 100644
+--- a/gsa/src/web/store/entities/utils/main.js
++++ b/gsa/src/web/store/entities/utils/main.js
+@@ -17,8 +17,8 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+  */
+ import {
+-  createEntitiesActions,
+-  createEntityActions,
++  createEntitiesLoadingActions,
++  createEntityLoadingActions,
+   createLoadAllEntities,
+   createLoadEntities,
+   createLoadEntity,
+@@ -30,8 +30,8 @@ import {createSelector} from './selectors';
+ 
+ export const createAll = entityType => {
+   const selector = createSelector(entityType);
+-  const entitiesActions = createEntitiesActions(entityType);
+-  const entityActions = createEntityActions(entityType);
++  const entitiesActions = createEntitiesLoadingActions(entityType);
++  const entityActions = createEntityLoadingActions(entityType);
+   const reducer = createReducer(entityType);
+   const loadAllEntities = createLoadAllEntities({
+     selector,
+
+From 31d96711ce759e519e806c7e822b6946d2d12bdf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B6rn=20Ricks?= <bjoern.ricks@greenbone.net>
+Date: Wed, 15 May 2019 10:07:42 +0200
+Subject: [PATCH 2/5] Update exports for model actions
+
+Rename entitiesActions to entitiesLoadingActions and entityActions to
+entityLoadingActions.
+---
+ .../web/store/entities/__tests__/reports.js   | 18 +++++++-------
+ gsa/src/web/store/entities/agents.js          |  8 +++----
+ gsa/src/web/store/entities/alerts.js          |  8 +++----
+ gsa/src/web/store/entities/certbund.js        |  8 +++----
+ gsa/src/web/store/entities/cpes.js            |  8 +++----
+ gsa/src/web/store/entities/credentials.js     |  8 +++----
+ gsa/src/web/store/entities/cves.js            |  8 +++----
+ gsa/src/web/store/entities/dfncerts.js        |  8 +++----
+ gsa/src/web/store/entities/filters.js         |  8 +++----
+ gsa/src/web/store/entities/groups.js          |  8 +++----
+ gsa/src/web/store/entities/hosts.js           |  8 +++----
+ gsa/src/web/store/entities/notes.js           |  8 +++----
+ gsa/src/web/store/entities/nvts.js            |  8 +++----
+ .../web/store/entities/operatingsystems.js    |  8 +++----
+ gsa/src/web/store/entities/ovaldefs.js        |  8 +++----
+ gsa/src/web/store/entities/overrides.js       |  8 +++----
+ gsa/src/web/store/entities/permissions.js     |  8 +++----
+ gsa/src/web/store/entities/portlists.js       |  8 +++----
+ gsa/src/web/store/entities/reportformats.js   |  8 +++----
+ gsa/src/web/store/entities/reports.js         | 24 +++++++++----------
+ gsa/src/web/store/entities/results.js         |  8 +++----
+ gsa/src/web/store/entities/roles.js           |  8 +++----
+ gsa/src/web/store/entities/scanconfigs.js     |  8 +++----
+ gsa/src/web/store/entities/scanners.js        |  8 +++----
+ gsa/src/web/store/entities/schedules.js       |  8 +++----
+ gsa/src/web/store/entities/secinfo.js         |  8 +++----
+ gsa/src/web/store/entities/tags.js            |  8 +++----
+ gsa/src/web/store/entities/targets.js         |  8 +++----
+ gsa/src/web/store/entities/tasks.js           |  8 +++----
+ gsa/src/web/store/entities/tickets.js         |  8 +++----
+ gsa/src/web/store/entities/users.js           |  8 +++----
+ .../store/entities/utils/__tests__/main.js    | 16 ++++++-------
+ gsa/src/web/store/entities/utils/main.js      | 14 +++++------
+ gsa/src/web/store/entities/utils/testing.js   | 16 +++++++++----
+ gsa/src/web/store/entities/vulns.js           |  8 +++----
+ 35 files changed, 167 insertions(+), 161 deletions(-)
+
+diff --git a/gsa/src/web/store/entities/__tests__/reports.js b/gsa/src/web/store/entities/__tests__/reports.js
+index 886e75cf7..b25e87ef9 100644
+--- a/gsa/src/web/store/entities/__tests__/reports.js
++++ b/gsa/src/web/store/entities/__tests__/reports.js
+@@ -31,23 +31,23 @@ import {
+ } from 'web/store/entities/utils/testing';
+ 
+ import {
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+   loadEntities,
+   loadEntity,
+   reducer,
+-  deltaEntityActions,
++  deltaEntityLoadingActions,
+   deltaReducer,
+   deltaSelector,
+   loadDeltaReport,
+ } from '../reports';
+ import Filter from 'gmp/models/filter';
+ 
+-testEntitiesActions('report', entitiesActions);
+-testEntityActions('report', entityActions);
++testEntitiesActions('report', entitiesLoadingActions);
++testEntityActions('report', entityLoadingActions);
+ testLoadEntities('report', loadEntities);
+-testReducerForEntities('report', reducer, entitiesActions);
+-testReducerForEntity('report', reducer, entityActions);
++testReducerForEntities('report', reducer, entitiesLoadingActions);
++testReducerForEntity('report', reducer, entityLoadingActions);
+ 
+ const entityType = 'report';
+ 
+@@ -220,8 +220,8 @@ describe('report loadEntity function tests', () => {
+   });
+ });
+ 
+-testEntityActions('deltaReport', deltaEntityActions);
+-testReducerForEntity('deltaReport', deltaReducer, deltaEntityActions);
++testEntityActions('deltaReport', deltaEntityLoadingActions);
++testReducerForEntity('deltaReport', deltaReducer, deltaEntityLoadingActions);
+ 
+ describe('delta report loadDeltaReport function tests', () => {
+   test('should load delta report successfully', () => {
+diff --git a/gsa/src/web/store/entities/agents.js b/gsa/src/web/store/entities/agents.js
+index 403abc91d..5092b6720 100644
+--- a/gsa/src/web/store/entities/agents.js
++++ b/gsa/src/web/store/entities/agents.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('agent');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/alerts.js b/gsa/src/web/store/entities/alerts.js
+index 997f89436..bd445b40a 100644
+--- a/gsa/src/web/store/entities/alerts.js
++++ b/gsa/src/web/store/entities/alerts.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('alert');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/certbund.js b/gsa/src/web/store/entities/certbund.js
+index 15da45474..c56dba684 100644
+--- a/gsa/src/web/store/entities/certbund.js
++++ b/gsa/src/web/store/entities/certbund.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('certbund');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/cpes.js b/gsa/src/web/store/entities/cpes.js
+index fcbc43921..a519eeea6 100644
+--- a/gsa/src/web/store/entities/cpes.js
++++ b/gsa/src/web/store/entities/cpes.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('cpe');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/credentials.js b/gsa/src/web/store/entities/credentials.js
+index 7ae9d256a..63d941785 100644
+--- a/gsa/src/web/store/entities/credentials.js
++++ b/gsa/src/web/store/entities/credentials.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('credential');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/cves.js b/gsa/src/web/store/entities/cves.js
+index 7db1538ea..96d869cc2 100644
+--- a/gsa/src/web/store/entities/cves.js
++++ b/gsa/src/web/store/entities/cves.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('cve');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/dfncerts.js b/gsa/src/web/store/entities/dfncerts.js
+index db47b5c20..473e8e477 100644
+--- a/gsa/src/web/store/entities/dfncerts.js
++++ b/gsa/src/web/store/entities/dfncerts.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('dfncert');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/filters.js b/gsa/src/web/store/entities/filters.js
+index bdfbf043a..cf1df758d 100644
+--- a/gsa/src/web/store/entities/filters.js
++++ b/gsa/src/web/store/entities/filters.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('filter');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/groups.js b/gsa/src/web/store/entities/groups.js
+index 213d01484..fa2355542 100644
+--- a/gsa/src/web/store/entities/groups.js
++++ b/gsa/src/web/store/entities/groups.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('group');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/hosts.js b/gsa/src/web/store/entities/hosts.js
+index a2b702547..2215e24ea 100644
+--- a/gsa/src/web/store/entities/hosts.js
++++ b/gsa/src/web/store/entities/hosts.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('host');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/notes.js b/gsa/src/web/store/entities/notes.js
+index 8721e9e89..ef29d2d8c 100644
+--- a/gsa/src/web/store/entities/notes.js
++++ b/gsa/src/web/store/entities/notes.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('note');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/nvts.js b/gsa/src/web/store/entities/nvts.js
+index 4b6d81302..25098c5d0 100644
+--- a/gsa/src/web/store/entities/nvts.js
++++ b/gsa/src/web/store/entities/nvts.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('nvt');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/operatingsystems.js b/gsa/src/web/store/entities/operatingsystems.js
+index 985d712e3..7d6f47df9 100644
+--- a/gsa/src/web/store/entities/operatingsystems.js
++++ b/gsa/src/web/store/entities/operatingsystems.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('operatingsystem');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/ovaldefs.js b/gsa/src/web/store/entities/ovaldefs.js
+index 1aa2573de..b3f247ca0 100644
+--- a/gsa/src/web/store/entities/ovaldefs.js
++++ b/gsa/src/web/store/entities/ovaldefs.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('ovaldef');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/overrides.js b/gsa/src/web/store/entities/overrides.js
+index 22ec6d11c..3bdb9a0bf 100644
+--- a/gsa/src/web/store/entities/overrides.js
++++ b/gsa/src/web/store/entities/overrides.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('override');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/permissions.js b/gsa/src/web/store/entities/permissions.js
+index f1f30299e..28491562c 100644
+--- a/gsa/src/web/store/entities/permissions.js
++++ b/gsa/src/web/store/entities/permissions.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('permission');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/portlists.js b/gsa/src/web/store/entities/portlists.js
+index b07c25344..a1e419765 100644
+--- a/gsa/src/web/store/entities/portlists.js
++++ b/gsa/src/web/store/entities/portlists.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('portlist');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/reportformats.js b/gsa/src/web/store/entities/reportformats.js
+index 26adb6855..b9d2500e7 100644
+--- a/gsa/src/web/store/entities/reportformats.js
++++ b/gsa/src/web/store/entities/reportformats.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('reportformat');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/reports.js b/gsa/src/web/store/entities/reports.js
+index 1bed56c86..05a73017f 100644
+--- a/gsa/src/web/store/entities/reports.js
++++ b/gsa/src/web/store/entities/reports.js
+@@ -29,8 +29,8 @@ const {
+   loadEntities,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('report');
+ 
+ const entityType = 'deltaReport';
+@@ -65,7 +65,7 @@ const deltaReducer = createReducer(entityType);
+ const deltaSelector = rootState =>
+   new DeltaSelector(rootState.entities[entityType]);
+ 
+-const deltaEntityActions = createEntityLoadingActions(entityType);
++const deltaEntityLoadingActions = createEntityLoadingActions(entityType);
+ 
+ const loadEntity = gmp => (id, filter) => (dispatch, getState) => {
+   const rootState = getState();
+@@ -76,13 +76,13 @@ const loadEntity = gmp => (id, filter) => (dispatch, getState) => {
+     return Promise.resolve();
+   }
+ 
+-  dispatch(entityActions.request(id));
++  dispatch(entityLoadingActions.request(id));
+ 
+   return gmp.report
+     .get({id}, {filter})
+     .then(
+-      response => dispatch(entityActions.success(id, response.data)),
+-      error => dispatch(entityActions.error(id, error)),
++      response => dispatch(entityLoadingActions.success(id, response.data)),
++      error => dispatch(entityLoadingActions.error(id, error)),
+     );
+ };
+ 
+@@ -100,19 +100,19 @@ const loadDeltaReport = gmp => (id, deltaId, filter) => (
+ 
+   const identifier = deltaIdentifier(id, deltaId);
+ 
+-  dispatch(deltaEntityActions.request(identifier));
++  dispatch(deltaEntityLoadingActions.request(identifier));
+ 
+   return gmp.report
+     .getDelta({id}, {id: deltaId}, {filter})
+     .then(
+       response =>
+-        dispatch(deltaEntityActions.success(identifier, response.data)),
+-      error => dispatch(deltaEntityActions.error(identifier, error)),
++        dispatch(deltaEntityLoadingActions.success(identifier, response.data)),
++      error => dispatch(deltaEntityLoadingActions.error(identifier, error)),
+     );
+ };
+ 
+ export {
+-  deltaEntityActions,
++  deltaEntityLoadingActions,
+   deltaReducer,
+   deltaSelector,
+   loadDeltaReport,
+@@ -121,8 +121,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/results.js b/gsa/src/web/store/entities/results.js
+index 29be4a083..08ef1c6b4 100644
+--- a/gsa/src/web/store/entities/results.js
++++ b/gsa/src/web/store/entities/results.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('result');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/roles.js b/gsa/src/web/store/entities/roles.js
+index c3db750c8..18e150e9e 100644
+--- a/gsa/src/web/store/entities/roles.js
++++ b/gsa/src/web/store/entities/roles.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('role');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/scanconfigs.js b/gsa/src/web/store/entities/scanconfigs.js
+index 3a00945aa..3b51b5428 100644
+--- a/gsa/src/web/store/entities/scanconfigs.js
++++ b/gsa/src/web/store/entities/scanconfigs.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('scanconfig');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/scanners.js b/gsa/src/web/store/entities/scanners.js
+index bf7ae7e51..72c681692 100644
+--- a/gsa/src/web/store/entities/scanners.js
++++ b/gsa/src/web/store/entities/scanners.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('scanner');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/schedules.js b/gsa/src/web/store/entities/schedules.js
+index b4bdf4508..e978853b3 100644
+--- a/gsa/src/web/store/entities/schedules.js
++++ b/gsa/src/web/store/entities/schedules.js
+@@ -20,8 +20,8 @@ import {createAll} from './utils/main';
+ 
+ const {
+   loadAllEntities,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+   loadEntities,
+   loadEntity,
+   reducer,
+@@ -30,8 +30,8 @@ const {
+ 
+ export {
+   loadAllEntities,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+   loadEntities,
+   loadEntity,
+   reducer,
+diff --git a/gsa/src/web/store/entities/secinfo.js b/gsa/src/web/store/entities/secinfo.js
+index 17da9093c..6b91239eb 100644
+--- a/gsa/src/web/store/entities/secinfo.js
++++ b/gsa/src/web/store/entities/secinfo.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('secinfo');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/tags.js b/gsa/src/web/store/entities/tags.js
+index f89622e54..1ed62d56e 100644
+--- a/gsa/src/web/store/entities/tags.js
++++ b/gsa/src/web/store/entities/tags.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('tag');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/targets.js b/gsa/src/web/store/entities/targets.js
+index 24ff4cce9..643ce6d0f 100644
+--- a/gsa/src/web/store/entities/targets.js
++++ b/gsa/src/web/store/entities/targets.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('target');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/tasks.js b/gsa/src/web/store/entities/tasks.js
+index 78e0ac824..3466af302 100644
+--- a/gsa/src/web/store/entities/tasks.js
++++ b/gsa/src/web/store/entities/tasks.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('task');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/tickets.js b/gsa/src/web/store/entities/tickets.js
+index 6512cf279..a5652150b 100644
+--- a/gsa/src/web/store/entities/tickets.js
++++ b/gsa/src/web/store/entities/tickets.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('ticket');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/users.js b/gsa/src/web/store/entities/users.js
+index ec91c5f34..15d60afb8 100644
+--- a/gsa/src/web/store/entities/users.js
++++ b/gsa/src/web/store/entities/users.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('user');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/utils/__tests__/main.js b/gsa/src/web/store/entities/utils/__tests__/main.js
+index 401b99693..93651a2b6 100644
+--- a/gsa/src/web/store/entities/utils/__tests__/main.js
++++ b/gsa/src/web/store/entities/utils/__tests__/main.js
+@@ -24,8 +24,8 @@ import {createState} from '../testing';
+ describe('createAll function tests', () => {
+   test('should create all functions and objects', () => {
+     const {
+-      entitiesActions,
+-      entityActions,
++      entitiesLoadingActions,
++      entityLoadingActions,
+       loadAllEntities,
+       loadEntities,
+       loadEntity,
+@@ -47,13 +47,13 @@ describe('createAll function tests', () => {
+     expect(isFunction(reducer)).toBe(true);
+     expect(isFunction(selector)).toBe(true);
+ 
+-    expect(isFunction(entitiesActions.request)).toBe(true);
+-    expect(isFunction(entitiesActions.success)).toBe(true);
+-    expect(isFunction(entitiesActions.error)).toBe(true);
++    expect(isFunction(entitiesLoadingActions.request)).toBe(true);
++    expect(isFunction(entitiesLoadingActions.success)).toBe(true);
++    expect(isFunction(entitiesLoadingActions.error)).toBe(true);
+ 
+-    expect(isFunction(entityActions.request)).toBe(true);
+-    expect(isFunction(entityActions.success)).toBe(true);
+-    expect(isFunction(entityActions.error)).toBe(true);
++    expect(isFunction(entityLoadingActions.request)).toBe(true);
++    expect(isFunction(entityLoadingActions.success)).toBe(true);
++    expect(isFunction(entityLoadingActions.error)).toBe(true);
+ 
+     expect(selector(rootState).isLoadingEntities()).toBe(true);
+     expect(selector(rootState).isLoadingEntity(id)).toBe(true);
+diff --git a/gsa/src/web/store/entities/utils/main.js b/gsa/src/web/store/entities/utils/main.js
+index bb8fb2185..3e3baae84 100644
+--- a/gsa/src/web/store/entities/utils/main.js
++++ b/gsa/src/web/store/entities/utils/main.js
+@@ -30,28 +30,28 @@ import {createSelector} from './selectors';
+ 
+ export const createAll = entityType => {
+   const selector = createSelector(entityType);
+-  const entitiesActions = createEntitiesLoadingActions(entityType);
+-  const entityActions = createEntityLoadingActions(entityType);
++  const entitiesLoadingActions = createEntitiesLoadingActions(entityType);
++  const entityLoadingActions = createEntityLoadingActions(entityType);
+   const reducer = createReducer(entityType);
+   const loadAllEntities = createLoadAllEntities({
+     selector,
+-    actions: entitiesActions,
++    actions: entitiesLoadingActions,
+     entityType,
+   });
+   const loadEntities = createLoadEntities({
+     selector,
+-    actions: entitiesActions,
++    actions: entitiesLoadingActions,
+     entityType,
+   });
+   const loadEntity = createLoadEntity({
+     selector,
+-    actions: entityActions,
++    actions: entityLoadingActions,
+     entityType,
+   });
+ 
+   return {
+-    entitiesActions,
+-    entityActions,
++    entitiesLoadingActions,
++    entityLoadingActions,
+     loadAllEntities,
+     loadEntities,
+     loadEntity,
+diff --git a/gsa/src/web/store/entities/utils/testing.js b/gsa/src/web/store/entities/utils/testing.js
+index 186b4c2ae..ae00b8829 100644
+--- a/gsa/src/web/store/entities/utils/testing.js
++++ b/gsa/src/web/store/entities/utils/testing.js
+@@ -571,14 +571,20 @@ export const testLoadEntity = (entityType, loadEntity) => {
+ 
+ export const testAll = (
+   name,
+-  {entitiesActions, entityActions, loadEntities, loadEntity, reducer},
++  {
++    entitiesLoadingActions,
++    entityLoadingActions,
++    loadEntities,
++    loadEntity,
++    reducer,
++  },
+ ) => {
+-  testEntitiesActions(name, entitiesActions);
+-  testEntityActions(name, entityActions);
++  testEntitiesActions(name, entitiesLoadingActions);
++  testEntityActions(name, entityLoadingActions);
+   testLoadEntities(name, loadEntities);
+   testLoadEntity(name, loadEntity);
+-  testReducerForEntities(name, reducer, entitiesActions);
+-  testReducerForEntity(name, reducer, entityActions);
++  testReducerForEntities(name, reducer, entitiesLoadingActions);
++  testReducerForEntity(name, reducer, entityLoadingActions);
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+diff --git a/gsa/src/web/store/entities/vulns.js b/gsa/src/web/store/entities/vulns.js
+index 0244436c4..f7a1097c6 100644
+--- a/gsa/src/web/store/entities/vulns.js
++++ b/gsa/src/web/store/entities/vulns.js
+@@ -24,8 +24,8 @@ const {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ } = createAll('vuln');
+ 
+ export {
+@@ -34,8 +34,8 @@ export {
+   loadEntity,
+   reducer,
+   selector,
+-  entitiesActions,
+-  entityActions,
++  entitiesLoadingActions,
++  entityLoadingActions,
+ };
+ 
+ // vim: set ts=2 sw=2 tw=80:
+
+From dfa8bfd217172d58b11f068e1cec08455a828179 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B6rn=20Ricks?= <bjoern.ricks@greenbone.net>
+Date: Fri, 17 May 2019 15:00:31 +0200
+Subject: [PATCH 3/5] Add action to delte an entity
+
+Add a redux action and creator to delete a single entity.
+---
+ gsa/src/web/store/entities/utils/actions.js | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/gsa/src/web/store/entities/utils/actions.js b/gsa/src/web/store/entities/utils/actions.js
+index 49e7dc7cc..ce103963a 100644
+--- a/gsa/src/web/store/entities/utils/actions.js
++++ b/gsa/src/web/store/entities/utils/actions.js
+@@ -29,6 +29,7 @@ export const types = {
+   ENTITY_LOADING_REQUEST: 'ENTITY_LOADING_REQUEST',
+   ENTITY_LOADING_SUCCESS: 'ENTITY_LOADING_SUCCESS',
+   ENTITY_LOADING_ERROR: 'ENTITY_LOADING_ERROR',
++  ENTITY_DELETE_SUCCESS: 'ENTITY_DELETE_SUCCESS',
+ };
+ 
+ export const createEntitiesLoadingActions = entityType => ({
+@@ -73,6 +74,14 @@ export const createEntityLoadingActions = entityType => ({
+   }),
+ });
+ 
++export const entityDeleteActions = {
++  success: (entityType, id) => ({
++    type: types.ENTITY_DELETE_SUCCESS,
++    entityType,
++    id,
++  }),
++};
++
+ export const createLoadEntities = ({
+   selector,
+   actions,
+@@ -152,4 +161,9 @@ export const createLoadEntity = ({
+       error => dispatch(actions.error(id, error)),
+     );
+ };
++
++export const createDeleteEntity = ({entityType}) => gmp => id => dispatch =>
++  gmp[entityType]
++    .delete({id})
++    .then(() => dispatch(entityDeleteActions.success(entityType, id)));
+ // vim: set ts=2 sw=2 tw=80:
+
+From 9cbee4ff00f6b286fcea803c209562cadaeb9e98 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B6rn=20Ricks?= <bjoern.ricks@greenbone.net>
+Date: Fri, 17 May 2019 15:01:25 +0200
+Subject: [PATCH 4/5] Handle entity delete action in entities reducers
+
+Drop the deleted entity from the store
+---
+ gsa/src/web/store/entities/utils/reducers.js | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/gsa/src/web/store/entities/utils/reducers.js b/gsa/src/web/store/entities/utils/reducers.js
+index f193468cc..7bdb8d229 100644
+--- a/gsa/src/web/store/entities/utils/reducers.js
++++ b/gsa/src/web/store/entities/utils/reducers.js
+@@ -131,6 +131,12 @@ export const createReducer = entityType => {
+           ...state,
+           [action.id]: action.data,
+         };
++      case types.ENTITY_DELETE_SUCCESS:
++        const nState = {
++          ...state,
++        };
++        delete nState[action.id];
++        return nState;
+       default:
+         return state;
+     }
+@@ -141,12 +147,11 @@ export const createReducer = entityType => {
+       return state;
+     }
+ 
+-    const filterString = filterIdentifier(action.filter);
+-
+     switch (action.type) {
+       case types.ENTITIES_LOADING_REQUEST:
+       case types.ENTITIES_LOADING_SUCCESS:
+       case types.ENTITIES_LOADING_ERROR:
++        const filterString = filterIdentifier(action.filter);
+         return {
+           ...state,
+           byId: byId(state.byId, action),
+@@ -163,6 +168,11 @@ export const createReducer = entityType => {
+           isLoading: isLoading(state.isLoading, action),
+           errors: errors(state.errors, action),
+         };
++      case types.ENTITY_DELETE_SUCCESS:
++        return {
++          ...state,
++          byId: byId(state.byId, action),
++        };
+       default:
+         return state;
+     }
+
+From a8f33aeef9229d192437235b4a8e3d85fabbaa45 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B6rn=20Ricks?= <bjoern.ricks@greenbone.net>
+Date: Fri, 17 May 2019 15:02:36 +0200
+Subject: [PATCH 5/5] Use new action creator to delete a single entity
+
+Remove the deleted entity directly from the redux store and don't rely
+on the load request to not contain the deleted entity anymore. This will
+show faster deletion in some cases.
+---
+ gsa/src/web/entity/component.js | 30 +++++++++++++++++++++++-------
+ 1 file changed, 23 insertions(+), 7 deletions(-)
+
+diff --git a/gsa/src/web/entity/component.js b/gsa/src/web/entity/component.js
+index 82f5861d6..943f19d35 100644
+--- a/gsa/src/web/entity/component.js
++++ b/gsa/src/web/entity/component.js
+@@ -18,11 +18,14 @@
+  */
+ import React from 'react';
+ 
+-import {isDefined} from 'gmp/utils/identity';
++import {connect} from 'react-redux';
+ 
+-import PropTypes from '../utils/proptypes.js';
++import {isDefined} from 'gmp/utils/identity';
+ 
+-import withGmp from '../utils/withGmp.js';
++import compose from 'web/utils/compose';
++import PropTypes from 'web/utils/proptypes';
++import withGmp from 'web/utils/withGmp';
++import {createDeleteEntity} from 'web/store/entities/utils/actions';
+ 
+ export const goto_details = (type, props) => ({data}) => {
+   const {history} = props;
+@@ -45,12 +48,11 @@ class EntityComponent extends React.Component {
+   }
+ 
+   handleEntityDelete(entity) {
+-    const {onDeleted, onDeleteError, gmp, name} = this.props;
+-    const cmd = gmp[name];
++    const {deleteEntity, onDeleted, onDeleteError} = this.props;
+ 
+     this.handleInteraction();
+ 
+-    return cmd.delete(entity).then(onDeleted, onDeleteError);
++    return deleteEntity(entity.id).then(onDeleted, onDeleteError);
+   }
+ 
+   handleEntityClone(entity) {
+@@ -113,6 +115,7 @@ class EntityComponent extends React.Component {
+ 
+ EntityComponent.propTypes = {
+   children: PropTypes.func.isRequired,
++  deleteEntity: PropTypes.func.isRequired,
+   gmp: PropTypes.gmp.isRequired,
+   name: PropTypes.string.isRequired,
+   onCloneError: PropTypes.func,
+@@ -128,6 +131,19 @@ EntityComponent.propTypes = {
+   onSaved: PropTypes.func,
+ };
+ 
+-export default withGmp(EntityComponent);
++const mapDispatchToProps = (dispatch, {name, gmp}) => {
++  const deleteEntity = createDeleteEntity({entityType: name});
++  return {
++    deleteEntity: id => dispatch(deleteEntity(gmp)(id)),
++  };
++};
++
++export default compose(
++  withGmp,
++  connect(
++    undefined,
++    mapDispatchToProps,
++  ),
++)(EntityComponent);
+ 
+ // vim: set ts=2 sw=2 tw=80:
