@@ -41,7 +41,7 @@ import {
   OSP_SCANNER_TYPE,
   GMP_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
-  OSP_SENSOR_SCANNER_TYPE,
+  GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 
 import {
@@ -189,7 +189,7 @@ const TaskDialog = ({
 
     if (
       scanner_type === OPENVAS_SCANNER_TYPE ||
-      scanner_type === OSP_SENSOR_SCANNER_TYPE ||
+      scanner_type === GREENBONE_SENSOR_SCANNER_TYPE ||
       scanner_type === GMP_SCANNER_TYPE
     ) {
       setConfigType('openvas');
@@ -207,7 +207,7 @@ const TaskDialog = ({
       if (
         scanner_type === OPENVAS_SCANNER_TYPE ||
         scanner_type === GMP_SCANNER_TYPE ||
-        scanner_type === OSP_SENSOR_SCANNER_TYPE
+        scanner_type === GREENBONE_SENSOR_SCANNER_TYPE
       ) {
         onScanConfigChange(
           selectSaveId(
@@ -309,7 +309,7 @@ const TaskDialog = ({
         const use_openvas_scan_config =
           state.scanner_type === OPENVAS_SCANNER_TYPE ||
           state.scanner_type === GMP_SCANNER_TYPE ||
-          state.scanner_type === OSP_SENSOR_SCANNER_TYPE;
+          state.scanner_type === GREENBONE_SENSOR_SCANNER_TYPE;
 
         return (
           <Layout flex="column">

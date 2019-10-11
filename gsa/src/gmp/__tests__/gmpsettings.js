@@ -64,6 +64,7 @@ describe('GmpSettings tests', () => {
     const storage = createStorage();
     const settings = new GmpSettings(storage, {
       disableLoginForm: true,
+      enableGreenboneSensor: true,
       enableStoreDebugLog: true,
       guestUsername: 'guest',
       guestPassword: 'pass',
@@ -86,6 +87,7 @@ describe('GmpSettings tests', () => {
     });
 
     expect(settings.disableLoginForm).toEqual(true);
+    expect(settings.enableGreenboneSensor).toEqual(true);
     expect(settings.enableStoreDebugLog).toEqual(true);
     expect(settings.guestUsername).toEqual('guest');
     expect(settings.guestPassword).toEqual('pass');
@@ -130,7 +132,9 @@ describe('GmpSettings tests', () => {
       protocol: 'http',
     });
 
+    expect(settings.enableGreenboneSensor).toEqual(false);
     expect(settings.enableStoreDebugLog).toEqual(false);
+    expect(settings.reloadinterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.locale).toEqual('en');
     expect(settings.loglevel).toEqual('error');
     expect(settings.manualUrl).toEqual(DEFAULT_MANUAL_URL);
@@ -255,6 +259,7 @@ describe('GmpSettings tests', () => {
     const storage = createStorage();
     const settings = new GmpSettings(storage, {
       disableLoginForm: true,
+      enableGreenboneSensor: true,
       guestUsername: 'guest',
       guestPassword: 'pass',
       locale: 'en',
@@ -277,6 +282,10 @@ describe('GmpSettings tests', () => {
       settings.disableLoginForm = false;
     }).toThrow();
     expect(settings.disableLoginForm).toEqual(true);
+    expect(() => {
+      settings.enableGreenboneSensor = false;
+    }).toThrow();
+    expect(settings.enableGreenboneSensor).toEqual(true);
     expect(() => {
       settings.guestUsername = 'foo';
     }).toThrow();
