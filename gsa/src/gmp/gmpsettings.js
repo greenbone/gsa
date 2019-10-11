@@ -42,6 +42,7 @@ const setAndFreeze = (obj, name, value) => {
 class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
+      enableGreenboneSensor = false,
       disableLoginForm = false,
       enableStoreDebugLog,
       guestUsername,
@@ -68,6 +69,7 @@ class GmpSettings {
     this.timeout = timeout;
 
     setAndFreeze(this, 'disableLoginForm', disableLoginForm);
+    setAndFreeze(this, 'enableGreenboneSensor', enableGreenboneSensor);
     setAndFreeze(this, 'guestUsername', guestUsername);
     setAndFreeze(this, 'guestPassword', guestPassword);
     setAndFreeze(this, 'manualUrl', manualUrl);
