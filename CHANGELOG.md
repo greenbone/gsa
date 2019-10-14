@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [9.0.0] - unreleased
+## [9.0.0] - 2019-10-14
 
 ### Added
 - Update German Translation [#1689](https://github.com/greenbone/gsa/pull/1689)
@@ -86,7 +86,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Remove edit_config command from gsad [#1439](https://github.com/greenbone/gsa/pull/1439)
 - Remove copyright from gsad version output [#1379](https://github.com/greenbone/gsa/pull/1379)
 
-[9.0.0]: https://github.com/greenbone/gsa/compare/gsa-8.0...gsa-9.0
+[9.0.0]: https://github.com/greenbone/gsa/compare/v8.0.1...v9.0.0
 
 ## [8.0.2] - unreleased
 
