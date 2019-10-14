@@ -41,7 +41,7 @@ exports[`Select component tests should render 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  cursor: not-allowed;
+  cursor: pointer;
 }
 
 .c4 {
@@ -77,6 +77,7 @@ exports[`Select component tests should render 1`] = `
   background-color: #fff;
   color: #000;
   font-weight: normal;
+  background-color: #eeeeee;
 }
 
 .c0 {
@@ -120,7 +121,13 @@ exports[`Select component tests should render 1`] = `
   width="180px"
 >
   <div
+    aria-haspopup="true"
+    aria-label="open menu"
     class="c1"
+    data-toggle="true"
+    disabled=""
+    role="button"
+    type="button"
   >
     <div
       class="c2"
@@ -131,14 +138,8 @@ exports[`Select component tests should render 1`] = `
       class="c3"
     >
       <span
-        aria-haspopup="true"
-        aria-label="open menu"
         class="c4 c5"
         data-testid="select-open-button"
-        data-toggle="true"
-        disabled=""
-        role="button"
-        type="button"
       >
         ▼
       </span>
@@ -388,7 +389,12 @@ exports[`Severity Values Group Tests should render 1`] = `
           width="180px"
         >
           <div
+            aria-haspopup="true"
+            aria-label="open menu"
             class="c6"
+            data-toggle="true"
+            role="button"
+            type="button"
           >
             <div
               class="c7"
@@ -401,13 +407,8 @@ exports[`Severity Values Group Tests should render 1`] = `
               class="c8"
             >
               <span
-                aria-haspopup="true"
-                aria-label="open menu"
                 class="c9 c10"
                 data-testid="select-open-button"
-                data-toggle="true"
-                role="button"
-                type="button"
               >
                 ▼
               </span>

@@ -469,7 +469,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  cursor: not-allowed;
+  cursor: pointer;
 }
 
 .c18 {
@@ -505,6 +505,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   background-color: #fff;
   color: #000;
   font-weight: normal;
+  background-color: #eeeeee;
 }
 
 .c14 {
@@ -614,7 +615,13 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
                             width="230px"
                           >
                             <div
+                              aria-haspopup="true"
+                              aria-label="open menu"
                               class="c15"
+                              data-toggle="true"
+                              disabled=""
+                              role="button"
+                              type="button"
                             >
                               <div
                                 class="c16"
@@ -625,14 +632,8 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
                                 class="c17"
                               >
                                 <span
-                                  aria-haspopup="true"
-                                  aria-label="open menu"
                                   class="c18 c19"
                                   data-testid="select-open-button"
-                                  data-toggle="true"
-                                  disabled=""
-                                  role="button"
-                                  type="button"
                                 >
                                   ▼
                                 </span>
@@ -1333,7 +1334,12 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
                             width="230px"
                           >
                             <div
+                              aria-haspopup="true"
+                              aria-label="open menu"
                               class="c15"
+                              data-toggle="true"
+                              role="button"
+                              type="button"
                             >
                               <div
                                 class="c16"
@@ -1343,13 +1349,8 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
                                 class="c17"
                               >
                                 <span
-                                  aria-haspopup="true"
-                                  aria-label="open menu"
                                   class="c18 c19"
                                   data-testid="select-open-button"
-                                  data-toggle="true"
-                                  role="button"
-                                  type="button"
                                 >
                                   ▼
                                 </span>

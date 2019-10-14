@@ -1216,7 +1216,12 @@ exports[`Scan Config table tests should render 1`] = `
                       width="180px"
                     >
                       <div
+                        aria-haspopup="true"
+                        aria-label="open menu"
                         class="c26"
+                        data-toggle="true"
+                        role="button"
+                        type="button"
                       >
                         <div
                           class="c27"
@@ -1226,13 +1231,8 @@ exports[`Scan Config table tests should render 1`] = `
                           class="c28"
                         >
                           <span
-                            aria-haspopup="true"
-                            aria-label="open menu"
                             class="c29 c30"
                             data-testid="select-open-button"
-                            data-toggle="true"
-                            role="button"
-                            type="button"
                           >
                             ▼
                           </span>

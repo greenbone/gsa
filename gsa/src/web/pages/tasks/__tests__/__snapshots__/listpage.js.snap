@@ -1935,8 +1935,13 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                 width="150px"
               >
                 <div
+                  aria-haspopup="true"
+                  aria-label="open menu"
                   class="c22"
+                  data-toggle="true"
+                  role="button"
                   title="Loaded filter"
+                  type="button"
                 >
                   <div
                     class="c23"
@@ -1949,13 +1954,8 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                     class="c24"
                   >
                     <span
-                      aria-haspopup="true"
-                      aria-label="open menu"
                       class="c25 c26"
                       data-testid="select-open-button"
-                      data-toggle="true"
-                      role="button"
-                      type="button"
                     >
                       ▼
                     </span>
@@ -2713,7 +2713,12 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                             width="180px"
                           >
                             <div
+                              aria-haspopup="true"
+                              aria-label="open menu"
                               class="c22"
+                              data-toggle="true"
+                              role="button"
+                              type="button"
                             >
                               <div
                                 class="c23"
@@ -2726,13 +2731,8 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                                 class="c24"
                               >
                                 <span
-                                  aria-haspopup="true"
-                                  aria-label="open menu"
                                   class="c25 c26"
                                   data-testid="select-open-button"
-                                  data-toggle="true"
-                                  role="button"
-                                  type="button"
                                 >
                                   ▼
                                 </span>
