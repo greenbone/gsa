@@ -23,9 +23,8 @@ message ("-- Configuring Greenbone Security Assistant...")
 # VERSION: Set patch version for stable releases, e.g. "9.0.0",
 #          unset patch version for prereleases, e.g. "9.0"
 project (greenbone-security-assistant
-         VERSION 9.0
+         VERSION 9.0.0
          LANGUAGES C)
-
 
 if (POLICY CMP0005)
   cmake_policy (SET CMP0005 NEW)
@@ -39,18 +38,6 @@ endif (NOT CMAKE_BUILD_TYPE)
 
 ## Retrieve git revision (at configure time)
 include (GetGit)
-
-## make format
-message (STATUS "Looking for clang-format...")
-find_program (CLANG_FORMAT clang-format)
-
-if (CLANG_FORMAT)
-  message (STATUS "Looking for clang-format... ${CLANG_FORMAT}")
-  add_custom_target(format COMMAND ${CLANG_FORMAT} "-i" "./gsad/src/*.c"
-                    "./gsad/src/*.h" WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
-else (CLANG_FORMAT)
-  message (STATUS "clang-format not found...")
-endif (CLANG_FORMAT)
 
 if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
   if (EXISTS "${CMAKE_SOURCE_DIR}/.git/")
@@ -91,7 +78,23 @@ endif (DEFINED PROJECT_BETA_RELEASE AND NOT PROJECT_BETA_RELEASE STREQUAL "")
 
 set (PROJECT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}${PROJECT_VERSION_SUFFIX}${PROJECT_VERSION_GIT}")
 
+set (GSAD_VERSION "${PROJECT_VERSION_STRING}")
+
+message (STATUS "Building GSA version ${PROJECT_VERSION_STRING}")
+
 configure_file (VERSION.in VERSION)
+
+## make format
+message (STATUS "Looking for clang-format...")
+find_program (CLANG_FORMAT clang-format)
+
+if (CLANG_FORMAT)
+  message (STATUS "Looking for clang-format... ${CLANG_FORMAT}")
+  add_custom_target(format COMMAND ${CLANG_FORMAT} "-i" "./gsad/src/*.c"
+                    "./gsad/src/*.h" WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+else (CLANG_FORMAT)
+  message (STATUS "clang-format not found...")
+endif (CLANG_FORMAT)
 
 ## CPack configuration
 
@@ -202,9 +205,6 @@ endif (NOT GVM_RUN_DIR)
 
 message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 
-## Version
-
-set (GSAD_VERSION "${PROJECT_VERSION_STRING}")
 
 if (SKIP_SRC)
   # ng has no documentation to build so skip if src should not be build
