@@ -28,7 +28,7 @@ import Nvt from '../models/nvt.js';
 
 const info_filter = info => isDefined(info.nvt);
 
-class NvtCommand extends InfoEntityCommand {
+export class NvtCommand extends InfoEntityCommand {
   constructor(http) {
     super(http, 'nvt', Nvt);
   }
@@ -45,7 +45,7 @@ class NvtCommand extends InfoEntityCommand {
       const {data} = response;
       const config_resp = data.get_config_nvt_response;
 
-      const nvt = new Nvt(config_resp.get_nvts_response.nvt);
+      const nvt = Nvt.fromElement(config_resp.get_nvts_response.nvt);
 
       return response.setData(nvt);
     });

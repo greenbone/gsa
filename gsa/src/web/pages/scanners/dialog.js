@@ -33,6 +33,8 @@ import {parseInt} from 'gmp/parser';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
+import withGmp from 'web/utils/withGmp';
+
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FootNote from 'web/components/footnote/footnote';
@@ -54,7 +56,7 @@ import {getTimezone} from 'web/store/usersettings/selectors';
 import {
   OSP_SCANNER_TYPE,
   GMP_SCANNER_TYPE,
-  OSP_SENSOR_SCANNER_TYPE,
+  GREENBONE_SENSOR_SCANNER_TYPE,
   scannerTypeName,
 } from 'gmp/models/scanner';
 
@@ -62,12 +64,6 @@ import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
-
-const SCANNER_TYPES = [
-  GMP_SCANNER_TYPE,
-  OSP_SCANNER_TYPE,
-  OSP_SENSOR_SCANNER_TYPE,
-];
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
@@ -149,6 +145,7 @@ class ScannerDialog extends React.Component {
   render() {
     const {
       comment = '',
+      gmp,
       scanner,
       ca_pub,
       credentials,
@@ -164,6 +161,18 @@ class ScannerDialog extends React.Component {
       onNewCredentialClick,
       onSave,
     } = this.props;
+
+    let SCANNER_TYPES;
+
+    if (gmp.settings.enableGreenboneSensor) {
+      SCANNER_TYPES = [
+        GMP_SCANNER_TYPE,
+        OSP_SCANNER_TYPE,
+        GREENBONE_SENSOR_SCANNER_TYPE,
+      ];
+    } else {
+      SCANNER_TYPES = [GMP_SCANNER_TYPE, OSP_SCANNER_TYPE];
+    }
 
     let {credential_id} = this.props;
 
@@ -190,10 +199,10 @@ class ScannerDialog extends React.Component {
       isDefined(scanner.credential) &&
       scanner.credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
 
-    const isOspSensorType = type === OSP_SENSOR_SCANNER_TYPE;
+    const isGreenboneSensorType = type === GREENBONE_SENSOR_SCANNER_TYPE;
     const isOspScannerType = type === OSP_SCANNER_TYPE;
 
-    if (isOspSensorType) {
+    if (isGreenboneSensorType) {
       credential_id = '';
     }
 
@@ -307,7 +316,7 @@ class ScannerDialog extends React.Component {
                 </React.Fragment>
               )}
 
-              {!isOspSensorType && (
+              {!isGreenboneSensorType && (
                 <FormGroup title={_('Credential')} flex="column">
                   <Divider>
                     <Select
@@ -342,13 +351,14 @@ ScannerDialog.propTypes = {
   comment: PropTypes.string,
   credential_id: PropTypes.id,
   credentials: PropTypes.array,
+  gmp: PropTypes.gmp,
   host: PropTypes.string,
   id: PropTypes.string,
   name: PropTypes.string,
   port: PropTypes.string,
   scanner: PropTypes.model,
   title: PropTypes.string,
-  type: PropTypes.oneOf(SCANNER_TYPES),
+  type: PropTypes.array,
   which_cert: PropTypes.oneOf(['default', 'existing', 'new']),
   onClose: PropTypes.func.isRequired,
   onCredentialChange: PropTypes.func.isRequired,
@@ -358,6 +368,6 @@ ScannerDialog.propTypes = {
   onValueChange: PropTypes.func,
 };
 
-export default ScannerDialog;
+export default withGmp(ScannerDialog);
 
 // vim: set ts=2 sw=2 tw=80:

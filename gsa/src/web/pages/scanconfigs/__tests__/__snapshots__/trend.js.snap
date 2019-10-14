@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Scan Config Trend tests should render 1`] = `
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+<span
+  alt="Dynamic"
+  class="c0 "
+  data-testid="svg-icon"
+  title="Dynamic"
+>
+  <svg>
+    trend_more.svg
+  </svg>
+</span>
+`;

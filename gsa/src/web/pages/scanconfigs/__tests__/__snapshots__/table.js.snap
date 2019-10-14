@@ -1,0 +1,1357 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Scan Config table tests should render 1`] = `
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c13 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c17 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.c18 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c19 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c21 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c24 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c28 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c7 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c7 > * {
+  margin-left: 5px;
+}
+
+.c23 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c23 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c23 > * {
+  margin-left: 5px;
+}
+
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c22 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c4 {
+  cursor: pointer;
+}
+
+.c8 svg path {
+  fill: #aaaaaa;
+}
+
+.c3 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c3 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c30 {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  outline: none;
+  margin: 1px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.c29 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c29 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c26 {
+  border: 1px solid #aaaaaa;
+  border-radius: 2px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  padding: 1px 5px;
+  background-color: #fff;
+  color: #000;
+  font-weight: normal;
+}
+
+.c25 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: relative;
+  width: 180px;
+}
+
+.c27 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+  cursor: default;
+}
+
+.c11 a {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #000;
+}
+
+.c11 a:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  color: #000;
+}
+
+.c12 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 72%;
+}
+
+.c14 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 5%;
+}
+
+.c15 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 10%;
+}
+
+.c16 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 8%;
+}
+
+.c31 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-size: 10px;
+  color: #787878;
+  text-align: left;
+}
+
+.c9 {
+  margin: 0 3px;
+}
+
+.c5 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin: 2px 3px;
+}
+
+.c10 {
+  border: 0;
+  border-spacing: 0px;
+  font-size: 12px;
+  text-align: left;
+  table-layout: auto;
+  width: 100%;
+  opacity: 1.0;
+}
+
+.c10 th,
+.c10 td {
+  padding: 4px 10px;
+  border-bottom: 1px solid #c8d3d9;
+}
+
+.c10 tfoot tr {
+  background: #fff;
+}
+
+.c10 tfoot tr td {
+  border-bottom: 1px solid #c8d3d9;
+}
+
+.c2 {
+  margin-top: 2px;
+  margin-left: 2px;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  margin-top: 20px;
+}
+
+.c20 {
+  cursor: pointer;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #0000ff;
+}
+
+.c20:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  color: #0000ff;
+}
+
+@media print {
+  .c4 {
+    display: none;
+  }
+}
+
+@media print {
+  .c11 {
+    border-bottom: 1px solid black;
+  }
+
+  .c11 a,
+  .c11 a:hover {
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    color: #000;
+  }
+}
+
+@media print {
+  .c12 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c14 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c15 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c16 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c5 svg {
+    display: none;
+  }
+}
+
+@media print {
+  .c10 {
+    border-collapse: collapse;
+  }
+}
+
+@media screen {
+  .c10 > tbody:nth-of-type(even),
+  .c10 > tbody:only-of-type > tr:nth-of-type(even) {
+    background: #eeeeee;
+  }
+
+  .c10 > tbody:not(:only-of-type):hover,
+  .c10 > tbody:only-of-type > tr:hover {
+    background: #c8d3d9;
+  }
+}
+
+@media print {
+  .c20 {
+    color: #000;
+  }
+}
+
+<body>
+  <div
+    id="portals"
+  />
+  <div>
+    <div
+      class="entities-table c0"
+    >
+      <div
+        class="c1"
+      >
+        <span
+          class="c2 c3 c4"
+          data-testid="svg-icon"
+          title="Unfold all details"
+        >
+          <svg>
+            fold.svg
+          </svg>
+        </span>
+        <div
+          class="c5"
+        >
+          <div
+            class="c6"
+          >
+            <div
+              class="c7"
+              margin="5px"
+            >
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="First"
+              >
+                <svg>
+                  first.svg
+                </svg>
+              </span>
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="Previous"
+              >
+                <svg>
+                  previous.svg
+                </svg>
+              </span>
+            </div>
+          </div>
+          <span
+            class="c9"
+          >
+            1 - 1 of 1
+          </span>
+          <div
+            class="c6"
+          >
+            <div
+              class="c7"
+              margin="5px"
+            >
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="Next"
+              >
+                <svg>
+                  next.svg
+                </svg>
+              </span>
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="Last"
+              >
+                <svg>
+                  last.svg
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <table
+        class="c10"
+      >
+        <thead
+          class="c11"
+        >
+          <tr>
+            <th
+              class="c12"
+              rowspan="2"
+            >
+              <div
+                class="c13"
+              >
+                Name
+              </div>
+            </th>
+            <th
+              class="c14"
+              rowspan="2"
+            >
+              <div
+                class="c13"
+              >
+                Type
+              </div>
+            </th>
+            <th
+              class="c15"
+              colspan="2"
+            >
+              <div
+                class="c13"
+              >
+                Family
+              </div>
+            </th>
+            <th
+              class="c15"
+              colspan="2"
+            >
+              <div
+                class="c13"
+              >
+                NVTs
+              </div>
+            </th>
+            <th
+              class="c16"
+              rowspan="2"
+            >
+              <div
+                class="c17"
+              >
+                Actions
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <th
+              class="c14"
+            >
+              <div
+                class="c13"
+              >
+                Total
+              </div>
+            </th>
+            <th
+              class="c14"
+            >
+              <div
+                class="c13"
+              >
+                Trend
+              </div>
+            </th>
+            <th
+              class="c14"
+            >
+              <div
+                class="c13"
+              >
+                Total
+              </div>
+            </th>
+            <th
+              class="c14"
+            >
+              <div
+                class="c13"
+              >
+                Trend
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class=""
+        >
+          <tr>
+            <td>
+              <div
+                class="c18"
+              >
+                <div
+                  class="c19"
+                >
+                  <div
+                    class="c18"
+                  >
+                    <span>
+                      <span
+                        class="c20"
+                        name="12345"
+                      >
+                        foo
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="comment"
+                >
+                  (
+                  bar
+                  )
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                OpenVAS
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                2
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                <span
+                  alt="Static"
+                  class="c3 "
+                  data-testid="svg-icon"
+                  title="The family selection is STATIC. New families will NOT automatically be added and considered."
+                >
+                  <svg>
+                    trend_nochange.svg
+                  </svg>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                4
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                <span
+                  alt="Dynamic"
+                  class="c3 "
+                  data-testid="svg-icon"
+                  title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."
+                >
+                  <svg>
+                    trend_more.svg
+                  </svg>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c21"
+              >
+                <div
+                  class="c22"
+                >
+                  <div
+                    class="c23"
+                    margin="5px"
+                  >
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Move Scan Config to trashcan"
+                    >
+                      <svg>
+                        trashcan.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Edit Scan Config"
+                    >
+                      <svg>
+                        edit.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Clone Scan Config"
+                    >
+                      <svg>
+                        clone.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Export Scan Config"
+                    >
+                      <svg>
+                        export.svg
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c18"
+              >
+                <div
+                  class="c19"
+                >
+                  <div
+                    class="c18"
+                  >
+                    <span>
+                      <span
+                        class="c20"
+                        name="123456"
+                      >
+                        lorem
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="comment"
+                >
+                  (
+                  ipsum
+                  )
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                OpenVAS
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                3
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                <span
+                  alt="Static"
+                  class="c3 "
+                  data-testid="svg-icon"
+                  title="The family selection is STATIC. New families will NOT automatically be added and considered."
+                >
+                  <svg>
+                    trend_nochange.svg
+                  </svg>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                5
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                <span
+                  alt="Dynamic"
+                  class="c3 "
+                  data-testid="svg-icon"
+                  title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."
+                >
+                  <svg>
+                    trend_more.svg
+                  </svg>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c21"
+              >
+                <div
+                  class="c22"
+                >
+                  <div
+                    class="c23"
+                    margin="5px"
+                  >
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Move Scan Config to trashcan"
+                    >
+                      <svg>
+                        trashcan.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Edit Scan Config"
+                    >
+                      <svg>
+                        edit.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Clone Scan Config"
+                    >
+                      <svg>
+                        clone.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Export Scan Config"
+                    >
+                      <svg>
+                        export.svg
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c18"
+              >
+                <div
+                  class="c19"
+                >
+                  <div
+                    class="c18"
+                  >
+                    <span>
+                      <span
+                        class="c20"
+                        name="1234567"
+                      >
+                        hello
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="comment"
+                >
+                  (
+                  world
+                  )
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                OpenVAS
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                1
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                <span
+                  alt="Static"
+                  class="c3 "
+                  data-testid="svg-icon"
+                  title="The family selection is STATIC. New families will NOT automatically be added and considered."
+                >
+                  <svg>
+                    trend_nochange.svg
+                  </svg>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                1
+              </div>
+            </td>
+            <td>
+              <div
+                class="c18"
+              >
+                <span
+                  alt="Dynamic"
+                  class="c3 "
+                  data-testid="svg-icon"
+                  title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."
+                >
+                  <svg>
+                    trend_more.svg
+                  </svg>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c21"
+              >
+                <div
+                  class="c22"
+                >
+                  <div
+                    class="c23"
+                    margin="5px"
+                  >
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Move Scan Config to trashcan"
+                    >
+                      <svg>
+                        trashcan.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Edit Scan Config"
+                    >
+                      <svg>
+                        edit.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Clone Scan Config"
+                    >
+                      <svg>
+                        clone.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Export Scan Config"
+                    >
+                      <svg>
+                        export.svg
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td
+              colspan="7"
+            >
+              <div
+                class="c24"
+              >
+                <div
+                  class="c6"
+                >
+                  <div
+                    class="c7"
+                    margin="5px"
+                  >
+                    <div
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      aria-labelledby="downshift-0-label"
+                      class="c25"
+                      role="combobox"
+                      width="180px"
+                    >
+                      <div
+                        aria-haspopup="true"
+                        aria-label="open menu"
+                        class="c26"
+                        data-toggle="true"
+                        role="button"
+                        type="button"
+                      >
+                        <div
+                          class="c27"
+                          data-testid="select-selected-value"
+                        />
+                        <div
+                          class="c28"
+                        >
+                          <span
+                            class="c29 c30"
+                            data-testid="select-open-button"
+                          >
+                            ▼
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="c6"
+                    >
+                      <div
+                        class="c7"
+                        margin="5px"
+                      >
+                        <span
+                          class="c3 "
+                          data-testid="svg-icon"
+                        >
+                          <svg>
+                            tags.svg
+                          </svg>
+                        </span>
+                        <span
+                          class="c3 "
+                          data-testid="svg-icon"
+                        >
+                          <svg>
+                            trashcan.svg
+                          </svg>
+                        </span>
+                        <span
+                          class="c3 "
+                          data-testid="svg-icon"
+                        >
+                          <svg>
+                            export.svg
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      <div
+        class="c19"
+      >
+        <div
+          class="c31"
+        >
+          (Applied filter: rows=2)
+        </div>
+        <div
+          class="c5"
+        >
+          <div
+            class="c6"
+          >
+            <div
+              class="c7"
+              margin="5px"
+            >
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="First"
+              >
+                <svg>
+                  first.svg
+                </svg>
+              </span>
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="Previous"
+              >
+                <svg>
+                  previous.svg
+                </svg>
+              </span>
+            </div>
+          </div>
+          <span
+            class="c9"
+          >
+            1 - 1 of 1
+          </span>
+          <div
+            class="c6"
+          >
+            <div
+              class="c7"
+              margin="5px"
+            >
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="Next"
+              >
+                <svg>
+                  next.svg
+                </svg>
+              </span>
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="Last"
+              >
+                <svg>
+                  last.svg
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;

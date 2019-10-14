@@ -54,7 +54,7 @@ import TaskFilterDialog from './filterdialog';
 import Table from './table';
 import TaskIcon from 'web/components/icon/taskicon';
 
-const ToolBarIcons = withCapabilities(
+export const ToolBarIcons = withCapabilities(
   ({
     capabilities,
     onAdvancedTaskWizardClick,

@@ -21,37 +21,42 @@ import {isDefined} from 'gmp/utils/identity';
 import {setProperties} from 'gmp/parser';
 
 class OperatingSystem {
-  constructor(elem) {
-    const properties = this.parseProperties(elem);
-    setProperties(properties, this);
+  constructor() {
+    this.hosts = {
+      hostsByIp: {},
+      count: 0,
+    };
   }
 
   addHost(host) {
-    if (!(host.ip in this.hosts.hosts_by_ip)) {
-      this.hosts.hosts_by_ip[host.ip] = host;
+    if (!(host.ip in this.hosts.hostsByIp)) {
+      this.hosts.hostsByIp[host.ip] = host;
       this.hosts.count++;
     }
   }
 
-  addSeverity(severity) {
+  setSeverity(severity) {
     if (!isDefined(this.severity) || this.severity < severity) {
       this.severity = severity;
     }
   }
 
-  parseProperties(elem) {
+  static fromElement(element) {
+    const os = new OperatingSystem();
+
+    setProperties(this.parseElement(element), os);
+
+    return os;
+  }
+
+  static parseElement(element = {}) {
     const copy = {};
 
-    const {best_os_cpe, best_os_txt} = elem;
+    const {best_os_cpe, best_os_txt} = element;
 
     copy.name = best_os_txt;
     copy.id = best_os_cpe;
     copy.cpe = best_os_cpe;
-
-    copy.hosts = {
-      hosts_by_ip: {},
-      count: 0,
-    };
 
     return copy;
   }

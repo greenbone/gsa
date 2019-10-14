@@ -21,7 +21,7 @@ import logger from '../log';
 import {map} from '../utils/array';
 
 import registerCommand from '../command';
-import Model from '../model';
+import {parseModelFromElement} from '../model';
 
 import Alert from '../models/alert';
 import Credential from '../models/credential';
@@ -186,19 +186,17 @@ class AlertCommand extends EntityCommand {
       const {new_alert} = response.data;
       new_alert.report_formats = map(
         new_alert.get_report_formats_response.report_format,
-        format => new Model(format),
+        format => parseModelFromElement(format, 'reportformat'),
       );
       new_alert.credentials = map(
         new_alert.get_credentials_response.credential,
-        credential => new Credential(credential),
+        credential => Credential.fromElement(credential),
       );
-      new_alert.tasks = map(
-        new_alert.get_tasks_response.task,
-        task => new Model(task),
+      new_alert.tasks = map(new_alert.get_tasks_response.task, task =>
+        parseModelFromElement(task, 'task'),
       ); // don't use Task here to avoid cyclic dependencies
-      new_alert.filters = map(
-        new_alert.get_filters_response.filter,
-        filter => new Filter(filter),
+      new_alert.filters = map(new_alert.get_filters_response.filter, filter =>
+        Filter.fromElement(filter),
       );
       return response.setData(new_alert);
     });
@@ -211,30 +209,30 @@ class AlertCommand extends EntityCommand {
     }).then(response => {
       const {edit_alert} = response.data;
 
-      edit_alert.alert = new Alert(edit_alert.get_alerts_response.alert);
+      edit_alert.alert = Alert.fromElement(
+        edit_alert.get_alerts_response.alert,
+      );
       delete edit_alert.get_alerts_response;
 
       edit_alert.report_formats = map(
         edit_alert.get_report_formats_response.report_format,
-        format => new Model(format),
+        format => parseModelFromElement(format, 'reportformat'),
       );
       delete edit_alert.get_report_formats_response;
 
       edit_alert.credentials = map(
         edit_alert.get_credentials_response.credential,
-        credential => new Credential(credential),
+        credential => Credential.fromElement(credential),
       );
       delete edit_alert.get_credentials_response;
 
-      edit_alert.tasks = map(
-        edit_alert.get_tasks_response.task,
-        task => new Model(task),
+      edit_alert.tasks = map(edit_alert.get_tasks_response.task, task =>
+        parseModelFromElement(task, 'task'),
       ); // don't use Task here to avoid cyclic dependencies
       delete edit_alert.get_tasks_response;
 
-      edit_alert.filters = map(
-        edit_alert.get_filters_response.filter,
-        filter => new Filter(filter),
+      edit_alert.filters = map(edit_alert.get_filters_response.filter, filter =>
+        Filter.fromElement(filter),
       );
       delete edit_alert.get_filters_response;
 

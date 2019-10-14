@@ -120,7 +120,12 @@ exports[`TimezoneSelect tests should render 1`] = `
   width="230px"
 >
   <div
+    aria-haspopup="true"
+    aria-label="open menu"
     class="c1"
+    data-toggle="true"
+    role="button"
+    type="button"
   >
     <div
       class="c2"
@@ -133,13 +138,8 @@ exports[`TimezoneSelect tests should render 1`] = `
       class="c3"
     >
       <span
-        aria-haspopup="true"
-        aria-label="open menu"
         class="c4 c5"
         data-testid="select-open-button"
-        data-toggle="true"
-        role="button"
-        type="button"
       >
         ▼
       </span>

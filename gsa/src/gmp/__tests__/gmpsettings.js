@@ -26,7 +26,7 @@ import GmpSettings, {
 const createStorage = state => {
   const store = {
     ...state,
-    setItem: jest.fn((name, value) => (store[name] = value)),
+    setItem: jest.fn((name, value) => (store[name] = '' + value)),
     removeItem: jest.fn(name => delete store[name]),
   };
   return store;
@@ -36,21 +36,23 @@ describe('GmpSettings tests', () => {
   test('should init with defaults', () => {
     const storage = createStorage();
     const settings = new GmpSettings(storage);
+
+    expect(settings.disableLoginForm).toEqual(false);
+    expect(settings.enableStoreDebugLog).toBeUndefined();
+    expect(settings.guestUsername).toBeUndefined();
+    expect(settings.guestPassword).toBeUndefined();
     expect(settings.loglevel).toEqual(DEFAULT_LOG_LEVEL);
-    expect(settings.reloadinterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.locale).toBeUndefined();
     expect(settings.manualUrl).toEqual(DEFAULT_MANUAL_URL);
     expect(settings.manualLanguageMapping).toBeUndefined();
     expect(settings.protocol).toEqual('http:');
     expect(settings.protocoldocurl).toEqual(DEFAULT_PROTOCOLDOC_URL);
+    expect(settings.reloadinterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.server).toEqual('localhost');
     expect(settings.token).toBeUndefined();
     expect(settings.timeout).toBeUndefined();
     expect(settings.timezone).toBeUndefined();
     expect(settings.username).toBeUndefined();
-    expect(settings.guestUsername).toBeUndefined();
-    expect(settings.guestPassword).toBeUndefined();
-    expect(settings.disableLoginForm).toEqual(false);
     expect(settings.vendorVersion).toBeUndefined();
     expect(settings.vendorLabel).toBeUndefined();
 
@@ -61,7 +63,11 @@ describe('GmpSettings tests', () => {
   test('should init with passed options', () => {
     const storage = createStorage();
     const settings = new GmpSettings(storage, {
-      reloadinterval: 10,
+      disableLoginForm: true,
+      enableGreenboneSensor: true,
+      enableStoreDebugLog: true,
+      guestUsername: 'guest',
+      guestPassword: 'pass',
       locale: 'en',
       loglevel: 'error',
       manualUrl: 'http://manual',
@@ -70,48 +76,53 @@ describe('GmpSettings tests', () => {
       },
       protocol: 'http',
       protocoldocurl: 'http://protocol',
+      reloadinterval: 10,
       server: 'localhost',
       token: 'atoken',
       timeout: 30000,
       timezone: 'cet',
       username: 'foo',
-      guestUsername: 'guest',
-      guestPassword: 'pass',
-      disableLoginForm: true,
       vendorVersion: 'foo',
       vendorLabel: 'foo.bar',
     });
 
-    expect(settings.reloadinterval).toEqual(10);
+    expect(settings.disableLoginForm).toEqual(true);
+    expect(settings.enableGreenboneSensor).toEqual(true);
+    expect(settings.enableStoreDebugLog).toEqual(true);
+    expect(settings.guestUsername).toEqual('guest');
+    expect(settings.guestPassword).toEqual('pass');
     expect(settings.locale).toBeUndefined();
+    expect(settings.loglevel).toEqual('error');
     expect(settings.manualUrl).toEqual('http://manual');
     expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual('http://protocol');
+    expect(settings.reloadinterval).toEqual(10);
     expect(settings.server).toEqual('localhost');
     expect(settings.token).toBeUndefined();
     expect(settings.timeout).toEqual(30000);
     expect(settings.timezone).toBeUndefined();
     expect(settings.username).toBeUndefined();
-    expect(settings.loglevel).toEqual('error');
-
-    expect(settings.guestUsername).toEqual('guest');
-    expect(settings.guestPassword).toEqual('pass');
-    expect(settings.disableLoginForm).toEqual(true);
     expect(settings.vendorVersion).toEqual('foo');
     expect(settings.vendorLabel).toEqual('foo.bar');
 
-    expect(storage.setItem).toHaveBeenCalledTimes(1);
-    expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'error');
+    expect(storage.setItem).toHaveBeenCalledTimes(2);
+    expect(storage.setItem).toHaveBeenNthCalledWith(
+      1,
+      'enableStoreDebugLog',
+      '1',
+    );
+    expect(storage.setItem).toHaveBeenNthCalledWith(2, 'loglevel', 'error');
   });
 
   test('should init from store', () => {
     const storage = createStorage({
+      enableStoreDebugLog: '0',
       locale: 'en',
-      token: 'atoken',
-      timezone: 'cet',
-      username: 'foo',
       loglevel: 'error',
+      timezone: 'cet',
+      token: 'atoken',
+      username: 'foo',
     });
 
     const settings = new GmpSettings(storage, {
@@ -121,18 +132,21 @@ describe('GmpSettings tests', () => {
       protocol: 'http',
     });
 
+    expect(settings.enableGreenboneSensor).toEqual(false);
+    expect(settings.enableStoreDebugLog).toEqual(false);
     expect(settings.reloadinterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.locale).toEqual('en');
+    expect(settings.loglevel).toEqual('error');
     expect(settings.manualUrl).toEqual(DEFAULT_MANUAL_URL);
     expect(settings.manualLanguageMapping).toBeUndefined();
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual(DEFAULT_PROTOCOLDOC_URL);
+    expect(settings.reloadinterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.server).toEqual('foo');
     expect(settings.token).toEqual('atoken');
     expect(settings.timeout).toBeUndefined();
     expect(settings.timezone).toEqual('cet');
     expect(settings.username).toEqual('foo');
-    expect(settings.loglevel).toEqual('error');
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'error');
@@ -140,80 +154,96 @@ describe('GmpSettings tests', () => {
 
   test('should ensure options override settings from storage', () => {
     const storage = createStorage({
-      reloadinterval: 20,
+      enableStoreDebugLog: '0',
       locale: 'de',
+      loglevel: 'error',
       manualUrl: 'http://ipsum',
       manualLanguageMapping: {lorem: 'ipsum'},
       protocol: 'https',
       protocoldocurl: 'http://lorem',
+      reloadinterval: 20,
       server: 'foo.bar',
       token: 'btoken',
       timeout: 10000,
       timezone: 'cest',
       username: 'bar',
-      loglevel: 'error',
       vendorVersion: 'foo',
       vendorLabel: 'foo.bar',
     });
 
     const settings = new GmpSettings(storage, {
-      reloadinterval: 10,
+      enableStoreDebugLog: true,
       locale: 'en',
+      loglevel: 'debug',
       manualUrl: 'http://manual',
       manualLanguageMapping: {foo: 'bar'},
       protocol: 'http',
       protocoldocurl: 'http://protocol',
+      reloadinterval: 10,
       server: 'localhost',
       token: 'atoken',
       timeout: 30000,
       timezone: 'cet',
       username: 'foo',
-      loglevel: 'debug',
       vendorVersion: 'bar',
       vendorLabel: 'bar.foo',
     });
 
-    expect(settings.reloadinterval).toEqual(10);
+    expect(settings.enableStoreDebugLog).toEqual(true);
     expect(settings.locale).toEqual('de');
+    expect(settings.loglevel).toEqual('debug');
     expect(settings.manualUrl).toEqual('http://manual');
     expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual('http://protocol');
+    expect(settings.reloadinterval).toEqual(10);
     expect(settings.server).toEqual('localhost');
     expect(settings.token).toEqual('btoken');
     expect(settings.timeout).toEqual(30000);
     expect(settings.timezone).toEqual('cest');
     expect(settings.username).toEqual('bar');
-    expect(settings.loglevel).toEqual('debug');
     expect(settings.vendorVersion).toEqual('bar');
     expect(settings.vendorLabel).toEqual('bar.foo');
 
-    expect(storage.setItem).toHaveBeenCalledTimes(1);
-    expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'debug');
+    expect(storage.setItem).toHaveBeenCalledTimes(2);
+    expect(storage.setItem).toHaveBeenNthCalledWith(
+      1,
+      'enableStoreDebugLog',
+      '1',
+    );
+    expect(storage.setItem).toHaveBeenNthCalledWith(2, 'loglevel', 'debug');
   });
 
   test('should delete settings from storage', () => {
     const storage = createStorage({
+      enableStoreDebugLog: '1',
       locale: 'en',
+      loglevel: 'error',
       token: 'atoken',
       timezone: 'cet',
       username: 'foo',
-      loglevel: 'error',
     });
 
     const settings = new GmpSettings(storage, {});
 
+    expect(settings.enableStoreDebugLog).toEqual(true);
     expect(settings.locale).toEqual('en');
+    expect(settings.loglevel).toEqual('error');
     expect(settings.token).toEqual('atoken');
     expect(settings.timezone).toEqual('cet');
     expect(settings.username).toEqual('foo');
-    expect(settings.loglevel).toEqual('error');
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
     expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'error');
 
+    settings.enableStoreDebugLog = undefined;
+    expect(storage.removeItem).toBeCalledWith('enableStoreDebugLog');
+
     settings.locale = undefined;
     expect(storage.removeItem).toBeCalledWith('locale');
+
+    settings.loglevel = undefined;
+    expect(storage.removeItem).toBeCalledWith('loglevel');
 
     settings.token = undefined;
     expect(storage.removeItem).toBeCalledWith('token');
@@ -223,33 +253,47 @@ describe('GmpSettings tests', () => {
 
     settings.username = undefined;
     expect(storage.removeItem).toBeCalledWith('username');
-
-    settings.loglevel = undefined;
-    expect(storage.removeItem).toBeCalledWith('loglevel');
   });
 
   test('should freeze properties', () => {
     const storage = createStorage();
     const settings = new GmpSettings(storage, {
-      reloadinterval: 10,
+      disableLoginForm: true,
+      enableGreenboneSensor: true,
+      guestUsername: 'guest',
+      guestPassword: 'pass',
       locale: 'en',
       loglevel: 'error',
       manualUrl: 'http://manual',
       manualLanguageMapping: {foo: 'bar'},
       protocol: 'http',
       protocoldocurl: 'http://protocol',
+      reloadinterval: 10,
       server: 'localhost',
       token: 'atoken',
       timeout: 30000,
       timezone: 'cet',
       username: 'foo',
-      guestUsername: 'guest',
-      guestPassword: 'pass',
-      disableLoginForm: true,
       vendorVersion: 'foobar',
       vendorLabel: 'foo.bar',
     });
 
+    expect(() => {
+      settings.disableLoginForm = false;
+    }).toThrow();
+    expect(settings.disableLoginForm).toEqual(true);
+    expect(() => {
+      settings.enableGreenboneSensor = false;
+    }).toThrow();
+    expect(settings.enableGreenboneSensor).toEqual(true);
+    expect(() => {
+      settings.guestUsername = 'foo';
+    }).toThrow();
+    expect(settings.guestUsername).toEqual('guest');
+    expect(() => {
+      settings.guestPassword = 'foo';
+    }).toThrow();
+    expect(settings.guestPassword).toEqual('pass');
     expect(() => {
       settings.manualUrl = 'foo';
     }).toThrow();
@@ -270,18 +314,6 @@ describe('GmpSettings tests', () => {
       settings.protocol = 'foo';
     }).toThrow();
     expect(settings.protocol).toEqual('http');
-    expect(() => {
-      settings.guestUsername = 'foo';
-    }).toThrow();
-    expect(settings.guestUsername).toEqual('guest');
-    expect(() => {
-      settings.guestPassword = 'foo';
-    }).toThrow();
-    expect(settings.guestPassword).toEqual('pass');
-    expect(() => {
-      settings.disableLoginForm = false;
-    }).toThrow();
-    expect(settings.disableLoginForm).toEqual(true);
     expect(() => {
       settings.vendorVersion = 'barfoo';
     }).toThrow();

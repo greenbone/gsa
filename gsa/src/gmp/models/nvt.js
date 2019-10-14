@@ -42,39 +42,51 @@ const parse_tags = tags => {
   return newtags;
 };
 
-const getFilteredRefIds = (refs, type) => {
-  const filteredRefs = refs.filter(ref => ref._type === type);
+export const getRefs = element => {
+  if (
+    !isDefined(element) ||
+    !isDefined(element.refs) ||
+    !isDefined(element.refs.ref)
+  ) {
+    return [];
+  }
+  if (isArray(element.refs.ref)) {
+    return element.refs.ref;
+  }
+  return [element.refs.ref];
+};
+
+export const hasRefType = refType => (ref = {}) =>
+  isString(ref._type) && ref._type.toLowerCase() === refType;
+
+export const getFilteredRefIds = (refs = [], type) => {
+  const filteredRefs = refs.filter(hasRefType(type));
   return filteredRefs.map(ref => ref._id);
 };
 
-const getFilteredRefs = (refs, type) => {
-  const filteredRefs = refs.filter(ref => {
-    const rtype = isString(ref._type) ? ref._type.toLowerCase() : undefined;
-    return rtype === type;
-  });
-  const returnRefs = filteredRefs.map(ref => {
+const getFilteredUrlRefs = refs => {
+  return refs.filter(hasRefType('url')).map(ref => {
     let id = ref._id;
-    if (type === 'url') {
-      if (
-        !id.startsWith('http://') &&
-        !id.startsWith('https://') &&
-        !id.startsWith('ftp://') &&
-        !id.startsWith('ftps://')
-      ) {
-        id = 'http://' + id;
-      }
-      return {
-        ref: id,
-        type: type,
-      };
+    if (
+      !id.startsWith('http://') &&
+      !id.startsWith('https://') &&
+      !id.startsWith('ftp://') &&
+      !id.startsWith('ftps://')
+    ) {
+      id = 'http://' + id;
     }
     return {
-      id: id,
-      type: type,
+      ref: id,
+      type: 'url',
     };
   });
-  return returnRefs;
 };
+
+const getFilteredRefs = (refs, type) =>
+  refs.filter(hasRefType(type)).map(ref => ({
+    id: ref._id,
+    type,
+  }));
 
 const getOtherRefs = refs => {
   const filteredRefs = refs.filter(ref => {
@@ -104,18 +116,13 @@ class Nvt extends Info {
   static parseElement(element) {
     const ret = super.parseElement(element, 'nvt');
 
-    ret.nvtType = element._type;
+    ret.nvtType = ret._type;
 
     ret.oid = isEmpty(ret._oid) ? undefined : ret._oid;
     ret.id = ret.oid;
-    ret.tags = parse_tags(element.tags);
+    ret.tags = parse_tags(ret.tags);
 
-    let refs = [];
-    if (isDefined(element.refs) && isArray(element.refs.ref)) {
-      refs = ret.refs.ref;
-    } else if (isDefined(element.refs) && isDefined(element.refs.ref)) {
-      refs = [ret.refs.ref];
-    }
+    const refs = getRefs(ret);
 
     ret.cves = getFilteredRefIds(refs, 'cve').concat(
       getFilteredRefIds(refs, 'cve_id'),
@@ -128,14 +135,14 @@ class Nvt extends Info {
       getFilteredRefs(refs, 'cert-bund'),
     );
 
-    ret.xrefs = getFilteredRefs(refs, 'url').concat(getOtherRefs(refs));
+    ret.xrefs = getFilteredUrlRefs(refs, 'url').concat(getOtherRefs(refs));
 
     delete ret.refs;
 
-    ret.severity = parseSeverity(element.cvss_base);
+    ret.severity = parseSeverity(ret.cvss_base);
     delete ret.cvss_base;
 
-    if (isDefined(element.preferences)) {
+    if (isDefined(ret.preferences)) {
       ret.preferences = map(ret.preferences.preference, preference => {
         const pref = {...preference};
         delete pref.nvt;
@@ -145,29 +152,29 @@ class Nvt extends Info {
       ret.preferences = [];
     }
 
-    if (isDefined(element.qod)) {
-      if (isEmpty(element.qod.value)) {
+    if (isDefined(ret.qod)) {
+      if (isEmpty(ret.qod.value)) {
         delete ret.qod.value;
       } else {
-        ret.qod.value = parseFloat(element.qod.value);
+        ret.qod.value = parseFloat(ret.qod.value);
       }
 
-      if (isEmpty(element.qod.type)) {
+      if (isEmpty(ret.qod.type)) {
         delete ret.qod.type;
       }
     }
 
-    if (isEmpty(element.default_timeout)) {
+    if (isEmpty(ret.default_timeout)) {
       delete ret.default_timeout;
     } else {
-      ret.defaultTimeout = parseFloat(element.default_timeout);
+      ret.defaultTimeout = parseFloat(ret.default_timeout);
       delete ret.default_timeout;
     }
 
-    if (isEmpty(element.timeout)) {
+    if (isEmpty(ret.timeout)) {
       delete ret.timeout;
     } else {
-      ret.timeout = parseFloat(element.timeout);
+      ret.timeout = parseFloat(ret.timeout);
     }
 
     return ret;

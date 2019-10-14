@@ -106,7 +106,7 @@ const Row = ({
         <DateTime date={entity.expirationTime} />
       </TableData>
       <TableData>
-        <DateTime date={entity.lastCollected} />
+        <DateTime date={entity.lastSeen} />
       </TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
