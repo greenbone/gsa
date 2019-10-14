@@ -1508,7 +1508,12 @@ exports[`Tasks table tests should render 1`] = `
                       width="180px"
                     >
                       <div
+                        aria-haspopup="true"
+                        aria-label="open menu"
                         class="c39"
+                        data-toggle="true"
+                        role="button"
+                        type="button"
                       >
                         <div
                           class="c40"
@@ -1518,13 +1523,8 @@ exports[`Tasks table tests should render 1`] = `
                           class="c41"
                         >
                           <span
-                            aria-haspopup="true"
-                            aria-label="open menu"
                             class="c42 c43"
                             data-testid="select-open-button"
-                            data-toggle="true"
-                            role="button"
-                            type="button"
                           >
                             ▼
                           </span>
