@@ -129,7 +129,7 @@ const Row = ({
             )}
             {isDefined(scanner) &&
               (scanner.scannerType === GMP_SCANNER_TYPE ||
-                GREENBONE_SENSOR_SCANNER_TYPE) && (
+                scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE) && (
                 <SensorIcon
                   size="small"
                   title={_('Task is configured to run on sensor {{name}}', {
