@@ -123,95 +123,80 @@ const SpinnerButtonDown = styled(SpinnerButton)`
   bottom: 0;
 `;
 
-class SpinnerComponent extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      upActive: false,
-      downActive: false,
-    };
-
-    this.handleDbClick = this.handleDbClick.bind(this);
-    this.handleDownButton = this.handleDownButton.bind(this);
-    this.handleMouseWheel = this.handleMouseWheel.bind(this);
-    this.handleUpButton = this.handleUpButton.bind(this);
-    this.notifyChange = this.notifyChange.bind(this);
-    this.handleDownKey = this.handleDownKey.bind(this);
-    this.handleUpKey = this.handleUpKey.bind(this);
-
-    const debounce_value = parseInt(this.props.debounce);
-
-    if (isDefined(debounce_value) && debounce_value > 0) {
-      this.notifyChange = debounce(this.notifyChange, debounce_value);
-    }
-  }
-
-  getStep() {
-    const {step, type} = this.props;
+const SpinnerComponent = props => {
+  const getStep = () => {
+    const {step, type} = props;
 
     if (isDefined(step)) {
       return parseFloat(step);
     }
     return type === 'float' ? 0.1 : 1;
-  }
+  };
 
-  handleUpButton(event) {
-    const step = this.getStep();
-
-    event.preventDefault();
-
-    const {value = 0} = this.props;
-
-    this.setAdjustedValue(parseFloat(value) + step);
-  }
-
-  handleUpKey(value) {
-    const step = this.getStep();
-    this.setAdjustedValue(value + step);
-  }
-
-  handleDownButton(event) {
-    const step = this.getStep();
+  const handleUpButton = event => {
+    const step = getStep();
 
     event.preventDefault();
 
-    const {value = 0} = this.props;
+    const {value = 0} = props;
 
-    this.setAdjustedValue(parseFloat(value) - step);
-  }
+    setAdjustedValue(parseFloat(value) + step);
+  };
 
-  handleDownKey(value) {
-    const step = this.getStep();
-    this.setAdjustedValue(value - step);
-  }
+  const handleUpKey = value => {
+    const step = getStep();
+    setAdjustedValue(value + step);
+  };
 
-  handleMouseWheel(event) {
+  const handleDownButton = event => {
+    const step = getStep();
+
+    event.preventDefault();
+
+    const {value = 0} = props;
+
+    setAdjustedValue(parseFloat(value) - step);
+  };
+
+  const handleDownKey = value => {
+    const step = getStep();
+    setAdjustedValue(value - step);
+  };
+
+  const handleMouseWheel = event => {
     const direction = event.deltaY > 1 ? 1 : -1;
-    const step = this.getStep();
+    const step = getStep();
 
     event.preventDefault();
 
-    const {value = 0} = this.props;
+    const {value = 0} = props;
 
-    this.setAdjustedValue(parseFloat(value) + step * direction);
-  }
+    setAdjustedValue(parseFloat(value) + step * direction);
+  };
 
-  handleDbClick(event) {
+  const handleDbClick = event => {
     event.preventDefault();
-  }
+  };
 
-  notifyChange(value) {
-    const {onChange, name, disabled = false} = this.props;
+  let notifyChange;
+
+  notifyChange = value => {
+    const {onChange, name, disabled = false} = props;
 
     if (!disabled && onChange) {
       onChange(value, name);
     }
+  };
+
+  const debounce_value = parseInt(props.debounce);
+
+  if (isDefined(debounce_value) && debounce_value > 0) {
+    notifyChange = debounce(notifyChange, debounce_value);
   }
 
-  setAdjustedValue(value) {
-    const step = this.getStep();
-    const {min = 0, disabled} = this.props;
+  const setAdjustedValue = value => {
+    const step = getStep();
+    const {min = 0, disabled} = props;
 
     if (disabled) {
       return;
@@ -228,13 +213,13 @@ class SpinnerComponent extends React.Component {
     value = base + above_min;
 
     // Fix precision from bad JS floating point math
-    value = parseFloat(fixedValue(value, this.getPrecision()));
+    value = parseFloat(fixedValue(value, getPrecision()));
 
-    this.setValue(value);
-  }
+    setValue(value);
+  };
 
-  setValue(value) {
-    let {min, max} = this.props;
+  const setValue = value => {
+    let {min, max} = props;
 
     min = parseFloat(min);
     max = parseFloat(max);
@@ -247,65 +232,63 @@ class SpinnerComponent extends React.Component {
         value = min;
       }
 
-      this.notifyChange(value);
+      notifyChange(value);
     }
-  }
+  };
 
-  getPrecision() {
-    const {precision = 0} = this.props;
-    const step = this.getStep();
+  const getPrecision = () => {
+    const {precision = 0} = props;
+    const step = getStep();
 
-    return Math.max(precision, this.precisionOf(step));
-  }
+    return Math.max(precision, precisionOf(step));
+  };
 
-  precisionOf(num) {
+  const precisionOf = num => {
     const str = num.toString();
     const decimal = str.indexOf('.');
 
     return decimal === -1 ? 0 : str.length - decimal - 1;
-  }
+  };
 
-  render() {
-    const {value = 0} = this.props;
-    const {size, type, min, max, disabled, maxLength, name} = this.props;
-    const precision = this.getPrecision();
-    return (
-      <StyledSpinner disabled={disabled} onWheel={this.handleMouseWheel}>
-        <StyledInput
-          data-testid="spinner-input"
-          type={type}
-          min={min}
-          max={max}
-          name={name}
-          size={size}
-          maxLength={maxLength}
-          value={value}
-          disabled={disabled}
-          precision={precision}
-          onChange={this.notifyChange}
-          onUpKeyPressed={this.handleUpKey}
-          onDownKeyPressed={this.handleDownKey}
-        />
-        <SpinnerButtonUp
-          data-testid="spinner-up"
-          disabled={disabled}
-          onClick={disabled ? undefined : this.handleUpButton}
-          onDoubleClick={this.handleDbClick}
-        >
-          ▲
-        </SpinnerButtonUp>
-        <SpinnerButtonDown
-          data-testid="spinner-down"
-          disabled={disabled}
-          onClick={disabled ? undefined : this.handleDownButton}
-          onDoubleClick={this.handleDbClick}
-        >
-          ▼
-        </SpinnerButtonDown>
-      </StyledSpinner>
-    );
-  }
-}
+  const {value = 0} = props;
+  const {size, type, min, max, disabled, maxLength, name} = props;
+  const precision = getPrecision();
+  return (
+    <StyledSpinner disabled={disabled} onWheel={handleMouseWheel}>
+      <StyledInput
+        data-testid="spinner-input"
+        type={type}
+        min={min}
+        max={max}
+        name={name}
+        size={size}
+        maxLength={maxLength}
+        value={value}
+        disabled={disabled}
+        precision={precision}
+        onChange={notifyChange}
+        onUpKeyPressed={handleUpKey}
+        onDownKeyPressed={handleDownKey}
+      />
+      <SpinnerButtonUp
+        data-testid="spinner-up"
+        disabled={disabled}
+        onClick={disabled ? undefined : handleUpButton}
+        onDoubleClick={handleDbClick}
+      >
+        ▲
+      </SpinnerButtonUp>
+      <SpinnerButtonDown
+        data-testid="spinner-down"
+        disabled={disabled}
+        onClick={disabled ? undefined : handleDownButton}
+        onDoubleClick={handleDbClick}
+      >
+        ▼
+      </SpinnerButtonDown>
+    </StyledSpinner>
+  );
+};
 
 SpinnerComponent.defaultProps = {
   size: 4,
