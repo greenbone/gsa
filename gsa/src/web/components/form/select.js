@@ -180,7 +180,25 @@ class Select extends React.Component {
               className={className}
               width={width}
             >
-              <Box isOpen={isOpen} title={toolTipTitle} ref={this.box}>
+              <Box
+                {...getToggleButtonProps({
+                  disabled,
+                  onClick: isOpen
+                    ? event => {
+                        closeMenu();
+                      }
+                    : event => {
+                        event.preventDownshiftDefault = true; // don't call default handler from downshift
+                        openMenu(() => {
+                          const {current: input} = this.input;
+                          input !== null && input.focus();
+                        }); // set focus to input field after menu is opened
+                      },
+                })}
+                isOpen={isOpen}
+                title={toolTipTitle}
+                ref={this.box}
+              >
                 <SingleSelectedValue
                   data-testid="select-selected-value"
                   disabled={disabled}
@@ -190,20 +208,6 @@ class Select extends React.Component {
                 </SingleSelectedValue>
                 <Layout align={['center', 'center']}>
                   <ArrowIcon
-                    {...getToggleButtonProps({
-                      disabled,
-                      onClick: isOpen
-                        ? event => {
-                            closeMenu();
-                          }
-                        : event => {
-                            event.preventDownshiftDefault = true; // don't call default handler from downshift
-                            openMenu(() => {
-                              const {current: input} = this.input;
-                              input !== null && input.focus();
-                            }); // set focus to input field after menu is opened
-                          },
-                    })}
                     data-testid="select-open-button"
                     down={!isOpen}
                     size="small"
