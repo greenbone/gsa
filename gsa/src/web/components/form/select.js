@@ -160,6 +160,7 @@ class Select extends React.Component {
         onSelect={this.handleSelect}
       >
         {({
+          closeMenu,
           getInputProps,
           getItemProps,
           getMenuProps,
@@ -192,7 +193,9 @@ class Select extends React.Component {
                     {...getToggleButtonProps({
                       disabled,
                       onClick: isOpen
-                        ? undefined
+                        ? event => {
+                            closeMenu();
+                          }
                         : event => {
                             event.preventDownshiftDefault = true; // don't call default handler from downshift
                             openMenu(() => {
