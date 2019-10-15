@@ -74,46 +74,38 @@ InputField.propTypes = {
   onClick: PropTypes.func,
 };
 
-class DatePickerComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(value) {
-    const {name, onChange} = this.props;
+const DatePickerComponent = props => {
+  const handleChange = value => {
+    const {name, onChange} = props;
 
     if (isDefined(onChange)) {
       onChange(value, name);
     }
-  }
+  };
 
-  render() {
-    const {
-      disabled,
-      minDate = date(),
-      name,
-      width,
-      value = date(),
-      ...props
-    } = this.props;
+  const {
+    disabled,
+    minDate = date(),
+    name,
+    width,
+    value = date(),
+    ...restProps
+  } = props;
 
-    return (
-      <DatePicker
-        {...props}
-        disabled={disabled}
-        customInput={<InputField width={width} disabled={disabled} />}
-        minDate={minDate === false ? undefined : minDate}
-        maxDate={date().add(3, 'years')}
-        selected={value}
-        todayButton={_('Today')}
-        locale={getLocale()}
-        onChange={this.handleChange}
-      />
-    );
-  }
-}
+  return (
+    <DatePicker
+      {...restProps}
+      disabled={disabled}
+      customInput={<InputField width={width} disabled={disabled} />}
+      minDate={minDate === false ? undefined : minDate}
+      maxDate={date().add(3, 'years')}
+      selected={value}
+      todayButton={_('Today')}
+      locale={getLocale()}
+      onChange={handleChange}
+    />
+  );
+};
 
 DatePickerComponent.propTypes = {
   disabled: PropTypes.bool,
