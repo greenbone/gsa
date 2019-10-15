@@ -3454,7 +3454,12 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
                         width="180px"
                       >
                         <div
+                          aria-haspopup="true"
+                          aria-label="open menu"
                           class="c15"
+                          data-toggle="true"
+                          role="button"
+                          type="button"
                         >
                           <div
                             class="c16"
@@ -3467,13 +3472,8 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
                             class="c17"
                           >
                             <span
-                              aria-haspopup="true"
-                              aria-label="open menu"
                               class="c18 c19"
                               data-testid="select-open-button"
-                              data-toggle="true"
-                              role="button"
-                              type="button"
                             >
                               ▼
                             </span>

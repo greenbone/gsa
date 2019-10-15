@@ -81,7 +81,7 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'modified' : false}
           onSortChange={onSortChange}
-          title={_('Latest collection')}
+          title={_('Last seen')}
         />
         <TableHead align="center">{_('Actions')}</TableHead>
       </TableRow>

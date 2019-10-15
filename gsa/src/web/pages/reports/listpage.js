@@ -285,6 +285,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadTasks: () => dispatch(loadAllTasks(gmp)(CONTAINER_TASK_FILTER)),
 });
 
+const FALLBACK_REPORT_LIST_FILTER = Filter.fromString(
+  'sort-reverse=date first=1',
+);
+
 export default compose(
   withGmp,
   connect(
@@ -292,6 +296,7 @@ export default compose(
     mapDispatchToProps,
   ),
   withEntitiesContainer('report', {
+    fallbackFilter: FALLBACK_REPORT_LIST_FILTER,
     entitiesSelector,
     loadEntities,
     reloadInterval: reportsReloadInterval,

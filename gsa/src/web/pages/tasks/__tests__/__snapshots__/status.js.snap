@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Task Status tests should render 1`] = `
+.c1 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c2 {
+  height: 13px;
+  box-sizing: content-box;
+  display: inline-block;
+  width: 100px;
+  background: #393637;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.c4 {
+  z-index: 1;
+  font-weight: bold;
+  color: #fff;
+  font-size: 9px;
+  margin: 0;
+  position: relative;
+  top: -13px;
+  padding-top: 1px;
+}
+
+.c3 {
+  height: 13px;
+  width: 100%;
+  background: #99be48;
+}
+
+.c5 {
+  white-space: nowrap;
+}
+
+.c0:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+@media print {
+  .c2 {
+    background: none;
+    border: 0;
+  }
+}
+
+@media print {
+  .c4 {
+    color: black;
+  }
+}
+
+@media print {
+  .c3 {
+    background: none;
+  }
+}
+
+<span
+  class="c0 c1"
+>
+  <div
+    class="c2"
+    data-testid="progressbar-box"
+    title="New"
+  >
+    <div
+      class="c3"
+      data-testid="progress"
+    />
+    <div
+      class="c4"
+    >
+      <span
+        class="c5"
+      >
+        New
+      </span>
+    </div>
+  </div>
+</span>
+`;

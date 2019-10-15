@@ -45,40 +45,59 @@ export const getTranslatableTimeStatus = status =>
 class TlsCertificate extends Model {
   static entityType = 'tlscertificate';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
+  static parseElement(element) {
+    const ret = super.parseElement(element);
 
-    ret.certificate = elem.certificate.__text;
+    ret.certificate = isDefined(element.certificate)
+      ? element.certificate.__text
+      : undefined;
 
-    ret.name = elem.issuer_dn;
+    ret.name = element.issuer_dn;
     delete ret.issuer_dn;
 
-    ret.activationTime = parseDate(elem.activation_time);
+    ret.activationTime =
+      element.activation_time === 'undefined' ||
+      element.activation_time === 'unlimited'
+        ? undefined
+        : parseDate(element.activation_time);
     delete ret.activation_time;
 
-    ret.expirationTime = parseDate(elem.expiration_time);
+    ret.expirationTime =
+      element.expiration_time === 'undefined' ||
+      element.expiration_time === 'unlimited'
+        ? undefined
+        : parseDate(element.expiration_time);
     delete ret.expiration_time;
 
-    ret.lastCollected = parseDate(elem.last_collected);
-    delete ret.last_collected;
+    ret.lastSeen =
+      element.last_seen === 'undefined' || element.last_seen === 'unlimited'
+        ? undefined
+        : parseDate(element.last_seen);
+    delete ret.last_seen;
 
-    ret.timeStatus = elem.time_status;
+    ret.timeStatus = element.time_status;
     delete ret.time_status;
 
-    const sourceReportIds = new Set();
-    const sourceHostIps = new Set();
+    const sourceReports = new Set();
+    const sourceHosts = new Set();
     const sourcePorts = new Set();
 
     if (isDefined(ret.sources)) {
       forEach(ret.sources.source, source => {
         if (isDefined(source.origin)) {
           if (source.origin.origin_type === 'Report') {
-            sourceReportIds.add(source.origin.origin_id);
+            sourceReports.add({
+              id: source.origin.origin_id,
+              timestamp: source.origin.report.date,
+            });
           }
         }
         if (isDefined(source.location)) {
           if (isDefined(source.location.host)) {
-            sourceHostIps.add(source.location.host.ip);
+            sourceHosts.add({
+              id: source.location.host.asset._id,
+              ip: source.location.host.ip,
+            });
           }
           if (isDefined(source.location.port)) {
             sourcePorts.add(source.location.port);
@@ -87,19 +106,19 @@ class TlsCertificate extends Model {
       });
     }
 
-    ret.sourceReportIds = [...sourceReportIds];
-    ret.sourceHostIps = [...sourceHostIps];
+    ret.sourceReports = [...sourceReports];
+    ret.sourceHosts = [...sourceHosts];
     ret.sourcePorts = [...sourcePorts];
 
     delete ret.sources;
 
-    ret.valid = parseBoolean(elem.valid);
-    ret.trust = parseBoolean(elem.trust);
+    ret.valid = parseBoolean(element.valid);
+    ret.trust = parseBoolean(element.trust);
 
-    ret.sha256Fingerprint = elem.sha256_fingerprint;
+    ret.sha256Fingerprint = element.sha256_fingerprint;
     delete ret.sha256_fingerprint;
 
-    ret.md5Fingerprint = elem.md5_fingerprint;
+    ret.md5Fingerprint = element.md5_fingerprint;
     delete ret.md5_fingerprint;
 
     return ret;

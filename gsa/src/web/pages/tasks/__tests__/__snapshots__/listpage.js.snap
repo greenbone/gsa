@@ -1,0 +1,2876 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TaskPage ToolBarIcons test should render 1`] = `
+.c8 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c1 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c1 > * {
+  margin-left: 5px;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c2 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c2 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c4 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c5 {
+  position: relative;
+  display: none;
+}
+
+.c3:hover .c5 {
+  display: block;
+}
+
+.c6 {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  list-style: none;
+  font-size: 10px;
+  width: 255px;
+}
+
+.c7 {
+  height: 22px;
+  width: 255px;
+  border-left: 1px solid #787878;
+  border-right: 1px solid #787878;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  background-color: #fff;
+  font-weight: bold;
+  text-indent: 12px;
+  text-align: left;
+}
+
+.c7:first-child {
+  border-top: 1px solid #787878;
+}
+
+.c7:last-child {
+  border-bottom: 1px solid #787878;
+}
+
+.c7:hover {
+  background: #66c430;
+  color: #fff;
+}
+
+.c7 div {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  cursor: pointer;
+}
+
+<div
+  class="c0"
+>
+  <div
+    class="c1"
+    margin="5px"
+  >
+    <a
+      href="test/en/scanning.html#managing-tasks"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      <span
+        class="c2 "
+        data-testid="svg-icon"
+        title="Help: Tasks"
+      >
+        <svg>
+          help.svg
+        </svg>
+      </span>
+    </a>
+    <span
+      class="c3 c4"
+    >
+      <span
+        class="c2 "
+        data-testid="svg-icon"
+      >
+        <svg>
+          wizard.svg
+        </svg>
+      </span>
+      <div
+        class="c5"
+      >
+        <ul
+          class="c6"
+        >
+          <li
+            class="c7"
+          >
+            <div
+              class="c8"
+            >
+              Task Wizard
+            </div>
+          </li>
+          <li
+            class="c7"
+          >
+            <div
+              class="c8"
+            >
+              Advanced Task Wizard
+            </div>
+          </li>
+          <li
+            class="c7"
+          >
+            <div
+              class="c8"
+            >
+              Modify Task Wizard
+            </div>
+          </li>
+        </ul>
+      </div>
+    </span>
+    <span
+      class="c3 c4"
+    >
+      <span
+        class="c2 "
+        data-testid="svg-icon"
+      >
+        <svg>
+          new.svg
+        </svg>
+      </span>
+      <div
+        class="c5"
+      >
+        <ul
+          class="c6"
+        >
+          <li
+            class="c7"
+          >
+            <div
+              class="c8"
+            >
+              New Task
+            </div>
+          </li>
+          <li
+            class="c7"
+          >
+            <div
+              class="c8"
+            >
+              New Container Task
+            </div>
+          </li>
+        </ul>
+      </div>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`TaskPage tests should render full TaskPage 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c10 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c11 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}
+
+.c12 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: stetch;
+  -webkit-box-align: stetch;
+  -ms-flex-align: stetch;
+  align-items: stetch;
+}
+
+.c13 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c16 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c24 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c53 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c62 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c67 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.c69 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c70 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c79 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.c82 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c73 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c3 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c3 > * {
+  margin-left: 5px;
+}
+
+.c15 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c15 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c15 > * {
+  margin-left: 5px;
+}
+
+.c47 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  margin-top: -5px;
+}
+
+.c47 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c47 > * {
+  margin-top: 5px;
+}
+
+.c81 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c81 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c81 > * {
+  margin-left: 5px;
+}
+
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c80 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c20 {
+  cursor: pointer;
+}
+
+.c56 svg path {
+  fill: #aaaaaa;
+}
+
+.c4 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c4 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c31 {
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+}
+
+.c31 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c27 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
+  margin: 10px 0px;
+  padding-bottom: 1px;
+  border-bottom: 2px solid #c8d3d9;
+  position: relative;
+}
+
+.c29 {
+  margin: 0 0 1px 0;
+}
+
+.c28 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c30 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
+  margin-right: 5px;
+}
+
+.c32 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
+  word-break: break-all;
+  min-width: 100px;
+}
+
+.c33 {
+  overflow: hidden;
+}
+
+.c51 {
+  margin: 8px 0px;
+  min-height: 50px;
+  display: none;
+  border: 1px dashed #c8d3d9;
+  background: none;
+  height: 250px;
+}
+
+.c35 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-flex-shrink: 1;
+  -ms-flex-negative: 1;
+  flex-shrink: 1;
+  -webkit-flex-basis: 0;
+  -ms-flex-preferred-size: 0;
+  flex-basis: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.c49 {
+  cursor: row-resize;
+  height: 10px;
+  width: 100%;
+  z-index: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c50 {
+  height: 2px;
+  width: 20px;
+  border-top: 1px solid rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+}
+
+.c34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 250px;
+  min-height: 175px;
+  background: none;
+}
+
+.c42 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  border: 1px solid #519032;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: Verdana,sans-serif;
+  color: #519032;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+.c42:hover {
+  color: #fff;
+  background: #519032;
+}
+
+.c41 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c41 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c26 {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  outline: none;
+  margin: 1px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.c25 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c25 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c22 {
+  border: 1px solid #aaaaaa;
+  border-radius: 2px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  padding: 1px 5px;
+  background-color: #fff;
+  color: #000;
+  font-weight: normal;
+}
+
+.c21 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: relative;
+  width: 150px;
+}
+
+.c83 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: relative;
+  width: 180px;
+}
+
+.c23 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+  cursor: default;
+}
+
+.c59 a {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #000;
+}
+
+.c59 a:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  color: #000;
+}
+
+.c61 {
+  cursor: pointer;
+}
+
+.c60 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 41%;
+}
+
+.c63 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 8%;
+}
+
+.c64 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 6%;
+}
+
+.c65 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 24%;
+}
+
+.c66 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 5%;
+}
+
+.c68 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 10em;
+}
+
+.c37 {
+  position: relative;
+  z-index: 1;
+  height: 20px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+.c38 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-flex-shrink: 1;
+  -ms-flex-negative: 1;
+  flex-shrink: 1;
+  background-color: #66c430;
+  border: 1px solid #787878;
+  color: #fff;
+  text-overflow: ellipsis;
+  padding: 0px 5px;
+  font-weight: bold;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overflow: hidden;
+}
+
+.c39 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 1px 0;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-flex-shrink: 1;
+  -ms-flex-negative: 1;
+  flex-shrink: 1;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.c36 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-flex-shrink: 1;
+  -ms-flex-negative: 1;
+  flex-shrink: 1;
+  -webkit-flex-basis: 0;
+  -ms-flex-preferred-size: 0;
+  flex-basis: 0;
+  background-color: #fff;
+  box-shadow: 5px 5px 10px #c8d3d9;
+}
+
+.c43 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-flex-shrink: 1;
+  -ms-flex-negative: 1;
+  flex-shrink: 1;
+  border-left: 1px solid #c8d3d9;
+  border-right: 1px solid #c8d3d9;
+  border-bottom: 1px solid #c8d3d9;
+  overflow: hidden;
+}
+
+.c40 {
+  display: block;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-flex-shrink: 1;
+  -ms-flex-negative: 1;
+  flex-shrink: 1;
+  white-space: nowrap;
+  word-break: keep-all;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: center;
+}
+
+.c48 {
+  color: #000;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  display: none;
+}
+
+.c48:link {
+  color: #000;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c48:hover {
+  color: #fff;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c46 {
+  height: 100%;
+  width: 26px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: start;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: start;
+  padding-top: 5px;
+  position: absolute;
+  right: 0;
+  z-index: 1;
+  background: #c8d3d9;
+  opacity: 0;
+  -webkit-transition: opacity 500ms;
+  transition: opacity 500ms;
+}
+
+.c44 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  position: relative;
+}
+
+.c44:hover .c45 {
+  opacity: 1;
+  -webkit-transition: opacity 500ms;
+  transition: opacity 500ms;
+}
+
+.c19 {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  display: block;
+  height: 22px;
+  color: #393637;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #aaaaaa;
+  border-radius: 2px;
+  padding: 1px 8px;
+}
+
+.c19:-webkit-autofill {
+  box-shadow: 0 0 0 1000px white inset;
+}
+
+.c18 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c17 {
+  margin-right: 5px;
+}
+
+.c14 {
+  margin-right: 5px;
+}
+
+.c84 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-size: 10px;
+  color: #787878;
+  text-align: left;
+}
+
+.c57 {
+  margin: 0 3px;
+}
+
+.c55 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin: 2px 3px;
+}
+
+.c58 {
+  border: 0;
+  border-spacing: 0px;
+  font-size: 12px;
+  text-align: left;
+  table-layout: auto;
+  width: 100%;
+  opacity: 1.0;
+}
+
+.c58 th,
+.c58 td {
+  padding: 4px 10px;
+  border-bottom: 1px solid #c8d3d9;
+}
+
+.c58 tfoot tr {
+  background: #fff;
+}
+
+.c58 tfoot tr td {
+  border-bottom: 1px solid #c8d3d9;
+}
+
+.c54 {
+  margin-top: 2px;
+  margin-left: 2px;
+}
+
+.c52 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  margin-top: 20px;
+}
+
+.c71 {
+  cursor: pointer;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #0000ff;
+}
+
+.c71:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  color: #0000ff;
+}
+
+.c74 {
+  height: 13px;
+  box-sizing: content-box;
+  display: inline-block;
+  width: 100px;
+  background: #393637;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.c76 {
+  z-index: 1;
+  font-weight: bold;
+  color: #fff;
+  font-size: 9px;
+  margin: 0;
+  position: relative;
+  top: -13px;
+  padding-top: 1px;
+}
+
+.c75 {
+  height: 13px;
+  width: 100%;
+  background: #4f91c7;
+}
+
+.c78 {
+  height: 13px;
+  width: 50%;
+  background: #f0a519;
+}
+
+.c77 {
+  white-space: nowrap;
+}
+
+.c72:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c6 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c7 {
+  position: relative;
+  display: none;
+}
+
+.c5:hover .c7 {
+  display: block;
+}
+
+.c8 {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  list-style: none;
+  font-size: 10px;
+  width: 255px;
+}
+
+.c9 {
+  height: 22px;
+  width: 255px;
+  border-left: 1px solid #787878;
+  border-right: 1px solid #787878;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  background-color: #fff;
+  font-weight: bold;
+  text-indent: 12px;
+  text-align: left;
+}
+
+.c9:first-child {
+  border-top: 1px solid #787878;
+}
+
+.c9:last-child {
+  border-bottom: 1px solid #787878;
+}
+
+.c9:hover {
+  background: #66c430;
+  color: #fff;
+}
+
+.c9 div {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  cursor: pointer;
+}
+
+@media print {
+  .c20 {
+    display: none;
+  }
+}
+
+@media print {
+  .c59 {
+    border-bottom: 1px solid black;
+  }
+
+  .c59 a,
+  .c59 a:hover {
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    color: #000;
+  }
+}
+
+@media print {
+  .c60 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c63 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c64 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c65 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c66 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c68 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c55 svg {
+    display: none;
+  }
+}
+
+@media print {
+  .c58 {
+    border-collapse: collapse;
+  }
+}
+
+@media screen {
+  .c58 > tbody:nth-of-type(even),
+  .c58 > tbody:only-of-type > tr:nth-of-type(even) {
+    background: #eeeeee;
+  }
+
+  .c58 > tbody:not(:only-of-type):hover,
+  .c58 > tbody:only-of-type > tr:hover {
+    background: #c8d3d9;
+  }
+}
+
+@media print {
+  .c71 {
+    color: #000;
+  }
+}
+
+@media print {
+  .c74 {
+    background: none;
+    border: 0;
+  }
+}
+
+@media print {
+  .c76 {
+    color: black;
+  }
+}
+
+@media print {
+  .c75 {
+    background: none;
+  }
+}
+
+@media print {
+  .c78 {
+    background: none;
+  }
+}
+
+<body>
+  <div
+    id="portals"
+  />
+  <div>
+    <div
+      class="c0"
+    >
+      <div
+        class="toolbar c1"
+      >
+        <div
+          class="c2"
+        >
+          <div
+            class="c3"
+            margin="5px"
+          >
+            <a
+              href="test/en/scanning.html#managing-tasks"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <span
+                class="c4 "
+                data-testid="svg-icon"
+                title="Help: Tasks"
+              >
+                <svg>
+                  help.svg
+                </svg>
+              </span>
+            </a>
+            <span
+              class="c5 c6"
+            >
+              <span
+                class="c4 "
+                data-testid="svg-icon"
+              >
+                <svg>
+                  wizard.svg
+                </svg>
+              </span>
+              <div
+                class="c7"
+              >
+                <ul
+                  class="c8"
+                >
+                  <li
+                    class="c9"
+                  >
+                    <div
+                      class="c10"
+                    >
+                      Task Wizard
+                    </div>
+                  </li>
+                  <li
+                    class="c9"
+                  >
+                    <div
+                      class="c10"
+                    >
+                      Advanced Task Wizard
+                    </div>
+                  </li>
+                  <li
+                    class="c9"
+                  >
+                    <div
+                      class="c10"
+                    >
+                      Modify Task Wizard
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </span>
+            <span
+              class="c5 c6"
+            >
+              <span
+                class="c4 "
+                data-testid="svg-icon"
+              >
+                <svg>
+                  new.svg
+                </svg>
+              </span>
+              <div
+                class="c7"
+              >
+                <ul
+                  class="c8"
+                >
+                  <li
+                    class="c9"
+                  >
+                    <div
+                      class="c10"
+                    >
+                      New Task
+                    </div>
+                  </li>
+                  <li
+                    class="c9"
+                  >
+                    <div
+                      class="c10"
+                    >
+                      New Container Task
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </span>
+          </div>
+        </div>
+        <div
+          class="c11"
+        >
+          <div
+            class="powerfilter c12"
+          >
+            <div
+              class="c13"
+            >
+              <div
+                class="c2"
+              >
+                <div
+                  class="c14 c15"
+                  margin="5px"
+                >
+                  <div
+                    class="c16"
+                  >
+                    <label
+                      class="c17"
+                    >
+                      <b>
+                        Filter
+                      </b>
+                    </label>
+                    <input
+                      class="c18 c19"
+                      maxlength="1000"
+                      name="userFilterString"
+                      size="53"
+                      type="text"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="c2"
+                  >
+                    <div
+                      class="c15"
+                      margin="5px"
+                    >
+                      <span
+                        class="c4 c20"
+                        data-testid="svg-icon"
+                        title="Update Filter"
+                      >
+                        <svg>
+                          refresh.svg
+                        </svg>
+                      </span>
+                      <span
+                        class="c4 c20"
+                        data-testid="svg-icon"
+                        title="Remove Filter"
+                      >
+                        <svg>
+                          delete.svg
+                        </svg>
+                      </span>
+                      <span
+                        class="c4 c20"
+                        data-testid="svg-icon"
+                        title="Reset to Default Filter"
+                      >
+                        <svg>
+                          reset.svg
+                        </svg>
+                      </span>
+                      <a
+                        href="test/en/web-interface.html#filtering-the-page-content"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="c4 "
+                          data-testid="svg-icon"
+                          title="Help: Powerfilter"
+                        >
+                          <svg>
+                            help.svg
+                          </svg>
+                        </span>
+                      </a>
+                      <span
+                        class="c4 c20"
+                        data-testid="svg-icon"
+                        title="Edit Filter"
+                      >
+                        <svg>
+                          edit.svg
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                aria-expanded="false"
+                aria-haspopup="listbox"
+                aria-labelledby="downshift-0-label"
+                class="c21"
+                role="combobox"
+                width="150px"
+              >
+                <div
+                  aria-haspopup="true"
+                  aria-label="open menu"
+                  class="c22"
+                  data-toggle="true"
+                  role="button"
+                  title="Loaded filter"
+                  type="button"
+                >
+                  <div
+                    class="c23"
+                    data-testid="select-selected-value"
+                    title="Loaded filter"
+                  >
+                    --
+                  </div>
+                  <div
+                    class="c24"
+                  >
+                    <span
+                      class="c25 c26"
+                      data-testid="select-open-button"
+                    >
+                      ▼
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section
+        class="entities-section"
+      >
+        <div
+          class="section-header c27"
+        >
+          <h2
+            class="c28 c29"
+          >
+            <div
+              class="c30"
+            >
+              <span
+                class="c31 "
+                data-testid="svg-icon"
+              >
+                <svg>
+                  task.svg
+                </svg>
+              </span>
+            </div>
+            <div
+              class="c32"
+            >
+              Tasks 0 of 0
+            </div>
+          </h2>
+          <div
+            class="c13"
+          >
+            <div
+              class="c2"
+            >
+              <div
+                class="c3"
+                margin="5px"
+              >
+                <span
+                  class="c4 c20"
+                  data-testid="svg-icon"
+                  title="Add new Dashboard Display"
+                >
+                  <svg>
+                    new.svg
+                  </svg>
+                </span>
+                <span
+                  class="c4 c20"
+                  data-testid="svg-icon"
+                  title="Reset to Defaults"
+                >
+                  <svg>
+                    reset.svg
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="c0"
+        >
+          <div
+            class="c33"
+          >
+            <div
+              class="c0"
+            >
+              <div
+                class="c34"
+                height="250"
+              >
+                <div
+                  class="c35"
+                  data-react-beautiful-dnd-draggable="1"
+                >
+                  <div
+                    class="c36"
+                  >
+                    <div
+                      aria-roledescription="Draggable item. Press space bar to lift"
+                      class="c37"
+                      data-react-beautiful-dnd-drag-handle="1"
+                      draggable="false"
+                      tabindex="0"
+                    >
+                      <div
+                        class="c38"
+                      >
+                        <div
+                          class="c39"
+                        >
+                          <div
+                            class="c40"
+                          >
+                            Tasks by Severity Class (Total: 0)
+                          </div>
+                          <div
+                            class="c41 c42"
+                            title="Remove"
+                          >
+                            ×
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="c43"
+                    >
+                      <div
+                        class="c44"
+                      >
+                        <div
+                          class="c0"
+                        >
+                          <div
+                            class="c45 c46"
+                          >
+                            <div
+                              class="c2"
+                            >
+                              <div
+                                class="c47"
+                                margin="5px"
+                              >
+                                <span
+                                  class="c4 c20"
+                                  data-testid="svg-icon"
+                                  title="Download SVG"
+                                >
+                                  <svg>
+                                    dl_svg.svg
+                                  </svg>
+                                </span>
+                                <span
+                                  class="c4 c20"
+                                  data-testid="svg-icon"
+                                  title="Toggle Legend"
+                                >
+                                  <svg>
+                                    legend.svg
+                                  </svg>
+                                </span>
+                                <span
+                                  class="c4 c20"
+                                  data-testid="svg-icon"
+                                  title="Toggle 2D/3D view"
+                                >
+                                  <svg>
+                                    toggle3d.svg
+                                  </svg>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <a
+                        class="c48"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="c35"
+                  data-react-beautiful-dnd-draggable="1"
+                >
+                  <div
+                    class="c36"
+                  >
+                    <div
+                      aria-roledescription="Draggable item. Press space bar to lift"
+                      class="c37"
+                      data-react-beautiful-dnd-drag-handle="1"
+                      draggable="false"
+                      tabindex="0"
+                    >
+                      <div
+                        class="c38"
+                      >
+                        <div
+                          class="c39"
+                        >
+                          <div
+                            class="c40"
+                          >
+                            Tasks with most High Results per Host
+                          </div>
+                          <div
+                            class="c41 c42"
+                            title="Remove"
+                          >
+                            ×
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="c43"
+                    >
+                      <div
+                        class="c44"
+                      >
+                        <div
+                          class="c0"
+                        >
+                          <div
+                            class="c45 c46"
+                          >
+                            <div
+                              class="c2"
+                            >
+                              <div
+                                class="c47"
+                                margin="5px"
+                              >
+                                <span
+                                  class="c4 c20"
+                                  data-testid="svg-icon"
+                                  title="Download SVG"
+                                >
+                                  <svg>
+                                    dl_svg.svg
+                                  </svg>
+                                </span>
+                                <span
+                                  class="c4 c20"
+                                  data-testid="svg-icon"
+                                  title="Download CSV"
+                                >
+                                  <svg>
+                                    dl_csv.svg
+                                  </svg>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <a
+                        class="c48"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="c35"
+                  data-react-beautiful-dnd-draggable="1"
+                >
+                  <div
+                    class="c36"
+                  >
+                    <div
+                      aria-roledescription="Draggable item. Press space bar to lift"
+                      class="c37"
+                      data-react-beautiful-dnd-drag-handle="1"
+                      draggable="false"
+                      tabindex="0"
+                    >
+                      <div
+                        class="c38"
+                      >
+                        <div
+                          class="c39"
+                        >
+                          <div
+                            class="c40"
+                          >
+                            Tasks by Status (Total: 0)
+                          </div>
+                          <div
+                            class="c41 c42"
+                            title="Remove"
+                          >
+                            ×
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="c43"
+                    >
+                      <div
+                        class="c44"
+                      >
+                        <div
+                          class="c0"
+                        >
+                          <div
+                            class="c45 c46"
+                          >
+                            <div
+                              class="c2"
+                            >
+                              <div
+                                class="c47"
+                                margin="5px"
+                              >
+                                <span
+                                  class="c4 c20"
+                                  data-testid="svg-icon"
+                                  title="Download SVG"
+                                >
+                                  <svg>
+                                    dl_svg.svg
+                                  </svg>
+                                </span>
+                                <span
+                                  class="c4 c20"
+                                  data-testid="svg-icon"
+                                  title="Toggle Legend"
+                                >
+                                  <svg>
+                                    legend.svg
+                                  </svg>
+                                </span>
+                                <span
+                                  class="c4 c20"
+                                  data-testid="svg-icon"
+                                  title="Toggle 2D/3D view"
+                                >
+                                  <svg>
+                                    toggle3d.svg
+                                  </svg>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <a
+                        class="c48"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="c49"
+              >
+                <span
+                  class="c50"
+                />
+              </div>
+              <div
+                class="c51"
+                height="250"
+              />
+            </div>
+          </div>
+          <div
+            class="entities-table c52"
+          >
+            <div
+              class="c53"
+            >
+              <span
+                class="c54 c4 c20"
+                data-testid="svg-icon"
+                title="Unfold all details"
+              >
+                <svg>
+                  fold.svg
+                </svg>
+              </span>
+              <div
+                class="c55"
+              >
+                <div
+                  class="c2"
+                >
+                  <div
+                    class="c3"
+                    margin="5px"
+                  >
+                    <span
+                      class="c4 c56"
+                      data-testid="svg-icon"
+                      title="First"
+                    >
+                      <svg>
+                        first.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c4 c56"
+                      data-testid="svg-icon"
+                      title="Previous"
+                    >
+                      <svg>
+                        previous.svg
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+                <span
+                  class="c57"
+                >
+                  0 - 0 of 0
+                </span>
+                <div
+                  class="c2"
+                >
+                  <div
+                    class="c3"
+                    margin="5px"
+                  >
+                    <span
+                      class="c4 c56"
+                      data-testid="svg-icon"
+                      title="Next"
+                    >
+                      <svg>
+                        next.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c4 c56"
+                      data-testid="svg-icon"
+                      title="Last"
+                    >
+                      <svg>
+                        last.svg
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <table
+              class="c58"
+            >
+              <thead
+                class="c59"
+              >
+                <tr>
+                  <th
+                    class="c60"
+                  >
+                    <a
+                      class="c61"
+                    >
+                      <div
+                        class="c62"
+                      >
+                        Name
+                      </div>
+                    </a>
+                  </th>
+                  <th
+                    class="c63"
+                  >
+                    <a
+                      class="c61"
+                    >
+                      <div
+                        class="c62"
+                      >
+                        Status
+                      </div>
+                    </a>
+                  </th>
+                  <th
+                    class="c64"
+                  >
+                    <a
+                      class="c61"
+                    >
+                      <div
+                        class="c62"
+                      >
+                        Reports
+                      </div>
+                    </a>
+                  </th>
+                  <th
+                    class="c65"
+                  >
+                    <a
+                      class="c61"
+                    >
+                      <div
+                        class="c62"
+                      >
+                        Last Report
+                      </div>
+                    </a>
+                  </th>
+                  <th
+                    class="c63"
+                  >
+                    <a
+                      class="c61"
+                    >
+                      <div
+                        class="c62"
+                      >
+                        Severity
+                      </div>
+                    </a>
+                  </th>
+                  <th
+                    class="c66"
+                  >
+                    <a
+                      class="c61"
+                    >
+                      <div
+                        class="c67"
+                      >
+                        Trend
+                      </div>
+                    </a>
+                  </th>
+                  <th
+                    class="c68"
+                  >
+                    <div
+                      class="c67"
+                    >
+                      Actions
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody
+                class=""
+              >
+                <tr>
+                  <td>
+                    <div
+                      class="c69"
+                    >
+                      <div
+                        class="c70"
+                      >
+                        <span
+                          class="c71"
+                          name="1234"
+                        >
+                          foo
+                        </span>
+                        <div
+                          class="c2"
+                        >
+                          <div
+                            class="c3"
+                            margin="5px"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        class="comment"
+                      >
+                        (
+                        bar
+                        )
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      class="c69"
+                    >
+                      <a
+                        class="c72 c73"
+                        data-testid="details-link"
+                        href="/report/1234"
+                      >
+                        <div
+                          class="c74"
+                          data-testid="progressbar-box"
+                          title="Done"
+                        >
+                          <div
+                            class="c75"
+                            data-testid="progress"
+                          />
+                          <div
+                            class="c76"
+                          >
+                            <span
+                              class="c77"
+                            >
+                              Done
+                            </span>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      class="c69"
+                    >
+                      <div
+                        class="c62"
+                      >
+                        <a
+                          class="c73"
+                          href="/reports?filter=task_id%3D1234%20sort-reverse%3Ddate"
+                          title="View list of all reports for Task foo, including unfinished ones"
+                        >
+                          1
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      class="c69"
+                    >
+                      <span>
+                        <a
+                          class="c73"
+                          data-testid="details-link"
+                          href="/report/1234"
+                        >
+                          2019年8月10日星期六 14:51 CEST
+                        </a>
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      class="c69"
+                    >
+                      <div
+                        class="c74"
+                        data-testid="progressbar-box"
+                        title="Medium"
+                      >
+                        <div
+                          class="c78"
+                          data-testid="progress"
+                        />
+                        <div
+                          class="c76"
+                        >
+                          5.0 (Medium)
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      class="c79"
+                    >
+                      <span />
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      class="c0"
+                    >
+                      <div
+                        class="c80"
+                      >
+                        <div
+                          class="c81"
+                          margin="5px"
+                        >
+                          <span
+                            class="c4 c20"
+                            data-testid="svg-icon"
+                            title="Start"
+                          >
+                            <svg>
+                              start.svg
+                            </svg>
+                          </span>
+                          <span
+                            alt="Resume"
+                            class="c4 c56"
+                            data-testid="svg-icon"
+                            title="Task is not stopped"
+                          >
+                            <svg>
+                              resume.svg
+                            </svg>
+                          </span>
+                          <span
+                            class="c4 c20"
+                            data-testid="svg-icon"
+                            title="Move Task to trashcan"
+                          >
+                            <svg>
+                              trashcan.svg
+                            </svg>
+                          </span>
+                          <span
+                            class="c4 c20"
+                            data-testid="svg-icon"
+                            title="Edit Task"
+                          >
+                            <svg>
+                              edit.svg
+                            </svg>
+                          </span>
+                          <span
+                            class="c4 c20"
+                            data-testid="svg-icon"
+                            title="Clone Task"
+                          >
+                            <svg>
+                              clone.svg
+                            </svg>
+                          </span>
+                          <span
+                            class="c4 c20"
+                            data-testid="svg-icon"
+                            title="Export Task"
+                          >
+                            <svg>
+                              export.svg
+                            </svg>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td
+                    colspan="10"
+                  >
+                    <div
+                      class="c82"
+                    >
+                      <div
+                        class="c2"
+                      >
+                        <div
+                          class="c3"
+                          margin="5px"
+                        >
+                          <div
+                            aria-expanded="false"
+                            aria-haspopup="listbox"
+                            aria-labelledby="downshift-1-label"
+                            class="c83"
+                            role="combobox"
+                            width="180px"
+                          >
+                            <div
+                              aria-haspopup="true"
+                              aria-label="open menu"
+                              class="c22"
+                              data-toggle="true"
+                              role="button"
+                              type="button"
+                            >
+                              <div
+                                class="c23"
+                                data-testid="select-selected-value"
+                                title="Apply to page contents"
+                              >
+                                Apply to page contents
+                              </div>
+                              <div
+                                class="c24"
+                              >
+                                <span
+                                  class="c25 c26"
+                                  data-testid="select-open-button"
+                                >
+                                  ▼
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            class="c2"
+                          >
+                            <div
+                              class="c3"
+                              margin="5px"
+                            >
+                              <span
+                                class="c4 c20"
+                                data-testid="svg-icon"
+                                title="Add tag to page contents"
+                              >
+                                <svg>
+                                  tags.svg
+                                </svg>
+                              </span>
+                              <span
+                                class="c4 c20"
+                                data-testid="svg-icon"
+                                title="Move page contents to trashcan"
+                              >
+                                <svg>
+                                  trashcan.svg
+                                </svg>
+                              </span>
+                              <span
+                                class="c4 c20"
+                                data-testid="svg-icon"
+                                title="Export page contents"
+                              >
+                                <svg>
+                                  export.svg
+                                </svg>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <div
+              class="c70"
+            >
+              <div
+                class="c84"
+              >
+                (Applied filter: )
+              </div>
+              <div
+                class="c55"
+              >
+                <div
+                  class="c2"
+                >
+                  <div
+                    class="c3"
+                    margin="5px"
+                  >
+                    <span
+                      class="c4 c56"
+                      data-testid="svg-icon"
+                      title="First"
+                    >
+                      <svg>
+                        first.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c4 c56"
+                      data-testid="svg-icon"
+                      title="Previous"
+                    >
+                      <svg>
+                        previous.svg
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+                <span
+                  class="c57"
+                >
+                  0 - 0 of 0
+                </span>
+                <div
+                  class="c2"
+                >
+                  <div
+                    class="c3"
+                    margin="5px"
+                  >
+                    <span
+                      class="c4 c56"
+                      data-testid="svg-icon"
+                      title="Next"
+                    >
+                      <svg>
+                        next.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c4 c56"
+                      data-testid="svg-icon"
+                      title="Last"
+                    >
+                      <svg>
+                        last.svg
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <a
+      aria-hidden="true"
+      style="display: none;"
+    >
+      Download
+    </a>
+  </div>
+  <div
+    aria-atomic="true"
+    aria-live="assertive"
+    id="react-beautiful-dnd-announcement-1"
+    role="log"
+    style="position: absolute; width: 1px; height: 1px; margin: -1px; border: 0px; padding: 0px; overflow: hidden; clip-path: inset(100%);"
+  />
+</body>
+`;

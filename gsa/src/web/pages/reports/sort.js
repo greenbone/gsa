@@ -42,6 +42,7 @@ export const closedCvesSortFunctions = {
 export const cvesSortFunctions = {
   cve: makeCompareString(entity => entity.cves.join(' ')),
   hosts: makeCompareNumber(entity => entity.hosts.count),
+  nvt: makeCompareString(entity => entity.nvtName),
   occurrences: makeCompareNumber(entity => entity.occurrences),
   severity: makeCompareSeverity(),
 };
@@ -105,16 +106,6 @@ export const tlsCertificatesSortFunctions = {
   ip: makeCompareIp('ip'),
   hostname: makeCompareString('hostname'),
   port: makeCompareString('port'),
-};
-
-export const vulnerabilitiesSortFunctions = {
-  name: makeCompareString('name'),
-  oldest: makeCompareDate(entity => entity.results.oldest),
-  newest: makeCompareDate(entity => entity.results.newest),
-  qod: makeCompareNumber(entity => entity.qod.value),
-  results: makeCompareNumber(entity => entity.results.count),
-  hosts: makeCompareNumber(entity => entity.hosts.count),
-  severity: makeCompareSeverity(),
 };
 
 // vim: set ts=2 sw=2 tw=80:

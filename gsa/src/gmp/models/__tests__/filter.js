@@ -104,6 +104,11 @@ describe('Filter parse from string tests', () => {
     filter = Filter.fromString('rows>1');
     expect(filter.toFilterString()).toEqual('rows=1');
   });
+
+  test('should ignore null as filter argument', () => {
+    const filter = Filter.fromString('foo=1', null);
+    expect(filter.toFilterString()).toEqual('foo=1');
+  });
 });
 
 describe('Filter parse from keywords', () => {
@@ -356,6 +361,11 @@ describe('Filter equal', () => {
   test('should not equal undefined', () => {
     const filter = Filter.fromString('');
     expect(filter.equals()).toEqual(false);
+  });
+
+  test('should not equal null', () => {
+    const filter = Filter.fromString('');
+    expect(filter.equals(null)).toEqual(false);
   });
 
   test('empty filter should equal itself', () => {
@@ -906,6 +916,26 @@ describe('Filter simple', () => {
 });
 
 describe('Filter merge extra keywords', () => {
+  test('should handle merging undefined filter', () => {
+    const filter1 = Filter.fromString('abc=1');
+    filter1.id = 'f1';
+    const filter2 = filter1.mergeExtraKeywords();
+
+    expect(filter1).not.toBe(filter2);
+    expect(filter2.get('abc')).toEqual('1');
+    expect(filter2.id).toBeUndefined();
+  });
+
+  test('should handle merging null filter', () => {
+    const filter1 = Filter.fromString('abc=1');
+    filter1.id = 'f1';
+    const filter2 = filter1.mergeExtraKeywords(null);
+
+    expect(filter1).not.toBe(filter2);
+    expect(filter2.get('abc')).toEqual('1');
+    expect(filter2.id).toBeUndefined();
+  });
+
   test('should merge extra keywords', () => {
     const filter1 = Filter.fromString('abc=1');
     const filter2 = Filter.fromString(
@@ -969,6 +999,16 @@ describe('Filter merge extra keywords', () => {
 });
 
 describe('filter and', () => {
+  test('should ignore undefined', () => {
+    const filter = Filter.fromString('foo=1');
+    expect(filter.and().toFilterString()).toEqual('foo=1');
+  });
+
+  test('should ignore null', () => {
+    const filter = Filter.fromString('foo=1');
+    expect(filter.and(null).toFilterString()).toEqual('foo=1');
+  });
+
   test('filters should be concatenated with and', () => {
     const filter1 = Filter.fromString('foo=1');
     const filter2 = Filter.fromString('bar=2');
@@ -1146,6 +1186,33 @@ describe('should lower the case of capitalized keywords', () => {
   test('just a value', () => {
     const filter2 = Filter.fromString('~AbC');
     expect(filter2.toFilterString()).toEqual('~AbC');
+  });
+});
+
+describe('Filter merge', () => {
+  test('should merge undefined', () => {
+    const filter1 = Filter.fromString('foo=bar');
+    const filter2 = filter1.merge();
+
+    expect(filter1).toBe(filter2);
+    expect(filter2.get('foo')).toEqual('bar');
+  });
+
+  test('should merge null', () => {
+    const filter1 = Filter.fromString('foo=bar');
+    const filter2 = filter1.merge(null);
+
+    expect(filter1).toBe(filter2);
+    expect(filter2.get('foo')).toEqual('bar');
+  });
+
+  test('should merge filter', () => {
+    const filter1 = Filter.fromString('foo=bar');
+    const filter2 = Filter.fromString('rows=10 first=1');
+    const filter3 = filter1.merge(filter2);
+
+    expect(filter1).toBe(filter3);
+    expect(filter3.toFilterString()).toEqual('foo=bar rows=10 first=1');
   });
 });
 

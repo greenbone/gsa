@@ -25,6 +25,7 @@ import {
   parseYesNo,
   parseDate,
   parseBoolean,
+  parseText,
   setProperties,
   NO_VALUE,
   YES_VALUE,
@@ -108,6 +109,8 @@ class Model {
     if (isDefined(element.owner) && isEmpty(element.owner.name)) {
       delete copy.owner;
     }
+
+    copy.comment = parseText(element.comment);
 
     if (isEmpty(element.comment)) {
       delete copy.comment;

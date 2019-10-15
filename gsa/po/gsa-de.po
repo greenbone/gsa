@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-12 17:51+0200\n"
-"PO-Revision-Date: 2019-09-13 09:22+0200\n"
+"POT-Creation-Date: 2019-10-14 10:32+0200\n"
+"PO-Revision-Date: 2019-10-14 10:57+0200\n"
 "Last-Translator: Steffen <steffen.waterkamp@greenbone.net>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -67,7 +67,7 @@ msgstr "Ergebnis: {{name}}"
 #: gsa/src/web/pages/results/table.js:73
 #: gsa/src/web/pages/results/dashboard/wordclouddisplay.js:134
 #: gsa/src/web/pages/reports/detailsfilterdialog.js:119
-#: gsa/src/web/pages/filters/component.js:59
+#: gsa/src/web/pages/filters/component.js:60
 #: gsa/src/web/pages/tickets/table.js:59
 #: gsa/src/web/components/dashboard/display/utils.js:151
 #: gsa/src/gmp/utils/entitytype.js:106
@@ -79,20 +79,20 @@ msgstr "Schwachstelle"
 #: gsa/src/web/pages/cves/detailspage.js:101
 #: gsa/src/web/pages/cves/filterdialog.js:26 gsa/src/web/pages/cves/table.js:54
 #: gsa/src/web/pages/scanners/details.js:143
-#: gsa/src/web/pages/scanners/dialog.js:202
+#: gsa/src/web/pages/scanners/dialog.js:223
 #: gsa/src/web/pages/scanners/table.js:32
 #: gsa/src/web/pages/reports/vulnerabilitiestable.js:81
 #: gsa/src/web/pages/filters/dialog.js:65 gsa/src/web/pages/filters/table.js:32
 #: gsa/src/web/pages/alerts/dialog.js:506 gsa/src/web/pages/alerts/table.js:32
 #: gsa/src/web/pages/tickets/detailspage.js:130
-#: gsa/src/web/pages/audits/detailspage.js:236
+#: gsa/src/web/pages/audits/detailspage.js:242
 #: gsa/src/web/pages/audits/details.js:139
 #: gsa/src/web/pages/audits/details.js:227
 #: gsa/src/web/pages/audits/dialog.js:139 gsa/src/web/pages/audits/table.js:54
 #: gsa/src/web/pages/users/header.js:49 gsa/src/web/pages/users/table.js:32
 #: gsa/src/web/pages/tasks/detailspage.js:280
 #: gsa/src/web/pages/tasks/details.js:153
-#: gsa/src/web/pages/tasks/details.js:255 gsa/src/web/pages/tasks/dialog.js:311
+#: gsa/src/web/pages/tasks/details.js:255 gsa/src/web/pages/tasks/dialog.js:316
 #: gsa/src/web/pages/tasks/containerdialog.js:76
 #: gsa/src/web/pages/tasks/filterdialog.js:48
 #: gsa/src/web/pages/tasks/table.js:54 gsa/src/web/pages/dfncert/table.js:54
@@ -121,11 +121,10 @@ msgstr "Schwachstelle"
 #: gsa/src/web/pages/groups/table.js:32 gsa/src/web/pages/hosts/dialog.js:47
 #: gsa/src/web/pages/hosts/filterdialog.js:26
 #: gsa/src/web/pages/hosts/table.js:60
-#: gsa/src/web/pages/hosts/identifiers.js:197
+#: gsa/src/web/pages/hosts/identifiers.js:176
 #: gsa/src/web/pages/nvts/filterdialog.js:26 gsa/src/web/pages/nvts/table.js:60
 #: gsa/src/web/pages/nvts/preferences.js:39
 #: gsa/src/web/pages/tlscertificates/detailspage.js:125
-#: gsa/src/web/pages/tlscertificates/filterdialog.js:26
 #: gsa/src/web/pages/vulns/filterdialog.js:45
 #: gsa/src/web/pages/vulns/filterdialog.js:110
 #: gsa/src/web/pages/vulns/table.js:53 gsa/src/web/pages/portlists/dialog.js:93
@@ -133,16 +132,16 @@ msgstr "Schwachstelle"
 #: gsa/src/web/pages/portlists/table.js:57
 #: gsa/src/web/pages/scanconfigs/detailspage.js:213
 #: gsa/src/web/pages/scanconfigs/detailspage.js:251
-#: gsa/src/web/pages/scanconfigs/dialog.js:69
+#: gsa/src/web/pages/scanconfigs/nvtpreferences.js:99
+#: gsa/src/web/pages/scanconfigs/dialog.js:68
 #: gsa/src/web/pages/scanconfigs/header.js:47
-#: gsa/src/web/pages/scanconfigs/editdialog.js:122
-#: gsa/src/web/pages/scanconfigs/editdialog.js:249
-#: gsa/src/web/pages/scanconfigs/editdialog.js:527
-#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:250
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:107
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:187
+#: gsa/src/web/pages/scanconfigs/editdialog.js:145
+#: gsa/src/web/pages/scanconfigs/scannerpreferences.js:122
+#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:231
+#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:138
+#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:212
 #: gsa/src/web/pages/scanconfigs/table.js:32
-#: gsa/src/web/pages/policies/dialog.js:64
+#: gsa/src/web/pages/policies/dialog.js:54
 #: gsa/src/web/pages/policies/header.js:46
 #: gsa/src/web/pages/policies/table.js:32
 #: gsa/src/web/pages/credentials/dialog.js:207
@@ -151,7 +150,7 @@ msgstr "Schwachstelle"
 #: gsa/src/web/pages/secinfo/table.js:58
 #: gsa/src/web/pages/certbund/filterdialog.js:26
 #: gsa/src/web/pages/certbund/table.js:54
-#: gsa/src/web/pages/reportformats/detailspage.js:168
+#: gsa/src/web/pages/reportformats/detailspage.js:146
 #: gsa/src/web/pages/reportformats/dialog.js:199
 #: gsa/src/web/pages/reportformats/dialog.js:230
 #: gsa/src/web/pages/reportformats/table.js:32 gsa/src/web/entity/tags.js:129
@@ -176,7 +175,7 @@ msgstr "Name"
 #: gsa/src/web/pages/reports/table.js:79
 #: gsa/src/web/pages/reports/applicationstable.js:70
 #: gsa/src/web/pages/reports/dashboard/cvssdisplay.js:47
-#: gsa/src/web/pages/reports/cvestable.js:68
+#: gsa/src/web/pages/reports/cvestable.js:80
 #: gsa/src/web/pages/tickets/detailspage.js:140
 #: gsa/src/web/pages/tickets/filterdialog.js:68
 #: gsa/src/web/pages/tickets/table.js:63
@@ -213,7 +212,7 @@ msgstr "Name"
 #: gsa/src/web/pages/vulns/filterdialog.js:97
 #: gsa/src/web/pages/vulns/table.js:81
 #: gsa/src/web/pages/vulns/dashboard/cvssdisplay.js:44
-#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:264
+#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:245
 #: gsa/src/web/pages/secinfo/filterdialog.js:42
 #: gsa/src/web/pages/secinfo/table.js:90
 #: gsa/src/web/pages/secinfo/dashboard/cvssdisplay.js:44
@@ -222,7 +221,7 @@ msgstr "Name"
 #: gsa/src/web/pages/certbund/table.js:86
 #: gsa/src/web/pages/certbund/dashboard/cvssdisplay.js:44
 #: gsa/src/web/pages/extras/cvsscalculatorpage.js:364
-#: gsa/src/web/pages/usersettings/usersettingspage.js:399
+#: gsa/src/web/pages/usersettings/usersettingspage.js:441
 #: gsa/src/web/components/dashboard/display/cvss/cvssdisplay.js:100
 msgid "Severity"
 msgstr "Schweregrad"
@@ -247,7 +246,7 @@ msgstr "QdE"
 #: gsa/src/web/pages/results/detailspage.js:217
 #: gsa/src/web/pages/results/table.js:105
 #: gsa/src/web/pages/scanners/details.js:217
-#: gsa/src/web/pages/scanners/dialog.js:232
+#: gsa/src/web/pages/scanners/dialog.js:253
 #: gsa/src/web/pages/scanners/table.js:37
 #: gsa/src/web/pages/reports/closedcvestable.js:52
 #: gsa/src/web/pages/reports/errorstable.js:51
@@ -285,7 +284,6 @@ msgstr "Tags"
 #: gsa/src/web/pages/results/detailspage.js:257
 #: gsa/src/web/pages/overrides/listpage.js:93
 #: gsa/src/web/pages/nvts/detailspage.js:151
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:137
 #: gsa/src/web/components/dialog/composercontent.js:84
 #: gsa/src/web/components/bar/menubar.js:151 gsa/src/web/utils/render.js:156
 msgid "Overrides"
@@ -294,7 +292,6 @@ msgstr "Übersteuerungen"
 #: gsa/src/web/pages/results/detailspage.js:267
 #: gsa/src/web/pages/notes/listpage.js:90
 #: gsa/src/web/pages/nvts/detailspage.js:161
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:133
 #: gsa/src/web/components/dialog/composercontent.js:76
 #: gsa/src/web/components/bar/menubar.js:148 gsa/src/web/utils/render.js:150
 msgid "Notes"
@@ -302,7 +299,7 @@ msgstr "Notizen"
 
 #: gsa/src/web/pages/results/detailspage.js:376
 #: gsa/src/web/pages/cves/detailspage.js:219
-#: gsa/src/web/pages/scanners/detailspage.js:212
+#: gsa/src/web/pages/scanners/detailspage.js:216
 #: gsa/src/web/pages/reports/detailscontent.js:464
 #: gsa/src/web/pages/filters/detailspage.js:155
 #: gsa/src/web/pages/alerts/detailspage.js:160
@@ -320,22 +317,22 @@ msgstr "Notizen"
 #: gsa/src/web/pages/targets/detailspage.js:192
 #: gsa/src/web/pages/agents/detailspage.js:188
 #: gsa/src/web/pages/operatingsystems/detailspage.js:237
-#: gsa/src/web/pages/groups/detailspage.js:154
+#: gsa/src/web/pages/groups/detailspage.js:158
 #: gsa/src/web/pages/hosts/detailspage.js:314
 #: gsa/src/web/pages/nvts/detailspage.js:236
-#: gsa/src/web/pages/tlscertificates/detailspage.js:253
+#: gsa/src/web/pages/tlscertificates/detailspage.js:257
 #: gsa/src/web/pages/portlists/detailspage.js:194
 #: gsa/src/web/pages/scanconfigs/detailspage.js:365
 #: gsa/src/web/pages/credentials/detailspage.js:246
 #: gsa/src/web/pages/certbund/detailspage.js:225
-#: gsa/src/web/pages/reportformats/detailspage.js:255
+#: gsa/src/web/pages/reportformats/detailspage.js:219
 msgid "User Tags"
 msgstr "Benutzer-Tags"
 
 #: gsa/src/web/pages/results/details.js:84
 #: gsa/src/web/pages/dfncert/detailspage.js:87
 #: gsa/src/web/pages/nvts/details.js:51
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:145
+#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:170
 #: gsa/src/web/pages/reportformats/details.js:92
 #: gsa/src/web/pages/reportformats/dialog.js:208
 msgid "Summary"
@@ -436,7 +433,7 @@ msgstr "Genutzte Version: "
 
 #: gsa/src/web/pages/results/details.js:244
 #: gsa/src/web/pages/nvts/details.js:108
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:152
+#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:177
 msgid "Affected Software/OS"
 msgstr "Betroffene Software/OS"
 
@@ -503,7 +500,7 @@ msgstr "Host (Name)"
 #: gsa/src/web/pages/results/table.js:123 gsa/src/web/pages/dfncert/table.js:70
 #: gsa/src/web/pages/ovaldefs/filterdialog.js:42
 #: gsa/src/web/pages/ovaldefs/table.js:86
-#: gsa/src/web/pages/hosts/identifiers.js:199
+#: gsa/src/web/pages/hosts/identifiers.js:178
 #: gsa/src/web/pages/nvts/filterdialog.js:34 gsa/src/web/pages/nvts/table.js:76
 #: gsa/src/web/pages/secinfo/filterdialog.js:34
 #: gsa/src/web/pages/secinfo/table.js:74
@@ -522,7 +519,6 @@ msgstr "Erstellt"
 #: gsa/src/web/pages/hosts/filterdialog.js:46
 #: gsa/src/web/pages/hosts/table.js:100
 #: gsa/src/web/pages/nvts/filterdialog.js:38 gsa/src/web/pages/nvts/table.js:84
-#: gsa/src/web/pages/tlscertificates/filterdialog.js:50
 #: gsa/src/web/pages/secinfo/filterdialog.js:38
 #: gsa/src/web/pages/secinfo/table.js:82
 msgid "Modified"
@@ -531,7 +527,7 @@ msgstr "Geändert"
 #: gsa/src/web/pages/results/filterdialog.js:110
 #: gsa/src/web/pages/reports/detailsfilterdialog.js:82
 #: gsa/src/web/pages/reports/filterdialog.js:111
-#: gsa/src/web/pages/tasks/details.js:235 gsa/src/web/pages/tasks/dialog.js:415
+#: gsa/src/web/pages/tasks/details.js:235 gsa/src/web/pages/tasks/dialog.js:420
 #: gsa/src/web/pages/tasks/filterdialog.js:107
 #: gsa/src/web/components/powerfilter/applyoverridesgroup.js:42
 msgid "Apply Overrides"
@@ -645,7 +641,7 @@ msgstr "Ergebnisse nach Schweregradklasse (Gesamt: {{count}})"
 #: gsa/src/web/pages/secinfo/dashboard/severityclassdisplay.js:49
 #: gsa/src/web/pages/certbund/dashboard/severityclassdisplay.js:49
 #: gsa/src/web/pages/usersettings/severitypart.js:42
-#: gsa/src/web/pages/usersettings/usersettingspage.js:467
+#: gsa/src/web/pages/usersettings/usersettingspage.js:509
 msgid "Severity Class"
 msgstr "Schweregradklasse"
 
@@ -681,7 +677,6 @@ msgstr "CERT-Advisories, die auf diese CVE verweisen"
 #: gsa/src/web/pages/ovaldefs/details.js:58
 #: gsa/src/web/pages/operatingsystems/filterdialog.js:30
 #: gsa/src/web/pages/operatingsystems/table.js:63
-#: gsa/src/web/pages/tlscertificates/filterdialog.js:30
 #: gsa/src/web/pages/certbund/details.js:69
 #: gsa/src/web/pages/certbund/filterdialog.js:30
 #: gsa/src/web/pages/certbund/table.js:62
@@ -716,12 +711,12 @@ msgid "Last updated:"
 msgstr "Zuletzt aktualisiert:"
 
 #: gsa/src/web/pages/cves/detailspage.js:217
-#: gsa/src/web/pages/scanners/detailspage.js:210
+#: gsa/src/web/pages/scanners/detailspage.js:214
 #: gsa/src/web/pages/reports/detailscontent.js:394
 #: gsa/src/web/pages/filters/detailspage.js:153
 #: gsa/src/web/pages/alerts/detailspage.js:158
 #: gsa/src/web/pages/tickets/detailspage.js:228
-#: gsa/src/web/pages/audits/detailspage.js:323
+#: gsa/src/web/pages/audits/detailspage.js:329
 #: gsa/src/web/pages/users/detailspage.js:152
 #: gsa/src/web/pages/tasks/detailspage.js:395
 #: gsa/src/web/pages/dfncert/detailspage.js:164
@@ -735,16 +730,16 @@ msgstr "Zuletzt aktualisiert:"
 #: gsa/src/web/pages/targets/detailspage.js:190
 #: gsa/src/web/pages/agents/detailspage.js:186
 #: gsa/src/web/pages/operatingsystems/detailspage.js:235
-#: gsa/src/web/pages/groups/detailspage.js:152
+#: gsa/src/web/pages/groups/detailspage.js:156
 #: gsa/src/web/pages/hosts/detailspage.js:312
 #: gsa/src/web/pages/nvts/detailspage.js:231
-#: gsa/src/web/pages/tlscertificates/detailspage.js:251
+#: gsa/src/web/pages/tlscertificates/detailspage.js:255
 #: gsa/src/web/pages/portlists/detailspage.js:189
 #: gsa/src/web/pages/scanconfigs/detailspage.js:354
-#: gsa/src/web/pages/policies/detailspage.js:175
+#: gsa/src/web/pages/policies/detailspage.js:181
 #: gsa/src/web/pages/credentials/detailspage.js:244
 #: gsa/src/web/pages/certbund/detailspage.js:223
-#: gsa/src/web/pages/reportformats/detailspage.js:250
+#: gsa/src/web/pages/reportformats/detailspage.js:214
 msgid "Information"
 msgstr "Informationen"
 
@@ -760,7 +755,7 @@ msgstr "Zugangskomplexität"
 
 #: gsa/src/web/pages/cves/details.js:46
 #: gsa/src/web/pages/cves/filterdialog.js:38 gsa/src/web/pages/cves/table.js:78
-#: gsa/src/web/pages/users/dialog.js:184 gsa/src/web/pages/users/dialog.js:224
+#: gsa/src/web/pages/users/dialog.js:186 gsa/src/web/pages/users/dialog.js:226
 #: gsa/src/web/pages/extras/cvsscalculatorpage.js:261
 msgid "Authentication"
 msgstr "Authentifizierung"
@@ -834,7 +829,7 @@ msgid "Published"
 msgstr "Veröffentlicht"
 
 #: gsa/src/web/pages/cves/table.js:145
-#: gsa/src/web/pages/reports/cvestable.js:107
+#: gsa/src/web/pages/reports/cvestable.js:126
 msgid "No CVEs available"
 msgstr "Keine CVEs vorhanden"
 
@@ -931,69 +926,73 @@ msgstr "Diagramm: CVEs nach Schweregradklasse"
 msgid "Table: CVEs by Severity Class"
 msgstr "Tabelle: CVEs nach Schweregradklasse"
 
-#: gsa/src/web/pages/performance/performancepage.js:89
+#: gsa/src/web/pages/performance/performancepage.js:92
 msgid "Help: Performance"
 msgstr "Hilfe: Leistungsdaten"
 
-#: gsa/src/web/pages/performance/performancepage.js:93
+#: gsa/src/web/pages/performance/performancepage.js:96
 msgid "Report for Last Hour"
 msgstr "Bericht für die letzte Stunde"
 
-#: gsa/src/web/pages/performance/performancepage.js:98
+#: gsa/src/web/pages/performance/performancepage.js:101
 msgid "Report for Last Day"
 msgstr "Bericht für den letzten Tag"
 
-#: gsa/src/web/pages/performance/performancepage.js:103
+#: gsa/src/web/pages/performance/performancepage.js:106
 msgid "Report for Last Week"
 msgstr "Bericht für die letzte Woche"
 
-#: gsa/src/web/pages/performance/performancepage.js:108
+#: gsa/src/web/pages/performance/performancepage.js:111
 msgid "Report for Last Month"
 msgstr "Bericht für den letzten Monat"
 
-#: gsa/src/web/pages/performance/performancepage.js:113
+#: gsa/src/web/pages/performance/performancepage.js:116
 msgid "Report for Last Year"
 msgstr "Bericht für das letzte Jahr"
 
 # Ich finde Leistungsdaten besser. Allerdings wird Performanz anscheinend im Handbuch verwendet.
-#: gsa/src/web/pages/performance/performancepage.js:277
+#: gsa/src/web/pages/performance/performancepage.js:278
 #: gsa/src/web/components/bar/menubar.js:262
 msgid "Performance"
 msgstr "Leistungsdaten"
 
-#: gsa/src/web/pages/performance/performancepage.js:291
+#: gsa/src/web/pages/performance/performancepage.js:292
 msgid "Report for Last"
 msgstr "Bericht für letzte(n/s)"
 
-#: gsa/src/web/pages/performance/performancepage.js:298
+#: gsa/src/web/pages/performance/performancepage.js:299
 msgid "Hour"
 msgstr "Stunde"
 
-#: gsa/src/web/pages/performance/performancepage.js:305
+#: gsa/src/web/pages/performance/performancepage.js:306
 msgid "Day"
 msgstr "Tag"
 
-#: gsa/src/web/pages/performance/performancepage.js:312
+#: gsa/src/web/pages/performance/performancepage.js:313
 msgid "Week"
 msgstr "Woche"
 
-#: gsa/src/web/pages/performance/performancepage.js:319
+#: gsa/src/web/pages/performance/performancepage.js:320
 msgid "Month"
 msgstr "Monat"
 
-#: gsa/src/web/pages/performance/performancepage.js:326
+#: gsa/src/web/pages/performance/performancepage.js:327
 msgid "Year"
 msgstr "Jahr"
 
-#: gsa/src/web/pages/performance/performancepage.js:331
+#: gsa/src/web/pages/performance/performancepage.js:335
+msgid "Report for GMP Scanner or Greenbone Sensor"
+msgstr "Bericht für GMP Scanner oder Greenbone Sensor"
+
+#: gsa/src/web/pages/performance/performancepage.js:336
 msgid "Report for GMP Scanner"
 msgstr "Bericht für GMP-Scanner"
 
 #: gsa/src/web/pages/performance/startendtimeselection.js:114
 #: gsa/src/web/pages/reports/scaninfo.js:234
-#: gsa/src/web/pages/schedules/details.js:80
+#: gsa/src/web/pages/schedules/details.js:84
 #: gsa/src/web/pages/schedules/dialog.js:426
-#: gsa/src/web/pages/usersettings/usersettingspage.js:414
+#: gsa/src/web/pages/usersettings/usersettingspage.js:456
 msgid "Timezone"
 msgstr "Zeitzone"
 
@@ -1068,7 +1067,7 @@ msgstr "Dashboardgrenze erreicht"
 
 #: gsa/src/web/pages/start/newdashboarddialog.js:88
 #: gsa/src/web/pages/scanners/details.js:146
-#: gsa/src/web/pages/scanners/dialog.js:269
+#: gsa/src/web/pages/scanners/dialog.js:290
 msgid "Default"
 msgstr "Standard"
 
@@ -1094,18 +1093,18 @@ msgid "Add"
 msgstr "Hinzufügen"
 
 #: gsa/src/web/pages/start/newdashboarddialog.js:122
-#: gsa/src/web/pages/scanners/dialog.js:153
+#: gsa/src/web/pages/scanners/dialog.js:154
 #: gsa/src/web/pages/filters/dialog.js:36
 #: gsa/src/web/pages/alerts/dialog.js:232 gsa/src/web/pages/audits/dialog.js:72
-#: gsa/src/web/pages/users/dialog.js:104
+#: gsa/src/web/pages/users/dialog.js:103
 #: gsa/src/web/pages/tasks/component.js:248
-#: gsa/src/web/pages/tasks/dialog.js:194 gsa/src/web/pages/roles/dialog.js:69
+#: gsa/src/web/pages/tasks/dialog.js:147 gsa/src/web/pages/roles/dialog.js:69
 #: gsa/src/web/pages/schedules/dialog.js:351
 #: gsa/src/web/pages/targets/dialog.js:121
 #: gsa/src/web/pages/agents/dialog.js:35 gsa/src/web/pages/groups/dialog.js:53
 #: gsa/src/web/pages/portlists/dialog.js:52
 #: gsa/src/web/pages/scanconfigs/dialog.js:45
-#: gsa/src/web/pages/policies/dialog.js:41
+#: gsa/src/web/pages/policies/dialog.js:35
 #: gsa/src/web/pages/credentials/dialog.js:145
 msgid "Unnamed"
 msgstr "Unbenannt"
@@ -1142,10 +1141,15 @@ msgstr "Zertifikat herunterladen"
 msgid "Download CA Certificate"
 msgstr "CA-Zertifikat herunterladen"
 
-#: gsa/src/web/pages/scanners/detailspage.js:215
+#: gsa/src/web/pages/scanners/detailspage.js:171
+#: gsa/src/web/pages/scanners/listpage.js:95
+msgid "Scanner Verified"
+msgstr "Scanner verifiziert"
+
+#: gsa/src/web/pages/scanners/detailspage.js:219
 #: gsa/src/web/pages/filters/detailspage.js:158
 #: gsa/src/web/pages/alerts/detailspage.js:163
-#: gsa/src/web/pages/audits/detailspage.js:325
+#: gsa/src/web/pages/audits/detailspage.js:331
 #: gsa/src/web/pages/users/detailspage.js:157
 #: gsa/src/web/pages/tasks/detailspage.js:400
 #: gsa/src/web/pages/overrides/detailspage.js:235
@@ -1157,14 +1161,14 @@ msgstr "CA-Zertifikat herunterladen"
 #: gsa/src/web/pages/targets/detailspage.js:195
 #: gsa/src/web/pages/agents/detailspage.js:191
 #: gsa/src/web/pages/operatingsystems/detailspage.js:240
-#: gsa/src/web/pages/groups/detailspage.js:157
+#: gsa/src/web/pages/groups/detailspage.js:161
 #: gsa/src/web/pages/hosts/detailspage.js:317
-#: gsa/src/web/pages/tlscertificates/detailspage.js:256
+#: gsa/src/web/pages/tlscertificates/detailspage.js:260
 #: gsa/src/web/pages/portlists/detailspage.js:197
 #: gsa/src/web/pages/scanconfigs/detailspage.js:368
-#: gsa/src/web/pages/policies/detailspage.js:186
+#: gsa/src/web/pages/policies/detailspage.js:192
 #: gsa/src/web/pages/credentials/detailspage.js:249
-#: gsa/src/web/pages/reportformats/detailspage.js:258
+#: gsa/src/web/pages/reportformats/detailspage.js:222
 #: gsa/src/web/components/bar/menubar.js:257 gsa/src/web/utils/render.js:158
 msgid "Permissions"
 msgstr "Berechtigungen"
@@ -1228,7 +1232,7 @@ msgid "Scanner Parameters"
 msgstr "Scanner-Parameter"
 
 #: gsa/src/web/pages/scanners/details.js:145
-#: gsa/src/web/pages/scanners/dialog.js:222
+#: gsa/src/web/pages/scanners/dialog.js:243
 #: gsa/src/web/pages/scanners/table.js:47
 #: gsa/src/web/pages/filters/details.js:62
 #: gsa/src/web/pages/filters/dialog.js:95 gsa/src/web/pages/filters/table.js:42
@@ -1265,18 +1269,18 @@ msgid "OSP Scanner is offline"
 msgstr "OSP-Scanner ist offline"
 
 #: gsa/src/web/pages/scanners/details.js:205
-#: gsa/src/web/pages/scanners/dialog.js:212
+#: gsa/src/web/pages/scanners/dialog.js:233
 #: gsa/src/web/pages/reports/scaninfo.js:122
 #: gsa/src/web/pages/filters/details.js:51
 #: gsa/src/web/pages/filters/dialog.js:75
 #: gsa/src/web/pages/alerts/details.js:63
 #: gsa/src/web/pages/alerts/dialog.js:516
 #: gsa/src/web/pages/tickets/detailspage.js:135
-#: gsa/src/web/pages/audits/detailspage.js:241
+#: gsa/src/web/pages/audits/detailspage.js:247
 #: gsa/src/web/pages/audits/dialog.js:149 gsa/src/web/pages/users/details.js:92
-#: gsa/src/web/pages/users/dialog.js:173
+#: gsa/src/web/pages/users/dialog.js:175
 #: gsa/src/web/pages/tasks/detailspage.js:285
-#: gsa/src/web/pages/tasks/dialog.js:321
+#: gsa/src/web/pages/tasks/dialog.js:326
 #: gsa/src/web/pages/tasks/containerdialog.js:85
 #: gsa/src/web/pages/tasks/filterdialog.js:143
 #: gsa/src/web/pages/roles/details.js:46 gsa/src/web/pages/roles/dialog.js:122
@@ -1294,10 +1298,10 @@ msgstr "OSP-Scanner ist offline"
 #: gsa/src/web/pages/portlists/details.js:55
 #: gsa/src/web/pages/portlists/dialog.js:103
 #: gsa/src/web/pages/scanconfigs/details.js:53
-#: gsa/src/web/pages/scanconfigs/dialog.js:79
-#: gsa/src/web/pages/scanconfigs/editdialog.js:537
+#: gsa/src/web/pages/scanconfigs/dialog.js:78
+#: gsa/src/web/pages/scanconfigs/editdialog.js:155
 #: gsa/src/web/pages/policies/details.js:53
-#: gsa/src/web/pages/policies/dialog.js:74
+#: gsa/src/web/pages/policies/dialog.js:64
 #: gsa/src/web/pages/credentials/details.js:69
 #: gsa/src/web/pages/credentials/dialog.js:217 gsa/src/web/entity/tags.js:131
 #: gsa/src/web/entities/tagsdialog.js:93
@@ -1314,7 +1318,7 @@ msgid "N/A (Builtin Scanner)"
 msgstr "N/A (eingebauter Scanner)"
 
 #: gsa/src/web/pages/scanners/details.js:230
-#: gsa/src/web/pages/scanners/dialog.js:244
+#: gsa/src/web/pages/scanners/dialog.js:265
 #: gsa/src/web/pages/scanners/table.js:42
 #: gsa/src/web/pages/reports/errorstable.js:72
 #: gsa/src/web/pages/reports/portstable.js:42
@@ -1325,7 +1329,7 @@ msgid "Port"
 msgstr "Port"
 
 #: gsa/src/web/pages/scanners/details.js:243
-#: gsa/src/web/pages/scanners/dialog.js:298
+#: gsa/src/web/pages/scanners/dialog.js:320
 #: gsa/src/web/pages/scanners/table.js:52
 #: gsa/src/web/pages/filters/component.js:37
 #: gsa/src/web/pages/alerts/smbmethodpart.js:67
@@ -1357,42 +1361,38 @@ msgstr "Scan-Konfigurationen, die diesen Scanner verwenden"
 msgid "Client Certificate (from Credential)"
 msgstr "Benutzerzertifikat (aus Anmeldedaten)"
 
-#: gsa/src/web/pages/scanners/dialog.js:89
+#: gsa/src/web/pages/scanners/dialog.js:90
 msgid "Certificate currently in use expired at {{date}}"
 msgstr "Derzeitiges Zertifikat ist am {{date}} abgelaufen"
 
-#: gsa/src/web/pages/scanners/dialog.js:94
+#: gsa/src/web/pages/scanners/dialog.js:95
 msgid "Certificate currently not valid until {{date}}"
 msgstr "Zertifikat derzeit nicht gültig bis {{date}}"
 
-#: gsa/src/web/pages/scanners/dialog.js:98
+#: gsa/src/web/pages/scanners/dialog.js:99
 msgid "Certificate in use will expire at {{date}}"
 msgstr "Aktuelles Zertifikat wird am {{date}} ablaufen"
 
-#: gsa/src/web/pages/scanners/dialog.js:155
+#: gsa/src/web/pages/scanners/dialog.js:156
 #: gsa/src/web/pages/scanners/listpage.js:57
 msgid "New Scanner"
 msgstr "Neuer Scanner"
 
-#: gsa/src/web/pages/scanners/dialog.js:254 gsa/src/web/pages/ldap/dialog.js:85
+#: gsa/src/web/pages/scanners/dialog.js:275 gsa/src/web/pages/ldap/dialog.js:85
 msgid "CA Certificate"
 msgstr "CA-Zertifikat"
 
-#: gsa/src/web/pages/scanners/dialog.js:261
+#: gsa/src/web/pages/scanners/dialog.js:282
 msgid "Existing"
 msgstr "Vorhanden"
 
-#: gsa/src/web/pages/scanners/dialog.js:276
+#: gsa/src/web/pages/scanners/dialog.js:297
 msgid "New:"
 msgstr "Neu:"
 
-#: gsa/src/web/pages/scanners/dialog.js:309
+#: gsa/src/web/pages/scanners/dialog.js:331
 msgid "Create a new Credential"
 msgstr "Neue Anmeldedaten erstellen"
-
-#: gsa/src/web/pages/scanners/listpage.js:95
-msgid "Scanner Verified"
-msgstr "Scanner verifiziert"
 
 #: gsa/src/web/pages/scanners/listpage.js:111
 #: gsa/src/web/components/bar/menubar.js:234 gsa/src/web/utils/render.js:174
@@ -1403,9 +1403,9 @@ msgstr "Scanner"
 #: gsa/src/web/pages/scanners/row.js:72 gsa/src/web/pages/scanners/row.js:130
 #: gsa/src/web/pages/filters/component.js:50
 #: gsa/src/web/pages/audits/details.js:135
-#: gsa/src/web/pages/tasks/details.js:149 gsa/src/web/pages/tasks/dialog.js:153
+#: gsa/src/web/pages/tasks/details.js:149 gsa/src/web/pages/tasks/dialog.js:108
 #: gsa/src/web/pages/scanconfigs/details.js:59
-#: gsa/src/web/pages/scanconfigs/editdialog.js:548
+#: gsa/src/web/pages/scanconfigs/editdialog.js:171
 #: gsa/src/web/pages/policies/details.js:59 gsa/src/gmp/utils/entitytype.js:98
 msgid "Scanner"
 msgstr "Scanner"
@@ -1419,7 +1419,7 @@ msgid "No scanners available"
 msgstr "Keine Scanner vorhanden"
 
 #: gsa/src/web/pages/reports/closedcvestable.js:45
-#: gsa/src/web/pages/reports/cvestable.js:46
+#: gsa/src/web/pages/reports/cvestable.js:48
 #: gsa/src/web/pages/nvts/references.js:49
 #: gsa/src/web/pages/nvts/filterdialog.js:46 gsa/src/web/pages/nvts/table.js:92
 #: gsa/src/gmp/models/secinfo.js:34 gsa/src/gmp/utils/entitytype.js:79
@@ -1428,6 +1428,7 @@ msgstr "CVE"
 
 #: gsa/src/web/pages/reports/closedcvestable.js:59
 #: gsa/src/web/pages/reports/errorstable.js:65
+#: gsa/src/web/pages/reports/cvestable.js:56
 #: gsa/src/web/pages/overrides/dialog.js:173
 #: gsa/src/web/pages/overrides/dialog.js:178
 #: gsa/src/web/pages/overrides/table.js:62
@@ -1435,7 +1436,7 @@ msgstr "CVE"
 #: gsa/src/web/pages/notes/table.js:62
 #: gsa/src/web/pages/nvts/detailspage.js:212
 #: gsa/src/web/pages/scanconfigs/detailspage.js:250
-#: gsa/src/web/pages/scanconfigs/editdialog.js:121
+#: gsa/src/web/pages/scanconfigs/nvtpreferences.js:98
 #: gsa/src/gmp/models/secinfo.js:38 gsa/src/gmp/utils/entitytype.js:89
 msgid "NVT"
 msgstr "NVT"
@@ -1498,16 +1499,12 @@ msgstr "Inhalt für Scan-Bericht zusammenstellen"
 #: gsa/src/web/pages/alerts/method.js:353
 #: gsa/src/web/pages/alerts/method.js:471
 #: gsa/src/web/pages/alerts/method.js:482
-#: gsa/src/web/pages/reportformats/detailspage.js:97
-#: gsa/src/web/pages/reportformats/detailspage.js:102
-#: gsa/src/web/pages/reportformats/detailspage.js:107
-#: gsa/src/web/pages/reportformats/detailspage.js:112
-#: gsa/src/web/pages/reportformats/row.js:62
-#: gsa/src/web/pages/reportformats/row.js:68
-#: gsa/src/web/pages/reportformats/row.js:74
-#: gsa/src/web/pages/reportformats/row.js:87
-#: gsa/src/web/pages/reportformats/row.js:118
-#: gsa/src/gmp/utils/entitytype.js:94
+#: gsa/src/web/pages/reportformats/detailspage.js:91
+#: gsa/src/web/pages/reportformats/detailspage.js:96
+#: gsa/src/web/pages/reportformats/detailspage.js:101
+#: gsa/src/web/pages/reportformats/row.js:57
+#: gsa/src/web/pages/reportformats/row.js:63
+#: gsa/src/web/pages/reportformats/row.js:96 gsa/src/gmp/utils/entitytype.js:94
 msgid "Report Format"
 msgstr "Berichtformat"
 
@@ -1618,7 +1615,7 @@ msgstr "Nur Hosts mit Ergebnissen anzeigen"
 #: gsa/src/web/pages/reports/vulnerabilitiestable.js:113
 #: gsa/src/web/pages/reports/applicationstable.js:55
 #: gsa/src/web/pages/reports/detailscontent.js:409
-#: gsa/src/web/pages/reports/cvestable.js:53
+#: gsa/src/web/pages/reports/cvestable.js:64
 #: gsa/src/web/pages/overrides/details.js:57
 #: gsa/src/web/pages/overrides/dialog.js:262
 #: gsa/src/web/pages/overrides/filterdialog.js:50
@@ -1632,8 +1629,7 @@ msgstr "Nur Hosts mit Ergebnissen anzeigen"
 #: gsa/src/web/pages/operatingsystems/filterdialog.js:46
 #: gsa/src/web/pages/operatingsystems/table.js:75
 #: gsa/src/web/pages/hosts/listpage.js:101
-#: gsa/src/web/pages/tlscertificates/detailspage.js:165
-#: gsa/src/web/pages/tlscertificates/filterdialog.js:46
+#: gsa/src/web/pages/tlscertificates/detailspage.js:169
 #: gsa/src/web/pages/vulns/filterdialog.js:69
 #: gsa/src/web/pages/vulns/table.js:105
 #: gsa/src/web/components/bar/menubar.js:160 gsa/src/web/utils/render.js:142
@@ -1649,6 +1645,7 @@ msgid "DN"
 msgstr "DN"
 
 #: gsa/src/web/pages/reports/tlscertificatestable.js:68
+#: gsa/src/web/pages/tlscertificates/filterdialog.js:30
 #: gsa/src/web/pages/tlscertificates/table.js:60
 msgid "Serial"
 msgstr "Seriennummer"
@@ -1665,14 +1662,14 @@ msgstr "Nicht gültig nach"
 #: gsa/src/web/pages/reports/table.js:135 gsa/src/web/pages/audits/table.js:84
 #: gsa/src/web/pages/tasks/table.js:102 gsa/src/web/pages/roles/dialog.js:197
 #: gsa/src/web/pages/operatingsystems/table.js:90
-#: gsa/src/web/pages/hosts/identifiers.js:201
+#: gsa/src/web/pages/hosts/identifiers.js:180
 #: gsa/src/web/pages/tlscertificates/table.js:86
 #: gsa/src/web/pages/portlists/portrangestable.js:47
 #: gsa/src/web/pages/portlists/table.js:66
+#: gsa/src/web/pages/scanconfigs/nvtpreferences.js:102
 #: gsa/src/web/pages/scanconfigs/header.js:66
-#: gsa/src/web/pages/scanconfigs/editdialog.js:125
-#: gsa/src/web/pages/scanconfigs/editdialog.js:418
-#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:282
+#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:263
+#: gsa/src/web/pages/scanconfigs/nvtfamilies.js:159
 #: gsa/src/web/pages/policies/header.js:50 gsa/src/web/entity/tags.js:133
 #: gsa/src/web/entities/header.js:32 gsa/src/web/entities/header.js:71
 msgid "Actions"
@@ -1879,7 +1876,7 @@ msgstr "OS"
 
 #: gsa/src/web/pages/reports/hoststable.js:80
 #: gsa/src/web/pages/reports/detailscontent.js:414
-#: gsa/src/web/pages/tlscertificates/detailspage.js:187
+#: gsa/src/web/pages/tlscertificates/detailspage.js:191
 msgid "Ports"
 msgstr "Ports"
 
@@ -2016,7 +2013,7 @@ msgstr "Datum"
 #: gsa/src/web/pages/tickets/editdialog.js:72
 #: gsa/src/web/pages/tickets/table.js:84
 #: gsa/src/web/pages/tickets/dashboard/statusdisplay.js:85
-#: gsa/src/web/pages/audits/detailspage.js:251
+#: gsa/src/web/pages/audits/detailspage.js:257
 #: gsa/src/web/pages/audits/table.js:59
 #: gsa/src/web/pages/tasks/detailspage.js:295
 #: gsa/src/web/pages/tasks/filterdialog.js:52
@@ -2081,7 +2078,7 @@ msgid "Application CPE"
 msgstr "Anwendungs-CPE"
 
 #: gsa/src/web/pages/reports/applicationstable.js:62
-#: gsa/src/web/pages/reports/cvestable.js:60
+#: gsa/src/web/pages/reports/cvestable.js:72
 msgid "Occurrences"
 msgstr "Vorkommen"
 
@@ -2298,7 +2295,7 @@ msgstr "Agent"
 #: gsa/src/web/pages/roles/dialog.js:170
 #: gsa/src/web/pages/permissions/dialog.js:279
 #: gsa/src/web/pages/permissions/dialog.js:312
-#: gsa/src/web/pages/permissions/multipledialog.js:181
+#: gsa/src/web/pages/permissions/multipledialog.js:182
 #: gsa/src/web/pages/groups/row.js:48 gsa/src/web/pages/groups/row.js:54
 #: gsa/src/web/pages/groups/row.js:60 gsa/src/web/pages/groups/row.js:96
 #: gsa/src/gmp/utils/entitytype.js:82
@@ -2317,7 +2314,7 @@ msgstr "Übersteuerung"
 
 #: gsa/src/web/pages/filters/component.js:44
 #: gsa/src/web/pages/roles/detailspage.js:150
-#: gsa/src/web/pages/permissions/multipledialog.js:135
+#: gsa/src/web/pages/permissions/multipledialog.js:136
 #: gsa/src/web/pages/permissions/row.js:56
 #: gsa/src/web/pages/permissions/row.js:62
 #: gsa/src/web/pages/permissions/row.js:68
@@ -2349,7 +2346,7 @@ msgstr "Ergebnis"
 #: gsa/src/web/pages/roles/row.js:96
 #: gsa/src/web/pages/permissions/dialog.js:262
 #: gsa/src/web/pages/permissions/dialog.js:308
-#: gsa/src/web/pages/permissions/multipledialog.js:163
+#: gsa/src/web/pages/permissions/multipledialog.js:164
 #: gsa/src/gmp/utils/entitytype.js:96
 msgid "Role"
 msgstr "Rolle"
@@ -2357,7 +2354,7 @@ msgstr "Rolle"
 #: gsa/src/web/pages/filters/component.js:51
 #: gsa/src/web/pages/audits/details.js:223
 #: gsa/src/web/pages/audits/dialog.js:199
-#: gsa/src/web/pages/tasks/details.js:251 gsa/src/web/pages/tasks/dialog.js:383
+#: gsa/src/web/pages/tasks/details.js:251 gsa/src/web/pages/tasks/dialog.js:388
 #: gsa/src/web/pages/tasks/filterdialog.js:136
 #: gsa/src/web/pages/schedules/row.js:56 gsa/src/web/pages/schedules/row.js:62
 #: gsa/src/web/pages/schedules/row.js:68 gsa/src/web/pages/schedules/row.js:107
@@ -2372,19 +2369,19 @@ msgid "SecInfo"
 msgstr "Sicherheitsinfos"
 
 #: gsa/src/web/pages/filters/component.js:53
-#: gsa/src/web/pages/tasks/details.js:172 gsa/src/web/pages/tasks/dialog.js:474
-#: gsa/src/web/pages/tasks/dialog.js:552
+#: gsa/src/web/pages/tasks/details.js:172 gsa/src/web/pages/tasks/dialog.js:477
+#: gsa/src/web/pages/tasks/dialog.js:558
 #: gsa/src/web/pages/scanconfigs/row.js:53
 #: gsa/src/web/pages/scanconfigs/row.js:59
 #: gsa/src/web/pages/scanconfigs/row.js:65
-#: gsa/src/web/pages/scanconfigs/row.js:101
+#: gsa/src/web/pages/scanconfigs/row.js:100
 #: gsa/src/web/wizard/advancedtaskwizard.js:194
 #: gsa/src/gmp/utils/entitytype.js:97
 msgid "Scan Config"
 msgstr "Scan-Konfiguration"
 
 #: gsa/src/web/pages/filters/component.js:54
-#: gsa/src/web/pages/tasks/dialog.js:566 gsa/src/web/pages/tags/row.js:88
+#: gsa/src/web/pages/tasks/dialog.js:575 gsa/src/web/pages/tags/row.js:88
 #: gsa/src/web/pages/tags/row.js:94 gsa/src/web/pages/tags/row.js:100
 #: gsa/src/web/pages/tags/row.js:141 gsa/src/gmp/utils/entitytype.js:100
 msgid "Tag"
@@ -2406,18 +2403,23 @@ msgid "Ticket"
 msgstr "Ticket"
 
 #: gsa/src/web/pages/filters/component.js:58
+#: gsa/src/gmp/utils/entitytype.js:104
+msgid "TLS Certificate"
+msgstr "TLS-Zertifikat"
+
+#: gsa/src/web/pages/filters/component.js:59
 #: gsa/src/web/pages/alerts/alembavfiremethodpart.js:116
 #: gsa/src/web/pages/users/row.js:57 gsa/src/web/pages/users/row.js:63
 #: gsa/src/web/pages/users/row.js:69 gsa/src/web/pages/users/row.js:120
 #: gsa/src/web/pages/permissions/dialog.js:245
 #: gsa/src/web/pages/permissions/dialog.js:304
-#: gsa/src/web/pages/permissions/multipledialog.js:145
+#: gsa/src/web/pages/permissions/multipledialog.js:146
 #: gsa/src/web/pages/hosts/identifiers.js:101
 #: gsa/src/gmp/utils/entitytype.js:105
 msgid "User"
 msgstr "Benutzer"
 
-#: gsa/src/web/pages/filters/component.js:107
+#: gsa/src/web/pages/filters/component.js:108
 msgid "Edit Filter {{name}}"
 msgstr "Filter {{name}} bearbeiten"
 
@@ -2436,7 +2438,7 @@ msgid "New Filter"
 msgstr "Neuer Filter"
 
 #: gsa/src/web/pages/filters/listpage.js:89
-#: gsa/src/web/pages/usersettings/usersettingspage.js:402
+#: gsa/src/web/pages/usersettings/usersettingspage.js:444
 #: gsa/src/web/components/bar/menubar.js:237 gsa/src/web/utils/render.js:138
 msgid "Filters"
 msgstr "Filter"
@@ -2611,8 +2613,8 @@ msgid "Details URL"
 msgstr "Details-URL"
 
 #: gsa/src/web/pages/alerts/details.js:136
-#: gsa/src/web/pages/usersettings/filterpart.js:216
-#: gsa/src/web/pages/usersettings/usersettingspage.js:666
+#: gsa/src/web/pages/usersettings/filterpart.js:217
+#: gsa/src/web/pages/usersettings/usersettingspage.js:708
 #: gsa/src/web/components/dialog/composercontent.js:65
 msgid "Results Filter"
 msgstr "Ergebnisse-Filter"
@@ -2641,8 +2643,8 @@ msgstr "Aktiv"
 #: gsa/src/web/pages/alerts/details.js:149
 #: gsa/src/web/pages/credentials/details.js:86
 #: gsa/src/web/pages/credentials/row.js:119
-#: gsa/src/web/pages/usersettings/usersettingspage.js:454
-#: gsa/src/web/pages/usersettings/usersettingspage.js:477
+#: gsa/src/web/pages/usersettings/usersettingspage.js:496
+#: gsa/src/web/pages/usersettings/usersettingspage.js:519
 #: gsa/src/web/components/form/yesnoradio.js:45 gsa/src/web/utils/render.js:99
 msgid "Yes"
 msgstr "Ja"
@@ -2650,8 +2652,8 @@ msgstr "Ja"
 #: gsa/src/web/pages/alerts/details.js:149
 #: gsa/src/web/pages/credentials/details.js:86
 #: gsa/src/web/pages/credentials/row.js:119
-#: gsa/src/web/pages/usersettings/usersettingspage.js:455
-#: gsa/src/web/pages/usersettings/usersettingspage.js:478
+#: gsa/src/web/pages/usersettings/usersettingspage.js:497
+#: gsa/src/web/pages/usersettings/usersettingspage.js:520
 #: gsa/src/web/components/form/yesnoradio.js:54 gsa/src/web/utils/render.js:105
 msgid "No"
 msgstr "Nein"
@@ -2777,7 +2779,7 @@ msgstr "Bericht mit ID"
 #: gsa/src/web/pages/alerts/listpage.js:94
 #: gsa/src/web/pages/audits/details.js:121
 #: gsa/src/web/pages/audits/dialog.js:180
-#: gsa/src/web/pages/tasks/details.js:135 gsa/src/web/pages/tasks/dialog.js:363
+#: gsa/src/web/pages/tasks/details.js:135 gsa/src/web/pages/tasks/dialog.js:368
 #: gsa/src/web/components/bar/menubar.js:218 gsa/src/web/utils/render.js:118
 msgid "Alerts"
 msgstr "Benachrichtigungen"
@@ -2920,7 +2922,7 @@ msgstr "Sitzungstyp"
 
 #: gsa/src/web/pages/alerts/method.js:163
 #: gsa/src/web/pages/alerts/alembavfiremethodpart.js:70
-#: gsa/src/web/pages/reportformats/listpage.js:108
+#: gsa/src/web/pages/reportformats/listpage.js:93
 #: gsa/src/web/components/bar/menubar.js:224 gsa/src/web/utils/render.js:168
 msgid "Report Formats"
 msgstr "Berichtformate"
@@ -3013,6 +3015,7 @@ msgstr "URL"
 #: gsa/src/web/pages/alerts/method.js:607
 #: gsa/src/web/pages/credentials/dialog.js:286
 #: gsa/src/web/pages/login/loginform.js:162
+#: gsa/src/web/pages/login/loginform.js:167
 msgid "Username"
 msgstr "Benutzername"
 
@@ -3370,11 +3373,16 @@ msgstr "Diagramm: Tickets nach Erstellungszeit"
 msgid "Table: Tickets by Creation Time"
 msgstr "Tabelle: Tickets nach Erstellungszeit"
 
-#: gsa/src/web/pages/audits/detailspage.js:107
+#: gsa/src/web/pages/audits/detailspage.js:111
+#: gsa/src/web/pages/audits/listpage.js:55
+msgid "Help: Audits"
+msgstr "Hilfe: Audits"
+
+#: gsa/src/web/pages/audits/detailspage.js:113
 msgid "Audit List"
 msgstr "Auditliste"
 
-#: gsa/src/web/pages/audits/detailspage.js:111
+#: gsa/src/web/pages/audits/detailspage.js:117
 msgid ""
 "This is an Alterable Audit. Reports may not relate to current Policy or "
 "Target!"
@@ -3382,47 +3390,47 @@ msgstr ""
 "Dies ist ein änderbares Audit. Berichte könnten sich nicht auf die aktuelle "
 "Richtlinie oder das aktuelle Ziel beziehen!"
 
-#: gsa/src/web/pages/audits/detailspage.js:120
 #: gsa/src/web/pages/audits/detailspage.js:126
 #: gsa/src/web/pages/audits/detailspage.js:132
-#: gsa/src/web/pages/audits/row.js:118
+#: gsa/src/web/pages/audits/detailspage.js:138
+#: gsa/src/web/pages/audits/row.js:119
 msgid "Audit"
 msgstr "Audit"
 
-#: gsa/src/web/pages/audits/detailspage.js:139
+#: gsa/src/web/pages/audits/detailspage.js:145
 msgid "Export Audit as XML"
 msgstr "Audit als XML exportieren"
 
-#: gsa/src/web/pages/audits/detailspage.js:167
+#: gsa/src/web/pages/audits/detailspage.js:173
 msgid "Current Report for Audit {{- name}} from {{- date}}"
 msgstr "Aktueller Bericht für Audit {{- name}} vom {{- date}}"
 
-#: gsa/src/web/pages/audits/detailspage.js:180
+#: gsa/src/web/pages/audits/detailspage.js:186
 msgid "Last Report for Audit {{- name}} from {{- date}}"
 msgstr "Letzter Bericht für Audit {{- name}} vom {{- date}}"
 
-#: gsa/src/web/pages/audits/detailspage.js:192
+#: gsa/src/web/pages/audits/detailspage.js:198
 msgid "Total Reports for Audit {{- name}}"
 msgstr "Alle Berichte für das Audit {{- name}}"
 
-#: gsa/src/web/pages/audits/detailspage.js:203
+#: gsa/src/web/pages/audits/detailspage.js:209
 msgid "Results for Audit {{- name}}"
 msgstr "Ergebnisse für Audit {{- name}}"
 
-#: gsa/src/web/pages/audits/detailspage.js:246
+#: gsa/src/web/pages/audits/detailspage.js:252
 #: gsa/src/web/pages/tasks/detailspage.js:290
 msgid "Alterable"
 msgstr "Veränderbar"
 
-#: gsa/src/web/pages/audits/component.js:339
-#: gsa/src/web/pages/audits/component.js:471
+#: gsa/src/web/pages/audits/component.js:333
+#: gsa/src/web/pages/audits/component.js:463
 msgid "Edit Audit {{name}}"
 msgstr "Audit {{name}} bearbeiten"
 
-#: gsa/src/web/pages/audits/component.js:376
+#: gsa/src/web/pages/audits/component.js:370
 #: gsa/src/web/pages/audits/dialog.js:82
-#: gsa/src/web/pages/audits/listpage.js:52
-#: gsa/src/web/pages/policies/component.js:248
+#: gsa/src/web/pages/audits/listpage.js:58
+#: gsa/src/web/pages/policies/component.js:254
 msgid "New Audit"
 msgstr "Neues Audit"
 
@@ -3438,11 +3446,11 @@ msgstr "Noch keine Scans"
 
 #: gsa/src/web/pages/audits/details.js:158
 #: gsa/src/web/pages/audits/dialog.js:248
-#: gsa/src/web/pages/policies/detailspage.js:86
-#: gsa/src/web/pages/policies/detailspage.js:91
-#: gsa/src/web/pages/policies/detailspage.js:96
-#: gsa/src/web/pages/policies/component.js:754
-#: gsa/src/web/pages/policies/component.js:769
+#: gsa/src/web/pages/policies/detailspage.js:92
+#: gsa/src/web/pages/policies/detailspage.js:97
+#: gsa/src/web/pages/policies/detailspage.js:102
+#: gsa/src/web/pages/policies/component.js:777
+#: gsa/src/web/pages/policies/component.js:793
 #: gsa/src/web/pages/policies/row.js:56 gsa/src/web/pages/policies/row.js:62
 #: gsa/src/web/pages/policies/row.js:68 gsa/src/web/pages/policies/row.js:111
 msgid "Policy"
@@ -3450,25 +3458,25 @@ msgstr "Richtlinie"
 
 #: gsa/src/web/pages/audits/details.js:175
 #: gsa/src/web/pages/audits/dialog.js:264
-#: gsa/src/web/pages/tasks/details.js:189 gsa/src/web/pages/tasks/dialog.js:500
+#: gsa/src/web/pages/tasks/details.js:189 gsa/src/web/pages/tasks/dialog.js:506
 msgid "Order for target hosts"
 msgstr "Reihenfolge der Ziel-Hosts"
 
 #: gsa/src/web/pages/audits/details.js:182
 #: gsa/src/web/pages/audits/dialog.js:257
-#: gsa/src/web/pages/tasks/details.js:196 gsa/src/web/pages/tasks/dialog.js:493
+#: gsa/src/web/pages/tasks/details.js:196 gsa/src/web/pages/tasks/dialog.js:499
 msgid "Network Source Interface"
 msgstr "Netzwerk-Quell-Interface"
 
 #: gsa/src/web/pages/audits/details.js:191
 #: gsa/src/web/pages/audits/dialog.js:287
-#: gsa/src/web/pages/tasks/details.js:205 gsa/src/web/pages/tasks/dialog.js:523
+#: gsa/src/web/pages/tasks/details.js:205 gsa/src/web/pages/tasks/dialog.js:529
 msgid "Maximum concurrently executed NVTs per host"
 msgstr "Maximal gleichzeitig ausgeführte NVTs pro Host"
 
 #: gsa/src/web/pages/audits/details.js:201
 #: gsa/src/web/pages/audits/dialog.js:300
-#: gsa/src/web/pages/tasks/details.js:215 gsa/src/web/pages/tasks/dialog.js:536
+#: gsa/src/web/pages/tasks/details.js:215 gsa/src/web/pages/tasks/dialog.js:542
 msgid "Maximum concurrently scanned hosts"
 msgstr "Maximal gleichzeitig gescannte Hosts"
 
@@ -3511,7 +3519,7 @@ msgstr "{{nr}} weitere Male"
 
 #: gsa/src/web/pages/audits/details.js:272
 #: gsa/src/web/pages/audits/dialog.js:212
-#: gsa/src/web/pages/tasks/details.js:300 gsa/src/web/pages/tasks/dialog.js:397
+#: gsa/src/web/pages/tasks/details.js:300 gsa/src/web/pages/tasks/dialog.js:402
 #: gsa/src/web/pages/schedules/dialog.js:62
 #: gsa/src/web/pages/schedules/render.js:137
 msgid "Once"
@@ -3535,19 +3543,19 @@ msgstr ""
 msgid "Do not automatically delete reports"
 msgstr "Berichte nicht automatisch löschen"
 
-#: gsa/src/web/pages/audits/dialog.js:159 gsa/src/web/pages/tasks/dialog.js:331
+#: gsa/src/web/pages/audits/dialog.js:159 gsa/src/web/pages/tasks/dialog.js:336
 msgid "Scan Targets"
 msgstr "Scan-Ziele"
 
-#: gsa/src/web/pages/audits/dialog.js:171 gsa/src/web/pages/tasks/dialog.js:354
+#: gsa/src/web/pages/audits/dialog.js:171 gsa/src/web/pages/tasks/dialog.js:359
 msgid "Create a new target"
 msgstr "Neues Ziel erstellen"
 
-#: gsa/src/web/pages/audits/dialog.js:190 gsa/src/web/pages/tasks/dialog.js:374
+#: gsa/src/web/pages/audits/dialog.js:190 gsa/src/web/pages/tasks/dialog.js:379
 msgid "Create a new alert"
 msgstr "Neue Benachrichtigung erstellen"
 
-#: gsa/src/web/pages/audits/dialog.js:217 gsa/src/web/pages/tasks/dialog.js:402
+#: gsa/src/web/pages/audits/dialog.js:217 gsa/src/web/pages/tasks/dialog.js:407
 msgid "Create a new schedule"
 msgstr "Neuen Zeitplan erstellen"
 
@@ -3555,43 +3563,43 @@ msgstr "Neuen Zeitplan erstellen"
 msgid "Alterable Audit"
 msgstr "Änderbares Audit"
 
-#: gsa/src/web/pages/audits/dialog.js:270 gsa/src/web/pages/tasks/dialog.js:506
+#: gsa/src/web/pages/audits/dialog.js:270 gsa/src/web/pages/tasks/dialog.js:512
 msgid "Sequential"
 msgstr "Sequenziell"
 
-#: gsa/src/web/pages/audits/dialog.js:274 gsa/src/web/pages/tasks/dialog.js:510
+#: gsa/src/web/pages/audits/dialog.js:274 gsa/src/web/pages/tasks/dialog.js:516
 msgid "Random"
 msgstr "Zufällig"
 
-#: gsa/src/web/pages/audits/dialog.js:278 gsa/src/web/pages/tasks/dialog.js:514
+#: gsa/src/web/pages/audits/dialog.js:278 gsa/src/web/pages/tasks/dialog.js:520
 msgid "Reverse"
 msgstr "Rückwärts"
 
-#: gsa/src/web/pages/audits/listpage.js:93
+#: gsa/src/web/pages/audits/listpage.js:99
 msgid "Audits"
 msgstr "Audits"
 
-#: gsa/src/web/pages/audits/row.js:88 gsa/src/web/pages/tasks/row.js:106
+#: gsa/src/web/pages/audits/row.js:89 gsa/src/web/pages/tasks/row.js:106
 msgid "User {{name}}"
 msgstr "Benutzer {{name}}"
 
-#: gsa/src/web/pages/audits/row.js:91 gsa/src/web/pages/tasks/row.js:109
+#: gsa/src/web/pages/audits/row.js:92 gsa/src/web/pages/tasks/row.js:109
 msgid "Role {{name}}"
 msgstr "Rolle {{name}}"
 
-#: gsa/src/web/pages/audits/row.js:94 gsa/src/web/pages/tasks/row.js:112
+#: gsa/src/web/pages/audits/row.js:95 gsa/src/web/pages/tasks/row.js:112
 msgid "Group {{name}}"
 msgstr "Gruppe {{name}}"
 
-#: gsa/src/web/pages/audits/row.js:107
+#: gsa/src/web/pages/audits/row.js:108
 msgid "Audit is alterable"
 msgstr "Audit ist änderbar"
 
-#: gsa/src/web/pages/audits/row.js:112
+#: gsa/src/web/pages/audits/row.js:113
 msgid "Audit is configured to run on sensor {{name}}"
 msgstr "Audit ist konfiguriert auf dem Sensor {{name}} ausgeführt zu werden"
 
-#: gsa/src/web/pages/audits/row.js:125
+#: gsa/src/web/pages/audits/row.js:126
 msgid "Audit made visible for: {{observers}}"
 msgstr "Audit sichtbar gemacht für: {{observers}}"
 
@@ -3694,75 +3702,75 @@ msgstr "Alle verweigern"
 msgid "Deny all and allow from {{addresses}}"
 msgstr "Alle verweigern und von {{addresses}} erlauben"
 
-#: gsa/src/web/pages/users/details.js:97 gsa/src/web/pages/users/dialog.js:273
+#: gsa/src/web/pages/users/details.js:97 gsa/src/web/pages/users/dialog.js:275
 #: gsa/src/web/pages/users/header.js:57 gsa/src/web/pages/users/table.js:36
 #: gsa/src/web/pages/roles/listpage.js:89
 #: gsa/src/web/components/bar/menubar.js:254 gsa/src/web/utils/render.js:172
 msgid "Roles"
 msgstr "Rollen"
 
-#: gsa/src/web/pages/users/details.js:112 gsa/src/web/pages/users/dialog.js:284
+#: gsa/src/web/pages/users/details.js:112 gsa/src/web/pages/users/dialog.js:286
 #: gsa/src/web/pages/users/header.js:65 gsa/src/web/pages/users/table.js:40
 #: gsa/src/web/pages/groups/listpage.js:87
 #: gsa/src/web/components/bar/menubar.js:251 gsa/src/web/utils/render.js:140
 msgid "Groups"
 msgstr "Gruppen"
 
-#: gsa/src/web/pages/users/details.js:132 gsa/src/web/pages/users/dialog.js:294
+#: gsa/src/web/pages/users/details.js:132 gsa/src/web/pages/users/dialog.js:296
 #: gsa/src/web/pages/users/header.js:73 gsa/src/web/pages/users/table.js:44
 msgid "Host Access"
 msgstr "Host-Zugriff"
 
-#: gsa/src/web/pages/users/details.js:137 gsa/src/web/pages/users/dialog.js:321
+#: gsa/src/web/pages/users/details.js:139 gsa/src/web/pages/users/dialog.js:323
 msgid "Interface Access"
 msgstr "Interface-Zugriff"
 
-#: gsa/src/web/pages/users/details.js:142 gsa/src/web/pages/users/header.js:81
+#: gsa/src/web/pages/users/details.js:144 gsa/src/web/pages/users/header.js:81
 #: gsa/src/web/pages/users/table.js:48
 msgid "Authentication Type"
 msgstr "Authentifizierungstyp"
 
-#: gsa/src/web/pages/users/dialog.js:109 gsa/src/web/pages/users/listpage.js:67
+#: gsa/src/web/pages/users/dialog.js:108 gsa/src/web/pages/users/listpage.js:67
 msgid "New User"
 msgstr "Neuer Benutzer"
 
-#: gsa/src/web/pages/users/dialog.js:163
+#: gsa/src/web/pages/users/dialog.js:165
 msgid "Login Name"
 msgstr "Loginname"
 
-#: gsa/src/web/pages/users/dialog.js:188
+#: gsa/src/web/pages/users/dialog.js:190
 #: gsa/src/web/pages/credentials/dialog.js:299
-#: gsa/src/web/pages/usersettings/usersettingspage.js:418
+#: gsa/src/web/pages/usersettings/usersettingspage.js:460
 #: gsa/src/web/pages/login/loginform.js:174
 #: gsa/src/web/pages/login/loginform.js:179
 msgid "Password"
 msgstr "Passwort"
 
-#: gsa/src/web/pages/users/dialog.js:203 gsa/src/web/pages/users/dialog.js:252
+#: gsa/src/web/pages/users/dialog.js:205 gsa/src/web/pages/users/dialog.js:254
 msgid "LDAP Authentication Only"
 msgstr "Nur LDAP-Authentifizierung"
 
-#: gsa/src/web/pages/users/dialog.js:212 gsa/src/web/pages/users/dialog.js:261
+#: gsa/src/web/pages/users/dialog.js:214 gsa/src/web/pages/users/dialog.js:263
 msgid "RADIUS Authentication Only"
 msgstr "Nur RADIUS-Authentifizierung"
 
-#: gsa/src/web/pages/users/dialog.js:227
+#: gsa/src/web/pages/users/dialog.js:229
 msgid "Password: Use existing Password"
 msgstr "Passwort: Verwende bestehendes Passwort"
 
-#: gsa/src/web/pages/users/dialog.js:235
+#: gsa/src/web/pages/users/dialog.js:237
 msgid "New Password"
 msgstr "Neues Passwort"
 
-#: gsa/src/web/pages/users/dialog.js:299 gsa/src/web/pages/users/dialog.js:326
+#: gsa/src/web/pages/users/dialog.js:301 gsa/src/web/pages/users/dialog.js:328
 msgid "Allow all and deny"
 msgstr "Erlaube alle und verweigere"
 
-#: gsa/src/web/pages/users/dialog.js:306 gsa/src/web/pages/users/dialog.js:333
+#: gsa/src/web/pages/users/dialog.js:308 gsa/src/web/pages/users/dialog.js:335
 msgid "Deny all and allow"
 msgstr "Verweigere alle und erlaube"
 
-#: gsa/src/web/pages/users/dialog.js:351
+#: gsa/src/web/pages/users/dialog.js:353
 msgid ""
 "Please note: You are about to create a user without a role. This user will "
 "not have any permissions and as a result will not be able to login."
@@ -3771,7 +3779,7 @@ msgstr ""
 "Dieser Benutzer wird keine Berechtigungen haben und deshalb nicht in der "
 "Lage sein, sich einzuloggen."
 
-#: gsa/src/web/pages/users/dialog.js:355
+#: gsa/src/web/pages/users/dialog.js:357
 msgid "User without a role"
 msgstr "Benutzer ohne Rolle"
 
@@ -3935,7 +3943,7 @@ msgid "Edit Task {{name}}"
 msgstr "Aufgabe {{name}} bearbeiten"
 
 #: gsa/src/web/pages/tasks/component.js:474
-#: gsa/src/web/pages/tasks/dialog.js:211
+#: gsa/src/web/pages/tasks/dialog.js:164
 #: gsa/src/web/pages/tasks/icons/newiconmenu.js:35
 #: gsa/src/web/wizard/taskwizard.js:112
 msgid "New Task"
@@ -3970,22 +3978,22 @@ msgstr "Anzahl der Schwachstellen verringert"
 msgid "Vulnerabilities did not change"
 msgstr "Schwachstellen unverändert"
 
-#: gsa/src/web/pages/tasks/details.js:242 gsa/src/web/pages/tasks/dialog.js:424
+#: gsa/src/web/pages/tasks/details.js:242 gsa/src/web/pages/tasks/dialog.js:429
 msgid "Min QoD"
 msgstr "Min QdE"
 
-#: gsa/src/web/pages/tasks/dialog.js:338 gsa/src/web/pages/tasks/dialog.js:459
-#: gsa/src/web/pages/tasks/dialog.js:480
+#: gsa/src/web/pages/tasks/dialog.js:343 gsa/src/web/pages/tasks/dialog.js:464
+#: gsa/src/web/pages/tasks/dialog.js:483
 msgid "This setting is not alterable once task has been run at least once."
 msgstr ""
 "Diese Einstellung ist nicht änderbar sobald die Aufgabe mindestens einmal "
 "ausgeführt wurde."
 
-#: gsa/src/web/pages/tasks/dialog.js:439
+#: gsa/src/web/pages/tasks/dialog.js:444
 msgid "Alterable Task"
 msgstr "Änderbare Aufgabe"
 
-#: gsa/src/web/pages/tasks/dialog.js:569
+#: gsa/src/web/pages/tasks/dialog.js:578
 msgid "Add:"
 msgstr "Hinzufügen:"
 
@@ -4114,7 +4122,7 @@ msgstr "Berichte: Letzter"
 #: gsa/src/web/pages/scanconfigs/detailspage.js:145
 #: gsa/src/web/pages/scanconfigs/header.js:86
 #: gsa/src/web/pages/scanconfigs/header.js:103
-#: gsa/src/web/pages/scanconfigs/editdialog.js:416
+#: gsa/src/web/pages/scanconfigs/nvtfamilies.js:157
 #: gsa/src/web/components/powerfilter/tasktrendgroup.js:37
 msgid "Trend"
 msgstr "Trend"
@@ -4605,7 +4613,7 @@ msgstr "Über GSA"
 msgid "Version {{version}}"
 msgstr "Version ({{version}})"
 
-#: gsa/src/web/pages/page.js:93
+#: gsa/src/web/pages/page.js:98
 #: gsa/src/web/components/error/errorboundary.js:75
 msgid "An error occurred on this page."
 msgstr "Es ist ein Fehler auf dieser Seite aufgetreten."
@@ -4797,11 +4805,11 @@ msgstr "Tag {{name}} bearbeiten"
 
 #: gsa/src/web/pages/tags/details.js:56 gsa/src/web/pages/tags/dialog.js:237
 #: gsa/src/web/pages/tags/listpage.js:56 gsa/src/web/pages/tags/table.js:62
-#: gsa/src/web/pages/hosts/identifiers.js:198
+#: gsa/src/web/pages/hosts/identifiers.js:177
 #: gsa/src/web/pages/scanconfigs/detailspage.js:214
 #: gsa/src/web/pages/scanconfigs/detailspage.js:252
-#: gsa/src/web/pages/scanconfigs/editdialog.js:123
-#: gsa/src/web/pages/reportformats/detailspage.js:169
+#: gsa/src/web/pages/scanconfigs/nvtpreferences.js:100
+#: gsa/src/web/pages/reportformats/detailspage.js:147
 #: gsa/src/web/pages/reportformats/dialog.js:231 gsa/src/web/entity/tags.js:130
 #: gsa/src/web/entities/tagsdialog.js:90
 msgid "Value"
@@ -4991,24 +4999,24 @@ msgstr "Zeitplan {{name}} bearbeiten"
 msgid "First Run"
 msgstr "Erste Ausführung"
 
-#: gsa/src/web/pages/schedules/details.js:69
+#: gsa/src/web/pages/schedules/details.js:73
 #: gsa/src/web/pages/schedules/table.js:42
 msgid "Next Run"
 msgstr "Nächste Ausführung"
 
-#: gsa/src/web/pages/schedules/details.js:92
+#: gsa/src/web/pages/schedules/details.js:96
 #: gsa/src/web/pages/schedules/dialog.js:509
 #: gsa/src/web/pages/schedules/table.js:47
 msgid "Recurrence"
 msgstr "Wiederholung"
 
-#: gsa/src/web/pages/schedules/details.js:97
+#: gsa/src/web/pages/schedules/details.js:101
 #: gsa/src/web/pages/schedules/dialog.js:505
 #: gsa/src/web/pages/schedules/table.js:52
 msgid "Duration"
 msgstr "Laufzeit"
 
-#: gsa/src/web/pages/schedules/details.js:106
+#: gsa/src/web/pages/schedules/details.js:110
 msgid "Tasks using this Schedule"
 msgstr "Aufgaben, die diesen Zeitplan verwenden"
 
@@ -5352,35 +5360,35 @@ msgstr "Gruppen-ID"
 msgid "Resource ID"
 msgstr "Ressourcen-ID"
 
-#: gsa/src/web/pages/permissions/multipledialog.js:90
+#: gsa/src/web/pages/permissions/multipledialog.js:91
 msgid "including related resources"
 msgstr "einschließlich verbundener Ressourcen"
 
-#: gsa/src/web/pages/permissions/multipledialog.js:96
+#: gsa/src/web/pages/permissions/multipledialog.js:97
 msgid "for current resource only"
 msgstr "nur für aktuelle Ressource"
 
-#: gsa/src/web/pages/permissions/multipledialog.js:102
+#: gsa/src/web/pages/permissions/multipledialog.js:103
 msgid "for related resources only"
 msgstr "nur für verbundene Ressourcen"
 
-#: gsa/src/web/pages/permissions/multipledialog.js:118
+#: gsa/src/web/pages/permissions/multipledialog.js:119
 msgid "Grant"
 msgstr "Gewähre"
 
-#: gsa/src/web/pages/permissions/multipledialog.js:125
+#: gsa/src/web/pages/permissions/multipledialog.js:126
 msgid "read"
 msgstr "lesen"
 
-#: gsa/src/web/pages/permissions/multipledialog.js:129
+#: gsa/src/web/pages/permissions/multipledialog.js:130
 msgid "write"
 msgstr "schreiben"
 
-#: gsa/src/web/pages/permissions/multipledialog.js:138
+#: gsa/src/web/pages/permissions/multipledialog.js:139
 msgid "to"
 msgstr "für"
 
-#: gsa/src/web/pages/permissions/multipledialog.js:195
+#: gsa/src/web/pages/permissions/multipledialog.js:196
 msgid "on"
 msgstr "für"
 
@@ -5397,7 +5405,7 @@ msgid "Subject Type"
 msgstr "Subjekttyp"
 
 #: gsa/src/web/pages/permissions/table.js:63
-#: gsa/src/web/entity/permissions.js:212
+#: gsa/src/web/entity/permissions.js:217
 msgid "No permissions available"
 msgstr "Keine Berechtigungen vorhanden"
 
@@ -5432,7 +5440,7 @@ msgid "Criteria"
 msgstr "Kriterien"
 
 #: gsa/src/web/pages/ovaldefs/detailspage.js:200
-#: gsa/src/web/pages/hosts/identifiers.js:200
+#: gsa/src/web/pages/hosts/identifiers.js:179
 msgid "Source"
 msgstr "Quelle"
 
@@ -5452,7 +5460,6 @@ msgstr "Beitragende"
 #: gsa/src/web/pages/ovaldefs/filterdialog.js:30
 #: gsa/src/web/pages/ovaldefs/table.js:62
 #: gsa/src/web/pages/nvts/filterdialog.js:42
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:129
 #: gsa/src/web/pages/certbund/details.js:63
 #: gsa/src/web/pages/extras/feedstatuspage.js:120
 msgid "Version"
@@ -5842,17 +5849,14 @@ msgid "Average Severity"
 msgstr "Durchschnittlicher Schweregrad"
 
 #: gsa/src/web/pages/operatingsystems/filterdialog.js:34
-#: gsa/src/web/pages/tlscertificates/filterdialog.js:34
 msgid "Severity: Latest"
 msgstr "Schweregrad: Neuester"
 
 #: gsa/src/web/pages/operatingsystems/filterdialog.js:38
-#: gsa/src/web/pages/tlscertificates/filterdialog.js:38
 msgid "Severity: Highest"
 msgstr "Schweregrad: Höchster"
 
 #: gsa/src/web/pages/operatingsystems/filterdialog.js:42
-#: gsa/src/web/pages/tlscertificates/filterdialog.js:42
 msgid "Severity: Average"
 msgstr "Schweregrad: Durchschnitt"
 
@@ -5959,6 +5963,14 @@ msgstr "Gruppe als XML exportieren"
 #: gsa/src/web/pages/groups/component.js:54
 msgid "Edit Group {{name}}"
 msgstr "Gruppe {{name}} bearbeiten"
+
+#: gsa/src/web/pages/groups/details.js:62
+msgid "Note: "
+msgstr "Notiz:"
+
+#: gsa/src/web/pages/groups/details.js:63
+msgid "Special group"
+msgstr "Spezielle Gruppe"
 
 #: gsa/src/web/pages/groups/dialog.js:42
 #: gsa/src/web/pages/groups/listpage.js:56
@@ -6173,23 +6185,23 @@ msgstr "Tabelle: Hosts nach Schweregrad-Score"
 msgid "(Target Host)"
 msgstr "(Ziel-Host)"
 
-#: gsa/src/web/pages/hosts/identifiers.js:169
+#: gsa/src/web/pages/hosts/identifiers.js:150
 msgid "Latest Identifiers"
 msgstr "Neueste Identifikatoren"
 
-#: gsa/src/web/pages/hosts/identifiers.js:169
+#: gsa/src/web/pages/hosts/identifiers.js:150
 msgid "All Identifiers"
 msgstr "Alle Identifikatoren"
 
-#: gsa/src/web/pages/hosts/identifiers.js:176
+#: gsa/src/web/pages/hosts/identifiers.js:156
 msgid "Show all Identifiers"
 msgstr "Alle Identifikatoren anzeigen"
 
-#: gsa/src/web/pages/hosts/identifiers.js:177
+#: gsa/src/web/pages/hosts/identifiers.js:156
 msgid "Show latest Identifiers"
 msgstr "Die letzten Identifikatoren anzeigen"
 
-#: gsa/src/web/pages/hosts/identifiers.js:228
+#: gsa/src/web/pages/hosts/identifiers.js:207
 msgid "Delete Identifier"
 msgstr "Identifikator löschen"
 
@@ -6243,9 +6255,9 @@ msgstr "Qualität der Erkennung"
 #: gsa/src/web/pages/nvts/filterdialog.js:30 gsa/src/web/pages/nvts/table.js:68
 #: gsa/src/web/pages/scanconfigs/detailspage.js:141
 #: gsa/src/web/pages/scanconfigs/header.js:59
-#: gsa/src/web/pages/scanconfigs/editdialog.js:414
-#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:235
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:121
+#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:216
+#: gsa/src/web/pages/scanconfigs/nvtfamilies.js:155
+#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:152
 msgid "Family"
 msgstr "Familie"
 
@@ -6391,36 +6403,36 @@ msgstr "Tabelle: NVTs nach Schweregradklasse"
 #: gsa/src/web/pages/nvts/preferences.js:40
 #: gsa/src/web/pages/scanconfigs/detailspage.js:215
 #: gsa/src/web/pages/scanconfigs/detailspage.js:253
-#: gsa/src/web/pages/scanconfigs/editdialog.js:251
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:189
+#: gsa/src/web/pages/scanconfigs/scannerpreferences.js:124
+#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:214
 msgid "Default Value"
 msgstr "Standardwert"
 
 #: gsa/src/web/pages/nvts/preferences.js:45
-#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:271
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:194
+#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:252
+#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:219
 msgid "Timeout"
 msgstr "Timeout"
 
 #: gsa/src/web/pages/nvts/preferences.js:47
-#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:86
+#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:82
 msgid "default"
 msgstr "Voreinstellung"
 
-#: gsa/src/web/pages/tlscertificates/detailspage.js:86
+#: gsa/src/web/pages/tlscertificates/detailspage.js:85
 #: gsa/src/web/pages/tlscertificates/listpage.js:55
 msgid "Help: TLS Certificate Assets"
 msgstr "Hilfe: TLS-Zertifikat-Assets"
 
-#: gsa/src/web/pages/tlscertificates/detailspage.js:88
+#: gsa/src/web/pages/tlscertificates/detailspage.js:87
 msgid "TLS Certificates List"
 msgstr "TLS-Zertifikat-Liste"
 
-#: gsa/src/web/pages/tlscertificates/detailspage.js:94
+#: gsa/src/web/pages/tlscertificates/detailspage.js:93
 msgid "Download TLS Certificate as .pem"
 msgstr "TLS-Zertifikat als .pem herunterladen"
 
-#: gsa/src/web/pages/tlscertificates/detailspage.js:99
+#: gsa/src/web/pages/tlscertificates/detailspage.js:98
 #: gsa/src/web/pages/tlscertificates/row.js:71
 msgid "Export TLS Certificate as XML"
 msgstr "TLS-Zertifikat als XML exportieren"
@@ -6435,11 +6447,13 @@ msgid "Valid"
 msgstr "Gültig"
 
 #: gsa/src/web/pages/tlscertificates/details.js:65
+#: gsa/src/web/pages/tlscertificates/filterdialog.js:34
 #: gsa/src/web/pages/tlscertificates/table.js:68
 msgid "Activates"
 msgstr "Wird aktiviert"
 
 #: gsa/src/web/pages/tlscertificates/details.js:73
+#: gsa/src/web/pages/tlscertificates/filterdialog.js:38
 #: gsa/src/web/pages/tlscertificates/table.js:76
 msgid "Expires"
 msgstr "Läuft ab"
@@ -6456,13 +6470,18 @@ msgstr "TLS-Zertifikat wird verwendet"
 msgid "Delete TLS Certificate"
 msgstr "TLS-Zertifikat löschen"
 
+#: gsa/src/web/pages/tlscertificates/filterdialog.js:26
 #: gsa/src/web/pages/tlscertificates/table.js:52
 msgid "Issuer DN"
 msgstr "Aussteller DN"
 
+#: gsa/src/web/pages/tlscertificates/filterdialog.js:42
+msgid "Last Seen"
+msgstr "Zuletzt gesehen"
+
 #: gsa/src/web/pages/tlscertificates/table.js:84
-msgid "Latest collection"
-msgstr "Letzter Fund"
+msgid "Last seen"
+msgstr "Zuletzt gesehen"
 
 #: gsa/src/web/pages/tlscertificates/table.js:107
 msgid "No certificates available"
@@ -6736,13 +6755,13 @@ msgid "Export Scan Config as XML"
 msgstr "Scan-Konfiguration als XML exportieren"
 
 #: gsa/src/web/pages/scanconfigs/detailspage.js:114
-#: gsa/src/web/pages/scanconfigs/component.js:494
+#: gsa/src/web/pages/scanconfigs/component.js:527
 #: gsa/src/web/pages/scanconfigs/listpage.js:66
 msgid "Import Scan Config"
 msgstr "Scan-Konfiguration importieren"
 
 #: gsa/src/web/pages/scanconfigs/detailspage.js:142
-#: gsa/src/web/pages/scanconfigs/editdialog.js:415
+#: gsa/src/web/pages/scanconfigs/nvtfamilies.js:156
 msgid "NVTs selected"
 msgstr "NVTs ausgewählt"
 
@@ -6767,7 +6786,7 @@ msgid "NVTs of family {{name}}"
 msgstr "NVTs der Familie {{name}}"
 
 #: gsa/src/web/pages/scanconfigs/detailspage.js:176
-#: gsa/src/web/pages/scanconfigs/editdialog.js:316
+#: gsa/src/web/pages/scanconfigs/nvtfamilies.js:67
 msgid "{{count}} of {{max}}"
 msgstr "{{count}} von {{max}}"
 
@@ -6788,41 +6807,57 @@ msgstr ""
 "und berücksichtigt."
 
 #: gsa/src/web/pages/scanconfigs/detailspage.js:356
-#: gsa/src/web/pages/policies/detailspage.js:177
+#: gsa/src/web/pages/policies/detailspage.js:183
 msgid "Scanner Preferences"
 msgstr "Scanner-Vorgaben"
 
 #: gsa/src/web/pages/scanconfigs/detailspage.js:359
-#: gsa/src/web/pages/policies/detailspage.js:180
+#: gsa/src/web/pages/policies/detailspage.js:186
 #: gsa/src/web/utils/render.js:154
 msgid "NVT Families"
 msgstr "NVT-Familien"
 
 #: gsa/src/web/pages/scanconfigs/detailspage.js:362
-#: gsa/src/web/pages/policies/detailspage.js:183
+#: gsa/src/web/pages/policies/detailspage.js:189
 msgid "NVT Preferences"
 msgstr "NVT-Vorgaben"
 
-#: gsa/src/web/pages/scanconfigs/component.js:90
+#: gsa/src/web/pages/scanconfigs/component.js:103
 msgid "Edit Scan Config {{name}}"
 msgstr "Scan-Konfiguration {{name}} bearbeiten"
 
-#: gsa/src/web/pages/scanconfigs/component.js:146
+#: gsa/src/web/pages/scanconfigs/component.js:164
 msgid "Edit Scan Config Family {{name}}"
 msgstr "Scan-Konfiguration-Familie {{name}} bearbeiten"
 
-#: gsa/src/web/pages/scanconfigs/component.js:169
+#: gsa/src/web/pages/scanconfigs/component.js:226
+msgid "Edit Scan Config NVT {{nvtOid}}"
+msgstr "Scan-Konfiguration-NVT {{nvtOid}} bearbeiten"
+
+#: gsa/src/web/pages/scanconfigs/component.js:250
 msgid "Edit Scan Config NVT {{name}}"
 msgstr "Scan-Konfiguration-NVT {{name}} bearbeiten"
 
-#: gsa/src/web/pages/scanconfigs/component.js:495
+#: gsa/src/web/pages/scanconfigs/component.js:501
+msgid "Edit Scan Config NVT Details"
+msgstr "Scan-Konfiguration-NVT-Details bearbeiten"
+
+#: gsa/src/web/pages/scanconfigs/component.js:502
+msgid "Edit Scan Config Family"
+msgstr "Scan-Konfiguration-Familie bearbeiten"
+
+#: gsa/src/web/pages/scanconfigs/component.js:528
 msgid "Import XML config"
 msgstr "XML-Konfiguration importieren"
 
-#: gsa/src/web/pages/scanconfigs/component.js:503
-#: gsa/src/web/pages/scanconfigs/component.js:518
+#: gsa/src/web/pages/scanconfigs/component.js:536
+#: gsa/src/web/pages/scanconfigs/component.js:552
 msgid "Config"
 msgstr "Konfiguration"
+
+#: gsa/src/web/pages/scanconfigs/nvtpreferences.js:91
+msgid "Network Vulnerability Test Preferences ({{counts}})"
+msgstr "Vorgaben für Network Vulnerability Tests ({{counts}})"
 
 #: gsa/src/web/pages/scanconfigs/trend.js:35
 msgid "Dynamic"
@@ -6837,15 +6872,15 @@ msgstr "Aufgaben, die diese Scan-Konfiguration verwenden"
 msgid "New Scan Config"
 msgstr "Neue Scan-Konfiguration"
 
-#: gsa/src/web/pages/scanconfigs/dialog.js:89
+#: gsa/src/web/pages/scanconfigs/dialog.js:88
 msgid "Base"
 msgstr "Basis"
 
-#: gsa/src/web/pages/scanconfigs/dialog.js:95
+#: gsa/src/web/pages/scanconfigs/dialog.js:94
 msgid "Empty, static and fast"
 msgstr "Empty, static and fast"
 
-#: gsa/src/web/pages/scanconfigs/dialog.js:102
+#: gsa/src/web/pages/scanconfigs/dialog.js:103
 msgid "Full and fast"
 msgstr "Full and fast"
 
@@ -6858,60 +6893,11 @@ msgstr "Hilfe: Scan-Konfigurationen"
 msgid "Scan Configs"
 msgstr "Scan-Konfigurationen"
 
-#: gsa/src/web/pages/scanconfigs/editdialog.js:83
-msgid "Edit Policy NVT Details"
-msgstr "Richtlinien-NVT-Details bearbeiten"
-
-#: gsa/src/web/pages/scanconfigs/editdialog.js:84
-msgid "Edit Scan Config NVT Details"
-msgstr "Scan-Konfiguration-NVT-Details bearbeiten"
-
-#: gsa/src/web/pages/scanconfigs/editdialog.js:114
-msgid "Network Vulnerability Test Preferences ({{counts}})"
-msgstr "Vorgaben für Network Vulnerability Tests ({{counts}})"
-
-#: gsa/src/web/pages/scanconfigs/editdialog.js:242
-msgid "Edit Scanner Preferences ({{counts}})"
-msgstr "Scanner-Vorgaben bearbeiten ({{counts}}))"
-
-#: gsa/src/web/pages/scanconfigs/editdialog.js:250
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:188
-msgid "New Value"
-msgstr "Neuer Wert"
-
-#: gsa/src/web/pages/scanconfigs/editdialog.js:310
-msgid "Edit Policy Family"
-msgstr "Richtlinien-Familie bearbeiten"
-
-#: gsa/src/web/pages/scanconfigs/editdialog.js:311
-msgid "Edit Scan Config Family"
-msgstr "Scan-Konfiguration-Familie bearbeiten"
-
-#: gsa/src/web/pages/scanconfigs/editdialog.js:407
-msgid "Edit Network Vulnerability Test Families ({{counts}})"
-msgstr "Familien von Network Vulnerability Tests bearbeiten ({{counts}})"
-
-#: gsa/src/web/pages/scanconfigs/editdialog.js:417
-msgid "Select all NVTs"
-msgstr "Alle NVTs auswählen"
-
-#: gsa/src/web/pages/scanconfigs/editdialog.js:439
-msgid "Total: {{count}}"
-msgstr "Gesamt: {{count}}"
-
-#: gsa/src/web/pages/scanconfigs/editdialog.js:442
-msgid "{{known}} of {{max}}"
-msgstr "{{known}} von {{max}}"
-
-#: gsa/src/web/pages/scanconfigs/row.js:68
-msgid "Clone Scan Config"
-msgstr "Scan-Konfiguration klonen"
-
-#: gsa/src/web/pages/scanconfigs/row.js:74
+#: gsa/src/web/pages/scanconfigs/row.js:73
 msgid "Export Scan Config"
 msgstr "Scan-Konfiguration exportieren"
 
-#: gsa/src/web/pages/scanconfigs/row.js:110
+#: gsa/src/web/pages/scanconfigs/row.js:109
 msgid ""
 "The family selection is DYNAMIC. New families will automatically be added "
 "and considered."
@@ -6919,7 +6905,7 @@ msgstr ""
 "Die Familien-Auswahl ist DYNAMISCH. Neue Familien werden automatisch "
 "hinzugefügt und berücksichtigt."
 
-#: gsa/src/web/pages/scanconfigs/row.js:114
+#: gsa/src/web/pages/scanconfigs/row.js:113
 msgid ""
 "The family selection is STATIC. New families will NOT automatically be added "
 "and considered."
@@ -6927,7 +6913,7 @@ msgstr ""
 "Die Familien-Auswahl ist STATISCH. Neue Familien werden NICHT automatisch "
 "hinzugefügt und berücksichtigt."
 
-#: gsa/src/web/pages/scanconfigs/row.js:124
+#: gsa/src/web/pages/scanconfigs/row.js:123
 msgid ""
 "The NVT selection is DYNAMIC. New NVTs of selected families will "
 "automatically be added and considered."
@@ -6935,7 +6921,7 @@ msgstr ""
 "Die NVT-Auswahl ist DYNAMISCH. Neue NVTs ausgewählter Familien werden "
 "automatisch hinzugefügt und berücksichtigt."
 
-#: gsa/src/web/pages/scanconfigs/row.js:128
+#: gsa/src/web/pages/scanconfigs/row.js:127
 msgid ""
 "The NVT selection is STATIC. New NVTs of selected families will NOT "
 "automatically be added and considered."
@@ -6943,40 +6929,61 @@ msgstr ""
 "Die NVT-Auswahl ist STATISCH. Neue NVTs ausgewählter Familien werden NICHT "
 "automatisch hinzugefügt und berücksichtigt."
 
-#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:104
+#: gsa/src/web/pages/scanconfigs/scannerpreferences.js:115
+msgid "Edit Scanner Preferences ({{counts}})"
+msgstr "Scanner-Vorgaben bearbeiten ({{counts}}))"
+
+#: gsa/src/web/pages/scanconfigs/scannerpreferences.js:123
+#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:213
+msgid "New Value"
+msgstr "Neuer Wert"
+
+#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:100
 msgid "Select and edit NVT details"
 msgstr "NVT-Details auswählen und bearbeiten"
 
-#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:241
+#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:222
 msgid "Edit Network Vulnerability Tests"
 msgstr "Network Vulnerability Tests bearbeiten"
 
-#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:257
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:125
+#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:238
+#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:156
 msgid "OID"
 msgstr "OID"
 
-#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:273
+#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:254
 msgid "Prefs"
 msgstr "Vorgaben"
 
-#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:280
+#: gsa/src/web/pages/scanconfigs/editconfigfamilydialog.js:261
 msgid "Selected"
 msgstr "Ausgewählt"
 
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:158
+#: gsa/src/web/pages/scanconfigs/nvtfamilies.js:148
+msgid "Edit Network Vulnerability Test Families ({{counts}})"
+msgstr "Familien von Network Vulnerability Tests bearbeiten ({{counts}})"
+
+#: gsa/src/web/pages/scanconfigs/nvtfamilies.js:158
+msgid "Select all NVTs"
+msgstr "Alle NVTs auswählen"
+
+#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:160
+msgid "Last Modified"
+msgstr "Zuletzt geändert"
+
+#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:183
 msgid "Vulnerability Scoring"
 msgstr "Schwachstellen-Bewertung"
 
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:162
+#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:187
 msgid "CVSS base"
 msgstr "CVSS-Basisscore"
 
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:169
+#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:194
 msgid "CVSS base vector"
 msgstr "CVSS-Basisvektor"
 
-#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:205
+#: gsa/src/web/pages/scanconfigs/editnvtdetailsdialog.js:230
 msgid "Apply default timeout"
 msgstr "Standard-Timeout anwenden"
 
@@ -7000,11 +7007,16 @@ msgstr "NVTS: Trend"
 msgid "No Scan Configs available"
 msgstr "Keine Scan-Konfigurationen vorhanden"
 
-#: gsa/src/web/pages/policies/detailspage.js:81
+#: gsa/src/web/pages/policies/detailspage.js:85
+#: gsa/src/web/pages/policies/listpage.js:53
+msgid "Help: Policies"
+msgstr "Hilfe: Richtlinien"
+
+#: gsa/src/web/pages/policies/detailspage.js:87
 msgid "Policies List"
 msgstr "Richtlinienliste"
 
-#: gsa/src/web/pages/policies/detailspage.js:101
+#: gsa/src/web/pages/policies/detailspage.js:107
 msgid "Export Policy as XML"
 msgstr "Richtlinie als XML exportieren"
 
@@ -7012,20 +7024,32 @@ msgstr "Richtlinie als XML exportieren"
 msgid "Edit Policy {{name}}"
 msgstr "Richtlinie {{name}} bearbeiten"
 
-#: gsa/src/web/pages/policies/component.js:328
+#: gsa/src/web/pages/policies/component.js:333
 msgid "Edit Policy Family {{name}}"
 msgstr "Richtlinien-Familie {{name}} bearbeiten"
 
-#: gsa/src/web/pages/policies/component.js:351
+#: gsa/src/web/pages/policies/component.js:395
+msgid "Edit Policy NVT {{nvtOid}}"
+msgstr "Richtlinien-NVT {{nvtOid}} bearbeiten"
+
+#: gsa/src/web/pages/policies/component.js:419
 msgid "Edit Policy NVT {{name}}"
 msgstr "Richtlinien-NVT {{name}} bearbeiten"
 
-#: gsa/src/web/pages/policies/component.js:745
-#: gsa/src/web/pages/policies/listpage.js:53
+#: gsa/src/web/pages/policies/component.js:742
+msgid "Edit Policy NVT Details"
+msgstr "Richtlinien-NVT-Details bearbeiten"
+
+#: gsa/src/web/pages/policies/component.js:743
+msgid "Edit Policy Family"
+msgstr "Richtlinien-Familie bearbeiten"
+
+#: gsa/src/web/pages/policies/component.js:768
+#: gsa/src/web/pages/policies/listpage.js:59
 msgid "Import Policy"
 msgstr "Richtlinie importieren"
 
-#: gsa/src/web/pages/policies/component.js:746
+#: gsa/src/web/pages/policies/component.js:769
 msgid "Import XML policy"
 msgstr "Importiere XML Richtlinie"
 
@@ -7033,12 +7057,12 @@ msgstr "Importiere XML Richtlinie"
 msgid "Audits using this Policy"
 msgstr "Audits, die diese Richtlinie verwenden"
 
-#: gsa/src/web/pages/policies/dialog.js:43
-#: gsa/src/web/pages/policies/listpage.js:50
+#: gsa/src/web/pages/policies/dialog.js:36
+#: gsa/src/web/pages/policies/listpage.js:56
 msgid "New Policy"
 msgstr "Neue Richtlinie"
 
-#: gsa/src/web/pages/policies/listpage.js:93
+#: gsa/src/web/pages/policies/listpage.js:99
 msgid "Policies"
 msgstr "Richtlinien"
 
@@ -7530,247 +7554,252 @@ msgstr "Inhalt"
 msgid "Items"
 msgstr "Objekte"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:71
-#: gsa/src/web/pages/usersettings/usersettingspage.js:596
+#: gsa/src/web/pages/usersettings/filterpart.js:72
+#: gsa/src/web/pages/usersettings/usersettingspage.js:638
 msgid "Agents Filter"
 msgstr "Agenten-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:82
-#: gsa/src/web/pages/usersettings/usersettingspage.js:601
+#: gsa/src/web/pages/usersettings/filterpart.js:83
+#: gsa/src/web/pages/usersettings/usersettingspage.js:643
 msgid "Alerts Filter"
 msgstr "Benachrichtigungen-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:93
+#: gsa/src/web/pages/usersettings/filterpart.js:94
 msgid "Scan Configs Filter"
 msgstr "Scan-Konfigurationen-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:104
-#: gsa/src/web/pages/usersettings/usersettingspage.js:611
+#: gsa/src/web/pages/usersettings/filterpart.js:105
+#: gsa/src/web/pages/usersettings/usersettingspage.js:653
 msgid "Credentials Filter"
 msgstr "Anmeldedaten-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:115
-#: gsa/src/web/pages/usersettings/usersettingspage.js:616
+#: gsa/src/web/pages/usersettings/filterpart.js:116
+#: gsa/src/web/pages/usersettings/usersettingspage.js:658
 msgid "Filters Filter"
 msgstr "Filter-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:126
-#: gsa/src/web/pages/usersettings/usersettingspage.js:621
+#: gsa/src/web/pages/usersettings/filterpart.js:127
+#: gsa/src/web/pages/usersettings/usersettingspage.js:663
 msgid "Groups Filter"
 msgstr "Gruppen-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:137
-#: gsa/src/web/pages/usersettings/usersettingspage.js:626
+#: gsa/src/web/pages/usersettings/filterpart.js:138
+#: gsa/src/web/pages/usersettings/usersettingspage.js:668
 msgid "Hosts Filter"
 msgstr "Hosts-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:145
-#: gsa/src/web/pages/usersettings/usersettingspage.js:631
+#: gsa/src/web/pages/usersettings/filterpart.js:146
+#: gsa/src/web/pages/usersettings/usersettingspage.js:673
 msgid "Notes Filter"
 msgstr "Notizen-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:153
-#: gsa/src/web/pages/usersettings/usersettingspage.js:636
+#: gsa/src/web/pages/usersettings/filterpart.js:154
+#: gsa/src/web/pages/usersettings/usersettingspage.js:678
 msgid "Operating Systems Filter"
 msgstr "Betriebssysteme-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:161
-#: gsa/src/web/pages/usersettings/usersettingspage.js:641
+#: gsa/src/web/pages/usersettings/filterpart.js:162
+#: gsa/src/web/pages/usersettings/usersettingspage.js:683
 msgid "Overrides Filter"
 msgstr "Übersteuerungen-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:172
-#: gsa/src/web/pages/usersettings/usersettingspage.js:646
+#: gsa/src/web/pages/usersettings/filterpart.js:173
+#: gsa/src/web/pages/usersettings/usersettingspage.js:688
 msgid "Permissions Filter"
 msgstr "Berechtigungen-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:183
-#: gsa/src/web/pages/usersettings/usersettingspage.js:651
+#: gsa/src/web/pages/usersettings/filterpart.js:184
+#: gsa/src/web/pages/usersettings/usersettingspage.js:693
 msgid "Port Lists Filter"
 msgstr "Portlisten-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:194
-#: gsa/src/web/pages/usersettings/usersettingspage.js:656
+#: gsa/src/web/pages/usersettings/filterpart.js:195
+#: gsa/src/web/pages/usersettings/usersettingspage.js:698
 msgid "Reports Filter"
 msgstr "Berichte-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:205
-#: gsa/src/web/pages/usersettings/usersettingspage.js:661
+#: gsa/src/web/pages/usersettings/filterpart.js:206
+#: gsa/src/web/pages/usersettings/usersettingspage.js:703
 msgid "Report Formats Filter"
 msgstr "Berichtformate-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:227
-#: gsa/src/web/pages/usersettings/usersettingspage.js:671
+#: gsa/src/web/pages/usersettings/filterpart.js:228
+#: gsa/src/web/pages/usersettings/usersettingspage.js:713
 msgid "Roles Filter"
 msgstr "Rollen-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:235
-#: gsa/src/web/pages/usersettings/usersettingspage.js:676
+#: gsa/src/web/pages/usersettings/filterpart.js:236
+#: gsa/src/web/pages/usersettings/usersettingspage.js:718
 msgid "Scanners Filter"
 msgstr "Scanner-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:246
-#: gsa/src/web/pages/usersettings/usersettingspage.js:681
+#: gsa/src/web/pages/usersettings/filterpart.js:247
+#: gsa/src/web/pages/usersettings/usersettingspage.js:723
 msgid "Schedules Filter"
 msgstr "Zeitpläne-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:257
-#: gsa/src/web/pages/usersettings/usersettingspage.js:686
+#: gsa/src/web/pages/usersettings/filterpart.js:258
+#: gsa/src/web/pages/usersettings/usersettingspage.js:728
 msgid "Tags Filter"
 msgstr "Tags-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:265
-#: gsa/src/web/pages/usersettings/usersettingspage.js:691
+#: gsa/src/web/pages/usersettings/filterpart.js:266
+#: gsa/src/web/pages/usersettings/usersettingspage.js:733
 msgid "Targets Filter"
 msgstr "Ziele-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:276
-#: gsa/src/web/pages/usersettings/usersettingspage.js:696
+#: gsa/src/web/pages/usersettings/filterpart.js:277
+#: gsa/src/web/pages/usersettings/usersettingspage.js:738
 msgid "Tasks Filter"
 msgstr "Aufgaben-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:284
-#: gsa/src/web/pages/usersettings/usersettingspage.js:701
+#: gsa/src/web/pages/usersettings/filterpart.js:285
+#: gsa/src/web/pages/usersettings/usersettingspage.js:743
 msgid "Tickets Filter"
 msgstr "Tickets-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:295
-#: gsa/src/web/pages/usersettings/usersettingspage.js:706
+#: gsa/src/web/pages/usersettings/filterpart.js:296
+#: gsa/src/web/pages/usersettings/usersettingspage.js:748
+msgid "TLS Certificates Filter"
+msgstr "TLS-Zertifikate-Filter"
+
+#: gsa/src/web/pages/usersettings/filterpart.js:307
+#: gsa/src/web/pages/usersettings/usersettingspage.js:753
 msgid "Users Filter"
 msgstr "Benutzer-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:303
-#: gsa/src/web/pages/usersettings/usersettingspage.js:711
+#: gsa/src/web/pages/usersettings/filterpart.js:315
+#: gsa/src/web/pages/usersettings/usersettingspage.js:758
 msgid "Vulnerabilities Filter"
 msgstr "Schwachstellen-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:311
-#: gsa/src/web/pages/usersettings/usersettingspage.js:716
+#: gsa/src/web/pages/usersettings/filterpart.js:323
+#: gsa/src/web/pages/usersettings/usersettingspage.js:763
 msgid "CPE Filter"
 msgstr "CPE-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:319
-#: gsa/src/web/pages/usersettings/usersettingspage.js:721
+#: gsa/src/web/pages/usersettings/filterpart.js:331
+#: gsa/src/web/pages/usersettings/usersettingspage.js:768
 msgid "CVE Filter"
 msgstr "CVE-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:327
-#: gsa/src/web/pages/usersettings/usersettingspage.js:726
+#: gsa/src/web/pages/usersettings/filterpart.js:339
+#: gsa/src/web/pages/usersettings/usersettingspage.js:773
 msgid "NVT Filter"
 msgstr "NVT-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:335
-#: gsa/src/web/pages/usersettings/usersettingspage.js:731
+#: gsa/src/web/pages/usersettings/filterpart.js:347
+#: gsa/src/web/pages/usersettings/usersettingspage.js:778
 msgid "OVAL Definitions Filter"
 msgstr "OVAL-Definitionen-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:343
-#: gsa/src/web/pages/usersettings/usersettingspage.js:736
+#: gsa/src/web/pages/usersettings/filterpart.js:355
+#: gsa/src/web/pages/usersettings/usersettingspage.js:783
 msgid "CERT-Bund Advisories Filter"
 msgstr "CERT-Bund Advisories-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:351
-#: gsa/src/web/pages/usersettings/usersettingspage.js:741
+#: gsa/src/web/pages/usersettings/filterpart.js:363
+#: gsa/src/web/pages/usersettings/usersettingspage.js:788
 msgid "DFN-CERT Advisories Filter"
 msgstr "DFN-CERT Advisories-Filter"
 
-#: gsa/src/web/pages/usersettings/filterpart.js:359
-#: gsa/src/web/pages/usersettings/usersettingspage.js:746
+#: gsa/src/web/pages/usersettings/filterpart.js:371
+#: gsa/src/web/pages/usersettings/usersettingspage.js:793
 msgid "SecInfo Filter"
 msgstr "Alle-Sicherheitsinfos-Filter"
 
-#: gsa/src/web/pages/usersettings/dialog.js:181
+#: gsa/src/web/pages/usersettings/dialog.js:183
 msgid "Edit User Settings"
 msgstr "Benutzereinstellungen bearbeiten"
 
-#: gsa/src/web/pages/usersettings/dialog.js:189
+#: gsa/src/web/pages/usersettings/dialog.js:191
 msgid "General Settings"
 msgstr "Allgemeine Einstellungen"
 
-#: gsa/src/web/pages/usersettings/dialog.js:207
+#: gsa/src/web/pages/usersettings/dialog.js:209
 msgid "Severity Settings"
 msgstr "Schweregrad-Einstellungen"
 
-#: gsa/src/web/pages/usersettings/dialog.js:217
+#: gsa/src/web/pages/usersettings/dialog.js:219
 msgid "Defaults Settings"
 msgstr "Standards-Einstellungen"
 
-#: gsa/src/web/pages/usersettings/dialog.js:248
+#: gsa/src/web/pages/usersettings/dialog.js:250
 msgid "Filter Settings"
 msgstr "Filter-Einstellungen"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:61
-#: gsa/src/web/pages/usersettings/usersettingspage.js:497
+#: gsa/src/web/pages/usersettings/usersettingspage.js:539
 msgid "Default Alert"
 msgstr "Standard Benachrichtigung"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:71
-#: gsa/src/web/pages/usersettings/usersettingspage.js:504
+#: gsa/src/web/pages/usersettings/usersettingspage.js:546
 msgid "Default ESXi Credential"
 msgstr "Standard ESXi-Anmeldedaten"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:81
-#: gsa/src/web/pages/usersettings/usersettingspage.js:511
+#: gsa/src/web/pages/usersettings/usersettingspage.js:553
 msgid "Default OSP Scan Config"
 msgstr "Standard OSP-Scan-Konfiguration"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:91
-#: gsa/src/web/pages/usersettings/usersettingspage.js:518
+#: gsa/src/web/pages/usersettings/usersettingspage.js:560
 msgid "Default OSP Scanner"
 msgstr "Standard OSP-Scanner"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:101
-#: gsa/src/web/pages/usersettings/usersettingspage.js:525
+#: gsa/src/web/pages/usersettings/usersettingspage.js:567
 msgid "Default OpenVAS Scan Config"
 msgstr "Standard OpenVAS-Scan-Konfiguration"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:111
-#: gsa/src/web/pages/usersettings/usersettingspage.js:532
+#: gsa/src/web/pages/usersettings/usersettingspage.js:574
 msgid "Default OpenVAS Scanner"
 msgstr "Standard OpenVAS-Scanner"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:121
-#: gsa/src/web/pages/usersettings/usersettingspage.js:539
+#: gsa/src/web/pages/usersettings/usersettingspage.js:581
 msgid "Default Port List"
 msgstr "Standard Portliste"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:131
-#: gsa/src/web/pages/usersettings/usersettingspage.js:546
+#: gsa/src/web/pages/usersettings/usersettingspage.js:588
 msgid "Default Report Format"
 msgstr "Standard Berichtformat"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:141
-#: gsa/src/web/pages/usersettings/usersettingspage.js:553
+#: gsa/src/web/pages/usersettings/usersettingspage.js:595
 msgid "Default SMB Credential"
 msgstr "Standard SMB-Anmeldedaten"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:151
-#: gsa/src/web/pages/usersettings/usersettingspage.js:560
+#: gsa/src/web/pages/usersettings/usersettingspage.js:602
 msgid "Default SNMP Credential"
 msgstr "Standard SNMP-Anmeldedaten"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:161
-#: gsa/src/web/pages/usersettings/usersettingspage.js:567
+#: gsa/src/web/pages/usersettings/usersettingspage.js:609
 msgid "Default SSH Credential"
 msgstr "Standard SSH-Anmeldedaten"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:171
-#: gsa/src/web/pages/usersettings/usersettingspage.js:574
+#: gsa/src/web/pages/usersettings/usersettingspage.js:616
 msgid "Default Schedule"
 msgstr "Standard Zeitplan"
 
 #: gsa/src/web/pages/usersettings/defaultspart.js:181
-#: gsa/src/web/pages/usersettings/usersettingspage.js:581
+#: gsa/src/web/pages/usersettings/usersettingspage.js:623
 msgid "Default Target"
 msgstr "Standard Ziel"
 
 #: gsa/src/web/pages/usersettings/severitypart.js:50
-#: gsa/src/web/pages/usersettings/usersettingspage.js:473
+#: gsa/src/web/pages/usersettings/usersettingspage.js:515
 msgid "Dynamic Severity"
 msgstr "Dynamischer Schweregrad"
 
 #: gsa/src/web/pages/usersettings/severitypart.js:59
-#: gsa/src/web/pages/usersettings/usersettingspage.js:483
+#: gsa/src/web/pages/usersettings/usersettingspage.js:525
 msgid "Default Severity"
 msgstr "Standard Schweregrad"
 
@@ -7786,56 +7815,64 @@ msgstr "Keine Berechtigung, Einstellungen zu bearbeiten"
 msgid "Help: My Settings"
 msgstr "Hilfe: Eigene Einstellungen"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:377
+#: gsa/src/web/pages/usersettings/usersettingspage.js:419
 #: gsa/src/web/components/menu/usermenu.js:177
 msgid "My Settings"
 msgstr "Eigene Einstellungen"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:398
+#: gsa/src/web/pages/usersettings/usersettingspage.js:440
 msgid "General"
 msgstr "Allgemein"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:400
+#: gsa/src/web/pages/usersettings/usersettingspage.js:442
 msgid "Defaults"
 msgstr "Standards"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:422
+#: gsa/src/web/pages/usersettings/usersettingspage.js:464
 msgid "User Interface Language"
 msgstr "Sprache der Benutzeroberfläche"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:428
+#: gsa/src/web/pages/usersettings/usersettingspage.js:470
 msgid "Rows Per Page"
 msgstr "Zeilen pro Seite"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:432
+#: gsa/src/web/pages/usersettings/usersettingspage.js:474
 msgid "Details Export File Name"
 msgstr "Dateiname für Details-Export"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:436
+#: gsa/src/web/pages/usersettings/usersettingspage.js:478
 msgid "List Export File Name"
 msgstr "Dateiname für Listen-Export"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:440
+#: gsa/src/web/pages/usersettings/usersettingspage.js:482
 msgid "Report Export File Name"
 msgstr "Dateiname für Bericht-Export"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:445
+#: gsa/src/web/pages/usersettings/usersettingspage.js:487
 msgid "Max Rows Per Page (immutable)"
 msgstr "Max Zeilen pro Seite (unveränderlich)"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:450
+#: gsa/src/web/pages/usersettings/usersettingspage.js:492
 msgid "Auto Cache Rebuild"
 msgstr "Automatische Cache-Neuerstellung"
 
-#: gsa/src/web/pages/usersettings/usersettingspage.js:606
+#: gsa/src/web/pages/usersettings/usersettingspage.js:648
 msgid "Configs Filter"
 msgstr "Konfigurationen-Filter"
 
-#: gsa/src/web/pages/usersettings/generalpart.js:59
+#: gsa/src/web/pages/usersettings/generalpart.js:60
+msgid "Please enter a new password!"
+msgstr "Bitte geben Sie ein neues Passwort ein!"
+
+#: gsa/src/web/pages/usersettings/generalpart.js:66
+msgid "Please enter your old password!"
+msgstr "Bitte geben Sie Ihr altes Passwort ein!"
+
+#: gsa/src/web/pages/usersettings/generalpart.js:69
 msgid "Confirmation does not match new password!"
 msgstr "Bestätigung entspricht nicht dem neuen Passwort!"
 
-#: gsa/src/web/pages/usersettings/generalpart.js:62
+#: gsa/src/web/pages/usersettings/generalpart.js:72
 msgid "Confirmation matches new password!"
 msgstr "Bestätigung entspricht neuem Passwort!"
 
@@ -7879,48 +7916,36 @@ msgstr ""
 "Sie nutzen Internet Explorer 11. Es kann zu Darstellungsfehlern und "
 "Problemen mit der Leistung kommen."
 
-#: gsa/src/web/pages/login/loginform.js:167
-msgid "e.g. johndoe"
-msgstr "z.B. maxmustermann"
-
 #: gsa/src/web/pages/login/loginform.js:206
 msgid "Login as Guest"
 msgstr "Als Gast anmelden"
 
-#: gsa/src/web/pages/reportformats/detailspage.js:91
+#: gsa/src/web/pages/reportformats/detailspage.js:85
 #: gsa/src/web/pages/reportformats/listpage.js:54
 msgid "Help: Report Formats"
 msgstr "Hilfe: Berichtformate"
 
-#: gsa/src/web/pages/reportformats/detailspage.js:93
+#: gsa/src/web/pages/reportformats/detailspage.js:87
 msgid "Report Formats List"
 msgstr "Berichtformatliste"
 
-#: gsa/src/web/pages/reportformats/detailspage.js:118
+#: gsa/src/web/pages/reportformats/detailspage.js:107
 msgid "Export Report Format as XML"
 msgstr "Berichtformat als XML exportieren"
 
-#: gsa/src/web/pages/reportformats/detailspage.js:126
-msgid "Verify Report Format"
-msgstr "Berichtformat verifizieren"
-
-#: gsa/src/web/pages/reportformats/detailspage.js:127
-msgid "Permission to verify Report Format denied"
-msgstr "Keine Berechtigung, Berichtformat zu verifizieren"
-
-#: gsa/src/web/pages/reportformats/detailspage.js:163
+#: gsa/src/web/pages/reportformats/detailspage.js:141
 msgid "No parameters available"
 msgstr "Keine Parameter vorhanden"
 
-#: gsa/src/web/pages/reportformats/detailspage.js:252
+#: gsa/src/web/pages/reportformats/detailspage.js:216
 msgid "Parameters"
 msgstr "Parameter"
 
-#: gsa/src/web/pages/reportformats/component.js:89
+#: gsa/src/web/pages/reportformats/component.js:80
 msgid "Edit Report Format {{name}}"
 msgstr "Berichtformat {{name}} bearbeiten"
 
-#: gsa/src/web/pages/reportformats/component.js:97
+#: gsa/src/web/pages/reportformats/component.js:88
 #: gsa/src/web/pages/reportformats/dialog.js:183
 #: gsa/src/web/pages/reportformats/listpage.js:58
 msgid "Import Report Format"
@@ -7948,15 +7973,7 @@ msgstr "Benachrichtigungen, die dieses Berichtformat verwenden"
 msgid "Import XML Report Format"
 msgstr "Importiere XML Berichtformat"
 
-#: gsa/src/web/pages/reportformats/listpage.js:94
-msgid "Report Format has been verified."
-msgstr "Berichtformat wurde verifiziert"
-
-#: gsa/src/web/pages/reportformats/row.js:77
-msgid "Clone Report Format"
-msgstr "Berichtformat klonen"
-
-#: gsa/src/web/pages/reportformats/row.js:83
+#: gsa/src/web/pages/reportformats/row.js:70
 msgid "Export Report Format"
 msgstr "Berichtformat exportieren"
 
@@ -8049,7 +8066,7 @@ msgstr "Abbrechen"
 msgid "An error occurred in this dialog."
 msgstr "Es ist ein Fehler in diesem Dialog aufgetreten."
 
-#: gsa/src/web/components/dialog/savedialog.js:139
+#: gsa/src/web/components/dialog/savedialog.js:142
 msgid "Save"
 msgstr "Speichern"
 
@@ -8232,11 +8249,11 @@ msgstr "Ergebnisse pro Seite"
 msgid "Greenbone Security Assistant"
 msgstr "Greenbone Security Assistant"
 
-#: gsa/src/web/components/bar/statusbar.js:54
+#: gsa/src/web/components/bar/statusbar.js:56
 msgid "{{status}} at {{progress}} %"
 msgstr "{{status}} bei {{progress}} %"
 
-#: gsa/src/web/components/bar/statusbar.js:56
+#: gsa/src/web/components/bar/statusbar.js:58
 msgid "{{progress}} %"
 msgstr "{{progress}} %"
 
@@ -8377,11 +8394,11 @@ msgstr "Auswahl exportieren"
 msgid "Export all filtered"
 msgstr "Gesamte Filterauswahl exportieren"
 
-#: gsa/src/web/components/dashboard/dashboard.js:263
+#: gsa/src/web/components/dashboard/dashboard.js:264
 msgid "Could not load dashboard settings. Reason: {{error}}"
 msgstr "Konnte Dashboardeinstellungen nicht laden. Grund: {{error}}"
 
-#: gsa/src/web/components/dashboard/dashboard.js:289
+#: gsa/src/web/components/dashboard/dashboard.js:292
 msgid "An error occurred on this dashboard."
 msgstr "Es ist ein Fehler in diesem Dashboard aufgetreten."
 
@@ -8543,11 +8560,11 @@ msgstr "Aktiv bis"
 msgid "Modifed"
 msgstr "Geändert"
 
-#: gsa/src/web/entity/permissions.js:111
+#: gsa/src/web/entity/permissions.js:112
 msgid "Create Multiple Permissions"
 msgstr "Mehrere Berechtigungen erstellen"
 
-#: gsa/src/web/entity/permissions.js:210
+#: gsa/src/web/entity/permissions.js:215
 msgid "Permissions ({{count}})"
 msgstr "Berechtigungen ({{count}})"
 
@@ -8674,15 +8691,15 @@ msgstr "Tag bearbeiten"
 msgid "Open all details"
 msgstr "Alle Details öffnen"
 
-#: gsa/src/web/entities/container.js:607
+#: gsa/src/web/entities/container.js:601
 msgid "Add Tag to Selection"
 msgstr "Tag zu Auswahl hinzufügen"
 
-#: gsa/src/web/entities/container.js:609
+#: gsa/src/web/entities/container.js:603
 msgid "Add Tag to Page Contents"
 msgstr "Tag zum Seiteninhalt hinzufügen"
 
-#: gsa/src/web/entities/container.js:611
+#: gsa/src/web/entities/container.js:605
 msgid "Add Tag to All Filtered"
 msgstr "Tag zur Filterauswahl hinzufügen"
 
@@ -8944,7 +8961,7 @@ msgstr "Nicht ändern"
 msgid "Create Schedule"
 msgstr "Zeitplan erstellen"
 
-#: gsa/src/web/app.js:101
+#: gsa/src/web/app.js:105
 msgid "An error occurred on this page"
 msgstr "Es ist ein Fehler auf dieser Seite aufgetreten"
 
@@ -9256,23 +9273,27 @@ msgstr "GMP-Fehler während der Authentifizierung"
 msgid "GMP Service is down"
 msgstr "GMP-Dienst ist nicht erreichbar"
 
-#: gsa/src/gmp/models/scanner.js:51
+#: gsa/src/gmp/models/scanner.js:52
 msgid "OSP Scanner"
 msgstr "OSP-Scanner"
 
-#: gsa/src/gmp/models/scanner.js:53
+#: gsa/src/gmp/models/scanner.js:54
 msgid "OpenVAS Scanner"
 msgstr "OpenVAS-Scanner"
 
-#: gsa/src/gmp/models/scanner.js:55
+#: gsa/src/gmp/models/scanner.js:56
 msgid "CVE Scanner"
 msgstr "CVE-Scanner"
 
-#: gsa/src/gmp/models/scanner.js:57
+#: gsa/src/gmp/models/scanner.js:58
 msgid "GMP Scanner"
 msgstr "GMP-Scanner"
 
-#: gsa/src/gmp/models/scanner.js:59
+#: gsa/src/gmp/models/scanner.js:60
+msgid "Greenbone Sensor"
+msgstr "Greenbone Sensor"
+
+#: gsa/src/gmp/models/scanner.js:62
 msgid "Unknown type ({{type}})"
 msgstr "Unbekannter Typ ({{type}})"
 
@@ -9348,10 +9369,6 @@ msgstr "Info"
 msgid "Port Range"
 msgstr "Portbereiche"
 
-#: gsa/src/gmp/utils/entitytype.js:104
-msgid "TLS Certificate"
-msgstr "TLS-Zertifikat"
-
 #: gsa/src/gmp/http/http.js:199
 msgid ""
 "An error occurred during making the request. Most likely the web server does "
@@ -9369,6 +9386,33 @@ msgid "An error occurred while converting gmp response to js for url {{- url}}"
 msgstr ""
 "Es ist ein Fehler beim Konvertieren einer GMP-Anwort nach Javascript für die "
 "URL {{- url}} aufgetreten"
+
+#~ msgid "Latest collection"
+#~ msgstr "Letzter Fund"
+
+#~ msgid "Total: {{count}}"
+#~ msgstr "Gesamt: {{count}}"
+
+#~ msgid "{{known}} of {{max}}"
+#~ msgstr "{{known}} von {{max}}"
+
+#~ msgid "Clone Scan Config"
+#~ msgstr "Scan-Konfiguration klonen"
+
+#~ msgid "e.g. johndoe"
+#~ msgstr "z.B. maxmustermann"
+
+#~ msgid "Verify Report Format"
+#~ msgstr "Berichtformat verifizieren"
+
+#~ msgid "Permission to verify Report Format denied"
+#~ msgstr "Keine Berechtigung, Berichtformat zu verifizieren"
+
+#~ msgid "Report Format has been verified."
+#~ msgstr "Berichtformat wurde verifiziert"
+
+#~ msgid "Clone Report Format"
+#~ msgstr "Berichtformat klonen"
 
 #~ msgid "Fold"
 #~ msgstr "Einklappen"

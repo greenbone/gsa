@@ -1,0 +1,1649 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tasks table tests should render 1`] = `
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c13 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c18 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.c20 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c21 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c30 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.c31 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c37 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c41 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c24 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c7 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c7 > * {
+  margin-left: 5px;
+}
+
+.c33 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c33 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c33 > * {
+  margin-left: 5px;
+}
+
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c32 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c4 {
+  cursor: pointer;
+}
+
+.c8 svg path {
+  fill: #aaaaaa;
+}
+
+.c3 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c3 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c43 {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  outline: none;
+  margin: 1px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.c42 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c42 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c39 {
+  border: 1px solid #aaaaaa;
+  border-radius: 2px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  padding: 1px 5px;
+  background-color: #fff;
+  color: #000;
+  font-weight: normal;
+}
+
+.c38 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: relative;
+  width: 180px;
+}
+
+.c40 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+  cursor: default;
+}
+
+.c11 a {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #000;
+}
+
+.c11 a:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  color: #000;
+}
+
+.c12 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 41%;
+}
+
+.c14 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 8%;
+}
+
+.c15 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 6%;
+}
+
+.c16 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 24%;
+}
+
+.c17 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 5%;
+}
+
+.c19 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 10em;
+}
+
+.c44 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-size: 10px;
+  color: #787878;
+  text-align: left;
+}
+
+.c9 {
+  margin: 0 3px;
+}
+
+.c5 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin: 2px 3px;
+}
+
+.c10 {
+  border: 0;
+  border-spacing: 0px;
+  font-size: 12px;
+  text-align: left;
+  table-layout: auto;
+  width: 100%;
+  opacity: 1.0;
+}
+
+.c10 th,
+.c10 td {
+  padding: 4px 10px;
+  border-bottom: 1px solid #c8d3d9;
+}
+
+.c10 tfoot tr {
+  background: #fff;
+}
+
+.c10 tfoot tr td {
+  border-bottom: 1px solid #c8d3d9;
+}
+
+.c2 {
+  margin-top: 2px;
+  margin-left: 2px;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  margin-top: 20px;
+}
+
+.c22 {
+  cursor: pointer;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #0000ff;
+}
+
+.c22:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  color: #0000ff;
+}
+
+.c25 {
+  height: 13px;
+  box-sizing: content-box;
+  display: inline-block;
+  width: 100px;
+  background: #393637;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.c27 {
+  z-index: 1;
+  font-weight: bold;
+  color: #fff;
+  font-size: 9px;
+  margin: 0;
+  position: relative;
+  top: -13px;
+  padding-top: 1px;
+}
+
+.c26 {
+  height: 13px;
+  width: 100%;
+  background: #4f91c7;
+}
+
+.c29 {
+  height: 13px;
+  width: 50%;
+  background: #f0a519;
+}
+
+.c34 {
+  height: 13px;
+  width: 100%;
+  background: #99be48;
+}
+
+.c35 {
+  height: 13px;
+  width: 0%;
+  background: #70c000;
+}
+
+.c36 {
+  height: 13px;
+  width: 100%;
+  background: #c83814;
+}
+
+.c28 {
+  white-space: nowrap;
+}
+
+.c23:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+@media print {
+  .c4 {
+    display: none;
+  }
+}
+
+@media print {
+  .c11 {
+    border-bottom: 1px solid black;
+  }
+
+  .c11 a,
+  .c11 a:hover {
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    color: #000;
+  }
+}
+
+@media print {
+  .c12 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c14 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c15 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c16 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c17 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c19 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c5 svg {
+    display: none;
+  }
+}
+
+@media print {
+  .c10 {
+    border-collapse: collapse;
+  }
+}
+
+@media screen {
+  .c10 > tbody:nth-of-type(even),
+  .c10 > tbody:only-of-type > tr:nth-of-type(even) {
+    background: #eeeeee;
+  }
+
+  .c10 > tbody:not(:only-of-type):hover,
+  .c10 > tbody:only-of-type > tr:hover {
+    background: #c8d3d9;
+  }
+}
+
+@media print {
+  .c22 {
+    color: #000;
+  }
+}
+
+@media print {
+  .c25 {
+    background: none;
+    border: 0;
+  }
+}
+
+@media print {
+  .c27 {
+    color: black;
+  }
+}
+
+@media print {
+  .c26 {
+    background: none;
+  }
+}
+
+@media print {
+  .c29 {
+    background: none;
+  }
+}
+
+@media print {
+  .c34 {
+    background: none;
+  }
+}
+
+@media print {
+  .c35 {
+    background: none;
+  }
+}
+
+@media print {
+  .c36 {
+    background: none;
+  }
+}
+
+<body>
+  <div
+    id="portals"
+  />
+  <div>
+    <div
+      class="entities-table c0"
+    >
+      <div
+        class="c1"
+      >
+        <span
+          class="c2 c3 c4"
+          data-testid="svg-icon"
+          title="Unfold all details"
+        >
+          <svg>
+            fold.svg
+          </svg>
+        </span>
+        <div
+          class="c5"
+        >
+          <div
+            class="c6"
+          >
+            <div
+              class="c7"
+              margin="5px"
+            >
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="First"
+              >
+                <svg>
+                  first.svg
+                </svg>
+              </span>
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="Previous"
+              >
+                <svg>
+                  previous.svg
+                </svg>
+              </span>
+            </div>
+          </div>
+          <span
+            class="c9"
+          >
+            1 - 1 of 1
+          </span>
+          <div
+            class="c6"
+          >
+            <div
+              class="c7"
+              margin="5px"
+            >
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="Next"
+              >
+                <svg>
+                  next.svg
+                </svg>
+              </span>
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="Last"
+              >
+                <svg>
+                  last.svg
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <table
+        class="c10"
+      >
+        <thead
+          class="c11"
+        >
+          <tr>
+            <th
+              class="c12"
+            >
+              <div
+                class="c13"
+              >
+                Name
+              </div>
+            </th>
+            <th
+              class="c14"
+            >
+              <div
+                class="c13"
+              >
+                Status
+              </div>
+            </th>
+            <th
+              class="c15"
+            >
+              <div
+                class="c13"
+              >
+                Reports
+              </div>
+            </th>
+            <th
+              class="c16"
+            >
+              <div
+                class="c13"
+              >
+                Last Report
+              </div>
+            </th>
+            <th
+              class="c14"
+            >
+              <div
+                class="c13"
+              >
+                Severity
+              </div>
+            </th>
+            <th
+              class="c17"
+            >
+              <div
+                class="c18"
+              >
+                Trend
+              </div>
+            </th>
+            <th
+              class="c19"
+            >
+              <div
+                class="c18"
+              >
+                Actions
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class=""
+        >
+          <tr>
+            <td>
+              <div
+                class="c20"
+              >
+                <div
+                  class="c21"
+                >
+                  <span
+                    class="c22"
+                    name="1234"
+                  >
+                    foo
+                  </span>
+                  <div
+                    class="c6"
+                  >
+                    <div
+                      class="c7"
+                      margin="5px"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="comment"
+                >
+                  (
+                  bar
+                  )
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c20"
+              >
+                <a
+                  class="c23 c24"
+                  data-testid="details-link"
+                  href="/report/1234"
+                >
+                  <div
+                    class="c25"
+                    data-testid="progressbar-box"
+                    title="Done"
+                  >
+                    <div
+                      class="c26"
+                      data-testid="progress"
+                    />
+                    <div
+                      class="c27"
+                    >
+                      <span
+                        class="c28"
+                      >
+                        Done
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c20"
+              >
+                <div
+                  class="c13"
+                >
+                  <a
+                    class="c24"
+                    href="/reports?filter=task_id%3D1234%20sort-reverse%3Ddate"
+                    title="View list of all reports for Task foo, including unfinished ones"
+                  >
+                    1
+                  </a>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c20"
+              >
+                <span>
+                  <a
+                    class="c24"
+                    data-testid="details-link"
+                    href="/report/1234"
+                  >
+                    Sat, Aug 10, 2019 2:51 PM CEST
+                  </a>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c20"
+              >
+                <div
+                  class="c25"
+                  data-testid="progressbar-box"
+                  title="Medium"
+                >
+                  <div
+                    class="c29"
+                    data-testid="progress"
+                  />
+                  <div
+                    class="c27"
+                  >
+                    5.0 (Medium)
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c30"
+              >
+                <span />
+              </div>
+            </td>
+            <td>
+              <div
+                class="c31"
+              >
+                <div
+                  class="c32"
+                >
+                  <div
+                    class="c33"
+                    margin="5px"
+                  >
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Start"
+                    >
+                      <svg>
+                        start.svg
+                      </svg>
+                    </span>
+                    <span
+                      alt="Resume"
+                      class="c3 c8"
+                      data-testid="svg-icon"
+                      title="Task is not stopped"
+                    >
+                      <svg>
+                        resume.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Move Task to trashcan"
+                    >
+                      <svg>
+                        trashcan.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Edit Task"
+                    >
+                      <svg>
+                        edit.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Clone Task"
+                    >
+                      <svg>
+                        clone.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Export Task"
+                    >
+                      <svg>
+                        export.svg
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c20"
+              >
+                <div
+                  class="c21"
+                >
+                  <span
+                    class="c22"
+                    name="12345"
+                  >
+                    lorem
+                  </span>
+                  <div
+                    class="c6"
+                  >
+                    <div
+                      class="c7"
+                      margin="5px"
+                    >
+                      <span
+                        alt="Task owned by user"
+                        class="c3 "
+                        data-testid="svg-icon"
+                        title="Task owned by user"
+                      >
+                        <svg>
+                          view_other.svg
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="comment"
+                >
+                  (
+                  ipsum
+                  )
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c20"
+              >
+                <span
+                  class="c23 c24"
+                >
+                  <div
+                    class="c25"
+                    data-testid="progressbar-box"
+                    title="New"
+                  >
+                    <div
+                      class="c34"
+                      data-testid="progress"
+                    />
+                    <div
+                      class="c27"
+                    >
+                      <span
+                        class="c28"
+                      >
+                        New
+                      </span>
+                    </div>
+                  </div>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c20"
+              />
+            </td>
+            <td>
+              <div
+                class="c20"
+              />
+            </td>
+            <td>
+              <div
+                class="c20"
+              />
+            </td>
+            <td>
+              <div
+                class="c30"
+              >
+                <span />
+              </div>
+            </td>
+            <td>
+              <div
+                class="c31"
+              >
+                <div
+                  class="c32"
+                >
+                  <div
+                    class="c33"
+                    margin="5px"
+                  >
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Start"
+                    >
+                      <svg>
+                        start.svg
+                      </svg>
+                    </span>
+                    <span
+                      alt="Resume"
+                      class="c3 c8"
+                      data-testid="svg-icon"
+                      title="Task is not stopped"
+                    >
+                      <svg>
+                        resume.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Move Task to trashcan"
+                    >
+                      <svg>
+                        trashcan.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Edit Task"
+                    >
+                      <svg>
+                        edit.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Clone Task"
+                    >
+                      <svg>
+                        clone.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Export Task"
+                    >
+                      <svg>
+                        export.svg
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c20"
+              >
+                <div
+                  class="c21"
+                >
+                  <span
+                    class="c22"
+                    name="123456"
+                  >
+                    hello
+                  </span>
+                  <div
+                    class="c6"
+                  >
+                    <div
+                      class="c7"
+                      margin="5px"
+                    >
+                      <span
+                        alt="Task owned by user"
+                        class="c3 "
+                        data-testid="svg-icon"
+                        title="Task owned by user"
+                      >
+                        <svg>
+                          view_other.svg
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="comment"
+                >
+                  (
+                  world
+                  )
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c20"
+              >
+                <a
+                  class="c23 c24"
+                  data-testid="details-link"
+                  href="/report/5678"
+                >
+                  <div
+                    class="c25"
+                    data-testid="progressbar-box"
+                    title="Running"
+                  >
+                    <div
+                      class="c35"
+                      data-testid="progress"
+                    />
+                    <div
+                      class="c27"
+                    >
+                      <span
+                        class="c28"
+                      >
+                        0 %
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c20"
+              >
+                <div
+                  class="c13"
+                >
+                  <a
+                    class="c24"
+                    href="/reports?filter=task_id%3D123456%20sort-reverse%3Ddate"
+                    title="View list of all reports for Task hello, including unfinished ones"
+                  >
+                    2
+                  </a>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c20"
+              >
+                <span>
+                  <a
+                    class="c24"
+                    data-testid="details-link"
+                    href="/report/1234"
+                  >
+                    Wed, Jul 10, 2019 2:51 PM CEST
+                  </a>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c20"
+              >
+                <div
+                  class="c25"
+                  data-testid="progressbar-box"
+                  title="High"
+                >
+                  <div
+                    class="c36"
+                    data-testid="progress"
+                  />
+                  <div
+                    class="c27"
+                  >
+                    10.0 (High)
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c30"
+              >
+                <span />
+              </div>
+            </td>
+            <td>
+              <div
+                class="c31"
+              >
+                <div
+                  class="c32"
+                >
+                  <div
+                    class="c33"
+                    margin="5px"
+                  >
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Stop"
+                    >
+                      <svg>
+                        stop.svg
+                      </svg>
+                    </span>
+                    <span
+                      alt="Resume"
+                      class="c3 c8"
+                      data-testid="svg-icon"
+                      title="Task is not stopped"
+                    >
+                      <svg>
+                        resume.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Move Task to trashcan"
+                    >
+                      <svg>
+                        trashcan.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Edit Task"
+                    >
+                      <svg>
+                        edit.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Clone Task"
+                    >
+                      <svg>
+                        clone.svg
+                      </svg>
+                    </span>
+                    <span
+                      class="c3 c4"
+                      data-testid="svg-icon"
+                      title="Export Task"
+                    >
+                      <svg>
+                        export.svg
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td
+              colspan="10"
+            >
+              <div
+                class="c37"
+              >
+                <div
+                  class="c6"
+                >
+                  <div
+                    class="c7"
+                    margin="5px"
+                  >
+                    <div
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      aria-labelledby="downshift-0-label"
+                      class="c38"
+                      role="combobox"
+                      width="180px"
+                    >
+                      <div
+                        aria-haspopup="true"
+                        aria-label="open menu"
+                        class="c39"
+                        data-toggle="true"
+                        role="button"
+                        type="button"
+                      >
+                        <div
+                          class="c40"
+                          data-testid="select-selected-value"
+                        />
+                        <div
+                          class="c41"
+                        >
+                          <span
+                            class="c42 c43"
+                            data-testid="select-open-button"
+                          >
+                            ▼
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="c6"
+                    >
+                      <div
+                        class="c7"
+                        margin="5px"
+                      >
+                        <span
+                          class="c3 "
+                          data-testid="svg-icon"
+                        >
+                          <svg>
+                            tags.svg
+                          </svg>
+                        </span>
+                        <span
+                          class="c3 "
+                          data-testid="svg-icon"
+                        >
+                          <svg>
+                            trashcan.svg
+                          </svg>
+                        </span>
+                        <span
+                          class="c3 "
+                          data-testid="svg-icon"
+                        >
+                          <svg>
+                            export.svg
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      <div
+        class="c21"
+      >
+        <div
+          class="c44"
+        >
+          (Applied filter: rows=2)
+        </div>
+        <div
+          class="c5"
+        >
+          <div
+            class="c6"
+          >
+            <div
+              class="c7"
+              margin="5px"
+            >
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="First"
+              >
+                <svg>
+                  first.svg
+                </svg>
+              </span>
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="Previous"
+              >
+                <svg>
+                  previous.svg
+                </svg>
+              </span>
+            </div>
+          </div>
+          <span
+            class="c9"
+          >
+            1 - 1 of 1
+          </span>
+          <div
+            class="c6"
+          >
+            <div
+              class="c7"
+              margin="5px"
+            >
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="Next"
+              >
+                <svg>
+                  next.svg
+                </svg>
+              </span>
+              <span
+                class="c3 c8"
+                data-testid="svg-icon"
+                title="Last"
+              >
+                <svg>
+                  last.svg
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;

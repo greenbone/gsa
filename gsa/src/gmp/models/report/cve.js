@@ -27,7 +27,7 @@ class ReportCve {
     this.occurrences = 0;
 
     this.hosts = {
-      hosts_by_ip: {},
+      hostsByIp: {},
       count: 0,
     };
   }
@@ -41,8 +41,8 @@ class ReportCve {
   }
 
   addHost(host) {
-    if (!(host.ip in this.hosts.hosts_by_ip)) {
-      this.hosts.hosts_by_ip[host.ip] = host;
+    if (!(host.ip in this.hosts.hostsByIp)) {
+      this.hosts.hostsByIp[host.ip] = host;
       this.hosts.count++;
     }
   }
@@ -63,6 +63,7 @@ class ReportCve {
     const nvt = Nvt.fromElement(element);
 
     copy.id = nvt.id;
+    copy.nvtName = nvt.name;
     copy.cves = nvt.cves;
 
     return copy;

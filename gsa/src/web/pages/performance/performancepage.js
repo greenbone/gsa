@@ -29,7 +29,10 @@ import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
-import {GMP_SCANNER_TYPE, OSP_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
+import {
+  GMP_SCANNER_TYPE,
+  GREENBONE_SENSOR_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
@@ -162,10 +165,6 @@ const Selector = withClickHandler()(styled.span`
   }}
 `);
 
-const SLAVE_SCANNER_FILTER = Filter.fromString(
-  'type=' + GMP_SCANNER_TYPE + ' type=' + OSP_SENSOR_SCANNER_TYPE,
-);
-
 class PerformancePage extends React.Component {
   constructor(...args) {
     super(...args);
@@ -271,7 +270,7 @@ class PerformancePage extends React.Component {
   }
 
   render() {
-    const {scanners = []} = this.props;
+    const {scanners = [], gmp} = this.props;
     const {duration, reports, scannerId, startDate, endDate} = this.state;
     const sensorId = selectSaveId(scanners, scannerId, 0);
     return (
@@ -330,7 +329,13 @@ class PerformancePage extends React.Component {
               </Divider>
             </FormGroup>
 
-            <FormGroup title={_('Report for GMP Scanner or OSP Sensor')}>
+            <FormGroup
+              title={
+                gmp.settings.enableGreenboneSensor
+                  ? _('Report for GMP Scanner or Greenbone Sensor')
+                  : _('Report for GMP Scanner')
+              }
+            >
               <Select
                 name="scannerId"
                 value={sensorId}
@@ -367,12 +372,33 @@ PerformancePage.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-  loadScanners: () => dispatch(loadScanners(gmp)(SLAVE_SCANNER_FILTER)),
-});
+const mapDispatchToProps = (dispatch, {gmp}) => {
+  let SLAVE_SCANNER_FILTER;
 
-const mapStateToProps = rootState => {
+  if (gmp.settings.enableGreenboneSensor) {
+    SLAVE_SCANNER_FILTER = Filter.fromString(
+      'type=' + GMP_SCANNER_TYPE + ' type=' + GREENBONE_SENSOR_SCANNER_TYPE,
+    );
+  } else {
+    SLAVE_SCANNER_FILTER = Filter.fromString('type=' + GMP_SCANNER_TYPE);
+  }
+
+  return {
+    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+    loadScanners: () => dispatch(loadScanners(gmp)(SLAVE_SCANNER_FILTER)),
+  };
+};
+
+const mapStateToProps = (rootState, {gmp}) => {
+  let SLAVE_SCANNER_FILTER;
+
+  if (gmp.settings.enableGreenboneSensor) {
+    SLAVE_SCANNER_FILTER = Filter.fromString(
+      'type=' + GMP_SCANNER_TYPE + ' type=' + GREENBONE_SENSOR_SCANNER_TYPE,
+    );
+  } else {
+    SLAVE_SCANNER_FILTER = Filter.fromString('type=' + GMP_SCANNER_TYPE);
+  }
   const select = scannerSelector(rootState);
   return {
     scanners: select.getEntities(SLAVE_SCANNER_FILTER),

@@ -283,7 +283,12 @@ exports[`SortByGroup tests should render 1`] = `
       width="180px"
     >
       <div
+        aria-haspopup="true"
+        aria-label="open menu"
         class="c4"
+        data-toggle="true"
+        role="button"
+        type="button"
       >
         <div
           class="c5"
@@ -293,13 +298,8 @@ exports[`SortByGroup tests should render 1`] = `
           class="c6"
         >
           <span
-            aria-haspopup="true"
-            aria-label="open menu"
             class="c7 c8"
             data-testid="select-open-button"
-            data-toggle="true"
-            role="button"
-            type="button"
           >
             ▼
           </span>

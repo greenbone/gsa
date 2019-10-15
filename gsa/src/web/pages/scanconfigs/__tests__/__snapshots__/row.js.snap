@@ -1,0 +1,300 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Scan Config row tests should render 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c6 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c6 > * {
+  margin-left: 5px;
+}
+
+.c5 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c7 {
+  cursor: pointer;
+}
+
+.c3 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c3 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c2 {
+  cursor: pointer;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #0000ff;
+}
+
+.c2:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  color: #0000ff;
+}
+
+@media print {
+  .c7 {
+    display: none;
+  }
+}
+
+@media print {
+  .c2 {
+    color: #000;
+  }
+}
+
+<body>
+  <div
+    id="portals"
+  />
+  <div>
+    <tr>
+      <td>
+        <div
+          class="c0"
+        >
+          <div
+            class="c1"
+          >
+            <div
+              class="c0"
+            >
+              <span>
+                <span
+                  class="c2"
+                  name="1234"
+                >
+                  foo
+                </span>
+              </span>
+            </div>
+          </div>
+          <div
+            class="comment"
+          >
+            (
+            bar
+            )
+          </div>
+        </div>
+      </td>
+      <td>
+        <div
+          class="c0"
+        >
+          OpenVAS
+        </div>
+      </td>
+      <td>
+        <div
+          class="c0"
+        >
+          2
+        </div>
+      </td>
+      <td>
+        <div
+          class="c0"
+        >
+          <span
+            alt="Static"
+            class="c3 "
+            data-testid="svg-icon"
+            title="The family selection is STATIC. New families will NOT automatically be added and considered."
+          >
+            <svg>
+              trend_nochange.svg
+            </svg>
+          </span>
+        </div>
+      </td>
+      <td>
+        <div
+          class="c0"
+        >
+          4
+        </div>
+      </td>
+      <td>
+        <div
+          class="c0"
+        >
+          <span
+            alt="Dynamic"
+            class="c3 "
+            data-testid="svg-icon"
+            title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."
+          >
+            <svg>
+              trend_more.svg
+            </svg>
+          </span>
+        </div>
+      </td>
+      <td>
+        <div
+          class="c4"
+        >
+          <div
+            class="c5"
+          >
+            <div
+              class="c6"
+              margin="5px"
+            >
+              <span
+                class="c3 c7"
+                data-testid="svg-icon"
+                title="Move Scan Config to trashcan"
+              >
+                <svg>
+                  trashcan.svg
+                </svg>
+              </span>
+              <span
+                class="c3 c7"
+                data-testid="svg-icon"
+                title="Edit Scan Config"
+              >
+                <svg>
+                  edit.svg
+                </svg>
+              </span>
+              <span
+                class="c3 c7"
+                data-testid="svg-icon"
+                title="Clone Scan Config"
+              >
+                <svg>
+                  clone.svg
+                </svg>
+              </span>
+              <span
+                class="c3 c7"
+                data-testid="svg-icon"
+                title="Export Scan Config"
+              >
+                <svg>
+                  export.svg
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </div>
+</body>
+`;

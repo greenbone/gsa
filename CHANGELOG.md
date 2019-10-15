@@ -16,9 +16,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 [20.04]: https://github.com/greenbone/gsa/compare/gsa-9.0...master
 
-## [9.0.0] - unreleased
+### [9.0.1] - unreleased
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+[9.0.1]: https://github.com/greenbone/gsa/compare/v9.0.0...gsa-9.0
+
+## [9.0.0] - 2019-10-14
+
+### Added
+- Update German Translation [#1689](https://github.com/greenbone/gsa/pull/1689)
+- List NVT of the found CVEs at the report details page [#1673](https://github.com/greenbone/gsa/pull/1673)
 - Added links for GOS 6 manual for audits, policies and TLS certificates [#1657](https://github.com/greenbone/gsa/pull/1657)
 - Added OSP Sensor type to GSA [#1646](https://github.com/greenbone/gsa/pull/1646)
 - Added TLS certificate filter type [#1630](https://github.com/greenbone/gsa/pull/1630)
@@ -40,13 +54,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added TLS certificates to the asset management.
   [#1455](https://github.com/greenbone/gsa/pull/1455),
   [#1461](https://github.com/greenbone/gsa/pull/1461),
-  [#1600](https://github.com/greenbone/gsa/pull/1600)
+  [#1600](https://github.com/greenbone/gsa/pull/1600),
+  [#1681](https://github.com/greenbone/gsa/pull/1681)
 - Add usage type to task and scanconfig commands [#1460](https://github.com/greenbone/gsa/pull/1460)
   [#1466](https://github.com/greenbone/gsa/pull/1466) [#1467](https://github.com/greenbone/gsa/pull/1467)
 
 ### Changed
+- Decide whether to default to full and fast scan config (task dialog)[#1671](https://github.com/greenbone/gsa/pull/1671)
 - Determine the to be applied filter of a list page in GSA and don't rely on the
-  backend [#1631](https://github.com/greenbone/gsa/pull/1631), [#1653](https://github.com/greenbone/gsa/pull/1653)
+  backend
+  [#1631](https://github.com/greenbone/gsa/pull/1631),
+  [#1653](https://github.com/greenbone/gsa/pull/1653),
+  [#1677](https://github.com/greenbone/gsa/pull/1677)
 - Change gmpname for vulnerability and secinfo pages [#1652](https://github.com/greenbone/gsa/pull/1652)
 - Use "lean" reports by default when requesting a single report [#1635](https://github.com/greenbone/gsa/pull/1635)
 - Use uuid to get greenbone compliance report format [#1643](https://github.com/greenbone/gsa/pull/1643)
@@ -79,6 +98,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   requests in gsad [#1355](https://github.com/greenbone/gsa/pull/1355)
 
 ### Fixed
+- Fixed parsing report details data [#1673](https://github.com/greenbone/gsa/pull/1673)
+- Fixed scanconfig clone icon tooltip does not show if permission is denied [#1664](https://github.com/greenbone/gsa/pull/1664)
 - Fixed feed status page does not render [#1628](https://github.com/greenbone/gsa/pull/1628)
 - fixed secinfo severitybars not displaying severity.[#1530](https://github.com/greenbone/gsa/pull/1530)
 - Fixed outer click issues for multi select and select boxes
@@ -89,11 +110,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Remove edit_config command from gsad [#1439](https://github.com/greenbone/gsa/pull/1439)
 - Remove copyright from gsad version output [#1379](https://github.com/greenbone/gsa/pull/1379)
 
-[9.0.0]: https://github.com/greenbone/gsa/compare/gsa-8.0...gsa-9.0
+[9.0.0]: https://github.com/greenbone/gsa/compare/v8.0.1...v9.0.0
 
 ## [8.0.2] - unreleased
 
 ### Added
+- Added new setting to enable and disable debug logging for the redux store [#1684](https://github.com/greenbone/gsa/pull/1684)
 - Added text notification when old password is entered but new password isn't [#1636](https://github.com/greenbone/gsa/pull/1636)
 - Added a loading timer for empty trash button [#1604](https://github.com/greenbone/gsa/pull/1604)
 - Added details to alert details page [#1591](https://github.com/greenbone/gsa/pull/1591)
@@ -109,7 +131,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - Removed Clone and Verify functionalities for report formats [#1650](https://github.com/greenbone/gsa/pull/1650)
 - Use new [React context API](https://reactjs.org/docs/context.html#api) [#1637](https://github.com/greenbone/gsa/pull/1637)
-- Update response data parsing in Model classes [#1633](https://github.com/greenbone/gsa/pull/1633)
+- Update response data parsing in Model classes
+  [#1633](https://github.com/greenbone/gsa/pull/1633),
+  [#1668](https://github.com/greenbone/gsa/pull/1668)
 - Fix statusbar content can be more than 100% and add progressbar colors to theme [1621](https://github.com/greenbone/gsa/pull/1621)
 - Allow to overwrite details=1 for command results.get() [#1618](https://github.com/greenbone/gsa/pull/1618)
 - Ensure not to request the report details when loading a list of reports [#1617](https://github.com/greenbone/gsa/pull/1617)
@@ -125,6 +149,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Use new model construction in some commands [#1665](https://github.com/greenbone/gsa/pull/1665)
 - Fixed auth_method preselection for user dialog [#1661](https://github.com/greenbone/gsa/pull/1661)
 - Fixed userId, roleId and groupId not rendering in create entity permissions dialog [#1658](https://github.com/greenbone/gsa/pull/1658)
 - Don't crash Schedule details and list pages if invalid ical data is loaded [#1656](https://github.com/greenbone/gsa/pull/1656)
