@@ -54,7 +54,8 @@ import {
 import {
   loadDeltaReport,
   deltaSelector,
-  loadEntity as loadReport,
+  loadEntity as loadReportEntityWithStore,
+  loadEntityIfNeeded as loadReportEntityWithStoreIfNeeded,
   selector as reportSelector,
 } from 'web/store/entities/reports';
 
@@ -268,9 +269,11 @@ class ReportDetails extends React.Component {
       lastFilter: filter,
     }));
 
-    this.props.loadReport(reportId, deltaReportId, filter).then(() => {
-      this.startTimer();
-      this.setState({isUpdating: false});
+    this.props.loadReportIfNeeded(reportId, deltaReportId, filter).then(() => {
+      this.props.loadReport(reportId, deltaReportId, filter).then(() => {
+        this.startTimer();
+        this.setState({isUpdating: false});
+      });
     });
   }
 
@@ -682,6 +685,7 @@ ReportDetails.propTypes = {
   loadReport: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
+  loadReportIfNeeded: PropTypes.func.isRequired,
   loadSettings: PropTypes.func.isRequired,
   loadTarget: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
@@ -710,11 +714,13 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
     loadReportFormats: () =>
       dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
     loadReport: (id, deltaId, filter) =>
-      dispatch(
-        isDefined(deltaId)
-          ? loadDeltaReport(gmp)(id, deltaId, filter)
-          : loadReport(gmp)(id, filter),
-      ),
+      isDefined(deltaId)
+        ? dispatch(loadDeltaReport(gmp)(id, deltaId, filter))
+        : dispatch(loadReportEntityWithStore(gmp)(id, filter)),
+    loadReportIfNeeded: (id, deltaId, filter) =>
+      isDefined(deltaId)
+        ? dispatch(loadDeltaReport(gmp)(id, deltaId, filter))
+        : dispatch(loadReportEntityWithStoreIfNeeded(gmp)(id, filter)),
     loadReportComposerDefaults: () =>
       dispatch(loadReportComposerDefaults(gmp)()),
     saveReportComposerDefaults: reportComposerDefaults =>
