@@ -22,6 +22,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import {duration as createDuration} from 'gmp/models/date';
+import Report from 'gmp/models/report';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -32,6 +33,8 @@ import StatusBar from 'web/components/bar/statusbar';
 import DateTime from 'web/components/date/datetime';
 
 import DetailsLink from 'web/components/link/detailslink';
+
+import Loading from 'web/components/loading/loading';
 
 import Table from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
@@ -88,8 +91,10 @@ const ReportScanInfoTable = ({filterString, links = true, report}) => {
   const hosts_count =
     isDefined(hosts) && isDefined(hosts.counts) ? hosts.counts.all : 0;
 
-  if (!isDefined(filterString)) {
-    filterString = filter.simple().toFilterString();
+  if (isDefined(filter)) {
+    if (!isDefined(filterString)) {
+      filterString = filter.simple().toFilterString();
+    }
   }
 
   const status =
@@ -97,7 +102,7 @@ const ReportScanInfoTable = ({filterString, links = true, report}) => {
       ? _('Container')
       : scan_run_status;
 
-  const delta = report.isDeltaReport();
+  const delta = report instanceof Report ? report.isDeltaReport() : false;
 
   const is_ended = isDefined(scan_end) && scan_end.isValid();
   return (
