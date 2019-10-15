@@ -116,13 +116,13 @@ const ResultsTab = ({
 };
 
 ResultsTab.propTypes = {
-  counts: PropTypes.counts.isRequired,
+  counts: PropTypes.oneOfType([PropTypes.counts, PropTypes.object]).isRequired,
   delta: PropTypes.bool,
   filter: PropTypes.filter.isRequired,
   hasTarget: PropTypes.bool,
   isUpdating: PropTypes.bool,
   progress: PropTypes.number.isRequired,
-  results: PropTypes.array.isRequired,
+  results: PropTypes.array,
   sortField: PropTypes.string.isRequired,
   sortReverse: PropTypes.bool.isRequired,
   status: PropTypes.string.isRequired,

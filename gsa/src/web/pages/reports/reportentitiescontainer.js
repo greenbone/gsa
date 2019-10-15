@@ -181,8 +181,8 @@ class ReportEntitiesContainer extends React.Component {
 
 ReportEntitiesContainer.propTypes = {
   children: PropTypes.func,
-  counts: PropTypes.counts.isRequired,
-  entities: PropTypes.array.isRequired,
+  counts: PropTypes.oneOfType([PropTypes.counts, PropTypes.object]).isRequired,
+  entities: PropTypes.array,
   filter: PropTypes.filter,
   sortField: PropTypes.string.isRequired,
   sortFunctions: PropTypes.object,
