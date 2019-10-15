@@ -80,7 +80,7 @@ describe('report loadEntity function tests', () => {
 
     return loadEntity(gmp)(id)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {filter: undefined});
+      expect(get).toBeCalledWith({id}, {details: 1, filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {
@@ -130,7 +130,7 @@ describe('report loadEntity function tests', () => {
 
     return loadEntity(gmp)(id, filter)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {filter});
+      expect(get).toBeCalledWith({id}, {details: 1, filter});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {
@@ -199,7 +199,7 @@ describe('report loadEntity function tests', () => {
 
     return loadEntity(gmp)(id)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {filter: undefined});
+      expect(get).toBeCalledWith({id}, {details: 1, filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {
