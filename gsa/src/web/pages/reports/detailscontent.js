@@ -27,8 +27,6 @@ import {TASK_STATUS} from 'gmp/models/task';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import StatusBar from 'web/components/bar/statusbar';
 import ToolBar from 'web/components/bar/toolbar';
 

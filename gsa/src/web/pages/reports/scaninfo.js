@@ -34,8 +34,6 @@ import DateTime from 'web/components/date/datetime';
 
 import DetailsLink from 'web/components/link/detailslink';
 
-import Loading from 'web/components/loading/loading';
-
 import Table from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableRow from 'web/components/table/row';
