@@ -137,11 +137,12 @@ class ReportCommand extends EntityCommand {
     ).then(this.transformResponse);
   }
 
-  get({id}, {filter, ...options} = {}) {
+  get({id}, {filter, details, ...options} = {}) {
     return this.httpGet(
       {
         id,
         filter,
+        details,
         ignore_pagination: 1,
       },
       {...options, transform: FastXmlTransform},
