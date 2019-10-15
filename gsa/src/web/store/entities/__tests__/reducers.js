@@ -60,7 +60,6 @@ describe('entities reducer tests', () => {
       scanconfig: initState,
       scanner: initState,
       schedule: initState,
-      secinfo: initState,
       tag: initState,
       target: initState,
       task: initState,
