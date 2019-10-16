@@ -35,6 +35,13 @@ import withLayout from '../layout/withLayout';
 
 import NumberField from './numberfield';
 
+const precisionOf = num => {
+  const str = num.toString();
+  const decimal = str.indexOf('.');
+
+  return decimal === -1 ? 0 : str.length - decimal - 1;
+};
+
 const StyledSpinner = styled.span`
   border-radius: 2px;
   border: 1px solid ${Theme.lightGray};
@@ -188,10 +195,10 @@ const SpinnerComponent = props => {
     }
   };
 
-  const debounce_value = parseInt(props.debounce);
+  const debounceValue = parseInt(props.debounce);
 
-  if (isDefined(debounce_value) && debounce_value > 0) {
-    notifyChange = debounce(notifyChange, debounce_value);
+  if (isDefined(debounceValue) && debounceValue > 0) {
+    notifyChange = debounce(notifyChange, debounceValue);
   }
 
   const setAdjustedValue = value => {
@@ -204,13 +211,13 @@ const SpinnerComponent = props => {
 
     const base = parseFloat(min);
 
-    let above_min = value - base;
+    let aboveMin = value - base;
 
     // - round to the nearest step
-    above_min = Math.round(above_min / step) * step;
+    aboveMin = Math.round(aboveMin / step) * step;
 
     // - rounding is based on 0, so adjust back to our base
-    value = base + above_min;
+    value = base + aboveMin;
 
     // Fix precision from bad JS floating point math
     value = parseFloat(fixedValue(value, getPrecision()));
@@ -241,13 +248,6 @@ const SpinnerComponent = props => {
     const step = getStep();
 
     return Math.max(precision, precisionOf(step));
-  };
-
-  const precisionOf = num => {
-    const str = num.toString();
-    const decimal = str.indexOf('.');
-
-    return decimal === -1 ? 0 : str.length - decimal - 1;
   };
 
   const {value = 0} = props;
