@@ -202,21 +202,17 @@ describe('report loadEntity function tests', () => {
       expect(getState).toBeCalled();
       expect(get).toBeCalledWith({id}, {details: 1, filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([
-        {
-          type: types.ENTITY_LOADING_REQUEST,
-          entityType,
-          id,
-        },
-      ]);
-      expect(dispatch.mock.calls[1]).toEqual([
-        {
-          type: types.ENTITY_LOADING_ERROR,
-          entityType,
-          error: 'An Error',
-          id,
-        },
-      ]);
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: types.ENTITY_LOADING_REQUEST,
+        entityType,
+        id,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: types.ENTITY_LOADING_ERROR,
+        entityType,
+        error: 'An Error',
+        id,
+      });
     });
   });
 });
@@ -233,11 +229,7 @@ describe('report loadEntityIfNeeded function tests', () => {
 
     const dispatch = jest.fn();
 
-    const get = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: {foo: 'bar'},
-      }),
-    );
+    const get = jest.fn().mockResolvedValue({data: {foo: 'bar'}});
 
     const gmp = {
       [entityType]: {
@@ -252,21 +244,17 @@ describe('report loadEntityIfNeeded function tests', () => {
       expect(getState).toBeCalled();
       expect(get).toBeCalledWith({id}, {details: 0, filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([
-        {
-          type: types.ENTITY_LOADING_REQUEST,
-          entityType,
-          id,
-        },
-      ]);
-      expect(dispatch.mock.calls[1]).toEqual([
-        {
-          type: types.ENTITY_LOADING_SUCCESS,
-          entityType,
-          data: {foo: 'bar'},
-          id,
-        },
-      ]);
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: types.ENTITY_LOADING_REQUEST,
+        entityType,
+        id,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: types.ENTITY_LOADING_SUCCESS,
+        entityType,
+        data: {foo: 'bar'},
+        id,
+      });
     });
   });
 
@@ -285,7 +273,7 @@ describe('report loadEntityIfNeeded function tests', () => {
 
     const dispatch = jest.fn();
 
-    const get = jest.fn().mockReturnValue(Promise.resolve([{id: 'foo'}]));
+    const get = jest.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       [entityType]: {
@@ -311,11 +299,7 @@ describe('report loadEntityIfNeeded function tests', () => {
 
     const dispatch = jest.fn();
 
-    const get = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: {foo: 'bar'},
-      }),
-    );
+    const get = jest.fn().mockResolvedValue({data: {foo: 'bar'}});
 
     const gmp = {
       [entityType]: {
@@ -332,21 +316,17 @@ describe('report loadEntityIfNeeded function tests', () => {
       expect(getState).toBeCalled();
       expect(get).toBeCalledWith({id}, {details: 0, filter});
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([
-        {
-          type: types.ENTITY_LOADING_REQUEST,
-          entityType,
-          id,
-        },
-      ]);
-      expect(dispatch.mock.calls[1]).toEqual([
-        {
-          type: types.ENTITY_LOADING_SUCCESS,
-          entityType,
-          data: {foo: 'bar'},
-          id,
-        },
-      ]);
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: types.ENTITY_LOADING_REQUEST,
+        entityType,
+        id,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: types.ENTITY_LOADING_SUCCESS,
+        entityType,
+        data: {foo: 'bar'},
+        id,
+      });
     });
   });
 
@@ -362,7 +342,7 @@ describe('report loadEntityIfNeeded function tests', () => {
 
     const dispatch = jest.fn();
 
-    const get = jest.fn().mockReturnValue(Promise.resolve([{id: 'foo'}]));
+    const get = jest.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       [entityType]: {
@@ -389,7 +369,7 @@ describe('report loadEntityIfNeeded function tests', () => {
 
     const dispatch = jest.fn();
 
-    const get = jest.fn().mockReturnValue(Promise.reject('An Error'));
+    const get = jest.fn().mockRejectedValue('An Error');
 
     const gmp = {
       [entityType]: {

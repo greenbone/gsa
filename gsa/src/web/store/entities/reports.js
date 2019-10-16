@@ -91,12 +91,8 @@ const loadEntityIfNeeded = gmp => (id, filter) => (dispatch, getState) => {
   // yet in the store. resolve() otherwise
   const rootState = getState();
   const state = selector(rootState);
-  const reportsState = state.state;
 
-  if (
-    state.isLoadingEntity(id) ||
-    (isDefined(reportsState.byId) && isDefined(reportsState.byId[id]))
-  ) {
+  if (state.isLoadingEntity(id) || isDefined(state.getEntity(id))) {
     // we are already loading data or have it in the store
     return Promise.resolve();
   }
