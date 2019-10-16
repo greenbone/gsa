@@ -364,7 +364,6 @@ class UserSettings extends React.Component {
       ovalFilter,
       certBundFilter,
       dfnCertFilter,
-      secInfoFilter,
       autoCacheRebuild = {},
     } = this.props;
 
@@ -407,7 +406,6 @@ class UserSettings extends React.Component {
     ovalFilter = hasValue(ovalFilter) ? ovalFilter : {};
     certBundFilter = hasValue(certBundFilter) ? certBundFilter : {};
     dfnCertFilter = hasValue(dfnCertFilter) ? dfnCertFilter : {};
-    secInfoFilter = hasValue(secInfoFilter) ? secInfoFilter : {};
 
     const openVasScanConfigs = scanconfigs.filter(openVasScanConfigsFilter);
     const ospScanConfigs = scanconfigs.filter(ospScanConfigsFilter);
@@ -788,11 +786,6 @@ class UserSettings extends React.Component {
                             title={_('DFN-CERT Advisories Filter')}
                             type="filter"
                           />
-                          <SettingTableRow
-                            setting={secInfoFilter}
-                            title={_('SecInfo Filter')}
-                            type="filter"
-                          />
                         </TableBody>
                       </Table>
                     </TabPanel>
@@ -871,7 +864,6 @@ class UserSettings extends React.Component {
               ovalFilter={ovalFilter.id}
               certBundFilter={certBundFilter.id}
               dfnCertFilter={dfnCertFilter.id}
-              secInfoFilter={secInfoFilter.id}
               onClose={this.handleCloseDialog}
               onSave={this.handleSaveSettings}
               onValueChange={this.handleValueChange}
@@ -951,7 +943,6 @@ UserSettings.propTypes = {
   scannersFilter: PropTypes.object,
   schedules: PropTypes.array,
   schedulesFilter: PropTypes.object,
-  secInfoFilter: PropTypes.object,
   setLocale: PropTypes.func.isRequired,
   setTimezone: PropTypes.func.isRequired,
   severityClass: PropTypes.object,
@@ -1098,7 +1089,6 @@ const mapStateToProps = rootState => {
   const dfnCertFilter = userDefaultFilterSelector.getFilter('dfncert');
   const nvtFilter = userDefaultFilterSelector.getFilter('nvt');
   const ovalFilter = userDefaultFilterSelector.getFilter('ovaldef');
-  const secInfoFilter = userDefaultFilterSelector.getFilter('allinfo');
 
   let scanconfigs = scanConfigsSel.getEntities(ALL_FILTER);
   if (isDefined(scanconfigs)) {
@@ -1170,7 +1160,6 @@ const mapStateToProps = rootState => {
     dfnCertFilter,
     nvtFilter,
     ovalFilter,
-    secInfoFilter,
     autoCacheRebuild,
   };
 };
@@ -1212,7 +1201,6 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
       dispatch(loadUserSettingsDefaultFilter(gmp)('dfncert')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('nvt')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('ovaldef')),
-      dispatch(loadUserSettingsDefaultFilter(gmp)('allinfo')),
     ]),
   loadPortLists: () => dispatch(loadPortLists(gmp)(ALL_FILTER)),
   loadReportFormats: () => dispatch(loadReportFormats(gmp)(ALL_FILTER)),

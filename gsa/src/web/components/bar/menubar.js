@@ -193,9 +193,6 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
               <MenuEntry title={_('OVAL Definitions')} to="ovaldefs" />
               <MenuEntry title={_('CERT-Bund Advisories')} to="certbunds" />
               <MenuEntry title={_('DFN-CERT Advisories')} to="dfncerts" />
-              <MenuSection>
-                <MenuEntry title={_('All SecInfo')} to="secinfos" />
-              </MenuSection>
             </Menu>
           )}
           {may_op_configuration && (

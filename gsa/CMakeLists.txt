@@ -1,4 +1,4 @@
-# Copyright (C) 2016-2018 Greenbone Networks GmbH
+# Copyright (C) 2016-2019 Greenbone Networks GmbH
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 #
@@ -90,7 +90,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/commands/scanconfigs.js
      ${GSA_SRC_DIR}/src/gmp/commands/scanners.js
      ${GSA_SRC_DIR}/src/gmp/commands/schedules.js
-     ${GSA_SRC_DIR}/src/gmp/commands/secinfo.js
      ${GSA_SRC_DIR}/src/gmp/commands/tags.js
      ${GSA_SRC_DIR}/src/gmp/commands/targets.js
      ${GSA_SRC_DIR}/src/gmp/commands/tasks.js
@@ -280,7 +279,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/addtoassetsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/agenticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/alerticon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/allinfoicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/alterableicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/arrowicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/auditicon.js
@@ -400,7 +398,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/add_to_assets.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/agent.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/alert.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/allinfo.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/alterable.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/audit.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/calendar.svg
@@ -949,17 +946,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/schedules/table.js
      ${GSA_SRC_DIR}/src/web/pages/schedules/timeunitselect.js
      ${GSA_SRC_DIR}/src/web/pages/schedules/weekdayselect.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/details.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/filterdialog.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/listpage.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/row.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/table.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/createddisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/cvssdisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/index.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/loaders.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/severityclassdisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/typedisplay.js
      ${GSA_SRC_DIR}/src/web/pages/start/confirmremovedialog.js
      ${GSA_SRC_DIR}/src/web/pages/start/dashboard.js
      ${GSA_SRC_DIR}/src/web/pages/start/editdashboarddialog.js
@@ -1093,7 +1079,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/scanconfigs.js
      ${GSA_SRC_DIR}/src/web/store/entities/scanners.js
      ${GSA_SRC_DIR}/src/web/store/entities/schedules.js
-     ${GSA_SRC_DIR}/src/web/store/entities/secinfo.js
      ${GSA_SRC_DIR}/src/web/store/entities/tags.js
      ${GSA_SRC_DIR}/src/web/store/entities/targets.js
      ${GSA_SRC_DIR}/src/web/store/entities/tasks.js

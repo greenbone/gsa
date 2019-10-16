@@ -40,7 +40,6 @@ import {CERTBUND_DISPLAYS} from '../certbund/dashboard';
 import {CVES_DISPLAYS} from '../cves/dashboard';
 import {CPES_DISPLAYS} from '../cpes/dashboard';
 import {DFNCERT_DISPLAYS} from '../dfncert/dashboard';
-import {SECINFO_DISPLAYS} from '../secinfo/dashboard';
 import {TICKETS_DISPLAYS} from '../tickets/dashboard';
 
 import {DEFAULT_DISPLAYS} from './newdashboarddialog';
@@ -60,7 +59,6 @@ const ALL_DISPLAYS = [
   ...CVES_DISPLAYS,
   ...CPES_DISPLAYS,
   ...DFNCERT_DISPLAYS,
-  ...SECINFO_DISPLAYS,
   ...TICKETS_DISPLAYS,
 ];
 

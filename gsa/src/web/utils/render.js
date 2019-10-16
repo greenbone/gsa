@@ -116,8 +116,6 @@ const getPermissionTypeName = type => {
       return _('Aggregates');
     case 'alerts':
       return _('Alerts');
-    case 'allinfo':
-      return _('All SecInfo');
     case 'assets':
       return _('Assets');
     case 'configs':

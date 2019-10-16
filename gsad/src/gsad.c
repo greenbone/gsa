@@ -471,7 +471,7 @@ init_validator ()
     validator, "aggregate_type",
     "^(agent|alert|config|credential|filter|group|host|nvt|note|os|override|"
     "permission|port_list|report|report_format|result|role|scanner|schedule|"
-    "tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|"
+    "tag|target|task|user|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|"
     "vuln|tls_certificate)$");
   gvm_validator_add (
     validator, "alive_tests",
