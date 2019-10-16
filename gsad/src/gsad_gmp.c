@@ -9619,10 +9619,12 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   const char *filter;
   const char *filter_id;
   int ret;
+  int details;
   int ignore_pagination;
   gchar *fname_format;
   const gchar *extension, *requested_content_type;
 
+  details = params_value_bool (params, "details");
   ignore_pagination = params_value_bool (params, "ignore_pagination");
 
   report_id = params_value (params, "report_id");
@@ -9641,12 +9643,14 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   ret = gvm_connection_sendf_xml (
     connection,
     "<get_reports"
+    " details=\"%d\""
     " ignore_pagination=\"%d\""
     " filter=\"%s\""
     " filt_id=\"%s\""
     " report_id=\"%s\""
     " delta_report_id=\"%s\""
     " format_id=\"%s\"/>",
+    details,
     ignore_pagination,
     filter,
     filter_id ? filter_id : FILT_ID_NONE,

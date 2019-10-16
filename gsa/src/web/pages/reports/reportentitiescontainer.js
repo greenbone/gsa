@@ -22,6 +22,8 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
+import Loading from 'web/components/loading/loading';
+
 import SortBy from 'web/components/sortby/sortby';
 
 const sortEntities = ({
@@ -144,7 +146,7 @@ class ReportEntitiesContainer extends React.Component {
     const {page} = this.state;
 
     if (!isDefined(children) || !isDefined(entities)) {
-      return null;
+      return <Loading />;
     }
 
     const sortedEntities = sortEntities({
@@ -181,8 +183,8 @@ class ReportEntitiesContainer extends React.Component {
 
 ReportEntitiesContainer.propTypes = {
   children: PropTypes.func,
-  counts: PropTypes.counts.isRequired,
-  entities: PropTypes.array.isRequired,
+  counts: PropTypes.oneOfType([PropTypes.counts, PropTypes.object]).isRequired,
+  entities: PropTypes.array,
   filter: PropTypes.filter,
   sortField: PropTypes.string.isRequired,
   sortFunctions: PropTypes.object,

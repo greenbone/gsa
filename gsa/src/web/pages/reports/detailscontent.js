@@ -285,16 +285,16 @@ const PageContent = ({
   const userTagsCount = userTags.length;
 
   const {
-    applications,
-    closed_cves,
-    cves,
-    errors,
-    hosts,
-    operatingsystems,
-    ports,
-    results,
+    applications = {},
+    closed_cves = {},
+    cves = {},
+    errors = {},
+    hosts = {},
+    operatingsystems = {},
+    ports = {},
+    results = {},
     result_count = {},
-    tls_certificates,
+    tls_certificates = {},
     timestamp,
     scan_run_status,
   } = report;
@@ -457,7 +457,7 @@ const PageContent = ({
                 </Tab>
               </TabList>
             </TabLayout>
-            {isDefined(results) ? (
+            {isDefined(report) ? (
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
@@ -469,7 +469,7 @@ const PageContent = ({
                   </TabPanel>
                   <TabPanel>
                     <ResultsTab
-                      counts={results.counts}
+                      counts={isDefined(results.counts) ? results.counts : {}}
                       delta={delta}
                       filter={filter}
                       hasTarget={!isContainer}
