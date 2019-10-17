@@ -33,7 +33,7 @@ describe('Policy Details tests', () => {
       name: 'foo',
       comment: 'bar',
       scanner: {name: 'scanner', type: '42'},
-      policy_type: OPENVAS_SCAN_CONFIG_TYPE,
+      type: OPENVAS_SCAN_CONFIG_TYPE,
       tasks: {
         task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
       },
@@ -46,13 +46,15 @@ describe('Policy Details tests', () => {
 
     expect(element).toMatchSnapshot();
     expect(element).toHaveTextContent('bar');
-    expect(element).toHaveTextContent('audit1');
-    expect(element).toHaveTextContent('audit2');
-    expect(element).not.toHaveTextContent('scanner');
 
     const detailslinks = getAllByTestId('details-link');
 
+    expect(element).toHaveTextContent('audit1');
     expect(detailslinks[0]).toHaveAttribute('href', '/audit/1234');
+
+    expect(element).toHaveTextContent('audit2');
     expect(detailslinks[1]).toHaveAttribute('href', '/audit/5678');
+
+    expect(element).not.toHaveTextContent('scanner');
   });
 });
