@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 ### Fixed
+- Handle authentication errors in gsad more carefully [#1700](https://github.com/greenbone/gsa/pull/1700)
 
 ### Removed
 
