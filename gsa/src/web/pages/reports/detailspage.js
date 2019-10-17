@@ -67,6 +67,8 @@ import {
 
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
+import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 
 import {
   getReportComposerDefaults,
@@ -364,7 +366,7 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterResetClick() {
-    this.handleFilterChange(Filter.fromString(''));
+    this.handleFilterChange(this.props.resultDefaultFilter);
   }
 
   handleActivateTab(index) {
@@ -695,6 +697,7 @@ ReportDetails.propTypes = {
   reportFilter: PropTypes.filter,
   reportFormats: PropTypes.array,
   reportId: PropTypes.id,
+  resultDefaultFilter: PropTypes.filter,
   saveReportComposerDefaults: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
@@ -723,6 +726,8 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
         : dispatch(loadReportEntityWithStoreIfNeeded(gmp)(id, filter)),
     loadReportComposerDefaults: () =>
       dispatch(loadReportComposerDefaults(gmp)()),
+    loadUserSettingDefaultFilter: () =>
+      dispatch(loadUserSettingsDefaultFilter(gmp)('result')),
     saveReportComposerDefaults: reportComposerDefaults =>
       dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
   };
@@ -735,6 +740,10 @@ const mapStateToProps = (rootState, {match}) => {
   const deltaSel = deltaSelector(rootState);
   const reportFormatsSel = reportFormatsSelector(rootState);
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const userDefaultFilterSel = getUserSettingsDefaultFilter(
+    rootState,
+    'result',
+  );
   const username = getUsername(rootState);
 
   let entity;
@@ -761,6 +770,7 @@ const mapStateToProps = (rootState, {match}) => {
     reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
     reportId: id,
     reportComposerDefaults: getReportComposerDefaults(rootState),
+    resultDefaultFilter: userDefaultFilterSel.getFilter('result'),
     username,
   };
 };
