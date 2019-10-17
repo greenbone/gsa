@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+import {act} from 'react-dom/test-utils';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -108,6 +109,12 @@ const getReportFormats = jest.fn().mockResolvedValue({
   },
 });
 
+const renewSession = jest.fn().mockReturnValue(
+  Promise.resolve({
+    foo: 'bar',
+  }),
+);
+
 describe('TaskPage tests', () => {
   test('should render full TaskPage', async () => {
     const gmp = {
@@ -165,6 +172,91 @@ describe('TaskPage tests', () => {
     await waitForElement(() => baseElement.querySelectorAll('table'));
 
     expect(baseElement).toMatchSnapshot();
+  });
+
+  test('should call commands for bulk actions', async () => {
+    const deleteByFilter = jest.fn().mockReturnValue(
+      Promise.resolve({
+        foo: 'bar',
+      }),
+    );
+
+    const exportByFilter = jest.fn().mockReturnValue(
+      Promise.resolve({
+        foo: 'bar',
+      }),
+    );
+
+    const gmp = {
+      tasks: {
+        get: getTasks,
+        getSeverityAggregates: getAggregates,
+        getHighResultsAggregates: getAggregates,
+        getStatusAggregates: getAggregates,
+        deleteByFilter,
+        exportByFilter,
+      },
+      filters: {
+        get: getFilters,
+      },
+      reportformats: {
+        get: getReportFormats,
+      },
+      dashboard: {
+        getSetting: getDashboardSetting,
+      },
+      reloadInterval,
+      settings: {manualUrl},
+      user: {renewSession, currentSettings, getSetting: getUserSetting},
+    };
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    const defaultSettingfilter = Filter.fromString('foo=bar');
+    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success('task', defaultSettingfilter),
+    );
+
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesActions.success([task], filter, loadedFilter, counts),
+    );
+
+    const {baseElement, getAllByTestId} = render(<TaskPage />);
+
+    await waitForElement(() => baseElement.querySelectorAll('table'));
+
+    const icons = getAllByTestId('svg-icon');
+
+    await act(async () => {
+      expect(icons[31]).toHaveAttribute(
+        'title',
+        'Move page contents to trashcan',
+      );
+      fireEvent.click(icons[31]);
+      expect(deleteByFilter).toHaveBeenCalled();
+
+      expect(icons[32]).toHaveAttribute('title', 'Export page contents');
+      fireEvent.click(icons[32]);
+      expect(exportByFilter).toHaveBeenCalled();
+    });
   });
 });
 
