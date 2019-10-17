@@ -1451,13 +1451,17 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
       res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Could not connect to manager daemon. "
-                          "Manager daemon doesn't respond.",
+                          "Could not open a connection.",
                           response_data);
       break;
     default: /* unknown error */
-      cmd_response_data_free (response_data);
-      return handler_send_reauthentication (con, MHD_HTTP_INTERNAL_SERVER_ERROR,
-                                            UNKOWN_ERROR);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+                          "An internal error occurred. "
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Unknown error.",
+                          response_data);
     }
 
   if (res)
@@ -1917,13 +1921,17 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
       res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Could not connect to manager daemon. "
-                          "Manager daemon doesn't respond.",
+                          "Could not open a connection.",
                           response_data);
       break;
     default: /* unknown error */
-      cmd_response_data_free (response_data);
-      return handler_send_reauthentication (con, MHD_HTTP_INTERNAL_SERVER_ERROR,
-                                            UNKOWN_ERROR);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+                          "An internal error occurred. "
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Unknown error.",
+                          response_data);
     }
 
   if (res)
