@@ -311,7 +311,7 @@ class EntitiesContainer extends React.Component {
 
     this.handleInteraction();
 
-    promise.then(response => {
+    return promise.then(response => {
       const filename = generateFilename({
         fileNameFormat: listExportFileName,
         resourceType: pluralizeType(getEntityType(entities[0])),
@@ -337,7 +337,7 @@ class EntitiesContainer extends React.Component {
 
     this.handleInteraction();
 
-    promise.then(deleted => {
+    return promise.then(deleted => {
       log.debug('successfully deleted entities', deleted);
       this.handleChanged();
     }, this.handleError);
