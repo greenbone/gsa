@@ -1423,23 +1423,41 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
     {
     case 0:
       break;
-    case -1:
+    case 1: /* manager closed connection */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+                          "An internal error occurred. "
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Manager closed the connection.",
+                          response_data);
+      break;
+    case 2: /* auth failed */
       cmd_response_data_free (response_data);
-      return handler_send_reauthentication (con, MHD_HTTP_SERVICE_UNAVAILABLE,
-                                            GMP_SERVICE_DOWN);
-    case -2:
+      return handler_send_reauthentication (con, MHD_HTTP_UNAUTHORIZED,
+                                            LOGIN_FAILED);
+    case 3: /* timeout */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
                           "An internal error occurred. "
-                          "Diagnostics: Could not authenticate to manager "
-                          "daemon.",
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Connection timeout.",
                           response_data);
       break;
-    default:
+    case 4: /* can't connect to manager */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_SERVICE_UNAVAILABLE);
       res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
                           "An internal error occurred. "
-                          "Diagnostics: Failure to connect to manager daemon.",
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Manager daemon doesn't respond.",
                           response_data);
       break;
+    default: /* unknown error */
+      cmd_response_data_free (response_data);
+      return handler_send_reauthentication (con, MHD_HTTP_INTERNAL_SERVER_ERROR,
+                                            UNKOWN_ERROR);
     }
 
   if (res)
@@ -1871,27 +1889,41 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
     {
     case 0:
       break;
-    case -1:
+    case 1: /* manager closed connection */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
                           "An internal error occurred. "
-                          "Diagnostics: Could not connect to manager "
-                          "daemon.",
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Manager closed the connection.",
                           response_data);
       break;
-
-    case -2:
+    case 2: /* auth failed */
+      cmd_response_data_free (response_data);
+      return handler_send_reauthentication (con, MHD_HTTP_UNAUTHORIZED,
+                                            LOGIN_FAILED);
+    case 3: /* timeout */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
                           "An internal error occurred. "
-                          "Diagnostics: Could not authenticate to manager "
-                          "daemon.",
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Connection timeout.",
                           response_data);
       break;
-    default:
+    case 4: /* can't connect to manager */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_SERVICE_UNAVAILABLE);
       res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
                           "An internal error occurred. "
-                          "Diagnostics: Failure to connect to manager "
-                          "daemon.",
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Manager daemon doesn't respond.",
                           response_data);
+      break;
+    default: /* unknown error */
+      cmd_response_data_free (response_data);
+      return handler_send_reauthentication (con, MHD_HTTP_INTERNAL_SERVER_ERROR,
+                                            UNKOWN_ERROR);
     }
 
   if (res)

@@ -604,19 +604,16 @@ handle_system_report (http_connection_t *connection, const char *method,
                                    response_data);
       gvm_connection_close (&con);
       break;
-    case -1:
-      return handler_send_reauthentication (
-        connection, MHD_HTTP_SERVICE_UNAVAILABLE, GMP_SERVICE_DOWN);
+    case 2:
+      cmd_response_data_free (response_data);
+      credentials_free (credentials);
+      return handler_send_reauthentication (connection, MHD_HTTP_UNAUTHORIZED,
+                                            LOGIN_FAILED);
 
       break;
-    case -2:
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
-                          "An internal error occurred. "
-                          "Diagnostics: Could not authenticate to manager "
-                          "daemon.",
-                          response_data);
-      break;
     default:
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Failure to connect to manager daemon.",

@@ -17370,7 +17370,8 @@ login (http_connection_t *con, params_t *params,
  * @param[out]  connection   Connection to Manager on success.
  * @param[out]  response_data  Extra data return for the HTTP response.
  *
- * @return 0 success, -1 failed to connect, -2 authentication failed.
+ * @return 0 success, 1 if manager closed connection, 2 if auth failed,
+ *         3 on timeout, 4 failed to connect, -1 on error
  */
 int
 manager_connect (credentials_t *credentials, gvm_connection_t *connection,
@@ -17380,20 +17381,21 @@ manager_connect (credentials_t *credentials, gvm_connection_t *connection,
 
   if (gvm_connection_open (connection, manager_address, manager_port))
     {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_SERVICE_UNAVAILABLE);
-      return -1;
+      return 4;
     }
 
   user_t *user = credentials_get_user (credentials);
+
   auth_opts = gmp_authenticate_info_opts_defaults;
   auth_opts.username = user_get_username (user);
   auth_opts.password = user_get_password (user);
-  if (gmp_authenticate_info_ext_c (connection, auth_opts))
+
+  int ret = gmp_authenticate_info_ext_c (connection, auth_opts);
+
+  if (ret)
     {
-      g_debug ("authenticate failed!\n");
       gvm_connection_close (connection);
-      return -2;
+      return ret;
     }
 
 #ifdef DEBUG

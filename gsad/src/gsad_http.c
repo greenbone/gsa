@@ -464,6 +464,9 @@ handler_send_reauthentication (http_connection_t *connection,
     case LOGOUT:
       msg = "Successfully logged out.";
       break;
+    case UNKOWN_ERROR:
+      msg = "Unknown error.";
+      break;
     default:
       msg = "";
     }
