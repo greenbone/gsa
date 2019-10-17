@@ -19,6 +19,8 @@
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 
+import {setLocale} from 'gmp/locale/lang';
+
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -33,6 +35,8 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
 
 import TaskPage, {ToolBarIcons} from '../listpage';
+
+setLocale('en');
 
 const lastReport = {
   report: {

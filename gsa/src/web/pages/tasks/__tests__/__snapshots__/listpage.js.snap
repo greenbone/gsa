@@ -2584,7 +2584,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                           data-testid="details-link"
                           href="/report/1234"
                         >
-                          2019年8月10日星期六 14:51 CEST
+                          Sat, Aug 10, 2019 2:51 PM CEST
                         </a>
                       </span>
                     </div>
