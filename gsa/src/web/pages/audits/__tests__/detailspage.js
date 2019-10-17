@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -429,7 +430,7 @@ describe('Audit Detailspage tests', () => {
     expect(element).toHaveTextContent('No permissions available');
   });
 
-  test('should call commands', () => {
+  test('should call commands', async () => {
     const getAudit = jest.fn().mockReturnValue(
       Promise.resolve({
         data: audit5,
@@ -507,25 +508,27 @@ describe('Audit Detailspage tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(icons[2]);
-    expect(clone).toHaveBeenCalledWith(audit5);
-    expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
+    await act(async () => {
+      fireEvent.click(icons[2]);
+      expect(clone).toHaveBeenCalledWith(audit5);
+      expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[4]);
-    expect(deleteFunc).toHaveBeenCalledWith(audit5);
-    expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
+      fireEvent.click(icons[4]);
+      expect(deleteFunc).toHaveBeenCalledWith(audit5);
+      expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    fireEvent.click(icons[5]);
-    expect(exportFunc).toHaveBeenCalledWith(audit5);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
+      fireEvent.click(icons[5]);
+      expect(exportFunc).toHaveBeenCalledWith(audit5);
+      expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
 
-    fireEvent.click(icons[6]);
-    expect(start).toHaveBeenCalledWith(audit5);
-    expect(icons[6]).toHaveAttribute('title', 'Start');
+      fireEvent.click(icons[6]);
+      expect(start).toHaveBeenCalledWith(audit5);
+      expect(icons[6]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[7]);
-    expect(resume).toHaveBeenCalledWith(audit5);
-    expect(icons[7]).toHaveAttribute('title', 'Resume');
+      fireEvent.click(icons[7]);
+      expect(resume).toHaveBeenCalledWith(audit5);
+      expect(icons[7]).toHaveAttribute('title', 'Resume');
+    });
   });
 });
 

@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -538,7 +539,7 @@ describe('Scan Config Detailspage tests', () => {
     expect(element).toHaveTextContent('No permissions available');
   });
 
-  test('should call commands', () => {
+  test('should call commands', async () => {
     const getConfig = jest.fn().mockReturnValue(
       Promise.resolve({
         data: config,
@@ -613,27 +614,29 @@ describe('Scan Config Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
 
-    fireEvent.click(icons[3]);
-    expect(clone).toHaveBeenCalledWith(config);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
+    await act(async () => {
+      fireEvent.click(icons[3]);
+      expect(clone).toHaveBeenCalledWith(config);
+      expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
 
-    fireEvent.click(icons[4]);
-    expect(getNvtFamilies).toHaveBeenCalled();
-    expect(getAllScanners).toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
+      fireEvent.click(icons[4]);
+      expect(getNvtFamilies).toHaveBeenCalled();
+      expect(getAllScanners).toHaveBeenCalled();
+      expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
 
-    fireEvent.click(icons[5]);
-    expect(deleteFunc).toHaveBeenCalledWith(config);
-    expect(icons[5]).toHaveAttribute('title', 'Move Scan Config to trashcan');
+      fireEvent.click(icons[5]);
+      expect(deleteFunc).toHaveBeenCalledWith(config);
+      expect(icons[5]).toHaveAttribute('title', 'Move Scan Config to trashcan');
 
-    fireEvent.click(icons[6]);
-    expect(exportFunc).toHaveBeenCalledWith(config);
-    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+      fireEvent.click(icons[6]);
+      expect(exportFunc).toHaveBeenCalledWith(config);
+      expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+    });
 
     expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
   });
 
-  test('should not call commands without permission', () => {
+  test('should not call commands without permission', async () => {
     const getConfig = jest.fn().mockReturnValue(
       Promise.resolve({
         data: config2,
@@ -710,36 +713,38 @@ describe('Scan Config Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
 
-    fireEvent.click(icons[3]);
-    expect(clone).not.toHaveBeenCalledWith(config2);
-    expect(icons[3]).toHaveAttribute(
-      'title',
-      'Permission to clone Scan Config denied',
-    );
+    await act(async () => {
+      fireEvent.click(icons[3]);
+      expect(clone).not.toHaveBeenCalledWith(config2);
+      expect(icons[3]).toHaveAttribute(
+        'title',
+        'Permission to clone Scan Config denied',
+      );
 
-    fireEvent.click(icons[4]);
-    expect(getNvtFamilies).not.toHaveBeenCalled();
-    expect(getAllScanners).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute(
-      'title',
-      'Permission to edit Scan Config denied',
-    );
+      fireEvent.click(icons[4]);
+      expect(getNvtFamilies).not.toHaveBeenCalled();
+      expect(getAllScanners).not.toHaveBeenCalled();
+      expect(icons[4]).toHaveAttribute(
+        'title',
+        'Permission to edit Scan Config denied',
+      );
 
-    fireEvent.click(icons[5]);
-    expect(deleteFunc).not.toHaveBeenCalledWith(config2);
-    expect(icons[5]).toHaveAttribute(
-      'title',
-      'Permission to move Scan Config to trashcan denied',
-    );
+      fireEvent.click(icons[5]);
+      expect(deleteFunc).not.toHaveBeenCalledWith(config2);
+      expect(icons[5]).toHaveAttribute(
+        'title',
+        'Permission to move Scan Config to trashcan denied',
+      );
 
-    fireEvent.click(icons[6]);
-    expect(exportFunc).toHaveBeenCalledWith(config2);
-    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+      fireEvent.click(icons[6]);
+      expect(exportFunc).toHaveBeenCalledWith(config2);
+      expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+    });
 
     expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
   });
 
-  test('should (not) call commands if config is in use', () => {
+  test('should (not) call commands if config is in use', async () => {
     const getConfig = jest.fn().mockReturnValue(
       Promise.resolve({
         data: config3,
@@ -816,27 +821,29 @@ describe('Scan Config Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
 
-    fireEvent.click(icons[3]);
-    expect(clone).toHaveBeenCalledWith(config3);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
+    await act(async () => {
+      fireEvent.click(icons[3]);
+      expect(clone).toHaveBeenCalledWith(config3);
+      expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
 
-    fireEvent.click(icons[4]);
-    expect(getNvtFamilies).toHaveBeenCalled();
-    expect(getAllScanners).toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
+      fireEvent.click(icons[4]);
+      expect(getNvtFamilies).toHaveBeenCalled();
+      expect(getAllScanners).toHaveBeenCalled();
+      expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
 
-    fireEvent.click(icons[5]);
-    expect(deleteFunc).not.toHaveBeenCalledWith(config3);
-    expect(icons[5]).toHaveAttribute('title', 'Scan Config is still in use');
+      fireEvent.click(icons[5]);
+      expect(deleteFunc).not.toHaveBeenCalledWith(config3);
+      expect(icons[5]).toHaveAttribute('title', 'Scan Config is still in use');
 
-    fireEvent.click(icons[6]);
-    expect(exportFunc).toHaveBeenCalledWith(config3);
-    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+      fireEvent.click(icons[6]);
+      expect(exportFunc).toHaveBeenCalledWith(config3);
+      expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+    });
 
     expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
   });
 
-  test('should (not) call commands if config is not writable', () => {
+  test('should (not) call commands if config is not writable', async () => {
     const getConfig = jest.fn().mockReturnValue(
       Promise.resolve({
         data: config4,
@@ -913,22 +920,24 @@ describe('Scan Config Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
 
-    fireEvent.click(icons[3]);
-    expect(clone).toHaveBeenCalledWith(config4);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
+    await act(async () => {
+      fireEvent.click(icons[3]);
+      expect(clone).toHaveBeenCalledWith(config4);
+      expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
 
-    fireEvent.click(icons[4]);
-    expect(getNvtFamilies).not.toHaveBeenCalled();
-    expect(getAllScanners).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute('title', 'Scan Config is not writable');
+      fireEvent.click(icons[4]);
+      expect(getNvtFamilies).not.toHaveBeenCalled();
+      expect(getAllScanners).not.toHaveBeenCalled();
+      expect(icons[4]).toHaveAttribute('title', 'Scan Config is not writable');
 
-    fireEvent.click(icons[5]);
-    expect(deleteFunc).not.toHaveBeenCalledWith(config4);
-    expect(icons[5]).toHaveAttribute('title', 'Scan Config is not writable');
+      fireEvent.click(icons[5]);
+      expect(deleteFunc).not.toHaveBeenCalledWith(config4);
+      expect(icons[5]).toHaveAttribute('title', 'Scan Config is not writable');
 
-    fireEvent.click(icons[6]);
-    expect(exportFunc).toHaveBeenCalledWith(config4);
-    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+      fireEvent.click(icons[6]);
+      expect(exportFunc).toHaveBeenCalledWith(config4);
+      expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+    });
 
     expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
   });

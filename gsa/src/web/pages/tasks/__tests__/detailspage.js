@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -536,7 +537,7 @@ describe('Task Detailspage tests', () => {
     expect(element).toHaveTextContent('No permissions available');
   });
 
-  test('should call commands', () => {
+  test('should call commands', async () => {
     const getTask = jest.fn().mockReturnValue(
       Promise.resolve({
         data: task5,
@@ -620,25 +621,27 @@ describe('Task Detailspage tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(icons[3]);
-    expect(clone).toHaveBeenCalledWith(task5);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Task');
+    await act(async () => {
+      fireEvent.click(icons[3]);
+      expect(clone).toHaveBeenCalledWith(task5);
+      expect(icons[3]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(icons[5]);
-    expect(deleteFunc).toHaveBeenCalledWith(task5);
-    expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
+      fireEvent.click(icons[5]);
+      expect(deleteFunc).toHaveBeenCalledWith(task5);
+      expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
 
-    fireEvent.click(icons[6]);
-    expect(exportFunc).toHaveBeenCalledWith(task5);
-    expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
+      fireEvent.click(icons[6]);
+      expect(exportFunc).toHaveBeenCalledWith(task5);
+      expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
 
-    fireEvent.click(icons[7]);
-    expect(start).toHaveBeenCalledWith(task5);
-    expect(icons[7]).toHaveAttribute('title', 'Start');
+      fireEvent.click(icons[7]);
+      expect(start).toHaveBeenCalledWith(task5);
+      expect(icons[7]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[8]);
-    expect(resume).toHaveBeenCalledWith(task5);
-    expect(icons[8]).toHaveAttribute('title', 'Resume');
+      fireEvent.click(icons[8]);
+      expect(resume).toHaveBeenCalledWith(task5);
+      expect(icons[8]).toHaveAttribute('title', 'Resume');
+    });
   });
 });
 
