@@ -17168,7 +17168,7 @@ gvm_connection_open (gvm_connection_t *connection, const gchar *address,
  * @param[out] language      User Interface Language, or NULL.
  * @param[out] pw_warning    Password warning message, NULL if password is OK.
  *
- * @return 0 if valid, 1 failed, 2 manager down, -1 error.
+ * @return 0 if valid, 1 manager down, 2 failed, 3 timeout, -1 error.
  */
 int
 authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
@@ -17182,7 +17182,7 @@ authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
   if (gvm_connection_open (&connection, manager_address, manager_port))
     {
       g_debug ("%s failed to acquire socket!\n", __FUNCTION__);
-      return 2;
+      return 1;
     }
 
   auth_opts = gmp_authenticate_info_opts_defaults;
@@ -17214,7 +17214,7 @@ authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
         case 1:
         case 2:
           gvm_connection_close (&connection);
-          return 2;
+          return 1;
         default:
           gvm_connection_close (&connection);
           return -1;
@@ -17227,7 +17227,7 @@ authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
       if (ret)
         {
           gvm_connection_close (&connection);
-          return 2;
+          return 1;
         }
 
       /* Read the response. */
@@ -17236,7 +17236,7 @@ authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
       if (read_entity_and_text_c (&connection, &entity, &response))
         {
           gvm_connection_close (&connection);
-          return 2;
+          return 1;
         }
 
       /* Check the response. */
@@ -17248,8 +17248,10 @@ authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
           free_entity (entity);
           return -1;
         }
+
       first = status[0];
       free_entity (entity);
+
       if (first == '2')
         {
           *capabilities = response;
@@ -17267,7 +17269,16 @@ authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
   else
     {
       gvm_connection_close (&connection);
-      return 1;
+
+      switch (auth)
+        {
+        case 1: /* manager closed connection */
+        case 2: /* auth failed */
+        case 3: /* timeout */
+          return auth;
+        default:
+          return -1;
+        }
     }
 }
 
@@ -17285,7 +17296,7 @@ int
 login (http_connection_t *con, params_t *params,
        cmd_response_data_t *response_data, const char *client_address)
 {
-  int ret;
+  int ret, status;
   authentication_reason_t auth_reason;
   credentials_t *credentials;
   gchar *timezone;
@@ -17308,19 +17319,26 @@ login (http_connection_t *con, params_t *params,
                               &capabilities, &language, &pw_warning);
       if (ret)
         {
-          int status;
-          if (ret == -1)
-            status = MHD_HTTP_INTERNAL_SERVER_ERROR;
-          if (ret == 2)
-            status = MHD_HTTP_SERVICE_UNAVAILABLE;
-          else
-            status = MHD_HTTP_UNAUTHORIZED;
+          switch (ret)
+            {
+            case 1: /* could not connect to manager */
+            case 3: /* timeout */
+              status = MHD_HTTP_SERVICE_UNAVAILABLE;
+              auth_reason = GMP_SERVICE_DOWN;
+              break;
+            case 2: /* authentication failure */
+              status = MHD_HTTP_UNAUTHORIZED;
+              auth_reason = LOGIN_FAILED;
+              break;
+            default: /* unspecified error */
+              status = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              auth_reason = LOGIN_ERROR;
+              break;
+            }
 
-          auth_reason = ret == 2 ? GMP_SERVICE_DOWN
-                                 : (ret == -1 ? LOGIN_ERROR : LOGIN_FAILED);
-
-          g_warning ("Authentication failure for '%s' from %s", login ?: "",
-                     client_address);
+          g_warning ("Authentication failure for '%s' from %s. "
+                     "Status was %d.",
+                     login ?: "", client_address, ret);
           return handler_send_reauthentication (con, status, auth_reason);
         }
       else
@@ -17370,7 +17388,8 @@ login (http_connection_t *con, params_t *params,
  * @param[out]  connection   Connection to Manager on success.
  * @param[out]  response_data  Extra data return for the HTTP response.
  *
- * @return 0 success, -1 failed to connect, -2 authentication failed.
+ * @return 0 success, 1 if manager closed connection, 2 if auth failed,
+ *         3 on timeout, 4 failed to connect, -1 on error
  */
 int
 manager_connect (credentials_t *credentials, gvm_connection_t *connection,
@@ -17380,20 +17399,21 @@ manager_connect (credentials_t *credentials, gvm_connection_t *connection,
 
   if (gvm_connection_open (connection, manager_address, manager_port))
     {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_SERVICE_UNAVAILABLE);
-      return -1;
+      return 4;
     }
 
   user_t *user = credentials_get_user (credentials);
+
   auth_opts = gmp_authenticate_info_opts_defaults;
   auth_opts.username = user_get_username (user);
   auth_opts.password = user_get_password (user);
-  if (gmp_authenticate_info_ext_c (connection, auth_opts))
+
+  int ret = gmp_authenticate_info_ext_c (connection, auth_opts);
+
+  if (ret)
     {
-      g_debug ("authenticate failed!\n");
       gvm_connection_close (connection);
-      return -2;
+      return ret;
     }
 
 #ifdef DEBUG
