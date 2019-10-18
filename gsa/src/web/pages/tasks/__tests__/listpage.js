@@ -113,11 +113,9 @@ const getReportFormats = jest.fn().mockResolvedValue({
   },
 });
 
-const renewSession = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
+const renewSession = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
 describe('TaskPage tests', () => {
   test('should render full TaskPage', async () => {
@@ -179,17 +177,13 @@ describe('TaskPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
+    const deleteByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
 
-    const exportByFilter = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
+    const exportByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
 
     const gmp = {
       tasks: {

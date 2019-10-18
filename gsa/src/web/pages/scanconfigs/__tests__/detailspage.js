@@ -206,34 +206,27 @@ const entityType = 'scanconfig';
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
-const renewSession = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-const getPermissions = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  }),
-);
+const renewSession = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
+
+const getPermissions = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
 
 describe('Scan Config Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getConfig = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: config,
-      }),
-    );
+    const getConfig = jest.fn().mockResolvedValue({
+      data: config,
+    });
 
     const gmp = {
       [entityType]: {
@@ -298,11 +291,9 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should render nvt families tab', () => {
-    const getConfig = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: config,
-      }),
-    );
+    const getConfig = jest.fn().mockResolvedValue({
+      data: config,
+    });
 
     const gmp = {
       [entityType]: {
@@ -384,11 +375,9 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should render nvt preferences tab', () => {
-    const getConfig = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: config,
-      }),
-    );
+    const getConfig = jest.fn().mockResolvedValue({
+      data: config,
+    });
 
     const gmp = {
       [entityType]: {
@@ -443,21 +432,17 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should render user tags tab', () => {
-    const getConfig = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: config,
-      }),
-    );
+    const getConfig = jest.fn().mockResolvedValue({
+      data: config,
+    });
 
-    const getTags = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: [],
-        meta: {
-          filter: Filter.fromString(),
-          counts: new CollectionCounts(),
-        },
-      }),
-    );
+    const getTags = jest.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    });
 
     const gmp = {
       [entityType]: {
@@ -498,11 +483,9 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const getConfig = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: config,
-      }),
-    );
+    const getConfig = jest.fn().mockResolvedValue({
+      data: config,
+    });
 
     const gmp = {
       [entityType]: {

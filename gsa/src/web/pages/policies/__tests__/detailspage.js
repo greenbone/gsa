@@ -206,34 +206,27 @@ const entityType = 'policy';
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
-const renewSession = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-const getPermissions = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  }),
-);
+const renewSession = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
+
+const getPermissions = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
 
 describe('Policy Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getPolicy = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: policy,
-      }),
-    );
+    const getPolicy = jest.fn().mockResolvedValue({
+      data: policy,
+    });
 
     const gmp = {
       [entityType]: {
@@ -297,11 +290,9 @@ describe('Policy Detailspage tests', () => {
   });
 
   test('should render nvt families tab', () => {
-    const getPolicy = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: policy,
-      }),
-    );
+    const getPolicy = jest.fn().mockResolvedValue({
+      data: policy,
+    });
 
     const gmp = {
       [entityType]: {
@@ -385,11 +376,9 @@ describe('Policy Detailspage tests', () => {
   });
 
   test('should render nvt preferences tab', () => {
-    const getPolicy = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: policy,
-      }),
-    );
+    const getPolicy = jest.fn().mockResolvedValue({
+      data: policy,
+    });
 
     const gmp = {
       [entityType]: {
@@ -444,11 +433,9 @@ describe('Policy Detailspage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const getPolicy = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: policy,
-      }),
-    );
+    const getPolicy = jest.fn().mockResolvedValue({
+      data: policy,
+    });
 
     const gmp = {
       [entityType]: {

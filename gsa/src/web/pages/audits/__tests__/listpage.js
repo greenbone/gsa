@@ -97,11 +97,9 @@ const getReportFormats = jest.fn().mockResolvedValue({
   },
 });
 
-const renewSession = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
+const renewSession = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
 describe('AuditPage tests', () => {
   test('should render full AuditPage', async () => {
@@ -157,17 +155,13 @@ describe('AuditPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
+    const deleteByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
 
-    const exportByFilter = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
+    const exportByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
 
     const gmp = {
       audits: {

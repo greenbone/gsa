@@ -20,6 +20,8 @@ import React, {useState} from 'react';
 
 import styled from 'styled-components';
 
+import _ from 'gmp/locale';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
@@ -59,7 +61,7 @@ const SvgIcon = ({
   disabled = false,
   active = !disabled,
   children,
-  loadingTitle = 'Loading...',
+  loadingTitle = _('Loading...'),
   title,
   to,
   value,
@@ -68,19 +70,22 @@ const SvgIcon = ({
 }) => {
   const [loading, setLoading] = useState(false);
 
-  const handleClick = () => {
-    if (onClick && !loading) {
+  const handleClick = event => {
+    if (isDefined(onClick) && !disabled && !loading) {
+      event.preventDefault();
+      event.stopPropagation();
       const promise = onClick(value);
 
-      if (isDefined(promise)) {
+      if (isDefined(promise) && isDefined(promise.then)) {
         setLoading(true);
         // eslint-disable-next-line no-shadow
         promise
           .then(() => {
             setLoading(false);
           })
-          .catch(() => {
+          .catch(error => {
             setLoading(false);
+            throw error;
           });
       }
     }
@@ -93,15 +98,7 @@ const SvgIcon = ({
       active={active && !loading}
       loading={loading}
       title={loading ? loadingTitle : title}
-      onClick={
-        isDefined(onClick) && !disabled && !loading
-          ? event => {
-              event.preventDefault();
-              event.stopPropagation();
-              handleClick(value, onClick);
-            }
-          : undefined
-      }
+      onClick={handleClick}
     >
       {isDefined(to) ? <Anchor href={to}>{children}</Anchor> : children}
     </Styled>

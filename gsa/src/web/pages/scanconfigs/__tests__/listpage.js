@@ -141,17 +141,13 @@ describe('ScanConfigsPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
+    const deleteByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
 
-    const exportByFilter = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
+    const exportByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
 
     const gmp = {
       scanconfigs: {

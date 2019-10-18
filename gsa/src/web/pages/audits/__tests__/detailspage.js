@@ -248,47 +248,35 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
+const currentSettings = jest.fn().mockResolveValue({
+  foo: 'bar',
+});
 
-const renewSession = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
+const renewSession = jest.fn().mockResolveValue({
+  foo: 'bar',
+});
 
-const getPolicy = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: policy,
-  }),
-);
+const getPolicy = jest.fn().mockResolveValue({
+  data: policy,
+});
 
-const getSchedule = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: schedule,
-  }),
-);
+const getSchedule = jest.fn().mockResolveValue({
+  data: schedule,
+});
 
-const getEntities = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  }),
-);
+const getEntities = jest.fn().mockResolveValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
 
 describe('Audit Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getAudit = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: audit,
-      }),
-    );
+    const getAudit = jest.fn().mockResolveValue({
+      data: audit,
+    });
 
     const gmp = {
       audit: {
@@ -381,11 +369,9 @@ describe('Audit Detailspage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const getAudit = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: audit2,
-      }),
-    );
+    const getAudit = jest.fn().mockResolvedValue({
+      data: audit2,
+    });
 
     const gmp = {
       audit: {
@@ -431,37 +417,29 @@ describe('Audit Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const getAudit = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: audit5,
-      }),
-    );
+    const getAudit = jest.fn().mockResolvedValue({
+      data: audit5,
+    });
 
-    const clone = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: {id: 'foo'},
-      }),
-    );
-    const deleteFunc = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const exportFunc = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const start = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const resume = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
+    const clone = jest.fn().mockResolvedValue({
+      data: {id: 'foo'},
+    });
+
+    const deleteFunc = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportFunc = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const start = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const resume = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
 
     const gmp = {
       audit: {
