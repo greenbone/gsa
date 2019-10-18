@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 ### Fixed
+- Import additional polyfills for IE11 [#1702](https://github.com/greenbone/gsa/pull/1702)
 - Handle authentication errors in gsad more carefully [#1700](https://github.com/greenbone/gsa/pull/1700)
 
 ### Removed
