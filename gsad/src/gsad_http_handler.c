@@ -626,7 +626,7 @@ handle_system_report (http_connection_t *connection, const char *method,
       res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Failure to connect to manager daemon. "
-                          "Timout while waiting for manager response.",
+                          "Timeout while waiting for manager response.",
                           response_data);
       break;
     case 4: /* failed to connect to manager */
