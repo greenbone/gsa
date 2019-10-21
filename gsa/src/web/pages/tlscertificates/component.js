@@ -25,7 +25,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import EntityComponent from 'web/entity/component';
 
-import {loadEntity, selector} from 'web/store/entities/tlscertificates';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
@@ -55,36 +54,38 @@ class TlsCertificateComponent extends React.Component {
   }
 
   handleTlsCertificateDownload(cert) {
-    const {detailsExportFileName, username, onDownloaded} = this.props;
+    const {detailsExportFileName, gmp, username, onDownloaded} = this.props;
 
-    const fullCert = loadEntity(cert.id);
+    return gmp.tlscertificate.get({id: cert.id}).then(response => {
+      const {data} = response;
 
-    const {
-      creationTime,
-      certificate,
-      entityType,
-      id,
-      modificationTime,
-      name,
-    } = fullCert;
+      const {
+        creationTime,
+        certificate,
+        entityType,
+        id,
+        modificationTime,
+        name,
+      } = data;
 
-    this.handleInteraction();
+      this.handleInteraction();
 
-    const filename = generateFilename({
-      creationTime,
-      extension: 'pem', // this gets overwritten?
-      fileNameFormat: detailsExportFileName,
-      id,
-      modificationTime,
-      resourceName: name,
-      resourceType: entityType,
-      username,
-    });
+      const filename = generateFilename({
+        creationTime,
+        extension: 'pem', // this gets overwritten to .cer in chrome
+        fileNameFormat: detailsExportFileName,
+        id,
+        modificationTime,
+        resourceName: name,
+        resourceType: entityType,
+        username,
+      });
 
-    onDownloaded({
-      filename,
-      mimetype: 'application/x-x509-ca-cert',
-      data: create_pem_certificate(certificate),
+      return onDownloaded({
+        filename,
+        mimetype: 'application/x-x509-ca-cert',
+        data: create_pem_certificate(certificate),
+      });
     });
   }
 
@@ -122,7 +123,6 @@ class TlsCertificateComponent extends React.Component {
 }
 
 TlsCertificateComponent.propTypes = {
-  certificate: PropTypes.model,
   children: PropTypes.func.isRequired,
   detailsExportFileName: PropTypes.string,
   gmp: PropTypes.gmp.isRequired,
@@ -135,22 +135,19 @@ TlsCertificateComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (rootState, {id}) => {
-  const tlsCertificateSelector = selector(rootState);
+const mapStateToProps = rootState => {
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
   const username = getUsername(rootState);
   const detailsExportFileName = userDefaultsSelector.getValueByName(
     'detailsexportfilename',
   );
   return {
-    certificate: tlsCertificateSelector.getEntity(id),
     detailsExportFileName,
     username,
   };
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadEntity: id => dispatch(loadEntity(gmp)(id)),
   loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
   onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
 });
