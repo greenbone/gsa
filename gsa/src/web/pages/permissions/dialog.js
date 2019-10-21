@@ -101,7 +101,6 @@ const NEED_RESOURCE_ID = [
   'modify_override',
   'modify_permission',
   'modify_port_list',
-  'modify_report',
   'modify_report_format',
   'modify_role',
   'modify_scanner',
