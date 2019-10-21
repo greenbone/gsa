@@ -168,7 +168,7 @@ class Trashcan extends React.Component {
 
     this.handleInteraction();
 
-    gmp.trashcan
+    return gmp.trashcan
       .restore(entity)
       .then(this.getTrash)
       .catch(error => {
@@ -183,7 +183,7 @@ class Trashcan extends React.Component {
 
     this.handleInteraction();
 
-    gmp.trashcan
+    return gmp.trashcan
       .delete(entity)
       .then(this.getTrash)
       .catch(error => {
