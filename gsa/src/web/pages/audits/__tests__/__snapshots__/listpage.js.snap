@@ -1210,8 +1210,13 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                 width="150px"
               >
                 <div
+                  aria-haspopup="true"
+                  aria-label="open menu"
                   class="c16"
+                  data-toggle="true"
+                  role="button"
                   title="Loaded filter"
+                  type="button"
                 >
                   <div
                     class="c17"
@@ -1224,13 +1229,8 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                     class="c18"
                   >
                     <span
-                      aria-haspopup="true"
-                      aria-label="open menu"
                       class="c19 c20"
                       data-testid="select-open-button"
-                      data-toggle="true"
-                      role="button"
-                      type="button"
                     >
                       ▼
                     </span>
@@ -1627,7 +1627,12 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                             width="180px"
                           >
                             <div
+                              aria-haspopup="true"
+                              aria-label="open menu"
                               class="c16"
+                              data-toggle="true"
+                              role="button"
+                              type="button"
                             >
                               <div
                                 class="c17"
@@ -1640,13 +1645,8 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                                 class="c18"
                               >
                                 <span
-                                  aria-haspopup="true"
-                                  aria-label="open menu"
                                   class="c19 c20"
                                   data-testid="select-open-button"
-                                  data-toggle="true"
-                                  role="button"
-                                  type="button"
                                 >
                                   ▼
                                 </span>
