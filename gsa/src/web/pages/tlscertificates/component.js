@@ -56,7 +56,7 @@ class TlsCertificateComponent extends React.Component {
   handleTlsCertificateDownload(cert) {
     const {detailsExportFileName, gmp, username, onDownloaded} = this.props;
 
-    gmp.tlscertificate.get({id: cert.id}).then(response => {
+    return gmp.tlscertificate.get({id: cert.id}).then(response => {
       const {data} = response;
 
       const {
