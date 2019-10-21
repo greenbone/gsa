@@ -87,6 +87,10 @@ exports[`Audit Actions tests should render 1`] = `
   cursor: pointer;
 }
 
+.c5 {
+  cursor: pointer;
+}
+
 .c5 svg path {
   fill: #aaaaaa;
 }
@@ -104,6 +108,12 @@ exports[`Audit Actions tests should render 1`] = `
 
 @media print {
   .c4 {
+    display: none;
+  }
+}
+
+@media print {
+  .c5 {
     display: none;
   }
 }

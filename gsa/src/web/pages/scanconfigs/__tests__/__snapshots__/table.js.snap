@@ -257,6 +257,10 @@ exports[`Scan Config table tests should render 1`] = `
   cursor: pointer;
 }
 
+.c8 {
+  cursor: pointer;
+}
+
 .c8 svg path {
   fill: #aaaaaa;
 }
@@ -519,6 +523,12 @@ exports[`Scan Config table tests should render 1`] = `
 
 @media print {
   .c4 {
+    display: none;
+  }
+}
+
+@media print {
+  .c8 {
     display: none;
   }
 }
@@ -836,7 +846,7 @@ exports[`Scan Config table tests should render 1`] = `
               >
                 <span
                   alt="Static"
-                  class="c3 "
+                  class="c3 c4"
                   data-testid="svg-icon"
                   title="The family selection is STATIC. New families will NOT automatically be added and considered."
                 >
@@ -859,7 +869,7 @@ exports[`Scan Config table tests should render 1`] = `
               >
                 <span
                   alt="Dynamic"
-                  class="c3 "
+                  class="c3 c4"
                   data-testid="svg-icon"
                   title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."
                 >
@@ -971,7 +981,7 @@ exports[`Scan Config table tests should render 1`] = `
               >
                 <span
                   alt="Static"
-                  class="c3 "
+                  class="c3 c4"
                   data-testid="svg-icon"
                   title="The family selection is STATIC. New families will NOT automatically be added and considered."
                 >
@@ -994,7 +1004,7 @@ exports[`Scan Config table tests should render 1`] = `
               >
                 <span
                   alt="Dynamic"
-                  class="c3 "
+                  class="c3 c4"
                   data-testid="svg-icon"
                   title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."
                 >
@@ -1106,7 +1116,7 @@ exports[`Scan Config table tests should render 1`] = `
               >
                 <span
                   alt="Static"
-                  class="c3 "
+                  class="c3 c4"
                   data-testid="svg-icon"
                   title="The family selection is STATIC. New families will NOT automatically be added and considered."
                 >
@@ -1129,7 +1139,7 @@ exports[`Scan Config table tests should render 1`] = `
               >
                 <span
                   alt="Dynamic"
-                  class="c3 "
+                  class="c3 c4"
                   data-testid="svg-icon"
                   title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."
                 >
@@ -1247,7 +1257,7 @@ exports[`Scan Config table tests should render 1`] = `
                         margin="5px"
                       >
                         <span
-                          class="c3 "
+                          class="c3 c4"
                           data-testid="svg-icon"
                         >
                           <svg>
@@ -1255,7 +1265,7 @@ exports[`Scan Config table tests should render 1`] = `
                           </svg>
                         </span>
                         <span
-                          class="c3 "
+                          class="c3 c4"
                           data-testid="svg-icon"
                         >
                           <svg>
@@ -1263,7 +1273,7 @@ exports[`Scan Config table tests should render 1`] = `
                           </svg>
                         </span>
                         <span
-                          class="c3 "
+                          class="c3 c4"
                           data-testid="svg-icon"
                         >
                           <svg>
