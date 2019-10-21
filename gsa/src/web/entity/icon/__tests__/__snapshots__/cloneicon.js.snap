@@ -1,6 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Entity CloneIcon component tests should deactivate if wrong command level permissions are given 1`] = `
+.c1 {
+  cursor: pointer;
+}
+
 .c1 svg path {
   fill: #aaaaaa;
 }
@@ -14,6 +18,12 @@ exports[`Entity CloneIcon component tests should deactivate if wrong command lev
 .c0 * {
   height: inherit;
   width: inherit;
+}
+
+@media print {
+  .c1 {
+    display: none;
+  }
 }
 
 <span
@@ -28,6 +38,10 @@ exports[`Entity CloneIcon component tests should deactivate if wrong command lev
 `;
 
 exports[`Entity CloneIcon component tests should deactivate if wrong resource level permissions are given 1`] = `
+.c1 {
+  cursor: pointer;
+}
+
 .c1 svg path {
   fill: #aaaaaa;
 }
@@ -41,6 +55,12 @@ exports[`Entity CloneIcon component tests should deactivate if wrong resource le
 .c0 * {
   height: inherit;
   width: inherit;
+}
+
+@media print {
+  .c1 {
+    display: none;
+  }
 }
 
 <span
