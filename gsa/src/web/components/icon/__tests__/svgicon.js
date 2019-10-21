@@ -69,33 +69,4 @@ describe('SVG icon component tests', () => {
 
     expect(element).toHaveAttribute('title', 'Clone Entity');
   });
-
-  test('should render loading state with error', async () => {
-    let rej;
-    const promise = new Promise((resolve, reject) => {
-      rej = reject;
-    });
-
-    const handleClick = jest.fn().mockReturnValue(promise);
-
-    const {element} = render(
-      <CloneIcon
-        title="Clone Entity"
-        value={entity}
-        active={true}
-        onClick={handleClick}
-      />,
-    );
-
-    expect(element).toHaveAttribute('title', 'Clone Entity');
-    fireEvent.click(element);
-    expect(handleClick).toHaveBeenCalledWith(entity);
-    expect(element).toHaveAttribute('title', 'Loading...');
-
-    await act(async () => {
-      rej();
-    });
-
-    expect(element).toHaveAttribute('title', 'Clone Entity');
-  });
 });

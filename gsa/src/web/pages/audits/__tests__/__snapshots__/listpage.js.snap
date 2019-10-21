@@ -87,7 +87,7 @@ exports[`AuditPage ToolBarIcons test should render 1`] = `
       target="_blank"
     >
       <span
-        class="c2 "
+        class="c2 c3"
         data-testid="svg-icon"
         title="Help: Audits"
       >
@@ -490,6 +490,10 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
 }
 
 .c5 {
+  cursor: pointer;
+}
+
+.c31 {
   cursor: pointer;
 }
 
@@ -956,6 +960,12 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
 }
 
 @media print {
+  .c31 {
+    display: none;
+  }
+}
+
+@media print {
   .c34 {
     border-bottom: 1px solid black;
   }
@@ -1083,7 +1093,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
               target="_blank"
             >
               <span
-                class="c4 "
+                class="c4 c5"
                 data-testid="svg-icon"
                 title="Help: Audits"
               >
@@ -1178,7 +1188,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                         target="_blank"
                       >
                         <span
-                          class="c4 "
+                          class="c4 c5"
                           data-testid="svg-icon"
                           title="Help: Powerfilter"
                         >
@@ -1244,7 +1254,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
               class="c24"
             >
               <span
-                class="c25 "
+                class="c25 c5"
                 data-testid="svg-icon"
               >
                 <svg>

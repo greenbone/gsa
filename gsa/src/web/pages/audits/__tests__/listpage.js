@@ -39,6 +39,8 @@ import AuditPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
+window.URL.createObjectURL = jest.fn();
+
 const lastReport = {
   report: {
     _id: '1234',

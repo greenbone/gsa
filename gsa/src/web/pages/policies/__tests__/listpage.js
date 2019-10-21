@@ -40,6 +40,8 @@ import PoliciesPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
+window.URL.createObjectURL = jest.fn();
+
 const policy = Policy.fromElement({
   _id: '12345',
   name: 'foo',

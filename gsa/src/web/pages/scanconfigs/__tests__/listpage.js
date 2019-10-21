@@ -39,6 +39,8 @@ import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
 
 import ScanConfigsPage, {ToolBarIcons} from '../listpage';
 
+window.URL.createObjectURL = jest.fn();
+
 const config = ScanConfig.fromElement({
   _id: '12345',
   name: 'foo',

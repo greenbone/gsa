@@ -87,7 +87,7 @@ exports[`ScanConfigsPage ToolBarIcons test should render 1`] = `
       target="_blank"
     >
       <span
-        class="c2 "
+        class="c2 c3"
         data-testid="svg-icon"
         title="Help: Scan Configs"
       >
@@ -492,6 +492,10 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
 }
 
 .c5 {
+  cursor: pointer;
+}
+
+.c31 {
   cursor: pointer;
 }
 
@@ -916,6 +920,12 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
 }
 
 @media print {
+  .c31 {
+    display: none;
+  }
+}
+
+@media print {
   .c34 {
     border-bottom: 1px solid black;
   }
@@ -1018,7 +1028,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
               target="_blank"
             >
               <span
-                class="c4 "
+                class="c4 c5"
                 data-testid="svg-icon"
                 title="Help: Scan Configs"
               >
@@ -1122,7 +1132,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                         target="_blank"
                       >
                         <span
-                          class="c4 "
+                          class="c4 c5"
                           data-testid="svg-icon"
                           title="Help: Powerfilter"
                         >
@@ -1197,7 +1207,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
               class="c24"
             >
               <span
-                class="c25 "
+                class="c25 c5"
                 data-testid="svg-icon"
               >
                 <svg>
@@ -1471,7 +1481,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                     >
                       <span
                         alt="Static"
-                        class="c4 "
+                        class="c4 c5"
                         data-testid="svg-icon"
                         title="The family selection is STATIC. New families will NOT automatically be added and considered."
                       >
@@ -1494,7 +1504,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                     >
                       <span
                         alt="Dynamic"
-                        class="c4 "
+                        class="c4 c5"
                         data-testid="svg-icon"
                         title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."
                       >

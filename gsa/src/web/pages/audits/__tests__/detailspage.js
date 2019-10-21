@@ -248,23 +248,23 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolveValue({
+const currentSettings = jest.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = jest.fn().mockResolveValue({
+const renewSession = jest.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getPolicy = jest.fn().mockResolveValue({
+const getPolicy = jest.fn().mockResolvedValue({
   data: policy,
 });
 
-const getSchedule = jest.fn().mockResolveValue({
+const getSchedule = jest.fn().mockResolvedValue({
   data: schedule,
 });
 
-const getEntities = jest.fn().mockResolveValue({
+const getEntities = jest.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -274,7 +274,7 @@ const getEntities = jest.fn().mockResolveValue({
 
 describe('Audit Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getAudit = jest.fn().mockResolveValue({
+    const getAudit = jest.fn().mockResolvedValue({
       data: audit,
     });
 
