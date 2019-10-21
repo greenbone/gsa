@@ -81,7 +81,7 @@ class TlsCertificateComponent extends React.Component {
         username,
       });
 
-      onDownloaded({
+      return onDownloaded({
         filename,
         mimetype: 'application/x-x509-ca-cert',
         data: create_pem_certificate(certificate),
