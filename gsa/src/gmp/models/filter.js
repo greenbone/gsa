@@ -204,12 +204,34 @@ class Filter extends Model {
    *
    * @return {Filter} This filter with merged terms.
    */
+
   _mergeExtraKeywords(filter) {
     if (hasValue(filter)) {
       filter.forEach(term => {
         const {keyword: key} = term;
         if (isDefined(key) && EXTRA_KEYWORDS.includes(key) && !this.has(key)) {
           this._addTerm(term);
+        }
+      });
+    }
+    return this;
+  }
+
+  /**
+   * Merges terms with new keywords from filter into this Filter
+   *
+   * @private
+   *
+   * @param {Filter} filter  Use extra params terms filter to be merged.
+   *
+   * @return {Filter} This filter with merged terms.
+   */
+  _mergeNewKeywords(filter) {
+    if (hasValue(filter)) {
+      filter.forEach(term => {
+        const {keyword: key} = term;
+        if (isDefined(key)) {
+          !this.has(key) && this._addTerm(term);
         }
       });
     }
@@ -664,6 +686,23 @@ class Filter extends Model {
   merge(filter) {
     if (hasValue(filter)) {
       this._addTerm(...filter.getAllTerms());
+    }
+    return this;
+  }
+
+  /**
+   * Merges all new terms from filter into Filter
+   *
+   * @param {Filter} filter  Terms from filter to be merged.
+   *
+   * @return {Filter} This filter with merged terms.
+   */
+
+  mergeKeywords(filter) {
+    if (hasValue(filter)) {
+      this._resetFilterId();
+
+      this._mergeNewKeywords(filter);
     }
     return this;
   }
