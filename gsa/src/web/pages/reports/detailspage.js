@@ -40,7 +40,6 @@ import withDialogNotification from 'web/components/notification/withDialogNotifi
 import {handleDefaultReloadIntervalFunc} from 'web/entity/container';
 
 import FilterProvider from 'web/entities/filterprovider';
-import withDefaultFilter from 'web/entities/withDefaultFilter';
 
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
 
@@ -797,7 +796,6 @@ export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
-  withDefaultFilter('result'),
   connect(
     mapStateToProps,
     mapDispatchToProps,
