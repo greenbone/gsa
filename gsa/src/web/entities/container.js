@@ -104,6 +104,7 @@ class EntitiesContainer extends React.Component {
     this.handleLast = this.handleLast.bind(this);
     this.handleNext = this.handleNext.bind(this);
     this.handlePrevious = this.handlePrevious.bind(this);
+    this.handleReduxDeleteBulk = this.handleReduxDeleteBulk.bind(this);
     this.handleSelected = this.handleSelected.bind(this);
     this.handleSelectionTypeChange = this.handleSelectionTypeChange.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
@@ -347,6 +348,27 @@ class EntitiesContainer extends React.Component {
     this.handleInteraction();
 
     return promise.then(deleted => {
+      log.debug('successfully deleted entities', deleted);
+      this.handleChanged();
+    }, this.handleError);
+  }
+
+  handleReduxDeleteBulk() {
+    const {entitiesCommand} = this;
+    const {loadedFilter, selected, selectionType} = this.state;
+    let promise;
+
+    if (selectionType === SelectionType.SELECTION_USER) {
+      promise = entitiesCommand.delete(selected);
+    } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+      promise = entitiesCommand.bulkDeleteByFilter(loadedFilter);
+    } else {
+      promise = entitiesCommand.bulkDeleteByFilter(loadedFilter.all());
+    }
+
+    this.handleInteraction();
+
+    promise.then(deleted => {
       log.debug('successfully deleted entities', deleted);
       this.handleChanged();
     }, this.handleError);
@@ -641,7 +663,7 @@ class EntitiesContainer extends React.Component {
           sortDir,
           onChanged: this.handleChanged,
           onDeleted: this.handleDeleted,
-          onDeleteBulk: this.handleDeleteBulk,
+          onDeleteBulk: this.handleReduxDeleteBulk,
           onDownloadBulk: this.handleDownloadBulk,
           onDownloaded: onDownload,
           onEntitySelected: this.handleSelected,

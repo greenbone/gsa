@@ -97,10 +97,16 @@ class EntitiesCommand extends GmpCommand {
   }
 
   delete(entities, extraParams) {
+    const deletedIds = [];
     return this.deleteByIds(
-      map(entities, entity => entity.id),
+      map(entities, entity => {
+        deletedIds.push(entity.id);
+        return entity.id;
+      }),
       extraParams,
-    ).then(response => response.setData(entities));
+    ).then(response => {
+      return response.setData(entities);
+    });
   }
 
   deleteByIds(ids, extraParams = {}) {
@@ -124,6 +130,26 @@ class EntitiesCommand extends GmpCommand {
         return this.delete(deleted, extraParams);
       })
       .then(response => response.setData(deleted));
+  }
+
+  bulkDeleteByFilter(filter, extraParams) {
+    let deleted;
+
+    return this.get({filter}).then(entities => {
+      deleted = entities.data;
+      const deletedIds = this.extractDeletedIds(deleted, extraParams);
+      console.log(deletedIds);
+      return deletedIds;
+    });
+  }
+
+  extractDeletedIds(entities, extraParams) {
+    const deletedIds = [];
+
+    entities.forEach(entity => {
+      deletedIds.push(entity.id);
+    });
+    return deletedIds;
   }
 
   transformAggregates(response) {
