@@ -1,6 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Badge tests should render badge 1`] = `
+.c2 {
+  cursor: pointer;
+}
+
 .c1 {
   height: 16px;
   width: 16px;
@@ -21,7 +25,7 @@ exports[`Badge tests should render badge 1`] = `
   margin-right: 0px;
 }
 
-.c2 {
+.c3 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -57,11 +61,17 @@ exports[`Badge tests should render badge 1`] = `
   right: 0px;
 }
 
+@media print {
+  .c2 {
+    display: none;
+  }
+}
+
 <div
   class="c0"
 >
   <span
-    class="c1 "
+    class="c1 c2"
     data-testid="svg-icon"
   >
     <svg>
@@ -69,7 +79,7 @@ exports[`Badge tests should render badge 1`] = `
     </svg>
   </span>
   <span
-    class="c2"
+    class="c3"
     data-testid="badge-icon"
   >
     1

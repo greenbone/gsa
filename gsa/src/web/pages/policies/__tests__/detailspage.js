@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -205,34 +206,27 @@ const entityType = 'policy';
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
-const renewSession = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-const getPermissions = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  }),
-);
+const renewSession = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
+
+const getPermissions = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
 
 describe('Policy Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getPolicy = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: policy,
-      }),
-    );
+    const getPolicy = jest.fn().mockResolvedValue({
+      data: policy,
+    });
 
     const gmp = {
       [entityType]: {
@@ -296,11 +290,9 @@ describe('Policy Detailspage tests', () => {
   });
 
   test('should render nvt families tab', () => {
-    const getPolicy = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: policy,
-      }),
-    );
+    const getPolicy = jest.fn().mockResolvedValue({
+      data: policy,
+    });
 
     const gmp = {
       [entityType]: {
@@ -384,11 +376,9 @@ describe('Policy Detailspage tests', () => {
   });
 
   test('should render nvt preferences tab', () => {
-    const getPolicy = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: policy,
-      }),
-    );
+    const getPolicy = jest.fn().mockResolvedValue({
+      data: policy,
+    });
 
     const gmp = {
       [entityType]: {
@@ -443,11 +433,9 @@ describe('Policy Detailspage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const getPolicy = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: policy,
-      }),
-    );
+    const getPolicy = jest.fn().mockResolvedValue({
+      data: policy,
+    });
 
     const gmp = {
       [entityType]: {
@@ -484,7 +472,7 @@ describe('Policy Detailspage tests', () => {
     expect(element).toHaveTextContent('No permissions available');
   });
 
-  test('should call commands', () => {
+  test('should call commands', async () => {
     const getPolicy = jest.fn().mockReturnValue(
       Promise.resolve({
         data: policy,
@@ -557,25 +545,27 @@ describe('Policy Detailspage tests', () => {
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    fireEvent.click(icons[2]);
-    expect(clone).toHaveBeenCalledWith(policy);
-    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
+    await act(async () => {
+      fireEvent.click(icons[2]);
+      expect(clone).toHaveBeenCalledWith(policy);
+      expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
-    fireEvent.click(icons[3]);
-    expect(getNvtFamilies).toHaveBeenCalled();
-    expect(getAllScanners).toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
+      fireEvent.click(icons[3]);
+      expect(getNvtFamilies).toHaveBeenCalled();
+      expect(getAllScanners).toHaveBeenCalled();
+      expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
 
-    fireEvent.click(icons[4]);
-    expect(deleteFunc).toHaveBeenCalledWith(policy);
-    expect(icons[4]).toHaveAttribute('title', 'Move Policy to trashcan');
+      fireEvent.click(icons[4]);
+      expect(deleteFunc).toHaveBeenCalledWith(policy);
+      expect(icons[4]).toHaveAttribute('title', 'Move Policy to trashcan');
 
-    fireEvent.click(icons[5]);
-    expect(exportFunc).toHaveBeenCalledWith(policy);
-    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
+      fireEvent.click(icons[5]);
+      expect(exportFunc).toHaveBeenCalledWith(policy);
+      expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
+    });
   });
 
-  test('should not call commands without permission', () => {
+  test('should not call commands without permission', async () => {
     const getPolicy = jest.fn().mockReturnValue(
       Promise.resolve({
         data: policy2,
@@ -649,34 +639,36 @@ describe('Policy Detailspage tests', () => {
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    fireEvent.click(icons[2]);
-    expect(clone).not.toHaveBeenCalledWith(policy2);
-    expect(icons[2]).toHaveAttribute(
-      'title',
-      'Permission to clone Policy denied',
-    );
+    await act(async () => {
+      fireEvent.click(icons[2]);
+      expect(clone).not.toHaveBeenCalledWith(policy2);
+      expect(icons[2]).toHaveAttribute(
+        'title',
+        'Permission to clone Policy denied',
+      );
 
-    fireEvent.click(icons[3]);
-    expect(getNvtFamilies).not.toHaveBeenCalled();
-    expect(getAllScanners).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute(
-      'title',
-      'Permission to edit Policy denied',
-    );
+      fireEvent.click(icons[3]);
+      expect(getNvtFamilies).not.toHaveBeenCalled();
+      expect(getAllScanners).not.toHaveBeenCalled();
+      expect(icons[3]).toHaveAttribute(
+        'title',
+        'Permission to edit Policy denied',
+      );
 
-    fireEvent.click(icons[4]);
-    expect(deleteFunc).not.toHaveBeenCalledWith(policy2);
-    expect(icons[4]).toHaveAttribute(
-      'title',
-      'Permission to move Policy to trashcan denied',
-    );
+      fireEvent.click(icons[4]);
+      expect(deleteFunc).not.toHaveBeenCalledWith(policy2);
+      expect(icons[4]).toHaveAttribute(
+        'title',
+        'Permission to move Policy to trashcan denied',
+      );
 
-    fireEvent.click(icons[5]);
-    expect(exportFunc).toHaveBeenCalledWith(policy2);
-    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
+      fireEvent.click(icons[5]);
+      expect(exportFunc).toHaveBeenCalledWith(policy2);
+      expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
+    });
   });
 
-  test('should (not) call commands if policy is in use', () => {
+  test('should (not) call commands if policy is in use', async () => {
     const getPolicy = jest.fn().mockReturnValue(
       Promise.resolve({
         data: policy3,
@@ -750,25 +742,27 @@ describe('Policy Detailspage tests', () => {
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    fireEvent.click(icons[2]);
-    expect(clone).toHaveBeenCalledWith(policy3);
-    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
+    await act(async () => {
+      fireEvent.click(icons[2]);
+      expect(clone).toHaveBeenCalledWith(policy3);
+      expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
-    fireEvent.click(icons[3]);
-    expect(getNvtFamilies).toHaveBeenCalled();
-    expect(getAllScanners).toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
+      fireEvent.click(icons[3]);
+      expect(getNvtFamilies).toHaveBeenCalled();
+      expect(getAllScanners).toHaveBeenCalled();
+      expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
 
-    fireEvent.click(icons[4]);
-    expect(deleteFunc).not.toHaveBeenCalledWith(policy3);
-    expect(icons[4]).toHaveAttribute('title', 'Policy is still in use');
+      fireEvent.click(icons[4]);
+      expect(deleteFunc).not.toHaveBeenCalledWith(policy3);
+      expect(icons[4]).toHaveAttribute('title', 'Policy is still in use');
 
-    fireEvent.click(icons[5]);
-    expect(exportFunc).toHaveBeenCalledWith(policy3);
-    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
+      fireEvent.click(icons[5]);
+      expect(exportFunc).toHaveBeenCalledWith(policy3);
+      expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
+    });
   });
 
-  test('should (not) call commands if policy is not writable', () => {
+  test('should (not) call commands if policy is not writable', async () => {
     const getPolicy = jest.fn().mockReturnValue(
       Promise.resolve({
         data: policy4,
@@ -842,22 +836,24 @@ describe('Policy Detailspage tests', () => {
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    fireEvent.click(icons[2]);
-    expect(clone).toHaveBeenCalledWith(policy4);
-    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
+    await act(async () => {
+      fireEvent.click(icons[2]);
+      expect(clone).toHaveBeenCalledWith(policy4);
+      expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
-    fireEvent.click(icons[3]);
-    expect(getNvtFamilies).not.toHaveBeenCalled();
-    expect(getAllScanners).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute('title', 'Policy is not writable');
+      fireEvent.click(icons[3]);
+      expect(getNvtFamilies).not.toHaveBeenCalled();
+      expect(getAllScanners).not.toHaveBeenCalled();
+      expect(icons[3]).toHaveAttribute('title', 'Policy is not writable');
 
-    fireEvent.click(icons[4]);
-    expect(deleteFunc).not.toHaveBeenCalledWith(policy4);
-    expect(icons[4]).toHaveAttribute('title', 'Policy is not writable');
+      fireEvent.click(icons[4]);
+      expect(deleteFunc).not.toHaveBeenCalledWith(policy4);
+      expect(icons[4]).toHaveAttribute('title', 'Policy is not writable');
 
-    fireEvent.click(icons[5]);
-    expect(exportFunc).toHaveBeenCalledWith(policy4);
-    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
+      fireEvent.click(icons[5]);
+      expect(exportFunc).toHaveBeenCalledWith(policy4);
+      expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
+    });
   });
 
   // TODO: should render scanner preferences tab

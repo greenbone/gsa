@@ -1,6 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SolutionTypeIcon component tests should render correct image 1`] = `
+.c1 {
+  cursor: pointer;
+}
+
 .c0 {
   height: 16px;
   width: 16px;
@@ -12,9 +16,15 @@ exports[`SolutionTypeIcon component tests should render correct image 1`] = `
   width: inherit;
 }
 
+@media print {
+  .c1 {
+    display: none;
+  }
+}
+
 <span
   alt="Workaround"
-  class="c0 "
+  class="c0 c1"
   data-testid="svg-icon"
   title="Workaround"
 >
@@ -27,6 +37,10 @@ exports[`SolutionTypeIcon component tests should render correct image 1`] = `
 exports[`SolutionTypeIcon component tests should render correct image 2`] = `<span />`;
 
 exports[`SolutionTypeIcon component tests should render correct image 3`] = `
+.c1 {
+  cursor: pointer;
+}
+
 .c0 {
   height: 16px;
   width: 16px;
@@ -38,9 +52,15 @@ exports[`SolutionTypeIcon component tests should render correct image 3`] = `
   width: inherit;
 }
 
+@media print {
+  .c1 {
+    display: none;
+  }
+}
+
 <span
   alt="None available"
-  class="c0 "
+  class="c0 c1"
   data-testid="svg-icon"
   title="None available"
 >
@@ -51,6 +71,10 @@ exports[`SolutionTypeIcon component tests should render correct image 3`] = `
 `;
 
 exports[`SolutionTypeIcon component tests should render correct image 4`] = `
+.c1 {
+  cursor: pointer;
+}
+
 .c0 {
   height: 16px;
   width: 16px;
@@ -62,9 +86,15 @@ exports[`SolutionTypeIcon component tests should render correct image 4`] = `
   width: inherit;
 }
 
+@media print {
+  .c1 {
+    display: none;
+  }
+}
+
 <span
   alt="Vendorfix"
-  class="c0 "
+  class="c0 c1"
   data-testid="svg-icon"
   title="Vendorfix"
 >
@@ -75,6 +105,10 @@ exports[`SolutionTypeIcon component tests should render correct image 4`] = `
 `;
 
 exports[`SolutionTypeIcon component tests should render correct image 5`] = `
+.c1 {
+  cursor: pointer;
+}
+
 .c0 {
   height: 16px;
   width: 16px;
@@ -86,9 +120,15 @@ exports[`SolutionTypeIcon component tests should render correct image 5`] = `
   width: inherit;
 }
 
+@media print {
+  .c1 {
+    display: none;
+  }
+}
+
 <span
   alt="Will not fix"
-  class="c0 "
+  class="c0 c1"
   data-testid="svg-icon"
   title="Will not fix"
 >
@@ -99,6 +139,10 @@ exports[`SolutionTypeIcon component tests should render correct image 5`] = `
 `;
 
 exports[`SolutionTypeIcon component tests should render correct image 6`] = `
+.c1 {
+  cursor: pointer;
+}
+
 .c0 {
   height: 16px;
   width: 16px;
@@ -110,9 +154,15 @@ exports[`SolutionTypeIcon component tests should render correct image 6`] = `
   width: inherit;
 }
 
+@media print {
+  .c1 {
+    display: none;
+  }
+}
+
 <span
   alt="Workaround"
-  class="c0 "
+  class="c0 c1"
   data-testid="svg-icon"
   title="Workaround"
 >
@@ -123,6 +173,10 @@ exports[`SolutionTypeIcon component tests should render correct image 6`] = `
 `;
 
 exports[`SolutionTypeIcon component tests should render correct image 7`] = `
+.c1 {
+  cursor: pointer;
+}
+
 .c0 {
   height: 16px;
   width: 16px;
@@ -134,9 +188,15 @@ exports[`SolutionTypeIcon component tests should render correct image 7`] = `
   width: inherit;
 }
 
+@media print {
+  .c1 {
+    display: none;
+  }
+}
+
 <span
   alt=""
-  class="c0 "
+  class="c0 c1"
   data-testid="svg-icon"
   title=""
 >

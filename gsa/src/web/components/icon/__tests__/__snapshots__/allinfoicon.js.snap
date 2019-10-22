@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ScanConfigIcon component tests should render 1`] = `
+exports[`AllInfoIcon component tests should render 1`] = `
 .c1 {
   cursor: pointer;
 }
@@ -27,7 +27,7 @@ exports[`ScanConfigIcon component tests should render 1`] = `
   data-testid="svg-icon"
 >
   <svg>
-    config.svg
+    allinfo.svg
   </svg>
 </span>
 `;

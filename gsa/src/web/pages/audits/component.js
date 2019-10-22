@@ -107,7 +107,6 @@ class AuditComponent extends React.Component {
     this.handleAuditStart = this.handleAuditStart.bind(this);
     this.handleAuditStop = this.handleAuditStop.bind(this);
 
-    this.handleReportDownloadClick = this.handleReportDownloadClick.bind(this);
     this.handleReportDownload = this.handleReportDownload.bind(this);
 
     this.openAuditDialog = this.openAuditDialog.bind(this);
@@ -373,15 +372,11 @@ class AuditComponent extends React.Component {
     this.handleInteraction();
   }
 
-  handleReportDownloadClick(audit) {
+  handleReportDownload(audit) {
     this.setState({
       audit,
     });
 
-    this.handleReportDownload(audit);
-  }
-
-  handleReportDownload(audit) {
     const {
       gmp,
       reportExportFileName,
@@ -400,7 +395,7 @@ class AuditComponent extends React.Component {
 
     const {id} = audit.last_report;
 
-    gmp.report
+    return gmp.report
       .download(
         {id},
         {
@@ -486,7 +481,7 @@ class AuditComponent extends React.Component {
                 start: this.handleAuditStart,
                 stop: this.handleAuditStop,
                 resume: this.handleAuditResume,
-                reportDownload: this.handleReportDownloadClick,
+                reportDownload: this.handleReportDownload,
                 gcrFormatDefined,
               })}
 

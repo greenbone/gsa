@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -26,22 +27,36 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 
-import {setUsername} from 'web/store/usersettings/actions';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {entitiesActions} from 'web/store/entities/audits';
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+
+import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
 
 import AuditPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
+
+window.URL.createObjectURL = jest.fn();
+
+const lastReport = {
+  report: {
+    _id: '1234',
+    timestamp: '2019-07-10T12:51:27Z',
+    compliance_count: {yes: 4, no: 3, incomplete: 1},
+  },
+};
 
 const audit = Audit.fromElement({
   _id: '1234',
   owner: {name: 'admin'},
   name: 'foo',
   comment: 'bar',
-  status: AUDIT_STATUS.new,
+  status: AUDIT_STATUS.done,
   alterable: '0',
+  last_report: lastReport,
   permissions: {permission: [{name: 'everything'}]},
   target: {_id: 'id1', name: 'target1'},
 });
@@ -52,50 +67,44 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-const getSetting = jest.fn().mockReturnValue(
-  Promise.resolve({
-    set: 'ting',
-  }),
-);
+const getSetting = jest.fn().mockResolvedValue({
+  filter: null,
+});
 
-const getFilters = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  }),
-);
+const getFilters = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
 
-const getAudits = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: [audit],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  }),
-);
+const getAudits = jest.fn().mockResolvedValue({
+  data: [audit],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
 
-const getReportFormats = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  }),
-);
+const getReportFormats = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
+const renewSession = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
 describe('AuditPage tests', () => {
-  test('should render full AuditPage', () => {
+  test('should render full AuditPage', async () => {
     const gmp = {
       audits: {
         get: getAudits,
@@ -118,7 +127,14 @@ describe('AuditPage tests', () => {
       router: true,
     });
 
+    store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
+
+    const defaultSettingfilter = Filter.fromString('foo=bar');
+    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success('audit', defaultSettingfilter),
+    );
 
     const counts = new CollectionCounts({
       first: 1,
@@ -135,7 +151,84 @@ describe('AuditPage tests', () => {
 
     const {baseElement} = render(<AuditPage />);
 
+    await waitForElement(() => baseElement.querySelectorAll('table'));
+
     expect(baseElement).toMatchSnapshot();
+  });
+
+  test('should call commands for bulk actions', async () => {
+    const deleteByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const gmp = {
+      audits: {
+        get: getAudits,
+        deleteByFilter,
+        exportByFilter,
+      },
+      filters: {
+        get: getFilters,
+      },
+      reportformats: {
+        get: getReportFormats,
+      },
+      reloadInterval,
+      settings: {manualUrl},
+      user: {renewSession, currentSettings, getSetting: getSetting},
+    };
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    const defaultSettingfilter = Filter.fromString('foo=bar');
+    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success('audit', defaultSettingfilter),
+    );
+
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesActions.success([audit], filter, loadedFilter, counts),
+    );
+
+    const {baseElement, getAllByTestId} = render(<AuditPage />);
+
+    await waitForElement(() => baseElement.querySelectorAll('table'));
+
+    const icons = getAllByTestId('svg-icon');
+
+    await act(async () => {
+      expect(icons[19]).toHaveAttribute(
+        'title',
+        'Move page contents to trashcan',
+      );
+      fireEvent.click(icons[19]);
+      expect(deleteByFilter).toHaveBeenCalled();
+
+      expect(icons[20]).toHaveAttribute('title', 'Export page contents');
+      fireEvent.click(icons[20]);
+      expect(exportByFilter).toHaveBeenCalled();
+    });
   });
 });
 

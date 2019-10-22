@@ -85,21 +85,20 @@ class FilterDialog extends React.Component {
   handleSave() {
     const {filter, filterName = '', filterstring, saveNamedFilter} = this.state;
     const {onFilterChanged, onCloseClick} = this.props;
-
     const newFilter = Filter.fromString(filterstring);
-    newFilter.merge(filter);
+    filter.mergeKeywords(newFilter);
 
     if (saveNamedFilter) {
       if (filterName.trim().length > 0) {
-        return this.createFilter(newFilter).then(onCloseClick);
+        return this.createFilter(filter).then(onCloseClick);
       }
       return Promise.reject(
         new Error(_('Please insert a name for the new filter')),
       );
     }
 
-    if (onFilterChanged && !newFilter.equals(this.orig_filter)) {
-      onFilterChanged(newFilter);
+    if (onFilterChanged && !filter.equals(this.orig_filter)) {
+      onFilterChanged(filter);
     }
 
     if (isDefined(onCloseClick)) {

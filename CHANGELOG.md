@@ -24,14 +24,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 ### Fixed
+- Improve filter handling in report details [#1708](https://github.com/greenbone/gsa/pull/1708)
+- Fix TLS certificate download [#1704](https://github.com/greenbone/gsa/pull/1704)
+- Import additional polyfills for IE11 [#1702](https://github.com/greenbone/gsa/pull/1702)
+- Handle authentication errors in gsad more carefully [#1700](https://github.com/greenbone/gsa/pull/1700)
 
 ### Removed
+- Removed obsolete DefaultFilter component and withDefaultFilter HOC [#1709](https://github.com/greenbone/gsa/pull/1709)
 
 [9.0.1]: https://github.com/greenbone/gsa/compare/v9.0.0...gsa-9.0
 
 ## [9.0.0] - 2019-10-14
 
 ### Added
+- Add loading indicator to svg icon [#1701](https://github.com/greenbone/gsa/pull/1701)
 - Update German Translation [#1689](https://github.com/greenbone/gsa/pull/1689)
 - List NVT of the found CVEs at the report details page [#1673](https://github.com/greenbone/gsa/pull/1673)
 - Added links for GOS 6 manual for audits, policies and TLS certificates [#1657](https://github.com/greenbone/gsa/pull/1657)
@@ -99,6 +105,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   requests in gsad [#1355](https://github.com/greenbone/gsa/pull/1355)
 
 ### Fixed
+- Fixed filter dialog duplicating filter terms [#1705] (https://github.com/greenbone/gsa/pull/1705)
 - Fixed parsing report details data [#1673](https://github.com/greenbone/gsa/pull/1673)
 - Fixed scanconfig clone icon tooltip does not show if permission is denied [#1664](https://github.com/greenbone/gsa/pull/1664)
 - Fixed feed status page does not render [#1628](https://github.com/greenbone/gsa/pull/1628)

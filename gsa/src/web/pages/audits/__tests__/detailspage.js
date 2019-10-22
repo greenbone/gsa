@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -247,47 +248,35 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-const renewSession = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
+const renewSession = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-const getPolicy = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: policy,
-  }),
-);
+const getPolicy = jest.fn().mockResolvedValue({
+  data: policy,
+});
 
-const getSchedule = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: schedule,
-  }),
-);
+const getSchedule = jest.fn().mockResolvedValue({
+  data: schedule,
+});
 
-const getEntities = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  }),
-);
+const getEntities = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
 
 describe('Audit Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getAudit = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: audit,
-      }),
-    );
+    const getAudit = jest.fn().mockResolvedValue({
+      data: audit,
+    });
 
     const gmp = {
       audit: {
@@ -380,11 +369,9 @@ describe('Audit Detailspage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const getAudit = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: audit2,
-      }),
-    );
+    const getAudit = jest.fn().mockResolvedValue({
+      data: audit2,
+    });
 
     const gmp = {
       audit: {
@@ -429,38 +416,30 @@ describe('Audit Detailspage tests', () => {
     expect(element).toHaveTextContent('No permissions available');
   });
 
-  test('should call commands', () => {
-    const getAudit = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: audit5,
-      }),
-    );
+  test('should call commands', async () => {
+    const getAudit = jest.fn().mockResolvedValue({
+      data: audit5,
+    });
 
-    const clone = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: {id: 'foo'},
-      }),
-    );
-    const deleteFunc = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const exportFunc = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const start = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const resume = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
+    const clone = jest.fn().mockResolvedValue({
+      data: {id: 'foo'},
+    });
+
+    const deleteFunc = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportFunc = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const start = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const resume = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
 
     const gmp = {
       audit: {
@@ -507,25 +486,27 @@ describe('Audit Detailspage tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(icons[2]);
-    expect(clone).toHaveBeenCalledWith(audit5);
-    expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
+    await act(async () => {
+      fireEvent.click(icons[2]);
+      expect(clone).toHaveBeenCalledWith(audit5);
+      expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[4]);
-    expect(deleteFunc).toHaveBeenCalledWith(audit5);
-    expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
+      fireEvent.click(icons[4]);
+      expect(deleteFunc).toHaveBeenCalledWith(audit5);
+      expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    fireEvent.click(icons[5]);
-    expect(exportFunc).toHaveBeenCalledWith(audit5);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
+      fireEvent.click(icons[5]);
+      expect(exportFunc).toHaveBeenCalledWith(audit5);
+      expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
 
-    fireEvent.click(icons[6]);
-    expect(start).toHaveBeenCalledWith(audit5);
-    expect(icons[6]).toHaveAttribute('title', 'Start');
+      fireEvent.click(icons[6]);
+      expect(start).toHaveBeenCalledWith(audit5);
+      expect(icons[6]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[7]);
-    expect(resume).toHaveBeenCalledWith(audit5);
-    expect(icons[7]).toHaveAttribute('title', 'Resume');
+      fireEvent.click(icons[7]);
+      expect(resume).toHaveBeenCalledWith(audit5);
+      expect(icons[7]).toHaveAttribute('title', 'Resume');
+    });
   });
 });
 

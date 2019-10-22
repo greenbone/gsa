@@ -1200,7 +1200,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Dynamic"
-                                        class="c20 "
+                                        class="c20 c21"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1229,7 +1229,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Static"
-                                        class="c20 "
+                                        class="c20 c21"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1329,7 +1329,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Dynamic"
-                                        class="c20 "
+                                        class="c20 c21"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1359,7 +1359,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Static"
-                                        class="c20 "
+                                        class="c20 c21"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1458,7 +1458,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Dynamic"
-                                        class="c20 "
+                                        class="c20 c21"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1488,7 +1488,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Static"
-                                        class="c20 "
+                                        class="c20 c21"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1587,7 +1587,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Dynamic"
-                                        class="c20 "
+                                        class="c20 c21"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1617,7 +1617,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Static"
-                                        class="c20 "
+                                        class="c20 c21"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
