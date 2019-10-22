@@ -115,6 +115,7 @@ class EntitiesCommand extends GmpCommand {
       cmd: 'bulk_delete',
       resource_type: this.name,
     };
+
     for (const id of ids) {
       params['bulk_selected:' + id] = 1;
     }
@@ -138,7 +139,6 @@ class EntitiesCommand extends GmpCommand {
     return this.get({filter}).then(entities => {
       deleted = entities.data;
       const deletedIds = this.extractDeletedIds(deleted, extraParams);
-      console.log(deletedIds);
       return deletedIds;
     });
   }

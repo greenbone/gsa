@@ -171,6 +171,13 @@ export const createLoadEntity = ({
     );
 };
 
+export const createBulkDeleteEntities = ({
+  entityType,
+}) => gmp => ids => dispatch =>
+  gmp[pluralizeType(entityType)]
+    .deleteByIds({ids})
+    .then(() => dispatch(entitiesBulkDeleteActions.success(entityType, ids)));
+
 export const createDeleteEntity = ({entityType}) => gmp => id => dispatch =>
   gmp[entityType]
     .delete({id})
