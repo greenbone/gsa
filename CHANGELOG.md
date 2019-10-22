@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Handle authentication errors in gsad more carefully [#1700](https://github.com/greenbone/gsa/pull/1700)
 
 ### Removed
-- DefaultFilter and withDefaultFilter [#1709](https://github.com/greenbone/gsa/pull/1709)
+- Removed obsolete DefaultFilter component and withDefaultFilter HOC [#1709](https://github.com/greenbone/gsa/pull/1709)
 
 [9.0.1]: https://github.com/greenbone/gsa/compare/v9.0.0...gsa-9.0
 
