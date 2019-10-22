@@ -8012,10 +8012,9 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
             }
           g_strfreev (splits);
 
-          value = preference->value_size
-                    ? g_base64_encode ((guchar *) preference->value,
-                                       preference->value_size)
-                    : g_strdup ("");
+          value = preference->value_size ? g_base64_encode (
+                    (guchar *) preference->value, preference->value_size)
+                                         : g_strdup ("");
 
           if (is_timeout)
             {
@@ -9691,8 +9690,7 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
         new_severity = params_value (params, "new_severity_from_list");
       else if (params_original_value (params, "new_severity_from_list") == NULL
                || strcmp (
-                    params_original_value (params, "new_severity_from_list"),
-                    ""))
+                 params_original_value (params, "new_severity_from_list"), ""))
         new_severity = NULL;
       else
         new_severity = "";
@@ -10229,17 +10227,16 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
       if (ca_pub == NULL)
         ca_pub = "";
       if (in_use)
-        ret =
-          gmpf (connection, credentials, &response, &entity, response_data,
-                "<modify_scanner scanner_id=\"%s\">"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<ca_pub>%s</ca_pub>"
-                "<credential id=\"%s\"/>"
-                "</modify_scanner>",
-                scanner_id, name, comment ?: "",
-                strcmp (which_cert, "new") == 0 ? ca_pub : "",
-                credential_id ? credential_id : "");
+        ret = gmpf (connection, credentials, &response, &entity, response_data,
+                    "<modify_scanner scanner_id=\"%s\">"
+                    "<name>%s</name>"
+                    "<comment>%s</comment>"
+                    "<ca_pub>%s</ca_pub>"
+                    "<credential id=\"%s\"/>"
+                    "</modify_scanner>",
+                    scanner_id, name, comment ?: "",
+                    strcmp (which_cert, "new") == 0 ? ca_pub : "",
+                    credential_id ? credential_id : "");
       else
         ret = gmpf (connection, credentials, &response, &entity, response_data,
                     "<modify_scanner scanner_id=\"%s\">"
