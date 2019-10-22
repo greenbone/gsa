@@ -56,7 +56,6 @@ const withEntitiesContainer = (
         <FilterProvider
           fallbackFilter={fallbackFilter}
           gmpname={gmpname}
-          history={props.history}
           locationQuery={props.location.query}
         >
           {({filter}) => (
@@ -102,7 +101,6 @@ const withEntitiesContainer = (
 
   EntitiesContainerWrapper.propTypes = {
     filter: PropTypes.filter,
-    history: PropTypes.object.isRequired,
   };
 
   EntitiesContainerWrapper = compose(

@@ -788,18 +788,10 @@ const mapStateToProps = (rootState, {gmp, match}) => {
 };
 
 const ReportDetailsWrapper = props => (
-  <FilterProvider
-    fallbackFilter={DEFAULT_FILTER}
-    gmpname="result"
-    history={props.history}
-  >
+  <FilterProvider fallbackFilter={DEFAULT_FILTER} gmpname="result">
     {({filter}) => <ReportDetails {...props} filter={filter} />}
   </FilterProvider>
 );
-
-ReportDetailsWrapper.propTypes = {
-  history: PropTypes.object.isRequired,
-};
 
 export default compose(
   withGmp,
