@@ -137,6 +137,14 @@ export const createReducer = entityType => {
         };
         delete nState[action.id];
         return nState;
+      case types.ENTITY_BULK_DELETE_SUCCESS:
+        const {ids = []} = action;
+        const bState = {
+          ...state,
+        };
+
+        ids.forEach(id => delete bState[id]);
+        return bState;
       default:
         return state;
     }
@@ -169,6 +177,11 @@ export const createReducer = entityType => {
           errors: errors(state.errors, action),
         };
       case types.ENTITY_DELETE_SUCCESS:
+        return {
+          ...state,
+          byId: byId(state.byId, action),
+        };
+      case types.ENTITY_BULK_DELETE_SUCCESS:
         return {
           ...state,
           byId: byId(state.byId, action),

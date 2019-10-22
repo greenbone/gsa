@@ -26,6 +26,7 @@ export const types = {
   ENTITIES_LOADING_REQUEST: 'ENTITIES_LOADING_REQUEST',
   ENTITIES_LOADING_SUCCESS: 'ENTITIES_LOADING_SUCCESS',
   ENTITIES_LOADING_ERROR: 'ENTITIES_LOADING_ERROR',
+  ENTITIES_BULK_DELETE_SUCCESS: 'ENTITIES_BULK_DELETE_SUCCESS',
   ENTITY_LOADING_REQUEST: 'ENTITY_LOADING_REQUEST',
   ENTITY_LOADING_SUCCESS: 'ENTITY_LOADING_SUCCESS',
   ENTITY_LOADING_ERROR: 'ENTITY_LOADING_ERROR',
@@ -73,6 +74,14 @@ export const createEntityLoadingActions = entityType => ({
     id,
   }),
 });
+
+export const entitiesBulkDeleteActions = {
+  success: (entityType, ids) => ({
+    type: types.ENTITIES_BULK_DELETE_SUCCESS,
+    entityType,
+    ids,
+  }),
+};
 
 export const entityDeleteActions = {
   success: (entityType, id) => ({
