@@ -24,6 +24,8 @@ import styled from 'styled-components';
 
 import Downshift from 'downshift';
 
+import _ from 'gmp/locale';
+
 import {arraysEqual} from 'gmp/utils/array';
 import {isDefined, isArray} from 'gmp/utils/identity';
 
@@ -178,11 +180,12 @@ class MultiSelect extends React.Component {
       menuPosition = 'adjust',
       width = DEFAULT_WIDTH,
       grow,
+      loading = false,
     } = this.props;
 
     const {search, selectedItems} = this.state;
 
-    disabled = disabled || !isDefined(items) || items.length === 0;
+    disabled = disabled || !isDefined(items) || items.length === 0 || loading;
 
     const displayedItems = isDefined(items)
       ? items.filter(caseInsensitiveFilter(search))
@@ -215,7 +218,9 @@ class MultiSelect extends React.Component {
             >
               <Box isOpen={isOpen} disabled={disabled} ref={this.box}>
                 <Layout grow="1" wrap>
-                  {selectedItems.map(item => this.renderItem(item, items))}
+                  {loading
+                    ? _('Loading...')
+                    : selectedItems.map(item => this.renderItem(item, items))}
                 </Layout>
                 <Layout align={['center', 'center']}>
                   <ArrowIcon
@@ -233,6 +238,7 @@ class MultiSelect extends React.Component {
                           },
                     })}
                     size="small"
+                    loading={loading}
                   />
                 </Layout>
               </Box>
@@ -286,6 +292,7 @@ MultiSelect.propTypes = {
   disabled: PropTypes.bool,
   grow: PropTypes.number,
   items: PropTypes.arrayOf(PropTypes.object),
+  loading: PropTypes.bool,
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
   value: PropTypes.array,
