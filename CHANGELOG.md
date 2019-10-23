@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Increase clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
+- Don't show mepty menu section 
+- Increase clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
 
 ### Fixed
 - Improve filter handling in report details [#1708](https://github.com/greenbone/gsa/pull/1708)
