@@ -285,13 +285,13 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
       </li>
       <li
         class="c7"
+        data-testid="usermenu-logout"
       >
         <div
           class="c8"
         >
           <div
             class="c9"
-            data-testid="usermenu-logout"
             margin="5px"
           >
             <span
