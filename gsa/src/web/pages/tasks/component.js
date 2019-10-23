@@ -16,6 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/features/promise/finally';
+
 import React from 'react';
 
 import {connect} from 'react-redux';
@@ -399,12 +401,33 @@ class TaskComponent extends React.Component {
   openStandardTaskDialog(task) {
     const {capabilities} = this.props;
 
-    this.props.loadAlerts();
-    this.props.loadScanConfigs();
-    this.props.loadScanners();
-    this.props.loadSchedules();
-    this.props.loadTargets();
-    this.props.loadTags();
+    this.setState({
+      isLoadingAlerts: true,
+      isLoadingConfigs: true,
+      isLoadingScanners: true,
+      isLoadingSchedules: true,
+      isLoadingTargets: true,
+      isLoadingTags: true,
+    });
+
+    this.props.loadAlerts().finally(() => {
+      this.setState({isLoadingAlerts: false});
+    });
+    this.props.loadScanConfigs().finally(() => {
+      this.setState({isLoadingConfigs: false});
+    });
+    this.props.loadScanners().finally(() => {
+      this.setState({isLoadingScanners: false});
+    });
+    this.props.loadSchedules().finally(() => {
+      this.setState({isLoadingSchedules: false});
+    });
+    this.props.loadTargets().finally(() => {
+      this.setState({isLoadingTargets: false});
+    });
+    this.props.loadTags().finally(() => {
+      this.setState({isLoadingTags: false});
+    });
 
     if (isDefined(task)) {
       const canAccessSchedules =
@@ -706,6 +729,12 @@ class TaskComponent extends React.Component {
       hosts_ordering,
       id,
       in_assets,
+      isLoadingAlerts,
+      isLoadingConfigs,
+      isLoadingScanners,
+      isLoadingSchedules,
+      isLoadingTargets,
+      isLoadingTags,
       max_checks,
       max_hosts,
       min_qod,
@@ -793,6 +822,12 @@ class TaskComponent extends React.Component {
                               hosts_ordering={hosts_ordering}
                               id={id}
                               in_assets={in_assets}
+                              isLoadingAlerts={isLoadingAlerts}
+                              isLoadingConfigs={isLoadingConfigs}
+                              isLoadingScanners={isLoadingScanners}
+                              isLoadingSchedules={isLoadingSchedules}
+                              isLoadingTargets={isLoadingTargets}
+                              isLoadingTags={isLoadingTags}
                               max_checks={max_checks}
                               max_hosts={max_hosts}
                               min_qod={min_qod}
