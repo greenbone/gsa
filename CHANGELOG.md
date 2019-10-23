@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Next Scheduled Tasks displays timezone [#1712](https://github.com/greenbone/gsa/pull/1712)
 - Load "small" report before full report [#1697](https://github.com/greenbone/gsa/pull/1697)
 - Removed Clone and Verify functionalities for report formats [#1650](https://github.com/greenbone/gsa/pull/1650)
 - Use new [React context API](https://reactjs.org/docs/context.html#api) [#1637](https://github.com/greenbone/gsa/pull/1637)
