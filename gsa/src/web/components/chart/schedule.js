@@ -23,16 +23,16 @@ import {LinearGradient} from '@vx/gradient';
 import {scaleBand, scaleUtc} from 'd3-scale';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
+import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import date from 'gmp/models/date';
 
 import {shorten} from 'gmp/utils/string';
 
-import PropTypes from '../../utils/proptypes';
-import Theme from '../../utils/theme';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
-import Layout from '../layout/layout';
+import Layout from 'web/components/layout/layout';
 
 import path from './utils/path';
 import {shouldUpdate} from './utils/update';
@@ -74,11 +74,14 @@ const cloneSchedule = (d, start) => {
   const {duration = 0} = d;
   const toolTip =
     duration === 0
-      ? _('{{name}} Start: {{date}}', {name: d.label, date: longDate(start)})
+      ? _('{{name}} Start: {{date}}', {
+          name: d.label,
+          date: dateTimeWithTimeZone(start),
+        })
       : _('{{name}} Start: {{startdate}} End: {{enddate}}', {
           name: d.label,
-          startdate: longDate(start),
-          enddate: longDate(start.clone().add(duration, 'seconds')),
+          startdate: dateTimeWithTimeZone(start),
+          enddate: dateTimeWithTimeZone(start.clone().add(duration, 'seconds')),
         });
   return {
     ...d,
