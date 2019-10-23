@@ -9,8 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
-- Increase clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
-- Don't show mepty menu section 
+- Don't show empty menu section [#1711](https://github.com/greenbone/gsa/pull/1711)
 - Increase clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
 
 ### Fixed
