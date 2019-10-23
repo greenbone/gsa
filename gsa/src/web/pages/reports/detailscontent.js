@@ -370,6 +370,7 @@ const PageContent = ({
             createFilterType="result"
             filter={filter}
             filters={filters}
+            isLoading={isLoading || isUpdating}
             onEditClick={onFilterEditClick}
             onError={onError}
             onFilterCreated={onFilterCreated}
