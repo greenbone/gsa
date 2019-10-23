@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/features/promise/finally';
 
 import React from 'react';
 
@@ -85,7 +86,10 @@ class EntitiesPage extends React.Component {
   }
 
   componentDidMount() {
-    this.props.loadFilters();
+    this.setState({isLoadingFilters: true});
+    this.props.loadFilters().finally(() => {
+      this.setState({isLoadingFilters: false});
+    });
   }
 
   getSectionTitle() {
@@ -191,6 +195,8 @@ class EntitiesPage extends React.Component {
       onFilterReset,
     } = this.props;
 
+    const {isLoadingFilters} = this.state;
+
     if (!powerfilter) {
       return null;
     }
@@ -207,6 +213,7 @@ class EntitiesPage extends React.Component {
           filter={filter}
           filters={filters}
           isLoading={isLoading}
+          isLoadingFilters={isLoadingFilters}
           onEditClick={handler}
           onError={onError}
           onRemoveClick={onFilterRemoved}
