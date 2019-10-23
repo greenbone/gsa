@@ -22,7 +22,6 @@ import styled from 'styled-components';
 
 import {scaleBand, scaleLinear} from 'd3-scale';
 
-import {shorten} from 'gmp/utils/string';
 import {isDefined} from 'gmp/utils/identity';
 
 import Layout from 'web/components/layout/layout';
@@ -57,7 +56,12 @@ const MIN_WIDTH = 250;
 const MIN_TICK_WIDTH = 20;
 
 const tickFormat = val => {
-  return shorten(val.toString(), MAX_LABEL_LENGTH);
+  const valStr = val.toString();
+  if (valStr.length > MAX_LABEL_LENGTH) {
+    // prevent cycling through the string
+    return '...' + valStr.slice(valStr.length - MAX_LABEL_LENGTH);
+  }
+  return valStr;
 };
 
 class BarChart extends React.Component {
