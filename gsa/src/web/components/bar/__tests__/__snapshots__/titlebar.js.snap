@@ -477,13 +477,13 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
             </li>
             <li
               class="c13"
+              data-testid="usermenu-logout"
             >
               <div
                 class="c14"
               >
                 <div
                   class="c15"
-                  data-testid="usermenu-logout"
                   margin="5px"
                 >
                   <span
