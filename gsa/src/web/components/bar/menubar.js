@@ -273,16 +273,16 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
                 />
               )}
             </MenuSection>
-            <MenuSection>
-              {capabilities.mayOp('describe_auth') &&
-                capabilities.mayOp('modify_auth') && (
+            {capabilities.mayOp('describe_auth') && (
+              <MenuSection>
+                {capabilities.mayOp('modify_auth') && (
                   <MenuEntry title={_('LDAP')} to="ldap" />
                 )}
-              {capabilities.mayOp('describe_auth') &&
-                capabilities.mayOp('modify_auth') && (
+                {capabilities.mayOp('modify_auth') && (
                   <MenuEntry title={_('Radius')} to="radius" />
                 )}
-            </MenuSection>
+              </MenuSection>
+            )}
           </Menu>
           <Menu title={_('Help')}>
             <MenuHelpEntry title={_('User Manual')} />
