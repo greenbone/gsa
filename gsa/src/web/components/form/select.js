@@ -22,6 +22,8 @@ import React from 'react';
 
 import Downshift from 'downshift';
 
+import _ from 'gmp/locale';
+
 import {isDefined, isArray} from 'gmp/utils/identity';
 
 import PropTypes, {mayRequire} from 'web/utils/proptypes';
@@ -142,11 +144,12 @@ class Select extends React.Component {
       value,
       toolTipTitle,
       width = DEFAULT_WIDTH,
+      loading = false,
     } = this.props;
 
     const {search} = this.state;
 
-    disabled = disabled || !isDefined(items) || items.length === 0;
+    disabled = disabled || !isDefined(items) || items.length === 0 || loading;
 
     const displayedItems = isDefined(items)
       ? items.filter(caseInsensitiveFilter(search))
@@ -184,7 +187,9 @@ class Select extends React.Component {
           selectItem,
           selectedItem,
         }) => {
-          const label = find_label(items, selectedItem);
+          const label = loading
+            ? _('Loading...')
+            : find_label(items, selectedItem);
           return (
             <SelectContainer
               {...getRootProps({})}
@@ -222,6 +227,7 @@ class Select extends React.Component {
                     data-testid="select-open-button"
                     down={!isOpen}
                     size="small"
+                    loading={loading}
                   />
                 </Layout>
               </Box>
@@ -286,6 +292,7 @@ Select.propTypes = {
       key: PropTypes.toString,
     }),
   ),
+  loading: PropTypes.bool,
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
   toolTipTitle: PropTypes.string,
