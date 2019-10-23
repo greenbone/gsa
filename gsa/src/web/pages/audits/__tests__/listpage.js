@@ -75,13 +75,15 @@ const getSetting = jest.fn().mockResolvedValue({
   filter: null,
 });
 
-const getFilters = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+const getFilters = jest.fn().mockReturnValue(
+  Promise.resolve({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+);
 
 const getAudits = jest.fn().mockResolvedValue({
   data: [audit],

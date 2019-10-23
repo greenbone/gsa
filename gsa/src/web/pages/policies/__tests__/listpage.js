@@ -70,13 +70,15 @@ const currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
 
 const getSetting = jest.fn().mockResolvedValue({filter: null});
 
-const getFilters = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+const getFilters = jest.fn().mockReturnValue(
+  Promise.resolve({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+);
 
 const getPolicies = jest.fn().mockResolvedValue({
   data: [policy],

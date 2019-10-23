@@ -75,13 +75,15 @@ const manualUrl = 'test/';
 
 const currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
 
-const getFilters = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+const getFilters = jest.fn().mockReturnValue(
+  Promise.resolve({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+);
 
 const getConfigs = jest.fn().mockResolvedValue({
   data: [config],
