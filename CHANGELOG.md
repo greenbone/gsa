@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Sorting of SecInfo items [#1717](https://github.com/greenbone/gsa/pull/1717))
 - Disable edit PowerFilter icon if isLoading [#1714](https://github.com/greenbone/gsa/pull/1714)
 - Use last chars of a label string in BarChart [#1713](https://github.com/greenbone/gsa/pull/1713)
 - Don't show empty menu section [#1711](https://github.com/greenbone/gsa/pull/1711)
@@ -28,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [9.0.0] - 2019-10-14
 
 ### Added
+- Add statereducer function to Select component: Scrolls to last selected item [#1715](https://github.com/greenbone/gsa/pull/1715)
 - Add loading indicator to svg icon [#1701](https://github.com/greenbone/gsa/pull/1701)
 - Update German Translation [#1689](https://github.com/greenbone/gsa/pull/1689)
 - List NVT of the found CVEs at the report details page [#1673](https://github.com/greenbone/gsa/pull/1673)

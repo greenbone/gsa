@@ -24,11 +24,11 @@ import Downshift from 'downshift';
 
 import {isDefined, isArray} from 'gmp/utils/identity';
 
-import PropTypes, {mayRequire} from '../../utils/proptypes.js';
+import PropTypes, {mayRequire} from 'web/utils/proptypes';
 
-import ArrowIcon from '../icon/arrowicon';
+import ArrowIcon from 'web/components/icon/arrowicon';
 
-import Layout from '../../components/layout/layout';
+import Layout from 'web/components/layout/layout';
 
 import styled from 'styled-components';
 
@@ -156,6 +156,17 @@ class Select extends React.Component {
       <Downshift
         selectedItem={value}
         itemToString={itemToString}
+        stateReducer={(state, changes) => {
+          if (isDefined(changes) && isDefined(changes.isOpen)) {
+            return {
+              ...changes,
+              highlightedIndex: displayedItems.findIndex(
+                item => item.value === state.selectedItem,
+              ),
+            };
+          }
+          return changes;
+        }}
         onChange={this.handleChange}
         onSelect={this.handleSelect}
       >

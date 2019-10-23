@@ -20,7 +20,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
+import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -89,8 +89,11 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
+const fallbackFilter = Filter.fromString('sort-reverse=modified');
+
 export default withEntitiesContainer('nvt', {
   entitiesSelector,
+  fallbackFilter,
   loadEntities,
 })(Page);
 

@@ -20,7 +20,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
+import Filter, {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -92,8 +92,11 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
+const fallbackFilter = Filter.fromString('sort-reverse=created');
+
 export default withEntitiesContainer('dfncert', {
   entitiesSelector,
+  fallbackFilter,
   loadEntities,
 })(Page);
 
