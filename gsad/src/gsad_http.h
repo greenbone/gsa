@@ -163,6 +163,7 @@ enum authentication_reason
   SESSION_EXPIRED,
   BAD_MISSING_COOKIE,
   BAD_MISSING_TOKEN,
+  UNKOWN_ERROR,
 };
 
 typedef enum authentication_reason authentication_reason_t;

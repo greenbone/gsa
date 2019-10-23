@@ -119,7 +119,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   display: inline-flex;
 }
 
-.c14 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -138,18 +138,18 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   margin-left: -5px;
 }
 
-.c14 > * {
+.c15 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c14 > * {
+.c15 > * {
   margin-left: 5px;
 }
 
-.c13 {
+.c14 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -171,6 +171,10 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   display: inline-flex;
 }
 
+.c10 {
+  cursor: pointer;
+}
+
 .c9 {
   height: 24px;
   width: 24px;
@@ -182,13 +186,13 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   width: inherit;
 }
 
-.c15 {
+.c16 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c15 * {
+.c16 * {
   height: inherit;
   width: inherit;
 }
@@ -203,18 +207,18 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   flex-direction: column;
 }
 
-.c10 {
+.c11 {
   position: relative;
   display: none;
   -webkit-animation: iKjwYD 0.1s ease-in;
   animation: iKjwYD 0.1s ease-in;
 }
 
-.c6:hover .c10 {
+.c6:hover .c11 {
   display: block;
 }
 
-.c11 {
+.c12 {
   position: absolute;
   margin: 0;
   padding: 0;
@@ -226,7 +230,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   width: 255px;
 }
 
-.c12 {
+.c13 {
   height: 30px;
   width: 255px;
   border-left: 1px solid #787878;
@@ -243,32 +247,32 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   padding-left: 12px;
 }
 
-.c12:hover {
+.c13:hover {
   background: #66c430;
   color: #fff;
   cursor: pointer;
 }
 
-.c12:first-child {
+.c13:first-child {
   border-top: 1px solid #787878;
   cursor: default;
   background-color: #eeeeee;
 }
 
-.c12:first-child:hover {
+.c13:first-child:hover {
   color: #000;
 }
 
-.c12:nth-child(2) {
+.c13:nth-child(2) {
   cursor: default;
   background-color: #eeeeee;
 }
 
-.c12:nth-child(2):hover {
+.c13:nth-child(2):hover {
   color: #000;
 }
 
-.c12:last-child {
+.c13:last-child {
   border-top: 1px solid #787878;
   border-bottom: 1px solid #787878;
 }
@@ -277,7 +281,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   margin-right: 10px;
 }
 
-.c16 {
+.c17 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -286,11 +290,11 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   height: 100%;
 }
 
-.c16:link,
-.c16:hover,
-.c16:active,
-.c16:visited,
-.c16:hover {
+.c17:link,
+.c17:hover,
+.c17:active,
+.c17:visited,
+.c17:hover {
   color: inherit;
   -webkit-text-decoration: none;
   text-decoration: none;
@@ -337,6 +341,12 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   height: 42px;
 }
 
+@media print {
+  .c10 {
+    display: none;
+  }
+}
+
 <body>
   <div
     id="portals"
@@ -373,7 +383,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
         data-testid="usermenu"
       >
         <span
-          class="c8 c9 "
+          class="c8 c9 c10"
           data-testid="svg-icon"
         >
           <svg>
@@ -381,24 +391,24 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
           </svg>
         </span>
         <div
-          class="c10"
+          class="c11"
         >
           <ul
-            class="c11"
+            class="c12"
           >
             <li
-              class="c12"
+              class="c13"
               title="Logged in as: username"
             >
               <div
-                class="c13"
+                class="c14"
               >
                 <div
-                  class="c14"
+                  class="c15"
                   margin="5px"
                 >
                   <span
-                    class="c15 "
+                    class="c16 c10"
                     data-testid="svg-icon"
                   >
                     <svg>
@@ -412,17 +422,17 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
               </div>
             </li>
             <li
-              class="c12"
+              class="c13"
             >
               <div
-                class="c13"
+                class="c14"
               >
                 <div
-                  class="c14"
+                  class="c15"
                   margin="5px"
                 >
                   <span
-                    class="c15 "
+                    class="c16 c10"
                     data-testid="svg-icon"
                   >
                     <svg>
@@ -436,22 +446,22 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
               </div>
             </li>
             <li
-              class="c12"
+              class="c13"
             >
               <a
-                class="c16"
+                class="c17"
                 data-testid="usermenu-settings"
                 href="/usersettings"
               >
                 <div
-                  class="c13"
+                  class="c14"
                 >
                   <div
-                    class="c14"
+                    class="c15"
                     margin="5px"
                   >
                     <span
-                      class="c15 "
+                      class="c16 c10"
                       data-testid="svg-icon"
                     >
                       <svg>
@@ -466,18 +476,18 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
               </a>
             </li>
             <li
-              class="c12"
+              class="c13"
             >
               <div
-                class="c13"
+                class="c14"
               >
                 <div
-                  class="c14"
+                  class="c15"
                   data-testid="usermenu-logout"
                   margin="5px"
                 >
                   <span
-                    class="c15 "
+                    class="c16 c10"
                     data-testid="svg-icon"
                   >
                     <svg>

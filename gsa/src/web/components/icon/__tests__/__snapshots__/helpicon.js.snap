@@ -1,6 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`HelpIcon component tests should render 1`] = `
+.c1 {
+  cursor: pointer;
+}
+
 .c0 {
   height: 16px;
   width: 16px;
@@ -12,8 +16,14 @@ exports[`HelpIcon component tests should render 1`] = `
   width: inherit;
 }
 
+@media print {
+  .c1 {
+    display: none;
+  }
+}
+
 <span
-  class="c0 "
+  class="c0 c1"
   data-testid="svg-icon"
 >
   <svg>

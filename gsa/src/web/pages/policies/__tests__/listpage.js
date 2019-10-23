@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -30,11 +31,16 @@ import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {setUsername} from 'web/store/usersettings/actions';
 
 import {entitiesActions} from 'web/store/entities/audits';
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+
+import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
 
 import PoliciesPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
+
+window.URL.createObjectURL = jest.fn();
 
 const policy = Policy.fromElement({
   _id: '12345',
@@ -62,7 +68,7 @@ const manualUrl = 'test/';
 
 const currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
 
-const getSetting = jest.fn().mockResolvedValue({set: 'ting'});
+const getSetting = jest.fn().mockResolvedValue({filter: null});
 
 const getFilters = jest.fn().mockResolvedValue({
   data: [],
@@ -81,7 +87,7 @@ const getPolicies = jest.fn().mockResolvedValue({
 });
 
 describe('PoliciesPage tests', () => {
-  test('should render full PoliciesPage', () => {
+  test('should render full PoliciesPage', async () => {
     const gmp = {
       policies: {
         get: getPolicies,
@@ -103,6 +109,12 @@ describe('PoliciesPage tests', () => {
 
     store.dispatch(setUsername('admin'));
 
+    const defaultSettingfilter = Filter.fromString('foo=bar');
+    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success('policy', defaultSettingfilter),
+    );
+
     const counts = new CollectionCounts({
       first: 1,
       all: 1,
@@ -118,7 +130,80 @@ describe('PoliciesPage tests', () => {
 
     const {baseElement} = render(<PoliciesPage />);
 
+    await waitForElement(() => baseElement.querySelectorAll('table'));
+
     expect(baseElement).toMatchSnapshot();
+  });
+
+  test('should call commands for bulk actions', async () => {
+    const deleteByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const gmp = {
+      policies: {
+        get: getPolicies,
+        deleteByFilter,
+        exportByFilter,
+      },
+      filters: {
+        get: getFilters,
+      },
+      reloadInterval,
+      settings: {manualUrl},
+      user: {currentSettings, getSetting: getSetting},
+    };
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(setUsername('admin'));
+
+    const defaultSettingfilter = Filter.fromString('foo=bar');
+    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success('policy', defaultSettingfilter),
+    );
+
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesActions.success([policy], filter, loadedFilter, counts),
+    );
+
+    const {baseElement, getAllByTestId} = render(<PoliciesPage />);
+
+    await waitForElement(() => baseElement.querySelectorAll('table'));
+
+    const icons = getAllByTestId('svg-icon');
+
+    await act(async () => {
+      expect(icons[18]).toHaveAttribute(
+        'title',
+        'Move page contents to trashcan',
+      );
+      fireEvent.click(icons[18]);
+      expect(deleteByFilter).toHaveBeenCalled();
+
+      expect(icons[19]).toHaveAttribute('title', 'Export page contents');
+      fireEvent.click(icons[19]);
+      expect(exportByFilter).toHaveBeenCalled();
+    });
   });
 });
 

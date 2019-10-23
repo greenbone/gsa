@@ -178,6 +178,10 @@ exports[`Audit Row tests should render 1`] = `
   cursor: pointer;
 }
 
+.c17 {
+  cursor: pointer;
+}
+
 .c17 svg path {
   fill: #aaaaaa;
 }
@@ -250,6 +254,12 @@ exports[`Audit Row tests should render 1`] = `
 
 @media print {
   .c16 {
+    display: none;
+  }
+}
+
+@media print {
+  .c17 {
     display: none;
   }
 }

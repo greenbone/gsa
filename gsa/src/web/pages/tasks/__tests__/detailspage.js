@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -273,47 +274,35 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-const renewSession = jest.fn().mockReturnValue(
-  Promise.resolve({
-    foo: 'bar',
-  }),
-);
+const renewSession = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-const getConfig = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: config,
-  }),
-);
+const getConfig = jest.fn().mockResolvedValue({
+  data: config,
+});
 
-const getSchedule = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: schedule,
-  }),
-);
+const getSchedule = jest.fn().mockResolvedValue({
+  data: schedule,
+});
 
-const getEntities = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  }),
-);
+const getEntities = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
 
 describe('Task Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getTask = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: task,
-      }),
-    );
+    const getTask = jest.fn().mockResolvedValue({
+      data: task,
+    });
 
     const gmp = {
       task: {
@@ -412,21 +401,17 @@ describe('Task Detailspage tests', () => {
   });
 
   test('should render user tags tab', () => {
-    const getTask = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: task2,
-      }),
-    );
+    const getTask = jest.fn().mockResolvedValue({
+      data: task2,
+    });
 
-    const getTags = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: [],
-        meta: {
-          filter: Filter.fromString(),
-          counts: new CollectionCounts(),
-        },
-      }),
-    );
+    const getTags = jest.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    });
 
     const gmp = {
       task: {
@@ -481,11 +466,9 @@ describe('Task Detailspage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const getTask = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: task2,
-      }),
-    );
+    const getTask = jest.fn().mockResolvedValue({
+      data: task2,
+    });
 
     const gmp = {
       task: {
@@ -536,38 +519,30 @@ describe('Task Detailspage tests', () => {
     expect(element).toHaveTextContent('No permissions available');
   });
 
-  test('should call commands', () => {
-    const getTask = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: task5,
-      }),
-    );
+  test('should call commands', async () => {
+    const getTask = jest.fn().mockResolvedValue({
+      data: task5,
+    });
 
-    const clone = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: {id: 'foo'},
-      }),
-    );
-    const deleteFunc = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const exportFunc = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const start = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const resume = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
+    const clone = jest.fn().mockResolvedValue({
+      data: {id: 'foo'},
+    });
+
+    const deleteFunc = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportFunc = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const start = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const resume = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
 
     const gmp = {
       task: {
@@ -620,25 +595,27 @@ describe('Task Detailspage tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(icons[3]);
-    expect(clone).toHaveBeenCalledWith(task5);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Task');
+    await act(async () => {
+      fireEvent.click(icons[3]);
+      expect(clone).toHaveBeenCalledWith(task5);
+      expect(icons[3]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(icons[5]);
-    expect(deleteFunc).toHaveBeenCalledWith(task5);
-    expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
+      fireEvent.click(icons[5]);
+      expect(deleteFunc).toHaveBeenCalledWith(task5);
+      expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
 
-    fireEvent.click(icons[6]);
-    expect(exportFunc).toHaveBeenCalledWith(task5);
-    expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
+      fireEvent.click(icons[6]);
+      expect(exportFunc).toHaveBeenCalledWith(task5);
+      expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
 
-    fireEvent.click(icons[7]);
-    expect(start).toHaveBeenCalledWith(task5);
-    expect(icons[7]).toHaveAttribute('title', 'Start');
+      fireEvent.click(icons[7]);
+      expect(start).toHaveBeenCalledWith(task5);
+      expect(icons[7]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[8]);
-    expect(resume).toHaveBeenCalledWith(task5);
-    expect(icons[8]).toHaveAttribute('title', 'Resume');
+      fireEvent.click(icons[8]);
+      expect(resume).toHaveBeenCalledWith(task5);
+      expect(icons[8]).toHaveAttribute('title', 'Resume');
+    });
   });
 });
 

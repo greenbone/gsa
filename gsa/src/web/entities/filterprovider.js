@@ -146,7 +146,6 @@ FilterProvider.propTypes = {
   fallbackFilter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   gmpname: PropTypes.string,
-  history: PropTypes.object.isRequired,
   locationQuery: PropTypes.shape({
     filter: PropTypes.string,
   }),

@@ -39,7 +39,7 @@ import withDialogNotification from 'web/components/notification/withDialogNotifi
 
 import {handleDefaultReloadIntervalFunc} from 'web/entity/container';
 
-import withDefaultFilter from 'web/entities/withDefaultFilter';
+import FilterProvider from 'web/entities/filterprovider';
 
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
 
@@ -68,6 +68,8 @@ import {
 
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
+import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 
 import {
   getReportComposerDefaults,
@@ -369,7 +371,11 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterResetClick() {
-    this.handleFilterChange(Filter.fromString(''));
+    if (hasValue(this.props.defaultResultFilter)) {
+      this.handleFilterChange(this.props.defaultResultFilter);
+    } else {
+      this.handleFilterChange(DEFAULT_FILTER);
+    }
   }
 
   handleActivateTab(index) {
@@ -686,6 +692,7 @@ class ReportDetails extends React.Component {
 
 ReportDetails.propTypes = {
   defaultReloadInterval: PropTypes.number,
+  defaultResultFilter: PropTypes.filter,
   deltaReportId: PropTypes.id,
   entity: PropTypes.model,
   entityError: PropTypes.object,
@@ -730,6 +737,8 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
           ? loadDeltaReport(gmp)(id, deltaId, filter)
           : loadReport(gmp)(id, filter),
       ),
+    loadResultDefaultFilter: () =>
+      dispatch(loadUserSettingsDefaultFilter(gmp)('result')),
     loadReportComposerDefaults: () =>
       dispatch(loadReportComposerDefaults(gmp)()),
     saveReportComposerDefaults: reportComposerDefaults =>
@@ -739,6 +748,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
 
 const mapStateToProps = (rootState, {gmp, match}) => {
   const {id, deltaid} = match.params;
+  const defaultFilterSel = getUserSettingsDefaultFilter(rootState, 'result');
   const filterSel = filterSelector(rootState);
   const reportSel = reportSelector(rootState);
   const deltaSel = deltaSelector(rootState);
@@ -760,6 +770,7 @@ const mapStateToProps = (rootState, {gmp, match}) => {
   return {
     deltaReportId: deltaid,
     defaultReloadInterval: gmp.reloadInterval,
+    defaultResultFilter: defaultFilterSel.getFilter(),
     entity,
     entityError,
     filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
@@ -775,15 +786,20 @@ const mapStateToProps = (rootState, {gmp, match}) => {
   };
 };
 
+const ReportDetailsWrapper = props => (
+  <FilterProvider fallbackFilter={DEFAULT_FILTER} gmpname="result">
+    {({filter}) => <ReportDetails {...props} filter={filter} />}
+  </FilterProvider>
+);
+
 export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
-  withDefaultFilter('result'),
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
-)(ReportDetails);
+)(ReportDetailsWrapper);
 
 // vim: set ts=2 sw=2 tw=80:
