@@ -532,7 +532,7 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
               data-testid="dialog-title-bar"
             >
               <span>
-                Edit Authentication
+                Edit LDAP per-User Authentication
               </span>
               <div
                 class="c4 c5"
@@ -677,9 +677,9 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
               <button
                 class="c21 c22 c23"
                 data-testid="dialog-save-button"
-                title="OK"
+                title="Save"
               >
-                OK
+                Save
               </button>
             </div>
           </div>
