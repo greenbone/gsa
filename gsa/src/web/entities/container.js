@@ -53,7 +53,10 @@ import PropTypes from 'web/utils/proptypes';
 import {generateFilename} from 'web/utils/render';
 import SelectionType from 'web/utils/selectiontype';
 
-import {createDeleteEntity} from 'web/store/entities/utils/actions';
+import {
+  createDeleteEntity,
+  createBulkDeleteEntities,
+} from 'web/store/entities/utils/actions';
 
 import SortBy from 'web/components/sortby/sortby';
 
@@ -356,14 +359,19 @@ class EntitiesContainer extends React.Component {
   handleReduxDeleteBulk() {
     const {entitiesCommand} = this;
     const {loadedFilter, selected, selectionType} = this.state;
+    const {deleteEntities} = this.props;
     let promise;
 
     if (selectionType === SelectionType.SELECTION_USER) {
       promise = entitiesCommand.delete(selected);
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise = entitiesCommand.bulkDeleteByFilter(loadedFilter);
+      promise = deleteEntities(
+        entitiesCommand.bulkDeleteByFilter(loadedFilter),
+      );
     } else {
-      promise = entitiesCommand.bulkDeleteByFilter(loadedFilter.all());
+      promise = deleteEntities(
+        entitiesCommand.bulkDeleteByFilter(loadedFilter.all()),
+      );
     }
 
     this.handleInteraction();
@@ -718,6 +726,7 @@ class EntitiesContainer extends React.Component {
 EntitiesContainer.propTypes = {
   children: PropTypes.func.isRequired,
   defaultReloadInterval: PropTypes.number.isRequired,
+  deleteEntities: PropTypes.func,
   deleteEntity: PropTypes.func,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
@@ -757,8 +766,10 @@ const mapStateToProps = rootState => {
 
 const mapDispatchToProps = (dispatch, {gmpname, gmp}) => {
   const deleteEntity = createDeleteEntity({entityType: gmpname});
+  const deleteEntities = createBulkDeleteEntities({entityType: gmpname});
   return {
     deleteEntity: id => dispatch(deleteEntity(gmp)(id)),
+    deleteEntities: ids => dispatch(deleteEntities(gmp)(ids)),
     loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
     onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   };
