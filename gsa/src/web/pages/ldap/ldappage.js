@@ -59,7 +59,10 @@ const ToolBarIcons = ({onOpenDialogClick}) => (
       size="small"
       title={_('Help: LDAP per-User Authentication')}
     />
-    <EditIcon onClick={onOpenDialogClick} />
+    <EditIcon
+      onClick={onOpenDialogClick}
+      title={_('Edit LDAP per-User Authentication')}
+    />
   </IconDivider>
 );
 

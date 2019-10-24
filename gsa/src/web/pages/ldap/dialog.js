@@ -46,8 +46,8 @@ const LdapDialog = ({
   };
   return (
     <SaveDialog
-      buttonTitle={_('OK')}
-      title={_('Edit Authentication')}
+      buttonTitle={_('Save')}
+      title={_('Edit LDAP per-User Authentication')}
       defaultValues={uncontrolledValues}
       onClose={onClose}
       onSave={onSave}
