@@ -31,7 +31,7 @@ import Filter, {RESET_FILTER, RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 
 import {first} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import withDownload from 'web/components/form/withDownload';
 
@@ -247,10 +247,21 @@ class ReportDetails extends React.Component {
     return duration;
   }
 
-  load(filter = this.props.filter) {
-    const {reportId, deltaReportId} = this.props;
+  load(filter) {
+    const {reportId, deltaReportId, reportFilter} = this.props;
+
+    if (!hasValue(filter)) {
+      // use loaded filter from the report data
+      filter = reportFilter;
+    }
+
+    if (!hasValue(filter)) {
+      // use filter from the user settings
+      filter = this.props.filter;
+    }
 
     if (!isDefined(filter)) {
+      // fallback
       filter = DEFAULT_FILTER;
     }
 
