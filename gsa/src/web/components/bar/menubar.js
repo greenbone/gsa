@@ -279,7 +279,7 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
                   <MenuEntry title={_('LDAP')} to="ldap" />
                 )}
                 {capabilities.mayOp('modify_auth') && (
-                  <MenuEntry title={_('Radius')} to="radius" />
+                  <MenuEntry title={_('RADIUS')} to="radius" />
                 )}
               </MenuSection>
             )}
