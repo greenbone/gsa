@@ -86,10 +86,7 @@ class EntitiesPage extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({isLoadingFilters: true});
-    this.props.loadFilters().finally(() => {
-      this.setState({isLoadingFilters: false});
-    });
+    this.props.loadFilters();
   }
 
   getSectionTitle() {
@@ -188,14 +185,13 @@ class EntitiesPage extends React.Component {
       filterEditDialog,
       filters,
       isLoading,
+      isLoadingFilters,
       powerfilter = PowerFilter,
       onError,
       onFilterChanged,
       onFilterRemoved,
       onFilterReset,
     } = this.props;
-
-    const {isLoadingFilters} = this.state;
 
     if (!powerfilter) {
       return null;
@@ -299,6 +295,7 @@ EntitiesPage.propTypes = {
   filters: PropTypes.array,
   filtersFilter: PropTypes.filter,
   isLoading: PropTypes.bool,
+  isLoadingFilters: PropTypes.bool,
   loadFilters: PropTypes.func.isRequired,
   powerfilter: PropTypes.componentOrFalse,
   section: PropTypes.componentOrFalse,
@@ -322,16 +319,22 @@ export const createEntitiesPage = (options = {}) => {
 };
 
 const mapStateToProps = (state, {filtersFilter}) => {
+  let isLoadingFilters = false;
+
   if (!isDefined(filtersFilter)) {
     return {
       filters: [],
+      isLoadingFilters,
     };
   }
 
   const filterSelector = selector(state);
   const filters = filterSelector.getAllEntities(filtersFilter);
+  isLoadingFilters = filterSelector.isLoadingAllEntities(filtersFilter);
+
   return {
     filters: hasValue(filters) ? filters : [],
+    isLoadingFilters,
   };
 };
 

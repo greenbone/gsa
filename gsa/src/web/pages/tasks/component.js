@@ -401,33 +401,12 @@ class TaskComponent extends React.Component {
   openStandardTaskDialog(task) {
     const {capabilities} = this.props;
 
-    this.setState({
-      isLoadingAlerts: true,
-      isLoadingConfigs: true,
-      isLoadingScanners: true,
-      isLoadingSchedules: true,
-      isLoadingTargets: true,
-      isLoadingTags: true,
-    });
-
-    this.props.loadAlerts().finally(() => {
-      this.setState({isLoadingAlerts: false});
-    });
-    this.props.loadScanConfigs().finally(() => {
-      this.setState({isLoadingConfigs: false});
-    });
-    this.props.loadScanners().finally(() => {
-      this.setState({isLoadingScanners: false});
-    });
-    this.props.loadSchedules().finally(() => {
-      this.setState({isLoadingSchedules: false});
-    });
-    this.props.loadTargets().finally(() => {
-      this.setState({isLoadingTargets: false});
-    });
-    this.props.loadTags().finally(() => {
-      this.setState({isLoadingTags: false});
-    });
+    this.props.loadAlerts();
+    this.props.loadScanConfigs();
+    this.props.loadScanners();
+    this.props.loadSchedules();
+    this.props.loadTargets();
+    this.props.loadTags();
 
     if (isDefined(task)) {
       const canAccessSchedules =
@@ -696,6 +675,12 @@ class TaskComponent extends React.Component {
     const {
       alerts,
       credentials,
+      isLoadingAlerts,
+      isLoadingConfigs,
+      isLoadingScanners,
+      isLoadingSchedules,
+      isLoadingTargets,
+      isLoadingTags,
       scanConfigs,
       scanners,
       schedules,
@@ -729,12 +714,6 @@ class TaskComponent extends React.Component {
       hosts_ordering,
       id,
       in_assets,
-      isLoadingAlerts,
-      isLoadingConfigs,
-      isLoadingScanners,
-      isLoadingSchedules,
-      isLoadingTargets,
-      isLoadingTags,
       max_checks,
       max_hosts,
       min_qod,
@@ -963,6 +942,12 @@ TaskComponent.propTypes = {
   defaultSshCredential: PropTypes.id,
   defaultTargetId: PropTypes.id,
   gmp: PropTypes.gmp.isRequired,
+  isLoadingAlerts: PropTypes.bool,
+  isLoadingConfigs: PropTypes.bool,
+  isLoadingScanners: PropTypes.bool,
+  isLoadingSchedules: PropTypes.bool,
+  isLoadingTags: PropTypes.bool,
+  isLoadingTargets: PropTypes.bool,
   loadAlerts: PropTypes.func.isRequired,
   loadCredentials: PropTypes.func.isRequired,
   loadScanConfigs: PropTypes.func.isRequired,
@@ -1034,6 +1019,12 @@ const mapStateToProps = rootState => {
     defaultSshCredential: userDefaults.getValueByName('defaultsshcredential'),
     defaultSmbCredential: userDefaults.getValueByName('defaultsmbcredential'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
+    isLoadingAlerts: alertSel.isLoadingAllEntities(ALL_FILTER),
+    isLoadingConfigs: scanConfigsSel.isLoadingAllEntities(ALL_FILTER),
+    isLoadingScanners: scannersSel.isLoadingAllEntities(ALL_FILTER),
+    isLoadingSchedules: scheduleSel.isLoadingAllEntities(ALL_FILTER),
+    isLoadingTags: tagsSel.isLoadingAllEntities(ALL_FILTER),
+    isLoadingTargets: targetSel.isLoadingAllEntities(ALL_FILTER),
     scanConfigs: scanConfigsSel.getEntities(ALL_FILTER),
     scanners: scannersSel.getEntities(ALL_FILTER),
     schedules: scheduleSel.getEntities(ALL_FILTER),
