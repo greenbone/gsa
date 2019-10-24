@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Sorting of SecInfo items [#1717](https://github.com/greenbone/gsa/pull/1717))
+- Disable edit PowerFilter icon if isLoading [#1714](https://github.com/greenbone/gsa/pull/1714)
 - Don't show empty menu section [#1711](https://github.com/greenbone/gsa/pull/1711)
 - Increase clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
 

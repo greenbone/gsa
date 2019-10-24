@@ -178,6 +178,7 @@ class PowerFilter extends React.Component {
       capabilities,
       filter,
       filters,
+      isLoading = false,
       onEditClick,
       onRemoveClick,
       onResetClick,
@@ -233,7 +234,7 @@ class PowerFilter extends React.Component {
               {onEditClick && (
                 <EditIcon
                   title={_('Edit Filter')}
-                  active={isDefined(filter)}
+                  disabled={!isDefined(filter) || isLoading}
                   onClick={isDefined(filter) ? onEditClick : undefined}
                 />
               )}
@@ -265,6 +266,7 @@ PowerFilter.propTypes = {
   filter: PropTypes.filter,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
+  isLoading: PropTypes.bool,
   onEditClick: PropTypes.func,
   onError: PropTypes.func,
   onFilterCreated: PropTypes.func,
