@@ -141,6 +141,59 @@ describe('Host model tests', () => {
     expect(host3.hostname).toBeUndefined();
   });
 
+  test('should parse best_os_cpe', () => {
+    const elem1 = {
+      host: {
+        detail: [
+          {
+            name: 'best_os_cpe',
+            value: 'cpe:/foo/bar',
+          },
+        ],
+      },
+    };
+
+    const elem2 = {
+      identifiers: {
+        identifier: [
+          {
+            name: 'OS',
+            value: 'cpe:/foo/bar',
+          },
+        ],
+      },
+    };
+
+    const elem3 = {
+      identifiers: {
+        identifier: [
+          {
+            name: 'notavailable',
+            value: 'no',
+          },
+        ],
+      },
+    };
+
+    const elem4 = {
+      host: {
+        severity: {
+          value: '8.5',
+        },
+      },
+    };
+
+    const host1 = Host.fromElement(elem1);
+    const host2 = Host.fromElement(elem2);
+    const host3 = Host.fromElement(elem3);
+    const host4 = Host.fromElement(elem4);
+
+    expect(host1.os).toEqual('cpe:/foo/bar');
+    expect(host2.os).toEqual('cpe:/foo/bar');
+    expect(host3.os).toBeUndefined();
+    expect(host4.os).toBeUndefined();
+  });
+
   test('should return ip identifier', () => {
     const elem = {
       identifiers: {
