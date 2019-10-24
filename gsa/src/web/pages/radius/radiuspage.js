@@ -59,7 +59,10 @@ const ToolBarIcons = ({onOpenDialogClick}) => (
       size="small"
       title={_('Help: RADIUS Authentication')}
     />
-    <EditIcon onClick={onOpenDialogClick} />
+    <EditIcon
+      onClick={onOpenDialogClick}
+      title={_('Edit RADIUS Authentication')}
+    />
   </IconDivider>
 );
 
@@ -187,7 +190,7 @@ class RadiusAuthentication extends React.Component {
               </TableBody>
             </Table>
           ) : (
-            <p>{_('Support for Radius is not available.')}</p>
+            <p>{_('Support for RADIUS is not available.')}</p>
           )}
         </Layout>
         {dialogVisible && (
