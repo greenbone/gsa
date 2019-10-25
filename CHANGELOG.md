@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Use single component for reloading data [#1722](https://github.com/greenbone/gsa/pull/1722)
 - Use last chars of a label string in BarChart [#1713](https://github.com/greenbone/gsa/pull/1713)
 - Next Scheduled Tasks displays timezone [#1712](https://github.com/greenbone/gsa/pull/1712)
 - Load "small" report before full report [#1697](https://github.com/greenbone/gsa/pull/1697)
