@@ -47,6 +47,12 @@ import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
 import TaskIcon from 'web/components/icon/taskicon';
 
+import {
+  NO_RELOAD,
+  USE_DEFAULT_RELOAD_INTERVAL,
+  DEFAULT_RELOAD_INTERVAL_ACTIVE,
+} from 'web/components/loading/reload';
+
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
@@ -89,7 +95,6 @@ import {
   loadEntity as loadTask,
 } from 'web/store/entities/tasks';
 
-import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
@@ -494,13 +499,13 @@ const load = gmp => {
     ]);
 };
 
-const reloadInterval = ({defaultReloadInterval, entity}) => {
-  if (!isDefined(entity)) {
-    return 0;
+const reloadInterval = ({entity}) => {
+  if (!isDefined(entity) || entity.isContainer()) {
+    return NO_RELOAD;
   }
   return entity.isActive()
     ? DEFAULT_RELOAD_INTERVAL_ACTIVE
-    : defaultReloadInterval;
+    : USE_DEFAULT_RELOAD_INTERVAL;
 };
 
 export default withEntityContainer('task', {

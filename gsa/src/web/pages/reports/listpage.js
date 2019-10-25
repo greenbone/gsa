@@ -40,6 +40,11 @@ import ReportIcon from 'web/components/icon/reporticon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
+import {
+  USE_DEFAULT_RELOAD_INTERVAL,
+  DEFAULT_RELOAD_INTERVAL_ACTIVE,
+} from 'web/components/loading/reload';
+
 import ContainerTaskDialog from 'web/pages/tasks/containerdialog';
 
 import {
@@ -52,7 +57,6 @@ import {
   selector as tasksSelector,
 } from 'web/store/entities/tasks';
 
-import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -267,10 +271,10 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const reportsReloadInterval = ({entities = [], defaultReloadInterval}) =>
+const reportsReloadInterval = ({entities = []}) =>
   entities.some(entity => isActive(entity.report.scan_run_status))
     ? DEFAULT_RELOAD_INTERVAL_ACTIVE
-    : defaultReloadInterval;
+    : USE_DEFAULT_RELOAD_INTERVAL;
 
 const mapStateToProps = rootState => {
   const sel = tasksSelector(rootState);
