@@ -37,6 +37,13 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 import EntityContainer from './container';
+import Reload, {
+  NO_RELOAD,
+  USE_DEFAULT_RELOAD_INTERVAL,
+} from 'web/components/loading/reload';
+
+const defaultEntityReloadIntervalFunc = ({entity}) =>
+  isDefined(entity) ? USE_DEFAULT_RELOAD_INTERVAL : NO_RELOAD;
 
 // get permissions assigned to the entity as resource
 export const permissionsResourceFilter = id =>
@@ -57,22 +64,26 @@ const withEntityContainer = (
     load,
     entitySelector,
     mapStateToProps: componentMapStateToProps,
-    reloadInterval,
+    reloadInterval = defaultEntityReloadIntervalFunc,
   },
 ) => Component => {
-  const EntityContainerWrapper = ({id, ...props}) => (
-    <EntityContainer
-      {...props}
-      id={id}
-      entityType={entityType}
-      reloadInterval={reloadInterval}
+  const EntityContainerWrapper = props => (
+    <Reload
+      reloadInterval={() => reloadInterval(props)}
+      reload={(id = props.id) => props.load(id)}
+      name={entityType}
     >
-      {cprops => <Component {...cprops} />}
-    </EntityContainer>
+      {({reload}) => (
+        <EntityContainer {...props} entityType={entityType} reload={reload}>
+          {cprops => <Component {...cprops} />}
+        </EntityContainer>
+      )}
+    </Reload>
   );
 
   EntityContainerWrapper.propTypes = {
     id: PropTypes.id.isRequired,
+    load: PropTypes.func.isRequired,
   };
 
   const mapDispatchToProps = (dispatch, {gmp}) => ({
