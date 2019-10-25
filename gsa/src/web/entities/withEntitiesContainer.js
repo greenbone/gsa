@@ -21,6 +21,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
+import Reload from 'web/components/loading/reload';
 import withDownload from 'web/components/form/withDownload';
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
 
@@ -29,36 +30,52 @@ import {pageFilter} from 'web/store/pages/actions';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 import EntitiesContainer from './container';
 
+const noop = () => {};
+
 const withEntitiesContainer = (
   gmpname,
-  {entitiesSelector, loadEntities, reloadInterval},
+  {entitiesSelector, loadEntities, reloadInterval = noop},
 ) => Component => {
   let EntitiesContainerWrapper = props => (
     <SubscriptionProvider>
       {({notify}) => (
-        <EntitiesContainer
-          {...props}
-          notify={notify}
-          gmpname={gmpname}
-          reloadInterval={reloadInterval}
+        <Reload
+          reloadInterval={() => reloadInterval(props)}
+          reload={(filter = props.filter) => props.loadEntities(filter)}
+          name={gmpname}
         >
-          {pageProps => <Component {...pageProps} />}
-        </EntitiesContainer>
+          {({reload}) => (
+            <EntitiesContainer
+              {...props}
+              notify={notify}
+              gmpname={gmpname}
+              reload={reload}
+              reloadInterval={reloadInterval}
+            >
+              {pageProps => <Component {...pageProps} />}
+            </EntitiesContainer>
+          )}
+        </Reload>
       )}
     </SubscriptionProvider>
   );
 
-  const mapStateToProps = (state, {gmp}) => {
+  EntitiesContainerWrapper.propTypes = {
+    filter: PropTypes.filter,
+    loadEntities: PropTypes.func.isRequired,
+  };
+
+  const mapStateToProps = state => {
     const eSelector = entitiesSelector(state);
     const pSelector = getPage(state);
     const filter = pSelector.getFilter(gmpname);
     const entities = eSelector.getEntities(filter);
     return {
-      defaultReloadInterval: gmp.reloadInterval,
       entities,
       entitiesCounts: eSelector.getEntitiesCounts(filter),
       entitiesError: eSelector.getEntitiesError(filter),
