@@ -500,7 +500,7 @@ const load = gmp => {
 };
 
 const reloadInterval = ({entity}) => {
-  if (!isDefined(entity)) {
+  if (!isDefined(entity) || entity.isContainer()) {
     return NO_RELOAD;
   }
   return entity.isActive()
