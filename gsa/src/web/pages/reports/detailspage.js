@@ -35,6 +35,11 @@ import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import withDownload from 'web/components/form/withDownload';
 
+import Reload, {
+  DEFAULT_RELOAD_INTERVAL_ACTIVE,
+  NO_RELOAD,
+} from 'web/components/loading/reload';
+
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
 
 import withDefaultFilter from 'web/entities/withDefaultFilter';
@@ -76,10 +81,6 @@ import {
 } from 'web/store/usersettings/selectors';
 
 import {create_pem_certificate} from 'web/utils/cert';
-import {
-  DEFAULT_RELOAD_INTERVAL_ACTIVE,
-  LOAD_TIME_FACTOR,
-} from 'web/utils/constants';
 import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
@@ -175,7 +176,6 @@ class ReportDetails extends React.Component {
     this.handleFilterResetClick = this.handleFilterResetClick.bind(this);
     this.handleRemoveFromAssets = this.handleRemoveFromAssets.bind(this);
     this.handleReportDownload = this.handleReportDownload.bind(this);
-    this.handleTimer = this.handleTimer.bind(this);
     this.handleTlsCertificateDownload = this.handleTlsCertificateDownload.bind(
       this,
     );
@@ -192,23 +192,13 @@ class ReportDetails extends React.Component {
   }
 
   componentDidMount() {
-    this.isRunning = true;
-
-    this.load();
-
     this.props.loadSettings();
     this.props.loadFilters();
     this.props.loadReportFormats();
     this.props.loadReportComposerDefaults();
   }
 
-  componentWillUnmount() {
-    this.isRunning = false;
-
-    this.clearTimer();
-  }
-
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const {reportFormats} = this.props;
     if (
       !isDefined(this.state.reportFormatId) &&
@@ -226,134 +216,31 @@ class ReportDetails extends React.Component {
     }
 
     if (
-      this.state.reportId !== this.props.reportId ||
-      this.state.deltaReportId !== this.props.deltaReportId
+      prevProps.reportId !== this.props.reportId ||
+      prevProps.deltaReportId !== this.props.deltaReportId
     ) {
       this.load();
     }
   }
 
-  startDurationMeasurement() {
-    this.startTimeStamp = performance.now();
-  }
-
-  endDurationMeasurement() {
-    if (!isDefined(this.startTimeStamp)) {
-      return 0;
-    }
-
-    const duration = performance.now() - this.startTimeStamp;
-    this.startTimeStamp = undefined;
-    return duration;
-  }
-
   load(filter) {
-    const {reportId, deltaReportId, reportFilter} = this.props;
-
-    if (!hasValue(filter)) {
-      // use loaded filter from the report data
-      filter = reportFilter;
-    }
-
-    if (!hasValue(filter)) {
-      // use filter from the user settings
-      filter = this.props.filter;
-    }
-
-    if (!isDefined(filter)) {
-      // fallback
-      filter = DEFAULT_FILTER;
-    }
-
     log.debug('Loading report', {
-      reportId,
-      deltaReportId,
       filter,
     });
 
-    this.clearTimer();
-
-    this.startDurationMeasurement();
-
     this.setState(({lastFilter}) => ({
-      reportId,
-      deltaReportId,
       isUpdating: isDefined(lastFilter) && !lastFilter.equals(filter), // show update indicator if filter has changed
       lastFilter: filter,
     }));
 
-    this.props.loadReportIfNeeded(reportId, deltaReportId, filter).then(() => {
-      this.props.loadReport(reportId, deltaReportId, filter).then(() => {
-        this.startTimer();
-        this.setState({isUpdating: false});
-      });
+    this.props.reload(filter).then(() => {
+      this.setState({isUpdating: false});
     });
   }
 
   reload() {
     // reload data from backend
     this.load(this.state.lastFilter);
-  }
-
-  getReloadInterval() {
-    const {entity} = this.props;
-    return isDefined(entity) && isActive(entity.report.scan_run_status)
-      ? DEFAULT_RELOAD_INTERVAL_ACTIVE
-      : 0; // report doesn't change anymore. no need to reload
-  }
-
-  startTimer() {
-    if (!this.isRunning || isDefined(this.timer)) {
-      log.debug('Not starting timer', {
-        isRunning: this.isRunning,
-        timer: this.timer,
-      });
-      return;
-    }
-
-    const loadTime = this.endDurationMeasurement();
-
-    log.debug('Loading time was', loadTime, 'milliseconds');
-
-    let interval = this.getReloadInterval();
-
-    if (loadTime > interval && interval !== 0) {
-      // ensure timer is longer then the loading procedure
-      interval = loadTime * LOAD_TIME_FACTOR;
-    }
-
-    if (interval > 0) {
-      this.timer = global.setTimeout(this.handleTimer, interval);
-      log.debug(
-        'Started reload timer with id',
-        this.timer,
-        'and interval of',
-        interval,
-        'milliseconds',
-      );
-    }
-  }
-
-  resetTimer() {
-    this.timer = undefined;
-  }
-
-  clearTimer() {
-    if (isDefined(this.timer)) {
-      log.debug('Clearing reload timer with id', this.timer);
-
-      this.resetTimer();
-
-      global.clearTimeout(this.timer);
-    }
-  }
-
-  handleTimer() {
-    log.debug('Timer', this.timer, 'finished. Reloading data.');
-
-    this.resetTimer();
-
-    this.reload();
   }
 
   handleChanged() {
@@ -687,10 +574,10 @@ class ReportDetails extends React.Component {
 }
 
 ReportDetails.propTypes = {
+  defaultFilter: PropTypes.filter.isRequired,
   deltaReportId: PropTypes.id,
   entity: PropTypes.model,
   entityError: PropTypes.object,
-  filter: PropTypes.filter,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool.isRequired,
@@ -703,6 +590,7 @@ ReportDetails.propTypes = {
   loadTarget: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  reload: PropTypes.func.isRequired,
   reportComposerDefaults: PropTypes.object,
   reportExportFileName: PropTypes.string,
   reportFilter: PropTypes.filter,
@@ -786,6 +674,64 @@ const mapStateToProps = (rootState, {match}) => {
   };
 };
 
+const reloadInterval = report =>
+  isDefined(report) && isActive(report.report.scan_run_status)
+    ? DEFAULT_RELOAD_INTERVAL_ACTIVE
+    : NO_RELOAD; // report doesn't change anymore. no need to reload
+
+const load = ({
+  defaultFilter,
+  reportId,
+  deltaReportId,
+  loadReport,
+  loadReportIfNeeded,
+  reportFilter,
+}) => filter => {
+  if (!hasValue(filter)) {
+    // use loaded filter after initial loading
+    filter = reportFilter;
+  }
+
+  if (!hasValue(filter)) {
+    // use filter from user setting
+    filter = defaultFilter;
+  }
+
+  if (!hasValue(filter)) {
+    // use fallback filter
+    filter = DEFAULT_FILTER;
+  }
+
+  return loadReportIfNeeded(reportId, deltaReportId, filter).then(() =>
+    loadReport(reportId, deltaReportId, filter),
+  );
+};
+
+const ReportDetailsWrapper = ({filter, reportFilter, ...props}) => (
+  <Reload
+    name="report"
+    load={load({...props, defaultFilter: filter})}
+    reload={load({...props, defaultFilter: filter, reportFilter})}
+    reloadInterval={() => reloadInterval(props.entity)}
+  >
+    {({reload}) => (
+      <ReportDetails
+        {...props}
+        defaultFilter={filter}
+        reportFilter={reportFilter}
+        reload={reload}
+      />
+    )}
+  </Reload>
+);
+
+ReportDetailsWrapper.propTypes = {
+  entity: PropTypes.model,
+  filter: PropTypes.filter,
+  gmp: PropTypes.gmp.isRequired,
+  reportFilter: PropTypes.filter,
+};
+
 export default compose(
   withGmp,
   withDialogNotification,
@@ -795,6 +741,6 @@ export default compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-)(ReportDetails);
+)(ReportDetailsWrapper);
 
 // vim: set ts=2 sw=2 tw=80:
