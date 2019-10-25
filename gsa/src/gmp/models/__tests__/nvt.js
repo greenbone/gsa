@@ -359,7 +359,7 @@ describe('getFilteredRefIds tests', () => {
     expect(refs).toEqual([]);
   });
 
-  test('should return empty array for for emtpy refs', () => {
+  test('should return empty array for empty refs', () => {
     const refs = getFilteredRefIds([], 'foo');
 
     expect(refs).toEqual([]);
