@@ -100,6 +100,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   requests in gsad [#1355](https://github.com/greenbone/gsa/pull/1355)
 
 ### Fixed
+- Fixed inability to change to/from LDAP and RADIUS settings [#1723](https://github.com/greenbone/gsa/pull/1723)
 - Fixed filter dialog duplicating filter terms [#1705] (https://github.com/greenbone/gsa/pull/1705)
 - Fixed parsing report details data [#1673](https://github.com/greenbone/gsa/pull/1673)
 - Fixed scanconfig clone icon tooltip does not show if permission is denied [#1664](https://github.com/greenbone/gsa/pull/1664)
