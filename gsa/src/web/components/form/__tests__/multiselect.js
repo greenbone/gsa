@@ -77,7 +77,7 @@ describe('MultiSelect component tests', () => {
     ];
 
     const {element, baseElement} = render(
-      <MultiSelect items={items} loading={true} />,
+      <MultiSelect items={items} isLoading={true} />,
     );
 
     expect(element).toHaveTextContent('Loading...');

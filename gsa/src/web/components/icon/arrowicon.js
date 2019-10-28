@@ -45,13 +45,13 @@ const Loading = styled.span`
   background: url(/img/loading.gif) center center no-repeat;
 `;
 
-const ArrowIcon = ({down = false, loading = false, ...props}) => (
-  <Styled {...props}>{loading ? <Loading /> : down ? '▼' : '▲'}</Styled>
+const ArrowIcon = ({down = false, isLoading = false, ...props}) => (
+  <Styled {...props}>{isLoading ? <Loading /> : down ? '▼' : '▲'}</Styled>
 );
 
 ArrowIcon.propTypes = {
   down: PropTypes.bool,
-  loading: PropTypes.bool,
+  isLoading: PropTypes.bool,
 };
 
 export default withIconSize()(ArrowIcon);

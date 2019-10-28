@@ -16,8 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import 'core-js/features/promise/finally';
-
 import React from 'react';
 
 import {connect} from 'react-redux';
@@ -319,22 +317,19 @@ export const createEntitiesPage = (options = {}) => {
 };
 
 const mapStateToProps = (state, {filtersFilter}) => {
-  let isLoadingFilters = false;
-
   if (!isDefined(filtersFilter)) {
     return {
       filters: [],
-      isLoadingFilters,
+      isLoadingFilters: false,
     };
   }
 
   const filterSelector = selector(state);
   const filters = filterSelector.getAllEntities(filtersFilter);
-  isLoadingFilters = filterSelector.isLoadingAllEntities(filtersFilter);
 
   return {
     filters: hasValue(filters) ? filters : [],
-    isLoadingFilters,
+    isLoadingFilters: filterSelector.isLoadingAllEntities(filtersFilter),
   };
 };
 

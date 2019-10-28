@@ -244,7 +244,7 @@ class PowerFilter extends React.Component {
           {capabilities.mayAccess('filters') && (
             <Select
               items={renderSelectItems(filters, DEFAULT_FILTER_ID)}
-              loading={isLoadingFilters}
+              isLoading={isLoadingFilters}
               menuPosition="right"
               toolTipTitle={_('Loaded filter')}
               value={

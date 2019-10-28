@@ -180,12 +180,12 @@ class MultiSelect extends React.Component {
       menuPosition = 'adjust',
       width = DEFAULT_WIDTH,
       grow,
-      loading = false,
+      isLoading = false,
     } = this.props;
 
     const {search, selectedItems} = this.state;
 
-    disabled = disabled || !isDefined(items) || items.length === 0 || loading;
+    disabled = disabled || !isDefined(items) || items.length === 0 || isLoading;
 
     const displayedItems = isDefined(items)
       ? items.filter(caseInsensitiveFilter(search))
@@ -218,7 +218,7 @@ class MultiSelect extends React.Component {
             >
               <Box isOpen={isOpen} disabled={disabled} ref={this.box}>
                 <Layout grow="1" wrap>
-                  {loading
+                  {isLoading
                     ? _('Loading...')
                     : selectedItems.map(item => this.renderItem(item, items))}
                 </Layout>
@@ -238,7 +238,7 @@ class MultiSelect extends React.Component {
                           },
                     })}
                     size="small"
-                    loading={loading}
+                    isLoading={isLoading}
                   />
                 </Layout>
               </Box>
@@ -291,8 +291,8 @@ class MultiSelect extends React.Component {
 MultiSelect.propTypes = {
   disabled: PropTypes.bool,
   grow: PropTypes.number,
+  isLoading: PropTypes.bool,
   items: PropTypes.arrayOf(PropTypes.object),
-  loading: PropTypes.bool,
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
   value: PropTypes.array,

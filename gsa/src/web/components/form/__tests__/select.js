@@ -88,7 +88,7 @@ describe('Select component tests', () => {
     ];
 
     const {element, baseElement} = render(
-      <Select items={items} loading={true} />,
+      <Select items={items} isLoading={true} />,
     );
 
     expect(element).toHaveTextContent('Loading...');

@@ -144,12 +144,12 @@ class Select extends React.Component {
       value,
       toolTipTitle,
       width = DEFAULT_WIDTH,
-      loading = false,
+      isLoading = false,
     } = this.props;
 
     const {search} = this.state;
 
-    disabled = disabled || !isDefined(items) || items.length === 0 || loading;
+    disabled = disabled || !isDefined(items) || items.length === 0 || isLoading;
 
     const displayedItems = isDefined(items)
       ? items.filter(caseInsensitiveFilter(search))
@@ -187,7 +187,7 @@ class Select extends React.Component {
           selectItem,
           selectedItem,
         }) => {
-          const label = loading
+          const label = isLoading
             ? _('Loading...')
             : find_label(items, selectedItem);
           return (
@@ -227,7 +227,7 @@ class Select extends React.Component {
                     data-testid="select-open-button"
                     down={!isOpen}
                     size="small"
-                    loading={loading}
+                    isLoading={isLoading}
                   />
                 </Layout>
               </Box>
@@ -284,6 +284,7 @@ class Select extends React.Component {
 
 Select.propTypes = {
   disabled: PropTypes.bool,
+  isLoading: PropTypes.bool,
   itemToString: PropTypes.func,
   items: PropTypes.arrayOf(
     PropTypes.shape({
@@ -292,7 +293,6 @@ Select.propTypes = {
       key: PropTypes.toString,
     }),
   ),
-  loading: PropTypes.bool,
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
   toolTipTitle: PropTypes.string,

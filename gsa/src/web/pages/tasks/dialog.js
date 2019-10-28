@@ -102,7 +102,7 @@ const get_scanner = (scanners, scanner_id) => {
 };
 
 const ScannerSelect = props => {
-  const {changeTask, loading, scannerId, scanners, onChange} = props;
+  const {changeTask, isLoading, scannerId, scanners, onChange} = props;
 
   return (
     <FormGroup title={_('Scanner')}>
@@ -111,7 +111,7 @@ const ScannerSelect = props => {
         value={scannerId}
         disabled={!changeTask}
         items={renderSelectItems(scanners)}
-        loading={loading}
+        isLoading={isLoading}
         onChange={onChange}
       />
     </FormGroup>
@@ -120,7 +120,7 @@ const ScannerSelect = props => {
 
 ScannerSelect.propTypes = {
   changeTask: PropTypes.bool.isRequired,
-  loading: PropTypes.bool,
+  isLoading: PropTypes.bool,
   scanConfigs: PropTypes.shape({
     [OPENVAS_SCANNER_TYPE]: PropTypes.array,
     [OSP_SCANNER_TYPE]: PropTypes.array,
@@ -356,7 +356,7 @@ const TaskDialog = ({
                     name="target_id"
                     disabled={!change_task}
                     items={target_items}
-                    loading={isLoadingTargets}
+                    isLoading={isLoadingTargets}
                     value={state.target_id}
                     width="260px"
                     onChange={onTargetChange}
@@ -379,7 +379,7 @@ const TaskDialog = ({
                   <MultiSelect
                     name="alert_ids"
                     items={alert_items}
-                    loading={isLoadingAlerts}
+                    isLoading={isLoadingAlerts}
                     value={state.alert_ids}
                     width="260px"
                     onChange={onAlertsChange}
@@ -401,7 +401,7 @@ const TaskDialog = ({
                     name="schedule_id"
                     value={state.schedule_id}
                     items={schedule_items}
-                    loading={isLoadingSchedules}
+                    isLoading={isLoadingSchedules}
                     width="201px"
                     onChange={onScheduleChange}
                   />
@@ -480,7 +480,7 @@ const TaskDialog = ({
                 scanners={scanners}
                 scannerId={state.scanner_id}
                 changeTask={change_task}
-                loading={isLoadingScanners}
+                isLoading={isLoadingScanners}
                 onChange={handleScannerChange}
               />
             </div>
@@ -500,7 +500,7 @@ const TaskDialog = ({
                       name="config_id"
                       disabled={!change_task}
                       items={openvas_scan_config_items}
-                      loading={isLoadingConfigs}
+                      isLoading={isLoadingConfigs}
                       value={openvas_config_id}
                       onChange={value => {
                         onScanConfigChange(value);
@@ -599,7 +599,7 @@ const TaskDialog = ({
                         disabled={state.add_tag !== YES_VALUE}
                         name="tag_id"
                         items={tag_items}
-                        loading={isLoadingTags}
+                        isLoading={isLoadingTags}
                         value={state.tag_id}
                         onChange={onValueChange}
                       />
