@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Increase clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
 
 ### Fixed
+- Get delta report needs to send details=1 [#1724](https://github.com/greenbone/gsa/pull/1724)
 - Improve filter handling in report details [#1708](https://github.com/greenbone/gsa/pull/1708)
 - Fix TLS certificate download [#1704](https://github.com/greenbone/gsa/pull/1704)
 - Import additional polyfills for IE11 [#1702](https://github.com/greenbone/gsa/pull/1702)
