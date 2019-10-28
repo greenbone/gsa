@@ -16,27 +16,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import logger from '../log';
+import logger from 'gmp/log';
 
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 
-import {forEach, map} from '../utils/array';
-import {isArray, isDefined} from '../utils/identity';
-import {severityValue} from '../utils/number';
+import {forEach, map} from 'gmp/utils/array';
+import {isArray, isDefined} from 'gmp/utils/identity';
+import {severityValue} from 'gmp/utils/number';
 
-import Capabilities from '../capabilities/capabilities';
+import Capabilities from 'gmp/capabilities/capabilities';
 
-import moment from '../models/date';
+import moment from 'gmp/models/date';
 
 import User, {
   AUTH_METHOD_LDAP,
   AUTH_METHOD_NEW_PASSWORD,
   AUTH_METHOD_RADIUS,
-} from '../models/user';
-import Setting from '../models/setting';
-import Settings from '../models/settings';
+} from 'gmp/models/user';
+import Setting from 'gmp/models/setting';
+import Settings from 'gmp/models/settings';
 
-import {parseInt} from '../parser';
+import {parseInt} from 'gmp/parser';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
@@ -117,7 +117,7 @@ export class UserCommand extends EntityCommand {
 
           forEach(group.auth_conf_setting, setting => {
             if (setting.key === 'enable') {
-              values.enabled = setting.value === 'true';
+              values.enabled = setting.value === true;
             } else {
               values[setting.key] = setting.value;
             }
