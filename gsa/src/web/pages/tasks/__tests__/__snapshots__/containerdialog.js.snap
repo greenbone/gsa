@@ -1419,8 +1419,9 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                             <input
                               class="c23"
                               data-testid="spinner-input"
+                              max="1200"
                               maxlength="5"
-                              min="1"
+                              min="2"
                               name="auto_delete_data"
                               size="4"
                               value="5"
