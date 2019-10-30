@@ -96,6 +96,32 @@ describe('AutoDeleteReportsGroup tests', () => {
     expect(handleChange).toHaveBeenCalledWith(10, 'auto_delete_data');
   });
 
+  test('should keep auto delete keep value in range 2-1200', () => {
+    const handleChange = jest.fn();
+
+    const {getByTestId} = render(
+      <AutoDeleteReportsGroup
+        autoDelete={AUTO_DELETE_KEEP}
+        autoDeleteData={AUTO_DELETE_KEEP_DEFAULT_VALUE}
+        onChange={handleChange}
+      />,
+    );
+
+    const autoDeleteKeepData = getByTestId('spinner-input');
+
+    fireEvent.change(autoDeleteKeepData, {target: {value: 1}});
+
+    expect(handleChange).not.toHaveBeenCalled();
+
+    fireEvent.change(autoDeleteKeepData, {target: {value: 1201}});
+
+    expect(handleChange).not.toHaveBeenCalled();
+
+    fireEvent.change(autoDeleteKeepData, {target: {value: 140}});
+
+    expect(handleChange).toHaveBeenCalledWith(140, 'auto_delete_data');
+  });
+
   test('should not allow to change auto delete keep value', () => {
     const handleChange = jest.fn();
 
