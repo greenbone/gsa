@@ -92,6 +92,7 @@ class ReportCommand extends EntityCommand {
       {
         cmd: 'get_report',
         delta_report_id: deltaReportId,
+        details: 1,
         report_id: id,
         report_format_id: reportFormatId,
         filter: isDefined(filter) ? filter.all() : ALL_FILTER,
