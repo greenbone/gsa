@@ -45,6 +45,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Fix getting details in delta report [#1732](https://github.com/greenbone/gsa/pull/1732)
 - Include results (details=1) in report download [#1731](https://github.com/greenbone/gsa/pull/1731)
 - Fixed High column in hosts table fo reports [#1730](https://github.com/greenbone/gsa/pull/1730)
 - Fix setting the user default filter in report results [#1699](https://github.com/greenbone/gsa/pull/1699)
