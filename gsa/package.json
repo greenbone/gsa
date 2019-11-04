@@ -78,12 +78,12 @@
   },
   "devDependencies": {
     "@storybook/react": "^5.1.11",
-    "@testing-library/jest-dom": "^4.1.0",
-    "@testing-library/react": "^9.1.1",
-    "@types/jest": "^24.0.18",
-    "eslint-config-prettier": "^6.1.0",
+    "@testing-library/jest-dom": "^4.2.3",
+    "@testing-library/react": "^9.3.1",
+    "@types/jest": "^24.0.21",
+    "eslint-config-prettier": "^6.5.0",
     "husky": "^2.7.0",
-    "jest-junit": "^8.0.0",
+    "jest-junit": "^9.0.0",
     "jest-styled-components": "^6.3.3",
     "lint-staged": "^8.2.1",
     "prettier": "^1.18.2"
