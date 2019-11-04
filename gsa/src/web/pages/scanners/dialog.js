@@ -132,6 +132,8 @@ CertStatus.propTypes = {
   info: PropTypes.object.isRequired,
 };
 
+const SCANNER_DIALOG_INITIAL_HEIGHT = '300px';
+
 const ScannerDialog = ({
   ca_pub,
   comment = '',
@@ -214,6 +216,7 @@ const ScannerDialog = ({
   return (
     <SaveDialog // the dialog current changes sizes based on content. For the future we should somehow fix the size to prevent jumping around.
       defaultValues={data}
+      initialHeight={SCANNER_DIALOG_INITIAL_HEIGHT}
       multiStep={1} // the option to switch to the MultiStepFooter. Leaving it out defaults to false
       title={title}
       values={{
