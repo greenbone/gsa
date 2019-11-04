@@ -47,7 +47,7 @@ describe('GmpSettings tests', () => {
     expect(settings.manualLanguageMapping).toBeUndefined();
     expect(settings.protocol).toEqual('http:');
     expect(settings.protocoldocurl).toEqual(DEFAULT_PROTOCOLDOC_URL);
-    expect(settings.reloadinterval).toEqual(DEFAULT_RELOAD_INTERVAL);
+    expect(settings.reloadInterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.server).toEqual('localhost');
     expect(settings.token).toBeUndefined();
     expect(settings.timeout).toBeUndefined();
@@ -76,7 +76,7 @@ describe('GmpSettings tests', () => {
       },
       protocol: 'http',
       protocoldocurl: 'http://protocol',
-      reloadinterval: 10,
+      reloadInterval: 10,
       server: 'localhost',
       token: 'atoken',
       timeout: 30000,
@@ -97,7 +97,7 @@ describe('GmpSettings tests', () => {
     expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual('http://protocol');
-    expect(settings.reloadinterval).toEqual(10);
+    expect(settings.reloadInterval).toEqual(10);
     expect(settings.server).toEqual('localhost');
     expect(settings.token).toBeUndefined();
     expect(settings.timeout).toEqual(30000);
@@ -141,7 +141,7 @@ describe('GmpSettings tests', () => {
     expect(settings.manualLanguageMapping).toBeUndefined();
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual(DEFAULT_PROTOCOLDOC_URL);
-    expect(settings.reloadinterval).toEqual(DEFAULT_RELOAD_INTERVAL);
+    expect(settings.reloadInterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.server).toEqual('foo');
     expect(settings.token).toEqual('atoken');
     expect(settings.timeout).toBeUndefined();
@@ -161,7 +161,7 @@ describe('GmpSettings tests', () => {
       manualLanguageMapping: {lorem: 'ipsum'},
       protocol: 'https',
       protocoldocurl: 'http://lorem',
-      reloadinterval: 20,
+      reloadInterval: 20,
       server: 'foo.bar',
       token: 'btoken',
       timeout: 10000,
@@ -179,7 +179,7 @@ describe('GmpSettings tests', () => {
       manualLanguageMapping: {foo: 'bar'},
       protocol: 'http',
       protocoldocurl: 'http://protocol',
-      reloadinterval: 10,
+      reloadInterval: 10,
       server: 'localhost',
       token: 'atoken',
       timeout: 30000,
@@ -196,7 +196,7 @@ describe('GmpSettings tests', () => {
     expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual('http://protocol');
-    expect(settings.reloadinterval).toEqual(10);
+    expect(settings.reloadInterval).toEqual(10);
     expect(settings.server).toEqual('localhost');
     expect(settings.token).toEqual('btoken');
     expect(settings.timeout).toEqual(30000);
@@ -268,7 +268,7 @@ describe('GmpSettings tests', () => {
       manualLanguageMapping: {foo: 'bar'},
       protocol: 'http',
       protocoldocurl: 'http://protocol',
-      reloadinterval: 10,
+      reloadInterval: 10,
       server: 'localhost',
       token: 'atoken',
       timeout: 30000,

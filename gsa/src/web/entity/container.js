@@ -20,121 +20,34 @@ import React from 'react';
 
 import logger from 'gmp/log';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import PropTypes from 'web/utils/proptypes';
 
 const log = logger.getLogger('web.entity.container');
-
-export const handleDefaultReloadIntervalFunc = func => ({
-  defaultReloadInterval,
-  ...args
-}) =>
-  defaultReloadInterval <= 0
-    ? defaultReloadInterval
-    : func({...args, defaultReloadInterval});
-
-const defaultReloadIntervalFunc = ({defaultReloadInterval, entity}) =>
-  isDefined(entity) ? defaultReloadInterval : 0;
 
 class EntityContainer extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.state = {};
-
     this.reload = this.reload.bind(this);
 
     this.handleChanged = this.handleChanged.bind(this);
     this.handleError = this.handleError.bind(this);
-    this.handleTimer = this.handleTimer.bind(this);
   }
 
-  componentDidMount() {
-    this.isRunning = true;
-
+  componentDidUpdate(prevProps) {
     const {id} = this.props;
-    this.load(id);
-  }
-
-  componentWillUnmount() {
-    this.isRunning = false;
-
-    this.clearTimer();
-  }
-
-  componentDidUpdate() {
-    const {id} = this.props;
-    if (id !== this.state.id) {
-      this.load(id);
+    if (id !== prevProps.id) {
+      this.reload();
     }
-  }
-
-  load(id) {
-    this.clearTimer();
-
-    this.setState({id});
-
-    this.props.load(id).then(() => this.startTimer());
   }
 
   reload() {
     const {id} = this.props;
-    this.load(id);
+
+    this.props.reload(id);
   }
 
   handleChanged() {
-    this.reload();
-  }
-
-  getReloadInterval() {
-    const {reloadInterval = defaultReloadIntervalFunc} = this.props;
-
-    return handleDefaultReloadIntervalFunc(reloadInterval)(this.props);
-  }
-
-  startTimer() {
-    if (!this.isRunning || isDefined(this.timer)) {
-      log.debug('Not starting timer', {
-        isRunning: this.isRunning,
-        timer: this.timer,
-      });
-      return;
-    }
-
-    const interval = this.getReloadInterval();
-
-    if (interval <= 0) {
-      log.debug('No reload timer will be started.');
-      return;
-    }
-
-    this.timer = global.setTimeout(this.handleTimer, interval);
-    log.debug(
-      'Started reload timer with id',
-      this.timer,
-      'and interval of',
-      interval,
-      'milliseconds',
-    );
-  }
-
-  resetTimer() {
-    this.timer = undefined;
-  }
-
-  clearTimer() {
-    if (isDefined(this.timer)) {
-      log.debug('Clearing reload timer with id', this.timer);
-      window.clearTimeout(this.timer);
-      this.resetTimer();
-    }
-  }
-
-  handleTimer() {
-    log.debug('Timer', this.timer, 'finished. Reloading data.');
-
-    this.resetTimer();
     this.reload();
   }
 
@@ -159,12 +72,8 @@ class EntityContainer extends React.Component {
 
 EntityContainer.propTypes = {
   children: PropTypes.func.isRequired,
-  defaultReloadInterval: PropTypes.number.isRequired,
-  entityType: PropTypes.string.isRequired,
-  gmp: PropTypes.gmp.isRequired,
   id: PropTypes.id.isRequired,
-  load: PropTypes.func.isRequired,
-  reloadInterval: PropTypes.func,
+  reload: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,

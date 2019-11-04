@@ -35,6 +35,7 @@ import {
   entityActions,
   loadEntities,
   loadEntity,
+  loadEntityIfNeeded,
   reducer,
   deltaEntityActions,
   deltaReducer,
@@ -80,7 +81,7 @@ describe('report loadEntity function tests', () => {
 
     return loadEntity(gmp)(id)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {filter: undefined});
+      expect(get).toBeCalledWith({id}, {details: 1, filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {
@@ -130,7 +131,7 @@ describe('report loadEntity function tests', () => {
 
     return loadEntity(gmp)(id, filter)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {filter});
+      expect(get).toBeCalledWith({id}, {details: 1, filter});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {
@@ -199,7 +200,186 @@ describe('report loadEntity function tests', () => {
 
     return loadEntity(gmp)(id)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {filter: undefined});
+      expect(get).toBeCalledWith({id}, {details: 1, filter: undefined});
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: types.ENTITY_LOADING_REQUEST,
+        entityType,
+        id,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: types.ENTITY_LOADING_ERROR,
+        entityType,
+        error: 'An Error',
+        id,
+      });
+    });
+  });
+});
+
+describe('report loadEntityIfNeeded function tests', () => {
+  test('should load report successfully if needed', () => {
+    const id = 'a1';
+    const rootState = createState(entityType, {
+      isLoading: {
+        [id]: false,
+      },
+    });
+    const getState = jest.fn().mockReturnValue(rootState);
+
+    const dispatch = jest.fn();
+
+    const get = jest.fn().mockResolvedValue({data: {foo: 'bar'}});
+
+    const gmp = {
+      [entityType]: {
+        get,
+      },
+    };
+
+    expect(loadEntityIfNeeded).toBeDefined();
+    expect(isFunction(loadEntityIfNeeded)).toBe(true);
+
+    return loadEntityIfNeeded(gmp)(id)(dispatch, getState).then(() => {
+      expect(getState).toBeCalled();
+      expect(get).toBeCalledWith({id}, {details: 0, filter: undefined});
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: types.ENTITY_LOADING_REQUEST,
+        entityType,
+        id,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: types.ENTITY_LOADING_SUCCESS,
+        entityType,
+        data: {foo: 'bar'},
+        id,
+      });
+    });
+  });
+
+  test('should not load report if report is already in store', () => {
+    const id = 'a1';
+    const rootState = createState(entityType, {
+      isLoading: {
+        [id]: false,
+      },
+      byId: {
+        [id]: 'a1',
+      },
+    });
+
+    const getState = jest.fn().mockReturnValue(rootState);
+
+    const dispatch = jest.fn();
+
+    const get = jest.fn().mockResolvedValue([{id: 'foo'}]);
+
+    const gmp = {
+      [entityType]: {
+        get,
+      },
+    };
+
+    return loadEntityIfNeeded(gmp)(id)(dispatch, getState).then(() => {
+      expect(getState).toBeCalled();
+      expect(dispatch).not.toBeCalled();
+      expect(get).not.toBeCalled();
+    });
+  });
+
+  test('should load report with results filter successfully if needed', () => {
+    const id = 'a1';
+    const rootState = createState(entityType, {
+      isLoading: {
+        [id]: false,
+      },
+    });
+    const getState = jest.fn().mockReturnValue(rootState);
+
+    const dispatch = jest.fn();
+
+    const get = jest.fn().mockResolvedValue({data: {foo: 'bar'}});
+
+    const gmp = {
+      [entityType]: {
+        get,
+      },
+    };
+
+    const filter = Filter.fromString('foo=bar');
+
+    expect(loadEntityIfNeeded).toBeDefined();
+    expect(isFunction(loadEntityIfNeeded)).toBe(true);
+
+    return loadEntityIfNeeded(gmp)(id, filter)(dispatch, getState).then(() => {
+      expect(getState).toBeCalled();
+      expect(get).toBeCalledWith({id}, {details: 0, filter});
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: types.ENTITY_LOADING_REQUEST,
+        entityType,
+        id,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: types.ENTITY_LOADING_SUCCESS,
+        entityType,
+        data: {foo: 'bar'},
+        id,
+      });
+    });
+  });
+
+  test('should not load report if isLoading is true', () => {
+    const id = 'a1';
+    const rootState = createState(entityType, {
+      isLoading: {
+        [id]: true,
+      },
+    });
+
+    const getState = jest.fn().mockReturnValue(rootState);
+
+    const dispatch = jest.fn();
+
+    const get = jest.fn().mockResolvedValue([{id: 'foo'}]);
+
+    const gmp = {
+      [entityType]: {
+        get,
+      },
+    };
+
+    return loadEntityIfNeeded(gmp)(id)(dispatch, getState).then(() => {
+      expect(getState).toBeCalled();
+      expect(dispatch).not.toBeCalled();
+      expect(get).not.toBeCalled();
+    });
+  });
+
+  test('should fail loading entity with an error', () => {
+    const id = 'a1';
+    const rootState = createState(entityType, {
+      [id]: {
+        isLoading: false,
+      },
+    });
+
+    const getState = jest.fn().mockReturnValue(rootState);
+
+    const dispatch = jest.fn();
+
+    const get = jest.fn().mockRejectedValue('An Error');
+
+    const gmp = {
+      [entityType]: {
+        get,
+      },
+    };
+
+    return loadEntityIfNeeded(gmp)(id)(dispatch, getState).then(() => {
+      expect(getState).toBeCalled();
+      expect(get).toBeCalledWith({id}, {details: 0, filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {

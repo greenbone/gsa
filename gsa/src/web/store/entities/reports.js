@@ -79,7 +79,28 @@ const loadEntity = gmp => (id, filter) => (dispatch, getState) => {
   dispatch(entityActions.request(id));
 
   return gmp.report
-    .get({id}, {filter})
+    .get({id}, {filter, details: 1})
+    .then(
+      response => dispatch(entityActions.success(id, response.data)),
+      error => dispatch(entityActions.error(id, error)),
+    );
+};
+
+const loadEntityIfNeeded = gmp => (id, filter) => (dispatch, getState) => {
+  // loads the small report (without details) if these information are not
+  // yet in the store. resolve() otherwise
+  const rootState = getState();
+  const state = selector(rootState);
+
+  if (state.isLoadingEntity(id) || isDefined(state.getEntity(id))) {
+    // we are already loading data or have it in the store
+    return Promise.resolve();
+  }
+
+  dispatch(entityActions.request(id));
+
+  return gmp.report
+    .get({id}, {filter, details: 0})
     .then(
       response => dispatch(entityActions.success(id, response.data)),
       error => dispatch(entityActions.error(id, error)),
@@ -119,6 +140,7 @@ export {
   loadAllEntities,
   loadEntities,
   loadEntity,
+  loadEntityIfNeeded,
   reducer,
   selector,
   entitiesActions,
