@@ -243,7 +243,9 @@ describe('PoliciesPage ToolBarIcons test', () => {
     const handlePolicyCreateClick = jest.fn();
     const handlePolicyImportClick = jest.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const renewSession = jest.fn().mockResolvedValue({data: {}});
+
+    const gmp = {settings: {manualUrl}, user: {renewSession}};
 
     const {render} = rendererWith({
       gmp,
