@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Update node dependencies to latest releases [#1735](https://github.com/greenbone/gsa/pull/1735)
 - If details not defined, then choose first OS from identifiers [#1719](https://github.com/greenbone/gsa/pull/1719)
 - Sorting of SecInfo items [#1717](https://github.com/greenbone/gsa/pull/1717))
 - Disable edit PowerFilter icon if isLoading [#1714](https://github.com/greenbone/gsa/pull/1714)
