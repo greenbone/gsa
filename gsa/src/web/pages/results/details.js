@@ -75,9 +75,18 @@ const ResultDetails = ({className, links = true, entity}) => {
 
   const result2 = isDefined(result.delta) ? result.delta.result : undefined;
   const result2Id = isDefined(result2) ? result2.id : undefined;
-  const result2Description = isDefined(result2)
-    ? result2.description
-    : undefined;
+
+  const deltaType = result.delta.delta_type;
+
+  let result2Description;
+
+  if (deltaType === 'same') {
+    result2Description = result.description;
+  } else if (deltaType === 'changed') {
+    result2Description = result2.description;
+  } else {
+    result2Description = 'No second result available.';
+  }
 
   return (
     <Layout flex="column" grow="1" className={className}>
