@@ -1,17 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Badge tests should render badge 1`] = `
-.c2 {
+.c1 {
   cursor: pointer;
 }
 
-.c1 {
+.c2 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c1 * {
+.c2 * {
   height: inherit;
   width: inherit;
 }
@@ -62,7 +62,7 @@ exports[`Badge tests should render badge 1`] = `
 }
 
 @media print {
-  .c2 {
+  .c1 {
     display: none;
   }
 }

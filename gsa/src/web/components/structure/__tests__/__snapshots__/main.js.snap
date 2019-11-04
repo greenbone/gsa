@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Main tests should render main 1`] = `
-.c1 {
+.c0 {
   padding: 5px 10px;
   height: 100%;
   padding-bottom: 20px;
 }
 
-.c0 {
+.c1 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

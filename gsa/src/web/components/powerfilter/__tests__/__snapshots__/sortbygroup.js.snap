@@ -119,7 +119,7 @@ exports[`SortByGroup tests should render 1`] = `
   padding-right: 10px;
 }
 
-.c8 {
+.c7 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -144,13 +144,13 @@ exports[`SortByGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c7 {
+.c8 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c7 * {
+.c8 * {
   height: inherit;
   width: inherit;
 }
@@ -227,7 +227,7 @@ exports[`SortByGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c13 {
+.c12 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -242,7 +242,7 @@ exports[`SortByGroup tests should render 1`] = `
   opacity: 1;
 }
 
-.c12 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

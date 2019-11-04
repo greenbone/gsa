@@ -48,7 +48,7 @@ exports[`Task Details tests should render full task details 1`] = `
   display: inline-flex;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -67,14 +67,14 @@ exports[`Task Details tests should render full task details 1`] = `
   margin-left: -5px;
 }
 
-.c5 > * {
+.c4 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c5 > * {
+.c4 > * {
   margin-left: 5px;
 }
 
@@ -100,7 +100,7 @@ exports[`Task Details tests should render full task details 1`] = `
   display: inline-flex;
 }
 
-.c7 {
+.c6 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -109,11 +109,11 @@ exports[`Task Details tests should render full task details 1`] = `
   width: 100%;
 }
 
-.c6 td {
+.c7 td {
   padding: 4px 4px 4px 0;
 }
 
-.c6 tr td:first-child {
+.c7 tr td:first-child {
   padding-right: 5px;
 }
 
@@ -125,13 +125,13 @@ exports[`Task Details tests should render full task details 1`] = `
   width: 90%;
 }
 
-.c4 > *:not(:last-child)::after {
+.c5 > *:not(:last-child)::after {
   content: '•';
   margin-left: 5px;
 }
 
 @media print {
-  .c7 {
+  .c6 {
     border-collapse: collapse;
   }
 }

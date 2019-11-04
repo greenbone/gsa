@@ -87,7 +87,7 @@ exports[`YesNoRadio tests should render 1`] = `
   cursor: pointer;
 }
 
-.c5 {
+.c4 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -102,7 +102,7 @@ exports[`YesNoRadio tests should render 1`] = `
   opacity: 1;
 }
 
-.c4 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

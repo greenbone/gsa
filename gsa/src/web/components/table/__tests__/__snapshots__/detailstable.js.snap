@@ -19,7 +19,7 @@ exports[`DetailsTable tests should render 1`] = `
   align-items: stretch;
 }
 
-.c1 {
+.c0 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -28,11 +28,11 @@ exports[`DetailsTable tests should render 1`] = `
   width: 100%;
 }
 
-.c0 td {
+.c1 td {
   padding: 4px 4px 4px 0;
 }
 
-.c0 tr td:first-child {
+.c1 tr td:first-child {
   padding-right: 5px;
 }
 
@@ -45,7 +45,7 @@ exports[`DetailsTable tests should render 1`] = `
 }
 
 @media print {
-  .c1 {
+  .c0 {
     border-collapse: collapse;
   }
 }

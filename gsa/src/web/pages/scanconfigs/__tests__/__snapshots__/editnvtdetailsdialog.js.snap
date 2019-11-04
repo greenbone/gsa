@@ -193,7 +193,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   border: 1px solid #787878;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -219,23 +219,23 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   flex-shrink: 0;
 }
 
-.c5:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
 
-.c4 {
+.c5 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c32 {
+.c30 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -255,12 +255,12 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c32:focus,
-.c32:hover {
+.c30:focus,
+.c30:hover {
   border: 1px solid #393637;
 }
 
-.c32:hover {
+.c30:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -268,20 +268,20 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c32[disabled] {
+.c30[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c32 img {
+.c30 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c32:link {
+.c30:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -305,13 +305,13 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c30 {
+.c32 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c30:hover {
+.c32:hover {
   color: #fff;
   background: #519032;
 }
@@ -467,7 +467,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   font-weight: bold;
 }
 
-.c26 {
+.c25 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -484,7 +484,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   opacity: 0.65;
 }
 
-.c26:-webkit-autofill {
+.c25:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
@@ -506,7 +506,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c25 {
+.c26 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -540,7 +540,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   cursor: pointer;
 }
 
-.c24 {
+.c23 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -555,7 +555,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
   opacity: 1;
 }
 
-.c23 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1221,7 +1221,7 @@ exports[`EditNvtDetailsDialog component tests should render dialog 1`] = `
                             class="c8"
                           >
                             <input
-                              class="c25 c28"
+                              class="c28 c26"
                               name="pref 3"
                               type="text"
                               value="foo"
@@ -1376,7 +1376,7 @@ exports[`EditNvtDetailsDialog component tests should render loading indicator 1`
   border: 1px solid #787878;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1402,23 +1402,23 @@ exports[`EditNvtDetailsDialog component tests should render loading indicator 1`
   flex-shrink: 0;
 }
 
-.c5:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
 
-.c4 {
+.c5 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c13 {
+.c11 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -1438,12 +1438,12 @@ exports[`EditNvtDetailsDialog component tests should render loading indicator 1`
   z-index: 1;
 }
 
-.c13:focus,
-.c13:hover {
+.c11:focus,
+.c11:hover {
   border: 1px solid #393637;
 }
 
-.c13:hover {
+.c11:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -1451,20 +1451,20 @@ exports[`EditNvtDetailsDialog component tests should render loading indicator 1`
   color: #fff;
 }
 
-.c13[disabled] {
+.c11[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c13 img {
+.c11 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c13:link {
+.c11:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -1488,13 +1488,13 @@ exports[`EditNvtDetailsDialog component tests should render loading indicator 1`
   align-items: center;
 }
 
-.c11 {
+.c13 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c11:hover {
+.c13:hover {
   color: #fff;
   background: #519032;
 }
