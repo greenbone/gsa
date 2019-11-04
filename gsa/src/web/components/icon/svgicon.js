@@ -45,15 +45,15 @@ const Styled = styled.span`
 
   & svg {
     background: ${props =>
-      props.loading
+      props.isLoading
         ? 'url(/img/loading.gif) center center no-repeat'
         : undefined};
   }
 
   & svg path {
-    display: ${props => (props.loading ? 'none' : undefined)};
+    display: ${props => (props.isLoading ? 'none' : undefined)};
     fill: ${props =>
-      props.active || props.loading ? undefined : Theme.inputBorderGray};
+      props.active || props.isLoading ? undefined : Theme.inputBorderGray};
   }
 `;
 
@@ -96,7 +96,7 @@ const SvgIcon = ({
       {...other}
       data-testid="svg-icon"
       active={active && !loading}
-      loading={loading}
+      isLoading={loading}
       title={loading ? loadingTitle : title}
       onClick={handleClick}
     >
