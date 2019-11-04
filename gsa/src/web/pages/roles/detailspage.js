@@ -274,7 +274,7 @@ Page.propTypes = {
 };
 
 const generalPermissionsFilter = id =>
-  Filter.fromString('subject_uuid=' + id).all();
+  Filter.fromString('subject_uuid=' + id + ' and resource_uuid=""').all();
 
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
