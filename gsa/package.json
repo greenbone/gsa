@@ -41,7 +41,7 @@
     "fast-deep-equal": "^2.0.1",
     "fast-xml-parser": "^3.14.0",
     "glamor": "^2.20.40",
-    "history": "^4.7.2",
+    "history": "^4.10.1",
     "hoist-non-react-statics": "^3.3.0",
     "i18next": "^19.0.0",
     "i18next-xhr-backend": "3.2.2",
