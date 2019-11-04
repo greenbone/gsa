@@ -58,9 +58,7 @@ const DownloadReportDialog = ({
   onClose,
   onSave,
 }) => {
-  const filterString = isString(filter)
-    ? filter
-    : filter.simple().toFilterString();
+  const filterString = isString(filter) ? filter : filter.toFilterString();
 
   reportFormatId = selectSaveId(reportFormats, defaultReportFormatId);
 
