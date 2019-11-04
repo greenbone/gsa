@@ -134,7 +134,6 @@ describe('GmpSettings tests', () => {
 
     expect(settings.enableGreenboneSensor).toEqual(false);
     expect(settings.enableStoreDebugLog).toEqual(false);
-    expect(settings.reloadinterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.locale).toEqual('en');
     expect(settings.loglevel).toEqual('error');
     expect(settings.manualUrl).toEqual(DEFAULT_MANUAL_URL);
