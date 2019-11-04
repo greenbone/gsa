@@ -55,7 +55,7 @@ exports[`Audit Row tests should render 1`] = `
   align-items: stretch;
 }
 
-.c6 {
+.c5 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -174,7 +174,7 @@ exports[`Audit Row tests should render 1`] = `
   display: inline-flex;
 }
 
-.c16 {
+.c15 {
   cursor: pointer;
 }
 
@@ -186,13 +186,13 @@ exports[`Audit Row tests should render 1`] = `
   fill: #aaaaaa;
 }
 
-.c15 {
+.c16 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c15 * {
+.c16 * {
   height: inherit;
   width: inherit;
 }
@@ -247,13 +247,13 @@ exports[`Audit Row tests should render 1`] = `
   white-space: nowrap;
 }
 
-.c5:hover {
+.c6:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
 @media print {
-  .c16 {
+  .c15 {
     display: none;
   }
 }
@@ -369,7 +369,7 @@ exports[`Audit Row tests should render 1`] = `
         >
           <span>
             <a
-              class="c6"
+              class="c5"
               data-testid="details-link"
               href="/report/1234"
             >
@@ -421,7 +421,7 @@ exports[`Audit Row tests should render 1`] = `
               </span>
               <span
                 alt="Resume"
-                class="c15 c17"
+                class="c17 c16"
                 data-testid="svg-icon"
                 title="Audit is not stopped"
               >

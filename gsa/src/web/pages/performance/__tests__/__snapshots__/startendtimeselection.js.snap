@@ -101,7 +101,7 @@ exports[`StartTimeSelection tests should render 1`] = `
   display: inline-flex;
 }
 
-.c9 {
+.c7 {
   cursor: pointer;
 }
 
@@ -116,7 +116,7 @@ exports[`StartTimeSelection tests should render 1`] = `
   width: inherit;
 }
 
-.c17 {
+.c16 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -136,12 +136,12 @@ exports[`StartTimeSelection tests should render 1`] = `
   z-index: 1;
 }
 
-.c17:focus,
-.c17:hover {
+.c16:focus,
+.c16:hover {
   border: 1px solid #393637;
 }
 
-.c17:hover {
+.c16:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -149,26 +149,26 @@ exports[`StartTimeSelection tests should render 1`] = `
   color: #fff;
 }
 
-.c17[disabled] {
+.c16[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c17 img {
+.c16 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c17:link {
+.c16:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c16 {
+.c17 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -359,11 +359,11 @@ exports[`StartTimeSelection tests should render 1`] = `
   text-decoration: none;
 }
 
-.c7 {
+.c9 {
   margin-left: 5px;
 }
 
-.c7:hover {
+.c9:hover {
   cursor: pointer;
 }
 
@@ -377,7 +377,7 @@ exports[`StartTimeSelection tests should render 1`] = `
 }
 
 @media print {
-  .c9 {
+  .c7 {
     display: none;
   }
 }

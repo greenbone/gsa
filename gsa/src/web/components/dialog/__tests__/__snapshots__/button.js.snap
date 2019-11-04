@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Dialog Button tests should render button 1`] = `
-.c2 {
+.c0 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -21,12 +21,12 @@ exports[`Dialog Button tests should render button 1`] = `
   z-index: 1;
 }
 
-.c2:focus,
-.c2:hover {
+.c0:focus,
+.c0:hover {
   border: 1px solid #393637;
 }
 
-.c2:hover {
+.c0:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -34,20 +34,20 @@ exports[`Dialog Button tests should render button 1`] = `
   color: #fff;
 }
 
-.c2[disabled] {
+.c0[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c2 img {
+.c0 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c2:link {
+.c0:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -71,13 +71,13 @@ exports[`Dialog Button tests should render button 1`] = `
   align-items: center;
 }
 
-.c0 {
+.c2 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c0:hover {
+.c2:hover {
   color: #fff;
   background: #519032;
 }
@@ -88,7 +88,7 @@ exports[`Dialog Button tests should render button 1`] = `
 `;
 
 exports[`Dialog Button tests should render button when loading 1`] = `
-.c2 {
+.c0 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -108,12 +108,12 @@ exports[`Dialog Button tests should render button when loading 1`] = `
   z-index: 1;
 }
 
-.c2:focus,
-.c2:hover {
+.c0:focus,
+.c0:hover {
   border: 1px solid #393637;
 }
 
-.c2:hover {
+.c0:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -121,20 +121,20 @@ exports[`Dialog Button tests should render button when loading 1`] = `
   color: #fff;
 }
 
-.c2[disabled] {
+.c0[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c2 img {
+.c0 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c2:link {
+.c0:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -158,13 +158,13 @@ exports[`Dialog Button tests should render button when loading 1`] = `
   align-items: center;
 }
 
-.c0 {
+.c2 {
   border: 1px solid #787878;
   color: rgba(0,0,0,0.0);
   background: #87d050 url(/img/loading.gif) center center no-repeat;
 }
 
-.c0:hover {
+.c2:hover {
   color: rgba(0,0,0,0.0);
   background: #66c430 url(/img/loading.gif) center center no-repeat;
 }

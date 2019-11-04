@@ -49,7 +49,7 @@ exports[`FilterStringGroup tests should render 1`] = `
   padding-right: 10px;
 }
 
-.c4 {
+.c3 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -63,11 +63,11 @@ exports[`FilterStringGroup tests should render 1`] = `
   padding: 1px 8px;
 }
 
-.c4:-webkit-autofill {
+.c3:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c3 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

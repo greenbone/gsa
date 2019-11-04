@@ -264,7 +264,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   display: inline-flex;
 }
 
-.c6 {
+.c5 {
   cursor: pointer;
 }
 
@@ -276,13 +276,13 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   fill: #aaaaaa;
 }
 
-.c5 {
+.c6 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c5 * {
+.c6 * {
   height: inherit;
   width: inherit;
 }
@@ -320,11 +320,11 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   position: relative;
 }
 
-.c14 {
+.c13 {
   margin: 0 0 1px 0;
 }
 
-.c13 {
+.c14 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -469,7 +469,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   margin-bottom: 15px;
 }
 
-.c30 {
+.c29 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -486,11 +486,11 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   width: 100%;
 }
 
-.c29 td {
+.c30 td {
   padding: 4px 4px 4px 0;
 }
 
-.c29 tr td:first-child {
+.c30 tr td:first-child {
   padding-right: 5px;
 }
 
@@ -622,7 +622,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
 }
 
 @media print {
-  .c6 {
+  .c5 {
     display: none;
   }
 }
@@ -634,7 +634,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
 }
 
 @media print {
-  .c30 {
+  .c29 {
     border-collapse: collapse;
   }
 }
@@ -668,7 +668,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   class="c0"
 >
   <div
-    class="toolbar c1"
+    class="c1 toolbar"
   >
     <div
       class="c2"
@@ -787,7 +787,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             </span>
             <span
               alt="Resume"
-              class="c5 c9"
+              class="c9 c6"
               data-testid="svg-icon"
               title="Audit is not stopped"
             >
@@ -885,7 +885,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
     class="entity-section"
   >
     <div
-      class="section-header c12"
+      class="c12 section-header"
     >
       <h2
         class="c13 c14"
@@ -894,7 +894,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
           class="c15"
         >
           <span
-            class="c16 c6"
+            class="c5 c16"
             data-testid="svg-icon"
           >
             <svg>
@@ -1061,7 +1061,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                   class="c28"
                 >
                   <a
-                    class="c33 c7"
+                    class="c7 c33"
                     data-testid="details-link"
                     href="/report/1234"
                   >
@@ -1120,7 +1120,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                 class="c2"
               >
                 <div
-                  class="c38 c8"
+                  class="c8 c38"
                   margin="5px"
                 >
                   <span>
@@ -1144,7 +1144,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             </h2>
             <div>
               <table
-                class="c29 c39"
+                class="c39 c30"
               >
                 <colgroup>
                   <col
@@ -1211,7 +1211,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             </h2>
             <div>
               <table
-                class="c29 c39"
+                class="c39 c30"
               >
                 <colgroup>
                   <col
@@ -1254,7 +1254,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             </h2>
             <div>
               <table
-                class="c29 c39"
+                class="c39 c30"
               >
                 <colgroup>
                   <col
@@ -1432,7 +1432,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
   display: inline-flex;
 }
 
-.c4 {
+.c3 {
   cursor: pointer;
 }
 
@@ -1444,13 +1444,13 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
   fill: #aaaaaa;
 }
 
-.c3 {
+.c4 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c3 * {
+.c4 * {
   height: inherit;
   width: inherit;
 }
@@ -1501,7 +1501,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
 }
 
 @media print {
-  .c4 {
+  .c3 {
     display: none;
   }
 }
@@ -1629,7 +1629,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
         </span>
         <span
           alt="Resume"
-          class="c3 c7"
+          class="c7 c4"
           data-testid="svg-icon"
           title="Audit is not stopped"
         >

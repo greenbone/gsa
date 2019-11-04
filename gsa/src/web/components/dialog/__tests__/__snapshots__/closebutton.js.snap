@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Dialog CloseButton tests should render 1`] = `
-.c1 {
+.c0 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -27,18 +27,18 @@ exports[`Dialog CloseButton tests should render 1`] = `
   flex-shrink: 0;
 }
 
-.c1:hover {
+.c0:hover {
   color: #fff;
   background: #519032;
 }
 
-.c0 {
+.c1 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c0 * {
+.c1 * {
   height: inherit;
   width: inherit;
 }

@@ -151,6 +151,8 @@ describe('ScanConfigsPage tests', () => {
       foo: 'bar',
     });
 
+    const renewSession = jest.fn().mockResolvedValue({data: {}});
+
     const gmp = {
       scanconfigs: {
         get: getConfigs,
@@ -162,7 +164,7 @@ describe('ScanConfigsPage tests', () => {
       },
       reloadInterval,
       settings: {manualUrl},
-      user: {currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting, renewSession},
     };
 
     const {render, store} = rendererWith({
