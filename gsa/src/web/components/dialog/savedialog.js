@@ -27,22 +27,35 @@ import PropTypes from 'web/utils/proptypes';
 
 import ErrorBoundary from 'web/components/error/errorboundary';
 
-import Dialog from '../dialog/dialog';
-import DialogContent from '../dialog/content';
-import DialogError from '../dialog/error';
-import DialogFooter from '../dialog/twobuttonfooter';
-import DialogTitle from '../dialog/title';
-import ScrollableContent from '../dialog/scrollablecontent';
+import Dialog from 'web/components/dialog/dialog';
+import DialogContent from 'web/components/dialog/content';
+import DialogError from 'web/components/dialog/error';
+import DialogFooter from 'web/components/dialog/twobuttonfooter';
+import DialogTitle from 'web/components/dialog/title';
+import MultiStepFooter from 'web/components/dialog/multistepfooter';
+import ScrollableContent from 'web/components/dialog/scrollablecontent';
 
 const SaveDialogContent = ({
   onSave,
   error,
+  multiStep = 0,
   onError,
   onErrorClose = undefined,
   ...props
 }) => {
   const [loading, setLoading] = useState(false);
   const [stateError, setStateError] = useState(undefined);
+
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const [prevDisabled, setPrevDisabled] = useState(true);
+  const [nextDisabled, setNextDisabled] = useState(false);
+
+  useEffect(() => {
+    setPrevDisabled(currentStep === 0);
+    setNextDisabled(currentStep === multiStep);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep]);
 
   useEffect(() => {
     setStateError(error);
@@ -57,6 +70,10 @@ const SaveDialogContent = ({
     } else {
       setStateError(err.message);
     }
+  };
+
+  const handleStepChange = index => {
+    setCurrentStep(index);
   };
 
   const handleSaveClick = state => {
@@ -105,17 +122,40 @@ const SaveDialogContent = ({
                 {...heightProps}
               >
                 {children({
+                  currentStep,
                   values: childValues,
+                  onStepChange: handleStepChange,
                   onValueChange,
                 })}
               </ScrollableContent>
             </ErrorBoundary>
-            <DialogFooter
-              loading={loading}
-              rightButtonTitle={buttonTitle}
-              onLeftButtonClick={close}
-              onRightButtonClick={() => handleSaveClick(childValues)}
-            />
+            {multiStep > 0 ? (
+              <MultiStepFooter
+                loading={loading}
+                prevDisabled={prevDisabled}
+                nextDisabled={nextDisabled}
+                rightButtonTitle={buttonTitle}
+                onNextButtonClick={() =>
+                  setCurrentStep(
+                    currentStep < multiStep ? currentStep + 1 : currentStep,
+                  )
+                }
+                onLeftButtonClick={close}
+                onPreviousButtonClick={() =>
+                  setCurrentStep(
+                    currentStep > 0 ? currentStep - 1 : currentStep,
+                  )
+                }
+                onRightButtonClick={() => handleSaveClick(childValues)}
+              />
+            ) : (
+              <DialogFooter
+                loading={loading}
+                rightButtonTitle={buttonTitle}
+                onLeftButtonClick={close}
+                onRightButtonClick={() => handleSaveClick(childValues)}
+              />
+            )}
           </DialogContent>
         );
       }}
@@ -130,6 +170,9 @@ SaveDialogContent.propTypes = {
   error: PropTypes.string,
   heightProps: PropTypes.object,
   moveProps: PropTypes.object,
+  multiStep: PropTypes.number,
+  nextDisabled: PropTypes.bool,
+  prevDisabled: PropTypes.bool,
   title: PropTypes.string.isRequired,
   values: PropTypes.object,
   onError: PropTypes.func,
@@ -146,6 +189,7 @@ const SaveDialog = ({
   initialHeight,
   minHeight,
   minWidth,
+  multiStep = 0,
   title,
   values,
   width,
@@ -169,6 +213,7 @@ const SaveDialog = ({
           defaultValues={defaultValues}
           error={error}
           moveProps={moveProps}
+          multiStep={multiStep}
           heightProps={heightProps}
           title={title}
           values={values}
@@ -190,6 +235,7 @@ SaveDialog.propTypes = {
   initialHeight: PropTypes.string,
   minHeight: PropTypes.numberOrNumberString,
   minWidth: PropTypes.numberOrNumberString,
+  multiStep: PropTypes.number,
   title: PropTypes.string.isRequired,
   values: PropTypes.object, // should be used for controlled values
   width: PropTypes.string,
