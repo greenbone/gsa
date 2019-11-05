@@ -59,6 +59,41 @@ const Pre = styled.pre`
   word-wrap: normal;
 `;
 
+const DerivedDiff = ({deltaType, firstDescription, secondDesription}) => {
+  let Component;
+  let lines;
+  let prefix;
+
+  if (deltaType === 'new') {
+    lines = secondDesription.split(/\r|\n|\r\n/);
+    Component = Added;
+    prefix = '+';
+  } else if (deltaType === 'gone') {
+    lines = firstDescription.split(/\r|\n|\r\n/);
+    Component = Removed;
+    prefix = '-';
+  } else {
+    lines = [_('N/A')];
+    Component = Pre;
+    prefix = '';
+  }
+
+  return (
+    <React.Fragment>
+      {lines.map((line, i) => {
+        const lineWithPrefix = prefix + line;
+        return <Component key={i}>{lineWithPrefix}</Component>;
+      })}
+    </React.Fragment>
+  );
+};
+
+DerivedDiff.propTypes = {
+  deltaType: PropTypes.string.isRequired,
+  firstDescription: PropTypes.string.isRequired,
+  secondDesription: PropTypes.string.isRequired,
+};
+
 const ResultDetails = ({className, links = true, entity}) => {
   const result = entity;
 
@@ -128,7 +163,11 @@ const ResultDetails = ({className, links = true, entity}) => {
             {isDefined(result.delta.diff) ? (
               <Diff>{result.delta.diff}</Diff>
             ) : (
-              <Pre>{_('N/A')}</Pre>
+              <DerivedDiff
+                deltaType={deltaType}
+                firstDescription={result1Description}
+                secondDesription={result2Description}
+              />
             )}
           </div>
         </DetailsBlock>
