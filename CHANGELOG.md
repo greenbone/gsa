@@ -34,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Add statereducer function to Select component: Scrolls to last selected item [#1715](https://github.com/greenbone/gsa/pull/1715)
+- Add loading indicator to select [#1716](https://github.com/greenbone/gsa/pull/1716)
 - Add loading indicator to svg icon [#1701](https://github.com/greenbone/gsa/pull/1701)
 - Update German Translation [#1689](https://github.com/greenbone/gsa/pull/1689)
 - List NVT of the found CVEs at the report details page [#1673](https://github.com/greenbone/gsa/pull/1673)

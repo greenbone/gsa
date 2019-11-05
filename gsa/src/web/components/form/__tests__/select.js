@@ -18,6 +18,8 @@
  */
 import React from 'react';
 
+import {setLocale} from 'gmp/locale/lang';
+
 import {
   render,
   fireEvent,
@@ -26,6 +28,8 @@ import {
 } from 'web/utils/testing';
 
 import Select from '../select.js';
+
+setLocale('en');
 
 export const openSelectElement = element => {
   const openButton = getByTestId(element, 'select-open-button');
@@ -73,6 +77,29 @@ describe('Select component tests', () => {
     expect(domItems.length).toEqual(2);
     expect(domItems[0]).toHaveTextContent('Bar');
     expect(domItems[1]).toHaveTextContent('Foo');
+  });
+
+  test('should render loading', () => {
+    const items = [
+      {
+        value: '0',
+        label: '--',
+      },
+    ];
+
+    const {element, baseElement} = render(
+      <Select items={items} isLoading={true} />,
+    );
+
+    expect(element).toHaveTextContent('Loading...');
+
+    let domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(0);
+
+    openSelectElement(element);
+
+    domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(0);
   });
 
   test('should call onChange handler', () => {
