@@ -115,17 +115,17 @@ exports[`Row tests should render 1`] = `
   display: inline-flex;
 }
 
-.c7 {
+.c6 {
   cursor: pointer;
 }
 
-.c6 {
+.c7 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c6 * {
+.c7 * {
   height: inherit;
   width: inherit;
 }
@@ -144,7 +144,7 @@ exports[`Row tests should render 1`] = `
 }
 
 @media print {
-  .c7 {
+  .c6 {
     display: none;
   }
 }

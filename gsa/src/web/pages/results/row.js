@@ -122,7 +122,7 @@ const Row = ({
       </TableData>
       <TableData>{entity.port}</TableData>
       <TableData>
-        <DateTime date={entity.modificationTime} />
+        <DateTime date={entity.creationTime} />
       </TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>

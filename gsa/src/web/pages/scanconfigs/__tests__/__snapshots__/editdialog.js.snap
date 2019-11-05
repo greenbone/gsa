@@ -211,17 +211,17 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   display: inline-flex;
 }
 
-.c21 {
+.c20 {
   cursor: pointer;
 }
 
-.c20 {
+.c21 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c20 * {
+.c21 * {
   height: inherit;
   width: inherit;
 }
@@ -262,11 +262,11 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   position: relative;
 }
 
-.c16 {
+.c15 {
   margin: 0 0 1px 0;
 }
 
-.c15 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -391,7 +391,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   border: 1px solid #787878;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -417,23 +417,23 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   flex-shrink: 0;
 }
 
-.c5:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
 
-.c4 {
+.c5 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c49 {
+.c47 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -453,12 +453,12 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c49:focus,
-.c49:hover {
+.c47:focus,
+.c47:hover {
   border: 1px solid #393637;
 }
 
-.c49:hover {
+.c47:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -466,20 +466,20 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c49[disabled] {
+.c47[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c49 img {
+.c47 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c49:link {
+.c47:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -503,13 +503,13 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c47 {
+.c49 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c47:hover {
+.c49:hover {
   color: #fff;
   background: #519032;
 }
@@ -752,7 +752,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   width: 10%;
 }
 
-.c13 {
+.c12 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -766,11 +766,11 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   padding: 1px 8px;
 }
 
-.c13:-webkit-autofill {
+.c12:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c12 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -826,7 +826,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   cursor: pointer;
 }
 
-.c36 {
+.c35 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -837,7 +837,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   height: auto;
 }
 
-.c35 {
+.c36 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -878,7 +878,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 }
 
 @media print {
-  .c21 {
+  .c20 {
     display: none;
   }
 }
@@ -1059,7 +1059,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                   </div>
                   <section>
                     <div
-                      class="section-header c14"
+                      class="c14 section-header"
                     >
                       <h2
                         class="c15 c16"
@@ -1077,7 +1077,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                           class="c19"
                         >
                           <span
-                            class="section-fold-icon c20 c21"
+                            class="c20 c21 section-fold-icon"
                             data-testid="svg-icon"
                             title="Fold"
                           >
@@ -1256,7 +1256,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       >
                                         <input
                                           checked=""
-                                          class="c38 c36"
+                                          class="c35 c38"
                                           name="family1"
                                           type="checkbox"
                                         />
@@ -1385,7 +1385,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         margin="5px"
                                       >
                                         <input
-                                          class="c38 c36"
+                                          class="c35 c38"
                                           name="family2"
                                           type="checkbox"
                                         />
@@ -1514,7 +1514,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         margin="5px"
                                       >
                                         <input
-                                          class="c38 c36"
+                                          class="c35 c38"
                                           name="family3"
                                           type="checkbox"
                                         />
@@ -1643,7 +1643,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         margin="5px"
                                       >
                                         <input
-                                          class="c38 c36"
+                                          class="c35 c38"
                                           name="family4"
                                           type="checkbox"
                                         />
@@ -1675,7 +1675,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                   </section>
                   <section>
                     <div
-                      class="section-header c14"
+                      class="c14 section-header"
                     >
                       <h2
                         class="c15 c16"
@@ -1693,7 +1693,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                           class="c19"
                         >
                           <span
-                            class="section-fold-icon c20 c21"
+                            class="c20 c21 section-fold-icon"
                             data-testid="svg-icon"
                             title="Unfold"
                           >
@@ -1762,7 +1762,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                   class="c8"
                                 >
                                   <input
-                                    class="c41 c13"
+                                    class="c12 c41"
                                     name="scannerpref0"
                                     type="text"
                                     value="0"
@@ -1782,7 +1782,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                   </section>
                   <section>
                     <div
-                      class="section-header c14"
+                      class="c14 section-header"
                     >
                       <h2
                         class="c15 c16"
@@ -1800,7 +1800,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                           class="c19"
                         >
                           <span
-                            class="section-fold-icon c20 c21"
+                            class="c20 c21 section-fold-icon"
                             data-testid="svg-icon"
                             title="Unfold"
                           >
@@ -2129,7 +2129,7 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   border: 1px solid #787878;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2155,23 +2155,23 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   flex-shrink: 0;
 }
 
-.c5:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
 
-.c4 {
+.c5 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c17 {
+.c15 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -2191,12 +2191,12 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   z-index: 1;
 }
 
-.c17:focus,
-.c17:hover {
+.c15:focus,
+.c15:hover {
   border: 1px solid #393637;
 }
 
-.c17:hover {
+.c15:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -2204,20 +2204,20 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   color: #fff;
 }
 
-.c17[disabled] {
+.c15[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c17 img {
+.c15 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c17:link {
+.c15:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -2241,13 +2241,13 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   align-items: center;
 }
 
-.c15 {
+.c17 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c15:hover {
+.c17:hover {
   color: #fff;
   background: #519032;
 }
@@ -2401,7 +2401,7 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   padding-right: 10px;
 }
 
-.c13 {
+.c12 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -2415,11 +2415,11 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   padding: 1px 8px;
 }
 
-.c13:-webkit-autofill {
+.c12:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c12 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2662,17 +2662,17 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   align-items: center;
 }
 
-.c27 {
+.c26 {
   cursor: pointer;
 }
 
-.c26 {
+.c27 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c26 * {
+.c27 * {
   height: inherit;
   width: inherit;
 }
@@ -2707,11 +2707,11 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   position: relative;
 }
 
-.c22 {
+.c21 {
   margin: 0 0 1px 0;
 }
 
-.c21 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2836,7 +2836,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   border: 1px solid #787878;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2862,23 +2862,23 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   flex-shrink: 0;
 }
 
-.c5:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
 
-.c4 {
+.c5 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c38 {
+.c36 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -2898,12 +2898,12 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   z-index: 1;
 }
 
-.c38:focus,
-.c38:hover {
+.c36:focus,
+.c36:hover {
   border: 1px solid #393637;
 }
 
-.c38:hover {
+.c36:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -2911,20 +2911,20 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   color: #fff;
 }
 
-.c38[disabled] {
+.c36[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c38 img {
+.c36 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c38:link {
+.c36:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -2948,13 +2948,13 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   align-items: center;
 }
 
-.c36 {
+.c38 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c36:hover {
+.c38:hover {
   color: #fff;
   background: #519032;
 }
@@ -3108,7 +3108,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   padding-right: 10px;
 }
 
-.c19 {
+.c18 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -3133,13 +3133,13 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   cursor: pointer;
 }
 
-.c18 {
+.c19 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c18 * {
+.c19 * {
   height: inherit;
   width: inherit;
 }
@@ -3242,7 +3242,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   font-weight: bold;
 }
 
-.c13 {
+.c12 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -3256,11 +3256,11 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   padding: 1px 8px;
 }
 
-.c13:-webkit-autofill {
+.c12:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c12 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -3301,7 +3301,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
 }
 
 @media print {
-  .c27 {
+  .c26 {
     display: none;
   }
 }
@@ -3484,7 +3484,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
                   </div>
                   <section>
                     <div
-                      class="section-header c20"
+                      class="c20 section-header"
                     >
                       <h2
                         class="c21 c22"
@@ -3502,7 +3502,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
                           class="c25"
                         >
                           <span
-                            class="section-fold-icon c26 c27"
+                            class="c26 c27 section-fold-icon"
                             data-testid="svg-icon"
                             title="Unfold"
                           >
@@ -3571,7 +3571,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
                                   class="c8"
                                 >
                                   <input
-                                    class="c34 c13"
+                                    class="c12 c34"
                                     name="scannerpref0"
                                     type="text"
                                     value="0"

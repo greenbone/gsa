@@ -163,6 +163,7 @@ NvtPreference.propTypes = {
     name: PropTypes.string.isRequired,
     value: PropTypes.any,
     alt: PropTypes.array,
+    type: PropTypes.string,
   }).isRequired,
   value: PropTypes.any,
   onChange: PropTypes.func.isRequired,

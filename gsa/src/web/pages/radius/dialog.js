@@ -46,8 +46,8 @@ const RadiusDialog = ({
   };
   return (
     <SaveDialog
-      buttonTitle={_('OK')}
-      title={_('Edit Authentication')}
+      buttonTitle={_('Save')}
+      title={_('Edit RADIUS Authentication')}
       defaultValues={uncontrolledValues}
       onClose={onClose}
       onSave={onSave}

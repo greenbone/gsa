@@ -27,6 +27,7 @@ import {isDefined} from 'gmp/utils/identity';
 import FilterProvider from 'web/entities/filterprovider';
 
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
+import Reload from 'web/components/loading/reload';
 import withDownload from 'web/components/form/withDownload';
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
 
@@ -40,12 +41,14 @@ import withGmp from 'web/utils/withGmp';
 
 import EntitiesContainer from './container';
 
+const noop = () => {};
+
 const withEntitiesContainer = (
   gmpname,
   {
     entitiesSelector,
     loadEntities,
-    reloadInterval,
+    reloadInterval = noop,
     defaultFilter,
     fallbackFilter,
   },
@@ -59,22 +62,35 @@ const withEntitiesContainer = (
           locationQuery={props.location.query}
         >
           {({filter}) => (
-            <EntitiesContainer
-              {...props}
-              filter={filter}
-              notify={notify}
-              gmpname={gmpname}
-              reloadInterval={reloadInterval}
+            <Reload
+              reloadInterval={() => reloadInterval(props)}
+              reload={(newFilter = filter) => props.loadEntities(newFilter)}
+              name={gmpname}
             >
-              {pageProps => <Component {...pageProps} />}
-            </EntitiesContainer>
+              {({reload}) => (
+                <EntitiesContainer
+                  {...props}
+                  filter={filter}
+                  notify={notify}
+                  gmpname={gmpname}
+                  reload={reload}
+                >
+                  {pageProps => <Component {...pageProps} />}
+                </EntitiesContainer>
+              )}
+            </Reload>
           )}
         </FilterProvider>
       )}
     </SubscriptionProvider>
   );
 
-  const mapStateToProps = (state, {gmp}) => {
+  EntitiesContainerWrapper.propTypes = {
+    filter: PropTypes.filter,
+    loadEntities: PropTypes.func.isRequired,
+  };
+
+  const mapStateToProps = state => {
     const eSelector = entitiesSelector(state);
     const pSelector = getPage(state);
     let filter = pSelector.getFilter(gmpname);
@@ -83,7 +99,6 @@ const withEntitiesContainer = (
     }
     const entities = eSelector.getEntities(filter);
     return {
-      defaultReloadInterval: gmp.reloadInterval,
       entities,
       entitiesCounts: eSelector.getEntitiesCounts(filter),
       entitiesError: eSelector.getEntitiesError(filter),
@@ -98,10 +113,6 @@ const withEntitiesContainer = (
     updateFilter: filter => dispatch(pageFilter(gmpname, filter)),
     onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   });
-
-  EntitiesContainerWrapper.propTypes = {
-    filter: PropTypes.filter,
-  };
 
   EntitiesContainerWrapper = compose(
     withDialogNotification,

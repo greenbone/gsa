@@ -147,7 +147,7 @@ exports[`AutoFpGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c8 {
+.c7 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -180,7 +180,7 @@ exports[`AutoFpGroup tests should render 1`] = `
   align-items: center;
 }
 
-.c7 {
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -263,7 +263,7 @@ exports[`AutoFpGroup tests should render 1`] = `
                 >
                   <input
                     checked=""
-                    class="c10 c8"
+                    class="c7 c10"
                     data-testid="radio-input"
                     name="autofp"
                     type="radio"
@@ -289,7 +289,7 @@ exports[`AutoFpGroup tests should render 1`] = `
                   margin="5px"
                 >
                   <input
-                    class="c10 c8"
+                    class="c7 c10"
                     data-testid="radio-input"
                     name="autofp"
                     type="radio"

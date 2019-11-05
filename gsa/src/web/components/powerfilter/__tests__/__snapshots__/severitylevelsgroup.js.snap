@@ -117,7 +117,7 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c7 {
+.c6 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -128,7 +128,7 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   height: auto;
 }
 
-.c6 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

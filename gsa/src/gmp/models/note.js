@@ -30,8 +30,8 @@ import {
 
 import Nvt from './nvt';
 
-export const NOTE_ACTIVE_UNLIMITED_VALUE = '-2';
-export const NOTE_INACTIVE_VALUE = '-1';
+export const NOTE_ACTIVE_UNLIMITED_VALUE = -2;
+export const NOTE_INACTIVE_VALUE = -1;
 
 class Note extends Model {
   static entityType = 'note';

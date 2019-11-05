@@ -31,7 +31,7 @@ describe('LoadingButton tests', () => {
   });
 
   test('should render loading', () => {
-    const {element} = render(<LoadingButton loading={true} />);
+    const {element} = render(<LoadingButton isLoading={true} />);
 
     expect(element).toMatchSnapshot();
   });
@@ -82,14 +82,14 @@ describe('LoadingButton tests', () => {
     expect(element).toHaveTextContent('bar');
   });
 
-  test('should render non loading', () => {
+  test('should render non loading with title', () => {
     const {element} = render(<LoadingButton title="foo" />);
 
     expect(element).toHaveStyleRule('background', Theme.white);
   });
 
-  test('should render loading', () => {
-    const {element} = render(<LoadingButton title="foo" loading={true} />);
+  test('should render loading with title', () => {
+    const {element} = render(<LoadingButton title="foo" isLoading={true} />);
 
     expect(element).toHaveStyleRule(
       'background',

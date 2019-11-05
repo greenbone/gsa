@@ -264,7 +264,7 @@ const Row = ({entity, links = true}) => {
       <TableData>
         <DateTime date={end} />
       </TableData>
-      <TableData>{result_counts.hole}</TableData>
+      <TableData>{result_counts.high}</TableData>
       <TableData>{result_counts.warning}</TableData>
       <TableData>{result_counts.info}</TableData>
       <TableData>{result_counts.log}</TableData>

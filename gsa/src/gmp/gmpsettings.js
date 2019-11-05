@@ -52,7 +52,7 @@ class GmpSettings {
       manualLanguageMapping,
       protocol = global.location.protocol,
       protocoldocurl = DEFAULT_PROTOCOLDOC_URL,
-      reloadinterval = DEFAULT_RELOAD_INTERVAL,
+      reloadInterval = DEFAULT_RELOAD_INTERVAL,
       server = global.location.host,
       timeout,
       vendorVersion,
@@ -65,7 +65,7 @@ class GmpSettings {
     }
 
     this.loglevel = isDefined(loglevel) ? loglevel : DEFAULT_LOG_LEVEL;
-    this.reloadinterval = reloadinterval;
+    this.reloadInterval = reloadInterval;
     this.timeout = timeout;
 
     setAndFreeze(this, 'disableLoginForm', disableLoginForm);

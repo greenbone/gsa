@@ -35,7 +35,7 @@ exports[`FilterSearchGroup tests should render 1`] = `
   align-items: center;
 }
 
-.c3 {
+.c2 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -49,11 +49,11 @@ exports[`FilterSearchGroup tests should render 1`] = `
   padding: 1px 8px;
 }
 
-.c3:-webkit-autofill {
+.c2:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c2 {
+.c3 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

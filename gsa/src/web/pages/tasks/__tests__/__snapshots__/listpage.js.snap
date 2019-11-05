@@ -75,17 +75,17 @@ exports[`TaskPage ToolBarIcons test should render 1`] = `
   display: inline-flex;
 }
 
-.c3 {
+.c2 {
   cursor: pointer;
 }
 
-.c2 {
+.c3 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c2 * {
+.c3 * {
   height: inherit;
   width: inherit;
 }
@@ -170,7 +170,7 @@ exports[`TaskPage ToolBarIcons test should render 1`] = `
 }
 
 @media print {
-  .c3 {
+  .c2 {
     display: none;
   }
 }
@@ -553,7 +553,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
   align-items: center;
 }
 
-.c73 {
+.c72 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -590,7 +590,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
   margin-left: 5px;
 }
 
-.c16 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -609,14 +609,14 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
   margin-left: -5px;
 }
 
-.c16 > * {
+.c15 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c16 > * {
+.c15 > * {
   margin-left: 5px;
 }
 
@@ -732,7 +732,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
   display: inline-flex;
 }
 
-.c5 {
+.c4 {
   cursor: pointer;
 }
 
@@ -744,13 +744,13 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
   fill: #aaaaaa;
 }
 
-.c4 {
+.c5 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
@@ -788,11 +788,11 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
   position: relative;
 }
 
-.c29 {
+.c28 {
   margin: 0 0 1px 0;
 }
 
-.c28 {
+.c29 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -927,7 +927,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
   background: none;
 }
 
-.c42 {
+.c41 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -953,23 +953,23 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
   flex-shrink: 0;
 }
 
-.c42:hover {
+.c41:hover {
   color: #fff;
   background: #519032;
 }
 
-.c41 {
+.c42 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c41 * {
+.c42 * {
   height: inherit;
   width: inherit;
 }
 
-.c26 {
+.c25 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -994,13 +994,13 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
   cursor: pointer;
 }
 
-.c25 {
+.c26 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c25 * {
+.c26 * {
   height: inherit;
   width: inherit;
 }
@@ -1321,7 +1321,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
   transition: opacity 500ms;
 }
 
-.c20 {
+.c19 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -1335,11 +1335,11 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
   padding: 1px 8px;
 }
 
-.c20:-webkit-autofill {
+.c19:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c19 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1361,7 +1361,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
   margin-right: 5px;
 }
 
-.c15 {
+.c16 {
   margin-right: 5px;
 }
 
@@ -1511,7 +1511,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
   white-space: nowrap;
 }
 
-.c72:hover {
+.c73:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
 }
@@ -1596,7 +1596,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
 }
 
 @media print {
-  .c5 {
+  .c4 {
     display: none;
   }
 }
@@ -1738,7 +1738,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
       class="c0"
     >
       <div
-        class="toolbar c1"
+        class="c1 toolbar"
       >
         <div
           class="c2"
@@ -1853,7 +1853,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
           class="c12"
         >
           <div
-            class="powerfilter c13"
+            class="c13 powerfilter"
           >
             <div
               class="c14"
@@ -1888,7 +1888,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                     class="c2"
                   >
                     <div
-                      class="c16"
+                      class="c15"
                       margin="5px"
                     >
                       <span
@@ -1990,7 +1990,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
         class="entities-section"
       >
         <div
-          class="section-header c27"
+          class="c27 section-header"
         >
           <h2
             class="c28 c29"
@@ -1999,7 +1999,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
               class="c30"
             >
               <span
-                class="c31 c5"
+                class="c4 c31"
                 data-testid="svg-icon"
               >
                 <svg>
@@ -2337,13 +2337,13 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
             </div>
           </div>
           <div
-            class="entities-table c52"
+            class="c52 entities-table"
           >
             <div
               class="c53"
             >
               <span
-                class="c54 c4 c5"
+                class="c4 c5 c54"
                 data-testid="svg-icon"
                 title="Unfold all details"
               >
@@ -2362,7 +2362,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c4 c56"
+                      class="c56 c5"
                       data-testid="svg-icon"
                       title="First"
                     >
@@ -2371,7 +2371,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c4 c56"
+                      class="c56 c5"
                       data-testid="svg-icon"
                       title="Previous"
                     >
@@ -2394,7 +2394,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c4 c56"
+                      class="c56 c5"
                       data-testid="svg-icon"
                       title="Next"
                     >
@@ -2403,7 +2403,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c4 c56"
+                      class="c56 c5"
                       data-testid="svg-icon"
                       title="Last"
                     >
@@ -2585,7 +2585,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                         class="c62"
                       >
                         <a
-                          class="c73"
+                          class="c72"
                           href="/reports?filter=task_id%3D1234%20sort-reverse%3Ddate"
                           title="View list of all reports for Task foo, including unfinished ones"
                         >
@@ -2600,7 +2600,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                     >
                       <span>
                         <a
-                          class="c73"
+                          class="c72"
                           data-testid="details-link"
                           href="/report/1234"
                         >
@@ -2659,7 +2659,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                           </span>
                           <span
                             alt="Resume"
-                            class="c4 c56"
+                            class="c56 c5"
                             data-testid="svg-icon"
                             title="Task is not stopped"
                           >
@@ -2821,7 +2821,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c4 c56"
+                      class="c56 c5"
                       data-testid="svg-icon"
                       title="First"
                     >
@@ -2830,7 +2830,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c4 c56"
+                      class="c56 c5"
                       data-testid="svg-icon"
                       title="Previous"
                     >
@@ -2853,7 +2853,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c4 c56"
+                      class="c56 c5"
                       data-testid="svg-icon"
                       title="Next"
                     >
@@ -2862,7 +2862,7 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c4 c56"
+                      class="c56 c5"
                       data-testid="svg-icon"
                       title="Last"
                     >

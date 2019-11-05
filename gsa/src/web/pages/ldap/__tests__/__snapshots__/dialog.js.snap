@@ -138,7 +138,7 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   border: 1px solid #787878;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -164,23 +164,23 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   flex-shrink: 0;
 }
 
-.c5:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
 
-.c4 {
+.c5 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c23 {
+.c21 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -200,12 +200,12 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c23:focus,
-.c23:hover {
+.c21:focus,
+.c21:hover {
   border: 1px solid #393637;
 }
 
-.c23:hover {
+.c21:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -213,20 +213,20 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c23[disabled] {
+.c21[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c23 img {
+.c21 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c23:link {
+.c21:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -250,13 +250,13 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c21 {
+.c23 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c21:hover {
+.c23:hover {
   color: #fff;
   background: #519032;
 }
@@ -410,7 +410,7 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   padding-right: 10px;
 }
 
-.c18 {
+.c17 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -424,11 +424,11 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   padding: 1px 8px;
 }
 
-.c18:-webkit-autofill {
+.c17:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c17 {
+.c18 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -462,7 +462,7 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   cursor: pointer;
 }
 
-.c16 {
+.c15 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -473,7 +473,7 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   height: auto;
 }
 
-.c15 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -532,7 +532,7 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
               data-testid="dialog-title-bar"
             >
               <span>
-                Edit Authentication
+                Edit LDAP per-User Authentication
               </span>
               <div
                 class="c4 c5"
@@ -677,9 +677,9 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
               <button
                 class="c21 c22 c23"
                 data-testid="dialog-save-button"
-                title="OK"
+                title="Save"
               >
-                OK
+                Save
               </button>
             </div>
           </div>

@@ -36,15 +36,19 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
+import TaskIcon from 'web/components/icon/taskicon';
 import WizardIcon from 'web/components/icon/wizardicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
+import {
+  USE_DEFAULT_RELOAD_INTERVAL,
+  DEFAULT_RELOAD_INTERVAL_ACTIVE,
+} from 'web/components/loading/reload';
+
 import IconMenu from 'web/components/menu/iconmenu';
 import MenuEntry from 'web/components/menu/menuentry';
-
-import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 
 import NewIconMenu from './icons/newiconmenu';
 
@@ -52,7 +56,6 @@ import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import Table from './table';
-import TaskIcon from 'web/components/icon/taskicon';
 
 export const ToolBarIcons = withCapabilities(
   ({
@@ -207,10 +210,10 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const taskReloadInterval = ({entities = [], defaultReloadInterval}) =>
+export const taskReloadInterval = ({entities = []}) =>
   entities.some(task => task.isActive())
     ? DEFAULT_RELOAD_INTERVAL_ACTIVE
-    : defaultReloadInterval;
+    : USE_DEFAULT_RELOAD_INTERVAL;
 
 export default withEntitiesContainer('task', {
   entitiesSelector,

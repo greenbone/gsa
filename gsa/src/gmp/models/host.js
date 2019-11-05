@@ -16,9 +16,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined} from '../utils/identity';
-import {isEmpty} from '../utils/string';
-import {forEach, map} from '../utils/array';
+
+import 'core-js/features/array/find';
+
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
+import {forEach, map} from 'gmp/utils/array';
 
 import {
   parseInt,
@@ -26,7 +29,7 @@ import {
   parseSeverity,
   parseYesNo,
   setProperties,
-} from '../parser';
+} from 'gmp/parser';
 
 import Asset from './asset';
 
@@ -108,6 +111,17 @@ class Host extends Asset {
       delete ret.host;
     } else {
       ret.routes = [];
+    }
+
+    if (isDefined(ret.details) && isDefined(ret.details.best_os_cpe)) {
+      ret.os = ret.details.best_os_cpe.value;
+    } else if (isDefined(ret.identifiers)) {
+      const firstOs = ret.identifiers.find(
+        identifier => identifier.name === 'OS',
+      );
+      ret.os = isDefined(firstOs) ? firstOs.value : undefined;
+    } else {
+      ret.os = undefined;
     }
 
     return ret;

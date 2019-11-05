@@ -98,7 +98,7 @@ const EmptyTrashButton = withCapabilities(
     }
     return (
       <Layout align="end">
-        <LoadingButton onClick={onClick} loading={loading}>
+        <LoadingButton onClick={onClick} isLoading={loading}>
           {_('Empty Trash')}
         </LoadingButton>
       </Layout>

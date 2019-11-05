@@ -30,7 +30,7 @@ describe('UserCommand tests', () => {
               auth_conf_setting: [
                 {
                   key: 'enable',
-                  value: 'true',
+                  value: true,
                 },
               ],
             },
