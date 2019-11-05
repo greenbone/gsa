@@ -25,7 +25,7 @@
   "dependencies": {
     "@babel/core": "^7.6.4",
     "@vx/axis": "^0.0.183",
-    "@vx/gradient": "^0.0.183",
+    "@vx/gradient": "^0.0.192",
     "@vx/shape": "^0.0.179",
     "babel-loader": "8.0.6",
     "core-js": "^3.3.6",
