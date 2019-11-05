@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DatePicker component tests should render 1`] = `
-.c3 {
+.c1 {
   cursor: pointer;
 }
 
@@ -16,11 +16,11 @@ exports[`DatePicker component tests should render 1`] = `
   width: inherit;
 }
 
-.c1 {
+.c3 {
   margin-left: 5px;
 }
 
-.c1:hover {
+.c3:hover {
   cursor: pointer;
 }
 
@@ -34,7 +34,7 @@ exports[`DatePicker component tests should render 1`] = `
 }
 
 @media print {
-  .c3 {
+  .c1 {
     display: none;
   }
 }
@@ -71,12 +71,12 @@ exports[`DatePicker component tests should render 2`] = `
     class="react-datepicker__input-container"
   >
     <div
-      class="sc-iBEsjs jPgHBa"
+      class="sc-hzNEM gqYbXA"
       width="auto"
     >
       2018/11/11
       <span
-        class="sc-LKuAh kEybis sc-jzJRlG lcpYA sc-fjdhpX fEEsMp"
+        class="sc-fjdhpX fEEsMp sc-jzJRlG lcpYA sc-iBEsjs hwafBF"
         data-testid="svg-icon"
       >
         <svg>

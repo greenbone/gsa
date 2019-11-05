@@ -75,13 +75,15 @@ const manualUrl = 'test/';
 
 const currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
 
-const getFilters = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+const getFilters = jest.fn().mockReturnValue(
+  Promise.resolve({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+);
 
 const getConfigs = jest.fn().mockResolvedValue({
   data: [config],
@@ -151,6 +153,8 @@ describe('ScanConfigsPage tests', () => {
       foo: 'bar',
     });
 
+    const renewSession = jest.fn().mockResolvedValue({data: {}});
+
     const gmp = {
       scanconfigs: {
         get: getConfigs,
@@ -162,7 +166,7 @@ describe('ScanConfigsPage tests', () => {
       },
       reloadInterval,
       settings: {manualUrl},
-      user: {currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting, renewSession},
     };
 
     const {render, store} = rendererWith({

@@ -70,13 +70,15 @@ const currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
 
 const getSetting = jest.fn().mockResolvedValue({filter: null});
 
-const getFilters = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+const getFilters = jest.fn().mockReturnValue(
+  Promise.resolve({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+);
 
 const getPolicies = jest.fn().mockResolvedValue({
   data: [policy],
@@ -211,8 +213,9 @@ describe('PoliciesPage ToolBarIcons test', () => {
   test('should render', () => {
     const handlePolicyCreateClick = jest.fn();
     const handlePolicyImportClick = jest.fn();
+    const renewSession = jest.fn().mockResolvedValue({data: {}});
 
-    const gmp = {settings: {manualUrl}};
+    const gmp = {settings: {manualUrl}, user: {renewSession}};
 
     const {render} = rendererWith({
       gmp,
@@ -242,7 +245,9 @@ describe('PoliciesPage ToolBarIcons test', () => {
     const handlePolicyCreateClick = jest.fn();
     const handlePolicyImportClick = jest.fn();
 
-    const gmp = {settings: {manualUrl}};
+    const renewSession = jest.fn().mockResolvedValue({data: {}});
+
+    const gmp = {settings: {manualUrl}, user: {renewSession}};
 
     const {render} = rendererWith({
       gmp,

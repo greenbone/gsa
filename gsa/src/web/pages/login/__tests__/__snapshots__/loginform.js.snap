@@ -77,7 +77,7 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   align-items: center;
 }
 
-.c16 {
+.c15 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -97,12 +97,12 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   z-index: 1;
 }
 
-.c16:focus,
-.c16:hover {
+.c15:focus,
+.c15:hover {
   border: 1px solid #393637;
 }
 
-.c16:hover {
+.c15:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -110,26 +110,26 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   color: #fff;
 }
 
-.c16[disabled] {
+.c15[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c16 img {
+.c15 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c16:link {
+.c15:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c15 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -217,7 +217,7 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   margin-left: 33.33333333%;
 }
 
-.c12 {
+.c11 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -231,11 +231,11 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   padding: 1px 8px;
 }
 
-.c12:-webkit-autofill {
+.c11:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c11 {
+.c12 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

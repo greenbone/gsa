@@ -119,7 +119,7 @@ exports[`LoginPagetests should render Loginpage 1`] = `
   height: 42px;
 }
 
-.c26 {
+.c25 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -139,12 +139,12 @@ exports[`LoginPagetests should render Loginpage 1`] = `
   z-index: 1;
 }
 
-.c26:focus,
-.c26:hover {
+.c25:focus,
+.c25:hover {
   border: 1px solid #393637;
 }
 
-.c26:hover {
+.c25:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -152,26 +152,26 @@ exports[`LoginPagetests should render Loginpage 1`] = `
   color: #fff;
 }
 
-.c26[disabled] {
+.c25[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c26 img {
+.c25 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c26:link {
+.c25:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c25 {
+.c26 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -259,7 +259,7 @@ exports[`LoginPagetests should render Loginpage 1`] = `
   margin-left: 33.33333333%;
 }
 
-.c22 {
+.c21 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -273,11 +273,11 @@ exports[`LoginPagetests should render Loginpage 1`] = `
   padding: 1px 8px;
 }
 
-.c22:-webkit-autofill {
+.c21:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c21 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -510,7 +510,7 @@ exports[`LoginPagetests should render Loginpage 1`] = `
           class="c8"
         />
         <div
-          class="login c9"
+          class="c9 login"
         >
           <img
             alt="Greenbone Security Assistant"

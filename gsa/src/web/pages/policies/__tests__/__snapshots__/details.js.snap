@@ -103,7 +103,7 @@ exports[`Policy Details tests should render full Details 1`] = `
   display: inline-flex;
 }
 
-.c2 {
+.c1 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -111,11 +111,11 @@ exports[`Policy Details tests should render full Details 1`] = `
   table-layout: auto;
 }
 
-.c1 td {
+.c2 td {
   padding: 4px 4px 4px 0;
 }
 
-.c1 tr td:first-child {
+.c2 tr td:first-child {
   padding-right: 5px;
 }
 
@@ -128,7 +128,7 @@ exports[`Policy Details tests should render full Details 1`] = `
 }
 
 @media print {
-  .c2 {
+  .c1 {
     border-collapse: collapse;
   }
 }

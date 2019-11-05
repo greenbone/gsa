@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Improve Delta Report Details [#1748](https://github.com/greenbone/gsa/pull/1748)
+- Update node dependencies to latest releases [#1735](https://github.com/greenbone/gsa/pull/1735)
 - If details not defined, then choose first OS from identifiers [#1719](https://github.com/greenbone/gsa/pull/1719)
 - Sorting of SecInfo items [#1717](https://github.com/greenbone/gsa/pull/1717))
 - Disable edit PowerFilter icon if isLoading [#1714](https://github.com/greenbone/gsa/pull/1714)
@@ -34,6 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Add statereducer function to Select component: Scrolls to last selected item [#1715](https://github.com/greenbone/gsa/pull/1715)
+- Add loading indicator to select [#1716](https://github.com/greenbone/gsa/pull/1716)
 - Add loading indicator to svg icon [#1701](https://github.com/greenbone/gsa/pull/1701)
 - Update German Translation [#1689](https://github.com/greenbone/gsa/pull/1689)
 - List NVT of the found CVEs at the report details page [#1673](https://github.com/greenbone/gsa/pull/1673)
@@ -137,6 +139,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Do not simplify filterString in content composer for report download [#1733](https://github.com/greenbone/gsa/pull/1733)
+- Use single component for reloading data [#1722](https://github.com/greenbone/gsa/pull/1722)
+- Use last chars of a label string in BarChart [#1713](https://github.com/greenbone/gsa/pull/1713)
+- Next Scheduled Tasks displays timezone [#1712](https://github.com/greenbone/gsa/pull/1712)
+- Load "small" report before full report [#1697](https://github.com/greenbone/gsa/pull/1697)
 - Removed Clone and Verify functionalities for report formats [#1650](https://github.com/greenbone/gsa/pull/1650)
 - Use new [React context API](https://reactjs.org/docs/context.html#api) [#1637](https://github.com/greenbone/gsa/pull/1637)
 - Update response data parsing in Model classes
@@ -157,6 +164,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Fixed filtering general command permissions in roles [#1734](https://github.com/greenbone/gsa/pull/1734)
+- Fix getting details in delta report [#1732](https://github.com/greenbone/gsa/pull/1732)
+- Include results (details=1) in report download [#1731](https://github.com/greenbone/gsa/pull/1731)
+- Fixed High column in hosts table fo reports [#1730](https://github.com/greenbone/gsa/pull/1730)
+- Fix setting the user default filter in report results [#1699](https://github.com/greenbone/gsa/pull/1699)
 - Use new model construction in some commands [#1665](https://github.com/greenbone/gsa/pull/1665)
 - Fixed auth_method preselection for user dialog [#1661](https://github.com/greenbone/gsa/pull/1661)
 - Fixed userId, roleId and groupId not rendering in create entity permissions dialog [#1658](https://github.com/greenbone/gsa/pull/1658)

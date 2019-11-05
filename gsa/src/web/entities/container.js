@@ -48,14 +48,11 @@ import {getUsername} from 'web/store/usersettings/selectors';
 
 import compose from 'web/utils/compose';
 
-import {LOAD_TIME_FACTOR} from 'web/utils/constants';
 import PropTypes from 'web/utils/proptypes';
 import {generateFilename} from 'web/utils/render';
 import SelectionType from 'web/utils/selectiontype';
 
 import SortBy from 'web/components/sortby/sortby';
-
-import {handleDefaultReloadIntervalFunc} from 'web/entity/container';
 
 import TagDialog from 'web/pages/tags/dialog';
 
@@ -104,7 +101,6 @@ class EntitiesContainer extends React.Component {
     this.handleSelected = this.handleSelected.bind(this);
     this.handleSelectionTypeChange = this.handleSelectionTypeChange.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
-    this.handleTimer = this.handleTimer.bind(this);
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
     this.handleFilterRemoved = this.handleFilterRemoved.bind(this);
@@ -143,10 +139,9 @@ class EntitiesContainer extends React.Component {
   componentDidMount() {
     this.isRunning = true;
 
-    const {filter} = this.props;
-
     this.props.loadSettings();
-    this.load(filter);
+
+    this.updateFilter(this.props.filter);
   }
 
   componentDidUpdate() {
@@ -158,127 +153,26 @@ class EntitiesContainer extends React.Component {
       filter.get('first') !== 1
     ) {
       // goto first page if first exceeds the last page
-      this.load(filter.first());
+      this.updateFilter(filter.first());
     }
-  }
-
-  componentWillUnmount() {
-    this.isRunning = false;
-    this.clearTimer(); // remove possible running timer
   }
 
   handleInteraction() {
     this.props.onInteraction();
   }
 
-  load(filter) {
-    const {updateFilter, loadEntities} = this.props;
-
-    log.debug('Loading', {filter});
-
-    this.clearTimer();
-
-    this.startMeasurement();
+  updateFilter(filter) {
+    const {updateFilter} = this.props;
 
     updateFilter(filter);
 
-    loadEntities(filter).then(() => this.startTimer());
-  }
-
-  reload() {
-    // reload data from backend
-    this.load(this.props.filter);
-  }
-
-  startMeasurement() {
-    this.startTimeStamp = performance.now();
-  }
-
-  endMeasurement() {
-    if (!isDefined(this.startTimeStamp)) {
-      return 0;
-    }
-
-    const duration = performance.now() - this.startTimeStamp;
-    this.startTimeStamp = undefined;
-    return duration;
-  }
-
-  getReloadInterval() {
-    const {defaultReloadInterval, reloadInterval} = this.props;
-
-    return isDefined(reloadInterval)
-      ? handleDefaultReloadIntervalFunc(reloadInterval)(this.props)
-      : defaultReloadInterval;
-  }
-
-  startTimer() {
-    if (!this.isRunning || isDefined(this.timer)) {
-      log.debug('Not starting timer', {
-        isRunning: this.isRunning,
-        timer: this.timer,
-      });
-      return;
-    }
-
-    const loadTime = this.endMeasurement();
-
-    log.debug('Loading time was', loadTime, 'milliseconds');
-
-    let interval = this.getReloadInterval();
-    if (interval <= 0) {
-      log.debug('No reload timer will be started.');
-      return;
-    }
-
-    if (loadTime > interval) {
-      // ensure timer is longer then the loading procedure
-      interval = loadTime * LOAD_TIME_FACTOR;
-    }
-
-    this.timer = global.setTimeout(this.handleTimer, interval);
-
-    log.debug(
-      'Started reload timer with id',
-      this.timer,
-      'and interval of',
-      interval,
-      'milliseconds for',
-      this.props.gmpname,
-    );
-  }
-
-  resetTimer() {
-    this.timer = undefined;
-  }
-
-  clearTimer() {
-    if (isDefined(this.timer)) {
-      log.debug(
-        'Clearing reload timer with id',
-        this.timer,
-        'for',
-        this.props.gmpname,
-      );
-
-      global.clearTimeout(this.timer);
-
-      this.resetTimer();
-    }
-  }
-
-  handleTimer() {
-    log.debug('Timer', this.timer, 'finished. Reloading data.');
-
-    this.resetTimer();
-
-    this.notifyTimer();
-    this.reload();
+    this.props.reload(filter);
   }
 
   handleChanged() {
     this.notifyChanged();
-    this.reload();
+
+    this.props.reload();
   }
 
   handleSelectionTypeChange(selectionType) {
@@ -387,7 +281,7 @@ class EntitiesContainer extends React.Component {
   }
 
   changeFilter(filter) {
-    this.load(filter);
+    this.updateFilter(filter);
     this.handleInteraction();
   }
 
@@ -582,7 +476,6 @@ class EntitiesContainer extends React.Component {
     const {
       children,
       isLoading,
-      filter,
       onDownload,
       showErrorMessage,
       showSuccessMessage,
@@ -685,22 +578,19 @@ class EntitiesContainer extends React.Component {
 
 EntitiesContainer.propTypes = {
   children: PropTypes.func.isRequired,
-  defaultReloadInterval: PropTypes.number.isRequired,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
   entitiesError: PropTypes.error,
-  extraLoadParams: PropTypes.object,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   gmpname: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
   listExportFileName: PropTypes.string,
-  loadEntities: PropTypes.func.isRequired,
   loadSettings: PropTypes.func.isRequired,
   loadedFilter: PropTypes.filter,
   notify: PropTypes.func.isRequired,
-  reloadInterval: PropTypes.func,
+  reload: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,

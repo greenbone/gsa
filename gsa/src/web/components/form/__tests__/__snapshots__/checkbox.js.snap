@@ -69,7 +69,7 @@ exports[`CheckBox component tests should render with children 1`] = `
   cursor: pointer;
 }
 
-.c4 {
+.c3 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -80,7 +80,7 @@ exports[`CheckBox component tests should render with children 1`] = `
   height: auto;
 }
 
-.c3 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

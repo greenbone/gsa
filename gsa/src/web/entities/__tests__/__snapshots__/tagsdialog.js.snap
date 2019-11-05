@@ -93,17 +93,17 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   display: inline-flex;
 }
 
-.c21 {
+.c20 {
   cursor: pointer;
 }
 
-.c20 {
+.c21 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c20 * {
+.c21 * {
   height: inherit;
   width: inherit;
 }
@@ -175,7 +175,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   border: 1px solid #787878;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -201,23 +201,23 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   flex-shrink: 0;
 }
 
-.c5:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
 
-.c4 {
+.c5 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c25 {
+.c23 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -237,12 +237,12 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   z-index: 1;
 }
 
-.c25:focus,
-.c25:hover {
+.c23:focus,
+.c23:hover {
   border: 1px solid #393637;
 }
 
-.c25:hover {
+.c23:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -250,20 +250,20 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   color: #fff;
 }
 
-.c25[disabled] {
+.c23[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c25 img {
+.c23 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c25:link {
+.c23:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -287,13 +287,13 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   align-items: center;
 }
 
-.c23 {
+.c25 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c23:hover {
+.c25:hover {
   color: #fff;
   background: #519032;
 }
@@ -447,7 +447,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   padding-right: 10px;
 }
 
-.c19 {
+.c18 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -472,13 +472,13 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   cursor: pointer;
 }
 
-.c18 {
+.c19 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c18 * {
+.c19 * {
   height: inherit;
   width: inherit;
 }
@@ -541,7 +541,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
 }
 
 @media print {
-  .c21 {
+  .c20 {
     display: none;
   }
 }
@@ -809,17 +809,17 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   display: inline-flex;
 }
 
-.c21 {
+.c20 {
   cursor: pointer;
 }
 
-.c20 {
+.c21 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c20 * {
+.c21 * {
   height: inherit;
   width: inherit;
 }
@@ -891,7 +891,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   border: 1px solid #787878;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -917,23 +917,23 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   flex-shrink: 0;
 }
 
-.c5:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
 
-.c4 {
+.c5 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c25 {
+.c23 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -953,12 +953,12 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c25:focus,
-.c25:hover {
+.c23:focus,
+.c23:hover {
   border: 1px solid #393637;
 }
 
-.c25:hover {
+.c23:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -966,20 +966,20 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c25[disabled] {
+.c23[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c25 img {
+.c23 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c25:link {
+.c23:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -1003,13 +1003,13 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c23 {
+.c25 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c23:hover {
+.c25:hover {
   color: #fff;
   background: #519032;
 }
@@ -1163,7 +1163,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   padding-right: 10px;
 }
 
-.c19 {
+.c18 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -1188,13 +1188,13 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   cursor: pointer;
 }
 
-.c18 {
+.c19 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c18 * {
+.c19 * {
   height: inherit;
   width: inherit;
 }
@@ -1256,7 +1256,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
 }
 
 @media print {
-  .c21 {
+  .c20 {
     display: none;
   }
 }

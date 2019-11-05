@@ -8012,9 +8012,10 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
             }
           g_strfreev (splits);
 
-          value = preference->value_size ? g_base64_encode (
-                    (guchar *) preference->value, preference->value_size)
-                                         : g_strdup ("");
+          value = preference->value_size
+                    ? g_base64_encode ((guchar *) preference->value,
+                                       preference->value_size)
+                    : g_strdup ("");
 
           if (is_timeout)
             {
@@ -8466,6 +8467,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   gchar *fname_format;
   const gchar *extension, *requested_content_type;
 
+  details = params_value_bool (params, "details");
   ignore_pagination = params_value_bool (params, "ignore_pagination");
   lean = params_value_bool (params, "lean");
 
@@ -8487,17 +8489,17 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   ret = gvm_connection_sendf_xml (
     connection,
     "<get_reports"
+    " details=\"%d\""
     " ignore_pagination=\"%d\""
     " lean=\"%d\""
     " filter=\"%s\""
     " filt_id=\"%s\""
     " report_id=\"%s\""
     " delta_report_id=\"%s\""
-    " details=\"%d\""
     " format_id=\"%s\"/>",
-    ignore_pagination, lean, filter, filter_id ? filter_id : FILT_ID_NONE,
-    report_id, delta_report_id ? delta_report_id : "0", details,
-    format_id ? format_id : "");
+    details, ignore_pagination, lean, filter,
+    filter_id ? filter_id : FILT_ID_NONE, report_id,
+    delta_report_id ? delta_report_id : "0", format_id ? format_id : "");
 
   if (ret == -1)
     {
@@ -9690,7 +9692,8 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
         new_severity = params_value (params, "new_severity_from_list");
       else if (params_original_value (params, "new_severity_from_list") == NULL
                || strcmp (
-                 params_original_value (params, "new_severity_from_list"), ""))
+                    params_original_value (params, "new_severity_from_list"),
+                    ""))
         new_severity = NULL;
       else
         new_severity = "";

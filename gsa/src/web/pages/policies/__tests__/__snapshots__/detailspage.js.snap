@@ -267,17 +267,17 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   display: inline-flex;
 }
 
-.c6 {
+.c5 {
   cursor: pointer;
 }
 
-.c5 {
+.c6 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c5 * {
+.c6 * {
   height: inherit;
   width: inherit;
 }
@@ -315,11 +315,11 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   position: relative;
 }
 
-.c10 {
+.c9 {
   margin: 0 0 1px 0;
 }
 
-.c9 {
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -464,7 +464,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   margin-bottom: 15px;
 }
 
-.c26 {
+.c25 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -472,11 +472,11 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   table-layout: auto;
 }
 
-.c25 td {
+.c26 td {
   padding: 4px 4px 4px 0;
 }
 
-.c25 tr td:first-child {
+.c26 tr td:first-child {
   padding-right: 5px;
 }
 
@@ -522,13 +522,13 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
 }
 
 @media print {
-  .c6 {
+  .c5 {
     display: none;
   }
 }
 
 @media print {
-  .c26 {
+  .c25 {
     border-collapse: collapse;
   }
 }
@@ -537,7 +537,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   class="c0"
 >
   <div
-    class="toolbar c1"
+    class="c1 toolbar"
   >
     <div
       class="c2"
@@ -636,7 +636,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
     class="entity-section"
   >
     <div
-      class="section-header c8"
+      class="c8 section-header"
     >
       <h2
         class="c9 c10"
@@ -645,7 +645,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
           class="c11"
         >
           <span
-            class="c12 c6"
+            class="c5 c12"
             data-testid="svg-icon"
           >
             <svg>
@@ -968,23 +968,23 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
   display: inline-flex;
 }
 
-.c4 {
+.c3 {
   cursor: pointer;
 }
 
-.c3 {
+.c4 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c3 * {
+.c4 * {
   height: inherit;
   width: inherit;
 }
 
 @media print {
-  .c4 {
+  .c3 {
     display: none;
   }
 }

@@ -5,7 +5,7 @@ exports[`GlobalStyles tests should render global styles 1`] = `
   <head>
     <style
       data-styled=""
-      data-styled-version="4.3.2"
+      data-styled-version="4.4.1"
     >
       
       
@@ -131,7 +131,7 @@ exports[`GlobalStyles tests should render global styles 1`] = `
     </style>
     <style
       data-styled=""
-      data-styled-version="4.3.2"
+      data-styled-version="4.4.1"
     >
       
       
@@ -257,7 +257,7 @@ exports[`GlobalStyles tests should render global styles 1`] = `
     </style>
     <style
       data-styled=""
-      data-styled-version="4.3.2"
+      data-styled-version="4.4.1"
     >
       
       
@@ -383,7 +383,7 @@ exports[`GlobalStyles tests should render global styles 1`] = `
     </style>
     <style
       data-styled=""
-      data-styled-version="4.3.2"
+      data-styled-version="4.4.1"
     >
       
       
@@ -509,7 +509,7 @@ exports[`GlobalStyles tests should render global styles 1`] = `
     </style>
     <style
       data-styled=""
-      data-styled-version="4.3.2"
+      data-styled-version="4.4.1"
     >
       
       
@@ -635,7 +635,7 @@ exports[`GlobalStyles tests should render global styles 1`] = `
     </style>
     <style
       data-styled=""
-      data-styled-version="4.3.2"
+      data-styled-version="4.4.1"
     >
       
       
@@ -761,7 +761,7 @@ exports[`GlobalStyles tests should render global styles 1`] = `
     </style>
     <style
       data-styled=""
-      data-styled-version="4.3.2"
+      data-styled-version="4.4.1"
     >
       
       
@@ -790,6 +790,9 @@ exports[`GlobalStyles tests should render global styles 1`] = `
 
       
 /* sc-component-id: sc-iYUSvU */
+
+      
+/* sc-component-id: sc-cHSUfg */
 
       
 /* sc-component-id: sc-global-2342249302 */

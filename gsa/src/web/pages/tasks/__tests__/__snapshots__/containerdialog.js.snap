@@ -86,7 +86,7 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   border: 1px solid #787878;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -112,23 +112,23 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   flex-shrink: 0;
 }
 
-.c5:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
 
-.c4 {
+.c5 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c17 {
+.c15 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -148,12 +148,12 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   z-index: 1;
 }
 
-.c17:focus,
-.c17:hover {
+.c15:focus,
+.c15:hover {
   border: 1px solid #393637;
 }
 
-.c17:hover {
+.c15:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -161,20 +161,20 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   color: #fff;
 }
 
-.c17[disabled] {
+.c15[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c17 img {
+.c15 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c17:link {
+.c15:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -198,13 +198,13 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   align-items: center;
 }
 
-.c15 {
+.c17 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c15:hover {
+.c17:hover {
   color: #fff;
   background: #519032;
 }
@@ -358,7 +358,7 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   padding-right: 10px;
 }
 
-.c13 {
+.c12 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -372,11 +372,11 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   padding: 1px 8px;
 }
 
-.c13:-webkit-autofill {
+.c12:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c12 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -684,7 +684,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   border: 1px solid #787878;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -710,23 +710,23 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   flex-shrink: 0;
 }
 
-.c5:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
 
-.c4 {
+.c5 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c29 {
+.c27 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -746,12 +746,12 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   z-index: 1;
 }
 
-.c29:focus,
-.c29:hover {
+.c27:focus,
+.c27:hover {
   border: 1px solid #393637;
 }
 
-.c29:hover {
+.c27:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -759,20 +759,20 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   color: #fff;
 }
 
-.c29[disabled] {
+.c27[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c29 img {
+.c27 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c29:link {
+.c27:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -796,13 +796,13 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   align-items: center;
 }
 
-.c27 {
+.c29 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c27:hover {
+.c29:hover {
   color: #fff;
   background: #519032;
 }
@@ -977,7 +977,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   padding-right: 10px;
 }
 
-.c13 {
+.c12 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -991,11 +991,11 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   padding: 1px 8px;
 }
 
-.c13:-webkit-autofill {
+.c12:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c12 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1033,7 +1033,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   cursor: pointer;
 }
 
-.c19 {
+.c18 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -1048,7 +1048,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   opacity: 1;
 }
 
-.c18 {
+.c19 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

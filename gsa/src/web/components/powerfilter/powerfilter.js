@@ -179,6 +179,7 @@ class PowerFilter extends React.Component {
       filter,
       filters,
       isLoading = false,
+      isLoadingFilters,
       onEditClick,
       onRemoveClick,
       onResetClick,
@@ -243,6 +244,7 @@ class PowerFilter extends React.Component {
           {capabilities.mayAccess('filters') && (
             <Select
               items={renderSelectItems(filters, DEFAULT_FILTER_ID)}
+              isLoading={isLoadingFilters}
               menuPosition="right"
               toolTipTitle={_('Loaded filter')}
               value={
@@ -267,6 +269,7 @@ PowerFilter.propTypes = {
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool,
+  isLoadingFilters: PropTypes.bool,
   onEditClick: PropTypes.func,
   onError: PropTypes.func,
   onFilterCreated: PropTypes.func,

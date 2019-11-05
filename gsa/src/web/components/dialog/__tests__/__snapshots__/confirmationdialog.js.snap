@@ -50,7 +50,7 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   border: 1px solid #787878;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -76,23 +76,23 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   flex-shrink: 0;
 }
 
-.c5:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
 
-.c4 {
+.c5 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c11 {
+.c9 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -112,12 +112,12 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   z-index: 1;
 }
 
-.c11:focus,
-.c11:hover {
+.c9:focus,
+.c9:hover {
   border: 1px solid #393637;
 }
 
-.c11:hover {
+.c9:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -125,20 +125,20 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   color: #fff;
 }
 
-.c11[disabled] {
+.c9[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c11 img {
+.c9 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c11:link {
+.c9:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -162,13 +162,13 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   align-items: center;
 }
 
-.c9 {
+.c11 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c9:hover {
+.c11:hover {
   color: #fff;
   background: #519032;
 }

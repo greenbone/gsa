@@ -20,6 +20,6 @@ exports[`Toolbar tests should render 1`] = `
 }
 
 <div
-  class="toolbar c0"
+  class="c0 toolbar"
 />
 `;

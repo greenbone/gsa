@@ -1,27 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Entity DeleteIcon component tests should deactivate if wrong command level permissions are given 1`] = `
-.c1 {
+.c0 {
   cursor: pointer;
 }
 
-.c1 svg path {
+.c0 svg path {
   fill: #aaaaaa;
 }
 
-.c0 {
+.c1 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c0 * {
+.c1 * {
   height: inherit;
   width: inherit;
 }
 
 @media print {
-  .c1 {
+  .c0 {
     display: none;
   }
 }
@@ -38,27 +38,27 @@ exports[`Entity DeleteIcon component tests should deactivate if wrong command le
 `;
 
 exports[`Entity DeleteIcon component tests should deactivate if wrong resource level permissions are given 1`] = `
-.c1 {
+.c0 {
   cursor: pointer;
 }
 
-.c1 svg path {
+.c0 svg path {
   fill: #aaaaaa;
 }
 
-.c0 {
+.c1 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c0 * {
+.c1 * {
   height: inherit;
   width: inherit;
 }
 
 @media print {
-  .c1 {
+  .c0 {
     display: none;
   }
 }
@@ -75,23 +75,23 @@ exports[`Entity DeleteIcon component tests should deactivate if wrong resource l
 `;
 
 exports[`Entity DeleteIcon component tests should render in active state with correct permissions 1`] = `
-.c1 {
+.c0 {
   cursor: pointer;
 }
 
-.c0 {
+.c1 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c0 * {
+.c1 * {
   height: inherit;
   width: inherit;
 }
 
 @media print {
-  .c1 {
+  .c0 {
     display: none;
   }
 }

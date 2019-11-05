@@ -673,6 +673,12 @@ class TaskComponent extends React.Component {
     const {
       alerts,
       credentials,
+      isLoadingAlerts,
+      isLoadingConfigs,
+      isLoadingScanners,
+      isLoadingSchedules,
+      isLoadingTargets,
+      isLoadingTags,
       scanConfigs,
       scanners,
       schedules,
@@ -793,6 +799,12 @@ class TaskComponent extends React.Component {
                               hosts_ordering={hosts_ordering}
                               id={id}
                               in_assets={in_assets}
+                              isLoadingAlerts={isLoadingAlerts}
+                              isLoadingConfigs={isLoadingConfigs}
+                              isLoadingScanners={isLoadingScanners}
+                              isLoadingSchedules={isLoadingSchedules}
+                              isLoadingTargets={isLoadingTargets}
+                              isLoadingTags={isLoadingTags}
                               max_checks={max_checks}
                               max_hosts={max_hosts}
                               min_qod={min_qod}
@@ -928,6 +940,12 @@ TaskComponent.propTypes = {
   defaultSshCredential: PropTypes.id,
   defaultTargetId: PropTypes.id,
   gmp: PropTypes.gmp.isRequired,
+  isLoadingAlerts: PropTypes.bool,
+  isLoadingConfigs: PropTypes.bool,
+  isLoadingScanners: PropTypes.bool,
+  isLoadingSchedules: PropTypes.bool,
+  isLoadingTags: PropTypes.bool,
+  isLoadingTargets: PropTypes.bool,
   loadAlerts: PropTypes.func.isRequired,
   loadCredentials: PropTypes.func.isRequired,
   loadScanConfigs: PropTypes.func.isRequired,
@@ -999,6 +1017,12 @@ const mapStateToProps = rootState => {
     defaultSshCredential: userDefaults.getValueByName('defaultsshcredential'),
     defaultSmbCredential: userDefaults.getValueByName('defaultsmbcredential'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
+    isLoadingAlerts: alertSel.isLoadingAllEntities(ALL_FILTER),
+    isLoadingConfigs: scanConfigsSel.isLoadingAllEntities(ALL_FILTER),
+    isLoadingScanners: scannersSel.isLoadingAllEntities(ALL_FILTER),
+    isLoadingSchedules: scheduleSel.isLoadingAllEntities(ALL_FILTER),
+    isLoadingTags: tagsSel.isLoadingAllEntities(ALL_FILTER),
+    isLoadingTargets: targetSel.isLoadingAllEntities(ALL_FILTER),
     scanConfigs: scanConfigsSel.getEntities(ALL_FILTER),
     scanners: scannersSel.getEntities(ALL_FILTER),
     schedules: scheduleSel.getEntities(ALL_FILTER),

@@ -1,23 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`UploadIcon component tests should render 1`] = `
-.c1 {
+.c0 {
   cursor: pointer;
 }
 
-.c0 {
+.c1 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c0 * {
+.c1 * {
   height: inherit;
   width: inherit;
 }
 
 @media print {
-  .c1 {
+  .c0 {
     display: none;
   }
 }

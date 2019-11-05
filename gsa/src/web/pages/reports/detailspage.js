@@ -35,9 +35,12 @@ import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import withDownload from 'web/components/form/withDownload';
 
-import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
+import Reload, {
+  DEFAULT_RELOAD_INTERVAL_ACTIVE,
+  NO_RELOAD,
+} from 'web/components/loading/reload';
 
-import {handleDefaultReloadIntervalFunc} from 'web/entity/container';
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
 
 import FilterProvider from 'web/entities/filterprovider';
 
@@ -56,7 +59,8 @@ import {
 import {
   loadDeltaReport,
   deltaSelector,
-  loadEntity as loadReport,
+  loadEntity as loadReportEntityWithStore,
+  loadEntityIfNeeded as loadReportEntityWithStoreIfNeeded,
   selector as reportSelector,
 } from 'web/store/entities/reports';
 
@@ -77,10 +81,6 @@ import {
 } from 'web/store/usersettings/selectors';
 
 import {create_pem_certificate} from 'web/utils/cert';
-import {
-  DEFAULT_RELOAD_INTERVAL_ACTIVE,
-  LOAD_TIME_FACTOR,
-} from 'web/utils/constants';
 import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
@@ -111,17 +111,12 @@ const getFilter = (entity = {}) => {
   return report.filter;
 };
 
-const reloadReportFunc = ({entity}) =>
-  isDefined(entity) && isActive(entity.report.scan_run_status)
-    ? DEFAULT_RELOAD_INTERVAL_ACTIVE
-    : 0; // report doesn't change anymore. no need to reload
-
 class ReportDetails extends React.Component {
   constructor(...args) {
     super(...args);
 
     this.state = {
-      activeTab: 1,
+      activeTab: 0,
       showFilterDialog: false,
       showDownloadReportDialog: false,
       sorting: {
@@ -182,7 +177,6 @@ class ReportDetails extends React.Component {
     this.handleFilterResetClick = this.handleFilterResetClick.bind(this);
     this.handleRemoveFromAssets = this.handleRemoveFromAssets.bind(this);
     this.handleReportDownload = this.handleReportDownload.bind(this);
-    this.handleTimer = this.handleTimer.bind(this);
     this.handleTlsCertificateDownload = this.handleTlsCertificateDownload.bind(
       this,
     );
@@ -199,23 +193,13 @@ class ReportDetails extends React.Component {
   }
 
   componentDidMount() {
-    this.isRunning = true;
-
-    this.load();
-
     this.props.loadSettings();
     this.props.loadFilters();
     this.props.loadReportFormats();
     this.props.loadReportComposerDefaults();
   }
 
-  componentWillUnmount() {
-    this.isRunning = false;
-
-    this.clearTimer();
-  }
-
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const {reportFormats} = this.props;
     if (
       !isDefined(this.state.reportFormatId) &&
@@ -233,53 +217,24 @@ class ReportDetails extends React.Component {
     }
 
     if (
-      this.state.reportId !== this.props.reportId ||
-      this.state.deltaReportId !== this.props.deltaReportId
+      prevProps.reportId !== this.props.reportId ||
+      prevProps.deltaReportId !== this.props.deltaReportId
     ) {
       this.load();
     }
   }
 
-  startDurationMeasurement() {
-    this.startTimeStamp = performance.now();
-  }
-
-  endDurationMeasurement() {
-    if (!isDefined(this.startTimeStamp)) {
-      return 0;
-    }
-
-    const duration = performance.now() - this.startTimeStamp;
-    this.startTimeStamp = undefined;
-    return duration;
-  }
-
-  load(filter = this.props.filter) {
-    const {reportId, deltaReportId} = this.props;
-
-    if (!isDefined(filter)) {
-      filter = DEFAULT_FILTER;
-    }
-
+  load(filter) {
     log.debug('Loading report', {
-      reportId,
-      deltaReportId,
       filter,
     });
 
-    this.clearTimer();
-
-    this.startDurationMeasurement();
-
     this.setState(({lastFilter}) => ({
-      reportId,
-      deltaReportId,
       isUpdating: hasValue(lastFilter) && !lastFilter.equals(filter), // show update indicator if filter has changed
       lastFilter: filter,
     }));
 
-    this.props.loadReport(reportId, deltaReportId, filter).then(() => {
-      this.startTimer();
+    this.props.reload(filter).then(() => {
       this.setState({isUpdating: false});
     });
   }
@@ -287,67 +242,6 @@ class ReportDetails extends React.Component {
   reload() {
     // reload data from backend
     this.load(this.state.lastFilter);
-  }
-
-  getReloadInterval() {
-    return handleDefaultReloadIntervalFunc(reloadReportFunc)(this.props);
-  }
-
-  startTimer() {
-    if (!this.isRunning || isDefined(this.timer)) {
-      log.debug('Not starting timer', {
-        isRunning: this.isRunning,
-        timer: this.timer,
-      });
-      return;
-    }
-
-    const loadTime = this.endDurationMeasurement();
-
-    log.debug('Loading time was', loadTime, 'milliseconds');
-
-    let interval = this.getReloadInterval();
-
-    if (interval <= 0) {
-      log.debug('No reload timer will be started.');
-      return;
-    }
-
-    if (loadTime > interval) {
-      // ensure timer is longer then the loading procedure
-      interval = loadTime * LOAD_TIME_FACTOR;
-    }
-
-    this.timer = global.setTimeout(this.handleTimer, interval);
-    log.debug(
-      'Started reload timer with id',
-      this.timer,
-      'and interval of',
-      interval,
-      'milliseconds',
-    );
-  }
-
-  resetTimer() {
-    this.timer = undefined;
-  }
-
-  clearTimer() {
-    if (isDefined(this.timer)) {
-      log.debug('Clearing reload timer with id', this.timer);
-
-      this.resetTimer();
-
-      global.clearTimeout(this.timer);
-    }
-  }
-
-  handleTimer() {
-    log.debug('Timer', this.timer, 'finished. Reloading data.');
-
-    this.resetTimer();
-
-    this.reload();
   }
 
   handleChanged() {
@@ -691,12 +585,10 @@ class ReportDetails extends React.Component {
 }
 
 ReportDetails.propTypes = {
-  defaultReloadInterval: PropTypes.number,
   defaultResultFilter: PropTypes.filter,
   deltaReportId: PropTypes.id,
   entity: PropTypes.model,
   entityError: PropTypes.object,
-  filter: PropTypes.filter,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool.isRequired,
@@ -704,15 +596,18 @@ ReportDetails.propTypes = {
   loadReport: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
+  loadReportIfNeeded: PropTypes.func.isRequired,
   loadSettings: PropTypes.func.isRequired,
   loadTarget: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  reload: PropTypes.func.isRequired,
   reportComposerDefaults: PropTypes.object,
   reportExportFileName: PropTypes.string,
   reportFilter: PropTypes.filter,
   reportFormats: PropTypes.array,
   reportId: PropTypes.id,
+  resultDefaultFilter: PropTypes.filter,
   saveReportComposerDefaults: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
@@ -732,15 +627,19 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
     loadReportFormats: () =>
       dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
     loadReport: (id, deltaId, filter) =>
-      dispatch(
-        isDefined(deltaId)
-          ? loadDeltaReport(gmp)(id, deltaId, filter)
-          : loadReport(gmp)(id, filter),
-      ),
+      isDefined(deltaId)
+        ? dispatch(loadDeltaReport(gmp)(id, deltaId, filter))
+        : dispatch(loadReportEntityWithStore(gmp)(id, filter)),
+    loadReportIfNeeded: (id, deltaId, filter) =>
+      isDefined(deltaId)
+        ? dispatch(loadDeltaReport(gmp)(id, deltaId, filter))
+        : dispatch(loadReportEntityWithStoreIfNeeded(gmp)(id, filter)),
     loadResultDefaultFilter: () =>
       dispatch(loadUserSettingsDefaultFilter(gmp)('result')),
     loadReportComposerDefaults: () =>
       dispatch(loadReportComposerDefaults(gmp)()),
+    loadUserSettingDefaultFilter: () =>
+      dispatch(loadUserSettingsDefaultFilter(gmp)('result')),
     saveReportComposerDefaults: reportComposerDefaults =>
       dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
   };
@@ -754,6 +653,10 @@ const mapStateToProps = (rootState, {gmp, match}) => {
   const deltaSel = deltaSelector(rootState);
   const reportFormatsSel = reportFormatsSelector(rootState);
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const userDefaultFilterSel = getUserSettingsDefaultFilter(
+    rootState,
+    'result',
+  );
   const username = getUsername(rootState);
 
   let entity;
@@ -782,15 +685,71 @@ const mapStateToProps = (rootState, {gmp, match}) => {
     reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
     reportId: id,
     reportComposerDefaults: getReportComposerDefaults(rootState),
+    resultDefaultFilter: userDefaultFilterSel.getFilter('result'),
     username,
   };
 };
 
-const ReportDetailsWrapper = props => (
+const reloadInterval = report =>
+  isDefined(report) && isActive(report.report.scan_run_status)
+    ? DEFAULT_RELOAD_INTERVAL_ACTIVE
+    : NO_RELOAD; // report doesn't change anymore. no need to reload
+
+const load = ({
+  defaultFilter,
+  reportId,
+  deltaReportId,
+  loadReport,
+  loadReportIfNeeded,
+  reportFilter,
+}) => filter => {
+  if (!hasValue(filter)) {
+    // use loaded filter after initial loading
+    filter = reportFilter;
+  }
+
+  if (!hasValue(filter)) {
+    // use filter from user setting
+    filter = defaultFilter;
+  }
+
+  if (!hasValue(filter)) {
+    // use fallback filter
+    filter = DEFAULT_FILTER;
+  }
+
+  return loadReportIfNeeded(reportId, deltaReportId, filter).then(() =>
+    loadReport(reportId, deltaReportId, filter),
+  );
+};
+
+const ReportDetailsWrapper = ({reportFilter, ...props}) => (
   <FilterProvider fallbackFilter={DEFAULT_FILTER} gmpname="result">
-    {({filter}) => <ReportDetails {...props} filter={filter} />}
+    {({filter}) => (
+      <Reload
+        name="report"
+        load={load({...props, defaultFilter: filter})}
+        reload={load({...props, defaultFilter: filter, reportFilter})}
+        reloadInterval={() => reloadInterval(props.entity)}
+      >
+        {({reload}) => (
+          <ReportDetails
+            {...props}
+            defaultFilter={filter}
+            reportFilter={reportFilter}
+            reload={reload}
+          />
+        )}
+      </Reload>
+    )}
   </FilterProvider>
 );
+
+ReportDetailsWrapper.propTypes = {
+  entity: PropTypes.model,
+  gmp: PropTypes.gmp.isRequired,
+  reportFilter: PropTypes.filter,
+};
 
 export default compose(
   withGmp,

@@ -23,17 +23,17 @@ import Button from 'web/components/form/button';
 import Theme from 'web/utils/theme';
 
 const LoadingButton = styled(Button)`
-  color: ${props => (props.loading ? 'rgba(0, 0, 0, 0.0)' : Theme.darkGray)};
+  color: ${props => (props.isLoading ? 'rgba(0, 0, 0, 0.0)' : Theme.darkGray)};
   background: ${props =>
-    props.loading
+    props.isLoading
       ? Theme.lightGreen + ' url(/img/loading.gif) center center no-repeat'
       : Theme.white};
 
   /* when hovering these settings have to be overwritten explicitly */
   :hover {
-    color: ${props => (props.loading ? 'rgba(0, 0, 0, 0.0)' : Theme.white)};
+    color: ${props => (props.isLoading ? 'rgba(0, 0, 0, 0.0)' : Theme.white)};
     background: ${props =>
-      props.loading
+      props.isLoading
         ? Theme.green + ' url(/img/loading.gif) center center no-repeat'
         : Theme.green};
   }

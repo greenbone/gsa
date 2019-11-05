@@ -104,7 +104,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   border: 1px solid #787878;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -130,23 +130,23 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   flex-shrink: 0;
 }
 
-.c5:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
 
-.c4 {
+.c5 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c23 {
+.c21 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -166,12 +166,12 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c23:focus,
-.c23:hover {
+.c21:focus,
+.c21:hover {
   border: 1px solid #393637;
 }
 
-.c23:hover {
+.c21:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -179,20 +179,20 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c23[disabled] {
+.c21[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c23 img {
+.c21 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c23:link {
+.c21:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -216,13 +216,13 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c21 {
+.c23 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c21:hover {
+.c23:hover {
   color: #fff;
   background: #519032;
 }
@@ -376,7 +376,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   padding-right: 10px;
 }
 
-.c17 {
+.c16 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -401,13 +401,13 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   cursor: pointer;
 }
 
-.c16 {
+.c17 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c16 * {
+.c17 * {
   height: inherit;
   width: inherit;
 }
@@ -468,7 +468,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   cursor: default;
 }
 
-.c19 {
+.c18 {
   display: block;
   height: auto;
   color: #393637;
@@ -479,7 +479,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   padding: 4px 8px;
 }
 
-.c18 {
+.c19 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

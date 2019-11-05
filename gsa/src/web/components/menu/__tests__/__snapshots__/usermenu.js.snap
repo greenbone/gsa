@@ -53,7 +53,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   display: inline-flex;
 }
 
-.c4 {
+.c2 {
   cursor: pointer;
 }
 
@@ -159,7 +159,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   border-bottom: 1px solid #787878;
 }
 
-.c2 {
+.c4 {
   margin-right: 10px;
 }
 
@@ -183,7 +183,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
 }
 
 @media print {
-  .c4 {
+  .c2 {
     display: none;
   }
 }
@@ -218,7 +218,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
             margin="5px"
           >
             <span
-              class="c10 c4"
+              class="c2 c10"
               data-testid="svg-icon"
             >
               <svg>
@@ -240,7 +240,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
             margin="5px"
           >
             <span
-              class="c10 c4"
+              class="c2 c10"
               data-testid="svg-icon"
             >
               <svg>
@@ -269,7 +269,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
               margin="5px"
             >
               <span
-                class="c10 c4"
+                class="c2 c10"
                 data-testid="svg-icon"
               >
                 <svg>
@@ -295,7 +295,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
             margin="5px"
           >
             <span
-              class="c10 c4"
+              class="c2 c10"
               data-testid="svg-icon"
             >
               <svg>
