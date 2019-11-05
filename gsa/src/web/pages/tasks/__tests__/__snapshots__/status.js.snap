@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Task Status tests should render 1`] = `
-.c1 {
+.c0 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -39,7 +39,7 @@ exports[`Task Status tests should render 1`] = `
   white-space: nowrap;
 }
 
-.c0:hover {
+.c1:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
 }

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TrashDeleteIcon component tests should render 1`] = `
-.c2 {
+.c0 {
   cursor: pointer;
 }
 
@@ -16,16 +16,16 @@ exports[`TrashDeleteIcon component tests should render 1`] = `
   width: inherit;
 }
 
-.c0 svg:hover {
+.c2 svg:hover {
   background-color: #f2dede;
 }
 
-.c0 svg:hover path {
+.c2 svg:hover path {
   fill: #a94442;
 }
 
 @media print {
-  .c2 {
+  .c0 {
     display: none;
   }
 }

@@ -44,7 +44,7 @@ exports[`MultiSelect component tests should render 1`] = `
   align-items: center;
 }
 
-.c5 {
+.c4 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -69,13 +69,13 @@ exports[`MultiSelect component tests should render 1`] = `
   cursor: not-allowed;
 }
 
-.c4 {
+.c5 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }

@@ -83,7 +83,7 @@ exports[`Audit Actions tests should render 1`] = `
   display: inline-flex;
 }
 
-.c4 {
+.c3 {
   cursor: pointer;
 }
 
@@ -95,19 +95,19 @@ exports[`Audit Actions tests should render 1`] = `
   fill: #aaaaaa;
 }
 
-.c3 {
+.c4 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c3 * {
+.c4 * {
   height: inherit;
   width: inherit;
 }
 
 @media print {
-  .c4 {
+  .c3 {
     display: none;
   }
 }
@@ -145,7 +145,7 @@ exports[`Audit Actions tests should render 1`] = `
             </span>
             <span
               alt="Resume"
-              class="c3 c5"
+              class="c5 c4"
               data-testid="svg-icon"
               title="Audit is not stopped"
             >

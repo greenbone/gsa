@@ -153,17 +153,17 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   display: inline-flex;
 }
 
-.c32 {
+.c31 {
   cursor: pointer;
 }
 
-.c31 {
+.c32 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c31 * {
+.c32 * {
   height: inherit;
   width: inherit;
 }
@@ -190,11 +190,11 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   position: relative;
 }
 
-.c12 {
+.c11 {
   margin: 0 0 1px 0;
 }
 
-.c11 {
+.c12 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -299,7 +299,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   border: 1px solid #787878;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -325,23 +325,23 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   flex-shrink: 0;
 }
 
-.c5:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
 
-.c4 {
+.c5 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c37 {
+.c35 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -361,12 +361,12 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c37:focus,
-.c37:hover {
+.c35:focus,
+.c35:hover {
   border: 1px solid #393637;
 }
 
-.c37:hover {
+.c35:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -374,20 +374,20 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c37[disabled] {
+.c35[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c37 img {
+.c35 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c37:link {
+.c35:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -411,13 +411,13 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c35 {
+.c37 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c35:hover {
+.c37:hover {
   color: #fff;
   background: #519032;
 }
@@ -593,7 +593,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   cursor: pointer;
 }
 
-.c29 {
+.c28 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -604,7 +604,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   height: auto;
 }
 
-.c28 {
+.c29 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -656,7 +656,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
 }
 
 @media print {
-  .c32 {
+  .c31 {
     display: none;
   }
 }
@@ -817,7 +817,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                   </table>
                   <section>
                     <div
-                      class="section-header c10"
+                      class="c10 section-header"
                     >
                       <h2
                         class="c11 c12"
@@ -1261,7 +1261,7 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   border: 1px solid #787878;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1287,23 +1287,23 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   flex-shrink: 0;
 }
 
-.c5:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
 
-.c4 {
+.c5 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
 
-.c13 {
+.c11 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -1323,12 +1323,12 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   z-index: 1;
 }
 
-.c13:focus,
-.c13:hover {
+.c11:focus,
+.c11:hover {
   border: 1px solid #393637;
 }
 
-.c13:hover {
+.c11:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -1336,20 +1336,20 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   color: #fff;
 }
 
-.c13[disabled] {
+.c11[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c13 img {
+.c11 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c13:link {
+.c11:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -1373,13 +1373,13 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   align-items: center;
 }
 
-.c11 {
+.c13 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c11:hover {
+.c13:hover {
   color: #fff;
   background: #519032;
 }

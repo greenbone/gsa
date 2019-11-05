@@ -117,7 +117,7 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
   cursor: pointer;
 }
 
-.c7 {
+.c6 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -132,7 +132,7 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
   opacity: 1;
 }
 
-.c6 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -336,8 +336,9 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
           <input
             class="c10"
             data-testid="spinner-input"
+            max="1200"
             maxlength="5"
-            min="1"
+            min="2"
             name="auto_delete_data"
             size="4"
             value="5"

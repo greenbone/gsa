@@ -53,23 +53,23 @@ exports[`PoliciesPage ToolBarIcons test should render 1`] = `
   display: inline-flex;
 }
 
-.c3 {
+.c2 {
   cursor: pointer;
 }
 
-.c2 {
+.c3 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c2 * {
+.c3 * {
   height: inherit;
   width: inherit;
 }
 
 @media print {
-  .c3 {
+  .c2 {
     display: none;
   }
 }
@@ -379,7 +379,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   margin-left: 5px;
 }
 
-.c10 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -398,14 +398,14 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   margin-left: -5px;
 }
 
-.c10 > * {
+.c9 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c10 > * {
+.c9 > * {
   margin-left: 5px;
 }
 
@@ -491,7 +491,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   display: inline-flex;
 }
 
-.c5 {
+.c4 {
   cursor: pointer;
 }
 
@@ -503,13 +503,13 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   fill: #aaaaaa;
 }
 
-.c4 {
+.c5 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
@@ -547,11 +547,11 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   position: relative;
 }
 
-.c23 {
+.c22 {
   margin: 0 0 1px 0;
 }
 
-.c22 {
+.c23 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -608,7 +608,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   min-width: 100px;
 }
 
-.c20 {
+.c19 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -633,13 +633,13 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   cursor: pointer;
 }
 
-.c19 {
+.c20 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c19 * {
+.c20 * {
   height: inherit;
   width: inherit;
 }
@@ -744,7 +744,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   width: 8%;
 }
 
-.c14 {
+.c13 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -758,11 +758,11 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   padding: 1px 8px;
 }
 
-.c14:-webkit-autofill {
+.c13:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c13 {
+.c14 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -784,7 +784,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   margin-right: 5px;
 }
 
-.c9 {
+.c10 {
   margin-right: 5px;
 }
 
@@ -898,7 +898,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
 }
 
 @media print {
-  .c5 {
+  .c4 {
     display: none;
   }
 }
@@ -979,7 +979,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
       class="c0"
     >
       <div
-        class="toolbar c1"
+        class="c1 toolbar"
       >
         <div
           class="c2"
@@ -1027,7 +1027,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
           class="c6"
         >
           <div
-            class="powerfilter c7"
+            class="c7 powerfilter"
           >
             <div
               class="c8"
@@ -1062,7 +1062,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                     class="c2"
                   >
                     <div
-                      class="c10"
+                      class="c9"
                       margin="5px"
                     >
                       <span
@@ -1155,7 +1155,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
         class="entities-section"
       >
         <div
-          class="section-header c21"
+          class="c21 section-header"
         >
           <h2
             class="c22 c23"
@@ -1164,7 +1164,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
               class="c24"
             >
               <span
-                class="c25 c5"
+                class="c4 c25"
                 data-testid="svg-icon"
               >
                 <svg>
@@ -1186,13 +1186,13 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
           class="c0"
         >
           <div
-            class="entities-table c27"
+            class="c27 entities-table"
           >
             <div
               class="c28"
             >
               <span
-                class="c29 c4 c5"
+                class="c4 c5 c29"
                 data-testid="svg-icon"
                 title="Unfold all details"
               >
@@ -1211,7 +1211,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c4 c31"
+                      class="c31 c5"
                       data-testid="svg-icon"
                       title="First"
                     >
@@ -1220,7 +1220,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c4 c31"
+                      class="c31 c5"
                       data-testid="svg-icon"
                       title="Previous"
                     >
@@ -1243,7 +1243,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c4 c31"
+                      class="c31 c5"
                       data-testid="svg-icon"
                       title="Next"
                     >
@@ -1252,7 +1252,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c4 c31"
+                      class="c31 c5"
                       data-testid="svg-icon"
                       title="Last"
                     >
@@ -1493,7 +1493,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c4 c31"
+                      class="c31 c5"
                       data-testid="svg-icon"
                       title="First"
                     >
@@ -1502,7 +1502,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c4 c31"
+                      class="c31 c5"
                       data-testid="svg-icon"
                       title="Previous"
                     >
@@ -1525,7 +1525,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c4 c31"
+                      class="c31 c5"
                       data-testid="svg-icon"
                       title="Next"
                     >
@@ -1534,7 +1534,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c4 c31"
+                      class="c31 c5"
                       data-testid="svg-icon"
                       title="Last"
                     >

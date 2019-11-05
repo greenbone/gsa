@@ -20,7 +20,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {OVALDEFS_FILTER_FILTER} from 'gmp/models/filter';
+import Filter, {OVALDEFS_FILTER_FILTER} from 'gmp/models/filter';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -89,8 +89,11 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
+const fallbackFilter = Filter.fromString('sort-reverse=created');
+
 export default withEntitiesContainer('ovaldef', {
   entitiesSelector,
+  fallbackFilter,
   loadEntities,
 })(Page);
 

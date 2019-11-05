@@ -19,13 +19,13 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import ResultsTable from '../results/table.js';
+import ResultsTable from 'web/pages/results/table';
 
-import EmptyReport from './emptyreport.js';
-import EmptyResultsReport from './emptyresultsreport.js';
-import ReportEntitiesContainer from './reportentitiescontainer.js';
+import EmptyReport from './emptyreport';
+import EmptyResultsReport from './emptyresultsreport';
+import ReportEntitiesContainer from './reportentitiescontainer';
 
 import {resultsSortFunctions} from './sort.js';
 
@@ -116,13 +116,13 @@ const ResultsTab = ({
 };
 
 ResultsTab.propTypes = {
-  counts: PropTypes.counts.isRequired,
+  counts: PropTypes.oneOfType([PropTypes.counts, PropTypes.object]).isRequired,
   delta: PropTypes.bool,
   filter: PropTypes.filter.isRequired,
   hasTarget: PropTypes.bool,
   isUpdating: PropTypes.bool,
   progress: PropTypes.number.isRequired,
-  results: PropTypes.array.isRequired,
+  results: PropTypes.array,
   sortField: PropTypes.string.isRequired,
   sortReverse: PropTypes.bool.isRequired,
   status: PropTypes.string.isRequired,

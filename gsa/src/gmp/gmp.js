@@ -205,7 +205,7 @@ class Gmp {
   }
 
   get reloadInterval() {
-    return this.settings.reloadinterval;
+    return this.settings.reloadInterval;
   }
 
   addHttpErrorHandler(handler) {

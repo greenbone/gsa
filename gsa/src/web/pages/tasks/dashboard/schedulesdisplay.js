@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {_, _l} from 'gmp/locale/lang';
-import {longDate} from 'gmp/locale/date';
+import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -43,7 +43,7 @@ const transformScheduleData = (data = [], {endDate}) => {
     .filter(task => isDefined(task.schedule))
     .map(task => {
       const {schedule, name} = task;
-      const {event = {}} = schedule;
+      const {event = {}, timezone} = schedule;
       const {durationInSeconds: duration, recurrence = {}} = event;
       const {freq, interval = 1} = recurrence;
       let period;
@@ -52,11 +52,13 @@ const transformScheduleData = (data = [], {endDate}) => {
       } else if (freq === ReccurenceFrequency.SECONDLY) {
         period = interval;
       }
+
       return {
         label: name,
         duration,
-        nextStart: event.nextDate,
+        nextStart: dateTimeWithTimeZone(event.nextDate),
         starts: event.getNextDates(endDate),
+        timezone,
         isInfinite: isDefined(recurrence.isFinite) && !recurrence.isFinite(),
         period,
       };
@@ -82,10 +84,7 @@ export const TasksSchedulesTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   chartComponent: DataTable,
   dataTitles: [_l('Task Name'), _l('Next Schedule Time')],
-  dataRow: row => [
-    row.label,
-    isDefined(row.nextStart) ? longDate(row.nextStart) : '-',
-  ],
+  dataRow: row => [row.label, isDefined(row.nextStart) ? row.nextStart : '-'],
   dataTransform: transformScheduleData,
   title: () => _('Next Scheduled Tasks'),
   displayId: 'task-by-schedules-table',

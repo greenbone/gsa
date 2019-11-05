@@ -135,7 +135,7 @@ exports[`BooleanFilterGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c8 {
+.c7 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -150,7 +150,7 @@ exports[`BooleanFilterGroup tests should render 1`] = `
   opacity: 1;
 }
 
-.c7 {
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

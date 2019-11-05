@@ -46,8 +46,8 @@ import {OverridesActiveDaysLoader} from './loaders';
 
 const MAX_BINS = 10; // if this is changed, activeDaysColorScale needs adjustment
 
-const ACTIVE_YES_ALWAYS_VALUE = '-2';
-const ACTIVE_NO_VALUE = '-1';
+const ACTIVE_YES_ALWAYS_VALUE = -2;
+const ACTIVE_NO_VALUE = -1;
 
 const transformActiveDaysData = (data = {}) => {
   const {groups = []} = data;

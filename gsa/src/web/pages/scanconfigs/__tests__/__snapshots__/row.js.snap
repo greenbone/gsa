@@ -115,17 +115,17 @@ exports[`Scan Config row tests should render 1`] = `
   display: inline-flex;
 }
 
-.c4 {
+.c3 {
   cursor: pointer;
 }
 
-.c3 {
+.c4 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c3 * {
+.c4 * {
   height: inherit;
   width: inherit;
 }
@@ -144,7 +144,7 @@ exports[`Scan Config row tests should render 1`] = `
 }
 
 @media print {
-  .c4 {
+  .c3 {
     display: none;
   }
 }

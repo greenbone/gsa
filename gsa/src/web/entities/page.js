@@ -183,6 +183,7 @@ class EntitiesPage extends React.Component {
       filter,
       filterEditDialog,
       filters,
+      isLoading,
       powerfilter = PowerFilter,
       onError,
       onFilterChanged,
@@ -205,6 +206,7 @@ class EntitiesPage extends React.Component {
         <PowerFilterComponent
           filter={filter}
           filters={filters}
+          isLoading={isLoading}
           onEditClick={handler}
           onError={onError}
           onRemoveClick={onFilterRemoved}

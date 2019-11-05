@@ -53,7 +53,7 @@ exports[`MultiStepFooter tests should render 1`] = `
   display: inline-flex;
 }
 
-.c3 {
+.c1 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -73,12 +73,12 @@ exports[`MultiStepFooter tests should render 1`] = `
   z-index: 1;
 }
 
-.c3:focus,
-.c3:hover {
+.c1:focus,
+.c1:hover {
   border: 1px solid #393637;
 }
 
-.c3:hover {
+.c1:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -86,20 +86,20 @@ exports[`MultiStepFooter tests should render 1`] = `
   color: #fff;
 }
 
-.c3[disabled] {
+.c1[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c3 img {
+.c1 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c3:link {
+.c1:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -123,13 +123,13 @@ exports[`MultiStepFooter tests should render 1`] = `
   align-items: center;
 }
 
-.c1 {
+.c3 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c1:hover {
+.c3:hover {
   color: #fff;
   background: #519032;
 }
@@ -207,14 +207,14 @@ exports[`MultiStepFooter tests should render 1`] = `
       margin="5px"
     >
       <button
-        class="c6 c3"
+        class="c1 c6"
         data-testid="dialog-previous-button"
         title="🠬"
       >
         🠬
       </button>
       <button
-        class="c6 c3"
+        class="c1 c6"
         data-testid="dialog-next-button"
         title="🠮"
       >
@@ -285,7 +285,7 @@ exports[`MultiStepFooter tests should render loading and disable cancel button 1
   display: inline-flex;
 }
 
-.c3 {
+.c1 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -305,12 +305,12 @@ exports[`MultiStepFooter tests should render loading and disable cancel button 1
   z-index: 1;
 }
 
-.c3:focus,
-.c3:hover {
+.c1:focus,
+.c1:hover {
   border: 1px solid #393637;
 }
 
-.c3:hover {
+.c1:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -318,20 +318,20 @@ exports[`MultiStepFooter tests should render loading and disable cancel button 1
   color: #fff;
 }
 
-.c3[disabled] {
+.c1[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c3 img {
+.c1 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c3:link {
+.c1:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
@@ -355,13 +355,13 @@ exports[`MultiStepFooter tests should render loading and disable cancel button 1
   align-items: center;
 }
 
-.c1 {
+.c3 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c1:hover {
+.c3:hover {
   color: #fff;
   background: #519032;
 }
@@ -451,21 +451,21 @@ exports[`MultiStepFooter tests should render loading and disable cancel button 1
       margin="5px"
     >
       <button
-        class="c6 c3"
+        class="c1 c6"
         data-testid="dialog-previous-button"
         title="🠬"
       >
         🠬
       </button>
       <button
-        class="c6 c3"
+        class="c1 c6"
         data-testid="dialog-next-button"
         title="🠮"
       >
         🠮
       </button>
       <button
-        class="c7 c2 c3"
+        class="c1 c2 c7"
         data-testid="dialog-save-button"
         title="Foo"
       >

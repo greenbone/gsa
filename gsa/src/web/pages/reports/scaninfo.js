@@ -88,7 +88,7 @@ const ReportScanInfoTable = ({filterString, links = true, report}) => {
   const hosts_count =
     isDefined(hosts) && isDefined(hosts.counts) ? hosts.counts.all : 0;
 
-  if (!isDefined(filterString)) {
+  if (isDefined(filter) && !isDefined(filterString)) {
     filterString = filter.simple().toFilterString();
   }
 
@@ -97,7 +97,9 @@ const ReportScanInfoTable = ({filterString, links = true, report}) => {
       ? _('Container')
       : scan_run_status;
 
-  const delta = report.isDeltaReport();
+  const delta = isDefined(report.isDeltaReport)
+    ? report.isDeltaReport()
+    : false;
 
   const is_ended = isDefined(scan_end) && scan_end.isValid();
   return (

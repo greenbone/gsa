@@ -173,11 +173,11 @@ const UserMenuContainer = props => {
               </Divider>
             </StyledLink>
           </Entry>
-          <Entry>
-            <Divider
-              data-testid="usermenu-logout"
-              onClick={event => handleLogout(event)}
-            >
+          <Entry
+            data-testid="usermenu-logout"
+            onClick={event => handleLogout(event)}
+          >
+            <Divider>
               <LogoutIcon />
               <span>{_('Log Out')}</span>
             </Divider>

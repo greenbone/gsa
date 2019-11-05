@@ -87,7 +87,7 @@ exports[`Task Row tests should render 1`] = `
   align-items: stretch;
 }
 
-.c6 {
+.c5 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -206,7 +206,7 @@ exports[`Task Row tests should render 1`] = `
   display: inline-flex;
 }
 
-.c15 {
+.c14 {
   cursor: pointer;
 }
 
@@ -218,13 +218,13 @@ exports[`Task Row tests should render 1`] = `
   fill: #aaaaaa;
 }
 
-.c14 {
+.c15 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c14 * {
+.c15 * {
   height: inherit;
   width: inherit;
 }
@@ -279,13 +279,13 @@ exports[`Task Row tests should render 1`] = `
   white-space: nowrap;
 }
 
-.c5:hover {
+.c6:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
 @media print {
-  .c15 {
+  .c14 {
     display: none;
   }
 }
@@ -403,7 +403,7 @@ exports[`Task Row tests should render 1`] = `
             class="c11"
           >
             <a
-              class="c6"
+              class="c5"
               href="/reports?filter=task_id%3D314%20sort-reverse%3Ddate"
               title="View list of all reports for Task foo, including unfinished ones"
             >
@@ -418,7 +418,7 @@ exports[`Task Row tests should render 1`] = `
         >
           <span>
             <a
-              class="c6"
+              class="c5"
               data-testid="details-link"
               href="/report/1234"
             >
@@ -486,7 +486,7 @@ exports[`Task Row tests should render 1`] = `
               </span>
               <span
                 alt="Resume"
-                class="c14 c19"
+                class="c19 c15"
                 data-testid="svg-icon"
                 title="Task is not stopped"
               >

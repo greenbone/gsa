@@ -91,10 +91,10 @@ export class ReportCommand extends EntityCommand {
       {
         cmd: 'get_report',
         delta_report_id: deltaReportId,
+        details: 1,
         report_id: id,
         report_format_id: reportFormatId,
         filter: isDefined(filter) ? filter.all() : ALL_FILTER,
-        details: 1,
       },
       {transform: DefaultTransform, responseType: 'arraybuffer'},
     );
@@ -125,13 +125,18 @@ export class ReportCommand extends EntityCommand {
     });
   }
 
-  getDelta({id}, {id: delta_report_id}, {filter, ...options} = {}) {
+  getDelta(
+    {id},
+    {id: delta_report_id},
+    {filter, details = 1, ...options} = {},
+  ) {
     return this.httpGet(
       {
         id,
         delta_report_id,
         filter,
         ignore_pagination: 1,
+        details,
       },
       options,
     ).then(this.transformResponse);
