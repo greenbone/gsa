@@ -589,7 +589,7 @@ handle_system_report (http_connection_t *connection, const char *method,
     {
       credentials_free (credentials);
       g_warning ("%s: failed to validate slave_id, dropping request",
-                 __FUNCTION__);
+                 __func__);
       return MHD_NO;
     }
 
@@ -607,7 +607,7 @@ handle_system_report (http_connection_t *connection, const char *method,
     case 1: /* manager closed connection */
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Failure to connect to manager daemon. "
                           "Manager daemon doesn't respond.",
@@ -623,7 +623,7 @@ handle_system_report (http_connection_t *connection, const char *method,
     case 3: /* timeout */
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Failure to connect to manager daemon. "
                           "Timeout while waiting for manager response.",
@@ -632,7 +632,7 @@ handle_system_report (http_connection_t *connection, const char *method,
     case 4: /* failed to connect to manager */
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Failure to connect to manager daemon. "
                           "Could not open a connection.",
@@ -641,7 +641,7 @@ handle_system_report (http_connection_t *connection, const char *method,
     default:
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Failure to connect to manager daemon. "
                           "Unknown error.",
@@ -653,7 +653,7 @@ handle_system_report (http_connection_t *connection, const char *method,
     {
       credentials_free (credentials);
       g_warning ("%s: failed to get system reports, dropping request",
-                 __FUNCTION__);
+                 __func__);
       cmd_response_data_free (response_data);
       return MHD_NO;
     }

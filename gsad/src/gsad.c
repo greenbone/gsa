@@ -1314,7 +1314,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
 
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred inside GSA daemon. "
                           "Diagnostics: Invalid command.",
                           response_data);
@@ -1333,12 +1333,12 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
 
       if (params_given (con_info->params, "token") == 0)
-        res = gsad_message (NULL, "Internal error", __FUNCTION__, __LINE__,
+        res = gsad_message (NULL, "Internal error", __func__, __LINE__,
                             "An internal error occurred inside GSA daemon. "
                             "Diagnostics: Token missing.",
                             response_data);
       else
-        res = gsad_message (NULL, "Internal error", __FUNCTION__, __LINE__,
+        res = gsad_message (NULL, "Internal error", __func__, __LINE__,
                             "An internal error occurred inside GSA daemon. "
                             "Diagnostics: Token bad.",
                             response_data);
@@ -1351,7 +1351,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   if (ret == USER_BAD_TOKEN)
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      res = gsad_message (NULL, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (NULL, "Internal error", __func__, __LINE__,
                           "An internal error occurred inside GSA daemon. "
                           "Diagnostics: Bad token.",
                           response_data);
@@ -1365,7 +1365,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
       if (caller && g_utf8_validate (caller, -1, NULL) == FALSE)
         {
           caller = NULL;
-          g_warning ("%s - caller is not valid UTF-8", __FUNCTION__);
+          g_warning ("%s - caller is not valid UTF-8", __func__);
         }
 
       /* @todo Validate caller. */
@@ -1412,7 +1412,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
     {
       if (setenv ("TZ", timezone, 1) == -1)
         {
-          g_critical ("%s: failed to set TZ\n", __FUNCTION__);
+          g_critical ("%s: failed to set TZ\n", __func__);
           exit (EXIT_FAILURE);
         }
       tzset ();
@@ -1426,7 +1426,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
     case 1: /* manager closed connection */
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Could not connect to manager daemon. "
                           "Manager closed the connection.",
@@ -1439,7 +1439,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
     case 3: /* timeout */
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Could not connect to manager daemon. "
                           "Connection timeout.",
@@ -1448,7 +1448,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
     case 4: /* can't connect to manager */
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_SERVICE_UNAVAILABLE);
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Could not connect to manager daemon. "
                           "Could not open a connection.",
@@ -1457,7 +1457,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
     default: /* unknown error */
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Could not connect to manager daemon. "
                           "Unknown error.",
@@ -1582,7 +1582,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   else
   {
     cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-    res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+    res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                         "An internal error occurred inside GSA daemon. "
                         "Diagnostics: Unknown command.",
                         response_data);
@@ -1795,7 +1795,7 @@ watch_client_connection (void *data)
             {
               watcher_data->connection_closed = 1;
               active = 0;
-              g_debug ("%s: Client connection closed", __FUNCTION__);
+              g_debug ("%s: Client connection closed", __func__);
 
               if (watcher_data->gvm_connection->tls)
                 {
@@ -1866,7 +1866,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   else
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred inside GSA daemon. "
                           "Diagnostics: No valid command for gmp.",
                           response_data);
@@ -1882,7 +1882,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
     {
       if (setenv ("TZ", timezone, 1) == -1)
         {
-          g_critical ("%s: failed to set TZ\n", __FUNCTION__);
+          g_critical ("%s: failed to set TZ\n", __func__);
           exit (EXIT_FAILURE);
         }
       tzset ();
@@ -1896,7 +1896,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
     case 1: /* manager closed connection */
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Could not connect to manager daemon. "
                           "Manager closed the connection.",
@@ -1909,7 +1909,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
     case 3: /* timeout */
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Could not connect to manager daemon. "
                           "Connection timeout.",
@@ -1918,7 +1918,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
     case 4: /* can't connect to manager */
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_SERVICE_UNAVAILABLE);
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Could not connect to manager daemon. "
                           "Could not open a connection.",
@@ -1927,7 +1927,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
     default: /* unknown error */
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
                           "Diagnostics: Could not connect to manager daemon. "
                           "Unknown error.",
@@ -2159,7 +2159,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   else
   {
     cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-    res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+    res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                         "An internal error occurred inside GSA daemon. "
                         "Diagnostics: Unknown command.",
                         response_data);
@@ -2296,19 +2296,19 @@ drop_privileges (struct passwd *user_pw)
 {
   if (setgroups (0, NULL))
     {
-      g_critical ("%s: failed to set groups: %s\n", __FUNCTION__,
+      g_critical ("%s: failed to set groups: %s\n", __func__,
                   strerror (errno));
       return FALSE;
     }
   if (setgid (user_pw->pw_gid))
     {
-      g_critical ("%s: failed to drop group privileges: %s\n", __FUNCTION__,
+      g_critical ("%s: failed to drop group privileges: %s\n", __func__,
                   strerror (errno));
       return FALSE;
     }
   if (setuid (user_pw->pw_uid))
     {
-      g_critical ("%s: failed to drop user privileges: %s\n", __FUNCTION__,
+      g_critical ("%s: failed to drop user privileges: %s\n", __func__,
                   strerror (errno));
       return FALSE;
     }
@@ -2337,7 +2337,7 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop, const gchar *subdir)
         {
           g_critical ("%s: Failed to drop privileges."
                       "  Could not determine UID and GID for user \"%s\"!\n",
-                      __FUNCTION__, drop);
+                      __func__, drop);
           return 1;
         }
     }
@@ -2350,7 +2350,7 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop, const gchar *subdir)
 
       if (chroot (GSAD_DATA_DIR))
         {
-          g_critical ("%s: Failed to chroot to \"%s\": %s\n", __FUNCTION__,
+          g_critical ("%s: Failed to chroot to \"%s\": %s\n", __func__,
                       GSAD_DATA_DIR, strerror (errno));
           return 1;
         }
@@ -2359,7 +2359,7 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop, const gchar *subdir)
 
   if (user_pw && (drop_privileges (user_pw) == FALSE))
     {
-      g_critical ("%s: Failed to drop privileges\n", __FUNCTION__);
+      g_critical ("%s: Failed to drop privileges\n", __func__);
       return 1;
     }
 
@@ -2369,7 +2369,7 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop, const gchar *subdir)
       if (chdir (root_dir))
         {
           g_critical ("%s: failed change to chroot root directory (%s): %s\n",
-                      __FUNCTION__, root_dir, strerror (errno));
+                      __func__, root_dir, strerror (errno));
           g_free (root_dir);
           return 1;
         }
@@ -2380,7 +2380,7 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop, const gchar *subdir)
       gchar *data_dir = g_build_filename (GSAD_DATA_DIR, subdir, NULL);
       if (chdir (data_dir))
         {
-          g_critical ("%s: failed to change to \"%s\": %s\n", __FUNCTION__,
+          g_critical ("%s: failed to change to \"%s\": %s\n", __func__,
                       data_dir, strerror (errno));
           g_free (data_dir);
           return 1;
@@ -2426,7 +2426,7 @@ gsad_init ()
   /* Check for required files. */
   if (gvm_file_check_is_dir (GSAD_DATA_DIR) < 1)
     {
-      g_critical ("%s: Could not access %s!\n", __FUNCTION__, GSAD_DATA_DIR);
+      g_critical ("%s: Could not access %s!\n", __func__, GSAD_DATA_DIR);
       return MHD_NO;
     }
 
@@ -2442,7 +2442,7 @@ gsad_init ()
    * test. */
   if (!gcry_check_version (NULL))
     {
-      g_critical ("%s: libgcrypt version check failed\n", __FUNCTION__);
+      g_critical ("%s: libgcrypt version check failed\n", __func__);
       return MHD_NO;
     }
 
@@ -2471,7 +2471,7 @@ gsad_init ()
   int ret = gnutls_global_init ();
   if (ret < 0)
     {
-      g_critical ("%s: Failed to initialize GNUTLS.\n", __FUNCTION__);
+      g_critical ("%s: Failed to initialize GNUTLS.\n", __func__);
       return MHD_NO;
     }
 
@@ -2565,7 +2565,7 @@ start_unix_http_daemon (const char *unix_socket_path,
 
   if (unix_socket == -1)
     {
-      g_warning ("%s: Couldn't create UNIX socket", __FUNCTION__);
+      g_warning ("%s: Couldn't create UNIX socket", __func__);
       return NULL;
     }
 
@@ -2583,7 +2583,7 @@ start_unix_http_daemon (const char *unix_socket_path,
   if (bind (unix_socket, (struct sockaddr *) &addr, sizeof (struct sockaddr_un))
       == -1)
     {
-      g_warning ("%s: Error on bind(%s): %s", __FUNCTION__, unix_socket_path,
+      g_warning ("%s: Error on bind(%s): %s", __func__, unix_socket_path,
                  strerror (errno));
       return NULL;
     }
@@ -2591,7 +2591,7 @@ start_unix_http_daemon (const char *unix_socket_path,
     umask (oldmask);
   if (listen (unix_socket, 128) == -1)
     {
-      g_warning ("%s: Error on listen(): %s", __FUNCTION__, strerror (errno));
+      g_warning ("%s: Error on listen(): %s", __func__, strerror (errno));
       return NULL;
     }
 
@@ -2756,7 +2756,7 @@ main (int argc, char **argv)
 
   if (gsad_init () == MHD_NO)
     {
-      g_critical ("%s: Initialization failed!\nExiting...\n", __FUNCTION__);
+      g_critical ("%s: Initialization failed!\nExiting...\n", __func__);
       exit (EXIT_FAILURE);
     }
 
@@ -2881,7 +2881,7 @@ main (int argc, char **argv)
   g_option_context_add_main_entries (option_context, option_entries, NULL);
   if (!g_option_context_parse (option_context, &argc, &argv, &error))
     {
-      g_critical ("%s: %s\n\n", __FUNCTION__, error->message);
+      g_critical ("%s: %s\n\n", __func__, error->message);
       exit (EXIT_FAILURE);
     }
   g_option_context_free (option_context);
@@ -2935,7 +2935,7 @@ main (int argc, char **argv)
     {
     case 1:
       g_critical ("%s: libxml must be compiled with thread support\n",
-                  __FUNCTION__);
+                  __func__);
       exit (EXIT_FAILURE);
     }
 
@@ -2952,7 +2952,7 @@ main (int argc, char **argv)
 
   if (setenv ("TZ", "utc 0", 1) == -1)
     {
-      g_critical ("%s: failed to set timezone\n", __FUNCTION__);
+      g_critical ("%s: failed to set timezone\n", __func__);
       exit (EXIT_FAILURE);
     }
   tzset ();
@@ -2985,7 +2985,7 @@ main (int argc, char **argv)
 
   if ((timeout < 1) || (timeout > MAX_SESSION_TIMEOUT))
     {
-      g_critical ("%s: Timeout must be a number from 1 to %d\n", __FUNCTION__,
+      g_critical ("%s: Timeout must be a number from 1 to %d\n", __func__,
                   MAX_SESSION_TIMEOUT);
       exit (EXIT_FAILURE);
     }
@@ -3005,7 +3005,7 @@ main (int argc, char **argv)
       if (gsad_port <= 0 || gsad_port >= 65536)
         {
           g_critical ("%s: Port must be a number between 0 and 65536\n",
-                      __FUNCTION__);
+                      __func__);
           exit (EXIT_FAILURE);
         }
     }
@@ -3016,7 +3016,7 @@ main (int argc, char **argv)
       if (gsad_manager_port <= 0 || gsad_manager_port >= 65536)
         {
           g_critical ("%s: Manager port must be a number between 0 and 65536\n",
-                      __FUNCTION__);
+                      __func__);
           exit (EXIT_FAILURE);
         }
     }
@@ -3028,7 +3028,7 @@ main (int argc, char **argv)
         {
           g_critical (
             "%s: Redirect port must be a number between 0 and 65536\n",
-            __FUNCTION__);
+            __func__);
           exit (EXIT_FAILURE);
         }
     }
@@ -3045,7 +3045,7 @@ main (int argc, char **argv)
           break;
         case -1:
           /* Parent when error. */
-          g_critical ("%s: Failed to fork!\n", __FUNCTION__);
+          g_critical ("%s: Failed to fork!\n", __func__);
           exit (EXIT_FAILURE);
           break;
         default:
@@ -3072,12 +3072,12 @@ main (int argc, char **argv)
             g_warning ("%s: Failed to change parent death signal;"
                        " unix socket process will remain if parent is killed:"
                        " %s\n",
-                       __FUNCTION__, strerror (errno));
+                       __func__, strerror (errno));
 #endif
           break;
         case -1:
           /* Parent when error. */
-          g_warning ("%s: Failed to fork for unix socket!\n", __FUNCTION__);
+          g_warning ("%s: Failed to fork for unix socket!\n", __func__);
           exit (EXIT_FAILURE);
           break;
         default:
@@ -3102,13 +3102,13 @@ main (int argc, char **argv)
             g_warning ("%s: Failed to change parent death signal;"
                        " redirect process will remain if parent is killed:"
                        " %s\n",
-                       __FUNCTION__, strerror (errno));
+                       __func__, strerror (errno));
 #endif
           redirect_location = g_strdup_printf ("https://%%s:%i/", gsad_port);
           break;
         case -1:
           /* Parent when error. */
-          g_critical ("%s: Failed to fork for redirect!\n", __FUNCTION__);
+          g_critical ("%s: Failed to fork for redirect!\n", __func__);
           exit (EXIT_FAILURE);
           break;
         default:
@@ -3123,7 +3123,7 @@ main (int argc, char **argv)
 
   if (atexit (&gsad_cleanup))
     {
-      g_critical ("%s: Failed to register cleanup function!\n", __FUNCTION__);
+      g_critical ("%s: Failed to register cleanup function!\n", __func__);
       exit (EXIT_FAILURE);
     }
 
@@ -3131,7 +3131,7 @@ main (int argc, char **argv)
 
   if (pidfile_create ("gsad"))
     {
-      g_critical ("%s: Could not write PID file.\n", __FUNCTION__);
+      g_critical ("%s: Could not write PID file.\n", __func__);
       exit (EXIT_FAILURE);
     }
 
@@ -3162,7 +3162,7 @@ main (int argc, char **argv)
 
       if (gsad_daemon == NULL)
         {
-          g_warning ("%s: start_http_daemon redirect failed !", __FUNCTION__);
+          g_warning ("%s: start_http_daemon redirect failed !", __func__);
           return EXIT_FAILURE;
         }
       else
@@ -3183,7 +3183,7 @@ main (int argc, char **argv)
 
       if (gsad_daemon == NULL)
         {
-          g_warning ("%s: start_unix_http_daemon failed !", __FUNCTION__);
+          g_warning ("%s: start_unix_http_daemon failed !", __func__);
           return EXIT_FAILURE;
         }
       else
@@ -3234,7 +3234,7 @@ main (int argc, char **argv)
                                     NULL, &error))
             {
               g_critical ("%s: Could not load private SSL key from %s: %s\n",
-                          __FUNCTION__, ssl_private_key_filename,
+                          __func__, ssl_private_key_filename,
                           error->message);
               g_error_free (error);
               exit (EXIT_FAILURE);
@@ -3244,7 +3244,7 @@ main (int argc, char **argv)
                                     NULL, &error))
             {
               g_critical ("%s: Could not load SSL certificate from %s: %s\n",
-                          __FUNCTION__, ssl_certificate_filename,
+                          __func__, ssl_certificate_filename,
                           error->message);
               g_error_free (error);
               exit (EXIT_FAILURE);
@@ -3255,7 +3255,7 @@ main (int argc, char **argv)
                                        &error))
             {
               g_critical ("%s: Could not load SSL certificate from %s: %s\n",
-                          __FUNCTION__, dh_params_filename, error->message);
+                          __func__, dh_params_filename, error->message);
               g_error_free (error);
               exit (EXIT_FAILURE);
             }
@@ -3282,7 +3282,7 @@ main (int argc, char **argv)
 
       if (gsad_daemon == NULL)
         {
-          g_critical ("%s: start_https_daemon failed!\n", __FUNCTION__);
+          g_critical ("%s: start_https_daemon failed!\n", __func__);
           return EXIT_FAILURE;
         }
       else
@@ -3297,7 +3297,7 @@ main (int argc, char **argv)
   if (chroot_drop_privileges (do_chroot, drop, DEFAULT_WEB_DIRECTORY))
     {
       g_critical ("%s: Cannot use drop privileges for directory \"%s\"!\n",
-                  __FUNCTION__, DEFAULT_WEB_DIRECTORY);
+                  __func__, DEFAULT_WEB_DIRECTORY);
       exit (EXIT_FAILURE);
     }
 
@@ -3305,12 +3305,12 @@ main (int argc, char **argv)
 
   if (sigfillset (&sigmask_all))
     {
-      g_critical ("%s: Error filling signal set\n", __FUNCTION__);
+      g_critical ("%s: Error filling signal set\n", __func__);
       exit (EXIT_FAILURE);
     }
   if (pthread_sigmask (SIG_BLOCK, &sigmask_all, &sigmask_current))
     {
-      g_critical ("%s: Error setting signal mask\n", __FUNCTION__);
+      g_critical ("%s: Error setting signal mask\n", __func__);
       exit (EXIT_FAILURE);
     }
   while (1)
@@ -3328,7 +3328,7 @@ main (int argc, char **argv)
         {
           if (errno == EINTR)
             continue;
-          g_critical ("%s: pselect: %s\n", __FUNCTION__, strerror (errno));
+          g_critical ("%s: pselect: %s\n", __func__, strerror (errno));
           exit (EXIT_FAILURE);
         }
     }

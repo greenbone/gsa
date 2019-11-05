@@ -200,11 +200,11 @@ gvm_validate (validator_t validator, const char *name, const char *value)
 
   if (name != NULL && g_utf8_validate (name, -1, NULL) == FALSE)
     {
-      g_debug ("%s: name is not valid UTF-8", __FUNCTION__);
+      g_debug ("%s: name is not valid UTF-8", __func__);
       return 1;
     }
 
-  g_debug ("%s: name %s value %s", __FUNCTION__, name, value);
+  g_debug ("%s: name %s value %s", __func__, name, value);
 
   if (g_hash_table_lookup_extended (validator, name, &key, &value_rule))
     {
@@ -222,7 +222,7 @@ gvm_validate (validator_t validator, const char *name, const char *value)
 
       if (value != NULL && g_utf8_validate (value, -1, NULL) == FALSE)
         {
-          g_debug ("%s: value is not valid UTF-8", __FUNCTION__);
+          g_debug ("%s: value is not valid UTF-8", __func__);
           return 2;
         }
 
@@ -230,30 +230,30 @@ gvm_validate (validator_t validator, const char *name, const char *value)
         {
           if (value == NULL)
             {
-              g_debug ("%s: matched, regex NULL", __FUNCTION__);
+              g_debug ("%s: matched, regex NULL", __func__);
               return 0;
             }
-          g_debug ("%s: failed to match, regex NULL", __FUNCTION__);
+          g_debug ("%s: failed to match, regex NULL", __func__);
           return 2;
         }
 
       if (value == NULL)
         {
-          g_debug ("%s: failed to match, value NULL", __FUNCTION__);
+          g_debug ("%s: failed to match, value NULL", __func__);
           return 2;
         }
 
       g_debug ("matching <%s> against <%s>: ", (char *) rule->regex, value);
       if (g_regex_match_simple (rule->regex, (const gchar *) value, 0, 0))
         {
-          g_debug ("%s: matched", __FUNCTION__);
+          g_debug ("%s: matched", __func__);
           return 0;
         }
-      g_debug ("%s: failed to match\n", __FUNCTION__);
+      g_debug ("%s: failed to match\n", __func__);
       return 2;
     }
 
-  g_debug ("%s: failed to find name: %s", __FUNCTION__, name);
+  g_debug ("%s: failed to find name: %s", __func__, name);
   return 1;
 }
 
