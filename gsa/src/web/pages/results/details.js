@@ -48,7 +48,7 @@ import References from '../nvts/references';
 import Solution from '../nvts/solution';
 import P from '../nvts/preformatted';
 
-import Diff from './diff';
+import Diff, {Added, Removed} from './diff';
 
 /*
  security and log messages from nvts are converted to results
