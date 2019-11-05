@@ -79,13 +79,20 @@ const ResultDetails = ({className, links = true, entity}) => {
   const deltaType = result.delta.delta_type;
 
   let result2Description;
+  let result1Description;
 
   if (deltaType === 'same') {
     result2Description = result.description;
+    result1Description = result.description;
   } else if (deltaType === 'changed') {
+    result1Description = result.description;
     result2Description = result2.description;
+  } else if (deltaType === 'new') {
+    result1Description = _('N/A');
+    result2Description = result.description;
   } else {
-    result2Description = 'No second result available.';
+    result1Description = result.description;
+    result2Description = _('N/A');
   }
 
   return (
@@ -101,7 +108,7 @@ const ResultDetails = ({className, links = true, entity}) => {
               <h3>{_('Result 1')}</h3>
             </DetailsLink>
             <Pre>
-              {isDefined(result.description) ? result.description : _('N/A')}
+              {isDefined(result.description) ? result1Description : _('N/A')}
             </Pre>
           </div>
           <div>
