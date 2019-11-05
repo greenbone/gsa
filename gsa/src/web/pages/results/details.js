@@ -111,23 +111,35 @@ const ResultDetails = ({className, links = true, entity}) => {
   const result2 = isDefined(result.delta) ? result.delta.result : undefined;
   const result2Id = isDefined(result2) ? result2.id : undefined;
 
-  const deltaType = result.delta.delta_type;
+  const deltaType = isDefined(result.delta)
+    ? result.delta.delta_type
+    : undefined;
 
   let result2Description;
   let result1Description;
+  let result1Link;
+  let result2Link;
 
   if (deltaType === 'same') {
     result2Description = result.description;
     result1Description = result.description;
+    result1Link = result.id;
+    result2Link = result.id;
   } else if (deltaType === 'changed') {
     result1Description = result.description;
     result2Description = result2.description;
+    result1Link = result.id;
+    result2Link = result2Id;
   } else if (deltaType === 'new') {
     result1Description = _('N/A');
     result2Description = result.description;
+    result1Link = undefined;
+    result2Link = result.id;
   } else {
     result1Description = result.description;
     result2Description = _('N/A');
+    result1Link = result.id;
+    result2Link = undefined;
   }
 
   return (
@@ -139,16 +151,20 @@ const ResultDetails = ({className, links = true, entity}) => {
       {result.hasDelta() ? (
         <DetailsBlock title={_('Detection Results')}>
           <div>
-            <DetailsLink id={result.id} type="result">
+            {isDefined(result1Link) ? (
+              <DetailsLink id={result1Link} type="result">
+                <h3>{_('Result 1')}</h3>
+              </DetailsLink>
+            ) : (
               <h3>{_('Result 1')}</h3>
-            </DetailsLink>
+            )}
             <Pre>
-              {isDefined(result.description) ? result1Description : _('N/A')}
+              {isDefined(result1Description) ? result1Description : _('N/A')}
             </Pre>
           </div>
           <div>
-            {isDefined(result2Id) ? (
-              <DetailsLink id={result2Id} type="result">
+            {isDefined(result2Link) ? (
+              <DetailsLink id={result2Link} type="result">
                 <h3>{_('Result 2')}</h3>
               </DetailsLink>
             ) : (
