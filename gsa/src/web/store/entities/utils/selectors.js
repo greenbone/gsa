@@ -27,6 +27,20 @@ class EntitiesSelector {
     this.state = state;
   }
 
+  isLoadingAllEntities(filter) {
+    if (!isDefined(filter)) {
+      return isDefined(this.state.isLoading)
+        ? !!this.state.isLoading[filterIdentifier(ALL_FILTER)]
+        : false;
+    }
+    filter = isDefined(filter.toFilterString)
+      ? filter.all()
+      : Filter.fromString(filter).all();
+    return isDefined(this.state.isLoading)
+      ? !!this.state.isLoading[filterIdentifier(filter)]
+      : false;
+  }
+
   isLoadingEntities(filter) {
     return isDefined(this.state.isLoading)
       ? !!this.state.isLoading[filterIdentifier(filter)]
