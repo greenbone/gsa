@@ -28,13 +28,16 @@ import withGmp from 'web/utils/withGmp';
 const log = logger.getLogger('web.components.reload');
 
 export const NO_RELOAD = 0;
-export const USE_DEFAULT_RELOAD_INTERVAL = undefined;
-export const DEFAULT_RELOAD_INTERVAL_ACTIVE = 3 * 1000; // three seconds
+export const USE_DEFAULT_RELOAD_INTERVAL = -1;
+export const USE_DEFAULT_RELOAD_INTERVAL_ACTIVE = -2;
+export const USE_DEFAULT_RELOAD_INTERVAL_INACTIVE = -3;
 export const LOAD_TIME_FACTOR = 1.2;
 
 class Reload extends React.Component {
   constructor(...args) {
     super(...args);
+
+    this.isVisible = true;
 
     this.handleTimer = this.handleTimer.bind(this);
 
@@ -74,14 +77,34 @@ class Reload extends React.Component {
     const {
       gmp,
       defaultReloadInterval = gmp.settings.reloadInterval,
+      defaultReloadIntervalInactive = gmp.settings.reloadIntervalInactive,
+      defaultReloadIntervalActive = gmp.settings.reloadIntervalActive,
       reloadInterval,
     } = this.props;
 
+    let interval;
+
     if (isDefined(reloadInterval)) {
-      const interval = reloadInterval();
-      return isDefined(interval) ? interval : defaultReloadInterval;
+      interval = reloadInterval();
     }
-    return defaultReloadInterval;
+
+    if (interval === USE_DEFAULT_RELOAD_INTERVAL_ACTIVE) {
+      return this.isVisible
+        ? defaultReloadIntervalActive
+        : defaultReloadIntervalInactive;
+    } else if (interval === USE_DEFAULT_RELOAD_INTERVAL_INACTIVE) {
+      return defaultReloadIntervalInactive;
+    } else if (
+      !isDefined(interval) ||
+      interval === USE_DEFAULT_RELOAD_INTERVAL ||
+      interval < 0
+    ) {
+      return this.isVisible
+        ? defaultReloadInterval
+        : defaultReloadIntervalInactive;
+    }
+
+    return interval;
   }
 
   hasTimer() {
@@ -198,6 +221,8 @@ class Reload extends React.Component {
 Reload.propTypes = {
   children: PropTypes.func.isRequired,
   defaultReloadInterval: PropTypes.number,
+  defaultReloadIntervalActive: PropTypes.number,
+  defaultReloadIntervalInactive: PropTypes.number,
   gmp: PropTypes.gmp.isRequired,
   load: PropTypes.func,
   name: PropTypes.string.isRequired,
