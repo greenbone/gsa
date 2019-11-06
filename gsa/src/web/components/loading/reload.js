@@ -84,8 +84,12 @@ class Reload extends React.Component {
     return defaultReloadInterval;
   }
 
+  hasTimer() {
+    return isDefined(this.timer);
+  }
+
   startTimer() {
-    if (!this.isRunning || isDefined(this.timer)) {
+    if (!this.isRunning || this.hasTimer()) {
       log.debug('Not starting timer. A timer is already running.', {
         isRunning: this.isRunning,
         timer: this.timer,
@@ -126,7 +130,7 @@ class Reload extends React.Component {
   }
 
   clearTimer() {
-    if (isDefined(this.timer)) {
+    if (this.hasTimer()) {
       log.debug(
         'Clearing reload timer with id',
         this.timer,
