@@ -37,17 +37,20 @@ class Reload extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.isVisible = true;
+    this.isVisible = !document.hidden; // the browser window is active and visible to the user
 
     this.handleTimer = this.handleTimer.bind(this);
 
     this.reload = this.reload.bind(this);
+
+    this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
   }
 
   componentWillUnmount() {
     this.isRunning = false;
 
     this.clearTimer(); // remove possible running timer
+    this.removeVisibilityListender();
   }
 
   componentDidMount() {
@@ -56,6 +59,7 @@ class Reload extends React.Component {
 
     log.debug('Initial loading.');
 
+    this.activateVisibilityListener();
     this.internalLoad(loadFunc); // initial loading
   }
 
@@ -173,6 +177,29 @@ class Reload extends React.Component {
     this.resetTimer();
 
     this.internalLoad();
+  }
+
+  activateVisibilityListener() {
+    document.addEventListener('visibilitychange', this.handleVisibilityChange);
+  }
+
+  removeVisibilityListender() {
+    document.removeEventListener(
+      'visibilitychange',
+      this.handleVisibilityChange,
+    );
+  }
+
+  handleVisibilityChange() {
+    this.isVisible = !document.hidden;
+
+    if (this.isVisible && this.hasTimer()) {
+      // browser tab is visible again
+      // restart timer to get a possible shorter interval as the remaining time
+
+      this.clearTimer();
+      this.startTimer();
+    }
   }
 
   reload(options) {
