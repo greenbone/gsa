@@ -21,6 +21,8 @@ import GmpSettings, {
   DEFAULT_RELOAD_INTERVAL,
   DEFAULT_PROTOCOLDOC_URL,
   DEFAULT_LOG_LEVEL,
+  DEFAULT_RELOAD_INTERVAL_ACTIVE,
+  DEFAULT_RELOAD_INTERVAL_INACTIVE,
 } from 'gmp/gmpsettings';
 
 const createStorage = state => {
@@ -48,6 +50,12 @@ describe('GmpSettings tests', () => {
     expect(settings.protocol).toEqual('http:');
     expect(settings.protocoldocurl).toEqual(DEFAULT_PROTOCOLDOC_URL);
     expect(settings.reloadInterval).toEqual(DEFAULT_RELOAD_INTERVAL);
+    expect(settings.reloadIntervalActive).toEqual(
+      DEFAULT_RELOAD_INTERVAL_ACTIVE,
+    );
+    expect(settings.reloadIntervalInactive).toEqual(
+      DEFAULT_RELOAD_INTERVAL_INACTIVE,
+    );
     expect(settings.server).toEqual('localhost');
     expect(settings.token).toBeUndefined();
     expect(settings.timeout).toBeUndefined();
@@ -76,6 +84,8 @@ describe('GmpSettings tests', () => {
       protocol: 'http',
       protocoldocurl: 'http://protocol',
       reloadInterval: 10,
+      reloadIntervalActive: 5,
+      reloadIntervalInactive: 60,
       server: 'localhost',
       token: 'atoken',
       timeout: 30000,
@@ -96,6 +106,8 @@ describe('GmpSettings tests', () => {
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual('http://protocol');
     expect(settings.reloadInterval).toEqual(10);
+    expect(settings.reloadIntervalActive).toEqual(5);
+    expect(settings.reloadIntervalInactive).toEqual(60);
     expect(settings.server).toEqual('localhost');
     expect(settings.token).toBeUndefined();
     expect(settings.timeout).toEqual(30000);
@@ -138,6 +150,12 @@ describe('GmpSettings tests', () => {
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual(DEFAULT_PROTOCOLDOC_URL);
     expect(settings.reloadInterval).toEqual(DEFAULT_RELOAD_INTERVAL);
+    expect(settings.reloadIntervalActive).toEqual(
+      DEFAULT_RELOAD_INTERVAL_ACTIVE,
+    );
+    expect(settings.reloadIntervalInactive).toEqual(
+      DEFAULT_RELOAD_INTERVAL_INACTIVE,
+    );
     expect(settings.server).toEqual('foo');
     expect(settings.token).toEqual('atoken');
     expect(settings.timeout).toBeUndefined();
@@ -158,6 +176,8 @@ describe('GmpSettings tests', () => {
       protocol: 'https',
       protocoldocurl: 'http://lorem',
       reloadInterval: 20,
+      reloadIntervalActive: 20,
+      reloadIntervalInactive: 20,
       server: 'foo.bar',
       token: 'btoken',
       timeout: 10000,
@@ -176,6 +196,8 @@ describe('GmpSettings tests', () => {
       protocol: 'http',
       protocoldocurl: 'http://protocol',
       reloadInterval: 10,
+      reloadIntervalActive: 5,
+      reloadIntervalInactive: 60,
       server: 'localhost',
       token: 'atoken',
       timeout: 30000,
@@ -193,6 +215,8 @@ describe('GmpSettings tests', () => {
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual('http://protocol');
     expect(settings.reloadInterval).toEqual(10);
+    expect(settings.reloadIntervalActive).toEqual(5);
+    expect(settings.reloadIntervalInactive).toEqual(60);
     expect(settings.server).toEqual('localhost');
     expect(settings.token).toEqual('btoken');
     expect(settings.timeout).toEqual(30000);
