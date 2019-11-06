@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Fix react-scripts dependency because it broke tooltips [#1760](https://github.com/greenbone/gsa/pull/1760)
 - Improve Delta Report Details [#1748](https://github.com/greenbone/gsa/pull/1748)
 - Update node dependencies to latest releases [#1735](https://github.com/greenbone/gsa/pull/1735)
 - If details not defined, then choose first OS from identifiers [#1719](https://github.com/greenbone/gsa/pull/1719)
