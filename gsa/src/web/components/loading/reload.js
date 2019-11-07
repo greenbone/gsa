@@ -50,7 +50,7 @@ class Reload extends React.Component {
     this.isRunning = false;
 
     this.clearTimer(); // remove possible running timer
-    this.removeVisibilityListender();
+    this.removeVisibilityListener();
   }
 
   componentDidMount() {
@@ -183,7 +183,7 @@ class Reload extends React.Component {
     document.addEventListener('visibilitychange', this.handleVisibilityChange);
   }
 
-  removeVisibilityListender() {
+  removeVisibilityListener() {
     document.removeEventListener(
       'visibilitychange',
       this.handleVisibilityChange,
