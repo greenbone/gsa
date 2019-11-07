@@ -43,7 +43,7 @@ import IconDivider from 'web/components/layout/icondivider';
 
 import {
   USE_DEFAULT_RELOAD_INTERVAL,
-  DEFAULT_RELOAD_INTERVAL_ACTIVE,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
 
 import IconMenu from 'web/components/menu/iconmenu';
@@ -208,7 +208,7 @@ Page.propTypes = {
 
 const taskReloadInterval = ({entities = []}) =>
   entities.some(task => task.isActive())
-    ? DEFAULT_RELOAD_INTERVAL_ACTIVE
+    ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
     : USE_DEFAULT_RELOAD_INTERVAL;
 
 export default withEntitiesContainer('task', {

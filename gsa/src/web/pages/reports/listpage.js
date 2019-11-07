@@ -42,7 +42,7 @@ import IconDivider from 'web/components/layout/icondivider';
 
 import {
   USE_DEFAULT_RELOAD_INTERVAL,
-  DEFAULT_RELOAD_INTERVAL_ACTIVE,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
 
 import ContainerTaskDialog from 'web/pages/tasks/containerdialog';
@@ -273,7 +273,7 @@ Page.propTypes = {
 
 const reportsReloadInterval = ({entities = []}) =>
   entities.some(entity => isActive(entity.report.scan_run_status))
-    ? DEFAULT_RELOAD_INTERVAL_ACTIVE
+    ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
     : USE_DEFAULT_RELOAD_INTERVAL;
 
 const mapStateToProps = rootState => {

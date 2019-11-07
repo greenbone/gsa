@@ -36,8 +36,8 @@ import {isDefined, hasValue} from 'gmp/utils/identity';
 import withDownload from 'web/components/form/withDownload';
 
 import Reload, {
-  DEFAULT_RELOAD_INTERVAL_ACTIVE,
   NO_RELOAD,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
 
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
@@ -676,7 +676,7 @@ const mapStateToProps = (rootState, {match}) => {
 
 const reloadInterval = report =>
   isDefined(report) && isActive(report.report.scan_run_status)
-    ? DEFAULT_RELOAD_INTERVAL_ACTIVE
+    ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
     : NO_RELOAD; // report doesn't change anymore. no need to reload
 
 const load = ({

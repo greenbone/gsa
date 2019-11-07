@@ -19,6 +19,8 @@
 import {isDefined} from './utils/identity';
 
 export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
+export const DEFAULT_RELOAD_INTERVAL_ACTIVE = 3 * 1000; // three seconds
+export const DEFAULT_RELOAD_INTERVAL_INACTIVE = 60 * 1000; // one minute
 export const DEFAULT_MANUAL_URL = 'http://docs.greenbone.net/GSM-Manual/gos-5/';
 export const DEFAULT_PROTOCOLDOC_URL =
   'https://docs.greenbone.net/API/GMP/gmp-8.0.html';
@@ -52,6 +54,8 @@ class GmpSettings {
       protocol = global.location.protocol,
       protocoldocurl = DEFAULT_PROTOCOLDOC_URL,
       reloadInterval = DEFAULT_RELOAD_INTERVAL,
+      reloadIntervalActive = DEFAULT_RELOAD_INTERVAL_ACTIVE,
+      reloadIntervalInactive = DEFAULT_RELOAD_INTERVAL_INACTIVE,
       server = global.location.host,
       timeout,
       vendorVersion,
@@ -65,6 +69,8 @@ class GmpSettings {
 
     this.loglevel = isDefined(loglevel) ? loglevel : DEFAULT_LOG_LEVEL;
     this.reloadInterval = reloadInterval;
+    this.reloadIntervalActive = reloadIntervalActive;
+    this.reloadIntervalInactive = reloadIntervalInactive;
     this.timeout = timeout;
 
     setAndFreeze(this, 'disableLoginForm', disableLoginForm);
