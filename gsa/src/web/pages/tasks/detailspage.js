@@ -51,7 +51,7 @@ import TaskIcon from 'web/components/icon/taskicon';
 import {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL,
-  DEFAULT_RELOAD_INTERVAL_ACTIVE,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
 
 import Tab from 'web/components/tab/tab';
@@ -522,7 +522,7 @@ export const reloadInterval = ({entity}) => {
     return NO_RELOAD;
   }
   return entity.isActive()
-    ? DEFAULT_RELOAD_INTERVAL_ACTIVE
+    ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
     : USE_DEFAULT_RELOAD_INTERVAL;
 };
 
