@@ -140,6 +140,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Consider visibility status of page for calculating the reload interval [#1761](https://github.com/greenbone/gsa/pull/1761)
 - Do not simplify filterString in content composer for report download [#1733](https://github.com/greenbone/gsa/pull/1733)
 - Use single component for reloading data [#1722](https://github.com/greenbone/gsa/pull/1722)
 - Use last chars of a label string in BarChart [#1713](https://github.com/greenbone/gsa/pull/1713)
