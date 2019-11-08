@@ -20,7 +20,7 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import {withRouter} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 import styled, {keyframes} from 'styled-components';
 
@@ -132,9 +132,10 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const UserMenuContainer = ({sessionTimeout, userName, history}) => {
+const UserMenuContainer = ({sessionTimeout, userName}) => {
   const userTimezone = useUserTimezone();
   const gmp = useGmp();
+  const history = useHistory();
 
   const handleLogout = event => {
     event.preventDefault();
@@ -186,14 +187,12 @@ const UserMenuContainer = ({sessionTimeout, userName, history}) => {
 };
 
 UserMenuContainer.propTypes = {
-  history: PropTypes.object.isRequired,
   icon: PropTypes.element,
   sessionTimeout: PropTypes.date,
   userName: PropTypes.string,
 };
 
 export default compose(
-  withRouter,
   connect(rootState => ({
     sessionTimeout: getSessionTimeout(rootState),
     userName: getUsername(rootState),
