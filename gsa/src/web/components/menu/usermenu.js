@@ -39,9 +39,10 @@ import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 import useGmp from 'web/utils/useGmp';
+import useUserName from 'web/utils/useUserName';
 import useUserTimezone from 'web/utils/useUserTimezone';
 
-import {getUsername, getSessionTimeout} from 'web/store/usersettings/selectors';
+import {getSessionTimeout} from 'web/store/usersettings/selectors';
 
 const UserMenu = styled.span`
   display: inline-flex;
@@ -132,8 +133,9 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const UserMenuContainer = ({sessionTimeout, userName}) => {
+const UserMenuContainer = ({sessionTimeout}) => {
   const userTimezone = useUserTimezone();
+  const userName = useUserName();
   const gmp = useGmp();
   const history = useHistory();
 
@@ -189,13 +191,11 @@ const UserMenuContainer = ({sessionTimeout, userName}) => {
 UserMenuContainer.propTypes = {
   icon: PropTypes.element,
   sessionTimeout: PropTypes.date,
-  userName: PropTypes.string,
 };
 
 export default compose(
   connect(rootState => ({
     sessionTimeout: getSessionTimeout(rootState),
-    userName: getUsername(rootState),
   })),
 )(UserMenuContainer);
 
