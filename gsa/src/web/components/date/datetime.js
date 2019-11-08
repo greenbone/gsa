@@ -16,19 +16,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {connect} from 'react-redux';
-
 import {dateTimeWithTimeZone, ensureDate} from 'gmp/locale/date';
 
-import {isDefined} from 'gmp/utils/identity';
-
-import {getTimezone} from 'web/store/usersettings/selectors';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
+import useUserTimezone from 'web/utils/useUserTimezone';
 
 const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) => {
   date = ensureDate(date);
 
+  const userTimezone = useUserTimezone();
+
+  if (!hasValue(timezone)) {
+    timezone = userTimezone;
+  }
   return !isDefined(date) || !date.isValid() ? null : formatter(date, timezone);
 };
 
@@ -38,10 +40,4 @@ DateTime.propTypes = {
   timezone: PropTypes.string,
 };
 
-const mapStateToProps = (rootState, ownProps) => ({
-  timezone: isDefined(ownProps.timezone)
-    ? ownProps.timezone
-    : getTimezone(rootState),
-});
-
-export default connect(mapStateToProps)(DateTime);
+export default DateTime;
