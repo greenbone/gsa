@@ -25,7 +25,7 @@ import {withRouter} from 'react-router-dom';
 import styled, {keyframes} from 'styled-components';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
+import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import LogoutIcon from 'web/components/icon/logouticon';
 import MySettingsIcon from 'web/components/icon/mysettingsicon';
@@ -38,6 +38,7 @@ import Link from 'web/components/link/link';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
+import useUserTimezone from 'web/utils/useUserTimezone';
 import withGmp from 'web/utils/withGmp';
 
 import {getUsername, getSessionTimeout} from 'web/store/usersettings/selectors';
@@ -132,6 +133,8 @@ const StyledLink = styled(Link)`
 `;
 
 const UserMenuContainer = ({sessionTimeout, userName, gmp, history}) => {
+  const userTimezone = useUserTimezone();
+
   const handleLogout = event => {
     event.preventDefault();
 
@@ -156,7 +159,7 @@ const UserMenuContainer = ({sessionTimeout, userName, gmp, history}) => {
               <ScheduleIcon />
               <span>
                 {_('Session timeout: {{date}}', {
-                  date: longDate(sessionTimeout),
+                  date: dateTimeWithTimeZone(sessionTimeout, userTimezone),
                 })}
               </span>
             </Divider>
