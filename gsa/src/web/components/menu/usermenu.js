@@ -38,8 +38,8 @@ import Link from 'web/components/link/link';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
+import useGmp from 'web/utils/useGmp';
 import useUserTimezone from 'web/utils/useUserTimezone';
-import withGmp from 'web/utils/withGmp';
 
 import {getUsername, getSessionTimeout} from 'web/store/usersettings/selectors';
 
@@ -132,8 +132,9 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const UserMenuContainer = ({sessionTimeout, userName, gmp, history}) => {
+const UserMenuContainer = ({sessionTimeout, userName, history}) => {
   const userTimezone = useUserTimezone();
+  const gmp = useGmp();
 
   const handleLogout = event => {
     event.preventDefault();
@@ -185,7 +186,6 @@ const UserMenuContainer = ({sessionTimeout, userName, gmp, history}) => {
 };
 
 UserMenuContainer.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
   history: PropTypes.object.isRequired,
   icon: PropTypes.element,
   sessionTimeout: PropTypes.date,
@@ -193,7 +193,6 @@ UserMenuContainer.propTypes = {
 };
 
 export default compose(
-  withGmp,
   withRouter,
   connect(rootState => ({
     sessionTimeout: getSessionTimeout(rootState),
