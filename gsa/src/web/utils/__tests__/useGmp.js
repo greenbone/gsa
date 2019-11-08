@@ -16,28 +16,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {dateTimeWithTimeZone, ensureDate} from 'gmp/locale/date';
+import React from 'react';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import {rendererWith} from '../testing';
 
-import PropTypes from 'web/utils/proptypes';
-import useUserTimezone from 'web/utils/useUserTimezone';
+import useGmp from '../useGmp';
 
-const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) => {
-  date = ensureDate(date);
-
-  const userTimezone = useUserTimezone();
-
-  if (!hasValue(timezone)) {
-    timezone = userTimezone;
-  }
-  return !isDefined(date) || !date.isValid() ? null : formatter(date, timezone);
+const TestUseGmp = () => {
+  const gmp = useGmp();
+  return <span>{gmp.foo()}</span>;
 };
 
-DateTime.propTypes = {
-  date: PropTypes.date,
-  formatter: PropTypes.func,
-  timezone: PropTypes.string,
-};
+describe('useGmp tests', () => {
+  test('should return the current gmp object', () => {
+    const foo = jest.fn().mockReturnValue('foo');
+    const gmp = {foo};
 
-export default DateTime;
+    const {render} = rendererWith({gmp});
+
+    const {element} = render(<TestUseGmp />);
+
+    expect(foo).toHaveBeenCalled();
+    expect(element).toHaveTextContent(/^foo$/);
+  });
+});

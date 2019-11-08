@@ -16,28 +16,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {dateTimeWithTimeZone, ensureDate} from 'gmp/locale/date';
+import React from 'react';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import {dateFormat} from 'gmp/locale/date';
+import date from 'gmp/models/date';
 
-import PropTypes from 'web/utils/proptypes';
-import useUserTimezone from 'web/utils/useUserTimezone';
+import {setSessionTimeout} from 'web/store/usersettings/actions';
 
-const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) => {
-  date = ensureDate(date);
+import {rendererWith} from '../testing';
 
-  const userTimezone = useUserTimezone();
+import useUserSessionTimeout from '../useUserSessionTimeout';
 
-  if (!hasValue(timezone)) {
-    timezone = userTimezone;
-  }
-  return !isDefined(date) || !date.isValid() ? null : formatter(date, timezone);
-};
+const TestUserSessionTimeout = () => (
+  <span>{dateFormat(useUserSessionTimeout(), 'DD-MM-YY')}</span>
+);
 
-DateTime.propTypes = {
-  date: PropTypes.date,
-  formatter: PropTypes.func,
-  timezone: PropTypes.string,
-};
+describe('useUserSessionTimeout tests', () => {
+  test('should return the users session timeout', () => {
+    const {render, store} = rendererWith({store: true});
 
-export default DateTime;
+    const timeout = date('2019-10-10');
+
+    store.dispatch(setSessionTimeout(timeout));
+
+    const {element} = render(<TestUserSessionTimeout />);
+
+    expect(element).toHaveTextContent(/^10-10-19$/);
+  });
+});
