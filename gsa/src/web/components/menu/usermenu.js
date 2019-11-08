@@ -189,7 +189,6 @@ const UserMenuContainer = ({sessionTimeout}) => {
 };
 
 UserMenuContainer.propTypes = {
-  icon: PropTypes.element,
   sessionTimeout: PropTypes.date,
 };
 
