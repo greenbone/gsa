@@ -18,8 +18,6 @@
  */
 import React from 'react';
 
-import {connect} from 'react-redux';
-
 import {useHistory} from 'react-router-dom';
 
 import styled, {keyframes} from 'styled-components';
@@ -35,14 +33,11 @@ import UserIcon from 'web/components/icon/usericon';
 import Divider from 'web/components/layout/divider';
 import Link from 'web/components/link/link';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 import useGmp from 'web/utils/useGmp';
 import useUserName from 'web/utils/useUserName';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import useUserTimezone from 'web/utils/useUserTimezone';
-
-import {getSessionTimeout} from 'web/store/usersettings/selectors';
 
 const UserMenu = styled.span`
   display: inline-flex;
@@ -133,7 +128,8 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const UserMenuContainer = ({sessionTimeout}) => {
+const UserMenuContainer = () => {
+  const sessionTimeout = useUserSessionTimeout();
   const userTimezone = useUserTimezone();
   const userName = useUserName();
   const gmp = useGmp();
@@ -188,14 +184,6 @@ const UserMenuContainer = ({sessionTimeout}) => {
   );
 };
 
-UserMenuContainer.propTypes = {
-  sessionTimeout: PropTypes.date,
-};
-
-export default compose(
-  connect(rootState => ({
-    sessionTimeout: getSessionTimeout(rootState),
-  })),
-)(UserMenuContainer);
+export default UserMenuContainer;
 
 // vim: set ts=2 sw=2 tw=80:
