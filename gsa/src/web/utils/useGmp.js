@@ -16,28 +16,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {dateTimeWithTimeZone, ensureDate} from 'gmp/locale/date';
+import {useContext} from 'react';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import GmpContext from 'web/components/provider/gmpprovider';
 
-import PropTypes from 'web/utils/proptypes';
-import useUserTimezone from 'web/utils/useUserTimezone';
+const useGmp = () => useContext(GmpContext);
 
-const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) => {
-  date = ensureDate(date);
-
-  const userTimezone = useUserTimezone();
-
-  if (!hasValue(timezone)) {
-    timezone = userTimezone;
-  }
-  return !isDefined(date) || !date.isValid() ? null : formatter(date, timezone);
-};
-
-DateTime.propTypes = {
-  date: PropTypes.date,
-  formatter: PropTypes.func,
-  timezone: PropTypes.string,
-};
-
-export default DateTime;
+export default useGmp;

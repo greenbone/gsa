@@ -798,6 +798,9 @@ exports[`GlobalStyles tests should render global styles 1`] = `
 /* sc-component-id: sc-cTjmhe */
 
       
+/* sc-component-id: sc-cugefK */
+
+      
 /* sc-component-id: sc-global-2342249302 */
 html{box-sizing:border-box;} *,*:before,*:after{box-sizing:inherit;} body{margin:0;font-family:Verdana,sans-serif;font-size:12px;color:#000;} a:link{color:#0000ff;-webkit-text-decoration:none;text-decoration:none;} a:hover,a:focus{color:blue;-webkit-text-decoration:underline;text-decoration:underline;} pre{white-space:pre-wrap;word-wrap:break-word;} img{border:0;} svg{overflow:hidden;} h1{font-size:20px;} h2{font-size:18px;} h3{font-size:16px;} h4{font-size:14px;margin-bottom:0;} p{margin:0 0 10px;}
     </style>

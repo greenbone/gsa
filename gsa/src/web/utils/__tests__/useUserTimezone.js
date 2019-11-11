@@ -16,28 +16,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {dateTimeWithTimeZone, ensureDate} from 'gmp/locale/date';
+import React from 'react';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import {setTimezone} from 'web/store/usersettings/actions';
 
-import PropTypes from 'web/utils/proptypes';
-import useUserTimezone from 'web/utils/useUserTimezone';
+import {rendererWith} from '../testing';
 
-const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) => {
-  date = ensureDate(date);
+import useUserTimezone from '../useUserTimezone';
 
-  const userTimezone = useUserTimezone();
+const TestUserTimezone = () => <span>{useUserTimezone()}</span>;
 
-  if (!hasValue(timezone)) {
-    timezone = userTimezone;
-  }
-  return !isDefined(date) || !date.isValid() ? null : formatter(date, timezone);
-};
+describe('useUserTimezone tests', () => {
+  test('should return the users timezone', () => {
+    const {render, store} = rendererWith({store: true});
 
-DateTime.propTypes = {
-  date: PropTypes.date,
-  formatter: PropTypes.func,
-  timezone: PropTypes.string,
-};
+    store.dispatch(setTimezone('CET'));
 
-export default DateTime;
+    const {element} = render(<TestUserTimezone />);
+
+    expect(element).toHaveTextContent(/^CET$/);
+  });
+});

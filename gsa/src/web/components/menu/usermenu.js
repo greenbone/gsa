@@ -18,14 +18,12 @@
  */
 import React from 'react';
 
-import {connect} from 'react-redux';
-
-import {withRouter} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 import styled, {keyframes} from 'styled-components';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
+import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import LogoutIcon from 'web/components/icon/logouticon';
 import MySettingsIcon from 'web/components/icon/mysettingsicon';
@@ -35,12 +33,11 @@ import UserIcon from 'web/components/icon/usericon';
 import Divider from 'web/components/layout/divider';
 import Link from 'web/components/link/link';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-import withGmp from 'web/utils/withGmp';
-
-import {getUsername, getSessionTimeout} from 'web/store/usersettings/selectors';
+import useGmp from 'web/utils/useGmp';
+import useUserName from 'web/utils/useUserName';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useUserTimezone from 'web/utils/useUserTimezone';
 
 const UserMenu = styled.span`
   display: inline-flex;
@@ -131,18 +128,20 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const UserMenuContainer = props => {
-  const handleLogout = event => {
-    const {gmp, history} = props;
+const UserMenuContainer = () => {
+  const sessionTimeout = useUserSessionTimeout();
+  const userTimezone = useUserTimezone();
+  const userName = useUserName();
+  const gmp = useGmp();
+  const history = useHistory();
 
+  const handleLogout = event => {
     event.preventDefault();
 
     gmp.doLogout().then(() => {
       history.push('/login?type=logout');
     });
   };
-
-  const {sessionTimeout, userName} = props;
 
   return (
     <UserMenu data-testid="usermenu">
@@ -160,7 +159,7 @@ const UserMenuContainer = props => {
               <ScheduleIcon />
               <span>
                 {_('Session timeout: {{date}}', {
-                  date: longDate(sessionTimeout),
+                  date: dateTimeWithTimeZone(sessionTimeout, userTimezone),
                 })}
               </span>
             </Divider>
@@ -173,10 +172,7 @@ const UserMenuContainer = props => {
               </Divider>
             </StyledLink>
           </Entry>
-          <Entry
-            data-testid="usermenu-logout"
-            onClick={event => handleLogout(event)}
-          >
+          <Entry data-testid="usermenu-logout" onClick={handleLogout}>
             <Divider>
               <LogoutIcon />
               <span>{_('Log Out')}</span>
@@ -188,21 +184,6 @@ const UserMenuContainer = props => {
   );
 };
 
-UserMenuContainer.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  history: PropTypes.object.isRequired,
-  icon: PropTypes.element,
-  sessionTimeout: PropTypes.date,
-  userName: PropTypes.string,
-};
-
-export default compose(
-  withGmp,
-  withRouter,
-  connect(rootState => ({
-    sessionTimeout: getSessionTimeout(rootState),
-    userName: getUsername(rootState),
-  })),
-)(UserMenuContainer);
+export default UserMenuContainer;
 
 // vim: set ts=2 sw=2 tw=80:

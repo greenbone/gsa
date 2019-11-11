@@ -21,8 +21,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### [9.0.1] - unreleased
 
 ### Added
+- Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)
 
 ### Changed
+- Changed default port to 22 for scanner dialog [#1768](https://github.com/greenbone/gsa/pull/1768)
+- Fix react-scripts dependency because it broke tooltips [#1760](https://github.com/greenbone/gsa/pull/1760)
+- Improve Delta Report Details [#1748](https://github.com/greenbone/gsa/pull/1748)
 - Update node dependencies to latest releases [#1735](https://github.com/greenbone/gsa/pull/1735)
 - If details not defined, then choose first OS from identifiers [#1719](https://github.com/greenbone/gsa/pull/1719)
 - Sorting of SecInfo items [#1717](https://github.com/greenbone/gsa/pull/1717))
@@ -48,6 +52,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Add statereducer function to Select component: Scrolls to last selected item [#1715](https://github.com/greenbone/gsa/pull/1715)
+- Add loading indicator to select [#1716](https://github.com/greenbone/gsa/pull/1716)
 - Add loading indicator to svg icon [#1701](https://github.com/greenbone/gsa/pull/1701)
 - Update German Translation [#1689](https://github.com/greenbone/gsa/pull/1689)
 - List NVT of the found CVEs at the report details page [#1673](https://github.com/greenbone/gsa/pull/1673)
@@ -151,6 +156,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Consider visibility status of page for calculating the reload interval [#1761](https://github.com/greenbone/gsa/pull/1761)
 - Do not simplify filterString in content composer for report download [#1733](https://github.com/greenbone/gsa/pull/1733)
 - Use single component for reloading data [#1722](https://github.com/greenbone/gsa/pull/1722)
 - Use last chars of a label string in BarChart [#1713](https://github.com/greenbone/gsa/pull/1713)

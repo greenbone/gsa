@@ -48,7 +48,7 @@ import References from '../nvts/references';
 import Solution from '../nvts/solution';
 import P from '../nvts/preformatted';
 
-import Diff from './diff';
+import Diff, {Added, Removed} from './diff';
 
 /*
  security and log messages from nvts are converted to results
@@ -58,6 +58,41 @@ const Pre = styled.pre`
   white-space: pre-wrap;
   word-wrap: normal;
 `;
+
+const DerivedDiff = ({deltaType, firstDescription, secondDesription}) => {
+  let Component;
+  let lines;
+  let prefix;
+
+  if (deltaType === 'new') {
+    lines = secondDesription.split(/\r|\n|\r\n/);
+    Component = Added;
+    prefix = '+';
+  } else if (deltaType === 'gone') {
+    lines = firstDescription.split(/\r|\n|\r\n/);
+    Component = Removed;
+    prefix = '-';
+  } else {
+    lines = [_('N/A')];
+    Component = Pre;
+    prefix = '';
+  }
+
+  return (
+    <React.Fragment>
+      {lines.map((line, i) => {
+        const lineWithPrefix = prefix + line;
+        return <Component key={i}>{lineWithPrefix}</Component>;
+      })}
+    </React.Fragment>
+  );
+};
+
+DerivedDiff.propTypes = {
+  deltaType: PropTypes.string.isRequired,
+  firstDescription: PropTypes.string.isRequired,
+  secondDesription: PropTypes.string.isRequired,
+};
 
 const ResultDetails = ({className, links = true, entity}) => {
   const result = entity;
@@ -75,9 +110,37 @@ const ResultDetails = ({className, links = true, entity}) => {
 
   const result2 = isDefined(result.delta) ? result.delta.result : undefined;
   const result2Id = isDefined(result2) ? result2.id : undefined;
-  const result2Description = isDefined(result2)
-    ? result2.description
+
+  const deltaType = isDefined(result.delta)
+    ? result.delta.delta_type
     : undefined;
+
+  let result2Description;
+  let result1Description;
+  let result1Link;
+  let result2Link;
+
+  if (deltaType === 'same') {
+    result2Description = result.description;
+    result1Description = result.description;
+    result1Link = result.id;
+    result2Link = result.id;
+  } else if (deltaType === 'changed') {
+    result1Description = result.description;
+    result2Description = result2.description;
+    result1Link = result.id;
+    result2Link = result2Id;
+  } else if (deltaType === 'new') {
+    result1Description = _('N/A');
+    result2Description = result.description;
+    result1Link = undefined;
+    result2Link = result.id;
+  } else {
+    result1Description = result.description;
+    result2Description = _('N/A');
+    result1Link = result.id;
+    result2Link = undefined;
+  }
 
   return (
     <Layout flex="column" grow="1" className={className}>
@@ -88,16 +151,20 @@ const ResultDetails = ({className, links = true, entity}) => {
       {result.hasDelta() ? (
         <DetailsBlock title={_('Detection Results')}>
           <div>
-            <DetailsLink id={result.id} type="result">
+            {isDefined(result1Link) ? (
+              <DetailsLink id={result1Link} type="result">
+                <h3>{_('Result 1')}</h3>
+              </DetailsLink>
+            ) : (
               <h3>{_('Result 1')}</h3>
-            </DetailsLink>
+            )}
             <Pre>
-              {isDefined(result.description) ? result.description : _('N/A')}
+              {isDefined(result1Description) ? result1Description : _('N/A')}
             </Pre>
           </div>
           <div>
-            {isDefined(result2Id) ? (
-              <DetailsLink id={result2Id} type="result">
+            {isDefined(result2Link) ? (
+              <DetailsLink id={result2Link} type="result">
                 <h3>{_('Result 2')}</h3>
               </DetailsLink>
             ) : (
@@ -112,7 +179,11 @@ const ResultDetails = ({className, links = true, entity}) => {
             {isDefined(result.delta.diff) ? (
               <Diff>{result.delta.diff}</Diff>
             ) : (
-              <Pre>{_('N/A')}</Pre>
+              <DerivedDiff
+                deltaType={deltaType}
+                firstDescription={result1Description}
+                secondDesription={result2Description}
+              />
             )}
           </div>
         </DetailsBlock>

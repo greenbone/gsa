@@ -28,23 +28,29 @@ import withGmp from 'web/utils/withGmp';
 const log = logger.getLogger('web.components.reload');
 
 export const NO_RELOAD = 0;
-export const USE_DEFAULT_RELOAD_INTERVAL = undefined;
-export const DEFAULT_RELOAD_INTERVAL_ACTIVE = 3 * 1000; // three seconds
+export const USE_DEFAULT_RELOAD_INTERVAL = -1;
+export const USE_DEFAULT_RELOAD_INTERVAL_ACTIVE = -2;
+export const USE_DEFAULT_RELOAD_INTERVAL_INACTIVE = -3;
 export const LOAD_TIME_FACTOR = 1.2;
 
 class Reload extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.isVisible = !document.hidden; // the browser window is active and visible to the user
+
     this.handleTimer = this.handleTimer.bind(this);
 
     this.reload = this.reload.bind(this);
+
+    this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
   }
 
   componentWillUnmount() {
     this.isRunning = false;
 
     this.clearTimer(); // remove possible running timer
+    this.removeVisibilityListener();
   }
 
   componentDidMount() {
@@ -53,6 +59,7 @@ class Reload extends React.Component {
 
     log.debug('Initial loading.');
 
+    this.activateVisibilityListener();
     this.internalLoad(loadFunc); // initial loading
   }
 
@@ -74,18 +81,42 @@ class Reload extends React.Component {
     const {
       gmp,
       defaultReloadInterval = gmp.settings.reloadInterval,
+      defaultReloadIntervalInactive = gmp.settings.reloadIntervalInactive,
+      defaultReloadIntervalActive = gmp.settings.reloadIntervalActive,
       reloadInterval,
     } = this.props;
 
+    let interval;
+
     if (isDefined(reloadInterval)) {
-      const interval = reloadInterval();
-      return isDefined(interval) ? interval : defaultReloadInterval;
+      interval = reloadInterval();
     }
-    return defaultReloadInterval;
+
+    if (interval === USE_DEFAULT_RELOAD_INTERVAL_ACTIVE) {
+      return this.isVisible
+        ? defaultReloadIntervalActive
+        : defaultReloadIntervalInactive;
+    } else if (interval === USE_DEFAULT_RELOAD_INTERVAL_INACTIVE) {
+      return defaultReloadIntervalInactive;
+    } else if (
+      !isDefined(interval) ||
+      interval === USE_DEFAULT_RELOAD_INTERVAL ||
+      interval < 0
+    ) {
+      return this.isVisible
+        ? defaultReloadInterval
+        : defaultReloadIntervalInactive;
+    }
+
+    return interval;
+  }
+
+  hasTimer() {
+    return isDefined(this.timer);
   }
 
   startTimer() {
-    if (!this.isRunning || isDefined(this.timer)) {
+    if (!this.isRunning || this.hasTimer()) {
       log.debug('Not starting timer. A timer is already running.', {
         isRunning: this.isRunning,
         timer: this.timer,
@@ -126,7 +157,7 @@ class Reload extends React.Component {
   }
 
   clearTimer() {
-    if (isDefined(this.timer)) {
+    if (this.hasTimer()) {
       log.debug(
         'Clearing reload timer with id',
         this.timer,
@@ -146,6 +177,29 @@ class Reload extends React.Component {
     this.resetTimer();
 
     this.internalLoad();
+  }
+
+  activateVisibilityListener() {
+    document.addEventListener('visibilitychange', this.handleVisibilityChange);
+  }
+
+  removeVisibilityListener() {
+    document.removeEventListener(
+      'visibilitychange',
+      this.handleVisibilityChange,
+    );
+  }
+
+  handleVisibilityChange() {
+    this.isVisible = !document.hidden;
+
+    if (this.isVisible && this.hasTimer()) {
+      // browser tab is visible again
+      // restart timer to get a possible shorter interval as the remaining time
+
+      this.clearTimer();
+      this.startTimer();
+    }
   }
 
   reload(options) {
@@ -194,6 +248,8 @@ class Reload extends React.Component {
 Reload.propTypes = {
   children: PropTypes.func.isRequired,
   defaultReloadInterval: PropTypes.number,
+  defaultReloadIntervalActive: PropTypes.number,
+  defaultReloadIntervalInactive: PropTypes.number,
   gmp: PropTypes.gmp.isRequired,
   load: PropTypes.func,
   name: PropTypes.string.isRequired,
