@@ -86,7 +86,7 @@
     "jest-junit": "^9.0.0",
     "jest-styled-components": "^6.3.3",
     "lint-staged": "^8.2.1",
-    "prettier": "^1.18.2"
+    "prettier": "^1.19.1"
   },
   "jest": {
     "collectCoverageFrom": [
