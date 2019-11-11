@@ -30,11 +30,11 @@ const Pre = styled.div`
   font-family: monospace;
 `;
 
-const Removed = styled(Pre)`
+export const Removed = styled(Pre)`
   background-color: #ffeef0;
 `;
 
-const Added = styled(Pre)`
+export const Added = styled(Pre)`
   background-color: #e6ffed;
 `;
 

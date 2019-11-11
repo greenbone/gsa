@@ -20,7 +20,12 @@ import React from 'react';
 
 import {act, fireEvent, rendererWith} from 'web/utils/testing';
 
-import Reload from '../reload';
+import Reload, {
+  NO_RELOAD,
+  USE_DEFAULT_RELOAD_INTERVAL,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
+  USE_DEFAULT_RELOAD_INTERVAL_INACTIVE,
+} from '../reload';
 
 // eslint-disable-next-line react/prop-types
 const TestComponent = ({reload, id, reloadOptions}) => (
@@ -421,7 +426,184 @@ describe('Reload component tests', () => {
     expect(queryByTestId('two')).not.toBeInTheDocument();
   });
 
-  test('should fall back to defaultReloadInterval if reloadInterval returns undefined', async () => {
+  test(
+    'should fall back to defaultReloadInterval if reloadInterval returns ' +
+      'USE_DEFAULT_RELOAD_INTERVAL',
+    async () => {
+      jest.useFakeTimers();
+
+      const renderFunc = jest
+        .fn()
+        .mockReturnValueOnce(<div data-testid="one" />)
+        .mockReturnValueOnce(<div data-testid="two" />);
+      const loadFunc = jest.fn().mockResolvedValue();
+      const reloadFunc = jest.fn().mockResolvedValue();
+
+      const reloadInterval = jest
+        .fn()
+        .mockReturnValue(USE_DEFAULT_RELOAD_INTERVAL);
+
+      const gmp = {
+        settings: {
+          reloadInterval: 5000,
+        },
+      };
+
+      const {render} = rendererWith({gmp});
+
+      const {queryByTestId} = render(
+        <Reload
+          defaultReloadInterval={NO_RELOAD}
+          load={loadFunc}
+          reload={reloadFunc}
+          reloadInterval={reloadInterval}
+          name="foo"
+        >
+          {renderFunc}
+        </Reload>,
+      );
+
+      expect(loadFunc).toHaveBeenCalled();
+      expect(reloadFunc).not.toHaveBeenCalled();
+      expect(renderFunc).toHaveBeenCalled();
+      expect(reloadInterval).not.toHaveBeenCalled();
+
+      expect(queryByTestId('one')).toBeInTheDocument();
+
+      loadFunc.mockClear();
+      renderFunc.mockClear();
+
+      await runTimers();
+
+      expect(loadFunc).not.toHaveBeenCalled();
+      expect(reloadFunc).not.toHaveBeenCalled();
+      expect(renderFunc).not.toHaveBeenCalled();
+      expect(reloadInterval).toHaveBeenCalled();
+
+      expect(queryByTestId('one')).toBeInTheDocument();
+      expect(queryByTestId('two')).not.toBeInTheDocument();
+    },
+  );
+
+  test(
+    'should fall back to defaultReloadIntervalActive if reloadInterval ' +
+      'returns USE_DEFAULT_RELOAD_INTERVAL_ACTIVE',
+    async () => {
+      jest.useFakeTimers();
+
+      const renderFunc = jest
+        .fn()
+        .mockReturnValueOnce(<div data-testid="one" />)
+        .mockReturnValueOnce(<div data-testid="two" />);
+      const loadFunc = jest.fn().mockResolvedValue();
+      const reloadFunc = jest.fn().mockResolvedValue();
+
+      const reloadInterval = jest
+        .fn()
+        .mockReturnValue(USE_DEFAULT_RELOAD_INTERVAL_ACTIVE);
+
+      const gmp = {
+        settings: {
+          reloadInterval: 5000,
+        },
+      };
+
+      const {render} = rendererWith({gmp});
+
+      const {queryByTestId} = render(
+        <Reload
+          defaultReloadIntervalActive={NO_RELOAD}
+          load={loadFunc}
+          reload={reloadFunc}
+          reloadInterval={reloadInterval}
+          name="foo"
+        >
+          {renderFunc}
+        </Reload>,
+      );
+
+      expect(loadFunc).toHaveBeenCalled();
+      expect(reloadFunc).not.toHaveBeenCalled();
+      expect(renderFunc).toHaveBeenCalled();
+      expect(reloadInterval).not.toHaveBeenCalled();
+
+      expect(queryByTestId('one')).toBeInTheDocument();
+
+      loadFunc.mockClear();
+      renderFunc.mockClear();
+
+      await runTimers();
+
+      expect(loadFunc).not.toHaveBeenCalled();
+      expect(reloadFunc).not.toHaveBeenCalled();
+      expect(renderFunc).not.toHaveBeenCalled();
+      expect(reloadInterval).toHaveBeenCalled();
+
+      expect(queryByTestId('one')).toBeInTheDocument();
+      expect(queryByTestId('two')).not.toBeInTheDocument();
+    },
+  );
+
+  test(
+    'should fall back to defaultReloadIntervalInactive if reloadInterval ' +
+      'returns USE_DEFAULT_RELOAD_INTERVAL_INACTIVE',
+    async () => {
+      jest.useFakeTimers();
+
+      const renderFunc = jest
+        .fn()
+        .mockReturnValueOnce(<div data-testid="one" />)
+        .mockReturnValueOnce(<div data-testid="two" />);
+      const loadFunc = jest.fn().mockResolvedValue();
+      const reloadFunc = jest.fn().mockResolvedValue();
+
+      const reloadInterval = jest
+        .fn()
+        .mockReturnValue(USE_DEFAULT_RELOAD_INTERVAL_INACTIVE);
+
+      const gmp = {
+        settings: {
+          reloadInterval: 5000,
+        },
+      };
+
+      const {render} = rendererWith({gmp});
+
+      const {queryByTestId} = render(
+        <Reload
+          defaultReloadIntervalActive={NO_RELOAD}
+          load={loadFunc}
+          reload={reloadFunc}
+          reloadInterval={reloadInterval}
+          name="foo"
+        >
+          {renderFunc}
+        </Reload>,
+      );
+
+      expect(loadFunc).toHaveBeenCalled();
+      expect(reloadFunc).not.toHaveBeenCalled();
+      expect(renderFunc).toHaveBeenCalled();
+      expect(reloadInterval).not.toHaveBeenCalled();
+
+      expect(queryByTestId('one')).toBeInTheDocument();
+
+      loadFunc.mockClear();
+      renderFunc.mockClear();
+
+      await runTimers();
+
+      expect(loadFunc).not.toHaveBeenCalled();
+      expect(reloadFunc).not.toHaveBeenCalled();
+      expect(renderFunc).not.toHaveBeenCalled();
+      expect(reloadInterval).toHaveBeenCalled();
+
+      expect(queryByTestId('one')).toBeInTheDocument();
+      expect(queryByTestId('two')).not.toBeInTheDocument();
+    },
+  );
+
+  test('should use reloadInterval from settings', async () => {
     jest.useFakeTimers();
 
     const renderFunc = jest
@@ -431,62 +613,9 @@ describe('Reload component tests', () => {
     const loadFunc = jest.fn().mockResolvedValue();
     const reloadFunc = jest.fn().mockResolvedValue();
 
-    const reloadInterval = jest.fn().mockReturnValue(undefined);
-
     const gmp = {
       settings: {
-        reloadInterval: 5000,
-      },
-    };
-
-    const {render} = rendererWith({gmp});
-
-    const {queryByTestId} = render(
-      <Reload
-        defaultReloadInterval={-1}
-        load={loadFunc}
-        reload={reloadFunc}
-        reloadInterval={reloadInterval}
-        name="foo"
-      >
-        {renderFunc}
-      </Reload>,
-    );
-
-    expect(loadFunc).toHaveBeenCalled();
-    expect(reloadFunc).not.toHaveBeenCalled();
-    expect(renderFunc).toHaveBeenCalled();
-    expect(reloadInterval).not.toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
-
-    loadFunc.mockClear();
-    renderFunc.mockClear();
-
-    await runTimers();
-
-    expect(loadFunc).not.toHaveBeenCalled();
-    expect(reloadFunc).not.toHaveBeenCalled();
-    expect(renderFunc).not.toHaveBeenCalled();
-    expect(reloadInterval).toHaveBeenCalled();
-
-    expect(queryByTestId('one')).toBeInTheDocument();
-    expect(queryByTestId('two')).not.toBeInTheDocument();
-  });
-
-  test('should use defaultReloadInterval for reload timer', async () => {
-    jest.useFakeTimers();
-
-    const renderFunc = jest
-      .fn()
-      .mockReturnValueOnce(<div data-testid="one" />)
-      .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = jest.fn().mockResolvedValue();
-    const reloadFunc = jest.fn().mockResolvedValue();
-
-    const gmp = {
-      settings: {
-        reloadInterval: -1,
+        reloadInterval: NO_RELOAD,
       },
     };
 
@@ -512,6 +641,112 @@ describe('Reload component tests', () => {
     expect(loadFunc).not.toHaveBeenCalled();
     expect(reloadFunc).not.toHaveBeenCalled();
     expect(renderFunc).not.toHaveBeenCalled();
+
+    expect(queryByTestId('one')).toBeInTheDocument();
+    expect(queryByTestId('two')).not.toBeInTheDocument();
+  });
+
+  test('should use reloadIntervalActive from settings', async () => {
+    jest.useFakeTimers();
+
+    const renderFunc = jest
+      .fn()
+      .mockReturnValueOnce(<div data-testid="one" />)
+      .mockReturnValueOnce(<div data-testid="two" />);
+    const loadFunc = jest.fn().mockResolvedValue();
+    const reloadFunc = jest.fn().mockResolvedValue();
+    const reloadIntervalFunc = jest
+      .fn()
+      .mockReturnValue(USE_DEFAULT_RELOAD_INTERVAL_ACTIVE);
+
+    const gmp = {
+      settings: {
+        reloadIntervalActive: NO_RELOAD,
+      },
+    };
+
+    const {render} = rendererWith({gmp});
+
+    const {queryByTestId} = render(
+      <Reload
+        load={loadFunc}
+        reloadInterval={reloadIntervalFunc}
+        reload={reloadFunc}
+        name="foo"
+      >
+        {renderFunc}
+      </Reload>,
+    );
+
+    expect(loadFunc).toHaveBeenCalled();
+    expect(reloadFunc).not.toHaveBeenCalled();
+    expect(renderFunc).toHaveBeenCalled();
+    expect(reloadIntervalFunc).not.toHaveBeenCalled();
+
+    expect(queryByTestId('one')).toBeInTheDocument();
+
+    loadFunc.mockClear();
+    renderFunc.mockClear();
+
+    await runTimers();
+
+    expect(loadFunc).not.toHaveBeenCalled();
+    expect(reloadFunc).not.toHaveBeenCalled();
+    expect(renderFunc).not.toHaveBeenCalled();
+    expect(reloadIntervalFunc).toHaveBeenCalled();
+
+    expect(queryByTestId('one')).toBeInTheDocument();
+    expect(queryByTestId('two')).not.toBeInTheDocument();
+  });
+
+  test('should use reloadIntervalInactive from settings', async () => {
+    jest.useFakeTimers();
+
+    const renderFunc = jest
+      .fn()
+      .mockReturnValueOnce(<div data-testid="one" />)
+      .mockReturnValueOnce(<div data-testid="two" />);
+    const loadFunc = jest.fn().mockResolvedValue();
+    const reloadFunc = jest.fn().mockResolvedValue();
+    const reloadIntervalFunc = jest
+      .fn()
+      .mockReturnValue(USE_DEFAULT_RELOAD_INTERVAL_INACTIVE);
+
+    const gmp = {
+      settings: {
+        reloadIntervalInactive: NO_RELOAD,
+      },
+    };
+
+    const {render} = rendererWith({gmp});
+
+    const {queryByTestId} = render(
+      <Reload
+        load={loadFunc}
+        reloadInterval={reloadIntervalFunc}
+        reload={reloadFunc}
+        name="foo"
+      >
+        {renderFunc}
+      </Reload>,
+    );
+
+    expect(loadFunc).toHaveBeenCalled();
+    expect(reloadFunc).not.toHaveBeenCalled();
+    expect(renderFunc).toHaveBeenCalled();
+    expect(reloadIntervalFunc).not.toHaveBeenCalled();
+
+    expect(queryByTestId('one')).toBeInTheDocument();
+
+    loadFunc.mockClear();
+    renderFunc.mockClear();
+
+    await runTimers();
+
+    expect(loadFunc).not.toHaveBeenCalled();
+    expect(reloadFunc).not.toHaveBeenCalled();
+    expect(renderFunc).not.toHaveBeenCalled();
+    expect(reloadIntervalFunc).toHaveBeenCalled();
 
     expect(queryByTestId('one')).toBeInTheDocument();
     expect(queryByTestId('two')).not.toBeInTheDocument();

@@ -18,9 +18,13 @@
  */
 import React from 'react';
 
+import {setLocale} from 'gmp/locale/lang';
+
 import {render, fireEvent} from 'web/utils/testing';
 
 import MultiSelect from '../multiselect.js';
+
+setLocale('en');
 
 const openInputElement = element => {
   const button = element.querySelector('[type="button"]');
@@ -62,6 +66,29 @@ describe('MultiSelect component tests', () => {
     expect(domItems.length).toEqual(2);
     expect(domItems[0]).toHaveTextContent('Bar');
     expect(domItems[1]).toHaveTextContent('Foo');
+  });
+
+  test('should render loading', () => {
+    const items = [
+      {
+        value: '0',
+        label: '--',
+      },
+    ];
+
+    const {element, baseElement} = render(
+      <MultiSelect items={items} isLoading={true} />,
+    );
+
+    expect(element).toHaveTextContent('Loading...');
+
+    let domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(0);
+
+    openInputElement(element);
+
+    domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(0);
   });
 
   test('should call onChange handler', () => {

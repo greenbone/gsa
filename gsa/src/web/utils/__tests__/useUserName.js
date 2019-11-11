@@ -16,28 +16,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {dateTimeWithTimeZone, ensureDate} from 'gmp/locale/date';
+import React from 'react';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import {setUsername} from 'web/store/usersettings/actions';
 
-import PropTypes from 'web/utils/proptypes';
-import useUserTimezone from 'web/utils/useUserTimezone';
+import {rendererWith} from '../testing';
 
-const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) => {
-  date = ensureDate(date);
+import useUserName from '../useUserName';
 
-  const userTimezone = useUserTimezone();
+const TestUserName = () => <span>{useUserName()}</span>;
 
-  if (!hasValue(timezone)) {
-    timezone = userTimezone;
-  }
-  return !isDefined(date) || !date.isValid() ? null : formatter(date, timezone);
-};
+describe('useUserName tests', () => {
+  test('should return the users name', () => {
+    const {render, store} = rendererWith({store: true});
 
-DateTime.propTypes = {
-  date: PropTypes.date,
-  formatter: PropTypes.func,
-  timezone: PropTypes.string,
-};
+    store.dispatch(setUsername('foo'));
 
-export default DateTime;
+    const {element} = render(<TestUserName />);
+
+    expect(element).toHaveTextContent(/^foo$/);
+  });
+});
