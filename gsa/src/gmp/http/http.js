@@ -115,9 +115,12 @@ class Http {
     const promise = new Promise(function(resolve, reject) {
       xhr = new XMLHttpRequest();
 
-      if (isDefined(responseType)) {
-        xhr.responseType = responseType;
-      }
+      xhr.onloadstart = function() {
+        // defer setting the responseType to avoid InvalidStateError with IE 11
+        if (isDefined(responseType)) {
+          xhr.responseType = responseType;
+        }
+      };
 
       xhr.open(method, url, true);
 
