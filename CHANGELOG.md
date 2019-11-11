@@ -168,6 +168,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Fixed getting InvalidStateError with IE 11 on XHR creation [#1769](https://github.com/greenbone/gsa/pull/1769)
 - Fixed filtering general command permissions in roles [#1734](https://github.com/greenbone/gsa/pull/1734)
 - Fix getting details in delta report [#1732](https://github.com/greenbone/gsa/pull/1732)
 - Include results (details=1) in report download [#1731](https://github.com/greenbone/gsa/pull/1731)
