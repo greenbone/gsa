@@ -175,9 +175,9 @@ class Gmp {
 
   buildUrl(path, params, anchor) {
     let url = buildServerUrl(
-      this.settings.server,
+      this.settings.apiServer,
       path,
-      this.settings.protocol,
+      this.settings.apiProtocol,
     );
 
     if (isDefined(params)) {
@@ -203,10 +203,6 @@ class Gmp {
   setTimezone(timezone) {
     this.settings.timezone = timezone;
     return this;
-  }
-
-  get reloadInterval() {
-    return this.settings.reloadInterval;
   }
 
   addHttpErrorHandler(handler) {

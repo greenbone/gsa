@@ -105,7 +105,6 @@ const withEntityContainer = (
       : undefined;
     return {
       isLoading: entitySel.isLoadingEntity(id),
-      defaultReloadInterval: gmp.reloadInterval,
       ...otherProps,
       id,
       entity: entitySel.getEntity(id),

@@ -23,8 +23,8 @@ import transform from './transform/fastxml';
 
 class GmpHttp extends Http {
   constructor(settings) {
-    const {server, protocol, timeout} = settings;
-    const url = buildServerUrl(server, 'gmp', protocol);
+    const {apiServer, apiProtocol, timeout} = settings;
+    const url = buildServerUrl(apiServer, 'gmp', apiProtocol);
     super(url, {timeout, transform});
     this.settings = settings;
   }

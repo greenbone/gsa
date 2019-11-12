@@ -161,7 +161,7 @@ describe('Gmp tests', () => {
           token: 'foo',
         },
       });
-      const settings = {token: 'foo', server: 'localhost'};
+      const settings = {token: 'foo', apiServer: 'localhost'};
 
       const http = {
         request,
@@ -188,7 +188,7 @@ describe('Gmp tests', () => {
       const request = jest.fn().mockResolvedValue({
         data: {},
       });
-      const settings = {token: 'foo', server: 'localhost'};
+      const settings = {token: 'foo', apiServer: 'localhost'};
 
       const http = {
         request,
@@ -214,9 +214,9 @@ describe('Gmp tests', () => {
         message: 'foo',
       });
       const settings = {
-        loglevel: 'silent',
+        logLevel: 'silent',
         token: 'foo',
-        server: 'localhost',
+        apiServer: 'localhost',
       };
 
       const http = {
@@ -242,7 +242,7 @@ describe('Gmp tests', () => {
       const request = jest.fn().mockResolvedValue({
         data: {},
       });
-      const settings = {server: 'localhost'};
+      const settings = {apiServer: 'localhost'};
 
       const http = {
         request,
