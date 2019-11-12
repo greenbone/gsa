@@ -23,6 +23,7 @@ import GmpSettings, {
   DEFAULT_LOG_LEVEL,
   DEFAULT_RELOAD_INTERVAL_ACTIVE,
   DEFAULT_RELOAD_INTERVAL_INACTIVE,
+  DEFAULT_TIMEOUT,
 } from 'gmp/gmpsettings';
 
 const createStorage = state => {
@@ -58,7 +59,7 @@ describe('GmpSettings tests', () => {
       DEFAULT_RELOAD_INTERVAL_INACTIVE,
     );
     expect(settings.token).toBeUndefined();
-    expect(settings.timeout).toBeUndefined();
+    expect(settings.timeout).toEqual(DEFAULT_TIMEOUT);
     expect(settings.timezone).toBeUndefined();
     expect(settings.username).toBeUndefined();
     expect(settings.vendorVersion).toBeUndefined();
@@ -161,7 +162,7 @@ describe('GmpSettings tests', () => {
       DEFAULT_RELOAD_INTERVAL_INACTIVE,
     );
     expect(settings.token).toEqual('atoken');
-    expect(settings.timeout).toBeUndefined();
+    expect(settings.timeout).toEqual(DEFAULT_TIMEOUT);
     expect(settings.timezone).toEqual('cet');
     expect(settings.username).toEqual('foo');
 
