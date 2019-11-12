@@ -40,7 +40,7 @@ const validationRules = {
     return {validity, error};
   },
   port: value => {
-    const validity = testNonEmptyString(value);
+    const validity = testNonEmptyString(value.toString()); // Port is always returned as an integer from the backend.
     const error = validity ? '' : 'Missing or invalid port.';
     return {validity, error};
   },

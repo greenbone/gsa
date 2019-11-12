@@ -44,6 +44,9 @@ import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
+import useForm, {syncVariables} from 'web/components/form/useForm';
+import validationRules from './validationrules';
+import ErrorBubble from 'web/components/form/errorbubble';
 
 import KeyIcon from 'web/components/icon/keyicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -57,6 +60,7 @@ import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 import TabLayout from 'web/components/tab/tablayout';
+import Theme from 'web/utils/theme';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
 
@@ -131,7 +135,7 @@ CertStatus.propTypes = {
   info: PropTypes.object.isRequired,
 };
 
-const SCANNER_DIALOG_INITIAL_HEIGHT = '300px';
+const SCANNER_DIALOG_INITIAL_HEIGHT = '350px';
 
 const ScannerDialog = ({
   ca_pub,
@@ -190,8 +194,6 @@ const ScannerDialog = ({
     SCANNER_TYPES = [GMP_SCANNER_TYPE, OSP_SCANNER_TYPE];
   }
 
-  let {credential_id} = props;
-
   const scannerTypesOptions = map(SCANNER_TYPES, scannerType => ({
     label: scannerTypeName(scannerType),
     value: scannerType,
@@ -208,9 +210,27 @@ const ScannerDialog = ({
   const isGreenboneSensorType = type === GREENBONE_SENSOR_SCANNER_TYPE;
   const isOspScannerType = type === OSP_SCANNER_TYPE;
 
+  let {credential_id = ''} = props;
+
   if (isGreenboneSensorType) {
     credential_id = '';
   }
+
+  const stateSchema = {
+    name,
+    credential_id,
+    host,
+    port,
+  };
+
+  const {
+    formState,
+    errorMessage,
+    shouldWarn,
+    handleValueChange,
+    formStatus,
+    handleSubmit,
+  } = useForm(stateSchema, validationRules, onSave);
 
   return (
     <SaveDialog // the dialog current changes sizes based on content. For the future we should somehow fix the size to prevent jumping around.
@@ -223,9 +243,10 @@ const ScannerDialog = ({
         type,
       }}
       onClose={onClose}
-      onSave={onSave}
+      onSave={vals => handleSubmit(vals)}
     >
       {({values: state, currentStep, onStepChange, onValueChange}) => {
+        syncVariables(state, formState); // Set attributes of state to be the same as formState
         return (
           <Layout flex="column">
             <DialogTabLayout grow="1" align={['start', 'end']}>
@@ -241,14 +262,23 @@ const ScannerDialog = ({
             <Tabs active={currentStep}>
               <TabPanels>
                 <TabPanel>
-                  <FormGroup title={_('Name')}>
-                    <TextField
-                      name="name"
-                      grow="1"
-                      value={state.name}
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
+                  <ErrorBubble
+                    visible={shouldWarn && !formStatus.name.validity} // only show error bubble if BOTH: 1. has error 2. after user hits submit for the rest time.
+                    content={formStatus.name.error}
+                  >
+                    {({targetRef}) => (
+                      <div ref={targetRef}>
+                        <FormGroup title={_('Name')}>
+                          <TextField
+                            name="name"
+                            grow="1"
+                            value={formState.name}
+                            onChange={handleValueChange}
+                          />
+                        </FormGroup>
+                      </div>
+                    )}
+                  </ErrorBubble>
 
                   <FormGroup title={_('Comment')}>
                     <TextField
@@ -267,29 +297,51 @@ const ScannerDialog = ({
                       onChange={handleTypeChange}
                     />
                   </FormGroup>
+                  {isDefined(errorMessage) ? (
+                    <h5 style={{color: Theme.warningRed}}>{errorMessage}</h5>
+                  ) : (
+                    ''
+                  )}
                 </TabPanel>
                 <TabPanel>
-                  <FormGroup title={_('Host')}>
-                    <TextField
-                      name="host"
-                      value={state.host}
-                      disabled={isInUse}
-                      grow="1"
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
-
+                  <ErrorBubble
+                    visible={shouldWarn && !formStatus.host.validity}
+                    content={formStatus.host.error}
+                  >
+                    {({targetRef}) => (
+                      <div ref={targetRef}>
+                        <FormGroup title={_('Host')}>
+                          <TextField
+                            name="host"
+                            value={formState.host}
+                            disabled={isInUse}
+                            grow="1"
+                            onChange={handleValueChange}
+                          />
+                        </FormGroup>
+                      </div>
+                    )}
+                  </ErrorBubble>
                   {isOspScannerType && (
                     <React.Fragment>
-                      <FormGroup title={_('Port')}>
-                        <TextField
-                          name="port"
-                          value={state.port}
-                          disabled={isInUse}
-                          grow="1"
-                          onChange={onValueChange}
-                        />
-                      </FormGroup>
+                      <ErrorBubble
+                        visible={shouldWarn && !formStatus.port.validity}
+                        content={formStatus.port.error}
+                      >
+                        {({targetRef}) => (
+                          <div ref={targetRef}>
+                            <FormGroup title={_('Port')}>
+                              <TextField
+                                name="port"
+                                value={formState.port}
+                                disabled={isInUse}
+                                grow="1"
+                                onChange={handleValueChange}
+                              />
+                            </FormGroup>
+                          </div>
+                        )}
+                      </ErrorBubble>
 
                       <FormGroup title={_('CA Certificate')} flex="column">
                         <Layout>
@@ -336,28 +388,42 @@ const ScannerDialog = ({
                   )}
 
                   {!isGreenboneSensorType && (
-                    <FormGroup title={_('Credential')} flex="column">
-                      <Divider>
-                        <Select
-                          name="credential_id"
-                          items={renderSelectItems(scanner_credentials)}
-                          value={credential_id}
-                          onChange={onCredentialChange}
-                        />
-                        <Layout>
-                          <NewIcon
-                            value={type}
-                            title={_('Create a new Credential')}
-                            onClick={onNewCredentialClick}
-                          />
-                        </Layout>
-                      </Divider>
-                      {show_cred_info && (
-                        <CertStatus
-                          info={scanner.credential.certificate_info}
-                        />
+                    <ErrorBubble
+                      visible={shouldWarn && !formStatus.credential_id.validity}
+                      content={formStatus.credential_id.error}
+                    >
+                      {({targetRef}) => (
+                        <div ref={targetRef}>
+                          <FormGroup title={_('Credential')} flex="column">
+                            <Divider>
+                              <Select
+                                name="credential_id"
+                                items={renderSelectItems(scanner_credentials)}
+                                value={formState.credential_id}
+                                onChange={handleValueChange}
+                              />
+                              <Layout>
+                                <NewIcon
+                                  value={type}
+                                  title={_('Create a new Credential')}
+                                  onClick={onNewCredentialClick}
+                                />
+                              </Layout>
+                            </Divider>
+                            {show_cred_info && (
+                              <CertStatus
+                                info={scanner.credential.certificate_info}
+                              />
+                            )}
+                          </FormGroup>
+                        </div>
                       )}
-                    </FormGroup>
+                    </ErrorBubble>
+                  )}
+                  {isDefined(errorMessage) ? (
+                    <h5 style={{color: Theme.warningRed}}>{errorMessage}</h5>
+                  ) : (
+                    ''
                   )}
                 </TabPanel>
               </TabPanels>
