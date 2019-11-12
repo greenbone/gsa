@@ -109,6 +109,8 @@ const EditScanConfigDialog = ({
   const [scannerPreferenceValues, setScannerPreferenceValues] = useState(
     createScannerPreferenceValues(scannerPreferences),
   );
+  const [trendValues, setTrendValues] = useState(undefined);
+  const [selectValues, setSelectValues] = useState(undefined);
 
   useEffect(() => {
     setScannerPreferenceValues(
@@ -116,7 +118,12 @@ const EditScanConfigDialog = ({
     );
   }, [scannerPreferences]);
 
-  const {trend, select} = createTrendAndSelect(configFamilies, families);
+  // trend and select are created only once and only after the whole config is loaded
+  if (!isDefined(trendValues) && !isDefined(selectValues) && !isLoadingConfig) {
+    const {trend, select} = createTrendAndSelect(configFamilies, families);
+    setTrendValues(trend);
+    setSelectValues(select);
+  }
 
   const uncontrolledData = {
     comment,
@@ -127,8 +134,8 @@ const EditScanConfigDialog = ({
   const controlledData = {
     id: configId,
     scannerPreferenceValues,
-    select,
-    trend,
+    select: selectValues,
+    trend: trendValues,
   };
 
   return (
@@ -186,8 +193,8 @@ const EditScanConfigDialog = ({
                     configFamilies={configFamilies}
                     editTitle={editNvtFamiliesTitle}
                     families={families}
-                    trend={trend}
-                    select={select}
+                    trend={trendValues}
+                    select={selectValues}
                     onEditConfigFamilyClick={onEditConfigFamilyClick}
                     onValueChange={onValueChange}
                   />
