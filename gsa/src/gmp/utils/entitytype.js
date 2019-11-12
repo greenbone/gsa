@@ -71,7 +71,6 @@ export const normalizeType = type => {
 const ENTITY_TYPES = {
   agent: _l('Agent'),
   alert: _l('Alert'),
-  allinfo: _l('All SecInfo'),
   asset: _l('Asset'),
   certbund: _l('CERT-Bund Advisory'),
   cpe: _l('CPE'),

@@ -39,7 +39,6 @@ import AlertsPage from './pages/alerts/listpage';
 import AlertDetailsPage from './pages/alerts/detailspage';
 import AuditsPage from './pages/audits/listpage';
 import AuditsDetailsPage from './pages/audits/detailspage';
-import SecInfosPage from './pages/secinfo/listpage';
 import CertBundsPage from './pages/certbund/listpage';
 import CertBundDetailsPage from './pages/certbund/detailspage';
 import CpesPage from './pages/cpes/listpage';
@@ -160,7 +159,6 @@ const Routes = () => (
               <Route path="/ovaldefs" component={OvaldefsPage} />
               <Route path="/certbunds" component={CertBundsPage} />
               <Route path="/dfncerts" component={DfnCertsPage} />
-              <Route path="/secinfos" component={SecInfosPage} />
               <Route path="/portlists" component={PortListsPage} />
               <Route path="/credentials" component={CredentialsPage} />
               <Route path="/filters" component={FiltersPage} />

@@ -23,7 +23,7 @@ message ("-- Configuring Greenbone Security Assistant...")
 # VERSION: Set patch version for stable releases, e.g. "9.0.0",
 #          unset patch version for prereleases, e.g. "9.0"
 project (greenbone-security-assistant
-         VERSION 9.0.0
+         VERSION 20.04
          LANGUAGES C)
 
 if (POLICY CMP0005)
@@ -52,13 +52,21 @@ endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
 
 # set if this is in prerelease status, starting at 0 before first beta release,
 # unset if this is a stable release series.
-# set (PROJECT_BETA_RELEASE 0)
+set (PROJECT_BETA_RELEASE 0)
 
 if (GIT_REVISION)
   set (PROJECT_VERSION_GIT "${GIT_REVISION}")
 else (GIT_REVISION)
   set (PROJECT_VERSION_GIT "")
 endif (GIT_REVISION)
+
+string(LENGTH ${PROJECT_VERSION_MINOR} PROJECT_VERSION_MINOR_LENGTH)
+
+if (PROJECT_VERSION_MINOR_LENGTH LESS 2)
+  set (PROJECT_VERSION_MINOR_STRING "0${PROJECT_VERSION_MINOR}")
+else ()
+  set (PROJECT_VERSION_MINOR_STRING "${PROJECT_VERSION_MINOR}")
+endif ()
 
 # If PROJECT_BETA_RELEASE is set to "0", the version string will be set to:
 #   "major.minor+alpha"
@@ -76,7 +84,8 @@ elseif (DEFINED PROJECT_VERSION_PATCH AND NOT PROJECT_VERSION_PATCH STREQUAL "")
   set (PROJECT_VERSION_SUFFIX ".${PROJECT_VERSION_PATCH}")
 endif (DEFINED PROJECT_BETA_RELEASE AND NOT PROJECT_BETA_RELEASE STREQUAL "")
 
-set (PROJECT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}${PROJECT_VERSION_SUFFIX}${PROJECT_VERSION_GIT}")
+set (PROJECT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR_STRING}${PROJECT_VERSION_SUFFIX}${PROJECT_VERSION_GIT}")
+message (STATUS "Building version ${PROJECT_VERSION_STRING}")
 
 set (GSAD_VERSION "${PROJECT_VERSION_STRING}")
 

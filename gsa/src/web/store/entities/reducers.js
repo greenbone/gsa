@@ -44,7 +44,6 @@ import {reducer as role} from './roles';
 import {reducer as scanconfig} from './scanconfigs';
 import {reducer as scanner} from './scanners';
 import {reducer as schedule} from './schedules';
-import {reducer as secinfo} from './secinfo';
 import {reducer as tag} from './tags';
 import {reducer as target} from './targets';
 import {reducer as task} from './tasks';
@@ -81,7 +80,6 @@ const entitiesReducer = combineReducers({
   scanconfig,
   scanner,
   schedule,
-  secinfo,
   tag,
   target,
   task,

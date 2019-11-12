@@ -4,7 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [9.0.1] - unreleased
+## [20.04] - unreleased
+
+### Added
+- Multistep dialog feature, implemented on scanner dialog [#1725] (https://github.com/greenbone/gsa/pull/1725)
+
+### Changed
+
+### Fixed
+
+### Removed
+- Remove "All SecInfo" section [#1685](https://github.com/greenbone/gsa/pull/1685)
+
+[20.04]: https://github.com/greenbone/gsa/compare/gsa-9.0...master
+
+### [9.0.1] - unreleased
 
 ### Added
 - Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)

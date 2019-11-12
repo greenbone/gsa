@@ -30,43 +30,31 @@ import DialogTwoButtonFooter from 'web/components/dialog/twobuttonfooter';
 
 const DEFAULT_DIALOG_WIDTH = '400px';
 
-class ConfirmationDialogContent extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.handleResume = this.handleResume.bind(this);
-  }
-
-  handleResume() {
-    const {onResumeClick} = this.props;
+const ConfirmationDialogContent = props => {
+  const handleResume = () => {
+    const {onResumeClick} = props;
 
     if (onResumeClick) {
       onResumeClick();
     }
-  }
+  };
 
-  render() {
-    const {moveprops, text, title, rightButtonTitle} = this.props;
+  const {moveprops, text, title, rightButtonTitle} = props;
 
-    return (
-      <DialogContent>
-        <DialogTitle
-          title={title}
-          onCloseClick={this.props.close}
-          {...moveprops}
-        />
-        <ScrollableContent data-testid="confirmationdialog-content">
-          {text}
-        </ScrollableContent>
-        <DialogTwoButtonFooter
-          rightButtonTitle={rightButtonTitle}
-          onLeftButtonClick={this.props.close}
-          onRightButtonClick={this.handleResume}
-        />
-      </DialogContent>
-    );
-  }
-}
+  return (
+    <DialogContent>
+      <DialogTitle title={title} onCloseClick={props.close} {...moveprops} />
+      <ScrollableContent data-testid="confirmationdialog-content">
+        {text}
+      </ScrollableContent>
+      <DialogTwoButtonFooter
+        rightButtonTitle={rightButtonTitle}
+        onLeftButtonClick={props.close}
+        onRightButtonClick={handleResume}
+      />
+    </DialogContent>
+  );
+};
 
 ConfirmationDialogContent.propTypes = {
   close: PropTypes.func.isRequired,
