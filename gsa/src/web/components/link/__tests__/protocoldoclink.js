@@ -26,7 +26,7 @@ describe('ProtocolDocLink tests', () => {
   test('should render ProtocolDocLink', () => {
     const gmp = {
       settings: {
-        protocoldocurl: 'http://foo.bar',
+        protocolDocUrl: 'http://foo.bar',
       },
     };
 

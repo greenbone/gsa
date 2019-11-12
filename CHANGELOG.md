@@ -35,6 +35,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Increase clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
 
 ### Fixed
+- Fix checkboxes in scanconfig editdialog reset after every rerender [#1773](https://github.com/greenbone/gsa/pull/1773)
+- Pass scanner port number to scanner dialog from component [#1772](https://github.com/greenbone/gsa/pull/1772)
 - Fixed allowed range for auto delete keep value [#1729](https://github.com/greenbone/gsa/pull/1729)
 - Fix Created column on Results listpage [#1726](https://github.com/greenbone/gsa/pull/1726)
 - Get delta report needs to send details=1 [#1724](https://github.com/greenbone/gsa/pull/1724)
@@ -156,6 +158,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Use consistent setting naming [#1774](https://github.com/greenbone/gsa/pull/1774)
 - Consider visibility status of page for calculating the reload interval [#1761](https://github.com/greenbone/gsa/pull/1761)
 - Do not simplify filterString in content composer for report download [#1733](https://github.com/greenbone/gsa/pull/1733)
 - Use single component for reloading data [#1722](https://github.com/greenbone/gsa/pull/1722)
@@ -182,6 +185,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Fixed getting InvalidStateError with IE 11 on XHR creation [#1769](https://github.com/greenbone/gsa/pull/1769)
 - Fixed filtering general command permissions in roles [#1734](https://github.com/greenbone/gsa/pull/1734)
 - Fix getting details in delta report [#1732](https://github.com/greenbone/gsa/pull/1732)
 - Include results (details=1) in report download [#1731](https://github.com/greenbone/gsa/pull/1731)
