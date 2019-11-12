@@ -63,7 +63,7 @@ class GmpSettings {
       manualUrl = DEFAULT_MANUAL_URL,
       manualLanguageMapping,
       protocol = global.location.protocol,
-      protocoldocurl = DEFAULT_PROTOCOLDOC_URL,
+      protocolDocUrl = DEFAULT_PROTOCOLDOC_URL,
       reloadInterval = DEFAULT_RELOAD_INTERVAL,
       reloadIntervalActive = DEFAULT_RELOAD_INTERVAL_ACTIVE,
       reloadIntervalInactive = DEFAULT_RELOAD_INTERVAL_INACTIVE,
@@ -103,7 +103,7 @@ class GmpSettings {
     setAndFreeze(this, 'manualUrl', manualUrl);
     setAndFreeze(this, 'manualLanguageMapping', manualLanguageMapping);
     setAndFreeze(this, 'protocol', protocol);
-    setAndFreeze(this, 'protocoldocurl', protocoldocurl);
+    setAndFreeze(this, 'protocolDocUrl', protocolDocUrl);
     setAndFreeze(this, 'server', server);
     setAndFreeze(this, 'vendorVersion', vendorVersion);
     setAndFreeze(this, 'vendorLabel', vendorLabel);

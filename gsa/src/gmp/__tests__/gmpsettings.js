@@ -48,7 +48,7 @@ describe('GmpSettings tests', () => {
     expect(settings.manualUrl).toEqual(DEFAULT_MANUAL_URL);
     expect(settings.manualLanguageMapping).toBeUndefined();
     expect(settings.protocol).toEqual('http:');
-    expect(settings.protocoldocurl).toEqual(DEFAULT_PROTOCOLDOC_URL);
+    expect(settings.protocolDocUrl).toEqual(DEFAULT_PROTOCOLDOC_URL);
     expect(settings.reloadInterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.reloadIntervalActive).toEqual(
       DEFAULT_RELOAD_INTERVAL_ACTIVE,
@@ -82,7 +82,7 @@ describe('GmpSettings tests', () => {
         foo: 'bar',
       },
       protocol: 'http',
-      protocoldocurl: 'http://protocol',
+      protocolDocUrl: 'http://protocol',
       reloadInterval: 10,
       reloadIntervalActive: 5,
       reloadIntervalInactive: 60,
@@ -104,7 +104,7 @@ describe('GmpSettings tests', () => {
     expect(settings.manualUrl).toEqual('http://manual');
     expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
     expect(settings.protocol).toEqual('http');
-    expect(settings.protocoldocurl).toEqual('http://protocol');
+    expect(settings.protocolDocUrl).toEqual('http://protocol');
     expect(settings.reloadInterval).toEqual(10);
     expect(settings.reloadIntervalActive).toEqual(5);
     expect(settings.reloadIntervalInactive).toEqual(60);
@@ -148,7 +148,7 @@ describe('GmpSettings tests', () => {
     expect(settings.manualUrl).toEqual(DEFAULT_MANUAL_URL);
     expect(settings.manualLanguageMapping).toBeUndefined();
     expect(settings.protocol).toEqual('http');
-    expect(settings.protocoldocurl).toEqual(DEFAULT_PROTOCOLDOC_URL);
+    expect(settings.protocolDocUrl).toEqual(DEFAULT_PROTOCOLDOC_URL);
     expect(settings.reloadInterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.reloadIntervalActive).toEqual(
       DEFAULT_RELOAD_INTERVAL_ACTIVE,
@@ -174,7 +174,7 @@ describe('GmpSettings tests', () => {
       manualUrl: 'http://ipsum',
       manualLanguageMapping: {lorem: 'ipsum'},
       protocol: 'https',
-      protocoldocurl: 'http://lorem',
+      protocolDocUrl: 'http://lorem',
       reloadInterval: 20,
       reloadIntervalActive: 20,
       reloadIntervalInactive: 20,
@@ -194,7 +194,7 @@ describe('GmpSettings tests', () => {
       manualUrl: 'http://manual',
       manualLanguageMapping: {foo: 'bar'},
       protocol: 'http',
-      protocoldocurl: 'http://protocol',
+      protocolDocUrl: 'http://protocol',
       reloadInterval: 10,
       reloadIntervalActive: 5,
       reloadIntervalInactive: 60,
@@ -213,7 +213,7 @@ describe('GmpSettings tests', () => {
     expect(settings.manualUrl).toEqual('http://manual');
     expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
     expect(settings.protocol).toEqual('http');
-    expect(settings.protocoldocurl).toEqual('http://protocol');
+    expect(settings.protocolDocUrl).toEqual('http://protocol');
     expect(settings.reloadInterval).toEqual(10);
     expect(settings.reloadIntervalActive).toEqual(5);
     expect(settings.reloadIntervalInactive).toEqual(60);
@@ -286,7 +286,7 @@ describe('GmpSettings tests', () => {
       manualUrl: 'http://manual',
       manualLanguageMapping: {foo: 'bar'},
       protocol: 'http',
-      protocoldocurl: 'http://protocol',
+      protocolDocUrl: 'http://protocol',
       reloadInterval: 10,
       server: 'localhost',
       token: 'atoken',
@@ -318,9 +318,9 @@ describe('GmpSettings tests', () => {
     }).toThrow();
     expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
     expect(() => {
-      settings.protocoldocurl = 'foo';
+      settings.protocolDocUrl = 'foo';
     }).toThrow();
-    expect(settings.protocoldocurl).toEqual('http://protocol');
+    expect(settings.protocolDocUrl).toEqual('http://protocol');
     expect(() => {
       settings.server = 'foo';
     }).toThrow();
