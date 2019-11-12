@@ -25,6 +25,9 @@ import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextArea from 'web/components/form/textarea';
 import Layout from 'web/components/layout/layout';
+import ErrorBubble from 'web/components/form/errorbubble';
+import useForm, {syncVariables} from 'web/components/form/useForm';
+import {createTicketRules as validationRules} from './validationrules';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
@@ -37,39 +40,65 @@ const CreateTicketDialog = ({
   onClose,
   onSave,
   onUserIdChange,
-}) => (
-  <SaveDialog
-    title={title}
-    onClose={onClose}
-    onSave={onSave}
-    values={{
-      resultId,
-      userId,
-    }}
-  >
-    {({values, onValueChange}) => (
-      <Layout flex="column">
-        <FormGroup title={_('Assign To User')}>
-          <Select
-            name="userId"
-            value={values.userId}
-            items={renderSelectItems(users)}
-            onChange={onUserIdChange}
-          />
-        </FormGroup>
-        <FormGroup title={_('Note')}>
-          <TextArea
-            name="note"
-            grow="1"
-            rows="5"
-            value={values.note}
-            onChange={onValueChange}
-          />
-        </FormGroup>
-      </Layout>
-    )}
-  </SaveDialog>
-);
+}) => {
+  const stateSchema = {
+    note: '',
+  };
+
+  const {
+    shouldWarn,
+    formState,
+    handleValueChange,
+    formStatus,
+    handleSubmit,
+  } = useForm(stateSchema, validationRules, onSave);
+
+  return (
+    <SaveDialog
+      title={title}
+      onClose={onClose}
+      onSave={vals => handleSubmit(vals)}
+      values={{
+        resultId,
+        userId,
+      }}
+    >
+      {({values, onValueChange}) => {
+        syncVariables(values, formState);
+        return (
+          <Layout flex="column">
+            <FormGroup title={_('Assign To User')}>
+              <Select
+                name="userId"
+                value={values.userId}
+                items={renderSelectItems(users)}
+                onChange={onUserIdChange}
+              />
+            </FormGroup>
+            <ErrorBubble
+              visible={shouldWarn && !formStatus.note.validity}
+              content={formStatus.note.error}
+            >
+              {({targetRef}) => (
+                <div ref={targetRef}>
+                  <FormGroup title={_('Note')}>
+                    <TextArea
+                      name="note"
+                      grow="1"
+                      rows="5"
+                      value={formState.note}
+                      onChange={handleValueChange}
+                    />
+                  </FormGroup>
+                </div>
+              )}
+            </ErrorBubble>
+          </Layout>
+        );
+      }}
+    </SaveDialog>
+  );
+};
 
 CreateTicketDialog.propTypes = {
   resultId: PropTypes.id,

@@ -66,3 +66,11 @@ export const editTicketRules = {
     return {validity, error};
   },
 };
+
+export const createTicketRules = {
+  note: value => {
+    const validity = testNonEmptyString(value);
+    const error = validity ? '' : 'Ticket note is required.';
+    return {validity, error};
+  },
+};
