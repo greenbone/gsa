@@ -25,6 +25,7 @@ export const DEFAULT_MANUAL_URL = 'http://docs.greenbone.net/GSM-Manual/gos-6/';
 export const DEFAULT_PROTOCOLDOC_URL =
   'https://docs.greenbone.net/API/GMP/gmp-9.0.html';
 export const DEFAULT_LOG_LEVEL = 'warn';
+export const DEFAULT_TIMEOUT = 300000; // 5 minutes
 
 const set = (storage, name, value) => {
   if (isDefined(value)) {
@@ -69,7 +70,7 @@ class GmpSettings {
       reloadIntervalActive = DEFAULT_RELOAD_INTERVAL_ACTIVE,
       reloadIntervalInactive = DEFAULT_RELOAD_INTERVAL_INACTIVE,
       server,
-      timeout,
+      timeout = DEFAULT_TIMEOUT,
       vendorVersion,
       vendorLabel,
     } = options;
