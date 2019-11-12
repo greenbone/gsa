@@ -23,8 +23,8 @@ import X2JsTransform from './transform/x2js.js';
 
 class GmpHttp extends Http {
   constructor(settings) {
-    const {server, protocol, timeout} = settings;
-    const url = buildServerUrl(server, 'gmp', protocol);
+    const {apiServer, apiProtocol, timeout} = settings;
+    const url = buildServerUrl(apiServer, 'gmp', apiProtocol);
     super(url, {timeout, transform: X2JsTransform});
     this.settings = settings;
   }
