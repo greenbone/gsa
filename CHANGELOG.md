@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Increase clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
 
 ### Fixed
+- Pass scanner port number to scanner dialog from component [#1772](https://github.com/greenbone/gsa/pull/1772)
 - Fixed allowed range for auto delete keep value [#1729](https://github.com/greenbone/gsa/pull/1729)
 - Fix Created column on Results listpage [#1726](https://github.com/greenbone/gsa/pull/1726)
 - Get delta report needs to send details=1 [#1724](https://github.com/greenbone/gsa/pull/1724)
