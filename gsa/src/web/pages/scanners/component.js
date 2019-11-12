@@ -45,7 +45,7 @@ import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
 
-import CredentialsDialog from '../credentials/dialog';
+import CredentialsDialog from 'web/pages/credentials/dialog';
 
 import ScannerDialog from './dialog';
 
@@ -100,6 +100,7 @@ class ScannerComponent extends React.Component {
             host: scanner.host,
             id: scanner.id,
             name: scanner.name,
+            port: scanner.port,
             scannerDialogVisible: true,
             scanner,
             title,
@@ -306,6 +307,7 @@ class ScannerComponent extends React.Component {
       host,
       id,
       name,
+      port,
       scannerDialogVisible,
       scanner,
       title,
@@ -347,6 +349,7 @@ class ScannerComponent extends React.Component {
                 host={host}
                 id={id}
                 name={name}
+                port={port}
                 scanner={scanner}
                 title={title}
                 type={type}
