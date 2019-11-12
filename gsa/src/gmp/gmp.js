@@ -171,9 +171,9 @@ class Gmp {
 
   buildUrl(path, params, anchor) {
     let url = buildServerUrl(
-      this.settings.server,
+      this.settings.apiServer,
       path,
-      this.settings.protocol,
+      this.settings.apiProtocol,
     );
 
     if (isDefined(params)) {

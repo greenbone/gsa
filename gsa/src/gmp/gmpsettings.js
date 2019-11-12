@@ -62,22 +62,32 @@ class GmpSettings {
       loglevel,
       manualUrl = DEFAULT_MANUAL_URL,
       manualLanguageMapping,
-      protocol = global.location.protocol,
+      protocol,
       protocolDocUrl = DEFAULT_PROTOCOLDOC_URL,
       reloadInterval = DEFAULT_RELOAD_INTERVAL,
       reloadIntervalActive = DEFAULT_RELOAD_INTERVAL_ACTIVE,
       reloadIntervalInactive = DEFAULT_RELOAD_INTERVAL_INACTIVE,
-      server = global.location.host,
+      server,
       timeout,
       vendorVersion,
       vendorLabel,
     } = options;
-    let {logLevel = loglevel} = options;
+    let {
+      apiProtocol = protocol,
+      apiServer = server,
+      logLevel = loglevel,
+    } = options;
 
     this.storage = storage;
 
     if (isDefined(loglevel)) {
       warnDeprecatedSetting('loglevel', 'logLevel');
+    }
+    if (isDefined(server)) {
+      warnDeprecatedSetting('server', 'apiServer');
+    }
+    if (isDefined(protocol)) {
+      warnDeprecatedSetting('protocol', 'apiProtocol');
     }
 
     if (isDefined(enableStoreDebugLog)) {
@@ -91,20 +101,27 @@ class GmpSettings {
       logLevel = DEFAULT_LOG_LEVEL;
     }
 
+    if (!isDefined(apiProtocol)) {
+      apiProtocol = global.location.protocol;
+    }
+    if (!isDefined(apiServer)) {
+      apiServer = global.location.host;
+    }
+
     this.logLevel = logLevel;
     this.reloadInterval = reloadInterval;
     this.reloadIntervalActive = reloadIntervalActive;
     this.reloadIntervalInactive = reloadIntervalInactive;
     this.timeout = timeout;
 
+    setAndFreeze(this, 'apiProtocol', apiProtocol);
+    setAndFreeze(this, 'apiServer', apiServer);
     setAndFreeze(this, 'disableLoginForm', disableLoginForm);
     setAndFreeze(this, 'guestUsername', guestUsername);
     setAndFreeze(this, 'guestPassword', guestPassword);
     setAndFreeze(this, 'manualUrl', manualUrl);
     setAndFreeze(this, 'manualLanguageMapping', manualLanguageMapping);
-    setAndFreeze(this, 'protocol', protocol);
     setAndFreeze(this, 'protocolDocUrl', protocolDocUrl);
-    setAndFreeze(this, 'server', server);
     setAndFreeze(this, 'vendorVersion', vendorVersion);
     setAndFreeze(this, 'vendorLabel', vendorLabel);
   }
