@@ -41,6 +41,17 @@ const setAndFreeze = (obj, name, value) => {
   });
 };
 
+const warnDeprecatedSetting = (oldName, newName) => {
+  // eslint-disable-next-line no-console
+  console.warn(
+    'A deprecated setting',
+    oldName,
+    'is used. Please use',
+    newName,
+    'instead.',
+  );
+};
+
 class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
@@ -48,6 +59,7 @@ class GmpSettings {
       enableStoreDebugLog,
       guestUsername,
       guestPassword,
+      loglevel,
       manualUrl = DEFAULT_MANUAL_URL,
       manualLanguageMapping,
       protocol = global.location.protocol,
@@ -60,9 +72,13 @@ class GmpSettings {
       vendorVersion,
       vendorLabel,
     } = options;
-    let {logLevel} = options;
+    let {logLevel = loglevel} = options;
 
     this.storage = storage;
+
+    if (isDefined(loglevel)) {
+      warnDeprecatedSetting('loglevel', 'logLevel');
+    }
 
     if (isDefined(enableStoreDebugLog)) {
       this.enableStoreDebugLog = enableStoreDebugLog;
