@@ -146,6 +146,8 @@ describe('PoliciesPage tests', () => {
       foo: 'bar',
     });
 
+    const renewSession = jest.fn().mockResolvedValue({data: {}});
+
     const gmp = {
       policies: {
         get: getPolicies,
@@ -157,7 +159,7 @@ describe('PoliciesPage tests', () => {
       },
       reloadInterval,
       settings: {manualUrl},
-      user: {currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting, renewSession},
     };
 
     const {render, store} = rendererWith({
