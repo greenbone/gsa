@@ -595,25 +595,27 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
                       </div>
                     </div>
                   </div>
-                  <div
-                    class="c9"
-                  >
-                    <label
-                      class="c10"
-                      data-testid="formgroup-title"
-                    >
-                      Note
-                    </label>
+                  <div>
                     <div
-                      class="c11"
-                      data-testid="formgroup-content"
-                      size="10"
+                      class="c9"
                     >
-                      <textarea
-                        class="c18 c19"
-                        name="note"
-                        rows="5"
-                      />
+                      <label
+                        class="c10"
+                        data-testid="formgroup-title"
+                      >
+                        Note
+                      </label>
+                      <div
+                        class="c11"
+                        data-testid="formgroup-content"
+                        size="10"
+                      >
+                        <textarea
+                          class="c18 c19"
+                          name="note"
+                          rows="5"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

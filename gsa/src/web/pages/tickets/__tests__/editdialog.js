@@ -121,6 +121,7 @@ describe('EditTicketDialog component tests', () => {
 
     const {baseElement, getByTestId} = render(
       <EditTicketDialog
+        fixedNote="Ticket has been fixed"
         status={TICKET_STATUS.open}
         ticketId="t1"
         userId="u1"
@@ -148,7 +149,7 @@ describe('EditTicketDialog component tests', () => {
       userId: 'u1',
       openNote: '',
       closedNote: '',
-      fixedNote: '',
+      fixedNote: 'Ticket has been fixed',
     });
   });
 
@@ -158,6 +159,7 @@ describe('EditTicketDialog component tests', () => {
 
     const {baseElement, getByTestId} = render(
       <EditTicketDialog
+        openNote="Ticket has been opened"
         status={TICKET_STATUS.open}
         ticketId="t1"
         userId="u1"
@@ -183,10 +185,32 @@ describe('EditTicketDialog component tests', () => {
       status: TICKET_STATUS.open,
       ticketId: 't1',
       userId: 'u2',
-      openNote: '',
+      openNote: 'Ticket has been opened',
       closedNote: '',
       fixedNote: '',
     });
+  });
+
+  test('should not save invalid form states', () => {
+    const handleClose = jest.fn();
+    const handleSave = jest.fn();
+
+    const {getByTestId} = render(
+      <EditTicketDialog
+        openNote="Ticket has been opened."
+        status={TICKET_STATUS.closed}
+        ticketId="t1"
+        userId="u1"
+        users={users}
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
+    const saveButton = getByTestId('dialog-save-button');
+
+    fireEvent.click(saveButton);
+
+    expect(handleSave).not.toHaveBeenCalled();
   });
 
   test('should allow to close the dialog', () => {
