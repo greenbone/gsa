@@ -31,6 +31,9 @@ import TextArea from 'web/components/form/textarea';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
+import useForm, {syncVariables} from 'web/components/form/useForm';
+import {editTicketRules as validationRules} from './validationrules';
+import ErrorBubble from 'web/components/form/errorbubble';
 
 const STATUS = [TICKET_STATUS.open, TICKET_STATUS.fixed, TICKET_STATUS.closed];
 
@@ -50,71 +53,126 @@ const EditTicketDialog = ({
   users,
   onClose,
   onSave,
-}) => (
-  <SaveDialog
-    title={title}
-    onClose={onClose}
-    onSave={onSave}
-    values={{
-      ticketId,
-    }}
-    defaultValues={{
-      closedNote,
-      fixedNote,
-      openNote,
-      status,
-      userId,
-    }}
-  >
-    {({values, onValueChange}) => (
-      <Layout flex="column">
-        <FormGroup title={_('Status')}>
-          <Select
-            name="status"
-            items={STATUS_ITEMS}
-            value={values.status}
-            onChange={onValueChange}
-          />
-        </FormGroup>
-        <FormGroup title={_('Assigned User')}>
-          <Select
-            name="userId"
-            items={renderSelectItems(users)}
-            value={values.userId}
-            onChange={onValueChange}
-          />
-        </FormGroup>
-        <FormGroup title={_('Note for Open')}>
-          <TextArea
-            name="openNote"
-            grow="1"
-            rows="5"
-            value={values.openNote}
-            onChange={onValueChange}
-          />
-        </FormGroup>
-        <FormGroup title={_('Note for Fixed')}>
-          <TextArea
-            name="fixedNote"
-            grow="1"
-            rows="5"
-            value={values.fixedNote}
-            onChange={onValueChange}
-          />
-        </FormGroup>
-        <FormGroup title={_('Note for Closed')}>
-          <TextArea
-            name="closedNote"
-            grow="1"
-            rows="5"
-            value={values.closedNote}
-            onChange={onValueChange}
-          />
-        </FormGroup>
-      </Layout>
-    )}
-  </SaveDialog>
-);
+}) => {
+  const stateSchema = {
+    // variables needing validation
+    openNote,
+    closedNote,
+    fixedNote,
+  };
+
+  const extras = {
+    // variables not needing validation but needed as dependencies
+    status,
+  };
+
+  const {
+    formState,
+    dependencies,
+    shouldWarn,
+    handleValueChange,
+    handleDependencyChange,
+    formStatus,
+    handleSubmit,
+  } = useForm(stateSchema, validationRules, onSave, extras);
+
+  return (
+    <SaveDialog
+      title={title}
+      onClose={onClose}
+      onSave={vals => handleSubmit(vals)}
+      values={{
+        ticketId,
+      }}
+      defaultValues={{
+        closedNote,
+        fixedNote,
+        openNote,
+        status,
+        userId,
+      }}
+    >
+      {({values, onValueChange}) => {
+        syncVariables(values, formState, dependencies);
+
+        return (
+          <Layout flex="column">
+            <FormGroup title={_('Status')}>
+              <Select
+                name="status"
+                items={STATUS_ITEMS}
+                value={dependencies.status}
+                onChange={handleDependencyChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('Assigned User')}>
+              <Select
+                name="userId"
+                items={renderSelectItems(users)}
+                value={values.userId}
+                onChange={onValueChange}
+              />
+            </FormGroup>
+            <ErrorBubble
+              visible={shouldWarn && !formStatus.openNote.validity}
+              content={formStatus.openNote.error}
+            >
+              {({targetRef}) => (
+                <div ref={targetRef}>
+                  <FormGroup title={_('Note for Open')}>
+                    <TextArea
+                      name="openNote"
+                      grow="1"
+                      rows="5"
+                      value={formState.openNote}
+                      onChange={handleValueChange}
+                    />
+                  </FormGroup>
+                </div>
+              )}
+            </ErrorBubble>
+            <ErrorBubble
+              visible={shouldWarn && !formStatus.fixedNote.validity}
+              content={formStatus.fixedNote.error}
+            >
+              {({targetRef}) => (
+                <div ref={targetRef}>
+                  <FormGroup title={_('Note for Fixed')}>
+                    <TextArea
+                      name="fixedNote"
+                      grow="1"
+                      rows="5"
+                      value={formState.fixedNote}
+                      onChange={handleValueChange}
+                    />
+                  </FormGroup>
+                </div>
+              )}
+            </ErrorBubble>
+            <ErrorBubble
+              visible={shouldWarn && !formStatus.closedNote.validity}
+              content={formStatus.closedNote.error}
+            >
+              {({targetRef}) => (
+                <div ref={targetRef}>
+                  <FormGroup title={_('Note for Closed')}>
+                    <TextArea
+                      name="closedNote"
+                      grow="1"
+                      rows="5"
+                      value={formState.closedNote}
+                      onChange={handleValueChange}
+                    />
+                  </FormGroup>
+                </div>
+              )}
+            </ErrorBubble>
+          </Layout>
+        );
+      }}
+    </SaveDialog>
+  );
+};
 
 EditTicketDialog.propTypes = {
   closedNote: PropTypes.string,
