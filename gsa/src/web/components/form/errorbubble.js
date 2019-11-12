@@ -100,7 +100,9 @@ const ErrorBubble = ({visible, ...props}) => {
     <React.Fragment>
       {content && visible && (
         <Portal>
-          <BubbleDisplay ref={bubble}>{content}</BubbleDisplay>
+          <BubbleDisplay data-testid="error-bubble" ref={bubble}>
+            {content}
+          </BubbleDisplay>
         </Portal>
       )}
       {children({
