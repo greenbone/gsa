@@ -214,7 +214,7 @@ describe('Gmp tests', () => {
         message: 'foo',
       });
       const settings = {
-        loglevel: 'silent',
+        logLevel: 'silent',
         token: 'foo',
         server: 'localhost',
       };

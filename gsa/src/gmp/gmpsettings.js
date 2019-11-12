@@ -48,7 +48,6 @@ class GmpSettings {
       enableStoreDebugLog,
       guestUsername,
       guestPassword,
-      loglevel = storage.loglevel,
       manualUrl = DEFAULT_MANUAL_URL,
       manualLanguageMapping,
       protocol = global.location.protocol,
@@ -60,14 +59,23 @@ class GmpSettings {
       timeout,
       vendorVersion,
       vendorLabel,
-    } = {...options};
+    } = options;
+    let {logLevel} = options;
+
     this.storage = storage;
 
     if (isDefined(enableStoreDebugLog)) {
       this.enableStoreDebugLog = enableStoreDebugLog;
     }
 
-    this.loglevel = isDefined(loglevel) ? loglevel : DEFAULT_LOG_LEVEL;
+    if (!isDefined(logLevel)) {
+      logLevel = storage.logLevel;
+    }
+    if (!isDefined(logLevel)) {
+      logLevel = DEFAULT_LOG_LEVEL;
+    }
+
+    this.logLevel = logLevel;
     this.reloadInterval = reloadInterval;
     this.reloadIntervalActive = reloadIntervalActive;
     this.reloadIntervalInactive = reloadIntervalInactive;
@@ -117,12 +125,12 @@ class GmpSettings {
     return this.storage.locale;
   }
 
-  get loglevel() {
-    return this.storage.loglevel;
+  get logLevel() {
+    return this.storage.logLevel;
   }
 
-  set loglevel(value) {
-    set(this.storage, 'loglevel', value);
+  set logLevel(value) {
+    set(this.storage, 'logLevel', value);
   }
 
   get enableStoreDebugLog() {

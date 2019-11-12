@@ -38,8 +38,8 @@ export const LogLevels = {
 const isValidLogLevel = level =>
   isString(level) && level.toLowerCase() in LogLevels;
 
-const getLogLevel = loglevel =>
-  isValidLogLevel(loglevel) ? LogLevels[loglevel.toLowerCase()] : undefined;
+const getLogLevel = logLevel =>
+  isValidLogLevel(logLevel) ? LogLevels[logLevel.toLowerCase()] : undefined;
 
 function noop() {}
 
@@ -75,7 +75,7 @@ class Logger {
     let logValue = getLogLevel(level);
 
     if (!isDefined(logValue)) {
-      console.error('Unknown loglevel ', level, ' for Logger ', this.name);
+      console.error('Unknown logLevel ', level, ' for Logger ', this.name);
       logValue = LogLevels.silent;
     }
 
@@ -90,7 +90,7 @@ class Logger {
     let logValue = getLogLevel(level);
 
     if (!isDefined(logValue)) {
-      console.error('Unknown loglevel ', level, ' for Logger ', this.name);
+      console.error('Unknown logLevel ', level, ' for Logger ', this.name);
       logValue = LogLevels.silent;
     }
 
@@ -106,8 +106,8 @@ export class RootLogger {
     this.level = DEFAULT_LOG_LEVEL;
   }
 
-  init({loglevel}) {
-    return this.setDefaultLevel(loglevel);
+  init({logLevel}) {
+    return this.setDefaultLevel(logLevel);
   }
 
   setDefaultLevel(level) {

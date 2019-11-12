@@ -43,7 +43,7 @@ describe('GmpSettings tests', () => {
     expect(settings.enableStoreDebugLog).toBeUndefined();
     expect(settings.guestUsername).toBeUndefined();
     expect(settings.guestPassword).toBeUndefined();
-    expect(settings.loglevel).toEqual(DEFAULT_LOG_LEVEL);
+    expect(settings.logLevel).toEqual(DEFAULT_LOG_LEVEL);
     expect(settings.locale).toBeUndefined();
     expect(settings.manualUrl).toEqual(DEFAULT_MANUAL_URL);
     expect(settings.manualLanguageMapping).toBeUndefined();
@@ -65,7 +65,7 @@ describe('GmpSettings tests', () => {
     expect(settings.vendorLabel).toBeUndefined();
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
-    expect(storage.setItem).toHaveBeenCalledWith('loglevel', DEFAULT_LOG_LEVEL);
+    expect(storage.setItem).toHaveBeenCalledWith('logLevel', DEFAULT_LOG_LEVEL);
   });
 
   test('should init with passed options', () => {
@@ -76,7 +76,7 @@ describe('GmpSettings tests', () => {
       guestUsername: 'guest',
       guestPassword: 'pass',
       locale: 'en',
-      loglevel: 'error',
+      logLevel: 'error',
       manualUrl: 'http://manual',
       manualLanguageMapping: {
         foo: 'bar',
@@ -100,7 +100,7 @@ describe('GmpSettings tests', () => {
     expect(settings.guestUsername).toEqual('guest');
     expect(settings.guestPassword).toEqual('pass');
     expect(settings.locale).toBeUndefined();
-    expect(settings.loglevel).toEqual('error');
+    expect(settings.logLevel).toEqual('error');
     expect(settings.manualUrl).toEqual('http://manual');
     expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
     expect(settings.protocol).toEqual('http');
@@ -122,14 +122,14 @@ describe('GmpSettings tests', () => {
       'enableStoreDebugLog',
       '1',
     );
-    expect(storage.setItem).toHaveBeenNthCalledWith(2, 'loglevel', 'error');
+    expect(storage.setItem).toHaveBeenNthCalledWith(2, 'logLevel', 'error');
   });
 
   test('should init from store', () => {
     const storage = createStorage({
       enableStoreDebugLog: '0',
       locale: 'en',
-      loglevel: 'error',
+      logLevel: 'error',
       timezone: 'cet',
       token: 'atoken',
       username: 'foo',
@@ -144,7 +144,7 @@ describe('GmpSettings tests', () => {
 
     expect(settings.enableStoreDebugLog).toEqual(false);
     expect(settings.locale).toEqual('en');
-    expect(settings.loglevel).toEqual('error');
+    expect(settings.logLevel).toEqual('error');
     expect(settings.manualUrl).toEqual(DEFAULT_MANUAL_URL);
     expect(settings.manualLanguageMapping).toBeUndefined();
     expect(settings.protocol).toEqual('http');
@@ -163,14 +163,14 @@ describe('GmpSettings tests', () => {
     expect(settings.username).toEqual('foo');
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
-    expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'error');
+    expect(storage.setItem).toHaveBeenCalledWith('logLevel', 'error');
   });
 
   test('should ensure options override settings from storage', () => {
     const storage = createStorage({
       enableStoreDebugLog: '0',
       locale: 'de',
-      loglevel: 'error',
+      logLevel: 'error',
       manualUrl: 'http://ipsum',
       manualLanguageMapping: {lorem: 'ipsum'},
       protocol: 'https',
@@ -190,7 +190,7 @@ describe('GmpSettings tests', () => {
     const settings = new GmpSettings(storage, {
       enableStoreDebugLog: true,
       locale: 'en',
-      loglevel: 'debug',
+      logLevel: 'debug',
       manualUrl: 'http://manual',
       manualLanguageMapping: {foo: 'bar'},
       protocol: 'http',
@@ -209,7 +209,7 @@ describe('GmpSettings tests', () => {
 
     expect(settings.enableStoreDebugLog).toEqual(true);
     expect(settings.locale).toEqual('de');
-    expect(settings.loglevel).toEqual('debug');
+    expect(settings.logLevel).toEqual('debug');
     expect(settings.manualUrl).toEqual('http://manual');
     expect(settings.manualLanguageMapping).toEqual({foo: 'bar'});
     expect(settings.protocol).toEqual('http');
@@ -231,14 +231,14 @@ describe('GmpSettings tests', () => {
       'enableStoreDebugLog',
       '1',
     );
-    expect(storage.setItem).toHaveBeenNthCalledWith(2, 'loglevel', 'debug');
+    expect(storage.setItem).toHaveBeenNthCalledWith(2, 'logLevel', 'debug');
   });
 
   test('should delete settings from storage', () => {
     const storage = createStorage({
       enableStoreDebugLog: '1',
       locale: 'en',
-      loglevel: 'error',
+      logLevel: 'error',
       token: 'atoken',
       timezone: 'cet',
       username: 'foo',
@@ -248,13 +248,13 @@ describe('GmpSettings tests', () => {
 
     expect(settings.enableStoreDebugLog).toEqual(true);
     expect(settings.locale).toEqual('en');
-    expect(settings.loglevel).toEqual('error');
+    expect(settings.logLevel).toEqual('error');
     expect(settings.token).toEqual('atoken');
     expect(settings.timezone).toEqual('cet');
     expect(settings.username).toEqual('foo');
 
     expect(storage.setItem).toHaveBeenCalledTimes(1);
-    expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'error');
+    expect(storage.setItem).toHaveBeenCalledWith('logLevel', 'error');
 
     settings.enableStoreDebugLog = undefined;
     expect(storage.removeItem).toBeCalledWith('enableStoreDebugLog');
@@ -262,8 +262,8 @@ describe('GmpSettings tests', () => {
     settings.locale = undefined;
     expect(storage.removeItem).toBeCalledWith('locale');
 
-    settings.loglevel = undefined;
-    expect(storage.removeItem).toBeCalledWith('loglevel');
+    settings.logLevel = undefined;
+    expect(storage.removeItem).toBeCalledWith('logLevel');
 
     settings.token = undefined;
     expect(storage.removeItem).toBeCalledWith('token');
@@ -282,7 +282,7 @@ describe('GmpSettings tests', () => {
       guestUsername: 'guest',
       guestPassword: 'pass',
       locale: 'en',
-      loglevel: 'error',
+      logLevel: 'error',
       manualUrl: 'http://manual',
       manualLanguageMapping: {foo: 'bar'},
       protocol: 'http',
