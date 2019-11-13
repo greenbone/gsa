@@ -145,7 +145,7 @@ const ScannerDialog = ({
   host = 'localhost',
   id,
   name = _('Unnamed'),
-  port = '9391',
+  port = '22',
   title = _('New Scanner'),
   type = OSP_SCANNER_TYPE,
   which_cert,
@@ -184,7 +184,7 @@ const ScannerDialog = ({
 
   const {gmp} = props;
 
-  if (gmp.settings.enableGreenboneSensor) {
+  if (isDefined(gmp) && gmp.settings.enableGreenboneSensor) {
     SCANNER_TYPES = [
       GMP_SCANNER_TYPE,
       OSP_SCANNER_TYPE,
