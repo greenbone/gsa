@@ -21,11 +21,7 @@ import React from 'react';
 import {render, fireEvent} from 'web/utils/testing';
 
 import ContainerDialog from '../containerdialog';
-import Task, {
-  AUTO_DELETE_KEEP,
-  AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  AUTO_DELETE_NO,
-} from 'gmp/models/task';
+import Task, {AUTO_DELETE_KEEP_DEFAULT_VALUE} from 'gmp/models/task';
 
 describe('ContainerDialog tests', () => {
   test('should render create dialog', () => {

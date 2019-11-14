@@ -24,10 +24,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {YES_VALUE} from 'gmp/parser';
 
-import {
-  AUTO_DELETE_KEEP,
-  AUTO_DELETE_KEEP_DEFAULT_VALUE,
-} from 'gmp/models/task';
+import {AUTO_DELETE_KEEP_DEFAULT_VALUE} from 'gmp/models/task';
 
 import PropTypes from '../../utils/proptypes.js';
 
