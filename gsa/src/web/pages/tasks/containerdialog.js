@@ -24,8 +24,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {YES_VALUE} from 'gmp/parser';
 
-import {AUTO_DELETE_KEEP_DEFAULT_VALUE} from 'gmp/models/task';
-
 import PropTypes from '../../utils/proptypes.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -49,7 +47,6 @@ const ContainerTaskDialog = ({
   const isEdit = isDefined(task);
 
   const data = {
-    auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE, // the backend expects auto_delete_data still
     comment,
     in_assets,
     name,
