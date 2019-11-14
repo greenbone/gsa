@@ -93,7 +93,9 @@ const FilterProvider = ({
   }, [returnedFilter, rowsPerPage, gmp, dispatch]);
 
   const [locationQueryFilter, setLocationQueryFilter] = useState(
-    Filter.fromString(locationQuery.filter),
+    isDefined(locationQuery.filter)
+      ? Filter.fromString(locationQuery.filter)
+      : undefined,
   );
 
   useEffect(() => {
