@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Increase clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
 
 ### Fixed
+- Fix defaultfilter is not always applied [#1783](https://github.com/greenbone/gsa/pull/1783)
 - Fix checkboxes in scanconfig editdialog reset after every rerender [#1773](https://github.com/greenbone/gsa/pull/1773)
 - Pass scanner port number to scanner dialog from component [#1772](https://github.com/greenbone/gsa/pull/1772)
 - Fixed allowed range for auto delete keep value [#1729](https://github.com/greenbone/gsa/pull/1729)

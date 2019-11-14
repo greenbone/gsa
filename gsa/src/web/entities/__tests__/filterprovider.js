@@ -75,6 +75,8 @@ describe('FilterProvider component tests', () => {
 
     const pFilter = Filter.fromString('page=filter');
 
+    const emptyFilter = Filter.fromString('rows=42');
+
     const defaultSettingfilter = Filter.fromString('foo=bar');
 
     const getSetting = jest.fn().mockResolvedValue({});
@@ -107,12 +109,15 @@ describe('FilterProvider component tests', () => {
     await waitForElement(() => getByTestId('awaiting-span'));
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
+    expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
   });
 
   test('should use defaultSettingFilter', async () => {
     const resultingFilter = Filter.fromString('foo=bar rows=42');
 
     const defaultSettingfilter = Filter.fromString('foo=bar');
+
+    const emptyFilter = Filter.fromString('rows=42');
 
     const getSetting = jest.fn().mockResolvedValue({});
     const gmp = {
@@ -143,12 +148,15 @@ describe('FilterProvider component tests', () => {
     await waitForElement(() => getByTestId('awaiting-span'));
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
+    expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
   });
 
   test('should use fallbackfilter if defaultSettingFilter could not be loaded', async () => {
     const resultingFilter = Filter.fromString('fall=back rows=42');
 
     const fallbackFilter = Filter.fromString('fall=back');
+
+    const emptyFilter = Filter.fromString('rows=42');
 
     const getSetting = jest.fn().mockResolvedValue({});
     const gmp = {
@@ -181,6 +189,7 @@ describe('FilterProvider component tests', () => {
     await waitForElement(() => getByTestId('awaiting-span'));
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
+    expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
   });
 
   test('should use fallbackFilter if given', async () => {
