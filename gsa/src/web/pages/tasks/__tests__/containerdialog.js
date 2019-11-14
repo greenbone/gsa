@@ -75,7 +75,6 @@ describe('ContainerDialog tests', () => {
 
     expect(handleSave).toHaveBeenCalledWith({
       comment: 'lorem',
-      auto_delete: AUTO_DELETE_KEEP,
       auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
       in_assets: 1,
       id: undefined,
@@ -104,12 +103,6 @@ describe('ContainerDialog tests', () => {
     const commentInput = getByName('comment');
     fireEvent.change(commentInput, {target: {value: 'lorem'}});
 
-    const autoDeleteKeepInput = getByName('auto_delete_data');
-    fireEvent.change(autoDeleteKeepInput, {target: {value: '10'}});
-
-    const [autoDeleteNoRadio] = queryAllByName('auto_delete');
-    fireEvent.click(autoDeleteNoRadio);
-
     const [, inAssetsNoRadio] = queryAllByName('in_assets');
     fireEvent.click(inAssetsNoRadio);
 
@@ -118,8 +111,7 @@ describe('ContainerDialog tests', () => {
 
     expect(handleSave).toHaveBeenCalledWith({
       comment: 'lorem',
-      auto_delete: AUTO_DELETE_NO,
-      auto_delete_data: 10,
+      auto_delete_data: 5,
       in_assets: 0,
       id: 't1',
       name: 'ipsum',

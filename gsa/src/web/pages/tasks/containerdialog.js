@@ -39,7 +39,6 @@ import TextField from '../../components/form/textfield.js';
 import Layout from '../../components/layout/layout.js';
 
 import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
-import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
 
 const ContainerTaskDialog = ({
   comment = '',

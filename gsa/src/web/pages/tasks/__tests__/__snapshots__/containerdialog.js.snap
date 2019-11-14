@@ -650,7 +650,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   height: 100%;
 }
 
-.c31 {
+.c26 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -659,7 +659,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c30 {
+.c25 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -726,7 +726,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   width: inherit;
 }
 
-.c27 {
+.c22 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -746,12 +746,12 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   z-index: 1;
 }
 
-.c27:focus,
-.c27:hover {
+.c22:focus,
+.c22:hover {
   border: 1px solid #393637;
 }
 
-.c27:hover {
+.c22:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -759,26 +759,26 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   color: #fff;
 }
 
-.c27[disabled] {
+.c22[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c27 img {
+.c22 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c27:link {
+.c22:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c28 {
+.c23 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -796,18 +796,18 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   align-items: center;
 }
 
-.c29 {
+.c24 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c29:hover {
+.c24:hover {
   color: #fff;
   background: #519032;
 }
 
-.c26 {
+.c21 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -956,27 +956,6 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   padding-right: 10px;
 }
 
-.c21 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-  width: 83.33333333%;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
 .c12 {
   font-family: inherit;
   font-size: inherit;
@@ -1064,112 +1043,6 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c22 {
-  border-radius: 2px;
-  border: 1px solid #c8d3d9;
-  background-color: #fff;
-  font-size: 1.1em;
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-  padding: 0;
-  vertical-align: middle;
-}
-
-.c23 {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  border: none;
-  background: none;
-  color: inherit;
-  padding: 0;
-  margin: 0.2em 0;
-  vertical-align: middle;
-  margin-left: 0.4em;
-  margin-right: 22px;
-}
-
-.c24 {
-  background-color: #c8d3d9;
-  color: #787878;
-  border-left: 1px solid #393637;
-  width: 16px;
-  height: 50%;
-  font-size: 0.6em;
-  padding: 0;
-  margin: 0;
-  text-align: center;
-  vertical-align: middle;
-  position: absolute;
-  right: 0;
-  cursor: default;
-  display: block;
-  overflow: hidden;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border-top-right-radius: 1px;
-  top: 0;
-}
-
-.c24:hover {
-  background-color: #66c430;
-  color: #fff;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-}
-
-.c24:active {
-  background-color: #fff;
-  color: #519032;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-}
-
-.c25 {
-  background-color: #c8d3d9;
-  color: #787878;
-  border-left: 1px solid #393637;
-  width: 16px;
-  height: 50%;
-  font-size: 0.6em;
-  padding: 0;
-  margin: 0;
-  text-align: center;
-  vertical-align: middle;
-  position: absolute;
-  right: 0;
-  cursor: default;
-  display: block;
-  overflow: hidden;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border-bottom-right-radius: 1px;
-  bottom: 0;
-}
-
-.c25:hover {
-  background-color: #66c430;
-  color: #fff;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-}
-
-.c25:active {
-  background-color: #fff;
-  color: #519032;
-  -webkit-text-decoration: none;
-  text-decoration: none;
 }
 
 <div>
@@ -1339,128 +1212,21 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                       </div>
                     </div>
                   </div>
-                  <div
-                    class="c9"
-                  >
-                    <label
-                      class="c10"
-                      data-testid="formgroup-title"
-                    >
-                      Auto Delete Reports
-                    </label>
-                    <div
-                      class="c21"
-                      data-testid="formgroup-content"
-                      size="10"
-                    >
-                      <label
-                        class="c17"
-                      >
-                        <div
-                          class="c15"
-                        >
-                          <div
-                            class="c16"
-                            margin="5px"
-                          >
-                            <input
-                              class="c18 c19"
-                              data-testid="radio-input"
-                              name="auto_delete"
-                              type="radio"
-                              value="no"
-                            />
-                            <span
-                              class="c20"
-                              data-testid="radio-title"
-                            >
-                              Do not automatically delete reports
-                            </span>
-                          </div>
-                        </div>
-                      </label>
-                      <div
-                        class="c15"
-                      >
-                        <div
-                          class="c16"
-                          margin="5px"
-                        >
-                          <label
-                            class="c17"
-                          >
-                            <div
-                              class="c15"
-                            >
-                              <div
-                                class="c16"
-                                margin="5px"
-                              >
-                                <input
-                                  checked=""
-                                  class="c18 c19"
-                                  data-testid="radio-input"
-                                  name="auto_delete"
-                                  type="radio"
-                                  value="keep"
-                                />
-                                <span
-                                  class="c20"
-                                  data-testid="radio-title"
-                                >
-                                  Automatically delete oldest reports but always keep newest
-                                </span>
-                              </div>
-                            </div>
-                          </label>
-                          <span
-                            class="c22"
-                          >
-                            <input
-                              class="c23"
-                              data-testid="spinner-input"
-                              max="1200"
-                              maxlength="5"
-                              min="2"
-                              name="auto_delete_data"
-                              size="4"
-                              value="5"
-                            />
-                            <span
-                              class="c24"
-                              data-testid="spinner-up"
-                            >
-                              ▲
-                            </span>
-                            <span
-                              class="c25"
-                              data-testid="spinner-down"
-                            >
-                              ▼
-                            </span>
-                          </span>
-                          <span>
-                            reports
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
             <div
-              class="c26"
+              class="c21"
             >
               <button
-                class="c27 c28 c29"
+                class="c22 c23 c24"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c27 c28 c29"
+                class="c22 c23 c24"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -1469,10 +1235,10 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
             </div>
           </div>
           <div
-            class="c30"
+            class="c25"
           >
             <div
-              class="c31"
+              class="c26"
             />
           </div>
         </div>
