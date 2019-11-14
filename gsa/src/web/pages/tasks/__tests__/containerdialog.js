@@ -21,7 +21,7 @@ import React from 'react';
 import {render, fireEvent} from 'web/utils/testing';
 
 import ContainerDialog from '../containerdialog';
-import Task, {AUTO_DELETE_KEEP_DEFAULT_VALUE} from 'gmp/models/task';
+import Task from 'gmp/models/task';
 
 describe('ContainerDialog tests', () => {
   test('should render create dialog', () => {
@@ -71,7 +71,6 @@ describe('ContainerDialog tests', () => {
 
     expect(handleSave).toHaveBeenCalledWith({
       comment: 'lorem',
-      auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
       in_assets: 1,
       id: undefined,
       name: 'ipsum',
@@ -107,7 +106,6 @@ describe('ContainerDialog tests', () => {
 
     expect(handleSave).toHaveBeenCalledWith({
       comment: 'lorem',
-      auto_delete_data: 5,
       in_assets: 0,
       id: 't1',
       name: 'ipsum',

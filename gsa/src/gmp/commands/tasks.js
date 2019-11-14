@@ -22,8 +22,10 @@ import registerCommand from 'gmp/command';
 
 import {NO_VALUE} from '../parser';
 
-import Task, {HOSTS_ORDERING_SEQUENTIAL} from 'gmp/models/task';
-import {AUTO_DELETE_KEEP_DEFAULT_VALUE} from 'gmp/models/task';
+import Task, {
+  HOSTS_ORDERING_SEQUENTIAL,
+  AUTO_DELETE_KEEP_DEFAULT_VALUE,
+} from 'gmp/models/task';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
