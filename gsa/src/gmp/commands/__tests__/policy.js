@@ -19,7 +19,7 @@
 import {
   SCANCONFIG_TREND_DYNAMIC,
   SCANCONFIG_TREND_STATIC,
-  EMPTY_SCAN_CONFIG_ID,
+  BASE_SCAN_CONFIG_ID,
 } from 'gmp/models/scanconfig';
 
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
@@ -50,7 +50,7 @@ describe('PolicyCommand tests', () => {
         expect(fakeHttp.request).toHaveBeenCalledWith('post', {
           data: {
             cmd: 'create_config',
-            base: EMPTY_SCAN_CONFIG_ID,
+            base: BASE_SCAN_CONFIG_ID,
             comment: 'bar',
             name: 'foo',
             usage_type: 'policy',
