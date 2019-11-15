@@ -31,7 +31,7 @@ import Policy from '../models/policy';
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
 import {convert, convertSelect, convertPreferences} from './scanconfigs';
-import {EMPTY_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
+import {BASE_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 
 const log = logger.getLogger('gmp.commands.policies');
 
@@ -52,7 +52,7 @@ export class PolicyCommand extends EntityCommand {
   create({name, comment}) {
     const data = {
       cmd: 'create_config',
-      base: EMPTY_SCAN_CONFIG_ID,
+      base: BASE_SCAN_CONFIG_ID,
       comment,
       name,
       usage_type: 'policy',
