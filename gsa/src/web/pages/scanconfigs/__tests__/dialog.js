@@ -27,15 +27,13 @@ describe('CreateScanConfigDialog component tests', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
 
-    const {getAllByTestId, baseElement, debug} = render(
+    const {getAllByTestId} = render(
       <CreateScanConfigDialog
         title={'New Scan Config'}
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
-
-    debug(baseElement);
 
     const formgroups = getAllByTestId('formgroup-title');
     const radioInputs = getAllByTestId('radio-input');
