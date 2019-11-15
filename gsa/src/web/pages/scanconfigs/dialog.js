@@ -37,10 +37,11 @@ import Layout from 'web/components/layout/layout';
 import {
   FULL_AND_FAST_SCAN_CONFIG_ID,
   EMPTY_SCAN_CONFIG_ID,
+  BASE_SCAN_CONFIG_ID,
 } from 'gmp/models/scanconfig';
 
 const CreateScanConfigDialog = ({
-  baseScanConfig = EMPTY_SCAN_CONFIG_ID,
+  baseScanConfig = BASE_SCAN_CONFIG_ID,
   comment = '',
   name = _('Unnamed'),
   scannerId,
@@ -89,6 +90,13 @@ const CreateScanConfigDialog = ({
               <Divider flex="column">
                 <Radio
                   name="baseScanConfig"
+                  value={BASE_SCAN_CONFIG_ID}
+                  checked={state.baseScanConfig === BASE_SCAN_CONFIG_ID}
+                  title={_('Base with a minimum set of NVTs')}
+                  onChange={onValueChange}
+                />
+                <Radio
+                  name="baseScanConfig"
                   value={EMPTY_SCAN_CONFIG_ID}
                   checked={state.baseScanConfig === EMPTY_SCAN_CONFIG_ID}
                   title={_('Empty, static and fast')}
@@ -132,6 +140,7 @@ CreateScanConfigDialog.propTypes = {
   baseScanConfig: PropTypes.oneOf([
     FULL_AND_FAST_SCAN_CONFIG_ID,
     EMPTY_SCAN_CONFIG_ID,
+    BASE_SCAN_CONFIG_ID,
     '0',
   ]),
   comment: PropTypes.string,

@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [9.0.1] - unreleased
 
 ### Added
+- Add base config to create scanconfig dialog, make it new default base for scanconfigs and new base for policies [#1789](https://github.com/greenbone/gsa/pull/1789)
 - Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)
 
 ### Changed
