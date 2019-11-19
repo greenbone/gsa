@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 ### Removed
-- Remove "All SecInfo" section [#1685](https://github.com/greenbone/gsa/pull/1685)
+- Remove "All SecInfo" section [#1685](https://github.com/greenbone/gsa/pull/1685) [#1695](https://github.com/greenbone/gsa/pull/1695)
 
 [20.04]: https://github.com/greenbone/gsa/compare/gsa-9.0...master
 
