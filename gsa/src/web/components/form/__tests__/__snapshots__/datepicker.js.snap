@@ -2,25 +2,21 @@
 
 exports[`DatePicker component tests should render 1`] = `
 .c1 {
-  cursor: pointer;
-}
-
-.c2 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c2 * {
+.c1 * {
   height: inherit;
   width: inherit;
 }
 
-.c3 {
+.c2 {
   margin-left: 5px;
 }
 
-.c3:hover {
+.c2:hover {
   cursor: pointer;
 }
 
@@ -31,12 +27,6 @@ exports[`DatePicker component tests should render 1`] = `
   display: flex;
   margin-right: 5px;
   width: auto;
-}
-
-@media print {
-  .c1 {
-    display: none;
-  }
 }
 
 <div
@@ -51,7 +41,7 @@ exports[`DatePicker component tests should render 1`] = `
     >
       2018/11/11
       <span
-        class="c1 c2 c3"
+        class="c1 c2"
         data-testid="svg-icon"
       >
         <svg>
@@ -76,7 +66,7 @@ exports[`DatePicker component tests should render 2`] = `
     >
       2018/11/11
       <span
-        class="sc-fjdhpX fEEsMp sc-jzJRlG lcpYA sc-iBEsjs hwafBF"
+        class="sc-fjdhpX eWPlQv sc-jzJRlG lcpYA sc-iBEsjs hwafBF"
         data-testid="svg-icon"
       >
         <svg>
