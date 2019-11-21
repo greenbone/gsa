@@ -49,7 +49,7 @@ exports[`StartTimeSelection tests should render 1`] = `
   margin-top: 5px;
 }
 
-.c10 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -68,14 +68,14 @@ exports[`StartTimeSelection tests should render 1`] = `
   margin-left: -20px;
 }
 
-.c10 > * {
+.c9 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c10 > * {
+.c9 > * {
   margin-left: 20px;
 }
 
@@ -102,21 +102,17 @@ exports[`StartTimeSelection tests should render 1`] = `
 }
 
 .c7 {
-  cursor: pointer;
-}
-
-.c8 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c8 * {
+.c7 * {
   height: inherit;
   width: inherit;
 }
 
-.c16 {
+.c15 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -136,12 +132,12 @@ exports[`StartTimeSelection tests should render 1`] = `
   z-index: 1;
 }
 
-.c16:focus,
-.c16:hover {
+.c15:focus,
+.c15:hover {
   border: 1px solid #393637;
 }
 
-.c16:hover {
+.c15:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -149,26 +145,26 @@ exports[`StartTimeSelection tests should render 1`] = `
   color: #fff;
 }
 
-.c16[disabled] {
+.c15[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c16 img {
+.c15 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c16:link {
+.c15:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c17 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -234,7 +230,7 @@ exports[`StartTimeSelection tests should render 1`] = `
   padding-right: 10px;
 }
 
-.c15 {
+.c14 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -253,7 +249,7 @@ exports[`StartTimeSelection tests should render 1`] = `
   margin-left: 33.33333333%;
 }
 
-.c11 {
+.c10 {
   border-radius: 2px;
   border: 1px solid #c8d3d9;
   background-color: #fff;
@@ -265,7 +261,7 @@ exports[`StartTimeSelection tests should render 1`] = `
   vertical-align: middle;
 }
 
-.c12 {
+.c11 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -279,7 +275,7 @@ exports[`StartTimeSelection tests should render 1`] = `
   margin-right: 22px;
 }
 
-.c13 {
+.c12 {
   background-color: #c8d3d9;
   color: #787878;
   border-left: 1px solid #393637;
@@ -305,21 +301,21 @@ exports[`StartTimeSelection tests should render 1`] = `
   top: 0;
 }
 
-.c13:hover {
+.c12:hover {
   background-color: #66c430;
   color: #fff;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c13:active {
+.c12:active {
   background-color: #fff;
   color: #519032;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c14 {
+.c13 {
   background-color: #c8d3d9;
   color: #787878;
   border-left: 1px solid #393637;
@@ -345,25 +341,25 @@ exports[`StartTimeSelection tests should render 1`] = `
   bottom: 0;
 }
 
-.c14:hover {
+.c13:hover {
   background-color: #66c430;
   color: #fff;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c14:active {
+.c13:active {
   background-color: #fff;
   color: #519032;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c9 {
+.c8 {
   margin-left: 5px;
 }
 
-.c9:hover {
+.c8:hover {
   cursor: pointer;
 }
 
@@ -374,12 +370,6 @@ exports[`StartTimeSelection tests should render 1`] = `
   display: flex;
   margin-right: 5px;
   width: auto;
-}
-
-@media print {
-  .c7 {
-    display: none;
-  }
 }
 
 <div
@@ -435,7 +425,7 @@ exports[`StartTimeSelection tests should render 1`] = `
               >
                 01/01/2019
                 <span
-                  class="c7 c8 c9"
+                  class="c7 c8"
                   data-testid="svg-icon"
                 >
                   <svg>
@@ -449,14 +439,14 @@ exports[`StartTimeSelection tests should render 1`] = `
             class="c4"
           >
             <div
-              class="c10"
+              class="c9"
               margin="20px"
             >
               <span
-                class="c11"
+                class="c10"
               >
                 <input
-                  class="c12"
+                  class="c11"
                   data-testid="spinner-input"
                   max="23"
                   maxlength="5"
@@ -466,13 +456,13 @@ exports[`StartTimeSelection tests should render 1`] = `
                   value="13"
                 />
                 <span
-                  class="c13"
+                  class="c12"
                   data-testid="spinner-up"
                 >
                   ▲
                 </span>
                 <span
-                  class="c14"
+                  class="c13"
                   data-testid="spinner-down"
                 >
                   ▼
@@ -481,10 +471,10 @@ exports[`StartTimeSelection tests should render 1`] = `
                
               h
               <span
-                class="c11"
+                class="c10"
               >
                 <input
-                  class="c12"
+                  class="c11"
                   data-testid="spinner-input"
                   max="59"
                   maxlength="5"
@@ -494,13 +484,13 @@ exports[`StartTimeSelection tests should render 1`] = `
                   value="0"
                 />
                 <span
-                  class="c13"
+                  class="c12"
                   data-testid="spinner-up"
                 >
                   ▲
                 </span>
                 <span
-                  class="c14"
+                  class="c13"
                   data-testid="spinner-down"
                 >
                   ▼
@@ -547,7 +537,7 @@ exports[`StartTimeSelection tests should render 1`] = `
               >
                 01/01/2019
                 <span
-                  class="c7 c8 c9"
+                  class="c7 c8"
                   data-testid="svg-icon"
                 >
                   <svg>
@@ -561,14 +551,14 @@ exports[`StartTimeSelection tests should render 1`] = `
             class="c4"
           >
             <div
-              class="c10"
+              class="c9"
               margin="20px"
             >
               <span
-                class="c11"
+                class="c10"
               >
                 <input
-                  class="c12"
+                  class="c11"
                   data-testid="spinner-input"
                   max="23"
                   maxlength="5"
@@ -578,13 +568,13 @@ exports[`StartTimeSelection tests should render 1`] = `
                   value="14"
                 />
                 <span
-                  class="c13"
+                  class="c12"
                   data-testid="spinner-up"
                 >
                   ▲
                 </span>
                 <span
-                  class="c14"
+                  class="c13"
                   data-testid="spinner-down"
                 >
                   ▼
@@ -593,10 +583,10 @@ exports[`StartTimeSelection tests should render 1`] = `
                
               h
               <span
-                class="c11"
+                class="c10"
               >
                 <input
-                  class="c12"
+                  class="c11"
                   data-testid="spinner-input"
                   max="59"
                   maxlength="5"
@@ -606,13 +596,13 @@ exports[`StartTimeSelection tests should render 1`] = `
                   value="0"
                 />
                 <span
-                  class="c13"
+                  class="c12"
                   data-testid="spinner-up"
                 >
                   ▲
                 </span>
                 <span
-                  class="c14"
+                  class="c13"
                   data-testid="spinner-down"
                 >
                   ▼
@@ -630,12 +620,12 @@ exports[`StartTimeSelection tests should render 1`] = `
     class="c1"
   >
     <div
-      class="c15"
+      class="c14"
       data-testid="formgroup-content"
       offset="4"
     >
       <button
-        class="c16 c17"
+        class="c15 c16"
         data-testid="update-button"
       >
         Update
