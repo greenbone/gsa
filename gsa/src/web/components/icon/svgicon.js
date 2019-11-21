@@ -71,23 +71,21 @@ const SvgIcon = ({
   const [loading, setLoading] = useState(false);
 
   const handleClick = event => {
-    if (isDefined(onClick) && !disabled && !loading) {
-      event.preventDefault();
-      event.stopPropagation();
-      const promise = onClick(value);
+    event.preventDefault();
+    event.stopPropagation();
+    const promise = onClick(value);
 
-      if (isDefined(promise) && isDefined(promise.then)) {
-        setLoading(true);
-        // eslint-disable-next-line no-shadow
-        promise
-          .then(() => {
-            setLoading(false);
-          })
-          .catch(error => {
-            setLoading(false);
-            throw error;
-          });
-      }
+    if (isDefined(promise) && isDefined(promise.then)) {
+      setLoading(true);
+      // eslint-disable-next-line no-shadow
+      promise
+        .then(() => {
+          setLoading(false);
+        })
+        .catch(error => {
+          setLoading(false);
+          throw error;
+        });
     }
   };
 
@@ -98,7 +96,9 @@ const SvgIcon = ({
       active={active && !loading}
       isLoading={loading}
       title={loading ? loadingTitle : title}
-      onClick={handleClick}
+      onClick={
+        isDefined(onClick) && !disabled && !loading ? handleClick : undefined
+      }
     >
       {isDefined(to) ? <Anchor href={to}>{children}</Anchor> : children}
     </Styled>

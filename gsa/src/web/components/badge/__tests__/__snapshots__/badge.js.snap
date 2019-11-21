@@ -2,16 +2,12 @@
 
 exports[`Badge tests should render badge 1`] = `
 .c1 {
-  cursor: pointer;
-}
-
-.c2 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c2 * {
+.c1 * {
   height: inherit;
   width: inherit;
 }
@@ -25,7 +21,7 @@ exports[`Badge tests should render badge 1`] = `
   margin-right: 0px;
 }
 
-.c3 {
+.c2 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -61,17 +57,11 @@ exports[`Badge tests should render badge 1`] = `
   right: 0px;
 }
 
-@media print {
-  .c1 {
-    display: none;
-  }
-}
-
 <div
   class="c0"
 >
   <span
-    class="c1 c2"
+    class="c1"
     data-testid="svg-icon"
   >
     <svg>
@@ -79,7 +69,7 @@ exports[`Badge tests should render badge 1`] = `
     </svg>
   </span>
   <span
-    class="c3"
+    class="c2"
     data-testid="badge-icon"
   >
     1

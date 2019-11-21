@@ -145,7 +145,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
   align-items: stretch;
 }
 
-.c7 {
+.c6 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -267,17 +267,17 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
   display: inline-flex;
 }
 
-.c5 {
+.c7 {
   cursor: pointer;
 }
 
-.c6 {
+.c5 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c6 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
@@ -522,7 +522,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
 }
 
 @media print {
-  .c5 {
+  .c7 {
     display: none;
   }
 }
@@ -559,7 +559,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
               target="_blank"
             >
               <span
-                class="c5 c6"
+                class="c5"
                 data-testid="svg-icon"
                 title="Help: ScanConfigs"
               >
@@ -569,11 +569,11 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
               </span>
             </a>
             <a
-              class="c7"
+              class="c6"
               href="/scanconfigs"
             >
               <span
-                class="c5 c6"
+                class="c5"
                 data-testid="svg-icon"
                 title="ScanConfig List"
               >
@@ -592,7 +592,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
             margin="5px"
           >
             <span
-              class="c5 c6"
+              class="c7 c5"
               data-testid="svg-icon"
               title="Create new Scan Config"
             >
@@ -601,7 +601,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6"
+              class="c7 c5"
               data-testid="svg-icon"
               title="Clone Scan Config"
             >
@@ -610,7 +610,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6"
+              class="c7 c5"
               data-testid="svg-icon"
               title="Edit Scan Config"
             >
@@ -619,7 +619,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6"
+              class="c7 c5"
               data-testid="svg-icon"
               title="Move Scan Config to trashcan"
             >
@@ -628,7 +628,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6"
+              class="c7 c5"
               data-testid="svg-icon"
               title="Export Scan Config as XML"
             >
@@ -637,7 +637,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6"
+              class="c7 c5"
               data-testid="svg-icon"
               title="Import Scan Config"
             >
@@ -663,7 +663,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
           class="c11"
         >
           <span
-            class="c5 c12"
+            class="c12"
             data-testid="svg-icon"
           >
             <svg>
@@ -888,7 +888,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
                         margin="5px"
                       >
                         <a
-                          class="c7"
+                          class="c6"
                           data-testid="details-link"
                           href="/task/1234"
                         >
@@ -896,7 +896,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
                         </a>
                         ,
                         <a
-                          class="c7"
+                          class="c6"
                           data-testid="details-link"
                           href="/task/5678"
                         >
@@ -917,7 +917,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
 `;
 
 exports[`Scan Config ToolBarIcons tests should render 1`] = `
-.c5 {
+.c4 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -1006,23 +1006,23 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
   display: inline-flex;
 }
 
-.c3 {
+.c5 {
   cursor: pointer;
 }
 
-.c4 {
+.c3 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c4 * {
+.c3 * {
   height: inherit;
   width: inherit;
 }
 
 @media print {
-  .c3 {
+  .c5 {
     display: none;
   }
 }
@@ -1047,7 +1047,7 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
           target="_blank"
         >
           <span
-            class="c3 c4"
+            class="c3"
             data-testid="svg-icon"
             title="Help: ScanConfigs"
           >
@@ -1057,11 +1057,11 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
           </span>
         </a>
         <a
-          class="c5"
+          class="c4"
           href="/scanconfigs"
         >
           <span
-            class="c3 c4"
+            class="c3"
             data-testid="svg-icon"
             title="ScanConfig List"
           >
@@ -1080,7 +1080,7 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
         margin="5px"
       >
         <span
-          class="c3 c4"
+          class="c5 c3"
           data-testid="svg-icon"
           title="Create new Scan Config"
         >
@@ -1089,7 +1089,7 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
           </svg>
         </span>
         <span
-          class="c3 c4"
+          class="c5 c3"
           data-testid="svg-icon"
           title="Clone Scan Config"
         >
@@ -1098,7 +1098,7 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
           </svg>
         </span>
         <span
-          class="c3 c4"
+          class="c5 c3"
           data-testid="svg-icon"
           title="Edit Scan Config"
         >
@@ -1107,7 +1107,7 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
           </svg>
         </span>
         <span
-          class="c3 c4"
+          class="c5 c3"
           data-testid="svg-icon"
           title="Move Scan Config to trashcan"
         >
@@ -1116,7 +1116,7 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
           </svg>
         </span>
         <span
-          class="c3 c4"
+          class="c5 c3"
           data-testid="svg-icon"
           title="Export Scan Config as XML"
         >
@@ -1125,7 +1125,7 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
           </svg>
         </span>
         <span
-          class="c3 c4"
+          class="c5 c3"
           data-testid="svg-icon"
           title="Import Scan Config"
         >

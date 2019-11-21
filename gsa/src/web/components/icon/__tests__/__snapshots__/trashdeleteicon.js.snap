@@ -2,36 +2,26 @@
 
 exports[`TrashDeleteIcon component tests should render 1`] = `
 .c0 {
-  cursor: pointer;
-}
-
-.c1 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c1 * {
+.c0 * {
   height: inherit;
   width: inherit;
 }
 
-.c2 svg:hover {
+.c1 svg:hover {
   background-color: #f2dede;
 }
 
-.c2 svg:hover path {
+.c1 svg:hover path {
   fill: #a94442;
 }
 
-@media print {
-  .c0 {
-    display: none;
-  }
-}
-
 <span
-  class="c0 c1 c2"
+  class="c0 c1"
   data-testid="svg-icon"
 >
   <svg>

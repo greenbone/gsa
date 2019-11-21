@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`UserMenu component tests should render UserMenu 1`] = `
-.c9 {
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -20,18 +20,18 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   margin-left: -5px;
 }
 
-.c9 > * {
+.c8 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c9 > * {
+.c8 > * {
   margin-left: 5px;
 }
 
-.c8 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -54,27 +54,23 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
 }
 
 .c2 {
-  cursor: pointer;
-}
-
-.c3 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c3 * {
+.c2 * {
   height: inherit;
   width: inherit;
 }
 
-.c10 {
+.c9 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c10 * {
+.c9 * {
   height: inherit;
   width: inherit;
 }
@@ -89,18 +85,18 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   flex-direction: column;
 }
 
-.c5 {
+.c4 {
   position: relative;
   display: none;
   -webkit-animation: iKjwYD 0.1s ease-in;
   animation: iKjwYD 0.1s ease-in;
 }
 
-.c0:hover .c5 {
+.c0:hover .c4 {
   display: block;
 }
 
-.c6 {
+.c5 {
   position: absolute;
   margin: 0;
   padding: 0;
@@ -112,7 +108,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   width: 255px;
 }
 
-.c7 {
+.c6 {
   height: 30px;
   width: 255px;
   border-left: 1px solid #787878;
@@ -129,41 +125,41 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   padding-left: 12px;
 }
 
-.c7:hover {
+.c6:hover {
   background: #66c430;
   color: #fff;
   cursor: pointer;
 }
 
-.c7:first-child {
+.c6:first-child {
   border-top: 1px solid #787878;
   cursor: default;
   background-color: #eeeeee;
 }
 
-.c7:first-child:hover {
+.c6:first-child:hover {
   color: #000;
 }
 
-.c7:nth-child(2) {
+.c6:nth-child(2) {
   cursor: default;
   background-color: #eeeeee;
 }
 
-.c7:nth-child(2):hover {
+.c6:nth-child(2):hover {
   color: #000;
 }
 
-.c7:last-child {
+.c6:last-child {
   border-top: 1px solid #787878;
   border-bottom: 1px solid #787878;
 }
 
-.c4 {
+.c3 {
   margin-right: 10px;
 }
 
-.c11 {
+.c10 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -172,20 +168,14 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   height: 100%;
 }
 
-.c11:link,
-.c11:hover,
-.c11:active,
-.c11:visited,
-.c11:hover {
+.c10:link,
+.c10:hover,
+.c10:active,
+.c10:visited,
+.c10:hover {
   color: inherit;
   -webkit-text-decoration: none;
   text-decoration: none;
-}
-
-@media print {
-  .c2 {
-    display: none;
-  }
 }
 
 <span
@@ -193,7 +183,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   data-testid="usermenu"
 >
   <span
-    class="c2 c3 c4"
+    class="c2 c3"
     data-testid="svg-icon"
   >
     <svg>
@@ -201,24 +191,24 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
     </svg>
   </span>
   <div
-    class="c5"
+    class="c4"
   >
     <ul
-      class="c6"
+      class="c5"
     >
       <li
-        class="c7"
+        class="c6"
         title="Logged in as: "
       >
         <div
-          class="c8"
+          class="c7"
         >
           <div
-            class="c9"
+            class="c8"
             margin="5px"
           >
             <span
-              class="c2 c10"
+              class="c9"
               data-testid="svg-icon"
             >
               <svg>
@@ -230,17 +220,17 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
         </div>
       </li>
       <li
-        class="c7"
+        class="c6"
       >
         <div
-          class="c8"
+          class="c7"
         >
           <div
-            class="c9"
+            class="c8"
             margin="5px"
           >
             <span
-              class="c2 c10"
+              class="c9"
               data-testid="svg-icon"
             >
               <svg>
@@ -254,22 +244,22 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
         </div>
       </li>
       <li
-        class="c7"
+        class="c6"
       >
         <a
-          class="c11"
+          class="c10"
           data-testid="usermenu-settings"
           href="/usersettings"
         >
           <div
-            class="c8"
+            class="c7"
           >
             <div
-              class="c9"
+              class="c8"
               margin="5px"
             >
               <span
-                class="c2 c10"
+                class="c9"
                 data-testid="svg-icon"
               >
                 <svg>
@@ -284,18 +274,18 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
         </a>
       </li>
       <li
-        class="c7"
+        class="c6"
         data-testid="usermenu-logout"
       >
         <div
-          class="c8"
+          class="c7"
         >
           <div
-            class="c9"
+            class="c8"
             margin="5px"
           >
             <span
-              class="c2 c10"
+              class="c9"
               data-testid="svg-icon"
             >
               <svg>

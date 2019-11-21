@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ErrorMessage tests should render 1`] = `
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -49,7 +49,7 @@ exports[`ErrorMessage tests should render 1`] = `
   margin-left: 15px;
 }
 
-.c6 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -68,14 +68,14 @@ exports[`ErrorMessage tests should render 1`] = `
   margin-left: -5px;
 }
 
-.c6 > * {
+.c5 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c6 > * {
+.c5 > * {
   margin-left: 5px;
 }
 
@@ -102,16 +102,12 @@ exports[`ErrorMessage tests should render 1`] = `
 }
 
 .c3 {
-  cursor: pointer;
-}
-
-.c4 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c4 * {
+.c3 * {
   height: inherit;
   width: inherit;
 }
@@ -139,12 +135,6 @@ exports[`ErrorMessage tests should render 1`] = `
   background-color: #f2dede;
 }
 
-@media print {
-  .c3 {
-    display: none;
-  }
-}
-
 <div
   class="c0"
 >
@@ -156,7 +146,7 @@ exports[`ErrorMessage tests should render 1`] = `
       margin="15px"
     >
       <span
-        class="c3 c4"
+        class="c3"
         data-testid="svg-icon"
       >
         <svg>
@@ -164,13 +154,13 @@ exports[`ErrorMessage tests should render 1`] = `
         </svg>
       </span>
       <div
-        class="c5"
+        class="c4"
       >
         <div
           class="c1"
         >
           <div
-            class="c6"
+            class="c5"
             margin="5px"
           >
             <b
