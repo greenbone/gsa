@@ -16,13 +16,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import logger from '../log';
+import logger from 'gmp/log';
 
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 
 import {NO_VALUE} from '../parser';
 
-import Task, {HOSTS_ORDERING_SEQUENTIAL} from '../models/task';
+import Task, {
+  HOSTS_ORDERING_SEQUENTIAL,
+  AUTO_DELETE_KEEP_DEFAULT_VALUE,
+} from 'gmp/models/task';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
@@ -142,6 +145,7 @@ export class TaskCommand extends EntityCommand {
     log.debug('Creating container task', args);
     return this.action({
       cmd: 'create_container_task',
+      auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
       name,
       comment,
       usage_type: 'scan',
@@ -200,22 +204,15 @@ export class TaskCommand extends EntityCommand {
   }
 
   saveContainer(args) {
-    const {
-      name,
-      comment = '',
-      in_assets = '1',
-      auto_delete = 'no',
-      auto_delete_data,
-      id,
-    } = args;
+    const {name, comment = '', in_assets = '1', id} = args;
     log.debug('Saving container task', args);
     return this.action({
       cmd: 'save_container_task',
       name,
       comment,
       in_assets,
-      auto_delete,
-      auto_delete_data,
+      auto_delete: 'no',
+      auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
       task_id: id,
       usage_type: 'scan',
     });

@@ -278,10 +278,6 @@ exports[`Tasks table tests should render 1`] = `
   cursor: pointer;
 }
 
-.c8 {
-  cursor: pointer;
-}
-
 .c8 svg path {
   fill: #aaaaaa;
 }
@@ -620,12 +616,6 @@ exports[`Tasks table tests should render 1`] = `
 
 @media print {
   .c2 {
-    display: none;
-  }
-}
-
-@media print {
-  .c8 {
     display: none;
   }
 }
@@ -1146,7 +1136,7 @@ exports[`Tasks table tests should render 1`] = `
                     >
                       <span
                         alt="Task owned by user"
-                        class="c2 c3"
+                        class="c3"
                         data-testid="svg-icon"
                         title="Task owned by user"
                       >
@@ -1311,7 +1301,7 @@ exports[`Tasks table tests should render 1`] = `
                     >
                       <span
                         alt="Task owned by user"
-                        class="c2 c3"
+                        class="c3"
                         data-testid="svg-icon"
                         title="Task owned by user"
                       >
@@ -1549,7 +1539,7 @@ exports[`Tasks table tests should render 1`] = `
                         margin="5px"
                       >
                         <span
-                          class="c2 c3"
+                          class="c3"
                           data-testid="svg-icon"
                         >
                           <svg>
@@ -1557,7 +1547,7 @@ exports[`Tasks table tests should render 1`] = `
                           </svg>
                         </span>
                         <span
-                          class="c2 c3"
+                          class="c3"
                           data-testid="svg-icon"
                         >
                           <svg>
@@ -1565,7 +1555,7 @@ exports[`Tasks table tests should render 1`] = `
                           </svg>
                         </span>
                         <span
-                          class="c2 c3"
+                          class="c3"
                           data-testid="svg-icon"
                         >
                           <svg>

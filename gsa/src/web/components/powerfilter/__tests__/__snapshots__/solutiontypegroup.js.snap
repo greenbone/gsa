@@ -72,16 +72,12 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
 }
 
 .c11 {
-  cursor: pointer;
-}
-
-.c12 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c12 * {
+.c11 * {
   height: inherit;
   width: inherit;
 }
@@ -211,12 +207,6 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
 }
 
 @media print {
-  .c11 {
-    display: none;
-  }
-}
-
-@media print {
   .c4 {
     border-collapse: collapse;
   }
@@ -299,7 +289,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                       />
                       <span
                         alt="Workaround"
-                        class="c11 c12"
+                        class="c11"
                         data-testid="svg-icon"
                         title="Workaround"
                       >
@@ -338,7 +328,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                       />
                       <span
                         alt="Mitigation"
-                        class="c11 c12"
+                        class="c11"
                         data-testid="svg-icon"
                         title="Mitigation"
                       >
@@ -379,7 +369,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                       />
                       <span
                         alt="Vendorfix"
-                        class="c11 c12"
+                        class="c11"
                         data-testid="svg-icon"
                         title="Vendorfix"
                       >
@@ -418,7 +408,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                       />
                       <span
                         alt="None available"
-                        class="c11 c12"
+                        class="c11"
                         data-testid="svg-icon"
                         title="None available"
                       >
@@ -457,7 +447,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                       />
                       <span
                         alt="Will not fix"
-                        class="c11 c12"
+                        class="c11"
                         data-testid="svg-icon"
                         title="Will not fix"
                       >

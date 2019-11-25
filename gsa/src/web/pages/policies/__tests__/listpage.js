@@ -56,7 +56,10 @@ const policy = Policy.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
+    task: [
+      {id: '1234', name: 'audit1'},
+      {id: '5678', name: 'audit2'},
+    ],
   },
 });
 
@@ -146,6 +149,8 @@ describe('PoliciesPage tests', () => {
       foo: 'bar',
     });
 
+    const renewSession = jest.fn().mockResolvedValue({data: {}});
+
     const gmp = {
       policies: {
         get: getPolicies,
@@ -157,7 +162,7 @@ describe('PoliciesPage tests', () => {
       },
       reloadInterval,
       settings: {manualUrl},
-      user: {currentSettings, getSetting: getSetting},
+      user: {currentSettings, getSetting: getSetting, renewSession},
     };
 
     const {render, store} = rendererWith({

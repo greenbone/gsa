@@ -24,11 +24,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {YES_VALUE} from 'gmp/parser';
 
-import {
-  AUTO_DELETE_KEEP,
-  AUTO_DELETE_KEEP_DEFAULT_VALUE,
-} from 'gmp/models/task';
-
 import PropTypes from '../../utils/proptypes.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -39,11 +34,8 @@ import TextField from '../../components/form/textfield.js';
 import Layout from '../../components/layout/layout.js';
 
 import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
-import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
 
 const ContainerTaskDialog = ({
-  auto_delete = AUTO_DELETE_KEEP,
-  auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   comment = '',
   in_assets = YES_VALUE,
   name = '',
@@ -55,8 +47,6 @@ const ContainerTaskDialog = ({
   const isEdit = isDefined(task);
 
   const data = {
-    auto_delete,
-    auto_delete_data,
     comment,
     in_assets,
     name,
@@ -93,17 +83,10 @@ const ContainerTaskDialog = ({
             </FormGroup>
 
             {isEdit && (
-              <React.Fragment>
-                <AddResultsToAssetsGroup
-                  inAssets={state.in_assets}
-                  onChange={onValueChange}
-                />
-                <AutoDeleteReportsGroup
-                  autoDelete={state.auto_delete}
-                  autoDeleteData={state.auto_delete_data}
-                  onChange={onValueChange}
-                />
-              </React.Fragment>
+              <AddResultsToAssetsGroup
+                inAssets={state.in_assets}
+                onChange={onValueChange}
+              />
             )}
           </Layout>
         );

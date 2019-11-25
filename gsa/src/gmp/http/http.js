@@ -31,8 +31,6 @@ import {buildUrlParams} from './utils';
 
 const log = logger.getLogger('gmp.http');
 
-export const DEFAULT_TIMEOUT = 300000; // 5 min
-
 function formdata_append(formdata, key, value) {
   if (hasValue(value)) {
     formdata.append(key, value);
@@ -41,7 +39,7 @@ function formdata_append(formdata, key, value) {
 
 class Http {
   constructor(url, options = {}) {
-    const {timeout = DEFAULT_TIMEOUT, transform = DefaultTransform} = options;
+    const {timeout, transform = DefaultTransform} = options;
 
     this.url = url;
     this.params = {};

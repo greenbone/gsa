@@ -168,6 +168,7 @@ describe('TaskCommand tests', () => {
       .then(resp => {
         expect(fakeHttp.request).toHaveBeenCalledWith('post', {
           data: {
+            auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
             cmd: 'create_container_task',
             comment: 'comment',
             name: 'foo',

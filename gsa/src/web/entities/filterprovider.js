@@ -93,7 +93,9 @@ const FilterProvider = ({
   }, [returnedFilter, rowsPerPage, gmp, dispatch]);
 
   const [locationQueryFilter, setLocationQueryFilter] = useState(
-    Filter.fromString(locationQuery.filter),
+    isDefined(locationQuery.filter)
+      ? Filter.fromString(locationQuery.filter)
+      : undefined,
   );
 
   useEffect(() => {
@@ -151,9 +153,6 @@ FilterProvider.propTypes = {
   }),
 };
 
-export default compose(
-  withGmp,
-  withRouter,
-)(FilterProvider);
+export default compose(withGmp, withRouter)(FilterProvider);
 
 // vim: set ts=2 sw=2 tw=80:
