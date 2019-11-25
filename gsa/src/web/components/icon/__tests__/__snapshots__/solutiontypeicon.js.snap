@@ -2,29 +2,19 @@
 
 exports[`SolutionTypeIcon component tests should render correct image 1`] = `
 .c0 {
-  cursor: pointer;
-}
-
-.c1 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c1 * {
+.c0 * {
   height: inherit;
   width: inherit;
 }
 
-@media print {
-  .c0 {
-    display: none;
-  }
-}
-
 <span
   alt="Workaround"
-  class="c0 c1"
+  class="c0"
   data-testid="svg-icon"
   title="Workaround"
 >
@@ -38,29 +28,19 @@ exports[`SolutionTypeIcon component tests should render correct image 2`] = `<sp
 
 exports[`SolutionTypeIcon component tests should render correct image 3`] = `
 .c0 {
-  cursor: pointer;
-}
-
-.c1 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c1 * {
+.c0 * {
   height: inherit;
   width: inherit;
 }
 
-@media print {
-  .c0 {
-    display: none;
-  }
-}
-
 <span
   alt="None available"
-  class="c0 c1"
+  class="c0"
   data-testid="svg-icon"
   title="None available"
 >
@@ -72,29 +52,19 @@ exports[`SolutionTypeIcon component tests should render correct image 3`] = `
 
 exports[`SolutionTypeIcon component tests should render correct image 4`] = `
 .c0 {
-  cursor: pointer;
-}
-
-.c1 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c1 * {
+.c0 * {
   height: inherit;
   width: inherit;
 }
 
-@media print {
-  .c0 {
-    display: none;
-  }
-}
-
 <span
   alt="Vendorfix"
-  class="c0 c1"
+  class="c0"
   data-testid="svg-icon"
   title="Vendorfix"
 >
@@ -106,29 +76,19 @@ exports[`SolutionTypeIcon component tests should render correct image 4`] = `
 
 exports[`SolutionTypeIcon component tests should render correct image 5`] = `
 .c0 {
-  cursor: pointer;
-}
-
-.c1 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c1 * {
+.c0 * {
   height: inherit;
   width: inherit;
 }
 
-@media print {
-  .c0 {
-    display: none;
-  }
-}
-
 <span
   alt="Will not fix"
-  class="c0 c1"
+  class="c0"
   data-testid="svg-icon"
   title="Will not fix"
 >
@@ -140,29 +100,19 @@ exports[`SolutionTypeIcon component tests should render correct image 5`] = `
 
 exports[`SolutionTypeIcon component tests should render correct image 6`] = `
 .c0 {
-  cursor: pointer;
-}
-
-.c1 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c1 * {
+.c0 * {
   height: inherit;
   width: inherit;
 }
 
-@media print {
-  .c0 {
-    display: none;
-  }
-}
-
 <span
   alt="Workaround"
-  class="c0 c1"
+  class="c0"
   data-testid="svg-icon"
   title="Workaround"
 >
@@ -174,29 +124,19 @@ exports[`SolutionTypeIcon component tests should render correct image 6`] = `
 
 exports[`SolutionTypeIcon component tests should render correct image 7`] = `
 .c0 {
-  cursor: pointer;
-}
-
-.c1 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c1 * {
+.c0 * {
   height: inherit;
   width: inherit;
 }
 
-@media print {
-  .c0 {
-    display: none;
-  }
-}
-
 <span
   alt=""
-  class="c0 c1"
+  class="c0"
   data-testid="svg-icon"
   title=""
 >
