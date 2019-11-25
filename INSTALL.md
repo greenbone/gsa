@@ -213,7 +213,7 @@ To build the translation `.mo` files, you need to have the `gettext` tools like
 `msgfmt` installed. Once the `.mo` files are built, the tools are no longer
 needed.
 (For more information on the creation of translation files, see the
-[i18n-howto.txt](gsa/po/i18n-howto.txt) file in the GSA source documentation.)
+[i18n-howto.md](gsa/po/i18n-howto.md) file in the GSA source documentation.)
 
 To use the translations, you need to have an English locale with UTF-8 encoding
 installed, for example `en_US.UTF8` or `en_GB.UTF8`.  The name of this locale
