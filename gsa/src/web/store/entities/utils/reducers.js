@@ -131,6 +131,12 @@ export const createReducer = entityType => {
           ...state,
           [action.id]: action.data,
         };
+      case types.ENTITY_DELETE_SUCCESS:
+        const nState = {
+          ...state,
+        };
+        delete nState[action.id];
+        return nState;
       default:
         return state;
     }
@@ -162,6 +168,11 @@ export const createReducer = entityType => {
           byId: byId(state.byId, action),
           isLoading: isLoading(state.isLoading, action),
           errors: errors(state.errors, action),
+        };
+      case types.ENTITY_DELETE_SUCCESS:
+        return {
+          ...state,
+          byId: byId(state.byId, action),
         };
       default:
         return state;
