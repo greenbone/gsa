@@ -7,24 +7,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [9.0.1] - unreleased
 
 ### Added
-- Add base config to create scanconfig dialog, make it new default base for scanconfigs and new base for policies [#1789](https://github.com/greenbone/gsa/pull/1789)
+- Added base config to create scanconfig dialog, make it new default base for scanconfigs and new base for policies [#1789](https://github.com/greenbone/gsa/pull/1789)
 - Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)
 
 ### Changed
 - Changed default port to 22 for scanner dialog [#1768](https://github.com/greenbone/gsa/pull/1768)
-- Improve Delta Report Details [#1748](https://github.com/greenbone/gsa/pull/1748)
-- Update node dependencies to latest releases [#1735](https://github.com/greenbone/gsa/pull/1735)
+- Improved Delta Report Details [#1748](https://github.com/greenbone/gsa/pull/1748)
+- Updated node dependencies to latest releases [#1735](https://github.com/greenbone/gsa/pull/1735)
 - If details not defined, then choose first OS from identifiers [#1719](https://github.com/greenbone/gsa/pull/1719)
 - Sorting of SecInfo items [#1717](https://github.com/greenbone/gsa/pull/1717))
-- Disable edit PowerFilter icon if isLoading [#1714](https://github.com/greenbone/gsa/pull/1714)
+- Disabled edit PowerFilter icon if isLoading [#1714](https://github.com/greenbone/gsa/pull/1714)
 - Don't show empty menu section [#1711](https://github.com/greenbone/gsa/pull/1711)
-- Increase clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
+- Increased clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
 
 ### Fixed
-- Fix react-scripts dependency because it broke tooltips [#1760](https://github.com/greenbone/gsa/pull/1760)
-- Fix svg icon cursor is always a pointer [#1800](https://github.com/greenbone/gsa/pull/1800)
-- Fix defaultfilter is not always applied [#1783](https://github.com/greenbone/gsa/pull/1783)
-- Fix checkboxes in scanconfig editdialog reset after every rerender [#1773](https://github.com/greenbone/gsa/pull/1773)
+- Fixed react-scripts dependency because it broke tooltips [#1760](https://github.com/greenbone/gsa/pull/1760)
+- Fixed svg icon cursor is always a pointer [#1800](https://github.com/greenbone/gsa/pull/1800)
+- Fixed defaultfilter is not always applied [#1783](https://github.com/greenbone/gsa/pull/1783)
+- Fixed checkboxes in scanconfig editdialog reset after every rerender [#1773](https://github.com/greenbone/gsa/pull/1773)
 - Pass scanner port number to scanner dialog from component [#1772](https://github.com/greenbone/gsa/pull/1772)
 - Fixed allowed range for auto delete keep value [#1729](https://github.com/greenbone/gsa/pull/1729)
 - Fix Created column on Results listpage [#1726](https://github.com/greenbone/gsa/pull/1726)
@@ -35,7 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Handle authentication errors in gsad more carefully [#1700](https://github.com/greenbone/gsa/pull/1700)
 
 ### Removed
-- Remove auto delete field from container task dialog [#1784](https://github.com/greenbone/gsa/pull/1784)
+- Removed auto delete field from container task dialog [#1784](https://github.com/greenbone/gsa/pull/1784)
 - Removed obsolete DefaultFilter component and withDefaultFilter HOC [#1709](https://github.com/greenbone/gsa/pull/1709)
 
 [9.0.1]: https://github.com/greenbone/gsa/compare/v9.0.0...gsa-9.0
