@@ -86,7 +86,7 @@ jobs:
           command: mkdir build && rm -rf .git && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release -DSKIP_GSA=1 .. && make install
   build_gsa:
     docker:
-      - image: greenbone/build-env-gsa-master-debian-stretch-node8-ng
+      - image: greenbone/build-env-gsa-debian-buster-node10-ng
     steps:
       - checkout
       - restore_cache:
