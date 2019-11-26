@@ -20,16 +20,14 @@
 /* eslint-disable max-len */
 import React from 'react';
 
-import {render, fireEvent} from 'web/utils/testing';
+import {render, fireEvent, act} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
 
 import {ICON_SIZE_SMALL_PIXELS} from './withIconSize';
 
 export const testIcon = Icon => {
-  test('should render', () => {
+  test('should render with default width and height', () => {
     const {element} = render(<Icon />);
-
-    expect(element).toMatchSnapshot();
 
     expect(element).toHaveStyleRule('width', ICON_SIZE_SMALL_PIXELS);
     expect(element).toHaveStyleRule('height', ICON_SIZE_SMALL_PIXELS);
@@ -52,6 +50,14 @@ export const testIcon = Icon => {
     });
   });
 
+  test('should change appearance when if inactive', () => {
+    const {element} = render(<Icon active={false} />);
+
+    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
+      modifier: '& svg path',
+    });
+  });
+
   test('should not call clickhandler when disabled', () => {
     const handler = jest.fn();
     const {element} = render(<Icon disabled={true} onClick={handler} />);
@@ -59,6 +65,47 @@ export const testIcon = Icon => {
     fireEvent.click(element);
 
     expect(handler).not.toHaveBeenCalled();
+  });
+
+  test('should render loading state', async () => {
+    let resolve;
+    const promise = new Promise((res, rej) => {
+      resolve = res;
+    });
+
+    const handler = jest.fn().mockReturnValue(promise);
+
+    const {element} = render(
+      <Icon title="foo" loadingTitle="bar" onClick={handler} />,
+    );
+
+    const svgElement = element.querySelector('svg');
+
+    expect(element).toHaveAttribute('title', 'foo');
+    expect(svgElement).toHaveAttribute('title', 'foo');
+
+    fireEvent.click(element);
+
+    expect(element).toHaveStyleRule('display', 'none', {
+      modifier: '& svg path',
+    });
+    expect(element).toHaveStyleRule(
+      'background',
+      'url(/img/loading.gif) center center no-repeat',
+      {
+        modifier: '& svg',
+      },
+    );
+
+    expect(element).toHaveAttribute('title', 'bar');
+    expect(svgElement).toHaveAttribute('title', 'bar');
+
+    await act(async () => {
+      resolve();
+    });
+
+    expect(element).toHaveAttribute('title', 'foo');
+    expect(svgElement).toHaveAttribute('title', 'foo');
   });
 };
 
