@@ -26,8 +26,8 @@ import Task, {TASK_STATUS} from 'gmp/models/task';
 import Schedule from 'gmp/models/schedule';
 import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {entityActions as scanconfigActions} from 'web/store/entities/scanconfigs';
-import {entityActions as scheduleActions} from 'web/store/entities/schedules';
+import {entityLoadingActions as scanconfigActions} from 'web/store/entities/scanconfigs';
+import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
 
 import {rendererWith} from 'web/utils/testing';
 
@@ -42,7 +42,10 @@ const config = ScanConfig.fromElement({
   scanner: {name: 'scanner1', type: '0'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '12345', name: 'foo'}, {id: '678910', name: 'task2'}],
+    task: [
+      {id: '12345', name: 'foo'},
+      {id: '678910', name: 'task2'},
+    ],
   },
 });
 

@@ -31,7 +31,7 @@ import Task, {TASK_STATUS} from 'gmp/models/task';
 import Schedule from 'gmp/models/schedule';
 import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {entityActions} from 'web/store/entities/tasks';
+import {entityLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
@@ -52,7 +52,10 @@ const config = ScanConfig.fromElement({
   scanner: {name: 'scanner1', type: '0'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '12345', name: 'foo'}, {id: '678910', name: 'task2'}],
+    task: [
+      {id: '12345', name: 'foo'},
+      {id: '678910', name: 'task2'},
+    ],
   },
 });
 
@@ -343,7 +346,7 @@ describe('Task Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', task));
+    store.dispatch(entityLoadingActions.success('12345', task));
 
     const {baseElement, element, getAllByTestId} = render(
       <Detailspage id="12345" />,
@@ -456,7 +459,7 @@ describe('Task Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', task2));
+    store.dispatch(entityLoadingActions.success('12345', task2));
 
     const {baseElement, element} = render(<Detailspage id="12345" />);
     const spans = baseElement.querySelectorAll('span');
@@ -510,7 +513,7 @@ describe('Task Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', task2));
+    store.dispatch(entityLoadingActions.success('12345', task2));
 
     const {baseElement, element} = render(<Detailspage id="12345" />);
     const spans = baseElement.querySelectorAll('span');
@@ -589,7 +592,7 @@ describe('Task Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', task5));
+    store.dispatch(entityLoadingActions.success('12345', task5));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 

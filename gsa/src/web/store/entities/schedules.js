@@ -20,8 +20,8 @@ import {createAll} from './utils/main';
 
 const {
   loadAllEntities,
-  entitiesActions,
-  entityActions,
+  entitiesLoadingActions,
+  entityLoadingActions,
   loadEntities,
   loadEntity,
   reducer,
@@ -30,8 +30,8 @@ const {
 
 export {
   loadAllEntities,
-  entitiesActions,
-  entityActions,
+  entitiesLoadingActions,
+  entityLoadingActions,
   loadEntities,
   loadEntity,
   reducer,

@@ -31,8 +31,8 @@ import {
 } from 'web/store/entities/utils/testing';
 
 import {
-  entitiesActions,
-  entityActions,
+  entitiesLoadingActions,
+  entityLoadingActions,
   loadEntities,
   loadEntity,
   loadEntityIfNeeded,
@@ -44,11 +44,11 @@ import {
 } from '../reports';
 import Filter from 'gmp/models/filter';
 
-testEntitiesActions('report', entitiesActions);
-testEntityActions('report', entityActions);
+testEntitiesActions('report', entitiesLoadingActions);
+testEntityActions('report', entityLoadingActions);
 testLoadEntities('report', loadEntities);
-testReducerForEntities('report', reducer, entitiesActions);
-testReducerForEntity('report', reducer, entityActions);
+testReducerForEntities('report', reducer, entitiesLoadingActions);
+testReducerForEntity('report', reducer, entityLoadingActions);
 
 const entityType = 'report';
 
@@ -486,28 +486,30 @@ describe('delta report loadDeltaReport function tests', () => {
     expect(loadDeltaReport).toBeDefined();
     expect(isFunction(loadDeltaReport)).toBe(true);
 
-    return loadDeltaReport(gmp)(id, deltaId, filter)(dispatch, getState).then(
-      () => {
-        expect(getState).toBeCalled();
-        expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter});
-        expect(dispatch).toHaveBeenCalledTimes(2);
-        expect(dispatch.mock.calls[0]).toEqual([
-          {
-            type: types.ENTITY_LOADING_REQUEST,
-            entityType: 'deltaReport',
-            id: identifier,
-          },
-        ]);
-        expect(dispatch.mock.calls[1]).toEqual([
-          {
-            type: types.ENTITY_LOADING_SUCCESS,
-            entityType: 'deltaReport',
-            data: {foo: 'bar'},
-            id: identifier,
-          },
-        ]);
-      },
-    );
+    return loadDeltaReport(gmp)(
+      id,
+      deltaId,
+      filter,
+    )(dispatch, getState).then(() => {
+      expect(getState).toBeCalled();
+      expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter});
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch.mock.calls[0]).toEqual([
+        {
+          type: types.ENTITY_LOADING_REQUEST,
+          entityType: 'deltaReport',
+          id: identifier,
+        },
+      ]);
+      expect(dispatch.mock.calls[1]).toEqual([
+        {
+          type: types.ENTITY_LOADING_SUCCESS,
+          entityType: 'deltaReport',
+          data: {foo: 'bar'},
+          id: identifier,
+        },
+      ]);
+    });
   });
 
   test('should not load delta report if isLoading is true', () => {

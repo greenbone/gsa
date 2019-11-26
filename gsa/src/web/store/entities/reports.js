@@ -29,8 +29,8 @@ const {
   loadEntities,
   reducer,
   selector,
-  entitiesActions,
-  entityActions,
+  entitiesLoadingActions,
+  entityLoadingActions,
 } = createAll('report');
 
 const entityType = 'deltaReport';
@@ -76,11 +76,11 @@ const loadEntity = gmp => (id, filter) => (dispatch, getState) => {
     return Promise.resolve();
   }
 
-  dispatch(entityActions.request(id));
+  dispatch(entityLoadingActions.request(id));
 
   return gmp.report.get({id}, {filter, details: 1}).then(
-    response => dispatch(entityActions.success(id, response.data)),
-    error => dispatch(entityActions.error(id, error)),
+    response => dispatch(entityLoadingActions.success(id, response.data)),
+    error => dispatch(entityLoadingActions.error(id, error)),
   );
 };
 
@@ -95,11 +95,11 @@ const loadEntityIfNeeded = gmp => (id, filter) => (dispatch, getState) => {
     return Promise.resolve();
   }
 
-  dispatch(entityActions.request(id));
+  dispatch(entityLoadingActions.request(id));
 
   return gmp.report.get({id}, {filter, details: 0}).then(
-    response => dispatch(entityActions.success(id, response.data)),
-    error => dispatch(entityActions.error(id, error)),
+    response => dispatch(entityLoadingActions.success(id, response.data)),
+    error => dispatch(entityLoadingActions.error(id, error)),
   );
 };
 
@@ -136,8 +136,8 @@ export {
   loadEntityIfNeeded,
   reducer,
   selector,
-  entitiesActions,
-  entityActions,
+  entitiesLoadingActions,
+  entityLoadingActions,
 };
 
 // vim: set ts=2 sw=2 tw=80:

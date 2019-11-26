@@ -24,8 +24,8 @@ import {createState} from '../testing';
 describe('createAll function tests', () => {
   test('should create all functions and objects', () => {
     const {
-      entitiesActions,
-      entityActions,
+      entitiesLoadingActions,
+      entityLoadingActions,
       loadAllEntities,
       loadEntities,
       loadEntity,
@@ -47,13 +47,13 @@ describe('createAll function tests', () => {
     expect(isFunction(reducer)).toBe(true);
     expect(isFunction(selector)).toBe(true);
 
-    expect(isFunction(entitiesActions.request)).toBe(true);
-    expect(isFunction(entitiesActions.success)).toBe(true);
-    expect(isFunction(entitiesActions.error)).toBe(true);
+    expect(isFunction(entitiesLoadingActions.request)).toBe(true);
+    expect(isFunction(entitiesLoadingActions.success)).toBe(true);
+    expect(isFunction(entitiesLoadingActions.error)).toBe(true);
 
-    expect(isFunction(entityActions.request)).toBe(true);
-    expect(isFunction(entityActions.success)).toBe(true);
-    expect(isFunction(entityActions.error)).toBe(true);
+    expect(isFunction(entityLoadingActions.request)).toBe(true);
+    expect(isFunction(entityLoadingActions.success)).toBe(true);
+    expect(isFunction(entityLoadingActions.error)).toBe(true);
 
     expect(selector(rootState).isLoadingEntities()).toBe(true);
     expect(selector(rootState).isLoadingEntity(id)).toBe(true);
