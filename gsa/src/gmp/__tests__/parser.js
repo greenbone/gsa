@@ -237,6 +237,10 @@ describe('parseCsv tests', () => {
     expect(parseCsv('foo, bar, ')).toEqual(['foo', 'bar', '']);
     expect(parseCsv('foo, bar,,,,')).toEqual(['foo', 'bar', '', '', '', '']);
   });
+
+  test('should parse non string values', () => {
+    expect(parseCsv(123)).toEqual(['123']);
+  });
 });
 
 describe('parseQod tests', () => {
