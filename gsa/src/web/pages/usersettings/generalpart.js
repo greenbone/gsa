@@ -159,7 +159,7 @@ const GeneralPart = ({
           onChange={onChange}
         />
       </FormGroup>
-      <FormGroup title={_('Details Export Filename')} titleSize="3">
+      <FormGroup title={_('Details Export File Name')} titleSize="3">
         <TextField
           name="detailsExportFileName"
           value={detailsExportFileName}
@@ -167,7 +167,7 @@ const GeneralPart = ({
           onChange={onChange}
         />
       </FormGroup>
-      <FormGroup title={_('List Export Filename')} titleSize="3">
+      <FormGroup title={_('List Export File Name')} titleSize="3">
         <TextField
           name="listExportFileName"
           value={listExportFileName}
@@ -175,7 +175,7 @@ const GeneralPart = ({
           onChange={onChange}
         />
       </FormGroup>
-      <FormGroup title={_('Report Export Filename')} titleSize="3">
+      <FormGroup title={_('Report Export File Name')} titleSize="3">
         <TextField
           name="reportExportFileName"
           value={reportExportFileName}
