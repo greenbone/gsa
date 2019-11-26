@@ -91,7 +91,9 @@ exports[`ScanConfigsPage ToolBarIcons test should render 1`] = `
         data-testid="svg-icon"
         title="Help: Scan Configs"
       >
-        <svg>
+        <svg
+          title="Help: Scan Configs"
+        >
           help.svg
         </svg>
       </span>
@@ -101,7 +103,9 @@ exports[`ScanConfigsPage ToolBarIcons test should render 1`] = `
       data-testid="svg-icon"
       title="New Scan Config"
     >
-      <svg>
+      <svg
+        title="New Scan Config"
+      >
         new.svg
       </svg>
     </span>
@@ -110,7 +114,9 @@ exports[`ScanConfigsPage ToolBarIcons test should render 1`] = `
       data-testid="svg-icon"
       title="Import Scan Config"
     >
-      <svg>
+      <svg
+        title="Import Scan Config"
+      >
         upload.svg
       </svg>
     </span>
@@ -1022,7 +1028,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                 data-testid="svg-icon"
                 title="Help: Scan Configs"
               >
-                <svg>
+                <svg
+                  title="Help: Scan Configs"
+                >
                   help.svg
                 </svg>
               </span>
@@ -1032,7 +1040,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
               data-testid="svg-icon"
               title="New Scan Config"
             >
-              <svg>
+              <svg
+                title="New Scan Config"
+              >
                 new.svg
               </svg>
             </span>
@@ -1041,7 +1051,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
               data-testid="svg-icon"
               title="Import Scan Config"
             >
-              <svg>
+              <svg
+                title="Import Scan Config"
+              >
                 upload.svg
               </svg>
             </span>
@@ -1094,7 +1106,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                         data-testid="svg-icon"
                         title="Update Filter"
                       >
-                        <svg>
+                        <svg
+                          title="Update Filter"
+                        >
                           refresh.svg
                         </svg>
                       </span>
@@ -1103,7 +1117,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                         data-testid="svg-icon"
                         title="Remove Filter"
                       >
-                        <svg>
+                        <svg
+                          title="Remove Filter"
+                        >
                           delete.svg
                         </svg>
                       </span>
@@ -1112,7 +1128,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                         data-testid="svg-icon"
                         title="Reset to Default Filter"
                       >
-                        <svg>
+                        <svg
+                          title="Reset to Default Filter"
+                        >
                           reset.svg
                         </svg>
                       </span>
@@ -1126,7 +1144,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                           data-testid="svg-icon"
                           title="Help: Powerfilter"
                         >
-                          <svg>
+                          <svg
+                            title="Help: Powerfilter"
+                          >
                             help.svg
                           </svg>
                         </span>
@@ -1136,7 +1156,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                         data-testid="svg-icon"
                         title="Edit Filter"
                       >
-                        <svg>
+                        <svg
+                          title="Edit Filter"
+                        >
                           edit.svg
                         </svg>
                       </span>
@@ -1229,7 +1251,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                 data-testid="svg-icon"
                 title="Unfold all details"
               >
-                <svg>
+                <svg
+                  title="Unfold all details"
+                >
                   fold.svg
                 </svg>
               </span>
@@ -1248,7 +1272,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       data-testid="svg-icon"
                       title="First"
                     >
-                      <svg>
+                      <svg
+                        title="First"
+                      >
                         first.svg
                       </svg>
                     </span>
@@ -1257,7 +1283,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       data-testid="svg-icon"
                       title="Previous"
                     >
-                      <svg>
+                      <svg
+                        title="Previous"
+                      >
                         previous.svg
                       </svg>
                     </span>
@@ -1280,7 +1308,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       data-testid="svg-icon"
                       title="Next"
                     >
-                      <svg>
+                      <svg
+                        title="Next"
+                      >
                         next.svg
                       </svg>
                     </span>
@@ -1289,7 +1319,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       data-testid="svg-icon"
                       title="Last"
                     >
-                      <svg>
+                      <svg
+                        title="Last"
+                      >
                         last.svg
                       </svg>
                     </span>
@@ -1475,7 +1507,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                         data-testid="svg-icon"
                         title="The family selection is STATIC. New families will NOT automatically be added and considered."
                       >
-                        <svg>
+                        <svg
+                          title="The family selection is STATIC. New families will NOT automatically be added and considered."
+                        >
                           trend_nochange.svg
                         </svg>
                       </span>
@@ -1498,7 +1532,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                         data-testid="svg-icon"
                         title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."
                       >
-                        <svg>
+                        <svg
+                          title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."
+                        >
                           trend_more.svg
                         </svg>
                       </span>
@@ -1520,7 +1556,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                             data-testid="svg-icon"
                             title="Move Scan Config to trashcan"
                           >
-                            <svg>
+                            <svg
+                              title="Move Scan Config to trashcan"
+                            >
                               trashcan.svg
                             </svg>
                           </span>
@@ -1529,7 +1567,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                             data-testid="svg-icon"
                             title="Edit Scan Config"
                           >
-                            <svg>
+                            <svg
+                              title="Edit Scan Config"
+                            >
                               edit.svg
                             </svg>
                           </span>
@@ -1538,7 +1578,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                             data-testid="svg-icon"
                             title="Clone Scan Config"
                           >
-                            <svg>
+                            <svg
+                              title="Clone Scan Config"
+                            >
                               clone.svg
                             </svg>
                           </span>
@@ -1547,7 +1589,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                             data-testid="svg-icon"
                             title="Export Scan Config"
                           >
-                            <svg>
+                            <svg
+                              title="Export Scan Config"
+                            >
                               export.svg
                             </svg>
                           </span>
@@ -1619,7 +1663,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                                 data-testid="svg-icon"
                                 title="Add tag to page contents"
                               >
-                                <svg>
+                                <svg
+                                  title="Add tag to page contents"
+                                >
                                   tags.svg
                                 </svg>
                               </span>
@@ -1628,7 +1674,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                                 data-testid="svg-icon"
                                 title="Move page contents to trashcan"
                               >
-                                <svg>
+                                <svg
+                                  title="Move page contents to trashcan"
+                                >
                                   trashcan.svg
                                 </svg>
                               </span>
@@ -1637,7 +1685,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                                 data-testid="svg-icon"
                                 title="Export page contents"
                               >
-                                <svg>
+                                <svg
+                                  title="Export page contents"
+                                >
                                   export.svg
                                 </svg>
                               </span>
@@ -1673,7 +1723,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       data-testid="svg-icon"
                       title="First"
                     >
-                      <svg>
+                      <svg
+                        title="First"
+                      >
                         first.svg
                       </svg>
                     </span>
@@ -1682,7 +1734,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       data-testid="svg-icon"
                       title="Previous"
                     >
-                      <svg>
+                      <svg
+                        title="Previous"
+                      >
                         previous.svg
                       </svg>
                     </span>
@@ -1705,7 +1759,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       data-testid="svg-icon"
                       title="Next"
                     >
-                      <svg>
+                      <svg
+                        title="Next"
+                      >
                         next.svg
                       </svg>
                     </span>
@@ -1714,7 +1770,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       data-testid="svg-icon"
                       title="Last"
                     >
-                      <svg>
+                      <svg
+                        title="Last"
+                      >
                         last.svg
                       </svg>
                     </span>

@@ -1081,7 +1081,9 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                             data-testid="svg-icon"
                             title="Fold"
                           >
-                            <svg>
+                            <svg
+                              title="Fold"
+                            >
                               unfold.svg
                             </svg>
                           </span>
@@ -1274,7 +1276,9 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                     data-testid="svg-icon"
                                     title="Edit Scan Config Family"
                                   >
-                                    <svg>
+                                    <svg
+                                      title="Edit Scan Config Family"
+                                    >
                                       edit.svg
                                     </svg>
                                   </span>
@@ -1403,7 +1407,9 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                     data-testid="svg-icon"
                                     title="Edit Scan Config Family"
                                   >
-                                    <svg>
+                                    <svg
+                                      title="Edit Scan Config Family"
+                                    >
                                       edit.svg
                                     </svg>
                                   </span>
@@ -1532,7 +1538,9 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                     data-testid="svg-icon"
                                     title="Edit Scan Config Family"
                                   >
-                                    <svg>
+                                    <svg
+                                      title="Edit Scan Config Family"
+                                    >
                                       edit.svg
                                     </svg>
                                   </span>
@@ -1661,7 +1669,9 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                     data-testid="svg-icon"
                                     title="Edit Scan Config Family"
                                   >
-                                    <svg>
+                                    <svg
+                                      title="Edit Scan Config Family"
+                                    >
                                       edit.svg
                                     </svg>
                                   </span>
@@ -1697,7 +1707,9 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                             data-testid="svg-icon"
                             title="Unfold"
                           >
-                            <svg>
+                            <svg
+                              title="Unfold"
+                            >
                               fold.svg
                             </svg>
                           </span>
@@ -1804,7 +1816,9 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                             data-testid="svg-icon"
                             title="Unfold"
                           >
-                            <svg>
+                            <svg
+                              title="Unfold"
+                            >
                               fold.svg
                             </svg>
                           </span>
@@ -1902,7 +1916,9 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                     data-testid="svg-icon"
                                     title="Edit Scan Config NVT Details"
                                   >
-                                    <svg>
+                                    <svg
+                                      title="Edit Scan Config NVT Details"
+                                    >
                                       edit.svg
                                     </svg>
                                   </span>
@@ -1946,7 +1962,9 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                     data-testid="svg-icon"
                                     title="Edit Scan Config NVT Details"
                                   >
-                                    <svg>
+                                    <svg
+                                      title="Edit Scan Config NVT Details"
+                                    >
                                       edit.svg
                                     </svg>
                                   </span>
@@ -1990,7 +2008,9 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                     data-testid="svg-icon"
                                     title="Edit Scan Config NVT Details"
                                   >
-                                    <svg>
+                                    <svg
+                                      title="Edit Scan Config NVT Details"
+                                    >
                                       edit.svg
                                     </svg>
                                   </span>
@@ -3506,7 +3526,9 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
                             data-testid="svg-icon"
                             title="Unfold"
                           >
-                            <svg>
+                            <svg
+                              title="Unfold"
+                            >
                               fold.svg
                             </svg>
                           </span>

@@ -129,7 +129,9 @@ exports[`Task Actions tests should render 1`] = `
               data-testid="svg-icon"
               title="Start"
             >
-              <svg>
+              <svg
+                title="Start"
+              >
                 start.svg
               </svg>
             </span>
@@ -139,7 +141,9 @@ exports[`Task Actions tests should render 1`] = `
               data-testid="svg-icon"
               title="Task is not stopped"
             >
-              <svg>
+              <svg
+                title="Task is not stopped"
+              >
                 resume.svg
               </svg>
             </span>
@@ -148,7 +152,9 @@ exports[`Task Actions tests should render 1`] = `
               data-testid="svg-icon"
               title="Move Task to trashcan"
             >
-              <svg>
+              <svg
+                title="Move Task to trashcan"
+              >
                 trashcan.svg
               </svg>
             </span>
@@ -157,7 +163,9 @@ exports[`Task Actions tests should render 1`] = `
               data-testid="svg-icon"
               title="Edit Task"
             >
-              <svg>
+              <svg
+                title="Edit Task"
+              >
                 edit.svg
               </svg>
             </span>
@@ -166,7 +174,9 @@ exports[`Task Actions tests should render 1`] = `
               data-testid="svg-icon"
               title="Clone Task"
             >
-              <svg>
+              <svg
+                title="Clone Task"
+              >
                 clone.svg
               </svg>
             </span>
@@ -175,7 +185,9 @@ exports[`Task Actions tests should render 1`] = `
               data-testid="svg-icon"
               title="Export Task"
             >
-              <svg>
+              <svg
+                title="Export Task"
+              >
                 export.svg
               </svg>
             </span>

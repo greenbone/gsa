@@ -40,7 +40,6 @@ describe('Entity CreateIcon component tests', () => {
       <CreateIcon entity={entity} onClick={clickHandler} />,
     );
 
-    expect(element).toMatchSnapshot();
     expect(caps.mayCreate('task')).toEqual(true);
 
     fireEvent.click(element);

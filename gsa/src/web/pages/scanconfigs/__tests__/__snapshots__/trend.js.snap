@@ -18,7 +18,9 @@ exports[`Scan Config Trend tests should render 1`] = `
   data-testid="svg-icon"
   title="Dynamic"
 >
-  <svg>
+  <svg
+    title="Dynamic"
+  >
     trend_more.svg
   </svg>
 </span>

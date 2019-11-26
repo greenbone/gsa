@@ -27,7 +27,9 @@ exports[`Audit ResumeIcon component tests should render in active state with cor
   data-testid="svg-icon"
   title="Resume"
 >
-  <svg>
+  <svg
+    title="Resume"
+  >
     resume.svg
   </svg>
 </span>

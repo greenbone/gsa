@@ -645,7 +645,9 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
                             data-testid="svg-icon"
                             title="Create a new Tag"
                           >
-                            <svg>
+                            <svg
+                              title="Create a new Tag"
+                            >
                               new.svg
                             </svg>
                           </span>
@@ -1362,7 +1364,9 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
                             data-testid="svg-icon"
                             title="Create a new Tag"
                           >
-                            <svg>
+                            <svg
+                              title="Create a new Tag"
+                            >
                               new.svg
                             </svg>
                           </span>

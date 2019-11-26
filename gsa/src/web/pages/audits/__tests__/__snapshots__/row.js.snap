@@ -405,7 +405,9 @@ exports[`Audit Row tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Start"
               >
-                <svg>
+                <svg
+                  title="Start"
+                >
                   start.svg
                 </svg>
               </span>
@@ -415,7 +417,9 @@ exports[`Audit Row tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Audit is not stopped"
               >
-                <svg>
+                <svg
+                  title="Audit is not stopped"
+                >
                   resume.svg
                 </svg>
               </span>
@@ -424,7 +428,9 @@ exports[`Audit Row tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Move Audit to trashcan"
               >
-                <svg>
+                <svg
+                  title="Move Audit to trashcan"
+                >
                   trashcan.svg
                 </svg>
               </span>
@@ -433,7 +439,9 @@ exports[`Audit Row tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Edit Audit"
               >
-                <svg>
+                <svg
+                  title="Edit Audit"
+                >
                   edit.svg
                 </svg>
               </span>
@@ -442,7 +450,9 @@ exports[`Audit Row tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Clone Audit"
               >
-                <svg>
+                <svg
+                  title="Clone Audit"
+                >
                   clone.svg
                 </svg>
               </span>
@@ -451,7 +461,9 @@ exports[`Audit Row tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Export Audit"
               >
-                <svg>
+                <svg
+                  title="Export Audit"
+                >
                   export.svg
                 </svg>
               </span>
@@ -460,7 +472,9 @@ exports[`Audit Row tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Download Greenbone Compliance Report"
               >
-                <svg>
+                <svg
+                  title="Download Greenbone Compliance Report"
+                >
                   download.svg
                 </svg>
               </span>
