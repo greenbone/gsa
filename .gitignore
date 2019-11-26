@@ -8,5 +8,4 @@ node_modules/
 # directory files for image previews
 .directory
 coverage/
-/gsa/public/locales/
 /gsa/storybook-static/
