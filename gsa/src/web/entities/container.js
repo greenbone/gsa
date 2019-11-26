@@ -54,6 +54,8 @@ import PropTypes from 'web/utils/proptypes';
 import {generateFilename} from 'web/utils/render';
 import SelectionType from 'web/utils/selectiontype';
 
+import {createDeleteEntity} from 'web/store/entities/utils/actions';
+
 import SortBy from 'web/components/sortby/sortby';
 
 import TagDialog from 'web/pages/tags/dialog';
@@ -92,6 +94,7 @@ class EntitiesContainer extends React.Component {
 
     this.handleChanged = this.handleChanged.bind(this);
     this.handleCreateTag = this.handleCreateTag.bind(this);
+    this.handleDeleted = this.handleDeleted.bind(this);
     this.handleDeselected = this.handleDeselected.bind(this);
     this.handleDeleteBulk = this.handleDeleteBulk.bind(this);
     this.handleDownloadBulk = this.handleDownloadBulk.bind(this);
@@ -169,6 +172,12 @@ class EntitiesContainer extends React.Component {
     updateFilter(filter);
 
     this.props.reload(filter);
+  }
+
+  handleDeleted(entity) {
+    const {deleteEntity} = this.props;
+
+    deleteEntity(entity.id).then(this.handleChanged, this.handleError);
   }
 
   handleChanged() {
@@ -526,6 +535,7 @@ class EntitiesContainer extends React.Component {
           sortBy,
           sortDir,
           onChanged: this.handleChanged,
+          onDeleted: this.handleDeleted,
           onDeleteBulk: this.handleDeleteBulk,
           onDownloadBulk: this.handleDownloadBulk,
           onDownloaded: onDownload,
@@ -580,6 +590,7 @@ class EntitiesContainer extends React.Component {
 
 EntitiesContainer.propTypes = {
   children: PropTypes.func.isRequired,
+  deleteEntity: PropTypes.func,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
   entitiesError: PropTypes.error,
@@ -614,10 +625,14 @@ const mapStateToProps = rootState => {
   };
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-});
+const mapDispatchToProps = (dispatch, {gmpname, gmp}) => {
+  const deleteEntity = createDeleteEntity({entityType: gmpname});
+  return {
+    deleteEntity: id => dispatch(deleteEntity(gmp)(id)),
+    loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
+    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+  };
+};
 
 export default compose(
   withRouter,
