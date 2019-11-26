@@ -27,7 +27,9 @@ exports[`Audit StartIcon component tests should render in active state with corr
   data-testid="svg-icon"
   title="Start"
 >
-  <svg>
+  <svg
+    title="Start"
+  >
     start.svg
   </svg>
 </span>

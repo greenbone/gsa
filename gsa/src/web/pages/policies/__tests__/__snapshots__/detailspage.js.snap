@@ -563,7 +563,9 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
                 data-testid="svg-icon"
                 title="Help: Policies"
               >
-                <svg>
+                <svg
+                  title="Help: Policies"
+                >
                   help.svg
                 </svg>
               </span>
@@ -577,7 +579,9 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
                 data-testid="svg-icon"
                 title="Policies List"
               >
-                <svg>
+                <svg
+                  title="Policies List"
+                >
                   list.svg
                 </svg>
               </span>
@@ -596,7 +600,9 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Clone Policy"
             >
-              <svg>
+              <svg
+                title="Clone Policy"
+              >
                 clone.svg
               </svg>
             </span>
@@ -605,7 +611,9 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Edit Policy"
             >
-              <svg>
+              <svg
+                title="Edit Policy"
+              >
                 edit.svg
               </svg>
             </span>
@@ -614,7 +622,9 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Move Policy to trashcan"
             >
-              <svg>
+              <svg
+                title="Move Policy to trashcan"
+              >
                 trashcan.svg
               </svg>
             </span>
@@ -623,7 +633,9 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Export Policy as XML"
             >
-              <svg>
+              <svg
+                title="Export Policy as XML"
+              >
                 export.svg
               </svg>
             </span>
@@ -1013,7 +1025,9 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
             data-testid="svg-icon"
             title="Help: Policies"
           >
-            <svg>
+            <svg
+              title="Help: Policies"
+            >
               help.svg
             </svg>
           </span>
@@ -1027,7 +1041,9 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
             data-testid="svg-icon"
             title="Policies List"
           >
-            <svg>
+            <svg
+              title="Policies List"
+            >
               list.svg
             </svg>
           </span>
@@ -1046,7 +1062,9 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Clone Policy"
         >
-          <svg>
+          <svg
+            title="Clone Policy"
+          >
             clone.svg
           </svg>
         </span>
@@ -1055,7 +1073,9 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Edit Policy"
         >
-          <svg>
+          <svg
+            title="Edit Policy"
+          >
             edit.svg
           </svg>
         </span>
@@ -1064,7 +1084,9 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Move Policy to trashcan"
         >
-          <svg>
+          <svg
+            title="Move Policy to trashcan"
+          >
             trashcan.svg
           </svg>
         </span>
@@ -1073,7 +1095,9 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Export Policy as XML"
         >
-          <svg>
+          <svg
+            title="Export Policy as XML"
+          >
             export.svg
           </svg>
         </span>

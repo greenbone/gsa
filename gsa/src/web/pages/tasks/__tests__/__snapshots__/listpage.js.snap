@@ -182,7 +182,9 @@ exports[`TaskPage ToolBarIcons test should render 1`] = `
         data-testid="svg-icon"
         title="Help: Tasks"
       >
-        <svg>
+        <svg
+          title="Help: Tasks"
+        >
           help.svg
         </svg>
       </span>
@@ -1737,7 +1739,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                 data-testid="svg-icon"
                 title="Help: Tasks"
               >
-                <svg>
+                <svg
+                  title="Help: Tasks"
+                >
                   help.svg
                 </svg>
               </span>
@@ -1876,7 +1880,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                         data-testid="svg-icon"
                         title="Update Filter"
                       >
-                        <svg>
+                        <svg
+                          title="Update Filter"
+                        >
                           refresh.svg
                         </svg>
                       </span>
@@ -1885,7 +1891,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                         data-testid="svg-icon"
                         title="Remove Filter"
                       >
-                        <svg>
+                        <svg
+                          title="Remove Filter"
+                        >
                           delete.svg
                         </svg>
                       </span>
@@ -1894,7 +1902,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                         data-testid="svg-icon"
                         title="Reset to Default Filter"
                       >
-                        <svg>
+                        <svg
+                          title="Reset to Default Filter"
+                        >
                           reset.svg
                         </svg>
                       </span>
@@ -1908,7 +1918,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                           data-testid="svg-icon"
                           title="Help: Powerfilter"
                         >
-                          <svg>
+                          <svg
+                            title="Help: Powerfilter"
+                          >
                             help.svg
                           </svg>
                         </span>
@@ -1918,7 +1930,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                         data-testid="svg-icon"
                         title="Edit Filter"
                       >
-                        <svg>
+                        <svg
+                          title="Edit Filter"
+                        >
                           edit.svg
                         </svg>
                       </span>
@@ -2008,7 +2022,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                   data-testid="svg-icon"
                   title="Add new Dashboard Display"
                 >
-                  <svg>
+                  <svg
+                    title="Add new Dashboard Display"
+                  >
                     new.svg
                   </svg>
                 </span>
@@ -2017,7 +2033,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                   data-testid="svg-icon"
                   title="Reset to Defaults"
                 >
-                  <svg>
+                  <svg
+                    title="Reset to Defaults"
+                  >
                     reset.svg
                   </svg>
                 </span>
@@ -2096,7 +2114,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                                   data-testid="svg-icon"
                                   title="Download SVG"
                                 >
-                                  <svg>
+                                  <svg
+                                    title="Download SVG"
+                                  >
                                     dl_svg.svg
                                   </svg>
                                 </span>
@@ -2105,7 +2125,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                                   data-testid="svg-icon"
                                   title="Toggle Legend"
                                 >
-                                  <svg>
+                                  <svg
+                                    title="Toggle Legend"
+                                  >
                                     legend.svg
                                   </svg>
                                 </span>
@@ -2114,7 +2136,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                                   data-testid="svg-icon"
                                   title="Toggle 2D/3D view"
                                 >
-                                  <svg>
+                                  <svg
+                                    title="Toggle 2D/3D view"
+                                  >
                                     toggle3d.svg
                                   </svg>
                                 </span>
@@ -2187,7 +2211,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                                   data-testid="svg-icon"
                                   title="Download SVG"
                                 >
-                                  <svg>
+                                  <svg
+                                    title="Download SVG"
+                                  >
                                     dl_svg.svg
                                   </svg>
                                 </span>
@@ -2196,7 +2222,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                                   data-testid="svg-icon"
                                   title="Download CSV"
                                 >
-                                  <svg>
+                                  <svg
+                                    title="Download CSV"
+                                  >
                                     dl_csv.svg
                                   </svg>
                                 </span>
@@ -2269,7 +2297,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                                   data-testid="svg-icon"
                                   title="Download SVG"
                                 >
-                                  <svg>
+                                  <svg
+                                    title="Download SVG"
+                                  >
                                     dl_svg.svg
                                   </svg>
                                 </span>
@@ -2278,7 +2308,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                                   data-testid="svg-icon"
                                   title="Toggle Legend"
                                 >
-                                  <svg>
+                                  <svg
+                                    title="Toggle Legend"
+                                  >
                                     legend.svg
                                   </svg>
                                 </span>
@@ -2287,7 +2319,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                                   data-testid="svg-icon"
                                   title="Toggle 2D/3D view"
                                 >
-                                  <svg>
+                                  <svg
+                                    title="Toggle 2D/3D view"
+                                  >
                                     toggle3d.svg
                                   </svg>
                                 </span>
@@ -2327,7 +2361,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                 data-testid="svg-icon"
                 title="Unfold all details"
               >
-                <svg>
+                <svg
+                  title="Unfold all details"
+                >
                   fold.svg
                 </svg>
               </span>
@@ -2346,7 +2382,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                       data-testid="svg-icon"
                       title="First"
                     >
-                      <svg>
+                      <svg
+                        title="First"
+                      >
                         first.svg
                       </svg>
                     </span>
@@ -2355,7 +2393,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                       data-testid="svg-icon"
                       title="Previous"
                     >
-                      <svg>
+                      <svg
+                        title="Previous"
+                      >
                         previous.svg
                       </svg>
                     </span>
@@ -2378,7 +2418,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                       data-testid="svg-icon"
                       title="Next"
                     >
-                      <svg>
+                      <svg
+                        title="Next"
+                      >
                         next.svg
                       </svg>
                     </span>
@@ -2387,7 +2429,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                       data-testid="svg-icon"
                       title="Last"
                     >
-                      <svg>
+                      <svg
+                        title="Last"
+                      >
                         last.svg
                       </svg>
                     </span>
@@ -2633,7 +2677,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                             data-testid="svg-icon"
                             title="Start"
                           >
-                            <svg>
+                            <svg
+                              title="Start"
+                            >
                               start.svg
                             </svg>
                           </span>
@@ -2643,7 +2689,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                             data-testid="svg-icon"
                             title="Task is not stopped"
                           >
-                            <svg>
+                            <svg
+                              title="Task is not stopped"
+                            >
                               resume.svg
                             </svg>
                           </span>
@@ -2652,7 +2700,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                             data-testid="svg-icon"
                             title="Move Task to trashcan"
                           >
-                            <svg>
+                            <svg
+                              title="Move Task to trashcan"
+                            >
                               trashcan.svg
                             </svg>
                           </span>
@@ -2661,7 +2711,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                             data-testid="svg-icon"
                             title="Edit Task"
                           >
-                            <svg>
+                            <svg
+                              title="Edit Task"
+                            >
                               edit.svg
                             </svg>
                           </span>
@@ -2670,7 +2722,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                             data-testid="svg-icon"
                             title="Clone Task"
                           >
-                            <svg>
+                            <svg
+                              title="Clone Task"
+                            >
                               clone.svg
                             </svg>
                           </span>
@@ -2679,7 +2733,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                             data-testid="svg-icon"
                             title="Export Task"
                           >
-                            <svg>
+                            <svg
+                              title="Export Task"
+                            >
                               export.svg
                             </svg>
                           </span>
@@ -2751,7 +2807,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                                 data-testid="svg-icon"
                                 title="Add tag to page contents"
                               >
-                                <svg>
+                                <svg
+                                  title="Add tag to page contents"
+                                >
                                   tags.svg
                                 </svg>
                               </span>
@@ -2760,7 +2818,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                                 data-testid="svg-icon"
                                 title="Move page contents to trashcan"
                               >
-                                <svg>
+                                <svg
+                                  title="Move page contents to trashcan"
+                                >
                                   trashcan.svg
                                 </svg>
                               </span>
@@ -2769,7 +2829,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                                 data-testid="svg-icon"
                                 title="Export page contents"
                               >
-                                <svg>
+                                <svg
+                                  title="Export page contents"
+                                >
                                   export.svg
                                 </svg>
                               </span>
@@ -2805,7 +2867,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                       data-testid="svg-icon"
                       title="First"
                     >
-                      <svg>
+                      <svg
+                        title="First"
+                      >
                         first.svg
                       </svg>
                     </span>
@@ -2814,7 +2878,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                       data-testid="svg-icon"
                       title="Previous"
                     >
-                      <svg>
+                      <svg
+                        title="Previous"
+                      >
                         previous.svg
                       </svg>
                     </span>
@@ -2837,7 +2903,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                       data-testid="svg-icon"
                       title="Next"
                     >
-                      <svg>
+                      <svg
+                        title="Next"
+                      >
                         next.svg
                       </svg>
                     </span>
@@ -2846,7 +2914,9 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                       data-testid="svg-icon"
                       title="Last"
                     >
-                      <svg>
+                      <svg
+                        title="Last"
+                      >
                         last.svg
                       </svg>
                     </span>
