@@ -31,7 +31,7 @@ export const types = {
   ENTITY_LOADING_ERROR: 'ENTITY_LOADING_ERROR',
 };
 
-export const createEntitiesActions = entityType => ({
+export const createEntitiesLoadingActions = entityType => ({
   request: filter => ({
     type: types.ENTITIES_LOADING_REQUEST,
     entityType,
@@ -53,7 +53,7 @@ export const createEntitiesActions = entityType => ({
   }),
 });
 
-export const createEntityActions = entityType => ({
+export const createEntityLoadingActions = entityType => ({
   request: id => ({
     type: types.ENTITY_LOADING_REQUEST,
     entityType,
@@ -145,11 +145,9 @@ export const createLoadEntity = ({
 
   dispatch(actions.request(id));
 
-  return gmp[entityType]
-    .get({id})
-    .then(
-      response => dispatch(actions.success(id, response.data)),
-      error => dispatch(actions.error(id, error)),
-    );
+  return gmp[entityType].get({id}).then(
+    response => dispatch(actions.success(id, response.data)),
+    error => dispatch(actions.error(id, error)),
+  );
 };
 // vim: set ts=2 sw=2 tw=80:

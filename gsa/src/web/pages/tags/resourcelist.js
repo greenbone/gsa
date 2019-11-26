@@ -39,7 +39,7 @@ import {MAX_RESOURCES} from 'web/pages/tags/component';
 
 import {
   createLoadEntities,
-  createEntitiesActions,
+  createEntitiesLoadingActions,
 } from 'web/store/entities/utils/actions';
 import {createSelector} from 'web/store/entities/utils/selectors';
 
@@ -155,7 +155,7 @@ const mapDispatchToProps = (dispatch, {entity, gmp}) => {
 
   const {resourceType: entityType} = entity;
   const selector = createSelector(entityType);
-  const actions = createEntitiesActions(entityType);
+  const actions = createEntitiesLoadingActions(entityType);
   const loadEntities = createLoadEntities({
     selector,
     actions,
@@ -169,10 +169,7 @@ const mapDispatchToProps = (dispatch, {entity, gmp}) => {
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(ResourceList);
 
 // vim: set ts=2 sw=2 tw=80:
