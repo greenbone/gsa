@@ -50,7 +50,7 @@ export const testIcon = Icon => {
     });
   });
 
-  test('should change appearance when if inactive', () => {
+  test('should change appearance when inactive', () => {
     const {element} = render(<Icon active={false} />);
 
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
