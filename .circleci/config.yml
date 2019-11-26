@@ -44,7 +44,7 @@ jobs:
   js_lint:
     working_directory: ~/gsa
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
         environment:
           ENV: CI
     steps:
