@@ -21,7 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Increased clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
 
 ### Fixed
-- Fixed react-scripts dependency because it broke tooltips [#1760](https://github.com/greenbone/gsa/pull/1760)
+- Fixed displaying icon titles [#1809](https://github.com/greenbone/gsa/pull/1809)
 - Fixed svg icon cursor is always a pointer [#1800](https://github.com/greenbone/gsa/pull/1800)
 - Fixed defaultfilter is not always applied [#1783](https://github.com/greenbone/gsa/pull/1783)
 - Fixed checkboxes in scanconfig editdialog reset after every rerender [#1773](https://github.com/greenbone/gsa/pull/1773)
