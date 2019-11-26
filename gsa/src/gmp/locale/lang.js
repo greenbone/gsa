@@ -136,10 +136,12 @@ class LazyTranslate {
   }
 
   toString() {
+    /* i18next-extract-disable-next-line */
     return i18next.t(this.key, this.options);
   }
 }
 
+/* i18next-extract-disable-next-line */
 const translate = (key, options) => i18next.t(key, options);
 const translateLazy = (key, options) => new LazyTranslate(key, options);
 

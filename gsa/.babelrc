@@ -1,0 +1,18 @@
+{
+  "presets": ["react-app"],
+  "plugins": [
+    [
+      "i18next-extract",
+      {
+        "locales": ["de"],
+        "pluralSeparator": null,
+        "contextSeparator": null,
+        "nsSeparator": null,
+        "keySeparator": null,
+        "outputPath": "public/locales/gsa-{{locale}}.json",
+        "tFunctionNames": ["_", "_l"],
+        "discardOldKeys": true
+      }
+    ]
+  ]
+}
