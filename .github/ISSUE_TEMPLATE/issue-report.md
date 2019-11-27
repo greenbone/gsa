@@ -1,3 +1,12 @@
+---
+name: Issue Report
+about: Create a report to report an issue
+title: ''
+labels: bug
+assignees: ''
+
+---
+
 <!--
 If reporting an issue please try to provide the information asked below.
 
