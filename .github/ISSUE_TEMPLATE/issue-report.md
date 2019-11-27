@@ -1,6 +1,6 @@
 ---
-name: Issue Report
-about: Create a report to report an issue
+name: Bug Report
+about: Report an issue with GSA
 title: ''
 labels: bug
 assignees: ''
