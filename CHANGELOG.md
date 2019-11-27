@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Override dialog: Make host/port/task fields editable even when fixed, and display oid when no name is defined [#1814](https://github.com/greenbone/gsa/pull/1814)
 - Use consistent setting naming [#1774](https://github.com/greenbone/gsa/pull/1774)
 - Consider visibility status of page for calculating the reload interval [#1761](https://github.com/greenbone/gsa/pull/1761)
 - Do not simplify filterString in content composer for report download [#1733](https://github.com/greenbone/gsa/pull/1733)
