@@ -122,9 +122,14 @@ const NoteDialog = ({
       {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
-            {state.fixed && (
+            {state.fixed && isDefined(oid) && (
               <FormGroup title={_('NVT')} flex="column">
                 <span>{renderNvtName(oid, nvt_name)}</span>
+              </FormGroup>
+            )}
+            {state.fixed && !isDefined(oid) && (
+              <FormGroup title={_('NVT')} flex="column">
+                <span>{renderNvtName(state.oid, nvt_name)}</span>
               </FormGroup>
             )}
             {is_edit && !state.fixed && (
@@ -222,19 +227,16 @@ const NoteDialog = ({
               <Divider>
                 <Radio
                   name="hosts"
-                  title={state.fixed ? state.hosts_manual : ''}
                   checked={state.hosts === MANUAL}
                   value={MANUAL}
                   onChange={onValueChange}
                 />
-                {!state.fixed && (
-                  <TextField
-                    name="hosts_manual"
-                    disabled={state.hosts !== MANUAL}
-                    value={state.hosts_manual}
-                    onChange={onValueChange}
-                  />
-                )}
+                <TextField
+                  name="hosts_manual"
+                  disabled={state.hosts !== MANUAL}
+                  value={state.hosts_manual}
+                  onChange={onValueChange}
+                />
               </Divider>
             </FormGroup>
 
@@ -249,19 +251,16 @@ const NoteDialog = ({
               <Divider>
                 <Radio
                   name="port"
-                  title={state.fixed ? state.port_manual : ''}
                   checked={state.port === MANUAL}
                   value={MANUAL}
                   onChange={onValueChange}
                 />
-                {!state.fixed && (
-                  <TextField
-                    name="port_manual"
-                    disabled={state.port !== MANUAL}
-                    value={state.port_manual}
-                    onChange={onValueChange}
-                  />
-                )}
+                <TextField
+                  name="port_manual"
+                  disabled={state.port !== MANUAL}
+                  value={state.port_manual}
+                  onChange={onValueChange}
+                />
               </Divider>
             </FormGroup>
 
@@ -329,20 +328,17 @@ const NoteDialog = ({
               <Divider>
                 <Radio
                   name="task_id"
-                  title={state.fixed ? state.task_name : ''}
                   checked={state.task_id === '0'}
                   value="0"
                   onChange={onValueChange}
                 />
-                {!state.fixed && (
-                  <Select
-                    name="task_uuid"
-                    value={state.task_uuid}
-                    items={renderSelectItems(tasks)}
-                    disabled={state.task_id !== '0'}
-                    onChange={onValueChange}
-                  />
-                )}
+                <Select
+                  name="task_uuid"
+                  value={state.task_uuid}
+                  items={renderSelectItems(tasks)}
+                  disabled={state.task_id !== '0'}
+                  onChange={onValueChange}
+                />
               </Divider>
             </FormGroup>
 
