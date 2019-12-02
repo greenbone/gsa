@@ -69,8 +69,8 @@ const CvssCalculator = ({gmp, onInteraction, ...props}) => {
     authentication: 'NONE',
     integrityImpact: 'NONE',
     availabilityImpact: 'NONE',
-    cvssVector: '',
-    userVector: '',
+    cvssVector: 'AV:L/AC:L/Au:N/C:N/I:N/A:N',
+    userVector: 'AV:L/AC:L/Au:N/C:N/I:N/A:N',
     cvssScore: 0,
   });
 
@@ -85,8 +85,15 @@ const CvssCalculator = ({gmp, onInteraction, ...props}) => {
       const {cvssVector} = location.query;
       setState(vals => ({...vals, cvssVector, userVector: cvssVector}));
       calculateScore(cvssVector);
+      handleVectorChange();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    handleVectorChange();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.userVector]);
 
   const calculateVector = newVector => {
     const {
@@ -190,7 +197,6 @@ const CvssCalculator = ({gmp, onInteraction, ...props}) => {
     integrityImpact,
   } = state;
 
-  console.log(state);
   return (
     <Layout flex="column">
       <ToolBarIcons />
