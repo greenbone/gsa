@@ -24,6 +24,26 @@ import {fireEvent, rendererWith, waitForElement} from 'web/utils/testing';
 
 import CvssCalculator from 'web/pages/extras/cvsscalculatorpage';
 
+/* eslint-disable no-console */
+
+// this is just a little hack to silence a warning that we'll get until we
+// upgrade to 16.9: https://github.com/facebook/react/pull/14853
+const originalError = console.error;
+beforeAll(() => {
+  console.error = (...args) => {
+    if (/Warning.*not wrapped in act/.test(args[0])) {
+      return;
+    }
+    originalError.call(console, ...args);
+  };
+});
+
+afterAll(() => {
+  console.error = originalError;
+});
+
+/* eslint-enable no-console */
+
 const calculateScoreFromVector = jest.fn().mockReturnValue(
   Promise.resolve({
     data: 7.5,
@@ -46,8 +66,6 @@ const gmp = {
   },
 };
 
-const onInteraction = jest.fn();
-
 const location = {
   query: {cvssVector: 'AV:N/AC:L/Au:N/C:P/I:P/A:P'},
 };
@@ -56,32 +74,29 @@ describe('CvssCalculator page tests', () => {
   test('Should render with default values', () => {
     const {render} = rendererWith({
       gmp,
-      onInteraction,
       store: true,
     });
 
     const {element, getAllByTestId} = render(<CvssCalculator />);
 
-    expect(element).toMatchSnapshot();
     const input = getAllByTestId('select-selected-value');
+
     waitForElement(() => element.querySelectorAll('input'));
     const vector = element.querySelectorAll('input');
 
-    act(() => {
-      expect(input[0]).toHaveTextContent('Local');
-      expect(input[1]).toHaveTextContent('Low');
-      expect(input[2]).toHaveTextContent('None');
-      expect(input[3]).toHaveTextContent('None');
-      expect(input[4]).toHaveTextContent('None');
-      expect(input[5]).toHaveTextContent('None');
+    expect(input[0]).toHaveTextContent('Local');
+    expect(input[1]).toHaveTextContent('Low');
+    expect(input[2]).toHaveTextContent('None');
+    expect(input[3]).toHaveTextContent('None');
+    expect(input[4]).toHaveTextContent('None');
+    expect(input[5]).toHaveTextContent('None');
 
-      expect(vector[0]).toHaveAttribute('value', 'AV:L/AC:L/Au:N/C:N/I:N/A:N');
-    });
+    expect(vector[0]).toHaveAttribute('value', 'AV:L/AC:L/Au:N/C:N/I:N/A:N');
   });
+
   test('Should render userVector from url', () => {
     const {render} = rendererWith({
       gmp,
-      onInteraction,
       store: true,
     });
 
@@ -90,23 +105,23 @@ describe('CvssCalculator page tests', () => {
     );
 
     const input = getAllByTestId('select-selected-value');
+    waitForElement(() => element.querySelectorAll('input'));
+
     const vector = element.querySelectorAll('input');
 
-    act(() => {
-      expect(input[0]).toHaveTextContent('Network');
-      expect(input[1]).toHaveTextContent('Low');
-      expect(input[2]).toHaveTextContent('None');
-      expect(input[3]).toHaveTextContent('Partial');
-      expect(input[4]).toHaveTextContent('Partial');
-      expect(input[5]).toHaveTextContent('Partial');
+    expect(input[0]).toHaveTextContent('Network');
+    expect(input[1]).toHaveTextContent('Low');
+    expect(input[2]).toHaveTextContent('None');
+    expect(input[3]).toHaveTextContent('Partial');
+    expect(input[4]).toHaveTextContent('Partial');
+    expect(input[5]).toHaveTextContent('Partial');
 
-      expect(vector[0]).toHaveAttribute('value', 'AV:N/AC:L/Au:N/C:P/I:P/A:P');
-    });
+    expect(vector[0]).toHaveAttribute('value', 'AV:N/AC:L/Au:N/C:P/I:P/A:P');
   });
-  test('Changing userVector should change displayed select values', () => {
+
+  test('Changing userVector should change displayed select values', async () => {
     const {render} = rendererWith({
       gmp,
-      onInteraction,
       store: true,
     });
 
@@ -116,27 +131,28 @@ describe('CvssCalculator page tests', () => {
 
     const vector = element.querySelectorAll('input');
 
-    fireEvent.change(vector[0], {
-      target: {value: 'AV:N/AC:L/Au:N/C:N/I:P/A:P'},
+    act(() => {
+      fireEvent.change(vector[0], {
+        target: {value: 'AV:N/AC:L/Au:N/C:N/I:P/A:P'},
+      });
     });
 
+    waitForElement(() => getAllByTestId('select-selected-value'));
     const input = getAllByTestId('select-selected-value');
 
-    act(() => {
-      expect(input[0]).toHaveTextContent('Network');
-      expect(input[1]).toHaveTextContent('Low');
-      expect(input[2]).toHaveTextContent('None');
-      expect(input[3]).toHaveTextContent('None');
-      expect(input[4]).toHaveTextContent('Partial');
-      expect(input[5]).toHaveTextContent('Partial');
+    expect(input[0]).toHaveTextContent('Network');
+    expect(input[1]).toHaveTextContent('Low');
+    expect(input[2]).toHaveTextContent('None');
+    expect(input[3]).toHaveTextContent('None');
+    expect(input[4]).toHaveTextContent('Partial');
+    expect(input[5]).toHaveTextContent('Partial');
 
-      expect(vector[0]).toHaveAttribute('value', 'AV:N/AC:L/Au:N/C:N/I:P/A:P');
-    });
+    expect(vector[0]).toHaveAttribute('value', 'AV:N/AC:L/Au:N/C:N/I:P/A:P');
   });
+
   test('Changing displayed select values should change userVector', async () => {
     const {render} = rendererWith({
       gmp,
-      onInteraction,
       store: true,
     });
 
@@ -146,30 +162,25 @@ describe('CvssCalculator page tests', () => {
 
     const vector = element.querySelectorAll('input');
 
+    waitForElement(() => getAllByTestId('select-selected-value'));
     const input = getAllByTestId('select-selected-value');
 
-    act(() => {
-      expect(input[0]).toHaveTextContent('Network');
-      expect(input[1]).toHaveTextContent('Low');
-      expect(input[2]).toHaveTextContent('None');
-      expect(input[3]).toHaveTextContent('Partial');
-      expect(input[4]).toHaveTextContent('Partial');
-      expect(input[5]).toHaveTextContent('Partial');
+    expect(input[0]).toHaveTextContent('Network');
+    expect(input[1]).toHaveTextContent('Low');
+    expect(input[2]).toHaveTextContent('None');
+    expect(input[3]).toHaveTextContent('Partial');
+    expect(input[4]).toHaveTextContent('Partial');
+    expect(input[5]).toHaveTextContent('Partial');
 
-      expect(vector[0]).toHaveAttribute('value', 'AV:N/AC:L/Au:N/C:P/I:P/A:P');
-    });
+    expect(vector[0]).toHaveAttribute('value', 'AV:N/AC:L/Au:N/C:P/I:P/A:P');
 
-    act(() => {
-      const selectFields = getAllByTestId('select-open-button');
+    const selectFields = getAllByTestId('select-open-button');
 
-      fireEvent.click(selectFields[0]);
-    });
+    fireEvent.click(selectFields[0]);
 
-    act(() => {
-      const selectItems = getAllByTestId('select-item');
+    const selectItems = getAllByTestId('select-item');
 
-      fireEvent.click(selectItems[0]);
-    });
+    fireEvent.click(selectItems[0]);
 
     expect(vector[0]).toHaveAttribute('value', 'AV:L/AC:L/Au:N/C:P/I:P/A:P');
   });
