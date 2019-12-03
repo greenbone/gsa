@@ -18,11 +18,9 @@
  */
 import React from 'react';
 
-import {withRouter} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 
 import {connect} from 'react-redux';
-
-import {isDefined} from 'gmp/utils/identity';
 
 import FilterProvider from 'web/entities/filterprovider';
 
@@ -31,7 +29,6 @@ import Reload from 'web/components/loading/reload';
 import withDownload from 'web/components/form/withDownload';
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
 
-import getPage from 'web/store/pages/selectors';
 import {pageFilter} from 'web/store/pages/actions';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
@@ -47,56 +44,45 @@ const withEntitiesContainer = (
   gmpname,
   {
     entitiesSelector,
-    loadEntities,
+    loadEntities: loadEntitiesFunc,
     reloadInterval = noop,
-    defaultFilter,
     fallbackFilter,
   },
 ) => Component => {
-  let EntitiesContainerWrapper = props => (
-    <SubscriptionProvider>
-      {({notify}) => (
-        <FilterProvider
-          fallbackFilter={fallbackFilter}
+  let EntitiesContainerWrapper = ({
+    children,
+    filter,
+    loadEntities,
+    notify,
+    ...props
+  }) => (
+    <Reload
+      reloadInterval={() => reloadInterval(props)}
+      reload={(newFilter = filter) => loadEntities(newFilter)}
+      name={gmpname}
+    >
+      {({reload}) => (
+        <EntitiesContainer
+          {...props}
+          filter={filter}
+          notify={notify}
           gmpname={gmpname}
-          locationQuery={props.location.query}
+          reload={reload}
         >
-          {({filter}) => (
-            <Reload
-              reloadInterval={() => reloadInterval(props)}
-              reload={(newFilter = filter) => props.loadEntities(newFilter)}
-              name={gmpname}
-            >
-              {({reload}) => (
-                <EntitiesContainer
-                  {...props}
-                  filter={filter}
-                  notify={notify}
-                  gmpname={gmpname}
-                  reload={reload}
-                >
-                  {pageProps => <Component {...pageProps} />}
-                </EntitiesContainer>
-              )}
-            </Reload>
-          )}
-        </FilterProvider>
+          {pageProps => <Component {...pageProps} />}
+        </EntitiesContainer>
       )}
-    </SubscriptionProvider>
+    </Reload>
   );
 
   EntitiesContainerWrapper.propTypes = {
     filter: PropTypes.filter,
     loadEntities: PropTypes.func.isRequired,
+    notify: PropTypes.func.isRequired,
   };
 
-  const mapStateToProps = state => {
+  const mapStateToProps = (state, {filter}) => {
     const eSelector = entitiesSelector(state);
-    const pSelector = getPage(state);
-    let filter = pSelector.getFilter(gmpname);
-    if (!isDefined(filter)) {
-      filter = defaultFilter;
-    }
     const entities = eSelector.getEntities(filter);
     return {
       entities,
@@ -109,7 +95,7 @@ const withEntitiesContainer = (
   };
 
   const mapDispatchToProps = (dispatch, {gmp}) => ({
-    loadEntities: filter => dispatch(loadEntities(gmp)(filter)),
+    loadEntities: filter => dispatch(loadEntitiesFunc(gmp)(filter)),
     updateFilter: filter => dispatch(pageFilter(gmpname, filter)),
     onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   });
@@ -118,14 +104,34 @@ const withEntitiesContainer = (
     withDialogNotification,
     withDownload,
     withGmp,
-    withRouter,
     connect(
       mapStateToProps,
       mapDispatchToProps,
     ),
   )(EntitiesContainerWrapper);
 
-  return EntitiesContainerWrapper;
+  return props => {
+    const location = useLocation();
+    return (
+      <SubscriptionProvider>
+        {({notify}) => (
+          <FilterProvider
+            fallbackFilter={fallbackFilter}
+            gmpname={gmpname}
+            locationQuery={location.query}
+          >
+            {({filter}) => (
+              <EntitiesContainerWrapper
+                {...props}
+                filter={filter}
+                notify={notify}
+              />
+            )}
+          </FilterProvider>
+        )}
+      </SubscriptionProvider>
+    );
+  };
 };
 
 export default withEntitiesContainer;

@@ -21,8 +21,6 @@ import React, {useEffect, useState} from 'react';
 
 import {useSelector, useDispatch} from 'react-redux';
 
-import {withRouter} from 'react-router-dom';
-
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/users';
 
 import Filter, {
@@ -42,16 +40,15 @@ import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilte
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-import compose from 'web/utils/compose';
+import useGmp from 'web/utils/useGmp';
 
 const FilterProvider = ({
   children,
   fallbackFilter,
-  gmp,
   gmpname,
   locationQuery = {},
 }) => {
+  const gmp = useGmp();
   const dispatch = useDispatch();
 
   let returnedFilter;
@@ -146,16 +143,12 @@ const FilterProvider = ({
 
 FilterProvider.propTypes = {
   fallbackFilter: PropTypes.filter,
-  gmp: PropTypes.gmp.isRequired,
   gmpname: PropTypes.string,
   locationQuery: PropTypes.shape({
     filter: PropTypes.string,
   }),
 };
 
-export default compose(
-  withGmp,
-  withRouter,
-)(FilterProvider);
+export default FilterProvider;
 
 // vim: set ts=2 sw=2 tw=80:
