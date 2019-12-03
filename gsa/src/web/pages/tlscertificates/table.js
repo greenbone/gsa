@@ -47,7 +47,7 @@ const Header = ({
           width="30%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'dn' : false}
+          sortBy={sort ? 'issuer_dn' : false}
           onSortChange={onSortChange}
           title={_('Issuer DN')}
         />
@@ -63,7 +63,7 @@ const Header = ({
           width="12%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'hosts' : false}
+          sortBy={sort ? 'activates' : false}
           onSortChange={onSortChange}
           title={_('Activates')}
         />
@@ -71,7 +71,7 @@ const Header = ({
           width="12%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'modified' : false}
+          sortBy={sort ? 'expires' : false}
           onSortChange={onSortChange}
           title={_('Expires')}
         />
@@ -79,7 +79,7 @@ const Header = ({
           width="12%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'modified' : false}
+          sortBy={sort ? 'last_seen' : false}
           onSortChange={onSortChange}
           title={_('Last seen')}
         />
