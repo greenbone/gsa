@@ -20,6 +20,8 @@ import 'core-js/features/set';
 
 import React from 'react';
 
+import {withRouter} from 'react-router-dom';
+
 import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
@@ -618,6 +620,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 });
 
 export default compose(
+  withRouter,
   connect(
     mapStateToProps,
     mapDispatchToProps,
