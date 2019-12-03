@@ -110,6 +110,12 @@ class Model {
       delete copy.owner;
     }
 
+    copy.summary = parseText(element.summary);
+
+    if (isEmpty(element.summary)) {
+      delete copy.summary;
+    }
+
     copy.comment = parseText(element.comment);
 
     if (isEmpty(element.comment)) {
