@@ -21,8 +21,6 @@ import React, {useEffect, useState} from 'react';
 
 import {useSelector, useDispatch} from 'react-redux';
 
-import {withRouter} from 'react-router-dom';
-
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/users';
 
 import Filter, {
@@ -153,9 +151,6 @@ FilterProvider.propTypes = {
   }),
 };
 
-export default compose(
-  withGmp,
-  withRouter,
-)(FilterProvider);
+export default compose(withGmp)(FilterProvider);
 
 // vim: set ts=2 sw=2 tw=80:
