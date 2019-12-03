@@ -18,7 +18,7 @@
  */
 import React from 'react';
 
-import {withRouter} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 
 import {connect} from 'react-redux';
 
@@ -93,32 +93,34 @@ const withEntitiesContainer = (
     withDialogNotification,
     withDownload,
     withGmp,
-    withRouter,
     connect(
       mapStateToProps,
       mapDispatchToProps,
     ),
   )(EntitiesContainerWrapper);
 
-  return props => (
-    <SubscriptionProvider>
-      {({notify}) => (
-        <FilterProvider
-          fallbackFilter={fallbackFilter}
-          gmpname={gmpname}
-          locationQuery={props.location.query}
-        >
-          {({filter}) => (
-            <EntitiesContainerWrapper
-              {...props}
-              filter={filter}
-              notify={notify}
-            />
-          )}
-        </FilterProvider>
-      )}
-    </SubscriptionProvider>
-  );
+  return props => {
+    const location = useLocation();
+    return (
+      <SubscriptionProvider>
+        {({notify}) => (
+          <FilterProvider
+            fallbackFilter={fallbackFilter}
+            gmpname={gmpname}
+            locationQuery={location.query}
+          >
+            {({filter}) => (
+              <EntitiesContainerWrapper
+                {...props}
+                filter={filter}
+                notify={notify}
+              />
+            )}
+          </FilterProvider>
+        )}
+      </SubscriptionProvider>
+    );
+  };
 };
 
 export default withEntitiesContainer;
