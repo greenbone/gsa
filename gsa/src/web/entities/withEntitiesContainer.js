@@ -42,12 +42,23 @@ const noop = () => {};
 
 const withEntitiesContainer = (
   gmpname,
-  {entitiesSelector, loadEntities, reloadInterval = noop, fallbackFilter},
+  {
+    entitiesSelector,
+    loadEntities: loadEntitiesFunc,
+    reloadInterval = noop,
+    fallbackFilter,
+  },
 ) => Component => {
-  let EntitiesContainerWrapper = ({children, filter, notify, ...props}) => (
+  let EntitiesContainerWrapper = ({
+    children,
+    filter,
+    loadEntities,
+    notify,
+    ...props
+  }) => (
     <Reload
       reloadInterval={() => reloadInterval(props)}
-      reload={(newFilter = filter) => props.loadEntities(newFilter)}
+      reload={(newFilter = filter) => loadEntities(newFilter)}
       name={gmpname}
     >
       {({reload}) => (
@@ -84,7 +95,7 @@ const withEntitiesContainer = (
   };
 
   const mapDispatchToProps = (dispatch, {gmp}) => ({
-    loadEntities: filter => dispatch(loadEntities(gmp)(filter)),
+    loadEntities: filter => dispatch(loadEntitiesFunc(gmp)(filter)),
     updateFilter: filter => dispatch(pageFilter(gmpname, filter)),
     onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   });
