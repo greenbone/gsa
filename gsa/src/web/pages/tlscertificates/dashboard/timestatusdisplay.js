@@ -81,6 +81,7 @@ export const TimeStatusDisplay = createDisplay({
     _('TLS Certificates by Status (Total: {{count}})', {count: tdata.total}),
   filtersFilter: TLS_CERTIFICATES_FILTER_FILTER,
   loaderComponent: TlsCertificatesStatusLoader,
+  filterTerm: 'time_status',
 });
 
 export const TimeStatusTableDisplay = createDisplay({

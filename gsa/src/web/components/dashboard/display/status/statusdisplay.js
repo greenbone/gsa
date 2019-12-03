@@ -37,11 +37,13 @@ class StatusDisplay extends React.Component {
   }
 
   handleDataClick(data) {
-    const {onFilterChanged, filter} = this.props;
+    const {onFilterChanged, filter, filterTerm = 'status'} = this.props;
     const {filterValue} = data;
 
     if (isDefined(filterValue) && isDefined(onFilterChanged)) {
-      const statusTerm = FilterTerm.fromString(`status="${filterValue}"`);
+      const statusTerm = FilterTerm.fromString(
+        `${filterTerm}="${filterValue}"`,
+      );
 
       if (isDefined(filter) && filter.hasTerm(statusTerm)) {
         return;
@@ -90,6 +92,7 @@ class StatusDisplay extends React.Component {
 
 StatusDisplay.propTypes = {
   filter: PropTypes.filter,
+  filterTerm: PropTypes.string,
   onFilterChanged: PropTypes.func,
 };
 
