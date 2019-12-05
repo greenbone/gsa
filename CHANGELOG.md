@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Limit the length of result description with a div [#1834](https://github.com/greenbone/gsa/pull/1834)
 - Refactored cvsscalculatorpage to function and parse vector from url [#1824](https://github.com/greenbone/gsa/pull/1824)
 - New override and note dialog: Make host/port/task fields editable even when fixed, and display oid when no name is defined [#1814](https://github.com/greenbone/gsa/pull/1814) [#1817](https://github.com/greenbone/gsa/pull/1817)
 - Use consistent setting naming [#1774](https://github.com/greenbone/gsa/pull/1774)
