@@ -22,7 +22,7 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {MANUAL, TASK_SELECTED, RESULT_UUID} from 'gmp/models/override';
+import {MANUAL, TASK_SELECTED, RESULT_ANY} from 'gmp/models/override';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -316,7 +316,7 @@ class Page extends React.Component {
       nvt_name: nvt.name,
       task_id: TASK_SELECTED,
       task_name: task.name,
-      result_id: RESULT_UUID,
+      result_id: RESULT_ANY,
       task_uuid: task.id,
       result_uuid: result.id,
       result_name: result.name,
