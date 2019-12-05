@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.2] - unreleased
 
 ### Added
+- Added parseText to model.js to parse single space summary [#1829](https://github.com/greenbone/gsa/pull/1829)
 - Added new setting to enable and disable debug logging for the redux store [#1684](https://github.com/greenbone/gsa/pull/1684)
 - Added text notification when old password is entered but new password isn't [#1636](https://github.com/greenbone/gsa/pull/1636)
 - Added a loading timer for empty trash button [#1604](https://github.com/greenbone/gsa/pull/1604)
@@ -22,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Limit the length of result description with a div [#1834](https://github.com/greenbone/gsa/pull/1834)
+- Changed new override dialog defaults [#1833](https://github.com/greenbone/gsa/pull/1833)
 - Refactored cvsscalculatorpage to function and parse vector from url [#1824](https://github.com/greenbone/gsa/pull/1824)
 - New override and note dialog: Make host/port/task fields editable even when fixed, and display oid when no name is defined [#1814](https://github.com/greenbone/gsa/pull/1814) [#1817](https://github.com/greenbone/gsa/pull/1817)
 - Use consistent setting naming [#1774](https://github.com/greenbone/gsa/pull/1774)
