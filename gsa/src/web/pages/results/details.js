@@ -56,7 +56,12 @@ import Diff from './diff';
 */
 const Pre = styled.pre`
   white-space: pre-wrap;
-  word-wrap: normal;
+  word-wrap: word-break;
+`;
+
+const GrowDiv = styled.div`
+  min-width: 500px;
+  max-width: 1080px;
 `;
 
 const ResultDetails = ({className, links = true, entity}) => {
@@ -119,7 +124,9 @@ const ResultDetails = ({className, links = true, entity}) => {
       ) : (
         <DetailsBlock title={_('Detection Result')}>
           {!isEmpty(result.description) && result.description.length > 1 ? (
-            <Pre>{result.description}</Pre>
+            <GrowDiv>
+              <Pre>{result.description}</Pre>
+            </GrowDiv>
           ) : (
             _(
               'Vulnerability was detected according to the ' +
