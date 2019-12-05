@@ -68,7 +68,7 @@ const SectionElements = withCapabilities(
             />
           )}
           <ManualIcon
-            page="gui_introduction"
+            page="web-interface"
             anchor="tags"
             title={_('Help: User Tags')}
           />
