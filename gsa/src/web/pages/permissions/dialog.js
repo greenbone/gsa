@@ -276,6 +276,7 @@ const PermissionDialog = ({
                     <Radio
                       name="subjectType"
                       checked={state.subjectType === 'group'}
+                      disabled={groups.length === 0}
                       title={_('Group')}
                       value="group"
                       onChange={onValueChange}
