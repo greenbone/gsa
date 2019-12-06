@@ -22,7 +22,7 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isFunction} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -89,13 +89,19 @@ const SvgIcon = ({
     }
   };
 
+  title = loading ? loadingTitle : title;
+
+  if (isFunction(children)) {
+    children = children({title});
+  }
+
   return (
     <Styled
       {...other}
       data-testid="svg-icon"
       active={active && !loading}
       isLoading={loading}
-      title={loading ? loadingTitle : title}
+      title={title}
       onClick={
         isDefined(onClick) && !disabled && !loading ? handleClick : undefined
       }

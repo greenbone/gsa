@@ -65,7 +65,7 @@ export const severityFormat = format('0.1f');
 
 export const renderNvtName = (oid, name, length = 70) => {
   if (!isDefined(name)) {
-    return '';
+    return oid;
   }
 
   if (name.length < length) {

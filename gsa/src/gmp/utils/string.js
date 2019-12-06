@@ -16,14 +16,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined} from './identity';
+import {isDefined, isString} from './identity';
 
 export const capitalizeFirstLetter = string =>
   string.charAt(0).toUpperCase() + string.slice(1);
 
-export const shorten = (text, length = 60) => {
-  if (!isDefined(text)) {
-    return '';
+export const shorten = (text = '', length = 60) => {
+  if (!isString(text)) {
+    text = `${text}`;
   }
 
   if (text.length < length) {

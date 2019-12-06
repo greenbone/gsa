@@ -182,7 +182,9 @@ exports[`TaskPage ToolBarIcons test should render 1`] = `
         data-testid="svg-icon"
         title="Help: Tasks"
       >
-        <svg>
+        <svg
+          title="Help: Tasks"
+        >
           help.svg
         </svg>
       </span>

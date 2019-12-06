@@ -563,7 +563,9 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
                 data-testid="svg-icon"
                 title="Help: ScanConfigs"
               >
-                <svg>
+                <svg
+                  title="Help: ScanConfigs"
+                >
                   help.svg
                 </svg>
               </span>
@@ -577,7 +579,9 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
                 data-testid="svg-icon"
                 title="ScanConfig List"
               >
-                <svg>
+                <svg
+                  title="ScanConfig List"
+                >
                   list.svg
                 </svg>
               </span>
@@ -596,7 +600,9 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Create new Scan Config"
             >
-              <svg>
+              <svg
+                title="Create new Scan Config"
+              >
                 new.svg
               </svg>
             </span>
@@ -605,7 +611,9 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Clone Scan Config"
             >
-              <svg>
+              <svg
+                title="Clone Scan Config"
+              >
                 clone.svg
               </svg>
             </span>
@@ -614,7 +622,9 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Edit Scan Config"
             >
-              <svg>
+              <svg
+                title="Edit Scan Config"
+              >
                 edit.svg
               </svg>
             </span>
@@ -623,7 +633,9 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Move Scan Config to trashcan"
             >
-              <svg>
+              <svg
+                title="Move Scan Config to trashcan"
+              >
                 trashcan.svg
               </svg>
             </span>
@@ -632,7 +644,9 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Export Scan Config as XML"
             >
-              <svg>
+              <svg
+                title="Export Scan Config as XML"
+              >
                 export.svg
               </svg>
             </span>
@@ -641,7 +655,9 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Import Scan Config"
             >
-              <svg>
+              <svg
+                title="Import Scan Config"
+              >
                 upload.svg
               </svg>
             </span>
@@ -1051,7 +1067,9 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
             data-testid="svg-icon"
             title="Help: ScanConfigs"
           >
-            <svg>
+            <svg
+              title="Help: ScanConfigs"
+            >
               help.svg
             </svg>
           </span>
@@ -1065,7 +1083,9 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
             data-testid="svg-icon"
             title="ScanConfig List"
           >
-            <svg>
+            <svg
+              title="ScanConfig List"
+            >
               list.svg
             </svg>
           </span>
@@ -1084,7 +1104,9 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Create new Scan Config"
         >
-          <svg>
+          <svg
+            title="Create new Scan Config"
+          >
             new.svg
           </svg>
         </span>
@@ -1093,7 +1115,9 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Clone Scan Config"
         >
-          <svg>
+          <svg
+            title="Clone Scan Config"
+          >
             clone.svg
           </svg>
         </span>
@@ -1102,7 +1126,9 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Edit Scan Config"
         >
-          <svg>
+          <svg
+            title="Edit Scan Config"
+          >
             edit.svg
           </svg>
         </span>
@@ -1111,7 +1137,9 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Move Scan Config to trashcan"
         >
-          <svg>
+          <svg
+            title="Move Scan Config to trashcan"
+          >
             trashcan.svg
           </svg>
         </span>
@@ -1120,7 +1148,9 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Export Scan Config as XML"
         >
-          <svg>
+          <svg
+            title="Export Scan Config as XML"
+          >
             export.svg
           </svg>
         </span>
@@ -1129,7 +1159,9 @@ exports[`Scan Config ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Import Scan Config"
         >
-          <svg>
+          <svg
+            title="Import Scan Config"
+          >
             upload.svg
           </svg>
         </span>

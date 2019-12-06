@@ -42,7 +42,6 @@ describe('Entity CloneIcon component tests', () => {
       <CloneIcon entity={entity} onClick={clickHandler} />,
     );
 
-    expect(element).toMatchSnapshot();
     expect(entity.userCapabilities.mayAccess('task')).toEqual(true);
 
     fireEvent.click(element);
@@ -66,7 +65,6 @@ describe('Entity CloneIcon component tests', () => {
       <CloneIcon entity={entity} onClick={clickHandler} />,
     );
 
-    expect(element).toMatchSnapshot();
     expect(entity.userCapabilities.mayAccess('task')).toEqual(true);
 
     fireEvent.click(element);
@@ -89,7 +87,6 @@ describe('Entity CloneIcon component tests', () => {
       <CloneIcon entity={entity} onClick={clickHandler} />,
     );
 
-    expect(element).toMatchSnapshot();
     expect(entity.userCapabilities.mayAccess('task')).toEqual(false);
 
     fireEvent.click(element);

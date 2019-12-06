@@ -584,7 +584,9 @@ exports[`Policies table tests should render 1`] = `
           data-testid="svg-icon"
           title="Unfold all details"
         >
-          <svg>
+          <svg
+            title="Unfold all details"
+          >
             fold.svg
           </svg>
         </span>
@@ -603,7 +605,9 @@ exports[`Policies table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="First"
               >
-                <svg>
+                <svg
+                  title="First"
+                >
                   first.svg
                 </svg>
               </span>
@@ -612,7 +616,9 @@ exports[`Policies table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Previous"
               >
-                <svg>
+                <svg
+                  title="Previous"
+                >
                   previous.svg
                 </svg>
               </span>
@@ -635,7 +641,9 @@ exports[`Policies table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Next"
               >
-                <svg>
+                <svg
+                  title="Next"
+                >
                   next.svg
                 </svg>
               </span>
@@ -644,7 +652,9 @@ exports[`Policies table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Last"
               >
-                <svg>
+                <svg
+                  title="Last"
+                >
                   last.svg
                 </svg>
               </span>
@@ -728,7 +738,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Move Policy to trashcan"
                     >
-                      <svg>
+                      <svg
+                        title="Move Policy to trashcan"
+                      >
                         trashcan.svg
                       </svg>
                     </span>
@@ -737,7 +749,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Edit Policy"
                     >
-                      <svg>
+                      <svg
+                        title="Edit Policy"
+                      >
                         edit.svg
                       </svg>
                     </span>
@@ -746,7 +760,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Clone Policy"
                     >
-                      <svg>
+                      <svg
+                        title="Clone Policy"
+                      >
                         clone.svg
                       </svg>
                     </span>
@@ -755,7 +771,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Create Audit from Policy"
                     >
-                      <svg>
+                      <svg
+                        title="Create Audit from Policy"
+                      >
                         new.svg
                       </svg>
                     </span>
@@ -764,7 +782,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Export Policy"
                     >
-                      <svg>
+                      <svg
+                        title="Export Policy"
+                      >
                         export.svg
                       </svg>
                     </span>
@@ -819,7 +839,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Move Policy to trashcan"
                     >
-                      <svg>
+                      <svg
+                        title="Move Policy to trashcan"
+                      >
                         trashcan.svg
                       </svg>
                     </span>
@@ -828,7 +850,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Edit Policy"
                     >
-                      <svg>
+                      <svg
+                        title="Edit Policy"
+                      >
                         edit.svg
                       </svg>
                     </span>
@@ -837,7 +861,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Clone Policy"
                     >
-                      <svg>
+                      <svg
+                        title="Clone Policy"
+                      >
                         clone.svg
                       </svg>
                     </span>
@@ -846,7 +872,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Create Audit from Policy"
                     >
-                      <svg>
+                      <svg
+                        title="Create Audit from Policy"
+                      >
                         new.svg
                       </svg>
                     </span>
@@ -855,7 +883,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Export Policy"
                     >
-                      <svg>
+                      <svg
+                        title="Export Policy"
+                      >
                         export.svg
                       </svg>
                     </span>
@@ -910,7 +940,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Move Policy to trashcan"
                     >
-                      <svg>
+                      <svg
+                        title="Move Policy to trashcan"
+                      >
                         trashcan.svg
                       </svg>
                     </span>
@@ -919,7 +951,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Edit Policy"
                     >
-                      <svg>
+                      <svg
+                        title="Edit Policy"
+                      >
                         edit.svg
                       </svg>
                     </span>
@@ -928,7 +962,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Clone Policy"
                     >
-                      <svg>
+                      <svg
+                        title="Clone Policy"
+                      >
                         clone.svg
                       </svg>
                     </span>
@@ -937,7 +973,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Create Audit from Policy"
                     >
-                      <svg>
+                      <svg
+                        title="Create Audit from Policy"
+                      >
                         new.svg
                       </svg>
                     </span>
@@ -946,7 +984,9 @@ exports[`Policies table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Export Policy"
                     >
-                      <svg>
+                      <svg
+                        title="Export Policy"
+                      >
                         export.svg
                       </svg>
                     </span>
@@ -1058,7 +1098,9 @@ exports[`Policies table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="First"
               >
-                <svg>
+                <svg
+                  title="First"
+                >
                   first.svg
                 </svg>
               </span>
@@ -1067,7 +1109,9 @@ exports[`Policies table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Previous"
               >
-                <svg>
+                <svg
+                  title="Previous"
+                >
                   previous.svg
                 </svg>
               </span>
@@ -1090,7 +1134,9 @@ exports[`Policies table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Next"
               >
-                <svg>
+                <svg
+                  title="Next"
+                >
                   next.svg
                 </svg>
               </span>
@@ -1099,7 +1145,9 @@ exports[`Policies table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Last"
               >
-                <svg>
+                <svg
+                  title="Last"
+                >
                   last.svg
                 </svg>
               </span>
