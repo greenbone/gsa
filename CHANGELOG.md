@@ -137,6 +137,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.2] - unreleased
 
 ### Added
+- Added parseText to model.js to parse single space summary [#1829](https://github.com/greenbone/gsa/pull/1829)
 - Added new setting to enable and disable debug logging for the redux store [#1684](https://github.com/greenbone/gsa/pull/1684)
 - Added text notification when old password is entered but new password isn't [#1636](https://github.com/greenbone/gsa/pull/1636)
 - Added a loading timer for empty trash button [#1604](https://github.com/greenbone/gsa/pull/1604)
@@ -151,6 +152,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Limit the length of result description with a div [#1834](https://github.com/greenbone/gsa/pull/1834)
+- New permission dialog: radio button for groups disabled if no groups available [#1836](https://github.com/greenbone/gsa/pull/1836)
+- Changed new override dialog defaults [#1833](https://github.com/greenbone/gsa/pull/1833)
+- Refactored cvsscalculatorpage to function and parse vector from url [#1824](https://github.com/greenbone/gsa/pull/1824)
 - New override and note dialog: Make host/port/task fields editable even when fixed, and display oid when no name is defined [#1814](https://github.com/greenbone/gsa/pull/1814) [#1817](https://github.com/greenbone/gsa/pull/1817)
 - Use consistent setting naming [#1774](https://github.com/greenbone/gsa/pull/1774)
 - Consider visibility status of page for calculating the reload interval [#1761](https://github.com/greenbone/gsa/pull/1761)
@@ -179,6 +184,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Use correct link for ManualIcon [#1835](https://github.com/greenbone/gsa/pull/1835)
 - Fixed getting InvalidStateError with IE 11 on XHR creation [#1769](https://github.com/greenbone/gsa/pull/1769)
 - Fixed filtering general command permissions in roles [#1734](https://github.com/greenbone/gsa/pull/1734)
 - Fix getting details in delta report [#1732](https://github.com/greenbone/gsa/pull/1732)

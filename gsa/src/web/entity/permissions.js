@@ -59,7 +59,7 @@ const SectionElements = withCapabilities(
           />
         )}
         <ManualIcon
-          page="gui_administration"
+          page="web-interface-access"
           anchor="permissions"
           title={_('Help: Permissions')}
         />
