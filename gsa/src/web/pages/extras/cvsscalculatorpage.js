@@ -39,7 +39,6 @@ import CvssIcon from 'web/components/icon/cvssicon';
 import ManualIcon from 'web/components/icon/manualicon';
 
 import Layout from 'web/components/layout/layout';
-import PageTitle from 'web/components/layout/pagetitle';
 
 import Section from 'web/components/section/section';
 
