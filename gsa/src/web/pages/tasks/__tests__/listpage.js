@@ -122,64 +122,6 @@ const renewSession = jest.fn().mockResolvedValue({
 });
 
 describe('TaskPage tests', () => {
-  test('should render full TaskPage', async () => {
-    const gmp = {
-      tasks: {
-        get: getTasks,
-        getSeverityAggregates: getAggregates,
-        getHighResultsAggregates: getAggregates,
-        getStatusAggregates: getAggregates,
-      },
-      filters: {
-        get: getFilters,
-      },
-      reportformats: {
-        get: getReportFormats,
-      },
-      dashboard: {
-        getSetting: getDashboardSetting,
-      },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting: getUserSetting},
-    };
-
-    const {render, store} = rendererWith({
-      gmp,
-      capabilities: true,
-      store: true,
-      router: true,
-    });
-
-    store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    const defaultSettingfilter = Filter.fromString('foo=bar');
-    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
-    store.dispatch(
-      defaultFilterLoadingActions.success('task', defaultSettingfilter),
-    );
-
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesActions.success([task], filter, loadedFilter, counts),
-    );
-
-    const {baseElement} = render(<TaskPage />);
-
-    await waitForElement(() => baseElement.querySelectorAll('table'));
-
-    expect(baseElement).toMatchSnapshot();
-  });
-
   test('should call commands for bulk actions', async () => {
     const deleteByFilter = jest.fn().mockResolvedValue({
       foo: 'bar',

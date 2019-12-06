@@ -52,11 +52,13 @@ class Grid extends React.Component {
 
     this.state = {
       isDragging: false,
+      isInteracting: false,
     };
 
     this.handleDragEnd = this.handleDragEnd.bind(this);
     this.handleDragStart = this.handleDragStart.bind(this);
     this.handleRowResize = this.handleRowResize.bind(this);
+    this.handleOnBeforeCapture = this.handleOnBeforeCapture.bind(this);
   }
 
   notifyChange(items) {
@@ -75,6 +77,12 @@ class Grid extends React.Component {
     }
   }
 
+  handleOnBeforeCapture() {
+    this.setState({
+      isInteracting: true,
+    });
+  }
+
   handleDragStart(drag) {
     const {droppableId: rowId} = drag.source;
 
@@ -88,6 +96,7 @@ class Grid extends React.Component {
     this.setState({
       isDragging: false,
       dragSourceRowId: undefined,
+      isInteracting: false,
     });
 
     // dropped outside the list or at same position
@@ -145,7 +154,7 @@ class Grid extends React.Component {
   }
 
   render() {
-    const {isDragging, dragSourceRowId} = this.state;
+    const {isInteracting, isDragging, dragSourceRowId} = this.state;
     const {maxItemsPerRow, maxRows, items = [], children} = this.props;
     const showEmptyRow = !isDefined(maxRows) || items.length < maxRows;
 
@@ -161,6 +170,7 @@ class Grid extends React.Component {
       <DragDropContext
         onDragEnd={this.handleDragEnd}
         onDragStart={this.handleDragStart}
+        onBeforeCapture={this.handleOnBeforeCapture}
       >
         <AutoSize>
           {({width: fullWidth}) => (
@@ -211,7 +221,7 @@ class Grid extends React.Component {
                 );
               })}
               {showEmptyRow && (
-                <EmptyRow active={isDragging} height={emptyRowHeight} />
+                <EmptyRow active={isInteracting} height={emptyRowHeight} />
               )}
             </Layout>
           )}
