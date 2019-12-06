@@ -213,6 +213,10 @@ const task5 = Task.fromElement({
   preferences: preferences,
 });
 
+const task5Id = {
+  id: '12345',
+};
+
 const task6 = Task.fromElement({
   _id: '12345',
   owner: {name: 'admin'},
@@ -604,7 +608,7 @@ describe('Task Detailspage tests', () => {
       expect(icons[3]).toHaveAttribute('title', 'Clone Task');
 
       fireEvent.click(icons[5]);
-      expect(deleteFunc).toHaveBeenCalledWith(task5);
+      expect(deleteFunc).toHaveBeenCalledWith(task5Id);
       expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
 
       fireEvent.click(icons[6]);

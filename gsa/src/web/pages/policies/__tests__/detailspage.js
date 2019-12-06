@@ -138,6 +138,10 @@ const policy = Policy.fromElement({
   },
 });
 
+const policyId = {
+  id: '12345',
+};
+
 const policy2 = Policy.fromElement({
   _id: '12345',
   name: 'foo',
@@ -568,7 +572,7 @@ describe('Policy Detailspage tests', () => {
       expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
 
       fireEvent.click(icons[4]);
-      expect(deleteFunc).toHaveBeenCalledWith(policy);
+      expect(deleteFunc).toHaveBeenCalledWith(policyId);
       expect(icons[4]).toHaveAttribute('title', 'Move Policy to trashcan');
 
       fireEvent.click(icons[5]);

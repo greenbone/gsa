@@ -200,6 +200,10 @@ const audit5 = Audit.fromElement({
   preferences: preferences,
 });
 
+const audit5Id = {
+  id: '12345',
+};
+
 const audit6 = Audit.fromElement({
   _id: '12345',
   owner: {name: 'admin'},
@@ -493,9 +497,10 @@ describe('Audit Detailspage tests', () => {
       fireEvent.click(icons[2]);
       expect(clone).toHaveBeenCalledWith(audit5);
       expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
+      console.log(audit5Id);
 
       fireEvent.click(icons[4]);
-      expect(deleteFunc).toHaveBeenCalledWith(audit5);
+      expect(deleteFunc).toHaveBeenCalledWith(audit5Id);
       expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
 
       fireEvent.click(icons[5]);

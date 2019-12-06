@@ -137,6 +137,10 @@ const config = ScanConfig.fromElement({
   },
 });
 
+const configId = {
+  id: '12345',
+};
+
 const config2 = ScanConfig.fromElement({
   _id: '12345',
   name: 'foo',
@@ -620,7 +624,7 @@ describe('Scan Config Detailspage tests', () => {
       expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
 
       fireEvent.click(icons[5]);
-      expect(deleteFunc).toHaveBeenCalledWith(config);
+      expect(deleteFunc).toHaveBeenCalledWith(configId);
       expect(icons[5]).toHaveAttribute('title', 'Move Scan Config to trashcan');
 
       fireEvent.click(icons[6]);
