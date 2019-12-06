@@ -18,7 +18,9 @@ exports[`Task Trend tests should render 1`] = `
   data-testid="svg-icon"
   title="Severity increased"
 >
-  <svg>
+  <svg
+    title="Severity increased"
+  >
     trend_up.svg
   </svg>
 </span>

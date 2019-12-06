@@ -684,7 +684,9 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                 data-testid="svg-icon"
                 title="Help: Audits"
               >
-                <svg>
+                <svg
+                  title="Help: Audits"
+                >
                   help.svg
                 </svg>
               </span>
@@ -698,7 +700,9 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                 data-testid="svg-icon"
                 title="Audit List"
               >
-                <svg>
+                <svg
+                  title="Audit List"
+                >
                   list.svg
                 </svg>
               </span>
@@ -708,7 +712,9 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="This is an Alterable Audit. Reports may not relate to current Policy or Target!"
             >
-              <svg>
+              <svg
+                title="This is an Alterable Audit. Reports may not relate to current Policy or Target!"
+              >
                 alterable.svg
               </svg>
             </span>
@@ -726,7 +732,9 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Clone Audit"
             >
-              <svg>
+              <svg
+                title="Clone Audit"
+              >
                 clone.svg
               </svg>
             </span>
@@ -735,7 +743,9 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Edit Audit"
             >
-              <svg>
+              <svg
+                title="Edit Audit"
+              >
                 edit.svg
               </svg>
             </span>
@@ -744,7 +754,9 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Move Audit to trashcan"
             >
-              <svg>
+              <svg
+                title="Move Audit to trashcan"
+              >
                 trashcan.svg
               </svg>
             </span>
@@ -753,7 +765,9 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Export Audit as XML"
             >
-              <svg>
+              <svg
+                title="Export Audit as XML"
+              >
                 export.svg
               </svg>
             </span>
@@ -771,7 +785,9 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Start"
             >
-              <svg>
+              <svg
+                title="Start"
+              >
                 start.svg
               </svg>
             </span>
@@ -781,7 +797,9 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Audit is not stopped"
             >
-              <svg>
+              <svg
+                title="Audit is not stopped"
+              >
                 resume.svg
               </svg>
             </span>
@@ -1516,7 +1534,9 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
             data-testid="svg-icon"
             title="Help: Audits"
           >
-            <svg>
+            <svg
+              title="Help: Audits"
+            >
               help.svg
             </svg>
           </span>
@@ -1530,7 +1550,9 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
             data-testid="svg-icon"
             title="Audit List"
           >
-            <svg>
+            <svg
+              title="Audit List"
+            >
               list.svg
             </svg>
           </span>
@@ -1540,7 +1562,9 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="This is an Alterable Audit. Reports may not relate to current Policy or Target!"
         >
-          <svg>
+          <svg
+            title="This is an Alterable Audit. Reports may not relate to current Policy or Target!"
+          >
             alterable.svg
           </svg>
         </span>
@@ -1558,7 +1582,9 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Clone Audit"
         >
-          <svg>
+          <svg
+            title="Clone Audit"
+          >
             clone.svg
           </svg>
         </span>
@@ -1567,7 +1593,9 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Edit Audit"
         >
-          <svg>
+          <svg
+            title="Edit Audit"
+          >
             edit.svg
           </svg>
         </span>
@@ -1576,7 +1604,9 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Move Audit to trashcan"
         >
-          <svg>
+          <svg
+            title="Move Audit to trashcan"
+          >
             trashcan.svg
           </svg>
         </span>
@@ -1585,7 +1615,9 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Export Audit as XML"
         >
-          <svg>
+          <svg
+            title="Export Audit as XML"
+          >
             export.svg
           </svg>
         </span>
@@ -1603,7 +1635,9 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Start"
         >
-          <svg>
+          <svg
+            title="Start"
+          >
             start.svg
           </svg>
         </span>
@@ -1613,7 +1647,9 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Audit is not stopped"
         >
-          <svg>
+          <svg
+            title="Audit is not stopped"
+          >
             resume.svg
           </svg>
         </span>

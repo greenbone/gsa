@@ -169,9 +169,14 @@ const OverrideDialog = ({
       {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
-            {fixed && (
+            {fixed && isDefined(oid) && (
               <FormGroup title={_('NVT')} flex="column">
                 <span>{renderNvtName(oid, nvt_name)}</span>
+              </FormGroup>
+            )}
+            {fixed && !isDefined(oid) && (
+              <FormGroup title={_('NVT')} flex="column">
+                <span>{renderNvtName(state.oid, nvt_name)}</span>
               </FormGroup>
             )}
             {is_edit && !fixed && (
@@ -270,19 +275,16 @@ const OverrideDialog = ({
               <Layout>
                 <Radio
                   name="hosts"
-                  title={fixed ? state.hosts_manual : ''}
                   checked={state.hosts === MANUAL}
                   value={MANUAL}
                   onChange={onValueChange}
                 />
-                {!fixed && (
-                  <TextField
-                    name="hosts_manual"
-                    value={state.hosts_manual}
-                    disabled={state.hosts !== MANUAL}
-                    onChange={onValueChange}
-                  />
-                )}
+                <TextField
+                  name="hosts_manual"
+                  value={state.hosts_manual}
+                  disabled={state.hosts !== MANUAL}
+                  onChange={onValueChange}
+                />
               </Layout>
             </FormGroup>
 
@@ -297,19 +299,16 @@ const OverrideDialog = ({
               <Layout>
                 <Radio
                   name="port"
-                  title={fixed ? state.port_manual : ''}
                   checked={state.port === MANUAL}
                   value={MANUAL}
                   onChange={onValueChange}
                 />
-                {!fixed && (
-                  <TextField
-                    name="port_manual"
-                    disabled={state.port !== MANUAL}
-                    value={state.port_manual}
-                    onChange={onValueChange}
-                  />
-                )}
+                <TextField
+                  name="port_manual"
+                  disabled={state.port !== MANUAL}
+                  value={state.port_manual}
+                  onChange={onValueChange}
+                />
               </Layout>
             </FormGroup>
 
@@ -412,20 +411,18 @@ const OverrideDialog = ({
               <Layout>
                 <Radio
                   name="task_id"
-                  title={fixed ? state.task_name : ''}
                   checked={state.task_id === TASK_SELECTED}
                   value={TASK_SELECTED}
                   onChange={onValueChange}
                 />
-                {!fixed && (
-                  <Select
-                    name="task_uuid"
-                    disabled={state.task_id !== TASK_SELECTED}
-                    items={renderSelectItems(tasks)}
-                    value={state.task_uuid}
-                    onChange={onValueChange}
-                  />
-                )}
+
+                <Select
+                  name="task_uuid"
+                  disabled={state.task_id !== TASK_SELECTED}
+                  items={renderSelectItems(tasks)}
+                  value={state.task_uuid}
+                  onChange={onValueChange}
+                />
               </Layout>
             </FormGroup>
 

@@ -1018,7 +1018,9 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                                 data-testid="svg-icon"
                                 title="Select and edit NVT details"
                               >
-                                <svg>
+                                <svg
+                                  title="Select and edit NVT details"
+                                >
                                   edit.svg
                                 </svg>
                               </span>
@@ -1111,7 +1113,9 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                                 data-testid="svg-icon"
                                 title="Select and edit NVT details"
                               >
-                                <svg>
+                                <svg
+                                  title="Select and edit NVT details"
+                                >
                                   edit.svg
                                 </svg>
                               </span>

@@ -716,7 +716,9 @@ exports[`Audits table tests should render 1`] = `
           data-testid="svg-icon"
           title="Unfold all details"
         >
-          <svg>
+          <svg
+            title="Unfold all details"
+          >
             fold.svg
           </svg>
         </span>
@@ -735,7 +737,9 @@ exports[`Audits table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="First"
               >
-                <svg>
+                <svg
+                  title="First"
+                >
                   first.svg
                 </svg>
               </span>
@@ -744,7 +748,9 @@ exports[`Audits table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Previous"
               >
-                <svg>
+                <svg
+                  title="Previous"
+                >
                   previous.svg
                 </svg>
               </span>
@@ -767,7 +773,9 @@ exports[`Audits table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Next"
               >
-                <svg>
+                <svg
+                  title="Next"
+                >
                   next.svg
                 </svg>
               </span>
@@ -776,7 +784,9 @@ exports[`Audits table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Last"
               >
-                <svg>
+                <svg
+                  title="Last"
+                >
                   last.svg
                 </svg>
               </span>
@@ -956,7 +966,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Start"
                     >
-                      <svg>
+                      <svg
+                        title="Start"
+                      >
                         start.svg
                       </svg>
                     </span>
@@ -966,7 +978,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Audit is not stopped"
                     >
-                      <svg>
+                      <svg
+                        title="Audit is not stopped"
+                      >
                         resume.svg
                       </svg>
                     </span>
@@ -975,7 +989,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Move Audit to trashcan"
                     >
-                      <svg>
+                      <svg
+                        title="Move Audit to trashcan"
+                      >
                         trashcan.svg
                       </svg>
                     </span>
@@ -984,7 +1000,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Edit Audit"
                     >
-                      <svg>
+                      <svg
+                        title="Edit Audit"
+                      >
                         edit.svg
                       </svg>
                     </span>
@@ -993,7 +1011,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Clone Audit"
                     >
-                      <svg>
+                      <svg
+                        title="Clone Audit"
+                      >
                         clone.svg
                       </svg>
                     </span>
@@ -1002,7 +1022,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Export Audit"
                     >
-                      <svg>
+                      <svg
+                        title="Export Audit"
+                      >
                         export.svg
                       </svg>
                     </span>
@@ -1011,7 +1033,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Report download not available"
                     >
-                      <svg>
+                      <svg
+                        title="Report download not available"
+                      >
                         download.svg
                       </svg>
                     </span>
@@ -1047,7 +1071,9 @@ exports[`Audits table tests should render 1`] = `
                         data-testid="svg-icon"
                         title="Audit owned by user"
                       >
-                        <svg>
+                        <svg
+                          title="Audit owned by user"
+                        >
                           view_other.svg
                         </svg>
                       </span>
@@ -1118,7 +1144,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Start"
                     >
-                      <svg>
+                      <svg
+                        title="Start"
+                      >
                         start.svg
                       </svg>
                     </span>
@@ -1128,7 +1156,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Audit is not stopped"
                     >
-                      <svg>
+                      <svg
+                        title="Audit is not stopped"
+                      >
                         resume.svg
                       </svg>
                     </span>
@@ -1137,7 +1167,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Move Audit to trashcan"
                     >
-                      <svg>
+                      <svg
+                        title="Move Audit to trashcan"
+                      >
                         trashcan.svg
                       </svg>
                     </span>
@@ -1146,7 +1178,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Edit Audit"
                     >
-                      <svg>
+                      <svg
+                        title="Edit Audit"
+                      >
                         edit.svg
                       </svg>
                     </span>
@@ -1155,7 +1189,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Clone Audit"
                     >
-                      <svg>
+                      <svg
+                        title="Clone Audit"
+                      >
                         clone.svg
                       </svg>
                     </span>
@@ -1164,7 +1200,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Export Audit"
                     >
-                      <svg>
+                      <svg
+                        title="Export Audit"
+                      >
                         export.svg
                       </svg>
                     </span>
@@ -1173,7 +1211,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Report download not available"
                     >
-                      <svg>
+                      <svg
+                        title="Report download not available"
+                      >
                         download.svg
                       </svg>
                     </span>
@@ -1209,7 +1249,9 @@ exports[`Audits table tests should render 1`] = `
                         data-testid="svg-icon"
                         title="Audit owned by user"
                       >
-                        <svg>
+                        <svg
+                          title="Audit owned by user"
+                        >
                           view_other.svg
                         </svg>
                       </span>
@@ -1308,7 +1350,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Stop"
                     >
-                      <svg>
+                      <svg
+                        title="Stop"
+                      >
                         stop.svg
                       </svg>
                     </span>
@@ -1318,7 +1362,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Audit is not stopped"
                     >
-                      <svg>
+                      <svg
+                        title="Audit is not stopped"
+                      >
                         resume.svg
                       </svg>
                     </span>
@@ -1327,7 +1373,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Move Audit to trashcan"
                     >
-                      <svg>
+                      <svg
+                        title="Move Audit to trashcan"
+                      >
                         trashcan.svg
                       </svg>
                     </span>
@@ -1336,7 +1384,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Edit Audit"
                     >
-                      <svg>
+                      <svg
+                        title="Edit Audit"
+                      >
                         edit.svg
                       </svg>
                     </span>
@@ -1345,7 +1395,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Clone Audit"
                     >
-                      <svg>
+                      <svg
+                        title="Clone Audit"
+                      >
                         clone.svg
                       </svg>
                     </span>
@@ -1354,7 +1406,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Export Audit"
                     >
-                      <svg>
+                      <svg
+                        title="Export Audit"
+                      >
                         export.svg
                       </svg>
                     </span>
@@ -1363,7 +1417,9 @@ exports[`Audits table tests should render 1`] = `
                       data-testid="svg-icon"
                       title="Report download not available"
                     >
-                      <svg>
+                      <svg
+                        title="Report download not available"
+                      >
                         download.svg
                       </svg>
                     </span>
@@ -1475,7 +1531,9 @@ exports[`Audits table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="First"
               >
-                <svg>
+                <svg
+                  title="First"
+                >
                   first.svg
                 </svg>
               </span>
@@ -1484,7 +1542,9 @@ exports[`Audits table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Previous"
               >
-                <svg>
+                <svg
+                  title="Previous"
+                >
                   previous.svg
                 </svg>
               </span>
@@ -1507,7 +1567,9 @@ exports[`Audits table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Next"
               >
-                <svg>
+                <svg
+                  title="Next"
+                >
                   next.svg
                 </svg>
               </span>
@@ -1516,7 +1578,9 @@ exports[`Audits table tests should render 1`] = `
                 data-testid="svg-icon"
                 title="Last"
               >
-                <svg>
+                <svg
+                  title="Last"
+                >
                   last.svg
                 </svg>
               </span>

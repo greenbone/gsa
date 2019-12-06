@@ -30,7 +30,7 @@ describe('Entity ObserverIcon component tests', () => {
 
     const {element} = render(<ObserverIcon entity={entity} userName={'bar'} />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should not render if the owner is the current user', () => {

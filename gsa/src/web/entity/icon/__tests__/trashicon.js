@@ -42,7 +42,6 @@ describe('Entity TrashIcon component tests', () => {
       <TrashIcon entity={entity} onClick={clickHandler} />,
     );
 
-    expect(element).toMatchSnapshot();
     expect(caps.mayDelete('task')).toEqual(true);
     expect(entity.userCapabilities.mayDelete('task')).toEqual(true);
 
@@ -67,7 +66,6 @@ describe('Entity TrashIcon component tests', () => {
       <TrashIcon entity={entity} onClick={clickHandler} />,
     );
 
-    expect(element).toMatchSnapshot();
     expect(caps.mayDelete('task')).toEqual(false);
     expect(entity.userCapabilities.mayDelete('task')).toEqual(true);
 
@@ -91,7 +89,6 @@ describe('Entity TrashIcon component tests', () => {
       <TrashIcon entity={entity} onClick={clickHandler} />,
     );
 
-    expect(element).toMatchSnapshot();
     expect(caps.mayDelete('task')).toEqual(true);
     expect(entity.userCapabilities.mayDelete('task')).toEqual(false);
 

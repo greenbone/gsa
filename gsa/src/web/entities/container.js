@@ -20,6 +20,8 @@ import 'core-js/features/set';
 
 import React from 'react';
 
+import {withRouter} from 'react-router-dom';
+
 import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
@@ -618,10 +620,8 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 });
 
 export default compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps),
 )(EntitiesContainer);
 
 // vim: set ts=2 sw=2 tw=80:

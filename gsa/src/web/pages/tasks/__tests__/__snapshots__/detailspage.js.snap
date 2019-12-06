@@ -785,7 +785,9 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
                 data-testid="svg-icon"
                 title="Help: Tasks"
               >
-                <svg>
+                <svg
+                  title="Help: Tasks"
+                >
                   help.svg
                 </svg>
               </span>
@@ -799,7 +801,9 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
                 data-testid="svg-icon"
                 title="Task List"
               >
-                <svg>
+                <svg
+                  title="Task List"
+                >
                   list.svg
                 </svg>
               </span>
@@ -809,7 +813,9 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="This is an Alterable Task. Reports may not relate to current Scan Config or Target!"
             >
-              <svg>
+              <svg
+                title="This is an Alterable Task. Reports may not relate to current Scan Config or Target!"
+              >
                 alterable.svg
               </svg>
             </span>
@@ -865,7 +871,9 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Clone Task"
             >
-              <svg>
+              <svg
+                title="Clone Task"
+              >
                 clone.svg
               </svg>
             </span>
@@ -874,7 +882,9 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Edit Task"
             >
-              <svg>
+              <svg
+                title="Edit Task"
+              >
                 edit.svg
               </svg>
             </span>
@@ -883,7 +893,9 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Move Task to trashcan"
             >
-              <svg>
+              <svg
+                title="Move Task to trashcan"
+              >
                 trashcan.svg
               </svg>
             </span>
@@ -892,7 +904,9 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Export Task as XML"
             >
-              <svg>
+              <svg
+                title="Export Task as XML"
+              >
                 export.svg
               </svg>
             </span>
@@ -910,7 +924,9 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Start"
             >
-              <svg>
+              <svg
+                title="Start"
+              >
                 start.svg
               </svg>
             </span>
@@ -920,7 +936,9 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
               data-testid="svg-icon"
               title="Task is not stopped"
             >
-              <svg>
+              <svg
+                title="Task is not stopped"
+              >
                 resume.svg
               </svg>
             </span>
@@ -1865,7 +1883,9 @@ exports[`Task ToolBarIcons tests should render 1`] = `
             data-testid="svg-icon"
             title="Help: Tasks"
           >
-            <svg>
+            <svg
+              title="Help: Tasks"
+            >
               help.svg
             </svg>
           </span>
@@ -1879,7 +1899,9 @@ exports[`Task ToolBarIcons tests should render 1`] = `
             data-testid="svg-icon"
             title="Task List"
           >
-            <svg>
+            <svg
+              title="Task List"
+            >
               list.svg
             </svg>
           </span>
@@ -1889,7 +1911,9 @@ exports[`Task ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="This is an Alterable Task. Reports may not relate to current Scan Config or Target!"
         >
-          <svg>
+          <svg
+            title="This is an Alterable Task. Reports may not relate to current Scan Config or Target!"
+          >
             alterable.svg
           </svg>
         </span>
@@ -1945,7 +1969,9 @@ exports[`Task ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Clone Task"
         >
-          <svg>
+          <svg
+            title="Clone Task"
+          >
             clone.svg
           </svg>
         </span>
@@ -1954,7 +1980,9 @@ exports[`Task ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Edit Task"
         >
-          <svg>
+          <svg
+            title="Edit Task"
+          >
             edit.svg
           </svg>
         </span>
@@ -1963,7 +1991,9 @@ exports[`Task ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Move Task to trashcan"
         >
-          <svg>
+          <svg
+            title="Move Task to trashcan"
+          >
             trashcan.svg
           </svg>
         </span>
@@ -1972,7 +2002,9 @@ exports[`Task ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Export Task as XML"
         >
-          <svg>
+          <svg
+            title="Export Task as XML"
+          >
             export.svg
           </svg>
         </span>
@@ -1990,7 +2022,9 @@ exports[`Task ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Start"
         >
-          <svg>
+          <svg
+            title="Start"
+          >
             start.svg
           </svg>
         </span>
@@ -2000,7 +2034,9 @@ exports[`Task ToolBarIcons tests should render 1`] = `
           data-testid="svg-icon"
           title="Task is not stopped"
         >
-          <svg>
+          <svg
+            title="Task is not stopped"
+          >
             resume.svg
           </svg>
         </span>
