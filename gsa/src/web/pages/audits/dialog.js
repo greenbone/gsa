@@ -22,7 +22,6 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
@@ -71,7 +70,7 @@ const AuditDialog = ({
   maxHosts = DEFAULT_MAX_HOSTS,
   name = _('Unnamed'),
   policies = [],
-  policyId,
+  policyId = UNSET_VALUE,
   scheduleId = UNSET_VALUE,
   schedulePeriods = NO_VALUE,
   schedules = [],
@@ -92,7 +91,7 @@ const AuditDialog = ({
 
   const scheduleItems = renderSelectItems(schedules, UNSET_VALUE);
 
-  const policyItems = renderSelectItems(policies);
+  const policyItems = renderSelectItems(policies, UNSET_VALUE);
 
   const alertItems = renderSelectItems(alerts);
 
@@ -132,8 +131,6 @@ const AuditDialog = ({
       values={controlledData}
     >
       {({values: state, onValueChange}) => {
-        const currentPolicyId = selectSaveId(policies, state.policyId);
-
         return (
           <Layout flex="column">
             <FormGroup title={_('Name')}>
@@ -250,7 +247,7 @@ const AuditDialog = ({
                   name="policyId"
                   disabled={!changeAudit || hasAudit || fromPolicy}
                   items={policyItems}
-                  value={currentPolicyId}
+                  value={policyId}
                   onChange={onChange}
                 />
               </FormGroup>
