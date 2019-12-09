@@ -20,7 +20,6 @@
 import {
   makeCompareDate,
   makeCompareIp,
-  makeCompareNumber,
   makeCompareSeverity,
   makeCompareString,
 } from 'web/utils/sort';
@@ -29,13 +28,6 @@ export const closedCvesSortFunctions = {
   cve: makeCompareString('id'),
   host: makeCompareIp(entity => entity.host.ip),
   nvt: makeCompareString(entity => entity.source.description),
-  severity: makeCompareSeverity(),
-};
-
-export const cvesSortFunctions = {
-  cve: makeCompareString(entity => entity.cves.join(' ')),
-  hosts: makeCompareNumber(entity => entity.hosts.count),
-  occurrences: makeCompareNumber(entity => entity.occurrences),
   severity: makeCompareSeverity(),
 };
 

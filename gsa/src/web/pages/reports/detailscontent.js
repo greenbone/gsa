@@ -59,14 +59,12 @@ import EntityTags from 'web/entity/tags';
 import PropTypes from 'web/utils/proptypes';
 
 import ClosedCvesTable from './closedcvestable';
-import CvesTable from './cvestable';
 import ErrorsTable from './errorstable';
 import Summary from './summary';
 import TLSCertificatesTable from './tlscertificatestable';
 
 import {
   closedCvesSortFunctions,
-  cvesSortFunctions,
   errorsSortFunctions,
   tlsCertificatesSortFunctions,
 } from './sort';
@@ -79,6 +77,7 @@ import ToolBarIcons from './details/toolbaricons';
 import PortsTab from './details/portstab';
 import ApplicationsTab from './details/applicationstab';
 import OperatingSystemsTab from './details/operatingsystemstab';
+import CvesTab from './details/cvestab';
 
 const Span = styled.span`
   margin-top: 2px;
@@ -350,43 +349,18 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    <ReportEntitiesContainer
+                    <CvesTab
                       counts={cves.counts}
-                      entities={cves.entities}
+                      cves={cves.entities}
                       filter={filter}
-                      sortFunctions={cvesSortFunctions}
+                      isUpdating={isUpdating}
                       sortField={sorting.cves.sortField}
                       sortReverse={sorting.cves.sortReverse}
                       onInteraction={onInteraction}
-                    >
-                      {({
-                        entities,
-                        entitiesCounts,
-                        sortBy,
-                        sortDir,
-                        onFirstClick,
-                        onLastClick,
-                        onNextClick,
-                        onPreviousClick,
-                      }) => (
-                        <CvesTable
-                          entities={entities}
-                          entitiesCounts={entitiesCounts}
-                          filter={filter}
-                          isUpdating={isUpdating}
-                          sortBy={sortBy}
-                          sortDir={sortDir}
-                          toggleDetailsIcon={false}
-                          onFirstClick={onFirstClick}
-                          onLastClick={onLastClick}
-                          onNextClick={onNextClick}
-                          onPreviousClick={onPreviousClick}
-                          onSortChange={sortField =>
-                            onSortChange('cves', sortField)
-                          }
-                        />
-                      )}
-                    </ReportEntitiesContainer>
+                      onSortChange={sortField =>
+                        onSortChange('cves', sortField)
+                      }
+                    />
                   </TabPanel>
                   <TabPanel>
                     <ReportEntitiesContainer
