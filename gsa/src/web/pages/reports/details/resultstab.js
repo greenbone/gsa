@@ -25,9 +25,10 @@ import ResultsTable from 'web/pages/results/table';
 
 import EmptyReport from './emptyreport';
 import EmptyResultsReport from './emptyresultsreport';
-import ReportEntitiesContainer from './reportentitiescontainer';
 
-import {resultsSortFunctions} from './sort.js';
+import ReportEntitiesContainer from '../reportentitiescontainer';
+
+import {resultsSortFunctions} from '../sort';
 
 const ResultsTab = ({
   counts,

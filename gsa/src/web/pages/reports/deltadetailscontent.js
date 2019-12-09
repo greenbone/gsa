@@ -66,7 +66,6 @@ import HostsTable from './hoststable';
 import OperatingSystemsTable from './operatingsystemstable';
 import PortsTable from './portstable';
 import ReportEntitiesContainer from './reportentitiescontainer';
-import ResultsTab from './resultstab';
 import Summary from './summary';
 import TLSCertificatesTable from './tlscertificatestable';
 
@@ -81,6 +80,7 @@ import {
   tlsCertificatesSortFunctions,
 } from './sort';
 
+import ResultsTab from './details/resultstab';
 import TabTitle from './details/tabtitle';
 import ToolBarIcons from './details/toolbaricons';
 
