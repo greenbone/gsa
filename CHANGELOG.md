@@ -59,7 +59,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed filtering general command permissions in roles [#1734](https://github.com/greenbone/gsa/pull/1734)
 - Fix getting details in delta report [#1732](https://github.com/greenbone/gsa/pull/1732)
 - Include results (details=1) in report download [#1731](https://github.com/greenbone/gsa/pull/1731)
-- Fixed High column in hosts table fo reports [#1730](https://github.com/greenbone/gsa/pull/1730)
+- Fixed High column in hosts table for reports [#1730](https://github.com/greenbone/gsa/pull/1730)
 - Fix setting the user default filter in report results [#1699](https://github.com/greenbone/gsa/pull/1699)
 - Use new model construction in some commands [#1665](https://github.com/greenbone/gsa/pull/1665)
 - Fixed auth_method preselection for user dialog [#1661](https://github.com/greenbone/gsa/pull/1661)
