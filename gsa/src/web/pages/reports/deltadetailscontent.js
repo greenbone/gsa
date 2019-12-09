@@ -81,43 +81,12 @@ import {
   tlsCertificatesSortFunctions,
 } from './sort';
 
+import TabTitle from './details/tabtitle';
 import ToolBarIcons from './details/toolbaricons';
-
-const TabTitleCounts = styled.span`
-  font-size: 0.7em;
-`;
 
 const Span = styled.span`
   margin-top: 2px;
 `;
-
-const TabTitle = ({title, counts}) => (
-  <Layout flex="column" align={['center', 'center']}>
-    <span>{title}</span>
-    <TabTitleCounts>
-      (<i>{_('{{filtered}} of {{all}}', counts)}</i>)
-    </TabTitleCounts>
-  </Layout>
-);
-
-TabTitle.propTypes = {
-  counts: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired,
-};
-
-const TabTitleWithSingleCount = ({title, count}) => (
-  <Layout flex="column" align={['center', 'center']}>
-    <span>{title}</span>
-    <TabTitleCounts>
-      (<i>{count}</i>)
-    </TabTitleCounts>
-  </Layout>
-);
-
-TabTitleWithSingleCount.propTypes = {
-  count: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-};
 
 const PageContent = ({
   activeTab,
