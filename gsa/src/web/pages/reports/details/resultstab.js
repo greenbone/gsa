@@ -23,11 +23,29 @@ import PropTypes from 'web/utils/proptypes';
 
 import ResultsTable from 'web/pages/results/table';
 
+import {
+  makeCompareDate,
+  makeCompareIp,
+  makeCompareNumber,
+  makeCompareSeverity,
+  makeCompareString,
+} from 'web/utils/sort';
+
 import EmptyReport from './emptyreport';
 import EmptyResultsReport from './emptyresultsreport';
 import ReportEntitiesContainer from './reportentitiescontainer';
 
-import {resultsSortFunctions} from '../sort';
+const resultsSortFunctions = {
+  delta: makeCompareString(entity => entity.delta.delta_type),
+  created: makeCompareDate('creationTime'),
+  host: makeCompareIp(entity => entity.host.name),
+  hostname: makeCompareString(entity => entity.host.hostname),
+  location: makeCompareString('port'),
+  qod: makeCompareNumber(entity => entity.qod.value),
+  severity: makeCompareSeverity(),
+  solution_type: makeCompareString(entity => entity.nvt.tags.solution_type),
+  vulnerability: makeCompareString('vulnerability'),
+};
 
 const ResultsTab = ({
   counts,

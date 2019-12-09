@@ -67,18 +67,6 @@ export const portsSortFunctions = {
   severity: makeCompareSeverity(),
 };
 
-export const resultsSortFunctions = {
-  delta: makeCompareString(entity => entity.delta.delta_type),
-  created: makeCompareDate('creationTime'),
-  host: makeCompareIp(entity => entity.host.name),
-  hostname: makeCompareString(entity => entity.host.hostname),
-  location: makeCompareString('port'),
-  qod: makeCompareNumber(entity => entity.qod.value),
-  severity: makeCompareSeverity(),
-  solution_type: makeCompareString(entity => entity.nvt.tags.solution_type),
-  vulnerability: makeCompareString('vulnerability'),
-};
-
 export const tlsCertificatesSortFunctions = {
   dn: makeCompareString('issuer'),
   serial: makeCompareString('serial'),
