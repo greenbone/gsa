@@ -58,7 +58,6 @@ import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
 
-import ApplicationsTable from './applicationstable';
 import ClosedCvesTable from './closedcvestable';
 import CvesTable from './cvestable';
 import ErrorsTable from './errorstable';
@@ -67,7 +66,6 @@ import Summary from './summary';
 import TLSCertificatesTable from './tlscertificatestable';
 
 import {
-  appsSortFunctions,
   closedCvesSortFunctions,
   cvesSortFunctions,
   errorsSortFunctions,
@@ -81,6 +79,7 @@ import ResultsTab from './details/resultstab';
 import TabTitle from './details/tabtitle';
 import ToolBarIcons from './details/toolbaricons';
 import PortsTab from './details/portstab';
+import ApplicationsTab from './details/applicationstab';
 
 const Span = styled.span`
   margin-top: 2px;
@@ -326,43 +325,18 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    <ReportEntitiesContainer
+                    <ApplicationsTab
                       counts={applications.counts}
-                      entities={applications.entities}
+                      applications={applications.entities}
                       filter={filter}
                       sortField={sorting.apps.sortField}
-                      sortFunctions={appsSortFunctions}
                       sortReverse={sorting.apps.sortReverse}
                       onInteraction={onInteraction}
-                    >
-                      {({
-                        entities,
-                        entitiesCounts,
-                        sortBy,
-                        sortDir,
-                        onFirstClick,
-                        onLastClick,
-                        onNextClick,
-                        onPreviousClick,
-                      }) => (
-                        <ApplicationsTable
-                          entities={entities}
-                          entitiesCounts={entitiesCounts}
-                          filter={filter}
-                          isUpdating={isUpdating}
-                          sortBy={sortBy}
-                          sortDir={sortDir}
-                          toggleDetailsIcon={false}
-                          onFirstClick={onFirstClick}
-                          onLastClick={onLastClick}
-                          onNextClick={onNextClick}
-                          onPreviousClick={onPreviousClick}
-                          onSortChange={sortField =>
-                            onSortChange('apps', sortField)
-                          }
-                        />
-                      )}
-                    </ReportEntitiesContainer>
+                      isUpdating={isUpdating}
+                      onSortChange={sortField =>
+                        onSortChange('apps', sortField)
+                      }
+                    />
                   </TabPanel>
                   <TabPanel>
                     <ReportEntitiesContainer

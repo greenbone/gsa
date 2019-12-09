@@ -25,13 +25,6 @@ import {
   makeCompareString,
 } from 'web/utils/sort';
 
-export const appsSortFunctions = {
-  name: makeCompareString('name'),
-  hosts: makeCompareNumber(entity => entity.hosts.count),
-  occurrences: makeCompareNumber(entity => entity.occurrences.total),
-  severity: makeCompareSeverity(),
-};
-
 export const closedCvesSortFunctions = {
   cve: makeCompareString('id'),
   host: makeCompareIp(entity => entity.host.ip),
