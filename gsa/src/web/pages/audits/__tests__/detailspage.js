@@ -497,7 +497,6 @@ describe('Audit Detailspage tests', () => {
       fireEvent.click(icons[2]);
       expect(clone).toHaveBeenCalledWith(audit5);
       expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
-      console.log(audit5Id);
 
       fireEvent.click(icons[4]);
       expect(deleteFunc).toHaveBeenCalledWith(audit5Id);

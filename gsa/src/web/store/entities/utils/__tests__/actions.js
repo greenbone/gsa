@@ -27,6 +27,7 @@ import {
   createLoadEntities,
   createEntityLoadingActions,
   createLoadEntity,
+  createDeleteEntity,
 } from '../actions';
 
 describe('entities loading actions tests', () => {
@@ -659,6 +660,35 @@ describe('entities loading actions tests', () => {
         expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_ERROR_ACTION'}]);
         expect(get).toBeCalledWith({id});
       });
+    });
+  });
+});
+
+describe('createDeleteEntity tests', () => {
+  test('should create a entity delete success action', () => {
+    const id = 'id1';
+    const gmp = {
+      foo: {
+        delete: jest.fn().mockReturnValue(
+          Promise.resolve({
+            data: 'bar',
+          }),
+        ),
+      },
+    };
+    const dispatch = jest.fn();
+    const deleteFunc = createDeleteEntity({entityType: 'foo'});
+
+    expect(deleteFunc).toBeDefined();
+    expect(isFunction(deleteFunc)).toBe(true);
+
+    return deleteFunc(gmp)(id)(dispatch).then(() => {
+      expect(gmp.foo.delete).toHaveBeenCalled();
+      expect(gmp.foo.delete).toHaveBeenCalledWith({id});
+      expect(dispatch).toHaveBeenCalledTimes(1);
+      expect(dispatch.mock.calls[0]).toEqual([
+        {type: 'ENTITY_DELETE_SUCCESS', entityType: 'foo', id: 'id1'},
+      ]);
     });
   });
 });
