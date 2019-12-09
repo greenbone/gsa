@@ -47,13 +47,6 @@ export const errorsSortFunctions = {
   port: makeCompareString('port'),
 };
 
-export const operatingssystemsSortFunctions = {
-  name: makeCompareString('name'),
-  cpe: makeCompareString('id'),
-  hosts: makeCompareNumber(entity => entity.hosts.count),
-  severity: makeCompareNumber('severity', 0),
-};
-
 export const tlsCertificatesSortFunctions = {
   dn: makeCompareString('issuer'),
   serial: makeCompareString('serial'),
