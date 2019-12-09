@@ -34,25 +34,12 @@ import DateTime from 'web/components/date/datetime';
 
 import ErrorMessage from 'web/components/error/errormessage';
 
-import AddToAssetsIcon from 'web/components/icon/addtoassetsicon';
-import DownloadIcon from 'web/components/icon/downloadicon';
-import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
-import ListIcon from 'web/components/icon/listicon';
-import ManualIcon from 'web/components/icon/manualicon';
-import PerformanceIcon from 'web/components/icon/performanceicon';
-import RemoveFromAssetsIcon from 'web/components/icon/removefromassetsicon';
 import ReportIcon from 'web/components/icon/reporticon';
-import ResultIcon from 'web/components/icon/resulticon';
-import TaskIcon from 'web/components/icon/taskicon';
 
-import IconDivider from 'web/components/layout/icondivider';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import Loading from 'web/components/loading/loading';
-
-import DetailsLink from 'web/components/link/detailslink';
-import Link from 'web/components/link/link';
 
 import Powerfilter from 'web/components/powerfilter/powerfilter';
 
@@ -71,7 +58,6 @@ import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
 
-import AlertActions from './alertactions';
 import ApplicationsTable from './applicationstable';
 import ClosedCvesTable from './closedcvestable';
 import CvesTable from './cvestable';
@@ -94,6 +80,8 @@ import {
   portsSortFunctions,
   tlsCertificatesSortFunctions,
 } from './sort';
+
+import ToolBarIcons from './details/toolbaricons';
 
 const TabTitleCounts = styled.span`
   font-size: 0.7em;
@@ -129,122 +117,6 @@ const TabTitleWithSingleCount = ({title, count}) => (
 TabTitleWithSingleCount.propTypes = {
   count: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-};
-
-const ToolBarIcons = ({
-  delta = false,
-  filter,
-  loading,
-  report,
-  task,
-  onAddToAssetsClick,
-  onRemoveFromAssetsClick,
-  onReportDownloadClick,
-  showError,
-  showErrorMessage,
-  showSuccessMessage,
-  onInteraction,
-}) => {
-  return (
-    <Divider margin="15px">
-      <IconDivider>
-        <ManualIcon
-          page="reports"
-          anchor="reading-a-report"
-          title={_('Help: Reading Reports')}
-        />
-        <ListIcon title={_('Reports List')} page="reports" />
-      </IconDivider>
-      {!loading && (
-        <React.Fragment>
-          <IconDivider>
-            <AddToAssetsIcon
-              title={_('Add to Assets with QoD=>70% and Overrides enabled')}
-              onClick={onAddToAssetsClick}
-            />
-            <RemoveFromAssetsIcon
-              title={_('Remove from Assets')}
-              onClick={onRemoveFromAssetsClick}
-            />
-          </IconDivider>
-          <IconDivider>
-            <DetailsLink
-              type="task"
-              textOnly={!isDefined(task)}
-              id={isDefined(task) ? task.id : ''}
-              title={_('Corresponding Task')}
-            >
-              <TaskIcon />
-            </DetailsLink>
-            <Link
-              to="results"
-              filter={'report_id=' + report.id}
-              title={_('Corresponding Results')}
-            >
-              <ResultIcon />
-            </Link>
-            <Link
-              to="vulnerabilities"
-              filter={'report_id=' + report.id}
-              title={_('Corresponding Vulnerabilities')}
-            >
-              <VulnerabilityIcon />
-            </Link>
-            {isDefined(task) && !task.isContainer() && (
-              <Link
-                to="performance"
-                title={_('Corresponding Performance')}
-                query={{
-                  start: isDefined(report.scan_start)
-                    ? report.scan_start.toISOString()
-                    : undefined,
-                  end: isDefined(report.scan_end)
-                    ? report.scan_end.toISOString()
-                    : undefined,
-                  scanner: isDefined(report.slave)
-                    ? report.slave.id
-                    : undefined,
-                }}
-              >
-                <PerformanceIcon />
-              </Link>
-            )}
-          </IconDivider>
-          <IconDivider>
-            <DownloadIcon
-              title={_('Download filtered Report')}
-              onClick={onReportDownloadClick}
-            />
-            {!delta && (
-              <AlertActions
-                filter={filter}
-                report={report}
-                showError={showError}
-                showSuccessMessage={showSuccessMessage}
-                showErrorMessage={showErrorMessage}
-                onInteraction={onInteraction}
-              />
-            )}
-          </IconDivider>
-        </React.Fragment>
-      )}
-    </Divider>
-  );
-};
-
-ToolBarIcons.propTypes = {
-  delta: PropTypes.bool,
-  filter: PropTypes.filter,
-  loading: PropTypes.bool,
-  report: PropTypes.object.isRequired,
-  showError: PropTypes.func.isRequired,
-  showErrorMessage: PropTypes.func.isRequired,
-  showSuccessMessage: PropTypes.func.isRequired,
-  task: PropTypes.model,
-  onAddToAssetsClick: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-  onRemoveFromAssetsClick: PropTypes.func.isRequired,
-  onReportDownloadClick: PropTypes.func.isRequired,
 };
 
 const PageContent = ({
