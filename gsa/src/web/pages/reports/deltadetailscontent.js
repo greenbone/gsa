@@ -177,10 +177,6 @@ const PageContent = ({
     return <ErrorMessage message={entityError.message} />;
   }
 
-  const delta = isDefined(report.isDeltaReport)
-    ? report.isDeltaReport()
-    : undefined;
-
   const isContainer = isDefined(task) && task.isContainer();
   const status = isContainer ? TASK_STATUS.container : scan_run_status;
   const progress = isDefined(task) ? task.progress : 0;
@@ -207,14 +203,13 @@ const PageContent = ({
     </SectionHeader>
   );
 
-  const {full, filtered} = result_count;
-  const resultCounts = {filtered, all: full};
+  const {filtered} = result_count;
 
   return (
     <Layout grow flex="column" align={['start', 'stretch']}>
       <ToolBar>
         <ToolBarIcons
-          delta={delta}
+          delta={true}
           filter={filter}
           loading={isLoading}
           report={report}
@@ -254,78 +249,11 @@ const PageContent = ({
                 onActivateTab={onActivateTab}
               >
                 <Tab>{_('Information')}</Tab>
-                {delta ? (
-                  <Tab>
-                    <TabTitleWithSingleCount
-                      title={_('Results')}
-                      count={filtered}
-                    />
-                  </Tab>
-                ) : (
-                  <Tab>
-                    <TabTitle title={_('Results')} counts={resultCounts} />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle title={_('Hosts')} counts={hosts.counts} />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle title={_('Ports')} counts={ports.counts} />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle
-                      title={_('Applications')}
-                      counts={applications.counts}
-                    />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle
-                      title={_('Operating Systems')}
-                      counts={operatingsystems.counts}
-                    />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle title={_('CVEs')} counts={cves.counts} />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle
-                      title={_('Closed CVEs')}
-                      counts={closed_cves.counts}
-                    />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle
-                      title={_('TLS Certificates')}
-                      counts={tls_certificates.counts}
-                    />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle
-                      title={_('Error Messages')}
-                      counts={errors.counts}
-                    />
-                  </Tab>
-                )}
                 <Tab>
-                  <TabTitleWithSingleCount
-                    title={_('User Tags')}
-                    count={userTagsCount}
-                  />
+                  <TabTitle title={_('Results')} count={filtered} />
+                </Tab>
+                <Tab>
+                  <TabTitle title={_('User Tags')} count={userTagsCount} />
                 </Tab>
               </TabList>
             </TabLayout>
@@ -342,7 +270,7 @@ const PageContent = ({
                   <TabPanel>
                     <ResultsTab
                       counts={isDefined(results.counts) ? results.counts : {}}
-                      delta={delta}
+                      delta={true}
                       filter={filter}
                       hasTarget={!isContainer}
                       isUpdating={isUpdating}
