@@ -58,16 +58,11 @@ import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
 
-import ClosedCvesTable from './closedcvestable';
 import ErrorsTable from './errorstable';
 import Summary from './summary';
 import TLSCertificatesTable from './tlscertificatestable';
 
-import {
-  closedCvesSortFunctions,
-  errorsSortFunctions,
-  tlsCertificatesSortFunctions,
-} from './sort';
+import {errorsSortFunctions, tlsCertificatesSortFunctions} from './sort';
 
 import HostsTab from './details/hoststab';
 import ReportEntitiesContainer from './details/reportentitiescontainer';
@@ -78,6 +73,7 @@ import PortsTab from './details/portstab';
 import ApplicationsTab from './details/applicationstab';
 import OperatingSystemsTab from './details/operatingsystemstab';
 import CvesTab from './details/cvestab';
+import ClosedCvesTab from './details/closedcvestab';
 
 const Span = styled.span`
   margin-top: 2px;
@@ -363,43 +359,18 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    <ReportEntitiesContainer
+                    <ClosedCvesTab
                       counts={closed_cves.counts}
-                      entities={closed_cves.entities}
+                      closedCves={closed_cves.entities}
                       filter={filter}
-                      sortFunctions={closedCvesSortFunctions}
+                      isUpdating={isUpdating}
                       sortField={sorting.closedcves.sortField}
                       sortReverse={sorting.closedcves.sortReverse}
                       onInteraction={onInteraction}
-                    >
-                      {({
-                        entities,
-                        entitiesCounts,
-                        sortBy,
-                        sortDir,
-                        onFirstClick,
-                        onLastClick,
-                        onNextClick,
-                        onPreviousClick,
-                      }) => (
-                        <ClosedCvesTable
-                          entities={entities}
-                          entitiesCounts={entitiesCounts}
-                          filter={filter}
-                          isUpdating={isUpdating}
-                          sortBy={sortBy}
-                          sortDir={sortDir}
-                          toggleDetailsIcon={false}
-                          onFirstClick={onFirstClick}
-                          onLastClick={onLastClick}
-                          onNextClick={onNextClick}
-                          onPreviousClick={onPreviousClick}
-                          onSortChange={sortField =>
-                            onSortChange('closedcves', sortField)
-                          }
-                        />
-                      )}
-                    </ReportEntitiesContainer>
+                      onSortChange={sortField =>
+                        onSortChange('closedcves', sortField)
+                      }
+                    />
                   </TabPanel>
                   <TabPanel>
                     <ReportEntitiesContainer
