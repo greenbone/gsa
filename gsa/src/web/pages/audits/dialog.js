@@ -22,6 +22,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
@@ -70,7 +71,7 @@ const AuditDialog = ({
   maxHosts = DEFAULT_MAX_HOSTS,
   name = _('Unnamed'),
   policies = [],
-  policyId = UNSET_VALUE,
+  policyId,
   scheduleId = UNSET_VALUE,
   schedulePeriods = NO_VALUE,
   schedules = [],
@@ -91,7 +92,9 @@ const AuditDialog = ({
 
   const scheduleItems = renderSelectItems(schedules, UNSET_VALUE);
 
-  const policyItems = renderSelectItems(policies, UNSET_VALUE);
+  const policyItems = renderSelectItems(policies);
+
+  policyId = selectSaveId(policies, policyId, undefined);
 
   const alertItems = renderSelectItems(alerts);
 
