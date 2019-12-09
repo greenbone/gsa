@@ -62,7 +62,6 @@ import ApplicationsTable from './applicationstable';
 import ClosedCvesTable from './closedcvestable';
 import CvesTable from './cvestable';
 import ErrorsTable from './errorstable';
-import HostsTable from './hoststable';
 import OperatingSystemsTable from './operatingsystemstable';
 import PortsTable from './portstable';
 import Summary from './summary';
@@ -73,12 +72,12 @@ import {
   closedCvesSortFunctions,
   cvesSortFunctions,
   errorsSortFunctions,
-  hostsSortFunctions,
   operatingssystemsSortFunctions,
   portsSortFunctions,
   tlsCertificatesSortFunctions,
 } from './sort';
 
+import HostsTab from './details/hoststab';
 import ReportEntitiesContainer from './details/reportentitiescontainer';
 import ResultsTab from './details/resultstab';
 import TabTitle from './details/tabtitle';
@@ -300,43 +299,18 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    <ReportEntitiesContainer
-                      counts={hosts.counts}
-                      entities={hosts.entities}
+                    <HostsTab
+                      counts={isDefined(hosts.counts) ? hosts.counts : {}}
                       filter={filter}
+                      hosts={hosts.entities}
+                      isUpdating={isUpdating}
                       sortField={sorting.hosts.sortField}
                       sortReverse={sorting.hosts.sortReverse}
-                      sortFunctions={hostsSortFunctions}
                       onInteraction={onInteraction}
-                    >
-                      {({
-                        entities,
-                        entitiesCounts,
-                        sortBy,
-                        sortDir,
-                        onFirstClick,
-                        onLastClick,
-                        onNextClick,
-                        onPreviousClick,
-                      }) => (
-                        <HostsTable
-                          entities={entities}
-                          entitiesCounts={entitiesCounts}
-                          filter={filter}
-                          isUpdating={isUpdating}
-                          sortBy={sortBy}
-                          sortDir={sortDir}
-                          toggleDetailsIcon={false}
-                          onFirstClick={onFirstClick}
-                          onLastClick={onLastClick}
-                          onNextClick={onNextClick}
-                          onPreviousClick={onPreviousClick}
-                          onSortChange={sortField =>
-                            onSortChange('hosts', sortField)
-                          }
-                        />
-                      )}
-                    </ReportEntitiesContainer>
+                      onSortChange={sortField =>
+                        onSortChange('hosts', sortField)
+                      }
+                    />
                   </TabPanel>
                   <TabPanel>
                     <ReportEntitiesContainer
