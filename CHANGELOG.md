@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Increased clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
 
 ### Fixed
+- Fixed undefined policy in create audit dialog [#1847](https://github.com/greenbone/gsa/pull/1847)
 - Fixed TLS certificate filtering [#1830](https://github.com/greenbone/gsa/pull/1830)
 - Fixed resetting to default filter at list pages [#1828](https://github.com/greenbone/gsa/pull/1828)
 - Fixed error when parsing invalid hosts for overrides and notes [#1810](https://github.com/greenbone/gsa/pull/1810)
