@@ -23,6 +23,7 @@ import GmpSettings, {
   DEFAULT_LOG_LEVEL,
   DEFAULT_RELOAD_INTERVAL_ACTIVE,
   DEFAULT_RELOAD_INTERVAL_INACTIVE,
+  DEFAULT_REPORT_RESULTS_THRESHOLD,
 } from 'gmp/gmpsettings';
 
 const createStorage = state => {
@@ -57,6 +58,9 @@ describe('GmpSettings tests', () => {
     expect(settings.reloadIntervalInactive).toEqual(
       DEFAULT_RELOAD_INTERVAL_INACTIVE,
     );
+    expect(settings.reportResultsThreshold).toEqual(
+      DEFAULT_REPORT_RESULTS_THRESHOLD,
+    );
     expect(settings.token).toBeUndefined();
     expect(settings.timeout).toBeUndefined();
     expect(settings.timezone).toBeUndefined();
@@ -87,6 +91,7 @@ describe('GmpSettings tests', () => {
       reloadInterval: 10,
       reloadIntervalActive: 5,
       reloadIntervalInactive: 60,
+      reportResultsThreshold: 10000,
       token: 'atoken',
       timeout: 30000,
       timezone: 'cet',
@@ -109,6 +114,7 @@ describe('GmpSettings tests', () => {
     expect(settings.reloadInterval).toEqual(10);
     expect(settings.reloadIntervalActive).toEqual(5);
     expect(settings.reloadIntervalInactive).toEqual(60);
+    expect(settings.reportResultsThreshold).toEqual(10000);
     expect(settings.token).toBeUndefined();
     expect(settings.timeout).toEqual(30000);
     expect(settings.timezone).toBeUndefined();
@@ -157,6 +163,9 @@ describe('GmpSettings tests', () => {
     expect(settings.reloadIntervalInactive).toEqual(
       DEFAULT_RELOAD_INTERVAL_INACTIVE,
     );
+    expect(settings.reportResultsThreshold).toEqual(
+      DEFAULT_REPORT_RESULTS_THRESHOLD,
+    );
     expect(settings.token).toEqual('atoken');
     expect(settings.timeout).toBeUndefined();
     expect(settings.timezone).toEqual('cet');
@@ -179,6 +188,7 @@ describe('GmpSettings tests', () => {
       reloadInterval: 20,
       reloadIntervalActive: 20,
       reloadIntervalInactive: 20,
+      reportResultsThreshold: 500,
       token: 'btoken',
       timeout: 10000,
       timezone: 'cest',
@@ -199,6 +209,7 @@ describe('GmpSettings tests', () => {
       reloadInterval: 10,
       reloadIntervalActive: 5,
       reloadIntervalInactive: 60,
+      reportResultsThreshold: 10000,
       token: 'atoken',
       timeout: 30000,
       timezone: 'cet',
@@ -218,6 +229,7 @@ describe('GmpSettings tests', () => {
     expect(settings.reloadInterval).toEqual(10);
     expect(settings.reloadIntervalActive).toEqual(5);
     expect(settings.reloadIntervalInactive).toEqual(60);
+    expect(settings.reportResultsThreshold).toEqual(10000);
     expect(settings.token).toEqual('btoken');
     expect(settings.timeout).toEqual(30000);
     expect(settings.timezone).toEqual('cest');
