@@ -853,6 +853,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/reports/details/reportpanel.js
      ${GSA_SRC_DIR}/src/web/pages/reports/details/resultstab.js
      ${GSA_SRC_DIR}/src/web/pages/reports/details/summary.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/thresholdpanel.js
      ${GSA_SRC_DIR}/src/web/pages/reports/details/tlscertificatestab.js
      ${GSA_SRC_DIR}/src/web/pages/reports/details/tlscertificatestable.js
      ${GSA_SRC_DIR}/src/web/pages/reports/downloadreportdialog.js
