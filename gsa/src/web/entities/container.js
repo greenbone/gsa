@@ -94,7 +94,7 @@ class EntitiesContainer extends React.Component {
 
     this.handleChanged = this.handleChanged.bind(this);
     this.handleCreateTag = this.handleCreateTag.bind(this);
-    this.handleDeleted = this.handleDeleted.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.handleDeselected = this.handleDeselected.bind(this);
     this.handleDeleteBulk = this.handleDeleteBulk.bind(this);
     this.handleDownloadBulk = this.handleDownloadBulk.bind(this);
@@ -174,7 +174,7 @@ class EntitiesContainer extends React.Component {
     this.props.reload(filter);
   }
 
-  handleDeleted(entity) {
+  handleDelete(entity) {
     const {deleteEntity} = this.props;
 
     deleteEntity(entity.id).then(this.handleChanged, this.handleError);
@@ -535,7 +535,7 @@ class EntitiesContainer extends React.Component {
           sortBy,
           sortDir,
           onChanged: this.handleChanged,
-          onDeleted: this.handleDeleted,
+          onDelete: this.handleDelete,
           onDeleteBulk: this.handleDeleteBulk,
           onDownloadBulk: this.handleDownloadBulk,
           onDownloaded: onDownload,

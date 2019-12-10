@@ -194,8 +194,8 @@ class Page extends React.Component {
   }
 
   handleReportDeleteClick(report) {
-    const {onDeleted} = this.props;
-    return onDeleted(report);
+    const {onDelete} = this.props;
+    return onDelete(report);
   }
 
   handleTaskChange(task_id) {
@@ -268,7 +268,7 @@ Page.propTypes = {
   loadTasks: PropTypes.func.isRequired,
   tasks: PropTypes.arrayOf(PropTypes.model),
   onChanged: PropTypes.func.isRequired,
-  onDeleted: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,

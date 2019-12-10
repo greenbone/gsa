@@ -669,11 +669,7 @@ describe('createDeleteEntity tests', () => {
     const id = 'id1';
     const gmp = {
       foo: {
-        delete: jest.fn().mockReturnValue(
-          Promise.resolve({
-            data: 'bar',
-          }),
-        ),
+        delete: jest.fn().mockResolvedValue({data: 'bar'}),
       },
     };
     const dispatch = jest.fn();
