@@ -121,7 +121,6 @@ const PageContent = ({
     operatingsystems = {},
     ports = {},
     results = {},
-    result_count = {},
     tls_certificates = {},
     timestamp,
     scan_run_status,
@@ -158,9 +157,6 @@ const PageContent = ({
       {hasReport && <EntityInfo entity={entity} />}
     </SectionHeader>
   );
-
-  const {full, filtered} = result_count;
-  const resultCounts = {filtered, all: full};
 
   return (
     <Layout grow flex="column" align={['start', 'stretch']}>
@@ -206,7 +202,7 @@ const PageContent = ({
               >
                 <Tab>{_('Information')}</Tab>
                 <Tab>
-                  <TabTitle title={_('Results')} counts={resultCounts} />
+                  <TabTitle title={_('Results')} counts={results.counts} />
                 </Tab>
                 <Tab>
                   <TabTitle title={_('Hosts')} counts={hosts.counts} />
@@ -258,19 +254,21 @@ const PageContent = ({
                 <TabPanels>
                   <TabPanel>
                     <Summary
+                      filter={filter}
                       report={report}
+                      isUpdating={isUpdating}
                       onError={onError}
                       onTagChanged={onTagSuccess}
                     />
                   </TabPanel>
                   <TabPanel>
                     <ResultsTab
-                      counts={isDefined(results.counts) ? results.counts : {}}
+                      counts={results.counts}
                       filter={filter}
                       hasTarget={!isContainer}
                       isUpdating={isUpdating}
                       progress={progress}
-                      results={isDefined(results) ? results.entities : {}}
+                      results={results.entities}
                       sortField={sorting.results.sortField}
                       sortReverse={sorting.results.sortReverse}
                       status={status}
