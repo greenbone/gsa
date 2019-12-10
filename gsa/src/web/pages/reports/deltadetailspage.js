@@ -57,9 +57,10 @@ import {
 } from 'web/store/entities/reportformats';
 
 import {
+  loadDeltaReport,
+  deltaSelector,
   loadEntity as loadReportEntityWithStore,
   loadEntityIfNeeded as loadReportEntityWithStoreIfNeeded,
-  selector as reportSelector,
 } from 'web/store/entities/reports';
 
 import {
@@ -86,10 +87,10 @@ import withGmp from 'web/utils/withGmp';
 
 import TargetComponent from '../targets/component';
 
-import Page from './detailscontent';
+import Page from './deltadetailscontent';
 import FilterDialog from './detailsfilterdialog';
 
-const log = logger.getLogger('web.pages.report.detailspage');
+const log = logger.getLogger('web.pages.report.deltadetailspage');
 
 const DEFAULT_FILTER = Filter.fromString(
   'levels=hml rows=100 min_qod=70 first=1 sort-reverse=severity',
@@ -108,7 +109,7 @@ const getFilter = (entity = {}) => {
   return report.filter;
 };
 
-class ReportDetails extends React.Component {
+class DeltaReportDetails extends React.Component {
   constructor(...args) {
     super(...args);
 
@@ -222,7 +223,7 @@ class ReportDetails extends React.Component {
   }
 
   load(filter) {
-    log.debug('Loading report', {
+    log.debug('Loading deleta report', {
       filter,
     });
 
@@ -571,7 +572,7 @@ class ReportDetails extends React.Component {
   }
 }
 
-ReportDetails.propTypes = {
+DeltaReportDetails.propTypes = {
   defaultFilter: PropTypes.filter.isRequired,
   deltaReportId: PropTypes.id,
   entity: PropTypes.model,
@@ -613,10 +614,14 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
     loadTarget: targetId => gmp.target.get({id: targetId}),
     loadReportFormats: () =>
       dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
-    loadReport: (id, filter) =>
-      dispatch(loadReportEntityWithStore(gmp)(id, filter)),
-    loadReportIfNeeded: (id, filter) =>
-      dispatch(loadReportEntityWithStoreIfNeeded(gmp)(id, filter)),
+    loadReport: (id, deltaId, filter) =>
+      isDefined(deltaId)
+        ? dispatch(loadDeltaReport(gmp)(id, deltaId, filter))
+        : dispatch(loadReportEntityWithStore(gmp)(id, filter)),
+    loadReportIfNeeded: (id, deltaId, filter) =>
+      isDefined(deltaId)
+        ? dispatch(loadDeltaReport(gmp)(id, deltaId, filter))
+        : dispatch(loadReportEntityWithStoreIfNeeded(gmp)(id, filter)),
     loadReportComposerDefaults: () =>
       dispatch(loadReportComposerDefaults(gmp)()),
     loadUserSettingDefaultFilter: () =>
@@ -627,9 +632,9 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
 };
 
 const mapStateToProps = (rootState, {match}) => {
-  const {id} = match.params;
+  const {id, deltaid} = match.params;
   const filterSel = filterSelector(rootState);
-  const reportSel = reportSelector(rootState);
+  const deltaSel = deltaSelector(rootState);
   const reportFormatsSel = reportFormatsSelector(rootState);
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
   const userDefaultFilterSel = getUserSettingsDefaultFilter(
@@ -637,10 +642,11 @@ const mapStateToProps = (rootState, {match}) => {
     'result',
   );
   const username = getUsername(rootState);
+  const entity = deltaSel.getEntity(id, deltaid);
+  const entityError = deltaSel.getError(id, deltaid);
 
-  const entity = reportSel.getEntity(id);
-  const entityError = reportSel.getEntityError(id);
   return {
+    deltaReportId: deltaid,
     entity,
     entityError,
     filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
@@ -665,6 +671,7 @@ const reloadInterval = report =>
 const load = ({
   defaultFilter,
   reportId,
+  deltaReportId,
   loadReport,
   loadReportIfNeeded,
   reportFilter,
@@ -684,12 +691,12 @@ const load = ({
     filter = DEFAULT_FILTER;
   }
 
-  return loadReportIfNeeded(reportId, filter).then(() =>
-    loadReport(reportId, filter),
+  return loadReportIfNeeded(reportId, deltaReportId, filter).then(() =>
+    loadReport(reportId, deltaReportId, filter),
   );
 };
 
-const ReportDetailsWrapper = ({filter, reportFilter, ...props}) => (
+const DeltaReportDetailsWrapper = ({filter, reportFilter, ...props}) => (
   <Reload
     name="report"
     load={load({...props, defaultFilter: filter})}
@@ -697,7 +704,7 @@ const ReportDetailsWrapper = ({filter, reportFilter, ...props}) => (
     reloadInterval={() => reloadInterval(props.entity)}
   >
     {({reload}) => (
-      <ReportDetails
+      <DeltaReportDetails
         {...props}
         defaultFilter={filter}
         reportFilter={reportFilter}
@@ -707,7 +714,7 @@ const ReportDetailsWrapper = ({filter, reportFilter, ...props}) => (
   </Reload>
 );
 
-ReportDetailsWrapper.propTypes = {
+DeltaReportDetailsWrapper.propTypes = {
   entity: PropTypes.model,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
@@ -723,6 +730,6 @@ export default compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-)(ReportDetailsWrapper);
+)(DeltaReportDetailsWrapper);
 
 // vim: set ts=2 sw=2 tw=80:

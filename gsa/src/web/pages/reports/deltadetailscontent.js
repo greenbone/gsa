@@ -60,17 +60,9 @@ import PropTypes from 'web/utils/proptypes';
 
 import Summary from './summary';
 
-import HostsTab from './details/hoststab';
 import ResultsTab from './details/resultstab';
 import TabTitle from './details/tabtitle';
 import ToolBarIcons from './details/toolbaricons';
-import PortsTab from './details/portstab';
-import ApplicationsTab from './details/applicationstab';
-import OperatingSystemsTab from './details/operatingsystemstab';
-import CvesTab from './details/cvestab';
-import ClosedCvesTab from './details/closedcvestab';
-import TLSCertificatesTab from './details/tlscertificatestab';
-import ErrorsTab from './details/errorstab';
 
 const Span = styled.span`
   margin-top: 2px;
@@ -113,20 +105,7 @@ const PageContent = ({
   const {userTags = {}} = report;
   const userTagsCount = userTags.length;
 
-  const {
-    applications = {},
-    closed_cves = {},
-    cves = {},
-    errors = {},
-    hosts = {},
-    operatingsystems = {},
-    ports = {},
-    results = {},
-    result_count = {},
-    tls_certificates = {},
-    timestamp,
-    scan_run_status,
-  } = report;
+  const {results = {}, result_count = {}, timestamp, scan_run_status} = report;
 
   const hasReport = isDefined(entity);
 
@@ -160,13 +139,13 @@ const PageContent = ({
     </SectionHeader>
   );
 
-  const {full, filtered} = result_count;
-  const resultCounts = {filtered, all: full};
+  const {filtered} = result_count;
 
   return (
     <Layout grow flex="column" align={['start', 'stretch']}>
       <ToolBar>
         <ToolBarIcons
+          delta={true}
           filter={filter}
           loading={isLoading}
           report={report}
@@ -207,53 +186,13 @@ const PageContent = ({
               >
                 <Tab>{_('Information')}</Tab>
                 <Tab>
-                  <TabTitle title={_('Results')} counts={resultCounts} />
-                </Tab>
-                <Tab>
-                  <TabTitle title={_('Hosts')} counts={hosts.counts} />
-                </Tab>
-                <Tab>
-                  <TabTitle title={_('Ports')} counts={ports.counts} />
-                </Tab>
-                <Tab>
-                  <TabTitle
-                    title={_('Applications')}
-                    counts={applications.counts}
-                  />
-                </Tab>
-                <Tab>
-                  <TabTitle
-                    title={_('Operating Systems')}
-                    counts={operatingsystems.counts}
-                  />
-                </Tab>
-                <Tab>
-                  <TabTitle title={_('CVEs')} counts={cves.counts} />
-                </Tab>
-                <Tab>
-                  <TabTitle
-                    title={_('Closed CVEs')}
-                    counts={closed_cves.counts}
-                  />
-                </Tab>
-                <Tab>
-                  <TabTitle
-                    title={_('TLS Certificates')}
-                    counts={tls_certificates.counts}
-                  />
-                </Tab>
-                <Tab>
-                  <TabTitle
-                    title={_('Error Messages')}
-                    counts={errors.counts}
-                  />
+                  <TabTitle title={_('Results')} count={filtered} />
                 </Tab>
                 <Tab>
                   <TabTitle title={_('User Tags')} count={userTagsCount} />
                 </Tab>
               </TabList>
             </TabLayout>
-
             {isDefined(report) ? (
               <Tabs active={activeTab}>
                 <TabPanels>
@@ -267,6 +206,7 @@ const PageContent = ({
                   <TabPanel>
                     <ResultsTab
                       counts={isDefined(results.counts) ? results.counts : {}}
+                      delta={true}
                       filter={filter}
                       hasTarget={!isContainer}
                       isUpdating={isUpdating}
@@ -285,117 +225,6 @@ const PageContent = ({
                         onSortChange('results', sortField)
                       }
                       onTargetEditClick={onTargetEditClick}
-                    />
-                  </TabPanel>
-                  <TabPanel>
-                    <HostsTab
-                      counts={isDefined(hosts.counts) ? hosts.counts : {}}
-                      filter={filter}
-                      hosts={hosts.entities}
-                      isUpdating={isUpdating}
-                      sortField={sorting.hosts.sortField}
-                      sortReverse={sorting.hosts.sortReverse}
-                      onInteraction={onInteraction}
-                      onSortChange={sortField =>
-                        onSortChange('hosts', sortField)
-                      }
-                    />
-                  </TabPanel>
-                  <TabPanel>
-                    <PortsTab
-                      counts={ports.counts}
-                      filter={filter}
-                      isUpdating={isUpdating}
-                      ports={ports.entities}
-                      sortField={sorting.ports.sortField}
-                      sortReverse={sorting.ports.sortReverse}
-                      onInteraction={onInteraction}
-                      onSortChange={sortField =>
-                        onSortChange('ports', sortField)
-                      }
-                    />
-                  </TabPanel>
-                  <TabPanel>
-                    <ApplicationsTab
-                      counts={applications.counts}
-                      applications={applications.entities}
-                      filter={filter}
-                      sortField={sorting.apps.sortField}
-                      sortReverse={sorting.apps.sortReverse}
-                      onInteraction={onInteraction}
-                      isUpdating={isUpdating}
-                      onSortChange={sortField =>
-                        onSortChange('apps', sortField)
-                      }
-                    />
-                  </TabPanel>
-                  <TabPanel>
-                    <OperatingSystemsTab
-                      counts={operatingsystems.counts}
-                      operatingsystems={operatingsystems.entities}
-                      filter={filter}
-                      sortField={sorting.os.sortField}
-                      sortReverse={sorting.os.sortReverse}
-                      isUpdating={isUpdating}
-                      onInteraction={onInteraction}
-                      onSortChange={sortField => onSortChange('os', sortField)}
-                    />
-                  </TabPanel>
-                  <TabPanel>
-                    <CvesTab
-                      counts={cves.counts}
-                      cves={cves.entities}
-                      filter={filter}
-                      isUpdating={isUpdating}
-                      sortField={sorting.cves.sortField}
-                      sortReverse={sorting.cves.sortReverse}
-                      onInteraction={onInteraction}
-                      onSortChange={sortField =>
-                        onSortChange('cves', sortField)
-                      }
-                    />
-                  </TabPanel>
-                  <TabPanel>
-                    <ClosedCvesTab
-                      counts={closed_cves.counts}
-                      closedCves={closed_cves.entities}
-                      filter={filter}
-                      isUpdating={isUpdating}
-                      sortField={sorting.closedcves.sortField}
-                      sortReverse={sorting.closedcves.sortReverse}
-                      onInteraction={onInteraction}
-                      onSortChange={sortField =>
-                        onSortChange('closedcves', sortField)
-                      }
-                    />
-                  </TabPanel>
-                  <TabPanel>
-                    <TLSCertificatesTab
-                      counts={tls_certificates.counts}
-                      tlsCertificates={tls_certificates.entities}
-                      filter={filter}
-                      sortField={sorting.tlscerts.sortField}
-                      sortReverse={sorting.tlscerts.sortReverse}
-                      onInteraction={onInteraction}
-                      onSortChange={sortField =>
-                        onSortChange('tlscerts', sortField)
-                      }
-                      onTlsCertificateDownloadClick={
-                        onTlsCertificateDownloadClick
-                      }
-                    />
-                  </TabPanel>
-                  <TabPanel>
-                    <ErrorsTab
-                      counts={errors.counts}
-                      errors={errors.entities}
-                      filter={filter}
-                      sortField={sorting.errors.sortField}
-                      sortReverse={sorting.errors.sortReverse}
-                      onInteraction={onInteraction}
-                      onSortChange={sortField =>
-                        onSortChange('errors', sortField)
-                      }
                     />
                   </TabPanel>
                   <TabPanel>

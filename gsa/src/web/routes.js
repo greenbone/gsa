@@ -78,6 +78,7 @@ import ReportFormatsPage from './pages/reportformats/listpage';
 import ReportFormatDetailsPage from './pages/reportformats/detailspage';
 import ReportsPage from './pages/reports/listpage';
 import ReportDetailsPage from './pages/reports/detailspage';
+import DeltaReportDetailsPage from './pages/reports/deltadetailspage';
 import ResultsPage from './pages/results/listpage';
 import ResultDetailsPage from './pages/results/detailspage';
 import RolesPage from './pages/roles/listpage';
@@ -184,7 +185,7 @@ const Routes = () => (
               <Route path="/cve/:id" component={CveDetailsPage} />
               <Route
                 path="/report/delta/:id/:deltaid"
-                component={ReportDetailsPage}
+                component={DeltaReportDetailsPage}
               />
               <Route path="/report/:id" component={ReportDetailsPage} />
               <Route path="/cpe/:id" component={CpeDetailsPage} />
