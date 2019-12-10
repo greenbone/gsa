@@ -317,10 +317,10 @@ const PageContent = ({
                       counts={applications.counts}
                       applications={applications.entities}
                       filter={filter}
+                      isUpdating={isUpdating}
                       sortField={sorting.apps.sortField}
                       sortReverse={sorting.apps.sortReverse}
                       onInteraction={onInteraction}
-                      isUpdating={isUpdating}
                       onSortChange={sortField =>
                         onSortChange('apps', sortField)
                       }
@@ -331,9 +331,9 @@ const PageContent = ({
                       counts={operatingsystems.counts}
                       operatingsystems={operatingsystems.entities}
                       filter={filter}
+                      isUpdating={isUpdating}
                       sortField={sorting.os.sortField}
                       sortReverse={sorting.os.sortReverse}
-                      isUpdating={isUpdating}
                       onInteraction={onInteraction}
                       onSortChange={sortField => onSortChange('os', sortField)}
                     />
@@ -371,6 +371,7 @@ const PageContent = ({
                       counts={tls_certificates.counts}
                       tlsCertificates={tls_certificates.entities}
                       filter={filter}
+                      isUpdating={isUpdating}
                       sortField={sorting.tlscerts.sortField}
                       sortReverse={sorting.tlscerts.sortReverse}
                       onInteraction={onInteraction}
@@ -387,6 +388,7 @@ const PageContent = ({
                       counts={errors.counts}
                       errors={errors.entities}
                       filter={filter}
+                      isUpdating={isUpdating}
                       sortField={sorting.errors.sortField}
                       sortReverse={sorting.errors.sortReverse}
                       onInteraction={onInteraction}
