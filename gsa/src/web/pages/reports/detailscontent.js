@@ -60,9 +60,8 @@ import PropTypes from 'web/utils/proptypes';
 
 import ErrorsTable from './errorstable';
 import Summary from './summary';
-import TLSCertificatesTable from './tlscertificatestable';
 
-import {errorsSortFunctions, tlsCertificatesSortFunctions} from './sort';
+import {errorsSortFunctions} from './sort';
 
 import HostsTab from './details/hoststab';
 import ReportEntitiesContainer from './details/reportentitiescontainer';
@@ -74,6 +73,7 @@ import ApplicationsTab from './details/applicationstab';
 import OperatingSystemsTab from './details/operatingsystemstab';
 import CvesTab from './details/cvestab';
 import ClosedCvesTab from './details/closedcvestab';
+import TLSCertificatesTab from './details/tlscertificatestab';
 
 const Span = styled.span`
   margin-top: 2px;
@@ -373,46 +373,20 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    <ReportEntitiesContainer
+                    <TLSCertificatesTab
                       counts={tls_certificates.counts}
-                      entities={tls_certificates.entities}
+                      tlsCertificates={tls_certificates.entities}
                       filter={filter}
-                      sortFunctions={tlsCertificatesSortFunctions}
                       sortField={sorting.tlscerts.sortField}
                       sortReverse={sorting.tlscerts.sortReverse}
                       onInteraction={onInteraction}
-                    >
-                      {({
-                        entities,
-                        entitiesCounts,
-                        sortBy,
-                        sortDir,
-                        onFirstClick,
-                        onLastClick,
-                        onNextClick,
-                        onPreviousClick,
-                      }) => (
-                        <TLSCertificatesTable
-                          entities={entities}
-                          entitiesCounts={entitiesCounts}
-                          filter={filter}
-                          isUpdating={isUpdating}
-                          sortBy={sortBy}
-                          sortDir={sortDir}
-                          toggleDetailsIcon={false}
-                          onFirstClick={onFirstClick}
-                          onLastClick={onLastClick}
-                          onNextClick={onNextClick}
-                          onPreviousClick={onPreviousClick}
-                          onSortChange={sortField =>
-                            onSortChange('tlscerts', sortField)
-                          }
-                          onTlsCertificateDownloadClick={
-                            onTlsCertificateDownloadClick
-                          }
-                        />
-                      )}
-                    </ReportEntitiesContainer>
+                      onSortChange={sortField =>
+                        onSortChange('tlscerts', sortField)
+                      }
+                      onTlsCertificateDownloadClick={
+                        onTlsCertificateDownloadClick
+                      }
+                    />
                   </TabPanel>
                   <TabPanel>
                     <ReportEntitiesContainer

@@ -17,27 +17,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {
-  makeCompareDate,
-  makeCompareIp,
-  makeCompareString,
-} from 'web/utils/sort';
+import {makeCompareIp, makeCompareString} from 'web/utils/sort';
 
 export const errorsSortFunctions = {
   error: makeCompareString('description'),
   host: makeCompareIp(entity => entity.host.ip),
   hostname: makeCompareString(entity => entity.host.name),
   nvt: makeCompareString(entity => entity.nvt.name),
-  port: makeCompareString('port'),
-};
-
-export const tlsCertificatesSortFunctions = {
-  dn: makeCompareString('issuer'),
-  serial: makeCompareString('serial'),
-  notvalidbefore: makeCompareDate('notbefore'),
-  notvalidafter: makeCompareDate('notafter'),
-  ip: makeCompareIp('ip'),
-  hostname: makeCompareString('hostname'),
   port: makeCompareString('port'),
 };
 
