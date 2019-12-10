@@ -58,13 +58,9 @@ import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
 
-import ErrorsTable from './errorstable';
 import Summary from './summary';
 
-import {errorsSortFunctions} from './sort';
-
 import HostsTab from './details/hoststab';
-import ReportEntitiesContainer from './details/reportentitiescontainer';
 import ResultsTab from './details/resultstab';
 import TabTitle from './details/tabtitle';
 import ToolBarIcons from './details/toolbaricons';
@@ -74,6 +70,7 @@ import OperatingSystemsTab from './details/operatingsystemstab';
 import CvesTab from './details/cvestab';
 import ClosedCvesTab from './details/closedcvestab';
 import TLSCertificatesTab from './details/tlscertificatestab';
+import ErrorsTab from './details/errorstab';
 
 const Span = styled.span`
   margin-top: 2px;
@@ -389,43 +386,17 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    <ReportEntitiesContainer
+                    <ErrorsTab
                       counts={errors.counts}
-                      entities={errors.entities}
+                      errors={errors.entities}
                       filter={filter}
-                      sortFunctions={errorsSortFunctions}
                       sortField={sorting.errors.sortField}
                       sortReverse={sorting.errors.sortReverse}
                       onInteraction={onInteraction}
-                    >
-                      {({
-                        entities,
-                        entitiesCounts,
-                        sortBy,
-                        sortDir,
-                        onFirstClick,
-                        onLastClick,
-                        onNextClick,
-                        onPreviousClick,
-                      }) => (
-                        <ErrorsTable
-                          entities={entities}
-                          entitiesCounts={entitiesCounts}
-                          filter={filter}
-                          isUpdating={isUpdating}
-                          sortBy={sortBy}
-                          sortDir={sortDir}
-                          toggleDetailsIcon={false}
-                          onFirstClick={onFirstClick}
-                          onLastClick={onLastClick}
-                          onNextClick={onNextClick}
-                          onPreviousClick={onPreviousClick}
-                          onSortChange={sortField =>
-                            onSortChange('errors', sortField)
-                          }
-                        />
-                      )}
-                    </ReportEntitiesContainer>
+                      onSortChange={sortField =>
+                        onSortChange('errors', sortField)
+                      }
+                    />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags
