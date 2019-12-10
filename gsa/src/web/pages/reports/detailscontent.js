@@ -58,19 +58,18 @@ import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Summary from './summary';
-
-import HostsTab from './details/hoststab';
-import ResultsTab from './details/resultstab';
-import TabTitle from './details/tabtitle';
-import ToolBarIcons from './details/toolbaricons';
-import PortsTab from './details/portstab';
 import ApplicationsTab from './details/applicationstab';
-import OperatingSystemsTab from './details/operatingsystemstab';
 import CvesTab from './details/cvestab';
 import ClosedCvesTab from './details/closedcvestab';
-import TLSCertificatesTab from './details/tlscertificatestab';
 import ErrorsTab from './details/errorstab';
+import HostsTab from './details/hoststab';
+import OperatingSystemsTab from './details/operatingsystemstab';
+import PortsTab from './details/portstab';
+import ResultsTab from './details/resultstab';
+import Summary from './details/summary';
+import TabTitle from './details/tabtitle';
+import TLSCertificatesTab from './details/tlscertificatestab';
+import ToolBarIcons from './details/toolbaricons';
 
 const Span = styled.span`
   margin-top: 2px;
