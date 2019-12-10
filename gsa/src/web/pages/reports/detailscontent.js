@@ -140,8 +140,9 @@ const PageContent = ({
     return <ErrorMessage message={entityError.message} />;
   }
 
-  const showThresholdMessage =
-    hasReport && results.counts.filtered > gmp.settings.reportResultsThreshold;
+  const threshold = gmp.settings.reportResultsThreshold;
+
+  const showThresholdMessage = hasReport && results.counts.filtered > threshold;
 
   const isContainer = isDefined(task) && task.isContainer();
   const status = isContainer ? TASK_STATUS.container : scan_run_status;
@@ -301,6 +302,7 @@ const PageContent = ({
                         entityType={_('Hosts')}
                         filter={filter}
                         isUpdating={isUpdating}
+                        threshold={threshold}
                         onFilterEditClick={onFilterEditClick}
                         onFilterChanged={onFilterChanged}
                       />
@@ -325,6 +327,7 @@ const PageContent = ({
                         entityType={_('Ports')}
                         filter={filter}
                         isUpdating={isUpdating}
+                        threshold={threshold}
                         onFilterEditClick={onFilterEditClick}
                         onFilterChanged={onFilterChanged}
                       />
@@ -349,6 +352,7 @@ const PageContent = ({
                         entityType={_('Applications')}
                         filter={filter}
                         isUpdating={isUpdating}
+                        threshold={threshold}
                         onFilterEditClick={onFilterEditClick}
                         onFilterChanged={onFilterChanged}
                       />
@@ -373,6 +377,7 @@ const PageContent = ({
                         entityType={_('Operating Systems')}
                         filter={filter}
                         isUpdating={isUpdating}
+                        threshold={threshold}
                         onFilterEditClick={onFilterEditClick}
                         onFilterChanged={onFilterChanged}
                       />
@@ -397,6 +402,7 @@ const PageContent = ({
                         entityType={_('CVEs')}
                         filter={filter}
                         isUpdating={isUpdating}
+                        threshold={threshold}
                         onFilterEditClick={onFilterEditClick}
                         onFilterChanged={onFilterChanged}
                       />
@@ -420,6 +426,7 @@ const PageContent = ({
                       <ThresholdPanel
                         entityType={_('Closed CVEs')}
                         filter={filter}
+                        threshold={threshold}
                         isUpdating={isUpdating}
                         onFilterEditClick={onFilterEditClick}
                         onFilterChanged={onFilterChanged}
@@ -445,6 +452,7 @@ const PageContent = ({
                         entityType={_('TLS Certificates')}
                         filter={filter}
                         isUpdating={isUpdating}
+                        threshold={threshold}
                         onFilterEditClick={onFilterEditClick}
                         onFilterChanged={onFilterChanged}
                       />

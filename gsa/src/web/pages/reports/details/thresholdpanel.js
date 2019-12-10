@@ -45,6 +45,7 @@ const ThresholdPanel = ({
   entityType,
   filter,
   isUpdating = false,
+  threshold,
   onFilterChanged,
   onFilterEditClick,
 }) => {
@@ -95,20 +96,22 @@ const ThresholdPanel = ({
     >
       <InfoPanel
         heading={_(
-          "The {{entityType}} can't be displayed, because the " +
-            'report contains too many results. Please decrease the number ' +
-            'of results by applying a different filter.',
-          {entityType},
+          "The {{entityType}} can't be displayed in order to keep " +
+            'performance within browser capabilities. The report ' +
+            'contains too many results. Please decrease the number ' +
+            'of results below the threshold of {{threshold}} ' +
+            'by applying a more refined filter.',
+          {entityType, threshold},
         )}
       />
       <Divider wrap>
         {levels.includes('g') && (
           <ReportPanel
             icon={props => <FilterIcon {...props} />}
-            title={_('Log messages are currently included.')}
+            title={_('Result with log messages are currently included.')}
             onClick={handleRemoveLogLevel}
           >
-            {_('Filter out log messages via your filter settings.')}
+            {_('Filter out log message results.')}
           </ReportPanel>
         )}
         {levels.includes('l') && (
@@ -117,9 +120,7 @@ const ThresholdPanel = ({
             title={_('Results with low severity are currently included.')}
             onClick={handleRemoveLowLevel}
           >
-            {_(
-              'Filter out results with low severity via your filter settings.',
-            )}
+            {_('Filter out results with low severity.')}
           </ReportPanel>
         )}
         {levels.includes('m') && (
@@ -128,10 +129,7 @@ const ThresholdPanel = ({
             title={_('Results with medium severity are currently included.')}
             onClick={handleRemoveMediumLevel}
           >
-            {_(
-              'Filter out results with medium severity via your filter ' +
-                'settings.',
-            )}
+            {_('Filter out results with medium severity.')}
           </ReportPanel>
         )}
         {!filter.has('levels') && severity < 7 && (
@@ -166,6 +164,7 @@ ThresholdPanel.propTypes = {
   entityType: PropTypes.string.isRequired,
   filter: PropTypes.filter.isRequired,
   isUpdating: PropTypes.bool,
+  threshold: PropTypes.number.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
   onFilterEditClick: PropTypes.func.isRequired,
 };
