@@ -550,27 +550,39 @@ export const parseClosedCves = (report, filter) => {
   let cves_array = [];
 
   forEach(hosts, host => {
-    let host_cves = [];
     let hostname;
+    const host_cves = {};
 
     forEach(host.detail, detail => {
       const {name, value = '', extra, source} = detail;
 
       if (isDefined(name)) {
         if (name.startsWith('Closed CVE')) {
-          host_cves = host_cves.concat(
-            value.split(',').map(val => {
-              return {
-                id: val.trim(),
-                host: {
-                  ip: host.ip,
-                  id: isDefined(host.asset) ? host.asset._asset_id : undefined,
-                },
-                source,
-                severity: parseSeverity(extra),
-              };
-            }),
-          );
+          value.split(',').forEach(val => {
+            const cveId = val.trim();
+            const cve = {
+              id: cveId + '-' + host.ip + '-' + source.name,
+              cveId,
+              host: {
+                ip: host.ip,
+                id: isDefined(host.asset) ? host.asset._asset_id : undefined,
+              },
+              source,
+              severity: parseSeverity(extra),
+            };
+
+            const existingCve = host_cves[cveId];
+            if (
+              isDefined(existingCve) &&
+              isDefined(existingCve.severity) &&
+              (existingCve.severity > cve.severity || !isDefined(cve.severity))
+            ) {
+              // always use highest severity
+              cve.severity = existingCve.severity;
+            }
+
+            host_cves[cveId] = cve;
+          });
         } else if (name === 'hostname') {
           // collect hostname
           hostname = value;
@@ -579,12 +591,12 @@ export const parseClosedCves = (report, filter) => {
     });
 
     if (isDefined(hostname)) {
-      host_cves.forEach(cve => {
+      for (const cve of Object.values(host_cves)) {
         cve.host.name = hostname;
-      });
+      }
     }
 
-    cves_array = cves_array.concat(host_cves);
+    cves_array = cves_array.concat(Object.values(host_cves));
   });
 
   const {length: filtered_count} = cves_array;
