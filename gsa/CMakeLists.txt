@@ -828,35 +828,41 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/reportformats/listpage.js
      ${GSA_SRC_DIR}/src/web/pages/reportformats/row.js
      ${GSA_SRC_DIR}/src/web/pages/reportformats/table.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/alertactions.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/applicationstable.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/closedcvestable.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/cvestable.js
      ${GSA_SRC_DIR}/src/web/pages/reports/deltaresultsfiltergroup.js
      ${GSA_SRC_DIR}/src/web/pages/reports/detailscontent.js
      ${GSA_SRC_DIR}/src/web/pages/reports/detailsfilterdialog.js
      ${GSA_SRC_DIR}/src/web/pages/reports/detailspage.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/alertactions.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/applicationstab.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/applicationstable.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/closedcvestab.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/closedcvestable.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/cvestab.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/cvestable.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/emptyreport.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/emptyresultsreport.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/errorstab.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/errorstable.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/hoststab.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/hoststable.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/operatingsystemstab.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/operatingsystemstable.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/portstab.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/portstable.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/reportentitiescontainer.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/reportpanel.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/resultstab.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/tlscertificatestab.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/tlscertificatestable.js
      ${GSA_SRC_DIR}/src/web/pages/reports/downloadreportdialog.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/emptyreport.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/emptyresultsreport.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/errorstable.js
      ${GSA_SRC_DIR}/src/web/pages/reports/filterdialog.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/hoststable.js
      ${GSA_SRC_DIR}/src/web/pages/reports/importdialog.js
      ${GSA_SRC_DIR}/src/web/pages/reports/listpage.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/operatingsystemstable.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/portstable.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/reportentitiescontainer.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/reportpanel.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/resultstab.js
      ${GSA_SRC_DIR}/src/web/pages/reports/row.js
      ${GSA_SRC_DIR}/src/web/pages/reports/scaninfo.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/sort.js
      ${GSA_SRC_DIR}/src/web/pages/reports/summary.js
      ${GSA_SRC_DIR}/src/web/pages/reports/table.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/tlscertificatestable.js
      ${GSA_SRC_DIR}/src/web/pages/reports/triggeralertdialog.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/vulnerabilitiestable.js
      ${GSA_SRC_DIR}/src/web/pages/reports/dashboard/cvssdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/reports/dashboard/highresultsdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/reports/dashboard/index.js
