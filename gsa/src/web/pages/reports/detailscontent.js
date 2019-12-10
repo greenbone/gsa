@@ -23,6 +23,8 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
+import logger from 'gmp/log';
+
 import {TASK_STATUS} from 'gmp/models/task';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -57,20 +59,23 @@ import EntityInfo from 'web/entity/info';
 import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import Summary from './summary';
-
-import HostsTab from './details/hoststab';
-import ResultsTab from './details/resultstab';
-import TabTitle from './details/tabtitle';
-import ToolBarIcons from './details/toolbaricons';
-import PortsTab from './details/portstab';
 import ApplicationsTab from './details/applicationstab';
-import OperatingSystemsTab from './details/operatingsystemstab';
 import CvesTab from './details/cvestab';
 import ClosedCvesTab from './details/closedcvestab';
-import TLSCertificatesTab from './details/tlscertificatestab';
 import ErrorsTab from './details/errorstab';
+import HostsTab from './details/hoststab';
+import OperatingSystemsTab from './details/operatingsystemstab';
+import PortsTab from './details/portstab';
+import ResultsTab from './details/resultstab';
+import Summary from './details/summary';
+import TabTitle from './details/tabtitle';
+import ThresholdPanel from './details/thresholdpanel';
+import TLSCertificatesTab from './details/tlscertificatestab';
+import ToolBarIcons from './details/toolbaricons';
+
+const log = logger.getLogger('web.pages.report.detailscontent');
 
 const Span = styled.span`
   margin-top: 2px;
@@ -82,6 +87,7 @@ const PageContent = ({
   entityError,
   filter,
   filters,
+  gmp,
   isLoading = true,
   isUpdating = false,
   sorting,
@@ -122,7 +128,6 @@ const PageContent = ({
     operatingsystems = {},
     ports = {},
     results = {},
-    result_count = {},
     tls_certificates = {},
     timestamp,
     scan_run_status,
@@ -131,8 +136,13 @@ const PageContent = ({
   const hasReport = isDefined(entity);
 
   if (!hasReport && isDefined(entityError)) {
+    log.error(entityError);
     return <ErrorMessage message={entityError.message} />;
   }
+
+  const threshold = gmp.settings.reportResultsThreshold;
+
+  const showThresholdMessage = hasReport && results.counts.filtered > threshold;
 
   const isContainer = isDefined(task) && task.isContainer();
   const status = isContainer ? TASK_STATUS.container : scan_run_status;
@@ -159,9 +169,6 @@ const PageContent = ({
       {hasReport && <EntityInfo entity={entity} />}
     </SectionHeader>
   );
-
-  const {full, filtered} = result_count;
-  const resultCounts = {filtered, all: full};
 
   return (
     <Layout grow flex="column" align={['start', 'stretch']}>
@@ -207,7 +214,7 @@ const PageContent = ({
               >
                 <Tab>{_('Information')}</Tab>
                 <Tab>
-                  <TabTitle title={_('Results')} counts={resultCounts} />
+                  <TabTitle title={_('Results')} counts={results.counts} />
                 </Tab>
                 <Tab>
                   <TabTitle title={_('Hosts')} counts={hosts.counts} />
@@ -259,19 +266,21 @@ const PageContent = ({
                 <TabPanels>
                   <TabPanel>
                     <Summary
+                      filter={filter}
                       report={report}
+                      isUpdating={isUpdating}
                       onError={onError}
                       onTagChanged={onTagSuccess}
                     />
                   </TabPanel>
                   <TabPanel>
                     <ResultsTab
-                      counts={isDefined(results.counts) ? results.counts : {}}
+                      counts={results.counts}
                       filter={filter}
                       hasTarget={!isContainer}
                       isUpdating={isUpdating}
                       progress={progress}
-                      results={isDefined(results) ? results.entities : {}}
+                      results={results.entities}
                       sortField={sorting.results.sortField}
                       sortReverse={sorting.results.sortReverse}
                       status={status}
@@ -288,108 +297,189 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    <HostsTab
-                      counts={isDefined(hosts.counts) ? hosts.counts : {}}
-                      filter={filter}
-                      hosts={hosts.entities}
-                      isUpdating={isUpdating}
-                      sortField={sorting.hosts.sortField}
-                      sortReverse={sorting.hosts.sortReverse}
-                      onInteraction={onInteraction}
-                      onSortChange={sortField =>
-                        onSortChange('hosts', sortField)
-                      }
-                    />
+                    {showThresholdMessage ? (
+                      <ThresholdPanel
+                        entityType={_('Hosts')}
+                        filter={filter}
+                        isUpdating={isUpdating}
+                        threshold={threshold}
+                        onFilterEditClick={onFilterEditClick}
+                        onFilterChanged={onFilterChanged}
+                      />
+                    ) : (
+                      <HostsTab
+                        counts={hosts.counts}
+                        filter={filter}
+                        hosts={hosts.entities}
+                        isUpdating={isUpdating}
+                        sortField={sorting.hosts.sortField}
+                        sortReverse={sorting.hosts.sortReverse}
+                        onInteraction={onInteraction}
+                        onSortChange={sortField =>
+                          onSortChange('hosts', sortField)
+                        }
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel>
-                    <PortsTab
-                      counts={ports.counts}
-                      filter={filter}
-                      isUpdating={isUpdating}
-                      ports={ports.entities}
-                      sortField={sorting.ports.sortField}
-                      sortReverse={sorting.ports.sortReverse}
-                      onInteraction={onInteraction}
-                      onSortChange={sortField =>
-                        onSortChange('ports', sortField)
-                      }
-                    />
+                    {showThresholdMessage ? (
+                      <ThresholdPanel
+                        entityType={_('Ports')}
+                        filter={filter}
+                        isUpdating={isUpdating}
+                        threshold={threshold}
+                        onFilterEditClick={onFilterEditClick}
+                        onFilterChanged={onFilterChanged}
+                      />
+                    ) : (
+                      <PortsTab
+                        counts={ports.counts}
+                        filter={filter}
+                        isUpdating={isUpdating}
+                        ports={ports.entities}
+                        sortField={sorting.ports.sortField}
+                        sortReverse={sorting.ports.sortReverse}
+                        onInteraction={onInteraction}
+                        onSortChange={sortField =>
+                          onSortChange('ports', sortField)
+                        }
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel>
-                    <ApplicationsTab
-                      counts={applications.counts}
-                      applications={applications.entities}
-                      filter={filter}
-                      sortField={sorting.apps.sortField}
-                      sortReverse={sorting.apps.sortReverse}
-                      onInteraction={onInteraction}
-                      isUpdating={isUpdating}
-                      onSortChange={sortField =>
-                        onSortChange('apps', sortField)
-                      }
-                    />
+                    {showThresholdMessage ? (
+                      <ThresholdPanel
+                        entityType={_('Applications')}
+                        filter={filter}
+                        isUpdating={isUpdating}
+                        threshold={threshold}
+                        onFilterEditClick={onFilterEditClick}
+                        onFilterChanged={onFilterChanged}
+                      />
+                    ) : (
+                      <ApplicationsTab
+                        counts={applications.counts}
+                        applications={applications.entities}
+                        filter={filter}
+                        isUpdating={isUpdating}
+                        sortField={sorting.apps.sortField}
+                        sortReverse={sorting.apps.sortReverse}
+                        onInteraction={onInteraction}
+                        onSortChange={sortField =>
+                          onSortChange('apps', sortField)
+                        }
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel>
-                    <OperatingSystemsTab
-                      counts={operatingsystems.counts}
-                      operatingsystems={operatingsystems.entities}
-                      filter={filter}
-                      sortField={sorting.os.sortField}
-                      sortReverse={sorting.os.sortReverse}
-                      isUpdating={isUpdating}
-                      onInteraction={onInteraction}
-                      onSortChange={sortField => onSortChange('os', sortField)}
-                    />
+                    {showThresholdMessage ? (
+                      <ThresholdPanel
+                        entityType={_('Operating Systems')}
+                        filter={filter}
+                        isUpdating={isUpdating}
+                        threshold={threshold}
+                        onFilterEditClick={onFilterEditClick}
+                        onFilterChanged={onFilterChanged}
+                      />
+                    ) : (
+                      <OperatingSystemsTab
+                        counts={operatingsystems.counts}
+                        operatingsystems={operatingsystems.entities}
+                        filter={filter}
+                        sortField={sorting.os.sortField}
+                        sortReverse={sorting.os.sortReverse}
+                        isUpdating={isUpdating}
+                        onInteraction={onInteraction}
+                        onSortChange={sortField =>
+                          onSortChange('os', sortField)
+                        }
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel>
-                    <CvesTab
-                      counts={cves.counts}
-                      cves={cves.entities}
-                      filter={filter}
-                      isUpdating={isUpdating}
-                      sortField={sorting.cves.sortField}
-                      sortReverse={sorting.cves.sortReverse}
-                      onInteraction={onInteraction}
-                      onSortChange={sortField =>
-                        onSortChange('cves', sortField)
-                      }
-                    />
+                    {showThresholdMessage ? (
+                      <ThresholdPanel
+                        entityType={_('CVEs')}
+                        filter={filter}
+                        isUpdating={isUpdating}
+                        threshold={threshold}
+                        onFilterEditClick={onFilterEditClick}
+                        onFilterChanged={onFilterChanged}
+                      />
+                    ) : (
+                      <CvesTab
+                        counts={cves.counts}
+                        cves={cves.entities}
+                        filter={filter}
+                        isUpdating={isUpdating}
+                        sortField={sorting.cves.sortField}
+                        sortReverse={sorting.cves.sortReverse}
+                        onInteraction={onInteraction}
+                        onSortChange={sortField =>
+                          onSortChange('cves', sortField)
+                        }
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel>
-                    <ClosedCvesTab
-                      counts={closed_cves.counts}
-                      closedCves={closed_cves.entities}
-                      filter={filter}
-                      isUpdating={isUpdating}
-                      sortField={sorting.closedcves.sortField}
-                      sortReverse={sorting.closedcves.sortReverse}
-                      onInteraction={onInteraction}
-                      onSortChange={sortField =>
-                        onSortChange('closedcves', sortField)
-                      }
-                    />
+                    {showThresholdMessage ? (
+                      <ThresholdPanel
+                        entityType={_('Closed CVEs')}
+                        filter={filter}
+                        threshold={threshold}
+                        isUpdating={isUpdating}
+                        onFilterEditClick={onFilterEditClick}
+                        onFilterChanged={onFilterChanged}
+                      />
+                    ) : (
+                      <ClosedCvesTab
+                        counts={closed_cves.counts}
+                        closedCves={closed_cves.entities}
+                        filter={filter}
+                        isUpdating={isUpdating}
+                        sortField={sorting.closedcves.sortField}
+                        sortReverse={sorting.closedcves.sortReverse}
+                        onInteraction={onInteraction}
+                        onSortChange={sortField =>
+                          onSortChange('closedcves', sortField)
+                        }
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel>
-                    <TLSCertificatesTab
-                      counts={tls_certificates.counts}
-                      tlsCertificates={tls_certificates.entities}
-                      filter={filter}
-                      sortField={sorting.tlscerts.sortField}
-                      sortReverse={sorting.tlscerts.sortReverse}
-                      onInteraction={onInteraction}
-                      onSortChange={sortField =>
-                        onSortChange('tlscerts', sortField)
-                      }
-                      onTlsCertificateDownloadClick={
-                        onTlsCertificateDownloadClick
-                      }
-                    />
+                    {showThresholdMessage ? (
+                      <ThresholdPanel
+                        entityType={_('TLS Certificates')}
+                        filter={filter}
+                        isUpdating={isUpdating}
+                        threshold={threshold}
+                        onFilterEditClick={onFilterEditClick}
+                        onFilterChanged={onFilterChanged}
+                      />
+                    ) : (
+                      <TLSCertificatesTab
+                        counts={tls_certificates.counts}
+                        tlsCertificates={tls_certificates.entities}
+                        filter={filter}
+                        isUpdating={isUpdating}
+                        sortField={sorting.tlscerts.sortField}
+                        sortReverse={sorting.tlscerts.sortReverse}
+                        onInteraction={onInteraction}
+                        onSortChange={sortField =>
+                          onSortChange('tlscerts', sortField)
+                        }
+                        onTlsCertificateDownloadClick={
+                          onTlsCertificateDownloadClick
+                        }
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel>
                     <ErrorsTab
                       counts={errors.counts}
                       errors={errors.entities}
                       filter={filter}
+                      isUpdating={isUpdating}
                       sortField={sorting.errors.sortField}
                       sortReverse={sorting.errors.sortReverse}
                       onInteraction={onInteraction}
@@ -424,6 +514,7 @@ PageContent.propTypes = {
   entityError: PropTypes.object,
   filter: PropTypes.filter,
   filters: PropTypes.array,
+  gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool,
   isUpdating: PropTypes.bool,
   showError: PropTypes.func.isRequired,
@@ -451,6 +542,6 @@ PageContent.propTypes = {
   onTlsCertificateDownloadClick: PropTypes.func.isRequired,
 };
 
-export default PageContent;
+export default withGmp(PageContent);
 
 // vim: set ts=2 sw=2 tw=80:

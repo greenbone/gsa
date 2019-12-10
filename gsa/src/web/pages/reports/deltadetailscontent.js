@@ -58,9 +58,8 @@ import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Summary from './summary';
-
 import ResultsTab from './details/resultstab';
+import Summary from './details/summary';
 import TabTitle from './details/tabtitle';
 import ToolBarIcons from './details/toolbaricons';
 

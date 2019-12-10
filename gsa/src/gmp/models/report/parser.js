@@ -436,7 +436,7 @@ export const parseHosts = (report, filter) => {
 };
 
 const parse_report_report_counts = elem => {
-  const es = elem.results;
+  const es = isDefined(elem.results) ? elem.results : {};
   const ec = elem.result_count;
 
   const length = isDefined(es.result) ? es.result.length : 0;
@@ -452,9 +452,9 @@ const parse_report_report_counts = elem => {
 };
 
 export const parseResults = (report, filter) => {
-  const {results} = report;
+  const {results, result_count} = report;
 
-  if (!isDefined(results)) {
+  if (!isDefined(results) && !isDefined(result_count)) {
     return undefined;
     // instead of returning empty_collection_list(filter) we return an undefined
     // in order to query if results have been loaded and make a difference to

@@ -21,6 +21,7 @@ import {isDefined} from './utils/identity';
 export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
 export const DEFAULT_RELOAD_INTERVAL_ACTIVE = 3 * 1000; // three seconds
 export const DEFAULT_RELOAD_INTERVAL_INACTIVE = 60 * 1000; // one minute
+export const DEFAULT_REPORT_RESULTS_THRESHOLD = 25000;
 export const DEFAULT_MANUAL_URL = 'http://docs.greenbone.net/GSM-Manual/gos-5/';
 export const DEFAULT_PROTOCOLDOC_URL =
   'https://docs.greenbone.net/API/GMP/gmp-8.0.html';
@@ -67,6 +68,7 @@ class GmpSettings {
       reloadInterval = DEFAULT_RELOAD_INTERVAL,
       reloadIntervalActive = DEFAULT_RELOAD_INTERVAL_ACTIVE,
       reloadIntervalInactive = DEFAULT_RELOAD_INTERVAL_INACTIVE,
+      reportResultsThreshold = DEFAULT_REPORT_RESULTS_THRESHOLD,
       server,
       timeout,
       vendorVersion,
@@ -112,6 +114,7 @@ class GmpSettings {
     this.reloadInterval = reloadInterval;
     this.reloadIntervalActive = reloadIntervalActive;
     this.reloadIntervalInactive = reloadIntervalInactive;
+    this.reportResultsThreshold = reportResultsThreshold;
     this.timeout = timeout;
 
     setAndFreeze(this, 'apiProtocol', apiProtocol);

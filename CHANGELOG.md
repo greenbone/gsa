@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Only render report information, results and errors if a result has more than 25000 results [#1849](https://github.com/greenbone/gsa/pull/1849)
 - Limit the length of result description with a div [#1834](https://github.com/greenbone/gsa/pull/1834)
 - New permission dialog: radio button for groups disabled if no groups available [#1836](https://github.com/greenbone/gsa/pull/1836)
 - Changed new override dialog defaults [#1833](https://github.com/greenbone/gsa/pull/1833)
@@ -42,7 +43,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix statusbar content can be more than 100% and add progressbar colors to theme [1621](https://github.com/greenbone/gsa/pull/1621)
 - Allow to overwrite details=1 for command results.get() [#1618](https://github.com/greenbone/gsa/pull/1618)
 - Ensure not to request the report details when loading a list of reports [#1617](https://github.com/greenbone/gsa/pull/1617)
-- Adjust ProtList manual links [#1599](https://github.com/greenbone/gsa/pull/1599)
+- Adjust PortList manual links [#1599](https://github.com/greenbone/gsa/pull/1599)
 - Word-wrap in pre component [#1586](https://github.com/greenbone/gsa/pull/1586)
 - Disable EditIcon for My Settings if permission denied [#1588](https://github.com/greenbone/gsa/pull/1588)
 - Don't allow to clone hosts [#1581](https://github.com/greenbone/gsa/pull/1581)
@@ -54,8 +55,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
 
 ### Fixed
+- Fixed displaying update indication at all report details tabs [#1849](https://github.com/greenbone/gsa/pull/1849)
 - Fixed getting list of Closed CVEs and sorting the Closed CVEs at report details [#1850](https://github.com/greenbone/gsa/pull/1850)
-- Fix sorting of TLS Certificates by port at report details page [#1848](https://github.com/greenbone/gsa/pull/1848)
+- Fixed sorting of TLS Certificates by port at report details page [#1848](https://github.com/greenbone/gsa/pull/1848)
 - Use correct link for ManualIcon [#1835](https://github.com/greenbone/gsa/pull/1835)
 - Fixed getting InvalidStateError with IE 11 on XHR creation [#1769](https://github.com/greenbone/gsa/pull/1769)
 - Fixed filtering general command permissions in roles [#1734](https://github.com/greenbone/gsa/pull/1734)

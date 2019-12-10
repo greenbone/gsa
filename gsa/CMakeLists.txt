@@ -852,6 +852,8 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/reports/details/reportentitiescontainer.js
      ${GSA_SRC_DIR}/src/web/pages/reports/details/reportpanel.js
      ${GSA_SRC_DIR}/src/web/pages/reports/details/resultstab.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/summary.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/details/thresholdpanel.js
      ${GSA_SRC_DIR}/src/web/pages/reports/details/tlscertificatestab.js
      ${GSA_SRC_DIR}/src/web/pages/reports/details/tlscertificatestable.js
      ${GSA_SRC_DIR}/src/web/pages/reports/downloadreportdialog.js
@@ -859,8 +861,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/reports/importdialog.js
      ${GSA_SRC_DIR}/src/web/pages/reports/listpage.js
      ${GSA_SRC_DIR}/src/web/pages/reports/row.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/scaninfo.js
-     ${GSA_SRC_DIR}/src/web/pages/reports/summary.js
      ${GSA_SRC_DIR}/src/web/pages/reports/table.js
      ${GSA_SRC_DIR}/src/web/pages/reports/triggeralertdialog.js
      ${GSA_SRC_DIR}/src/web/pages/reports/dashboard/cvssdisplay.js
