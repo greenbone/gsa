@@ -23,6 +23,8 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
+import logger from 'gmp/log';
+
 import {TASK_STATUS} from 'gmp/models/task';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -70,6 +72,8 @@ import Summary from './details/summary';
 import TabTitle from './details/tabtitle';
 import TLSCertificatesTab from './details/tlscertificatestab';
 import ToolBarIcons from './details/toolbaricons';
+
+const log = logger.getLogger('web.pages.report.detailscontent');
 
 const Span = styled.span`
   margin-top: 2px;
@@ -129,6 +133,7 @@ const PageContent = ({
   const hasReport = isDefined(entity);
 
   if (!hasReport && isDefined(entityError)) {
+    log.error(entityError);
     return <ErrorMessage message={entityError.message} />;
   }
 
