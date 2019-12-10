@@ -27,6 +27,7 @@ import PropTypes from 'web/utils/proptypes';
 import {
   makeCompareDate,
   makeCompareIp,
+  makeComparePort,
   makeCompareString,
 } from 'web/utils/sort';
 
@@ -37,7 +38,7 @@ const tlsCertificatesSortFunctions = {
   notvalidafter: makeCompareDate('notafter'),
   ip: makeCompareIp('ip'),
   hostname: makeCompareString('hostname'),
-  port: makeCompareString('port'),
+  port: makeComparePort('port'),
 };
 
 const TLSCertificatesTab = ({
