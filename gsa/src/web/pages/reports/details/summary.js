@@ -19,6 +19,8 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 
 import {duration as createDuration} from 'gmp/models/date';
@@ -41,6 +43,10 @@ import TableData from 'web/components/table/data';
 import {Col} from 'web/entity/page';
 
 import PropTypes from 'web/utils/proptypes';
+
+const UpdatingTable = styled(Table)`
+  opacity: ${props => (props.isUpdating ? '0.2' : '1.0')};
+`;
 
 const scanDuration = (start, end) => {
   const dur = createDuration(end.diff(start));
@@ -71,7 +77,7 @@ const scanDuration = (start, end) => {
   });
 };
 
-const Summary = ({filter, links = true, report}) => {
+const Summary = ({filter, isUpdating = false, links = true, report}) => {
   const {
     delta_report,
     hosts,
@@ -103,7 +109,7 @@ const Summary = ({filter, links = true, report}) => {
   const is_ended = isDefined(scan_end) && scan_end.isValid();
   return (
     <Layout flex="column">
-      <Table>
+      <UpdatingTable isUpdating={isUpdating}>
         <colgroup>
           <Col width="10%" />
           <Col width="90%" />
@@ -239,13 +245,14 @@ const Summary = ({filter, links = true, report}) => {
             </TableData>
           </TableRow>
         </TableBody>
-      </Table>
+      </UpdatingTable>
     </Layout>
   );
 };
 
 Summary.propTypes = {
   filter: PropTypes.filter.isRequired,
+  isUpdating: PropTypes.bool,
   links: PropTypes.bool,
   report: PropTypes.model.isRequired,
 };
