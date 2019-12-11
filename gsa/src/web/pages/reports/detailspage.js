@@ -57,9 +57,8 @@ import {
 } from 'web/store/entities/reportformats';
 
 import {
-  loadEntity as loadReportEntityWithStore,
-  loadEntityIfNeeded as loadReportEntityWithStoreIfNeeded,
   selector as reportSelector,
+  loadEntityWithThreshold,
 } from 'web/store/entities/reports';
 
 import {
@@ -574,10 +573,8 @@ ReportDetails.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool.isRequired,
   loadFilters: PropTypes.func.isRequired,
-  loadReport: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
-  loadReportIfNeeded: PropTypes.func.isRequired,
   loadSettings: PropTypes.func.isRequired,
   loadTarget: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
@@ -607,10 +604,8 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
     loadTarget: targetId => gmp.target.get({id: targetId}),
     loadReportFormats: () =>
       dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
-    loadReport: (id, filter) =>
-      dispatch(loadReportEntityWithStore(gmp)(id, filter)),
-    loadReportIfNeeded: (id, filter) =>
-      dispatch(loadReportEntityWithStoreIfNeeded(gmp)(id, filter)),
+    loadReportWithThreshold: (id, options) =>
+      dispatch(loadEntityWithThreshold(gmp)(id, options)),
     loadReportComposerDefaults: () =>
       dispatch(loadReportComposerDefaults(gmp)()),
     loadUserSettingDefaultFilter: () =>
@@ -659,8 +654,7 @@ const reloadInterval = report =>
 const load = ({
   defaultFilter,
   reportId,
-  loadReport,
-  loadReportIfNeeded,
+  loadReportWithThreshold,
   reportFilter,
 }) => filter => {
   if (!hasValue(filter)) {
@@ -678,9 +672,7 @@ const load = ({
     filter = DEFAULT_FILTER;
   }
 
-  return loadReportIfNeeded(reportId, filter).then(() =>
-    loadReport(reportId, filter),
-  );
+  return loadReportWithThreshold(reportId, {filter});
 };
 
 const ReportDetailsWrapper = ({filter, reportFilter, ...props}) => (
