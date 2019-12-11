@@ -680,17 +680,21 @@ const load = ({
   return loadReportWithThreshold(reportId, {filter});
 };
 
-const ReportDetailsWrapper = ({filter, reportFilter, ...props}) => (
+const ReportDetailsWrapper = ({
+  filter: defaultFilter,
+  reportFilter,
+  ...props
+}) => (
   <Reload
     name="report"
-    load={load({...props, defaultFilter: filter})}
-    reload={load({...props, defaultFilter: filter, reportFilter})}
+    load={load({...props, defaultFilter})}
+    reload={load({...props, defaultFilter, reportFilter})}
     reloadInterval={() => reloadInterval(props.entity)}
   >
     {({reload}) => (
       <ReportDetails
         {...props}
-        defaultFilter={filter}
+        defaultFilter={defaultFilter}
         reportFilter={reportFilter}
         reload={reload}
       />
