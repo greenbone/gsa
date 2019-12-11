@@ -481,6 +481,7 @@ class ReportDetails extends React.Component {
       entity,
       entityError,
       filters = [],
+      gmp,
       isLoading,
       reportFilter,
       reportFormats,
@@ -500,6 +501,11 @@ class ReportDetails extends React.Component {
     } = this.state;
 
     const {report} = entity || {};
+
+    const threshold = gmp.settings.reportResultsThreshold;
+    const showThresholdMessage =
+      hasValue(report) && report.results.counts.filtered > threshold;
+
     return (
       <React.Fragment>
         <TargetComponent
@@ -560,7 +566,9 @@ class ReportDetails extends React.Component {
             includeNotes={reportComposerDefaults.includeNotes}
             includeOverrides={reportComposerDefaults.includeOverrides}
             reportFormats={reportFormats}
+            showThresholdMessage={showThresholdMessage}
             storeAsDefault={storeAsDefault}
+            threshold={threshold}
             onClose={this.handleCloseDownloadReportDialog}
             onSave={this.handleReportDownload}
           />

@@ -32,6 +32,7 @@ import {renderSelectItems} from 'web/utils/render';
 
 import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
+  ThresholdMessage,
 } from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -54,7 +55,9 @@ const DownloadReportDialog = ({
   includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
   reportFormatId,
   reportFormats,
+  showThresholdMessage,
   storeAsDefault,
+  threshold,
   onClose,
   onSave,
 }) => {
@@ -109,6 +112,7 @@ const DownloadReportDialog = ({
               onChange={onValueChange}
             />
           </StyledDiv>
+          {showThresholdMessage && <ThresholdMessage threshold={threshold} />}
         </Layout>
       )}
     </SaveDialog>
@@ -122,7 +126,9 @@ DownloadReportDialog.propTypes = {
   includeOverrides: PropTypes.number,
   reportFormatId: PropTypes.id,
   reportFormats: PropTypes.array,
+  showThresholdMessage: PropTypes.bool,
   storeAsDefault: PropTypes.bool,
+  threshold: PropTypes.number,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
