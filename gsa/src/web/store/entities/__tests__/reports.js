@@ -81,7 +81,7 @@ describe('report loadEntity function tests', () => {
 
     return loadEntity(gmp)(id)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: 1, filter: undefined});
+      expect(get).toBeCalledWith({id}, {details: true, filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {
@@ -129,9 +129,9 @@ describe('report loadEntity function tests', () => {
     expect(loadEntity).toBeDefined();
     expect(isFunction(loadEntity)).toBe(true);
 
-    return loadEntity(gmp)(id, filter)(dispatch, getState).then(() => {
+    return loadEntity(gmp)(id, {filter})(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: 1, filter});
+      expect(get).toBeCalledWith({id}, {details: true, filter});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {
@@ -200,7 +200,7 @@ describe('report loadEntity function tests', () => {
 
     return loadEntity(gmp)(id)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: 1, filter: undefined});
+      expect(get).toBeCalledWith({id}, {details: true, filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
@@ -242,7 +242,7 @@ describe('report loadEntityIfNeeded function tests', () => {
 
     return loadEntityIfNeeded(gmp)(id)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: 0, filter: undefined});
+      expect(get).toBeCalledWith({id}, {details: false, filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
@@ -312,22 +312,24 @@ describe('report loadEntityIfNeeded function tests', () => {
     expect(loadEntityIfNeeded).toBeDefined();
     expect(isFunction(loadEntityIfNeeded)).toBe(true);
 
-    return loadEntityIfNeeded(gmp)(id, filter)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: 0, filter});
-      expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch).toHaveBeenNthCalledWith(1, {
-        type: types.ENTITY_LOADING_REQUEST,
-        entityType,
-        id,
-      });
-      expect(dispatch).toHaveBeenNthCalledWith(2, {
-        type: types.ENTITY_LOADING_SUCCESS,
-        entityType,
-        data: {foo: 'bar'},
-        id,
-      });
-    });
+    return loadEntityIfNeeded(gmp)(id, {filter})(dispatch, getState).then(
+      () => {
+        expect(getState).toBeCalled();
+        expect(get).toBeCalledWith({id}, {details: false, filter});
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: types.ENTITY_LOADING_REQUEST,
+          entityType,
+          id,
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: types.ENTITY_LOADING_SUCCESS,
+          entityType,
+          data: {foo: 'bar'},
+          id,
+        });
+      },
+    );
   });
 
   test('should not load report if isLoading is true', () => {
@@ -379,7 +381,7 @@ describe('report loadEntityIfNeeded function tests', () => {
 
     return loadEntityIfNeeded(gmp)(id)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: 0, filter: undefined});
+      expect(get).toBeCalledWith({id}, {details: false, filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {
