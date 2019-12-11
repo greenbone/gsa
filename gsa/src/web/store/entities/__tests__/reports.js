@@ -198,7 +198,9 @@ describe('report loadEntity function tests', () => {
       },
     };
 
-    return loadEntity(gmp)(id)(dispatch, getState).then(() => {
+    expect.assertions(5);
+
+    return loadEntity(gmp)(id)(dispatch, getState).catch(() => {
       expect(getState).toBeCalled();
       expect(get).toBeCalledWith({id}, {details: true, filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
@@ -379,7 +381,9 @@ describe('report loadEntityIfNeeded function tests', () => {
       },
     };
 
-    return loadEntityIfNeeded(gmp)(id)(dispatch, getState).then(() => {
+    expect.assertions(5);
+
+    return loadEntityIfNeeded(gmp)(id)(dispatch, getState).catch(() => {
       expect(getState).toBeCalled();
       expect(get).toBeCalledWith({id}, {details: false, filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);

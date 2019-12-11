@@ -67,10 +67,10 @@ const deltaSelector = rootState =>
 
 const deltaEntityActions = createEntityActions(entityType);
 
-const loadEntity = gmp => (id, {filter, details = true, force = false}) => (
-  dispatch,
-  getState,
-) => {
+const loadEntity = gmp => (
+  id,
+  {filter, details = true, force = false} = {},
+) => (dispatch, getState) => {
   const rootState = getState();
   const state = selector(rootState);
 
@@ -96,7 +96,7 @@ const loadEntity = gmp => (id, {filter, details = true, force = false}) => (
     });
 };
 
-const loadEntityWithThreshold = gmp => (id, {filter}) => (
+const loadEntityWithThreshold = gmp => (id, {filter} = {}) => (
   dispatch,
   getState,
 ) => {
@@ -138,7 +138,7 @@ const loadEntityWithThreshold = gmp => (id, {filter}) => (
     });
 };
 
-const loadEntityIfNeeded = gmp => (id, {filter, details = false}) => (
+const loadEntityIfNeeded = gmp => (id, {filter, details = false} = {}) => (
   dispatch,
   getState,
 ) => {
