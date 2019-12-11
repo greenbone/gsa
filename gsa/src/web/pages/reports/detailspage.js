@@ -224,12 +224,17 @@ class ReportDetails extends React.Component {
     const {reportFilter} = this.props;
 
     this.setState({
-      isUpdating: isDefined(reportFilter) && !reportFilter.equals(filter), // show update indicator if filter has changed
+      isUpdating: isDefined(reportFilter) || !reportFilter.equals(filter), // show update indicator if filter has changed
     });
 
-    this.props.reload(filter).then(() => {
-      this.setState({isUpdating: false});
-    });
+    this.props
+      .reload(filter)
+      .then(() => {
+        this.setState({isUpdating: false});
+      })
+      .catch(() => {
+        this.setState({isUpdating: false});
+      });
   }
 
   reload() {
