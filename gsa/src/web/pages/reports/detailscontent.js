@@ -23,8 +23,6 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import logger from 'gmp/log';
-
 import {TASK_STATUS} from 'gmp/models/task';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -33,8 +31,6 @@ import StatusBar from 'web/components/bar/statusbar';
 import ToolBar from 'web/components/bar/toolbar';
 
 import DateTime from 'web/components/date/datetime';
-
-import ErrorMessage from 'web/components/error/errormessage';
 
 import ReportIcon from 'web/components/icon/reporticon';
 
@@ -74,8 +70,7 @@ import TabTitle from './details/tabtitle';
 import ThresholdPanel from './details/thresholdpanel';
 import TLSCertificatesTab from './details/tlscertificatestab';
 import ToolBarIcons from './details/toolbaricons';
-
-const log = logger.getLogger('web.pages.report.detailscontent');
+import ErrorPanel from 'web/components/error/errorpanel';
 
 const Span = styled.span`
   margin-top: 2px;
@@ -136,8 +131,7 @@ const PageContent = ({
   const hasReport = isDefined(entity);
 
   if (!hasReport && isDefined(entityError)) {
-    log.error(entityError);
-    return <ErrorMessage message={entityError.message} />;
+    return <ErrorPanel message={entityError.message} error={entityError} />;
   }
 
   const threshold = gmp.settings.reportResultsThreshold;
