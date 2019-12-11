@@ -31,7 +31,7 @@ import ScanConfig, {
 
 import {setUsername} from 'web/store/usersettings/actions';
 
-import {entitiesActions} from 'web/store/entities/scanconfigs';
+import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
@@ -55,7 +55,10 @@ const config = ScanConfig.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'task1'}, {id: '5678', name: 'task2'}],
+    task: [
+      {id: '1234', name: 'task1'},
+      {id: '5678', name: 'task2'},
+    ],
   },
   family_count: {
     __text: 2,
@@ -134,7 +137,7 @@ describe('ScanConfigsPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesActions.success([config], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );
 
     const {baseElement} = render(<ScanConfigsPage />);
@@ -194,7 +197,7 @@ describe('ScanConfigsPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesActions.success([config], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );
 
     const {baseElement, getAllByTestId} = render(<ScanConfigsPage />);

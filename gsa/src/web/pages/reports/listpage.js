@@ -194,8 +194,8 @@ class Page extends React.Component {
   }
 
   handleReportDeleteClick(report) {
-    const {gmp, onChanged, onError} = this.props;
-    return gmp.report.delete(report).then(onChanged, onError);
+    const {onDelete} = this.props;
+    return onDelete(report);
   }
 
   handleTaskChange(task_id) {
@@ -268,6 +268,7 @@ Page.propTypes = {
   loadTasks: PropTypes.func.isRequired,
   tasks: PropTypes.arrayOf(PropTypes.model),
   onChanged: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
@@ -295,10 +296,7 @@ const FALLBACK_REPORT_LIST_FILTER = Filter.fromString(
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   withEntitiesContainer('report', {
     fallbackFilter: FALLBACK_REPORT_LIST_FILTER,
     entitiesSelector,

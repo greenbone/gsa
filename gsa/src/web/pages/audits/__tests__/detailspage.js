@@ -32,7 +32,7 @@ import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {entityActions} from 'web/store/entities/audits';
+import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
@@ -53,7 +53,10 @@ const policy = Policy.fromElement({
   scanner: {name: 'scanner1', type: '0'},
   policy_type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '12345', name: 'foo'}, {id: '678910', name: 'audit2'}],
+    task: [
+      {id: '12345', name: 'foo'},
+      {id: '678910', name: 'audit2'},
+    ],
   },
 });
 
@@ -197,6 +200,10 @@ const audit5 = Audit.fromElement({
   preferences: preferences,
 });
 
+const audit5Id = {
+  id: '12345',
+};
+
 const audit6 = Audit.fromElement({
   _id: '12345',
   owner: {name: 'admin'},
@@ -311,7 +318,7 @@ describe('Audit Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', audit));
+    store.dispatch(entityLoadingActions.success('12345', audit));
 
     const {baseElement, element, getAllByTestId} = render(
       <Detailspage id="12345" />,
@@ -407,7 +414,7 @@ describe('Audit Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', audit2));
+    store.dispatch(entityLoadingActions.success('12345', audit2));
 
     const {baseElement, element} = render(<Detailspage id="12345" />);
     const spans = baseElement.querySelectorAll('span');
@@ -480,7 +487,7 @@ describe('Audit Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', audit5));
+    store.dispatch(entityLoadingActions.success('12345', audit5));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 
@@ -492,7 +499,7 @@ describe('Audit Detailspage tests', () => {
       expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
 
       fireEvent.click(icons[4]);
-      expect(deleteFunc).toHaveBeenCalledWith(audit5);
+      expect(deleteFunc).toHaveBeenCalledWith(audit5Id);
       expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
 
       fireEvent.click(icons[5]);

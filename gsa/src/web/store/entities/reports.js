@@ -18,7 +18,7 @@
  */
 import {isDefined} from 'gmp/utils/identity';
 
-import {createEntityActions} from './utils/actions';
+import {createEntityLoadingActions} from './utils/actions';
 
 import {createAll} from './utils/main';
 
@@ -29,8 +29,8 @@ const {
   loadEntities,
   reducer,
   selector,
-  entitiesActions,
-  entityActions,
+  entitiesLoadingActions,
+  entityLoadingActions,
 } = createAll('report');
 
 const entityType = 'deltaReport';
@@ -65,7 +65,7 @@ const deltaReducer = createReducer(entityType);
 const deltaSelector = rootState =>
   new DeltaSelector(rootState.entities[entityType]);
 
-const deltaEntityActions = createEntityActions(entityType);
+const deltaEntityActions = createEntityLoadingActions(entityType);
 
 const loadEntity = gmp => (id, filter) => (dispatch, getState) => {
   const rootState = getState();
@@ -76,14 +76,12 @@ const loadEntity = gmp => (id, filter) => (dispatch, getState) => {
     return Promise.resolve();
   }
 
-  dispatch(entityActions.request(id));
+  dispatch(entityLoadingActions.request(id));
 
-  return gmp.report
-    .get({id}, {filter, details: 1})
-    .then(
-      response => dispatch(entityActions.success(id, response.data)),
-      error => dispatch(entityActions.error(id, error)),
-    );
+  return gmp.report.get({id}, {filter, details: 1}).then(
+    response => dispatch(entityLoadingActions.success(id, response.data)),
+    error => dispatch(entityLoadingActions.error(id, error)),
+  );
 };
 
 const loadEntityIfNeeded = gmp => (id, filter) => (dispatch, getState) => {
@@ -97,14 +95,12 @@ const loadEntityIfNeeded = gmp => (id, filter) => (dispatch, getState) => {
     return Promise.resolve();
   }
 
-  dispatch(entityActions.request(id));
+  dispatch(entityLoadingActions.request(id));
 
-  return gmp.report
-    .get({id}, {filter, details: 0})
-    .then(
-      response => dispatch(entityActions.success(id, response.data)),
-      error => dispatch(entityActions.error(id, error)),
-    );
+  return gmp.report.get({id}, {filter, details: 0}).then(
+    response => dispatch(entityLoadingActions.success(id, response.data)),
+    error => dispatch(entityLoadingActions.error(id, error)),
+  );
 };
 
 const loadDeltaReport = gmp => (id, deltaId, filter) => (
@@ -123,13 +119,10 @@ const loadDeltaReport = gmp => (id, deltaId, filter) => (
 
   dispatch(deltaEntityActions.request(identifier));
 
-  return gmp.report
-    .getDelta({id}, {id: deltaId}, {filter})
-    .then(
-      response =>
-        dispatch(deltaEntityActions.success(identifier, response.data)),
-      error => dispatch(deltaEntityActions.error(identifier, error)),
-    );
+  return gmp.report.getDelta({id}, {id: deltaId}, {filter}).then(
+    response => dispatch(deltaEntityActions.success(identifier, response.data)),
+    error => dispatch(deltaEntityActions.error(identifier, error)),
+  );
 };
 
 export {
@@ -143,8 +136,8 @@ export {
   loadEntityIfNeeded,
   reducer,
   selector,
-  entitiesActions,
-  entityActions,
+  entitiesLoadingActions,
+  entityLoadingActions,
 };
 
 // vim: set ts=2 sw=2 tw=80:

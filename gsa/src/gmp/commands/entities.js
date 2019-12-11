@@ -112,7 +112,9 @@ class EntitiesCommand extends GmpCommand {
     for (const id of ids) {
       params['bulk_selected:' + id] = 1;
     }
-    return this.httpPost(params).then(response => response.setData(ids));
+    return this.httpPost(params).then(response => {
+      response.setData(ids);
+    });
   }
 
   deleteByFilter(filter, extraParams) {

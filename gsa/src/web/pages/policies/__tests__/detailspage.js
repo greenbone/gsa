@@ -30,7 +30,7 @@ import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {entityActions} from 'web/store/entities/policies';
+import {entityLoadingActions} from 'web/store/entities/policies';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
@@ -131,9 +131,16 @@ const policy = Policy.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
+    task: [
+      {id: '1234', name: 'audit1'},
+      {id: '5678', name: 'audit2'},
+    ],
   },
 });
+
+const policyId = {
+  id: '12345',
+};
 
 const policy2 = Policy.fromElement({
   _id: '12345',
@@ -152,7 +159,10 @@ const policy2 = Policy.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
+    task: [
+      {id: '1234', name: 'audit1'},
+      {id: '5678', name: 'audit2'},
+    ],
   },
 });
 
@@ -173,7 +183,10 @@ const policy3 = Policy.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
+    task: [
+      {id: '1234', name: 'audit1'},
+      {id: '5678', name: 'audit2'},
+    ],
   },
 });
 
@@ -194,7 +207,10 @@ const policy4 = Policy.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
+    task: [
+      {id: '1234', name: 'audit1'},
+      {id: '5678', name: 'audit2'},
+    ],
   },
 });
 
@@ -252,7 +268,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', policy));
+    store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element, getAllByTestId} = render(
       <Detailspage id="12345" />,
@@ -319,7 +335,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', policy));
+    store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element, getAllByTestId} = render(
       <Detailspage id="12345" />,
@@ -405,7 +421,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', policy));
+    store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element, getAllByTestId} = render(
       <Detailspage id="12345" />,
@@ -462,7 +478,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityActions.success('12345', policy));
+    store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element} = render(<Detailspage id="12345" />);
 
@@ -537,7 +553,7 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityActions.success('12345', policy));
+    store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 
@@ -556,7 +572,7 @@ describe('Policy Detailspage tests', () => {
       expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
 
       fireEvent.click(icons[4]);
-      expect(deleteFunc).toHaveBeenCalledWith(policy);
+      expect(deleteFunc).toHaveBeenCalledWith(policyId);
       expect(icons[4]).toHaveAttribute('title', 'Move Policy to trashcan');
 
       fireEvent.click(icons[5]);
@@ -631,7 +647,7 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityActions.success('12345', policy2));
+    store.dispatch(entityLoadingActions.success('12345', policy2));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 
@@ -734,7 +750,7 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityActions.success('12345', policy3));
+    store.dispatch(entityLoadingActions.success('12345', policy3));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 
@@ -828,7 +844,7 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
-    store.dispatch(entityActions.success('12345', policy4));
+    store.dispatch(entityLoadingActions.success('12345', policy4));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
 

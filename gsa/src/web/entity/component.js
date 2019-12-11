@@ -26,6 +26,7 @@ import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
+import {createDeleteEntity} from 'web/store/entities/utils/actions';
 
 import compose from 'web/utils/compose';
 
@@ -60,12 +61,11 @@ class EntityComponent extends React.Component {
   }
 
   handleEntityDelete(entity) {
-    const {onDeleted, onDeleteError, gmp, name} = this.props;
-    const cmd = gmp[name];
+    const {deleteEntity, onDeleted, onDeleteError} = this.props;
 
     this.handleInteraction();
 
-    return cmd.delete(entity).then(onDeleted, onDeleteError);
+    return deleteEntity(entity.id).then(onDeleted, onDeleteError);
   }
 
   handleEntityClone(entity) {
@@ -144,6 +144,7 @@ class EntityComponent extends React.Component {
 
 EntityComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  deleteEntity: PropTypes.func.isRequired,
   detailsExportFileName: PropTypes.string,
   gmp: PropTypes.gmp.isRequired,
   loadSettings: PropTypes.func.isRequired,
@@ -174,17 +175,18 @@ const mapStateToProps = rootState => {
   };
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-});
+const mapDispatchToProps = (dispatch, {name, gmp}) => {
+  const deleteEntity = createDeleteEntity({entityType: name});
+  return {
+    deleteEntity: id => dispatch(deleteEntity(gmp)(id)),
+    loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
+    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+  };
+};
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(EntityComponent);
 
 // vim: set ts=2 sw=2 tw=80:

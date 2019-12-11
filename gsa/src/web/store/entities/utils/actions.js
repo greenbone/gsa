@@ -29,9 +29,10 @@ export const types = {
   ENTITY_LOADING_REQUEST: 'ENTITY_LOADING_REQUEST',
   ENTITY_LOADING_SUCCESS: 'ENTITY_LOADING_SUCCESS',
   ENTITY_LOADING_ERROR: 'ENTITY_LOADING_ERROR',
+  ENTITY_DELETE_SUCCESS: 'ENTITY_DELETE_SUCCESS',
 };
 
-export const createEntitiesActions = entityType => ({
+export const createEntitiesLoadingActions = entityType => ({
   request: filter => ({
     type: types.ENTITIES_LOADING_REQUEST,
     entityType,
@@ -53,7 +54,7 @@ export const createEntitiesActions = entityType => ({
   }),
 });
 
-export const createEntityActions = entityType => ({
+export const createEntityLoadingActions = entityType => ({
   request: id => ({
     type: types.ENTITY_LOADING_REQUEST,
     entityType,
@@ -72,6 +73,14 @@ export const createEntityActions = entityType => ({
     id,
   }),
 });
+
+export const entityDeleteActions = {
+  success: (entityType, id) => ({
+    type: types.ENTITY_DELETE_SUCCESS,
+    entityType,
+    id,
+  }),
+};
 
 export const createLoadEntities = ({
   selector,
@@ -145,11 +154,14 @@ export const createLoadEntity = ({
 
   dispatch(actions.request(id));
 
-  return gmp[entityType]
-    .get({id})
-    .then(
-      response => dispatch(actions.success(id, response.data)),
-      error => dispatch(actions.error(id, error)),
-    );
+  return gmp[entityType].get({id}).then(
+    response => dispatch(actions.success(id, response.data)),
+    error => dispatch(actions.error(id, error)),
+  );
 };
+
+export const createDeleteEntity = ({entityType}) => gmp => id => dispatch =>
+  gmp[entityType]
+    .delete({id})
+    .then(() => dispatch(entityDeleteActions.success(entityType, id)));
 // vim: set ts=2 sw=2 tw=80:

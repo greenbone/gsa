@@ -28,7 +28,7 @@ import Filter from 'gmp/models/filter';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {entitiesActions} from 'web/store/entities/tasks';
+import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
@@ -180,7 +180,7 @@ describe('TaskPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesActions.success([task], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([task], filter, loadedFilter, counts),
     );
 
     const {baseElement, getAllByTestId} = render(<TaskPage />);
