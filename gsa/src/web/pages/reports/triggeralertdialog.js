@@ -32,6 +32,7 @@ import {renderSelectItems} from 'web/utils/render';
 
 import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
+  ThresholdMessage,
 } from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -56,7 +57,9 @@ const TriggerAlertDialog = ({
   filter = {},
   includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
   includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
+  showThresholdMessage,
   storeAsDefault,
+  threshold,
   onAlertChange,
   onClose,
   onNewAlertClick,
@@ -123,6 +126,7 @@ const TriggerAlertDialog = ({
               onChange={onValueChange}
             />
           </StyledDiv>
+          {showThresholdMessage && <ThresholdMessage threshold={threshold} />}
         </Layout>
       )}
     </SaveDialog>
@@ -137,7 +141,9 @@ TriggerAlertDialog.propTypes = {
   filter: PropTypes.filter.isRequired,
   includeNotes: PropTypes.number,
   includeOverrides: PropTypes.number,
+  showThresholdMessage: PropTypes.bool,
   storeAsDefault: PropTypes.bool,
+  threshold: PropTypes.number,
   onAlertChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onNewAlertClick: PropTypes.func.isRequired,

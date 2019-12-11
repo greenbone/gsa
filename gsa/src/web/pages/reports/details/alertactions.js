@@ -166,6 +166,8 @@ class AlertActions extends React.Component {
       reportComposerDefaults,
       filter,
       showError,
+      showThresholdMessage,
+      threshold,
       onInteraction,
     } = this.props;
     const {alertId, showTriggerAlertDialog, storeAsDefault} = this.state;
@@ -194,7 +196,9 @@ class AlertActions extends React.Component {
                 filter={filter}
                 includeNotes={reportComposerDefaults.includeNotes}
                 includeOverrides={reportComposerDefaults.includeOverrides}
+                showThresholdMessage={showThresholdMessage}
                 storeAsDefault={storeAsDefault}
+                threshold={threshold}
                 onAlertChange={this.handleAlertChange}
                 onClose={this.handleCloseTriggerAlertDialog}
                 onNewAlertClick={create}
@@ -221,6 +225,8 @@ AlertActions.propTypes = {
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
+  showThresholdMessage: PropTypes.bool,
+  threshold: PropTypes.number,
   onInteraction: PropTypes.func.isRequired,
 };
 

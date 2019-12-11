@@ -48,7 +48,9 @@ const ToolBarIcons = ({
   filter,
   loading,
   report,
+  showThresholdMessage,
   task,
+  threshold,
   onAddToAssetsClick,
   onRemoveFromAssetsClick,
   onReportDownloadClick,
@@ -130,6 +132,8 @@ const ToolBarIcons = ({
             showError={showError}
             showSuccessMessage={showSuccessMessage}
             showErrorMessage={showErrorMessage}
+            showThresholdMessage={showThresholdMessage}
+            theshold={threshold}
             onInteraction={onInteraction}
           />
         </IconDivider>
@@ -145,7 +149,9 @@ ToolBarIcons.propTypes = {
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
+  showThresholdMessage: PropTypes.bool,
   task: PropTypes.model,
+  threshold: PropTypes.number,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
