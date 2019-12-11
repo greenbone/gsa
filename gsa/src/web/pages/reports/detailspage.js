@@ -601,56 +601,6 @@ ReportDetails.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => {
-  return {
-    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-    loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
-    loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
-    loadTarget: targetId => gmp.target.get({id: targetId}),
-    loadReportFormats: () =>
-      dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
-    loadReportWithThreshold: (id, options) =>
-      dispatch(loadEntityWithThreshold(gmp)(id, options)),
-    loadReportComposerDefaults: () =>
-      dispatch(loadReportComposerDefaults(gmp)()),
-    loadUserSettingDefaultFilter: () =>
-      dispatch(loadUserSettingsDefaultFilter(gmp)('result')),
-    saveReportComposerDefaults: reportComposerDefaults =>
-      dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
-  };
-};
-
-const mapStateToProps = (rootState, {match}) => {
-  const {id} = match.params;
-  const filterSel = filterSelector(rootState);
-  const reportSel = reportSelector(rootState);
-  const reportFormatsSel = reportFormatsSelector(rootState);
-  const userDefaultsSelector = getUserSettingsDefaults(rootState);
-  const userDefaultFilterSel = getUserSettingsDefaultFilter(
-    rootState,
-    'result',
-  );
-  const username = getUsername(rootState);
-
-  const entity = reportSel.getEntity(id);
-  const entityError = reportSel.getEntityError(id);
-  return {
-    entity,
-    entityError,
-    filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
-    isLoading: !isDefined(entity),
-    reportExportFileName: userDefaultsSelector.getValueByName(
-      'reportexportfilename',
-    ),
-    reportFilter: getFilter(entity),
-    reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
-    reportId: id,
-    reportComposerDefaults: getReportComposerDefaults(rootState),
-    resultDefaultFilter: userDefaultFilterSel.getFilter('result'),
-    username,
-  };
-};
-
 const reloadInterval = report =>
   isDefined(report) && isActive(report.report.scan_run_status)
     ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
@@ -707,6 +657,53 @@ ReportDetailsWrapper.propTypes = {
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   reportFilter: PropTypes.filter,
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+  loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
+  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
+  loadTarget: targetId => gmp.target.get({id: targetId}),
+  loadReportFormats: () =>
+    dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
+  loadReportWithThreshold: (id, options) =>
+    dispatch(loadEntityWithThreshold(gmp)(id, options)),
+  loadReportComposerDefaults: () => dispatch(loadReportComposerDefaults(gmp)()),
+  loadUserSettingDefaultFilter: () =>
+    dispatch(loadUserSettingsDefaultFilter(gmp)('result')),
+  saveReportComposerDefaults: reportComposerDefaults =>
+    dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
+});
+
+const mapStateToProps = (rootState, {match}) => {
+  const {id} = match.params;
+  const filterSel = filterSelector(rootState);
+  const reportSel = reportSelector(rootState);
+  const reportFormatsSel = reportFormatsSelector(rootState);
+  const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const userDefaultFilterSel = getUserSettingsDefaultFilter(
+    rootState,
+    'result',
+  );
+  const username = getUsername(rootState);
+
+  const entity = reportSel.getEntity(id);
+  const entityError = reportSel.getEntityError(id);
+  return {
+    entity,
+    entityError,
+    filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
+    isLoading: !isDefined(entity),
+    reportExportFileName: userDefaultsSelector.getValueByName(
+      'reportexportfilename',
+    ),
+    reportFilter: getFilter(entity),
+    reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
+    reportId: id,
+    reportComposerDefaults: getReportComposerDefaults(rootState),
+    resultDefaultFilter: userDefaultFilterSel.getFilter('result'),
+    username,
+  };
 };
 
 export default compose(
