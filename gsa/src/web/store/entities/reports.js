@@ -67,7 +67,39 @@ const deltaSelector = rootState =>
 
 const deltaEntityActions = createEntityActions(entityType);
 
-const loadEntity = gmp => (id, filter, details = 1) => (dispatch, getState) => {
+const loadEntity = gmp => (id, {filter, details = true, force = false}) => (
+  dispatch,
+  getState,
+) => {
+  const rootState = getState();
+  const state = selector(rootState);
+
+  if (!force && state.isLoadingEntity(id)) {
+    // we are already loading data
+    return Promise.resolve();
+  }
+
+  dispatch(entityActions.request(id));
+
+  return gmp.report
+    .get({id}, {filter, details})
+    .then(
+      response => response.data,
+      error => {
+        dispatch(entityActions.error(id, error));
+        return Promise.reject(error);
+      },
+    )
+    .then(data => {
+      dispatch(entityActions.success(id, data));
+      return data;
+    });
+};
+
+const loadEntityWithThreshold = gmp => (id, {filter}) => (
+  dispatch,
+  getState,
+) => {
   const rootState = getState();
   const state = selector(rootState);
 
@@ -78,15 +110,38 @@ const loadEntity = gmp => (id, filter, details = 1) => (dispatch, getState) => {
 
   dispatch(entityActions.request(id));
 
+  const {reportResultsThreshold: threshold} = gmp.settings;
   return gmp.report
-    .get({id}, {filter, details})
+    .get({id}, {filter, details: false})
     .then(
-      response => dispatch(entityActions.success(id, response.data)),
-      error => dispatch(entityActions.error(id, error)),
-    );
+      response => response.data,
+      error => {
+        dispatch(entityActions.error(id, error));
+        return Promise.reject(error);
+      },
+    )
+    .then(report => {
+      const fullReport =
+        isDefined(report) &&
+        isDefined(report.report) &&
+        isDefined(report.report.results) &&
+        report.report.results.counts.filtered < threshold;
+
+      if (fullReport) {
+        return loadEntity(gmp)(id, {filter, details: true, force: true})(
+          dispatch,
+          getState,
+        );
+      }
+
+      dispatch(entityActions.success(id, report));
+    });
 };
 
-const loadEntityIfNeeded = gmp => (id, filter) => (dispatch, getState) => {
+const loadEntityIfNeeded = gmp => (id, {filter, details = false}) => (
+  dispatch,
+  getState,
+) => {
   // loads the small report (without details) if these information are not
   // yet in the store. resolve() otherwise
   const rootState = getState();
@@ -96,7 +151,7 @@ const loadEntityIfNeeded = gmp => (id, filter) => (dispatch, getState) => {
     // we are already loading data or have it in the store
     return Promise.resolve();
   }
-  return loadEntity(gmp)(id, filter, 0)(dispatch, getState);
+  return loadEntity(gmp)(id, {filter, details})(dispatch, getState);
 };
 
 const loadDeltaReport = gmp => (id, deltaId, filter) => (
@@ -133,6 +188,7 @@ export {
   loadEntities,
   loadEntity,
   loadEntityIfNeeded,
+  loadEntityWithThreshold,
   reducer,
   selector,
   entitiesActions,
