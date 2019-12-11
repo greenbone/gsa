@@ -213,10 +213,7 @@ class ReportDetails extends React.Component {
       }
     }
 
-    if (
-      prevProps.reportId !== this.props.reportId ||
-      prevProps.deltaReportId !== this.props.deltaReportId
-    ) {
+    if (prevProps.reportId !== this.props.reportId) {
       this.load();
     }
   }
@@ -321,7 +318,6 @@ class ReportDetails extends React.Component {
 
   handleReportDownload(state) {
     const {
-      deltaReportId,
       entity,
       gmp,
       reportComposerDefaults,
@@ -365,7 +361,6 @@ class ReportDetails extends React.Component {
     return gmp.report
       .download(entity, {
         reportFormatId,
-        deltaReportId,
         filter: newFilter,
       })
       .then(response => {
@@ -573,7 +568,6 @@ class ReportDetails extends React.Component {
 
 ReportDetails.propTypes = {
   defaultFilter: PropTypes.filter.isRequired,
-  deltaReportId: PropTypes.id,
   entity: PropTypes.model,
   entityError: PropTypes.object,
   filters: PropTypes.array,
