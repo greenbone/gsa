@@ -29,6 +29,7 @@ import {ALL_FILTER} from '../models/filter';
 import DefaultTransform from '../http/transform/default';
 import FastXmlTransform from '../http/transform/fastxml';
 
+import {convertBoolean} from './convert';
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
 
@@ -148,7 +149,7 @@ class ReportCommand extends EntityCommand {
       {
         id,
         filter,
-        details,
+        details: convertBoolean(details),
         ignore_pagination: 1,
       },
       {...options, transform: FastXmlTransform},

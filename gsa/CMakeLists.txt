@@ -175,6 +175,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/utils/number.js
      ${GSA_SRC_DIR}/src/gmp/utils/object.js
      ${GSA_SRC_DIR}/src/gmp/utils/string.js
+     ${GSA_SRC_DIR}/src/gmp/utils/trace.js
      ${GSA_SRC_DIR}/src/web/app.js
      ${GSA_SRC_DIR}/src/web/components/badge/badge.js
      ${GSA_SRC_DIR}/src/web/components/bar/menubar.js

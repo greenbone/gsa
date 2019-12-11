@@ -197,6 +197,7 @@ const PageContent = ({
                 <TabPanels>
                   <TabPanel>
                     <Summary
+                      filter={filter}
                       report={report}
                       onError={onError}
                       onTagChanged={onTagSuccess}
