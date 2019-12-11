@@ -547,7 +547,7 @@ class ReportDetails extends React.Component {
         {showFilterDialog && (
           <FilterDialog
             filter={reportFilter}
-            delta={isDefined(report) && report.isDeltaReport()}
+            delta={false}
             onFilterChanged={this.handleFilterChange}
             onCloseClick={this.handleFilterDialogClose}
             createFilterType="result"
