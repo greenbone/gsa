@@ -32,9 +32,9 @@ import {renderSelectItems} from 'web/utils/render';
 
 import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
-  ThresholdMessage,
 } from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
 import SaveDialog from 'web/components/dialog/savedialog';
+import ThresholdMessage from 'web/components/dialog/thresholdmessage';
 
 import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
@@ -57,7 +57,7 @@ const TriggerAlertDialog = ({
   filter = {},
   includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
   includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
-  showThresholdMessage,
+  showThresholdMessage = false,
   storeAsDefault,
   threshold,
   onAlertChange,

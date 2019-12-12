@@ -27,8 +27,6 @@ import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 
-import ErrorContainer from 'web/components/error/errorcontainer';
-
 import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 
@@ -40,20 +38,6 @@ import Theme from 'web/utils/theme';
 export const COMPOSER_CONTENT_DEFAULTS = {
   includeNotes: YES_VALUE,
   includeOverrides: YES_VALUE,
-};
-
-export const ThresholdMessage = threshold => {
-  return (
-    <ErrorContainer>
-      {_(
-        'WARNING: Please be aware that the report has more results than ' +
-          'the threshold of {{threshold}}. Therefore, this action can take ' +
-          'a really long time to finish. It might even exceed the session ' +
-          'timeout!',
-        threshold,
-      )}
-    </ErrorContainer>
-  );
 };
 
 const FilterField = styled.div`

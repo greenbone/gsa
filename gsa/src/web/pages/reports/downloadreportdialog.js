@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 Greenbone Networks GmbH
+/* Copyright (C) 2018-2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -32,8 +32,8 @@ import {renderSelectItems} from 'web/utils/render';
 
 import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
-  ThresholdMessage,
 } from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
+import ThresholdMessage from 'web/components/dialog/thresholdmessage';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -55,7 +55,7 @@ const DownloadReportDialog = ({
   includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
   reportFormatId,
   reportFormats,
-  showThresholdMessage,
+  showThresholdMessage = false,
   storeAsDefault,
   threshold,
   onClose,
