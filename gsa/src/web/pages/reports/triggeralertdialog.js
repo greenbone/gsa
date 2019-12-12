@@ -34,7 +34,7 @@ import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
 } from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
 import SaveDialog from 'web/components/dialog/savedialog';
-import ThresholdMessage from 'web/components/dialog/thresholdmessage';
+import ThresholdMessage from 'web/pages/reports/thresholdmessage';
 
 import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';

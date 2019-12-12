@@ -33,7 +33,7 @@ import {renderSelectItems} from 'web/utils/render';
 import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
 } from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
-import ThresholdMessage from 'web/components/dialog/thresholdmessage';
+import ThresholdMessage from 'web/pages/reports/thresholdmessage';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 

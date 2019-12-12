@@ -863,6 +863,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/reports/listpage.js
      ${GSA_SRC_DIR}/src/web/pages/reports/row.js
      ${GSA_SRC_DIR}/src/web/pages/reports/table.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/thresholdmessage.js
      ${GSA_SRC_DIR}/src/web/pages/reports/triggeralertdialog.js
      ${GSA_SRC_DIR}/src/web/pages/reports/dashboard/cvssdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/reports/dashboard/highresultsdisplay.js
