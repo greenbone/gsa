@@ -8756,10 +8756,70 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
         g_string_append (xml, extra_xml);
 
       if (delta_report_id)
-        g_string_append_printf (xml, "<delta>%s</delta>", delta_report_id);
+        {
+          g_string_append_printf (xml, "<delta>%s</delta>", delta_report_id);
 
-      entity = NULL;
-      if (read_entity_and_string_c (connection, &entity, &xml))
+          entity = NULL;
+          if (read_entity_and_string_c (connection, &entity, &xml))
+            {
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
+              return gsad_message (
+                credentials, "Internal error", __FUNCTION__, __LINE__,
+                "An internal error occurred while getting a report. "
+                "The report could not be delivered. "
+                "Diagnostics: Failure to receive response from manager daemon.",
+                response_data);
+            }
+
+           if (gmp_success (entity) != 1)
+             {
+               gchar *message;
+
+               set_http_status_from_entity (entity, response_data);
+
+               message = gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
+                                       entity_attribute (entity, "status_text"),
+                                       response_data);
+
+               g_string_free (xml, TRUE);
+               free_entity (entity);
+               return message;
+             }
+
+           report_entity = entity_child (entity, "report");
+           if (report_entity)
+             report_entity = entity_child (report_entity, "report");
+           if (report_entity)
+             {
+               const char *id;
+               entity_t task_entity, name;
+
+               id = NULL;
+               task_entity = entity_child (report_entity, "task");
+               if (task_entity)
+                 {
+                   id = entity_attribute (task_entity, "id");
+                   name = entity_child (task_entity, "name");
+                 }
+               else
+                 name = NULL;
+
+               if (delta_report_id && id && name)
+                 g_string_append_printf (xml,
+                                         "<task id=\"%s\"><name>%s</name></task>",
+                                         id, entity_text (name));
+
+               free_entity (entity);
+             }
+
+          g_string_append (xml, "</get_report>");
+
+          return envelope_gmp (connection, credentials, params,
+                               g_string_free (xml, FALSE), response_data);
+        }
+
+      if (read_string_c (connection, &xml))
         {
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
@@ -8769,47 +8829,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
             "The report could not be delivered. "
             "Diagnostics: Failure to receive response from manager daemon.",
             response_data);
-        }
-
-      if (gmp_success (entity) != 1)
-        {
-          gchar *message;
-
-          set_http_status_from_entity (entity, response_data);
-
-          message = gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
-                                  entity_attribute (entity, "status_text"),
-                                  response_data);
-
-          g_string_free (xml, TRUE);
-          free_entity (entity);
-          return message;
-        }
-
-      report_entity = entity_child (entity, "report");
-      if (report_entity)
-        report_entity = entity_child (report_entity, "report");
-      if (report_entity)
-        {
-          const char *id;
-          entity_t task_entity, name;
-
-          id = NULL;
-          task_entity = entity_child (report_entity, "task");
-          if (task_entity)
-            {
-              id = entity_attribute (task_entity, "id");
-              name = entity_child (task_entity, "name");
-            }
-          else
-            name = NULL;
-
-          if (delta_report_id && id && name)
-            g_string_append_printf (xml,
-                                    "<task id=\"%s\"><name>%s</name></task>",
-                                    id, entity_text (name));
-
-          free_entity (entity);
         }
 
       g_string_append (xml, "</get_report>");
