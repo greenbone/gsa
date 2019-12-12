@@ -38,7 +38,7 @@ const ThresholdMessage = ({threshold}) => (
 );
 
 ThresholdMessage.propTypes = {
-  threshold: PropTypes.number,
+  threshold: PropTypes.number.isRequired,
 };
 
 export default ThresholdMessage;
