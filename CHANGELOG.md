@@ -58,6 +58,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Lower memory usage when getting a report [#1858](https://github.com/greenbone/gvmd/pull/1858)
 
 ### Fixed
+- Fixed sorting of hosts in report details [#1860](https://github.com/greenbone/gsa/pull/1860)
 - Fixed displaying update indication at all report details tabs [#1849](https://github.com/greenbone/gsa/pull/1849)
 - Fixed getting list of Closed CVEs and sorting the Closed CVEs at report details [#1850](https://github.com/greenbone/gsa/pull/1850)
 - Fixed sorting of TLS Certificates by port at report details page [#1848](https://github.com/greenbone/gsa/pull/1848)

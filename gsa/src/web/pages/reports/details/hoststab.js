@@ -22,6 +22,7 @@ import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 
 import {
+  makeCompareDate,
   makeCompareIp,
   makeCompareNumber,
   makeCompareSeverity,
@@ -34,19 +35,21 @@ import ReportEntitiesContainer from './reportentitiescontainer';
 const hostsSortFunctions = {
   ip: makeCompareIp('ip'),
   hostname: makeCompareString('hostname'),
-  portsCount: makeCompareNumber(entity => entity.portCount),
-  appsCount: makeCompareNumber(entity => entity.appsCount),
+  portsCount: makeCompareNumber(entity => entity.portsCount),
+  appsCount: makeCompareNumber(entity => entity.details.appsCount),
   distance: makeCompareNumber(entity => entity.details.distance),
   os: makeCompareString(entity => entity.details.best_os_cpe),
-  high: makeCompareNumber(entity => entity.result_counts.hole),
+  high: makeCompareNumber(entity => entity.result_counts.high),
   medium: makeCompareNumber(entity => entity.result_counts.warning),
   low: makeCompareNumber(entity => entity.result_counts.info),
   log: makeCompareNumber(entity => entity.result_counts.log),
   false_positive: makeCompareNumber(
     entity => entity.result_counts.false_positive,
   ),
-  total: makeCompareNumber(entity => entity.result_counts.total),
   severity: makeCompareSeverity(),
+  start: makeCompareDate(entity => entity.start),
+  end: makeCompareDate(entity => entity.end),
+  total: makeCompareNumber(entity => entity.result_counts.total),
 };
 
 const HostsTab = ({
