@@ -20,10 +20,13 @@ import React from 'react';
 
 import DefaultFilter from './defaultfilter';
 
-const withDefaultFilter = entityType => Component => {
+const withDefaultFilter = (entityType, name = 'defaultFilter') => Component => {
   const DefaultFilterWrapper = props => (
     <DefaultFilter entityType={entityType}>
-      {({filter}) => <Component filter={filter} {...props} />}
+      {({filter}) => {
+        const filterProps = {[name]: filter, ...props};
+        return <Component {...filterProps} />;
+      }}
     </DefaultFilter>
   );
   return DefaultFilterWrapper;
