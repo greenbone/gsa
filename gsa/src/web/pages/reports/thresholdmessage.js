@@ -32,7 +32,7 @@ const ThresholdMessage = ({threshold}) => (
         'the threshold of {{threshold}}. Therefore, this action can take ' +
         'a really long time to finish. It might even exceed the session ' +
         'timeout!',
-      threshold,
+      {threshold},
     )}
   </ErrorContainer>
 );
