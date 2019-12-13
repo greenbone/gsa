@@ -55,6 +55,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Adjust clickable areas for Select and MultiSelect [#1545](https://github.com/greenbone/gsa/pull/1545)
 - Redirect to main page when visiting the login page and the user is already
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
+- Lower memory usage when getting a report [#1858](https://github.com/greenbone/gvmd/pull/1858)
 
 ### Fixed
 - Fixed displaying update indication at all report details tabs [#1849](https://github.com/greenbone/gsa/pull/1849)
