@@ -127,14 +127,14 @@ const loadEntityWithThreshold = gmp => (id, {filter} = {}) => (
         isDefined(report.report.results) &&
         report.report.results.counts.filtered < threshold;
 
+      dispatch(entityActions.success(id, report));
+
       if (fullReport) {
         return loadEntity(gmp)(id, {filter, details: true, force: true})(
           dispatch,
           getState,
         );
       }
-
-      dispatch(entityActions.success(id, report));
     });
 };
 
