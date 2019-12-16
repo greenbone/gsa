@@ -1131,6 +1131,7 @@ get_many (gvm_connection_t *connection, const char *type,
   const char *level_high, *level_medium, *level_low, *level_log;
   const char *level_false_positive;
   const char *details;
+  const char *and_report_id;
   entity_t entity;
 
   build_filter = params_value (params, "build_filter");
@@ -1255,11 +1256,27 @@ get_many (gvm_connection_t *connection, const char *type,
             }
           else if (str_equal (type, "result"))
             {
+              gchar *report_id_filter;
+              and_report_id = params_value (params, "_and_report_id");
+
+              if (and_report_id == NULL || str_equal (and_report_id, ""))
+                {
+                  report_id_filter = g_strdup ("");
+                }
+              else
+                {
+                  report_id_filter =
+                    g_strdup_printf ("_and_report_id=%s", and_report_id);
+                }
+
               built_filter = g_strdup_printf (
                 "apply_overrides=%d autofp=%s rows=-2"
-                " sort-reverse=created",
+                " sort-reverse=created %s",
                 (overrides == NULL || str_equal (overrides, "1")),
-                (autofp && str_equal (autofp, "1")) ? autofp_value : "0");
+                (autofp && str_equal (autofp, "1")) ? autofp_value : "0",
+                report_id_filter);
+
+              g_free (report_id_filter);
             }
           else if (str_equal (type, "note") || str_equal (type, "override"))
             {
@@ -10319,6 +10336,11 @@ get_results (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t *response_data)
 {
+  const gchar *_and_report_id = params_value (params, "_and_report_id");
+  if (params_given (params, "_and_report_id"))
+    {
+      CHECK_VARIABLE_INVALID (_and_report_id, "Get Results");
+    }
   return get_many (connection, "result", credentials, params, extra_xml, NULL,
                    response_data);
 }
