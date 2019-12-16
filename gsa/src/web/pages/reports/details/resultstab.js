@@ -86,18 +86,6 @@ class ResultsTab extends React.Component {
     };
   }
 
-  componentDidMount() {
-    let filter = this.props.resultsFilter;
-
-    if (!isDefined(filter)) {
-      filter = this.props.filter;
-    }
-
-    if (isDefined(filter)) {
-      this.load(filterWithReportId(filter, this.props.reportId));
-    }
-  }
-
   componentDidUpdate(prevProps) {
     const {filter, reportId} = this.props;
     if (isDefined(prevProps.filter) && !prevProps.filter.equals(filter)) {
