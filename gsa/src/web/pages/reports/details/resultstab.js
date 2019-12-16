@@ -22,10 +22,15 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import Filter from 'gmp/models/filter';
+import {isActive} from 'gmp/models/task';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import Loading from 'web/components/loading/loading';
+import Reload, {
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
+  NO_RELOAD,
+} from 'web/components/loading/reload';
 
 import SortBy from 'web/components/sortby/sortby';
 
@@ -105,9 +110,8 @@ class ResultsTab extends React.Component {
   load(filter) {
     this.setState({isUpdating: true});
 
-    this.props.updateFilter(filter);
     this.props
-      .loadResults(filter)
+      .reload(filter)
       .then(() => {
         this.setState({isUpdating: false});
       })
@@ -163,11 +167,12 @@ class ResultsTab extends React.Component {
   render() {
     const {isUpdating, results, resultsCounts} = this.state;
     const {
-      resultsFilter: filter,
-      isLoading = true,
-      status,
-      progress,
       hasTarget,
+      isLoading = true,
+      progress,
+      filter: reportFilter,
+      resultsFilter: filter,
+      status,
       onFilterAddLogLevelClick,
       onFilterDecreaseMinQoDClick,
       onFilterEditClick,
@@ -221,7 +226,7 @@ class ResultsTab extends React.Component {
         delta={false}
         entities={results}
         entitiesCounts={resultsCounts}
-        filter={filter}
+        filter={reportFilter}
         footer={false}
         isUpdating={isUpdating}
         links={true}
@@ -242,19 +247,58 @@ ResultsTab.propTypes = {
   filter: PropTypes.filter,
   hasTarget: PropTypes.bool,
   isLoading: PropTypes.bool,
-  loadResults: PropTypes.func.isRequired,
   progress: PropTypes.number.isRequired,
+  reload: PropTypes.func.isRequired,
   reportId: PropTypes.id,
   resultsCounts: PropTypes.counts,
   resultsFilter: PropTypes.filter,
   status: PropTypes.string.isRequired,
-  updateFilter: PropTypes.func.isRequired,
   onFilterAddLogLevelClick: PropTypes.func.isRequired,
   onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
   onFilterEditClick: PropTypes.func.isRequired,
   onFilterRemoveClick: PropTypes.func.isRequired,
   onFilterRemoveSeverityClick: PropTypes.func.isRequired,
   onTargetEditClick: PropTypes.func.isRequired,
+};
+
+const reloadInterval = status =>
+  isActive(status) ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE : NO_RELOAD; // report doesn't change anymore. no need to reload
+
+const load = ({
+  filter: reportFilter,
+  reportId,
+  resultsFilter,
+  // eslint-disable-next-line no-shadow
+  loadResults,
+  updateFilter,
+}) => filter => {
+  if (!hasValue(filter)) {
+    filter = resultsFilter;
+  }
+
+  if (!hasValue(filter)) {
+    filter = reportFilter;
+  }
+
+  filter = filterWithReportId(filter, reportId);
+  updateFilter(filter);
+
+  return loadResults(filter);
+};
+
+const ResultsTabWrapper = props => (
+  <Reload
+    name={`report-${props.reportId}-results`}
+    reload={load(props)}
+    reloadInterval={() => reloadInterval(props.status)}
+  >
+    {({reload}) => <ResultsTab {...props} reload={reload} />}
+  </Reload>
+);
+
+ResultsTabWrapper.propTypes = {
+  reportId: PropTypes.id.isRequired,
+  status: PropTypes.string.isRequired,
 };
 
 const getPageName = reportId => `report-${reportId}-results`;
@@ -286,6 +330,6 @@ export default compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-)(ResultsTab);
+)(ResultsTabWrapper);
 
 // vim: set ts=2 sw=2 tw=80:
