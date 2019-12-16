@@ -6116,7 +6116,7 @@ msgstr "Ergebnisse sind nicht nach Schweregrad sortiert."
 
 #: gsa/src/web/pages/reports/details/thresholdpanel.js:141
 msgid "Apply a minimum severity of 7.0."
-msgstr "Minimalen Schweregrads von 7.0 anwenden."
+msgstr "Minimalen Schweregrad von 7.0 anwenden."
 
 #: gsa/src/web/pages/reports/details/thresholdpanel.js:146
 msgid "Your filter settings may be too unrefined."
