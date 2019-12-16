@@ -159,7 +159,7 @@ class ResultsTab extends React.Component {
       isLoading = true,
       progress,
       filter: reportFilter,
-      resultsFilter: filter,
+      resultsFilter,
       status,
       onFilterAddLogLevelClick,
       onFilterDecreaseMinQoDClick,
@@ -169,12 +169,14 @@ class ResultsTab extends React.Component {
       onTargetEditClick,
     } = this.props;
 
-    const reverseField = isDefined(filter)
-      ? filter.get('sort-reverse')
+    const reverseField = isDefined(resultsFilter)
+      ? resultsFilter.get('sort-reverse')
       : undefined;
     const reverse = isDefined(reverseField);
     let sortBy =
-      reverse || !isDefined(filter) ? reverseField : filter.get('sort');
+      reverse || !isDefined(resultsFilter)
+        ? reverseField
+        : resultsFilter.get('sort');
     const sortDir = reverse ? SortBy.DESC : SortBy.ASC;
 
     if (!isDefined(sortBy)) {
@@ -185,6 +187,9 @@ class ResultsTab extends React.Component {
     if (!isDefined(results) && isLoading) {
       return <Loading />;
     }
+
+    const displayedFilter = reportFilter.simple();
+
     if (isDefined(resultsCounts) && resultsCounts.filtered === 0) {
       if (resultsCounts.all === 0) {
         return (
@@ -199,7 +204,7 @@ class ResultsTab extends React.Component {
         return (
           <EmptyResultsReport
             all={resultsCounts.all}
-            filter={filter}
+            filter={displayedFilter}
             onFilterAddLogLevelClick={onFilterAddLogLevelClick}
             onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
             onFilterEditClick={onFilterEditClick}
@@ -214,7 +219,7 @@ class ResultsTab extends React.Component {
         delta={false}
         entities={results}
         entitiesCounts={resultsCounts}
-        filter={reportFilter}
+        filter={displayedFilter}
         footer={false}
         isUpdating={isUpdating}
         links={true}
