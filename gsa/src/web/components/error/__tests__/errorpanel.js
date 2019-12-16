@@ -21,52 +21,60 @@
 
 import React from 'react';
 
+import {setLocale} from 'gmp/locale/lang';
+
 import {render, fireEvent} from 'web/utils/testing';
-import ErrorBoundary from '../errorboundary';
 
-const ThrowError = () => {
-  throw new Error('foo');
-};
+import ErrorPanel from '../errorpanel';
 
-describe('ErrorBoundary tests', () => {
-  test('should render children if no error occurs', () => {
-    const {container, element} = render(
-      <ErrorBoundary message="An error occurred">
-        <span>foo</span>
-      </ErrorBoundary>,
-    );
+setLocale('en');
 
-    expect(container.childNodes.length).toEqual(1);
-    expect(element.nodeName).toEqual('SPAN');
-    expect(element).toHaveTextContent('foo');
-  });
-
-  test('should render ErrorMessage if error occurs', () => {
-    const origConsoleError = console.error;
-    console.error = () => {};
-
+describe('ErrorPanel tests', () => {
+  test('should render message', () => {
     const message = 'An error occurred';
-    const {getByTestId} = render(
-      <ErrorBoundary message={message}>
-        <ThrowError />
-      </ErrorBoundary>,
-    );
+    const {getByTestId} = render(<ErrorPanel message={message} />);
 
     expect(getByTestId('error-message')).toHaveTextContent(message);
     expect(getByTestId('error-details')).toHaveTextContent('Please try again');
-
-    console.error = origConsoleError;
   });
 
-  test('should allow to display error details', () => {
-    const origConsoleError = console.error;
-    console.error = () => {};
-
+  test('should allow to display error stack details', () => {
     const message = 'An error occurred';
+
+    const error = {
+      name: 'Error',
+      message: 'foo',
+      stack: 'Foo Bar',
+    };
+
+    const {getByTestId, queryByTestId} = render(
+      <ErrorPanel message={message} error={error} />,
+    );
+
+    const toggle = getByTestId('errorpanel-toggle');
+
+    fireEvent.click(toggle);
+
+    expect(getByTestId('errorpanel-heading')).toHaveTextContent('Error: foo');
+    expect(queryByTestId('errorpanel-component-stack')).toBeNull();
+    expect(getByTestId('errorpanel-error-stack')).not.toBeNull();
+  });
+
+  test('should allow to display component stack details', () => {
+    const message = 'An error occurred';
+
+    const error = {
+      name: 'Error',
+      message: 'foo',
+      stack: 'Foo Bar',
+    };
+
+    const info = {
+      componentStack: 'Lorem Ipsum',
+    };
+
     const {getByTestId} = render(
-      <ErrorBoundary message={message}>
-        <ThrowError />
-      </ErrorBoundary>,
+      <ErrorPanel message={message} error={error} info={info} />,
     );
 
     const toggle = getByTestId('errorpanel-toggle');
@@ -76,7 +84,5 @@ describe('ErrorBoundary tests', () => {
     expect(getByTestId('errorpanel-heading')).toHaveTextContent('Error: foo');
     expect(getByTestId('errorpanel-component-stack')).not.toBeNull();
     expect(getByTestId('errorpanel-error-stack')).not.toBeNull();
-
-    console.error = origConsoleError;
   });
 });

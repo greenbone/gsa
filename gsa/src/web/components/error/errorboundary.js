@@ -19,43 +19,17 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
 
-import Divider from 'web/components/layout/divider';
-
 import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
 
-import ErrorMessage from './errormessage';
-
-const ErrorDetailsToggle = styled.span`
-  margin-top: 10px;
-  cursor: pointer;
-  :hover {
-    text-decoration: underline;
-  }
-`;
-
-const ErrorDetails = styled.div`
-  margin-top: 10px;
-  border: 1px solid ${Theme.mediumLightRed};
-  background-color: ${Theme.white};
-  padding: 5px;
-  max-height: 200px;
-  overflow: auto;
-  overflow-x: auto;
-  white-space: pre;
-`;
+import ErrorPanel from './errorpanel';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {hasError: false, showDetails: false};
-
-    this.handleToggleDetails = this.handleToggleDetails.bind(this);
+    this.state = {hasError: false};
   }
 
   componentDidCatch(error, info) {
@@ -66,42 +40,12 @@ class ErrorBoundary extends React.Component {
     });
   }
 
-  handleToggleDetails() {
-    this.setState(({showDetails}) => ({showDetails: !showDetails}));
-  }
-
   render() {
-    const {hasError, showDetails, error, info} = this.state;
+    const {hasError, error, info} = this.state;
     const {message = _('An error occurred on this page.')} = this.props;
 
     if (hasError) {
-      return (
-        <ErrorMessage
-          message={message}
-          details={_('Please try again.')}
-          flex="column"
-        >
-          <ErrorDetailsToggle
-            data-testid="errorboundary-toggle"
-            onClick={this.handleToggleDetails}
-          >
-            {showDetails ? _('Hide Error Details') : _('Show Error Details')}
-          </ErrorDetailsToggle>
-          {showDetails && (
-            <ErrorDetails>
-              <Divider flex="column">
-                <h3 data-testid="errorboundary-heading">
-                  {error.name}: {error.message}
-                </h3>
-                <pre data-testid="errorboundary-component-stack">
-                  {info.componentStack}
-                </pre>
-                <pre data-testid="errorboundary-error-stack">{error.stack}</pre>
-              </Divider>
-            </ErrorDetails>
-          )}
-        </ErrorMessage>
-      );
+      return <ErrorPanel error={error} info={info} message={message} />;
     }
     return this.props.children;
   }
