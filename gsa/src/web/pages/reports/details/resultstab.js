@@ -53,8 +53,8 @@ import EmptyResultsReport from './emptyresultsreport';
 
 const filterWithReportId = (filter, reportId) =>
   isDefined(filter)
-    ? filter.copy().set('report_id', reportId)
-    : Filter.fromString(`report_id=${reportId}`);
+    ? filter.copy().set('_and_report_id', reportId)
+    : Filter.fromString(`_and_report_id=${reportId}`);
 
 class ResultsTab extends React.Component {
   constructor(...args) {
