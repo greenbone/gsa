@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-13 16:10+0100\n"
-"PO-Revision-Date: 2019-12-13 17:06+0100\n"
+"POT-Creation-Date: 2019-12-16 09:08+0100\n"
+"PO-Revision-Date: 2019-12-16 09:45+0100\n"
 "Last-Translator: Kristin Schlosser <kristin.schlosser@greenbone.net>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -6087,27 +6087,24 @@ msgstr ""
 "{{threshold}}, indem Sie einen präziseren Filter anwenden."
 
 #: gsa/src/web/pages/reports/details/thresholdpanel.js:111
-#, fuzzy
 msgid "Result with log messages are currently included."
-msgstr "Log Nachrichten sind derzeit ausgeschlossen."
+msgstr "Ergebnisse mit Log-Nachrichten sind derzeit eingeschlossen."
 
 #: gsa/src/web/pages/reports/details/thresholdpanel.js:114
 msgid "Filter out log message results."
 msgstr "Ergebnisse mit Log Nachrichten herausfiltern."
 
 #: gsa/src/web/pages/reports/details/thresholdpanel.js:120
-#, fuzzy
 msgid "Results with low severity are currently included."
-msgstr "Log Nachrichten sind derzeit ausgeschlossen."
+msgstr "Ergebnisse mit niedrigem Schweregrad sind derzeit eingeschlossen."
 
 #: gsa/src/web/pages/reports/details/thresholdpanel.js:123
 msgid "Filter out results with low severity."
 msgstr "Ergebnisse mit niedrigem Schweregrad herausfiltern."
 
 #: gsa/src/web/pages/reports/details/thresholdpanel.js:129
-#, fuzzy
 msgid "Results with medium severity are currently included."
-msgstr "Log Nachrichten sind derzeit ausgeschlossen."
+msgstr "Ergebnisse mit mittlerem Schweregrad sind derzeit eingeschlossen."
 
 #: gsa/src/web/pages/reports/details/thresholdpanel.js:132
 msgid "Filter out results with medium severity."
@@ -6115,16 +6112,15 @@ msgstr "Ergebnisse mit mittlerem Schweregrad herausfiltern."
 
 #: gsa/src/web/pages/reports/details/thresholdpanel.js:138
 msgid "Results aren't filtered by severity."
-msgstr ""
+msgstr "Ergebnisse sind nicht nach Schweregrad sortiert."
 
 #: gsa/src/web/pages/reports/details/thresholdpanel.js:141
 msgid "Apply a minimum severity of 7.0."
-msgstr "Anwenden eines minimalen Schweregrads von 7.0."
+msgstr "Minimalen Schweregrads von 7.0 anwenden."
 
 #: gsa/src/web/pages/reports/details/thresholdpanel.js:146
-#, fuzzy
 msgid "Your filter settings may be too unrefined."
-msgstr "Ihre Filtereinstellungen könnten zu präzise sein."
+msgstr "Ihre Filtereinstellungen könnten zu unpräzise sein."
 
 #: gsa/src/web/pages/reports/details/thresholdpanel.js:154
 #: gsa/src/web/entities/table.js:145 gsa/src/web/entities/table.js:280
@@ -6268,15 +6264,15 @@ msgstr "Tabelle: Ergebnis-Schwachstelle-Wordcloud"
 
 #: gsa/src/web/pages/results/row.js:87
 msgid "There are notes for this result"
-msgstr "Es gibt Notizen zu diesem Ergebnis"
+msgstr "Es gibt Notizen zu diesem Ergebnis."
 
 #: gsa/src/web/pages/results/row.js:90
 msgid "There are overrides for this result"
-msgstr "Es gibt Übersteuerungen zu diesem Ergebnis"
+msgstr "Es gibt Übersteuerungen zu diesem Ergebnis."
 
 #: gsa/src/web/pages/results/row.js:93
 msgid "There are tickets for this result"
-msgstr "Es gibt Tickets zu diesem Ergebnis"
+msgstr "Es gibt Tickets zu diesem Ergebnis."
 
 #: gsa/src/web/pages/results/details.js:94
 msgid "Detection Results"
@@ -6596,7 +6592,7 @@ msgstr "Host {{name}} bearbeiten"
 
 #: gsa/src/web/pages/alerts/httpmethodpart.js:32
 msgid "HTTP Get URL"
-msgstr "HTTP-Get-URL"
+msgstr "HTTP-GET-URL"
 
 #: gsa/src/web/pages/alerts/sendmethodpart.js:44
 #: gsa/src/web/pages/alerts/dialog.js:369
@@ -6660,7 +6656,7 @@ msgstr "verringert"
 #: gsa/src/web/pages/alerts/alembavfiremethodpart.js:79
 #: gsa/src/web/pages/alerts/method.js:99
 msgid "Base URL"
-msgstr "Basis URL"
+msgstr "Basis-URL"
 
 #: gsa/src/web/pages/alerts/alembavfiremethodpart.js:107
 #: gsa/src/web/pages/alerts/method.js:156
@@ -6839,7 +6835,7 @@ msgstr "Bericht einfügen"
 
 #: gsa/src/web/pages/alerts/emailmethodpart.js:151
 msgid "Include list of resources with message:"
-msgstr "Ressourcenliste einfügen mit Nachricht:"
+msgstr "Ressourcenliste mit folgender Nachricht einfügen:"
 
 #: gsa/src/web/pages/alerts/emailmethodpart.js:175
 msgid "Activate the \"include\" option to make changes here."
@@ -6906,7 +6902,7 @@ msgstr "E-Mail"
 
 #: gsa/src/web/pages/alerts/dialog.js:361
 msgid "HTTP Get"
-msgstr "HTTP-Get"
+msgstr "HTTP-GET"
 
 #: gsa/src/web/pages/alerts/dialog.js:365
 #: gsa/src/web/pages/alerts/dialog.js:427
@@ -7123,7 +7119,8 @@ msgstr "Testen der Benachrichtigung {{name}} ist fehlgeschlagen. {{message}}."
 #: gsa/src/web/pages/alerts/component.js:838
 msgid "An error occurred during Testing the alert {{name}}"
 msgstr ""
-"Es ist ein Fehler während des Tests der Benachrichtigung {{name}} aufgetreten"
+"Es ist ein Fehler während des Tests der Benachrichtigung {{name}} "
+"aufgetreten."
 
 #: gsa/src/web/pages/alerts/smbmethodpart.js:60
 msgid ""
@@ -7802,7 +7799,7 @@ msgstr "Berichtformat importieren"
 
 #: gsa/src/web/pages/reportformats/dialog.js:270
 msgid "Import XML Report Format"
-msgstr "Importiere XML Berichtformat"
+msgstr "Importiere XML-Berichtformat"
 
 #: gsa/src/web/pages/reportformats/detailspage.js:86
 msgid "Report Formats List"
@@ -7822,7 +7819,7 @@ msgstr "Parameter"
 
 #: gsa/src/web/pages/reportformats/table.js:47
 msgid "Trust (Last Verified)"
-msgstr "Vertrauen (Zuletzt Verifiziert)"
+msgstr "Vertrauen (Zuletzt verifiziert)"
 
 #: gsa/src/web/pages/reportformats/table.js:58
 msgid "No report formats available"
@@ -7971,7 +7968,7 @@ msgstr "Beitragende"
 
 #: gsa/src/web/pages/ovaldefs/table.js:137
 msgid "No OVAL Definitions available"
-msgstr "Keine OVAL Definitionen verfügbar"
+msgstr "Keine OVAL-Definitionen verfügbar"
 
 #: gsa/src/web/pages/page.js:98
 #: gsa/src/web/components/error/errorboundary.js:75
@@ -8104,7 +8101,7 @@ msgstr "Der Portbereich benötigt numerische Werte für Start und Ende!"
 
 #: gsa/src/web/pages/portlists/component.js:222
 msgid "The end of the port range can not be below its start!"
-msgstr "Das Ende des Portbereiches kann nicht unter dessen Startwert liegen!"
+msgstr "Das Ende des Portbereichs kann nicht unter dessen Startwert liegen!"
 
 #: gsa/src/web/pages/portlists/component.js:242
 msgid "New port range overlaps with an existing one!"
@@ -8334,7 +8331,7 @@ msgstr "Scans"
 
 #: gsa/src/web/components/bar/menubar.js:146
 msgid "Remediation Tickets"
-msgstr "Remediation Tickets"
+msgstr "Remediation-Tickets"
 
 #: gsa/src/web/components/bar/menubar.js:181
 msgid "Configuration"
@@ -8379,7 +8376,7 @@ msgstr "Hilfe"
 
 #: gsa/src/web/components/bar/menubar.js:272
 msgid "About"
-msgstr "Über"
+msgstr "Über den Greenbone Security Manager"
 
 #: gsa/src/web/components/bar/titlebar.js:76
 #: gsa/src/web/components/img/product.js:40
@@ -8445,7 +8442,7 @@ msgstr "Remote-Banner"
 
 #: gsa/src/web/components/dashboard/display/utils.js:104
 msgid "Remote probe"
-msgstr "Fern-Test"
+msgstr "Remote-Test"
 
 #: gsa/src/web/components/dashboard/display/utils.js:105
 msgid "Unreliable rem. banner"
@@ -8481,7 +8478,7 @@ msgstr "Patch"
 
 #: gsa/src/web/components/dashboard/display/datadisplayicons.js:38
 msgid "Toggle 2D/3D view"
-msgstr "Zwischen 2D/3D-Ansicht umschalten"
+msgstr "Zwischen 2D-/3D-Ansicht umschalten"
 
 #: gsa/src/web/components/dashboard/display/datadisplayicons.js:56
 #: gsa/src/web/components/dashboard/display/filterselection.js:98
@@ -8527,11 +8524,11 @@ msgstr "Anzeige auswählen"
 
 #: gsa/src/web/components/link/certlink.js:42
 msgid "View details of CERT-Bund Advisory {{name}}"
-msgstr "Details der CERT-Bund Advisory {{name}} anzeigen"
+msgstr "Details der CERT-Bund-Advisory {{name}} anzeigen"
 
 #: gsa/src/web/components/link/certlink.js:44
 msgid "View details of DFN-CERT Advisory {{name}}"
-msgstr "Details der DFN-CERT Advisory {{name}} anzeigen"
+msgstr "Details der DFN-CERT-Advisory {{name}} anzeigen"
 
 #: gsa/src/web/components/link/userlink.js:50
 msgid "Your session will end at {{date}}"
@@ -8539,7 +8536,7 @@ msgstr "Ihre Sitzung läuft {{date}} ab"
 
 #: gsa/src/web/components/link/externallink.js:65
 msgid "You are leaving GSA"
-msgstr "Sie verlassen GSA"
+msgstr "Sie verlassen den Greenbone Security Assistant."
 
 #: gsa/src/web/components/link/externallink.js:67
 msgid ""
@@ -8549,7 +8546,8 @@ msgid ""
 msgstr ""
 "Dieser Dialog öffnet ein neues Fenster für {{-to}}, wenn Sie auf \"Link "
 "folgen\" klicken. Diesem Link zu folgen liegt in Ihrer Verantwortung. "
-"Greenbone hat keinen Einfluss auf den Inhalt, den Sie dort sehen werden."
+"Greenbone Networks hat keinen Einfluss auf den Inhalt, den Sie dort sehen "
+"werden."
 
 #: gsa/src/web/components/link/externallink.js:84
 msgid "Follow Link"
@@ -8565,7 +8563,7 @@ msgstr "Vorherige"
 
 #: gsa/src/web/components/pagination/pagination.js:77
 msgid "{{first}} - {{last}} of {{filtered}}"
-msgstr "{{first}} - {{last}} von {{filtered}}"
+msgstr "{{first}} – {{last}} von {{filtered}}"
 
 #: gsa/src/web/components/pagination/pagination.js:87
 msgid "Last"
@@ -8685,7 +8683,7 @@ msgstr "Geladener Filter"
 
 #: gsa/src/web/components/powerfilter/filterdialog.js:95
 msgid "Please insert a name for the new filter"
-msgstr "Bitte geben Sie einen Filternamen für den neuen Filter an"
+msgstr "Bitte geben Sie einen Filternamen für den neuen Filter an."
 
 #: gsa/src/web/components/powerfilter/resultsperpagegroup.js:36
 msgid "Results per page"
@@ -8693,7 +8691,7 @@ msgstr "Ergebnisse pro Seite"
 
 #: gsa/src/web/components/powerfilter/minqodgroup.js:39
 msgid "must be at least"
-msgstr "mindestens"
+msgstr "Mindestens"
 
 #: gsa/src/web/components/powerfilter/autofpgroup.js:37
 msgid "Auto-FP"
@@ -8757,7 +8755,7 @@ msgstr ""
 
 #: gsa/src/web/components/form/timezoneselect.js:35
 msgid "Coordinated Universal Time/UTC"
-msgstr "Coordinated Universal Time/UTC"
+msgstr "Koordinierte Weltzeit/UTC"
 
 #: gsa/src/web/components/form/datepicker.js:110
 msgid "Today"
@@ -8765,11 +8763,11 @@ msgstr "Heute"
 
 #: gsa/src/web/components/table/head.js:53
 msgid "Sorted In Descending Order By {{sortBy}}"
-msgstr "In absteigender Reihenfolge sortiert nach {{sortBy}}"
+msgstr "In absteigender Reihenfolge nach {{sortBy}} sortiert"
 
 #: gsa/src/web/components/table/head.js:63
 msgid "Sorted In Ascending Order By {{sortBy}}"
-msgstr "In aufsteigender Reihenfolge sortiert nach {{sortBy}}"
+msgstr "In aufsteigender Reihenfolge nach {{sortBy}} sortiert"
 
 #: gsa/src/web/components/icon/osicon.js:51
 msgid "OS Conflict: {{best_os_txt}} ({{best_os_cpe}})"
@@ -8853,52 +8851,4 @@ msgstr "Falsch-Positiv"
 
 #: gsa/src/web/app.js:105
 msgid "An error occurred on this page"
-msgstr "Es ist ein Fehler auf dieser Seite aufgetreten"
-
-#, fuzzy
-#~| msgid "Create Permission"
-#~ msgid "Create Process Node"
-#~ msgstr "Berechtigung erstellen"
-
-#, fuzzy
-#~| msgid "NVTs selected"
-#~ msgid "No process selected"
-#~ msgstr "NVTs ausgewählt"
-
-#, fuzzy
-#~| msgid "Remove from Assets"
-#~ msgid "Remove Host from Process"
-#~ msgstr "Aus Assets entfernen"
-
-#~ msgid "Report:"
-#~ msgstr "Bericht:"
-
-#~ msgid "Help: Group Details"
-#~ msgstr "Hilfe: Gruppendetails"
-
-#~ msgid "Help: User Details"
-#~ msgstr "Hilfe: Benutzerdetails"
-
-#~ msgid "Help: PortList Details"
-#~ msgstr "Hilfe: Portlistendetails"
-
-#~ msgid "Clone Report Format"
-#~ msgstr "Berichtformat klonen"
-
-#~ msgid "Help: Report Format Details"
-#~ msgstr "Hilfe: Berichtformatdetails"
-
-#~ msgid "Verify Report Format"
-#~ msgstr "Berichtformat verifizieren"
-
-#~ msgid "Permission to verify Report Format denied"
-#~ msgstr "Keine Berechtigung, Berichtformat zu verifizieren"
-
-#~ msgid "Help: Host Details"
-#~ msgstr "Hilfe: Hostdetails"
-
-#~ msgid "e.g. johndoe"
-#~ msgstr "z.B. maxmustermann"
-
-#~ msgid "Unkown Error"
-#~ msgstr "Unbekannter Fehler"
+msgstr "Es ist ein Fehler auf dieser Seite aufgetreten."
