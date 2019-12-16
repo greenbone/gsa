@@ -648,7 +648,7 @@ const load = ({
 
 const ReportDetailsWrapper = ({defaultFilter, reportFilter, ...props}) => (
   <Reload
-    name="report"
+    name={`report-${props.reportId}`}
     load={load({...props, defaultFilter})}
     reload={load({...props, defaultFilter, reportFilter})}
     reloadInterval={() => reloadInterval(props.entity)}
@@ -669,6 +669,7 @@ ReportDetailsWrapper.propTypes = {
   entity: PropTypes.model,
   gmp: PropTypes.gmp.isRequired,
   reportFilter: PropTypes.filter,
+  reportId: PropTypes.id.isRequired,
 };
 
 const getReportPageName = id => `report-${id}`;
