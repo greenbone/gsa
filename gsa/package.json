@@ -83,7 +83,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.3",
     "@types/jest": "^24.0.23",
-    "babel-plugin-i18next-extract": "^0.4.1",
+    "babel-plugin-i18next-extract": "^0.4.2",
     "eslint-config-prettier": "^6.7.0",
     "husky": "^2.7.0",
     "jest-junit": "^10.0.0",
