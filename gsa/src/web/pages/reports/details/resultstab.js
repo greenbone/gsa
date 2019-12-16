@@ -188,7 +188,9 @@ class ResultsTab extends React.Component {
       return <Loading />;
     }
 
-    const displayedFilter = reportFilter.simple();
+    const displayedFilter = isDefined(resultsFilter)
+      ? resultsFilter.copy().delete('_and_report_id')
+      : reportFilter;
 
     if (isDefined(resultsCounts) && resultsCounts.filtered === 0) {
       if (resultsCounts.all === 0) {
