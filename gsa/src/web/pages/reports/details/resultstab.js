@@ -257,6 +257,38 @@ ResultsTab.propTypes = {
 const reloadInterval = status =>
   isActive(status) ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE : NO_RELOAD; // report doesn't change anymore. no need to reload
 
+const loadInitial = ({
+  filter: reportFilter,
+  reportId,
+  resultsFilter,
+  // eslint-disable-next-line no-shadow
+  loadResults,
+  updateFilter,
+}) => () => {
+  let newFilter = resultsFilter;
+
+  if (isDefined(resultsFilter) && isDefined(reportFilter)) {
+    const simplifiedResultsFilter = resultsFilter
+      .simple()
+      .delete('_and_report_id');
+    const simplifiedReportFilter = reportFilter.simple();
+
+    if (!simplifiedReportFilter.equals(simplifiedResultsFilter)) {
+      // report filter has changed
+      newFilter = reportFilter;
+    }
+  } else if (isDefined(resultsFilter)) {
+    newFilter = resultsFilter;
+  } else {
+    newFilter = reportFilter;
+  }
+
+  newFilter = filterWithReportId(newFilter, reportId);
+  updateFilter(newFilter);
+
+  return loadResults(newFilter);
+};
+
 const load = ({
   filter: reportFilter,
   reportId,
@@ -264,24 +296,25 @@ const load = ({
   // eslint-disable-next-line no-shadow
   loadResults,
   updateFilter,
-}) => filter => {
-  if (!hasValue(filter)) {
-    filter = resultsFilter;
+}) => newFilter => {
+  if (!hasValue(newFilter)) {
+    newFilter = resultsFilter;
   }
 
-  if (!hasValue(filter)) {
-    filter = reportFilter;
+  if (!hasValue(newFilter)) {
+    newFilter = reportFilter;
   }
 
-  filter = filterWithReportId(filter, reportId);
-  updateFilter(filter);
+  newFilter = filterWithReportId(newFilter, reportId);
+  updateFilter(newFilter);
 
-  return loadResults(filter);
+  return loadResults(newFilter);
 };
 
 const ResultsTabWrapper = props => (
   <Reload
     name={`report-${props.reportId}-results`}
+    load={loadInitial(props)}
     reload={load(props)}
     reloadInterval={() => reloadInterval(props.status)}
   >
