@@ -84,7 +84,6 @@ const PageContent = ({
   gmp,
   isLoading = true,
   isUpdating = false,
-  pageFilter,
   reportFilter,
   sorting,
   showError,
@@ -275,7 +274,7 @@ const PageContent = ({
                     <ResultsTab
                       status={status}
                       progress={progress}
-                      filter={pageFilter}
+                      filter={reportFilter}
                       hasTarget={!isContainer}
                       reportId={report.id}
                       results={results.entities}
@@ -513,7 +512,6 @@ PageContent.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool,
   isUpdating: PropTypes.bool,
-  pageFilter: PropTypes.filter,
   reportFilter: PropTypes.filter,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
