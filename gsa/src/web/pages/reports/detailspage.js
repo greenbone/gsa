@@ -714,7 +714,7 @@ const mapStateToProps = (rootState, {match}) => {
     reportError,
     pageFilter: pSelector.getFilter(getReportPageName(id)),
     filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
-    isLoading: !isDefined(entity),
+    isLoading: reportSel.isLoadingEntity(id),
     reportExportFileName: userDefaultsSelector.getValueByName(
       'reportexportfilename',
     ),

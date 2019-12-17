@@ -149,10 +149,18 @@ const PageContent = ({
   const status = isContainer ? TASK_STATUS.container : scan_run_status;
   const progress = isDefined(task) ? task.progress : 0;
 
+  const showIsLoading = isLoading && !hasReport;
+
+  const showInitialLoading =
+    isLoading &&
+    !isDefined(reportError) &&
+    !showThresholdMessage &&
+    (!isDefined(results.entities) || results.entities.length === 0);
+
   const header_title = (
     <Divider>
       <span>{_('Report:')}</span>
-      {isLoading ? (
+      {showIsLoading ? (
         <span>{_('Loading')}</span>
       ) : (
         <Divider>
@@ -176,7 +184,7 @@ const PageContent = ({
       <ToolBar>
         <ToolBarIcons
           filter={reportFilter}
-          isLoading={isLoading}
+          isLoading={showIsLoading}
           report={hasReport ? report : undefined}
           reportId={reportId}
           showError={showError}
@@ -206,7 +214,7 @@ const PageContent = ({
       </ToolBar>
 
       <Section header={header}>
-        {isLoading ? (
+        {showIsLoading ? (
           <Loading />
         ) : (
           <React.Fragment>
@@ -265,7 +273,7 @@ const PageContent = ({
               </TabList>
             </TabLayout>
 
-            {isDefined(report) ? (
+            {hasReport ? (
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
@@ -302,7 +310,9 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    {showThresholdMessage ? (
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
                       <ThresholdPanel
                         entityType={_('Hosts')}
                         filter={reportFilter}
@@ -327,7 +337,9 @@ const PageContent = ({
                     )}
                   </TabPanel>
                   <TabPanel>
-                    {showThresholdMessage ? (
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
                       <ThresholdPanel
                         entityType={_('Ports')}
                         filter={reportFilter}
@@ -352,7 +364,9 @@ const PageContent = ({
                     )}
                   </TabPanel>
                   <TabPanel>
-                    {showThresholdMessage ? (
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
                       <ThresholdPanel
                         entityType={_('Applications')}
                         filter={reportFilter}
@@ -377,7 +391,9 @@ const PageContent = ({
                     )}
                   </TabPanel>
                   <TabPanel>
-                    {showThresholdMessage ? (
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
                       <ThresholdPanel
                         entityType={_('Operating Systems')}
                         filter={reportFilter}
@@ -402,7 +418,9 @@ const PageContent = ({
                     )}
                   </TabPanel>
                   <TabPanel>
-                    {showThresholdMessage ? (
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
                       <ThresholdPanel
                         entityType={_('CVEs')}
                         filter={reportFilter}
@@ -427,7 +445,9 @@ const PageContent = ({
                     )}
                   </TabPanel>
                   <TabPanel>
-                    {showThresholdMessage ? (
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
                       <ThresholdPanel
                         entityType={_('Closed CVEs')}
                         filter={reportFilter}
@@ -452,7 +472,9 @@ const PageContent = ({
                     )}
                   </TabPanel>
                   <TabPanel>
-                    {showThresholdMessage ? (
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
                       <ThresholdPanel
                         entityType={_('TLS Certificates')}
                         filter={reportFilter}
