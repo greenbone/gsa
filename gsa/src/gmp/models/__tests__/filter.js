@@ -104,6 +104,17 @@ describe('Filter parse from string tests', () => {
     filter = Filter.fromString('rows>1');
     expect(filter.toFilterString()).toEqual('rows=1');
   });
+
+  test('should ignore filter terms starting with _', () => {
+    let filter = Filter.fromString('rows=100 _foo=bar');
+    expect(filter.toFilterString()).toEqual('rows=100');
+
+    filter = Filter.fromString('_bar=foo rows=100');
+    expect(filter.toFilterString()).toEqual('rows=100');
+
+    filter = Filter.fromString('_foo rows=100');
+    expect(filter.toFilterString()).toEqual('rows=100');
+  });
 });
 
 describe('Filter parse from keywords', () => {

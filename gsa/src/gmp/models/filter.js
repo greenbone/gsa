@@ -46,7 +46,7 @@ const parseFilterTermsFromString = filterString => {
     for (let filterTerm of filterTerms) {
       // strip whitespace
       filterTerm = filterTerm.trim();
-      if (filterTerm.length > 0) {
+      if (filterTerm.length > 0 && !filterTerm.startsWith('_')) {
         terms.push(FilterTerm.fromString(filterTerm));
       }
     }
