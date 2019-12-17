@@ -87,12 +87,18 @@ import TargetComponent from '../targets/component';
 
 import Page from './detailscontent';
 import FilterDialog from './detailsfilterdialog';
+import {pageFilter as setPageFilter} from 'web/store/pages/actions';
+import getPage from 'web/store/pages/selectors';
 
 const log = logger.getLogger('web.pages.report.detailspage');
 
 const DEFAULT_FILTER = Filter.fromString(
   'levels=hml rows=100 min_qod=70 first=1 sort-reverse=severity',
 );
+
+const REPORT_RESET_FILTER = RESET_FILTER.copy()
+  .setSortOrder('sort-reverse')
+  .setSortBy('severity');
 
 const REPORT_FORMATS_FILTER = Filter.fromString('active=1 and trust=1 rows=-1');
 
@@ -259,7 +265,7 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterRemoveClick() {
-    this.handleFilterChange(RESET_FILTER);
+    this.handleFilterChange(REPORT_RESET_FILTER);
   }
 
   handleFilterResetClick() {
@@ -479,12 +485,14 @@ class ReportDetails extends React.Component {
   render() {
     const {
       entity,
-      entityError,
       filters = [],
       gmp,
       isLoading,
+      pageFilter,
+      reportError,
       reportFilter,
       reportFormats,
+      reportId,
       onInteraction,
       reportComposerDefaults,
       showError,
@@ -516,11 +524,13 @@ class ReportDetails extends React.Component {
             <Page
               activeTab={activeTab}
               entity={entity}
-              entityError={entityError}
-              filter={reportFilter}
               filters={filters}
               isLoading={isLoading}
               isUpdating={isUpdating}
+              pageFilter={pageFilter}
+              reportError={reportError}
+              reportFilter={reportFilter}
+              reportId={reportId}
               sorting={sorting}
               task={isDefined(report) ? report.task : undefined}
               onActivateTab={this.handleActivateTab}
@@ -581,7 +591,7 @@ class ReportDetails extends React.Component {
 ReportDetails.propTypes = {
   defaultFilter: PropTypes.filter.isRequired,
   entity: PropTypes.model,
-  entityError: PropTypes.object,
+  filter: PropTypes.filter,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool.isRequired,
@@ -592,8 +602,10 @@ ReportDetails.propTypes = {
   loadTarget: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  pageFilter: PropTypes.filter,
   reload: PropTypes.func.isRequired,
   reportComposerDefaults: PropTypes.object,
+  reportError: PropTypes.error,
   reportExportFileName: PropTypes.string,
   reportFilter: PropTypes.filter,
   reportFormats: PropTypes.array,
@@ -619,6 +631,7 @@ const load = ({
   reportId,
   loadReportWithThreshold,
   reportFilter,
+  updateFilter,
 }) => filter => {
   if (!hasValue(filter)) {
     // use loaded filter after initial loading
@@ -635,16 +648,13 @@ const load = ({
     filter = DEFAULT_FILTER;
   }
 
+  updateFilter(filter);
   return loadReportWithThreshold(reportId, {filter});
 };
 
-const ReportDetailsWrapper = ({
-  filter: defaultFilter,
-  reportFilter,
-  ...props
-}) => (
+const ReportDetailsWrapper = ({defaultFilter, reportFilter, ...props}) => (
   <Reload
-    name="report"
+    name={`report-${props.reportId}`}
     load={load({...props, defaultFilter})}
     reload={load({...props, defaultFilter, reportFilter})}
     reloadInterval={() => reloadInterval(props.entity)}
@@ -661,13 +671,16 @@ const ReportDetailsWrapper = ({
 );
 
 ReportDetailsWrapper.propTypes = {
+  defaultFilter: PropTypes.filter,
   entity: PropTypes.model,
-  filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   reportFilter: PropTypes.filter,
+  reportId: PropTypes.id.isRequired,
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => ({
+const getReportPageName = id => `report-${id}`;
+
+const mapDispatchToProps = (dispatch, {gmp, match}) => ({
   onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
   loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
@@ -681,6 +694,8 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
     dispatch(loadUserSettingsDefaultFilter(gmp)('result')),
   saveReportComposerDefaults: reportComposerDefaults =>
     dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
+  updateFilter: f =>
+    dispatch(setPageFilter(getReportPageName(match.params.id), f)),
 });
 
 const mapStateToProps = (rootState, {match}) => {
@@ -696,12 +711,14 @@ const mapStateToProps = (rootState, {match}) => {
   const username = getUsername(rootState);
 
   const entity = reportSel.getEntity(id);
-  const entityError = reportSel.getEntityError(id);
+  const reportError = reportSel.getEntityError(id);
+  const pSelector = getPage(rootState);
   return {
     entity,
-    entityError,
+    reportError,
+    pageFilter: pSelector.getFilter(getReportPageName(id)),
     filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
-    isLoading: !isDefined(entity),
+    isLoading: reportSel.isLoadingEntity(id),
     reportExportFileName: userDefaultsSelector.getValueByName(
       'reportexportfilename',
     ),

@@ -58,7 +58,7 @@ import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
 
-import ResultsTab from './details/resultstab';
+import DeltaResultsTab from './details/deltaresultstab';
 import Summary from './details/summary';
 import TabTitle from './details/tabtitle';
 import ToolBarIcons from './details/toolbaricons';
@@ -146,7 +146,7 @@ const PageContent = ({
         <ToolBarIcons
           delta={true}
           filter={filter}
-          loading={isLoading}
+          isLoading={isLoading}
           report={report}
           showError={showError}
           showSuccessMessage={showSuccessMessage}
@@ -204,7 +204,7 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    <ResultsTab
+                    <DeltaResultsTab
                       counts={isDefined(results.counts) ? results.counts : {}}
                       delta={true}
                       filter={filter}

@@ -55,9 +55,9 @@ class Reload extends React.Component {
 
   componentDidMount() {
     this.isRunning = true;
-    const {reload, load: loadFunc = reload} = this.props;
+    const {reload, load: loadFunc = reload, name} = this.props;
 
-    log.debug('Initial loading.');
+    log.debug('Initial loading for', name);
 
     this.activateVisibilityListener();
     this.internalLoad(loadFunc); // initial loading
@@ -116,19 +116,19 @@ class Reload extends React.Component {
   }
 
   startTimer() {
+    const {name} = this.props;
+
     if (!this.isRunning || this.hasTimer()) {
-      log.debug('Not starting timer. A timer is already running.', {
+      log.debug('Not starting timer for', name, 'A timer is already running.', {
         isRunning: this.isRunning,
         timer: this.timer,
       });
       return;
     }
 
-    const {name} = this.props;
-
     const loadTime = this.endMeasurement();
 
-    log.debug('Loading time was', loadTime, 'milliseconds');
+    log.debug('Loading time for', name, 'was', loadTime, 'milliseconds');
 
     let interval = this.getReloadInterval();
 
@@ -148,7 +148,7 @@ class Reload extends React.Component {
         name,
       );
     } else {
-      log.debug('Not starting timer. Interval was', interval);
+      log.debug('Not starting timer for', name, 'Interval was', interval);
     }
   }
 
@@ -172,7 +172,13 @@ class Reload extends React.Component {
   }
 
   handleTimer() {
-    log.debug('Timer', this.timer, 'finished. Reloading data.');
+    log.debug(
+      'Timer',
+      this.timer,
+      'for',
+      this.props.name,
+      'finished. Reloading data.',
+    );
 
     this.resetTimer();
 
@@ -208,7 +214,7 @@ class Reload extends React.Component {
       return Promise.resolve();
     }
 
-    log.debug('Reloading requested.', options);
+    log.debug('Reloading for', this.props.name, 'requested.', options);
     return this.internalLoad(this.props.reload, options);
   }
 
@@ -219,19 +225,21 @@ class Reload extends React.Component {
       return Promise.resolve();
     }
 
-    log.debug('Loading requested.', options);
+    log.debug('Loading for', this.props.name, 'requested.', options);
 
     this.startMeasurement();
 
     return loadFunc(options)
       .then(() => {
-        log.debug('Loading finished.');
+        log.debug('Loading for', this.props.name, 'finished.');
         this.startTimer();
       })
       .catch(error => {
         /* don't restart timer to avoid raising several errors */
         log.debug(
-          'Loading Promise has been rejected. Not starting new timer.',
+          'Loading Promise for',
+          this.props.name,
+          'has been rejected. Not starting new timer.',
           error,
         );
       });

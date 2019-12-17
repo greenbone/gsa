@@ -696,17 +696,17 @@ const load = ({
   );
 };
 
-const DeltaReportDetailsWrapper = ({filter, reportFilter, ...props}) => (
+const DeltaReportDetailsWrapper = ({defaultFilter, reportFilter, ...props}) => (
   <Reload
     name="report"
-    load={load({...props, defaultFilter: filter})}
-    reload={load({...props, defaultFilter: filter, reportFilter})}
+    load={load({...props, defaultFilter})}
+    reload={load({...props, defaultFilter, reportFilter})}
     reloadInterval={() => reloadInterval(props.entity)}
   >
     {({reload}) => (
       <DeltaReportDetails
         {...props}
-        defaultFilter={filter}
+        defaultFilter={defaultFilter}
         reportFilter={reportFilter}
         reload={reload}
       />
@@ -715,8 +715,8 @@ const DeltaReportDetailsWrapper = ({filter, reportFilter, ...props}) => (
 );
 
 DeltaReportDetailsWrapper.propTypes = {
+  defaultFilter: PropTypes.filter,
   entity: PropTypes.model,
-  filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   reportFilter: PropTypes.filter,
 };

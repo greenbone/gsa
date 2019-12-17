@@ -648,7 +648,6 @@ init_validator ()
                      "^(duration|until_end|from_start|start_to_end)$");
   gvm_validator_add (validator, "related:name", "^.*$");
   gvm_validator_add (validator, "related:value", "^.*$");
-  gvm_validator_add (validator, "report_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "report_fname",
                      "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
   gvm_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
@@ -872,6 +871,8 @@ init_validator ()
   gvm_validator_alias (validator, "report_format_ids:name", "number");
   gvm_validator_alias (validator, "report_format_ids:value",
                        "report_format_id");
+  gvm_validator_alias (validator, "report_id", "id");
+  gvm_validator_alias (validator, "_and_report_id", "id");
   gvm_validator_alias (validator, "result_task_id", "optional_task_id");
   gvm_validator_alias (validator, "result_uuid", "optional_id");
   gvm_validator_alias (validator, "report_result_id", "result_id");
