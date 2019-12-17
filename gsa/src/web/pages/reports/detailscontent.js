@@ -178,6 +178,7 @@ const PageContent = ({
           filter={reportFilter}
           loading={isLoading}
           report={report}
+          reportId={reportId}
           showError={showError}
           showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}

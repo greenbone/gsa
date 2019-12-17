@@ -48,6 +48,7 @@ const ToolBarIcons = ({
   filter,
   loading,
   report,
+  reportId,
   showThresholdMessage,
   task,
   threshold,
@@ -128,7 +129,7 @@ const ToolBarIcons = ({
           />
           <AlertActions
             filter={filter}
-            report={report}
+            reportId={reportId}
             showError={showError}
             showSuccessMessage={showSuccessMessage}
             showErrorMessage={showErrorMessage}
@@ -146,6 +147,7 @@ ToolBarIcons.propTypes = {
   filter: PropTypes.filter,
   loading: PropTypes.bool,
   report: PropTypes.object.isRequired,
+  reportId: PropTypes.id.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
