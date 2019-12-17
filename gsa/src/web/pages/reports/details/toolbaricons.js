@@ -92,14 +92,14 @@ const ToolBarIcons = ({
           </DetailsLink>
           <Link
             to="results"
-            filter={'report_id=' + report.id}
+            filter={'report_id=' + reportId}
             title={_('Corresponding Results')}
           >
             <ResultIcon />
           </Link>
           <Link
             to="vulnerabilities"
-            filter={'report_id=' + report.id}
+            filter={'report_id=' + reportId}
             title={_('Corresponding Vulnerabilities')}
           >
             <VulnerabilityIcon />
