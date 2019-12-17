@@ -146,7 +146,13 @@ const ToolBarIcons = ({
 ToolBarIcons.propTypes = {
   filter: PropTypes.filter,
   isLoading: PropTypes.bool,
-  report: PropTypes.object.isRequired,
+  report: PropTypes.shape({
+    scan_end: PropTypes.date,
+    scan_start: PropTypes.date,
+    slave: PropTypes.shape({
+      id: PropTypes.id.isRequired,
+    }),
+  }),
   reportId: PropTypes.id.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,

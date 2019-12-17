@@ -177,7 +177,7 @@ const PageContent = ({
         <ToolBarIcons
           filter={reportFilter}
           isLoading={isLoading}
-          report={report}
+          report={hasReport ? report : undefined}
           reportId={reportId}
           showError={showError}
           showSuccessMessage={showSuccessMessage}
