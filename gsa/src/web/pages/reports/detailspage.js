@@ -96,6 +96,10 @@ const DEFAULT_FILTER = Filter.fromString(
   'levels=hml rows=100 min_qod=70 first=1 sort-reverse=severity',
 );
 
+const REPORT_RESET_FILTER = RESET_FILTER.copy()
+  .setSortOrder('sort-reverse')
+  .setSortBy('severity');
+
 const REPORT_FORMATS_FILTER = Filter.fromString('active=1 and trust=1 rows=-1');
 
 const getTarget = (entity = {}) => {
@@ -261,7 +265,7 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterRemoveClick() {
-    this.handleFilterChange(RESET_FILTER);
+    this.handleFilterChange(REPORT_RESET_FILTER);
   }
 
   handleFilterResetClick() {
