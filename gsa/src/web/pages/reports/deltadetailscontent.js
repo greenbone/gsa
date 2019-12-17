@@ -146,7 +146,7 @@ const PageContent = ({
         <ToolBarIcons
           delta={true}
           filter={filter}
-          loading={isLoading}
+          isLoading={isLoading}
           report={report}
           showError={showError}
           showSuccessMessage={showSuccessMessage}

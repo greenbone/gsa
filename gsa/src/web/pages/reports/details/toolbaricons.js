@@ -46,7 +46,7 @@ import AlertActions from './alertactions';
 
 const ToolBarIcons = ({
   filter,
-  loading,
+  isLoading,
   report,
   reportId,
   showThresholdMessage,
@@ -69,7 +69,7 @@ const ToolBarIcons = ({
       />
       <ListIcon title={_('Reports List')} page="reports" />
     </IconDivider>
-    {!loading && (
+    {!isLoading && (
       <React.Fragment>
         <IconDivider>
           <AddToAssetsIcon
@@ -145,7 +145,7 @@ const ToolBarIcons = ({
 
 ToolBarIcons.propTypes = {
   filter: PropTypes.filter,
-  loading: PropTypes.bool,
+  isLoading: PropTypes.bool,
   report: PropTypes.object.isRequired,
   reportId: PropTypes.id.isRequired,
   showError: PropTypes.func.isRequired,
