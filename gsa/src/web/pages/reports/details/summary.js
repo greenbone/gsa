@@ -31,6 +31,8 @@ import StatusBar from 'web/components/bar/statusbar';
 
 import DateTime from 'web/components/date/datetime';
 
+import ErrorPanel from 'web/components/error/errorpanel';
+
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -77,7 +79,14 @@ const scanDuration = (start, end) => {
   });
 };
 
-const Summary = ({filter, isUpdating = false, links = true, report}) => {
+const Summary = ({
+  filter,
+  isUpdating = false,
+  links = true,
+  report,
+  reportId,
+  reportError,
+}) => {
   const {
     delta_report,
     hosts,
@@ -109,6 +118,12 @@ const Summary = ({filter, isUpdating = false, links = true, report}) => {
   const is_ended = isDefined(scan_end) && scan_end.isValid();
   return (
     <Layout flex="column">
+      {isDefined(reportError) && (
+        <ErrorPanel
+          message={_('Error while loading Report {{reportId}}', {reportId})}
+          error={reportError}
+        />
+      )}
       <UpdatingTable isUpdating={isUpdating}>
         <colgroup>
           <Col width="10%" />
@@ -255,6 +270,8 @@ Summary.propTypes = {
   isUpdating: PropTypes.bool,
   links: PropTypes.bool,
   report: PropTypes.model.isRequired,
+  reportError: PropTypes.error,
+  reportId: PropTypes.id.isRequired,
 };
 
 export default Summary;

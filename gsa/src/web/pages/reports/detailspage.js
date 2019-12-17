@@ -488,6 +488,7 @@ class ReportDetails extends React.Component {
       pageFilter,
       reportFilter,
       reportFormats,
+      reportId,
       onInteraction,
       reportComposerDefaults,
       showError,
@@ -525,6 +526,7 @@ class ReportDetails extends React.Component {
               isUpdating={isUpdating}
               pageFilter={pageFilter}
               reportFilter={reportFilter}
+              reportId={reportId}
               sorting={sorting}
               task={isDefined(report) ? report.task : undefined}
               onActivateTab={this.handleActivateTab}

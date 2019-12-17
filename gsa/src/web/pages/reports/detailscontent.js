@@ -85,6 +85,7 @@ const PageContent = ({
   isLoading = true,
   isUpdating = false,
   reportFilter,
+  reportId,
   sorting,
   showError,
   showErrorMessage,
@@ -265,6 +266,8 @@ const PageContent = ({
                     <Summary
                       filter={reportFilter}
                       report={report}
+                      reportError={entityError}
+                      reportId={reportId}
                       isUpdating={isUpdating}
                       onError={onError}
                       onTagChanged={onTagSuccess}
@@ -513,6 +516,7 @@ PageContent.propTypes = {
   isLoading: PropTypes.bool,
   isUpdating: PropTypes.bool,
   reportFilter: PropTypes.filter,
+  reportId: PropTypes.id.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
