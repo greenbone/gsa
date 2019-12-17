@@ -21,10 +21,14 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
+import _ from 'gmp/locale';
+
 import Filter from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
+
+import ErrorPanel from 'web/components/error/errorpanel';
 
 import Loading from 'web/components/loading/loading';
 import Reload, {
@@ -159,6 +163,8 @@ class ResultsTab extends React.Component {
       isLoading = true,
       progress,
       filter: reportFilter,
+      reportId,
+      resultsError,
       resultsFilter,
       status,
       onFilterAddLogLevelClick,
@@ -168,6 +174,17 @@ class ResultsTab extends React.Component {
       onFilterRemoveSeverityClick,
       onTargetEditClick,
     } = this.props;
+
+    if (isDefined(resultsError)) {
+      return (
+        <ErrorPanel
+          message={_('Error while loading Results for Report {{reportId}}', {
+            reportId,
+          })}
+          error={resultsError}
+        />
+      );
+    }
 
     const reverseField = isDefined(resultsFilter)
       ? resultsFilter.get('sort-reverse')
@@ -184,7 +201,7 @@ class ResultsTab extends React.Component {
       sortBy = 'severity';
     }
 
-    if (!isDefined(results) && isLoading) {
+    if (!isDefined(resultsError) && !isDefined(results) && isLoading) {
       return <Loading />;
     }
 
@@ -246,6 +263,7 @@ ResultsTab.propTypes = {
   reload: PropTypes.func.isRequired,
   reportId: PropTypes.id,
   resultsCounts: PropTypes.counts,
+  resultsError: PropTypes.error,
   resultsFilter: PropTypes.filter,
   status: PropTypes.string.isRequired,
   onFilterAddLogLevelClick: PropTypes.func.isRequired,
@@ -338,6 +356,7 @@ const mapStateToProps = (state, {reportId}) => {
   const selector = resultsSelector(state);
   return {
     resultsFilter,
+    resultsError: selector.getEntitiesError(resultsFilter),
     results: selector.getEntities(resultsFilter),
     resultsCounts: selector.getEntitiesCounts(resultsFilter),
     isLoading: selector.isLoadingEntities(resultsFilter),
