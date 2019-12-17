@@ -51,6 +51,7 @@ const FilterDialog = ({
   delta = false,
   filter,
   filterstring,
+  onFilterChange,
   onFilterStringChange,
   onFilterValueChange,
   capabilities,
@@ -59,6 +60,7 @@ const FilterDialog = ({
   onValueChange,
 }) => {
   const result_hosts_only = filter.get('result_hosts_only');
+  const handleRemoveLevels = () => onFilterChange(filter.delete('levels'));
   return (
     <Layout flex="column">
       <FilterStringGroup
@@ -94,7 +96,11 @@ const FilterDialog = ({
         onChange={onFilterValueChange}
       />
 
-      <SeverityLevelsGroup filter={filter} onChange={onFilterValueChange} />
+      <SeverityLevelsGroup
+        filter={filter}
+        onChange={onFilterValueChange}
+        onRemove={handleRemoveLevels}
+      />
 
       <SolutionTypeGroup filter={filter} onChange={onFilterValueChange} />
 

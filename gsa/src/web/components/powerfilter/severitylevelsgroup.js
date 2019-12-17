@@ -41,7 +41,7 @@ class SeverityLevelsFilterGroup extends React.Component {
   }
 
   handleLevelChange(value, level) {
-    const {filter, onChange} = this.props;
+    const {filter, onChange, onRemove} = this.props;
     let levels = filter.get('levels');
 
     if (!levels) {
@@ -53,7 +53,12 @@ class SeverityLevelsFilterGroup extends React.Component {
       onChange(levels, 'levels');
     } else if (!value && levels.includes(level)) {
       levels = levels.replace(level, '');
-      onChange(levels, 'levels');
+
+      if (levels.trim().length === 0) {
+        onRemove();
+      } else {
+        onChange(levels, 'levels');
+      }
     }
   }
 
@@ -112,6 +117,7 @@ class SeverityLevelsFilterGroup extends React.Component {
 SeverityLevelsFilterGroup.propTypes = {
   filter: PropTypes.filter.isRequired,
   onChange: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
 };
 
 export default SeverityLevelsFilterGroup;
