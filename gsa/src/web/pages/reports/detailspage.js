@@ -481,11 +481,11 @@ class ReportDetails extends React.Component {
   render() {
     const {
       entity,
-      entityError,
       filters = [],
       gmp,
       isLoading,
       pageFilter,
+      reportError,
       reportFilter,
       reportFormats,
       reportId,
@@ -520,11 +520,11 @@ class ReportDetails extends React.Component {
             <Page
               activeTab={activeTab}
               entity={entity}
-              entityError={entityError}
               filters={filters}
               isLoading={isLoading}
               isUpdating={isUpdating}
               pageFilter={pageFilter}
+              reportError={reportError}
               reportFilter={reportFilter}
               reportId={reportId}
               sorting={sorting}
@@ -587,7 +587,6 @@ class ReportDetails extends React.Component {
 ReportDetails.propTypes = {
   defaultFilter: PropTypes.filter.isRequired,
   entity: PropTypes.model,
-  entityError: PropTypes.object,
   filter: PropTypes.filter,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
@@ -602,6 +601,7 @@ ReportDetails.propTypes = {
   pageFilter: PropTypes.filter,
   reload: PropTypes.func.isRequired,
   reportComposerDefaults: PropTypes.object,
+  reportError: PropTypes.error,
   reportExportFileName: PropTypes.string,
   reportFilter: PropTypes.filter,
   reportFormats: PropTypes.array,
@@ -707,11 +707,11 @@ const mapStateToProps = (rootState, {match}) => {
   const username = getUsername(rootState);
 
   const entity = reportSel.getEntity(id);
-  const entityError = reportSel.getEntityError(id);
+  const reportError = reportSel.getEntityError(id);
   const pSelector = getPage(rootState);
   return {
     entity,
-    entityError,
+    reportError,
     pageFilter: pSelector.getFilter(getReportPageName(id)),
     filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
     isLoading: !isDefined(entity),

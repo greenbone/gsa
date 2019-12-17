@@ -79,11 +79,11 @@ const Span = styled.span`
 const PageContent = ({
   activeTab,
   entity,
-  entityError,
   filters,
   gmp,
   isLoading = true,
   isUpdating = false,
+  reportError,
   reportFilter,
   reportId,
   sorting,
@@ -131,8 +131,13 @@ const PageContent = ({
 
   const hasReport = isDefined(entity);
 
-  if (!hasReport && isDefined(entityError)) {
-    return <ErrorPanel message={entityError.message} error={entityError} />;
+  if (!hasReport && isDefined(reportError)) {
+    return (
+      <ErrorPanel
+        message={_('Error while loading Report {{reportId}}', {reportId})}
+        error={reportError}
+      />
+    );
   }
 
   const threshold = gmp.settings.reportResultsThreshold;
@@ -266,7 +271,7 @@ const PageContent = ({
                     <Summary
                       filter={reportFilter}
                       report={report}
-                      reportError={entityError}
+                      reportError={reportError}
                       reportId={reportId}
                       isUpdating={isUpdating}
                       onError={onError}
@@ -510,11 +515,11 @@ const PageContent = ({
 PageContent.propTypes = {
   activeTab: PropTypes.number,
   entity: PropTypes.model,
-  entityError: PropTypes.object,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool,
   isUpdating: PropTypes.bool,
+  reportError: PropTypes.error,
   reportFilter: PropTypes.filter,
   reportId: PropTypes.id.isRequired,
   showError: PropTypes.func.isRequired,
