@@ -91,9 +91,13 @@ class ResultsTab extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const {filter, reportId} = this.props;
-    if (isDefined(prevProps.filter) && !prevProps.filter.equals(filter)) {
-      const resultsFilter = filterWithReportId(filter, reportId);
+    const {reportFilter, reportId} = this.props;
+
+    if (
+      isDefined(prevProps.reportFilter) &&
+      !prevProps.reportFilter.equals(reportFilter)
+    ) {
+      const resultsFilter = filterWithReportId(reportFilter, reportId);
 
       this.load(resultsFilter);
     }
@@ -162,7 +166,7 @@ class ResultsTab extends React.Component {
       hasTarget,
       isLoading = true,
       progress,
-      filter: reportFilter,
+      reportFilter,
       reportId,
       resultsError,
       resultsFilter,
@@ -256,12 +260,12 @@ class ResultsTab extends React.Component {
 }
 
 ResultsTab.propTypes = {
-  filter: PropTypes.filter,
   hasTarget: PropTypes.bool,
   isLoading: PropTypes.bool,
   progress: PropTypes.number.isRequired,
   reload: PropTypes.func.isRequired,
-  reportId: PropTypes.id,
+  reportFilter: PropTypes.filter.isRequired,
+  reportId: PropTypes.id.isRequired,
   resultsCounts: PropTypes.counts,
   resultsError: PropTypes.error,
   resultsFilter: PropTypes.filter,
@@ -278,7 +282,7 @@ const reloadInterval = status =>
   isActive(status) ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE : NO_RELOAD; // report doesn't change anymore. no need to reload
 
 const loadInitial = ({
-  filter: reportFilter,
+  reportFilter,
   reportId,
   resultsFilter,
   // eslint-disable-next-line no-shadow
@@ -310,7 +314,7 @@ const loadInitial = ({
 };
 
 const load = ({
-  filter: reportFilter,
+  reportFilter,
   reportId,
   resultsFilter,
   // eslint-disable-next-line no-shadow

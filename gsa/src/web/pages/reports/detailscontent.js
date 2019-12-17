@@ -291,8 +291,8 @@ const PageContent = ({
                     <ResultsTab
                       status={status}
                       progress={progress}
-                      filter={reportFilter}
                       hasTarget={!isContainer}
+                      reportFilter={reportFilter}
                       reportId={reportId}
                       results={results.entities}
                       sortField={sorting.results.sortField}
