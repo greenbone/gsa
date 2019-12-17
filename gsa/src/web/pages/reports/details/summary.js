@@ -104,7 +104,9 @@ const Summary = ({
   const hosts_count =
     isDefined(hosts) && isDefined(hosts.counts) ? hosts.counts.all : 0;
 
-  const filterString = filter.simple().toFilterString();
+  const filterString = isDefined(filter)
+    ? filter.simple().toFilterString()
+    : '';
 
   const status =
     isDefined(task.isContainer) && task.isContainer()
