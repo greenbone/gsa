@@ -24,7 +24,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
-- Load report results with separate requests [#1863](https://github.com/greenbone/gsa/pull/1863)
+- Load report results with separate requests
+  [#1863](https://github.com/greenbone/gsa/pull/1863),
+  [#1871](https://github.com/greenbone/gsa/pull/1871)
 - Only load full report if the report has less than 25000 results [#1851](https://github.com/greenbone/gsa/pull/1851)
 - Only render report information, results and errors if a result has more than 25000 results [#1849](https://github.com/greenbone/gsa/pull/1849)
 - Limit the length of result description with a div [#1834](https://github.com/greenbone/gsa/pull/1834)

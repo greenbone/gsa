@@ -75,6 +75,7 @@ const PageContent = ({
   filters,
   isLoading = true,
   isUpdating = false,
+  reportId,
   sorting,
   showError,
   showErrorMessage,
@@ -148,6 +149,7 @@ const PageContent = ({
           filter={filter}
           isLoading={isLoading}
           report={report}
+          reportId={reportId}
           showError={showError}
           showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}
@@ -199,6 +201,7 @@ const PageContent = ({
                     <Summary
                       filter={filter}
                       report={report}
+                      reportId={reportId}
                       onError={onError}
                       onTagChanged={onTagSuccess}
                     />
@@ -255,6 +258,7 @@ PageContent.propTypes = {
   filters: PropTypes.array,
   isLoading: PropTypes.bool,
   isUpdating: PropTypes.bool,
+  reportId: PropTypes.id.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
