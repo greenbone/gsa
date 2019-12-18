@@ -257,6 +257,22 @@ describe('Filter parse from keywords', () => {
     const filter2 = Filter.fromString(filterstring);
     expect(filter.equals(filter2)).toEqual(true);
   });
+
+  test('should parse columns with underscore', () => {
+    const elem = {
+      keywords: {
+        keyword: [
+          {
+            column: '_foo',
+            relation: '=',
+            value: 'abc',
+          },
+        ],
+      },
+    };
+    const filter = Filter.fromElement(elem);
+    expect(filter.toFilterString()).toEqual('_foo=abc');
+  });
 });
 
 describe('Filter set', () => {
@@ -310,6 +326,11 @@ describe('Filter set', () => {
 
     filter.set('first', '0');
     expect(filter.id).toBeUndefined();
+  });
+
+  test('should allow to set a filter term with underscore', () => {
+    const filter = Filter.fromElement();
+    expect(filter.set('_foo', '1', '=').toFilterString()).toEqual('_foo=1');
   });
 });
 
