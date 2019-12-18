@@ -985,6 +985,48 @@ describe('Filter merge extra keywords', () => {
     expect(filter3.get('min_qod')).toBe(80);
   });
 
+  test('should not merge sort or sort-reverse if already exis', () => {
+    let filter1 = Filter.fromString('sort=foo');
+    let filter2 = Filter.fromString('sort=bar');
+
+    let filter3 = filter1.mergeExtraKeywords(filter2);
+
+    expect(filter3.getSortOrder()).toEqual('sort');
+    expect(filter3.getSortBy()).toEqual('foo');
+
+    expect(filter3.toFilterString()).toEqual('sort=foo');
+
+    filter1 = Filter.fromString('sort=foo');
+    filter2 = Filter.fromString('sort-reverse=bar');
+
+    filter3 = filter1.mergeExtraKeywords(filter2);
+
+    expect(filter3.getSortOrder()).toEqual('sort');
+    expect(filter3.getSortBy()).toEqual('foo');
+
+    expect(filter3.toFilterString()).toEqual('sort=foo');
+
+    filter1 = Filter.fromString('sort-reverse=foo');
+    filter2 = Filter.fromString('sort-reverse=bar');
+
+    filter3 = filter1.mergeExtraKeywords(filter2);
+
+    expect(filter3.getSortOrder()).toEqual('sort-reverse');
+    expect(filter3.getSortBy()).toEqual('foo');
+
+    expect(filter3.toFilterString()).toEqual('sort-reverse=foo');
+
+    filter1 = Filter.fromString('sort-reverse=foo');
+    filter2 = Filter.fromString('sort=bar');
+
+    filter3 = filter1.mergeExtraKeywords(filter2);
+
+    expect(filter3.getSortOrder()).toEqual('sort-reverse');
+    expect(filter3.getSortBy()).toEqual('foo');
+
+    expect(filter3.toFilterString()).toEqual('sort-reverse=foo');
+  });
+
   test('should reset filter id', () => {
     const filter1 = Filter.fromString('abc=1');
     filter1.id = 'f1';
