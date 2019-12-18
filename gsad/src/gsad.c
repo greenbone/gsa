@@ -782,7 +782,6 @@ init_validator ()
   gvm_validator_alias (validator, "current_user", "boolean");
   gvm_validator_alias (validator, "dashboard_name", "name");
   gvm_validator_alias (validator, "debug", "boolean");
-  gvm_validator_alias (validator, "delta_report_id", "report_id");
   gvm_validator_alias (validator, "delta_state_changed", "boolean");
   gvm_validator_alias (validator, "delta_state_gone", "boolean");
   gvm_validator_alias (validator, "delta_state_new", "boolean");
@@ -873,6 +872,7 @@ init_validator ()
                        "report_format_id");
   gvm_validator_alias (validator, "report_id", "id");
   gvm_validator_alias (validator, "_and_report_id", "id");
+  gvm_validator_alias (validator, "delta_report_id", "id");
   gvm_validator_alias (validator, "result_task_id", "optional_task_id");
   gvm_validator_alias (validator, "result_uuid", "optional_id");
   gvm_validator_alias (validator, "report_result_id", "result_id");
