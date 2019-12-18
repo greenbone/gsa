@@ -486,6 +486,7 @@ class DeltaReportDetails extends React.Component {
       isLoading,
       reportFilter,
       reportFormats,
+      reportId,
       onInteraction,
       reportComposerDefaults,
       showError,
@@ -518,6 +519,7 @@ class DeltaReportDetails extends React.Component {
               isLoading={isLoading}
               isUpdating={isUpdating}
               sorting={sorting}
+              reportId={reportId}
               task={isDefined(report) ? report.task : undefined}
               onActivateTab={this.handleActivateTab}
               onAddToAssetsClick={this.handleAddToAssets}
