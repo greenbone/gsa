@@ -24,6 +24,8 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import Filter from 'gmp/models/filter';
 
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+
 import {rendererWith} from 'web/utils/testing';
 
 import {getMockReport} from './hoststab';
@@ -43,11 +45,14 @@ describe('Report Summary tests', () => {
   test('should render Report Summary', () => {
     const {report} = getMockReport();
 
-    const {render} = rendererWith({
+    const {render, store} = rendererWith({
       capabilities: caps,
       router: true,
       store: true,
     });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
 
     const {element, queryAllByTestId} = render(
       <Summary
@@ -71,7 +76,7 @@ describe('Report Summary tests', () => {
 
     expect(tableData[4]).toHaveTextContent('Scan Time');
     expect(tableData[5]).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:00 PM - Mon, Jun 3, 2019 1:31 PM',
+      'Mon, Jun 3, 2019 1:00 PM CEST - Mon, Jun 3, 2019 1:31 PM CEST',
     );
 
     expect(tableData[6]).toHaveTextContent('Scan Duration');
@@ -95,11 +100,14 @@ describe('Report Summary tests', () => {
   test('should render Delta Report Summary', () => {
     const {report} = getMockDeltaReport();
 
-    const {render} = rendererWith({
+    const {render, store} = rendererWith({
       capabilities: caps,
       router: true,
       store: true,
     });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
 
     const {element, queryAllByTestId} = render(
       <Summary filter={filter} report={report} reportId={report.id} />,
@@ -122,7 +130,7 @@ describe('Report Summary tests', () => {
 
     expect(tableData[6]).toHaveTextContent('Scan Time Report 1');
     expect(tableData[7]).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:00 PM - Mon, Jun 3, 2019 1:31 PM',
+      'Mon, Jun 3, 2019 1:00 PM CEST - Mon, Jun 3, 2019 1:31 PM CEST',
     );
 
     expect(tableData[8]).toHaveTextContent('Scan Duration Report 1');
@@ -137,7 +145,7 @@ describe('Report Summary tests', () => {
 
     expect(tableData[14]).toHaveTextContent('Scan Time Report 2');
     expect(tableData[15]).toHaveTextContent(
-      'Mon, May 20, 2019 2:00 PM - Mon, May 20, 2019 2:30 PM',
+      'Mon, May 20, 2019 2:00 PM CEST - Mon, May 20, 2019 2:30 PM CEST',
     );
 
     expect(tableData[16]).toHaveTextContent('Scan Duration Report 2');
