@@ -84,6 +84,7 @@ const PageContent = ({
   gmp,
   isLoading = true,
   isUpdating = false,
+  pageFilter,
   reportError,
   reportFilter,
   reportId,
@@ -203,7 +204,8 @@ const PageContent = ({
         <Layout align="end">
           <Powerfilter
             createFilterType="result"
-            filter={reportFilter}
+            // use loaded filter from report if available otherwise already show the requested filter
+            filter={isDefined(reportFilter) ? reportFilter : pageFilter}
             filters={filters}
             resetFilter={resetFilter}
             onEditClick={onFilterEditClick}
@@ -545,6 +547,7 @@ PageContent.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool,
   isUpdating: PropTypes.bool,
+  pageFilter: PropTypes.filter,
   reportError: PropTypes.error,
   reportFilter: PropTypes.filter,
   reportId: PropTypes.id.isRequired,
