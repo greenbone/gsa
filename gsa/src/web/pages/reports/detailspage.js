@@ -230,7 +230,7 @@ class ReportDetails extends React.Component {
     const {reportFilter} = this.props;
 
     this.setState({
-      isUpdating: isDefined(reportFilter) || !reportFilter.equals(filter), // show update indicator if filter has changed
+      isUpdating: !isDefined(reportFilter) || !reportFilter.equals(filter), // show update indicator if filter has changed
     });
 
     this.props
