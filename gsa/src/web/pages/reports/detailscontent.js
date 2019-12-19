@@ -86,6 +86,7 @@ const PageContent = ({
   reportError,
   reportFilter,
   reportId,
+  resetFilter,
   sorting,
   showError,
   showErrorMessage,
@@ -203,6 +204,7 @@ const PageContent = ({
             createFilterType="result"
             filter={reportFilter}
             filters={filters}
+            resetFilter={resetFilter}
             onEditClick={onFilterEditClick}
             onError={onError}
             onFilterCreated={onFilterCreated}
@@ -545,6 +547,7 @@ PageContent.propTypes = {
   reportError: PropTypes.error,
   reportFilter: PropTypes.filter,
   reportId: PropTypes.id.isRequired,
+  resetFilter: PropTypes.filter,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,

@@ -96,7 +96,7 @@ const DEFAULT_FILTER = Filter.fromString(
   'levels=hml rows=100 min_qod=70 first=1 sort-reverse=severity',
 );
 
-const REPORT_RESET_FILTER = RESET_FILTER.copy()
+export const REPORT_RESET_FILTER = RESET_FILTER.copy()
   .setSortOrder('sort-reverse')
   .setSortBy('severity');
 
@@ -531,6 +531,7 @@ class ReportDetails extends React.Component {
               reportError={reportError}
               reportFilter={reportFilter}
               reportId={reportId}
+              resetFilter={REPORT_RESET_FILTER}
               sorting={sorting}
               task={isDefined(report) ? report.task : undefined}
               onActivateTab={this.handleActivateTab}
