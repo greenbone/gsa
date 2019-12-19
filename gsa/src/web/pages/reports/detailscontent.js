@@ -32,6 +32,8 @@ import ToolBar from 'web/components/bar/toolbar';
 
 import DateTime from 'web/components/date/datetime';
 
+import ErrorPanel from 'web/components/error/errorpanel';
+
 import ReportIcon from 'web/components/icon/reporticon';
 
 import Divider from 'web/components/layout/divider';
@@ -70,7 +72,6 @@ import TabTitle from './details/tabtitle';
 import ThresholdPanel from './details/thresholdpanel';
 import TLSCertificatesTab from './details/tlscertificatestab';
 import ToolBarIcons from './details/toolbaricons';
-import ErrorPanel from 'web/components/error/errorpanel';
 
 const Span = styled.span`
   margin-top: 2px;
