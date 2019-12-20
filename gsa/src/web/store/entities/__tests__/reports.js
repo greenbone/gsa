@@ -64,11 +64,9 @@ describe('report loadEntity function tests', () => {
 
     const dispatch = jest.fn();
 
-    const get = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: {foo: 'bar'},
-      }),
-    );
+    const get = jest.fn().mockResolvedValue({
+      data: {foo: 'bar'},
+    });
 
     const gmp = {
       [entityType]: {
@@ -79,25 +77,23 @@ describe('report loadEntity function tests', () => {
     expect(loadEntity).toBeDefined();
     expect(isFunction(loadEntity)).toBe(true);
 
+    expect.assertions(7);
+
     return loadEntity(gmp)(id)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
       expect(get).toBeCalledWith({id}, {details: true, filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([
-        {
-          type: types.ENTITY_LOADING_REQUEST,
-          entityType,
-          id,
-        },
-      ]);
-      expect(dispatch.mock.calls[1]).toEqual([
-        {
-          type: types.ENTITY_LOADING_SUCCESS,
-          entityType,
-          data: {foo: 'bar'},
-          id,
-        },
-      ]);
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: types.ENTITY_LOADING_REQUEST,
+        entityType,
+        id,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: types.ENTITY_LOADING_SUCCESS,
+        entityType,
+        data: {foo: 'bar'},
+        id,
+      });
     });
   });
 
@@ -112,11 +108,9 @@ describe('report loadEntity function tests', () => {
 
     const dispatch = jest.fn();
 
-    const get = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: {foo: 'bar'},
-      }),
-    );
+    const get = jest.fn().mockResolvedValue({
+      data: {foo: 'bar'},
+    });
 
     const gmp = {
       [entityType]: {
@@ -129,25 +123,22 @@ describe('report loadEntity function tests', () => {
     expect(loadEntity).toBeDefined();
     expect(isFunction(loadEntity)).toBe(true);
 
+    expect.assertions(7);
+
     return loadEntity(gmp)(id, {filter})(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
       expect(get).toBeCalledWith({id}, {details: true, filter});
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([
-        {
-          type: types.ENTITY_LOADING_REQUEST,
-          entityType,
-          id,
-        },
-      ]);
-      expect(dispatch.mock.calls[1]).toEqual([
-        {
-          type: types.ENTITY_LOADING_SUCCESS,
-          entityType,
-          data: {foo: 'bar'},
-          id,
-        },
-      ]);
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: types.ENTITY_LOADING_REQUEST,
+        entityType,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: types.ENTITY_LOADING_SUCCESS,
+        entityType,
+        data: {foo: 'bar'},
+        id,
+      });
     });
   });
 
@@ -163,13 +154,15 @@ describe('report loadEntity function tests', () => {
 
     const dispatch = jest.fn();
 
-    const get = jest.fn().mockReturnValue(Promise.resolve([{id: 'foo'}]));
+    const get = jest.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       [entityType]: {
         get,
       },
     };
+
+    expect.assertions(3);
 
     return loadEntity(gmp)(id)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
@@ -190,7 +183,7 @@ describe('report loadEntity function tests', () => {
 
     const dispatch = jest.fn();
 
-    const get = jest.fn().mockReturnValue(Promise.reject('An Error'));
+    const get = jest.fn().mockRejectedValue('An Error');
 
     const gmp = {
       [entityType]: {
@@ -239,6 +232,8 @@ describe('report loadEntityIfNeeded function tests', () => {
       },
     };
 
+    expect.assertions(7);
+
     expect(loadEntityIfNeeded).toBeDefined();
     expect(isFunction(loadEntityIfNeeded)).toBe(true);
 
@@ -283,6 +278,8 @@ describe('report loadEntityIfNeeded function tests', () => {
       },
     };
 
+    expect.assertions(3);
+
     return loadEntityIfNeeded(gmp)(id)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
       expect(dispatch).not.toBeCalled();
@@ -310,6 +307,8 @@ describe('report loadEntityIfNeeded function tests', () => {
     };
 
     const filter = Filter.fromString('foo=bar');
+
+    expect.assertions(7);
 
     expect(loadEntityIfNeeded).toBeDefined();
     expect(isFunction(loadEntityIfNeeded)).toBe(true);
@@ -353,6 +352,8 @@ describe('report loadEntityIfNeeded function tests', () => {
         get,
       },
     };
+
+    expect.assertions(3);
 
     return loadEntityIfNeeded(gmp)(id)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
