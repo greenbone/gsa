@@ -69,15 +69,13 @@ describe('ErrorBoundary tests', () => {
       </ErrorBoundary>,
     );
 
-    const toggle = getByTestId('errorboundary-toggle');
+    const toggle = getByTestId('errorpanel-toggle');
 
     fireEvent.click(toggle);
 
-    expect(getByTestId('errorboundary-heading')).toHaveTextContent(
-      'Error: foo',
-    );
-    expect(getByTestId('errorboundary-component-stack')).not.toBeNull();
-    expect(getByTestId('errorboundary-error-stack')).not.toBeNull();
+    expect(getByTestId('errorpanel-heading')).toHaveTextContent('Error: foo');
+    expect(getByTestId('errorpanel-component-stack')).not.toBeNull();
+    expect(getByTestId('errorpanel-error-stack')).not.toBeNull();
 
     console.error = origConsoleError;
   });

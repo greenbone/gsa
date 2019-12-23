@@ -107,6 +107,8 @@ export const makeCompareDate = makeCompare(value => value);
 
 export const makeCompareIp = makeCompare(ipToNumber);
 
+export const makeComparePort = name => makeCompare(parseInt)(name, -1);
+
 export const makeCompareSeverity = (name = 'severity') =>
   makeCompareNumber(name, 0);
 

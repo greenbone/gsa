@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -19,24 +19,37 @@
 
 import React from 'react';
 
-import PropTypes from 'web/utils/proptypes';
+import styled from 'styled-components';
+
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import Layout from 'web/components/layout/layout';
 
-import ScanInfo from './scaninfo';
+import PropTypes from 'web/utils/proptypes';
 
-const Summary = ({report}) => (
-  <Layout flex="column">
-    <ScanInfo report={report} />
+const TabTitleCounts = styled.span`
+  font-size: 0.7em;
+`;
+
+const TabTitle = ({title, counts, count}) => (
+  <Layout flex="column" align={['center', 'center']}>
+    <span>{title}</span>
+    <TabTitleCounts>
+      (<i>{isDefined(counts) ? _('{{filtered}} of {{all}}', counts) : count}</i>
+      )
+    </TabTitleCounts>
   </Layout>
 );
 
-Summary.propTypes = {
-  report: PropTypes.model.isRequired,
-  onError: PropTypes.func.isRequired,
-  onTagChanged: PropTypes.func.isRequired,
+TabTitle.propTypes = {
+  count: PropTypes.number,
+  counts: PropTypes.shape({
+    filtered: PropTypes.numberOrNumberString.isRequired,
+    all: PropTypes.numberOrNumberString.isRequired,
+  }),
+  title: PropTypes.string.isRequired,
 };
 
-export default Summary;
-
-// vim: set ts=2 sw=2 tw=80:
+export default TabTitle;

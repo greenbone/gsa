@@ -9161,7 +9161,21 @@ char *
 get_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_many (connection, "results", credentials, params, NULL,
+  const gchar *_and_report_id;
+  gmp_arguments_t *arguments = NULL;
+
+  _and_report_id = params_value (params, "_and_report_id");
+
+  if (params_given (params, "_and_report_id"))
+    {
+      CHECK_VARIABLE_INVALID (_and_report_id, "Get results");
+
+      arguments = gmp_arguments_new ();
+
+      gmp_arguments_add (arguments, "_and_report_id", _and_report_id);
+    }
+
+  return get_many (connection, "results", credentials, params, arguments,
                    response_data);
 }
 

@@ -27,6 +27,7 @@ import {
   makeCompareIp,
   makeCompareSeverity,
   makeCompareDate,
+  makeComparePort,
 } from '../sort';
 
 describe('ipToNumber tests', () => {
@@ -371,6 +372,79 @@ describe('makeCompareDate tests', () => {
     expect(compareValues(objB, objA)).toEqual(-1);
     expect(compareValues(objA, objC)).toEqual(0);
     expect(compareValues(objA, objD)).toEqual(0);
+  });
+});
+
+describe('makeComparePort tests', () => {
+  test('should compare ports asc', () => {
+    const objA = {
+      value: 80,
+    };
+    const objB = {
+      value: 666,
+    };
+    const objC = {
+      value: 80,
+    };
+    const objD = {};
+    const objE = {
+      value: 22,
+    };
+
+    const compareValues = makeComparePort(obj => obj.value)();
+    expect(compareValues(objA, objB)).toEqual(-1);
+    expect(compareValues(objA, objC)).toEqual(0);
+    expect(compareValues(objA, objD)).toEqual(1);
+    expect(compareValues(objA, objE)).toEqual(1);
+  });
+
+  test('should compare ports desc', () => {
+    const objA = {
+      value: 80,
+    };
+    const objB = {
+      value: 666,
+    };
+    const objC = {
+      value: 80,
+    };
+    const objD = {};
+    const objE = {
+      value: 22,
+    };
+
+    const compareValues = makeComparePort(obj => obj.value)(true);
+    expect(compareValues(objA, objB)).toEqual(1);
+    expect(compareValues(objA, objC)).toEqual(0);
+    expect(compareValues(objA, objD)).toEqual(-1);
+    expect(compareValues(objA, objE)).toEqual(-1);
+  });
+
+  test('should compare ports as string', () => {
+    const objA = {
+      value: '80',
+    };
+    const objB = {
+      value: 666,
+    };
+    const objC = {
+      value: 80,
+    };
+    const objD = {};
+    const objE = {
+      value: '22',
+    };
+    const objF = {
+      value: 'foo',
+    };
+
+    const compareValues = makeComparePort(obj => obj.value)();
+    expect(compareValues(objA, objB)).toEqual(-1);
+    expect(compareValues(objA, objC)).toEqual(0);
+    expect(compareValues(objA, objD)).toEqual(1);
+    expect(compareValues(objA, objE)).toEqual(1);
+    expect(compareValues(objA, objF)).toEqual(1);
+    expect(compareValues(objD, objF)).toEqual(0);
   });
 });
 
