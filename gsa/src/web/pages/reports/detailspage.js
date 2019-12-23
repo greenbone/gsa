@@ -522,11 +522,11 @@ class ReportDetails extends React.Component {
       storeAsDefault,
     } = this.state;
 
-    const {report} = entity || {};
+    const report = isDefined(entity) ? entity.report : undefined;
 
     const threshold = gmp.settings.reportResultsThreshold;
     const showThresholdMessage =
-      hasValue(report) && report.results.counts.filtered > threshold;
+      isDefined(report) && report.results.counts.filtered > threshold;
 
     return (
       <React.Fragment>

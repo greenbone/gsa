@@ -113,10 +113,12 @@ const PageContent = ({
   onTagSuccess,
   onTargetEditClick,
 }) => {
-  const {report = {}} = entity || {};
+  const hasReport = isDefined(entity);
 
-  const {userTags = {}} = report;
-  const userTagsCount = userTags.length;
+  const report = hasReport ? entity.report : undefined;
+
+  const userTags = hasReport ? report.userTags : undefined;
+  const userTagsCount = isDefined(userTags) ? userTags.length : 0;
 
   const {
     applications = {},
@@ -130,9 +132,7 @@ const PageContent = ({
     tls_certificates = {},
     timestamp,
     scan_run_status,
-  } = report;
-
-  const hasReport = isDefined(entity);
+  } = report || {};
 
   if (!hasReport && isDefined(reportError)) {
     return (
