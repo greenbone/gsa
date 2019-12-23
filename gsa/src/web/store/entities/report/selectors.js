@@ -62,5 +62,34 @@ class ReportSelector {
   }
 }
 
+export const deltaReportIdentifier = (id, deltaId) => `${id}+${deltaId}`;
+
+class DeltaReportSelector {
+  constructor(state = {}) {
+    this.state = state;
+  }
+
+  isLoading(id, deltaId) {
+    return isDefined(this.state.isLoading)
+      ? !!this.state.isLoading[deltaReportIdentifier(id, deltaId)]
+      : false;
+  }
+
+  getError(id, deltaId) {
+    return isDefined(this.state.errors)
+      ? this.state.errors[deltaReportIdentifier(id, deltaId)]
+      : undefined;
+  }
+
+  getEntity(id, deltaId) {
+    return isDefined(this.state.byId)
+      ? this.state.byId[deltaReportIdentifier(id, deltaId)]
+      : undefined;
+  }
+}
+
 export const reportSelector = rootState =>
   new ReportSelector(rootState.entities.report);
+
+export const deltaReportSelector = rootState =>
+  new DeltaReportSelector(rootState.entities.deltaReport);

@@ -19,12 +19,13 @@
 
 import Filter from 'gmp/models/filter';
 
-import {createState} from 'web/store/entities/utils/testing';
+import {createState, createRootState} from 'web/store/entities/utils/testing';
 
 import {
   reportIdentifier,
   simplifiedReportIdentifier,
   reportSelector,
+  deltaReportSelector,
 } from '../selectors';
 
 describe('reportIdentifier tests', () => {
@@ -216,5 +217,165 @@ describe('report selector tests', () => {
     });
     const selector = reportSelector(state);
     expect(selector.getEntity('foo', filter2)).toBe(model);
+  });
+});
+
+describe('delta report selector tests', () => {
+  test('should be false for undefined state', () => {
+    const id = 'a1';
+    const deltaId = 'a2';
+    const rootState = createRootState({});
+    const selector = deltaReportSelector(rootState);
+
+    expect(selector.isLoading(id, deltaId)).toBe(false);
+  });
+
+  test('should be false for empty state', () => {
+    const id = 'a1';
+    const deltaId = 'a2';
+    const rootState = createState('deltaReport', {});
+    const selector = deltaReportSelector(rootState);
+
+    expect(selector.isLoading(id, deltaId)).toEqual(false);
+  });
+
+  test('should be false for unknown id', () => {
+    const id = 'a1';
+    const deltaId = 'a2';
+    const rootState = createState('deltaReport', {
+      isLoading: {
+        foo: true,
+      },
+    });
+    const selector = deltaReportSelector(rootState);
+
+    expect(selector.isLoading(id, deltaId)).toBe(false);
+  });
+
+  test('should be false if false in state', () => {
+    const id = 'a1';
+    const deltaId = 'a2';
+    const identifier = `${id}+${deltaId}`;
+    const rootState = createState('deltaId', {
+      isLoading: {
+        [identifier]: false,
+      },
+    });
+    const selector = deltaReportSelector(rootState);
+
+    expect(selector.isLoading(id, deltaId)).toBe(false);
+  });
+
+  test('should be true if true in state', () => {
+    const id = 'a1';
+    const deltaId = 'a2';
+    const identifier = `${id}+${deltaId}`;
+    const rootState = createState('deltaReport', {
+      isLoading: {
+        [identifier]: true,
+      },
+    });
+    const selector = deltaReportSelector(rootState);
+
+    expect(selector.isLoading(id, deltaId)).toBe(true);
+  });
+
+  test('should return undefined for empty state', () => {
+    const rootState = createRootState({});
+    const selector = deltaReportSelector(rootState);
+
+    expect(selector.getEntity('bar')).toBeUndefined();
+  });
+
+  test('should return undefined for empty byId', () => {
+    const rootState = createState('deltaReport', {
+      byId: {},
+    });
+    const selector = deltaReportSelector(rootState);
+
+    expect(selector.getEntity('bar')).toBeUndefined();
+  });
+
+  test('should return undefined for unknown id', () => {
+    const rootState = createState('deltaReport', {
+      byId: {
+        foo: {
+          id: 'foo',
+        },
+      },
+    });
+    const selector = deltaReportSelector(rootState);
+
+    expect(selector.getEntity('bar')).toBeUndefined();
+  });
+
+  test('should return entity data', () => {
+    const id = 'a1';
+    const deltaId = 'a2';
+    const identifier = `${id}+${deltaId}`;
+
+    const rootState = createState('deltaReport', {
+      byId: {
+        [identifier]: {
+          id: 'bar',
+          lorem: 'ipsum',
+        },
+      },
+    });
+    const selector = deltaReportSelector(rootState);
+
+    expect(selector.getEntity(id, deltaId)).toEqual({
+      id: 'bar',
+      lorem: 'ipsum',
+    });
+  });
+
+  test('should return undefined for empty state', () => {
+    const id = 'a1';
+    const deltaId = 'a2';
+    const rootState = createRootState({});
+    const selector = deltaReportSelector(rootState);
+
+    expect(selector.getError(id, deltaId)).toBeUndefined();
+  });
+
+  test('should return undefined for empty byId', () => {
+    const id = 'a1';
+    const deltaId = 'a2';
+    const rootState = createState('deltaReport', {
+      byId: {},
+    });
+    const selector = deltaReportSelector(rootState);
+
+    expect(selector.getError(id, deltaId)).toBeUndefined();
+  });
+
+  test('should return undefined for unknown id', () => {
+    const id = 'a1';
+    const deltaId = 'a2';
+    const rootState = createState('deltaReport', {
+      byId: {
+        foo: {
+          id: 'foo',
+        },
+      },
+    });
+    const selector = deltaReportSelector(rootState);
+
+    expect(selector.getError(id, deltaId)).toBeUndefined();
+  });
+
+  test('should return error', () => {
+    const id = 'a1';
+    const deltaId = 'a2';
+    const identifier = `${id}+${deltaId}`;
+    const rootState = createState('deltaReport', {
+      errors: {
+        [identifier]: 'An error',
+      },
+    });
+    const selector = deltaReportSelector(rootState);
+
+    expect(selector.getError(id, deltaId)).toEqual('An error');
   });
 });

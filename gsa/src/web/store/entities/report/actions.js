@@ -18,9 +18,13 @@
  */
 import {isDefined} from 'gmp/utils/identity';
 
-import {types} from 'web/store/entities/utils/actions';
+import {types, createEntityActions} from 'web/store/entities/utils/actions';
 
-import {reportSelector} from './selectors';
+import {
+  reportSelector,
+  deltaReportSelector,
+  deltaReportIdentifier,
+} from './selectors';
 
 const entityType = 'report';
 
@@ -132,4 +136,31 @@ export const loadReportIfNeeded = gmp => (
     return Promise.resolve();
   }
   return loadReport(gmp)(id, {filter, details})(dispatch, getState);
+};
+
+export const deltaReportActions = createEntityActions('deltaReport');
+
+export const loadDeltaReport = gmp => (id, deltaId, filter) => (
+  dispatch,
+  getState,
+) => {
+  const rootState = getState();
+  const state = deltaReportSelector(rootState);
+
+  if (state.isLoading(id, deltaId)) {
+    // we are already loading data
+    return Promise.resolve();
+  }
+
+  const identifier = deltaReportIdentifier(id, deltaId);
+
+  dispatch(deltaReportActions.request(identifier));
+
+  return gmp.report
+    .getDelta({id}, {id: deltaId}, {filter})
+    .then(
+      response =>
+        dispatch(deltaReportActions.success(identifier, response.data)),
+      error => dispatch(deltaReportActions.error(identifier, error)),
+    );
 };
