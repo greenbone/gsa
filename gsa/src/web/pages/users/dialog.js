@@ -120,8 +120,8 @@ class Dialog extends React.Component {
       access_hosts: accessHosts,
       access_ifaces: accessIfaces,
       auth_method:
-        isEdit && isDefined(user.auth_method)
-          ? user.auth_method
+        isEdit && isDefined(user.authMethod)
+          ? user.authMethod
           : AUTH_METHOD_PASSWORD,
       comment,
       group_ids: groupIds,
