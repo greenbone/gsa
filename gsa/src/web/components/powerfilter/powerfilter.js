@@ -143,11 +143,11 @@ class PowerFilter extends React.Component {
   }
 
   handleNamedFilterChange(value) {
-    const {filters} = this.props;
+    const {filters, resetFilter = RESET_FILTER} = this.props;
 
     let filter = filters.find(f => f.id === value);
     if (!isDefined(filter)) {
-      filter = RESET_FILTER;
+      filter = resetFilter;
     }
     this.updateFilter(filter);
   }
@@ -265,6 +265,7 @@ PowerFilter.propTypes = {
   filter: PropTypes.filter,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
+  resetFilter: PropTypes.filter,
   onEditClick: PropTypes.func,
   onError: PropTypes.func,
   onFilterCreated: PropTypes.func,

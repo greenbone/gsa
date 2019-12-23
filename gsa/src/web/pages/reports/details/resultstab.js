@@ -91,15 +91,13 @@ class ResultsTab extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const {reportFilter, reportId} = this.props;
+    const {reportFilter} = this.props;
 
     if (
       isDefined(prevProps.reportFilter) &&
       !prevProps.reportFilter.equals(reportFilter)
     ) {
-      const resultsFilter = filterWithReportId(reportFilter, reportId);
-
-      this.load(resultsFilter);
+      this.load(reportFilter);
     }
   }
 
@@ -293,9 +291,14 @@ const loadInitial = ({
 
   if (isDefined(resultsFilter) && isDefined(reportFilter)) {
     const simplifiedResultsFilter = resultsFilter
-      .simple()
+      .copy()
+      .delete(resultsFilter.getSortOrder())
+      .delete('first')
       .delete('_and_report_id');
-    const simplifiedReportFilter = reportFilter.simple();
+    const simplifiedReportFilter = reportFilter
+      .copy()
+      .delete(reportFilter.getSortOrder())
+      .delete('first');
 
     if (!simplifiedReportFilter.equals(simplifiedResultsFilter)) {
       // report filter has changed

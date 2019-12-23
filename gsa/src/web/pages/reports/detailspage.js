@@ -56,10 +56,8 @@ import {
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 
-import {
-  selector as reportSelector,
-  loadEntityWithThreshold,
-} from 'web/store/entities/reports';
+import {loadReportWithThreshold} from 'web/store/entities/report/actions';
+import {reportSelector} from 'web/store/entities/report/selectors';
 
 import {
   loadReportComposerDefaults,
@@ -96,7 +94,7 @@ const DEFAULT_FILTER = Filter.fromString(
   'levels=hml rows=100 min_qod=70 first=1 sort-reverse=severity',
 );
 
-const REPORT_RESET_FILTER = RESET_FILTER.copy()
+export const REPORT_RESET_FILTER = RESET_FILTER.copy()
   .setSortOrder('sort-reverse')
   .setSortBy('severity');
 
@@ -194,6 +192,22 @@ class ReportDetails extends React.Component {
     );
   }
 
+  static getDerivedStateFromProps(props, state) {
+    if (isDefined(props.entity)) {
+      // update only if a new report is available to avoid having no report
+      // when the filter changes
+      return {
+        entity: props.entity,
+        reportFilter: props.reportFilter,
+        isUpdating: false,
+      };
+    }
+    // report is not in the store and is currently loaded
+    return {
+      isUpdating: true,
+    };
+  }
+
   componentDidMount() {
     this.props.loadSettings();
     this.props.loadFilters();
@@ -230,7 +244,7 @@ class ReportDetails extends React.Component {
     const {reportFilter} = this.props;
 
     this.setState({
-      isUpdating: isDefined(reportFilter) || !reportFilter.equals(filter), // show update indicator if filter has changed
+      isUpdating: !isDefined(reportFilter) || !reportFilter.equals(filter), // show update indicator if filter has changed
     });
 
     this.props
@@ -484,13 +498,11 @@ class ReportDetails extends React.Component {
 
   render() {
     const {
-      entity,
       filters = [],
       gmp,
       isLoading,
       pageFilter,
       reportError,
-      reportFilter,
       reportFormats,
       reportId,
       onInteraction,
@@ -501,18 +513,20 @@ class ReportDetails extends React.Component {
     } = this.props;
     const {
       activeTab,
+      entity,
       isUpdating = false,
+      reportFilter,
       showFilterDialog,
       showDownloadReportDialog,
       sorting,
       storeAsDefault,
     } = this.state;
 
-    const {report} = entity || {};
+    const report = isDefined(entity) ? entity.report : undefined;
 
     const threshold = gmp.settings.reportResultsThreshold;
     const showThresholdMessage =
-      hasValue(report) && report.results.counts.filtered > threshold;
+      isDefined(report) && report.results.counts.filtered > threshold;
 
     return (
       <React.Fragment>
@@ -531,6 +545,7 @@ class ReportDetails extends React.Component {
               reportError={reportError}
               reportFilter={reportFilter}
               reportId={reportId}
+              resetFilter={REPORT_RESET_FILTER}
               sorting={sorting}
               task={isDefined(report) ? report.task : undefined}
               onActivateTab={this.handleActivateTab}
@@ -594,7 +609,7 @@ ReportDetails.propTypes = {
   filter: PropTypes.filter,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
-  isLoading: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool,
   loadFilters: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
@@ -629,6 +644,7 @@ const reloadInterval = report =>
 const load = ({
   defaultFilter,
   reportId,
+  // eslint-disable-next-line no-shadow
   loadReportWithThreshold,
   reportFilter,
   updateFilter,
@@ -688,7 +704,7 @@ const mapDispatchToProps = (dispatch, {gmp, match}) => ({
   loadReportFormats: () =>
     dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
   loadReportWithThreshold: (id, options) =>
-    dispatch(loadEntityWithThreshold(gmp)(id, options)),
+    dispatch(loadReportWithThreshold(gmp)(id, options)),
   loadReportComposerDefaults: () => dispatch(loadReportComposerDefaults(gmp)()),
   loadUserSettingDefaultFilter: () =>
     dispatch(loadUserSettingsDefaultFilter(gmp)('result')),
@@ -710,15 +726,18 @@ const mapStateToProps = (rootState, {match}) => {
   );
   const username = getUsername(rootState);
 
-  const entity = reportSel.getEntity(id);
-  const reportError = reportSel.getEntityError(id);
   const pSelector = getPage(rootState);
+  const pageFilter = pSelector.getFilter(getReportPageName(id));
+
+  const entity = reportSel.getEntity(id, pageFilter);
+  const isLoading = reportSel.isLoadingEntity(id, pageFilter);
+  const reportError = reportSel.getEntityError(id, pageFilter);
   return {
     entity,
     reportError,
-    pageFilter: pSelector.getFilter(getReportPageName(id)),
+    pageFilter,
     filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
-    isLoading: reportSel.isLoadingEntity(id),
+    isLoading,
     reportExportFileName: userDefaultsSelector.getValueByName(
       'reportexportfilename',
     ),
