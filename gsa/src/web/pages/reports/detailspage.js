@@ -56,10 +56,8 @@ import {
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 
-import {
-  selector as reportSelector,
-  loadEntityWithThreshold,
-} from 'web/store/entities/reports';
+import {loadReportWithThreshold} from 'web/store/entities/report/actions';
+import {reportSelector} from 'web/store/entities/report/selectors';
 
 import {
   loadReportComposerDefaults,
@@ -611,7 +609,7 @@ ReportDetails.propTypes = {
   filter: PropTypes.filter,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
-  isLoading: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool,
   loadFilters: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
@@ -646,6 +644,7 @@ const reloadInterval = report =>
 const load = ({
   defaultFilter,
   reportId,
+  // eslint-disable-next-line no-shadow
   loadReportWithThreshold,
   reportFilter,
   updateFilter,
@@ -705,7 +704,7 @@ const mapDispatchToProps = (dispatch, {gmp, match}) => ({
   loadReportFormats: () =>
     dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
   loadReportWithThreshold: (id, options) =>
-    dispatch(loadEntityWithThreshold(gmp)(id, options)),
+    dispatch(loadReportWithThreshold(gmp)(id, options)),
   loadReportComposerDefaults: () => dispatch(loadReportComposerDefaults(gmp)()),
   loadUserSettingDefaultFilter: () =>
     dispatch(loadUserSettingsDefaultFilter(gmp)('result')),
@@ -727,15 +726,18 @@ const mapStateToProps = (rootState, {match}) => {
   );
   const username = getUsername(rootState);
 
-  const entity = reportSel.getEntity(id);
-  const reportError = reportSel.getEntityError(id);
   const pSelector = getPage(rootState);
+  const pageFilter = pSelector.getFilter(getReportPageName(id));
+
+  const entity = reportSel.getEntity(id, pageFilter);
+  const isLoading = reportSel.isLoadingEntity(id, pageFilter);
+  const reportError = reportSel.getEntityError(id, pageFilter);
   return {
     entity,
     reportError,
-    pageFilter: pSelector.getFilter(getReportPageName(id)),
+    pageFilter,
     filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
-    isLoading: reportSel.isLoadingEntity(id),
+    isLoading,
     reportExportFileName: userDefaultsSelector.getValueByName(
       'reportexportfilename',
     ),
