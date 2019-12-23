@@ -27,12 +27,12 @@ import {
 } from 'web/store/entities/utils/actions';
 
 import {createReducer, initialState} from 'web/store/entities/utils/reducers';
-import {createSelector} from 'web/store/entities/utils/selectors';
+import {createEntitiesSelector} from 'web/store/entities/utils/selectors';
 
 import {reportReducer} from './report/reducers';
 import {reportsReducer} from './reports/reducers';
 
-const reportsSelector = createSelector('report');
+const reportsSelector = createEntitiesSelector('report');
 const entitiesActions = createEntitiesActions('report');
 const loadAllEntities = createLoadAllEntities({
   selector: reportsSelector,
