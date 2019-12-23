@@ -194,6 +194,22 @@ class ReportDetails extends React.Component {
     );
   }
 
+  static getDerivedStateFromProps(props, state) {
+    if (isDefined(props.entity)) {
+      // update only if a new report is available to avoid having no report
+      // when the filter changes
+      return {
+        entity: props.entity,
+        reportFilter: props.reportFilter,
+        isUpdating: false,
+      };
+    }
+    // report is not in the store and is currently loaded
+    return {
+      isUpdating: true,
+    };
+  }
+
   componentDidMount() {
     this.props.loadSettings();
     this.props.loadFilters();
@@ -484,13 +500,11 @@ class ReportDetails extends React.Component {
 
   render() {
     const {
-      entity,
       filters = [],
       gmp,
       isLoading,
       pageFilter,
       reportError,
-      reportFilter,
       reportFormats,
       reportId,
       onInteraction,
@@ -501,7 +515,9 @@ class ReportDetails extends React.Component {
     } = this.props;
     const {
       activeTab,
+      entity,
       isUpdating = false,
+      reportFilter,
       showFilterDialog,
       showDownloadReportDialog,
       sorting,
