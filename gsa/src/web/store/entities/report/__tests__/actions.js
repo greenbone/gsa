@@ -30,17 +30,17 @@ import {
   loadReportIfNeeded,
   loadReportWithThreshold,
   reportActions,
+  loadDeltaReport,
 } from '../actions';
-import {reportIdentifier} from '../selectors';
 
-const entityType = 'report';
+import {reportIdentifier} from '../selectors';
 
 testEntityActions('report', reportActions);
 
 describe('loadReport function tests', () => {
   test('should load report successfully', () => {
     const id = 'a1';
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       isLoading: {
         [id]: false,
       },
@@ -54,7 +54,7 @@ describe('loadReport function tests', () => {
     });
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
     };
@@ -70,12 +70,12 @@ describe('loadReport function tests', () => {
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
-        entityType,
+        entityType: 'report',
         id,
       });
       expect(dispatch).toHaveBeenNthCalledWith(2, {
         type: types.ENTITY_LOADING_SUCCESS,
-        entityType,
+        entityType: 'report',
         data: {foo: 'bar'},
         id,
       });
@@ -84,7 +84,7 @@ describe('loadReport function tests', () => {
 
   test('should load report with results filter successfully', () => {
     const id = 'a1';
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       isLoading: {
         [id]: false,
       },
@@ -98,7 +98,7 @@ describe('loadReport function tests', () => {
     });
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
     };
@@ -116,13 +116,13 @@ describe('loadReport function tests', () => {
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
-        entityType,
+        entityType: 'report',
         filter,
         id,
       });
       expect(dispatch).toHaveBeenNthCalledWith(2, {
         type: types.ENTITY_LOADING_SUCCESS,
-        entityType,
+        entityType: 'report',
         filter,
         data: {foo: 'bar'},
         id,
@@ -132,7 +132,7 @@ describe('loadReport function tests', () => {
 
   test('should not load report if isLoading is true', () => {
     const id = 'a1';
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       isLoading: {
         [id]: true,
       },
@@ -145,7 +145,7 @@ describe('loadReport function tests', () => {
     const get = jest.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
     };
@@ -159,9 +159,9 @@ describe('loadReport function tests', () => {
     });
   });
 
-  test('should fail loading entity with an error', () => {
+  test('should fail loading report with an error', () => {
     const id = 'a1';
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       [id]: {
         isLoading: false,
       },
@@ -174,7 +174,7 @@ describe('loadReport function tests', () => {
     const get = jest.fn().mockRejectedValue('An Error');
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
     };
@@ -187,12 +187,12 @@ describe('loadReport function tests', () => {
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
-        entityType,
+        entityType: 'report',
         id,
       });
       expect(dispatch).toHaveBeenNthCalledWith(2, {
         type: types.ENTITY_LOADING_ERROR,
-        entityType,
+        entityType: 'report',
         error: 'An Error',
         id,
       });
@@ -203,7 +203,7 @@ describe('loadReport function tests', () => {
 describe('report loadReportIfNeeded function tests', () => {
   test('should load report successfully if needed', () => {
     const id = 'a1';
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       isLoading: {
         [id]: false,
       },
@@ -215,7 +215,7 @@ describe('report loadReportIfNeeded function tests', () => {
     const get = jest.fn().mockResolvedValue({data: {foo: 'bar'}});
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
     };
@@ -231,12 +231,12 @@ describe('report loadReportIfNeeded function tests', () => {
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
-        entityType,
+        entityType: 'report',
         id,
       });
       expect(dispatch).toHaveBeenNthCalledWith(2, {
         type: types.ENTITY_LOADING_SUCCESS,
-        entityType,
+        entityType: 'report',
         data: {foo: 'bar'},
         id,
       });
@@ -245,7 +245,7 @@ describe('report loadReportIfNeeded function tests', () => {
 
   test('should not load report if report is already in store', () => {
     const id = 'a1';
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       isLoading: {
         [id]: false,
       },
@@ -261,7 +261,7 @@ describe('report loadReportIfNeeded function tests', () => {
     const get = jest.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
     };
@@ -277,7 +277,7 @@ describe('report loadReportIfNeeded function tests', () => {
 
   test('should load report with results filter successfully if needed', () => {
     const id = 'a1';
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       isLoading: {
         [id]: false,
       },
@@ -289,7 +289,7 @@ describe('report loadReportIfNeeded function tests', () => {
     const get = jest.fn().mockResolvedValue({data: {foo: 'bar'}});
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
     };
@@ -308,13 +308,13 @@ describe('report loadReportIfNeeded function tests', () => {
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: types.ENTITY_LOADING_REQUEST,
-          entityType,
+          entityType: 'report',
           filter,
           id,
         });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: types.ENTITY_LOADING_SUCCESS,
-          entityType,
+          entityType: 'report',
           filter,
           data: {foo: 'bar'},
           id,
@@ -325,7 +325,7 @@ describe('report loadReportIfNeeded function tests', () => {
 
   test('should not load report if isLoading is true', () => {
     const id = 'a1';
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       isLoading: {
         [id]: true,
       },
@@ -338,7 +338,7 @@ describe('report loadReportIfNeeded function tests', () => {
     const get = jest.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
     };
@@ -352,9 +352,9 @@ describe('report loadReportIfNeeded function tests', () => {
     });
   });
 
-  test('should fail loading entity with an error', () => {
+  test('should fail loading report with an error', () => {
     const id = 'a1';
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       [id]: {
         isLoading: false,
       },
@@ -367,7 +367,7 @@ describe('report loadReportIfNeeded function tests', () => {
     const get = jest.fn().mockRejectedValue('An Error');
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
     };
@@ -381,14 +381,14 @@ describe('report loadReportIfNeeded function tests', () => {
       expect(dispatch.mock.calls[0]).toEqual([
         {
           type: types.ENTITY_LOADING_REQUEST,
-          entityType,
+          entityType: 'report',
           id,
         },
       ]);
       expect(dispatch.mock.calls[1]).toEqual([
         {
           type: types.ENTITY_LOADING_ERROR,
-          entityType,
+          entityType: 'report',
           error: 'An Error',
           id,
         },
@@ -400,7 +400,7 @@ describe('report loadReportIfNeeded function tests', () => {
 describe('loadReportWithThreshold tests', () => {
   test('should only load "simple" report', () => {
     const id = 'a1';
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       isLoading: {
         [id]: false,
       },
@@ -424,7 +424,7 @@ describe('loadReportWithThreshold tests', () => {
     });
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
       settings: {
@@ -443,12 +443,12 @@ describe('loadReportWithThreshold tests', () => {
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
-        entityType,
+        entityType: 'report',
         id,
       });
       expect(dispatch).toHaveBeenNthCalledWith(2, {
         type: types.ENTITY_LOADING_SUCCESS,
-        entityType,
+        entityType: 'report',
         data: report,
         id,
       });
@@ -457,7 +457,7 @@ describe('loadReportWithThreshold tests', () => {
 
   test('should load "full" report', () => {
     const id = 'a1';
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       isLoading: {
         [id]: false,
       },
@@ -481,7 +481,7 @@ describe('loadReportWithThreshold tests', () => {
     });
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
       settings: {
@@ -510,23 +510,23 @@ describe('loadReportWithThreshold tests', () => {
       expect(dispatch).toHaveBeenCalledTimes(4);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
-        entityType,
+        entityType: 'report',
         id,
       });
       expect(dispatch).toHaveBeenNthCalledWith(2, {
         type: types.ENTITY_LOADING_SUCCESS,
-        entityType,
+        entityType: 'report',
         data: report,
         id,
       });
       expect(dispatch).toHaveBeenNthCalledWith(3, {
         type: types.ENTITY_LOADING_REQUEST,
-        entityType,
+        entityType: 'report',
         id,
       });
       expect(dispatch).toHaveBeenNthCalledWith(4, {
         type: types.ENTITY_LOADING_SUCCESS,
-        entityType,
+        entityType: 'report',
         data: report,
         id,
       });
@@ -536,7 +536,7 @@ describe('loadReportWithThreshold tests', () => {
   test('should only load "simple" report with filter', () => {
     const id = 'a1';
     const filter = Filter.fromString('foo=bar rows=10');
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       isLoading: {
         [reportIdentifier(id, filter)]: false,
       },
@@ -560,7 +560,7 @@ describe('loadReportWithThreshold tests', () => {
     });
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
       settings: {
@@ -580,13 +580,13 @@ describe('loadReportWithThreshold tests', () => {
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: types.ENTITY_LOADING_REQUEST,
-          entityType,
+          entityType: 'report',
           filter,
           id,
         });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: types.ENTITY_LOADING_SUCCESS,
-          entityType,
+          entityType: 'report',
           filter,
           data: report,
           id,
@@ -598,7 +598,7 @@ describe('loadReportWithThreshold tests', () => {
   test('should load "full" report with filter', () => {
     const id = 'a1';
     const filter = Filter.fromString('foo=bar rows=10');
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       isLoading: {
         [reportIdentifier(id, filter)]: false,
       },
@@ -622,7 +622,7 @@ describe('loadReportWithThreshold tests', () => {
     });
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
       settings: {
@@ -644,26 +644,26 @@ describe('loadReportWithThreshold tests', () => {
         expect(dispatch).toHaveBeenCalledTimes(4);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: types.ENTITY_LOADING_REQUEST,
-          entityType,
+          entityType: 'report',
           filter,
           id,
         });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: types.ENTITY_LOADING_SUCCESS,
-          entityType,
+          entityType: 'report',
           filter,
           data: report,
           id,
         });
         expect(dispatch).toHaveBeenNthCalledWith(3, {
           type: types.ENTITY_LOADING_REQUEST,
-          entityType,
+          entityType: 'report',
           filter,
           id,
         });
         expect(dispatch).toHaveBeenNthCalledWith(4, {
           type: types.ENTITY_LOADING_SUCCESS,
-          entityType,
+          entityType: 'report',
           filter,
           data: report,
           id,
@@ -674,7 +674,7 @@ describe('loadReportWithThreshold tests', () => {
 
   test('should not load report if already loading', () => {
     const id = 'a1';
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       isLoading: {
         [id]: true,
       },
@@ -698,7 +698,7 @@ describe('loadReportWithThreshold tests', () => {
     });
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
       settings: {
@@ -721,7 +721,7 @@ describe('loadReportWithThreshold tests', () => {
   test('should not load report if already loading with filter', () => {
     const id = 'a1';
     const filter = Filter.fromString('foo=bar rows=10');
-    const rootState = createState(entityType, {
+    const rootState = createState('report', {
       isLoading: {
         [reportIdentifier(id, filter)]: true,
       },
@@ -745,7 +745,7 @@ describe('loadReportWithThreshold tests', () => {
     });
 
     const gmp = {
-      [entityType]: {
+      report: {
         get,
       },
       settings: {
