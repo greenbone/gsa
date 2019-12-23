@@ -32,6 +32,8 @@ import ToolBar from 'web/components/bar/toolbar';
 
 import DateTime from 'web/components/date/datetime';
 
+import ErrorPanel from 'web/components/error/errorpanel';
+
 import ReportIcon from 'web/components/icon/reporticon';
 
 import Divider from 'web/components/layout/divider';
@@ -70,7 +72,6 @@ import TabTitle from './details/tabtitle';
 import ThresholdPanel from './details/thresholdpanel';
 import TLSCertificatesTab from './details/tlscertificatestab';
 import ToolBarIcons from './details/toolbaricons';
-import ErrorPanel from 'web/components/error/errorpanel';
 
 const Span = styled.span`
   margin-top: 2px;
@@ -83,9 +84,11 @@ const PageContent = ({
   gmp,
   isLoading = true,
   isUpdating = false,
+  pageFilter,
   reportError,
   reportFilter,
   reportId,
+  resetFilter,
   sorting,
   showError,
   showErrorMessage,
@@ -110,10 +113,12 @@ const PageContent = ({
   onTagSuccess,
   onTargetEditClick,
 }) => {
-  const {report = {}} = entity || {};
+  const hasReport = isDefined(entity);
 
-  const {userTags = {}} = report;
-  const userTagsCount = userTags.length;
+  const report = hasReport ? entity.report : undefined;
+
+  const userTags = hasReport ? report.userTags : undefined;
+  const userTagsCount = isDefined(userTags) ? userTags.length : 0;
 
   const {
     applications = {},
@@ -127,9 +132,7 @@ const PageContent = ({
     tls_certificates = {},
     timestamp,
     scan_run_status,
-  } = report;
-
-  const hasReport = isDefined(entity);
+  } = report || {};
 
   if (!hasReport && isDefined(reportError)) {
     return (
@@ -201,8 +204,10 @@ const PageContent = ({
         <Layout align="end">
           <Powerfilter
             createFilterType="result"
-            filter={reportFilter}
+            // use loaded filter from report if available otherwise already show the requested filter
+            filter={isDefined(reportFilter) ? reportFilter : pageFilter}
             filters={filters}
+            resetFilter={resetFilter}
             onEditClick={onFilterEditClick}
             onError={onError}
             onFilterCreated={onFilterCreated}
@@ -542,9 +547,11 @@ PageContent.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool,
   isUpdating: PropTypes.bool,
+  pageFilter: PropTypes.filter,
   reportError: PropTypes.error,
   reportFilter: PropTypes.filter,
   reportId: PropTypes.id.isRequired,
+  resetFilter: PropTypes.filter,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,

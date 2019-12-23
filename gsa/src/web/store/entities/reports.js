@@ -16,183 +16,60 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined} from 'gmp/utils/identity';
+import {
+  createEntitiesActions,
+  createLoadAllEntities,
+  createLoadEntities,
+  types,
+} from 'web/store/entities/utils/actions';
 
-import {createEntityActions} from './utils/actions';
+import {createReducer, initialState} from 'web/store/entities/utils/reducers';
+import {createEntitiesSelector} from 'web/store/entities/utils/selectors';
 
-import {createAll} from './utils/main';
+import {reportReducer} from './report/reducers';
+import {reportsReducer} from './reports/reducers';
 
-import {createReducer} from 'web/store/entities/utils/reducers';
+const reportsSelector = createEntitiesSelector('report');
+const entitiesActions = createEntitiesActions('report');
+const loadAllEntities = createLoadAllEntities({
+  selector: reportsSelector,
+  actions: entitiesActions,
+  entityType: 'report',
+});
+const loadEntities = createLoadEntities({
+  selector: reportsSelector,
+  actions: entitiesActions,
+  entityType: 'report',
+});
 
-const {
-  loadAllEntities,
-  loadEntities,
-  reducer,
-  selector,
-  entitiesActions,
-  entityActions,
-} = createAll('report');
-
-const entityType = 'deltaReport';
-
-const deltaIdentifier = (id, deltaId) => `${id}+${deltaId}`;
-
-class DeltaSelector {
-  constructor(state = {}) {
-    this.state = state;
+const reducer = (state = initialState, action) => {
+  if (action.entityType !== 'report') {
+    return state;
   }
 
-  isLoading(id, deltaId) {
-    return isDefined(this.state.isLoading)
-      ? !!this.state.isLoading[deltaIdentifier(id, deltaId)]
-      : false;
+  switch (action.type) {
+    case types.ENTITIES_LOADING_REQUEST:
+    case types.ENTITIES_LOADING_SUCCESS:
+    case types.ENTITIES_LOADING_ERROR:
+      return reportsReducer(state, action);
+    case types.ENTITY_LOADING_REQUEST:
+    case types.ENTITY_LOADING_SUCCESS:
+    case types.ENTITY_LOADING_ERROR:
+      return reportReducer(state, action);
+    default:
+      return state;
   }
-
-  getError(id, deltaId) {
-    return isDefined(this.state.errors)
-      ? this.state.errors[deltaIdentifier(id, deltaId)]
-      : undefined;
-  }
-
-  getEntity(id, deltaId) {
-    return isDefined(this.state.byId)
-      ? this.state.byId[deltaIdentifier(id, deltaId)]
-      : undefined;
-  }
-}
-
-const deltaReducer = createReducer(entityType);
-const deltaSelector = rootState =>
-  new DeltaSelector(rootState.entities[entityType]);
-
-const deltaEntityActions = createEntityActions(entityType);
-
-const loadEntity = gmp => (
-  id,
-  {filter, details = true, force = false} = {},
-) => (dispatch, getState) => {
-  const rootState = getState();
-  const state = selector(rootState);
-
-  if (!force && state.isLoadingEntity(id)) {
-    // we are already loading data
-    return Promise.resolve();
-  }
-
-  dispatch(entityActions.request(id));
-
-  return gmp.report
-    .get({id}, {filter, details})
-    .then(
-      response => response.data,
-      error => {
-        dispatch(entityActions.error(id, error));
-        return Promise.reject(error);
-      },
-    )
-    .then(data => {
-      dispatch(entityActions.success(id, data));
-      return data;
-    });
 };
 
-const loadEntityWithThreshold = gmp => (id, {filter} = {}) => (
-  dispatch,
-  getState,
-) => {
-  const rootState = getState();
-  const state = selector(rootState);
-
-  if (state.isLoadingEntity(id)) {
-    // we are already loading data
-    return Promise.resolve();
-  }
-
-  dispatch(entityActions.request(id));
-
-  const {reportResultsThreshold: threshold} = gmp.settings;
-  return gmp.report
-    .get({id}, {filter, details: false})
-    .then(
-      response => response.data,
-      error => {
-        dispatch(entityActions.error(id, error));
-        return Promise.reject(error);
-      },
-    )
-    .then(report => {
-      const fullReport =
-        isDefined(report) &&
-        isDefined(report.report) &&
-        isDefined(report.report.results) &&
-        report.report.results.counts.filtered < threshold;
-
-      dispatch(entityActions.success(id, report));
-
-      if (fullReport) {
-        return loadEntity(gmp)(id, {filter, details: true, force: true})(
-          dispatch,
-          getState,
-        );
-      }
-    });
-};
-
-const loadEntityIfNeeded = gmp => (id, {filter, details = false} = {}) => (
-  dispatch,
-  getState,
-) => {
-  // loads the small report (without details) if these information are not
-  // yet in the store. resolve() otherwise
-  const rootState = getState();
-  const state = selector(rootState);
-
-  if (isDefined(state.getEntity(id))) {
-    // we are already loading data or have it in the store
-    return Promise.resolve();
-  }
-  return loadEntity(gmp)(id, {filter, details})(dispatch, getState);
-};
-
-const loadDeltaReport = gmp => (id, deltaId, filter) => (
-  dispatch,
-  getState,
-) => {
-  const rootState = getState();
-  const state = deltaSelector(rootState);
-
-  if (state.isLoading(id, deltaId)) {
-    // we are already loading data
-    return Promise.resolve();
-  }
-
-  const identifier = deltaIdentifier(id, deltaId);
-
-  dispatch(deltaEntityActions.request(identifier));
-
-  return gmp.report
-    .getDelta({id}, {id: deltaId}, {filter})
-    .then(
-      response =>
-        dispatch(deltaEntityActions.success(identifier, response.data)),
-      error => dispatch(deltaEntityActions.error(identifier, error)),
-    );
-};
+const deltaReducer = createReducer('deltaReport');
 
 export {
-  deltaEntityActions,
   deltaReducer,
-  deltaSelector,
-  loadDeltaReport,
   loadAllEntities,
   loadEntities,
-  loadEntity,
-  loadEntityIfNeeded,
-  loadEntityWithThreshold,
   reducer,
-  selector,
+  reportsSelector as selector,
   entitiesActions,
-  entityActions,
 };
 
 // vim: set ts=2 sw=2 tw=80:
