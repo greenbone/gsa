@@ -94,6 +94,8 @@ const AuditDialog = ({
 
   const policyItems = renderSelectItems(policies);
 
+  policyId = selectSaveId(policies, policyId, undefined);
+
   const alertItems = renderSelectItems(alerts);
 
   // having an audit means we are editing an audit
@@ -132,8 +134,6 @@ const AuditDialog = ({
       values={controlledData}
     >
       {({values: state, onValueChange}) => {
-        const currentPolicyId = selectSaveId(policies, state.policyId);
-
         return (
           <Layout flex="column">
             <FormGroup title={_('Name')}>
@@ -250,7 +250,7 @@ const AuditDialog = ({
                   name="policyId"
                   disabled={!changeAudit || hasAudit || fromPolicy}
                   items={policyItems}
-                  value={currentPolicyId}
+                  value={policyId}
                   onChange={onChange}
                 />
               </FormGroup>

@@ -97,6 +97,12 @@ const elementOrString = ReactPropTypes.oneOfType([
   ReactPropTypes.string,
 ]);
 
+const error = ReactPropTypes.shape({
+  message: ReactPropTypes.string.isRequired,
+  name: ReactPropTypes.string,
+  stack: ReactPropTypes.string,
+});
+
 const numberString = ReactPropTypes.string; // TODO restrict string to contain numbers
 
 const numberOrNumberString = ReactPropTypes.oneOfType([
@@ -218,10 +224,6 @@ const ref = ReactPropTypes.oneOfType([
     current: ReactPropTypes.any,
   }),
 ]);
-
-const error = ReactPropTypes.shape({
-  message: ReactPropTypes.string,
-});
 
 export default {
   bool: ReactPropTypes.bool,

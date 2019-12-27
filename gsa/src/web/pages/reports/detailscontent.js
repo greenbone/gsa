@@ -32,28 +32,14 @@ import ToolBar from 'web/components/bar/toolbar';
 
 import DateTime from 'web/components/date/datetime';
 
-import ErrorMessage from 'web/components/error/errormessage';
+import ErrorPanel from 'web/components/error/errorpanel';
 
-import AddToAssetsIcon from 'web/components/icon/addtoassetsicon';
-import DownloadIcon from 'web/components/icon/downloadicon';
-import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
-import ListIcon from 'web/components/icon/listicon';
-import ManualIcon from 'web/components/icon/manualicon';
-import PerformanceIcon from 'web/components/icon/performanceicon';
-import RemoveFromAssetsIcon from 'web/components/icon/removefromassetsicon';
 import ReportIcon from 'web/components/icon/reporticon';
-import ResultIcon from 'web/components/icon/resulticon';
-import TaskIcon from 'web/components/icon/taskicon';
-import TlsCertificateIcon from 'web/components/icon/tlscertificateicon';
 
-import IconDivider from 'web/components/layout/icondivider';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import Loading from 'web/components/loading/loading';
-
-import DetailsLink from 'web/components/link/detailslink';
-import Link from 'web/components/link/link';
 
 import Powerfilter from 'web/components/powerfilter/powerfilter';
 
@@ -71,200 +57,39 @@ import EntityInfo from 'web/entity/info';
 import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import AlertActions from './alertactions';
-import ApplicationsTable from './applicationstable';
-import ClosedCvesTable from './closedcvestable';
-import CvesTable from './cvestable';
-import ErrorsTable from './errorstable';
-import HostsTable from './hoststable';
-import OperatingSystemsTable from './operatingsystemstable';
-import PortsTable from './portstable';
-import ReportEntitiesContainer from './reportentitiescontainer';
-import ResultsTab from './resultstab';
-import Summary from './summary';
-import TLSCertificatesTable from './tlscertificatestable';
-
-import {
-  appsSortFunctions,
-  closedCvesSortFunctions,
-  cvesSortFunctions,
-  errorsSortFunctions,
-  hostsSortFunctions,
-  operatingssystemsSortFunctions,
-  portsSortFunctions,
-  tlsCertificatesSortFunctions,
-} from './sort';
-
-const TabTitleCounts = styled.span`
-  font-size: 0.7em;
-`;
+import ApplicationsTab from './details/applicationstab';
+import CvesTab from './details/cvestab';
+import ClosedCvesTab from './details/closedcvestab';
+import ErrorsTab from './details/errorstab';
+import HostsTab from './details/hoststab';
+import OperatingSystemsTab from './details/operatingsystemstab';
+import PortsTab from './details/portstab';
+import ResultsTab from './details/resultstab';
+import Summary from './details/summary';
+import TabTitle from './details/tabtitle';
+import ThresholdPanel from './details/thresholdpanel';
+import TLSCertificatesTab from './details/tlscertificatestab';
+import ToolBarIcons from './details/toolbaricons';
 
 const Span = styled.span`
   margin-top: 2px;
 `;
 
-const TabTitle = ({title, counts}) => (
-  <Layout flex="column" align={['center', 'center']}>
-    <span>{title}</span>
-    <TabTitleCounts>
-      (<i>{_('{{filtered}} of {{all}}', counts)}</i>)
-    </TabTitleCounts>
-  </Layout>
-);
-
-TabTitle.propTypes = {
-  counts: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired,
-};
-
-const TabTitleWithSingleCount = ({title, count}) => (
-  <Layout flex="column" align={['center', 'center']}>
-    <span>{title}</span>
-    <TabTitleCounts>
-      (<i>{count}</i>)
-    </TabTitleCounts>
-  </Layout>
-);
-
-TabTitleWithSingleCount.propTypes = {
-  count: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-};
-
-const ToolBarIcons = ({
-  delta = false,
-  filter,
-  loading,
-  report,
-  task,
-  onAddToAssetsClick,
-  onRemoveFromAssetsClick,
-  onReportDownloadClick,
-  showError,
-  showErrorMessage,
-  showSuccessMessage,
-  onInteraction,
-}) => {
-  return (
-    <Divider margin="15px">
-      <IconDivider>
-        <ManualIcon
-          page="reports"
-          anchor="reading-a-report"
-          title={_('Help: Reading Reports')}
-        />
-        <ListIcon title={_('Reports List')} page="reports" />
-      </IconDivider>
-      {!loading && (
-        <React.Fragment>
-          <IconDivider>
-            <AddToAssetsIcon
-              title={_('Add to Assets with QoD=>70% and Overrides enabled')}
-              onClick={onAddToAssetsClick}
-            />
-            <RemoveFromAssetsIcon
-              title={_('Remove from Assets')}
-              onClick={onRemoveFromAssetsClick}
-            />
-          </IconDivider>
-          <IconDivider>
-            <DetailsLink
-              type="task"
-              textOnly={!isDefined(task)}
-              id={isDefined(task) ? task.id : ''}
-              title={_('Corresponding Task')}
-            >
-              <TaskIcon />
-            </DetailsLink>
-            <Link
-              to="results"
-              filter={'report_id=' + report.id}
-              title={_('Corresponding Results')}
-            >
-              <ResultIcon />
-            </Link>
-            <Link
-              to="vulnerabilities"
-              filter={'report_id=' + report.id}
-              title={_('Corresponding Vulnerabilities')}
-            >
-              <VulnerabilityIcon />
-            </Link>
-            {!delta && (
-              <Link
-                to="tlscertificates"
-                filter={'report_id=' + report.id}
-                title={_('Corresponding TLS Certificates')}
-              >
-                <TlsCertificateIcon />
-              </Link>
-            )}
-            {isDefined(task) && !task.isContainer() && (
-              <Link
-                to="performance"
-                title={_('Corresponding Performance')}
-                query={{
-                  start: isDefined(report.scan_start)
-                    ? report.scan_start.toISOString()
-                    : undefined,
-                  end: isDefined(report.scan_end)
-                    ? report.scan_end.toISOString()
-                    : undefined,
-                  scanner: isDefined(report.slave)
-                    ? report.slave.id
-                    : undefined,
-                }}
-              >
-                <PerformanceIcon />
-              </Link>
-            )}
-          </IconDivider>
-          <IconDivider>
-            <DownloadIcon
-              title={_('Download filtered Report')}
-              onClick={onReportDownloadClick}
-            />
-            {!delta && (
-              <AlertActions
-                filter={filter}
-                report={report}
-                showError={showError}
-                showSuccessMessage={showSuccessMessage}
-                showErrorMessage={showErrorMessage}
-                onInteraction={onInteraction}
-              />
-            )}
-          </IconDivider>
-        </React.Fragment>
-      )}
-    </Divider>
-  );
-};
-
-ToolBarIcons.propTypes = {
-  delta: PropTypes.bool,
-  filter: PropTypes.filter,
-  loading: PropTypes.bool,
-  report: PropTypes.object.isRequired,
-  showError: PropTypes.func.isRequired,
-  showErrorMessage: PropTypes.func.isRequired,
-  showSuccessMessage: PropTypes.func.isRequired,
-  task: PropTypes.model,
-  onAddToAssetsClick: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-  onRemoveFromAssetsClick: PropTypes.func.isRequired,
-  onReportDownloadClick: PropTypes.func.isRequired,
-};
-
 const PageContent = ({
   activeTab,
   entity,
-  entityError,
-  filter,
   filters,
+  gmp,
   isLoading = true,
+  isLoadingFilters = true,
   isUpdating = false,
+  pageFilter,
+  reportError,
+  reportFilter,
+  reportId,
+  resetFilter,
   sorting,
   showError,
   showErrorMessage,
@@ -289,10 +114,12 @@ const PageContent = ({
   onTagSuccess,
   onTargetEditClick,
 }) => {
-  const {report = {}} = entity || {};
+  const hasReport = isDefined(entity);
 
-  const {userTags = {}} = report;
-  const userTagsCount = userTags.length;
+  const report = hasReport ? entity.report : undefined;
+
+  const userTags = hasReport ? report.userTags : undefined;
+  const userTagsCount = isDefined(userTags) ? userTags.length : 0;
 
   const {
     applications = {},
@@ -303,30 +130,41 @@ const PageContent = ({
     operatingsystems = {},
     ports = {},
     results = {},
-    result_count = {},
     tlsCertificates = {},
     timestamp,
     scan_run_status,
-  } = report;
+  } = report || {};
 
-  const hasReport = isDefined(entity);
-
-  if (!hasReport && isDefined(entityError)) {
-    return <ErrorMessage message={entityError.message} />;
+  if (!hasReport && isDefined(reportError)) {
+    return (
+      <ErrorPanel
+        message={_('Error while loading Report {{reportId}}', {reportId})}
+        error={reportError}
+      />
+    );
   }
 
-  const delta = isDefined(report.isDeltaReport)
-    ? report.isDeltaReport()
-    : undefined;
+  const threshold = gmp.settings.reportResultsThreshold;
+
+  const showThresholdMessage =
+    !isLoading && hasReport && results.counts.filtered > threshold;
 
   const isContainer = isDefined(task) && task.isContainer();
   const status = isContainer ? TASK_STATUS.container : scan_run_status;
   const progress = isDefined(task) ? task.progress : 0;
 
+  const showIsLoading = isLoading && !hasReport;
+
+  const showInitialLoading =
+    isLoading &&
+    !isDefined(reportError) &&
+    !showThresholdMessage &&
+    (!isDefined(results.entities) || results.entities.length === 0);
+
   const header_title = (
     <Divider>
       <span>{_('Report:')}</span>
-      {isLoading ? (
+      {showIsLoading ? (
         <span>{_('Loading')}</span>
       ) : (
         <Divider>
@@ -345,21 +183,21 @@ const PageContent = ({
     </SectionHeader>
   );
 
-  const {full, filtered} = result_count;
-  const resultCounts = {filtered, all: full};
-
   return (
     <Layout grow flex="column" align={['start', 'stretch']}>
       <ToolBar>
         <ToolBarIcons
-          delta={delta}
-          filter={filter}
-          loading={isLoading}
-          report={report}
+          delta={false}
+          filter={reportFilter}
+          isLoading={showIsLoading}
+          report={hasReport ? report : undefined}
+          reportId={reportId}
           showError={showError}
           showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}
+          showThresholdMessage={showThresholdMessage}
           task={task}
+          threshold={threshold}
           onAddToAssetsClick={onAddToAssetsClick}
           onInteraction={onInteraction}
           onRemoveFromAssetsClick={onRemoveFromAssetsClick}
@@ -368,9 +206,12 @@ const PageContent = ({
         <Layout align="end">
           <Powerfilter
             createFilterType="result"
-            filter={filter}
+            // use loaded filter from report if available otherwise already show the requested filter
+            filter={isDefined(reportFilter) ? reportFilter : pageFilter}
             filters={filters}
             isLoading={isLoading || isUpdating}
+            isLoadingFilters={isLoadingFilters}
+            resetFilter={resetFilter}
             onEditClick={onFilterEditClick}
             onError={onError}
             onFilterCreated={onFilterCreated}
@@ -382,7 +223,7 @@ const PageContent = ({
       </ToolBar>
 
       <Section header={header}>
-        {isLoading ? (
+        {showIsLoading ? (
           <Loading />
         ) : (
           <React.Fragment>
@@ -393,103 +234,78 @@ const PageContent = ({
                 onActivateTab={onActivateTab}
               >
                 <Tab>{_('Information')}</Tab>
-                {delta ? (
-                  <Tab>
-                    <TabTitleWithSingleCount
-                      title={_('Results')}
-                      count={filtered}
-                    />
-                  </Tab>
-                ) : (
-                  <Tab>
-                    <TabTitle title={_('Results')} counts={resultCounts} />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle title={_('Hosts')} counts={hosts.counts} />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle title={_('Ports')} counts={ports.counts} />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle
-                      title={_('Applications')}
-                      counts={applications.counts}
-                    />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle
-                      title={_('Operating Systems')}
-                      counts={operatingsystems.counts}
-                    />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle title={_('CVEs')} counts={cves.counts} />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle
-                      title={_('Closed CVEs')}
-                      counts={closed_cves.counts}
-                    />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle
-                      title={_('TLS Certificates')}
-                      counts={tlsCertificates.counts}
-                    />
-                  </Tab>
-                )}
-                {!delta && (
-                  <Tab>
-                    <TabTitle
-                      title={_('Error Messages')}
-                      counts={errors.counts}
-                    />
-                  </Tab>
-                )}
                 <Tab>
-                  <TabTitleWithSingleCount
-                    title={_('User Tags')}
-                    count={userTagsCount}
+                  <TabTitle title={_('Results')} counts={results.counts} />
+                </Tab>
+                <Tab>
+                  <TabTitle title={_('Hosts')} counts={hosts.counts} />
+                </Tab>
+                <Tab>
+                  <TabTitle title={_('Ports')} counts={ports.counts} />
+                </Tab>
+                <Tab>
+                  <TabTitle
+                    title={_('Applications')}
+                    counts={applications.counts}
                   />
+                </Tab>
+                <Tab>
+                  <TabTitle
+                    title={_('Operating Systems')}
+                    counts={operatingsystems.counts}
+                  />
+                </Tab>
+                <Tab>
+                  <TabTitle title={_('CVEs')} counts={cves.counts} />
+                </Tab>
+                <Tab>
+                  <TabTitle
+                    title={_('Closed CVEs')}
+                    counts={closed_cves.counts}
+                  />
+                </Tab>
+                <Tab>
+                  <TabTitle
+                    title={_('TLS Certificates')}
+                    counts={tlsCertificates.counts}
+                  />
+                </Tab>
+                <Tab>
+                  <TabTitle
+                    title={_('Error Messages')}
+                    counts={errors.counts}
+                  />
+                </Tab>
+                <Tab>
+                  <TabTitle title={_('User Tags')} count={userTagsCount} />
                 </Tab>
               </TabList>
             </TabLayout>
-            {isDefined(report) ? (
+
+            {hasReport ? (
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
                     <Summary
+                      filter={reportFilter}
                       report={report}
+                      reportError={reportError}
+                      reportId={reportId}
+                      isUpdating={isUpdating}
                       onError={onError}
                       onTagChanged={onTagSuccess}
                     />
                   </TabPanel>
                   <TabPanel>
                     <ResultsTab
-                      counts={isDefined(results.counts) ? results.counts : {}}
-                      delta={delta}
-                      filter={filter}
-                      hasTarget={!isContainer}
-                      isUpdating={isUpdating}
+                      status={status}
                       progress={progress}
-                      results={isDefined(results) ? results.entities : {}}
+                      hasTarget={!isContainer}
+                      reportFilter={reportFilter}
+                      reportId={reportId}
+                      results={results.entities}
                       sortField={sorting.results.sortField}
                       sortReverse={sorting.results.sortReverse}
-                      status={status}
                       onFilterAddLogLevelClick={onFilterAddLogLevelClick}
                       onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
                       onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
@@ -503,319 +319,210 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    <ReportEntitiesContainer
-                      counts={hosts.counts}
-                      entities={hosts.entities}
-                      filter={filter}
-                      sortField={sorting.hosts.sortField}
-                      sortReverse={sorting.hosts.sortReverse}
-                      sortFunctions={hostsSortFunctions}
-                      onInteraction={onInteraction}
-                    >
-                      {({
-                        entities,
-                        entitiesCounts,
-                        sortBy,
-                        sortDir,
-                        onFirstClick,
-                        onLastClick,
-                        onNextClick,
-                        onPreviousClick,
-                      }) => (
-                        <HostsTable
-                          entities={entities}
-                          entitiesCounts={entitiesCounts}
-                          filter={filter}
-                          isUpdating={isUpdating}
-                          sortBy={sortBy}
-                          sortDir={sortDir}
-                          toggleDetailsIcon={false}
-                          onFirstClick={onFirstClick}
-                          onLastClick={onLastClick}
-                          onNextClick={onNextClick}
-                          onPreviousClick={onPreviousClick}
-                          onSortChange={sortField =>
-                            onSortChange('hosts', sortField)
-                          }
-                        />
-                      )}
-                    </ReportEntitiesContainer>
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
+                      <ThresholdPanel
+                        entityType={_('Hosts')}
+                        filter={reportFilter}
+                        isUpdating={isUpdating}
+                        threshold={threshold}
+                        onFilterEditClick={onFilterEditClick}
+                        onFilterChanged={onFilterChanged}
+                      />
+                    ) : (
+                      <HostsTab
+                        counts={hosts.counts}
+                        filter={reportFilter}
+                        hosts={hosts.entities}
+                        isUpdating={isUpdating}
+                        sortField={sorting.hosts.sortField}
+                        sortReverse={sorting.hosts.sortReverse}
+                        onInteraction={onInteraction}
+                        onSortChange={sortField =>
+                          onSortChange('hosts', sortField)
+                        }
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel>
-                    <ReportEntitiesContainer
-                      counts={ports.counts}
-                      entities={ports.entities}
-                      filter={filter}
-                      sortField={sorting.ports.sortField}
-                      sortFunctions={portsSortFunctions}
-                      sortReverse={sorting.ports.sortReverse}
-                      onInteraction={onInteraction}
-                    >
-                      {({
-                        entities,
-                        entitiesCounts,
-                        sortBy,
-                        sortDir,
-                        onFirstClick,
-                        onLastClick,
-                        onNextClick,
-                        onPreviousClick,
-                      }) => (
-                        <PortsTable
-                          entities={entities}
-                          entitiesCounts={entitiesCounts}
-                          filter={filter}
-                          isUpdating={isUpdating}
-                          sortBy={sortBy}
-                          sortDir={sortDir}
-                          toggleDetailsIcon={false}
-                          onFirstClick={onFirstClick}
-                          onLastClick={onLastClick}
-                          onNextClick={onNextClick}
-                          onPreviousClick={onPreviousClick}
-                          onSortChange={sortField =>
-                            onSortChange('ports', sortField)
-                          }
-                        />
-                      )}
-                    </ReportEntitiesContainer>
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
+                      <ThresholdPanel
+                        entityType={_('Ports')}
+                        filter={reportFilter}
+                        isUpdating={isUpdating}
+                        threshold={threshold}
+                        onFilterEditClick={onFilterEditClick}
+                        onFilterChanged={onFilterChanged}
+                      />
+                    ) : (
+                      <PortsTab
+                        counts={ports.counts}
+                        filter={reportFilter}
+                        isUpdating={isUpdating}
+                        ports={ports.entities}
+                        sortField={sorting.ports.sortField}
+                        sortReverse={sorting.ports.sortReverse}
+                        onInteraction={onInteraction}
+                        onSortChange={sortField =>
+                          onSortChange('ports', sortField)
+                        }
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel>
-                    <ReportEntitiesContainer
-                      counts={applications.counts}
-                      entities={applications.entities}
-                      filter={filter}
-                      sortField={sorting.apps.sortField}
-                      sortFunctions={appsSortFunctions}
-                      sortReverse={sorting.apps.sortReverse}
-                      onInteraction={onInteraction}
-                    >
-                      {({
-                        entities,
-                        entitiesCounts,
-                        sortBy,
-                        sortDir,
-                        onFirstClick,
-                        onLastClick,
-                        onNextClick,
-                        onPreviousClick,
-                      }) => (
-                        <ApplicationsTable
-                          entities={entities}
-                          entitiesCounts={entitiesCounts}
-                          filter={filter}
-                          isUpdating={isUpdating}
-                          sortBy={sortBy}
-                          sortDir={sortDir}
-                          toggleDetailsIcon={false}
-                          onFirstClick={onFirstClick}
-                          onLastClick={onLastClick}
-                          onNextClick={onNextClick}
-                          onPreviousClick={onPreviousClick}
-                          onSortChange={sortField =>
-                            onSortChange('apps', sortField)
-                          }
-                        />
-                      )}
-                    </ReportEntitiesContainer>
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
+                      <ThresholdPanel
+                        entityType={_('Applications')}
+                        filter={reportFilter}
+                        isUpdating={isUpdating}
+                        threshold={threshold}
+                        onFilterEditClick={onFilterEditClick}
+                        onFilterChanged={onFilterChanged}
+                      />
+                    ) : (
+                      <ApplicationsTab
+                        counts={applications.counts}
+                        applications={applications.entities}
+                        filter={reportFilter}
+                        isUpdating={isUpdating}
+                        sortField={sorting.apps.sortField}
+                        sortReverse={sorting.apps.sortReverse}
+                        onInteraction={onInteraction}
+                        onSortChange={sortField =>
+                          onSortChange('apps', sortField)
+                        }
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel>
-                    <ReportEntitiesContainer
-                      counts={operatingsystems.counts}
-                      entities={operatingsystems.entities}
-                      filter={filter}
-                      sortFunctions={operatingssystemsSortFunctions}
-                      sortField={sorting.os.sortField}
-                      sortReverse={sorting.os.sortReverse}
-                      onInteraction={onInteraction}
-                    >
-                      {({
-                        entities,
-                        entitiesCounts,
-                        sortBy,
-                        sortDir,
-                        onFirstClick,
-                        onLastClick,
-                        onNextClick,
-                        onPreviousClick,
-                      }) => (
-                        <OperatingSystemsTable
-                          entities={entities}
-                          entitiesCounts={entitiesCounts}
-                          filter={filter}
-                          isUpdating={isUpdating}
-                          sortBy={sortBy}
-                          sortDir={sortDir}
-                          toggleDetailsIcon={false}
-                          onFirstClick={onFirstClick}
-                          onLastClick={onLastClick}
-                          onNextClick={onNextClick}
-                          onPreviousClick={onPreviousClick}
-                          onSortChange={sortField =>
-                            onSortChange('os', sortField)
-                          }
-                        />
-                      )}
-                    </ReportEntitiesContainer>
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
+                      <ThresholdPanel
+                        entityType={_('Operating Systems')}
+                        filter={reportFilter}
+                        isUpdating={isUpdating}
+                        threshold={threshold}
+                        onFilterEditClick={onFilterEditClick}
+                        onFilterChanged={onFilterChanged}
+                      />
+                    ) : (
+                      <OperatingSystemsTab
+                        counts={operatingsystems.counts}
+                        operatingsystems={operatingsystems.entities}
+                        filter={reportFilter}
+                        sortField={sorting.os.sortField}
+                        sortReverse={sorting.os.sortReverse}
+                        isUpdating={isUpdating}
+                        onInteraction={onInteraction}
+                        onSortChange={sortField =>
+                          onSortChange('os', sortField)
+                        }
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel>
-                    <ReportEntitiesContainer
-                      counts={cves.counts}
-                      entities={cves.entities}
-                      filter={filter}
-                      sortFunctions={cvesSortFunctions}
-                      sortField={sorting.cves.sortField}
-                      sortReverse={sorting.cves.sortReverse}
-                      onInteraction={onInteraction}
-                    >
-                      {({
-                        entities,
-                        entitiesCounts,
-                        sortBy,
-                        sortDir,
-                        onFirstClick,
-                        onLastClick,
-                        onNextClick,
-                        onPreviousClick,
-                      }) => (
-                        <CvesTable
-                          entities={entities}
-                          entitiesCounts={entitiesCounts}
-                          filter={filter}
-                          isUpdating={isUpdating}
-                          sortBy={sortBy}
-                          sortDir={sortDir}
-                          toggleDetailsIcon={false}
-                          onFirstClick={onFirstClick}
-                          onLastClick={onLastClick}
-                          onNextClick={onNextClick}
-                          onPreviousClick={onPreviousClick}
-                          onSortChange={sortField =>
-                            onSortChange('cves', sortField)
-                          }
-                        />
-                      )}
-                    </ReportEntitiesContainer>
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
+                      <ThresholdPanel
+                        entityType={_('CVEs')}
+                        filter={reportFilter}
+                        isUpdating={isUpdating}
+                        threshold={threshold}
+                        onFilterEditClick={onFilterEditClick}
+                        onFilterChanged={onFilterChanged}
+                      />
+                    ) : (
+                      <CvesTab
+                        counts={cves.counts}
+                        cves={cves.entities}
+                        filter={reportFilter}
+                        isUpdating={isUpdating}
+                        sortField={sorting.cves.sortField}
+                        sortReverse={sorting.cves.sortReverse}
+                        onInteraction={onInteraction}
+                        onSortChange={sortField =>
+                          onSortChange('cves', sortField)
+                        }
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel>
-                    <ReportEntitiesContainer
-                      counts={closed_cves.counts}
-                      entities={closed_cves.entities}
-                      filter={filter}
-                      sortFunctions={closedCvesSortFunctions}
-                      sortField={sorting.closedcves.sortField}
-                      sortReverse={sorting.closedcves.sortReverse}
-                      onInteraction={onInteraction}
-                    >
-                      {({
-                        entities,
-                        entitiesCounts,
-                        sortBy,
-                        sortDir,
-                        onFirstClick,
-                        onLastClick,
-                        onNextClick,
-                        onPreviousClick,
-                      }) => (
-                        <ClosedCvesTable
-                          entities={entities}
-                          entitiesCounts={entitiesCounts}
-                          filter={filter}
-                          isUpdating={isUpdating}
-                          sortBy={sortBy}
-                          sortDir={sortDir}
-                          toggleDetailsIcon={false}
-                          onFirstClick={onFirstClick}
-                          onLastClick={onLastClick}
-                          onNextClick={onNextClick}
-                          onPreviousClick={onPreviousClick}
-                          onSortChange={sortField =>
-                            onSortChange('closedcves', sortField)
-                          }
-                        />
-                      )}
-                    </ReportEntitiesContainer>
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
+                      <ThresholdPanel
+                        entityType={_('Closed CVEs')}
+                        filter={reportFilter}
+                        threshold={threshold}
+                        isUpdating={isUpdating}
+                        onFilterEditClick={onFilterEditClick}
+                        onFilterChanged={onFilterChanged}
+                      />
+                    ) : (
+                      <ClosedCvesTab
+                        counts={closed_cves.counts}
+                        closedCves={closed_cves.entities}
+                        filter={reportFilter}
+                        isUpdating={isUpdating}
+                        sortField={sorting.closedcves.sortField}
+                        sortReverse={sorting.closedcves.sortReverse}
+                        onInteraction={onInteraction}
+                        onSortChange={sortField =>
+                          onSortChange('closedcves', sortField)
+                        }
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel>
-                    <ReportEntitiesContainer
-                      counts={tlsCertificates.counts}
-                      entities={tlsCertificates.entities}
-                      filter={filter}
-                      sortFunctions={tlsCertificatesSortFunctions}
-                      sortField={sorting.tlscerts.sortField}
-                      sortReverse={sorting.tlscerts.sortReverse}
-                      onInteraction={onInteraction}
-                    >
-                      {({
-                        entities,
-                        entitiesCounts,
-                        sortBy,
-                        sortDir,
-                        onFirstClick,
-                        onLastClick,
-                        onNextClick,
-                        onPreviousClick,
-                      }) => (
-                        <TLSCertificatesTable
-                          entities={entities}
-                          entitiesCounts={entitiesCounts}
-                          filter={filter}
-                          isUpdating={isUpdating}
-                          sortBy={sortBy}
-                          sortDir={sortDir}
-                          toggleDetailsIcon={false}
-                          onFirstClick={onFirstClick}
-                          onLastClick={onLastClick}
-                          onNextClick={onNextClick}
-                          onPreviousClick={onPreviousClick}
-                          onSortChange={sortField =>
-                            onSortChange('tlscerts', sortField)
-                          }
-                          onTlsCertificateDownloadClick={
-                            onTlsCertificateDownloadClick
-                          }
-                        />
-                      )}
-                    </ReportEntitiesContainer>
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
+                      <ThresholdPanel
+                        entityType={_('TLS Certificates')}
+                        filter={reportFilter}
+                        isUpdating={isUpdating}
+                        threshold={threshold}
+                        onFilterEditClick={onFilterEditClick}
+                        onFilterChanged={onFilterChanged}
+                      />
+                    ) : (
+                      <TLSCertificatesTab
+                        counts={tlsCertificates.counts}
+                        tlsCertificates={tlsCertificates.entities}
+                        filter={reportFilter}
+                        isUpdating={isUpdating}
+                        sortField={sorting.tlscerts.sortField}
+                        sortReverse={sorting.tlscerts.sortReverse}
+                        onInteraction={onInteraction}
+                        onSortChange={sortField =>
+                          onSortChange('tlscerts', sortField)
+                        }
+                        onTlsCertificateDownloadClick={
+                          onTlsCertificateDownloadClick
+                        }
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel>
-                    <ReportEntitiesContainer
+                    <ErrorsTab
                       counts={errors.counts}
-                      entities={errors.entities}
-                      filter={filter}
-                      sortFunctions={errorsSortFunctions}
+                      errors={errors.entities}
+                      filter={reportFilter}
+                      isUpdating={isUpdating}
                       sortField={sorting.errors.sortField}
                       sortReverse={sorting.errors.sortReverse}
                       onInteraction={onInteraction}
-                    >
-                      {({
-                        entities,
-                        entitiesCounts,
-                        sortBy,
-                        sortDir,
-                        onFirstClick,
-                        onLastClick,
-                        onNextClick,
-                        onPreviousClick,
-                      }) => (
-                        <ErrorsTable
-                          entities={entities}
-                          entitiesCounts={entitiesCounts}
-                          filter={filter}
-                          isUpdating={isUpdating}
-                          sortBy={sortBy}
-                          sortDir={sortDir}
-                          toggleDetailsIcon={false}
-                          onFirstClick={onFirstClick}
-                          onLastClick={onLastClick}
-                          onNextClick={onNextClick}
-                          onPreviousClick={onPreviousClick}
-                          onSortChange={sortField =>
-                            onSortChange('errors', sortField)
-                          }
-                        />
-                      )}
-                    </ReportEntitiesContainer>
+                      onSortChange={sortField =>
+                        onSortChange('errors', sortField)
+                      }
+                    />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags
@@ -840,11 +547,16 @@ const PageContent = ({
 PageContent.propTypes = {
   activeTab: PropTypes.number,
   entity: PropTypes.model,
-  entityError: PropTypes.object,
-  filter: PropTypes.filter,
   filters: PropTypes.array,
+  gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool,
+  isLoadingFilters: PropTypes.bool,
   isUpdating: PropTypes.bool,
+  pageFilter: PropTypes.filter,
+  reportError: PropTypes.error,
+  reportFilter: PropTypes.filter,
+  reportId: PropTypes.id.isRequired,
+  resetFilter: PropTypes.filter,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
@@ -870,6 +582,6 @@ PageContent.propTypes = {
   onTlsCertificateDownloadClick: PropTypes.func.isRequired,
 };
 
-export default PageContent;
+export default withGmp(PageContent);
 
 // vim: set ts=2 sw=2 tw=80:

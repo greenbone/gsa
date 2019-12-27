@@ -46,7 +46,7 @@ const parseFilterTermsFromString = filterString => {
     for (let filterTerm of filterTerms) {
       // strip whitespace
       filterTerm = filterTerm.trim();
-      if (filterTerm.length > 0) {
+      if (filterTerm.length > 0 && !filterTerm.startsWith('_')) {
         terms.push(FilterTerm.fromString(filterTerm));
       }
     }
@@ -209,9 +209,16 @@ class Filter extends Model {
     if (hasValue(filter)) {
       filter.forEach(term => {
         const {keyword: key} = term;
-        if (isDefined(key) && EXTRA_KEYWORDS.includes(key) && !this.has(key)) {
-          this._addTerm(term);
+        if (!isDefined(key) || !EXTRA_KEYWORDS.includes(key) || this.has(key)) {
+          return;
         }
+        if (
+          (key === 'sort' && this.has('sort-reverse')) ||
+          (key === 'sort-reverse' && this.has('sort'))
+        ) {
+          return;
+        }
+        this._addTerm(term);
       });
     }
     return this;
