@@ -50,10 +50,10 @@ export * from '@testing-library/react';
 
 afterEach(cleanup);
 
-const queryAllByName = (container, name) =>
+export const queryAllByName = (container, name) =>
   queryAllByAttribute('name', container, name);
 
-const queryByName = (container, name) => {
+export const queryByName = (container, name) => {
   const elements = queryAllByName(container, name);
   if (!elements.length) {
     return null;
@@ -61,7 +61,7 @@ const queryByName = (container, name) => {
   return elements[0];
 };
 
-const getByName = (container, name) => {
+export const getAllByName = (container, name) => {
   const elements = queryAllByName(container, name);
   if (!elements.length) {
     throw getElementError(
@@ -69,6 +69,11 @@ const getByName = (container, name) => {
       container,
     );
   }
+  return elements;
+};
+
+export const getByName = (container, name) => {
+  const elements = getAllByName(container, name);
   return elements[0];
 };
 
@@ -78,6 +83,7 @@ export const render = ui => {
     baseElement,
     container,
     element: hasValue(container) ? container.firstChild : undefined,
+    getAllByName: name => getAllByName(baseElement, name),
     getByName: name => getByName(baseElement, name),
     queryByName: name => queryByName(baseElement, name),
     queryAllByName: name => queryAllByName(baseElement, name),
