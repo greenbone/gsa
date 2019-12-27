@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Disabled edit PowerFilter icon if isLoading [#1714](https://github.com/greenbone/gsa/pull/1714)
 - Don't show empty menu section [#1711](https://github.com/greenbone/gsa/pull/1711)
 - Increased clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
+- Lower memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
 
 ### Fixed
 - Fixed undefined policy in create audit dialog [#1847](https://github.com/greenbone/gsa/pull/1847)
