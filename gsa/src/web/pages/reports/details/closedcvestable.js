@@ -78,12 +78,12 @@ Header.propTypes = {
 };
 
 const Row = ({entity}) => {
-  const {id, host, source, severity} = entity;
+  const {cveId, host, source, severity} = entity;
   return (
     <TableRow>
       <TableData>
         <span>
-          <CveLink id={id} />
+          <CveLink id={cveId} />
         </span>
       </TableData>
       <TableData>

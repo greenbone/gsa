@@ -4490,6 +4490,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
   const char *filter, *filter_id;
   const char *first_group, *max_groups;
   const char *mode;
+  const char *usage_type;
   gchar *filter_escaped, *command_escaped, *response;
   entity_t entity;
   GString *xml, *command;
@@ -4509,6 +4510,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
   first_group = params_value (params, "first_group");
   max_groups = params_value (params, "max_groups");
   mode = params_value (params, "aggregate_mode");
+  usage_type = params_value (params, "usage_type");
 
   if (filter && !str_equal (filter, ""))
     filter_escaped = g_markup_escape_text (filter, -1);
@@ -4548,6 +4550,9 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   if (mode && strcmp (mode, ""))
     g_string_append_printf (command, " mode=\"%s\"", mode);
+
+  if (usage_type && strcmp (usage_type, ""))
+    g_string_append_printf (command, " usage_type=\"%s\"", usage_type);
 
   g_string_append (command, ">");
 
@@ -9156,7 +9161,21 @@ char *
 get_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_many (connection, "results", credentials, params, NULL,
+  const gchar *_and_report_id;
+  gmp_arguments_t *arguments = NULL;
+
+  _and_report_id = params_value (params, "_and_report_id");
+
+  if (params_given (params, "_and_report_id"))
+    {
+      CHECK_VARIABLE_INVALID (_and_report_id, "Get results");
+
+      arguments = gmp_arguments_new ();
+
+      gmp_arguments_add (arguments, "_and_report_id", _and_report_id);
+    }
+
+  return get_many (connection, "results", credentials, params, arguments,
                    response_data);
 }
 

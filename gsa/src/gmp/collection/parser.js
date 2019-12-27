@@ -113,7 +113,8 @@ export function parseCounts(element, name, plural_name) {
   return {};
 }
 
-const parseElements = (response, name) => response[name];
+const parseElements = (response, name) =>
+  isDefined(response) ? response[name] : undefined;
 
 const parseEntities = (response, name, modelclass = Model) =>
   map(parseElements(response, name), element =>
