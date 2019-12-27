@@ -99,6 +99,4 @@ export default withEntitiesContainer('result', {
   fallbackFilter,
 })(Page);
 
-// export default ResultsPage;
-
 // vim: set ts=2 sw=2 tw=80:

@@ -28,9 +28,9 @@ import {filterIdentifier} from 'web/store/utils';
  *
  * @returns Boolean
  */
-const isError = error => !isDefined(error.isError) || error.isError();
+export const isError = error => !isDefined(error.isError) || error.isError();
 
-const initialState = {
+export const initialState = {
   byId: {},
   errors: {},
   isLoading: {},

@@ -1,5 +1,2 @@
-# GSA maintainers
-*                 @bjoernricks @swaterkamp
-
-# gsad maintainers
-/gsad/            @bjoernricks @timopollmeier
+# default reviewers
+*                 @greenbone/gsa-maintainers

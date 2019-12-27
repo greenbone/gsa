@@ -51,7 +51,7 @@ describe('EditNvtDetailsDialog component tests', () => {
 
     store.dispatch(setTimezone('UTC'));
 
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <EditNvtDetailsDialog
         configId="c1"
         configName="foo"
@@ -71,8 +71,6 @@ describe('EditNvtDetailsDialog component tests', () => {
         onSave={handleSave}
       />,
     );
-
-    expect(baseElement).toMatchSnapshot();
 
     const titleBar = getByTestId('dialog-title-bar');
     expect(titleBar).toHaveTextContent('Edit Scan Config NVT');
@@ -95,7 +93,7 @@ describe('EditNvtDetailsDialog component tests', () => {
 
     store.dispatch(setTimezone('UTC'));
 
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <EditNvtDetailsDialog
         configId="c1"
         configName="foo"
@@ -115,8 +113,6 @@ describe('EditNvtDetailsDialog component tests', () => {
         onSave={handleSave}
       />,
     );
-
-    expect(baseElement).toMatchSnapshot();
 
     const titleBar = getByTestId('dialog-title-bar');
     expect(titleBar).toHaveTextContent('Edit Scan Config NVT');
@@ -277,6 +273,62 @@ describe('EditNvtDetailsDialog component tests', () => {
       nvtOid: '1.2.3',
       preferenceValues: newPreferenceValues,
       useDefaultTimeout: '1',
+    });
+  });
+
+  test('should handle changing timeout', () => {
+    const handleClose = jest.fn();
+    const handleSave = jest.fn();
+
+    const {render} = rendererWith({
+      capabilities: true,
+      store: true,
+      router: true,
+    });
+
+    const {getByTestId, getAllByName, getByName} = render(
+      <EditNvtDetailsDialog
+        configId="c1"
+        configName="foo"
+        configNameLabel="Config"
+        isLoadingNvt={false}
+        nvtAffectedSoftware="Foo"
+        nvtCvssVector="AV:N/AC:L/Au:N/C:N/I:N/A:N"
+        nvtFamily="family"
+        nvtLastModified={modified}
+        nvtName="foo"
+        nvtOid="1.2.3"
+        nvtSeverity={7.0}
+        nvtSummary="This is a test."
+        preferences={preferences}
+        title="Edit Scan Config NVT"
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
+
+    const useDefaultTimeoutRadios = getAllByName('useDefaultTimeout');
+    expect(useDefaultTimeoutRadios.length).toEqual(2);
+    fireEvent.click(useDefaultTimeoutRadios[1]);
+
+    const timeoutField = getByName('timeout');
+    fireEvent.change(timeoutField, {target: {value: '100'}});
+
+    const saveButton = getByTestId('dialog-save-button');
+    fireEvent.click(saveButton);
+
+    const preferenceValues = {
+      'pref 1': {id: '1', value: 'no', type: 'checkbox'},
+      'pref 2': {id: '2', value: '1', type: 'radio'},
+      'pref 3': {id: '3', value: 'foo', type: 'entry'},
+    };
+
+    expect(handleSave).toHaveBeenCalledWith({
+      configId: 'c1',
+      timeout: '100',
+      nvtOid: '1.2.3',
+      preferenceValues,
+      useDefaultTimeout: '0',
     });
   });
 });
