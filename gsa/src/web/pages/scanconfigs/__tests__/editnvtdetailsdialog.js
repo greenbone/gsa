@@ -51,7 +51,7 @@ describe('EditNvtDetailsDialog component tests', () => {
 
     store.dispatch(setTimezone('UTC'));
 
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <EditNvtDetailsDialog
         configId="c1"
         configName="foo"
@@ -71,8 +71,6 @@ describe('EditNvtDetailsDialog component tests', () => {
         onSave={handleSave}
       />,
     );
-
-    expect(baseElement).toMatchSnapshot();
 
     const titleBar = getByTestId('dialog-title-bar');
     expect(titleBar).toHaveTextContent('Edit Scan Config NVT');
@@ -95,7 +93,7 @@ describe('EditNvtDetailsDialog component tests', () => {
 
     store.dispatch(setTimezone('UTC'));
 
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <EditNvtDetailsDialog
         configId="c1"
         configName="foo"
@@ -115,8 +113,6 @@ describe('EditNvtDetailsDialog component tests', () => {
         onSave={handleSave}
       />,
     );
-
-    expect(baseElement).toMatchSnapshot();
 
     const titleBar = getByTestId('dialog-title-bar');
     expect(titleBar).toHaveTextContent('Edit Scan Config NVT');
