@@ -51,7 +51,7 @@ class ReportSelector {
 
   getEntityError(id, filter) {
     return isDefined(this.state.errors)
-      ? this.state.errors[simplifiedReportIdentifier(id, filter)]
+      ? this.state.errors[reportIdentifier(id, filter)]
       : undefined;
   }
 
