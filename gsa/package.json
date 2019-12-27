@@ -82,7 +82,7 @@
     "@storybook/react": "^5.2.8",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
-    "@types/jest": "^24.0.24",
+    "@types/jest": "^24.0.25",
     "babel-plugin-i18next-extract": "^0.4.2",
     "eslint-config-prettier": "^6.8.0",
     "husky": "^2.7.0",
