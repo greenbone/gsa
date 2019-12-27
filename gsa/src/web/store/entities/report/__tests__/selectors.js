@@ -154,7 +154,7 @@ describe('report selector tests', () => {
     const filter = Filter.fromString('foo=bar rows=10');
     const state = createState('report', {
       errors: {
-        [simplifiedReportIdentifier('foo', filter)]: 'An error',
+        [reportIdentifier('foo', filter)]: 'An error',
       },
     });
     const selector = reportSelector(state);
