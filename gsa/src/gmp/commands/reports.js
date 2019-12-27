@@ -28,6 +28,7 @@ import {ALL_FILTER} from '../models/filter';
 
 import DefaultTransform from '../http/transform/default';
 
+import {convertBoolean} from './convert';
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
 
@@ -128,7 +129,7 @@ export class ReportCommand extends EntityCommand {
   getDelta(
     {id},
     {id: delta_report_id},
-    {filter, details = 1, ...options} = {},
+    {filter, details = true, ...options} = {},
   ) {
     return this.httpGet(
       {
@@ -136,7 +137,7 @@ export class ReportCommand extends EntityCommand {
         delta_report_id,
         filter,
         ignore_pagination: 1,
-        details,
+        details: convertBoolean(details),
       },
       options,
     ).then(this.transformResponse);
@@ -144,15 +145,21 @@ export class ReportCommand extends EntityCommand {
 
   get(
     {id},
-    {filter, details = 1, ignorePagination = 1, lean = 1, ...options} = {},
+    {
+      filter,
+      details = true,
+      ignorePagination = true,
+      lean = true,
+      ...options
+    } = {},
   ) {
     return this.httpGet(
       {
         id,
         filter,
-        lean,
-        ignore_pagination: ignorePagination,
-        details,
+        lean: convertBoolean(lean),
+        ignore_pagination: convertBoolean(ignorePagination),
+        details: convertBoolean(details),
       },
       options,
     ).then(this.transformResponse);

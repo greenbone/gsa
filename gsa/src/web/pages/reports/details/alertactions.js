@@ -96,7 +96,7 @@ class AlertActions extends React.Component {
     const {
       filter,
       gmp,
-      report,
+      reportId,
       reportComposerDefaults,
       showErrorMessage,
       showSuccessMessage,
@@ -119,7 +119,7 @@ class AlertActions extends React.Component {
 
     return gmp.report
       .alert({
-        report_id: report.id,
+        report_id: reportId,
         alert_id: alertId,
         filter: newFilter.simple(),
       })
@@ -166,6 +166,8 @@ class AlertActions extends React.Component {
       reportComposerDefaults,
       filter,
       showError,
+      showThresholdMessage,
+      threshold,
       onInteraction,
     } = this.props;
     const {alertId, showTriggerAlertDialog, storeAsDefault} = this.state;
@@ -194,7 +196,9 @@ class AlertActions extends React.Component {
                 filter={filter}
                 includeNotes={reportComposerDefaults.includeNotes}
                 includeOverrides={reportComposerDefaults.includeOverrides}
+                showThresholdMessage={showThresholdMessage}
                 storeAsDefault={storeAsDefault}
+                threshold={threshold}
                 onAlertChange={this.handleAlertChange}
                 onClose={this.handleCloseTriggerAlertDialog}
                 onNewAlertClick={create}
@@ -215,12 +219,14 @@ AlertActions.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
-  report: PropTypes.model.isRequired,
   reportComposerDefaults: PropTypes.object,
+  reportId: PropTypes.id.isRequired,
   saveReportComposerDefaults: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
+  showThresholdMessage: PropTypes.bool,
+  threshold: PropTypes.number,
   onInteraction: PropTypes.func.isRequired,
 };
 

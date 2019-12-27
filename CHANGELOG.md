@@ -139,6 +139,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.2] - unreleased
 
 ### Added
+- Display error details at report details page [#1862](https://github.com/greenbone/gsa/pull/1862)
+- Added warnings to content composer if reportResultThreshold is exceeded [#1852](https://github.com/greenbone/gsa/pull/1852)
 - Added parseText to model.js to parse single space summary [#1829](https://github.com/greenbone/gsa/pull/1829)
 - Added new setting to enable and disable debug logging for the redux store [#1684](https://github.com/greenbone/gsa/pull/1684)
 - Added text notification when old password is entered but new password isn't [#1636](https://github.com/greenbone/gsa/pull/1636)
@@ -154,6 +156,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Load report results with separate requests
+  [#1863](https://github.com/greenbone/gsa/pull/1863),
+  [#1870](https://github.com/greenbone/gsa/pull/1870),
+  [#1871](https://github.com/greenbone/gsa/pull/1871)
+- Only load full report if the report has less than 25000 results [#1851](https://github.com/greenbone/gsa/pull/1851)
+- Only render report information, results and errors if a result has more than 25000 results [#1849](https://github.com/greenbone/gsa/pull/1849)
 - Limit the length of result description with a div [#1834](https://github.com/greenbone/gsa/pull/1834)
 - New permission dialog: radio button for groups disabled if no groups available [#1836](https://github.com/greenbone/gsa/pull/1836)
 - Changed new override dialog defaults [#1833](https://github.com/greenbone/gsa/pull/1833)
@@ -174,7 +182,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix statusbar content can be more than 100% and add progressbar colors to theme [1621](https://github.com/greenbone/gsa/pull/1621)
 - Allow to overwrite details=1 for command results.get() [#1618](https://github.com/greenbone/gsa/pull/1618)
 - Ensure not to request the report details when loading a list of reports [#1617](https://github.com/greenbone/gsa/pull/1617)
-- Adjust ProtList manual links [#1599](https://github.com/greenbone/gsa/pull/1599)
+- Adjust PortList manual links [#1599](https://github.com/greenbone/gsa/pull/1599)
 - Word-wrap in pre component [#1586](https://github.com/greenbone/gsa/pull/1586)
 - Disable EditIcon for My Settings if permission denied [#1588](https://github.com/greenbone/gsa/pull/1588)
 - Don't allow to clone hosts [#1581](https://github.com/greenbone/gsa/pull/1581)
@@ -184,14 +192,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Adjust clickable areas for Select and MultiSelect [#1545](https://github.com/greenbone/gsa/pull/1545)
 - Redirect to main page when visiting the login page and the user is already
   logged in [#1508](https://github.com/greenbone/gsa/pull/1508)
+- Lower memory usage when getting a report [#1858](https://github.com/greenbone/gvmd/pull/1858)
 
 ### Fixed
+- Fixed removing levels filter keyword if all severity levels are unchecked [#1869](https://github.com/greenbone/gsa/pull/1869)
+- Fixed sorting of hosts in report details [#1860](https://github.com/greenbone/gsa/pull/1860)
+- Fixed displaying update indication at all report details tabs [#1849](https://github.com/greenbone/gsa/pull/1849)
+- Fixed getting list of Closed CVEs and sorting the Closed CVEs at report details [#1850](https://github.com/greenbone/gsa/pull/1850)
+- Fixed sorting of TLS Certificates by port at report details page [#1848](https://github.com/greenbone/gsa/pull/1848)
 - Use correct link for ManualIcon [#1835](https://github.com/greenbone/gsa/pull/1835)
 - Fixed getting InvalidStateError with IE 11 on XHR creation [#1769](https://github.com/greenbone/gsa/pull/1769)
 - Fixed filtering general command permissions in roles [#1734](https://github.com/greenbone/gsa/pull/1734)
 - Fix getting details in delta report [#1732](https://github.com/greenbone/gsa/pull/1732)
 - Include results (details=1) in report download [#1731](https://github.com/greenbone/gsa/pull/1731)
-- Fixed High column in hosts table fo reports [#1730](https://github.com/greenbone/gsa/pull/1730)
+- Fixed High column in hosts table for reports [#1730](https://github.com/greenbone/gsa/pull/1730)
 - Fix setting the user default filter in report results [#1699](https://github.com/greenbone/gsa/pull/1699)
 - Use new model construction in some commands [#1665](https://github.com/greenbone/gsa/pull/1665)
 - Fixed auth_method preselection for user dialog [#1661](https://github.com/greenbone/gsa/pull/1661)
