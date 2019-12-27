@@ -132,18 +132,25 @@ describe('Report Details ToolBarIcons tests', () => {
     );
     expect(links[4]).toHaveAttribute('title', 'Corresponding Vulnerabilities');
 
-    // Corresponding Performance Icon
+    // Corresponding TLS Certificates Icon
+    expect(links[5]).toHaveAttribute('title', 'Corresponding TLS Certificates');
     expect(links[5]).toHaveAttribute(
+      'href',
+      '/tlscertificates?filter=report_id%3D1234',
+    );
+
+    // Corresponding Performance Icon
+    expect(links[6]).toHaveAttribute(
       'href',
       '/performance?start=2019-06-03T11%3A00%3A22.000Z&end=2019-06-03T11%3A31%3A23.000Z',
     );
-    expect(links[5]).toHaveAttribute('title', 'Corresponding Performance');
+    expect(links[6]).toHaveAttribute('title', 'Corresponding Performance');
 
     // Download Report Icon
-    expect(spans[8]).toHaveAttribute('title', 'Download filtered Report');
+    expect(spans[9]).toHaveAttribute('title', 'Download filtered Report');
 
     // Trigger Alert Icon
-    expect(spans[9]).toHaveAttribute('title', 'Trigger Alert');
+    expect(spans[10]).toHaveAttribute('title', 'Trigger Alert');
   });
 
   test('should call click handler', () => {
@@ -196,8 +203,8 @@ describe('Report Details ToolBarIcons tests', () => {
     fireEvent.click(spans[3]);
     expect(onRemoveFromAssetsClick).toHaveBeenCalled();
 
-    expect(spans[8]).toHaveAttribute('title', 'Download filtered Report');
-    fireEvent.click(spans[8]);
+    expect(spans[9]).toHaveAttribute('title', 'Download filtered Report');
+    fireEvent.click(spans[9]);
     expect(onReportDownloadClick).toHaveBeenCalled();
   });
 });
