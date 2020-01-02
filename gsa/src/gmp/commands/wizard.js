@@ -118,7 +118,7 @@ class WizardCommand extends HttpCommand {
     }).then(response => {
       const {data} = response;
 
-      const resp = data.wizard.run_wizard_response.response.commands_response;
+      const resp = data.wizard.run_wizard_response.response;
 
       const settings = new Settings();
 
@@ -154,7 +154,7 @@ class WizardCommand extends HttpCommand {
     }).then(response => {
       const {data} = response;
 
-      const resp = data.wizard.run_wizard_response.response.commands_response;
+      const resp = data.wizard.run_wizard_response.response;
 
       const settings = new Settings();
 
