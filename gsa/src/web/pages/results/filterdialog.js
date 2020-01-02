@@ -97,89 +97,96 @@ const ResultsFilterDialogComponent = ({
   onSortByChange,
   onSortOrderChange,
   onValueChange,
-}) => (
-  <Layout flex="column">
-    <FilterStringGroup
-      name="filterstring"
-      filter={filterstring}
-      onChange={onFilterStringChange}
-    />
-
-    <BooleanFilterGroup
-      name="apply_overrides"
-      title={_('Apply Overrides')}
-      filter={filter}
-      onChange={onFilterValueChange}
-    />
-
-    <AutoFpGroup filter={filter} onChange={onFilterValueChange} />
-
-    <SeverityLevelsGroup filter={filter} onChange={onFilterValueChange} />
-
-    <SeverityValuesGroup
-      name="cvss_base"
-      filter={filter}
-      title={_('Severity')}
-      onChange={onFilterValueChange}
-    />
-
-    <SolutionTypeGroup filter={filter} onChange={onFilterChange} />
-
-    <MinQodGroup
-      name="min_qod"
-      filter={filter}
-      onChange={onFilterValueChange}
-    />
-
-    <FilterSearchGroup
-      name="owner"
-      filter={filter}
-      title={_('Owner')}
-      onChange={onSearchTermChange}
-    />
-
-    <FilterSearchGroup
-      name="vulnerability"
-      filter={filter}
-      title={_('Vulnerability')}
-      onChange={onSearchTermChange}
-    />
-
-    <FilterSearchGroup
-      name="host"
-      filter={filter}
-      title={_('Host (IP)')}
-      onChange={onSearchTermChange}
-    />
-
-    <FilterSearchGroup
-      name="location"
-      filter={filter}
-      title={_('Location (eg. port/protocol)')}
-      onChange={onSearchTermChange}
-    />
-
-    <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
-
-    <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
-
-    <SortByGroup
-      filter={filter}
-      fields={SORT_FIELDS}
-      onSortOrderChange={onSortOrderChange}
-      onSortByChange={onSortByChange}
-    />
-
-    {capabilities.mayCreate('filter') && (
-      <CreateNamedFilterGroup
-        filter={filter}
-        filterName={filterName}
-        saveNamedFilter={saveNamedFilter}
-        onValueChange={onValueChange}
+}) => {
+  const handleRemoveLevels = () => onFilterChange(filter.delete('levels'));
+  return (
+    <Layout flex="column">
+      <FilterStringGroup
+        name="filterstring"
+        filter={filterstring}
+        onChange={onFilterStringChange}
       />
-    )}
-  </Layout>
-);
+
+      <BooleanFilterGroup
+        name="apply_overrides"
+        title={_('Apply Overrides')}
+        filter={filter}
+        onChange={onFilterValueChange}
+      />
+
+      <AutoFpGroup filter={filter} onChange={onFilterValueChange} />
+
+      <SeverityLevelsGroup
+        filter={filter}
+        onChange={onFilterValueChange}
+        onRemove={handleRemoveLevels}
+      />
+
+      <SeverityValuesGroup
+        name="cvss_base"
+        filter={filter}
+        title={_('Severity')}
+        onChange={onFilterValueChange}
+      />
+
+      <SolutionTypeGroup filter={filter} onChange={onFilterChange} />
+
+      <MinQodGroup
+        name="min_qod"
+        filter={filter}
+        onChange={onFilterValueChange}
+      />
+
+      <FilterSearchGroup
+        name="owner"
+        filter={filter}
+        title={_('Owner')}
+        onChange={onSearchTermChange}
+      />
+
+      <FilterSearchGroup
+        name="vulnerability"
+        filter={filter}
+        title={_('Vulnerability')}
+        onChange={onSearchTermChange}
+      />
+
+      <FilterSearchGroup
+        name="host"
+        filter={filter}
+        title={_('Host (IP)')}
+        onChange={onSearchTermChange}
+      />
+
+      <FilterSearchGroup
+        name="location"
+        filter={filter}
+        title={_('Location (eg. port/protocol)')}
+        onChange={onSearchTermChange}
+      />
+
+      <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
+
+      <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
+
+      <SortByGroup
+        filter={filter}
+        fields={SORT_FIELDS}
+        onSortOrderChange={onSortOrderChange}
+        onSortByChange={onSortByChange}
+      />
+
+      {capabilities.mayCreate('filter') && (
+        <CreateNamedFilterGroup
+          filter={filter}
+          filterName={filterName}
+          saveNamedFilter={saveNamedFilter}
+          onValueChange={onValueChange}
+        />
+      )}
+    </Layout>
+  );
+};
 
 ResultsFilterDialogComponent.propTypes = FilterDialogPropTypes;
 

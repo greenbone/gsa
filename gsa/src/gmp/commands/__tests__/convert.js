@@ -31,7 +31,12 @@ describe('convertBoolean tests', () => {
   test('should convert to undefined for other value', () => {
     expect(convertBoolean('true')).toBeUndefined();
     expect(convertBoolean('false')).toBeUndefined();
-    expect(convertBoolean(1)).toBeUndefined();
-    expect(convertBoolean(0)).toBeUndefined();
+    expect(convertBoolean('1')).toBeUndefined();
+    expect(convertBoolean('0')).toBeUndefined();
+  });
+
+  test('should convert to legacy 0 and 1 values', () => {
+    expect(convertBoolean(1)).toEqual(1);
+    expect(convertBoolean(0)).toEqual(0);
   });
 });
