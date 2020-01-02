@@ -1860,23 +1860,6 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
  */
 
 /**
- * @todo Unify the style of page handlers.
- *
- * There are variations in the style of the page handlers that run
- * multiple GMP commands.
- *
- * Some, like delete_credential_gmp, simply run the GMP commands inside
- * one GMP COMMANDS.
- *
- * Others, like create_target_gmp, run each command separately and wrap the
- * responses in a unique page tag.
- *
- * One handler, delete_target_gmp, runs all the commands in a single COMMANDS
- * and also wraps the response in a unique page tag to convey the context to
- * the enveloped XML.  This is probably the way to go.
- */
-
-/**
  * @brief Get a value from a param or fall back to a setting
  *
  * @param[out]  value       Variable to assign the value to.
