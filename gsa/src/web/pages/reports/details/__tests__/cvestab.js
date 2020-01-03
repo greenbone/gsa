@@ -81,7 +81,7 @@ describe('Report CVEs Tab tests', () => {
     // Row 1
     expect(links[4]).toHaveAttribute('href', '/cve/CVE-2019-1234');
     expect(links[4]).toHaveTextContent('CVE-2019-1234');
-    expect(rows[1]).toHaveTextContent('11'); // 1 Hosts, 1 Occurrences
+    expect(rows[1]).toHaveTextContent('22'); // 2 Hosts, 2 Occurrences
     expect(bars[0]).toHaveAttribute('title', 'High');
     expect(bars[0]).toHaveTextContent('10.0 (High)');
 

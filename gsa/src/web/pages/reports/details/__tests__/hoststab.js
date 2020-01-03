@@ -99,6 +99,27 @@ const result2 = {
   },
 };
 
+const result3 = {
+  _id: '103',
+  name: 'Result 3',
+  owner: {name: 'admin'},
+  comment: 'Comment 3',
+  creation_time: '2019-06-03T11:06:31Z',
+  modification_time: '2019-06-03T11:06:31Z',
+  host: {__text: '109.876.54.321'},
+  port: '80/tcp',
+  nvt: {
+    _oid: '201',
+    type: 'nvt',
+    name: 'nvt1',
+    cve: 'CVE-2019-1234',
+    tags: 'solution_type=Mitigation',
+  },
+  threat: 'Medium',
+  severity: 5.0,
+  qod: {value: 80},
+};
+
 // Hosts
 const host1 = {
   ip: '123.456.78.910',
@@ -239,8 +260,8 @@ export const getMockReport = () => {
     apps: {count: 4},
     os: {count: 2},
     ssl_certs: {count: 2},
-    result_count: {__text: 2, full: 2, filtered: 2},
-    results: {result: [result1, result2]},
+    result_count: {__text: 3, full: 3, filtered: 2},
+    results: {result: [result1, result2, result3]},
     hosts: {count: 2},
     host: [host1, host2],
     ports: {
