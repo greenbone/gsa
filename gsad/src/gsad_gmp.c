@@ -15914,14 +15914,9 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
   const char *type;
-  GString *commands_xml;
   params_t *selected_ids;
-  params_iterator_t iter;
-  param_t *param;
-  gchar *param_name;
-  gchar *html, *response;
-  entity_t entity;
   gchar *extra_attribs;
+  int count, fail;
 
   type = params_value (params, "resource_type");
   if (type == NULL)
@@ -15947,62 +15942,88 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t *credentials,
         extra_attribs = g_strdup_printf ("inheritor_id=\"%s\"", inheritor_id);
     }
 
-  commands_xml = g_string_new ("<commands>");
-
+  count = fail = 0;
   selected_ids = params_values (params, "bulk_selected:");
   if (selected_ids)
     {
+      params_iterator_t iter;
+      param_t *param;
+      gchar *param_name;
+
       params_iterator_init (&iter, selected_ids);
       while (params_iterator_next (&iter, &param_name, &param))
         {
-          xml_string_append (commands_xml,
-                             "<delete_%s %s_id=\"%s\" ultimate=\"0\"", type,
-                             type, param_name);
-          if (extra_attribs)
-            g_string_append_printf (commands_xml, " %s/>", extra_attribs);
+          gchar *command, *response;
+          entity_t entity;
+
+          /* Delete the resource. */
+
+          command = g_strdup_printf ("<delete_%s %s_id=\"%s\""
+                                     "           ultimate=\"0\" %s/>",
+                                     type, type, param_name,
+                                     extra_attribs ? extra_attribs : "");
+          if (gvm_connection_sendf_xml (connection, command) == -1)
+            {
+              g_free (command);
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
+              return gsad_message (
+                credentials, "Internal error", __func__, __LINE__,
+                "An internal error occurred while deleting resources. "
+                "The resources were not deleted. "
+                "Diagnostics: Failure to send command to manager daemon.",
+                response_data);
+            }
+          g_free (command);
+
+          entity = NULL;
+          if (read_entity_and_text_c (connection, &entity, &response))
+            {
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
+              return gsad_message (
+                credentials, "Internal error", __func__, __LINE__,
+                "An internal error occurred while deleting resources. "
+                "It is unclear whether the resources have been deleted or not. "
+                "Diagnostics: Failure to read response from manager daemon.",
+                response_data);
+            }
+
+          if (*(entity_attribute (entity, "status")) != '2')
+            fail = 1;
           else
-            g_string_append (commands_xml, "/>");
+            count++;
+
+          free_entity (entity);
+          g_free (response);
         }
     }
 
-  g_string_append (commands_xml, "</commands>");
-
-  /* Delete the resources and get all resources. */
-
-  if (gvm_connection_sendf_xml (connection, commands_xml->str) == -1)
-    {
-      g_string_free (commands_xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __func__, __LINE__,
-        "An internal error occurred while deleting resources. "
-        "The resources were not deleted. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-  g_string_free (commands_xml, TRUE);
-
-  entity = NULL;
-  if (read_entity_and_text_c (connection, &entity, &response))
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __func__, __LINE__,
-        "An internal error occurred while deleting resources. "
-        "It is unclear whether the resources have been deleted or not. "
-        "Diagnostics: Failure to read response from manager daemon.",
-        response_data);
-    }
-
   /* Cleanup, and return transformed XML. */
-  html = response_from_entity (connection, credentials, params, entity,
-                               "Bulk Delete", response_data);
-  g_free (response);
-  free_entity (entity);
 
-  return html;
+  if (fail)
+    {
+      gchar *html, *msg;
+
+      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
+
+      msg = g_strdup_printf
+             ("An error occurred while deleting one or more resources. "
+              "However, %i of the resources %s successfully deleted. "
+              "Diagnostics: At least one DELETE command failed.",
+              count,
+              count > 1 ? "were" : "was");
+
+      html = gsad_message (credentials, "Error", __func__, __LINE__, msg,
+                           response_data);
+      g_free (msg);
+      return html;
+    }
+
+  return action_result (connection, credentials, params, response_data, "Bulk Delete",
+                        "OK",
+                        "",    /* Status details. */
+                        NULL); /* ID. */
 }
 
 /**
