@@ -39,6 +39,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Import additional polyfills for IE11 [#1702](https://github.com/greenbone/gsa/pull/1702)
 - Handle authentication errors in gsad more carefully [#1700](https://github.com/greenbone/gsa/pull/1700)
 - Add usage_type param to get_aggregate [#1872](https://github.com/greenbone/gsa/pull/1872)
+- Fixed schedule dialog not displaying options [#1898](https://github.com/greenbone/gsa/pull/1898)
 
 ### Removed
 - Removed auto delete field from container task dialog [#1784](https://github.com/greenbone/gsa/pull/1784)
