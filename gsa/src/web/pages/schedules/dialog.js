@@ -163,7 +163,7 @@ class ScheduleDialog extends React.Component {
       }
     } else {
       recurrenceType = RECURRENCE_ONCE;
-      freq = ReccurenceFrequency.WEEKLY;
+      freq = RECURRENCE_ONCE;
     }
 
     const endDate = isDefined(duration)
@@ -516,79 +516,77 @@ class ScheduleDialog extends React.Component {
             </FormGroup>
 
             {state.recurrenceType === RECURRENCE_CUSTOM && (
-              <React.Fragment>
-                <FormGroup title={_('Repeat')}>
+              <FormGroup title={_('Repeat')}>
+                <Divider>
+                  <span>{_('Every')}</span>
+                  <Spinner
+                    name="interval"
+                    type="int"
+                    min="1"
+                    size="3"
+                    value={state.interval}
+                    onChange={this.handleValueChange}
+                  />
+                  <TimeUnitSelect
+                    name="freq"
+                    value={state.freq}
+                    onChange={this.handleValueChange}
+                  />
+                </Divider>
+              </FormGroup>
+            )}
+
+            {state.recurrenceType === RECURRENCE_WEEKLY && (
+              <FormGroup title={_('Repeat at')}>
+                <WeekDaySelect
+                  name="weekdays"
+                  value={weekdays}
+                  onChange={this.handleValueChange}
+                />
+              </FormGroup>
+            )}
+
+            {state.recurrenceType === RECURRENCE_MONTHLY && (
+              <FormGroup title={_('Repeat at')}>
+                <Divider flex="column">
                   <Divider>
-                    <span>{_('Every')}</span>
-                    <Spinner
-                      name="interval"
-                      type="int"
-                      min="1"
-                      size="3"
-                      value={state.interval}
+                    <Radio
+                      name="monthly"
+                      checked={state.monthly === RepeatMonthly.nth}
+                      value={RepeatMonthly.nth}
                       onChange={this.handleValueChange}
                     />
-                    <TimeUnitSelect
-                      name="freq"
-                      value={state.freq}
+                    <Select
+                      items={NTH_DAY_ITEMS}
+                      disabled={state.monthly !== RepeatMonthly.nth}
+                      name="monthlyNth"
+                      value={state.monthlyNth}
+                      onChange={this.handleValueChange}
+                    />
+                    <DaySelect
+                      name="monthlyDay"
+                      disabled={state.monthly !== RepeatMonthly.nth}
+                      value={state.monthlyDay}
                       onChange={this.handleValueChange}
                     />
                   </Divider>
-                </FormGroup>
-
-                {state.freq === RECURRENCE_WEEKLY && (
-                  <FormGroup title={_('Repeat at')}>
-                    <WeekDaySelect
-                      name="weekdays"
-                      value={weekdays}
+                  <Divider>
+                    <Radio
+                      title={_('Recur on day(s)')}
+                      name="monthly"
+                      checked={state.monthly === RepeatMonthly.days}
+                      value={RepeatMonthly.days}
                       onChange={this.handleValueChange}
                     />
-                  </FormGroup>
-                )}
-
-                {state.freq === RECURRENCE_MONTHLY && (
-                  <FormGroup title={_('Repeat at')}>
-                    <Divider flex="column">
-                      <Divider>
-                        <Radio
-                          name="monthly"
-                          checked={state.monthly === RepeatMonthly.nth}
-                          value={RepeatMonthly.nth}
-                          onChange={this.handleValueChange}
-                        />
-                        <Select
-                          items={NTH_DAY_ITEMS}
-                          disabled={state.monthly !== RepeatMonthly.nth}
-                          name="monthlyNth"
-                          value={state.monthlyNth}
-                          onChange={this.handleValueChange}
-                        />
-                        <DaySelect
-                          name="monthlyDay"
-                          disabled={state.monthly !== RepeatMonthly.nth}
-                          value={state.monthlyDay}
-                          onChange={this.handleValueChange}
-                        />
-                      </Divider>
-                      <Divider>
-                        <Radio
-                          title={_('Recur on day(s)')}
-                          name="monthly"
-                          checked={state.monthly === RepeatMonthly.days}
-                          value={RepeatMonthly.days}
-                          onChange={this.handleValueChange}
-                        />
-                        <MonthDaysSelect
-                          name="monthdays"
-                          disabled={state.monthly !== RepeatMonthly.days}
-                          value={state.monthdays}
-                          onChange={this.handleValueChange}
-                        />
-                      </Divider>
-                    </Divider>
-                  </FormGroup>
-                )}
-              </React.Fragment>
+                    <MonthDaysSelect
+                      name="monthdays"
+                      disabled={state.monthly !== RepeatMonthly.days}
+                      value={state.monthdays}
+                      onChange={this.handleValueChange}
+                    />
+                  </Divider>
+                </Divider>
+              </FormGroup>
             )}
           </Layout>
         )}
