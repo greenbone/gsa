@@ -84,8 +84,8 @@ describe('Report TLS Certificates Tab tests', () => {
     // Row 1
     expect(rows[1]).toHaveTextContent('CN=foo');
     expect(rows[1]).toHaveTextContent('abcd');
-    expect(rows[1]).toHaveTextContent('Wed, Jan 30, 2019 8:17 PM CET');
-    expect(rows[1]).toHaveTextContent('Thu, Aug 1, 2019 8:17 PM CEST');
+    expect(rows[1]).toHaveTextContent('Wed, Jan 30, 2019');
+    expect(rows[1]).toHaveTextContent('Thu, Aug 1, 2019');
     expect(links[7]).toHaveAttribute(
       'href',
       '/hosts?filter=name%3D123.456.78.910',
@@ -102,8 +102,8 @@ describe('Report TLS Certificates Tab tests', () => {
     // Row 2
     expect(rows[2]).toHaveTextContent('CN=bar');
     expect(rows[2]).toHaveTextContent('dcba');
-    expect(rows[2]).toHaveTextContent('Sat, Mar 30, 2019 8:17 PM CET');
-    expect(rows[2]).toHaveTextContent('Tue, Oct 1, 2019 8:17 PM CEST');
+    expect(rows[2]).toHaveTextContent('Sat, Mar 30, 2019');
+    expect(rows[2]).toHaveTextContent('Tue, Oct 1, 2019');
     expect(links[8]).toHaveAttribute(
       'href',
       '/hosts?filter=name%3D109.876.54.321',
