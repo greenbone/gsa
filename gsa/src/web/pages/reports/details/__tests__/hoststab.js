@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2019-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -53,6 +53,7 @@ const result1 = {
   host: {__text: '123.456.78.910'},
   port: '80/tcp',
   nvt: {
+    _oid: '201',
     type: 'nvt',
     name: 'nvt1',
     cve: 'CVE-2019-1234',
@@ -61,6 +62,13 @@ const result1 = {
   threat: 'High',
   severity: 10.0,
   qod: {value: 80},
+  detection: {
+    result: {
+      details: {
+        detail: [{name: 'product', value: 'cpe:/a: 123'}],
+      },
+    },
+  },
 };
 
 const result2 = {
@@ -73,6 +81,7 @@ const result2 = {
   host: {__text: '109.876.54.321'},
   port: '80/tcp',
   nvt: {
+    _oid: '202',
     type: 'nvt',
     name: 'nvt2',
     cve: 'CVE-2019-5678',
@@ -81,6 +90,34 @@ const result2 = {
   threat: 'Medium',
   severity: 5.0,
   qod: {value: 70},
+  detection: {
+    result: {
+      details: {
+        detail: [{name: 'product', value: 'cpe:/a: 456'}],
+      },
+    },
+  },
+};
+
+const result3 = {
+  _id: '103',
+  name: 'Result 3',
+  owner: {name: 'admin'},
+  comment: 'Comment 3',
+  creation_time: '2019-06-03T11:06:31Z',
+  modification_time: '2019-06-03T11:06:31Z',
+  host: {__text: '109.876.54.321'},
+  port: '80/tcp',
+  nvt: {
+    _oid: '201',
+    type: 'nvt',
+    name: 'nvt1',
+    cve: 'CVE-2019-1234',
+    tags: 'solution_type=Mitigation',
+  },
+  threat: 'Medium',
+  severity: 5.0,
+  qod: {value: 80},
 };
 
 // Hosts
@@ -101,12 +138,30 @@ const host1 = {
   detail: [
     {name: 'best_os_cpe', value: 'cpe:/foo/bar'},
     {name: 'best_os_txt', value: 'Foo OS'},
-    {name: 'App', value: '123'},
-    {name: 'App', value: '456'},
-    {name: 'App', value: '789'},
+    {name: 'App', value: 'cpe:/a: 123'},
+    {name: 'App', value: 'cpe:/a: 789'},
+    {name: 'App', value: 'cpe:/a: 101'},
+    {name: 'cpe:/a: 123', value: 'ab'},
+    {name: 'cpe:/a: 123', value: 'cd'},
     {name: 'traceroute', value: '1.1.1.1,2.2.2.2,3.3.3.3'},
     {name: 'hostname', value: 'foo.bar'},
     {name: 'Auth-SSH-Success'},
+    {name: 'SSLInfo', value: '1234::123456'},
+    {
+      name: 'SSLDetails:123456',
+      value:
+        'issuer:CN=foo|serial:abcd|notBefore:20190130T201714|notAfter:20190801T201714',
+    },
+    {
+      name: 'Closed CVE',
+      value: 'CVE-2000-1234',
+      source: {
+        type: 'openvas',
+        name: '201',
+        description: 'This is a description',
+      },
+      extra: '10.0',
+    },
   ],
 };
 
@@ -126,11 +181,27 @@ const host2 = {
   detail: [
     {name: 'best_os_cpe', value: 'cpe:/lorem/ipsum'},
     {name: 'best_os_txt', value: 'Lorem OS'},
-    {name: 'App', value: '123'},
-    {name: 'App', value: '456'},
+    {name: 'App', value: 'cpe:/a: 123'},
+    {name: 'App', value: 'cpe:/a: 456'},
     {name: 'traceroute', value: '1.1.1.1,2.2.2.2'},
     {name: 'hostname', value: 'lorem.ipsum'},
     {name: 'Auth-SSH-Failure'},
+    {name: 'SSLInfo', value: '5678::654321'},
+    {
+      name: 'SSLDetails:654321',
+      value:
+        'issuer:CN=bar|serial:dcba|notBefore:20190330T201714|notAfter:20191001T201714',
+    },
+    {
+      name: 'Closed CVE',
+      value: 'CVE-2000-5678',
+      source: {
+        type: 'openvas',
+        name: '202',
+        description: 'This is another description',
+      },
+      extra: '5.0',
+    },
   ],
 };
 
@@ -186,11 +257,11 @@ export const getMockReport = () => {
     task: task1,
     closed_cves: {count: 0},
     vulns: {count: 0},
-    apps: {count: 2},
+    apps: {count: 4},
     os: {count: 2},
     ssl_certs: {count: 2},
-    result_count: {__text: 2, full: 2, filtered: 2},
-    results: {result: [result1, result2]},
+    result_count: {__text: 3, full: 3, filtered: 2},
+    results: {result: [result1, result2, result3]},
     hosts: {count: 2},
     host: [host1, host2],
     ports: {
@@ -213,7 +284,11 @@ export const getMockReport = () => {
     results: entity.report.results,
     hosts: entity.report.hosts,
     ports: entity.report.ports,
+    applications: entity.report.applications,
+    operatingsystems: entity.report.operatingsystems,
     cves: entity.report.cves,
+    closedCves: entity.report.closed_cves,
+    tlsCertificates: entity.report.tls_certificates,
     errors: entity.report.errors,
     task: entity.report.task,
   };
