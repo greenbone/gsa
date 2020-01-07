@@ -69,7 +69,6 @@ export const normalizeType = type => {
 };
 
 const ENTITY_TYPES = {
-  agent: _l('Agent'),
   alert: _l('Alert'),
   asset: _l('Asset'),
   certbund: _l('CERT-Bund Advisory'),
