@@ -49,7 +49,6 @@ const REPORT_COMPOSER_DEFAULTS_SETTING_ID =
 export const ROWS_PER_PAGE_SETTING_ID = '5f5a8712-8017-11e1-8556-406186ea4fc5';
 
 export const DEFAULT_FILTER_SETTINGS = {
-  agent: '4a1334c1-cb93-4a79-8634-103b0a50bdcd',
   alert: 'b833a6f2-dcdc-4535-bfb0-a5154b5b5092',
   asset: '0f040d06-abf9-43a2-8f94-9de178b0e978',
   certbund: 'e4cf514a-17e2-4ab9-9c90-336f15e24750',
@@ -306,7 +305,6 @@ export class UserCommand extends EntityCommand {
         data.defaultSchedule,
       'settings_default:23409203-940a-4b4a-b70c-447475f18323':
         data.defaultTarget,
-      [saveDefaultFilterSettingId('agent')]: data.agentsFilter,
       [saveDefaultFilterSettingId('alert')]: data.alertsFilter,
       [saveDefaultFilterSettingId('asset')]: data.assetsFilter,
       [saveDefaultFilterSettingId('scanconfig')]: data.configsFilter,

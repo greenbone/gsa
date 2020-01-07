@@ -82,7 +82,6 @@ let UserSettingsDialog = ({
   defaultSshCredential,
   defaultSchedule,
   defaultTarget,
-  agentsFilter,
   alertsFilter,
   configsFilter,
   credentialsFilter,
@@ -145,7 +144,6 @@ let UserSettingsDialog = ({
     defaultSshCredential,
     defaultSchedule,
     defaultTarget,
-    agentsFilter,
     alertsFilter,
     configsFilter,
     credentialsFilter,
@@ -250,7 +248,6 @@ let UserSettingsDialog = ({
               <Section title={_('Filter Settings')} foldable>
                 <FormGroupSizer>
                   <FilterPart
-                    agentsFilter={values.agentsFilter}
                     alertsFilter={values.alertsFilter}
                     configsFilter={values.configsFilter}
                     credentialsFilter={values.credentialsFilter}
@@ -296,7 +293,6 @@ let UserSettingsDialog = ({
 };
 
 UserSettingsDialog.propTypes = {
-  agentsFilter: PropTypes.string,
   alerts: PropTypes.array,
   alertsFilter: PropTypes.string,
   autoCacheRebuild: PropTypes.string,
@@ -375,9 +371,6 @@ UserSettingsDialog = connect(rootState => {
   };
 })(UserSettingsDialog);
 
-export default compose(
-  withGmp,
-  withCapabilities,
-)(UserSettingsDialog);
+export default compose(withGmp, withCapabilities)(UserSettingsDialog);
 
 // vim: set ts=2 sw=2 tw=80:
