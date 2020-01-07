@@ -249,7 +249,6 @@ init_validator ()
                      "^((bulk_delete)"
                      "|(bulk_export)"
                      "|(clone)"
-                     "|(create_agent)"
                      "|(create_asset)"
                      "|(create_config)"
                      "|(create_container_task)"
@@ -276,7 +275,6 @@ init_validator ()
                      "|(create_tls_certificate)"
                      "|(create_user)"
                      "|(cvss_calculator)"
-                     "|(delete_agent)"
                      "|(delete_asset)"
                      "|(delete_config)"
                      "|(delete_credential)"
@@ -300,7 +298,6 @@ init_validator ()
                      "|(delete_ticket)"
                      "|(delete_tls_certificate)"
                      "|(delete_user)"
-                     "|(download_agent)"
                      "|(download_credential)"
                      "|(download_ssl_cert)"
                      "|(download_ca_pub)"
@@ -309,8 +306,6 @@ init_validator ()
                      "|(edit_config_family)"
                      "|(auth_settings)"
                      "|(empty_trashcan)"
-                     "|(export_agent)"
-                     "|(export_agents)"
                      "|(export_alert)"
                      "|(export_alerts)"
                      "|(export_asset)"
@@ -351,8 +346,6 @@ init_validator ()
                      "|(export_tasks)"
                      "|(export_user)"
                      "|(export_users)"
-                     "|(get_agent)"
-                     "|(get_agents)"
                      "|(get_aggregate)"
                      "|(get_alert)"
                      "|(get_alerts)"
@@ -422,7 +415,6 @@ init_validator ()
                      "|(resume_task)"
                      "|(run_wizard)"
                      "|(test_alert)"
-                     "|(save_agent)"
                      "|(save_alert)"
                      "|(save_asset)"
                      "|(save_auth)"
@@ -456,7 +448,6 @@ init_validator ()
                      "|(sync_cert)"
                      "|(sync_config)"
                      "|(toggle_tag)"
-                     "|(verify_agent)"
                      "|(verify_scanner)"
                      "|(wizard)"
                      "|(wizard_get))$");
@@ -1481,7 +1472,6 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (bulk_delete)
   ELSE (bulk_export)
   ELSE (clone)
-  ELSE (create_agent)
   ELSE (create_alert)
   ELSE (create_asset)
   ELSE (create_config)
@@ -1506,7 +1496,6 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (create_tls_certificate)
   ELSE (create_user)
   ELSE (create_role)
-  ELSE (delete_agent)
   ELSE (delete_asset)
   ELSE (delete_alert)
   ELSE (delete_config)
@@ -1540,7 +1529,6 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (restore)
   ELSE (resume_task)
   ELSE (run_wizard)
-  ELSE (save_agent)
   ELSE (save_alert)
   ELSE (save_asset)
   ELSE (save_auth)
@@ -1578,7 +1566,6 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (sync_cert)
   ELSE (test_alert)
   ELSE (toggle_tag)
-  ELSE (verify_agent)
   ELSE (verify_scanner)
   else
   {
@@ -1969,8 +1956,6 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (auth_settings)
   ELSE (edit_alert)
   ELSE (edit_config_family)
-  ELSE (export_agent)
-  ELSE (export_agents)
   ELSE (export_alert)
   ELSE (export_alerts)
   ELSE (export_asset)
@@ -2045,25 +2030,8 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (export_tasks)
   ELSE (export_user)
   ELSE (export_users)
-  ELSE (get_agent)
-  ELSE (get_agents)
   ELSE (get_asset)
   ELSE (get_assets)
-
-  else if (!strcmp (cmd, "download_agent"))
-  {
-    char *html, *filename;
-
-    if (download_agent_gmp (&connection, credentials, params, &html, &filename,
-                            response_data))
-      cmd_response_data_set_content_type (response_data,
-                                          GSAD_CONTENT_TYPE_OCTET_STREAM);
-    cmd_response_data_set_content_disposition (
-      response_data, g_strdup_printf ("attachment; filename=%s", filename));
-    g_free (filename);
-
-    res = html;
-  }
 
   else if (!strcmp (cmd, "download_ssl_cert"))
   {
