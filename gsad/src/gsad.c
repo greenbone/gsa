@@ -455,12 +455,10 @@ init_validator ()
   gvm_validator_add (validator, "action_message", "(?s)^.*$");
   gvm_validator_add (validator, "action_status", "(?s)^.*$");
   gvm_validator_add (validator, "active", "^(-1|-2|[0-9]+)$");
-  gvm_validator_add (validator, "agent_format", "^(installer)$");
-  gvm_validator_add (validator, "agent_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "aggregate_mode", "^[a-z0-9_]+$");
   gvm_validator_add (
     validator, "aggregate_type",
-    "^(agent|alert|config|credential|filter|group|host|nvt|note|os|override|"
+    "^(alert|config|credential|filter|group|host|nvt|note|os|override|"
     "permission|port_list|report|report_format|result|role|scanner|schedule|"
     "tag|target|task|user|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|"
     "vuln|tls_certificate)$");
@@ -653,7 +651,7 @@ init_validator ()
   gvm_validator_add (validator, "port_range_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (
     validator, "resource_type",
-    "^(agent|alert|asset|cert_bund_adv|config|cpe|credential|cve|dfn_cert_adv|"
+    "^(alert|asset|cert_bund_adv|config|cpe|credential|cve|dfn_cert_adv|"
     "filter|group|host|info|nvt|note|os|ovaldef|override|permission|port_list|"
     "report|report_format|result|role|scanner|schedule|tag|target|task|ticket|"
     "tls_certificate|user|vuln|)$");
@@ -661,7 +659,7 @@ init_validator ()
   gvm_validator_add (validator, "resources_action", "^(|add|set|remove)$");
   gvm_validator_add (
     validator, "optional_resource_type",
-    "^(agent|alert|asset|cert_bund_adv|config|cpe|credential|cve|dfn_cert_adv|"
+    "^(alert|asset|cert_bund_adv|config|cpe|credential|cve|dfn_cert_adv|"
     "filter|group|host|info|nvt|note|os|ovaldef|override|permission|port_list|"
     "report|report_format|result|role|scanner|schedule|tag|target|task|ticket|"
     "tls_certificate|user|vuln|)?$");
