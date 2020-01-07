@@ -23,7 +23,6 @@ import {isEmpty} from './utils/string';
 
 import logger from './log.js';
 
-import './commands/agents.js';
 import './commands/alerts.js';
 import './commands/audits.js';
 import './commands/auth.js';
