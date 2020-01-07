@@ -110,8 +110,6 @@ export const renderYesNo = value => {
 
 const getPermissionTypeName = type => {
   switch (type) {
-    case 'agents':
-      return _('Agent');
     case 'aggregates':
       return _('Aggregates');
     case 'alerts':
