@@ -33,7 +33,6 @@ describe('entities reducer tests', () => {
 
   test('should create initial state', () => {
     expect(entitiesReducer(undefined, {})).toEqual({
-      agent: initState,
       alert: initState,
       audit: initState,
       certbund: initState,
