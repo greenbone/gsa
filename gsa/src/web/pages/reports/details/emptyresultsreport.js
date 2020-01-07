@@ -60,12 +60,12 @@ const EmptyResultsReport = ({
     <Layout flex="column" align={['start', 'stretch']} grow>
       <InfoPanel
         heading={_(
-          'The Report is empty. The filter does not match any of the ' +
+          'The report is empty. The filter does not match any of the ' +
             '{{all}} results.',
           {all},
         )}
       >
-        {_('Current applied filter is: ')}
+        {_('The following filter is currently applied: ')}
         <FilterString>{filter.toFilterString()}</FilterString>
       </InfoPanel>
 
@@ -96,14 +96,14 @@ const EmptyResultsReport = ({
           <ReportPanel
             icon={props => <FilterIcon {...props} />}
             title={_(
-              'There may be results below the current minimum Quality of ' +
-                'Detection level.',
+              'There may be results below the currently selected Quality ' +
+                'of Detection (QoD).',
             )}
             onClick={onFilterDecreaseMinQoDClick}
           >
             {_(
-              'Decrease the minimum QoD in the Filter to 30 percent to see ' +
-                'those results.',
+              'Decrease the minimum QoD in the filter settings to 30 percent ' +
+                'to see those results.',
             )}
           </ReportPanel>
         )}

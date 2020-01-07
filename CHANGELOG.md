@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Improve text for empty results report and threshold panel [#1900](https://github.com/greenbone/gsa/pull/1900)
 - Load report results with separate requests
   [#1863](https://github.com/greenbone/gsa/pull/1863),
   [#1870](https://github.com/greenbone/gsa/pull/1870),
