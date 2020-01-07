@@ -89,7 +89,6 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
     'alerts',
     'schedules',
     'report_formats',
-    'agents',
     'scanners',
     'filters',
     'tags',
@@ -100,11 +99,10 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
     false,
   );
 
-  const mayOpAlertsSchedulesReportFormatsAgents = [
+  const mayOpAlertsSchedulesReportFormats = [
     'alerts',
     'schedules',
     'report_formats',
-    'agents',
   ].reduce((sum, cur) => sum || capabilities.mayAccess(cur), false);
 
   const mayOpScannersFiltersTags = ['scanners', 'filters', 'tags'].reduce(
@@ -209,7 +207,7 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
               {capabilities.mayAccess('configs') && (
                 <MenuEntry title={_('Scan Configs')} to="scanconfigs" />
               )}
-              {mayOpAlertsSchedulesReportFormatsAgents && (
+              {mayOpAlertsSchedulesReportFormats && (
                 <MenuSection>
                   {capabilities.mayAccess('alerts') && (
                     <MenuEntry title={_('Alerts')} to="alerts" />
@@ -219,9 +217,6 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
                   )}
                   {capabilities.mayAccess('report_formats') && (
                     <MenuEntry title={_('Report Formats')} to="reportformats" />
-                  )}
-                  {capabilities.mayAccess('agents') && (
-                    <MenuEntry title={_('Agents')} to="agents" />
                   )}
                 </MenuSection>
               )}
