@@ -23,8 +23,6 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import logger from 'gmp/log';
-
 import {TASK_STATUS} from 'gmp/models/task';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -34,7 +32,7 @@ import ToolBar from 'web/components/bar/toolbar';
 
 import DateTime from 'web/components/date/datetime';
 
-import ErrorMessage from 'web/components/error/errormessage';
+import ErrorPanel from 'web/components/error/errorpanel';
 
 import ReportIcon from 'web/components/icon/reporticon';
 
@@ -75,8 +73,6 @@ import ThresholdPanel from './details/thresholdpanel';
 import TLSCertificatesTab from './details/tlscertificatestab';
 import ToolBarIcons from './details/toolbaricons';
 
-const log = logger.getLogger('web.pages.report.detailscontent');
-
 const Span = styled.span`
   margin-top: 2px;
 `;
@@ -84,12 +80,15 @@ const Span = styled.span`
 const PageContent = ({
   activeTab,
   entity,
-  entityError,
-  filter,
   filters,
   gmp,
   isLoading = true,
   isUpdating = false,
+  pageFilter,
+  reportError,
+  reportFilter,
+  reportId,
+  resetFilter,
   sorting,
   showError,
   showErrorMessage,
@@ -114,10 +113,12 @@ const PageContent = ({
   onTagSuccess,
   onTargetEditClick,
 }) => {
-  const {report = {}} = entity || {};
+  const hasReport = isDefined(entity);
 
-  const {userTags = {}} = report;
-  const userTagsCount = userTags.length;
+  const report = hasReport ? entity.report : undefined;
+
+  const userTags = hasReport ? report.userTags : undefined;
+  const userTagsCount = isDefined(userTags) ? userTags.length : 0;
 
   const {
     applications = {},
@@ -131,27 +132,38 @@ const PageContent = ({
     tls_certificates = {},
     timestamp,
     scan_run_status,
-  } = report;
+  } = report || {};
 
-  const hasReport = isDefined(entity);
-
-  if (!hasReport && isDefined(entityError)) {
-    log.error(entityError);
-    return <ErrorMessage message={entityError.message} />;
+  if (!hasReport && isDefined(reportError)) {
+    return (
+      <ErrorPanel
+        message={_('Error while loading Report {{reportId}}', {reportId})}
+        error={reportError}
+      />
+    );
   }
 
   const threshold = gmp.settings.reportResultsThreshold;
 
-  const showThresholdMessage = hasReport && results.counts.filtered > threshold;
+  const showThresholdMessage =
+    !isLoading && hasReport && results.counts.filtered > threshold;
 
   const isContainer = isDefined(task) && task.isContainer();
   const status = isContainer ? TASK_STATUS.container : scan_run_status;
   const progress = isDefined(task) ? task.progress : 0;
 
+  const showIsLoading = isLoading && !hasReport;
+
+  const showInitialLoading =
+    isLoading &&
+    !isDefined(reportError) &&
+    !showThresholdMessage &&
+    (!isDefined(results.entities) || results.entities.length === 0);
+
   const header_title = (
     <Divider>
       <span>{_('Report:')}</span>
-      {isLoading ? (
+      {showIsLoading ? (
         <span>{_('Loading')}</span>
       ) : (
         <Divider>
@@ -174,9 +186,10 @@ const PageContent = ({
     <Layout grow flex="column" align={['start', 'stretch']}>
       <ToolBar>
         <ToolBarIcons
-          filter={filter}
-          loading={isLoading}
-          report={report}
+          filter={reportFilter}
+          isLoading={showIsLoading}
+          report={hasReport ? report : undefined}
+          reportId={reportId}
           showError={showError}
           showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}
@@ -191,8 +204,10 @@ const PageContent = ({
         <Layout align="end">
           <Powerfilter
             createFilterType="result"
-            filter={filter}
+            // use loaded filter from report if available otherwise already show the requested filter
+            filter={isDefined(reportFilter) ? reportFilter : pageFilter}
             filters={filters}
+            resetFilter={resetFilter}
             onEditClick={onFilterEditClick}
             onError={onError}
             onFilterCreated={onFilterCreated}
@@ -204,7 +219,7 @@ const PageContent = ({
       </ToolBar>
 
       <Section header={header}>
-        {isLoading ? (
+        {showIsLoading ? (
           <Loading />
         ) : (
           <React.Fragment>
@@ -263,13 +278,15 @@ const PageContent = ({
               </TabList>
             </TabLayout>
 
-            {isDefined(report) ? (
+            {hasReport ? (
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
                     <Summary
-                      filter={filter}
+                      filter={reportFilter}
                       report={report}
+                      reportError={reportError}
+                      reportId={reportId}
                       isUpdating={isUpdating}
                       onError={onError}
                       onTagChanged={onTagSuccess}
@@ -277,15 +294,14 @@ const PageContent = ({
                   </TabPanel>
                   <TabPanel>
                     <ResultsTab
-                      counts={results.counts}
-                      filter={filter}
-                      hasTarget={!isContainer}
-                      isUpdating={isUpdating}
+                      status={status}
                       progress={progress}
+                      hasTarget={!isContainer}
+                      reportFilter={reportFilter}
+                      reportId={reportId}
                       results={results.entities}
                       sortField={sorting.results.sortField}
                       sortReverse={sorting.results.sortReverse}
-                      status={status}
                       onFilterAddLogLevelClick={onFilterAddLogLevelClick}
                       onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
                       onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
@@ -299,10 +315,12 @@ const PageContent = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    {showThresholdMessage ? (
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
                       <ThresholdPanel
                         entityType={_('Hosts')}
-                        filter={filter}
+                        filter={reportFilter}
                         isUpdating={isUpdating}
                         threshold={threshold}
                         onFilterEditClick={onFilterEditClick}
@@ -311,7 +329,7 @@ const PageContent = ({
                     ) : (
                       <HostsTab
                         counts={hosts.counts}
-                        filter={filter}
+                        filter={reportFilter}
                         hosts={hosts.entities}
                         isUpdating={isUpdating}
                         sortField={sorting.hosts.sortField}
@@ -324,10 +342,12 @@ const PageContent = ({
                     )}
                   </TabPanel>
                   <TabPanel>
-                    {showThresholdMessage ? (
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
                       <ThresholdPanel
                         entityType={_('Ports')}
-                        filter={filter}
+                        filter={reportFilter}
                         isUpdating={isUpdating}
                         threshold={threshold}
                         onFilterEditClick={onFilterEditClick}
@@ -336,7 +356,7 @@ const PageContent = ({
                     ) : (
                       <PortsTab
                         counts={ports.counts}
-                        filter={filter}
+                        filter={reportFilter}
                         isUpdating={isUpdating}
                         ports={ports.entities}
                         sortField={sorting.ports.sortField}
@@ -349,10 +369,12 @@ const PageContent = ({
                     )}
                   </TabPanel>
                   <TabPanel>
-                    {showThresholdMessage ? (
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
                       <ThresholdPanel
                         entityType={_('Applications')}
-                        filter={filter}
+                        filter={reportFilter}
                         isUpdating={isUpdating}
                         threshold={threshold}
                         onFilterEditClick={onFilterEditClick}
@@ -362,7 +384,7 @@ const PageContent = ({
                       <ApplicationsTab
                         counts={applications.counts}
                         applications={applications.entities}
-                        filter={filter}
+                        filter={reportFilter}
                         isUpdating={isUpdating}
                         sortField={sorting.apps.sortField}
                         sortReverse={sorting.apps.sortReverse}
@@ -374,10 +396,12 @@ const PageContent = ({
                     )}
                   </TabPanel>
                   <TabPanel>
-                    {showThresholdMessage ? (
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
                       <ThresholdPanel
                         entityType={_('Operating Systems')}
-                        filter={filter}
+                        filter={reportFilter}
                         isUpdating={isUpdating}
                         threshold={threshold}
                         onFilterEditClick={onFilterEditClick}
@@ -387,7 +411,7 @@ const PageContent = ({
                       <OperatingSystemsTab
                         counts={operatingsystems.counts}
                         operatingsystems={operatingsystems.entities}
-                        filter={filter}
+                        filter={reportFilter}
                         sortField={sorting.os.sortField}
                         sortReverse={sorting.os.sortReverse}
                         isUpdating={isUpdating}
@@ -399,10 +423,12 @@ const PageContent = ({
                     )}
                   </TabPanel>
                   <TabPanel>
-                    {showThresholdMessage ? (
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
                       <ThresholdPanel
                         entityType={_('CVEs')}
-                        filter={filter}
+                        filter={reportFilter}
                         isUpdating={isUpdating}
                         threshold={threshold}
                         onFilterEditClick={onFilterEditClick}
@@ -412,7 +438,7 @@ const PageContent = ({
                       <CvesTab
                         counts={cves.counts}
                         cves={cves.entities}
-                        filter={filter}
+                        filter={reportFilter}
                         isUpdating={isUpdating}
                         sortField={sorting.cves.sortField}
                         sortReverse={sorting.cves.sortReverse}
@@ -424,10 +450,12 @@ const PageContent = ({
                     )}
                   </TabPanel>
                   <TabPanel>
-                    {showThresholdMessage ? (
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
                       <ThresholdPanel
                         entityType={_('Closed CVEs')}
-                        filter={filter}
+                        filter={reportFilter}
                         threshold={threshold}
                         isUpdating={isUpdating}
                         onFilterEditClick={onFilterEditClick}
@@ -437,7 +465,7 @@ const PageContent = ({
                       <ClosedCvesTab
                         counts={closed_cves.counts}
                         closedCves={closed_cves.entities}
-                        filter={filter}
+                        filter={reportFilter}
                         isUpdating={isUpdating}
                         sortField={sorting.closedcves.sortField}
                         sortReverse={sorting.closedcves.sortReverse}
@@ -449,10 +477,12 @@ const PageContent = ({
                     )}
                   </TabPanel>
                   <TabPanel>
-                    {showThresholdMessage ? (
+                    {showInitialLoading ? (
+                      <Loading />
+                    ) : showThresholdMessage ? (
                       <ThresholdPanel
                         entityType={_('TLS Certificates')}
-                        filter={filter}
+                        filter={reportFilter}
                         isUpdating={isUpdating}
                         threshold={threshold}
                         onFilterEditClick={onFilterEditClick}
@@ -462,7 +492,7 @@ const PageContent = ({
                       <TLSCertificatesTab
                         counts={tls_certificates.counts}
                         tlsCertificates={tls_certificates.entities}
-                        filter={filter}
+                        filter={reportFilter}
                         isUpdating={isUpdating}
                         sortField={sorting.tlscerts.sortField}
                         sortReverse={sorting.tlscerts.sortReverse}
@@ -480,7 +510,7 @@ const PageContent = ({
                     <ErrorsTab
                       counts={errors.counts}
                       errors={errors.entities}
-                      filter={filter}
+                      filter={reportFilter}
                       isUpdating={isUpdating}
                       sortField={sorting.errors.sortField}
                       sortReverse={sorting.errors.sortReverse}
@@ -513,12 +543,15 @@ const PageContent = ({
 PageContent.propTypes = {
   activeTab: PropTypes.number,
   entity: PropTypes.model,
-  entityError: PropTypes.object,
-  filter: PropTypes.filter,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool,
   isUpdating: PropTypes.bool,
+  pageFilter: PropTypes.filter,
+  reportError: PropTypes.error,
+  reportFilter: PropTypes.filter,
+  reportId: PropTypes.id.isRequired,
+  resetFilter: PropTypes.filter,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,

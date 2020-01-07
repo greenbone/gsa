@@ -58,7 +58,7 @@ import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
 
-import ResultsTab from './details/resultstab';
+import DeltaResultsTab from './details/deltaresultstab';
 import Summary from './details/summary';
 import TabTitle from './details/tabtitle';
 import ToolBarIcons from './details/toolbaricons';
@@ -75,6 +75,7 @@ const PageContent = ({
   filters,
   isLoading = true,
   isUpdating = false,
+  reportId,
   sorting,
   showError,
   showErrorMessage,
@@ -146,8 +147,9 @@ const PageContent = ({
         <ToolBarIcons
           delta={true}
           filter={filter}
-          loading={isLoading}
+          isLoading={isLoading}
           report={report}
+          reportId={reportId}
           showError={showError}
           showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}
@@ -199,12 +201,13 @@ const PageContent = ({
                     <Summary
                       filter={filter}
                       report={report}
+                      reportId={reportId}
                       onError={onError}
                       onTagChanged={onTagSuccess}
                     />
                   </TabPanel>
                   <TabPanel>
-                    <ResultsTab
+                    <DeltaResultsTab
                       counts={isDefined(results.counts) ? results.counts : {}}
                       delta={true}
                       filter={filter}
@@ -255,6 +258,7 @@ PageContent.propTypes = {
   filters: PropTypes.array,
   isLoading: PropTypes.bool,
   isUpdating: PropTypes.bool,
+  reportId: PropTypes.id.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,

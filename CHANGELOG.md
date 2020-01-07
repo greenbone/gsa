@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.2] - unreleased
 
 ### Added
+- Display error details at report details page [#1862](https://github.com/greenbone/gsa/pull/1862)
 - Added warnings to content composer if reportResultThreshold is exceeded [#1852](https://github.com/greenbone/gsa/pull/1852)
 - Added parseText to model.js to parse single space summary [#1829](https://github.com/greenbone/gsa/pull/1829)
 - Added new setting to enable and disable debug logging for the redux store [#1684](https://github.com/greenbone/gsa/pull/1684)
@@ -23,6 +24,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Load report results with separate requests
+  [#1863](https://github.com/greenbone/gsa/pull/1863),
+  [#1870](https://github.com/greenbone/gsa/pull/1870),
+  [#1871](https://github.com/greenbone/gsa/pull/1871)
 - Only load full report if the report has less than 25000 results [#1851](https://github.com/greenbone/gsa/pull/1851)
 - Only render report information, results and errors if a result has more than 25000 results [#1849](https://github.com/greenbone/gsa/pull/1849)
 - Limit the length of result description with a div [#1834](https://github.com/greenbone/gsa/pull/1834)
@@ -58,6 +63,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Lower memory usage when getting a report [#1858](https://github.com/greenbone/gvmd/pull/1858)
 
 ### Fixed
+- Fixed removing levels filter keyword if all severity levels are unchecked [#1869](https://github.com/greenbone/gsa/pull/1869)
 - Fixed sorting of hosts in report details [#1860](https://github.com/greenbone/gsa/pull/1860)
 - Fixed displaying update indication at all report details tabs [#1849](https://github.com/greenbone/gsa/pull/1849)
 - Fixed getting list of Closed CVEs and sorting the Closed CVEs at report details [#1850](https://github.com/greenbone/gsa/pull/1850)

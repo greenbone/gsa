@@ -22,7 +22,25 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {filterIdentifier} from 'web/store/utils';
 
-class EntitiesSelector {
+export class EntitySelector {
+  constructor(state = {}) {
+    this.state = state;
+  }
+
+  isLoadingEntity(id) {
+    return isDefined(this.state.isLoading) ? !!this.state.isLoading[id] : false;
+  }
+
+  getEntityError(id) {
+    return isDefined(this.state.errors) ? this.state.errors[id] : undefined;
+  }
+
+  getEntity(id) {
+    return isDefined(this.state.byId) ? this.state.byId[id] : undefined;
+  }
+}
+
+export class EntitiesSelector {
   constructor(state = {}) {
     this.state = state;
   }
@@ -33,18 +51,10 @@ class EntitiesSelector {
       : false;
   }
 
-  isLoadingEntity(id) {
-    return isDefined(this.state.isLoading) ? !!this.state.isLoading[id] : false;
-  }
-
   getEntitiesError(filter) {
     return isDefined(this.state.errors)
       ? this.state.errors[filterIdentifier(filter)]
       : undefined;
-  }
-
-  getEntityError(id) {
-    return isDefined(this.state.errors) ? this.state.errors[id] : undefined;
   }
 
   getEntities(filter) {
@@ -73,13 +83,58 @@ class EntitiesSelector {
     const state = this.state[filterIdentifier(filter)];
     return isDefined(state) ? state.loadedFilter : undefined;
   }
+}
+
+class Selector {
+  constructor(state = {}) {
+    this.entitySelector = new EntitySelector(state);
+    this.entitiesSelector = new EntitiesSelector(state);
+  }
+
+  isLoadingEntity(id) {
+    return this.entitySelector.isLoadingEntity(id);
+  }
+
+  getEntityError(id) {
+    return this.entitySelector.getEntityError(id);
+  }
 
   getEntity(id) {
-    return isDefined(this.state.byId) ? this.state.byId[id] : undefined;
+    return this.entitySelector.getEntity(id);
+  }
+
+  isLoadingEntities(filter) {
+    return this.entitiesSelector.isLoadingEntities(filter);
+  }
+
+  getEntitiesError(filter) {
+    return this.entitiesSelector.getEntitiesError(filter);
+  }
+
+  getEntities(filter) {
+    return this.entitiesSelector.getEntities(filter);
+  }
+
+  getAllEntities(filter) {
+    return this.entitiesSelector.getAllEntities(filter);
+  }
+
+  getEntitiesCounts(filter) {
+    return this.entitiesSelector.getEntitiesCounts(filter);
+  }
+
+  getLoadedFilter(filter) {
+    return this.entitiesSelector.getLoadedFilter(filter);
   }
 }
 
-export const createSelector = name => rootState =>
+export const createEntitySelector = name => rootState =>
+  new EntitySelector(rootState.entities[name]);
+
+export const createEntitiesSelector = name => rootState =>
   new EntitiesSelector(rootState.entities[name]);
+
+export const createSelector = name => rootState =>
+  new Selector(rootState.entities[name]);
 
 // vim: set ts=2 sw=2 tw=80:

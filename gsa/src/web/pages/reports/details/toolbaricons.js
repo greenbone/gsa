@@ -46,8 +46,9 @@ import AlertActions from './alertactions';
 
 const ToolBarIcons = ({
   filter,
-  loading,
+  isLoading,
   report,
+  reportId,
   showThresholdMessage,
   task,
   threshold,
@@ -68,7 +69,7 @@ const ToolBarIcons = ({
       />
       <ListIcon title={_('Reports List')} page="reports" />
     </IconDivider>
-    {!loading && (
+    {!isLoading && (
       <React.Fragment>
         <IconDivider>
           <AddToAssetsIcon
@@ -91,14 +92,14 @@ const ToolBarIcons = ({
           </DetailsLink>
           <Link
             to="results"
-            filter={'report_id=' + report.id}
+            filter={'report_id=' + reportId}
             title={_('Corresponding Results')}
           >
             <ResultIcon />
           </Link>
           <Link
             to="vulnerabilities"
-            filter={'report_id=' + report.id}
+            filter={'report_id=' + reportId}
             title={_('Corresponding Vulnerabilities')}
           >
             <VulnerabilityIcon />
@@ -128,7 +129,7 @@ const ToolBarIcons = ({
           />
           <AlertActions
             filter={filter}
-            report={report}
+            reportId={reportId}
             showError={showError}
             showSuccessMessage={showSuccessMessage}
             showErrorMessage={showErrorMessage}
@@ -144,8 +145,15 @@ const ToolBarIcons = ({
 
 ToolBarIcons.propTypes = {
   filter: PropTypes.filter,
-  loading: PropTypes.bool,
-  report: PropTypes.object.isRequired,
+  isLoading: PropTypes.bool,
+  report: PropTypes.shape({
+    scan_end: PropTypes.date,
+    scan_start: PropTypes.date,
+    slave: PropTypes.shape({
+      id: PropTypes.id.isRequired,
+    }),
+  }),
+  reportId: PropTypes.id.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,

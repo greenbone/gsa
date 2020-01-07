@@ -96,7 +96,7 @@ class AlertActions extends React.Component {
     const {
       filter,
       gmp,
-      report,
+      reportId,
       reportComposerDefaults,
       showErrorMessage,
       showSuccessMessage,
@@ -119,7 +119,7 @@ class AlertActions extends React.Component {
 
     return gmp.report
       .alert({
-        report_id: report.id,
+        report_id: reportId,
         alert_id: alertId,
         filter: newFilter.simple(),
       })
@@ -219,8 +219,8 @@ AlertActions.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
-  report: PropTypes.model.isRequired,
   reportComposerDefaults: PropTypes.object,
+  reportId: PropTypes.id.isRequired,
   saveReportComposerDefaults: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,

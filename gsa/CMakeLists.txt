@@ -248,6 +248,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/error/errorboundary.js
      ${GSA_SRC_DIR}/src/web/components/error/errorcontainer.js
      ${GSA_SRC_DIR}/src/web/components/error/errormessage.js
+     ${GSA_SRC_DIR}/src/web/components/error/errorpanel.js
      ${GSA_SRC_DIR}/src/web/components/folding/folding.js
      ${GSA_SRC_DIR}/src/web/components/footnote/footnote.js
      ${GSA_SRC_DIR}/src/web/components/form/button.js
@@ -1045,7 +1046,11 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/portlists.js
      ${GSA_SRC_DIR}/src/web/store/entities/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/reportformats.js
+     ${GSA_SRC_DIR}/src/web/store/entities/report/actions.js
+     ${GSA_SRC_DIR}/src/web/store/entities/report/reducers.js
+     ${GSA_SRC_DIR}/src/web/store/entities/report/selectors.js
      ${GSA_SRC_DIR}/src/web/store/entities/reports.js
+     ${GSA_SRC_DIR}/src/web/store/entities/reports/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/results.js
      ${GSA_SRC_DIR}/src/web/store/entities/roles.js
      ${GSA_SRC_DIR}/src/web/store/entities/scanconfigs.js
