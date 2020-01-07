@@ -41,7 +41,6 @@ export const SELECT_MAX_RESOURCES = 200; // concerns items in TagDialog's Select
 export const MAX_RESOURCES = 40; // concerns listing in "Assigned Resources" tab
 
 const TYPES = [
-  'agent',
   'alert',
   'host',
   'operatingsystem',
@@ -332,9 +331,6 @@ TagComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default compose(
-  withGmp,
-  withCapabilities,
-)(TagComponent);
+export default compose(withGmp, withCapabilities)(TagComponent);
 
 // vim: set ts=2 sw=2 tw=80:
