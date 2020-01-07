@@ -58,7 +58,6 @@ import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
 import AlertsTable from '../alerts/table';
-import AgentsTable from '../agents/table';
 import ScanConfigsTable from '../scanconfigs/table';
 import CredentialsTable from '../credentials/table';
 import FiltersTable from '../filters/table';
@@ -231,7 +230,6 @@ class Trashcan extends React.Component {
   }
 
   createContentsTable(trash) {
-    const render_agents = isDefined(trash.agent_list);
     const render_alerts = isDefined(trash.alert_list);
     const render_credentials = isDefined(trash.credential_list);
     const render_filters = isDefined(trash.filter_list);
@@ -262,8 +260,6 @@ class Trashcan extends React.Component {
 
     return (
       <TableBody>
-        {render_agents &&
-          this.createContentRow('agent', _('Agents'), trash.agent_list.length)}
         {render_alerts &&
           this.createContentRow('alert', _('Alerts'), trash.alert_list.length)}
         {renderAudits &&
@@ -400,13 +396,6 @@ class Trashcan extends React.Component {
             {contents_table}
           </Table>
 
-          {isDefined(trash.agent_list) && (
-            <span>
-              <LinkTarget id="agent" />
-              <h1>{_('Agents')}</h1>
-              <AgentsTable entities={trash.agent_list} {...table_props} />
-            </span>
-          )}
           {isDefined(trash.alert_list) && (
             <span>
               <LinkTarget id="alert" />

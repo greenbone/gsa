@@ -22,7 +22,6 @@ import {apiType} from '../utils/entitytype';
 import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
-import Agent from '../models/agent';
 import Alert from '../models/alert';
 import Scanconfig from '../models/scanconfig';
 import Credential from '../models/credential';
@@ -71,11 +70,6 @@ class Trashcan extends HttpCommand {
     return this.httpGet({cmd: 'get_trash'}).then(response => {
       const trash_data = response.data.get_trash;
       const data = {};
-      if (isDefined(trash_data.get_agents_response)) {
-        data.agent_list = map(trash_data.get_agents_response.agent, model =>
-          Agent.fromElement(model),
-        );
-      }
       if (isDefined(trash_data.get_alerts_response)) {
         data.alert_list = map(trash_data.get_alerts_response.alert, model =>
           Alert.fromElement(model),

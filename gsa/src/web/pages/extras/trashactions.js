@@ -33,9 +33,6 @@ import TableData from 'web/components/table/data';
 import PropTypes from 'web/utils/proptypes';
 
 const getRestorableDeletableForEntityType = {
-  agent: entity => {
-    return {restorable: true, deletable: true};
-  },
   alert: entity => {
     const restorable = isDefined(entity.filter)
       ? !entity.filter.isInTrash()
