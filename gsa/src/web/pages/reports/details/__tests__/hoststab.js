@@ -252,6 +252,7 @@ export const getMockReport = () => {
     scan_run_status: 'Done',
     scan_start: '2019-06-03T11:00:22Z',
     scan_end: '2019-06-03T11:31:23Z',
+    timestamp: '2019-06-03T11:00:22Z',
     timezone: 'UTC',
     timezone_abbrev: 'UTC',
     task: task1,
@@ -276,6 +277,11 @@ export const getMockReport = () => {
 
   const entity = Report.fromElement({
     report: report,
+    creation_time: '2019-06-02T12:00:22Z',
+    modification_time: '2019-06-03T11:00:22Z',
+    name: '2019-06-03T11:00:22Z',
+    owner: {name: 'admin'},
+    _id: '1234',
   });
 
   return {
