@@ -10827,8 +10827,6 @@ get_trash (gvm_connection_t *connection, credentials_t *credentials,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  GET_TRASH_RESOURCE ("GET_AGENTS", "get_agents", "agents");
-
   GET_TRASH_RESOURCE ("GET_CONFIGS", "get_configs", "configs");
 
   GET_TRASH_RESOURCE ("GET_CREDENTIALS", "get_credentials", "credentials");
@@ -12416,8 +12414,7 @@ create_permissions_gmp (gvm_connection_t *connection,
               CHECK_GMPF_RET
             }
 
-          if (str_equal (permission_resource_type, "agent")
-              || str_equal (permission_resource_type, "report_format")
+          if (str_equal (permission_resource_type, "report_format")
               || str_equal (permission_resource_type, "scanner"))
             {
               // create verify permission
@@ -12575,8 +12572,7 @@ create_permissions_gmp (gvm_connection_t *connection,
                       CHECK_GMPF_RET
                     }
 
-                  if (str_equal (related_type, "agent")
-                      || str_equal (related_type, "report_format")
+                  if (str_equal (related_type, "report_format")
                       || str_equal (related_type, "scanner"))
                     {
                       response = NULL;
