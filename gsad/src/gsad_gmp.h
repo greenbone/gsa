@@ -185,34 +185,6 @@ save_credential_gmp (gvm_connection_t *, credentials_t *, params_t *,
                      cmd_response_data_t *);
 
 char *
-get_agent_gmp (gvm_connection_t *, credentials_t *, params_t *,
-               cmd_response_data_t *);
-char *
-get_agents_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                cmd_response_data_t *);
-int
-download_agent_gmp (gvm_connection_t *, credentials_t *, params_t *, char **,
-                    char **, cmd_response_data_t *);
-char *
-save_agent_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                cmd_response_data_t *);
-char *
-create_agent_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                  cmd_response_data_t *);
-char *
-delete_agent_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                  cmd_response_data_t *);
-char *
-verify_agent_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                  cmd_response_data_t *);
-char *
-export_agent_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                  cmd_response_data_t *);
-char *
-export_agents_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                   cmd_response_data_t *);
-
-char *
 get_aggregate_gmp (gvm_connection_t *, credentials_t *, params_t *,
                    cmd_response_data_t *);
 
