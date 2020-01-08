@@ -33,8 +33,6 @@ import PageNotFound from './pages/notfoundpage';
 import StartPage from './pages/start/page';
 
 import AboutPage from './pages/help/about';
-import AgentsPage from './pages/agents/listpage';
-import AgentDetailsPage from './pages/agents/detailspage';
 import AlertsPage from './pages/alerts/listpage';
 import AlertDetailsPage from './pages/alerts/detailspage';
 import AuditsPage from './pages/audits/listpage';
@@ -166,7 +164,6 @@ const Routes = () => (
               <Route path="/alerts" component={AlertsPage} />
               <Route path="/schedules" component={SchedulesPage} />
               <Route path="/reportformats" component={ReportFormatsPage} />
-              <Route path="/agents" component={AgentsPage} />
               <Route path="/tags" component={TagsPage} />
               <Route path="/permissions" component={PermissionsPage} />
               <Route path="/scanners" component={ScannersPage} />
@@ -214,7 +211,6 @@ const Routes = () => (
                 path="/reportformat/:id"
                 component={ReportFormatDetailsPage}
               />
-              <Route path="/agent/:id" component={AgentDetailsPage} />
               <Route path="/filter/:id" component={FilterDetailsPage} />
               <Route path="/tag/:id" component={TagDetailsPage} />
               <Route path="/permission/:id" component={PermissionDetailsPage} />

@@ -504,6 +504,11 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
   width: 100%;
 }
 
+.c44 > *:not(:last-child)::after {
+  content: '•';
+  margin-left: 5px;
+}
+
 .c36 td {
   padding: 4px 4px 4px 0;
 }
@@ -551,11 +556,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
 
 .c33 {
   font-size: 0.7em;
-}
-
-.c44 > *:not(:last-child)::after {
-  content: '•';
-  margin-left: 5px;
 }
 
 .c40 {

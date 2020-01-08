@@ -32,7 +32,6 @@ import EntityComponent from 'web/entity/component';
 import FilterDialog from 'web/pages/filters/dialog';
 
 const FILTER_OPTIONS = [
-  ['agent', _l('Agent')],
   ['alert', _l('Alert')],
   ['credential', _l('Credential')],
   ['filter', _l('Filter')],

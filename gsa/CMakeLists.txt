@@ -53,7 +53,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/collection/collectioncounts.js
      ${GSA_SRC_DIR}/src/gmp/collection/parser.js
      ${GSA_SRC_DIR}/src/gmp/command.js
-     ${GSA_SRC_DIR}/src/gmp/commands/agents.js
      ${GSA_SRC_DIR}/src/gmp/commands/alerts.js
      ${GSA_SRC_DIR}/src/gmp/commands/audits.js
      ${GSA_SRC_DIR}/src/gmp/commands/auth.js
@@ -116,7 +115,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/log.js
      ${GSA_SRC_DIR}/src/gmp/model.js
      ${GSA_SRC_DIR}/src/gmp/models/actionresult.js
-     ${GSA_SRC_DIR}/src/gmp/models/agent.js
      ${GSA_SRC_DIR}/src/gmp/models/alert.js
      ${GSA_SRC_DIR}/src/gmp/models/asset.js
      ${GSA_SRC_DIR}/src/gmp/models/audit.js
@@ -279,7 +277,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/form/withDownload.js
      ${GSA_SRC_DIR}/src/web/components/form/yesnoradio.js
      ${GSA_SRC_DIR}/src/web/components/icon/addtoassetsicon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/agenticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/alerticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/alterableicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/arrowicon.js
@@ -398,7 +395,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/withSvgIcon.js
      ${GSA_SRC_DIR}/src/web/components/icon/wizardicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/svg/add_to_assets.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/agent.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/alert.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/alterable.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/audit.svg
@@ -615,13 +611,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/entity/tab.js
      ${GSA_SRC_DIR}/src/web/entity/tags.js
      ${GSA_SRC_DIR}/src/web/entity/withEntityContainer.js
-     ${GSA_SRC_DIR}/src/web/pages/agents/component.js
-     ${GSA_SRC_DIR}/src/web/pages/agents/details.js
-     ${GSA_SRC_DIR}/src/web/pages/agents/detailspage.js
-     ${GSA_SRC_DIR}/src/web/pages/agents/listpage.js
-     ${GSA_SRC_DIR}/src/web/pages/agents/dialog.js
-     ${GSA_SRC_DIR}/src/web/pages/agents/row.js
-     ${GSA_SRC_DIR}/src/web/pages/agents/table.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/alembavfiremethodpart.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/component.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/condition.js
@@ -1061,7 +1050,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/dashboard/settings/selectors.js
      ${GSA_SRC_DIR}/src/web/store/index.js
      ${GSA_SRC_DIR}/src/web/store/reducers.js
-     ${GSA_SRC_DIR}/src/web/store/entities/agents.js
      ${GSA_SRC_DIR}/src/web/store/entities/alerts.js
      ${GSA_SRC_DIR}/src/web/store/entities/audits.js
      ${GSA_SRC_DIR}/src/web/store/entities/certbund.js

@@ -32,7 +32,6 @@ const filterFilters = (filters, type) =>
   filters.filter(filter => filter.filter_type === type);
 
 const FilterPart = ({
-  agentsFilter,
   alertsFilter,
   configsFilter,
   credentialsFilter,
@@ -69,17 +68,6 @@ const FilterPart = ({
 }) => {
   return (
     <React.Fragment>
-      <FormGroup title={_('Agents Filter')} titleSize="3">
-        <Select
-          name="agentsFilter"
-          value={agentsFilter}
-          items={renderSelectItems(
-            filterFilters(filters, 'agent'),
-            UNSET_VALUE,
-          )}
-          onChange={onChange}
-        />
-      </FormGroup>
       <FormGroup title={_('Alerts Filter')} titleSize="3">
         <Select
           name="alertsFilter"
@@ -381,7 +369,6 @@ const FilterPart = ({
 };
 
 FilterPart.propTypes = {
-  agentsFilter: PropTypes.string,
   alertsFilter: PropTypes.string,
   certBundFilter: PropTypes.string,
   configsFilter: PropTypes.string,

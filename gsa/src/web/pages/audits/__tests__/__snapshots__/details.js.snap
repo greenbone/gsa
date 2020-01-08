@@ -109,6 +109,11 @@ exports[`Audit Details tests should render full audit details 1`] = `
   width: 100%;
 }
 
+.c5 > *:not(:last-child)::after {
+  content: '•';
+  margin-left: 5px;
+}
+
 .c7 td {
   padding: 4px 4px 4px 0;
 }
@@ -123,11 +128,6 @@ exports[`Audit Details tests should render full audit details 1`] = `
 
 .c9 {
   width: 90%;
-}
-
-.c5 > *:not(:last-child)::after {
-  content: '•';
-  margin-left: 5px;
 }
 
 @media print {

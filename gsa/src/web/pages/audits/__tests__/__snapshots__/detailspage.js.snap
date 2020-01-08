@@ -482,6 +482,11 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   width: 100%;
 }
 
+.c38 > *:not(:last-child)::after {
+  content: '•';
+  margin-left: 5px;
+}
+
 .c30 td {
   padding: 4px 4px 4px 0;
 }
@@ -529,11 +534,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
 
 .c27 {
   font-size: 0.7em;
-}
-
-.c38 > *:not(:last-child)::after {
-  content: '•';
-  margin-left: 5px;
 }
 
 .c34 {

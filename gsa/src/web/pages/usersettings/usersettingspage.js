@@ -333,7 +333,6 @@ class UserSettings extends React.Component {
       defaultSshCredential = {},
       defaultSchedule = {},
       defaultTarget = {},
-      agentsFilter,
       alertsFilter,
       configsFilter,
       credentialsFilter,
@@ -367,7 +366,6 @@ class UserSettings extends React.Component {
       autoCacheRebuild = {},
     } = this.props;
 
-    agentsFilter = hasValue(agentsFilter) ? agentsFilter : {};
     alertsFilter = hasValue(alertsFilter) ? alertsFilter : {};
     configsFilter = hasValue(configsFilter) ? configsFilter : {};
     credentialsFilter = hasValue(credentialsFilter) ? credentialsFilter : {};
@@ -632,11 +630,6 @@ class UserSettings extends React.Component {
                         <colgroup width={FIRST_COL_WIDTH} />
                         <TableBody>
                           <SettingTableRow
-                            setting={agentsFilter}
-                            title={_('Agents Filter')}
-                            type="filter"
-                          />
-                          <SettingTableRow
                             setting={alertsFilter}
                             title={_('Alerts Filter')}
                             type="filter"
@@ -833,7 +826,6 @@ class UserSettings extends React.Component {
               defaultSshCredential={defaultSshCredential.id}
               defaultSchedule={defaultSchedule.id}
               defaultTarget={defaultTarget.id}
-              agentsFilter={agentsFilter.id}
               alertsFilter={alertsFilter.id}
               configsFilter={configsFilter.id}
               credentialsFilter={credentialsFilter.id}
@@ -876,7 +868,6 @@ class UserSettings extends React.Component {
 }
 
 UserSettings.propTypes = {
-  agentsFilter: PropTypes.object,
   alerts: PropTypes.array,
   alertsFilter: PropTypes.object,
   autoCacheRebuild: PropTypes.object,
@@ -1050,7 +1041,6 @@ const mapStateToProps = rootState => {
   const defaultSshCredential = credentialsSel.getEntity(defaultSshCredentialId);
   const defaultSchedule = schedulesSel.getEntity(defaultScheduleId);
   const defaultTarget = targetsSel.getEntity(defaultTargetId);
-  const agentsFilter = userDefaultFilterSelector.getFilter('agent');
   const alertsFilter = userDefaultFilterSelector.getFilter('alert');
   const configsFilter = userDefaultFilterSelector.getFilter('scanconfig');
   const credentialsFilter = userDefaultFilterSelector.getFilter('credential');
@@ -1129,7 +1119,6 @@ const mapStateToProps = rootState => {
     defaultSshCredential,
     defaultSchedule,
     defaultTarget,
-    agentsFilter,
     alertsFilter,
     configsFilter,
     credentialsFilter,
@@ -1170,7 +1159,6 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadFilters: () => dispatch(loadFilters(gmp)(ALL_FILTER)),
   loadFilterDefaults: () =>
     Promise.all([
-      dispatch(loadUserSettingsDefaultFilter(gmp)('agent')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('alert')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('scanconfig')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('credential')),
@@ -1218,10 +1206,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   withCapabilities,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(UserSettings);
 
 // vim: set ts=2 sw=2 tw=80:
