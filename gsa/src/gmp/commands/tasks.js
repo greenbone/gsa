@@ -246,6 +246,7 @@ class TasksCommand extends EntitiesCommand {
     return this.getAggregates({
       aggregate_type: 'task',
       group_column: 'severity',
+      usage_type: 'scan',
       filter,
     });
   }
@@ -254,6 +255,7 @@ class TasksCommand extends EntitiesCommand {
     return this.getAggregates({
       aggregate_type: 'task',
       group_column: 'status',
+      usage_type: 'scan',
       filter,
     });
   }
@@ -263,6 +265,7 @@ class TasksCommand extends EntitiesCommand {
       filter,
       aggregate_type: 'task',
       group_column: 'uuid',
+      usage_type: 'scan',
       textColumns: ['name', 'high_per_host', 'severity', 'modified'],
       sort: [
         {
