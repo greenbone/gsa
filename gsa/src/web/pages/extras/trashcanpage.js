@@ -342,20 +342,25 @@ class Trashcan extends React.Component {
   }
 
   render() {
-    const {error, trash, loading} = this.state;
+    const {error, loading} = this.state;
+    let {trash} = this.state;
 
     if (!isDefined(trash) && !isDefined(error)) {
       return <Loading />;
+    } else if (!isDefined(trash) && isDefined(error)) {
+      trash = {};
     }
 
     const {scan: tasks, compliance: audits} = separateByUsageType(
-      trash.task_list,
+      isDefined(trash) ? trash.task_list : undefined,
     );
     const {scan: configs, compliance: policies} = separateByUsageType(
-      trash.config_list,
+      isDefined(trash) ? trash.config_list : undefined,
     );
 
-    const contents_table = this.createContentsTable(trash);
+    const contents_table = isDefined(trash)
+      ? this.createContentsTable(trash)
+      : undefined;
 
     const table_props = {
       links: false,
