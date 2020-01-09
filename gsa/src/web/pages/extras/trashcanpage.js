@@ -352,15 +352,13 @@ class Trashcan extends React.Component {
     }
 
     const {scan: tasks, compliance: audits} = separateByUsageType(
-      isDefined(trash) ? trash.task_list : undefined,
+      trash.task_list,
     );
     const {scan: configs, compliance: policies} = separateByUsageType(
-      isDefined(trash) ? trash.config_list : undefined,
+      trash.config_list,
     );
 
-    const contents_table = isDefined(trash)
-      ? this.createContentsTable(trash)
-      : undefined;
+    const contents_table = this.createContentsTable(trash);
 
     const table_props = {
       links: false,
