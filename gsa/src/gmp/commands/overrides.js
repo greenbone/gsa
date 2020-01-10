@@ -73,7 +73,6 @@ class OverrideCommand extends EntityCommand {
       newSeverity = '',
       new_severity_from_list = SEVERITY_FALSE_POSITIVE,
     } = args;
-
     log.debug('Saving override', args);
     return this.action({
       cmd,
@@ -81,7 +80,7 @@ class OverrideCommand extends EntityCommand {
       id,
       active,
       custom_severity,
-      newSeverity,
+      new_severity: newSeverity,
       new_severity_from_list,
       days,
       hosts: hosts === MANUAL ? '--' : '',
