@@ -50,6 +50,7 @@ const Item = ({children, index, id, ...props}) => (
       snapshot, // eslint-disable-line no-shadow
     ) => (
       <GridItem
+        data-testid="grid-item"
         ref={provided.innerRef}
         {...provided.draggableProps}
         isDragging={snapshot.isDragging}

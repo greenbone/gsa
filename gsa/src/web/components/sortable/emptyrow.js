@@ -39,6 +39,7 @@ const EmptyRow = ({children, active = false, height}) => (
   <Droppable droppableId="empty" direction="horizontal">
     {(provided, snapshot) => (
       <EmptyGridRow
+        data-testid="empty-grid-row"
         active={active}
         height={height}
         ref={provided.innerRef}
