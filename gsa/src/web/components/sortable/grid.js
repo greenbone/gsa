@@ -174,7 +174,7 @@ class Grid extends React.Component {
       >
         <AutoSize>
           {({width: fullWidth}) => (
-            <Layout flex="column" grow="1">
+            <Layout data-testid="grid" flex="column" grow="1">
               {items.map(row => {
                 let height = getRowHeight(row);
                 if (!isDefined(height)) {

@@ -101,7 +101,7 @@ class Resizer extends React.Component {
 
   render() {
     return (
-      <ResizeContainer onMouseDown={this.handleMouseDown}>
+      <ResizeContainer data-testid="resizer" onMouseDown={this.handleMouseDown}>
         <ResizeIcon />
       </ResizeContainer>
     );

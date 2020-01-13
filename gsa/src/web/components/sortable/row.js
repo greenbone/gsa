@@ -70,6 +70,7 @@ class Row extends React.Component {
         >
           {(provided, snapshot) => (
             <GridRow
+              data-testid="grid-row"
               ref={ref => {
                 this.row = ref;
                 provided.innerRef(ref);
