@@ -45,7 +45,7 @@ const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
     );
   }
 
-  if (isDefined(deleted) && deleted !== '0') {
+  if (isDefined(deleted) && deleted !== 0) {
     // FIXME is this still used?
     return <b>{_('Orphan')}</b>;
   }
