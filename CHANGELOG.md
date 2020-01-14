@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Lower memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
 
 ### Fixed
+- Fix showing resource as orphaned when it's not [#1921](https://github.com/greenbone/gsa/pull/1921)
 - Fix override new severity being invalid [#1909](https://github.com/greenbone/gsa/pull/1909)
 - Fixed missing usage_type in getAggregates commands for tasks [#1906](https://github.com/greenbone/gsa/pull/1906)
 - Fixed undefined policy in create audit dialog [#1847](https://github.com/greenbone/gsa/pull/1847)
