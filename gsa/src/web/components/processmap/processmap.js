@@ -28,7 +28,7 @@ import {isDefined} from 'gmp/utils/identity';
 import Group from 'web/components/chart/group';
 import ErrorBoundary from 'web/components/error/errorboundary';
 
-import {loadEntities} from 'web/store/entities/hosts';
+// import {loadEntities} from 'web/store/entities/hosts';
 import {loadBusinessProcessMaps} from 'web/store/usersettings/actions';
 import {getBusinessProcessMaps} from 'web/store/usersettings/selectors';
 
