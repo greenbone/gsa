@@ -160,7 +160,10 @@ const Routes = () => (
               <Route path="/portlists" component={PortListsPage} />
               <Route path="/processmaps" component={ProcessMapsPage} />
               <Route path="/radius" component={RadiusPage} />
+              <Route path="/reports" component={ReportsPage} />
               <Route path="/reportformats" component={ReportFormatsPage} />
+              <Route path="/results" component={ResultsPage} />
+              <Route path="/roles" component={RolesPage} />
               <Route path="/tags" component={TagsPage} />
               <Route path="/permissions" component={PermissionsPage} />
               <Route path="/scanners" component={ScannersPage} />
@@ -207,6 +210,8 @@ const Routes = () => (
                 path="/reportformat/:id"
                 component={ReportFormatDetailsPage}
               />
+              <Route path="/result/:id" component={ResultDetailsPage} />
+              <Route path="/role/:id" component={RoleDetailsPage} />
               <Route path="/filter/:id" component={FilterDetailsPage} />
               <Route path="/tag/:id" component={TagDetailsPage} />
               <Route path="/permission/:id" component={PermissionDetailsPage} />
