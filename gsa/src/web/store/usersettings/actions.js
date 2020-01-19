@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,6 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+export const USER_SETTINGS_LOAD_BUSINESS_PROCESS_MAPS_SUCCESS =
+  'USER_SETTINGS_LOAD_BUSINESS_PROCESS_MAPS_SUCCESS';
 export const USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS =
   'USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS';
 export const USER_SETTINGS_SET_TIMEZONE = 'USER_SETTINGS_SET_TIMEZONE';
@@ -39,6 +41,21 @@ export const saveReportComposerDefaults = gmp => defaults => dispatch =>
   gmp.user
     .saveReportComposerDefaults(defaults)
     .then(response => dispatch(getReportComposerDefaultsAction(defaults)));
+
+export const getBusinessProcessMapsAction = data => ({
+  type: USER_SETTINGS_LOAD_BUSINESS_PROCESS_MAPS_SUCCESS,
+  data,
+});
+
+export const loadBusinessProcessMaps = gmp => () => dispatch =>
+  gmp.user
+    .getBusinessProcessMaps()
+    .then(response => dispatch(getBusinessProcessMapsAction(response.data)));
+
+export const saveBusinessProcessMapAction = gmp => defaults => dispatch =>
+  gmp.user
+    .saveBusinessProcessMaps(defaults)
+    .then(response => dispatch(getBusinessProcessMapsAction(defaults)));
 
 export const setTimezone = timezone => ({
   type: USER_SETTINGS_SET_TIMEZONE,
