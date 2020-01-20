@@ -83,6 +83,7 @@ class MultiSelect extends React.Component {
     const {value} = this.props;
 
     this.state = {
+      value,
       search: '',
       selectedItems: isArray(value) ? value : [],
     };
@@ -144,12 +145,12 @@ class MultiSelect extends React.Component {
     this.notifyChange(copy);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const {value} = nextProps;
-
-    if (isDefined(value) && !arraysEqual(value, this.state.selectedItems)) {
-      this.setState({selectedItems: value});
+  static getDerivedStateFromProps(props, state) {
+    const {value} = props;
+    if (isDefined(value) && !arraysEqual(value, state.value)) {
+      return {selectedItems: value, value};
     }
+    return null;
   }
 
   renderItem(value, items) {
