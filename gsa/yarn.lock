@@ -3469,10 +3469,10 @@ babel-plugin-emotion@^10.0.22, babel-plugin-emotion@^10.0.23:
     find-root "^1.1.0"
     source-map "^0.5.7"
 
-babel-plugin-i18next-extract@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-i18next-extract/-/babel-plugin-i18next-extract-0.5.0.tgz#0968a5483e6fdf0070e9cd9103d91c4e407905a4"
-  integrity sha512-HTb6GVqW6z4KWc3GoZjnj6zLwoaEXoxlo5MkOQs6MC3NxqCt/qORVD3hdWX23dfDa/MlfPHQHTVseoR94xPz3Q==
+babel-plugin-i18next-extract@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/babel-plugin-i18next-extract/-/babel-plugin-i18next-extract-0.6.1.tgz#ce8570dcee116b7740a90a093da30b57b0cc1dc9"
+  integrity sha512-cvFZG6GaS53BaC3ILuY2sHV4bx2FoJrcLzqU3hNQodc3PnEFKv+EFj84C2+7ES7jSsFPwsCPBmALlIygLWyh4w==
   dependencies:
     "@babel/core" "^7.4.5"
     i18next "^19.0.0"
