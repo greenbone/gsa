@@ -26,6 +26,11 @@ if (POLICY CMP0005)
   cmake_policy (SET CMP0005 NEW)
 endif (POLICY CMP0005)
 
+if (NOT DEFINED PROJECT_VERSION_STRING)
+   set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../cmake)
+   include (ProjectVersion)
+endif()
+
 set (GSAD_VERSION "${PROJECT_VERSION_STRING}")
 
 message (STATUS "Building gsad version ${GSAD_VERSION}")
@@ -42,8 +47,9 @@ find_program (CLANG_FORMAT clang-format)
 
 if (CLANG_FORMAT)
   message (STATUS "Looking for clang-format... ${CLANG_FORMAT}")
-  add_custom_target(format COMMAND ${CLANG_FORMAT} "-i" "./gsad/src/*.c"
-                    "./gsad/src/*.h" WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+  add_custom_target(format COMMAND ${CLANG_FORMAT} "-i" "./src/*.c"
+                    "./src/*.h"
+                    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 else (CLANG_FORMAT)
   message (STATUS "clang-format not found...")
 endif (CLANG_FORMAT)
@@ -54,9 +60,9 @@ set (CPACK_CMAKE_GENERATOR "Unix Makefiles")
 set (CPACK_GENERATOR "TGZ")
 set (CPACK_INSTALL_CMAKE_PROJECTS ".;greenbone-security-assistant;ALL;/")
 set (CPACK_MODULE_PATH "")
-set (CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
-set (CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
-set (CPACK_RESOURCE_FILE_WELCOME "${CMAKE_SOURCE_DIR}/README.md")
+set (CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/../LICENSE")
+set (CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/../README.md")
+set (CPACK_RESOURCE_FILE_WELCOME "${CMAKE_CURRENT_SOURCE_DIR}/../README.md")
 set (CPACK_SOURCE_GENERATOR "TGZ")
 set (CPACK_SOURCE_TOPLEVEL_TAG "")
 set (CPACK_SYSTEM_NAME "")
@@ -75,12 +81,60 @@ set (CPACK_SOURCE_IGNORE_FILES
 
 include (CPack)
 
+if (NOT SYSCONFDIR)
+  set (SYSCONFDIR "${CMAKE_INSTALL_PREFIX}/etc")
+endif (NOT SYSCONFDIR)
+
+if (NOT EXEC_PREFIX)
+  set (EXEC_PREFIX "${CMAKE_INSTALL_PREFIX}")
+endif (NOT EXEC_PREFIX)
+
+if (NOT BINDIR)
+  set (BINDIR "${EXEC_PREFIX}/bin")
+endif (NOT BINDIR)
+
+if (NOT SBINDIR)
+  set (SBINDIR "${EXEC_PREFIX}/sbin")
+endif (NOT SBINDIR)
+
+if (NOT LIBDIR)
+  set (LIBDIR "${EXEC_PREFIX}/lib")
+endif (NOT LIBDIR)
+
+if (NOT LOCALSTATEDIR)
+  set (LOCALSTATEDIR "${CMAKE_INSTALL_PREFIX}/var")
+endif (NOT LOCALSTATEDIR)
+
+if (NOT INCLUDEDIR)
+  set (INCLUDEDIR "${CMAKE_INSTALL_PREFIX}/include")
+endif (NOT INCLUDEDIR)
+
+if (NOT DATADIR)
+  set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
+endif (NOT DATADIR)
+
 set (GSAD_DATA_DIR "${DATADIR}/gvm/gsad")
 set (GSAD_CONFIG_DIR "${SYSCONFDIR}/gvm/")
+
+if (NOT GSAD_PID_DIR)
+  set (GSAD_PID_DIR "${LOCALSTATEDIR}/run")
+endif (NOT GSAD_PID_DIR)
 
 if (NOT GVM_RUN_DIR)
   set (GVM_RUN_DIR  "${LOCALSTATEDIR}/run")
 endif (NOT GVM_RUN_DIR)
+
+if (NOT GVM_STATE_DIR)
+  set (GVM_STATE_DIR "${LOCALSTATEDIR}/lib/gvm")
+else (NOT GVM_STATE_DIR)
+  set (GVM_STATE_DIR "${GVM_STATE_DIR}")
+endif (NOT GVM_STATE_DIR)
+
+if (NOT GVM_LOG_DIR)
+  set (GVM_LOG_DIR "${LOCALSTATEDIR}/log/gvm")
+else (NOT GVM_LOG_DIR)
+  set (GVM_LOG_DIR "${GVM_LOG_DIR}")
+endif (NOT GVM_LOG_DIR)
 
 if (NOT GVM_SERVER_CERTIFICATE)
   set (GVM_SERVER_CERTIFICATE "${GVM_STATE_DIR}/CA/servercert.pem")

@@ -72,24 +72,6 @@ if (NOT DATADIR)
   set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 endif (NOT DATADIR)
 
-if (NOT GSAD_PID_DIR)
-  set (GSAD_PID_DIR "${LOCALSTATEDIR}/run")
-endif (NOT GSAD_PID_DIR)
-
-if (NOT GVM_STATE_DIR)
-  set (GVM_STATE_DIR "${LOCALSTATEDIR}/lib/gvm")
-else (NOT GVM_STATE_DIR)
-  set (GVM_STATE_DIR "${GVM_STATE_DIR}")
-endif (NOT GVM_STATE_DIR)
-
-if (NOT GVM_LOG_DIR)
-  set (GVM_LOG_DIR "${LOCALSTATEDIR}/log/gvm")
-else (NOT GVM_LOG_DIR)
-  set (GVM_LOG_DIR "${GVM_LOG_DIR}")
-endif (NOT GVM_LOG_DIR)
-
-# TODO: Eventually use own certificates
-
 message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 
 
