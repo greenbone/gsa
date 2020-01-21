@@ -2058,15 +2058,17 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
               >
                 <div
                   class="c35"
-                  data-react-beautiful-dnd-draggable="1"
+                  data-rbd-draggable-context-id="1"
+                  data-rbd-draggable-id="43b8e7d0-203c-4c80-87a9-46573baca336"
                 >
                   <div
                     class="c36"
                   >
                     <div
-                      aria-roledescription="Draggable item. Press space bar to lift"
+                      aria-labelledby="rbd-lift-instruction-1"
                       class="c37"
-                      data-react-beautiful-dnd-drag-handle="1"
+                      data-rbd-drag-handle-context-id="1"
+                      data-rbd-drag-handle-draggable-id="43b8e7d0-203c-4c80-87a9-46573baca336"
                       draggable="false"
                       tabindex="0"
                     >
@@ -2155,15 +2157,17 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                 </div>
                 <div
                   class="c35"
-                  data-react-beautiful-dnd-draggable="1"
+                  data-rbd-draggable-context-id="1"
+                  data-rbd-draggable-id="073d0bd1-027c-4478-9e28-963be71c6c1b"
                 >
                   <div
                     class="c36"
                   >
                     <div
-                      aria-roledescription="Draggable item. Press space bar to lift"
+                      aria-labelledby="rbd-lift-instruction-1"
                       class="c37"
-                      data-react-beautiful-dnd-drag-handle="1"
+                      data-rbd-drag-handle-context-id="1"
+                      data-rbd-drag-handle-draggable-id="073d0bd1-027c-4478-9e28-963be71c6c1b"
                       draggable="false"
                       tabindex="0"
                     >
@@ -2241,15 +2245,17 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
                 </div>
                 <div
                   class="c35"
-                  data-react-beautiful-dnd-draggable="1"
+                  data-rbd-draggable-context-id="1"
+                  data-rbd-draggable-id="73b507fb-528d-4102-99ae-2190f942b6a4"
                 >
                   <div
                     class="c36"
                   >
                     <div
-                      aria-roledescription="Draggable item. Press space bar to lift"
+                      aria-labelledby="rbd-lift-instruction-1"
                       class="c37"
-                      data-react-beautiful-dnd-drag-handle="1"
+                      data-rbd-drag-handle-context-id="1"
+                      data-rbd-drag-handle-draggable-id="73b507fb-528d-4102-99ae-2190f942b6a4"
                       draggable="false"
                       tabindex="0"
                     >
@@ -2938,9 +2944,22 @@ exports[`TaskPage tests should render full TaskPage 1`] = `
   <div
     aria-atomic="true"
     aria-live="assertive"
-    id="react-beautiful-dnd-announcement-1"
+    id="rbd-announcement-0"
     role="log"
     style="position: absolute; width: 1px; height: 1px; margin: -1px; border: 0px; padding: 0px; overflow: hidden; clip-path: inset(100%);"
   />
+  <div
+    aria-atomic="true"
+    aria-live="assertive"
+    id="rbd-announcement-1"
+    role="log"
+    style="position: absolute; width: 1px; height: 1px; margin: -1px; border: 0px; padding: 0px; overflow: hidden; clip-path: inset(100%);"
+  />
+  <div
+    id="rbd-lift-instruction-1"
+    style="display: none;"
+  >
+    Draggable item. Ensure your screen reader is not in browse mode and then press space bar to lift.
+  </div>
 </body>
 `;
