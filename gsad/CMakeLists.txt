@@ -165,4 +165,6 @@ install (FILES ${CMAKE_CURRENT_BINARY_DIR}/src/gsad_log.conf
 add_subdirectory (src)
 add_subdirectory (config)
 
+add_subdirectory (doc)
+
 # vim: set ts=2 sw=2 tw=80:

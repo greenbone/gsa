@@ -75,22 +75,7 @@ endif (NOT DATADIR)
 message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 
 
-if (SKIP_SRC)
-  # ng has no documentation to build so skip if src should not be build
-  set (SKIP_GSA ON)
-  set (SKIP_GSAD ON)
-endif (SKIP_SRC)
-
-if (NOT SKIP_GSA)
-  add_subdirectory (gsa)
-endif (NOT SKIP_GSA)
-
-if (NOT SKIP_GSAD)
-  add_subdirectory (gsad)
-endif (NOT SKIP_GSAD)
-
-## Documentation
-
-add_subdirectory (gsad/doc)
+add_subdirectory (gsa)
+add_subdirectory (gsad)
 
 # vim: set ts=2 sw=2 tw=80:
