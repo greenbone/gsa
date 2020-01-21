@@ -28,7 +28,8 @@ import {InMemoryCache} from 'apollo-cache-inmemory';
 
 const httpLink = createHttpLink({
   // where the django-graphene server is
-  uri: 'http://localhost:8000/selene/graphql/',
+  uri: 'http://127.0.0.1:8000/selene/graphql/',
+  credentials: 'include',
 });
 
 const client = new ApolloClient({

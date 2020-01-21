@@ -102,6 +102,13 @@ import {setTimezone} from 'web/store/usersettings/actions';
 
 import gql from 'graphql-tag';
 
+const LOGIN = gql`
+  mutation {
+    login(username: "admin", password: "admin") {
+      ok
+    }
+  }
+`;
 // I don't have configId because my setup somehow doesn't have a valid scan config.
 export const MODIFY_TASK = gql`
   mutation modifyTask(
@@ -113,9 +120,6 @@ export const MODIFY_TASK = gql`
     $alterable: Boolean
     $comment: String
   ) {
-    login(username: "admin", password: "admin") {
-      ok
-    }
     modifyTask(
       taskId: $taskId
       name: $name
@@ -141,9 +145,6 @@ export const CREATE_TASK = gql`
     $alterable: Boolean
     $comment: String
   ) {
-    login(username: "admin", password: "admin") {
-      ok
-    }
     createTask(
       name: $name
       configId: $configId
@@ -161,6 +162,7 @@ export const CREATE_TASK = gql`
 const TaskComponent = props => {
   const [modifyTask] = useMutation(MODIFY_TASK);
   const [createTask] = useMutation(CREATE_TASK);
+  const [login] = useMutation(LOGIN);
 
   const {
     defaultPortListId,
@@ -230,6 +232,7 @@ const TaskComponent = props => {
 
   useEffect(() => {
     props.loadUserSettingsDefaults();
+    login();
   }, []);
 
   const handleInteraction = () => {
