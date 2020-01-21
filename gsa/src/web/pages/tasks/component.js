@@ -102,6 +102,7 @@ import {setTimezone} from 'web/store/usersettings/actions';
 
 import gql from 'graphql-tag';
 
+// I don't have configId because my setup somehow doesn't have a valid scan config.
 export const MODIFY_TASK = gql`
   mutation modifyTask(
     $taskId: String!
@@ -372,8 +373,6 @@ const TaskComponent = props => {
     target_id,
     task,
   }) => {
-    const {gmp} = props;
-
     handleInteraction();
 
     if (isDefined(id)) {

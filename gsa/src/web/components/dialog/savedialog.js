@@ -29,7 +29,7 @@ import DialogFooter from 'web/components/dialog/twobuttonfooter';
 import DialogTitle from 'web/components/dialog/title';
 import MultiStepFooter from 'web/components/dialog/multistepfooter';
 import ScrollableContent from 'web/components/dialog/scrollablecontent';
-import {graphql} from 'graphql';
+
 const SaveDialogContent = ({
   onSave,
   error,
