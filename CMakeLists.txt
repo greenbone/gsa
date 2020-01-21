@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2018 Greenbone Networks GmbH
+# Copyright (C) 2009-2020 Greenbone Networks GmbH
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 #
@@ -18,17 +18,12 @@
 
 cmake_minimum_required (VERSION 3.0)
 
-message ("-- Configuring Greenbone Security Assistant...")
+message ("-- Configuring Greenbone Security Assistant")
 
 # VERSION: Set patch version for stable releases, e.g. "9.0.0",
 #          unset patch version for prereleases, e.g. "9.0"
 project (greenbone-security-assistant
-         VERSION 20.04
-         LANGUAGES C)
-
-if (POLICY CMP0005)
-  cmake_policy (SET CMP0005 NEW)
-endif (POLICY CMP0005)
+         VERSION 20.04)
 
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
@@ -85,52 +80,8 @@ elseif (DEFINED PROJECT_VERSION_PATCH AND NOT PROJECT_VERSION_PATCH STREQUAL "")
 endif (DEFINED PROJECT_BETA_RELEASE AND NOT PROJECT_BETA_RELEASE STREQUAL "")
 
 set (PROJECT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR_STRING}${PROJECT_VERSION_SUFFIX}${PROJECT_VERSION_GIT}")
-message (STATUS "Building version ${PROJECT_VERSION_STRING}")
 
-set (GSAD_VERSION "${PROJECT_VERSION_STRING}")
-
-message (STATUS "Building GSA version ${PROJECT_VERSION_STRING}")
-
-configure_file (VERSION.in VERSION)
-
-## make format
-message (STATUS "Looking for clang-format...")
-find_program (CLANG_FORMAT clang-format)
-
-if (CLANG_FORMAT)
-  message (STATUS "Looking for clang-format... ${CLANG_FORMAT}")
-  add_custom_target(format COMMAND ${CLANG_FORMAT} "-i" "./gsad/src/*.c"
-                    "./gsad/src/*.h" WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
-else (CLANG_FORMAT)
-  message (STATUS "clang-format not found...")
-endif (CLANG_FORMAT)
-
-## CPack configuration
-
-set (CPACK_CMAKE_GENERATOR "Unix Makefiles")
-set (CPACK_GENERATOR "TGZ")
-set (CPACK_INSTALL_CMAKE_PROJECTS ".;greenbone-security-assistant;ALL;/")
-set (CPACK_MODULE_PATH "")
-set (CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
-set (CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
-set (CPACK_RESOURCE_FILE_WELCOME "${CMAKE_SOURCE_DIR}/README.md")
-set (CPACK_SOURCE_GENERATOR "TGZ")
-set (CPACK_SOURCE_TOPLEVEL_TAG "")
-set (CPACK_SYSTEM_NAME "")
-set (CPACK_TOPLEVEL_TAG "")
-
-set (CPACK_PACKAGE_VERSION "${PROJECT_VERSION_STRING}${PROJECT_VERSION_GIT}")
-
-set (CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
-set (CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
-set (CPACK_PACKAGE_VENDOR "Greenbone Networks")
-set (CPACK_SOURCE_IGNORE_FILES
-    "${CMAKE_BINARY_DIR}"
-    "/.git/"
-    "swp$"
-)
-
-include (CPack)
+# configure_file (VERSION.in VERSION)
 
 ## Variables
 
@@ -182,35 +133,7 @@ else (NOT GVM_LOG_DIR)
   set (GVM_LOG_DIR "${GVM_LOG_DIR}")
 endif (NOT GVM_LOG_DIR)
 
-set (GSAD_DATA_DIR "${DATADIR}/gvm/gsad")
-set (GSAD_LOCALE_SUBDIR "locale")
-set (GSAD_LOCALE_DIR "${GSAD_DATA_DIR}/${GSAD_LOCALE_SUBDIR}")
-set (GSAD_CHROOT_LOCALE_DIR "/${GSAD_LOCALE_SUBDIR}")
-
 # TODO: Eventually use own certificates
-if (NOT GVM_SERVER_CERTIFICATE)
-  set (GVM_SERVER_CERTIFICATE "${GVM_STATE_DIR}/CA/servercert.pem")
-else (NOT GVM_SERVER_CERTIFICATE)
-  set (GVM_SERVER_CERTIFICATE "${GVM_SERVER_CERTIFICATE}")
-endif (NOT GVM_SERVER_CERTIFICATE)
-
-if (NOT GVM_SERVER_KEY)
-  set (GVM_SERVER_KEY "${GVM_STATE_DIR}/private/CA/serverkey.pem")
-else (NOT GVM_SERVER_KEY)
-  set (GVM_SERVER_KEY "${GVM_SERVER_KEY}")
-endif (NOT GVM_SERVER_KEY)
-
-if (NOT GVM_CA_CERTIFICATE)
-  set (GVM_CA_CERTIFICATE "${GVM_STATE_DIR}/CA/cacert.pem")
-else (NOT GVM_CA_CERTIFICATE)
-  set (GVM_CA_CERTIFICATE "${GVM_CA_CERTIFICATE}")
-endif (NOT GVM_CA_CERTIFICATE)
-
-set (GSAD_CONFIG_DIR         "${SYSCONFDIR}/gvm/")
-
-if (NOT GVM_RUN_DIR)
-  set (GVM_RUN_DIR      "${LOCALSTATEDIR}/run")
-endif (NOT GVM_RUN_DIR)
 
 message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 

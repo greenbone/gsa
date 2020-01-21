@@ -1,4 +1,4 @@
-# Copyright (C) 2016-2019 Greenbone Networks GmbH
+# Copyright (C) 2016-2020 Greenbone Networks GmbH
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 #
@@ -16,11 +16,19 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
+cmake_minimum_required (VERSION 3.0)
+
+message ("-- Configuring gsa")
+
+project (gsa VERSION 20.04)
+
+SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 find_package (Node 10.0 REQUIRED)
 find_package (Yarn 1.0)
 
 set (GSA_BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
-set (GSA_DEST_DIR ${GSAD_DATA_DIR}/web)
+set (GSA_DEST_DIR ${DATADIR}/gvm/gsad/web)
 set (GSA_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 set (GSA_PKG_FILES
@@ -41,6 +49,8 @@ else (NOT YARN_FOUND)
   endif (YARN_OFFLINE)
   list (APPEND GSA_PKG_FILES ${GSA_SRC_DIR}/yarn.lock)
 endif (NOT YARN_FOUND)
+
+message (STATUS "Building gsa version ${PROJECT_VERSION_STRING}")
 
 set (GSA_STATIC_SRC_FILES
      ${GSA_SRC_DIR}/public/index.html)
@@ -1134,7 +1144,7 @@ add_custom_command (OUTPUT node-modules.stamp
                     COMMAND ${INSTALLER} "${INSTALLER_ARGS}" "install"
                     COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/node-modules.stamp
                     WORKING_DIRECTORY ${GSA_SRC_DIR}
-                    COMMENT "Install gsa-ng js dependencies")
+                    COMMENT "Install gsa js dependencies")
 
 
 add_custom_command (OUTPUT bundle.stamp
@@ -1145,9 +1155,9 @@ add_custom_command (OUTPUT bundle.stamp
                              ${GSA_PKG_FILES}
                              ${GSA_STATIC_SRC_FILES}
                              ${GSA_JS_SRC_FILES}
-                    COMMENT "Build gsa-ng install files")
+                    COMMENT "Build gsa install files")
 
-add_custom_target (gsa-ng ALL
+add_custom_target (gsa ALL
                    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/node-modules.stamp
                            ${CMAKE_CURRENT_BINARY_DIR}/bundle.stamp)
 
