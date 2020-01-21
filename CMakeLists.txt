@@ -31,55 +31,12 @@ if (NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Debug)
 endif (NOT CMAKE_BUILD_TYPE)
 
-## Retrieve git revision (at configure time)
-include (GetGit)
-
-if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
-  if (EXISTS "${CMAKE_SOURCE_DIR}/.git/")
-    if (GIT_FOUND)
-      Git_GET_REVISION(${CMAKE_SOURCE_DIR} ProjectRevision)
-      set (GIT_REVISION "~git-${ProjectRevision}")
-    else (GIT_FOUND)
-      set (GIT_REVISION "~git")
-    endif (GIT_FOUND)
-  endif (EXISTS "${CMAKE_SOURCE_DIR}/.git/")
-endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
-
 # set if this is in prerelease status, starting at 0 before first beta release,
 # unset if this is a stable release series.
 set (PROJECT_BETA_RELEASE 0)
 
-if (GIT_REVISION)
-  set (PROJECT_VERSION_GIT "${GIT_REVISION}")
-else (GIT_REVISION)
-  set (PROJECT_VERSION_GIT "")
-endif (GIT_REVISION)
-
-string(LENGTH ${PROJECT_VERSION_MINOR} PROJECT_VERSION_MINOR_LENGTH)
-
-if (PROJECT_VERSION_MINOR_LENGTH LESS 2)
-  set (PROJECT_VERSION_MINOR_STRING "0${PROJECT_VERSION_MINOR}")
-else ()
-  set (PROJECT_VERSION_MINOR_STRING "${PROJECT_VERSION_MINOR}")
-endif ()
-
-# If PROJECT_BETA_RELEASE is set to "0", the version string will be set to:
-#   "major.minor+alpha"
-# If PROJECT_BETA_RELEASE is set otherwise, the version string will be set to:
-#   "major.minor+beta${PROJECT_BETA_RELEASE}"
-# If PROJECT_BETA_RELEASE is NOT set, the version string will be set to:
-#   "major.minor.patch"
-if (DEFINED PROJECT_BETA_RELEASE AND NOT PROJECT_BETA_RELEASE STREQUAL "")
-  if (PROJECT_BETA_RELEASE STREQUAL "0")
-    set (PROJECT_VERSION_SUFFIX "+alpha")
-  else (PROJECT_BETA_RELEASE STREQUAL "0")
-    set (PROJECT_VERSION_SUFFIX "+beta${PROJECT_BETA_RELEASE}")
-  endif (PROJECT_BETA_RELEASE STREQUAL "0")
-elseif (DEFINED PROJECT_VERSION_PATCH AND NOT PROJECT_VERSION_PATCH STREQUAL "")
-  set (PROJECT_VERSION_SUFFIX ".${PROJECT_VERSION_PATCH}")
-endif (DEFINED PROJECT_BETA_RELEASE AND NOT PROJECT_BETA_RELEASE STREQUAL "")
-
-set (PROJECT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR_STRING}${PROJECT_VERSION_SUFFIX}${PROJECT_VERSION_GIT}")
+## Retrieve git revision (at configure time)
+include (ProjectVersion)
 
 ## Variables
 
