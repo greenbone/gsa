@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -21,7 +21,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import App from './web/app.js';
+import {ApolloProvider} from 'react-apollo';
+import {ApolloClient} from 'apollo-client';
+import {createHttpLink} from 'apollo-link-http';
+import {InMemoryCache} from 'apollo-cache-inmemory';
 
-ReactDOM.render(<App />, document.getElementById('app'));
+const httpLink = createHttpLink({
+  // where the django-graphene server is
+  uri: 'http://localhost:8000/selene/graphql/',
+});
+
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache(),
+});
+
+ReactDOM.render(
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>,
+  document.getElementById('app'),
+);
 
 // vim: set ts=2 sw=2 tw=80:
