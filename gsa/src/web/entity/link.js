@@ -27,11 +27,11 @@ import withCapabilities from '../utils/withCapabilities.js';
 
 import DetailsLink from '../components/link/detailslink.js';
 import Link from '../components/link/link.js';
-import {getEntityType} from 'gmp/utils/entitytype.js';
+import {getEntityType, normalizeType} from 'gmp/utils/entitytype.js';
 
 const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
   const {id, name, userCapabilities, deleted} = entity;
-  const type = getEntityType(entity);
+  const type = normalizeType(getEntityType(entity));
 
   if (entity.isInTrash()) {
     return (
