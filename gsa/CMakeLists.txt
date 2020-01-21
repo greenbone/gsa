@@ -22,10 +22,19 @@ message ("-- Configuring gsa")
 
 project (gsa VERSION 20.04)
 
-SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 find_package (Node 10.0 REQUIRED)
 find_package (Yarn 1.0)
+
+if (NOT DEFINED PROJECT_VERSION_STRING)
+   set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../cmake)
+   include (ProjectVersion)
+endif()
+
+if (NOT DATADIR)
+  set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
+endif (NOT DATADIR)
 
 set (GSA_BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
 set (GSA_DEST_DIR ${DATADIR}/gvm/gsad/web)
@@ -1134,9 +1143,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/wizard/taskwizard.js
      )
 
-set (GSA_JS_SRC_FILES
-     ${GSA_JS_SRC_FILES}
-     PARENT_SCOPE)
 
 
 add_custom_command (OUTPUT node-modules.stamp
