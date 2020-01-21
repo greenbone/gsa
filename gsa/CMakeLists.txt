@@ -20,7 +20,7 @@ cmake_minimum_required (VERSION 3.0)
 
 message ("-- Configuring gsa")
 
-project (gsa VERSION 20.04)
+project (gsa VERSION 20.04 LANGUAGES)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
