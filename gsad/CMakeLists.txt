@@ -22,10 +22,6 @@ message ("-- Configuring gsad")
 
 project (gsad VERSION 20.04 LANGUAGES C)
 
-if (POLICY CMP0005)
-  cmake_policy (SET CMP0005 NEW)
-endif (POLICY CMP0005)
-
 if (NOT DEFINED PROJECT_VERSION_STRING)
    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../cmake)
    include (ProjectVersion)
