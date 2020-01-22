@@ -106,9 +106,9 @@ class Page extends React.Component {
     this.openCreateTaskDialog = this.openCreateTaskDialog.bind(this);
   }
 
-  componentWillReceiveProps(next) {
-    const {filter} = next;
-    const {selectedDeltaReport} = this.state;
+  static getDerivedStateFromProps(props, state) {
+    const {filter} = props;
+    const {selectedDeltaReport} = state;
 
     if (
       isDefined(selectedDeltaReport) &&
@@ -116,8 +116,9 @@ class Page extends React.Component {
         filter.get('task_id') !== selectedDeltaReport.task.id)
     ) {
       // filter has changed. reset delta report selection
-      this.setState({selectedDeltaReport: undefined});
+      return {selectedDeltaReport: undefined};
     }
+    return null;
   }
 
   openCreateTaskDialog() {
