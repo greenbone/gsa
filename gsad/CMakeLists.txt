@@ -47,7 +47,7 @@ if (CLANG_FORMAT)
                     "./src/*.h"
                     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 else (CLANG_FORMAT)
-  message (STATUS "clang-format not found...")
+  message (STATUS "clang-format not found.")
 endif (CLANG_FORMAT)
 
 ## CPack configuration
