@@ -26,8 +26,7 @@ import Downshift from 'downshift';
 
 import _ from 'gmp/locale';
 
-import {arraysEqual} from 'gmp/utils/array';
-import {isDefined, isArray} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import ArrowIcon from 'web/components/icon/arrowicon';
 
@@ -80,12 +79,8 @@ class MultiSelect extends React.Component {
   constructor(...args) {
     super(...args);
 
-    const {value} = this.props;
-
     this.state = {
-      value,
       search: '',
-      selectedItems: isArray(value) ? value : [],
     };
 
     this.input = React.createRef();
@@ -113,18 +108,22 @@ class MultiSelect extends React.Component {
   }
 
   handleSelect(selectedItem) {
-    const {selectedItems} = this.state;
+    const {value} = this.props;
 
-    if (selectedItems.includes(selectedItem)) {
-      this.handleRemoveItem(selectedItem);
-      return;
+    let newSelectedItems = [];
+
+    if (isDefined(value)) {
+      if (value.includes(selectedItem)) {
+        this.handleRemoveItem(selectedItem);
+        return;
+      }
+
+      newSelectedItems = [...value, selectedItem];
+    } else {
+      newSelectedItems = [selectedItem];
     }
 
-    const newSelectedItems = [...this.state.selectedItems, selectedItem];
-
     this.setState({
-      // add item
-      selectedItems: newSelectedItems,
       // reset search term
       search: '',
     });
@@ -133,24 +132,12 @@ class MultiSelect extends React.Component {
   }
 
   handleRemoveItem(item) {
-    const copy = [...this.state.selectedItems];
+    const copy = [...this.props.value];
     const index = copy.findIndex(elem => elem === item);
 
     copy.splice(index, 1);
 
-    this.setState({
-      selectedItems: copy,
-    });
-
     this.notifyChange(copy);
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    const {value} = props;
-    if (isDefined(value) && !arraysEqual(value, state.value)) {
-      return {selectedItems: value, value};
-    }
-    return null;
   }
 
   renderItem(value, items) {
@@ -182,9 +169,10 @@ class MultiSelect extends React.Component {
       width = DEFAULT_WIDTH,
       grow,
       isLoading = false,
+      value = [],
     } = this.props;
 
-    const {search, selectedItems} = this.state;
+    const {search} = this.state;
 
     disabled = disabled || !isDefined(items) || items.length === 0 || isLoading;
 
@@ -194,7 +182,7 @@ class MultiSelect extends React.Component {
 
     return (
       <Downshift
-        selectedItem={selectedItems}
+        selectedItem={value}
         onChange={this.handleChange}
         onSelect={this.handleSelect}
       >
@@ -221,7 +209,7 @@ class MultiSelect extends React.Component {
                 <Layout grow="1" wrap>
                   {isLoading
                     ? _('Loading...')
-                    : selectedItems.map(item => this.renderItem(item, items))}
+                    : value.map(item => this.renderItem(item, items))}
                 </Layout>
                 <Layout align={['center', 'center']}>
                   <ArrowIcon
@@ -264,7 +252,7 @@ class MultiSelect extends React.Component {
                         <Item
                           {...getItemProps({
                             item: itemValue,
-                            isSelected: selectedItems.includes(itemValue),
+                            isSelected: value.includes(itemValue),
                             isActive: i === highlightedIndex,
                             onClick: event => {
                               event.preventDownshiftDefault = true;
