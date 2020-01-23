@@ -196,7 +196,7 @@ const TaskComponent = props => {
   const [schedule_periods, setSchedulePeriods] = useState(0);
   const [min_qod, setMinQod] = useState(70);
   const [source_iface, setSourceIFace] = useState('');
-  const [hosts, setHosts] = useState(undefined);
+  const [hosts] = useState(undefined);
   const [port_list_id, setPortListId] = useState(defaultPortListId);
   const [alert_id, setAlertId] = useState(defaultAlertId);
   const [config_id, setConfigId] = useState(defaultScanConfigId);
@@ -209,14 +209,14 @@ const TaskComponent = props => {
   const [start_date, setStartDate] = useState(undefined);
   const [start_minute, setStartMinute] = useState(undefined);
   const [start_hour, setStartHour] = useState(undefined);
-  const [start_timezone, setStartTimezone] = useState(undefined);
+  const [start_timezone] = useState(undefined);
   const [tasks, setTasks] = useState(undefined);
   const [reschedule, setReschedule] = useState(NO_VALUE);
   const [task_id, setTaskId] = useState(undefined);
   const [reportImportDialogVisible, toggleReportImportDialogVisible] = useState(
     false,
   );
-  const [tag_id, setTagId] = useState(undefined);
+  const [tag_id] = useState(undefined);
 
   const {gmp} = props;
 
@@ -224,7 +224,7 @@ const TaskComponent = props => {
 
   useEffect(() => {
     props.loadUserSettingsDefaults();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleInteraction = () => {
     const {onInteraction} = props;

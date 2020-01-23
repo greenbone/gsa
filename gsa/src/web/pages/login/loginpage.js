@@ -173,7 +173,7 @@ const LoginPage = props => {
     if (isLoggedIn) {
       history.replace('/');
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {gmp} = props;
 
