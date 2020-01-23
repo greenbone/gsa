@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,33 +16,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
+export const LOAD_BUSINESS_PROCESS_MAPS_SUCCESS =
+  'LOAD_BUSINESS_PROCESS_MAPS_SUCCESS';
 
-import dashboardData from './dashboard/data/reducers';
-import dashboardSettings from './dashboard/settings/reducers';
-import userSettings from './usersettings/reducers';
-import {businessProcessMaps} from './businessprocessmaps/reducers';
-import pages from './pages/reducers';
-
-import entities from './entities/reducers';
-import {CLEAR_STORE} from 'web/store/actions';
-
-const rootReducer = combineReducers({
-  businessProcessMaps,
-  dashboardData,
-  dashboardSettings,
-  entities,
-  userSettings,
-  pages,
+export const getBusinessProcessMapsAction = data => ({
+  type: LOAD_BUSINESS_PROCESS_MAPS_SUCCESS,
+  data,
 });
 
-const clearStoreReducer = (state = {}, action) => {
-  if (action.type === CLEAR_STORE) {
-    state = {};
-  }
-  return rootReducer(state, action);
-};
+export const loadBusinessProcessMaps = gmp => () => dispatch =>
+  gmp.user
+    .getBusinessProcessMaps()
+    .then(response => dispatch(getBusinessProcessMapsAction(response.data)));
 
-export default clearStoreReducer;
+export const saveBusinessProcessMapAction = gmp => defaults => dispatch =>
+  gmp.user
+    .saveBusinessProcessMaps(defaults)
+    .then(response => dispatch(getBusinessProcessMapsAction(defaults)));
 
 // vim: set ts=2 sw=2 tw=80:

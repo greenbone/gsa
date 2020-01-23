@@ -29,8 +29,8 @@ import Group from 'web/components/chart/group';
 import ErrorBoundary from 'web/components/error/errorboundary';
 
 // import {loadEntities} from 'web/store/entities/hosts';
-import {loadBusinessProcessMaps} from 'web/store/usersettings/actions';
-import {getBusinessProcessMaps} from 'web/store/usersettings/selectors';
+import {loadBusinessProcessMaps} from 'web/store/businessprocessmaps/actions';
+import {getBusinessProcessMaps} from 'web/store/businessprocessmaps/selectors';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';

@@ -23,7 +23,6 @@ import defaults from './defaults/reducers';
 import defaultFilters from './defaultfilters/reducers';
 
 import {
-  USER_SETTINGS_LOAD_BUSINESS_PROCESS_MAPS_SUCCESS,
   USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
   USER_SETTINGS_SET_TIMEZONE,
   USER_SETTINGS_SET_LOCALE,
@@ -31,18 +30,6 @@ import {
   USER_SETTINGS_SET_SESSION_TIMEOUT,
   USER_SETTINGS_SET_LOGGED_IN,
 } from 'web/store/usersettings/actions';
-
-export const businessProcessMaps = (state = {}, action) => {
-  switch (action.type) {
-    case USER_SETTINGS_LOAD_BUSINESS_PROCESS_MAPS_SUCCESS:
-      return {
-        ...state,
-        ...action.data,
-      };
-    default:
-      return state;
-  }
-};
 
 export const reportComposerDefaults = (state = {}, action) => {
   switch (action.type) {
@@ -102,7 +89,6 @@ export const isLoggedIn = (state = false, action) => {
 };
 
 const userSettings = combineReducers({
-  businessProcessMaps,
   defaults,
   defaultFilters,
   isLoggedIn,
