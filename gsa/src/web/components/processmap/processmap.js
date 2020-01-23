@@ -17,19 +17,24 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import 'core-js/features/object/keys';
+
 import React from 'react';
 import styled from 'styled-components';
 
 import {connect} from 'react-redux';
 
-import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
+import {exclude} from 'gmp/utils/object';
 
 import Group from 'web/components/chart/group';
 import ErrorBoundary from 'web/components/error/errorboundary';
 
 // import {loadEntities} from 'web/store/entities/hosts';
-import {loadBusinessProcessMaps} from 'web/store/businessprocessmaps/actions';
+import {
+  loadBusinessProcessMaps,
+  saveBusinessProcessMap,
+} from 'web/store/businessprocessmaps/actions';
 import {getBusinessProcessMaps} from 'web/store/businessprocessmaps/selectors';
 
 import compose from 'web/utils/compose';
@@ -98,6 +103,7 @@ class ProcessMap extends React.Component {
       this,
     );
     this.openCreateProcessDialog = this.openCreateProcessDialog.bind(this);
+    this.saveMaps = this.saveMaps.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -152,43 +158,49 @@ class ProcessMap extends React.Component {
     }
   }
 
+  saveMaps({processes = this.state.processes, edges = this.state.edges}) {
+    const {uuid = '1', saveUpdatedMaps} = this.props; // TODO use actual UUID
+
+    const updatedMaps = {
+      [uuid]: {
+        processes,
+        edges,
+      },
+      // ...otherMaps;
+    };
+    saveUpdatedMaps(updatedMaps);
+  }
+
   handleDeleteElement() {
     const {id} = this.selectedElement;
+    const {processes, edges} = this.state;
     if (isDefined(id)) {
       if (this.selectedElement && this.selectedElement.type === 'edge') {
-        const {edges} = this.state;
-        const newEdges = this.removeEdge(id, edges);
+        delete edges[id];
 
         this.setState({
-          edges: newEdges,
+          edges,
         });
       } else {
-        const {edges, processes} = this.state;
-        const newProcesses = processes.filter(proc => proc.id !== id);
-
-        const attachedEdges = edges.filter(
-          edge => edge.source === id || edge.target === id,
-        );
-
-        let newEdges = edges;
-
-        forEach(attachedEdges, edge => {
-          newEdges = this.removeEdge(edge.id, newEdges);
+        // get all the edges that don't have the process as source or target
+        // and exclude those from all edges in order to get a list of attached
+        // edges
+        const attachedEdges = exclude(edges, key => {
+          return id !== edges[key].target && id !== edges[key].source;
         });
+        for (const edge in attachedEdges) {
+          delete edges[edge];
+        }
 
+        delete processes[id];
         this.setState({
-          edges: newEdges,
-          processes: newProcesses,
+          edges,
+          processes,
         });
       }
       this.selectedElement = undefined;
+      this.saveMaps({processes, edges});
     }
-  }
-
-  removeEdge(id, edges) {
-    const newEdges = edges.filter(edge => edge.id !== id);
-
-    return newEdges;
   }
 
   getMousePosition(event) {
@@ -222,45 +234,45 @@ class ProcessMap extends React.Component {
   }
 
   handleCreateProcess(process) {
-    let {processes, translateX, translateY} = this.state;
+    let {processes = {}, translateX, translateY} = this.state;
     const {name, comment} = process;
-    processes = [
-      {
+    const id = Date.now();
+    processes = {
+      [id]: {
         name,
         comment,
-        id: Date.now(), // TODO replace with actual UUID
+        id, // TODO replace with actual UUID
         tagId: '',
         x: 150 - translateX, // create Node next to Toolbar
         y: 100 - translateY, //
         type: 'process',
       },
       ...processes,
-    ];
+    };
 
     this.closeCreateProcessDialog();
 
     this.setState(() => ({
       processes,
     }));
+    this.saveMaps({processes});
   }
 
   handleProcessChange(newProcess) {
-    // takes the newProcess object and merges it's (possibly reduced number
-    // of) values into existing process
     const {processes} = this.state;
-    const oldProcessIndex = processes.findIndex(
-      proc => proc.id === newProcess.id,
-    );
-    const oldProcess = processes[oldProcessIndex];
-    for (const key in newProcess) {
-      oldProcess[key] = newProcess[key];
-    }
-    processes[oldProcessIndex] = oldProcess;
+    const {id} = newProcess;
+    const oldProcess = processes[id];
+
+    processes[id] = {...oldProcess, ...newProcess};
+
     this.closeCreateProcessDialog();
+
+    this.selectedElement = processes[id];
 
     this.setState(() => ({
       processes,
     }));
+    this.saveMaps({processes});
   }
 
   handleDrawEdge() {
@@ -268,21 +280,25 @@ class ProcessMap extends React.Component {
   }
 
   handleCreateEdge(source, target) {
-    let {edges} = this.state;
-    const newEdge = {
-      source: source.id,
-      target: target.id,
-      id: Date.now(),
-      type: 'edge',
+    let {edges = {}} = this.state;
+    const id = Date.now();
+    edges = {
+      [id]: {
+        source: source.id,
+        target: target.id,
+        id,
+        type: 'edge',
+      },
+      ...edges,
     };
-    edges = [newEdge, ...edges];
-    this.selectedElement = newEdge;
+    this.selectedElement = edges[id];
     this.setState(() => ({
       edges,
       isDrawingEdge: false,
       edgeDrawSource: undefined,
       edgeDrawTarget: undefined,
     }));
+    this.saveMaps({edges});
   }
 
   handleSelectElement(event, element) {
@@ -324,11 +340,18 @@ class ProcessMap extends React.Component {
       this.draggingElement = undefined;
     }
     this.coords = {};
+    if (this.state.isDraggingProcess) {
+      // if dragging just stopped
+      this.saveMaps({});
+    }
     this.setState({isDraggingBackground: false, isDraggingProcess: false});
   }
 
   handleMouseMove(event) {
-    if (isDefined(this.draggingElement)) {
+    if (
+      isDefined(this.draggingElement) &&
+      this.draggingElement.type !== 'edge'
+    ) {
       // we are dragging an element
       const {x: mx, y: my} = this.getMousePosition(event);
       const {x, y} = this.toBackgroundCoords(mx, my);
@@ -339,13 +362,9 @@ class ProcessMap extends React.Component {
     }
 
     if (!this.state.isDraggingBackground) {
-      // we aren't dragging anything
+      // we aren't dragging anythingcomment
       return;
     }
-
-    // if (this.state.isDrawingEdge) {
-    //   this.renderDrawEdgeNote(event);
-    // }
 
     event.preventDefault();
 
@@ -371,25 +390,23 @@ class ProcessMap extends React.Component {
 
   getCoordinates = processId => {
     const {processes} = this.state;
-    const processNode = processes.find(node => node.id === processId);
+    const processNode = processes[processId];
     return {x: processNode.x, y: processNode.y};
   };
 
   render() {
     const {
       createProcessDialogVisible,
-      edges = [],
+      edges = {},
       isDraggingBackground,
       isDraggingProcess,
       isDrawingEdge,
-      processes = [],
+      processes = {},
       translateX,
       translateY,
     } = this.state;
-
     const cursorType = isDraggingBackground ? 'move' : 'default';
     const processCursorType = isDraggingProcess ? 'move' : 'grab';
-
     return (
       <ErrorBoundary>
         <Wrapper>
@@ -405,11 +422,11 @@ class ProcessMap extends React.Component {
               ref={this.backgroundRef}
             />
             <Group left={translateX} top={translateY}>
-              {edges.map(edge => {
-                const isSelected = edge === this.selectedElement;
-                const {id} = edge;
-                const source = this.getCoordinates(edge.source);
-                const target = this.getCoordinates(edge.target);
+              {Object.keys(edges).map(key => {
+                const isSelected = edges[key] === this.selectedElement;
+                const {id} = edges[key];
+                const source = this.getCoordinates(edges[key].source);
+                const target = this.getCoordinates(edges[key].target);
                 return (
                   <Edge
                     isSelected={isSelected}
@@ -417,13 +434,15 @@ class ProcessMap extends React.Component {
                     source={source}
                     target={target}
                     id={id}
-                    onMouseDown={event => this.handleSelectElement(event, edge)}
+                    onMouseDown={event =>
+                      this.handleSelectElement(event, edges[key])
+                    }
                   />
                 );
               })}
-              {processes.map(process => {
-                const {color, id, comment, name, x, y} = process;
-                const isSelected = process === this.selectedElement;
+              {Object.keys(processes).map(key => {
+                const {color, id, comment, name, x, y} = processes[key];
+                const isSelected = processes[key] === this.selectedElement;
                 return (
                   <ProcessNode
                     color={color}
@@ -437,7 +456,7 @@ class ProcessMap extends React.Component {
                     x={x}
                     y={y}
                     onMouseDown={event =>
-                      this.handleSelectElement(event, process)
+                      this.handleSelectElement(event, processes[key])
                     }
                   />
                 );
@@ -500,12 +519,16 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
   return {
     // loadHosts: filter => dispatch(loadEntities(gmp)(filter)),
     loadBusinessProcessMaps: () => dispatch(loadBusinessProcessMaps(gmp)()),
+    saveUpdatedMaps: updatedMaps =>
+      dispatch(saveBusinessProcessMap(gmp)(updatedMaps)),
   };
 };
 
 ProcessMap.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   loadBusinessProcessMaps: PropTypes.func.isRequired,
+  saveUpdatedMaps: PropTypes.func.isRequired,
+  uuid: PropTypes.id, // isRequired
 };
 
 export default compose(

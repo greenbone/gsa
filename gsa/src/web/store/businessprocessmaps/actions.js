@@ -29,9 +29,9 @@ export const loadBusinessProcessMaps = gmp => () => dispatch =>
     .getBusinessProcessMaps()
     .then(response => dispatch(getBusinessProcessMapsAction(response.data)));
 
-export const saveBusinessProcessMapAction = gmp => defaults => dispatch =>
+export const saveBusinessProcessMap = gmp => map => dispatch =>
   gmp.user
-    .saveBusinessProcessMaps(defaults)
-    .then(response => dispatch(getBusinessProcessMapsAction(defaults)));
+    .saveBusinessProcessMaps(map)
+    .then(response => dispatch(getBusinessProcessMapsAction(map)));
 
 // vim: set ts=2 sw=2 tw=80:
