@@ -49,7 +49,7 @@ const Edge = ({cursor, isSelected = false, source, target, onMouseDown}) => {
 
 Edge.propTypes = {
   cursor: PropTypes.string,
-  isSelected: PropTypes.boolean,
+  isSelected: PropTypes.bool,
   name: PropTypes.string,
   radius: PropTypes.number,
   source: PropTypes.shape({x: PropTypes.number, y: PropTypes.number})
