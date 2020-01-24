@@ -18,7 +18,7 @@
  */
 import {_l} from 'gmp/locale/lang';
 
-import {isDefined, isArray, isString} from '../utils/identity';
+import {isDefined, isArray, hasValue} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 import {normalizeType} from '../utils/entitytype';
@@ -132,7 +132,7 @@ class Task extends Model {
   }
 
   isContainer() {
-    return !isDefined(this.target);
+    return !hasValue(this.target);
   }
 
   getTranslatableStatus() {
