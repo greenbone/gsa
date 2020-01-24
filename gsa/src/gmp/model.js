@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined} from './utils/identity';
+import {isDefined, hasValue} from './utils/identity';
 import {isEmpty} from './utils/string';
 import {map} from './utils/array';
 
@@ -62,6 +62,78 @@ class Model {
     const f = new this();
     f.setProperties(this.parseElement(element));
     return f;
+  }
+
+  static fromObject(object = {}) {
+    const f = new this();
+    f.setProperties(this.parseObject(object));
+    return f;
+  }
+
+  static parseObject(object = {}) {
+    const copy = parseDefaultProperties(object);
+
+    // use hasValue instead of isDefined for all things graphql related, since no value is null in Django.
+    if (!hasValue(object.id) && hasValue(object.uuid)) {
+      copy.id = object.uuid;
+      delete copy.uuid;
+    }
+
+    if (hasValue(object.end_time)) {
+      if (object.end_time.length > 0) {
+        copy.endTime = parseDate(object.end_time);
+      }
+      delete copy.end_time;
+    }
+
+    if (hasValue(object.permissions)) {
+      // these are the permissions the current user has on the entity
+      const caps = map(object.permissions, perm => perm.name);
+      copy.userCapabilities = new Capabilities(caps);
+      delete copy.permissions;
+    } else {
+      copy.userCapabilities = new Capabilities();
+    }
+
+    if (hasValue(object.user_tags)) {
+      copy.userTags = map(object.user_tags.tag, tag => {
+        return parseModelFromElement(tag, 'tag');
+      });
+      delete copy.user_tags;
+    } else {
+      copy.userTags = [];
+    }
+
+    const yes_no_props = ['writable', 'orphan', 'active', 'trash'];
+
+    for (const name of yes_no_props) {
+      const prop = object[name];
+      if (hasValue(prop)) {
+        copy[name] = parseYesNo(prop);
+      }
+    }
+
+    if (hasValue(object.in_use)) {
+      copy.inUse = parseBoolean(object.in_use);
+      delete copy.in_use;
+    }
+
+    if (!hasValue(object.owner)) {
+      delete copy.owner;
+    }
+
+    copy.summary = parseText(object.summary);
+
+    if (hasValue(object.summary)) {
+      delete copy.summary;
+    }
+    copy.comment = object.comment;
+
+    if (!hasValue(object.comment)) {
+      delete copy.comment;
+    }
+
+    return copy;
   }
 
   static parseElement(element = {}) {
