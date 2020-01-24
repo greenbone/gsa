@@ -17,6 +17,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+import {useQuery} from '@apollo/react-hooks';
+import {isDefined} from 'gmp/utils/identity';
 
 import _ from 'gmp/locale';
 
@@ -24,7 +26,7 @@ import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
+import Task from 'gmp/models/task';
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -56,6 +58,35 @@ import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import Table from './table';
+import gql from 'graphql-tag';
+
+const GET_TASKS = gql`
+  query Task($filterString: String) {
+    tasks(filterString: $filterString) {
+      name
+      uuid
+      permissions {
+        name
+      }
+      lastReport {
+        uuid
+        severity
+        timestamp
+      }
+      reportCount {
+        total
+        finished
+      }
+      status
+      target {
+        uuid
+      }
+      trend
+      comment
+      owner
+    }
+  }
+`;
 
 export const ToolBarIcons = withCapabilities(
   ({
@@ -116,90 +147,102 @@ const Page = ({
   onDownloaded,
   onError,
   ...props
-}) => (
-  <TaskComponent
-    onAdvancedTaskWizardSaved={onChanged}
-    onCloned={onChanged}
-    onCloneError={onError}
-    onContainerSaved={onChanged}
-    onCreated={onChanged}
-    onContainerCreated={onChanged}
-    onDeleted={onChanged}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-    onModifyTaskWizardSaved={onChanged}
-    onReportImported={onChanged}
-    onResumed={onChanged}
-    onResumeError={onError}
-    onSaved={onChanged}
-    onStarted={onChanged}
-    onStartError={onError}
-    onStopped={onChanged}
-    onStopError={onError}
-    onTaskWizardSaved={onChanged}
-  >
-    {({
-      clone,
-      create,
-      createcontainer,
-      delete: delete_func,
-      download,
-      edit,
-      start,
-      stop,
-      resume,
-      reportimport,
-      advancedtaskwizard,
-      modifytaskwizard,
-      taskwizard,
-    }) => (
-      <React.Fragment>
-        <PageTitle title={_('Tasks')} />
-        <EntitiesPage
-          {...props}
-          dashboard={() => (
-            <TaskDashboard
-              filter={filter}
-              onFilterChanged={onFilterChanged}
-              onInteraction={onInteraction}
-            />
-          )}
-          dashboardControls={() => (
-            <DashboardControls
-              dashboardId={TASK_DASHBOARD_ID}
-              onInteraction={onInteraction}
-            />
-          )}
-          filter={filter}
-          filterEditDialog={TaskFilterDialog}
-          filtersFilter={TASKS_FILTER_FILTER}
-          sectionIcon={<TaskIcon size="large" />}
-          table={Table}
-          title={_('Tasks')}
-          toolBarIcons={ToolBarIcons}
-          onAdvancedTaskWizardClick={advancedtaskwizard}
-          onContainerTaskCreateClick={createcontainer}
-          onError={onError}
-          onFilterChanged={onFilterChanged}
-          onInteraction={onInteraction}
-          onModifyTaskWizardClick={modifytaskwizard}
-          onReportImportClick={reportimport}
-          onTaskCloneClick={clone}
-          onTaskCreateClick={create}
-          onTaskDeleteClick={delete_func}
-          onTaskDownloadClick={download}
-          onTaskEditClick={edit}
-          onTaskResumeClick={resume}
-          onTaskStartClick={start}
-          onTaskStopClick={stop}
-          onTaskWizardClick={taskwizard}
-        />
-      </React.Fragment>
-    )}
-  </TaskComponent>
-);
+}) => {
+  const {data} = useQuery(GET_TASKS, {
+    variables: {filterString: filter.toFilterString()},
+  });
+
+  if (isDefined(data)) {
+    props.entities = data.tasks.map(entity => Task.fromObject(entity));
+  } else {
+    props.entities = undefined;
+  }
+
+  return (
+    <TaskComponent
+      onAdvancedTaskWizardSaved={onChanged}
+      onCloned={onChanged}
+      onCloneError={onError}
+      onContainerSaved={onChanged}
+      onCreated={onChanged}
+      onContainerCreated={onChanged}
+      onDeleted={onChanged}
+      onDeleteError={onError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onInteraction={onInteraction}
+      onModifyTaskWizardSaved={onChanged}
+      onReportImported={onChanged}
+      onResumed={onChanged}
+      onResumeError={onError}
+      onSaved={onChanged}
+      onStarted={onChanged}
+      onStartError={onError}
+      onStopped={onChanged}
+      onStopError={onError}
+      onTaskWizardSaved={onChanged}
+    >
+      {({
+        clone,
+        create,
+        createcontainer,
+        delete: delete_func,
+        download,
+        edit,
+        start,
+        stop,
+        resume,
+        reportimport,
+        advancedtaskwizard,
+        modifytaskwizard,
+        taskwizard,
+      }) => (
+        <React.Fragment>
+          <PageTitle title={_('Tasks')} />
+          <EntitiesPage
+            {...props}
+            dashboard={() => (
+              <TaskDashboard
+                filter={filter}
+                onFilterChanged={onFilterChanged}
+                onInteraction={onInteraction}
+              />
+            )}
+            dashboardControls={() => (
+              <DashboardControls
+                dashboardId={TASK_DASHBOARD_ID}
+                onInteraction={onInteraction}
+              />
+            )}
+            filter={filter}
+            filterEditDialog={TaskFilterDialog}
+            filtersFilter={TASKS_FILTER_FILTER}
+            sectionIcon={<TaskIcon size="large" />}
+            table={Table}
+            title={_('Tasks')}
+            toolBarIcons={ToolBarIcons}
+            onAdvancedTaskWizardClick={advancedtaskwizard}
+            onContainerTaskCreateClick={createcontainer}
+            onError={onError}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+            onModifyTaskWizardClick={modifytaskwizard}
+            onReportImportClick={reportimport}
+            onTaskCloneClick={clone}
+            onTaskCreateClick={create}
+            onTaskDeleteClick={delete_func}
+            onTaskDownloadClick={download}
+            onTaskEditClick={edit}
+            onTaskResumeClick={resume}
+            onTaskStartClick={start}
+            onTaskStopClick={stop}
+            onTaskWizardClick={taskwizard}
+          />
+        </React.Fragment>
+      )}
+    </TaskComponent>
+  );
+};
 
 Page.propTypes = {
   filter: PropTypes.filter,

@@ -21,7 +21,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isString, hasValue} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withUserName from 'web/utils/withUserName';
@@ -102,6 +102,10 @@ const Row = ({
   ...props
 }) => {
   const {scanner, observers} = entity;
+  entity.report_count = entity.reportCount;
+  entity.last_report = hasValue(entity.lastReport)
+    ? entity.lastReport
+    : undefined;
 
   const obs = [];
 
