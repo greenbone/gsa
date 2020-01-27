@@ -19,6 +19,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
+import {useMutation} from '@apollo/react-hooks';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -39,7 +40,22 @@ import StartIcon from 'web/pages/tasks/icons/starticon';
 import StopIcon from 'web/pages/tasks/icons/stopicon';
 
 import PropTypes from 'web/utils/proptypes';
+import gql from 'graphql-tag';
 
+const DELETE_TASK = gql`
+  mutation deleteTask($taskId: String!) {
+    deleteTask(taskId: $taskId) {
+      ok
+    }
+  }
+`;
+const CLONE_TASK = gql`
+  mutation cloneTask($taskId: String!) {
+    cloneTask(taskId: $taskId) {
+      taskId
+    }
+  }
+`;
 const Actions = ({
   entity,
   links,
@@ -51,31 +67,42 @@ const Actions = ({
   onTaskResumeClick,
   onTaskStartClick,
   onTaskStopClick,
-}) => (
-  <IconDivider align={['center', 'center']} grow>
-    {isDefined(entity.schedule) ? (
-      <ScheduleIcon schedule={entity.schedule} links={links} />
-    ) : (
-      <StartIcon task={entity} onClick={onTaskStartClick} />
-    )}
+}) => {
+  const [deleteTask] = useMutation(DELETE_TASK);
+  const [cloneTask] = useMutation(CLONE_TASK);
+  return (
+    <IconDivider align={['center', 'center']} grow>
+      {isDefined(entity.schedule) ? (
+        <ScheduleIcon schedule={entity.schedule} links={links} />
+      ) : (
+        <StartIcon task={entity} onClick={onTaskStartClick} />
+      )}
 
-    <ImportReportIcon task={entity} onClick={onReportImportClick} />
+      <ImportReportIcon task={entity} onClick={onReportImportClick} />
 
-    <StopIcon task={entity} onClick={onTaskStopClick} />
+      <StopIcon task={entity} onClick={onTaskStopClick} />
 
-    <ResumeIcon task={entity} onClick={onTaskResumeClick} />
+      <ResumeIcon task={entity} onClick={onTaskResumeClick} />
 
-    <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
-    <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
-    <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
-    <ExportIcon
-      value={entity}
-      title={_('Export Task')}
-      onClick={onTaskDownloadClick}
-    />
-  </IconDivider>
-);
-
+      <TrashIcon
+        entity={entity}
+        name="task"
+        onClick={entity => deleteTask({variables: {taskId: entity.id}})}
+      />
+      <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
+      <CloneIcon
+        entity={entity}
+        name="task"
+        onClick={entity => cloneTask({variables: {taskId: entity.id}})}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export Task')}
+        onClick={onTaskDownloadClick}
+      />
+    </IconDivider>
+  );
+};
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
