@@ -183,10 +183,8 @@ const Page = ({
       onTaskWizardSaved={onChanged}
     >
       {({
-        clone,
         create,
         createcontainer,
-        delete: delete_func,
         download,
         edit,
         start,
@@ -228,9 +226,7 @@ const Page = ({
             onInteraction={onInteraction}
             onModifyTaskWizardClick={modifytaskwizard}
             onReportImportClick={reportimport}
-            onTaskCloneClick={clone}
             onTaskCreateClick={create}
-            onTaskDeleteClick={delete_func}
             onTaskDownloadClick={download}
             onTaskEditClick={edit}
             onTaskResumeClick={resume}
