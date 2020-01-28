@@ -19,11 +19,17 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
 import DeleteIcon from 'web/components/icon/deleteicon';
+
+import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -37,6 +43,10 @@ import StripedTable from 'web/components/table/stripedtable';
 import {Col} from 'web/entity/page';
 
 import PropTypes from 'web/utils/proptypes';
+
+const StyledDiv = styled.div`
+  padding: 5px;
+`;
 
 const HostRow = ({host}) => {
   const {id, name, severity} = host;
@@ -61,32 +71,34 @@ HostRow.propTypes = {
   host: PropTypes.object,
 };
 
-const HostTable = ({hosts = []}) => {
+const HostTable = ({hosts}) => {
   return (
-    <StripedTable>
-      <colgroup>
-        <Col width="55%" />
-        <Col width="30%" />
-        <Col width="15%" />
-      </colgroup>
-      <Header>
-        <Row>
-          <Head>{_('Host')}</Head>
-          <Head>{_('Severity')}</Head>
-          <Head>{_('Actions')}</Head>
-        </Row>
-      </Header>
-      {hosts.length > 0 && (
-        <Body>
-          {hosts.map((host, i) => (
-            <HostRow key={i} host={host} />
-          ))}
-        </Body>
+    <Layout align="start" grow={true} flex="column">
+      <StripedTable>
+        <colgroup>
+          <Col width="55%" />
+          <Col width="30%" />
+          <Col width="15%" />
+        </colgroup>
+        <Header>
+          <Row>
+            <Head>{_('Host')}</Head>
+            <Head>{_('Severity')}</Head>
+            <Head>{_('Actions')}</Head>
+          </Row>
+        </Header>
+        {isDefined(hosts) && hosts.length > 0 && (
+          <Body>
+            {hosts.map((host, i) => (
+              <HostRow key={i} host={host} />
+            ))}
+          </Body>
+        )}
+      </StripedTable>
+      {isDefined(hosts) && hosts.length === 0 && (
+        <StyledDiv>{_('No hosts associated with this process.')}</StyledDiv>
       )}
-      {hosts.length === 0 && (
-        <Body>{_('No hosts associated with this process.')}</Body>
-      )}
-    </StripedTable>
+    </Layout>
   );
 };
 
