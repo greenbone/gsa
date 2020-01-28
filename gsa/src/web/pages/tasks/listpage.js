@@ -97,6 +97,10 @@ const GET_TASKS = gql`
         timezone
         duration
       }
+      alerts {
+        name
+        uuid
+      }
     }
   }
 `;

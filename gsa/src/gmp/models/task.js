@@ -38,6 +38,7 @@ import Report from './report';
 import Schedule from './schedule';
 import Scanner from './scanner';
 import Target from './target';
+import Alert from './alert';
 
 export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
@@ -179,11 +180,10 @@ class Task extends Model {
       }
     });
 
-    if (isDefined(object.alert)) {
-      copy.alerts = map(object.alert, alert =>
-        parseModelFromElement(alert, 'alert'),
-      );
-      delete copy.alert;
+    if (hasValue(object.alerts)) {
+      copy.alerts = map(object.alerts, alert => Alert.fromObject(alert));
+    } else {
+      delete copy.alerts;
     }
 
     if (isDefined(object.scanner) && !isEmpty(object.scanner._id)) {
