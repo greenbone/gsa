@@ -97,14 +97,12 @@ class TaskDetails extends React.Component {
       min_qod,
       preferences,
       scanner,
-      schedule_periods,
+      schedulePeriods,
       target,
       max_checks,
       max_hosts,
     } = entity;
     const {iface = {}} = preferences;
-
-    console.log(scanner);
 
     let dur;
     const has_duration =
@@ -293,12 +291,12 @@ class TaskDetails extends React.Component {
                   <TableData>{av_duration}</TableData>
                 </TableRow>
               )}
-              {schedule_periods > 0 && (
+              {schedulePeriods > 0 && (
                 <TableRow>
                   <TableData>{_('Period')}</TableData>
                   <TableData>
-                    {schedule_periods > 1
-                      ? _('{{nr}} more times', {nr: schedule_periods})
+                    {schedulePeriods > 1
+                      ? _('{{nr}} more times', {nr: schedulePeriods})
                       : _('Once')}
                   </TableData>
                 </TableRow>

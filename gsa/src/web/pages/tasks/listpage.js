@@ -111,6 +111,7 @@ const GET_TASKS = gql`
         name
         scannerType
       }
+      schedulePeriods
     }
   }
 `;
