@@ -27,7 +27,6 @@ import {
   parseInt,
   parseProgressElement,
   parseYesNo,
-  parseText,
   parseDuration,
   NO_VALUE,
   YES_VALUE,
@@ -38,6 +37,7 @@ import Model, {parseModelFromElement} from '../model';
 import Report from './report';
 import Schedule from './schedule';
 import Scanner from './scanner';
+import Target from './target';
 
 export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
@@ -86,8 +86,6 @@ const TASK_STATUS_TRANSLATIONS = {
 export function parse_yes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
 }
-
-const parseIntoArray = value => (isArray(value) ? value : [value]);
 
 export const getTranslatableTaskStatus = status =>
   `${TASK_STATUS_TRANSLATIONS[status]}`;
@@ -139,10 +137,10 @@ class Task extends Model {
     return getTranslatableTaskStatus(this.status);
   }
 
-  static parseElement(element) {
-    const copy = super.parseElement(element);
+  static parseObject(object) {
+    const copy = super.parseObject(object);
 
-    const {report_count} = element;
+    const {report_count} = object;
 
     if (isDefined(report_count)) {
       copy.report_count = {...report_count};
@@ -150,41 +148,30 @@ class Task extends Model {
       copy.report_count.finished = parseInt(report_count.finished);
     }
 
-    if (isDefined(element.observers)) {
-      copy.observers = {};
-      if (isString(element.observers) && element.observers.length > 0) {
-        copy.observers.user = element.observers.split(' ');
-      } else {
-        if (isDefined(element.observers.__text)) {
-          copy.observers.user = parseText(element.observers).split(' ');
-        }
-        if (isDefined(element.observers.role)) {
-          copy.observers.role = parseIntoArray(element.observers.role);
-        }
-        if (isDefined(element.observers.group)) {
-          copy.observers.group = parseIntoArray(element.observers.group);
-        }
-      }
-    }
-
-    copy.alterable = parseYesNo(element.alterable);
-    copy.result_count = parseInt(element.result_count);
+    copy.alterable = parseYesNo(object.alterable);
+    copy.result_count = parseInt(object.result_count);
 
     const reports = ['last_report', 'current_report'];
 
     reports.forEach(name => {
-      const report = element[name];
+      const report = object[name];
       if (isDefined(report)) {
         copy[name] = Report.fromElement(report.report);
       }
     });
 
+    if (hasValue(object.target)) {
+      copy.target = Target.fromObject(object.target);
+    } else {
+      delete copy.target;
+    }
+
     // slave isn't really an entity type but it has an id
-    const models = ['config', 'slave', 'target'];
+    const models = ['config', 'slave'];
     models.forEach(item => {
       const name = item;
 
-      const data = element[name];
+      const data = object[name];
       if (isDefined(data) && !isEmpty(data._id)) {
         copy[name] = parseModelFromElement(data, normalizeType(name));
       } else {
@@ -192,33 +179,33 @@ class Task extends Model {
       }
     });
 
-    if (isDefined(element.alert)) {
-      copy.alerts = map(element.alert, alert =>
+    if (isDefined(object.alert)) {
+      copy.alerts = map(object.alert, alert =>
         parseModelFromElement(alert, 'alert'),
       );
       delete copy.alert;
     }
 
-    if (isDefined(element.scanner) && !isEmpty(element.scanner._id)) {
-      copy.scanner = Scanner.fromElement(element.scanner);
+    if (isDefined(object.scanner) && !isEmpty(object.scanner._id)) {
+      copy.scanner = Scanner.fromElement(object.scanner);
     } else {
       delete copy.scanner;
     }
 
-    if (isDefined(element.schedule) && !isEmpty(element.schedule._id)) {
-      copy.schedule = Schedule.fromElement(element.schedule);
+    if (isDefined(object.schedule) && !isEmpty(object.schedule._id)) {
+      copy.schedule = Schedule.fromElement(object.schedule);
     } else {
       delete copy.schedule;
     }
 
-    copy.schedule_periods = parseInt(element.schedule_periods);
+    copy.schedule_periods = parseInt(object.schedule_periods);
 
-    copy.progress = parseProgressElement(element.progress);
+    copy.progress = parseProgressElement(object.progress);
 
     const prefs = {};
 
-    if (copy.preferences && isArray(element.preferences.preference)) {
-      for (const pref of element.preferences.preference) {
+    if (copy.preferences && isArray(object.preferences.preference)) {
+      for (const pref of object.preferences.preference) {
         switch (pref.scanner_name) {
           case 'in_assets':
             copy.in_assets = parse_yes(pref.value);
@@ -236,9 +223,8 @@ class Task extends Model {
                 : AUTO_DELETE_NO;
             break;
           case 'auto_delete_data':
-            const value = parseInt(pref.value);
             copy.auto_delete_data =
-              value === 0
+              pref.value === '0'
                 ? AUTO_DELETE_KEEP_DEFAULT_VALUE
                 : parseInt(pref.value);
             break;
@@ -258,8 +244,8 @@ class Task extends Model {
 
     copy.preferences = prefs;
 
-    if (isDefined(element.average_duration)) {
-      copy.average_duration = parseDuration(element.average_duration);
+    if (isDefined(object.average_duration)) {
+      copy.average_duration = parseDuration(object.average_duration);
     }
 
     if (
@@ -270,7 +256,7 @@ class Task extends Model {
       delete copy.hosts_ordering;
     }
 
-    copy.usageType = element.usage_type;
+    copy.usageType = object.usage_type;
 
     return copy;
   }
