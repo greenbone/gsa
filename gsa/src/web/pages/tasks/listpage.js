@@ -112,6 +112,7 @@ const GET_TASKS = gql`
         scannerType
       }
       schedulePeriods
+      hostsOrdering
     }
   }
 `;

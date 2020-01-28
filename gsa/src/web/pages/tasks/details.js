@@ -91,7 +91,7 @@ class TaskDetails extends React.Component {
       auto_delete_data,
       average_duration,
       config,
-      hosts_ordering,
+      hostsOrdering,
       in_assets,
       last_report,
       min_qod,
@@ -120,6 +120,8 @@ class TaskDetails extends React.Component {
 
     const has_av_duration = isDefined(average_duration) && average_duration > 0;
     const av_duration = has_av_duration ? average_duration.humanize() : '';
+
+    console.log(entity);
 
     return (
       <Layout grow="1" flex="column">
@@ -187,7 +189,7 @@ class TaskDetails extends React.Component {
                   scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
                     <TableRow>
                       <TableData>{_('Order for target hosts')}</TableData>
-                      <TableData>{hosts_ordering}</TableData>
+                      <TableData>{hostsOrdering.toLowerCase()}</TableData>
                     </TableRow>
                   )}
                 {isDefined(scanConfig) &&
