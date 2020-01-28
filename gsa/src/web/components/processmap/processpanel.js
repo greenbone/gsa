@@ -137,7 +137,7 @@ class ProcessPanel extends React.Component {
 ProcessPanel.propTypes = {
   element: PropTypes.object,
   hostList: PropTypes.array,
-  isLoadingHosts: PropTypes.boolean,
+  isLoadingHosts: PropTypes.bool,
   onEditProcessClick: PropTypes.func.isRequired,
   onProcessChange: PropTypes.func,
 };
