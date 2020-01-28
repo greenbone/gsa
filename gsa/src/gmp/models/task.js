@@ -39,6 +39,7 @@ import Schedule from './schedule';
 import Scanner from './scanner';
 import Target from './target';
 import Alert from './alert';
+import ScanConfig from './scanconfig';
 
 export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
@@ -168,7 +169,7 @@ class Task extends Model {
     }
 
     // slave isn't really an entity type but it has an id
-    const models = ['config', 'slave'];
+    const models = ['slave'];
     models.forEach(item => {
       const name = item;
 
@@ -179,6 +180,12 @@ class Task extends Model {
         delete copy[name];
       }
     });
+
+    if (hasValue(object.scanConfig)) {
+      copy.config = ScanConfig.fromObject(object.scanConfig);
+    }
+
+    delete copy.scanConfig;
 
     if (hasValue(object.alerts)) {
       copy.alerts = map(object.alerts, alert => Alert.fromObject(alert));
