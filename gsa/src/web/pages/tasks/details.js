@@ -121,8 +121,6 @@ class TaskDetails extends React.Component {
     const has_av_duration = isDefined(average_duration) && average_duration > 0;
     const av_duration = has_av_duration ? average_duration.humanize() : '';
 
-    console.log(entity);
-
     return (
       <Layout grow="1" flex="column">
         {isDefined(target) && (

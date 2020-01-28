@@ -212,7 +212,6 @@ class Task extends Model {
     const prefs = {};
 
     if (copy.preferences && isArray(object.preferences)) {
-      console.log(object.preferences);
       for (const pref of object.preferences) {
         switch (pref.name) {
           case 'in_assets':
@@ -251,7 +250,6 @@ class Task extends Model {
     }
 
     copy.preferences = prefs;
-    console.log();
 
     if (isDefined(object.average_duration)) {
       copy.average_duration = parseDuration(object.average_duration);
