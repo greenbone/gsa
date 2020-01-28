@@ -79,11 +79,17 @@ const GET_TASKS = gql`
       }
       status
       target {
+        name
         uuid
       }
       trend
       comment
       owner
+      preferences {
+        name
+        value
+        description
+      }
     }
   }
 `;
