@@ -186,8 +186,8 @@ class Task extends Model {
       delete copy.alerts;
     }
 
-    if (isDefined(object.scanner) && !isEmpty(object.scanner._id)) {
-      copy.scanner = Scanner.fromElement(object.scanner);
+    if (hasValue(object.scanner) && !isEmpty(object.scanner.uuid)) {
+      copy.scanner = Scanner.fromObject(object.scanner);
     } else {
       delete copy.scanner;
     }

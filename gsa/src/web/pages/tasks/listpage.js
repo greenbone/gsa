@@ -101,6 +101,16 @@ const GET_TASKS = gql`
         name
         uuid
       }
+      scanConfig {
+        uuid
+        name
+        trash
+      }
+      scanner {
+        uuid
+        name
+        scannerType
+      }
     }
   }
 `;
