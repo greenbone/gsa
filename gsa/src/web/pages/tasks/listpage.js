@@ -90,6 +90,13 @@ const GET_TASKS = gql`
         value
         description
       }
+      schedule {
+        name
+        uuid
+        icalendar
+        timezone
+        duration
+      }
     }
   }
 `;
