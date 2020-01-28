@@ -46,6 +46,21 @@ export const openVasScannersFilter = config =>
 export const ospScannersFilter = config =>
   config.scannerType === OSP_SCANNER_TYPE;
 
+export function scannerTypeInt(scannerType) {
+  if (scannerType === 'OSP_SCANNER_TYPE') {
+    return OSP_SCANNER_TYPE;
+  } else if (scannerType === 'OPENVAS_SCANNER_TYPE') {
+    return OPENVAS_SCANNER_TYPE;
+  } else if (scannerType === 'CVE_SCANNER_TYPE') {
+    return CVE_SCANNER_TYPE;
+  } else if (scannerType === 'GMP_SCANNER_TYPE') {
+    return GMP_SCANNER_TYPE;
+  } else if (scannerType === 'GREENBONE_SENSOR_SCANNER_TYPE') {
+    return GREENBONE_SENSOR_SCANNER_TYPE;
+  }
+  return _('Unknown type ({{type}})', {type: scannerType});
+}
+
 export function scannerTypeName(scannerType) {
   scannerType = parseInt(scannerType);
   if (scannerType === OSP_SCANNER_TYPE) {
@@ -82,6 +97,78 @@ class Scanner extends Model {
     const ret = super.parseElement(element);
 
     ret.scannerType = parseInt(element.type);
+
+    ret.credential =
+      isDefined(ret.credential) && !isEmpty(ret.credential._id)
+        ? Credential.fromElement(ret.credential)
+        : undefined;
+
+    if (isEmpty(element.ca_pub)) {
+      delete ret.ca_pub;
+    } else {
+      ret.caPub = {
+        certificate: element.ca_pub,
+      };
+
+      if (isDefined(element.ca_pub_info)) {
+        ret.caPub.info = element.ca_pub_info;
+        ret.caPub.info.activationTime = parseDate(
+          element.ca_pub_info.activation_time,
+        );
+        ret.caPub.info.expirationTime = parseDate(
+          element.ca_pub_info.expiration_time,
+        );
+        delete ret.ca_pub_info;
+      }
+    }
+
+    if (isDefined(ret.tasks)) {
+      ret.tasks = map(ret.tasks.task, task =>
+        parseModelFromElement(task, 'task'),
+      );
+    } else {
+      ret.tasks = [];
+    }
+
+    if (isEmpty(ret.configs)) {
+      ret.configs = [];
+    } else {
+      ret.configs = map(ret.configs.config, config =>
+        parseModelFromElement(config, 'scanconfig'),
+      );
+    }
+
+    if (isDefined(ret.info)) {
+      const {scanner, daemon, description, params, protocol} = ret.info;
+
+      ret.info.scanner = parse_scanner_info(scanner);
+      ret.info.daemon = parse_scanner_info(daemon);
+      ret.info.protocol = parse_scanner_info(protocol);
+
+      if (isEmpty(description)) {
+        delete ret.info.description;
+      }
+      if (isEmpty(params)) {
+        delete ret.info.params;
+      } else {
+        ret.info.params = map(ret.info.params.param, param => ({
+          name: param.name,
+          description: param.description,
+          paramType: param.type,
+          mandatory: parseYesNo(param.mandatory),
+          default: param.default,
+        }));
+        delete ret.info.params.param;
+      }
+    }
+
+    return ret;
+  }
+
+  static parseObject(element) {
+    const ret = super.parseObject(element);
+
+    ret.scannerType = scannerTypeInt(element.scannerType);
 
     ret.credential =
       isDefined(ret.credential) && !isEmpty(ret.credential._id)

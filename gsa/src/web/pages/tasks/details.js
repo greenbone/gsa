@@ -104,6 +104,8 @@ class TaskDetails extends React.Component {
     } = entity;
     const {iface = {}} = preferences;
 
+    console.log(scanner);
+
     let dur;
     const has_duration =
       isDefined(last_report) && isDefined(last_report.scan_start);
@@ -351,10 +353,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(TaskDetails);
 
 // vim: set ts=2 sw=2 tw=80:
