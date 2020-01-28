@@ -211,9 +211,10 @@ class Task extends Model {
 
     const prefs = {};
 
-    if (copy.preferences && isArray(object.preferences.preference)) {
-      for (const pref of object.preferences.preference) {
-        switch (pref.scanner_name) {
+    if (copy.preferences && isArray(object.preferences)) {
+      console.log(object.preferences);
+      for (const pref of object.preferences) {
+        switch (pref.name) {
           case 'in_assets':
             copy.in_assets = parse_yes(pref.value);
             break;
@@ -237,19 +238,20 @@ class Task extends Model {
             break;
           case 'max_hosts':
           case 'max_checks':
-            copy[pref.scanner_name] = parseInt(pref.value);
+            copy[pref.name] = parseInt(pref.value);
             break;
           case 'source_iface':
             copy.source_iface = pref.value;
             break;
           default:
-            prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
+            prefs[pref.name] = {value: pref.value, name: pref.name};
             break;
         }
       }
     }
 
     copy.preferences = prefs;
+    console.log();
 
     if (isDefined(object.average_duration)) {
       copy.average_duration = parseDuration(object.average_duration);
