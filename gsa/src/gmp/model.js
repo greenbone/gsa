@@ -64,6 +64,67 @@ class Model {
     return f;
   }
 
+  static parseElement(element = {}) {
+    const copy = parseDefaultProperties(element);
+
+    if (isDefined(element.end_time)) {
+      if (element.end_time.length > 0) {
+        copy.endTime = parseDate(element.end_time);
+      }
+      delete copy.end_time;
+    }
+
+    if (isDefined(element.permissions)) {
+      // these are the permissions the current user has on the entity
+      const caps = map(element.permissions.permission, perm => perm.name);
+      copy.userCapabilities = new Capabilities(caps);
+      delete copy.permissions;
+    } else {
+      copy.userCapabilities = new Capabilities();
+    }
+
+    if (isDefined(element.user_tags)) {
+      copy.userTags = map(element.user_tags.tag, tag => {
+        return parseModelFromElement(tag, 'tag');
+      });
+      delete copy.user_tags;
+    } else {
+      copy.userTags = [];
+    }
+
+    const yes_no_props = ['writable', 'orphan', 'active', 'trash'];
+
+    for (const name of yes_no_props) {
+      const prop = element[name];
+      if (isDefined(prop)) {
+        copy[name] = parseYesNo(prop);
+      }
+    }
+
+    if (isDefined(element.in_use)) {
+      copy.inUse = parseBoolean(element.in_use);
+      delete copy.in_use;
+    }
+
+    if (isDefined(element.owner) && isEmpty(element.owner.name)) {
+      delete copy.owner;
+    }
+
+    copy.summary = parseText(element.summary);
+
+    if (isEmpty(element.summary)) {
+      delete copy.summary;
+    }
+
+    copy.comment = parseText(element.comment);
+
+    if (isEmpty(element.comment)) {
+      delete copy.comment;
+    }
+
+    return copy;
+  }
+
   static fromObject(object = {}) {
     const f = new this();
     f.setProperties(this.parseObject(object));
@@ -130,67 +191,6 @@ class Model {
     copy.comment = object.comment;
 
     if (!hasValue(object.comment)) {
-      delete copy.comment;
-    }
-
-    return copy;
-  }
-
-  static parseElement(element = {}) {
-    const copy = parseDefaultProperties(element);
-
-    if (isDefined(element.end_time)) {
-      if (element.end_time.length > 0) {
-        copy.endTime = parseDate(element.end_time);
-      }
-      delete copy.end_time;
-    }
-
-    if (isDefined(element.permissions)) {
-      // these are the permissions the current user has on the entity
-      const caps = map(element.permissions.permission, perm => perm.name);
-      copy.userCapabilities = new Capabilities(caps);
-      delete copy.permissions;
-    } else {
-      copy.userCapabilities = new Capabilities();
-    }
-
-    if (isDefined(element.user_tags)) {
-      copy.userTags = map(element.user_tags.tag, tag => {
-        return parseModelFromElement(tag, 'tag');
-      });
-      delete copy.user_tags;
-    } else {
-      copy.userTags = [];
-    }
-
-    const yes_no_props = ['writable', 'orphan', 'active', 'trash'];
-
-    for (const name of yes_no_props) {
-      const prop = element[name];
-      if (isDefined(prop)) {
-        copy[name] = parseYesNo(prop);
-      }
-    }
-
-    if (isDefined(element.in_use)) {
-      copy.inUse = parseBoolean(element.in_use);
-      delete copy.in_use;
-    }
-
-    if (isDefined(element.owner) && isEmpty(element.owner.name)) {
-      delete copy.owner;
-    }
-
-    copy.summary = parseText(element.summary);
-
-    if (isEmpty(element.summary)) {
-      delete copy.summary;
-    }
-
-    copy.comment = parseText(element.comment);
-
-    if (isEmpty(element.comment)) {
       delete copy.comment;
     }
 
