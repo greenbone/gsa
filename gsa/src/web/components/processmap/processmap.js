@@ -30,12 +30,9 @@ import {exclude} from 'gmp/utils/object';
 import Group from 'web/components/chart/group';
 import ErrorBoundary from 'web/components/error/errorboundary';
 
-// import {loadEntities} from 'web/store/entities/hosts';
-import {
-  loadBusinessProcessMaps,
-  saveBusinessProcessMap,
-} from 'web/store/businessprocessmaps/actions';
-import {getBusinessProcessMaps} from 'web/store/businessprocessmaps/selectors';
+import {selector as hostSelector} from 'web/store/entities/hosts';
+
+import {saveBusinessProcessMap} from 'web/store/businessprocessmaps/actions';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -83,6 +80,7 @@ class ProcessMap extends React.Component {
 
     this.svg = React.createRef();
 
+    this.createTag = this.createTag.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -121,8 +119,6 @@ class ProcessMap extends React.Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.keyDownListener);
-
-    this.props.loadBusinessProcessMaps();
   }
 
   componentWillUnmount() {
@@ -236,26 +232,42 @@ class ProcessMap extends React.Component {
   handleCreateProcess(process) {
     let {processes = {}, translateX, translateY} = this.state;
     const {name, comment} = process;
-    const id = Date.now();
-    processes = {
-      [id]: {
+    const id = Date.now(); // TODO replace with actual UUID
+    this.createTag(name).then(newTagId => {
+      processes = {
+        [id]: {
+          name,
+          comment,
+          id,
+          tagId: newTagId,
+          x: 150 - translateX, // create Node next to Toolbar
+          y: 100 - translateY, //
+          type: 'process',
+        },
+        ...processes,
+      };
+
+      this.closeCreateProcessDialog();
+
+      this.setState(() => ({
+        processes,
+      }));
+      this.saveMaps({processes});
+    });
+  }
+
+  createTag(name) {
+    const {gmp} = this.props;
+    return gmp.tag
+      .create({
+        active: '1',
         name,
-        comment,
-        id, // TODO replace with actual UUID
-        tagId: '',
-        x: 150 - translateX, // create Node next to Toolbar
-        y: 100 - translateY, //
-        type: 'process',
-      },
-      ...processes,
-    };
-
-    this.closeCreateProcessDialog();
-
-    this.setState(() => ({
-      processes,
-    }));
-    this.saveMaps({processes});
+        resource_type: 'host',
+      })
+      .then(response => {
+        const {data = {}} = response;
+        return data.id;
+      });
   }
 
   handleProcessChange(newProcess) {
@@ -315,6 +327,7 @@ class ProcessMap extends React.Component {
         this.setState({edgeDrawTarget: element});
       }
     }
+    this.props.onSelectElement(element);
     this.selectedElement = element;
     this.draggingElement = element;
   }
@@ -362,7 +375,7 @@ class ProcessMap extends React.Component {
     }
 
     if (!this.state.isDraggingBackground) {
-      // we aren't dragging anythingcomment
+      // we aren't dragging anything
       return;
     }
 
@@ -407,6 +420,7 @@ class ProcessMap extends React.Component {
     } = this.state;
     const cursorType = isDraggingBackground ? 'move' : 'default';
     const processCursorType = isDraggingProcess ? 'move' : 'grab';
+
     return (
       <ErrorBoundary>
         <Wrapper>
@@ -469,16 +483,12 @@ class ProcessMap extends React.Component {
             onDrawEdgeClick={this.handleDrawEdge}
             onDeleteClick={this.handleDeleteElement}
           />
-          {isDefined(this.selectedElement) &&
-            this.selectedElement.type !== 'edge' && (
-              <ProcessPanel
-                element={this.selectedElement}
-                // hostList={hostList}
-                // isLoadingHosts={isLoadingHosts}
-                onEditProcessClick={this.openCreateProcessDialog}
-                onProcessChange={this.handleProcessChange}
-              />
-            )}
+          <ProcessPanel
+            element={this.selectedElement}
+            hostList={this.selectedElement ? this.props.hostList : undefined}
+            onEditProcessClick={this.openCreateProcessDialog}
+            onProcessChange={this.handleProcessChange}
+          />
         </Wrapper>
         {createProcessDialogVisible && (
           <CreateProcessDialog
@@ -508,17 +518,15 @@ class ProcessMap extends React.Component {
   }
 }
 
-const mapStateToProps = (rootState, {filter}) => {
+const mapStateToProps = (rootState, {hostFilter}) => {
+  const hostSel = hostSelector(rootState);
   return {
-    processMaps: getBusinessProcessMaps(rootState)['1'],
-    // TODO '1' is an ID that needs to be dynamically changed when >1 maps are loaded
+    hostList: hostSel.getEntities(hostFilter),
   };
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => {
   return {
-    // loadHosts: filter => dispatch(loadEntities(gmp)(filter)),
-    loadBusinessProcessMaps: () => dispatch(loadBusinessProcessMaps(gmp)()),
     saveUpdatedMaps: updatedMaps =>
       dispatch(saveBusinessProcessMap(gmp)(updatedMaps)),
   };
@@ -526,9 +534,11 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
 
 ProcessMap.propTypes = {
   gmp: PropTypes.gmp.isRequired,
-  loadBusinessProcessMaps: PropTypes.func.isRequired,
+  hostList: PropTypes.array,
+  processMaps: PropTypes.object,
   saveUpdatedMaps: PropTypes.func.isRequired,
   uuid: PropTypes.id, // isRequired
+  onSelectElement: PropTypes.func.isRequired,
 };
 
 export default compose(

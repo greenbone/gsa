@@ -61,7 +61,7 @@ export class BpmDisplay extends React.Component {
           Filter and processes need to be handed to the BPM.
           Use a callback to inform the loader about which element (process) is
           currently selected */}
-          {({processMaps}) => <ProcessMap processMaps={processMaps} />}
+          {({...loaderProps}) => <ProcessMap {...loaderProps} />}
         </ProcessMapsLoader>
       </Display>
     );
