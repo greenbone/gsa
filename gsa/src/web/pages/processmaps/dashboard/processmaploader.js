@@ -17,16 +17,113 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
-const ProcessMapsLoader = ({children}) => {
-  const processMaps = useSelector(
-    state => state.userSettings.businessProcessMaps,
+import Filter from 'gmp/models/filter';
+
+import {isDefined} from 'gmp/utils/identity';
+
+import Loading from 'web/components/loading/loading';
+
+import {
+  loadEntities as loadHosts,
+  selector as hostSelector,
+} from 'web/store/entities/hosts';
+
+import PropTypes from 'web/utils/proptypes';
+
+import useGmp from 'web/utils/useGmp';
+
+import {loadBusinessProcessMaps} from 'web/store/businessprocessmaps/actions';
+
+import useColorize from 'web/components/processmap/usecolorize';
+
+export const hostsFilter = id => Filter.fromString('tag_id=' + id).all();
+
+const ProcessMapsLoader = ({children, mapId = '1'}) => {
+  // TODO '1' is an ID that needs to be dynamically changed when >1 maps are
+  // loaded and must be replaced by a uuid. The dashboard display needs to know
+  // via dashboard settings, which map it has to render
+
+  const dispatch = useDispatch();
+  const gmp = useGmp();
+
+  const processMap = useSelector(state => {
+    return isDefined(state.businessProcessMaps[mapId])
+      ? state.businessProcessMaps[mapId]
+      : {};
+  });
+
+  useEffect(() => {
+    if (Object.entries(processMap).length === 0) {
+      dispatch(loadBusinessProcessMaps(gmp)());
+    }
+  }, [processMap, gmp, dispatch]);
+
+  const [selectedElement, setSelectedElement] = useState({});
+
+  const handleSelectElement = selEl => {
+    return setSelectedElement(selEl);
+  };
+  const hostFilter = hostsFilter(selectedElement.tagId);
+
+  useEffect(() => {
+    const processMapsTemp = isDefined(processMap) ? processMap : {};
+    let tempHostFilter;
+    for (const proc in processMapsTemp.processes) {
+      tempHostFilter = hostsFilter(processMapsTemp.processes[proc].tagId);
+      dispatch(loadHosts(gmp)(tempHostFilter));
+    }
+  }, [processMap, dispatch, gmp]);
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const isLoadingHosts = useSelector(rootState => {
+    const hostSel = hostSelector(rootState);
+    const hostEntities = hostSel.isLoadingAnyEntities();
+    return hostEntities;
+  });
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [isLoadingHosts]);
+
+  const [
+    applyConditionalColorization,
+    setApplyConditionalColorization,
+  ] = useState(true);
+
+  const handleToggleConditionalColorization = () => {
+    setApplyConditionalColorization(!applyConditionalColorization);
+  };
+
+  const coloredProcessMap = useColorize(
+    processMap,
+    applyConditionalColorization,
   );
 
-  return <React.Fragment>{children({processMaps})}</React.Fragment>;
+  return (
+    <React.Fragment>
+      {Object.entries(processMap).length === 0 || isLoading ? (
+        <Loading />
+      ) : (
+        children({
+          applyConditionalColorization,
+          hostFilter,
+          isLoading,
+          processMaps: coloredProcessMap,
+          onSelectElement: handleSelectElement,
+          onToggleConditionalColorization: handleToggleConditionalColorization,
+        })
+      )}
+    </React.Fragment>
+  );
+};
+
+ProcessMapsLoader.propTypes = {
+  mapId: PropTypes.string, // TODO change this to uuid
 };
 
 export default ProcessMapsLoader;
