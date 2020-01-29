@@ -116,6 +116,7 @@ const Row = ({
       }
     }
   }
+
   return (
     <TableRow>
       <TableData>
