@@ -174,7 +174,11 @@ describe('Task Row tests', () => {
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
       scanner: {_id: 'id', name: 'scanner', type: GMP_SCANNER_TYPE},
-      observers: 'user',
+      observers: {
+        __text: 'anon nymous',
+        role: [{name: 'lorem'}],
+        group: [{name: 'ipsum'}, {name: 'dolor'}],
+      },
     });
 
     const handleReportImport = jest.fn();
@@ -222,7 +226,7 @@ describe('Task Row tests', () => {
     );
     expect(icons[2]).toHaveAttribute(
       'title',
-      'Task made visible for: User user',
+      'Task made visible for:\nUsers anon, nymous\nRoles lorem\nGroups ipsum, dolor',
     );
   });
 
