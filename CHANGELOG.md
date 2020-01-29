@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)
 
 ### Changed
+- Made delta report diffs more explicit [#1950](https://github.com/greenbone/gsa/pull/1950)
 - Changed default port to 22 for scanner dialog [#1768](https://github.com/greenbone/gsa/pull/1768)
 - Improved Delta Report Details [#1748](https://github.com/greenbone/gsa/pull/1748)
 - Updated node dependencies to latest releases [#1735](https://github.com/greenbone/gsa/pull/1735)
