@@ -18,12 +18,10 @@
  */
 
 import React from 'react';
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-
-const DEFAULT_COLOR = Theme.green;
 
 const StyledText = styled.text`
   font-family: ${Theme.Font.default};
@@ -34,14 +32,33 @@ const StyledText = styled.text`
 
 const StyledCircle = styled.circle`
   cursor: ${props => props.cursor};
-  stroke: ${props => (props.isSelected ? Theme.mediumBlue : undefined)}
-  stroke-width: ${props => (props.isSelected ? '5px' : undefined)}
+  stroke: ${props => (props.isSelected ? Theme.mediumBlue : undefined)};
+  stroke-width: ${props => (props.isSelected ? '5px' : undefined)};
+  animation: ${props =>
+      keyframes({
+        '0%': {
+          fill: Theme.lightGray,
+          stroke: Theme.white,
+          strokeWidth: '0px',
+        },
+        '50%': {
+          stroke: Theme.mediumBlue,
+          strokeWidth: '7px',
+        },
+        '100%': {
+          fill: props.fill,
+          stroke: Theme.white,
+          strokeWidth: '0px',
+        },
+      })}
+    4s ease;
 `;
 
 const StyledG = styled.g`
   &:hover {
     ${StyledCircle} {
-      stroke: ${Theme.mediumBlue};
+      stroke: ${props =>
+        props.isSelected ? Theme.mediumBlue : Theme.severityLowBlue};
       stroke-width: 5px;
       cursor: ${props => props.cursor};
     }
@@ -52,7 +69,7 @@ const StyledG = styled.g`
 `;
 
 const ProcessNode = ({
-  color = DEFAULT_COLOR,
+  color,
   comment,
   cursor,
   id,
