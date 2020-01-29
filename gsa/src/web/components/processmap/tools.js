@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2019-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -24,6 +24,7 @@ import _ from 'gmp/locale';
 
 import BpmIcon from 'web/components/icon/bpmicon';
 import DeleteIcon from 'web/components/icon/deleteicon';
+import OverrideIcon from 'web/components/icon/overrideicon';
 import TrendNoChangeIcon from 'web/components/icon/trendnochangeicon';
 import HelpIcon from 'web/components/icon/helpicon';
 
@@ -55,7 +56,7 @@ const IconWrapper = styled.div`
     }
   }
   ${props =>
-    props.drawIsActive
+    props.isActive
       ? {
           backgroundColor: Theme.green,
         }
@@ -63,36 +64,55 @@ const IconWrapper = styled.div`
 `;
 
 const Tools = ({
+  applyConditionalColorization,
   drawIsActive,
   onCreateProcessClick,
   onDrawEdgeClick,
   onDeleteClick,
-}) => (
-  <Container>
-    <IconWrapper title={_('Create new process')} onClick={onCreateProcessClick}>
-      <BpmIcon size="medium" />
-    </IconWrapper>
-    <IconWrapper
-      title={_('Create new connection')}
-      drawIsActive={drawIsActive}
-      onClick={onDrawEdgeClick}
-    >
-      <TrendNoChangeIcon size="medium" />
-    </IconWrapper>
-    <IconWrapper title={_('Delete selected element')} onClick={onDeleteClick}>
-      <DeleteIcon size="medium" />
-    </IconWrapper>
-    <IconWrapper>
-      <HelpIcon title={_('Quick Help')} size="medium" />
-    </IconWrapper>
-  </Container>
-);
+  onToggleConditionalColorization,
+}) => {
+  const applyConditionalColorizationIconTitle = applyConditionalColorization
+    ? _('Turn off conditional colorization')
+    : _('Turn on conditional colorization');
+  return (
+    <Container>
+      <IconWrapper
+        title={_('Create new process')}
+        onClick={onCreateProcessClick}
+      >
+        <BpmIcon size="medium" />
+      </IconWrapper>
+      <IconWrapper
+        title={_('Create new connection')}
+        isActive={drawIsActive}
+        onClick={onDrawEdgeClick}
+      >
+        <TrendNoChangeIcon size="medium" />
+      </IconWrapper>
+      <IconWrapper title={_('Delete selected element')} onClick={onDeleteClick}>
+        <DeleteIcon size="medium" />
+      </IconWrapper>
+      <IconWrapper
+        isActive={!applyConditionalColorization}
+        title={applyConditionalColorizationIconTitle}
+        onClick={onToggleConditionalColorization}
+      >
+        <OverrideIcon size="medium" />
+      </IconWrapper>
+      <IconWrapper>
+        <HelpIcon title={_('Quick Help')} size="medium" />
+      </IconWrapper>
+    </Container>
+  );
+};
 
 Tools.propTypes = {
+  applyConditionalColorization: PropTypes.bool,
   drawIsActive: PropTypes.bool,
   onCreateProcessClick: PropTypes.func,
   onDeleteClick: PropTypes.func,
   onDrawEdgeClick: PropTypes.func,
+  onToggleConditionalColorization: PropTypes.func,
 };
 
 export default Tools;

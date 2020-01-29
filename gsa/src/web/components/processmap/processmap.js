@@ -478,10 +478,16 @@ class ProcessMap extends React.Component {
             </Group>
           </Map>
           <Tools
+            applyConditionalColorization={
+              this.props.applyConditionalColorization
+            }
             drawIsActive={isDrawingEdge}
             onCreateProcessClick={this.handleOpenCreateProcessDialog}
             onDrawEdgeClick={this.handleDrawEdge}
             onDeleteClick={this.handleDeleteElement}
+            onToggleConditionalColorization={
+              this.props.onToggleConditionalColorization
+            }
           />
           <ProcessPanel
             element={this.selectedElement}
@@ -533,12 +539,14 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
 };
 
 ProcessMap.propTypes = {
+  applyConditionalColorization: PropTypes.bool,
   gmp: PropTypes.gmp.isRequired,
   hostList: PropTypes.array,
   processMaps: PropTypes.object,
   saveUpdatedMaps: PropTypes.func.isRequired,
   uuid: PropTypes.id, // isRequired
   onSelectElement: PropTypes.func.isRequired,
+  onToggleConditionalColorization: PropTypes.func.isRequired,
 };
 
 export default compose(
