@@ -75,7 +75,8 @@
     "eject": "react-scripts eject",
     "storybook": "NODE_PATH=src start-storybook",
     "build-storybook": "NODE_PATH=src build-storybook",
-    "i18n-extract": "NODE_ENV=development babel -f .babelrc 'src/**/*.{js,jsx,ts,tsx}'"
+    "i18n-extract": "NODE_ENV=development babel -f .babelrc 'src/**/*.{js,jsx,ts,tsx}'",
+    "clean-up-translations": "node scripts/cleanuptranslations"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",
