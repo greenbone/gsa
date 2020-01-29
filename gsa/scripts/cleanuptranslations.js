@@ -36,9 +36,8 @@ for (const lang of languages) {
   }
 
   // remove all strings that were not translated
-  const newContent = {};
-  Object.assign(newContent, content);
-  for (const key in content) {
+  const newContent = {...content};
+  for (const key of Object.keys(content)) {
     if (content[key] === '') {
       delete newContent[key];
     }
