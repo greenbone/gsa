@@ -1182,6 +1182,3 @@ install (DIRECTORY
          ${GSA_BUILD_DIR}/static
          ${GSA_BUILD_DIR}/img
          DESTINATION ${GSA_DEST_DIR})
-
-## Translations
-add_subdirectory (po)
