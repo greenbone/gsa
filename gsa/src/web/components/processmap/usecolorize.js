@@ -23,7 +23,14 @@ import {hostsFilter} from 'web/pages/processmaps/dashboard/processmaploader';
 
 import {selector as hostSelector} from 'web/store/entities/hosts';
 
-import {severityRiskFactor, LOG, LOW, MEDIUM, HIGH} from 'web/utils/severity';
+import {
+  severityRiskFactor,
+  LOG,
+  LOG_VALUE,
+  LOW,
+  MEDIUM,
+  HIGH,
+} from 'web/utils/severity';
 import Theme from 'web/utils/theme';
 
 const getMaxSeverity = (hostEntities = []) => {
@@ -38,7 +45,7 @@ const getSeverityColor = severity => {
   const riskFactor = severityRiskFactor(severity);
   let color;
   if (riskFactor === LOG) {
-    color = 'gray';
+    color = Theme.lightGray;
   } else if (riskFactor === MEDIUM) {
     color = Theme.severityWarnYellow;
   } else if (riskFactor === HIGH) {
@@ -46,7 +53,7 @@ const getSeverityColor = severity => {
   } else if (riskFactor === LOW) {
     color = Theme.severityLowBlue;
   } else {
-    color = Theme.lightGray;
+    color = Theme.white;
   }
   return color;
 };
@@ -56,6 +63,7 @@ const useColorize = (processMap = {}, applyConditionalColorization) => {
   const procMap = {...processMap};
   const {processes = {}, edges = {}} = procMap;
   useSelector(rootState => {
+    // get the initial severities and colors for processes
     for (const procId in processes) {
       const {tagId} = processes[procId];
       hostFilter = hostsFilter(tagId);
@@ -66,16 +74,31 @@ const useColorize = (processMap = {}, applyConditionalColorization) => {
       if (!isLoadingHosts) {
         procMap.processes[procId].color = getSeverityColor(maxSeverity);
         procMap.processes[procId].severity = maxSeverity;
+        procMap.processes[procId].derivedSeverity = maxSeverity;
       }
     }
     if (applyConditionalColorization) {
-      for (const edge of Object.values(edges)) {
-        const {source: sourceId, target: targetId} = edge;
-        const source = procMap.processes[sourceId];
-        const target = procMap.processes[targetId];
-        if (source.severity > 0 && source.severity > target.severity) {
-          // if source.severity is not LOG and higher than target.severity
-          procMap.processes[targetId].color = getSeverityColor(source.severity);
+      let updated = true;
+      // loop through edges until no more processes received an update
+      while (updated) {
+        updated = false;
+        for (const edge of Object.values(edges)) {
+          const {source: sourceId, target: targetId} = edge;
+          const source = procMap.processes[sourceId];
+          const target = procMap.processes[targetId];
+
+          if (
+            source.derivedSeverity > target.derivedSeverity &&
+            source.derivedSeverity !== LOG_VALUE
+          ) {
+            // if source.derivedSeverity is not LOG
+            procMap.processes[targetId].color = getSeverityColor(
+              source.derivedSeverity,
+            );
+            procMap.processes[targetId].derivedSeverity =
+              source.derivedSeverity;
+            updated = true;
+          }
         }
       }
     }

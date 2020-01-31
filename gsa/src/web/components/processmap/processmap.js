@@ -155,10 +155,10 @@ class ProcessMap extends React.Component {
   }
 
   saveMaps({processes = this.state.processes, edges = this.state.edges}) {
-    const {uuid = '1', saveUpdatedMaps} = this.props; // TODO use actual UUID
+    const {mapId, saveUpdatedMaps} = this.props;
 
     const updatedMaps = {
-      [uuid]: {
+      [mapId]: {
         processes,
         edges,
       },
@@ -455,18 +455,29 @@ class ProcessMap extends React.Component {
                 );
               })}
               {Object.keys(processes).map(key => {
-                const {color, id, comment, name, x, y} = processes[key];
+                const {
+                  color,
+                  comment,
+                  derivedSeverity,
+                  id,
+                  name,
+                  severity,
+                  x,
+                  y,
+                } = processes[key];
                 const isSelected = processes[key] === this.selectedElement;
                 return (
                   <ProcessNode
                     color={color}
                     comment={comment}
                     cursor={processCursorType}
+                    derivedSeverity={derivedSeverity}
                     id={id}
                     isSelected={isSelected}
                     key={id}
                     name={name}
                     radius={DEFAULT_PROCESS_SIZE}
+                    severity={severity}
                     x={x}
                     y={y}
                     onMouseDown={event =>
@@ -542,9 +553,9 @@ ProcessMap.propTypes = {
   applyConditionalColorization: PropTypes.bool,
   gmp: PropTypes.gmp.isRequired,
   hostList: PropTypes.array,
+  mapId: PropTypes.id, // isRequired
   processMaps: PropTypes.object,
   saveUpdatedMaps: PropTypes.func.isRequired,
-  uuid: PropTypes.id, // isRequired
   onSelectElement: PropTypes.func.isRequired,
   onToggleConditionalColorization: PropTypes.func.isRequired,
 };

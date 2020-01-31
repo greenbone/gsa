@@ -82,8 +82,7 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
 
   const isLoadingHosts = useSelector(rootState => {
     const hostSel = hostSelector(rootState);
-    const hostEntities = hostSel.isLoadingAnyEntities();
-    return hostEntities;
+    return hostSel.isLoadingAnyEntities();
   });
 
   useEffect(() => {
@@ -113,6 +112,7 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
           applyConditionalColorization,
           hostFilter,
           isLoading,
+          mapId,
           processMaps: coloredProcessMap,
           onSelectElement: handleSelectElement,
           onToggleConditionalColorization: handleToggleConditionalColorization,
