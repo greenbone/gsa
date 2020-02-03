@@ -23,7 +23,7 @@ import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import {YES_VALUE} from 'gmp/parser';
 
@@ -97,7 +97,6 @@ class TaskDetails extends React.Component {
       min_qod,
       preferences,
       scanner,
-      schedulePeriods,
       target,
       max_checks,
       max_hosts,
@@ -184,7 +183,8 @@ class TaskDetails extends React.Component {
                   </TableRow>
                 )}
                 {isDefined(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+                  hasValue(hostsOrdering) && (
                     <TableRow>
                       <TableData>{_('Order for target hosts')}</TableData>
                       <TableData>{hostsOrdering.toLowerCase()}</TableData>
@@ -289,16 +289,6 @@ class TaskDetails extends React.Component {
                 <TableRow>
                   <TableData>{_('Average Scan duration')}</TableData>
                   <TableData>{av_duration}</TableData>
-                </TableRow>
-              )}
-              {schedulePeriods > 0 && (
-                <TableRow>
-                  <TableData>{_('Period')}</TableData>
-                  <TableData>
-                    {schedulePeriods > 1
-                      ? _('{{nr}} more times', {nr: schedulePeriods})
-                      : _('Once')}
-                  </TableData>
                 </TableRow>
               )}
               <TableRow>
