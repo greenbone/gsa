@@ -37,7 +37,7 @@ const StyledCircle = styled.circle`
   animation: ${props =>
       keyframes({
         '0%': {
-          fill: Theme.lightGray,
+          fill: Theme.white,
           stroke: Theme.white,
           strokeWidth: '0px',
         },
@@ -51,7 +51,7 @@ const StyledCircle = styled.circle`
           strokeWidth: '0px',
         },
       })}
-    4s ease;
+    3s ease;
 `;
 
 const StyledG = styled.g`
