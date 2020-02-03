@@ -187,7 +187,7 @@ class TaskDetails extends React.Component {
                   hasValue(hostsOrdering) && (
                     <TableRow>
                       <TableData>{_('Order for target hosts')}</TableData>
-                      <TableData>{hostsOrdering.toLowerCase()}</TableData>
+                      <TableData>{hostsOrdering}</TableData>
                     </TableRow>
                   )}
                 {isDefined(scanConfig) &&
