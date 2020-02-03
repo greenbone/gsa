@@ -92,9 +92,9 @@ class Model {
       copy.userTags = [];
     }
 
-    const yes_no_props = ['writable', 'orphan', 'active', 'trash'];
+    const yesNoProps = ['writable', 'orphan', 'active', 'trash'];
 
-    for (const name of yes_no_props) {
+    for (const name of yesNoProps) {
       const prop = element[name];
       if (isDefined(prop)) {
         copy[name] = parseYesNo(prop);
@@ -165,9 +165,9 @@ class Model {
       copy.userTags = [];
     }
 
-    const yes_no_props = ['writable', 'orphan', 'active', 'trash'];
+    const yesNoProps = ['writable', 'orphan', 'active', 'trash'];
 
-    for (const name of yes_no_props) {
+    for (const name of yesNoProps) {
       const prop = object[name];
       if (hasValue(prop)) {
         copy[name] = parseYesNo(prop);
