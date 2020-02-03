@@ -18,7 +18,7 @@
  */
 import {_l} from 'gmp/locale/lang';
 
-import {isDefined, isArray} from '../utils/identity';
+import {isDefined, isArray, isString} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 import {normalizeType} from '../utils/entitytype';
@@ -27,6 +27,7 @@ import {
   parseInt,
   parseProgressElement,
   parseYesNo,
+  parseText,
   parseDuration,
   NO_VALUE,
   YES_VALUE,
@@ -85,6 +86,8 @@ const TASK_STATUS_TRANSLATIONS = {
 export function parse_yes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
 }
+
+const parseIntoArray = value => (isArray(value) ? value : [value]);
 
 export const getTranslatableTaskStatus = status =>
   `${TASK_STATUS_TRANSLATIONS[status]}`;
@@ -145,6 +148,23 @@ class Task extends Model {
       copy.report_count = {...report_count};
       copy.report_count.total = parseInt(report_count.__text);
       copy.report_count.finished = parseInt(report_count.finished);
+    }
+
+    if (isDefined(element.observers)) {
+      copy.observers = {};
+      if (isString(element.observers) && element.observers.length > 0) {
+        copy.observers.user = element.observers.split(' ');
+      } else {
+        if (isDefined(element.observers.__text)) {
+          copy.observers.user = parseText(element.observers).split(' ');
+        }
+        if (isDefined(element.observers.role)) {
+          copy.observers.role = parseIntoArray(element.observers.role);
+        }
+        if (isDefined(element.observers.group)) {
+          copy.observers.group = parseIntoArray(element.observers.group);
+        }
+      }
     }
 
     copy.alterable = parseYesNo(element.alterable);
