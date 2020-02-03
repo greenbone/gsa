@@ -37,79 +37,75 @@ import {testModel} from '../testing';
 describe('Task Model parse tests', () => {
   testModel(Task, 'task', {testIsActive: false});
 
-  test('should parse undefined hosts_ordering', () => {
-    const obj = {hosts_ordering: undefined};
-    const task = Task.fromElement(obj);
-    expect(task.hosts_ordering).toBeUndefined();
+  test('should parse undefined hostsOrdering', () => {
+    const obj = {hostsOrdering: undefined};
+    const task = Task.fromObject(obj);
+    expect(task.hostsOrdering).toBeUndefined();
   });
 
-  test('should parse unknown hosts_ordering as undefined', () => {
-    const obj = {hosts_ordering: 'foo'};
-    const task = Task.fromElement(obj);
-    expect(task.hosts_ordering).toBeUndefined();
+  test('should parse unknown hostsOrdering as undefined', () => {
+    const obj = {hostsOrdering: 'foo'};
+    const task = Task.fromObject(obj);
+    expect(task.hostsOrdering).toBeUndefined();
   });
 
-  test('should parse known hosts_ordering', () => {
-    let obj = {hosts_ordering: HOSTS_ORDERING_RANDOM};
-    let task = Task.fromElement(obj);
-    expect(task.hosts_ordering).toEqual(HOSTS_ORDERING_RANDOM);
+  test('should parse known hostsOrdering', () => {
+    let obj = {hostsOrdering: HOSTS_ORDERING_RANDOM};
+    let task = Task.fromObject(obj);
+    expect(task.hostsOrdering).toEqual(HOSTS_ORDERING_RANDOM);
 
-    obj = {hosts_ordering: HOSTS_ORDERING_REVERSE};
-    task = Task.fromElement(obj);
-    expect(task.hosts_ordering).toEqual(HOSTS_ORDERING_REVERSE);
+    obj = {hostsOrdering: HOSTS_ORDERING_REVERSE};
+    task = Task.fromObject(obj);
+    expect(task.hostsOrdering).toEqual(HOSTS_ORDERING_REVERSE);
 
-    obj = {hosts_ordering: HOSTS_ORDERING_SEQUENTIAL};
-    task = Task.fromElement(obj);
-    expect(task.hosts_ordering).toEqual(HOSTS_ORDERING_SEQUENTIAL);
+    obj = {hostsOrdering: HOSTS_ORDERING_SEQUENTIAL};
+    task = Task.fromObject(obj);
+    expect(task.hostsOrdering).toEqual(HOSTS_ORDERING_SEQUENTIAL);
   });
 
-  test('should parse last_report', () => {
+  test('should parse lastReport', () => {
     const element = {
       _id: 't1',
-      last_report: {
-        report: {
-          _id: 'r1',
-        },
+      lastReport: {
+        uuid: 'r1',
       },
     };
 
-    const task = Task.fromElement(element);
+    const task = Task.fromObject(element);
 
     expect(task.id).toEqual('t1');
 
-    expect(task.last_report).toBeInstanceOf(Report);
-    expect(task.last_report.id).toEqual('r1');
-    expect(task.last_report.entityType).toEqual('report');
+    expect(task.lastReport).toBeInstanceOf(Report);
+    expect(task.lastReport.id).toEqual('r1');
+    expect(task.lastReport.entityType).toEqual('report');
   });
 
   test('should parse current_report', () => {
     const element = {
       _id: 't1',
-      current_report: {
-        report: {
-          _id: 'r1',
-        },
+      currentReport: {
+        uuid: 'r1',
       },
     };
 
-    const task = Task.fromElement(element);
+    const task = Task.fromObject(element);
 
     expect(task.id).toEqual('t1');
 
-    expect(task.current_report).toBeInstanceOf(Report);
-    expect(task.current_report.id).toEqual('r1');
-    expect(task.current_report.entityType).toEqual('report');
+    expect(task.currentReport).toBeInstanceOf(Report);
+    expect(task.currentReport.id).toEqual('r1');
+    expect(task.currentReport.entityType).toEqual('report');
   });
 
   test('should parse config', () => {
     const element = {
       _id: 't1',
-      config: {
+      scanConfig: {
         _id: 'c1',
       },
     };
 
-    const task = Task.fromElement(element);
+    const task = Task.fromObject(element);
 
     expect(task.id).toEqual('t1');
 
@@ -126,7 +122,7 @@ describe('Task Model parse tests', () => {
       },
     };
 
-    const task = Task.fromElement(element);
+    const task = Task.fromObject(element);
 
     expect(task.id).toEqual('t1');
 
@@ -143,7 +139,7 @@ describe('Task Model parse tests', () => {
       },
     };
 
-    const task = Task.fromElement(element);
+    const task = Task.fromObject(element);
 
     expect(task.id).toEqual('t1');
 
@@ -155,7 +151,7 @@ describe('Task Model parse tests', () => {
   test('should parse alerts', () => {
     const element = {
       _id: 't1',
-      alert: [
+      alerts: [
         {
           _id: 'a1',
         },
@@ -165,7 +161,7 @@ describe('Task Model parse tests', () => {
       ],
     };
 
-    const task = Task.fromElement(element);
+    const task = Task.fromObject(element);
 
     expect(task.id).toEqual('t1');
 
@@ -181,11 +177,11 @@ describe('Task Model parse tests', () => {
     const element = {
       _id: 't1',
       scanner: {
-        _id: 's1',
+        uuid: 's1',
       },
     };
 
-    const task = Task.fromElement(element);
+    const task = Task.fromObject(element);
 
     expect(task.id).toEqual('t1');
 
@@ -198,11 +194,11 @@ describe('Task Model parse tests', () => {
     const element = {
       _id: 't1',
       schedule: {
-        _id: 's1',
+        uuid: 's1',
       },
     };
 
-    const task = Task.fromElement(element);
+    const task = Task.fromObject(element);
 
     expect(task.id).toEqual('t1');
 
@@ -213,61 +209,48 @@ describe('Task Model parse tests', () => {
 
   test('should parse report counts', () => {
     const element = {
-      _id: 't1',
-      report_count: {
-        __text: '13',
+      uuid: 't1',
+      reportCount: {
+        total: '13',
         finished: '14',
       },
     };
 
-    const task = Task.fromElement(element);
+    const task = Task.fromObject(element);
 
     expect(task.id).toEqual('t1');
 
-    expect(task.report_count.total).toEqual(13);
-    expect(task.report_count.finished).toEqual(14);
+    expect(task.reportCount.total).toEqual(13);
+    expect(task.reportCount.finished).toEqual(14);
   });
 
   test('should parse result counts', () => {
     const element = {
       _id: 't1',
-      result_count: '666',
+      resultCount: '666',
     };
 
-    const task = Task.fromElement(element);
+    const task = Task.fromObject(element);
 
     expect(task.id).toEqual('t1');
 
-    expect(task.result_count).toEqual(666);
-  });
-
-  test('should parse schedule periods', () => {
-    const element = {
-      _id: 't1',
-      schedule_periods: '666',
-    };
-
-    const task = Task.fromElement(element);
-
-    expect(task.id).toEqual('t1');
-
-    expect(task.schedule_periods).toEqual(666);
+    expect(task.resultCount).toEqual(666);
   });
 
   test('should parse progress', () => {
-    const task1 = Task.fromElement({
+    const task1 = Task.fromObject({
       _id: 't1',
     });
 
     expect(task1.progress).toEqual(0);
 
-    const task2 = Task.fromElement({
+    const task2 = Task.fromObject({
       _id: 't1',
       progress: {},
     });
     expect(task2.progress).toEqual(0);
 
-    const task3 = Task.fromElement({
+    const task3 = Task.fromObject({
       _id: 't1',
       progress: {
         __text: '66',
@@ -275,7 +258,7 @@ describe('Task Model parse tests', () => {
     });
     expect(task3.progress).toEqual(66);
 
-    const task4 = Task.fromElement({
+    const task4 = Task.fromObject({
       _id: 't1',
       progress: '66',
     });
@@ -368,8 +351,8 @@ describe('Task Model parse tests', () => {
 
 describe(`Task Model methods tests`, () => {
   test('should be a container if target_id is not set', () => {
-    const task1 = Task.fromElement({});
-    const task2 = Task.fromElement({target: {_id: 'foo'}});
+    const task1 = Task.fromObject({});
+    const task2 = Task.fromObject({target: {_id: 'foo'}});
 
     expect(task1.isContainer()).toEqual(true);
     expect(task2.isContainer()).toEqual(false);
@@ -392,7 +375,7 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = Task.fromElement({status});
+      const task = Task.fromObject({status});
       expect(task.isActive()).toEqual(exp);
     }
   });
@@ -414,7 +397,7 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = Task.fromElement({status});
+      const task = Task.fromObject({status});
       expect(task.isRunning()).toEqual(exp);
     }
   });
@@ -436,7 +419,7 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = Task.fromElement({status});
+      const task = Task.fromObject({status});
       expect(task.isStopped()).toEqual(exp);
     }
   });
@@ -458,7 +441,7 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = Task.fromElement({status});
+      const task = Task.fromObject({status});
       expect(task.isInterrupted()).toEqual(exp);
     }
   });
@@ -480,16 +463,16 @@ describe(`Task Model methods tests`, () => {
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
-      const task = Task.fromElement({status});
+      const task = Task.fromObject({status});
       expect(task.isNew()).toEqual(exp);
     }
   });
 
   test('should be changeable if alterable or new', () => {
-    let task = Task.fromElement({status: TASK_STATUS.new, alterable: '0'});
+    let task = Task.fromObject({status: TASK_STATUS.new, alterable: '0'});
     expect(task.isChangeable()).toEqual(true);
 
-    task = Task.fromElement({status: TASK_STATUS.done, alterable: '1'});
+    task = Task.fromObject({status: TASK_STATUS.done, alterable: '1'});
     expect(task.isChangeable()).toEqual(true);
   });
 

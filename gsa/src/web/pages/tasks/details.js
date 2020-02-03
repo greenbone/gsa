@@ -86,29 +86,29 @@ class TaskDetails extends React.Component {
     const {links = true, entity, scanConfig, schedule} = this.props;
     const {
       alerts,
-      apply_overrides,
-      auto_delete,
-      auto_delete_data,
-      average_duration,
+      applyOverrides,
+      autoDelete,
+      autoDeleteData,
+      averageDuration,
       config,
       hostsOrdering,
-      in_assets,
-      last_report,
-      min_qod,
+      inAssets,
+      lastReport,
+      minQod,
       preferences,
       scanner,
       target,
-      max_checks,
-      max_hosts,
+      maxChecks,
+      maxHosts,
     } = entity;
     const {iface = {}} = preferences;
 
     let dur;
     const has_duration =
-      isDefined(last_report) && isDefined(last_report.scan_start);
+      hasValue(lastReport) && hasValue(lastReport.scan_start);
     if (has_duration) {
-      if (isDefined(last_report.scan_end)) {
-        const diff = last_report.scan_end.diff(last_report.scan_start);
+      if (hasValue(lastReport.scan_end)) {
+        const diff = lastReport.scan_end.diff(lastReport.scan_start);
         dur = duration(diff).humanize();
       } else {
         dur = _('Not finished yet');
@@ -117,8 +117,8 @@ class TaskDetails extends React.Component {
       dur = _('No scans yet');
     }
 
-    const has_av_duration = isDefined(average_duration) && average_duration > 0;
-    const av_duration = has_av_duration ? average_duration.humanize() : '';
+    const hasAvDuration = isDefined(averageDuration) && averageDuration > 0;
+    const avDuration = hasAvDuration ? averageDuration.humanize() : '';
 
     return (
       <Layout grow="1" flex="column">
@@ -199,22 +199,22 @@ class TaskDetails extends React.Component {
                   )}
                 {isDefined(scanConfig) &&
                   scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(max_checks) && (
+                  isDefined(maxChecks) && (
                     <TableRow>
                       <TableData>
                         {_('Maximum concurrently executed NVTs per host')}
                       </TableData>
-                      <TableData>{max_checks}</TableData>
+                      <TableData>{maxChecks}</TableData>
                     </TableRow>
                   )}
                 {isDefined(scanConfig) &&
                   scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(max_hosts) && (
+                  isDefined(maxHosts) && (
                     <TableRow>
                       <TableData>
                         {_('Maximum concurrently scanned hosts')}
                       </TableData>
-                      <TableData>{max_hosts}</TableData>
+                      <TableData>{maxHosts}</TableData>
                     </TableRow>
                   )}
               </TableBody>
@@ -227,20 +227,20 @@ class TaskDetails extends React.Component {
             <TableBody>
               <TableRow>
                 <TableData>{_('Add to Assets')}</TableData>
-                <TableData>{renderYesNo(in_assets)}</TableData>
+                <TableData>{renderYesNo(inAssets)}</TableData>
               </TableRow>
 
-              {in_assets === YES_VALUE && (
+              {inAssets === YES_VALUE && (
                 <TableRow>
                   <TableData>{_('Apply Overrides')}</TableData>
-                  <TableData>{renderYesNo(apply_overrides)}</TableData>
+                  <TableData>{renderYesNo(applyOverrides)}</TableData>
                 </TableRow>
               )}
 
-              {in_assets === YES_VALUE && (
+              {inAssets === YES_VALUE && (
                 <TableRow>
                   <TableData>{_('Min QoD')}</TableData>
-                  <TableData>{min_qod + ' %'}</TableData>
+                  <TableData>{minQod + ' %'}</TableData>
                 </TableRow>
               )}
             </TableBody>
@@ -285,20 +285,20 @@ class TaskDetails extends React.Component {
                 <TableData>{_('Duration of last Scan')}</TableData>
                 <TableData>{dur}</TableData>
               </TableRow>
-              {has_av_duration && (
+              {hasAvDuration && (
                 <TableRow>
                   <TableData>{_('Average Scan duration')}</TableData>
-                  <TableData>{av_duration}</TableData>
+                  <TableData>{avDuration}</TableData>
                 </TableRow>
               )}
               <TableRow>
                 <TableData>{_('Auto delete Reports')}</TableData>
                 <TableData>
-                  {auto_delete === 'keep'
+                  {autoDelete === 'keep'
                     ? _(
                         'Automatically delete oldest reports but always keep ' +
                           'newest {{nr}} reports',
-                        {nr: auto_delete_data},
+                        {nr: autoDeleteData},
                       )
                     : _('Do not automatically delete reports')}
                 </TableData>

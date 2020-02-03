@@ -142,23 +142,22 @@ class Task extends Model {
   static parseObject(object) {
     const copy = super.parseObject(object);
 
-    const {report_count} = object;
+    const {reportCount} = object;
 
-    if (isDefined(report_count)) {
-      copy.report_count = {...report_count};
-      copy.report_count.total = parseInt(report_count.__text);
-      copy.report_count.finished = parseInt(report_count.finished);
+    if (isDefined(reportCount)) {
+      copy.reportCount = {...reportCount};
+      copy.reportCount.total = parseInt(reportCount.total);
+      copy.reportCount.finished = parseInt(reportCount.finished);
     }
 
     copy.alterable = parseYesNo(object.alterable);
-    copy.result_count = parseInt(object.result_count);
-
-    const reports = ['last_report', 'current_report'];
+    copy.resultCount = parseInt(object.resultCount); // this doesn't exist in selene yet. Need to add.
+    const reports = ['lastReport', 'currentReport'];
 
     reports.forEach(name => {
       const report = object[name];
-      if (isDefined(report)) {
-        copy[name] = Report.fromElement(report.report);
+      if (hasValue(report)) {
+        copy[name] = Report.fromObject(report);
       }
     });
 
@@ -169,17 +168,14 @@ class Task extends Model {
     }
 
     // slave isn't really an entity type but it has an id
-    const models = ['slave'];
-    models.forEach(item => {
-      const name = item;
-
-      const data = object[name];
+    if (isDefined(object.slave)) {
+      const data = object.slave;
       if (isDefined(data) && !isEmpty(data._id)) {
-        copy[name] = parseModelFromElement(data, normalizeType(name));
+        copy.slave = parseModelFromElement(data, 'slave');
       } else {
-        delete copy[name];
+        delete copy.slave;
       }
-    });
+    }
 
     if (hasValue(object.scanConfig)) {
       copy.config = ScanConfig.fromObject(object.scanConfig);
@@ -205,8 +201,6 @@ class Task extends Model {
       delete copy.schedule;
     }
 
-    copy.schedule_periods = parseInt(object.schedule_periods);
-
     copy.progress = parseProgressElement(object.progress);
 
     const prefs = {};
@@ -215,32 +209,37 @@ class Task extends Model {
       for (const pref of object.preferences) {
         switch (pref.name) {
           case 'in_assets':
-            copy.in_assets = parse_yes(pref.value);
+            copy.inAssets = parse_yes(pref.value);
             break;
           case 'assets_apply_overrides':
-            copy.apply_overrides = parse_yes(pref.value);
+            copy.applyOverrides = parse_yes(pref.value);
             break;
           case 'assets_min_qod':
-            copy.min_qod = parseInt(pref.value);
+            copy.minQod = parseInt(pref.value);
             break;
           case 'auto_delete':
-            copy.auto_delete =
+            copy.autoDelete =
               pref.value === AUTO_DELETE_KEEP
                 ? AUTO_DELETE_KEEP
                 : AUTO_DELETE_NO;
             break;
           case 'auto_delete_data':
-            copy.auto_delete_data =
+            copy.autoDeleteData =
               pref.value === '0'
                 ? AUTO_DELETE_KEEP_DEFAULT_VALUE
                 : parseInt(pref.value);
             break;
           case 'max_hosts':
+            copy.maxHosts = parseInt(pref.value);
+            delete copy.max_hosts;
+            break;
           case 'max_checks':
-            copy[pref.name] = parseInt(pref.value);
+            copy.maxChecks = parseInt(pref.value);
+            delete copy.max_hosts;
             break;
           case 'source_iface':
-            copy.source_iface = pref.value;
+            copy.sourceIface = pref.value; // is this defined in selene?
+            delete copy.source_iface;
             break;
           default:
             prefs[pref.name] = {value: pref.value, name: pref.name};
@@ -252,19 +251,24 @@ class Task extends Model {
     copy.preferences = prefs;
 
     if (isDefined(object.average_duration)) {
-      copy.average_duration = parseDuration(object.average_duration);
+      copy.averageDuration = parseDuration(object.average_duration);
     }
 
+    if (hasValue(object.hostsOrdering)) {
+      copy.hostsOrdering = object.hostsOrdering.toLowerCase();
+      console.log(copy.hostsOrdering);
+    }
     if (
-      copy.hosts_ordering !== HOSTS_ORDERING_RANDOM &&
-      copy.hosts_ordering !== HOSTS_ORDERING_REVERSE &&
-      copy.hosts_ordering !== HOSTS_ORDERING_SEQUENTIAL
+      copy.hostsOrdering !== HOSTS_ORDERING_RANDOM &&
+      copy.hostsOrdering !== HOSTS_ORDERING_REVERSE &&
+      copy.hostsOrdering !== HOSTS_ORDERING_SEQUENTIAL
     ) {
-      delete copy.hosts_ordering;
+      delete copy.hostsOrdering;
     }
 
     copy.usageType = object.usage_type;
 
+    console.log(copy);
     return copy;
   }
 }
