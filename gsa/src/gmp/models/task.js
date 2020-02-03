@@ -190,7 +190,7 @@ class Task extends Model {
     }
 
     if (hasValue(object.scanner) && !isEmpty(object.scanner.uuid)) {
-      copy.scanner = Scanner.fromObject(object.scanner);
+      copy.scanner = Scanner.fromElement(object.scanner);
     } else {
       delete copy.scanner;
     }

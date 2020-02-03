@@ -18,7 +18,7 @@
  */
 import {_} from '../locale/lang';
 
-import {isDefined, isString} from '../utils/identity';
+import {isDefined, isString, hasValue} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
@@ -96,79 +96,15 @@ class Scanner extends Model {
   static parseElement(element) {
     const ret = super.parseElement(element);
 
-    ret.scannerType = parseInt(element.type);
+    if (hasValue(element.uuid) && !hasValue(element.id)) {
+      ret.id = element.uuid;
+    }
 
-    ret.credential =
-      isDefined(ret.credential) && !isEmpty(ret.credential._id)
-        ? Credential.fromElement(ret.credential)
-        : undefined;
-
-    if (isEmpty(element.ca_pub)) {
-      delete ret.ca_pub;
+    if (hasValue(element.scannerType)) {
+      ret.scannerType = scannerTypeInt(element.scannerType);
     } else {
-      ret.caPub = {
-        certificate: element.ca_pub,
-      };
-
-      if (isDefined(element.ca_pub_info)) {
-        ret.caPub.info = element.ca_pub_info;
-        ret.caPub.info.activationTime = parseDate(
-          element.ca_pub_info.activation_time,
-        );
-        ret.caPub.info.expirationTime = parseDate(
-          element.ca_pub_info.expiration_time,
-        );
-        delete ret.ca_pub_info;
-      }
+      ret.scannerType = parseInt(element.type);
     }
-
-    if (isDefined(ret.tasks)) {
-      ret.tasks = map(ret.tasks.task, task =>
-        parseModelFromElement(task, 'task'),
-      );
-    } else {
-      ret.tasks = [];
-    }
-
-    if (isEmpty(ret.configs)) {
-      ret.configs = [];
-    } else {
-      ret.configs = map(ret.configs.config, config =>
-        parseModelFromElement(config, 'scanconfig'),
-      );
-    }
-
-    if (isDefined(ret.info)) {
-      const {scanner, daemon, description, params, protocol} = ret.info;
-
-      ret.info.scanner = parse_scanner_info(scanner);
-      ret.info.daemon = parse_scanner_info(daemon);
-      ret.info.protocol = parse_scanner_info(protocol);
-
-      if (isEmpty(description)) {
-        delete ret.info.description;
-      }
-      if (isEmpty(params)) {
-        delete ret.info.params;
-      } else {
-        ret.info.params = map(ret.info.params.param, param => ({
-          name: param.name,
-          description: param.description,
-          paramType: param.type,
-          mandatory: parseYesNo(param.mandatory),
-          default: param.default,
-        }));
-        delete ret.info.params.param;
-      }
-    }
-
-    return ret;
-  }
-
-  static parseObject(element) {
-    const ret = super.parseObject(element);
-
-    ret.scannerType = scannerTypeInt(element.scannerType);
 
     ret.credential =
       isDefined(ret.credential) && !isEmpty(ret.credential._id)
