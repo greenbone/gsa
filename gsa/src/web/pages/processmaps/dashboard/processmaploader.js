@@ -63,6 +63,7 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
   }, [processMap, gmp, dispatch]);
 
   const [selectedElement, setSelectedElement] = useState({});
+  const [update, setUpdate] = useState(false);
 
   const handleSelectElement = selEl => {
     return setSelectedElement(selEl);
@@ -76,7 +77,7 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
       tempHostFilter = hostsFilter(processMapsTemp.processes[proc].tagId);
       dispatch(loadHosts(gmp)(tempHostFilter));
     }
-  }, [processMap, dispatch, gmp]);
+  }, [processMap, update, dispatch, gmp]);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -98,6 +99,10 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
     setApplyConditionalColorization(!applyConditionalColorization);
   };
 
+  const forceUpdate = () => {
+    setUpdate(!update);
+  };
+
   const coloredProcessMap = useColorize(
     processMap,
     applyConditionalColorization,
@@ -114,6 +119,7 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
           isLoading,
           mapId,
           processMaps: coloredProcessMap,
+          forceUpdate,
           onSelectElement: handleSelectElement,
           onToggleConditionalColorization: handleToggleConditionalColorization,
         })

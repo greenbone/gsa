@@ -32,7 +32,9 @@ import EditIcon from 'web/components/icon/editicon';
 import Loading from 'web/components/loading/loading';
 
 import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 import Theme from 'web/utils/theme';
+import withGmp from 'web/utils/withGmp';
 
 import HostTable from './hosttable';
 
@@ -86,11 +88,24 @@ class ProcessPanel extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.state = {processDialogVisible: false};
+    this.state = {
+      processDialogVisible: false,
+      selectedHosts: [],
+    };
 
     this.openProcessDialog = this.openProcessDialog.bind(this);
     this.closeProcessDialog = this.closeProcessDialog.bind(this);
-    this.handleProcessChange = this.handleProcessChange.bind(this);
+    this.handleAddHosts = this.handleAddHosts.bind(this);
+    this.handleSelectedHostsChange = this.handleSelectedHostsChange.bind(this);
+  }
+
+  componentDidMount() {
+    const {gmp} = this.props;
+    let allHosts = [];
+    gmp.hosts.getAll().then(response => {
+      allHosts = response.data;
+      this.setState({allHosts});
+    });
   }
 
   openProcessDialog() {
@@ -101,9 +116,13 @@ class ProcessPanel extends React.Component {
     this.setState({processDialogVisible: false});
   }
 
-  handleProcessChange(value) {
-    this.props.onProcessChange(value);
-    this.closeProcessDialog();
+  handleSelectedHostsChange(value, name) {
+    this.setState({[name]: value});
+  }
+
+  handleAddHosts(hosts) {
+    this.props.onAddHosts(this.state.selectedHosts);
+    this.setState({selectedHosts: []});
   }
 
   render() {
@@ -111,23 +130,44 @@ class ProcessPanel extends React.Component {
       element = {},
       hostList,
       isLoadingHosts,
+      onDeleteHost,
       onEditProcessClick,
     } = this.props;
+    const {allHosts} = this.state;
     const {name = _('No process selected'), comment} = element;
+
+    const hostItems = renderSelectItems(allHosts);
+
     return (
       <Container isShown={isDefined(element)}>
         <TitleBox>
           {name}
           <EditIcon
+            title={_('Edit process')}
             disabled={element.type !== 'process'}
             onClick={onEditProcessClick}
           />
         </TitleBox>
         <CommentBox>{comment}</CommentBox>
-        <MultiSelect width="100%" />
-        <Button title={_('Add hosts')} />
-        <HostsList>
-          {isLoadingHosts ? <Loading /> : <HostTable hosts={hostList} />}
+        <MultiSelect
+          disabled={element.type !== 'process'}
+          name="selectedHosts"
+          width="100%"
+          items={hostItems}
+          value={this.state.selectedHosts}
+          onChange={this.handleSelectedHostsChange}
+        />
+        <Button
+          title={_('Add Selected Hosts')}
+          disabled={element.type !== 'process'}
+          onClick={this.handleAddHosts}
+        />
+        <HostsList onDeleteHost={onDeleteHost}>
+          {isLoadingHosts ? (
+            <Loading />
+          ) : (
+            <HostTable hosts={hostList} onDeleteHost={onDeleteHost} />
+          )}
         </HostsList>
       </Container>
     );
@@ -136,12 +176,14 @@ class ProcessPanel extends React.Component {
 
 ProcessPanel.propTypes = {
   element: PropTypes.object,
+  gmp: PropTypes.gmp.isRequired,
   hostList: PropTypes.array,
   isLoadingHosts: PropTypes.bool,
+  onAddHosts: PropTypes.func.isRequired,
+  onDeleteHost: PropTypes.func.isRequired,
   onEditProcessClick: PropTypes.func.isRequired,
-  onProcessChange: PropTypes.func,
 };
 
-export default ProcessPanel;
+export default withGmp(ProcessPanel);
 
 // vim: set ts=2 sw=2 tw=80:

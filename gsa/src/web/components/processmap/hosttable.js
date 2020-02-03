@@ -48,7 +48,7 @@ const StyledDiv = styled.div`
   padding: 5px;
 `;
 
-const HostRow = ({host}) => {
+const HostRow = ({host, onDeleteHost}) => {
   const {id, name, severity} = host;
   return (
     <Row>
@@ -61,7 +61,10 @@ const HostRow = ({host}) => {
         <SeverityBar severity={severity} />
       </Data>
       <Data>
-        <DeleteIcon title={_('Remove host from process')} />
+        <DeleteIcon
+          title={_('Remove host from process')}
+          onClick={() => onDeleteHost(id)}
+        />
       </Data>
     </Row>
   );
@@ -69,9 +72,10 @@ const HostRow = ({host}) => {
 
 HostRow.propTypes = {
   host: PropTypes.object,
+  onDeleteHost: PropTypes.func.isRequired,
 };
 
-const HostTable = ({hosts}) => {
+const HostTable = ({hosts, onDeleteHost}) => {
   return (
     <Layout align="start" grow={true} flex="column">
       <StripedTable>
@@ -90,7 +94,7 @@ const HostTable = ({hosts}) => {
         {isDefined(hosts) && hosts.length > 0 && (
           <Body>
             {hosts.map((host, i) => (
-              <HostRow key={i} host={host} />
+              <HostRow key={i} host={host} onDeleteHost={onDeleteHost} />
             ))}
           </Body>
         )}
@@ -104,6 +108,7 @@ const HostTable = ({hosts}) => {
 
 HostTable.propTypes = {
   hosts: PropTypes.array,
+  onDeleteHost: PropTypes.func.isRequired,
 };
 
 export default HostTable;

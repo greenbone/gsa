@@ -45,7 +45,11 @@ import ProcessNode from './processnode';
 import ProcessPanel from './processpanel';
 import Tools from './tools';
 
+import {createTag, deleteTag, editTag} from './utils';
+
 const DEFAULT_PROCESS_SIZE = 75;
+
+const BPM_TAG_PREFIX = 'myBP:';
 
 const Wrapper = styled.div`
   display: flex;
@@ -80,7 +84,6 @@ class ProcessMap extends React.Component {
 
     this.svg = React.createRef();
 
-    this.createTag = this.createTag.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -88,6 +91,8 @@ class ProcessMap extends React.Component {
     this.handleCloseCreateProcessDialog = this.handleCloseCreateProcessDialog.bind(
       this,
     );
+    this.handleAddHosts = this.handleAddHosts.bind(this);
+    this.handleDeleteHosts = this.handleDeleteHosts.bind(this);
     this.handleDrawEdge = this.handleDrawEdge.bind(this);
     this.handleCreateEdge = this.handleCreateEdge.bind(this);
     this.handleCreateProcess = this.handleCreateProcess.bind(this);
@@ -187,7 +192,7 @@ class ProcessMap extends React.Component {
         for (const edge in attachedEdges) {
           delete edges[edge];
         }
-
+        deleteTag({tagId: processes[id].tagId, gmp: this.props.gmp});
         delete processes[id];
         this.setState({
           edges,
@@ -233,41 +238,29 @@ class ProcessMap extends React.Component {
     let {processes = {}, translateX, translateY} = this.state;
     const {name, comment} = process;
     const id = Date.now(); // TODO replace with actual UUID
-    this.createTag(name).then(newTagId => {
-      processes = {
-        [id]: {
-          name,
-          comment,
-          id,
-          tagId: newTagId,
-          x: 150 - translateX, // create Node next to Toolbar
-          y: 100 - translateY, //
-          type: 'process',
-        },
-        ...processes,
-      };
+    createTag({name: BPM_TAG_PREFIX + name, gmp: this.props.gmp}).then(
+      newTagId => {
+        processes = {
+          [id]: {
+            name,
+            comment,
+            id,
+            tagId: newTagId,
+            x: 150 - translateX, // create Node next to Toolbar
+            y: 100 - translateY, //
+            type: 'process',
+          },
+          ...processes,
+        };
 
-      this.closeCreateProcessDialog();
+        this.closeCreateProcessDialog();
 
-      this.setState(() => ({
-        processes,
-      }));
-      this.saveMaps({processes});
-    });
-  }
-
-  createTag(name) {
-    const {gmp} = this.props;
-    return gmp.tag
-      .create({
-        active: '1',
-        name,
-        resource_type: 'host',
-      })
-      .then(response => {
-        const {data = {}} = response;
-        return data.id;
-      });
+        this.setState(() => ({
+          processes,
+        }));
+        this.saveMaps({processes});
+      },
+    );
   }
 
   handleProcessChange(newProcess) {
@@ -275,7 +268,7 @@ class ProcessMap extends React.Component {
     const {id} = newProcess;
     const oldProcess = processes[id];
 
-    processes[id] = {...oldProcess, ...newProcess};
+    processes[id] = {...oldProcess, ...newProcess}; // merge new info into process
 
     this.closeCreateProcessDialog();
 
@@ -284,7 +277,35 @@ class ProcessMap extends React.Component {
     this.setState(() => ({
       processes,
     }));
+    editTag({
+      name: BPM_TAG_PREFIX + processes[id].name,
+      tagId: processes[id].tagId,
+      gmp: this.props.gmp,
+    });
     this.saveMaps({processes});
+  }
+
+  handleAddHosts(hostIds) {
+    editTag({
+      hostIds,
+      name: BPM_TAG_PREFIX + this.selectedElement.name,
+      tagId: this.selectedElement.tagId,
+      gmp: this.props.gmp,
+    }).then(() => {
+      this.props.forceUpdate();
+    });
+  }
+
+  handleDeleteHosts(hostId) {
+    editTag({
+      action: 'remove',
+      hostIds: [hostId],
+      name: BPM_TAG_PREFIX + this.selectedElement.name,
+      tagId: this.selectedElement.tagId,
+      gmp: this.props.gmp,
+    }).then(() => {
+      this.props.forceUpdate();
+    });
   }
 
   handleDrawEdge() {
@@ -431,10 +452,7 @@ class ProcessMap extends React.Component {
             onMouseUp={this.handleMouseUp}
             onMouseMove={this.handleMouseMove}
           >
-            <Background
-              color={isDrawingEdge ? 'orange' : undefined}
-              ref={this.backgroundRef}
-            />
+            <Background ref={this.backgroundRef} />
             <Group left={translateX} top={translateY}>
               {Object.keys(edges).map(key => {
                 const isSelected = edges[key] === this.selectedElement;
@@ -503,8 +521,9 @@ class ProcessMap extends React.Component {
           <ProcessPanel
             element={this.selectedElement}
             hostList={this.selectedElement ? this.props.hostList : undefined}
+            onAddHosts={this.handleAddHosts}
+            onDeleteHost={this.handleDeleteHosts}
             onEditProcessClick={this.openCreateProcessDialog}
-            onProcessChange={this.handleProcessChange}
           />
         </Wrapper>
         {createProcessDialogVisible && (
@@ -551,6 +570,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
 
 ProcessMap.propTypes = {
   applyConditionalColorization: PropTypes.bool,
+  forceUpdate: PropTypes.func.isRequired,
   gmp: PropTypes.gmp.isRequired,
   hostList: PropTypes.array,
   mapId: PropTypes.id, // isRequired
