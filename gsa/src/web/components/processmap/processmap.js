@@ -173,34 +173,36 @@ class ProcessMap extends React.Component {
   }
 
   handleDeleteElement() {
-    const {id} = this.selectedElement;
-    const {processes, edges} = this.state;
-    if (isDefined(id)) {
-      if (this.selectedElement && this.selectedElement.type === 'edge') {
-        delete edges[id];
+    if (isDefined(this.selectedElement)) {
+      const {id} = this.selectedElement;
+      const {processes, edges} = this.state;
+      if (isDefined(id)) {
+        if (this.selectedElement && this.selectedElement.type === 'edge') {
+          delete edges[id];
 
-        this.setState({
-          edges,
-        });
-      } else {
-        // get all the edges that don't have the process as source or target
-        // and exclude those from all edges in order to get a list of attached
-        // edges
-        const attachedEdges = exclude(edges, key => {
-          return id !== edges[key].target && id !== edges[key].source;
-        });
-        for (const edge in attachedEdges) {
-          delete edges[edge];
+          this.setState({
+            edges,
+          });
+        } else {
+          // get all the edges that don't have the process as source or target
+          // and exclude those from all edges in order to get a list of attached
+          // edges
+          const attachedEdges = exclude(edges, key => {
+            return id !== edges[key].target && id !== edges[key].source;
+          });
+          for (const edge in attachedEdges) {
+            delete edges[edge];
+          }
+          deleteTag({tagId: processes[id].tagId, gmp: this.props.gmp});
+          delete processes[id];
+          this.setState({
+            edges,
+            processes,
+          });
         }
-        deleteTag({tagId: processes[id].tagId, gmp: this.props.gmp});
-        delete processes[id];
-        this.setState({
-          edges,
-          processes,
-        });
+        this.selectedElement = undefined;
+        this.saveMaps({processes, edges});
       }
-      this.selectedElement = undefined;
-      this.saveMaps({processes, edges});
     }
   }
 
