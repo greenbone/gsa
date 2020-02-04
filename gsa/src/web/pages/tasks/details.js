@@ -103,8 +103,6 @@ class TaskDetails extends React.Component {
     } = entity;
     const {iface = {}} = preferences;
 
-    console.log(entity);
-
     let dur;
     const hasDuration = hasValue(lastReport) && hasValue(lastReport.scanStart);
     if (hasDuration) {
