@@ -40,6 +40,7 @@ import Scanner from './scanner';
 import Target from './target';
 import Alert from './alert';
 import ScanConfig from './scanconfig';
+import Tag from './tag';
 
 export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
@@ -268,7 +269,15 @@ class Task extends Model {
 
     copy.usageType = object.usage_type;
 
-    console.log(copy);
+    if (hasValue(object.userTags)) {
+      copy.userTags = object.userTags.tags.map(tag => {
+        return Tag.fromObject(tag);
+      });
+      console.log(copy.userTags);
+    } else {
+      copy.userTags = [];
+    }
+
     return copy;
   }
 }
