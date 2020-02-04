@@ -60,7 +60,9 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
     if (Object.entries(processMap).length === 0) {
       dispatch(loadBusinessProcessMaps(gmp)());
     }
-  }, [processMap, gmp, dispatch]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // used to prevent infinite reloads and deal with an empty usersetting
+  // no dep-array or a non-empty one will not prevent reloads
 
   const [selectedElement, setSelectedElement] = useState({});
   const [update, setUpdate] = useState(false);
@@ -99,9 +101,7 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
     setApplyConditionalColorization(!applyConditionalColorization);
   };
 
-  const forceUpdate = () => {
-    setUpdate(!update);
-  };
+  const forceUpdate = () => setUpdate(!update);
 
   const coloredProcessMap = useColorize(
     processMap,
@@ -110,7 +110,7 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
 
   return (
     <React.Fragment>
-      {Object.entries(processMap).length === 0 || isLoading ? (
+      {isLoading ? (
         <Loading />
       ) : (
         children({
