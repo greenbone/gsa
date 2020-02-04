@@ -23,7 +23,7 @@ import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import {YES_VALUE} from 'gmp/parser';
 
@@ -74,10 +74,10 @@ class TaskDetails extends React.Component {
   componentDidMount() {
     const {entity} = this.props;
 
-    if (isDefined(entity.config)) {
+    if (hasValue(entity.config)) {
       this.props.loadScanConfig(entity.config.id);
     }
-    if (isDefined(entity.schedule)) {
+    if (hasValue(entity.schedule)) {
       this.props.loadSchedule(entity.schedule.id);
     }
   }
@@ -93,7 +93,7 @@ class TaskDetails extends React.Component {
       config,
       hostsOrdering,
       inAssets,
-      lastReport,
+      lastReport = undefined,
       minQod,
       preferences,
       scanner,
@@ -103,12 +103,13 @@ class TaskDetails extends React.Component {
     } = entity;
     const {iface = {}} = preferences;
 
+    console.log(entity);
+
     let dur;
-    const has_duration =
-      hasValue(lastReport) && hasValue(lastReport.scan_start);
-    if (has_duration) {
-      if (hasValue(lastReport.scan_end)) {
-        const diff = lastReport.scan_end.diff(lastReport.scan_start);
+    const hasDuration = hasValue(lastReport) && hasValue(lastReport.scanStart);
+    if (hasDuration) {
+      if (hasValue(lastReport.scanEnd)) {
+        const diff = lastReport.scanEnd.diff(lastReport.scanStart); // Seems like scanEnd is not a valid date object or something. I get an error sometimes.
         dur = duration(diff).humanize();
       } else {
         dur = _('Not finished yet');
@@ -117,12 +118,12 @@ class TaskDetails extends React.Component {
       dur = _('No scans yet');
     }
 
-    const hasAvDuration = isDefined(averageDuration) && averageDuration > 0;
+    const hasAvDuration = hasValue(averageDuration) && averageDuration > 0;
     const avDuration = hasAvDuration ? averageDuration.humanize() : '';
 
     return (
       <Layout grow="1" flex="column">
-        {isDefined(target) && (
+        {hasValue(target) && (
           <DetailsBlock title={_('Target')}>
             <DetailsLink textOnly={!links} type="target" id={target.id}>
               {target.name}
@@ -130,7 +131,7 @@ class TaskDetails extends React.Component {
           </DetailsBlock>
         )}
 
-        {isDefined(alerts) && (
+        {hasValue(alerts) && (
           <DetailsBlock title={_('Alerts')}>
             <HorizontalSep>
               {alerts.sort(compareAlerts).map(alert => (
@@ -144,7 +145,7 @@ class TaskDetails extends React.Component {
           </DetailsBlock>
         )}
 
-        {isDefined(scanner) && (
+        {hasValue(scanner) && (
           <DetailsBlock title={_('Scanner')}>
             <DetailsTable>
               <TableBody>
@@ -166,7 +167,7 @@ class TaskDetails extends React.Component {
                   <TableData>{_('Type')}</TableData>
                   <TableData>{scannerTypeName(scanner.scannerType)}</TableData>
                 </TableRow>
-                {isDefined(config) && (
+                {hasValue(config) && (
                   <TableRow>
                     <TableData>{_('Scan Config')}</TableData>
                     <TableData>
@@ -182,7 +183,7 @@ class TaskDetails extends React.Component {
                     </TableData>
                   </TableRow>
                 )}
-                {isDefined(scanConfig) &&
+                {hasValue(scanConfig) &&
                   scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
                   hasValue(hostsOrdering) && (
                     <TableRow>
@@ -190,16 +191,16 @@ class TaskDetails extends React.Component {
                       <TableData>{hostsOrdering}</TableData>
                     </TableRow>
                   )}
-                {isDefined(scanConfig) &&
+                {hasValue(scanConfig) &&
                   scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
                     <TableRow>
                       <TableData>{_('Network Source Interface')}</TableData>
                       <TableData>{iface.value}</TableData>
                     </TableRow>
                   )}
-                {isDefined(scanConfig) &&
+                {hasValue(scanConfig) &&
                   scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(maxChecks) && (
+                  hasValue(maxChecks) && (
                     <TableRow>
                       <TableData>
                         {_('Maximum concurrently executed NVTs per host')}
@@ -207,9 +208,9 @@ class TaskDetails extends React.Component {
                       <TableData>{maxChecks}</TableData>
                     </TableRow>
                   )}
-                {isDefined(scanConfig) &&
+                {hasValue(scanConfig) &&
                   scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(maxHosts) && (
+                  hasValue(maxHosts) && (
                     <TableRow>
                       <TableData>
                         {_('Maximum concurrently scanned hosts')}
@@ -247,7 +248,7 @@ class TaskDetails extends React.Component {
           </DetailsTable>
         </DetailsBlock>
 
-        {isDefined(schedule) && (
+        {hasValue(schedule) && (
           <DetailsBlock title={_('Schedule')}>
             <DetailsTable>
               <TableBody>
@@ -265,7 +266,7 @@ class TaskDetails extends React.Component {
                     </span>
                   </TableData>
                 </TableRow>
-                {isDefined(schedule.event) && (
+                {hasValue(schedule.event) && (
                   <TableRow>
                     <TableData>{_('Next')}</TableData>
                     <TableData>
@@ -325,10 +326,10 @@ const mapStateToProps = (rootState, {entity = {}}) => {
   const scheduleSel = scheduleSelector(rootState);
   const scanConfigSel = scanConfigSelector(rootState);
   return {
-    scanConfig: isDefined(entity.config)
+    scanConfig: hasValue(entity.config)
       ? scanConfigSel.getEntity(entity.config.id)
       : undefined,
-    schedule: isDefined(entity.schedule)
+    schedule: hasValue(entity.schedule)
       ? scheduleSel.getEntity(entity.schedule.id)
       : undefined,
   };
