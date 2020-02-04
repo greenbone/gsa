@@ -64,6 +64,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Lower memory usage when getting a report [#1858](https://github.com/greenbone/gvmd/pull/1858)
 
 ### Fixed
+- Fixed missing delete button for host identifiers [#1959](https://github.com/greenbone/gsa/pull/1959)
 - Fixed sorting columns with empty string values [#1936](https://github.com/greenbone/gsa/pull/1936)
 - Fixed broken entity links for reportformat, scanconfig and portlist [#1934](https://github.com/greenbone/gsa/pull/1934)
 - Fixed removing levels filter keyword if all severity levels are unchecked [#1869](https://github.com/greenbone/gsa/pull/1869)
