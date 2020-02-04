@@ -295,7 +295,6 @@ const Page = ({
           onHostDeleteClick={delete_func}
           onHostDownloadClick={download}
           onHostEditClick={edit}
-          onHostIdentifierDeleteClick={deleteidentifier}
         >
           {({activeTab = 0, onActivateTab}) => {
             return (
@@ -319,7 +318,10 @@ const Page = ({
                 <Tabs active={activeTab}>
                   <TabPanels>
                     <TabPanel>
-                      <Details entity={entity} />
+                      <Details
+                        entity={entity}
+                        onHostIdentifierDeleteClick={deleteidentifier}
+                      />
                     </TabPanel>
                     <TabPanel>
                       <EntityTags
