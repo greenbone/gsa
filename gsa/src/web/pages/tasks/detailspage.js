@@ -17,16 +17,19 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {useQuery} from '@apollo/react-hooks';
 
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
 import Filter from 'gmp/models/filter';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
+
+import Task from 'gmp/models/task';
 
 import Badge from 'web/components/badge/badge';
 
@@ -110,6 +113,79 @@ import StopIcon from './icons/stopicon';
 import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
+import gql from 'graphql-tag';
+
+const GET_TASK = gql`
+  query Task($taskId: UUID!) {
+    task(taskId: $taskId) {
+      name
+      uuid
+      permissions {
+        name
+      }
+      lastReport {
+        uuid
+        severity
+        timestamp
+        scanStart
+        scanEnd
+      }
+      currentReport {
+        uuid
+        scanStart
+      }
+      reportCount {
+        total
+        finished
+      }
+      status
+      target {
+        name
+        uuid
+      }
+      trend
+      comment
+      owner
+      preferences {
+        name
+        value
+        description
+      }
+      schedule {
+        name
+        uuid
+        icalendar
+        timezone
+        duration
+      }
+      alerts {
+        name
+        uuid
+      }
+      scanConfig {
+        uuid
+        name
+        trash
+      }
+      scanner {
+        uuid
+        name
+        scannerType
+      }
+      schedulePeriods
+      hostsOrdering
+      userTags {
+        count
+        tags {
+          name
+          uuid
+          value
+          comment
+        }
+      }
+    }
+  }
+`;
 
 export const ToolBarIcons = ({
   entity,
@@ -162,7 +238,7 @@ export const ToolBarIcons = ({
       </IconDivider>
 
       <IconDivider>
-        {isDefined(entity.schedule) && (
+        {hasValue(entity.schedule) && (
           <ScheduleIcon
             schedule={entity.schedule}
             schedulePeriods={entity.schedule_periods}
@@ -182,26 +258,26 @@ export const ToolBarIcons = ({
 
       <Divider margin="10px">
         <IconDivider>
-          {isDefined(entity.current_report) && (
+          {hasValue(entity.currentReport) && (
             <DetailsLink
               type="report"
-              id={entity.current_report.id}
+              id={entity.currentReport.id}
               title={_('Current Report for Task {{- name}} from {{- date}}', {
                 name: entity.name,
-                date: shortDate(entity.current_report.scan_start),
+                date: shortDate(entity.currentReport.scanStart),
               })}
             >
               <ReportIcon />
             </DetailsLink>
           )}
 
-          {!isDefined(entity.current_report) && isDefined(entity.last_report) && (
+          {!hasValue(entity.currentReport) && hasValue(entity.lastReport) && (
             <DetailsLink
               type="report"
-              id={entity.last_report.id}
+              id={entity.lastReport.id}
               title={_('Last Report for Task {{- name}} from {{- date}}', {
                 name: entity.name,
-                date: shortDate(entity.last_report.scan_start),
+                date: shortDate(entity.lastReport.scanStart),
               })}
             >
               <ReportIcon />
@@ -213,7 +289,7 @@ export const ToolBarIcons = ({
             filter={'task_id=' + entity.id}
             title={_('Total Reports for Task {{- name}}', entity)}
           >
-            <Badge content={entity.report_count.total}>
+            <Badge content={entity.reportCount.total}>
               <ReportIcon />
             </Badge>
           </Link>
@@ -314,134 +390,146 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-class Page extends React.Component {
-  componentDidUpdate() {
-    // eslint-disable-next-line no-unused-vars
-    const {entity, history, ...props} = this.props;
-    if (isDefined(entity) && entity.usageType === 'audit') {
+const Page = props => {
+  const {data} = useQuery(GET_TASK, {
+    variables: {
+      taskId: props.location.pathname.slice(
+        props.location.pathname.lastIndexOf('/') + 1,
+      ),
+    },
+  });
+
+  const [entity, setEntity] = useState(undefined);
+  useEffect(() => {
+    if (hasValue(data)) {
+      setEntity(Task.fromObject(data.task));
+    } else {
+      setEntity(undefined);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const {history} = props;
+    if (hasValue(entity) && entity.usageType === 'audit') {
       return history.replace('/audit/' + entity.id);
     }
-  }
+  }, [props]);
 
-  render() {
-    const {
-      entity,
-      permissions = [],
-      onChanged,
-      onDownloaded,
-      onError,
-      onInteraction,
-      ...props
-    } = this.props;
-    return (
-      <TaskComponent
-        onCloned={goto_details('task', props)}
-        onCloneError={onError}
-        onCreated={goto_details('task', props)}
-        onContainerCreated={goto_details('task', props)}
-        onContainerSaved={onChanged}
-        onDeleted={goto_list('tasks', props)}
-        onDeleteError={onError}
-        onDownloaded={onDownloaded}
-        onDownloadError={onError}
-        onInteraction={onInteraction}
-        onReportImported={onChanged}
-        onResumed={onChanged}
-        onResumeError={onError}
-        onSaved={onChanged}
-        onStarted={onChanged}
-        onStartError={onError}
-        onStopped={onChanged}
-        onStopError={onError}
-      >
-        {({
-          clone,
-          create,
-          createcontainer,
-          delete: delete_func,
-          download,
-          edit,
-          start,
-          stop,
-          resume,
-          reportimport,
-        }) => (
-          <EntityPage
-            {...props}
-            entity={entity}
-            sectionIcon={<TaskIcon size="large" />}
-            title={_('Task')}
-            toolBarIcons={ToolBarIcons}
-            onChanged={onChanged}
-            onContainerTaskCreateClick={createcontainer}
-            onError={onError}
-            onInteraction={onInteraction}
-            onReportImportClick={reportimport}
-            onTaskCloneClick={clone}
-            onTaskCreateClick={create}
-            onTaskDeleteClick={delete_func}
-            onTaskDownloadClick={download}
-            onTaskEditClick={edit}
-            onTaskResumeClick={resume}
-            onTaskStartClick={start}
-            onTaskStopClick={stop}
-          >
-            {({activeTab = 0, onActivateTab}) => {
-              return (
-                <React.Fragment>
-                  <PageTitle title={_('Task: {{name}}', {name: entity.name})} />
-                  <Layout grow="1" flex="column">
-                    <TabLayout grow="1" align={['start', 'end']}>
-                      <TabList
-                        active={activeTab}
-                        align={['start', 'stretch']}
-                        onActivateTab={onActivateTab}
-                      >
-                        <Tab>{_('Information')}</Tab>
-                        <EntitiesTab entities={entity.userTags}>
-                          {_('User Tags')}
-                        </EntitiesTab>
-                        <EntitiesTab entities={permissions}>
-                          {_('Permissions')}
-                        </EntitiesTab>
-                      </TabList>
-                    </TabLayout>
+  const {
+    permissions = [],
+    onChanged,
+    onDownloaded,
+    onError,
+    onInteraction,
+  } = props;
+  return (
+    <TaskComponent
+      onCloned={goto_details('task', props)}
+      onCloneError={onError}
+      onCreated={goto_details('task', props)}
+      onContainerCreated={goto_details('task', props)}
+      onContainerSaved={onChanged}
+      onDeleted={goto_list('tasks', props)}
+      onDeleteError={onError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onInteraction={onInteraction}
+      onReportImported={onChanged}
+      onResumed={onChanged}
+      onResumeError={onError}
+      onSaved={onChanged}
+      onStarted={onChanged}
+      onStartError={onError}
+      onStopped={onChanged}
+      onStopError={onError}
+    >
+      {({
+        clone,
+        create,
+        createcontainer,
+        delete: delete_func,
+        download,
+        edit,
+        start,
+        stop,
+        resume,
+        reportimport,
+      }) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<TaskIcon size="large" />}
+          title={_('Task')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onContainerTaskCreateClick={createcontainer}
+          onError={onError}
+          onInteraction={onInteraction}
+          onReportImportClick={reportimport}
+          onTaskCloneClick={clone}
+          onTaskCreateClick={create}
+          onTaskDeleteClick={delete_func}
+          onTaskDownloadClick={download}
+          onTaskEditClick={edit}
+          onTaskResumeClick={resume}
+          onTaskStartClick={start}
+          onTaskStopClick={stop}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle title={_('Task: {{name}}', {name: entity.name})} />
+                <Layout grow="1" flex="column">
+                  <TabLayout grow="1" align={['start', 'end']}>
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
 
-                    <Tabs active={activeTab}>
-                      <TabPanels>
-                        <TabPanel>
-                          <Details entity={entity} />
-                        </TabPanel>
-                        <TabPanel>
-                          <EntityTags
-                            entity={entity}
-                            onChanged={onChanged}
-                            onError={onError}
-                            onInteraction={onInteraction}
-                          />
-                        </TabPanel>
-                        <TabPanel>
-                          <TaskPermissions
-                            entity={entity}
-                            permissions={permissions}
-                            onChanged={onChanged}
-                            onDownloaded={onDownloaded}
-                            onInteraction={onInteraction}
-                            onError={onError}
-                          />
-                        </TabPanel>
-                      </TabPanels>
-                    </Tabs>
-                  </Layout>
-                </React.Fragment>
-              );
-            }}
-          </EntityPage>
-        )}
-      </TaskComponent>
-    );
-  }
-}
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={entity} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={entity}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <TaskPermissions
+                          entity={entity}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onDownloaded={onDownloaded}
+                          onInteraction={onInteraction}
+                          onError={onError}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </TaskComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,
@@ -456,7 +544,7 @@ Page.propTypes = {
 export const TaskPermissions = withComponentDefaults({
   relatedResourcesLoaders: [
     ({entity, gmp}) =>
-      isDefined(entity.alerts)
+      hasValue(entity.alerts)
         ? Promise.resolve([...entity.alerts])
         : Promise.resolve([]),
     ({entity, gmp}) => {
@@ -464,21 +552,21 @@ export const TaskPermissions = withComponentDefaults({
       const names = ['config', 'scanner', 'schedule'];
 
       for (const name of names) {
-        if (isDefined(entity[name])) {
+        if (hasValue(entity[name])) {
           resources.push(entity[name]);
         }
       }
       return Promise.resolve(resources);
     },
     ({entity, gmp}) => {
-      if (isDefined(entity.target)) {
+      if (hasValue(entity.target)) {
         return gmp.target.get(entity.target).then(response => {
           const target = response.data;
           const resources = [target];
 
           for (const name of ['port_list', ...TARGET_CREDENTIAL_NAMES]) {
             const cred = target[name];
-            if (isDefined(cred)) {
+            if (hasValue(cred)) {
               resources.push(cred);
             }
           }
@@ -518,7 +606,7 @@ const load = gmp => {
 };
 
 export const reloadInterval = ({entity}) => {
-  if (!isDefined(entity) || entity.isContainer()) {
+  if (!hasValue(entity) || entity.isContainer()) {
     return NO_RELOAD;
   }
   return entity.isActive()
