@@ -162,7 +162,7 @@ class ProcessPanel extends React.Component {
           disabled={element.type !== 'process'}
           onClick={this.handleAddHosts}
         />
-        <HostsList onDeleteHost={onDeleteHost}>
+        <HostsList>
           {isLoadingHosts ? (
             <Loading />
           ) : (
