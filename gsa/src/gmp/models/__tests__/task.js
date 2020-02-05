@@ -498,5 +498,28 @@ describe(`Task Model methods tests`, () => {
     expect(observers.user).toEqual(['anon', 'nymous']);
     expect(observers.role).toEqual([{name: 'lorem'}]);
     expect(observers.group).toEqual([{name: 'ipsum'}, {name: 'dolor'}]);
+  test('should parse userTags (graphQL)', () => {
+    const task = Task.fromObject({
+      userTags: {
+        count: 2,
+        tags: [
+          {name: 'foo', uuid: 'bar', value: 'lorem', comment: 'ipsum'},
+          {name: 'foo1', uuid: 'bar1', value: 'lorem1', comment: 'ipsum1'},
+        ],
+      },
+    });
+
+    const tags = task.userTags;
+    expect(tags.length).toBe(2);
+
+    expect(tags[0].name).toEqual('foo');
+    expect(tags[0].id).toEqual('bar');
+    expect(tags[0].value).toEqual('lorem');
+    expect(tags[0].comment).toEqual('ipsum');
+
+    expect(tags[1].name).toEqual('foo1');
+    expect(tags[1].id).toEqual('bar1');
+    expect(tags[1].value).toEqual('lorem1');
+    expect(tags[1].comment).toEqual('ipsum1');
   });
 });
