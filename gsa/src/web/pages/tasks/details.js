@@ -129,7 +129,7 @@ class TaskDetails extends React.Component {
           </DetailsBlock>
         )}
 
-        {hasValue(alerts) && (
+        {hasValue(alerts) && alerts.length > 0 && (
           <DetailsBlock title={_('Alerts')}>
             <HorizontalSep>
               {alerts.sort(compareAlerts).map(alert => (
