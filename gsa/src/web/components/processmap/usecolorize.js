@@ -33,12 +33,15 @@ import {
 } from 'web/utils/severity';
 import Theme from 'web/utils/theme';
 
+const OWN_NA_VALUE = 'n/a';
+
 const getMaxSeverity = (hostEntities = []) => {
   const severities = [];
   for (const host of hostEntities) {
     severities.push(host.severity);
   }
-  return Math.max(...severities);
+  const sev = Math.max(...severities);
+  return sev === -Infinity ? OWN_NA_VALUE : sev;
 };
 
 const getSeverityColor = severity => {
@@ -52,8 +55,10 @@ const getSeverityColor = severity => {
     color = Theme.errorRed;
   } else if (riskFactor === LOW) {
     color = Theme.severityLowBlue;
-  } else {
+  } else if (severity === OWN_NA_VALUE) {
     color = Theme.white;
+  } else {
+    color = Theme.mediumGray;
   }
   return color;
 };
