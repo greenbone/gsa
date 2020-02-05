@@ -21,7 +21,6 @@ import {_l} from 'gmp/locale/lang';
 import {isDefined, isArray, hasValue} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
-import {normalizeType} from '../utils/entitytype';
 
 import {
   parseInt,

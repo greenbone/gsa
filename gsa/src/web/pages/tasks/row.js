@@ -21,7 +21,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined, isString, hasValue} from 'gmp/utils/identity';
+import {isString, hasValue} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withUserName from 'web/utils/withUserName';
@@ -101,7 +101,7 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
-  const {scanner, observers, lastReport, reportCount} = entity;
+  const {scanner, observers, lastReport} = entity;
   const obs = [];
   if (hasValue(observers)) {
     if (isString(observers)) {
@@ -158,10 +158,10 @@ const Row = ({
         <TaskStatus task={entity} links={links} />
       </TableData>
       <TableData>{renderReportTotal(entity, links)}</TableData>
-      <TableData>{renderReport(entity.lastReport, links)}</TableData>
+      <TableData>{renderReport(lastReport, links)}</TableData>
       <TableData>
-        {!entity.isContainer() && hasValue(entity.lastReport) && (
-          <SeverityBar severity={entity.lastReport.severity} />
+        {!entity.isContainer() && hasValue(lastReport) && (
+          <SeverityBar severity={lastReport.severity} />
         )}
       </TableData>
       <TableData align="center">
