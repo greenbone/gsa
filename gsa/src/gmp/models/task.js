@@ -257,7 +257,6 @@ class Task extends Model {
 
     if (hasValue(object.hostsOrdering)) {
       copy.hostsOrdering = object.hostsOrdering.toLowerCase();
-      console.log(copy.hostsOrdering);
     }
     if (
       copy.hostsOrdering !== HOSTS_ORDERING_RANDOM &&
@@ -273,7 +272,6 @@ class Task extends Model {
       copy.userTags = object.userTags.tags.map(tag => {
         return Tag.fromObject(tag);
       });
-      console.log(copy.userTags);
     } else {
       copy.userTags = [];
     }
