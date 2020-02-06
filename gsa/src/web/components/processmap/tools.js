@@ -77,30 +77,37 @@ const Tools = ({
   return (
     <Container>
       <IconWrapper
+        data-testid="bpm-tool-icon-new"
         title={_('Create new process')}
         onClick={onCreateProcessClick}
       >
         <BpmIcon size="medium" />
       </IconWrapper>
       <IconWrapper
+        data-testid="bpm-tool-icon-edge"
         title={_('Create new connection')}
         isActive={drawIsActive}
         onClick={onDrawEdgeClick}
       >
         <TrendNoChangeIcon size="medium" />
       </IconWrapper>
-      <IconWrapper title={_('Delete selected element')} onClick={onDeleteClick}>
+      <IconWrapper
+        data-testid="bpm-tool-icon-delete"
+        title={_('Delete selected element')}
+        onClick={onDeleteClick}
+      >
         <DeleteIcon size="medium" />
       </IconWrapper>
       <IconWrapper
+        data-testid="bpm-tool-icon-color"
         isActive={!applyConditionalColorization}
         title={applyConditionalColorizationIconTitle}
         onClick={onToggleConditionalColorization}
       >
         <OverrideIcon size="medium" />
       </IconWrapper>
-      <IconWrapper>
-        <HelpIcon title={_('Quick Help')} size="medium" />
+      <IconWrapper data-testid="bpm-tool-icon-help" title={_('Quick Help')}>
+        <HelpIcon size="medium" />
       </IconWrapper>
     </Container>
   );

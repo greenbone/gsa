@@ -36,6 +36,7 @@ const Edge = ({cursor, isSelected = false, source, target, onMouseDown}) => {
   return (
     <StyledG isSelected={isSelected} cursor={cursor} onMouseDown={onMouseDown}>
       <line
+        data-testid="bpm-edge-line"
         x1={source.x}
         y1={source.y}
         x2={target.x}

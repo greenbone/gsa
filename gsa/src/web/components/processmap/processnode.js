@@ -83,6 +83,7 @@ const ProcessNode = ({
 }) => {
   return (
     <StyledG
+      data-testid="process-node-group"
       id={id}
       name={name}
       cursor={cursor}
@@ -91,6 +92,7 @@ const ProcessNode = ({
       onMouseUp={onMouseUp}
     >
       <StyledCircle
+        data-testid="process-node-circle"
         isSelected={isSelected}
         cx={x}
         cy={y}
