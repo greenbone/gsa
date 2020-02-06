@@ -22,6 +22,10 @@ import styled, {keyframes} from 'styled-components';
 
 import _ from 'gmp/locale';
 
+import CollectionCounts from 'gmp/collection/collectioncounts';
+
+import {parseSeverity} from 'gmp/parser';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import Button from 'web/components/form/button';
@@ -29,7 +33,11 @@ import MultiSelect from 'web/components/form/multiselect';
 
 import EditIcon from 'web/components/icon/editicon';
 
+import Layout from 'web/components/layout/layout';
+
 import Loading from 'web/components/loading/loading';
+
+import Pagination from 'web/components/pagination/pagination';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
@@ -37,6 +45,8 @@ import Theme from 'web/utils/theme';
 import withGmp from 'web/utils/withGmp';
 
 import HostTable from './hosttable';
+
+const NUMBER_OF_LISTED_HOSTS = 30;
 
 const Container = styled.div`
   display: flex;
@@ -81,23 +91,94 @@ const CommentBox = styled.div`
 const HostsList = styled.div`
   display: flex;
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
 `;
+
+const compareSeverity = (host1, host2) => {
+  // sort by highest to lowest severity
+  const sev1 = parseSeverity(host1.severity);
+  const sev2 = parseSeverity(host2.severity);
+  if (sev1 > sev2) {
+    return -1;
+  }
+  if (sev1 < sev2) {
+    return 1;
+  }
+  return 0;
+};
+
+const getNumListedItems = (first, length) => {
+  const rest = length % NUMBER_OF_LISTED_HOSTS;
+  const allPages = Math.ceil(length / NUMBER_OF_LISTED_HOSTS);
+  const currentPage = Math.ceil(first / NUMBER_OF_LISTED_HOSTS);
+  const listedItems = currentPage === allPages ? rest : NUMBER_OF_LISTED_HOSTS;
+
+  return listedItems;
+};
 
 class ProcessPanel extends React.Component {
   constructor(...args) {
     super(...args);
 
+    const counts = new CollectionCounts({
+      first: 1,
+    });
     this.state = {
       processDialogVisible: false,
       selectedHosts: [],
+      counts,
     };
 
     this.openProcessDialog = this.openProcessDialog.bind(this);
     this.closeProcessDialog = this.closeProcessDialog.bind(this);
     this.handleAddHosts = this.handleAddHosts.bind(this);
     this.handleSelectedHostsChange = this.handleSelectedHostsChange.bind(this);
+    this.handleFirstClick = this.handleFirstClick.bind(this);
+    this.handleNextClick = this.handleNextClick.bind(this);
+    this.handleLastClick = this.handleLastClick.bind(this);
+    this.handlePreviousClick = this.handlePreviousClick.bind(this);
   }
+
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (!isDefined(nextProps.element)) {
+      return {
+        ...prevState,
+        element: undefined,
+      };
+    } else if (
+      nextProps.element === prevState.element ||
+      nextProps.element === nextProps.prevElement
+    ) {
+      const {hostList = []} = nextProps;
+      const {length} = hostList;
+
+      const newCounts = prevState.counts.clone({
+        first: prevState.counts.first,
+        length: getNumListedItems(prevState.counts.first, length),
+        filtered: hostList.length,
+      });
+
+      return {
+        counts: newCounts,
+      };
+    } else if (nextProps.element !== nextProps.prevElement) {
+      const {hostList = []} = nextProps;
+
+      const newCounts = prevState.counts.clone({
+        first: 1,
+        all: hostList.length,
+        length: NUMBER_OF_LISTED_HOSTS,
+        filtered: hostList.length,
+        rows: NUMBER_OF_LISTED_HOSTS,
+      });
+
+      return {
+        ...prevState,
+        counts: newCounts,
+        element: nextProps.element,
+      };
+    }
+  };
 
   componentDidMount() {
     const {gmp} = this.props;
@@ -106,6 +187,7 @@ class ProcessPanel extends React.Component {
       allHosts = response.data;
       this.setState({allHosts});
     });
+    this.handleFirstClick();
   }
 
   openProcessDialog() {
@@ -125,21 +207,76 @@ class ProcessPanel extends React.Component {
     this.setState({selectedHosts: []});
   }
 
+  handleFirstClick() {
+    const {counts} = this.state;
+    const {hostList = []} = this.props;
+
+    counts.first = 1;
+    counts.length = getNumListedItems(counts.first, hostList.length);
+
+    this.setState({
+      counts,
+    });
+  }
+
+  handleNextClick() {
+    const {counts} = this.state;
+    const {hostList = []} = this.props;
+    const newFirst = counts.first + NUMBER_OF_LISTED_HOSTS;
+
+    counts.first = newFirst;
+    counts.length = getNumListedItems(newFirst, hostList.length);
+
+    this.setState({
+      counts,
+    });
+  }
+
+  handleLastClick() {
+    const {counts} = this.state;
+    const {hostList = []} = this.props;
+    const remainingHosts = hostList.length % NUMBER_OF_LISTED_HOSTS;
+
+    counts.first = hostList.length - remainingHosts + 1;
+    counts.length = remainingHosts;
+
+    this.setState({
+      counts,
+    });
+  }
+
+  handlePreviousClick() {
+    const {counts} = this.state;
+    const newFirst = counts.first - NUMBER_OF_LISTED_HOSTS;
+
+    counts.first = newFirst;
+
+    this.setState({
+      counts,
+    });
+  }
+
   render() {
     const {
       element = {},
-      hostList,
+      hostList = [],
       isLoadingHosts,
       onDeleteHost,
       onEditProcessClick,
     } = this.props;
-    const {allHosts} = this.state;
+
+    const {allHosts, counts} = this.state;
+
     const {name = _('No process selected'), comment} = element;
 
     const hostItems = renderSelectItems(allHosts);
 
+    const sortedHostList = hostList.sort(compareSeverity);
+
+    const paginatedHosts = sortedHostList.slice(counts.first - 1, counts.last);
+
     return (
-      <Container isShown={isDefined(element)}>
+      <Container>
         <TitleBox>
           {name}
           <EditIcon
@@ -166,7 +303,18 @@ class ProcessPanel extends React.Component {
           {isLoadingHosts ? (
             <Loading />
           ) : (
-            <HostTable hosts={hostList} onDeleteHost={onDeleteHost} />
+            <Layout flex="column" grow>
+              <HostTable hosts={paginatedHosts} onDeleteHost={onDeleteHost} />
+              {hostList.length > 0 && (
+                <Pagination
+                  counts={counts}
+                  onNextClick={this.handleNextClick}
+                  onPreviousClick={this.handlePreviousClick}
+                  onLastClick={this.handleLastClick}
+                  onFirstClick={this.handleFirstClick}
+                />
+              )}
+            </Layout>
           )}
         </HostsList>
       </Container>
