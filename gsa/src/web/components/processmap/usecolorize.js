@@ -19,6 +19,8 @@
 
 import {useSelector} from 'react-redux';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import {hostsFilter} from 'web/pages/processmaps/dashboard/processmaploader';
 
 import {selector as hostSelector} from 'web/store/entities/hosts';
@@ -29,19 +31,26 @@ import {
   LOG_VALUE,
   LOW,
   MEDIUM,
+  NA_VALUE,
   HIGH,
 } from 'web/utils/severity';
 import Theme from 'web/utils/theme';
 
-const OWN_NA_VALUE = 'n/a';
+const LOCAL_NA_VALUE = -5;
 
 const getMaxSeverity = (hostEntities = []) => {
   const severities = [];
   for (const host of hostEntities) {
     severities.push(host.severity);
   }
-  const sev = Math.max(...severities);
-  return sev === -Infinity ? OWN_NA_VALUE : sev;
+  let sev = Math.max(...severities);
+  if (sev === -Infinity) {
+    sev = NA_VALUE;
+  } else if (isNaN(sev)) {
+    sev = LOCAL_NA_VALUE;
+  }
+
+  return sev;
 };
 
 const getSeverityColor = severity => {
@@ -55,7 +64,7 @@ const getSeverityColor = severity => {
     color = Theme.errorRed;
   } else if (riskFactor === LOW) {
     color = Theme.severityLowBlue;
-  } else if (severity === OWN_NA_VALUE) {
+  } else if (severity === NA_VALUE) {
     color = Theme.white;
   } else {
     color = Theme.mediumGray;
@@ -93,8 +102,9 @@ const useColorize = (processMap = {}, applyConditionalColorization) => {
           const target = procMap.processes[targetId];
 
           if (
-            source.derivedSeverity > target.derivedSeverity &&
-            source.derivedSeverity !== LOG_VALUE
+            (source.derivedSeverity > target.derivedSeverity &&
+              source.derivedSeverity !== LOG_VALUE) ||
+            !isDefined(target.derivedSeverity)
           ) {
             // if source.derivedSeverity is not LOG
             procMap.processes[targetId].color = getSeverityColor(
