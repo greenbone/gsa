@@ -75,9 +75,14 @@ HostRow.propTypes = {
   onDeleteHost: PropTypes.func.isRequired,
 };
 
+const StyledLayout = styled(Layout)`
+  width: 100%;
+  overflow: auto;
+`;
+
 const HostTable = ({hosts, onDeleteHost}) => {
   return (
-    <Layout align="start" grow={true} flex="column">
+    <StyledLayout align="start" grow flex="column">
       <StripedTable>
         <colgroup>
           <Col width="55%" />
@@ -102,7 +107,7 @@ const HostTable = ({hosts, onDeleteHost}) => {
       {isDefined(hosts) && hosts.length === 0 && (
         <StyledDiv>{_('No hosts associated with this process.')}</StyledDiv>
       )}
-    </Layout>
+    </StyledLayout>
   );
 };
 
