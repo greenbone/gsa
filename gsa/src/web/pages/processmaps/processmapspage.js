@@ -27,58 +27,64 @@ import ManualIcon from 'web/components/icon/manualicon';
 
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
-import PropTypes from 'web/utils/proptypes';
-
-import DashboardControls from 'web/components/dashboard/controls';
+import ProcessMap from 'web/components/processmap/processmap';
+import ProcessMapLoader from 'web/components/processmap/processmaploader';
 import Section from 'web/components/section/section';
 
+import Theme from 'web/utils/theme';
 import withGmp from 'web/utils/withGmp';
 
-import BpmDashboard, {BPM_DASHBOARD_ID} from './dashboard';
-
 const ToolBarIcons = () => (
-  <ManualIcon
-    page="web-interface"
-    anchor="displaying-the-feed-status"
-    size="small"
-    title={_('Help: Business Process Maps')}
-  />
+  <span>
+    <ManualIcon
+      page="web-interface"
+      anchor="displaying-the-feed-status"
+      size="small"
+      title={_('Help: Business Process Maps')}
+    />
+  </span>
 );
 
 const StyledLayout = styled(Layout)`
   align-items: stretch;
+  height: 100%;
+  overflow: hidden;
+  border: 2px solid ${Theme.lightGray};
+  border-radius: 2px;
 `;
 
-const ControlsDiv = styled.div`
-  display: flex;
-  flex-grow: 1;
-  align-self: flex-end;
+const PageWrapper = styled(Layout)`
+  flex-direction: column;
+  flex: 1;
+  align-items: stretch;
+  overflow: hidden;
+  padding: 5px 10px 0px 10px;
+
+  position: absolute;
+  bottom: 15px;
+  right: 0;
+  left: 0;
+  top: 77px; /* sum of TITLE_BAR_HEIGHT and MENU_BAR_HEIGHT */
 `;
 
-const ProcessMapsPage = ({gmp}) => {
+const ProcessMapsPage = () => {
   return (
     <React.Fragment>
-      <PageTitle title={_('Business Process Maps')} />
-      <Layout flex="column">
+      <PageTitle title={_('Business Process Map')} />
+      <PageWrapper>
         <ToolBarIcons />
         <Section
           img={<BpmIcon size="large" />}
-          title={_('Business Process Maps')}
+          title={_('Business Process Maph')}
         />
-        <StyledLayout flex="column" grow="1">
-          <ControlsDiv>
-            <DashboardControls dashboardId={BPM_DASHBOARD_ID} grow="1" />
-          </ControlsDiv>
-          <BpmDashboard />
+        <StyledLayout grow="1">
+          <ProcessMapLoader>
+            {({...loaderProps}) => <ProcessMap {...loaderProps} />}
+          </ProcessMapLoader>
         </StyledLayout>
-      </Layout>
+      </PageWrapper>
     </React.Fragment>
   );
-};
-
-ProcessMapsPage.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
 };
 
 export default withGmp(ProcessMapsPage);

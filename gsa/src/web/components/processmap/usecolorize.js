@@ -21,7 +21,7 @@ import {useSelector} from 'react-redux';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {hostsFilter} from 'web/pages/processmaps/dashboard/processmaploader';
+import {hostsFilter} from 'web/components/processmap/processmaploader';
 
 import {selector as hostSelector} from 'web/store/entities/hosts';
 

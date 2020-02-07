@@ -62,7 +62,6 @@ const Wrapper = styled.div`
 const Map = styled.svg`
   display: flex;
   position: relative;
-  height: 900px;
   width: 100%;
   align-content: stretch;
   cursor: ${props => props.cursor};
