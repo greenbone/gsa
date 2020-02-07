@@ -304,7 +304,10 @@ class ProcessPanel extends React.Component {
             <Loading />
           ) : (
             <Layout flex="column" grow>
-              <HostTable hosts={paginatedHosts} onDeleteHost={onDeleteHost} />
+              <HostTable
+                hosts={element.type === 'process' ? paginatedHosts : undefined}
+                onDeleteHost={onDeleteHost}
+              />
               {hostList.length > 0 && (
                 <Pagination
                   counts={counts}
