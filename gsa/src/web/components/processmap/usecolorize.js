@@ -41,13 +41,19 @@ const LOCAL_NA_VALUE = -5;
 const getMaxSeverity = (hostEntities = []) => {
   const severities = [];
   for (const host of hostEntities) {
-    severities.push(host.severity);
+    // only take "numerical" severities into account and ignore e.g. "N/A"
+    if (host.severity >= 0) {
+      severities.push(host.severity);
+    }
   }
   let sev = Math.max(...severities);
-  if (sev === -Infinity) {
-    sev = NA_VALUE;
-  } else if (isNaN(sev)) {
+  // if there are hosts but all of them have "non-numerical" severities
+  if (hostEntities.length > 0 && severities.length === 0) {
     sev = LOCAL_NA_VALUE;
+  }
+  if (sev === -Infinity) {
+    // when Math.max got an empty severities array
+    sev = NA_VALUE;
   }
 
   return sev;
