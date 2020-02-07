@@ -16,6 +16,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import React from 'react';
+
+import styled from 'styled-components';
+
+import {_} from 'gmp/locale/lang';
+
+import PropTypes from 'web/utils/proptypes';
 
 export const createTag = ({name, gmp}) => {
   return gmp.tag
@@ -47,6 +54,31 @@ export const deleteTag = ({tagId, gmp}) => {
   return gmp.tag.delete({
     id: tagId,
   });
+};
+
+const ToolTipContent = styled.div`
+  font-weight: normal;
+  text-align: center;
+  line-height: 1.2em;
+`;
+
+export const createToolTipContent = ({severity}) => {
+  return (
+    <ToolTipContent>
+      {severity < 0 ? (
+        _('No original severity value available')
+      ) : (
+        <span>
+          {_('Original severity: ')}
+          <b>{severity}</b>
+        </span>
+      )}
+    </ToolTipContent>
+  );
+};
+
+createToolTipContent.propTypes = {
+  severity: PropTypes.number,
 };
 
 // vim: set ts=2 sw=2 tw=80:

@@ -28,6 +28,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {exclude} from 'gmp/utils/object';
 
 import Group from 'web/components/chart/group';
+import ToolTip from 'web/components/chart/tooltip';
 import ErrorBoundary from 'web/components/error/errorboundary';
 
 import {selector as hostSelector} from 'web/store/entities/hosts';
@@ -45,7 +46,7 @@ import ProcessNode from './processnode';
 import ProcessPanel from './processpanel';
 import Tools from './tools';
 
-import {createTag, deleteTag, editTag} from './utils';
+import {createTag, createToolTipContent, deleteTag, editTag} from './utils';
 
 const DEFAULT_PROCESS_SIZE = 75;
 
@@ -487,23 +488,29 @@ class ProcessMap extends React.Component {
                 } = processes[key];
                 const isSelected = processes[key] === this.selectedElement;
                 return (
-                  <ProcessNode
-                    color={color}
-                    comment={comment}
-                    cursor={processCursorType}
-                    derivedSeverity={derivedSeverity}
-                    id={id}
-                    isSelected={isSelected}
-                    key={id}
-                    name={name}
-                    radius={DEFAULT_PROCESS_SIZE}
-                    severity={severity}
-                    x={x}
-                    y={y}
-                    onMouseDown={event =>
-                      this.handleSelectElement(event, processes[key])
-                    }
-                  />
+                  <ToolTip key={id} content={createToolTipContent({severity})}>
+                    {({targetRef, hide, show}) => (
+                      <ProcessNode
+                        color={color}
+                        comment={comment}
+                        cursor={processCursorType}
+                        derivedSeverity={derivedSeverity}
+                        id={id}
+                        isSelected={isSelected}
+                        name={name}
+                        radius={DEFAULT_PROCESS_SIZE}
+                        severity={severity}
+                        x={x}
+                        y={y}
+                        forwardedRef={targetRef}
+                        onMouseEnter={show}
+                        onMouseLeave={hide}
+                        onMouseDown={event =>
+                          this.handleSelectElement(event, processes[key])
+                        }
+                      />
+                    )}
+                  </ToolTip>
                 );
               })}
             </Group>

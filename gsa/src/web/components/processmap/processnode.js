@@ -76,9 +76,12 @@ const ProcessNode = ({
   isSelected = false,
   name,
   radius,
+  forwardedRef,
   x,
   y,
   onMouseDown,
+  onMouseEnter,
+  onMouseLeave,
   onMouseUp,
 }) => {
   return (
@@ -88,7 +91,10 @@ const ProcessNode = ({
       name={name}
       cursor={cursor}
       isSelected={isSelected}
+      ref={forwardedRef}
       onMouseDown={onMouseDown}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       onMouseUp={onMouseUp}
     >
       <StyledCircle
@@ -113,6 +119,7 @@ ProcessNode.propTypes = {
   color: PropTypes.string,
   comment: PropTypes.string,
   cursor: PropTypes.string,
+  forwardedRef: PropTypes.ref,
   id: PropTypes.string,
   isSelected: PropTypes.bool,
   name: PropTypes.string,
@@ -120,6 +127,8 @@ ProcessNode.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   onMouseDown: PropTypes.func,
+  onMouseEnter: PropTypes.func,
+  onMouseLeave: PropTypes.func,
   onMouseUp: PropTypes.func,
 };
 
