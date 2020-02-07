@@ -32,9 +32,39 @@ const StyledG = styled.g`
   }
 `;
 
+const calculateLine = ({source, target}) => {
+  const middleX = (target.x + source.x) / 2;
+  const middleY = (target.y + source.y) / 2;
+  return (
+    source.x +
+    ',' +
+    source.y +
+    ' ' +
+    middleX +
+    ',' +
+    middleY +
+    ' ' +
+    target.x +
+    ',' +
+    target.y
+  );
+};
+
 const Edge = ({cursor, isSelected = false, source, target, onMouseDown}) => {
   return (
     <StyledG isSelected={isSelected} cursor={cursor} onMouseDown={onMouseDown}>
+      <defs>
+        <marker
+          id="mid"
+          orient="auto"
+          markerWidth="10"
+          markerHeight="10"
+          refX="0"
+          refY="2.5"
+        >
+          <path d="M 5,2.5 0,5 0,0 z" />
+        </marker>
+      </defs>
       <line
         data-testid="bpm-edge-line"
         x1={source.x}
@@ -43,6 +73,15 @@ const Edge = ({cursor, isSelected = false, source, target, onMouseDown}) => {
         y2={target.y}
         fill={Theme.darkGray}
         strokeWidth="4px"
+      />
+      {/* in order to be able to use midMarker this invisible polyline is
+          rendered to position the arrow head. The polyline can not be hovered
+          or selected, though, so for element selection the <line> is used */}
+      <polyline
+        data-testid="bpm-edge-polyline"
+        points={calculateLine({source, target})}
+        strokeWidth="4px"
+        markerMid="url(#mid)"
       />
     </StyledG>
   );
