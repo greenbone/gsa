@@ -24,11 +24,14 @@ import styled from 'styled-components';
 
 import {connect} from 'react-redux';
 
+import {_} from 'gmp/locale/lang';
+
 import {isDefined} from 'gmp/utils/identity';
 import {exclude} from 'gmp/utils/object';
 
 import Group from 'web/components/chart/group';
 import ToolTip from 'web/components/chart/tooltip';
+import ConfirmationDialog from 'web/components/dialog/confirmationdialog';
 import ErrorBoundary from 'web/components/error/errorboundary';
 
 import {selector as hostSelector} from 'web/store/entities/hosts';
@@ -72,6 +75,7 @@ class ProcessMap extends React.Component {
     super(...args);
 
     this.state = {
+      confirmDeleteDialogVisible: false,
       createProcessDialogVisible: false,
       edgeDrawSource: undefined,
       edgeDrawTarget: undefined,
@@ -106,6 +110,8 @@ class ProcessMap extends React.Component {
       this,
     );
     this.openCreateProcessDialog = this.openCreateProcessDialog.bind(this);
+    this.openConfirmDeleteDialog = this.openConfirmDeleteDialog.bind(this);
+    this.closeConfirmDeleteDialog = this.closeConfirmDeleteDialog.bind(this);
     this.saveMaps = this.saveMaps.bind(this);
   }
 
@@ -146,7 +152,16 @@ class ProcessMap extends React.Component {
     const {createProcessDialogVisible} = this.state;
     switch (event.key) {
       case 'Delete':
-        if (isDefined(this.selectedElement) && !createProcessDialogVisible) {
+        if (
+          !createProcessDialogVisible &&
+          isDefined(this.selectedElement) &&
+          this.selectedElement.type === 'process'
+        ) {
+          this.openConfirmDeleteDialog();
+        } else if (
+          isDefined(this.selectedElement) &&
+          !createProcessDialogVisible
+        ) {
           this.handleDeleteElement();
         }
         break;
@@ -228,6 +243,15 @@ class ProcessMap extends React.Component {
   closeCreateProcessDialog() {
     this.setState({createProcessDialogVisible: false});
   }
+
+  openConfirmDeleteDialog() {
+    this.setState({confirmDeleteDialogVisible: true});
+  }
+
+  closeConfirmDeleteDialog() {
+    this.setState({confirmDeleteDialogVisible: false});
+  }
+
   handleCloseCreateProcessDialog() {
     this.closeCreateProcessDialog();
   }
@@ -432,6 +456,7 @@ class ProcessMap extends React.Component {
 
   render() {
     const {
+      confirmDeleteDialogVisible,
       createProcessDialogVisible,
       edges = {},
       isDraggingBackground,
@@ -443,6 +468,11 @@ class ProcessMap extends React.Component {
     } = this.state;
     const cursorType = isDraggingBackground ? 'move' : 'default';
     const processCursorType = isDraggingProcess ? 'move' : 'grab';
+
+    const deleteHandler =
+      isDefined(this.selectedElement) && this.selectedElement.type === 'process'
+        ? this.openConfirmDeleteDialog
+        : this.handleDeleteElement;
 
     return (
       <ErrorBoundary>
@@ -521,7 +551,7 @@ class ProcessMap extends React.Component {
             drawIsActive={isDrawingEdge}
             onCreateProcessClick={this.handleOpenCreateProcessDialog}
             onDrawEdgeClick={this.handleDrawEdge}
-            onDeleteClick={this.handleDeleteElement}
+            onDeleteClick={deleteHandler}
             onToggleConditionalColorization={
               this.props.onToggleConditionalColorization
             }
@@ -555,6 +585,25 @@ class ProcessMap extends React.Component {
             onClose={this.handleCloseCreateProcessDialog}
             onCreate={this.handleCreateProcess}
             onEdit={this.handleProcessChange}
+          />
+        )}
+        {confirmDeleteDialogVisible && (
+          <ConfirmationDialog
+            rightButtonTitle={_('Delete')}
+            text={_(
+              'Deleting the process will also delete the tag that is ' +
+                'associated with it. If this tag is used for any other ' +
+                'purpose besides business process mapping, this ' +
+                'functionality will be lost.',
+            )}
+            title={_('Remove Process {{name}}', {
+              name: this.selectedElement.name,
+            })}
+            onClose={() => this.closeConfirmDeleteDialog()}
+            onResumeClick={() => {
+              this.handleDeleteElement();
+              this.closeConfirmDeleteDialog();
+            }}
           />
         )}
       </ErrorBoundary>
