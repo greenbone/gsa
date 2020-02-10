@@ -21,11 +21,14 @@ import React, {useEffect, useState} from 'react';
 
 import {useSelector, useDispatch} from 'react-redux';
 
+import {_} from 'gmp/locale/lang';
+
 import Filter from 'gmp/models/filter';
 
 import {isDefined} from 'gmp/utils/identity';
 
 import Loading from 'web/components/loading/loading';
+import ConfirmationDialog from 'web/components/dialog/confirmationdialog';
 
 import {
   loadEntities as loadHosts,
@@ -38,9 +41,40 @@ import useGmp from 'web/utils/useGmp';
 
 import {loadBusinessProcessMaps} from 'web/store/businessprocessmaps/actions';
 
-import useColorize from 'web/components/processmap/usecolorize';
+import useColorize from './usecolorize';
 
 export const hostsFilter = id => Filter.fromString('tag_id=' + id).all();
+
+const createDialogContent = failedTags => {
+  return (
+    <span>
+      <div>
+        {_(
+          'While loading the processes one or more corresponding tag(s) ' +
+            'could not be found. Try reloading the map. If that does not help ' +
+            'check the trashcan for those tags. If the tags are not there, ' +
+            'affected processes need to be re-created by hand.',
+        )}
+      </div>
+      <br />
+      <div>
+        {_('Affected processes:')}
+        <br />
+        {failedTags.map((tag, index) => {
+          return (
+            <span key={index}>
+              {_('Process: "{{name}}", tag ID: {{tagId}}', {
+                name: tag.processName,
+                tagId: tag.tagId,
+              })}
+              <br />
+            </span>
+          );
+        })}
+      </div>
+    </span>
+  );
+};
 
 const ProcessMapsLoader = ({children, mapId = '1'}) => {
   // TODO '1' is an ID that needs to be dynamically changed when >1 maps are
@@ -72,13 +106,24 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
   };
   const hostFilter = hostsFilter(selectedElement.tagId);
 
+  const [failedTags, setFailedTags] = useState([]);
+
   useEffect(() => {
     const processMapsTemp = isDefined(processMap) ? processMap : {};
     let tempHostFilter;
+    const tmpFailedTags = [];
     for (const proc in processMapsTemp.processes) {
-      tempHostFilter = hostsFilter(processMapsTemp.processes[proc].tagId);
+      const {tagId, name} = processMapsTemp.processes[proc];
+      // check whether a tag with tagId exists prior to loading hosts
+      /* eslint-disable handle-callback-err */
+      gmp.tag.get({id: tagId}).catch(err => {
+        /* eslint-enable */
+        tmpFailedTags.push({processName: name, tagId});
+      });
+      tempHostFilter = hostsFilter(tagId);
       dispatch(loadHosts(gmp)(tempHostFilter));
     }
+    setFailedTags(tmpFailedTags);
   }, [processMap, update, dispatch, gmp]);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -108,6 +153,14 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
     applyConditionalColorization,
   );
 
+  const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
+
+  useEffect(() => {
+    if (failedTags.length > 0 && !isLoading) {
+      setConfirmDialogVisible(true);
+    }
+  }, [failedTags, isLoading]);
+
   return (
     <React.Fragment>
       {isLoading ? (
@@ -123,6 +176,15 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
           onSelectElement: handleSelectElement,
           onToggleConditionalColorization: handleToggleConditionalColorization,
         })
+      )}
+      {confirmDialogVisible && (
+        <ConfirmationDialog
+          content={createDialogContent(failedTags)}
+          title={_('Error Loading Processes')}
+          width="700px"
+          onClose={() => setConfirmDialogVisible(false)}
+          onResumeClick={() => setConfirmDialogVisible(false)}
+        />
       )}
     </React.Fragment>
   );
