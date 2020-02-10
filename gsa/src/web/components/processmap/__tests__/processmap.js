@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -24,7 +25,9 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Filter from 'gmp/models/filter';
 
-import {rendererWith} from 'web/utils/testing';
+import {entitiesLoadingActions} from 'web/store/entities/hosts';
+
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import ProcessMap from '../processmap';
 
@@ -38,7 +41,7 @@ export const getMockProcessMap = () => {
         color: '#f0a519',
         comment: 'bar',
         derivedSeverity: 5,
-        id: '21',
+        id: 21,
         name: 'foo',
         severity: 5,
         tagId: 31,
@@ -50,9 +53,21 @@ export const getMockProcessMap = () => {
         color: '#f0a519',
         comment: 'ipsum',
         derivedSeverity: 5,
-        id: '22',
+        id: 22,
         name: 'lorem',
         severity: undefined,
+        tagId: 32,
+        type: 'process',
+        x: 300,
+        y: 200,
+      },
+      23: {
+        color: '#c83814',
+        comment: 'world',
+        derivedSeverity: 10,
+        id: 23,
+        name: 'hello',
+        severity: 10,
         tagId: 32,
         type: 'process',
         x: 300,
@@ -67,13 +82,15 @@ export const getMockProcessMap = () => {
   };
 };
 
+const hostFilter = Filter.fromString('tag_id=31 first=1 rows=10 sort=name');
+
 const hosts = [
   {name: '123.456.78.910', id: '1234', severity: 5},
   {name: '109.876.54.321', id: '5678', severity: undefined},
 ];
 
 const getAllHosts = jest.fn().mockResolvedValue({
-  data: [hosts],
+  data: hosts,
   meta: {
     filter: Filter.fromString(),
     counts: new CollectionCounts(),
@@ -180,5 +197,415 @@ describe('ProcessMap tests', () => {
     expect(element).not.toHaveTextContent(
       'No hosts associated with this process.',
     );
+  });
+
+  test('should render with selected Element without hosts', () => {
+    const {mockProcessMap} = getMockProcessMap();
+
+    const handleForceUpdate = jest.fn();
+    const handleSelectElement = jest.fn();
+    const handleToggleConditionalColorization = jest.fn();
+
+    const getEmptyHostsList = jest.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    });
+
+    const gmp = {
+      hosts: {
+        getAll: getEmptyHostsList,
+      },
+    };
+
+    const {render, store} = rendererWith({
+      capabilities: true,
+      gmp,
+      router: true,
+      store: true,
+    });
+
+    const {element, getAllByTestId} = render(
+      <ProcessMap
+        applyConditionalColorization={true}
+        mapId={'1'}
+        hostFilter={hostFilter}
+        processMaps={mockProcessMap}
+        forceUpdate={handleForceUpdate}
+        onSelectElement={handleSelectElement}
+        onToggleConditionalColorization={handleToggleConditionalColorization}
+      />,
+    );
+
+    store.dispatch(entitiesLoadingActions.success([], hostFilter, hostFilter));
+
+    const circles = getAllByTestId('process-node-circle');
+
+    // select process
+    fireEvent.mouseDown(circles[0]);
+    fireEvent.mouseUp(circles[0]);
+
+    const icons = getAllByTestId('svg-icon');
+    const buttons = element.querySelectorAll('button');
+    const header = element.querySelectorAll('th');
+
+    // panel title
+    expect(element).toHaveTextContent('foo');
+    expect(icons[5]).toHaveAttribute('title', 'Edit process');
+
+    // add hosts
+    expect(buttons[0]).toHaveAttribute('title', 'Add Selected Hosts');
+    expect(buttons[0]).toHaveTextContent('Add Selected Hosts');
+
+    // host table
+
+    // headings
+    expect(header[0]).toHaveTextContent('Host');
+    expect(header[1]).toHaveTextContent('Severity');
+    expect(header[2]).toHaveTextContent('Actions');
+
+    expect(element).toHaveTextContent('No hosts associated with this process.');
+  });
+
+  test('should render with selected Element with hosts', () => {
+    const {mockProcessMap} = getMockProcessMap();
+
+    const handleForceUpdate = jest.fn();
+    const handleSelectElement = jest.fn();
+    const handleToggleConditionalColorization = jest.fn();
+    const gmp = {
+      hosts: {
+        getAll: getAllHosts,
+      },
+    };
+
+    const {render, store} = rendererWith({
+      capabilities: true,
+      gmp,
+      router: true,
+      store: true,
+    });
+
+    const {element, getAllByTestId} = render(
+      <ProcessMap
+        applyConditionalColorization={true}
+        mapId={'1'}
+        hostFilter={hostFilter}
+        processMaps={mockProcessMap}
+        forceUpdate={handleForceUpdate}
+        onSelectElement={handleSelectElement}
+        onToggleConditionalColorization={handleToggleConditionalColorization}
+      />,
+    );
+
+    store.dispatch(
+      entitiesLoadingActions.success(hosts, hostFilter, hostFilter),
+    );
+
+    const circles = getAllByTestId('process-node-circle');
+
+    // select process
+    fireEvent.mouseDown(circles[0]);
+    fireEvent.mouseUp(circles[0]);
+
+    const detailsLinks = getAllByTestId('details-link');
+    const icons = getAllByTestId('svg-icon');
+    const progressBars = getAllByTestId('progressbar-box');
+    const buttons = element.querySelectorAll('button');
+    const header = element.querySelectorAll('th');
+
+    // panel title
+    expect(element).toHaveTextContent('foo');
+    expect(icons[5]).toHaveAttribute('title', 'Edit process');
+
+    // add hosts
+    expect(buttons[0]).toHaveAttribute('title', 'Add Selected Hosts');
+    expect(buttons[0]).toHaveTextContent('Add Selected Hosts');
+
+    // host table
+
+    // Headings
+    expect(header[0]).toHaveTextContent('Host');
+    expect(header[1]).toHaveTextContent('Severity');
+    expect(header[2]).toHaveTextContent('Actions');
+
+    // Row 1
+    expect(detailsLinks[0]).toHaveAttribute('href', '/host/1234');
+    expect(detailsLinks[0]).toHaveTextContent('123.456.78.910');
+    expect(progressBars[0]).toHaveAttribute('title', 'Medium');
+    expect(progressBars[0]).toHaveTextContent('5.0 (Medium)');
+    expect(icons[6]).toHaveAttribute('title', 'Remove host from process');
+
+    // Row 2
+    expect(detailsLinks[1]).toHaveAttribute('href', '/host/5678');
+    expect(detailsLinks[1]).toHaveTextContent('109.876.54.321');
+    expect(progressBars[1]).toHaveAttribute('title', 'N/A');
+    expect(progressBars[1]).toHaveTextContent('N/A');
+    expect(icons[7]).toHaveAttribute('title', 'Remove host from process');
+  });
+
+  test('should call click handler for colorization', () => {
+    const {mockProcessMap} = getMockProcessMap();
+
+    const handleForceUpdate = jest.fn();
+    const handleSelectElement = jest.fn();
+    const handleToggleConditionalColorization = jest.fn();
+
+    const gmp = {
+      hosts: {
+        getAll: getAllHosts,
+      },
+    };
+
+    const {render} = rendererWith({
+      gmp,
+      store: true,
+    });
+
+    const {getByTestId} = render(
+      <ProcessMap
+        applyConditionalColorization={true}
+        mapId={'1'}
+        processMaps={mockProcessMap}
+        forceUpdate={handleForceUpdate}
+        onSelectElement={handleSelectElement}
+        onToggleConditionalColorization={handleToggleConditionalColorization}
+      />,
+    );
+
+    const colorIcon = getByTestId('bpm-tool-icon-color');
+
+    fireEvent.click(colorIcon);
+    expect(handleToggleConditionalColorization).toHaveBeenCalled();
+  });
+
+  test('should select elements', () => {
+    const {mockProcessMap, processes, edges} = getMockProcessMap();
+    const {21: process1} = processes;
+    const {11: edge1} = edges;
+
+    const handleForceUpdate = jest.fn();
+    const handleSelectElement = jest.fn();
+    const handleToggleConditionalColorization = jest.fn();
+
+    const saveBusinessProcessMaps = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const gmp = {
+      hosts: {
+        getAll: getAllHosts,
+      },
+      user: {
+        saveBusinessProcessMaps,
+      },
+    };
+
+    const {render} = rendererWith({
+      gmp,
+      store: true,
+    });
+
+    const {element, getAllByTestId} = render(
+      <ProcessMap
+        applyConditionalColorization={true}
+        mapId={'1'}
+        processMaps={mockProcessMap}
+        forceUpdate={handleForceUpdate}
+        onSelectElement={handleSelectElement}
+        onToggleConditionalColorization={handleToggleConditionalColorization}
+      />,
+    );
+
+    const circles = getAllByTestId('process-node-circle');
+    const bpmEdges = getAllByTestId('bpm-edge-line');
+    const background = element.querySelectorAll('rect');
+
+    fireEvent.mouseDown(background[0]);
+    fireEvent.mouseUp(background[0]);
+
+    expect(handleSelectElement).not.toHaveBeenCalled();
+
+    fireEvent.mouseDown(circles[0]);
+    fireEvent.mouseUp(circles[0]);
+
+    expect(handleSelectElement).toHaveBeenCalledWith(process1);
+
+    fireEvent.mouseDown(bpmEdges[0]);
+    fireEvent.mouseUp(bpmEdges[0]);
+
+    expect(handleSelectElement).toHaveBeenCalledWith(edge1);
+  });
+
+  test('should save map when drawing new edge', () => {
+    const {mockProcessMap} = getMockProcessMap();
+
+    const handleForceUpdate = jest.fn();
+    const handleSelectElement = jest.fn();
+    const handleToggleConditionalColorization = jest.fn();
+
+    const saveBusinessProcessMaps = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const gmp = {
+      hosts: {
+        getAll: getAllHosts,
+      },
+      user: {
+        saveBusinessProcessMaps,
+      },
+    };
+
+    const {render} = rendererWith({
+      gmp,
+      store: true,
+    });
+
+    const {getByTestId, getAllByTestId} = render(
+      <ProcessMap
+        applyConditionalColorization={true}
+        mapId={'1'}
+        processMaps={mockProcessMap}
+        forceUpdate={handleForceUpdate}
+        onSelectElement={handleSelectElement}
+        onToggleConditionalColorization={handleToggleConditionalColorization}
+      />,
+    );
+
+    const circles = getAllByTestId('process-node-circle');
+    const edgeIcon = getByTestId('bpm-tool-icon-edge');
+
+    expect(edgeIcon).not.toHaveStyleRule('background-color', '#66c430');
+    fireEvent.click(edgeIcon);
+    expect(edgeIcon).toHaveStyleRule('background-color', '#66c430');
+
+    fireEvent.mouseDown(circles[2]);
+    fireEvent.mouseUp(circles[2]);
+
+    expect(saveBusinessProcessMaps).not.toHaveBeenCalled();
+
+    fireEvent.mouseDown(circles[1]);
+    fireEvent.mouseUp(circles[1]);
+
+    expect(edgeIcon).not.toHaveStyleRule('background-color', '#66c430');
+
+    expect(saveBusinessProcessMaps).toHaveBeenCalled();
+  });
+
+  test('should save map after a process was moved', () => {
+    const {mockProcessMap} = getMockProcessMap();
+
+    const handleForceUpdate = jest.fn();
+    const handleSelectElement = jest.fn();
+    const handleToggleConditionalColorization = jest.fn();
+
+    const saveBusinessProcessMaps = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const gmp = {
+      hosts: {
+        getAll: getAllHosts,
+      },
+      user: {
+        saveBusinessProcessMaps,
+      },
+    };
+
+    const {render} = rendererWith({
+      gmp,
+      store: true,
+    });
+
+    const {getAllByTestId} = render(
+      <ProcessMap
+        applyConditionalColorization={true}
+        mapId={'1'}
+        processMaps={mockProcessMap}
+        forceUpdate={handleForceUpdate}
+        onSelectElement={handleSelectElement}
+        onToggleConditionalColorization={handleToggleConditionalColorization}
+      />,
+    );
+
+    const circles = getAllByTestId('process-node-circle');
+
+    fireEvent.mouseDown(circles[0]);
+
+    expect(saveBusinessProcessMaps).not.toHaveBeenCalled();
+
+    fireEvent.mouseMove(circles[0]);
+
+    expect(saveBusinessProcessMaps).not.toHaveBeenCalled();
+
+    fireEvent.mouseUp(circles[0]);
+
+    expect(saveBusinessProcessMaps).toHaveBeenCalled();
+  });
+
+  test('should force update for deleting a host', async () => {
+    const {mockProcessMap} = getMockProcessMap();
+
+    const handleForceUpdate = jest.fn();
+    const handleSelectElement = jest.fn();
+    const handleToggleConditionalColorization = jest.fn();
+
+    const saveTag = jest.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    });
+
+    const gmp = {
+      hosts: {
+        getAll: getAllHosts,
+      },
+      tag: {
+        save: saveTag,
+      },
+    };
+
+    const {render, store} = rendererWith({
+      capabilities: true,
+      gmp,
+      router: true,
+      store: true,
+    });
+
+    const {getAllByTestId} = render(
+      <ProcessMap
+        applyConditionalColorization={true}
+        mapId={'1'}
+        hostFilter={hostFilter}
+        processMaps={mockProcessMap}
+        forceUpdate={handleForceUpdate}
+        onSelectElement={handleSelectElement}
+        onToggleConditionalColorization={handleToggleConditionalColorization}
+      />,
+    );
+
+    store.dispatch(
+      entitiesLoadingActions.success(hosts, hostFilter, hostFilter),
+    );
+
+    const circles = getAllByTestId('process-node-circle');
+
+    // select process
+    fireEvent.mouseDown(circles[0]);
+    fireEvent.mouseUp(circles[0]);
+
+    const icons = getAllByTestId('svg-icon');
+
+    await act(async () => {
+      expect(icons[6]).toHaveAttribute('title', 'Remove host from process');
+      fireEvent.click(icons[6]);
+    });
+
+    expect(handleForceUpdate).toHaveBeenCalled();
   });
 });
