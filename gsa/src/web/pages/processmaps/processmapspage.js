@@ -75,7 +75,7 @@ const ProcessMapsPage = () => {
         <ToolBarIcons />
         <Section
           img={<BpmIcon size="large" />}
-          title={_('Business Process Maph')}
+          title={_('Business Process Map')}
         />
         <StyledLayout grow="1">
           <ProcessMapLoader>
