@@ -79,7 +79,7 @@ class ExternalLink extends React.Component {
           <ConfirmationDialog
             onClose={this.handleCloseDialog}
             onResumeClick={this.handleOpenLink}
-            text={dialogtext}
+            content={dialogtext}
             title={dialogtitle}
             rightButtonTitle={_('Follow Link')}
             to={to}

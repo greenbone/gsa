@@ -77,22 +77,19 @@ class TestButton extends React.Component {
     if (this.state.dialog && this.state.notification === 'Light on') {
       dialog = (
         <ConfirmationDialog
+          content="The light will be switched on!"
           title="Light Switch Alarm"
           onResumeClick={this.handleResumeClick}
           onClose={this.handleClose}
-          text="The light will be switched on!"
         />
       );
-    } else if (
-      this.state.dialog &&
-      this.state.notification === 'Light off'
-    ) {
+    } else if (this.state.dialog && this.state.notification === 'Light off') {
       dialog = (
         <ConfirmationDialog
+          content="The light will be switched off!"
           title="Light Switch Alarm"
           onResumeClick={this.handleResumeClick}
           onClose={this.handleClose}
-          text="The light will be switched off!"
         />
       );
     } else {
