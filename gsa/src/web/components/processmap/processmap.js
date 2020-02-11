@@ -37,6 +37,7 @@ import ErrorBoundary from 'web/components/error/errorboundary';
 import {selector as hostSelector} from 'web/store/entities/hosts';
 
 import {saveBusinessProcessMap} from 'web/store/businessprocessmaps/actions';
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -100,6 +101,7 @@ class ProcessMap extends React.Component {
     this.handleDrawEdge = this.handleDrawEdge.bind(this);
     this.handleCreateEdge = this.handleCreateEdge.bind(this);
     this.handleCreateProcess = this.handleCreateProcess.bind(this);
+    this.handleInteraction = this.handleInteraction.bind(this);
     this.handleSelectElement = this.handleSelectElement.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
     this.handleProcessChange = this.handleProcessChange.bind(this);
@@ -219,6 +221,7 @@ class ProcessMap extends React.Component {
         this.saveMaps({processes, edges});
       }
     }
+    this.handleInteraction();
   }
 
   getMousePosition(event) {
@@ -287,6 +290,7 @@ class ProcessMap extends React.Component {
         this.saveMaps({processes});
       },
     );
+    this.handleInteraction();
   }
 
   handleProcessChange(newProcess) {
@@ -309,6 +313,7 @@ class ProcessMap extends React.Component {
       gmp: this.props.gmp,
     });
     this.saveMaps({processes});
+    this.handleInteraction();
   }
 
   handleAddHosts(hostIds) {
@@ -320,6 +325,7 @@ class ProcessMap extends React.Component {
     }).then(() => {
       this.props.forceUpdate();
     });
+    this.handleInteraction();
   }
 
   handleDeleteHosts(hostId) {
@@ -332,6 +338,7 @@ class ProcessMap extends React.Component {
     }).then(() => {
       this.props.forceUpdate();
     });
+    this.handleInteraction();
   }
 
   handleDrawEdge() {
@@ -358,6 +365,7 @@ class ProcessMap extends React.Component {
       edgeDrawTarget: undefined,
     }));
     this.saveMaps({edges});
+    this.handleInteraction();
   }
 
   handleSelectElement(event, element) {
@@ -377,6 +385,7 @@ class ProcessMap extends React.Component {
     this.props.onSelectElement(element);
     this.selectedElement = element;
     this.draggingElement = element;
+    this.handleInteraction();
   }
 
   handleMouseDown(event) {
@@ -453,6 +462,13 @@ class ProcessMap extends React.Component {
     const processNode = processes[processId];
     return {x: processNode.x, y: processNode.y};
   };
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
 
   render() {
     const {
@@ -567,6 +583,7 @@ class ProcessMap extends React.Component {
             onAddHosts={this.handleAddHosts}
             onDeleteHost={this.handleDeleteHosts}
             onEditProcessClick={this.openCreateProcessDialog}
+            onInteraction={this.handleInteraction}
           />
         </Wrapper>
         {createProcessDialogVisible && (
@@ -627,6 +644,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
   return {
     saveUpdatedMaps: updatedMaps =>
       dispatch(saveBusinessProcessMap(gmp)(updatedMaps)),
+    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   };
 };
 
@@ -638,6 +656,7 @@ ProcessMap.propTypes = {
   mapId: PropTypes.id, // isRequired
   processMaps: PropTypes.object,
   saveUpdatedMaps: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onSelectElement: PropTypes.func.isRequired,
   onToggleConditionalColorization: PropTypes.func.isRequired,
 };

@@ -224,6 +224,10 @@ class ProcessPanel extends React.Component {
     counts.first = 1;
     counts.length = getNumListedItems(counts.first, hostList.length);
 
+    if (isDefined(this.props.onInteraction)) {
+      this.props.onInteraction();
+    }
+
     this.setState({
       counts,
     });
@@ -236,6 +240,10 @@ class ProcessPanel extends React.Component {
 
     counts.first = newFirst;
     counts.length = getNumListedItems(newFirst, hostList.length);
+
+    if (isDefined(this.props.onInteraction)) {
+      this.props.onInteraction();
+    }
 
     this.setState({
       counts,
@@ -250,6 +258,10 @@ class ProcessPanel extends React.Component {
     counts.first = hostList.length - remainingHosts + 1;
     counts.length = remainingHosts;
 
+    if (isDefined(this.props.onInteraction)) {
+      this.props.onInteraction();
+    }
+
     this.setState({
       counts,
     });
@@ -260,6 +272,10 @@ class ProcessPanel extends React.Component {
     const newFirst = counts.first - NUMBER_OF_LISTED_HOSTS;
 
     counts.first = newFirst;
+
+    if (isDefined(this.props.onInteraction)) {
+      this.props.onInteraction();
+    }
 
     this.setState({
       counts,
@@ -353,6 +369,7 @@ ProcessPanel.propTypes = {
   onAddHosts: PropTypes.func.isRequired,
   onDeleteHost: PropTypes.func.isRequired,
   onEditProcessClick: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withGmp(ProcessPanel);
