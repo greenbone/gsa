@@ -591,12 +591,12 @@ class ProcessMap extends React.Component {
           <ConfirmationDialog
             rightButtonTitle={_('Delete')}
             content={_(
-              'Deleting the process will also delete the tag that is ' +
-                'associated with it. If this tag is used for any other ' +
+              'Please note: Deleting the process will also delete the tag that' +
+                ' is associated with it. If this tag is used for any other ' +
                 'purpose besides business process mapping, this ' +
                 'functionality will be lost.',
             )}
-            title={_('Remove Process {{name}}', {
+            title={_('Delete Process {{name}}', {
               name: this.selectedElement.name,
             })}
             onClose={() => this.closeConfirmDeleteDialog()}
