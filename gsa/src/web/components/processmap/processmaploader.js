@@ -127,8 +127,8 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
       });
       tempHostFilter = hostsFilter(tagId);
       dispatch(loadHosts(gmp)(tempHostFilter));
+      setFailedTags(tmpFailedTags);
     }
-    setFailedTags(tmpFailedTags);
   }, [processMap, update, dispatch, gmp]);
 
   const [isLoading, setIsLoading] = useState(true);
