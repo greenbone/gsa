@@ -33,6 +33,8 @@ import ProcessMap from '../processmap';
 
 setLocale('en');
 
+const renewSession = jest.fn().mockResolvedValue({data: {}});
+
 export const getMockProcessMap = () => {
   const mockProcessMap = {
     edges: {11: {id: 11, source: 21, target: 22, type: 'edge'}},
@@ -108,6 +110,7 @@ describe('ProcessMap tests', () => {
       hosts: {
         getAll: getAllHosts,
       },
+      user: {renewSession},
     };
 
     const {render} = rendererWith({
@@ -218,6 +221,7 @@ describe('ProcessMap tests', () => {
       hosts: {
         getAll: getEmptyHostsList,
       },
+      user: {renewSession},
     };
 
     const {render, store} = rendererWith({
@@ -279,6 +283,7 @@ describe('ProcessMap tests', () => {
       hosts: {
         getAll: getAllHosts,
       },
+      user: {renewSession},
     };
 
     const {render, store} = rendererWith({
@@ -357,6 +362,7 @@ describe('ProcessMap tests', () => {
       hosts: {
         getAll: getAllHosts,
       },
+      user: {renewSession},
     };
 
     const {render} = rendererWith({
@@ -400,6 +406,7 @@ describe('ProcessMap tests', () => {
       },
       user: {
         saveBusinessProcessMaps,
+        renewSession,
       },
     };
 
@@ -456,6 +463,7 @@ describe('ProcessMap tests', () => {
       },
       user: {
         saveBusinessProcessMaps,
+        renewSession,
       },
     };
 
@@ -512,6 +520,7 @@ describe('ProcessMap tests', () => {
       },
       user: {
         saveBusinessProcessMaps,
+        renewSession,
       },
     };
 
@@ -568,6 +577,7 @@ describe('ProcessMap tests', () => {
       tag: {
         save: saveTag,
       },
+      user: {renewSession},
     };
 
     const {render, store} = rendererWith({
