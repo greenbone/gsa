@@ -549,6 +549,11 @@ class ProcessMap extends React.Component {
               this.props.applyConditionalColorization
             }
             drawIsActive={isDrawingEdge}
+            showNoEdgeHelper={
+              Object.entries(edges).length < 1 &&
+              Object.entries(processes).length > 1
+            }
+            showNoProcessHelper={Object.entries(processes).length < 1}
             onCreateProcessClick={this.handleOpenCreateProcessDialog}
             onDrawEdgeClick={this.handleDrawEdge}
             onDeleteClick={deleteHandler}

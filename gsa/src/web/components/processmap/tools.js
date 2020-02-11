@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -42,6 +42,7 @@ const Container = styled.div`
 `;
 
 const IconWrapper = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-around;
   padding: 10px 0 10px 0;
@@ -63,9 +64,67 @@ const IconWrapper = styled.div`
       : undefined}
 `;
 
+const HelperArrow = styled.div`
+  position: absolute;
+  top: 13px;
+  left: 50px;
+  width: 5px;
+  height: 5px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid ${Theme.green};
+
+  animation: ${keyframes({
+      '0%': {
+        opacity: 0,
+      },
+      '83%': {
+        opacity: 0,
+      },
+      '100%': {
+        opacity: 1,
+      },
+    })}
+    3s ease;
+`;
+
+const Helper = styled.div`
+  position: absolute;
+  top: 5px;
+  left: 60px;
+  background-color: ${Theme.offWhite};
+  border: 1px solid ${Theme.green};
+  border-radius: 2px;
+  padding: 10px;
+  width: 200px;
+  box-shadow: 5px 5px 5px ${Theme.mediumGray};
+
+  animation: ${keyframes({
+      '0%': {
+        opacity: 0,
+      },
+      '66%': {
+        opacity: 0,
+        transform: 'scale(0.5)',
+      },
+      '83%': {
+        opacity: 0.5,
+        transform: 'scale(1.2)',
+        scale: 1,
+      },
+      '100%': {
+        opacity: 1,
+        transform: 'scale(1)',
+      },
+    })}
+    3s ease;
+`;
+
 const Tools = ({
   applyConditionalColorization,
   drawIsActive,
+  showNoEdgeHelper = false,
+  showNoProcessHelper = false,
   onCreateProcessClick,
   onDrawEdgeClick,
   onDeleteClick,
@@ -79,9 +138,15 @@ const Tools = ({
       <IconWrapper
         data-testid="bpm-tool-icon-new"
         title={_('Create new process')}
-        onClick={onCreateProcessClick}
+        onClick={() => onCreateProcessClick()}
       >
         <BpmIcon size="medium" />
+        {showNoProcessHelper && (
+          <React.Fragment>
+            <Helper>{_('Click here to create a process.')}</Helper>
+            <HelperArrow />
+          </React.Fragment>
+        )}
       </IconWrapper>
       <IconWrapper
         data-testid="bpm-tool-icon-edge"
@@ -90,6 +155,16 @@ const Tools = ({
         onClick={onDrawEdgeClick}
       >
         <TrendNoChangeIcon size="medium" />
+        {showNoEdgeHelper && (
+          <React.Fragment>
+            <Helper>
+              {_(
+                'To connect processes, click here, select the source process first and then the target.',
+              )}
+            </Helper>
+            <HelperArrow />
+          </React.Fragment>
+        )}
       </IconWrapper>
       <IconWrapper
         data-testid="bpm-tool-icon-delete"
@@ -116,6 +191,8 @@ const Tools = ({
 Tools.propTypes = {
   applyConditionalColorization: PropTypes.bool,
   drawIsActive: PropTypes.bool,
+  showNoEdgeHelper: PropTypes.bool,
+  showNoProcessHelper: PropTypes.bool,
   onCreateProcessClick: PropTypes.func,
   onDeleteClick: PropTypes.func,
   onDrawEdgeClick: PropTypes.func,

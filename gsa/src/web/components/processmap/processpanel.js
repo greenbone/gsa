@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import styled, {keyframes} from 'styled-components';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -60,16 +60,7 @@ const Container = styled.div`
   min-width: 250px;
   height: 100%;
   background-color: ${Theme.white};
-  border-left: 2px solid ${Theme.lightGray}
-  animation: ${keyframes({
-    '0%': {
-      left: '100%',
-    },
-    '100%': {
-      left: '70%',
-    },
-  })}
-    0.3s ease;
+  border-left: 2px solid ${Theme.lightGray};
 `;
 
 const TitleBox = styled.div`
