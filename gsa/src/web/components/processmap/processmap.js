@@ -24,6 +24,8 @@ import styled from 'styled-components';
 
 import {connect} from 'react-redux';
 
+import uuid from 'uuid/v4';
+
 import {_} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -266,7 +268,7 @@ class ProcessMap extends React.Component {
   handleCreateProcess(process) {
     let {processes = {}, translateX, translateY} = this.state;
     const {name, comment} = process;
-    const id = Date.now(); // TODO replace with actual UUID
+    const id = uuid();
     createTag({name: BPM_TAG_PREFIX + name, gmp: this.props.gmp}).then(
       newTagId => {
         processes = {
@@ -347,7 +349,7 @@ class ProcessMap extends React.Component {
 
   handleCreateEdge(source, target) {
     let {edges = {}} = this.state;
-    const id = Date.now();
+    const id = uuid();
     edges = {
       [id]: {
         source: source.id,

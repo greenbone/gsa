@@ -120,7 +120,7 @@ ProcessNode.propTypes = {
   comment: PropTypes.string,
   cursor: PropTypes.string,
   forwardedRef: PropTypes.ref,
-  id: PropTypes.string,
+  id: PropTypes.id.isRequired,
   isSelected: PropTypes.bool,
   name: PropTypes.string,
   radius: PropTypes.number.isRequired,
