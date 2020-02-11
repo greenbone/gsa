@@ -20,8 +20,6 @@ import React from 'react';
 
 import {setLocale} from 'gmp/locale/lang';
 
-import Filter from 'gmp/models/filter';
-
 import {entitiesLoadingActions} from 'web/store/entities/hosts';
 
 import {
@@ -35,6 +33,8 @@ import {
 import Theme from 'web/utils/theme';
 
 import {rendererWith} from 'web/utils/testing';
+
+import {hostsFilter} from '../processmaploader';
 
 import useColorize from '../usecolorize';
 
@@ -58,12 +58,12 @@ const mockProcessMap2 = {
   },
 };
 
-const hostFilter1 = Filter.fromString('tag_id=31 first=1 rows=-1');
-const hostFilter2 = Filter.fromString('tag_id=32 first=1 rows=-1');
-const hostFilter3 = Filter.fromString('tag_id=33 first=1 rows=-1');
-const hostFilter4 = Filter.fromString('tag_id=34 first=1 rows=-1');
-const hostFilter5 = Filter.fromString('tag_id=35 first=1 rows=-1');
-const hostFilter6 = Filter.fromString('tag_id=36 first=1 rows=-1');
+const hostFilter1 = hostsFilter('31');
+const hostFilter2 = hostsFilter('32');
+const hostFilter3 = hostsFilter('33');
+const hostFilter4 = hostsFilter('34');
+const hostFilter5 = hostsFilter('35');
+const hostFilter6 = hostsFilter('36');
 
 const hosts = [
   {name: '123.456.78.1', id: '41', severity: LOW_VALUE},
