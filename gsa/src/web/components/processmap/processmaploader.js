@@ -154,12 +154,13 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
   );
 
   const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
+  const [dialogShownOnce, setDialogShownOnce] = useState(false);
 
   useEffect(() => {
-    if (failedTags.length > 0 && !isLoading) {
+    if (failedTags.length > 0 && !isLoading && !dialogShownOnce) {
       setConfirmDialogVisible(true);
     }
-  }, [failedTags, isLoading]);
+  }, [failedTags.length, isLoading, dialogShownOnce]);
 
   return (
     <React.Fragment>
@@ -182,8 +183,14 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
           content={createDialogContent(failedTags)}
           title={_('Error Loading Processes')}
           width="700px"
-          onClose={() => setConfirmDialogVisible(false)}
-          onResumeClick={() => setConfirmDialogVisible(false)}
+          onClose={() => {
+            setConfirmDialogVisible(false);
+            setDialogShownOnce(true);
+          }}
+          onResumeClick={() => {
+            setConfirmDialogVisible(false);
+            setDialogShownOnce(true);
+          }}
         />
       )}
     </React.Fragment>
