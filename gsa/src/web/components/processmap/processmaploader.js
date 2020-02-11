@@ -43,7 +43,12 @@ import {loadBusinessProcessMaps} from 'web/store/businessprocessmaps/actions';
 
 import useColorize from './usecolorize';
 
-export const hostsFilter = id => Filter.fromString('tag_id=' + id).all();
+export const MAX_HOSTS_PER_PROCESS = 100;
+
+export const hostsFilter = id =>
+  Filter.fromString(
+    'tag_id=' + id + ' first=1 rows=' + (MAX_HOSTS_PER_PROCESS + 1),
+  );
 
 const createDialogContent = failedTags => {
   return (

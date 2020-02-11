@@ -46,6 +46,7 @@ import withGmp from 'web/utils/withGmp';
 
 import HostTable from './hosttable';
 
+import {MAX_HOSTS_PER_PROCESS} from './processmaploader';
 const NUMBER_OF_LISTED_HOSTS = 30;
 
 const Container = styled.div`
@@ -92,6 +93,12 @@ const HostsList = styled.div`
   display: flex;
   height: 100%;
   overflow: hidden;
+`;
+
+const MaxHostsWarning = styled.div`
+  width: 100%;
+  background-color: ${Theme.lightRed};
+  padding: 5px;
 `;
 
 const compareSeverity = (host1, host2) => {
@@ -150,12 +157,18 @@ class ProcessPanel extends React.Component {
       nextProps.element === nextProps.prevElement
     ) {
       const {hostList = []} = nextProps;
-      const {length} = hostList;
+      let {length} = hostList;
+
+      // account for the +1 hosts loaded with hostFilter()
+      length =
+        hostList.length > MAX_HOSTS_PER_PROCESS
+          ? hostList.length - 1
+          : hostList.length;
 
       const newCounts = prevState.counts.clone({
         first: prevState.counts.first,
         length: getNumListedItems(prevState.counts.first, length),
-        filtered: hostList.length,
+        filtered: length,
       });
 
       return {
@@ -164,11 +177,17 @@ class ProcessPanel extends React.Component {
     } else if (nextProps.element !== nextProps.prevElement) {
       const {hostList = []} = nextProps;
 
+      // account for the +1 hosts loaded with hostFilter()
+      const length =
+        hostList.length > MAX_HOSTS_PER_PROCESS
+          ? hostList.length - 1
+          : hostList.length;
+
       const newCounts = prevState.counts.clone({
         first: 1,
-        all: hostList.length,
+        all: length,
         length: NUMBER_OF_LISTED_HOSTS,
-        filtered: hostList.length,
+        filtered: length,
         rows: NUMBER_OF_LISTED_HOSTS,
       });
 
@@ -299,6 +318,16 @@ class ProcessPanel extends React.Component {
           disabled={element.type !== 'process'}
           onClick={this.handleAddHosts}
         />
+        {hostList.length > MAX_HOSTS_PER_PROCESS && (
+          <MaxHostsWarning>
+            {_(
+              'The maximum of {{num}} hosts was exceded. If there are more ' +
+                'hosts associated with this process, they will not be taken ' +
+                'into account.',
+              {num: MAX_HOSTS_PER_PROCESS},
+            )}
+          </MaxHostsWarning>
+        )}
         <HostsList>
           {isLoadingHosts ? (
             <Loading />
