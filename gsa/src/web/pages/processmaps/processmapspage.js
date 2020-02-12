@@ -37,10 +37,10 @@ import withGmp from 'web/utils/withGmp';
 const ToolBarIcons = () => (
   <span>
     <ManualIcon
-      page="web-interface"
-      anchor="displaying-the-feed-status"
+      page="reports"
+      anchor="using-business-process-maps"
       size="small"
-      title={_('Help: Business Process Maps')}
+      title={_('Help: Business Process Map')}
     />
   </span>
 );
