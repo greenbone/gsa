@@ -22,11 +22,11 @@ import styled, {keyframes} from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import BpmIcon from 'web/components/icon/bpmicon';
+import ConditionalColorizationIcon from 'web/components/icon/condcoloricon';
 import DeleteIcon from 'web/components/icon/deleteicon';
-import OverrideIcon from 'web/components/icon/overrideicon';
-import TrendNoChangeIcon from 'web/components/icon/trendnochangeicon';
+import EdgeIcon from 'web/components/icon/edgeicon';
 import HelpIcon from 'web/components/icon/helpicon';
+import NewProcessIcon from 'web/components/icon/newprocessicon';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
@@ -140,7 +140,7 @@ const Tools = ({
         title={_('Create new process')}
         onClick={() => onCreateProcessClick()}
       >
-        <BpmIcon size="medium" />
+        <NewProcessIcon size="medium" />
         {showNoProcessHelper && (
           <React.Fragment>
             <Helper>{_('Click here to create a process.')}</Helper>
@@ -154,7 +154,7 @@ const Tools = ({
         isActive={drawIsActive}
         onClick={onDrawEdgeClick}
       >
-        <TrendNoChangeIcon size="medium" />
+        <EdgeIcon size="medium" />
         {showNoEdgeHelper && (
           <React.Fragment>
             <Helper>
@@ -173,13 +173,14 @@ const Tools = ({
       >
         <DeleteIcon size="medium" />
       </IconWrapper>
+      <hr />
       <IconWrapper
         data-testid="bpm-tool-icon-color"
         isActive={!applyConditionalColorization}
         title={applyConditionalColorizationIconTitle}
         onClick={onToggleConditionalColorization}
       >
-        <OverrideIcon size="medium" />
+        <ConditionalColorizationIcon size="medium" />
       </IconWrapper>
       <IconWrapper data-testid="bpm-tool-icon-help" title={_('Quick Help')}>
         <HelpIcon size="medium" />
