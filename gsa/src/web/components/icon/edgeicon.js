@@ -18,10 +18,10 @@
  */
 import withSvgIcon from './withSvgIcon';
 
-import {ReactComponent as Icon} from './svg/bpm.svg';
+import {ReactComponent as Icon} from './svg/edge.svg';
 
-const BpmIcon = withSvgIcon()(Icon);
+const EdgeIcon = withSvgIcon()(Icon);
 
-export default BpmIcon;
+export default EdgeIcon;
 
 // vim: set ts=2 sw=2 tw=80:

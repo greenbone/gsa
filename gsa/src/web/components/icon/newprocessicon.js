@@ -18,10 +18,10 @@
  */
 import withSvgIcon from './withSvgIcon';
 
-import {ReactComponent as Icon} from './svg/bpm.svg';
+import {ReactComponent as Icon} from './svg/new_process.svg';
 
-const BpmIcon = withSvgIcon()(Icon);
+const NewProcessIcon = withSvgIcon()(Icon);
 
-export default BpmIcon;
+export default NewProcessIcon;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -18,10 +18,10 @@
  */
 import withSvgIcon from './withSvgIcon';
 
-import {ReactComponent as Icon} from './svg/bpm.svg';
+import {ReactComponent as Icon} from './svg/cond_color.svg';
 
-const BpmIcon = withSvgIcon()(Icon);
+const ConditionalColorizationIcon = withSvgIcon()(Icon);
 
-export default BpmIcon;
+export default ConditionalColorizationIcon;
 
 // vim: set ts=2 sw=2 tw=80:

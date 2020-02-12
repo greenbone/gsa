@@ -303,6 +303,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/calendaricon.js
      ${GSA_SRC_DIR}/src/web/components/icon/certbundadvicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cloneicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/condcoloricon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cpeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cpelogoicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/credentialicon.js
@@ -322,6 +323,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/downloadkeyicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloadrpmicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloadsvgicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/edgeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/editicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/enableicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/exporticon.js
@@ -347,6 +349,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/newicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newnoteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newoverrideicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/newprocessicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newticketicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/nexticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/noteicon.js
@@ -420,6 +423,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/bpm.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/calendar.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/cert_bund_adv.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/cond_color.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/clone.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/config.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/cpe.svg
@@ -440,6 +444,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_rpm.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_svg.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/download.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/edge.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/edit.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/enable.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/export.svg
@@ -465,11 +470,12 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_workaround.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/my_setting.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/note.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/new_process.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_note.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_override.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_ticket.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/next.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/note.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/nvt.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/os.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/ovaldef.svg
