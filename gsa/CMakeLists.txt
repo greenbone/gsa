@@ -487,7 +487,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/override.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/performance.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/permission.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/plusicon.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/plus.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/policy.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/port_list.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/previous.svg
