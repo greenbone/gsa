@@ -369,7 +369,7 @@ ProcessPanel.propTypes = {
   onAddHosts: PropTypes.func.isRequired,
   onDeleteHost: PropTypes.func.isRequired,
   onEditProcessClick: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func,
 };
 
 export default withGmp(ProcessPanel);
