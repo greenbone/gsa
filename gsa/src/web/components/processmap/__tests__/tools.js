@@ -48,6 +48,9 @@ describe('Tools tests', () => {
     const edgeIcon = getByTestId('bpm-tool-icon-edge');
     const deleteIcon = getByTestId('bpm-tool-icon-delete');
     const colorIcon = getByTestId('bpm-tool-icon-color');
+    const zoomInIcon = getByTestId('bpm-tool-icon-zoomin');
+    const zoomResetIcon = getByTestId('bpm-tool-icon-zoomreset');
+    const zoomOutIcon = getByTestId('bpm-tool-icon-zoomout');
     const helpIcon = getByTestId('bpm-tool-icon-help');
 
     expect(newIcon).toHaveAttribute('title', 'Create new process');
@@ -62,6 +65,10 @@ describe('Tools tests', () => {
       'Turn off conditional colorization',
     );
     expect(colorIcon).not.toHaveStyleRule('background-color', '#66c430');
+
+    expect(zoomInIcon).toHaveAttribute('title', 'Zoom in');
+    expect(zoomResetIcon).toHaveAttribute('title', 'Reset zoom');
+    expect(zoomOutIcon).toHaveAttribute('title', 'Zoom out');
 
     expect(helpIcon).toHaveAttribute('title', 'Quick Help');
   });
@@ -87,6 +94,9 @@ describe('Tools tests', () => {
     const edgeIcon = getByTestId('bpm-tool-icon-edge');
     const deleteIcon = getByTestId('bpm-tool-icon-delete');
     const colorIcon = getByTestId('bpm-tool-icon-color');
+    const zoomInIcon = getByTestId('bpm-tool-icon-zoomin');
+    const zoomResetIcon = getByTestId('bpm-tool-icon-zoomreset');
+    const zoomOutIcon = getByTestId('bpm-tool-icon-zoomout');
     const helpIcon = getByTestId('bpm-tool-icon-help');
 
     expect(newIcon).toHaveAttribute('title', 'Create new process');
@@ -102,6 +112,10 @@ describe('Tools tests', () => {
     );
     expect(colorIcon).toHaveStyleRule('background-color', '#66c430');
 
+    expect(zoomInIcon).not.toHaveStyleRule('background-color', '#66c430');
+    expect(zoomResetIcon).not.toHaveStyleRule('background-color', '#66c430');
+    expect(zoomOutIcon).not.toHaveStyleRule('background-color', '#66c430');
+
     expect(helpIcon).toHaveAttribute('title', 'Quick Help');
   });
 
@@ -110,6 +124,7 @@ describe('Tools tests', () => {
     const handleDrawEdgeClick = jest.fn();
     const handleDeleteClick = jest.fn();
     const handleToggleConditionalColorization = jest.fn();
+    const handleZoomChangeClick = jest.fn();
 
     const {getByTestId} = render(
       <Tools
@@ -119,6 +134,7 @@ describe('Tools tests', () => {
         onDeleteClick={handleDeleteClick}
         onDrawEdgeClick={handleDrawEdgeClick}
         onToggleConditionalColorization={handleToggleConditionalColorization}
+        onZoomChangeClick={handleZoomChangeClick}
       />,
     );
 
@@ -126,6 +142,9 @@ describe('Tools tests', () => {
     const edgeIcon = getByTestId('bpm-tool-icon-edge');
     const deleteIcon = getByTestId('bpm-tool-icon-delete');
     const colorIcon = getByTestId('bpm-tool-icon-color');
+    const zoomInIcon = getByTestId('bpm-tool-icon-zoomin');
+    const zoomResetIcon = getByTestId('bpm-tool-icon-zoomreset');
+    const zoomOutIcon = getByTestId('bpm-tool-icon-zoomout');
 
     expect(newIcon).toHaveAttribute('title', 'Create new process');
     fireEvent.click(newIcon);
@@ -145,5 +164,17 @@ describe('Tools tests', () => {
     );
     fireEvent.click(colorIcon);
     expect(handleToggleConditionalColorization).toHaveBeenCalled();
+
+    expect(zoomInIcon).toHaveAttribute('title', 'Zoom in');
+    fireEvent.click(zoomInIcon);
+    expect(handleZoomChangeClick).toHaveBeenCalledWith('+');
+
+    expect(zoomResetIcon).toHaveAttribute('title', 'Reset zoom');
+    fireEvent.click(zoomResetIcon);
+    expect(handleZoomChangeClick).toHaveBeenCalledWith('0');
+
+    expect(zoomOutIcon).toHaveAttribute('title', 'Zoom out');
+    fireEvent.click(zoomOutIcon);
+    expect(handleZoomChangeClick).toHaveBeenCalledWith('-');
   });
 });

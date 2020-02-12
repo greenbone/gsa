@@ -138,6 +138,9 @@ describe('ProcessMap tests', () => {
     const edgeIcon = getByTestId('bpm-tool-icon-edge');
     const deleteIcon = getByTestId('bpm-tool-icon-delete');
     const colorIcon = getByTestId('bpm-tool-icon-color');
+    const zoomInIcon = getByTestId('bpm-tool-icon-zoomin');
+    const zoomResetIcon = getByTestId('bpm-tool-icon-zoomreset');
+    const zoomOutIcon = getByTestId('bpm-tool-icon-zoomout');
     const helpIcon = getByTestId('bpm-tool-icon-help');
 
     const buttons = element.querySelectorAll('button');
@@ -179,12 +182,15 @@ describe('ProcessMap tests', () => {
       'title',
       'Turn on conditional colorization',
     );
+    expect(zoomInIcon).toHaveAttribute('title', 'Zoom in');
+    expect(zoomResetIcon).toHaveAttribute('title', 'Reset zoom');
+    expect(zoomOutIcon).toHaveAttribute('title', 'Zoom out');
     expect(helpIcon).toHaveAttribute('title', 'Quick Help');
 
     // process panel
 
     expect(element).toHaveTextContent('No process selected');
-    expect(icons[5]).toHaveAttribute('title', 'Edit process');
+    expect(icons[8]).toHaveAttribute('title', 'Edit process');
 
     expect(buttons[0]).toHaveAttribute('title', 'Add Selected Hosts');
     expect(buttons[0]).toHaveTextContent('Add Selected Hosts');
@@ -253,7 +259,7 @@ describe('ProcessMap tests', () => {
 
     // panel title
     expect(element).toHaveTextContent('foo');
-    expect(icons[5]).toHaveAttribute('title', 'Edit process');
+    expect(icons[8]).toHaveAttribute('title', 'Edit process');
 
     // add hosts
     expect(buttons[0]).toHaveAttribute('title', 'Add Selected Hosts');
@@ -319,7 +325,7 @@ describe('ProcessMap tests', () => {
 
     // panel title
     expect(element).toHaveTextContent('foo');
-    expect(icons[5]).toHaveAttribute('title', 'Edit process');
+    expect(icons[8]).toHaveAttribute('title', 'Edit process');
 
     // add hosts
     expect(buttons[0]).toHaveAttribute('title', 'Add Selected Hosts');
@@ -337,14 +343,14 @@ describe('ProcessMap tests', () => {
     expect(detailsLinks[0]).toHaveTextContent('123.456.78.910');
     expect(progressBars[0]).toHaveAttribute('title', 'Medium');
     expect(progressBars[0]).toHaveTextContent('5.0 (Medium)');
-    expect(icons[6]).toHaveAttribute('title', 'Remove host from process');
+    expect(icons[9]).toHaveAttribute('title', 'Remove host from process');
 
     // Row 2
     expect(detailsLinks[1]).toHaveAttribute('href', '/host/5678');
     expect(detailsLinks[1]).toHaveTextContent('109.876.54.321');
     expect(progressBars[1]).toHaveAttribute('title', 'N/A');
     expect(progressBars[1]).toHaveTextContent('N/A');
-    expect(icons[7]).toHaveAttribute('title', 'Remove host from process');
+    expect(icons[10]).toHaveAttribute('title', 'Remove host from process');
   });
 
   test('should call click handler for colorization', () => {
@@ -608,8 +614,8 @@ describe('ProcessMap tests', () => {
     const icons = getAllByTestId('svg-icon');
 
     await act(async () => {
-      expect(icons[6]).toHaveAttribute('title', 'Remove host from process');
-      fireEvent.click(icons[6]);
+      expect(icons[9]).toHaveAttribute('title', 'Remove host from process');
+      fireEvent.click(icons[9]);
     });
 
     expect(handleForceUpdate).toHaveBeenCalled();
