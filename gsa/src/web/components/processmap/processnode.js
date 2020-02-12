@@ -29,8 +29,6 @@ const StyledText = styled.text`
   font-size: 1em;
   user-select: none;
   max-width: 70px;
-  border: 1px solid red;
-  word-break: break-all;
 `;
 
 const StyledCircle = styled.circle`
@@ -57,7 +55,19 @@ const StyledCircle = styled.circle`
     3s ease;
 `;
 
+const getTextScale = scale => {
+  scale = scale.toPrecision(2);
+  const scaleDiff = 1 - scale;
+  const factor = scale <= 0.5 ? 1.5 + scaleDiff : 1 + scaleDiff;
+  const preciseFactor = factor.toPrecision(2);
+  const percentage = scale >= 1 ? 100 : preciseFactor * 100 + 50;
+  return percentage + '%';
+};
+
 const StyledG = styled.g`
+  ${StyledText} {
+    font-size: ${props => getTextScale(props.scale)};
+  }
   &:hover {
     ${StyledCircle} {
       stroke: ${props =>
@@ -79,6 +89,7 @@ const ProcessNode = ({
   name,
   radius,
   forwardedRef,
+  scale,
   x,
   y,
   onMouseDown,
@@ -91,6 +102,7 @@ const ProcessNode = ({
       data-testid="process-node-group"
       cursor={cursor}
       isSelected={isSelected}
+      scale={scale}
       ref={forwardedRef}
       onMouseDown={onMouseDown}
       onMouseEnter={onMouseEnter}
@@ -123,6 +135,7 @@ ProcessNode.propTypes = {
   isSelected: PropTypes.bool,
   name: PropTypes.string,
   radius: PropTypes.number.isRequired,
+  scale: PropTypes.number,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   onMouseDown: PropTypes.func,

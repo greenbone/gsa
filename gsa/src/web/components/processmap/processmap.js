@@ -58,6 +58,11 @@ const DEFAULT_PROCESS_SIZE = 75;
 
 const BPM_TAG_PREFIX = 'myBP:';
 
+const SCROLL_STEP = 0.1;
+
+const MAX_SCALE = 1.6;
+const MIN_SCALE = 0.3;
+
 const Wrapper = styled.div`
   display: flex;
   position: relative;
@@ -82,6 +87,7 @@ class ProcessMap extends React.Component {
       createProcessDialogVisible: false,
       edgeDrawSource: undefined,
       edgeDrawTarget: undefined,
+      scale: 1.0,
       translateX: 0,
       translateY: 0,
       isDraggingBackground: false,
@@ -94,6 +100,7 @@ class ProcessMap extends React.Component {
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.handleMouseWheel = this.handleMouseWheel.bind(this);
 
     this.handleCloseCreateProcessDialog = this.handleCloseCreateProcessDialog.bind(
       this,
@@ -113,6 +120,7 @@ class ProcessMap extends React.Component {
     this.handleOpenCreateProcessDialog = this.handleOpenCreateProcessDialog.bind(
       this,
     );
+    this.handleZoomChange = this.handleZoomChange.bind(this);
     this.openCreateProcessDialog = this.openCreateProcessDialog.bind(this);
     this.openConfirmDeleteDialog = this.openConfirmDeleteDialog.bind(this);
     this.closeConfirmDeleteDialog = this.closeConfirmDeleteDialog.bind(this);
@@ -150,6 +158,100 @@ class ProcessMap extends React.Component {
     ) {
       this.handleCreateEdge(edgeDrawSource, edgeDrawTarget);
     }
+  }
+
+  zoom(px, py, scale) {
+    const {x, y} = this.toChartCoords(px, py);
+
+    // calculate new pixel coords and afterwards diff to previous coords
+    const diffX = x * scale - px;
+    const diffY = y * scale - py;
+
+    this.setState({
+      scale,
+      translateX: -diffX,
+      translateY: -diffY,
+    });
+  }
+
+  zoomIn(px, py) {
+    let {scale} = this.state;
+
+    if (scale === MAX_SCALE) {
+      // avoid setting state and rerendering
+      return;
+    }
+
+    scale = scale + SCROLL_STEP;
+
+    if (scale > MAX_SCALE) {
+      // limit min scale
+      scale = MAX_SCALE;
+    }
+
+    this.zoom(px, py, scale);
+  }
+
+  zoomOut(px, py) {
+    let {scale} = this.state;
+
+    if (scale === MIN_SCALE) {
+      // avoid setting state and rerendering
+      return;
+    }
+
+    scale = scale - SCROLL_STEP;
+
+    if (scale < MIN_SCALE) {
+      // limit scale
+      scale = MIN_SCALE;
+    }
+
+    this.zoom(px, py, scale);
+  }
+
+  toChartCoords(x, y) {
+    const {scale, translateX, translateY} = this.state;
+    // transform pixel coords into chart coords
+    return {
+      x: (x - translateX) / scale,
+      y: (y - translateY) / scale,
+    };
+  }
+
+  handleMouseWheel(event) {
+    const {x, y} = this.getMousePosition(event);
+
+    // event.deltaY returns nagative values for mouse wheel up and positive values for mouse wheel down
+    const isZoomOut = Math.sign(event.deltaY) === 1;
+
+    isZoomOut ? this.zoomOut(x, y) : this.zoomIn(x, y);
+  }
+
+  handleZoomChange(dir) {
+    const {scale} = this.state;
+    let zoomDir;
+    if (dir === '+') {
+      zoomDir = 1;
+    } else if (dir === '-') {
+      zoomDir = -1;
+    }
+    let newScale;
+    if (dir === '0') {
+      return this.setState({
+        scale: 1,
+        translateX: 0,
+        translateY: 0,
+      });
+    }
+    newScale = scale + zoomDir * SCROLL_STEP;
+    if (newScale > MAX_SCALE) {
+      newScale = MAX_SCALE;
+    }
+    if (newScale < MIN_SCALE) {
+      newScale = MIN_SCALE;
+    }
+    return this.setState({scale: newScale});
   }
 
   keyDownListener(event) {
@@ -481,6 +583,7 @@ class ProcessMap extends React.Component {
       isDraggingProcess,
       isDrawingEdge,
       processes = {},
+      scale,
       translateX,
       translateY,
     } = this.state;
@@ -501,9 +604,10 @@ class ProcessMap extends React.Component {
             onMouseDown={this.handleMouseDown}
             onMouseUp={this.handleMouseUp}
             onMouseMove={this.handleMouseMove}
+            onWheel={this.handleMouseWheel}
           >
             <Background ref={this.backgroundRef} />
-            <Group left={translateX} top={translateY}>
+            <Group left={translateX} top={translateY} scale={scale}>
               {Object.keys(edges).map(key => {
                 const isSelected = edges[key] === this.selectedElement;
                 const {id} = edges[key];
@@ -546,6 +650,7 @@ class ProcessMap extends React.Component {
                         isSelected={isSelected}
                         name={name}
                         radius={DEFAULT_PROCESS_SIZE}
+                        scale={scale}
                         severity={severity}
                         x={x}
                         y={y}
@@ -578,6 +683,7 @@ class ProcessMap extends React.Component {
             onToggleConditionalColorization={
               this.props.onToggleConditionalColorization
             }
+            onZoomChangeClick={this.handleZoomChange}
           />
           <ProcessPanel
             element={this.selectedElement}

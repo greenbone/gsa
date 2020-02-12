@@ -26,7 +26,12 @@ import ConditionalColorizationIcon from 'web/components/icon/condcoloricon';
 import DeleteIcon from 'web/components/icon/deleteicon';
 import EdgeIcon from 'web/components/icon/edgeicon';
 import HelpIcon from 'web/components/icon/helpicon';
+import MagnifierIcon from 'web/components/icon/magnifiericon';
+import MinusIcon from 'web/components/icon/minusicon';
 import NewProcessIcon from 'web/components/icon/newprocessicon';
+import PlusIcon from 'web/components/icon/plusicon';
+
+import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
@@ -35,10 +40,14 @@ const Container = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 50px;
   height: 100%;
   background-color: ${Theme.lightGray};
   opacity: 0.7;
+  border-right: 2px solid ${Theme.lightGray};
 `;
 
 const IconWrapper = styled.div`
@@ -47,14 +56,11 @@ const IconWrapper = styled.div`
   justify-content: space-around;
   padding: 10px 0 10px 0;
   & svg path {
-    fill: ${Theme.darkGray};
+    fill: ${Theme.black};
   }
   &:hover {
     cursor: pointer;
-    background-color: ${Theme.mediumGray};
-    & svg path {
-      fill: white;
-    }
+    background-color: ${Theme.dialogGray};
   }
   ${props =>
     props.isActive
@@ -129,62 +135,92 @@ const Tools = ({
   onDrawEdgeClick,
   onDeleteClick,
   onToggleConditionalColorization,
+  onZoomChangeClick,
 }) => {
   const applyConditionalColorizationIconTitle = applyConditionalColorization
     ? _('Turn off conditional colorization')
     : _('Turn on conditional colorization');
   return (
     <Container>
-      <IconWrapper
-        data-testid="bpm-tool-icon-new"
-        title={_('Create new process')}
-        onClick={() => onCreateProcessClick()}
-      >
-        <NewProcessIcon size="medium" />
-        {showNoProcessHelper && (
-          <React.Fragment>
-            <Helper>{_('Click here to create a process.')}</Helper>
-            <HelperArrow />
-          </React.Fragment>
-        )}
-      </IconWrapper>
-      <IconWrapper
-        data-testid="bpm-tool-icon-edge"
-        title={_('Create new connection')}
-        isActive={drawIsActive}
-        onClick={onDrawEdgeClick}
-      >
-        <EdgeIcon size="medium" />
-        {showNoEdgeHelper && (
-          <React.Fragment>
-            <Helper>
-              {_(
-                'To connect processes, click here, select the source process first and then the target.',
-              )}
-            </Helper>
-            <HelperArrow />
-          </React.Fragment>
-        )}
-      </IconWrapper>
-      <IconWrapper
-        data-testid="bpm-tool-icon-delete"
-        title={_('Delete selected element')}
-        onClick={onDeleteClick}
-      >
-        <DeleteIcon size="medium" />
-      </IconWrapper>
-      <hr />
-      <IconWrapper
-        data-testid="bpm-tool-icon-color"
-        isActive={!applyConditionalColorization}
-        title={applyConditionalColorizationIconTitle}
-        onClick={onToggleConditionalColorization}
-      >
-        <ConditionalColorizationIcon size="medium" />
-      </IconWrapper>
-      <IconWrapper data-testid="bpm-tool-icon-help" title={_('Quick Help')}>
-        <HelpIcon size="medium" />
-      </IconWrapper>
+      <span>
+        <IconWrapper
+          data-testid="bpm-tool-icon-new"
+          title={_('Create new process')}
+          onClick={() => onCreateProcessClick()}
+        >
+          <NewProcessIcon size="medium" />
+          {showNoProcessHelper && (
+            <React.Fragment>
+              <Helper>{_('Click here to create a process.')}</Helper>
+              <HelperArrow />
+            </React.Fragment>
+          )}
+        </IconWrapper>
+        <IconWrapper
+          data-testid="bpm-tool-icon-edge"
+          title={_('Create new connection')}
+          isActive={drawIsActive}
+          onClick={onDrawEdgeClick}
+        >
+          <EdgeIcon size="medium" />
+          {showNoEdgeHelper && (
+            <React.Fragment>
+              <Helper>
+                {_(
+                  'To connect processes, click here, select the source process first and then the target.',
+                )}
+              </Helper>
+              <HelperArrow />
+            </React.Fragment>
+          )}
+        </IconWrapper>
+        <IconWrapper
+          data-testid="bpm-tool-icon-delete"
+          title={_('Delete selected element')}
+          onClick={onDeleteClick}
+        >
+          <DeleteIcon size="medium" />
+        </IconWrapper>
+        <hr />
+        <IconWrapper
+          data-testid="bpm-tool-icon-color"
+          isActive={!applyConditionalColorization}
+          title={applyConditionalColorizationIconTitle}
+          onClick={onToggleConditionalColorization}
+        >
+          <ConditionalColorizationIcon size="medium" />
+        </IconWrapper>
+      </span>
+      <span>
+        <hr />
+        <Layout flex="column">
+          <IconWrapper
+            data-testid="bpm-tool-icon-zoomin"
+            title={_('Zoom in')}
+            onClick={() => onZoomChangeClick('+')}
+          >
+            <PlusIcon size="medium" />
+          </IconWrapper>
+          <IconWrapper
+            data-testid="bpm-tool-icon-zoomreset"
+            title={_('Reset zoom')}
+            onClick={() => onZoomChangeClick('0')}
+          >
+            <MagnifierIcon size="medium" />
+          </IconWrapper>
+          <IconWrapper
+            data-testid="bpm-tool-icon-zoomout"
+            title={_('Zoom out')}
+            onClick={() => onZoomChangeClick('-')}
+          >
+            <MinusIcon size="medium" />
+          </IconWrapper>
+        </Layout>
+        <hr />
+        <IconWrapper data-testid="bpm-tool-icon-help" title={_('Quick Help')}>
+          <HelpIcon size="medium" />
+        </IconWrapper>
+      </span>
     </Container>
   );
 };
@@ -198,6 +234,7 @@ Tools.propTypes = {
   onDeleteClick: PropTypes.func,
   onDrawEdgeClick: PropTypes.func,
   onToggleConditionalColorization: PropTypes.func,
+  onZoomChangeClick: PropTypes.func,
 };
 
 export default Tools;
