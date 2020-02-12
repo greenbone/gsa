@@ -37,40 +37,40 @@ const renewSession = jest.fn().mockResolvedValue({data: {}});
 
 export const getMockProcessMap = () => {
   const mockProcessMap = {
-    edges: {11: {id: 11, source: 21, target: 22, type: 'edge'}},
+    edges: {'11': {id: '11', source: '21', target: '22', type: 'edge'}},
     processes: {
-      21: {
+      '21': {
         color: '#f0a519',
         comment: 'bar',
         derivedSeverity: 5,
-        id: 21,
+        id: '21',
         name: 'foo',
         severity: 5,
-        tagId: 31,
+        tagId: '31',
         type: 'process',
         x: 600,
         y: 300,
       },
-      22: {
+      '22': {
         color: '#f0a519',
         comment: 'ipsum',
         derivedSeverity: 5,
-        id: 22,
+        id: '22',
         name: 'lorem',
         severity: undefined,
-        tagId: 32,
+        tagId: '32',
         type: 'process',
         x: 300,
         y: 200,
       },
-      23: {
+      '23': {
         color: '#c83814',
         comment: 'world',
         derivedSeverity: 10,
-        id: 23,
+        id: '23',
         name: 'hello',
         severity: 10,
-        tagId: 32,
+        tagId: '32',
         type: 'process',
         x: 300,
         y: 200,
@@ -146,8 +146,6 @@ describe('ProcessMap tests', () => {
     // process map
 
     // process 1
-    expect(processes[0]).toHaveAttribute('name', 'foo');
-    expect(processes[0]).toHaveAttribute('id', '21');
     expect(processes[0]).toHaveAttribute('cursor', 'grab');
     expect(processes[0]).toHaveTextContent('foo');
     expect(processes[0]).toHaveTextContent('bar');
@@ -157,8 +155,6 @@ describe('ProcessMap tests', () => {
     expect(circles[0]).toHaveAttribute('cy', '300');
 
     // process 2
-    expect(processes[1]).toHaveAttribute('name', 'lorem');
-    expect(processes[1]).toHaveAttribute('id', '22');
     expect(processes[1]).toHaveAttribute('cursor', 'grab');
     expect(processes[1]).toHaveTextContent('lorem');
     expect(processes[1]).toHaveTextContent('ipsum');

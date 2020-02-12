@@ -32,7 +32,7 @@ import ProcessPanel from '../processpanel';
 
 setLocale('en');
 const {processes} = getMockProcessMap();
-const {21: process1, 22: process2} = processes;
+const {'21': process1, '22': process2} = processes;
 
 const hosts = [
   {name: '123.456.78.910', id: '1234', severity: 5},

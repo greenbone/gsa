@@ -28,6 +28,9 @@ const StyledText = styled.text`
   text-anchor: middle;
   font-size: 1em;
   user-select: none;
+  max-width: 70px;
+  border: 1px solid red;
+  word-break: break-all;
 `;
 
 const StyledCircle = styled.circle`
@@ -72,7 +75,6 @@ const ProcessNode = ({
   color,
   comment,
   cursor,
-  id,
   isSelected = false,
   name,
   radius,
@@ -87,8 +89,6 @@ const ProcessNode = ({
   return (
     <StyledG
       data-testid="process-node-group"
-      id={id}
-      name={name}
       cursor={cursor}
       isSelected={isSelected}
       ref={forwardedRef}
@@ -120,7 +120,6 @@ ProcessNode.propTypes = {
   comment: PropTypes.string,
   cursor: PropTypes.string,
   forwardedRef: PropTypes.ref,
-  id: PropTypes.id.isRequired,
   isSelected: PropTypes.bool,
   name: PropTypes.string,
   radius: PropTypes.number.isRequired,
