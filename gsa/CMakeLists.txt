@@ -345,6 +345,8 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/listsvgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/logouticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/manualicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/magnifiericon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/minusicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/mysettingsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newnoteicon.js
@@ -360,6 +362,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/overrideicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/performanceicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/permissionicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/plusicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/policyicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/portlisticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/previousicon.js
@@ -468,6 +471,8 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_vendorfix.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_willnotfix.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_workaround.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/magnifier.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/minus.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/my_setting.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_process.svg
@@ -482,6 +487,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/override.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/performance.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/permission.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/plusicon.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/policy.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/port_list.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/previous.svg
