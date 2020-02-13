@@ -25,7 +25,6 @@ import _ from 'gmp/locale';
 import ConditionalColorizationIcon from 'web/components/icon/condcoloricon';
 import DeleteIcon from 'web/components/icon/deleteicon';
 import EdgeIcon from 'web/components/icon/edgeicon';
-import HelpIcon from 'web/components/icon/helpicon';
 import MagnifierIcon from 'web/components/icon/magnifiericon';
 import MinusIcon from 'web/components/icon/minusicon';
 import NewProcessIcon from 'web/components/icon/newprocessicon';
@@ -216,10 +215,6 @@ const Tools = ({
             <MinusIcon size="medium" />
           </IconWrapper>
         </Layout>
-        <hr />
-        <IconWrapper data-testid="bpm-tool-icon-help" title={_('Quick Help')}>
-          <HelpIcon size="medium" />
-        </IconWrapper>
       </span>
     </Container>
   );

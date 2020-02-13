@@ -51,7 +51,6 @@ describe('Tools tests', () => {
     const zoomInIcon = getByTestId('bpm-tool-icon-zoomin');
     const zoomResetIcon = getByTestId('bpm-tool-icon-zoomreset');
     const zoomOutIcon = getByTestId('bpm-tool-icon-zoomout');
-    const helpIcon = getByTestId('bpm-tool-icon-help');
 
     expect(newIcon).toHaveAttribute('title', 'Create new process');
 
@@ -69,8 +68,6 @@ describe('Tools tests', () => {
     expect(zoomInIcon).toHaveAttribute('title', 'Zoom in');
     expect(zoomResetIcon).toHaveAttribute('title', 'Reset zoom');
     expect(zoomOutIcon).toHaveAttribute('title', 'Zoom out');
-
-    expect(helpIcon).toHaveAttribute('title', 'Quick Help');
   });
 
   test('should render active icons', () => {
@@ -97,7 +94,6 @@ describe('Tools tests', () => {
     const zoomInIcon = getByTestId('bpm-tool-icon-zoomin');
     const zoomResetIcon = getByTestId('bpm-tool-icon-zoomreset');
     const zoomOutIcon = getByTestId('bpm-tool-icon-zoomout');
-    const helpIcon = getByTestId('bpm-tool-icon-help');
 
     expect(newIcon).toHaveAttribute('title', 'Create new process');
 
@@ -115,8 +111,6 @@ describe('Tools tests', () => {
     expect(zoomInIcon).not.toHaveStyleRule('background-color', '#66c430');
     expect(zoomResetIcon).not.toHaveStyleRule('background-color', '#66c430');
     expect(zoomOutIcon).not.toHaveStyleRule('background-color', '#66c430');
-
-    expect(helpIcon).toHaveAttribute('title', 'Quick Help');
   });
 
   test('should call click handler', () => {
