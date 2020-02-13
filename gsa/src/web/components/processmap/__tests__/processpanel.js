@@ -291,4 +291,157 @@ describe('ProcessPanel tests', () => {
     fireEvent.click(buttons[0]);
     expect(handleAddHosts).not.toHaveBeenCalled();
   });
+
+  test('should allow pagination', () => {
+    const handleAddHosts = jest.fn();
+    const handleDeleteHost = jest.fn();
+    const handleEditProcessClick = jest.fn();
+
+    const hosts2 = [
+      {id: '01', severity: '10'},
+      {id: '02', severity: '9'},
+      {id: '03', severity: '9'},
+      {id: '04', severity: '9'},
+      {id: '05', severity: '9'},
+      {id: '06', severity: '9'},
+      {id: '07', severity: '9'},
+      {id: '08', severity: '9'},
+      {id: '09', severity: '9'},
+      {id: '10', severity: '9'},
+      {id: '11', severity: '9'},
+      {id: '12', severity: '9'},
+      {id: '13', severity: '9'},
+      {id: '14', severity: '9'},
+      {id: '15', severity: '9'},
+      {id: '16', severity: '9'},
+      {id: '17', severity: '9'},
+      {id: '18', severity: '9'},
+      {id: '19', severity: '9'},
+      {id: '20', severity: '9'},
+      {id: '21', severity: '9'},
+      {id: '22', severity: '9'},
+      {id: '23', severity: '9'},
+      {id: '24', severity: '9'},
+      {id: '25', severity: '9'},
+      {id: '26', severity: '9'},
+      {id: '27', severity: '9'},
+      {id: '28', severity: '9'},
+      {id: '29', severity: '9'},
+      {id: '30', severity: '9'},
+      {id: '31', severity: '5'},
+      {id: '32', severity: '4'},
+      {id: '33', severity: '4'},
+      {id: '34', severity: '4'},
+      {id: '35', severity: '4'},
+      {id: '36', severity: '4'},
+      {id: '37', severity: '4'},
+      {id: '38', severity: '4'},
+      {id: '39', severity: '4'},
+      {id: '40', severity: '4'},
+      {id: '41', severity: '4'},
+      {id: '42', severity: '4'},
+      {id: '43', severity: '4'},
+      {id: '44', severity: '4'},
+      {id: '45', severity: '4'},
+      {id: '46', severity: '4'},
+      {id: '47', severity: '4'},
+      {id: '48', severity: '4'},
+      {id: '49', severity: '4'},
+      {id: '50', severity: '4'},
+      {id: '51', severity: '4'},
+      {id: '52', severity: '4'},
+      {id: '53', severity: '4'},
+      {id: '54', severity: '4'},
+      {id: '55', severity: '4'},
+      {id: '56', severity: '4'},
+      {id: '57', severity: '4'},
+      {id: '58', severity: '4'},
+      {id: '59', severity: '4'},
+      {id: '60', severity: '4'},
+      {id: '61', severity: '0'},
+    ];
+
+    const getAllHosts2 = jest.fn().mockResolvedValue({
+      data: [hosts2],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    });
+
+    const gmp = {
+      hosts: {
+        getAll: getAllHosts2,
+      },
+    };
+
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp,
+      router: true,
+    });
+
+    const {element, getAllByTestId} = render(
+      <ProcessPanel
+        element={process1}
+        hostList={hosts2}
+        isLoadingHosts={false}
+        onAddHosts={handleAddHosts}
+        onDeleteHost={handleDeleteHost}
+        onEditProcessClick={handleEditProcessClick}
+      />,
+    );
+
+    const detailsLinks = getAllByTestId('details-link');
+    let icons = getAllByTestId('svg-icon');
+
+    // 1. Page
+    expect(detailsLinks[0]).toHaveAttribute('href', '/host/01');
+    expect(element).toHaveTextContent('1 - 30 of 61');
+
+    expect(icons[33]).toHaveAttribute('title', 'Next');
+    fireEvent.click(icons[33]);
+
+    // 2. Page
+    icons = getAllByTestId('svg-icon');
+
+    expect(detailsLinks[0]).toHaveAttribute('href', '/host/31');
+    expect(element).toHaveTextContent('31 - 60 of 61');
+
+    expect(icons[33]).toHaveAttribute('title', 'Next');
+    fireEvent.click(icons[33]);
+
+    // 3. Page
+    icons = getAllByTestId('svg-icon');
+
+    expect(detailsLinks[0]).toHaveAttribute('href', '/host/61');
+    expect(element).toHaveTextContent('61 - 61 of 61');
+
+    expect(icons[2]).toHaveAttribute('title', 'First');
+    fireEvent.click(icons[2]);
+
+    // 1. Page
+    icons = getAllByTestId('svg-icon');
+
+    expect(detailsLinks[0]).toHaveAttribute('href', '/host/01');
+    expect(element).toHaveTextContent('1 - 30 of 61');
+
+    expect(icons[34]).toHaveAttribute('title', 'Last');
+    fireEvent.click(icons[34]);
+
+    // 3. Page
+    icons = getAllByTestId('svg-icon');
+
+    expect(detailsLinks[0]).toHaveAttribute('href', '/host/61');
+    expect(element).toHaveTextContent('61 - 61 of 61');
+
+    expect(icons[3]).toHaveAttribute('title', 'Previous');
+    fireEvent.click(icons[3]);
+
+    // 2. Page
+    icons = getAllByTestId('svg-icon');
+
+    expect(detailsLinks[0]).toHaveAttribute('href', '/host/31');
+    expect(element).toHaveTextContent('31 - 60 of 61');
+  });
 });
