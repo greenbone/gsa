@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [20.04] - unreleased
 
 ### Added
+- Added new BPM feature [#1931](https://github.com/greenbone/gsa/pull/1931)
 - Added clean-up-translations script [#1948](https://github.com/greenbone/gsa/pull/1948)
 - Added handling possible undefined trash in case of an error on the trashcanpage [#1908](https://github.com/greenbone/gsa/pull/1908)
 - Added translation using babel-plugin-i18next-extract [#1808](https://github.com/greenbone/gsa/pull/1808)
