@@ -577,6 +577,17 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/powerfilter/solutiontypegroup.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/sortbygroup.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/withFilterDialog.js
+     ${GSA_SRC_DIR}/src/web/components/processmap/background.js
+     ${GSA_SRC_DIR}/src/web/components/processmap/createprocessdialog.js
+     ${GSA_SRC_DIR}/src/web/components/processmap/edge.js
+     ${GSA_SRC_DIR}/src/web/components/processmap/hosttable.js
+     ${GSA_SRC_DIR}/src/web/components/processmap/processmap.js
+     ${GSA_SRC_DIR}/src/web/components/processmap/processmaploader.js
+     ${GSA_SRC_DIR}/src/web/components/processmap/processnode.js
+     ${GSA_SRC_DIR}/src/web/components/processmap/processpanel.js
+     ${GSA_SRC_DIR}/src/web/components/processmap/tools.js
+     ${GSA_SRC_DIR}/src/web/components/processmap/usecolorize.js
+     ${GSA_SRC_DIR}/src/web/components/processmap/utils.js
      ${GSA_SRC_DIR}/src/web/components/provider/capabilitiesprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/gmpprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/iconsizeprovider.js
@@ -873,6 +884,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/portlists/portrangestable.js
      ${GSA_SRC_DIR}/src/web/pages/portlists/row.js
      ${GSA_SRC_DIR}/src/web/pages/portlists/table.js
+     ${GSA_SRC_DIR}/src/web/pages/processmaps/processmapspage.js
      ${GSA_SRC_DIR}/src/web/pages/radius/dialog.js
      ${GSA_SRC_DIR}/src/web/pages/radius/radiuspage.js
      ${GSA_SRC_DIR}/src/web/pages/reportformats/component.js
@@ -1073,6 +1085,9 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/vulns/table.js
      ${GSA_SRC_DIR}/src/web/routes.js
      ${GSA_SRC_DIR}/src/web/store/actions.js
+     ${GSA_SRC_DIR}/src/web/store/businessprocessmaps/actions.js
+     ${GSA_SRC_DIR}/src/web/store/businessprocessmaps/reducers.js
+     ${GSA_SRC_DIR}/src/web/store/businessprocessmaps/selectors.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/data/actions.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/data/loader.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/data/reducers.js
