@@ -27,6 +27,8 @@ import Filter from 'gmp/models/filter';
 
 import {entitiesLoadingActions} from 'web/store/entities/hosts';
 
+import {KeyCode} from 'gmp/utils/event';
+
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import {hostsFilter} from 'web/components/processmap/processmaploader';
@@ -189,6 +191,72 @@ describe('ProcessMap tests', () => {
 
     // process panel
 
+    expect(element).toHaveTextContent('No process selected');
+    expect(icons[7]).toHaveAttribute('title', 'Edit process');
+
+    expect(buttons[0]).toHaveAttribute('title', 'Add Selected Hosts');
+    expect(buttons[0]).toHaveTextContent('Add Selected Hosts');
+
+    expect(header[0]).toHaveTextContent('Host');
+    expect(header[1]).toHaveTextContent('Severity');
+    expect(header[2]).toHaveTextContent('Actions');
+
+    expect(element).not.toHaveTextContent(
+      'No hosts associated with this process.',
+    );
+  });
+
+  test('should render ProcessMap without map', () => {
+    const handleForceUpdate = jest.fn();
+    const handleSelectElement = jest.fn();
+    const handleToggleConditionalColorization = jest.fn();
+    const gmp = {
+      hosts: {
+        getAll: getAllHosts,
+      },
+      user: {renewSession},
+    };
+
+    const {render} = rendererWith({
+      gmp,
+      store: true,
+    });
+
+    const {element, getByTestId, getAllByTestId} = render(
+      <ProcessMap
+        applyConditionalColorization={false}
+        mapId={'1'}
+        forceUpdate={handleForceUpdate}
+        onSelectElement={handleSelectElement}
+        onToggleConditionalColorization={handleToggleConditionalColorization}
+      />,
+    );
+
+    const icons = getAllByTestId('svg-icon');
+    const newIcon = getByTestId('bpm-tool-icon-new');
+    const edgeIcon = getByTestId('bpm-tool-icon-edge');
+    const deleteIcon = getByTestId('bpm-tool-icon-delete');
+    const colorIcon = getByTestId('bpm-tool-icon-color');
+    const zoomInIcon = getByTestId('bpm-tool-icon-zoomin');
+    const zoomResetIcon = getByTestId('bpm-tool-icon-zoomreset');
+    const zoomOutIcon = getByTestId('bpm-tool-icon-zoomout');
+
+    const buttons = element.querySelectorAll('button');
+    const header = element.querySelectorAll('th');
+
+    // tools
+    expect(newIcon).toHaveAttribute('title', 'Create new process');
+    expect(edgeIcon).toHaveAttribute('title', 'Create new connection');
+    expect(deleteIcon).toHaveAttribute('title', 'Delete selected element');
+    expect(colorIcon).toHaveAttribute(
+      'title',
+      'Turn on conditional colorization',
+    );
+    expect(zoomInIcon).toHaveAttribute('title', 'Zoom in');
+    expect(zoomResetIcon).toHaveAttribute('title', 'Reset zoom');
+    expect(zoomOutIcon).toHaveAttribute('title', 'Zoom out');
+
+    // process panel
     expect(element).toHaveTextContent('No process selected');
     expect(icons[7]).toHaveAttribute('title', 'Edit process');
 
@@ -448,6 +516,62 @@ describe('ProcessMap tests', () => {
     expect(handleSelectElement).toHaveBeenCalledWith(edge1);
   });
 
+  test('should end drawing mode', () => {
+    const {mockProcessMap} = getMockProcessMap();
+
+    const handleForceUpdate = jest.fn();
+    const handleSelectElement = jest.fn();
+    const handleToggleConditionalColorization = jest.fn();
+
+    const saveBusinessProcessMaps = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const gmp = {
+      hosts: {
+        getAll: getAllHosts,
+      },
+      user: {
+        saveBusinessProcessMaps,
+        renewSession,
+      },
+    };
+
+    const {render} = rendererWith({
+      gmp,
+      store: true,
+    });
+
+    const {element, getByTestId, getAllByTestId} = render(
+      <ProcessMap
+        applyConditionalColorization={true}
+        mapId={'1'}
+        processMaps={mockProcessMap}
+        forceUpdate={handleForceUpdate}
+        onSelectElement={handleSelectElement}
+        onToggleConditionalColorization={handleToggleConditionalColorization}
+      />,
+    );
+
+    const circles = getAllByTestId('process-node-circle');
+    const edgeIcon = getByTestId('bpm-tool-icon-edge');
+
+    expect(edgeIcon).not.toHaveStyleRule('background-color', '#66c430');
+    fireEvent.click(edgeIcon);
+    expect(edgeIcon).toHaveStyleRule('background-color', '#66c430');
+
+    fireEvent.mouseDown(circles[2]);
+    fireEvent.mouseUp(circles[2]);
+
+    expect(saveBusinessProcessMaps).not.toHaveBeenCalled();
+
+    fireEvent.keyDown(element, {key: 'Escape', keyCode: KeyCode.Escape});
+
+    expect(edgeIcon).not.toHaveStyleRule('background-color', '#66c430');
+
+    expect(saveBusinessProcessMaps).not.toHaveBeenCalled();
+  });
+
   test('should save map when drawing new edge', () => {
     const {mockProcessMap} = getMockProcessMap();
 
@@ -551,6 +675,55 @@ describe('ProcessMap tests', () => {
     expect(saveBusinessProcessMaps).not.toHaveBeenCalled();
 
     fireEvent.click(deleteIcon);
+
+    expect(saveBusinessProcessMaps).toHaveBeenCalled();
+  });
+
+  test('should save map when deleting an edge with delete key', () => {
+    const {mockProcessMap} = getMockProcessMap();
+
+    const handleForceUpdate = jest.fn();
+    const handleSelectElement = jest.fn();
+    const handleToggleConditionalColorization = jest.fn();
+
+    const saveBusinessProcessMaps = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const gmp = {
+      hosts: {
+        getAll: getAllHosts,
+      },
+      user: {
+        saveBusinessProcessMaps,
+        renewSession,
+      },
+    };
+
+    const {render} = rendererWith({
+      gmp,
+      store: true,
+    });
+
+    const {element, getAllByTestId} = render(
+      <ProcessMap
+        applyConditionalColorization={true}
+        mapId={'1'}
+        processMaps={mockProcessMap}
+        forceUpdate={handleForceUpdate}
+        onSelectElement={handleSelectElement}
+        onToggleConditionalColorization={handleToggleConditionalColorization}
+      />,
+    );
+
+    const edges = getAllByTestId('bpm-edge-line');
+
+    fireEvent.mouseDown(edges[0]);
+    fireEvent.mouseUp(edges[0]);
+
+    expect(saveBusinessProcessMaps).not.toHaveBeenCalled();
+
+    fireEvent.keyDown(element, {key: 'Delete', keyCode: KeyCode.Delete});
 
     expect(saveBusinessProcessMaps).toHaveBeenCalled();
   });
@@ -669,5 +842,73 @@ describe('ProcessMap tests', () => {
     });
 
     expect(handleForceUpdate).toHaveBeenCalled();
+  });
+
+  test('should zoom', () => {
+    const {mockProcessMap} = getMockProcessMap();
+
+    const handleForceUpdate = jest.fn();
+    const handleSelectElement = jest.fn();
+    const handleToggleConditionalColorization = jest.fn();
+    const gmp = {
+      hosts: {
+        getAll: getAllHosts,
+      },
+      user: {renewSession},
+    };
+
+    const {render} = rendererWith({
+      gmp,
+      store: true,
+    });
+
+    const {element, getByTestId, getAllByTestId} = render(
+      <ProcessMap
+        applyConditionalColorization={false}
+        mapId={'1'}
+        processMaps={mockProcessMap}
+        forceUpdate={handleForceUpdate}
+        onSelectElement={handleSelectElement}
+        onToggleConditionalColorization={handleToggleConditionalColorization}
+      />,
+    );
+
+    const zoomInIcon = getByTestId('bpm-tool-icon-zoomin');
+    const zoomResetIcon = getByTestId('bpm-tool-icon-zoomreset');
+    const zoomOutIcon = getByTestId('bpm-tool-icon-zoomout');
+    const svgs = element.querySelectorAll('svg');
+    let processes = getAllByTestId('process-node-group');
+
+    expect(processes[0]).toHaveAttribute('scale', '1');
+    expect(processes[1]).toHaveAttribute('scale', '1');
+
+    fireEvent.click(zoomInIcon);
+
+    processes = getAllByTestId('process-node-group');
+
+    expect(processes[0]).toHaveAttribute('scale', '1.1');
+    expect(processes[1]).toHaveAttribute('scale', '1.1');
+
+    fireEvent.click(zoomOutIcon);
+    fireEvent.click(zoomOutIcon);
+    fireEvent.click(zoomOutIcon);
+
+    expect(processes[0]).toHaveAttribute('scale', '0.8');
+    expect(processes[1]).toHaveAttribute('scale', '0.8');
+
+    fireEvent.click(zoomResetIcon);
+
+    expect(processes[0]).toHaveAttribute('scale', '1');
+    expect(processes[1]).toHaveAttribute('scale', '1');
+
+    fireEvent.wheel(zoomInIcon);
+
+    expect(processes[0]).toHaveAttribute('scale', '1');
+    expect(processes[1]).toHaveAttribute('scale', '1');
+
+    fireEvent.wheel(svgs[0]);
+
+    expect(processes[0]).toHaveAttribute('scale', '1.1');
+    expect(processes[1]).toHaveAttribute('scale', '1.1');
   });
 });
