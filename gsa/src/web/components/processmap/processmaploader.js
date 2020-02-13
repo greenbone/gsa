@@ -89,12 +89,25 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
   const dispatch = useDispatch();
   const gmp = useGmp();
 
+  const [
+    applyConditionalColorization,
+    setApplyConditionalColorization,
+  ] = useState(true);
+  const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
+  const [dialogShownOnce, setDialogShownOnce] = useState(false);
+  const [failedTags, setFailedTags] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedElement, setSelectedElement] = useState({});
+  const [update, setUpdate] = useState(false);
+
+  // get map from store
   const processMap = useSelector(state => {
     return isDefined(state.businessProcessMaps[mapId])
       ? state.businessProcessMaps[mapId]
       : {};
   });
 
+  // load map if processMap is empty
   useEffect(() => {
     if (Object.entries(processMap).length === 0) {
       dispatch(loadBusinessProcessMaps(gmp)());
@@ -103,16 +116,20 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
   // used to prevent infinite reloads and deal with an empty usersetting
   // no dep-array or a non-empty one will not prevent reloads
 
-  const [selectedElement, setSelectedElement] = useState({});
-  const [update, setUpdate] = useState(false);
+  // currently used to force an update when new hosts are added
+  const forceUpdate = () => setUpdate(!update);
 
+  // keep track of currently selected element
   const handleSelectElement = selEl => {
     return setSelectedElement(selEl);
   };
+
+  // create a filter for each individual tagId used to load all hosts associated
+  // to a specific process
   const hostFilter = hostsFilter(selectedElement.tagId);
 
-  const [failedTags, setFailedTags] = useState([]);
-
+  // loop through all processes and load their associated hosts via individual
+  // host filters
   useEffect(() => {
     const processMapsTemp = isDefined(processMap) ? processMap : {};
     let tempHostFilter;
@@ -131,36 +148,26 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
     }
   }, [processMap, update, dispatch, gmp]);
 
-  const [isLoading, setIsLoading] = useState(true);
-
+  // in combination with the next useEffect(), this will update the map once
+  // it is loaded to apply the correct colorization
   const isLoadingHosts = useSelector(rootState => {
     const hostSel = hostSelector(rootState);
     return hostSel.isLoadingAnyEntities();
   });
-
   useEffect(() => {
     setIsLoading(false);
   }, [isLoadingHosts]);
 
-  const [
-    applyConditionalColorization,
-    setApplyConditionalColorization,
-  ] = useState(true);
-
   const handleToggleConditionalColorization = () => {
     setApplyConditionalColorization(!applyConditionalColorization);
   };
-
-  const forceUpdate = () => setUpdate(!update);
 
   const coloredProcessMap = useColorize(
     processMap,
     applyConditionalColorization,
   );
 
-  const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
-  const [dialogShownOnce, setDialogShownOnce] = useState(false);
-
+  // use to show dialog, if there are processes without an existing tag
   useEffect(() => {
     if (failedTags.length > 0 && !isLoading && !dialogShownOnce) {
       setConfirmDialogVisible(true);
