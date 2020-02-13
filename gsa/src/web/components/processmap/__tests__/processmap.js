@@ -29,11 +29,11 @@ import {entitiesLoadingActions} from 'web/store/entities/hosts';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
+import {hostsFilter} from 'web/components/processmap/processmaploader';
+
 import ProcessMap from '../processmap';
 
 setLocale('en');
-
-const renewSession = jest.fn().mockResolvedValue({data: {}});
 
 export const getMockProcessMap = () => {
   const mockProcessMap = {
@@ -70,9 +70,9 @@ export const getMockProcessMap = () => {
         id: '23',
         name: 'hello',
         severity: 10,
-        tagId: '32',
+        tagId: 33,
         type: 'process',
-        x: 300,
+        x: 600,
         y: 200,
       },
     },
@@ -84,12 +84,14 @@ export const getMockProcessMap = () => {
   };
 };
 
-const hostFilter = Filter.fromString('tag_id=31 first=1 rows=10 sort=name');
+const hostFilter = hostsFilter('31');
 
 const hosts = [
   {name: '123.456.78.910', id: '1234', severity: 5},
   {name: '109.876.54.321', id: '5678', severity: undefined},
 ];
+
+const renewSession = jest.fn().mockResolvedValue({data: {}});
 
 const getAllHosts = jest.fn().mockResolvedValue({
   data: hosts,
@@ -501,6 +503,56 @@ describe('ProcessMap tests', () => {
     fireEvent.mouseUp(circles[1]);
 
     expect(edgeIcon).not.toHaveStyleRule('background-color', '#66c430');
+
+    expect(saveBusinessProcessMaps).toHaveBeenCalled();
+  });
+
+  test('should save map when deleting an edge', () => {
+    const {mockProcessMap} = getMockProcessMap();
+
+    const handleForceUpdate = jest.fn();
+    const handleSelectElement = jest.fn();
+    const handleToggleConditionalColorization = jest.fn();
+
+    const saveBusinessProcessMaps = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const gmp = {
+      hosts: {
+        getAll: getAllHosts,
+      },
+      user: {
+        saveBusinessProcessMaps,
+        renewSession,
+      },
+    };
+
+    const {render} = rendererWith({
+      gmp,
+      store: true,
+    });
+
+    const {getByTestId, getAllByTestId} = render(
+      <ProcessMap
+        applyConditionalColorization={true}
+        mapId={'1'}
+        processMaps={mockProcessMap}
+        forceUpdate={handleForceUpdate}
+        onSelectElement={handleSelectElement}
+        onToggleConditionalColorization={handleToggleConditionalColorization}
+      />,
+    );
+
+    const edges = getAllByTestId('bpm-edge-line');
+    const deleteIcon = getByTestId('bpm-tool-icon-delete');
+
+    fireEvent.mouseDown(edges[0]);
+    fireEvent.mouseUp(edges[0]);
+
+    expect(saveBusinessProcessMaps).not.toHaveBeenCalled();
+
+    fireEvent.click(deleteIcon);
 
     expect(saveBusinessProcessMaps).toHaveBeenCalled();
   });
