@@ -174,14 +174,11 @@ const UserMenuContainer = () => {
                   date: dateTimeWithTimeZone(sessionTimeout, userTimezone),
                 })}
               </span>
-              <span>
-                <RefreshIcon
-                  data-testid="usermenu-renewsession"
-                  title={_('Renew session timeout')}
-                  size="small"
-                  onClick={handleRenewSessionTimeout}
-                />
-              </span>
+              <RefreshIcon
+                title={_('Renew session timeout')}
+                size="small"
+                onClick={handleRenewSessionTimeout}
+              />
             </Divider>
           </Entry>
           <Entry>
