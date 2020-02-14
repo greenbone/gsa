@@ -68,8 +68,8 @@ export class EntitiesSelector {
   isLoadingAnyEntities() {
     const loaders = this.state.isLoading;
     const bools = Object.values(loaders);
-    return isDefined(this.state.isLoading)
-      ? !!bools.every(bool => bool === false)
+    return isDefined(bools.length > 0)
+      ? !bools.every(bool => bool === false)
       : false;
   }
 
