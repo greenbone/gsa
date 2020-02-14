@@ -55,7 +55,7 @@ class DfnCertAdv extends Info {
       }
 
       if (isDefined(entry.cve)) {
-        ret.cves = map(entry.cve, cve => cve.__text);
+        ret.cves = map(entry.cve, cve => cve);
       }
     }
 
