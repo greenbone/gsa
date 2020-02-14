@@ -83,7 +83,7 @@ describe('DfnCertAdv model tests', () => {
     const elem = {
       raw_data: {
         entry: {
-          cve: [{__text: 'lorem'}, {__text: 'ipsum'}, {__text: 'dolor'}],
+          cve: ['lorem', 'ipsum', 'dolor'],
         },
       },
     };
