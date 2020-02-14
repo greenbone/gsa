@@ -137,13 +137,21 @@ class ProcessPanel extends React.Component {
     this.handlePreviousClick = this.handlePreviousClick.bind(this);
   }
 
+  // in order to correctly use the pagination in the panel, we need to compare
+  // the current element in the panel and the previous element that was selected
   static getDerivedStateFromProps = (nextProps, prevState) => {
     if (!isDefined(nextProps.element)) {
+      // if no element will be selected, set current element to undefined
+      // -> the panel will not show process information
       return {
         ...prevState,
         element: undefined,
       };
     } else if (
+      // if the element does not change compared to the previous one (prevState)
+      // or if the prevElement (stored for comparison) is equal to the current
+      // element, set the counts according to the given hostList and don't reset
+      // pagination
       nextProps.element === prevState.element ||
       nextProps.element === nextProps.prevElement
     ) {
@@ -157,6 +165,7 @@ class ProcessPanel extends React.Component {
           : hostList.length;
 
       const newCounts = prevState.counts.clone({
+        // use count first of prevElement to be able to remember the page
         first: prevState.counts.first,
         length: getNumListedItems(prevState.counts.first, length),
         filtered: length,
@@ -166,6 +175,10 @@ class ProcessPanel extends React.Component {
         counts: newCounts,
       };
     } else if (nextProps.element !== nextProps.prevElement) {
+      // if the selected element changes, the counts need to be reset so that
+      // the pagination starts at the first element. Otherwise, e.g., navigating
+      // to the third page of one element and then changing the element would
+      // leed to the new elements hosts being listed from the third page on
       const {hostList = []} = nextProps;
 
       // account for the +1 hosts loaded with hostFilter()
