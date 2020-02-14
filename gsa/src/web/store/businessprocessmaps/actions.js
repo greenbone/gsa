@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,16 +16,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+export const LOAD_BUSINESS_PROCESS_MAPS_SUCCESS =
+  'LOAD_BUSINESS_PROCESS_MAPS_SUCCESS';
 
-import React from 'react';
-
-import {render} from 'web/utils/testing';
-
-import GlobalStyles from '../globalstyles';
-
-describe('GlobalStyles tests', () => {
-  test('should render global styles', () => {
-    render(<GlobalStyles />);
-    expect(document.documentElement).toMatchSnapshot();
-  });
+export const getBusinessProcessMapsAction = data => ({
+  type: LOAD_BUSINESS_PROCESS_MAPS_SUCCESS,
+  data,
 });
+
+export const loadBusinessProcessMaps = gmp => () => dispatch =>
+  gmp.user
+    .getBusinessProcessMaps()
+    .then(response => dispatch(getBusinessProcessMapsAction(response.data)));
+
+export const saveBusinessProcessMap = gmp => map => dispatch =>
+  gmp.user
+    .saveBusinessProcessMaps(map)
+    .then(response => dispatch(getBusinessProcessMapsAction(map)));
+
+// vim: set ts=2 sw=2 tw=80:

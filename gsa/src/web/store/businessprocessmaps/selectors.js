@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2020 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -17,22 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-export const getReportComposerDefaults = rootState => {
-  const {userSettings = {}} = rootState;
-  const {reportComposerDefaults} = userSettings;
-  return reportComposerDefaults;
+export const getBusinessProcessMaps = rootState => {
+  const {businessProcessMaps = {}} = rootState;
+  return businessProcessMaps;
 };
-
-export const getTimezone = rootState => rootState.userSettings.timezone;
-
-export const getLocale = rootState => rootState.userSettings.locale;
-
-export const getSessionTimeout = rootState =>
-  rootState.userSettings.sessionTimeout;
-
-export const getUsername = rootState => rootState.userSettings.username;
-
-export const isLoggedIn = rootState =>
-  rootState.userSettings.isLoggedIn === true;
-
-// vim: set ts=2 sw=2 tw=80:

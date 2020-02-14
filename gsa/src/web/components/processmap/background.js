@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,33 +16,33 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
 
-import dashboardData from './dashboard/data/reducers';
-import dashboardSettings from './dashboard/settings/reducers';
-import userSettings from './usersettings/reducers';
-import {businessProcessMaps} from './businessprocessmaps/reducers';
-import pages from './pages/reducers';
+import React from 'react';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
-import entities from './entities/reducers';
-import {CLEAR_STORE} from 'web/store/actions';
+const DEFAULT_SIZE = 8000;
+const DEFAULT_COLOR = Theme.dialogGray;
 
-const rootReducer = combineReducers({
-  businessProcessMaps,
-  dashboardData,
-  dashboardSettings,
-  entities,
-  userSettings,
-  pages,
-});
+const Background = ({
+  color = DEFAULT_COLOR,
+  height = DEFAULT_SIZE,
+  width = DEFAULT_SIZE,
+}) => (
+  <rect
+    fill={Theme.lightGray}
+    fillOpacity="0.2"
+    height={height}
+    width={width}
+  />
+);
 
-const clearStoreReducer = (state = {}, action) => {
-  if (action.type === CLEAR_STORE) {
-    state = {};
-  }
-  return rootReducer(state, action);
+Background.propTypes = {
+  color: PropTypes.string,
+  height: PropTypes.number,
+  width: PropTypes.number,
 };
 
-export default clearStoreReducer;
+export default Background;
 
 // vim: set ts=2 sw=2 tw=80:

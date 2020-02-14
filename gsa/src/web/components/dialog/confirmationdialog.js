@@ -39,13 +39,13 @@ const ConfirmationDialogContent = props => {
     }
   };
 
-  const {moveprops, text, title, rightButtonTitle} = props;
+  const {content, moveprops, title, rightButtonTitle} = props;
 
   return (
     <DialogContent>
       <DialogTitle title={title} onCloseClick={props.close} {...moveprops} />
       <ScrollableContent data-testid="confirmationdialog-content">
-        {text}
+        {content}
       </ScrollableContent>
       <DialogTwoButtonFooter
         rightButtonTitle={rightButtonTitle}
@@ -58,16 +58,16 @@ const ConfirmationDialogContent = props => {
 
 ConfirmationDialogContent.propTypes = {
   close: PropTypes.func.isRequired,
+  content: PropTypes.elementOrString,
   moveprops: PropTypes.object,
   rightButtonTitle: PropTypes.string,
-  text: PropTypes.string,
   title: PropTypes.string.isRequired,
   onResumeClick: PropTypes.func.isRequired,
 };
 
 const ConfirmationDialog = ({
   width = DEFAULT_DIALOG_WIDTH,
-  text,
+  content,
   title,
   rightButtonTitle = _('OK'),
   onClose,
@@ -79,7 +79,7 @@ const ConfirmationDialog = ({
         <ConfirmationDialogContent
           close={close}
           moveprops={moveProps}
-          text={text}
+          content={content}
           title={title}
           rightButtonTitle={rightButtonTitle}
           onResumeClick={onResumeClick}
@@ -90,8 +90,8 @@ const ConfirmationDialog = ({
 };
 
 ConfirmationDialog.propTypes = {
+  content: PropTypes.elementOrString,
   rightButtonTitle: PropTypes.string,
-  text: PropTypes.string,
   title: PropTypes.string.isRequired,
   width: PropTypes.string,
   onClose: PropTypes.func.isRequired,

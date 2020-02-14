@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,33 +16,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
+import withSvgIcon from './withSvgIcon';
 
-import dashboardData from './dashboard/data/reducers';
-import dashboardSettings from './dashboard/settings/reducers';
-import userSettings from './usersettings/reducers';
-import {businessProcessMaps} from './businessprocessmaps/reducers';
-import pages from './pages/reducers';
+import {ReactComponent as Icon} from './svg/plus.svg';
 
-import entities from './entities/reducers';
-import {CLEAR_STORE} from 'web/store/actions';
+const PlusIcon = withSvgIcon()(Icon);
 
-const rootReducer = combineReducers({
-  businessProcessMaps,
-  dashboardData,
-  dashboardSettings,
-  entities,
-  userSettings,
-  pages,
-});
-
-const clearStoreReducer = (state = {}, action) => {
-  if (action.type === CLEAR_STORE) {
-    state = {};
-  }
-  return rootReducer(state, action);
-};
-
-export default clearStoreReducer;
+export default PlusIcon;
 
 // vim: set ts=2 sw=2 tw=80:

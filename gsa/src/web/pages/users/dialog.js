@@ -349,7 +349,7 @@ class Dialog extends React.Component {
               </Layout>
               {confirmationDialogVisible && (
                 <ConfirmationDialog
-                  text={_(
+                  content={_(
                     'Please note: You are about to create a user ' +
                       'without a role. This user will not have any ' +
                       'permissions and as a result will not be able to login.',

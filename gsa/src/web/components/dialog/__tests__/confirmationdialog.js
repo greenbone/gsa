@@ -30,7 +30,7 @@ describe('ConfirmationDialog component tests', () => {
 
     const {baseElement, getByTestId} = render(
       <ConfirmationDialog
-        text="foo"
+        content="foo"
         title="bar"
         onClose={handleClose}
         onResumeClick={handleResumeClick}
@@ -38,6 +38,25 @@ describe('ConfirmationDialog component tests', () => {
     );
 
     expect(baseElement).toMatchSnapshot();
+    const contentElement = getByTestId('confirmationdialog-content');
+    const titleElement = getByTestId('dialog-title-bar');
+    expect(contentElement).toHaveTextContent('foo');
+    expect(titleElement).toHaveTextContent('bar');
+  });
+
+  test('should render ConfirmationDialog with element content and title', () => {
+    const handleClose = jest.fn();
+    const handleResumeClick = jest.fn();
+
+    const {getByTestId} = render(
+      <ConfirmationDialog
+        content={<div>foo</div>}
+        title="bar"
+        onClose={handleClose}
+        onResumeClick={handleResumeClick}
+      />,
+    );
+
     const contentElement = getByTestId('confirmationdialog-content');
     const titleElement = getByTestId('dialog-title-bar');
     expect(contentElement).toHaveTextContent('foo');

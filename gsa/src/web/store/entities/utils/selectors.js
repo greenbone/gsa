@@ -65,6 +65,14 @@ export class EntitiesSelector {
       : false;
   }
 
+  isLoadingAnyEntities() {
+    const loaders = this.state.isLoading;
+    const bools = Object.values(loaders);
+    return isDefined(bools.length > 0)
+      ? !bools.every(bool => bool === false)
+      : false;
+  }
+
   getEntitiesError(filter) {
     return isDefined(this.state.errors)
       ? this.state.errors[filterIdentifier(filter)]
@@ -119,6 +127,10 @@ class Selector {
 
   isLoadingEntities(filter) {
     return this.entitiesSelector.isLoadingEntities(filter);
+  }
+
+  isLoadingAnyEntities() {
+    return this.entitiesSelector.isLoadingAnyEntities();
   }
 
   isLoadingAllEntities(filter) {
