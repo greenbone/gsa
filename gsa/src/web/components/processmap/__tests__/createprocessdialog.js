@@ -44,7 +44,7 @@ describe('CreateProcessDialog tests', () => {
     const nameInput = getByName('name');
     const commentInput = getByName('comment');
 
-    expect(titleBar).toHaveTextContent('Create Process Node');
+    expect(titleBar).toHaveTextContent('Create Process');
 
     expect(formGroups[0]).toHaveTextContent('Name');
     expect(nameInput).toHaveAttribute('value', 'Unnamed');
@@ -80,7 +80,7 @@ describe('CreateProcessDialog tests', () => {
     const nameInput = getByName('name');
     const commentInput = getByName('comment');
 
-    expect(titleBar).toHaveTextContent('Edit Process Node');
+    expect(titleBar).toHaveTextContent('Edit Process');
 
     expect(formGroups[0]).toHaveTextContent('Name');
     expect(nameInput).toHaveAttribute('value', 'foo');

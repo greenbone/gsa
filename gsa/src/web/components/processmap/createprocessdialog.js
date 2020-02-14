@@ -41,7 +41,7 @@ const CreateProcessDialog = ({
   onEdit,
 }) => {
   const isEdit = isDefined(id);
-  const title = isEdit ? _('Edit Process Node') : _('Create Process Node');
+  const title = isEdit ? _('Edit Process') : _('Create Process');
   const buttonTitle = isEdit ? _('Save') : _('Create');
   const onSave = isEdit ? onEdit : onCreate;
   return (
