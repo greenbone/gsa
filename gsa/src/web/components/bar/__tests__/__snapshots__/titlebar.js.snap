@@ -227,12 +227,12 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   z-index: 600;
   list-style: none;
   font-size: 10px;
-  width: 280px;
+  width: 300px;
 }
 
 .c12 {
   height: 30px;
-  width: 280px;
+  width: 300px;
   border-left: 1px solid #787878;
   border-right: 1px solid #787878;
   display: -webkit-box;
