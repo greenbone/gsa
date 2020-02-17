@@ -21,7 +21,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined, isString} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withUserName from 'web/utils/withUserName';
@@ -102,15 +102,16 @@ const Row = ({
 
   const obs = [];
   if (isDefined(observers)) {
-    if (isString(observers)) {
-      obs.push(_('User {{name}}', {name: observers}));
-    } else {
-      if (isDefined(observers.role)) {
-        obs.push(_('Role {{name}}', {name: observers.role.name}));
-      }
-      if (isDefined(observers.group)) {
-        obs.push(_('Group {{name}}', {name: observers.group.name}));
-      }
+    if (isDefined(observers.user)) {
+      obs.user = _('Users {{user}}', {user: observers.user.join(', ')});
+    }
+    if (isDefined(observers.role)) {
+      const role = observers.role.map(r => r.name);
+      obs.role = _('Roles {{role}}', {role: role.join(', ')});
+    }
+    if (isDefined(observers.group)) {
+      const group = observers.group.map(g => g.name);
+      obs.group = _('Groups {{group}}', {group: group.join(', ')});
     }
   }
   return (
@@ -137,15 +138,19 @@ const Row = ({
               entity={entity}
               userName={username}
             />
-            {isDefined(observers) && observers.length > 0 && (
+            {isDefined(observers) && Object.keys(observers).length > 0 && (
               <ProvideViewIcon
                 size="small"
-                title={_('Task made visible for: {{observers}}', {
-                  observers: obs.join(', '),
-                })}
+                title={_(
+                  'Task made visible for:\n{{user}}\n{{role}}\n{{group}}',
+                  {
+                    user: obs.user,
+                    role: obs.role,
+                    group: obs.group,
+                  },
+                )}
               />
-            ) // TODO observer roles and groups
-            }
+            )}
           </IconDivider>
         </Layout>
         {entity.comment && <Comment>({entity.comment})</Comment>}
