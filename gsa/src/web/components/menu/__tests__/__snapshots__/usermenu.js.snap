@@ -53,6 +53,10 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   display: inline-flex;
 }
 
+.c10 {
+  cursor: pointer;
+}
+
 .c2 {
   height: 24px;
   width: 24px;
@@ -105,12 +109,12 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   z-index: 600;
   list-style: none;
   font-size: 10px;
-  width: 255px;
+  width: 300px;
 }
 
 .c6 {
   height: 30px;
-  width: 255px;
+  width: 300px;
   border-left: 1px solid #787878;
   border-right: 1px solid #787878;
   display: -webkit-box;
@@ -159,7 +163,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   margin-right: 10px;
 }
 
-.c10 {
+.c11 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -168,14 +172,20 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   height: 100%;
 }
 
-.c10:link,
-.c10:hover,
-.c10:active,
-.c10:visited,
-.c10:hover {
+.c11:link,
+.c11:hover,
+.c11:active,
+.c11:visited,
+.c11:hover {
   color: inherit;
   -webkit-text-decoration: none;
   text-decoration: none;
+}
+
+@media print {
+  .c10 {
+    display: none;
+  }
 }
 
 <span
@@ -240,6 +250,17 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
             <span>
               Session timeout: 
             </span>
+            <span
+              class="c10 c9"
+              data-testid="svg-icon"
+              title="Renew session timeout"
+            >
+              <svg
+                title="Renew session timeout"
+              >
+                refresh.svg
+              </svg>
+            </span>
           </div>
         </div>
       </li>
@@ -247,7 +268,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
         class="c6"
       >
         <a
-          class="c10"
+          class="c11"
           data-testid="usermenu-settings"
           href="/usersettings"
         >

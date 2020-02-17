@@ -78,6 +78,25 @@ describe('UserMenu component tests', () => {
 
     expect(gmp.doLogout).toHaveBeenCalled();
   });
+
+  test('should renew session timeout on click', () => {
+    const renewSession = jest
+      .fn()
+      .mockResolvedValue({data: '2019-10-10T12:00:00Z'});
+    const gmp = {
+      user: {
+        renewSession,
+      },
+    };
+    const {render} = rendererWith({gmp, store: true, router: true});
+
+    const {getAllByTestId} = render(<UserMenu />);
+    const icons = getAllByTestId('svg-icon');
+
+    fireEvent.click(icons[3]);
+
+    expect(gmp.user.renewSession).toHaveBeenCalled();
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:

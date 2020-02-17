@@ -171,6 +171,10 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   display: inline-flex;
 }
 
+.c16 {
+  cursor: pointer;
+}
+
 .c8 {
   height: 24px;
   width: 24px;
@@ -223,12 +227,12 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   z-index: 600;
   list-style: none;
   font-size: 10px;
-  width: 255px;
+  width: 300px;
 }
 
 .c12 {
   height: 30px;
-  width: 255px;
+  width: 300px;
   border-left: 1px solid #787878;
   border-right: 1px solid #787878;
   display: -webkit-box;
@@ -277,7 +281,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   margin-right: 10px;
 }
 
-.c16 {
+.c17 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -286,11 +290,11 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   height: 100%;
 }
 
-.c16:link,
-.c16:hover,
-.c16:active,
-.c16:visited,
-.c16:hover {
+.c17:link,
+.c17:hover,
+.c17:active,
+.c17:visited,
+.c17:hover {
   color: inherit;
   -webkit-text-decoration: none;
   text-decoration: none;
@@ -335,6 +339,12 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
 
 .c0 {
   height: 42px;
+}
+
+@media print {
+  .c16 {
+    display: none;
+  }
 }
 
 <body>
@@ -432,6 +442,17 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
                   <span>
                     Session timeout: 
                   </span>
+                  <span
+                    class="c16 c15"
+                    data-testid="svg-icon"
+                    title="Renew session timeout"
+                  >
+                    <svg
+                      title="Renew session timeout"
+                    >
+                      refresh.svg
+                    </svg>
+                  </span>
                 </div>
               </div>
             </li>
@@ -439,7 +460,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
               class="c12"
             >
               <a
-                class="c16"
+                class="c17"
                 data-testid="usermenu-settings"
                 href="/usersettings"
               >

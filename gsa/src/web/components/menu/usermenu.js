@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2019-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -18,6 +18,8 @@
  */
 import React from 'react';
 
+import {useDispatch} from 'react-redux';
+
 import {useHistory} from 'react-router-dom';
 
 import styled, {keyframes} from 'styled-components';
@@ -27,11 +29,14 @@ import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import LogoutIcon from 'web/components/icon/logouticon';
 import MySettingsIcon from 'web/components/icon/mysettingsicon';
+import RefreshIcon from 'web/components/icon/refreshicon';
 import ScheduleIcon from 'web/components/icon/scheduleicon';
 import UserIcon from 'web/components/icon/usericon';
 
 import Divider from 'web/components/layout/divider';
 import Link from 'web/components/link/link';
+
+import {setSessionTimeout} from 'web/store/usersettings/actions';
 
 import Theme from 'web/utils/theme';
 import useGmp from 'web/utils/useGmp';
@@ -72,12 +77,12 @@ const List = styled.ul`
   z-index: ${Theme.Layers.menu};
   list-style: none;
   font-size: 10px;
-  width: 255px;
+  width: 300px;
 `;
 
 const Entry = styled.li`
   height: 30px;
-  width: 255px;
+  width: 300px;
   border-left: 1px solid ${Theme.mediumGray};
   border-right: 1px solid ${Theme.mediumGray};
   display: flex;
@@ -129,6 +134,7 @@ const StyledLink = styled(Link)`
 `;
 
 const UserMenuContainer = () => {
+  const dispatch = useDispatch();
   const sessionTimeout = useUserSessionTimeout();
   const userTimezone = useUserTimezone();
   const userName = useUserName();
@@ -141,6 +147,12 @@ const UserMenuContainer = () => {
     gmp.doLogout().then(() => {
       history.push('/login?type=logout');
     });
+  };
+
+  const handleRenewSessionTimeout = () => {
+    gmp.user
+      .renewSession()
+      .then(response => dispatch(setSessionTimeout(response.data)));
   };
 
   return (
@@ -162,6 +174,11 @@ const UserMenuContainer = () => {
                   date: dateTimeWithTimeZone(sessionTimeout, userTimezone),
                 })}
               </span>
+              <RefreshIcon
+                title={_('Renew session timeout')}
+                size="small"
+                onClick={handleRenewSessionTimeout}
+              />
             </Divider>
           </Entry>
           <Entry>
