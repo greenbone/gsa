@@ -77,12 +77,12 @@ const List = styled.ul`
   z-index: ${Theme.Layers.menu};
   list-style: none;
   font-size: 10px;
-  width: 280px;
+  width: 300px;
 `;
 
 const Entry = styled.li`
   height: 30px;
-  width: 280px;
+  width: 300px;
   border-left: 1px solid ${Theme.mediumGray};
   border-right: 1px solid ${Theme.mediumGray};
   display: flex;
