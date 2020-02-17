@@ -447,4 +447,28 @@ describe(`Task Model methods tests`, () => {
     task = Task.fromElement({status: TASK_STATUS.done, alterable: '1'});
     expect(task.isChangeable()).toEqual(true);
   });
+
+  test('should parse observer strings', () => {
+    const task = Task.fromElement({
+      observers: 'foo bar',
+    });
+
+    const {observers} = task;
+    expect(observers.user).toEqual(['foo', 'bar']);
+  });
+  test('should parse all observers types', () => {
+    const task = Task.fromElement({
+      observers: {
+        __text: 'anon nymous',
+        role: [{name: 'lorem'}],
+        group: [{name: 'ipsum'}, {name: 'dolor'}],
+      },
+    });
+
+    const {observers} = task;
+
+    expect(observers.user).toEqual(['anon', 'nymous']);
+    expect(observers.role).toEqual([{name: 'lorem'}]);
+    expect(observers.group).toEqual([{name: 'ipsum'}, {name: 'dolor'}]);
+  });
 });
