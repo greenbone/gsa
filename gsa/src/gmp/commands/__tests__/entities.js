@@ -83,4 +83,27 @@ describe('EntitiesCommand tests', () => {
       });
     });
   });
+
+  test('deleteByIds() should should call bulk_delete with correct ids', () => {
+    const response = createEntitiesResponse('foo', []);
+    const fakeHttp = createHttp(response);
+
+    const ids = new Set();
+    ids.add('123');
+    ids.add('456');
+
+    expect.hasAssertions();
+
+    const cmd = new EntitiesCommand(fakeHttp, 'foo');
+    return cmd.deleteByIds(ids).then(resp => {
+      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+        data: {
+          'bulk_selected:123': 1,
+          'bulk_selected:456': 1,
+          cmd: 'bulk_delete',
+          resource_type: 'foo',
+        },
+      });
+    });
+  });
 });
