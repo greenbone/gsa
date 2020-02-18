@@ -42,7 +42,7 @@ const transformXmlData = response => {
 
 const transformRejection = rej => {
   const xmlString = rej.plainData('text');
-  return isDefined(xmlString) ? parse(xmlString) : undefined;
+  return isDefined(xmlString) ? parse(xmlString, PARSER_OPTIONS) : undefined;
 };
 
 export default {
