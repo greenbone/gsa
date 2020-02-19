@@ -99,62 +99,12 @@ import TargetComponent from 'web/pages/targets/component';
 import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
 import {setTimezone} from 'web/store/usersettings/actions';
+import {MODIFY_TASK, CREATE_TASK, CREATE_CONTAINER_TASK} from './graphql';
 
-import gql from 'graphql-tag';
-
-// I don't have configId because my setup somehow doesn't have a valid scan config.
-export const MODIFY_TASK = gql`
-  mutation modifyTask(
-    $taskId: String!
-    $name: String
-    $targetId: UUID
-    $scannerId: UUID
-    $schedulePeriods: Int
-    $alterable: Boolean
-    $comment: String
-  ) {
-    modifyTask(
-      taskId: $taskId
-      name: $name
-      targetId: $targetId
-      scannerId: $scannerId
-      schedulePeriods: $schedulePeriods
-      alterable: $alterable
-      comment: $comment
-    ) {
-      taskId
-    }
-  }
-`;
-
-export const CREATE_TASK = gql`
-  mutation createTask(
-    $name: String!
-    $configId: UUID!
-    $targetId: UUID!
-    $scannerId: UUID!
-    $scheduleId: UUID
-    $schedulePeriods: Int
-    $alterable: Boolean
-    $comment: String
-  ) {
-    createTask(
-      name: $name
-      configId: $configId
-      targetId: $targetId
-      scannerId: $scannerId
-      scheduleId: $scheduleId
-      schedulePeriods: $schedulePeriods
-      alterable: $alterable
-      comment: $comment
-    ) {
-      taskId
-    }
-  }
-`;
 const TaskComponent = props => {
   const [modifyTask] = useMutation(MODIFY_TASK);
   const [createTask] = useMutation(CREATE_TASK);
+  const [createContainerTask] = useMutation(CREATE_CONTAINER_TASK);
 
   const {
     defaultPortListId,
@@ -225,7 +175,6 @@ const TaskComponent = props => {
   useEffect(() => {
     props.loadUserSettingsDefaults();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   const handleInteraction = () => {
     const {onInteraction} = props;
     if (isDefined(onInteraction)) {
@@ -302,6 +251,7 @@ const TaskComponent = props => {
 
   const openContainerTaskDialog = task => {
     toggleContainerTaskDialogVisible(true);
+    setTask(task);
     setName(task ? task.name : _('Unnamed'));
     setComment(task ? task.comment : '');
     setId(task ? task.id : undefined);
@@ -329,16 +279,17 @@ const TaskComponent = props => {
 
     if (isDefined(data.id)) {
       const {onContainerSaved, onContainerSaveError} = props;
-      return cmd
-        .saveContainer(data)
+      return modifyTask({
+        variables: {taskId: data.id, name: data.name, comment: data.comment},
+      })
         .then(onContainerSaved, onContainerSaveError)
         .then(() => closeContainerTaskDialog());
     }
-
     const {onContainerCreated, onContainerCreateError} = props;
-    return cmd
-      .createContainer(data)
-      .then(onContainerCreated, onContainerCreateError)
+    return createContainerTask({
+      variables: {name: data.name, comment: data.comment},
+    })
+      .then(result => onContainerCreated(result), onContainerCreateError) // queries return a promise and result is what gets returned by django
       .then(() => closeContainerTaskDialog());
   };
 
@@ -405,7 +356,7 @@ const TaskComponent = props => {
     };
     const {onCreated, onCreateError} = props;
     return createTask({variables: {...mutationData}})
-      .then(onCreated, onCreateError)
+      .then(result => onCreated(result), onCreateError)
       .then(() => closeTaskDialog());
   };
 

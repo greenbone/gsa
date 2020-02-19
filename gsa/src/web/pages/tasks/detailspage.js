@@ -332,7 +332,7 @@ const Page = props => {
   const {data, refetch} = useQuery(GET_TASK, {
     variables: {
       taskId: props.location.pathname.slice(
-        props.location.pathname.lastIndexOf('/') + 1,
+        props.location.pathname.lastIndexOf('/') + 1, // extract uuid from url
       ),
     },
   });
