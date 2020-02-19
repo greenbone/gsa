@@ -16,11 +16,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined, hasValue} from '../utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
-import {parseSeverity, parseDate} from '../parser';
+import {parseSeverity, parseDate} from 'gmp/parser';
 
-import Model, {parseModelFromElement} from '../model';
+import Model, {parseModelFromElement} from 'gmp/model';
 
 import ReportReport from './report/report';
 import Task from './task';
