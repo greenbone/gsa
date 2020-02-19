@@ -36,16 +36,16 @@ import Img from 'web/components/img/img';
 const OsIcon = ({
   displayOsCpe = true,
   displayOsName = false,
-  osTxt,
-  osCpe,
+  osTxt = '',
+  osCpe = '',
   ...props
 }) => {
-  const os = isDefined(osCpe) ? OperatingSystems.find(osCpe) : undefined;
+  const os = OperatingSystems.find(osCpe);
 
   let title;
   let os_icon;
 
-  if (isDefined(osTxt) && osTxt.includes('[possible conflict]')) {
+  if (osTxt.includes('[possible conflict]')) {
     os_icon = 'os_conflict.svg';
     if (displayOsCpe) {
       title = _('OS Conflict: {{best_os_txt}} ({{best_os_cpe}})', {
