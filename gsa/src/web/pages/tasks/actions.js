@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -40,25 +40,13 @@ import StartIcon from 'web/pages/tasks/icons/starticon';
 import StopIcon from 'web/pages/tasks/icons/stopicon';
 
 import PropTypes from 'web/utils/proptypes';
-import gql from 'graphql-tag';
 
-const DELETE_TASK = gql`
-  mutation deleteTask($taskId: String!) {
-    deleteTask(taskId: $taskId) {
-      ok
-    }
-  }
-`;
-const CLONE_TASK = gql`
-  mutation cloneTask($taskId: String!) {
-    cloneTask(taskId: $taskId) {
-      taskId
-    }
-  }
-`;
+import {DELETE_TASK, CLONE_TASK} from './graphql';
+
 const Actions = ({
   entity,
   links,
+  refetch,
   onReportImportClick,
   onTaskDownloadClick,
   onTaskEditClick,
@@ -85,13 +73,17 @@ const Actions = ({
       <TrashIcon
         entity={entity}
         name="task"
-        onClick={entity => deleteTask({variables: {taskId: entity.id}})}
+        onClick={entity =>
+          deleteTask({variables: {taskId: entity.id}}).then(refetch)
+        }
       />
       <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
       <CloneIcon
         entity={entity}
         name="task"
-        onClick={entity => cloneTask({variables: {taskId: entity.id}})}
+        onClick={entity =>
+          cloneTask({variables: {taskId: entity.id}}).then(refetch)
+        }
       />
       <ExportIcon
         value={entity}
