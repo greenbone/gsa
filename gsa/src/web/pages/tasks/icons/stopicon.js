@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -21,11 +21,20 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import StopIcon from 'web/components/icon/stopicon';
 
-const TaskStopIcon = ({size, task, onClick}) => {
+const TaskStopIcon = ({capabilities, size, task, onClick}) => {
   if (task.isRunning() && !task.isContainer()) {
+    if (
+      !capabilities.mayOp('stop_task') ||
+      !task.userCapabilities.mayOp('stop_task')
+    ) {
+      return (
+        <StopIcon active={false} title={_('Permission to stop Task denied')} />
+      );
+    }
     return (
       <StopIcon size={size} title={_('Stop')} value={task} onClick={onClick} />
     );
@@ -34,11 +43,12 @@ const TaskStopIcon = ({size, task, onClick}) => {
 };
 
 TaskStopIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };
 
-export default TaskStopIcon;
+export default withCapabilities(TaskStopIcon);
 
 // vim: set ts=2 sw=2 tw=80:
