@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useQuery} from '@apollo/react-hooks';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -58,63 +58,7 @@ import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import Table from './table';
-import gql from 'graphql-tag';
-
-const GET_TASKS = gql`
-  query Task($filterString: String) {
-    tasks(filterString: $filterString) {
-      name
-      uuid
-      permissions {
-        name
-      }
-      lastReport {
-        uuid
-        severity
-        timestamp
-      }
-      reportCount {
-        total
-        finished
-      }
-      status
-      target {
-        name
-        uuid
-      }
-      trend
-      comment
-      owner
-      preferences {
-        name
-        value
-        description
-      }
-      schedule {
-        name
-        uuid
-        icalendar
-        timezone
-        duration
-      }
-      alerts {
-        name
-        uuid
-      }
-      scanConfig {
-        uuid
-        name
-        trash
-      }
-      scanner {
-        uuid
-        name
-        scannerType
-      }
-      hostsOrdering
-    }
-  }
-`;
+import {GET_TASKS} from './graphql';
 
 export const ToolBarIcons = withCapabilities(
   ({
@@ -176,7 +120,7 @@ const Page = ({
   onError,
   ...props
 }) => {
-  const {data} = useQuery(GET_TASKS, {
+  const {data, refetch} = useQuery(GET_TASKS, {
     variables: {filterString: filter.toFilterString()},
   });
 
@@ -186,15 +130,19 @@ const Page = ({
     props.entities = undefined;
   }
 
+  useEffect(() => {
+    refetch();
+  }, [props, refetch]);
+
   return (
     <TaskComponent
       onAdvancedTaskWizardSaved={onChanged}
-      onCloned={onChanged}
+      onCloned={refetch}
       onCloneError={onError}
-      onContainerSaved={onChanged}
-      onCreated={onChanged}
-      onContainerCreated={onChanged}
-      onDeleted={onChanged}
+      onContainerSaved={refetch}
+      onCreated={refetch}
+      onContainerCreated={refetch}
+      onDeleted={refetch}
       onDeleteError={onError}
       onDownloaded={onDownloaded}
       onDownloadError={onError}
@@ -203,7 +151,7 @@ const Page = ({
       onReportImported={onChanged}
       onResumed={onChanged}
       onResumeError={onError}
-      onSaved={onChanged}
+      onSaved={refetch}
       onStarted={onChanged}
       onStartError={onError}
       onStopped={onChanged}
@@ -243,6 +191,7 @@ const Page = ({
             filter={filter}
             filterEditDialog={TaskFilterDialog}
             filtersFilter={TASKS_FILTER_FILTER}
+            refetch={refetch}
             sectionIcon={<TaskIcon size="large" />}
             table={Table}
             title={_('Tasks')}
