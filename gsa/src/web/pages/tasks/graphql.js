@@ -1,0 +1,221 @@
+/* Copyright (C) 2020 Greenbone Networks GmbH
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+import gql from 'graphql-tag';
+
+export const GET_TASK = gql`
+  query Task($taskId: UUID!) {
+    task(taskId: $taskId) {
+      name
+      uuid
+      permissions {
+        name
+      }
+      lastReport {
+        uuid
+        severity
+        timestamp
+        scanStart
+        scanEnd
+      }
+      currentReport {
+        uuid
+        scanStart
+      }
+      reportCount {
+        total
+        finished
+      }
+      status
+      target {
+        name
+        uuid
+      }
+      trend
+      comment
+      owner
+      preferences {
+        name
+        value
+        description
+      }
+      schedule {
+        name
+        uuid
+        icalendar
+        timezone
+        duration
+      }
+      alerts {
+        name
+        uuid
+      }
+      scanConfig {
+        uuid
+        name
+        trash
+      }
+      scanner {
+        uuid
+        name
+        scannerType
+      }
+      schedulePeriods
+      hostsOrdering
+      userTags {
+        count
+        tags {
+          name
+          uuid
+          value
+          comment
+        }
+      }
+    }
+  }
+`;
+
+export const GET_TASKS = gql`
+  query Task($filterString: String) {
+    tasks(filterString: $filterString) {
+      name
+      uuid
+      permissions {
+        name
+      }
+      lastReport {
+        uuid
+        severity
+        timestamp
+      }
+      reportCount {
+        total
+        finished
+      }
+      status
+      target {
+        name
+        uuid
+      }
+      trend
+      comment
+      owner
+      preferences {
+        name
+        value
+        description
+      }
+      schedule {
+        name
+        uuid
+        icalendar
+        timezone
+        duration
+      }
+      alerts {
+        name
+        uuid
+      }
+      scanConfig {
+        uuid
+        name
+        trash
+      }
+      scanner {
+        uuid
+        name
+        scannerType
+      }
+      hostsOrdering
+    }
+  }
+`;
+
+export const CLONE_TASK = gql`
+  mutation cloneTask($taskId: String!) {
+    cloneTask(taskId: $taskId) {
+      taskId
+    }
+  }
+`;
+
+export const DELETE_TASK = gql`
+  mutation deleteTask($taskId: String!) {
+    deleteTask(taskId: $taskId) {
+      ok
+    }
+  }
+`;
+
+export const MODIFY_TASK = gql`
+  mutation modifyTask(
+    $taskId: String!
+    $name: String
+    $targetId: UUID
+    $scannerId: UUID
+    $schedulePeriods: Int
+    $alterable: Boolean
+    $comment: String
+  ) {
+    modifyTask(
+      taskId: $taskId
+      name: $name
+      targetId: $targetId
+      scannerId: $scannerId
+      schedulePeriods: $schedulePeriods
+      alterable: $alterable
+      comment: $comment
+    ) {
+      taskId
+    }
+  }
+`;
+
+export const CREATE_TASK = gql`
+  mutation createTask(
+    $name: String!
+    $configId: UUID!
+    $targetId: UUID!
+    $scannerId: UUID!
+    $scheduleId: UUID
+    $schedulePeriods: Int
+    $alterable: Boolean
+    $comment: String
+  ) {
+    createTask(
+      name: $name
+      configId: $configId
+      targetId: $targetId
+      scannerId: $scannerId
+      scheduleId: $scheduleId
+      schedulePeriods: $schedulePeriods
+      alterable: $alterable
+      comment: $comment
+    ) {
+      taskId
+    }
+  }
+`;
+
+export const CREATE_CONTAINER_TASK = gql`
+  mutation createContainerTask($name: String!, $comment: String) {
+    createContainerTask(name: $name, comment: $comment) {
+      taskId
+    }
+  }
+`;
