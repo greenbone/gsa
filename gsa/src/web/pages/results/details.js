@@ -29,6 +29,8 @@ import {isEmpty} from 'gmp/utils/string';
 
 import {TAG_NA} from 'gmp/models/nvt';
 
+import {DEFAULT_OID_VALUE} from 'gmp/models/override';
+
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
@@ -299,7 +301,7 @@ const ResultDetails = ({className, links = true, entity}) => {
                       {oid}
                     </DetailsLink>
                   )}
-                  {isDefined(oid) && oid.startsWith('1.3.6.1.4.1.25623.1.0.') && (
+                  {isDefined(oid) && oid.startsWith(DEFAULT_OID_VALUE) && (
                     <span>
                       <DetailsLink type="nvt" id={oid} textOnly={!links}>
                         {renderNvtName(oid, nvt.name)}
