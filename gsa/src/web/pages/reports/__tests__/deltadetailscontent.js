@@ -49,8 +49,8 @@ const getReportComposerDefaults = jest.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-describe('Report Details Content tests', () => {
-  test('should render Report Details Content', () => {
+describe('Delta Report Details Content tests', () => {
+  test('should render Delta Report Details Content', () => {
     const onActivateTab = jest.fn();
     const onAddToAssetsClick = jest.fn();
     const onError = jest.fn();
@@ -156,20 +156,19 @@ describe('Report Details Content tests', () => {
     expect(icons[6]).toHaveTextContent('vulnerability.svg');
     expect(icons[7]).toHaveTextContent('performance.svg');
     expect(icons[8]).toHaveTextContent('download.svg');
-    expect(icons[9]).toHaveTextContent('start.svg');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[10]).toHaveTextContent('refresh.svg');
-    expect(icons[11]).toHaveTextContent('delete.svg');
-    expect(icons[12]).toHaveTextContent('reset.svg');
-    expect(icons[13]).toHaveTextContent('help.svg');
-    expect(icons[14]).toHaveTextContent('edit.svg');
+    expect(icons[9]).toHaveTextContent('refresh.svg');
+    expect(icons[10]).toHaveTextContent('delete.svg');
+    expect(icons[11]).toHaveTextContent('reset.svg');
+    expect(icons[12]).toHaveTextContent('help.svg');
+    expect(icons[13]).toHaveTextContent('edit.svg');
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
     expect(selects[0]).toHaveTextContent('--');
 
     // Header
-    expect(icons[15]).toHaveTextContent('report.svg');
+    expect(icons[14]).toHaveTextContent('report.svg');
     expect(baseElement).toHaveTextContent(
       'Report:Mon, Jun 3, 2019 1:00 PM CEST',
     );
@@ -344,20 +343,19 @@ describe('Report Details Content tests', () => {
     expect(icons[6]).toHaveTextContent('vulnerability.svg');
     expect(icons[7]).toHaveTextContent('performance.svg');
     expect(icons[8]).toHaveTextContent('download.svg');
-    expect(icons[9]).toHaveTextContent('start.svg');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[10]).toHaveTextContent('refresh.svg');
-    expect(icons[11]).toHaveTextContent('delete.svg');
-    expect(icons[12]).toHaveTextContent('reset.svg');
-    expect(icons[13]).toHaveTextContent('help.svg');
-    expect(icons[14]).toHaveTextContent('edit.svg');
+    expect(icons[9]).toHaveTextContent('refresh.svg');
+    expect(icons[10]).toHaveTextContent('delete.svg');
+    expect(icons[11]).toHaveTextContent('reset.svg');
+    expect(icons[12]).toHaveTextContent('help.svg');
+    expect(icons[13]).toHaveTextContent('edit.svg');
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
     expect(selects[0]).toHaveTextContent('--');
 
     // Header
-    expect(icons[15]).toHaveTextContent('report.svg');
+    expect(icons[14]).toHaveTextContent('report.svg');
     expect(baseElement).toHaveTextContent(
       'Report:Mon, Jun 3, 2019 1:00 PM CEST',
     );
