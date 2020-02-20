@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -30,7 +30,10 @@ const TaskStartIcon = ({capabilities, task, onClick}) => {
     return null;
   }
 
-  if (!capabilities.mayOp('start_task')) {
+  if (
+    !capabilities.mayOp('start_task') ||
+    !task.userCapabilities.mayOp('start_task')
+  ) {
     return (
       <StartIcon active={false} title={_('Permission to start Task denied')} />
     );

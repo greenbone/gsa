@@ -96,10 +96,10 @@ const ThresholdPanel = ({
     >
       <InfoPanel
         heading={_(
-          "The {{entityType}} can't be displayed in order to keep " +
-            'performance within browser capabilities. The report ' +
-            'contains too many results. Please decrease the number ' +
-            'of results below the threshold of {{threshold}} ' +
+          'The {{entityType}} cannot be displayed in order to maintain ' +
+            "the performance within the browser's capabilities. The " +
+            'report contains too many results. Please decrease the ' +
+            'number of results below the threshold of {{threshold}} ' +
             'by applying a more refined filter.',
           {entityType, threshold},
         )}
@@ -108,7 +108,7 @@ const ThresholdPanel = ({
         {levels.includes('g') && (
           <ReportPanel
             icon={props => <FilterIcon {...props} />}
-            title={_('Result with log messages are currently included.')}
+            title={_('Results with log messages are currently included.')}
             onClick={handleRemoveLogLevel}
           >
             {_('Filter out log message results.')}
@@ -117,19 +117,21 @@ const ThresholdPanel = ({
         {levels.includes('l') && (
           <ReportPanel
             icon={props => <FilterIcon {...props} />}
-            title={_('Results with low severity are currently included.')}
+            title={_('Results with the severity "Low" are currently included.')}
             onClick={handleRemoveLowLevel}
           >
-            {_('Filter out results with low severity.')}
+            {_('Filter out results with the severity "Low".')}
           </ReportPanel>
         )}
         {levels.includes('m') && (
           <ReportPanel
             icon={props => <FilterIcon {...props} />}
-            title={_('Results with medium severity are currently included.')}
+            title={_(
+              'Results with the severity "Medium" are currently included.',
+            )}
             onClick={handleRemoveMediumLevel}
           >
-            {_('Filter out results with medium severity.')}
+            {_('Filter out results with the severity "Medium".')}
           </ReportPanel>
         )}
         {!filter.has('levels') && severity < 7 && (

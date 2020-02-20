@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -49,7 +49,10 @@ const TaskResumeIcon = ({capabilities, task, onClick}) => {
   }
 
   if (task.isStopped() || task.isInterrupted()) {
-    if (capabilities.mayOp('resume_task')) {
+    if (
+      capabilities.mayOp('start_task') &&
+      task.userCapabilities.mayOp('start_task')
+    ) {
       return <ResumeIcon title={_('Resume')} value={task} onClick={onClick} />;
     }
     return (

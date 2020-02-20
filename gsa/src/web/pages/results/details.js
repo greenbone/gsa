@@ -29,6 +29,8 @@ import {isEmpty} from 'gmp/utils/string';
 
 import {TAG_NA} from 'gmp/models/nvt';
 
+import {DEFAULT_OID_VALUE} from 'gmp/models/override';
+
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
@@ -78,7 +80,7 @@ const DerivedDiff = ({deltaType, firstDescription, secondDesription}) => {
     Component = Removed;
     prefix = '-';
   } else {
-    lines = [_('N/A')];
+    lines = [_('None.')];
     Component = Pre;
     prefix = '';
   }
@@ -136,13 +138,13 @@ const ResultDetails = ({className, links = true, entity}) => {
     result1Link = result.id;
     result2Link = result2Id;
   } else if (deltaType === 'new') {
-    result1Description = _('N/A');
+    result1Description = undefined;
     result2Description = result.description;
     result1Link = undefined;
     result2Link = result.id;
   } else {
     result1Description = result.description;
-    result2Description = _('N/A');
+    result2Description = undefined;
     result1Link = result.id;
     result2Link = undefined;
   }
@@ -164,7 +166,9 @@ const ResultDetails = ({className, links = true, entity}) => {
               <h3>{_('Result 1')}</h3>
             )}
             <Pre>
-              {isDefined(result1Description) ? result1Description : _('N/A')}
+              {isDefined(result1Description)
+                ? result1Description
+                : _('No first result available.')}
             </Pre>
           </div>
           <div>
@@ -176,7 +180,9 @@ const ResultDetails = ({className, links = true, entity}) => {
               <h3>{_('Result 2')}</h3>
             )}
             <Pre>
-              {isDefined(result2Description) ? result2Description : _('N/A')}
+              {isDefined(result2Description)
+                ? result2Description
+                : _('No second result available.')}
             </Pre>
           </div>
           <div>
@@ -295,7 +301,7 @@ const ResultDetails = ({className, links = true, entity}) => {
                       {oid}
                     </DetailsLink>
                   )}
-                  {isDefined(oid) && oid.startsWith('1.3.6.1.4.1.25623.1.0.') && (
+                  {isDefined(oid) && oid.startsWith(DEFAULT_OID_VALUE) && (
                     <span>
                       <DetailsLink type="nvt" id={oid} textOnly={!links}>
                         {renderNvtName(oid, nvt.name)}

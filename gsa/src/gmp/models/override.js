@@ -39,7 +39,7 @@ export const ACTIVE_YES_ALWAYS_VALUE = '-1';
 export const ACTIVE_YES_UNTIL_VALUE = '-2';
 
 export const DEFAULT_DAYS = 30;
-export const DEFAULT_OID_VALUE = '1.3.6.1.4.1.25623.1.0.';
+export const DEFAULT_OID_VALUE = '1.3.6.1.4.1.25623.1.';
 
 export const TASK_ANY = '';
 export const TASK_SELECTED = '0';

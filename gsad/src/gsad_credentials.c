@@ -86,7 +86,7 @@ credentials_get_cmd_duration (credentials_t *cred)
 {
   struct timeval tv;
   gettimeofday (&tv, NULL);
-  return ((double) ((tv.tv_sec - cred->cmd_start.tv_sec) * 1000000L + tv.tv_usec
-                    - cred->cmd_start.tv_usec)
-          / 1000000.0);
+  return (double) ((tv.tv_sec - cred->cmd_start.tv_sec) * 1000000L + tv.tv_usec
+                   - cred->cmd_start.tv_usec)
+         / 1000000.0;
 }

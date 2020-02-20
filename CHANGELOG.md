@@ -15,20 +15,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Multistep dialog feature, implemented on scanner dialog [#1725](https://github.com/greenbone/gsa/pull/1725)
 
 ### Changed
-- Adjust multiselect and report listpage to use getDerivedStateFromProps instead of deprecated componentWillReceiveProps [#1935](https://github.com/greenbone/gsa/pull/1935)
-- Update react-beautiful-dnd to version 12.2.0 and fix dragging into empty row [#1837](https://github.com/greenbone/gsa/pull/1837)
+- Adjusted multiselect and report listpage to use getDerivedStateFromProps instead of deprecated componentWillReceiveProps [#1935](https://github.com/greenbone/gsa/pull/1935)
+- Updated react-beautiful-dnd to version 12.2.0 and fix dragging into empty row [#1837](https://github.com/greenbone/gsa/pull/1837)
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
 
 ### Fixed
-- Fix parsing xml rejection messages [#1970](https://github.com/greenbone/gsa/pull/1970)
-- Fix returning bulk_delete response [#1969](https://github.com/greenbone/gsa/pull/1969)
-- Fix parsing DFN-Cert CVE entries [#1965](https://github.com/greenbone/gsa/pull/1965)
+- Fixed parsing xml rejection messages [#1970](https://github.com/greenbone/gsa/pull/1970)
+- Fixed returning bulk_delete response [#1969](https://github.com/greenbone/gsa/pull/1969)
+- Fixed parsing DFN-Cert CVE entries [#1965](https://github.com/greenbone/gsa/pull/1965)
 
 ### Removed
-- Remove old translation mechanism [#1952](https://github.com/greenbone/gsa/pull/1952)
-- Remove Agents from GSA and gsad [#1903](https://github.com/greenbone/gsa/pull/1903) [#1905](https://github.com/greenbone/gsa/pull/1905)
-- Remove "All SecInfo" section [#1685](https://github.com/greenbone/gsa/pull/1685) [#1695](https://github.com/greenbone/gsa/pull/1695)
-- Remove agents [#1903](https://github.com/greenbone/gsa/pull/1903)
+- Removed old translation mechanism [#1952](https://github.com/greenbone/gsa/pull/1952)
+- Removed Agents from GSA and gsad [#1903](https://github.com/greenbone/gsa/pull/1903) [#1905](https://github.com/greenbone/gsa/pull/1905)
+- Removed "All SecInfo" section [#1685](https://github.com/greenbone/gsa/pull/1685) [#1695](https://github.com/greenbone/gsa/pull/1695)
+- Removed agents [#1903](https://github.com/greenbone/gsa/pull/1903)
 
 [20.04]: https://github.com/greenbone/gsa/compare/gsa-9.0...master
 
@@ -39,6 +39,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)
 
 ### Changed
+- Adjusted DEFAULT_OID_VALUE for use with new oid scheme [#1974](https://github.com/greenbone/gsa/pull/1974)
+- Made delta report diffs more explicit [#1950](https://github.com/greenbone/gsa/pull/1950)
 - Changed default port to 22 for scanner dialog [#1768](https://github.com/greenbone/gsa/pull/1768)
 - Improved Delta Report Details [#1748](https://github.com/greenbone/gsa/pull/1748)
 - Updated node dependencies to latest releases [#1735](https://github.com/greenbone/gsa/pull/1735)
@@ -47,9 +49,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Disabled edit PowerFilter icon if isLoading [#1714](https://github.com/greenbone/gsa/pull/1714)
 - Don't show empty menu section [#1711](https://github.com/greenbone/gsa/pull/1711)
 - Increased clickable area for Logout [#1711](https://github.com/greenbone/gsa/pull/1711)
-- Lower memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
+- Lowered memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
 
 ### Fixed
+- Do not crash if osCpe or osTxt are undefined in OsIcon [#1975](https://github.com/greenbone/gsa/pull/1975) [#1978](https://github.com/greenbone/gsa/pull/1978)
+- Fixed task listpage observer tooltip [#1949](https://github.com/greenbone/gsa/pull/1949)
+- Fixed broken entity links for reportformat, scanconfig and portlist [#1937](https://github.com/greenbone/gsa/pull/1937)
+- Fixed showing resource as orphaned when it's not [#1921](https://github.com/greenbone/gsa/pull/1921)
+- Fixed override new severity being invalid [#1909](https://github.com/greenbone/gsa/pull/1909)
+- Fixed missing usage_type in getAggregates commands for tasks [#1906](https://github.com/greenbone/gsa/pull/1906)
 - Fixed undefined policy in create audit dialog [#1847](https://github.com/greenbone/gsa/pull/1847)
 - Fixed TLS certificate filtering [#1830](https://github.com/greenbone/gsa/pull/1830)
 - Fixed resetting to default filter at list pages [#1828](https://github.com/greenbone/gsa/pull/1828)
@@ -60,10 +68,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed checkboxes in scanconfig editdialog reset after every rerender [#1773](https://github.com/greenbone/gsa/pull/1773)
 - Pass scanner port number to scanner dialog from component [#1772](https://github.com/greenbone/gsa/pull/1772)
 - Fixed allowed range for auto delete keep value [#1729](https://github.com/greenbone/gsa/pull/1729)
-- Fix Created column on Results listpage [#1726](https://github.com/greenbone/gsa/pull/1726)
+- Fixed Created column on Results listpage [#1726](https://github.com/greenbone/gsa/pull/1726)
 - Get delta report needs to send details=1 [#1724](https://github.com/greenbone/gsa/pull/1724)
 - Improve filter handling in report details [#1708](https://github.com/greenbone/gsa/pull/1708)
-- Fix TLS certificate download [#1704](https://github.com/greenbone/gsa/pull/1704)
+- Fixed TLS certificate download [#1704](https://github.com/greenbone/gsa/pull/1704)
 - Import additional polyfills for IE11 [#1702](https://github.com/greenbone/gsa/pull/1702)
 - Handle authentication errors in gsad more carefully [#1700](https://github.com/greenbone/gsa/pull/1700)
 - Add usage_type param to get_aggregate [#1872](https://github.com/greenbone/gsa/pull/1872)
@@ -77,9 +85,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [9.0.0] - 2019-10-14
 
 ### Added
-- Add statereducer function to Select component: Scrolls to last selected item [#1715](https://github.com/greenbone/gsa/pull/1715)
-- Add loading indicator to select [#1716](https://github.com/greenbone/gsa/pull/1716)
-- Add loading indicator to svg icon [#1701](https://github.com/greenbone/gsa/pull/1701)
+- Added statereducer function to Select component: Scrolls to last selected item [#1715](https://github.com/greenbone/gsa/pull/1715)
+- Added loading indicator to select [#1716](https://github.com/greenbone/gsa/pull/1716)
+- Added loading indicator to svg icon [#1701](https://github.com/greenbone/gsa/pull/1701)
 - Update German Translation [#1689](https://github.com/greenbone/gsa/pull/1689)
 - List NVT of the found CVEs at the report details page [#1673](https://github.com/greenbone/gsa/pull/1673)
 - Added links for GOS 6 manual for audits, policies and TLS certificates [#1657](https://github.com/greenbone/gsa/pull/1657)
@@ -96,7 +104,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added HorizontalSep component for horizontal lists. [#1494](https://github.com/greenbone/gsa/pull/1494)
 - Added BooleanFilterGroup and changed notes filter dialog [#1493](https://github.com/greenbone/gsa/pull/1493)
 - Added grow option to multiselect component [#1485](https://github.com/greenbone/gsa/pull/1485)
-- Add LogoutIcon [#1481](https://github.com/greenbone/gsa/pull/1481)
+- Added LogoutIcon [#1481](https://github.com/greenbone/gsa/pull/1481)
 - Added a component "SeverityValuesGroup" enabling user choose the relation they want [#1477](https://github.com/greenbone/gsa/pull/1477)
 - Added filter keywords owner, host, cvss base score, vulnerability and location to filter dialog on results page [#1472](https://github.com/greenbone/gsa/pull/1472)
 - Add storybook [#1272](https://github.com/greenbone/gsa/pull/1286)
@@ -116,18 +124,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1631](https://github.com/greenbone/gsa/pull/1631),
   [#1653](https://github.com/greenbone/gsa/pull/1653),
   [#1677](https://github.com/greenbone/gsa/pull/1677)
-- Change gmpname for vulnerability and secinfo pages [#1652](https://github.com/greenbone/gsa/pull/1652)
+- Changed gmpname for vulnerability and secinfo pages [#1652](https://github.com/greenbone/gsa/pull/1652)
 - Use "lean" reports by default when requesting a single report [#1635](https://github.com/greenbone/gsa/pull/1635)
 - Use uuid to get greenbone compliance report format [#1643](https://github.com/greenbone/gsa/pull/1643)
-- Add details=1 to report download command [#1642](https://github.com/greenbone/gsa/pull/1642)
-- Adjust gsa to send details=1 for get_report and change gsad to forward details to gvmd [1640](https://github.com/greenbone/gsa/pull/1640)
+- Added details=1 to report download command [#1642](https://github.com/greenbone/gsa/pull/1642)
+- Adjusted gsa to send details=1 for get_report and change gsad to forward details to gvmd [1640](https://github.com/greenbone/gsa/pull/1640)
 - Switch tooltips for fold and unfold icon, change task trend options in filter dialog to make them easier to understand [#1627](https://github.com/greenbone/gsa/pull/1627)
-- Improve edit scanconfig dialogs to open immediately and show loading indicators [#1624](https://github.com/greenbone/gsa/pull/1624)
+- Improved edit scanconfig dialogs to open immediately and show loading indicators [#1624](https://github.com/greenbone/gsa/pull/1624)
 - Reuse permissions, reloadInterval and compareAlerts from task details and detailspage for audit details and detailspage [#1607](https://github.com/greenbone/gsa/pull/1607)
 - Replaced savedialogcontent class with hooks [#1602](https://github.com/greenbone/gsa/pull/1602)
 - TicketStatusGroup updated with new filter strings [#1594](https://github.com/greenbone/gsa/pull/1594)
 - Reuse NvtFamilies, NvtPreferences and ScannerPreferences from scanconfig detailspage for policy detailspage [#1593](https://github.com/greenbone/gsa/pull/1593)
-- Fix sensor icon not visible in audit row and reuse renderReport from tasks for audits [#1577](https://github.com/greenbone/gsa/pull/1577)
+- Fixed sensor icon not visible in audit row and reuse renderReport from tasks for audits [#1577](https://github.com/greenbone/gsa/pull/1577)
 - Reuse scanconfig edit dialogs for policies [#1573](https://github.com/greenbone/gsa/pull/1573)
 - Use styled-components to render global styles [#1557](https://github.com/greenbone/gsa/pull/1557)
 - Use fast xml parser by default [#1556](https://github.com/greenbone/gsa/pull/1556)
@@ -185,6 +193,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Improve text for empty results report and threshold panel [#1900](https://github.com/greenbone/gsa/pull/1900)
 - Load report results with separate requests
   [#1863](https://github.com/greenbone/gsa/pull/1863),
   [#1870](https://github.com/greenbone/gsa/pull/1870),
@@ -224,6 +233,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Lower memory usage when getting a report [#1858](https://github.com/greenbone/gvmd/pull/1858)
 
 ### Fixed
+- Use correct capabilities for task icons [#1973](https://github.com/greenbone/gsa/pull/1973)
+- Fixed ProvideViewIcon for tasks is only shown for users but not for groups and roles [#1968](https://github.com/greenbone/gsa/pull/1968)
+- Fixed missing delete button for host identifiers [#1959](https://github.com/greenbone/gsa/pull/1959)
+- Fixed sorting columns with empty string values [#1936](https://github.com/greenbone/gsa/pull/1936)
+- Fixed broken entity links for reportformat, scanconfig and portlist [#1934](https://github.com/greenbone/gsa/pull/1934)
 - Fixed removing levels filter keyword if all severity levels are unchecked [#1869](https://github.com/greenbone/gsa/pull/1869)
 - Fixed sorting of hosts in report details [#1860](https://github.com/greenbone/gsa/pull/1860)
 - Fixed displaying update indication at all report details tabs [#1849](https://github.com/greenbone/gsa/pull/1849)
@@ -232,37 +246,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use correct link for ManualIcon [#1835](https://github.com/greenbone/gsa/pull/1835)
 - Fixed getting InvalidStateError with IE 11 on XHR creation [#1769](https://github.com/greenbone/gsa/pull/1769)
 - Fixed filtering general command permissions in roles [#1734](https://github.com/greenbone/gsa/pull/1734)
-- Fix getting details in delta report [#1732](https://github.com/greenbone/gsa/pull/1732)
+- Fixed getting details in delta report [#1732](https://github.com/greenbone/gsa/pull/1732)
 - Include results (details=1) in report download [#1731](https://github.com/greenbone/gsa/pull/1731)
 - Fixed High column in hosts table for reports [#1730](https://github.com/greenbone/gsa/pull/1730)
-- Fix setting the user default filter in report results [#1699](https://github.com/greenbone/gsa/pull/1699)
+- Fixed setting the user default filter in report results [#1699](https://github.com/greenbone/gsa/pull/1699)
 - Use new model construction in some commands [#1665](https://github.com/greenbone/gsa/pull/1665)
 - Fixed auth_method preselection for user dialog [#1661](https://github.com/greenbone/gsa/pull/1661)
 - Fixed userId, roleId and groupId not rendering in create entity permissions dialog [#1658](https://github.com/greenbone/gsa/pull/1658)
 - Don't crash Schedule details and list pages if invalid ical data is loaded [#1656](https://github.com/greenbone/gsa/pull/1656)
-- Fix showing loading indicator in content composers [#1613](https://github.com/greenbone/gsa/pull/1613)
+- Fixed showing loading indicator in content composers [#1613](https://github.com/greenbone/gsa/pull/1613)
 - Enable downloading csv in table dashboard [#1611](https://github.com/greenbone/gsa/pull/1611)
 - Fixed 404 URL handling in gsad which caused a XSS vulnerability [#1603](https://github.com/greenbone/gsa/pull/1603)
 - Fixed status of Tickets for task.isInTrash() and isOrphan [#1592](https://github.com/greenbone/gsa/pull/1592)
-- Fix and improve editing of roles [#1587](https://github.com/greenbone/gsa/pull/1587)
-- Fix showing ScanConfig trends [#1582](https://github.com/greenbone/gsa/pull/1582) [#1554](https://github.com/greenbone/gsa/pull/1554)
+- Fixed and improve editing of roles [#1587](https://github.com/greenbone/gsa/pull/1587)
+- Fixed showing ScanConfig trends [#1582](https://github.com/greenbone/gsa/pull/1582) [#1554](https://github.com/greenbone/gsa/pull/1554)
 - Show HostsCount at SectionTitle [#1576](https://github.com/greenbone/gsa/pull/1576)
 - Fixed creating target from hosts [#1575](https://github.com/greenbone/gsa/pull/1575)
 - Fixed CVSSBaseCalculatorv2 [#1572](https://github.com/greenbone/gsa/pull/1572)
-- Fix title in Operating Systems table of Reports [#1567](https://github.com/greenbone/gsa/pull/1567)
-- Fix displaying only usable report formats at report download [#1565](https://github.com/greenbone/gsa/pull/1565)
-- Fix handling schedule_periods ("once" option) in TaskDialog [#1563](https://github.com/greenbone/gsa/pull/1563)
-- Fix showing inactive VerifyIcon at ReportFormats detailspage [#1554](https://github.com/greenbone/gsa/pull/1554)
-- Fix showing SensorIcon for tasks [#1548](https://github.com/greenbone/gsa/pull/1548)
+- Fixed title in Operating Systems table of Reports [#1567](https://github.com/greenbone/gsa/pull/1567)
+- Fixed displaying only usable report formats at report download [#1565](https://github.com/greenbone/gsa/pull/1565)
+- Fixed handling schedule_periods ("once" option) in TaskDialog [#1563](https://github.com/greenbone/gsa/pull/1563)
+- Fixed showing inactive VerifyIcon at ReportFormats detailspage [#1554](https://github.com/greenbone/gsa/pull/1554)
+- Fixed showing SensorIcon for tasks [#1548](https://github.com/greenbone/gsa/pull/1548)
 - Always show an identifier for results [#1543](https://github.com/greenbone/gsa/pull/1543)
 - Don't crash Alerts listpage and trashcan when Alert data is missing [#1541](https://github.com/greenbone/gsa/pull/1541)
-- Fix calculating the next date of schedules [#1539](https://github.com/greenbone/gsa/pull/1539)
-- Fix linking to best OS in host details [#1528](https://github.com/greenbone/gsa/pull/1528)
+- Fixed calculating the next date of schedules [#1539](https://github.com/greenbone/gsa/pull/1539)
+- Fixed linking to best OS in host details [#1528](https://github.com/greenbone/gsa/pull/1528)
 - Redirect to root URL by default [#1517](https://github.com/greenbone/gsa/pull/1517)
-- Fix showing details for tasks [#1515](https://github.com/greenbone/gsa/pull/1515)
+- Fixed showing details for tasks [#1515](https://github.com/greenbone/gsa/pull/1515)
 - Allow to use additional options for starting gsad via systemd
   [#1514](https://github.com/greenbone/gsa/pull/1514)
-- Fix using filename templates from usersettings [#1512](https://github.com/greenbone/gsa/pull/1512)
+- Fixed using filename templates from usersettings [#1512](https://github.com/greenbone/gsa/pull/1512)
 - Update manpage [#1616](https://github.com/greenbone/gsa/pull/1616)
 
 [8.0.2]: https://github.com/greenbone/gsa/compare/v8.0.1...gsa-8.0
