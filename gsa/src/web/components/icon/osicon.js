@@ -22,7 +22,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isString} from 'gmp/utils/identity';
 
 import OperatingSystems from 'web/utils/os';
 
@@ -36,16 +36,16 @@ import Img from 'web/components/img/img';
 const OsIcon = ({
   displayOsCpe = true,
   displayOsName = false,
-  osTxt = '',
-  osCpe = '',
+  osTxt,
+  osCpe,
   ...props
 }) => {
-  const os = OperatingSystems.find(osCpe);
+  const os = isString(osCpe) ? OperatingSystems.find(osCpe) : undefined;
 
   let title;
   let os_icon;
 
-  if (osTxt.includes('[possible conflict]')) {
+  if (isString(osTxt) && osTxt.includes('[possible conflict]')) {
     os_icon = 'os_conflict.svg';
     if (displayOsCpe) {
       title = _('OS Conflict: {{best_os_txt}} ({{best_os_cpe}})', {
