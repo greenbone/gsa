@@ -158,22 +158,23 @@ describe('Report Details Content tests', () => {
     expect(icons[4]).toHaveTextContent('task.svg');
     expect(icons[5]).toHaveTextContent('result.svg');
     expect(icons[6]).toHaveTextContent('vulnerability.svg');
-    expect(icons[7]).toHaveTextContent('performance.svg');
-    expect(icons[8]).toHaveTextContent('download.svg');
-    expect(icons[9]).toHaveTextContent('start.svg');
+    expect(icons[7]).toHaveTextContent('tlscertificate.svg');
+    expect(icons[8]).toHaveTextContent('performance.svg');
+    expect(icons[9]).toHaveTextContent('download.svg');
+    expect(icons[10]).toHaveTextContent('start.svg');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[10]).toHaveTextContent('refresh.svg');
-    expect(icons[11]).toHaveTextContent('delete.svg');
-    expect(icons[12]).toHaveTextContent('reset.svg');
-    expect(icons[13]).toHaveTextContent('help.svg');
-    expect(icons[14]).toHaveTextContent('edit.svg');
+    expect(icons[11]).toHaveTextContent('refresh.svg');
+    expect(icons[12]).toHaveTextContent('delete.svg');
+    expect(icons[13]).toHaveTextContent('reset.svg');
+    expect(icons[14]).toHaveTextContent('help.svg');
+    expect(icons[15]).toHaveTextContent('edit.svg');
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    expect(selects[0]).toHaveTextContent('Loading...');
 
     // Header
-    expect(icons[15]).toHaveTextContent('report.svg');
+    expect(icons[16]).toHaveTextContent('report.svg');
     expect(baseElement).toHaveTextContent(
       'Report:Mon, Jun 3, 2019 1:00 PM CEST',
     );
@@ -202,7 +203,7 @@ describe('Report Details Content tests', () => {
 
     // Summary
     expect(tableData[0]).toHaveTextContent('Task Name');
-    expect(links[7]).toHaveAttribute('href', '/task/314');
+    expect(links[8]).toHaveAttribute('href', '/task/314');
     expect(tableData[1]).toHaveTextContent('foo');
 
     expect(tableData[2]).toHaveTextContent('Comment');
@@ -336,22 +337,23 @@ describe('Report Details Content tests', () => {
     expect(icons[4]).toHaveTextContent('task.svg');
     expect(icons[5]).toHaveTextContent('result.svg');
     expect(icons[6]).toHaveTextContent('vulnerability.svg');
-    expect(icons[7]).toHaveTextContent('performance.svg');
-    expect(icons[8]).toHaveTextContent('download.svg');
-    expect(icons[9]).toHaveTextContent('start.svg');
+    expect(icons[7]).toHaveTextContent('tlscertificate.svg');
+    expect(icons[8]).toHaveTextContent('performance.svg');
+    expect(icons[9]).toHaveTextContent('download.svg');
+    expect(icons[10]).toHaveTextContent('start.svg');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[10]).toHaveTextContent('refresh.svg');
-    expect(icons[11]).toHaveTextContent('delete.svg');
-    expect(icons[12]).toHaveTextContent('reset.svg');
-    expect(icons[13]).toHaveTextContent('help.svg');
-    expect(icons[14]).toHaveTextContent('edit.svg');
+    expect(icons[11]).toHaveTextContent('refresh.svg');
+    expect(icons[12]).toHaveTextContent('delete.svg');
+    expect(icons[13]).toHaveTextContent('reset.svg');
+    expect(icons[14]).toHaveTextContent('help.svg');
+    expect(icons[15]).toHaveTextContent('edit.svg');
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    expect(selects[0]).toHaveTextContent('Loading...');
 
     // Header
-    expect(icons[15]).toHaveTextContent('report.svg');
+    expect(icons[16]).toHaveTextContent('report.svg');
     expect(baseElement).toHaveTextContent(
       'Report:Mon, Jun 3, 2019 1:00 PM CEST',
     );
@@ -388,7 +390,7 @@ describe('Report Details Content tests', () => {
     expect(baseElement).toHaveTextContent(
       'Results with the severity "Low" are currently included.',
     );
-    expect(icons[16]).toHaveTextContent('filter.svg');
+    expect(icons[17]).toHaveTextContent('filter.svg');
     expect(baseElement).toHaveTextContent(
       'Filter out results with the severity "Low".',
     );
@@ -396,7 +398,7 @@ describe('Report Details Content tests', () => {
     expect(baseElement).toHaveTextContent(
       'Results with the severity "Medium" are currently included.',
     );
-    expect(icons[17]).toHaveTextContent('filter.svg');
+    expect(icons[18]).toHaveTextContent('filter.svg');
     expect(baseElement).toHaveTextContent(
       'Filter out results with the severity "Medium".',
     );
@@ -404,7 +406,7 @@ describe('Report Details Content tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your filter settings may be too unrefined.',
     );
-    expect(icons[18]).toHaveTextContent('edit.svg');
+    expect(icons[19]).toHaveTextContent('edit.svg');
     expect(baseElement).toHaveTextContent(
       'Adjust and update your filter settings.',
     );

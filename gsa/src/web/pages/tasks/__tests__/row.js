@@ -757,8 +757,11 @@ describe('Task Row tests', () => {
 
     // Actions
     fireEvent.click(icons[1]);
-    expect(handleTaskStart).toHaveBeenCalledWith(task);
-    expect(icons[1]).toHaveAttribute('title', 'Start');
+    expect(handleTaskStart).not.toHaveBeenCalledWith(task);
+    expect(icons[1]).toHaveAttribute(
+      'title',
+      'Permission to start Task denied',
+    );
 
     fireEvent.click(icons[2]);
     expect(handleTaskResume).not.toHaveBeenCalled();
