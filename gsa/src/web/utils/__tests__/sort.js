@@ -112,12 +112,22 @@ describe('makeCompareString tests', () => {
     const objD = {
       value: 1, // will be converted to string
     };
+    const objE = {
+      value: undefined,
+    };
+    const objF = {
+      value: 'z',
+    };
 
     const compareValues = makeCompareString('value')();
     expect(compareValues(objA, objB)).toEqual(-1);
     expect(compareValues(objB, objA)).toEqual(1);
     expect(compareValues(objA, objC)).toEqual(0);
     expect(compareValues(objA, objD)).toEqual(1);
+    expect(compareValues(objE, objA)).toEqual(-1);
+    expect(compareValues(objA, objE)).toEqual(1);
+    expect(compareValues(objE, objF)).toEqual(-1);
+    expect(compareValues(objF, objE)).toEqual(1);
   });
 
   test('should compare strings desc', () => {
@@ -133,12 +143,22 @@ describe('makeCompareString tests', () => {
     const objD = {
       value: 1, // will be converted to string
     };
+    const objE = {
+      value: undefined,
+    };
+    const objF = {
+      value: 'z',
+    };
 
     const compareValues = makeCompareString('value')(true);
     expect(compareValues(objA, objB)).toEqual(1);
     expect(compareValues(objB, objA)).toEqual(-1);
     expect(compareValues(objA, objC)).toEqual(0);
     expect(compareValues(objA, objD)).toEqual(-1);
+    expect(compareValues(objE, objA)).toEqual(1);
+    expect(compareValues(objA, objE)).toEqual(-1);
+    expect(compareValues(objE, objF)).toEqual(1);
+    expect(compareValues(objF, objE)).toEqual(-1);
   });
 });
 

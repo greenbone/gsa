@@ -157,8 +157,7 @@ const Row = ({
                   },
                 )}
               />
-            ) // TODO observer roles and groups
-            }
+            )}
           </IconDivider>
         </Layout>
         {entity.comment && <Comment>({entity.comment})</Comment>}

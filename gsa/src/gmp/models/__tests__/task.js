@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import 'core-js/features/object/entries';
+import 'core-js/fn/object/entries';
 
 import Model from 'gmp/model';
 
@@ -63,6 +63,25 @@ describe('Task Model parse tests', () => {
     expect(task.hosts_ordering).toEqual(HOSTS_ORDERING_SEQUENTIAL);
   });
 
+  test('should parse first_report', () => {
+    const element = {
+      _id: 't1',
+      first_report: {
+        report: {
+          _id: 'r1',
+        },
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.first_report).toBeInstanceOf(Report);
+    expect(task.first_report.id).toEqual('r1');
+    expect(task.first_report.entityType).toEqual('report');
+  });
+
   test('should parse last_report', () => {
     const element = {
       _id: 't1',
@@ -80,6 +99,25 @@ describe('Task Model parse tests', () => {
     expect(task.last_report).toBeInstanceOf(Report);
     expect(task.last_report.id).toEqual('r1');
     expect(task.last_report.entityType).toEqual('report');
+  });
+
+  test('should parse second_last_report', () => {
+    const element = {
+      _id: 't1',
+      second_last_report: {
+        report: {
+          _id: 'r1',
+        },
+      },
+    };
+
+    const task = Task.fromElement(element);
+
+    expect(task.id).toEqual('t1');
+
+    expect(task.second_last_report).toBeInstanceOf(Report);
+    expect(task.second_last_report.id).toEqual('r1');
+    expect(task.second_last_report.entityType).toEqual('report');
   });
 
   test('should parse current_report', () => {
@@ -409,6 +447,7 @@ describe(`Task Model methods tests`, () => {
     task = Task.fromElement({status: TASK_STATUS.done, alterable: '1'});
     expect(task.isChangeable()).toEqual(true);
   });
+
   test('should parse observer strings', () => {
     const task = Task.fromElement({
       observers: 'foo bar',
