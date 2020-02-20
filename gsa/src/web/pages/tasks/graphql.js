@@ -18,6 +18,9 @@
  */
 import gql from 'graphql-tag';
 
+import {toGraphQL} from 'web/utils/graphql';
+import {useMutation} from '@apollo/react-hooks';
+
 export const GET_TASK = gql`
   query Task($taskId: UUID!) {
     task(taskId: $taskId) {
@@ -153,6 +156,12 @@ export const CLONE_TASK = gql`
     }
   }
 `;
+
+export const useCloneTask = () => {
+  const [cloneTask] = useMutation(CLONE_TASK);
+  console.log(cloneTask);
+  return toGraphQL(cloneTask);
+};
 
 export const DELETE_TASK = gql`
   mutation deleteTask($taskId: String!) {

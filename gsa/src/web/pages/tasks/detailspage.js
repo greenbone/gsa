@@ -19,7 +19,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, {useEffect, useState} from 'react';
-import {useQuery, useMutation} from '@apollo/react-hooks';
+import {useQuery} from '@apollo/react-hooks';
 import {useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
@@ -115,7 +115,7 @@ import StopIcon from './icons/stopicon';
 import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
-import {CLONE_TASK, GET_TASK} from './graphql';
+import {GET_TASK, useCloneTask} from './graphql';
 
 export const ToolBarIcons = ({
   entity,
@@ -162,7 +162,7 @@ export const ToolBarIcons = ({
           entity={entity}
           name="task"
           onClick={() =>
-            onTaskCloneClick({variables: {taskId: entity.id}}).then(result => {
+            onTaskCloneClick({taskId: entity.id}).then(result => {
               props.history.push('/task/' + result.data.cloneTask.taskId);
             })
           }
@@ -336,7 +336,7 @@ const Page = props => {
     variables: {taskId}, // extract uuid from router
   });
 
-  const [cloneTask] = useMutation(CLONE_TASK);
+  const cloneTask = useCloneTask();
 
   const [entity, setEntity] = useState(undefined);
   useEffect(() => {
