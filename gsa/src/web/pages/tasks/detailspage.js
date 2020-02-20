@@ -20,6 +20,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useQuery, useMutation} from '@apollo/react-hooks';
+import {useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
@@ -329,12 +330,10 @@ Details.propTypes = {
 };
 
 const Page = props => {
+  const {id: taskId} = useParams();
+
   const {data, refetch} = useQuery(GET_TASK, {
-    variables: {
-      taskId: props.location.pathname.slice(
-        props.location.pathname.lastIndexOf('/') + 1, // extract uuid from url
-      ),
-    },
+    variables: {taskId}, // extract uuid from router
   });
 
   const [cloneTask] = useMutation(CLONE_TASK);
