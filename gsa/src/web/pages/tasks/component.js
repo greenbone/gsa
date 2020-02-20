@@ -18,8 +18,6 @@
  */
 import React, {useState, useEffect} from 'react';
 
-import {useMutation} from '@apollo/react-hooks';
-
 import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
@@ -99,12 +97,12 @@ import TargetComponent from 'web/pages/targets/component';
 import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
 import {setTimezone} from 'web/store/usersettings/actions';
-import {MODIFY_TASK, CREATE_TASK, CREATE_CONTAINER_TASK} from './graphql';
+import {useModifyTask, useCreateContainerTask, useCreateTask} from './graphql';
 
 const TaskComponent = props => {
-  const [modifyTask] = useMutation(MODIFY_TASK);
-  const [createTask] = useMutation(CREATE_TASK);
-  const [createContainerTask] = useMutation(CREATE_CONTAINER_TASK);
+  const modifyTask = useModifyTask();
+  const createTask = useCreateTask();
+  const createContainerTask = useCreateContainerTask();
 
   const {
     defaultPortListId,
@@ -280,15 +278,15 @@ const TaskComponent = props => {
     if (isDefined(data.id)) {
       const {onContainerSaved, onContainerSaveError} = props;
       return modifyTask({
-        variables: {taskId: data.id, name: data.name, comment: data.comment},
+        taskId: data.id,
+        name: data.name,
+        comment: data.comment,
       })
         .then(onContainerSaved, onContainerSaveError)
         .then(() => closeContainerTaskDialog());
     }
     const {onContainerCreated, onContainerCreateError} = props;
-    return createContainerTask({
-      variables: {name: data.name, comment: data.comment},
-    })
+    return createContainerTask({name: data.name, comment: data.comment})
       .then(result => onContainerCreated(result), onContainerCreateError) // queries return a promise and result is what gets returned by django
       .then(() => closeContainerTaskDialog());
   };
@@ -341,7 +339,7 @@ const TaskComponent = props => {
         comment,
       };
 
-      return modifyTask({variables: {...mutationData}})
+      return modifyTask(mutationData)
         .then(onSaved, onSaveError)
         .then(() => closeTaskDialog());
     }
@@ -355,7 +353,7 @@ const TaskComponent = props => {
       comment,
     };
     const {onCreated, onCreateError} = props;
-    return createTask({variables: {...mutationData}})
+    return createTask(mutationData)
       .then(result => onCreated(result), onCreateError)
       .then(() => closeTaskDialog());
   };

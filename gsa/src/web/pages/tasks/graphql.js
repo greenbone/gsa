@@ -159,7 +159,6 @@ export const CLONE_TASK = gql`
 
 export const useCloneTask = () => {
   const [cloneTask] = useMutation(CLONE_TASK);
-  console.log(cloneTask);
   return toGraphQL(cloneTask);
 };
 
@@ -170,6 +169,11 @@ export const DELETE_TASK = gql`
     }
   }
 `;
+
+export const useDeleteTask = () => {
+  const [deleteTask] = useMutation(DELETE_TASK);
+  return toGraphQL(deleteTask);
+};
 
 export const MODIFY_TASK = gql`
   mutation modifyTask(
@@ -194,6 +198,11 @@ export const MODIFY_TASK = gql`
     }
   }
 `;
+
+export const useModifyTask = () => {
+  const [modifyTask] = useMutation(MODIFY_TASK);
+  return toGraphQL(modifyTask);
+};
 
 export const CREATE_TASK = gql`
   mutation createTask(
@@ -221,6 +230,11 @@ export const CREATE_TASK = gql`
   }
 `;
 
+export const useCreateTask = () => {
+  const [createTask] = useMutation(CREATE_TASK);
+  return toGraphQL(createTask);
+};
+
 export const CREATE_CONTAINER_TASK = gql`
   mutation createContainerTask($name: String!, $comment: String) {
     createContainerTask(name: $name, comment: $comment) {
@@ -228,3 +242,8 @@ export const CREATE_CONTAINER_TASK = gql`
     }
   }
 `;
+
+export const useCreateContainerTask = () => {
+  const [createContainerTask] = useMutation(CREATE_CONTAINER_TASK);
+  return toGraphQL(createContainerTask);
+};

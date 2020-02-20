@@ -19,7 +19,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {useMutation} from '@apollo/react-hooks';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -41,7 +40,7 @@ import StopIcon from 'web/pages/tasks/icons/stopicon';
 
 import PropTypes from 'web/utils/proptypes';
 
-import {DELETE_TASK, CLONE_TASK} from './graphql';
+import {useCloneTask, useDeleteTask} from './graphql';
 
 const Actions = ({
   entity,
@@ -54,8 +53,8 @@ const Actions = ({
   onTaskStartClick,
   onTaskStopClick,
 }) => {
-  const [deleteTask] = useMutation(DELETE_TASK);
-  const [cloneTask] = useMutation(CLONE_TASK);
+  const deleteTask = useDeleteTask();
+  const cloneTask = useCloneTask();
   return (
     <IconDivider align={['center', 'center']} grow>
       {isDefined(entity.schedule) ? (
@@ -73,17 +72,13 @@ const Actions = ({
       <TrashIcon
         entity={entity}
         name="task"
-        onClick={entity =>
-          deleteTask({variables: {taskId: entity.id}}).then(refetch)
-        }
+        onClick={entity => deleteTask({taskId: entity.id}).then(refetch)}
       />
       <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
       <CloneIcon
         entity={entity}
         name="task"
-        onClick={entity =>
-          cloneTask({variables: {taskId: entity.id}}).then(refetch)
-        }
+        onClick={entity => cloneTask({taskId: entity.id}).then(refetch)}
       />
       <ExportIcon
         value={entity}
