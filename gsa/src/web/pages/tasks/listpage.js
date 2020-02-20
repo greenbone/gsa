@@ -132,7 +132,7 @@ const Page = ({
 
   useEffect(() => {
     refetch();
-  }, [data]);
+  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <TaskComponent

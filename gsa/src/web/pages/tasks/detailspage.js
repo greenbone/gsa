@@ -73,7 +73,7 @@ import TableRow from 'web/components/table/row';
 
 import EntityPage, {Col} from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
@@ -116,6 +116,11 @@ import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
 import {GET_TASK, useCloneTask} from './graphql';
+
+const goto_task_details = (op, props) => result => {
+  const {history} = props;
+  return history.push('/task/' + result.data[op].taskId);
+};
 
 export const ToolBarIcons = ({
   entity,
@@ -161,11 +166,7 @@ export const ToolBarIcons = ({
         <CloneIcon
           entity={entity}
           name="task"
-          onClick={() =>
-            onTaskCloneClick({taskId: entity.id}).then(result => {
-              props.history.push('/task/' + result.data.cloneTask.taskId);
-            })
-          }
+          onClick={() => onTaskCloneClick({taskId: entity.id})}
         />
         <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
         <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
@@ -336,7 +337,9 @@ const Page = props => {
     variables: {taskId}, // extract uuid from router
   });
 
-  const cloneTask = useCloneTask();
+  const clone = useCloneTask();
+  const cloneTask = data =>
+    clone(data).then(goto_task_details('cloneTask', props));
 
   const [entity, setEntity] = useState(undefined);
   useEffect(() => {
@@ -363,14 +366,10 @@ const Page = props => {
   } = props;
   return (
     <TaskComponent
-      onCloned={goto_details('task', props)}
+      onCloned={onChanged}
       onCloneError={onError}
-      onCreated={result =>
-        props.history.push('/task/' + result.data.createTask.taskId)
-      }
-      onContainerCreated={result =>
-        props.history.push('/task/' + result.data.createContainerTask.taskId)
-      }
+      onCreated={goto_task_details('createTask', props)}
+      onContainerCreated={goto_task_details('createContainerTask', props)}
       onContainerSaved={refetch}
       onDeleted={goto_list('tasks', props)}
       onDeleteError={onError}
@@ -387,7 +386,6 @@ const Page = props => {
       onStopError={onError}
     >
       {({
-        clone,
         create,
         createcontainer,
         delete: delete_func,
@@ -410,7 +408,7 @@ const Page = props => {
             onError={onError}
             onInteraction={onInteraction}
             onReportImportClick={reportimport}
-            onTaskCloneClick={cloneTask}
+            onTaskCloneClick={cloneTask} // Clone is special because TaskComponent doesn't define it, so I'm assuming that EntityComponent is passing this method instead
             onTaskCreateClick={create}
             onTaskDeleteClick={delete_func}
             onTaskDownloadClick={download}
