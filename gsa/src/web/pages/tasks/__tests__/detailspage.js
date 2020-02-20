@@ -52,10 +52,7 @@ const config = ScanConfig.fromElement({
   scanner: {name: 'scanner1', type: '0'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [
-      {id: '12345', name: 'foo'},
-      {id: '678910', name: 'task2'},
-    ],
+    task: [{id: '12345', name: 'foo'}, {id: '678910', name: 'task2'}],
   },
 });
 
@@ -1154,8 +1151,11 @@ describe('Task ToolBarIcons tests', () => {
     expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
 
     fireEvent.click(icons[7]);
-    expect(handleTaskStart).toHaveBeenCalledWith(task6);
-    expect(icons[7]).toHaveAttribute('title', 'Start');
+    expect(handleTaskStart).not.toHaveBeenCalled();
+    expect(icons[7]).toHaveAttribute(
+      'title',
+      'Permission to start Task denied',
+    );
 
     fireEvent.click(icons[8]);
     expect(handleTaskResume).not.toHaveBeenCalled();
