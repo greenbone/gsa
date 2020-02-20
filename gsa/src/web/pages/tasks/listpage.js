@@ -132,7 +132,7 @@ const Page = ({
 
   useEffect(() => {
     refetch();
-  }, [props, refetch]);
+  }, [data]);
 
   return (
     <TaskComponent
