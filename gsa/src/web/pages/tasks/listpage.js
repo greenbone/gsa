@@ -58,7 +58,7 @@ import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import Table from './table';
-import {GET_TASKS} from './graphql';
+import {GET_TASKS, useGetTasks} from './graphql';
 
 export const ToolBarIcons = withCapabilities(
   ({
@@ -120,9 +120,9 @@ const Page = ({
   onError,
   ...props
 }) => {
-  const {data, refetch} = useQuery(GET_TASKS, {
-    variables: {filterString: filter.toFilterString()},
-  });
+  const query = useGetTasks();
+
+  const {data, refetch} = query({filterString: filter.toFilterString()});
 
   if (isDefined(data)) {
     props.entities = data.tasks.map(entity => Task.fromObject(entity));

@@ -18,8 +18,9 @@
  */
 import gql from 'graphql-tag';
 
-import {toGraphQL} from 'web/utils/graphql';
-import {useMutation} from '@apollo/react-hooks';
+import {useMutation, useQuery} from '@apollo/react-hooks';
+
+import {toGraphQL, useFruitfulQuery} from 'web/utils/graphql';
 
 export const GET_TASK = gql`
   query Task($taskId: UUID!) {
@@ -93,6 +94,10 @@ export const GET_TASK = gql`
   }
 `;
 
+export const useGetTask = () => {
+  return useFruitfulQuery(useQuery)(GET_TASK);
+};
+
 export const GET_TASKS = gql`
   query Task($filterString: String) {
     tasks(filterString: $filterString) {
@@ -148,6 +153,10 @@ export const GET_TASKS = gql`
     }
   }
 `;
+
+export const useGetTasks = () => {
+  return useFruitfulQuery(useQuery)(GET_TASKS);
+};
 
 export const CLONE_TASK = gql`
   mutation cloneTask($taskId: String!) {

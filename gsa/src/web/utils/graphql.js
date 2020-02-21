@@ -20,3 +20,7 @@
 export const toGraphQL = query => data => {
   return query({variables: data});
 };
+
+export const useFruitfulQuery = query => gql => vars => {
+  return query(gql, {variables: vars});
+};
