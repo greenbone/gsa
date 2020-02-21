@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React, {useEffect} from 'react';
-import {useQuery} from '@apollo/react-hooks';
 import {isDefined} from 'gmp/utils/identity';
 
 import _ from 'gmp/locale';
@@ -58,7 +57,7 @@ import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import Table from './table';
-import {GET_TASKS, useGetTasks} from './graphql';
+import {useGetTasks} from './graphql';
 
 export const ToolBarIcons = withCapabilities(
   ({

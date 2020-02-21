@@ -19,7 +19,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, {useEffect, useState} from 'react';
-import {useQuery} from '@apollo/react-hooks';
 import {useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
@@ -115,7 +114,7 @@ import StopIcon from './icons/stopicon';
 import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
-import {GET_TASK, useCloneTask} from './graphql';
+import {useGetTask, useCloneTask} from './graphql';
 
 const goto_task_details = (op, props) => result => {
   const {history} = props;
@@ -332,10 +331,8 @@ Details.propTypes = {
 
 const Page = props => {
   const {id: taskId} = useParams();
-
-  const {data, refetch} = useQuery(GET_TASK, {
-    variables: {taskId}, // extract uuid from router
-  });
+  const query = useGetTask();
+  const {data, refetch} = query({taskId});
 
   const clone = useCloneTask();
   const cloneTask = data =>

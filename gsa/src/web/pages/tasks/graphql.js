@@ -20,7 +20,7 @@ import gql from 'graphql-tag';
 
 import {useMutation, useQuery} from '@apollo/react-hooks';
 
-import {toGraphQL, useFruitfulQuery} from 'web/utils/graphql';
+import {toGraphQL, toFruitfulQuery} from 'web/utils/graphql';
 
 export const GET_TASK = gql`
   query Task($taskId: UUID!) {
@@ -95,7 +95,7 @@ export const GET_TASK = gql`
 `;
 
 export const useGetTask = () => {
-  return useFruitfulQuery(useQuery)(GET_TASK);
+  return toFruitfulQuery(useQuery)(GET_TASK);
 };
 
 export const GET_TASKS = gql`
@@ -155,7 +155,7 @@ export const GET_TASKS = gql`
 `;
 
 export const useGetTasks = () => {
-  return useFruitfulQuery(useQuery)(GET_TASKS);
+  return toFruitfulQuery(useQuery)(GET_TASKS);
 };
 
 export const CLONE_TASK = gql`
