@@ -18,7 +18,11 @@
  */
 import React from 'react';
 
+import _ from 'gmp/locale';
+
 import styled from 'styled-components';
+
+import {typeName} from 'gmp/utils/entitytype';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -40,6 +44,10 @@ import EntityInfo from './info';
 
 export const Col = styled.col`
   width: ${props => props.width};
+`;
+
+const ErrorContent = styled.div`
+  white-space: pre;
 `;
 
 class EntityPage extends React.Component {
@@ -125,13 +133,45 @@ class EntityPage extends React.Component {
   }
 
   render() {
-    const {entity, entityError, isLoading = true} = this.props;
+    const {entity, entityError, entityType, isLoading = true} = this.props;
 
     if (!isDefined(entity)) {
       if (isLoading) {
         return <Loading />;
       }
       if (isDefined(entityError)) {
+        if (entityError.status === 404) {
+          let content = _(
+            '\nYou might have followed an incorrect link and the {{entity}} ' +
+              'does not exist.',
+            {entity: typeName(entityType)},
+          );
+
+          if (entityType === 'cve') {
+            content = _(
+              '\nThis could have the following reasons:\n' +
+                '1. You might have followed an incorrect link and the cve does ' +
+                'not exist\n' +
+                '2. The cve might not be included in the SCAP databse yet. ' +
+                'For new cves it can take a month or more until they become ' +
+                'available.',
+            );
+          }
+
+          return (
+            <ErrorMessage
+              flex="column"
+              message={_(
+                'The {{entity}} you were looking for could not be found.',
+                {
+                  entity: typeName(entityType),
+                },
+              )}
+            >
+              <ErrorContent>{content}</ErrorContent>
+            </ErrorMessage>
+          );
+        }
         return <ErrorMessage message={entityError.message} />;
       }
       return null;
@@ -149,6 +189,7 @@ class EntityPage extends React.Component {
 EntityPage.propTypes = {
   entity: PropTypes.model,
   entityError: PropTypes.object,
+  entityType: PropTypes.string,
   infoComponent: PropTypes.componentOrFalse,
   isLoading: PropTypes.bool,
   sectionComponent: PropTypes.componentOrFalse,
