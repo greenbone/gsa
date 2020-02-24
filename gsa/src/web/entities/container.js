@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -388,10 +388,12 @@ class EntitiesContainer extends React.Component {
 
     const entitiesType = getEntityType(entities[0]);
 
-    let resource_ids;
+    let resourceIds;
+    let resourceIdsArray;
     let filter;
     if (selectionType === SelectionType.SELECTION_USER) {
-      resource_ids = map(selected, res => res.id);
+      resourceIds = map(selected, res => res.id);
+      resourceIdsArray = [...resourceIds];
       filter = undefined;
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       filter = loadedFilter;
@@ -408,7 +410,7 @@ class EntitiesContainer extends React.Component {
         filter,
         id,
         name,
-        resource_ids,
+        resource_ids: resourceIdsArray,
         resource_type: entitiesType,
         resources_action: 'add',
         value,
