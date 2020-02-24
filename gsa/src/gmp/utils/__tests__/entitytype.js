@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -71,6 +71,11 @@ describe('pluralizeType function tests', () => {
   test('should pluralize term', () => {
     expect(pluralizeType('foo')).toEqual('foos');
     expect(pluralizeType('task')).toEqual('tasks');
+  });
+
+  test('should pluralize special plural types', () => {
+    expect(pluralizeType('vulnerability')).toEqual('vulns');
+    expect(pluralizeType('policy')).toEqual('policies');
   });
 });
 
