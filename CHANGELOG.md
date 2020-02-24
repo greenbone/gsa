@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Lower memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
 
 ### Fixed
+- Fixed auto_delete_value of 0 for tasks and audits [#1987](https://github.com/greenbone/gsa/pull/1987)
 - Fixed bulk tagging by user selection (send IDs as array) [#1985](https://github.com/greenbone/gsa/pull/1985)
 - Fixed pluralizing type 'vulnerability' [#1984](https://github.com/greenbone/gsa/pull/1984)
 - Do not crash if osCpe or osTxt are undefined in OsIcon [#1975](https://github.com/greenbone/gsa/pull/1975) [#1978](https://github.com/greenbone/gsa/pull/1978)
