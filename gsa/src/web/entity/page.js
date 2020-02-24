@@ -150,7 +150,7 @@ class EntityPage extends React.Component {
           if (entityType === 'cve') {
             content = _(
               '\nThis could have the following reasons:\n' +
-                '1. You might have followed an incorrect link and the cve does ' +
+                '1. You might have followed an incorrect link and the CVE does ' +
                 'not exist\n' +
                 '2. The cve might not be included in the SCAP databse yet. ' +
                 'For new cves it can take a month or more until they become ' +
