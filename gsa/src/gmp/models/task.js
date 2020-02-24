@@ -237,7 +237,7 @@ class Task extends Model {
             break;
           case 'auto_delete_data':
             copy.auto_delete_data =
-              pref.value === '0'
+              pref.value === 0
                 ? AUTO_DELETE_KEEP_DEFAULT_VALUE
                 : parseInt(pref.value);
             break;
