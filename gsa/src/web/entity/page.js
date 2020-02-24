@@ -153,7 +153,7 @@ class EntityPage extends React.Component {
                 '1. You might have followed an incorrect link and the CVE does ' +
                 'not exist\n' +
                 '2. The CVE might not be included in the SCAP database yet. ' +
-                'For new cves it can take a month or more until they become ' +
+                'For new CVEs it can take a month or more until they become ' +
                 'available.',
             );
           }
