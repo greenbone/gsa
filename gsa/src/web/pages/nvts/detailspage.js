@@ -22,6 +22,8 @@ import _ from 'gmp/locale';
 
 import Filter from 'gmp/models/filter';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import ExportIcon from 'web/components/icon/exporticon';
 import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
 import ListIcon from 'web/components/icon/listicon';
@@ -185,7 +187,7 @@ const open_dialog = (nvt, func) => {
 };
 
 const Page = ({
-  entity = {},
+  entity,
   notes,
   overrides,
   onChanged,
@@ -194,7 +196,9 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
-  const {defaultTimeout, preferences = [], userTags} = entity;
+  const defaultTimeout = isDefined(entity) ? entity.defaultTimeout : undefined;
+  const preferences = isDefined(entity) ? entity.preferences : [];
+  const userTags = isDefined(entity) ? entity.userTags : undefined;
   const numPreferences = preferences.length;
 
   return (
@@ -306,7 +310,7 @@ const load = gmp => {
     ]);
 };
 
-export default withEntityContainer('task', {
+export default withEntityContainer('nvt', {
   load,
   entitySelector: nvtsSelector,
   mapStateToProps,
