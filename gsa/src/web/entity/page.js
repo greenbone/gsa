@@ -189,7 +189,7 @@ class EntityPage extends React.Component {
 EntityPage.propTypes = {
   entity: PropTypes.model,
   entityError: PropTypes.object,
-  entityType: PropTypes.string,
+  entityType: PropTypes.string.isRequired,
   infoComponent: PropTypes.componentOrFalse,
   isLoading: PropTypes.bool,
   sectionComponent: PropTypes.componentOrFalse,
