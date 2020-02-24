@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)
 
 ### Changed
+- Improved error handling for invalid detailspage links [#1986](https://github.com/greenbone/gsa/pull/1986)
 - Adjusted DEFAULT_OID_VALUE for use with new oid scheme [#1974](https://github.com/greenbone/gsa/pull/1974)
 - Made delta report diffs more explicit [#1950](https://github.com/greenbone/gsa/pull/1950)
 - Changed default port to 22 for scanner dialog [#1768](https://github.com/greenbone/gsa/pull/1768)
