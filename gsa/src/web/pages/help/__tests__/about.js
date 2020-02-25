@@ -26,7 +26,7 @@ import AboutPage from '../about';
 
 setLocale('en');
 
-describe('TaskPage tests', () => {
+describe('AboutPage tests', () => {
   test('should render about page', async () => {
     const gmp = {
       settings: {
