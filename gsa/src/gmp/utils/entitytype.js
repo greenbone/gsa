@@ -41,6 +41,8 @@ export const pluralizeType = type => {
     return type;
   } else if (type === 'policy') {
     return 'policies';
+  } else if (type === 'vulnerability') {
+    return 'vulns';
   }
   return type + 's';
 };

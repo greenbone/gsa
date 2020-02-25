@@ -55,6 +55,89 @@ describe('Audit model tests', () => {
     audit = Audit.fromElement(obj);
     expect(audit.hosts_ordering).toEqual(HOSTS_ORDERING_SEQUENTIAL);
   });
+
+  test('should parse preferences', () => {
+    const audit1 = Audit.fromElement({
+      _id: 't1',
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'in_assets',
+            value: 'yes',
+          },
+          {
+            scanner_name: 'assets_apply_overrides',
+            value: 'yes',
+          },
+          {
+            scanner_name: 'assets_min_qod',
+            value: '70',
+          },
+          {
+            scanner_name: 'auto_delete',
+            value: 'keep',
+          },
+          {
+            scanner_name: 'auto_delete_data',
+            value: 0,
+          },
+          {
+            scanner_name: 'max_hosts',
+            value: '20',
+          },
+          {
+            scanner_name: 'max_checks',
+            value: '4',
+          },
+          {
+            scanner_name: 'source_iface',
+            value: 'eth0',
+          },
+          {
+            scanner_name: 'foo',
+            value: 'bar',
+            name: 'lorem',
+          },
+        ],
+      },
+    });
+    const audit2 = Audit.fromElement({
+      _id: 't1',
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'in_assets',
+            value: 'no',
+          },
+          {
+            scanner_name: 'assets_apply_overrides',
+            value: 'no',
+          },
+          {
+            scanner_name: 'auto_delete',
+            value: 'no',
+          },
+          {
+            scanner_name: 'auto_delete_data',
+            value: 3,
+          },
+        ],
+      },
+    });
+
+    expect(audit1.in_assets).toEqual(1);
+    expect(audit1.apply_overrides).toEqual(1);
+    expect(audit1.min_qod).toEqual(70);
+    expect(audit1.auto_delete).toEqual('keep');
+    expect(audit1.max_hosts).toEqual(20);
+    expect(audit1.max_checks).toEqual(4);
+    expect(audit1.source_iface).toEqual('eth0');
+    expect(audit1.preferences).toEqual({foo: {value: 'bar', name: 'lorem'}});
+    expect(audit2.in_assets).toEqual(0);
+    expect(audit2.apply_overrides).toEqual(0);
+    expect(audit2.auto_delete).toEqual('no');
+    expect(audit2.auto_delete_data).toEqual(3);
+  });
 });
 
 describe(`Audit Model methods tests`, () => {
