@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -43,25 +43,11 @@ const GSA_VERSION = process.env.REACT_APP_VERSION || '20.04';
 
 const StyledLayout = styled(Layout)`
   margin: 0 auto;
-  max-width: 1100px;
+  max-width: 680px;
 `;
 
 const DivP = styled.div`
   margin-bottom: 10px;
-`;
-
-const TextBlock = styled.div`
-  max-width: 600px;
-  min-width: 400px;
-  margin-right: 30px;
-  text-align: left;
-  @media screen and (max-width: 800px) {
-    margin-right: 0px;
-  }
-`;
-
-const ImageBlock = styled.div`
-  max-width: 400px;
 `;
 
 const About = ({gmp}) => (
@@ -69,61 +55,69 @@ const About = ({gmp}) => (
     <PageTitle title={_('About GSA')} />
     <Layout flex="column">
       <Section img={<HelpIcon size="large" />} title={_('About GSA')}>
-        <StyledLayout wrap align="center">
-          <TextBlock>
-            <h1>Greenbone Security Assistant</h1>
-            <h3>
-              {isDefined(gmp.settings.vendorVersion)
-                ? gmp.settings.vendorVersion
-                : _('Version {{version}}', {version: GSA_VERSION})}
-            </h3>
-            <DivP>
-              The Greenbone Security Assistant (GSA) is the web-based user
-              interface of the Greenbone Vulnerability Manager (GVM).
-            </DivP>
-            <DivP>
-              GSA connects to GVM via the Greenbone Management Protocol (GMP)
-              making the rich feature set of the GVM backend available, covering
-              vulnerability scanning, vulnerability management, and related
-              activities.
-            </DivP>
-            <DivP>
-              GSA adds various smart features and forms a powerful tool to
-              manage and maintain a high resilience level of the IT
-              infrastructures.
-            </DivP>
-            <DivP>
-              Copyright (C) 2017-2019 by&nbsp;
-              <a
-                href="https://www.greenbone.net"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Greenbone Networks GmbH
-              </a>
-            </DivP>
-            <DivP>
-              License: GNU General Public License version 2 or any later version
-              &nbsp;
-              <ExternalLink to="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">
-                (full license text)
-              </ExternalLink>
-            </DivP>
-            <DivP>
-              Cookies: This web application uses cookies to store session
-              information. The cookie is not stored on the server-side hard disk
-              and not submitted anywhere. It is lost when the session is closed
-              or expired. The cookie is also temporarily stored in your browser
-              where you can examine the content.
-            </DivP>
-            <DivP>
-              The GMP documentation is available{' '}
-              <ProtocolDocLink title="here" />.
-            </DivP>
-          </TextBlock>
-          <ImageBlock>
-            <Img src="gsa_splash.svg" alt="GSA" width="100%" />
-          </ImageBlock>
+        <StyledLayout flex="column" align="center">
+          <Img src="greenbone_banner.jpeg" alt="GSA" width="100%" />
+          <h1>Greenbone Security Assistant</h1>
+          <h3>
+            {isDefined(gmp.settings.vendorVersion)
+              ? gmp.settings.vendorVersion
+              : _('Version {{version}}', {version: GSA_VERSION})}
+          </h3>
+          <DivP>
+            {_(
+              'The Greenbone Security Assistant (GSA) is the web-based ' +
+                'user interface of the Greenbone Vulnerability Manager (GVM).',
+            )}
+          </DivP>
+          <DivP>
+            {_(
+              'GSA connects to GVM via the Greenbone Management Protocol ' +
+                '(GMP) making the rich feature set of the GVM backend ' +
+                'available, covering vulnerability scanning, vulnerability ' +
+                'management, and related activities.',
+            )}
+          </DivP>
+          <DivP>
+            {_(
+              'GSA adds various smart features and forms a powerful tool ' +
+                'to manage and maintain a high resilience level of the IT ' +
+                'infrastructures.',
+            )}
+            '
+          </DivP>
+          <DivP>
+            Copyright (C) 2017-2020 by&nbsp;
+            <a
+              href="https://www.greenbone.net"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Greenbone Networks GmbH
+            </a>
+          </DivP>
+          <DivP>
+            {_(
+              'License: GNU General Public License version 2 or any later' +
+                ' version',
+            )}
+            &nbsp;
+            <ExternalLink to="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">
+              {_('(full license text)')}
+            </ExternalLink>
+          </DivP>
+          <DivP>
+            {_(
+              'Cookies: This web application uses cookies to store session' +
+                ' information. The cookie is not stored on the server-side hard' +
+                ' disk and not submitted anywhere. It is lost when the session ' +
+                'is closed or expired. The cookie is also temporarily stored in' +
+                ' your browser where you can examine the content.',
+            )}
+          </DivP>
+          <DivP>
+            {_('The GMP documentation is available ')}
+            <ProtocolDocLink title="here" />.
+          </DivP>
         </StyledLayout>
       </Section>
     </Layout>
