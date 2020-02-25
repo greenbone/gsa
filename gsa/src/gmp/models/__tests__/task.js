@@ -281,6 +281,89 @@ describe('Task Model parse tests', () => {
     });
     expect(task4.progress).toEqual(66);
   });
+
+  test('should parse preferences', () => {
+    const task1 = Task.fromElement({
+      _id: 't1',
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'in_assets',
+            value: 'yes',
+          },
+          {
+            scanner_name: 'assets_apply_overrides',
+            value: 'yes',
+          },
+          {
+            scanner_name: 'assets_min_qod',
+            value: '70',
+          },
+          {
+            scanner_name: 'auto_delete',
+            value: 'keep',
+          },
+          {
+            scanner_name: 'auto_delete_data',
+            value: 0,
+          },
+          {
+            scanner_name: 'max_hosts',
+            value: '20',
+          },
+          {
+            scanner_name: 'max_checks',
+            value: '4',
+          },
+          {
+            scanner_name: 'source_iface',
+            value: 'eth0',
+          },
+          {
+            scanner_name: 'foo',
+            value: 'bar',
+            name: 'lorem',
+          },
+        ],
+      },
+    });
+    const task2 = Task.fromElement({
+      _id: 't1',
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'in_assets',
+            value: 'no',
+          },
+          {
+            scanner_name: 'assets_apply_overrides',
+            value: 'no',
+          },
+          {
+            scanner_name: 'auto_delete',
+            value: 'no',
+          },
+          {
+            scanner_name: 'auto_delete_data',
+            value: 3,
+          },
+        ],
+      },
+    });
+
+    expect(task1.in_assets).toEqual(1);
+    expect(task1.apply_overrides).toEqual(1);
+    expect(task1.min_qod).toEqual(70);
+    expect(task1.auto_delete).toEqual('keep');
+    expect(task1.max_hosts).toEqual(20);
+    expect(task1.max_checks).toEqual(4);
+    expect(task1.source_iface).toEqual('eth0');
+    expect(task1.preferences).toEqual({foo: {value: 'bar', name: 'lorem'}});
+    expect(task2.in_assets).toEqual(0);
+    expect(task2.apply_overrides).toEqual(0);
+    expect(task2.auto_delete).toEqual('no');
+    expect(task2.auto_delete_data).toEqual(3);
+  });
 });
 
 describe(`Task Model methods tests`, () => {
