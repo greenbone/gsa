@@ -124,7 +124,7 @@ const Page = ({
   const {data, refetch} = query({filterString: filter.toFilterString()});
 
   if (isDefined(data)) {
-    props.entities = data.tasks.map(entity => Task.fromObject(entity));
+    props.entities = data.tasks.nodes.map(entity => Task.fromObject(entity));
   } else {
     props.entities = undefined;
   }

@@ -101,55 +101,57 @@ export const useGetTask = () => {
 export const GET_TASKS = gql`
   query Task($filterString: String) {
     tasks(filterString: $filterString) {
-      name
-      uuid
-      permissions {
-        name
-      }
-      lastReport {
-        uuid
-        severity
-        timestamp
-      }
-      reportCount {
-        total
-        finished
-      }
-      status
-      target {
+      nodes {
         name
         uuid
+        permissions {
+          name
+        }
+        lastReport {
+          uuid
+          severity
+          timestamp
+        }
+        reportCount {
+          total
+          finished
+        }
+        status
+        target {
+          name
+          uuid
+        }
+        trend
+        comment
+        owner
+        preferences {
+          name
+          value
+          description
+        }
+        schedule {
+          name
+          uuid
+          icalendar
+          timezone
+          duration
+        }
+        alerts {
+          name
+          uuid
+        }
+        scanConfig {
+          uuid
+          name
+          trash
+        }
+        scanner {
+          uuid
+          name
+          scannerType
+        }
+        hostsOrdering
       }
-      trend
-      comment
-      owner
-      preferences {
-        name
-        value
-        description
-      }
-      schedule {
-        name
-        uuid
-        icalendar
-        timezone
-        duration
-      }
-      alerts {
-        name
-        uuid
-      }
-      scanConfig {
-        uuid
-        name
-        trash
-      }
-      scanner {
-        uuid
-        name
-        scannerType
-      }
-      hostsOrdering
     }
   }
 `;
