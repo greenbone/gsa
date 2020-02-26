@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Multistep dialog feature, implemented on scanner dialog [#1725](https://github.com/greenbone/gsa/pull/1725)
 
 ### Changed
-- Changed image and layout of About page [#1993](https://github.com/greenbone/gsa/pull/1993)
+- Changed image, text, and layout of About page [#1993](https://github.com/greenbone/gsa/pull/1993)[#1996](https://github.com/greenbone/gsa/pull/1996)
 - Adjusted multiselect and report listpage to use getDerivedStateFromProps instead of deprecated componentWillReceiveProps [#1935](https://github.com/greenbone/gsa/pull/1935)
 - Updated react-beautiful-dnd to version 12.2.0 and fix dragging into empty row [#1837](https://github.com/greenbone/gsa/pull/1837)
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
