@@ -72,7 +72,7 @@ const About = ({gmp}) => (
           <DivP>
             {_(
               'GSA connects to GVM via the Greenbone Management Protocol ' +
-                '(GMP) making the rich feature set of the GVM backend ' +
+                '(GMP) making the extensive feature set of the GVM backend ' +
                 'available, covering vulnerability scanning, vulnerability ' +
                 'management, and related activities.',
             )}
@@ -107,11 +107,11 @@ const About = ({gmp}) => (
           </DivP>
           <DivP>
             {_(
-              'Cookies: This web application uses cookies to store session' +
-                ' information. The cookie is not stored on the server-side hard' +
-                ' disk and not submitted anywhere. It is lost when the session ' +
-                'is closed or expired. The cookie is also temporarily stored in' +
-                ' your browser where you can examine the content.',
+              'This web application uses cookies to store session information' +
+                '. The cookies are not stored on the server side hard disk ' +
+                'and not submitted anywhere. They are lost when the session ' +
+                'is closed or expired. The cookies are stored temporarily in ' +
+                'your browser as well where you can examine the content.',
             )}
           </DivP>
           <DivP>
