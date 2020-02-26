@@ -19,6 +19,8 @@
 
 import React from 'react';
 
+import Filter from 'gmp/models/filter.js';
+
 import SeverityBar from 'web/components/bar/severitybar';
 
 import DateTime from 'web/components/date/datetime';
@@ -44,60 +46,70 @@ const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
   entity,
   links = true,
+  onFilterChanged,
   onToggleDetailsClick,
   ...props
-}) => (
-  <TableRow>
-    <TableData>
-      <span>
-        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-          {entity.name}
-        </RowDetailsToggle>
-      </span>
-    </TableData>
-    <TableData>
-      <span>
-        <Link
-          to="nvts"
-          filter={'family="' + entity.family + '"'}
-          textOnly={!links}
-        >
-          {entity.family}
-        </Link>
-      </span>
-    </TableData>
-    <TableData>
-      <DateTime date={entity.creationTime} />
-    </TableData>
-    <TableData>
-      <DateTime date={entity.modificationTime} />
-    </TableData>
-    <TableData>
-      <Divider wrap>
-        {entity.cves.map(id => (
-          <CveLink key={id} id={id} textOnly={!links} />
-        ))}
-      </Divider>
-    </TableData>
-    <TableData align="center">
-      {entity && entity.tags && (
-        <SolutionTypeIcon type={entity.tags.solution_type} />
-      )}
-    </TableData>
-    <TableData>
-      <SeverityBar severity={entity.severity} />
-    </TableData>
-    <TableData align="end">
-      {entity.qod && <Qod value={entity.qod.value} />}
-    </TableData>
-    <ActionsComponent {...props} entity={entity} />
-  </TableRow>
-);
+}) => {
+  const handleFilterChanged = () => {
+    const filter = Filter.fromString('family="' + entity.family + '"');
+    onFilterChanged(filter);
+  };
+
+  return (
+    <TableRow>
+      <TableData>
+        <span>
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+            {entity.name}
+          </RowDetailsToggle>
+        </span>
+      </TableData>
+      <TableData>
+        <span>
+          <Link
+            to="nvts"
+            filter={'family="' + entity.family + '"'}
+            textOnly={!links}
+            onClick={handleFilterChanged}
+          >
+            {entity.family}
+          </Link>
+        </span>
+      </TableData>
+      <TableData>
+        <DateTime date={entity.creationTime} />
+      </TableData>
+      <TableData>
+        <DateTime date={entity.modificationTime} />
+      </TableData>
+      <TableData>
+        <Divider wrap>
+          {entity.cves.map(id => (
+            <CveLink key={id} id={id} textOnly={!links} />
+          ))}
+        </Divider>
+      </TableData>
+      <TableData align="center">
+        {entity && entity.tags && (
+          <SolutionTypeIcon type={entity.tags.solution_type} />
+        )}
+      </TableData>
+      <TableData>
+        <SeverityBar severity={entity.severity} />
+      </TableData>
+      <TableData align="end">
+        {entity.qod && <Qod value={entity.qod.value} />}
+      </TableData>
+      <ActionsComponent {...props} entity={entity} />
+    </TableRow>
+  );
+};
 
 Row.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  onFilterChanged: PropTypes.func.isRequired,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
