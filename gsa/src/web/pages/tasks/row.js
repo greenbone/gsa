@@ -103,18 +103,21 @@ const Row = ({
 }) => {
   const {scanner, observers, lastReport} = entity;
   const obs = [];
+
   if (hasValue(observers)) {
-    if (isString(observers)) {
-      obs.push(_('User {{name}}', {name: observers}));
-    } else {
-      if (hasValue(observers.role)) {
-        obs.push(_('Role {{name}}', {name: observers.role.name}));
-      }
-      if (hasValue(observers.group)) {
-        obs.push(_('Group {{name}}', {name: observers.group.name}));
-      }
+    if (hasValue(observers.users)) {
+      obs.user = _('Users {{user}}', {user: observers.users.join(', ')});
+    }
+    if (observers.roles.length > 0) {
+      const role = observers.roles.map(r => r.name);
+      obs.role = _('Roles {{role}}', {role: role.join(', ')});
+    }
+    if (observers.groups.length > 0) {
+      const group = observers.groups.map(g => g.name);
+      obs.group = _('Groups {{group}}', {group: group.join(', ')});
     }
   }
+
   return (
     <TableRow>
       <TableData>
@@ -141,15 +144,19 @@ const Row = ({
               entity={entity}
               userName={username}
             />
-            {hasValue(observers) && observers.length > 0 && (
+            {Object.keys(obs).length > 0 && (
               <ProvideViewIcon
                 size="small"
-                title={_('Task made visible for: {{observers}}', {
-                  observers: obs.join(', '),
-                })}
+                title={_(
+                  'Task made visible for:\n{{user}}\n{{role}}\n{{group}}',
+                  {
+                    user: obs.user,
+                    role: obs.role,
+                    group: obs.group,
+                  },
+                )}
               />
-            ) // TODO observer roles and groups
-            }
+            )}
           </IconDivider>
         </Layout>
         {entity.comment && <Comment>({entity.comment})</Comment>}
