@@ -335,8 +335,8 @@ const Page = props => {
   const {data, refetch} = query({taskId});
 
   const clone = useCloneTask();
-  const cloneTask = data =>
-    clone(data).then(goto_task_details('cloneTask', props));
+  const cloneTask = vars =>
+    clone(vars).then(goto_task_details('cloneTask', props));
 
   const [entity, setEntity] = useState();
   useEffect(() => {
