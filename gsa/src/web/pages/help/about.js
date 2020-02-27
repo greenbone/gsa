@@ -116,7 +116,7 @@ const About = ({gmp}) => (
           </DivP>
           <DivP>
             {_('The GMP documentation is available ')}
-            <ProtocolDocLink title="here" />.
+            <ProtocolDocLink title={_('here')} />.
           </DivP>
         </StyledLayout>
       </Section>

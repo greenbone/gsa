@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [20.04] - unreleased
 
 ### Added
+- Added German translation for About page [#1998](https://github.com/greenbone/gsa/pull/1998)
 - Added a renew session timeout icon to usermenu [#1966](https://github.com/greenbone/gsa/pull/1966)
 - Added new BPM feature [#1931](https://github.com/greenbone/gsa/pull/1931)
 - Added clean-up-translations script [#1948](https://github.com/greenbone/gsa/pull/1948)
@@ -15,7 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Multistep dialog feature, implemented on scanner dialog [#1725](https://github.com/greenbone/gsa/pull/1725)
 
 ### Changed
-- Changed image, text, and layout of About page [#1993](https://github.com/greenbone/gsa/pull/1993)[#1996](https://github.com/greenbone/gsa/pull/1996)
+- Changed image, text, and layout of About page [#1993](https://github.com/greenbone/gsa/pull/1993)[#1996](https://github.com/greenbone/gsa/pull/1996)[#1998](https://github.com/greenbone/gsa/pull/1998)
 - Adjusted multiselect and report listpage to use getDerivedStateFromProps instead of deprecated componentWillReceiveProps [#1935](https://github.com/greenbone/gsa/pull/1935)
 - Updated react-beautiful-dnd to version 12.2.0 and fix dragging into empty row [#1837](https://github.com/greenbone/gsa/pull/1837)
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
