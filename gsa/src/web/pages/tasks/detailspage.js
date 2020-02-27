@@ -338,12 +338,12 @@ const Page = props => {
   const cloneTask = data =>
     clone(data).then(goto_task_details('cloneTask', props));
 
-  const [entity, setEntity] = useState(undefined);
+  const [entity, setEntity] = useState();
   useEffect(() => {
     if (hasValue(data)) {
       setEntity(Task.fromObject(data.task));
     } else {
-      setEntity(undefined);
+      setEntity();
     }
   }, [data]);
 

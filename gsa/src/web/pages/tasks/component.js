@@ -16,6 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+/* eslint-disable no-shadow */
+
 import React, {useState, useEffect} from 'react';
 
 import {connect} from 'react-redux';
@@ -128,23 +130,23 @@ const TaskComponent = props => {
   const [alert_ids, setAlertIds] = useState([]);
   const [schedule_id, setScheduleId] = useState('0');
   const [name, setName] = useState(_('Unnamed'));
-  const [comment, setComment] = useState(_(''));
-  const [id, setId] = useState(undefined);
-  const [in_assets, setInAssets] = useState(undefined);
-  const [auto_delete, setAutoDelete] = useState(undefined);
-  const [auto_delete_data, setAutoDeleteData] = useState(undefined);
+  const [comment, setComment] = useState('');
+  const [id, setId] = useState();
+  const [in_assets, setInAssets] = useState();
+  const [auto_delete, setAutoDelete] = useState();
+  const [auto_delete_data, setAutoDeleteData] = useState();
   const [title, setTitle] = useState('');
   const [scanner_id, setScannerId] = useState('0');
-  const [alterable, setAlterable] = useState(undefined);
-  const [apply_overrides, setApplyOverrides] = useState(undefined);
-  const [hosts_ordering, setHostsOrdering] = useState(undefined);
-  const [max_checks, setMaxChecks] = useState(undefined);
-  const [max_hosts, setMaxHosts] = useState(undefined);
-  const [task, setTask] = useState(undefined);
+  const [alterable, setAlterable] = useState();
+  const [apply_overrides, setApplyOverrides] = useState();
+  const [hosts_ordering, setHostsOrdering] = useState();
+  const [max_checks, setMaxChecks] = useState();
+  const [max_hosts, setMaxHosts] = useState();
+  const [task, setTask] = useState();
   const [schedule_periods, setSchedulePeriods] = useState(0);
   const [min_qod, setMinQod] = useState(70);
   const [source_iface, setSourceIFace] = useState('');
-  const [hosts] = useState(undefined);
+  const [hosts] = useState();
   const [port_list_id, setPortListId] = useState(defaultPortListId);
   const [alert_id, setAlertId] = useState(defaultAlertId);
   const [config_id, setConfigId] = useState(defaultScanConfigId);
@@ -152,19 +154,19 @@ const TaskComponent = props => {
   const [smb_credential, setSmbCredential] = useState(defaultSmbCredential);
   const [esxi_credential, setEsxiCredential] = useState(defaultEsxiCredential);
   const [task_name, setTaskName] = useState(_('New Quick Task'));
-  const [target_hosts, setTargetHosts] = useState(undefined);
+  const [target_hosts, setTargetHosts] = useState();
 
-  const [start_date, setStartDate] = useState(undefined);
-  const [start_minute, setStartMinute] = useState(undefined);
-  const [start_hour, setStartHour] = useState(undefined);
-  const [start_timezone] = useState(undefined);
-  const [tasks, setTasks] = useState(undefined);
+  const [start_date, setStartDate] = useState();
+  const [start_minute, setStartMinute] = useState();
+  const [start_hour, setStartHour] = useState();
+  const [start_timezone] = useState();
+  const [tasks, setTasks] = useState();
   const [reschedule, setReschedule] = useState(NO_VALUE);
-  const [task_id, setTaskId] = useState(undefined);
+  const [task_id, setTaskId] = useState();
   const [reportImportDialogVisible, toggleReportImportDialogVisible] = useState(
     false,
   );
-  const [tag_id] = useState(undefined);
+  const [tag_id] = useState();
 
   const {gmp} = props;
 
