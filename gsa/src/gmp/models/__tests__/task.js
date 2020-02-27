@@ -266,86 +266,88 @@ describe('Task Model parse tests', () => {
   });
 
   test('should parse preferences', () => {
-    const task1 = Task.fromElement({
+    const task1 = Task.fromObject({
       _id: 't1',
-      preferences: {
-        preference: [
-          {
-            scanner_name: 'in_assets',
-            value: 'yes',
-          },
-          {
-            scanner_name: 'assets_apply_overrides',
-            value: 'yes',
-          },
-          {
-            scanner_name: 'assets_min_qod',
-            value: '70',
-          },
-          {
-            scanner_name: 'auto_delete',
-            value: 'keep',
-          },
-          {
-            scanner_name: 'auto_delete_data',
-            value: 0,
-          },
-          {
-            scanner_name: 'max_hosts',
-            value: '20',
-          },
-          {
-            scanner_name: 'max_checks',
-            value: '4',
-          },
-          {
-            scanner_name: 'source_iface',
-            value: 'eth0',
-          },
-          {
-            scanner_name: 'foo',
-            value: 'bar',
-            name: 'lorem',
-          },
-        ],
-      },
+      preferences: [
+        {
+          name: 'in_assets',
+          value: 'yes',
+        },
+        {
+          name: 'assets_apply_overrides',
+          value: 'yes',
+        },
+        {
+          name: 'assets_min_qod',
+          value: '70',
+        },
+        {
+          name: 'auto_delete',
+          value: 'keep',
+        },
+        {
+          name: 'auto_delete_data',
+          value: 0,
+        },
+        {
+          name: 'max_hosts',
+          value: '20',
+        },
+        {
+          name: 'max_checks',
+          value: '4',
+        },
+        {
+          name: 'source_iface',
+          value: 'eth0',
+        },
+        {
+          value: 'bar',
+          name: 'foo',
+        },
+        {
+          value: 'ipsum',
+          name: 'lorem',
+        },
+      ],
     });
-    const task2 = Task.fromElement({
+    const task2 = Task.fromObject({
       _id: 't1',
-      preferences: {
-        preference: [
-          {
-            scanner_name: 'in_assets',
-            value: 'no',
-          },
-          {
-            scanner_name: 'assets_apply_overrides',
-            value: 'no',
-          },
-          {
-            scanner_name: 'auto_delete',
-            value: 'no',
-          },
-          {
-            scanner_name: 'auto_delete_data',
-            value: 3,
-          },
-        ],
-      },
+      preferences: [
+        {
+          name: 'in_assets',
+          value: 'no',
+        },
+        {
+          name: 'assets_apply_overrides',
+          value: 'no',
+        },
+        {
+          name: 'auto_delete',
+          value: 'no',
+        },
+        {
+          name: 'auto_delete_data',
+          value: 3,
+        },
+      ],
     });
 
-    expect(task1.in_assets).toEqual(1);
-    expect(task1.apply_overrides).toEqual(1);
-    expect(task1.min_qod).toEqual(70);
-    expect(task1.auto_delete).toEqual('keep');
-    expect(task1.max_hosts).toEqual(20);
-    expect(task1.max_checks).toEqual(4);
-    expect(task1.source_iface).toEqual('eth0');
-    expect(task1.preferences).toEqual({foo: {value: 'bar', name: 'lorem'}});
-    expect(task2.in_assets).toEqual(0);
-    expect(task2.apply_overrides).toEqual(0);
-    expect(task2.auto_delete).toEqual('no');
-    expect(task2.auto_delete_data).toEqual(3);
+    expect(task1.inAssets).toEqual(1);
+    expect(task1.applyOverrides).toEqual(1);
+    expect(task1.minQod).toEqual(70);
+    expect(task1.autoDelete).toEqual('keep');
+    expect(task1.maxHosts).toEqual(20);
+    expect(task1.maxChecks).toEqual(4);
+    expect(task1.sourceIface).toEqual('eth0');
+    expect(task1.preferences).toEqual({
+      foo: {value: 'bar', name: 'foo'},
+      lorem: {value: 'ipsum', name: 'lorem'},
+    });
+    expect(task2.inAssets).toEqual(0);
+    expect(task2.applyOverrides).toEqual(0);
+    expect(task2.autoDelete).toEqual('no');
+    expect(task2.autoDeleteData).toEqual(3);
   });
 });
 
@@ -476,28 +478,22 @@ describe(`Task Model methods tests`, () => {
     expect(task.isChangeable()).toEqual(true);
   });
 
-  test('should parse observer strings', () => {
-    const task = Task.fromElement({
-      observers: 'foo bar',
-    });
-
-    const {observers} = task;
-    expect(observers.user).toEqual(['foo', 'bar']);
-  });
   test('should parse all observers types', () => {
-    const task = Task.fromElement({
+    const task = Task.fromObject({
       observers: {
-        __text: 'anon nymous',
-        role: [{name: 'lorem'}],
-        group: [{name: 'ipsum'}, {name: 'dolor'}],
+        users: ['anon', 'nymous'],
+        roles: [{name: 'lorem'}],
+        groups: [{name: 'ipsum'}, {name: 'dolor'}],
       },
     });
 
     const {observers} = task;
 
-    expect(observers.user).toEqual(['anon', 'nymous']);
-    expect(observers.role).toEqual([{name: 'lorem'}]);
-    expect(observers.group).toEqual([{name: 'ipsum'}, {name: 'dolor'}]);
+    expect(observers.users).toEqual(['anon', 'nymous']);
+    expect(observers.roles).toEqual([{name: 'lorem'}]);
+    expect(observers.groups).toEqual([{name: 'ipsum'}, {name: 'dolor'}]);
+  });
+
   test('should parse userTags (graphQL)', () => {
     const task = Task.fromObject({
       userTags: {

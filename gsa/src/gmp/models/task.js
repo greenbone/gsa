@@ -235,7 +235,7 @@ class Task extends Model {
             break;
           case 'max_checks':
             copy.maxChecks = parseInt(pref.value);
-            delete copy.max_hosts;
+            delete copy.max_checks;
             break;
           case 'source_iface':
             copy.sourceIface = pref.value; // is this defined in selene?
