@@ -72,13 +72,13 @@ const Actions = ({
       <TrashIcon
         entity={entity}
         name="task"
-        onClick={entity => deleteTask({taskId: entity.id}).then(refetch)}
+        onClick={() => deleteTask({taskId: entity.id}).then(refetch)}
       />
       <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
       <CloneIcon
         entity={entity}
         name="task"
-        onClick={entity => cloneTask({taskId: entity.id}).then(refetch)}
+        onClick={() => cloneTask({taskId: entity.id}).then(refetch)}
       />
       <ExportIcon
         value={entity}
@@ -91,6 +91,7 @@ const Actions = ({
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  refetch: PropTypes.func,
   onReportImportClick: PropTypes.func.isRequired,
   onTaskCloneClick: PropTypes.func,
   onTaskDeleteClick: PropTypes.func,
