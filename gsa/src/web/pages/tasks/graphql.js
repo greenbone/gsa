@@ -90,6 +90,15 @@ export const GET_TASK = gql`
           comment
         }
       }
+      observers {
+        users
+        roles {
+          name
+        }
+        groups {
+          name
+        }
+      }
     }
   }
 `;
@@ -151,6 +160,15 @@ export const GET_TASKS = gql`
           scannerType
         }
         hostsOrdering
+        observers {
+          users
+          roles {
+            name
+          }
+          groups {
+            name
+          }
+        }
       }
     }
   }
