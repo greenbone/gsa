@@ -21,7 +21,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isString, hasValue} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withUserName from 'web/utils/withUserName';
