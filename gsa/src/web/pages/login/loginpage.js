@@ -168,7 +168,7 @@ const LoginPage = props => {
   };
 
   useEffect(() => {
-    const {history, isLoggedIn = false} = props;
+    const {history, isLoggedIn = false} = props; // eslint-disable-line no-shadow
 
     if (isLoggedIn) {
       history.replace('/');
