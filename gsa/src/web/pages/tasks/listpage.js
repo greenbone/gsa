@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,7 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import React, {useEffect} from 'react';
+import {isDefined} from 'gmp/utils/identity';
 
 import _ from 'gmp/locale';
 
@@ -24,7 +25,7 @@ import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
+import Task from 'gmp/models/task';
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -56,6 +57,7 @@ import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import Table from './table';
+import {useGetTasks} from './graphql';
 
 export const ToolBarIcons = withCapabilities(
   ({
@@ -116,90 +118,103 @@ const Page = ({
   onDownloaded,
   onError,
   ...props
-}) => (
-  <TaskComponent
-    onAdvancedTaskWizardSaved={onChanged}
-    onCloned={onChanged}
-    onCloneError={onError}
-    onContainerSaved={onChanged}
-    onCreated={onChanged}
-    onContainerCreated={onChanged}
-    onDeleted={onChanged}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-    onModifyTaskWizardSaved={onChanged}
-    onReportImported={onChanged}
-    onResumed={onChanged}
-    onResumeError={onError}
-    onSaved={onChanged}
-    onStarted={onChanged}
-    onStartError={onError}
-    onStopped={onChanged}
-    onStopError={onError}
-    onTaskWizardSaved={onChanged}
-  >
-    {({
-      clone,
-      create,
-      createcontainer,
-      delete: delete_func,
-      download,
-      edit,
-      start,
-      stop,
-      resume,
-      reportimport,
-      advancedtaskwizard,
-      modifytaskwizard,
-      taskwizard,
-    }) => (
-      <React.Fragment>
-        <PageTitle title={_('Tasks')} />
-        <EntitiesPage
-          {...props}
-          dashboard={() => (
-            <TaskDashboard
-              filter={filter}
-              onFilterChanged={onFilterChanged}
-              onInteraction={onInteraction}
-            />
-          )}
-          dashboardControls={() => (
-            <DashboardControls
-              dashboardId={TASK_DASHBOARD_ID}
-              onInteraction={onInteraction}
-            />
-          )}
-          filter={filter}
-          filterEditDialog={TaskFilterDialog}
-          filtersFilter={TASKS_FILTER_FILTER}
-          sectionIcon={<TaskIcon size="large" />}
-          table={Table}
-          title={_('Tasks')}
-          toolBarIcons={ToolBarIcons}
-          onAdvancedTaskWizardClick={advancedtaskwizard}
-          onContainerTaskCreateClick={createcontainer}
-          onError={onError}
-          onFilterChanged={onFilterChanged}
-          onInteraction={onInteraction}
-          onModifyTaskWizardClick={modifytaskwizard}
-          onReportImportClick={reportimport}
-          onTaskCloneClick={clone}
-          onTaskCreateClick={create}
-          onTaskDeleteClick={delete_func}
-          onTaskDownloadClick={download}
-          onTaskEditClick={edit}
-          onTaskResumeClick={resume}
-          onTaskStartClick={start}
-          onTaskStopClick={stop}
-          onTaskWizardClick={taskwizard}
-        />
-      </React.Fragment>
-    )}
-  </TaskComponent>
-);
+}) => {
+  const query = useGetTasks();
+
+  const {data, refetch} = query({filterString: filter.toFilterString()});
+
+  if (isDefined(data)) {
+    props.entities = data.tasks.nodes.map(entity => Task.fromObject(entity));
+  } else {
+    props.entities = undefined;
+  }
+
+  useEffect(() => {
+    refetch();
+  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <TaskComponent
+      onAdvancedTaskWizardSaved={onChanged}
+      onCloned={refetch}
+      onCloneError={onError}
+      onContainerSaved={refetch}
+      onCreated={refetch}
+      onContainerCreated={refetch}
+      onDeleted={refetch}
+      onDeleteError={onError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onInteraction={onInteraction}
+      onModifyTaskWizardSaved={onChanged}
+      onReportImported={onChanged}
+      onResumed={onChanged}
+      onResumeError={onError}
+      onSaved={refetch}
+      onStarted={onChanged}
+      onStartError={onError}
+      onStopped={onChanged}
+      onStopError={onError}
+      onTaskWizardSaved={onChanged}
+    >
+      {({
+        create,
+        createcontainer,
+        download,
+        edit,
+        start,
+        stop,
+        resume,
+        reportimport,
+        advancedtaskwizard,
+        modifytaskwizard,
+        taskwizard,
+      }) => (
+        <React.Fragment>
+          <PageTitle title={_('Tasks')} />
+          <EntitiesPage
+            {...props}
+            dashboard={() => (
+              <TaskDashboard
+                filter={filter}
+                onFilterChanged={onFilterChanged}
+                onInteraction={onInteraction}
+              />
+            )}
+            dashboardControls={() => (
+              <DashboardControls
+                dashboardId={TASK_DASHBOARD_ID}
+                onInteraction={onInteraction}
+              />
+            )}
+            filter={filter}
+            filterEditDialog={TaskFilterDialog}
+            filtersFilter={TASKS_FILTER_FILTER}
+            refetch={refetch}
+            sectionIcon={<TaskIcon size="large" />}
+            table={Table}
+            title={_('Tasks')}
+            toolBarIcons={ToolBarIcons}
+            onAdvancedTaskWizardClick={advancedtaskwizard}
+            onContainerTaskCreateClick={createcontainer}
+            onError={onError}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+            onModifyTaskWizardClick={modifytaskwizard}
+            onReportImportClick={reportimport}
+            onTaskCreateClick={create}
+            onTaskDownloadClick={download}
+            onTaskEditClick={edit}
+            onTaskResumeClick={resume}
+            onTaskStartClick={start}
+            onTaskStopClick={stop}
+            onTaskWizardClick={taskwizard}
+          />
+        </React.Fragment>
+      )}
+    </TaskComponent>
+  );
+};
 
 Page.propTypes = {
   filter: PropTypes.filter,

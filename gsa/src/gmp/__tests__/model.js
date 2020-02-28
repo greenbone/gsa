@@ -48,4 +48,35 @@ describe('parseModelFromElement tests', () => {
   });
 });
 
+describe('fromObject tests', () => {
+  test('Should parse id', () => {
+    const object = {uuid: 'foo'};
+    const model = Model.fromObject(object);
+
+    expect(model.id).toEqual('foo');
+  });
+  test('should parse permissions', () => {
+    const object = {
+      permissions: [{name: 'foo'}, {name: 'bar'}],
+    };
+
+    const model = Model.fromObject(object);
+
+    expect(model.userCapabilities._has_caps).toEqual(true);
+    expect(model.userCapabilities.length).toBe(2);
+  });
+  test('should parse comment', () => {
+    const object = {
+      comment: 'lorem ipsum',
+    };
+    const object2 = {};
+
+    const model = Model.fromObject(object);
+    const model2 = Model.fromObject(object2);
+
+    expect(model.comment).toEqual('lorem ipsum');
+    expect(model2.comment).toBeUndefined();
+  });
+});
+
 // vim: set ts=2 sw=2 tw=80:

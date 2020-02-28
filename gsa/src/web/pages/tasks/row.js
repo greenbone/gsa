@@ -21,7 +21,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withUserName from 'web/utils/withUserName';
@@ -59,7 +59,7 @@ import {
 } from 'gmp/models/scanner';
 
 export const renderReport = (report, links) => {
-  if (!isDefined(report)) {
+  if (!hasValue(report)) {
     return null;
   }
   return (
@@ -72,7 +72,7 @@ export const renderReport = (report, links) => {
 };
 
 const renderReportTotal = (entity, links) => {
-  if (entity.report_count.total <= 0) {
+  if (entity.reportCount.total <= 0) {
     return null;
   }
   return (
@@ -85,9 +85,9 @@ const renderReportTotal = (entity, links) => {
             ' including unfinished ones',
           {name: entity.name},
         )}
-        textOnly={!links || entity.report_count.total === 0}
+        textOnly={!links || entity.reportCount.total === 0}
       >
-        {entity.report_count.total}
+        {entity.reportCount.total}
       </Link>
     </Layout>
   );
@@ -101,20 +101,19 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
-  const {scanner, observers} = entity;
-
+  const {scanner, observers, lastReport} = entity;
   const obs = [];
 
-  if (isDefined(observers)) {
-    if (isDefined(observers.user)) {
-      obs.user = _('Users {{user}}', {user: observers.user.join(', ')});
+  if (hasValue(observers)) {
+    if (hasValue(observers.users)) {
+      obs.user = _('Users {{user}}', {user: observers.users.join(', ')});
     }
-    if (isDefined(observers.role)) {
-      const role = observers.role.map(r => r.name);
+    if (observers.roles.length > 0) {
+      const role = observers.roles.map(r => r.name);
       obs.role = _('Roles {{role}}', {role: role.join(', ')});
     }
-    if (isDefined(observers.group)) {
-      const group = observers.group.map(g => g.name);
+    if (observers.groups.length > 0) {
+      const group = observers.groups.map(g => g.name);
       obs.group = _('Groups {{group}}', {group: group.join(', ')});
     }
   }
@@ -130,7 +129,7 @@ const Row = ({
             {entity.alterable === 1 && (
               <AlterableIcon size="small" title={_('Task is alterable')} />
             )}
-            {isDefined(scanner) &&
+            {hasValue(scanner) &&
               (scanner.scannerType === GMP_SCANNER_TYPE ||
                 scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE) && (
                 <SensorIcon
@@ -145,7 +144,7 @@ const Row = ({
               entity={entity}
               userName={username}
             />
-            {isDefined(observers) && Object.keys(observers).length > 0 && (
+            {Object.keys(obs).length > 0 && (
               <ProvideViewIcon
                 size="small"
                 title={_(
@@ -166,10 +165,10 @@ const Row = ({
         <TaskStatus task={entity} links={links} />
       </TableData>
       <TableData>{renderReportTotal(entity, links)}</TableData>
-      <TableData>{renderReport(entity.last_report, links)}</TableData>
+      <TableData>{renderReport(lastReport, links)}</TableData>
       <TableData>
-        {!entity.isContainer() && isDefined(entity.last_report) && (
-          <SeverityBar severity={entity.last_report.severity} />
+        {!entity.isContainer() && hasValue(lastReport) && (
+          <SeverityBar severity={lastReport.severity} />
         )}
       </TableData>
       <TableData align="center">

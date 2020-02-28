@@ -18,16 +18,14 @@
  */
 import {_l} from 'gmp/locale/lang';
 
-import {isDefined, isArray, isString} from '../utils/identity';
+import {isDefined, isArray, hasValue} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
-import {normalizeType} from '../utils/entitytype';
 
 import {
   parseInt,
   parseProgressElement,
   parseYesNo,
-  parseText,
   parseDuration,
   NO_VALUE,
   YES_VALUE,
@@ -38,6 +36,10 @@ import Model, {parseModelFromElement} from '../model';
 import Report from './report';
 import Schedule from './schedule';
 import Scanner from './scanner';
+import Target from './target';
+import Alert from './alert';
+import ScanConfig from './scanconfig';
+import Tag from './tag';
 
 export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
@@ -87,8 +89,6 @@ export function parse_yes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
 }
 
-const parseIntoArray = value => (isArray(value) ? value : [value]);
-
 export const getTranslatableTaskStatus = status =>
   `${TASK_STATUS_TRANSLATIONS[status]}`;
 
@@ -132,125 +132,117 @@ class Task extends Model {
   }
 
   isContainer() {
-    return !isDefined(this.target);
+    return !hasValue(this.target);
   }
 
   getTranslatableStatus() {
     return getTranslatableTaskStatus(this.status);
   }
 
-  static parseElement(element) {
-    const copy = super.parseElement(element);
+  static parseObject(object) {
+    const copy = super.parseObject(object);
 
-    const {report_count} = element;
+    const {reportCount} = object;
 
-    if (isDefined(report_count)) {
-      copy.report_count = {...report_count};
-      copy.report_count.total = parseInt(report_count.__text);
-      copy.report_count.finished = parseInt(report_count.finished);
+    if (isDefined(reportCount)) {
+      copy.reportCount = {...reportCount};
+      copy.reportCount.total = parseInt(reportCount.total);
+      copy.reportCount.finished = parseInt(reportCount.finished);
     }
 
-    if (isDefined(element.observers)) {
-      copy.observers = {};
-      if (isString(element.observers) && element.observers.length > 0) {
-        copy.observers.user = element.observers.split(' ');
-      } else {
-        if (isDefined(element.observers.__text)) {
-          copy.observers.user = parseText(element.observers).split(' ');
-        }
-        if (isDefined(element.observers.role)) {
-          copy.observers.role = parseIntoArray(element.observers.role);
-        }
-        if (isDefined(element.observers.group)) {
-          copy.observers.group = parseIntoArray(element.observers.group);
-        }
-      }
-    }
-
-    copy.alterable = parseYesNo(element.alterable);
-    copy.result_count = parseInt(element.result_count);
-
-    const reports = ['last_report', 'current_report'];
+    copy.alterable = parseYesNo(object.alterable);
+    copy.resultCount = parseInt(object.resultCount); // this doesn't exist in selene yet. Need to add.
+    const reports = ['lastReport', 'currentReport'];
 
     reports.forEach(name => {
-      const report = element[name];
-      if (isDefined(report)) {
-        copy[name] = Report.fromElement(report.report);
+      const report = object[name];
+      if (hasValue(report)) {
+        copy[name] = Report.fromObject(report);
       }
     });
 
-    // slave isn't really an entity type but it has an id
-    const models = ['config', 'slave', 'target'];
-    models.forEach(item => {
-      const name = item;
-
-      const data = element[name];
-      if (isDefined(data) && !isEmpty(data._id)) {
-        copy[name] = parseModelFromElement(data, normalizeType(name));
-      } else {
-        delete copy[name];
-      }
-    });
-
-    if (isDefined(element.alert)) {
-      copy.alerts = map(element.alert, alert =>
-        parseModelFromElement(alert, 'alert'),
-      );
-      delete copy.alert;
+    if (hasValue(object.target)) {
+      copy.target = Target.fromObject(object.target);
+    } else {
+      delete copy.target;
     }
 
-    if (isDefined(element.scanner) && !isEmpty(element.scanner._id)) {
-      copy.scanner = Scanner.fromElement(element.scanner);
+    // slave isn't really an entity type but it has an id
+    if (isDefined(object.slave)) {
+      const data = object.slave;
+      if (isDefined(data) && !isEmpty(data._id)) {
+        copy.slave = parseModelFromElement(data, 'slave');
+      } else {
+        delete copy.slave;
+      }
+    }
+
+    if (hasValue(object.scanConfig)) {
+      copy.config = ScanConfig.fromObject(object.scanConfig);
+    }
+
+    delete copy.scanConfig;
+
+    if (hasValue(object.alerts)) {
+      copy.alerts = map(object.alerts, alert => Alert.fromObject(alert));
+    } else {
+      delete copy.alerts;
+    }
+
+    if (hasValue(object.scanner) && !isEmpty(object.scanner.uuid)) {
+      copy.scanner = Scanner.fromElement(object.scanner);
     } else {
       delete copy.scanner;
     }
 
-    if (isDefined(element.schedule) && !isEmpty(element.schedule._id)) {
-      copy.schedule = Schedule.fromElement(element.schedule);
+    if (hasValue(object.schedule) && !isEmpty(object.schedule.uuid)) {
+      copy.schedule = Schedule.fromObject(object.schedule);
     } else {
       delete copy.schedule;
     }
 
-    copy.schedule_periods = parseInt(element.schedule_periods);
-
-    copy.progress = parseProgressElement(element.progress);
+    copy.progress = parseProgressElement(object.progress);
 
     const prefs = {};
 
-    if (copy.preferences && isArray(element.preferences.preference)) {
-      for (const pref of element.preferences.preference) {
-        switch (pref.scanner_name) {
+    if (copy.preferences && isArray(object.preferences)) {
+      for (const pref of object.preferences) {
+        switch (pref.name) {
           case 'in_assets':
-            copy.in_assets = parse_yes(pref.value);
+            copy.inAssets = parse_yes(pref.value);
             break;
           case 'assets_apply_overrides':
-            copy.apply_overrides = parse_yes(pref.value);
+            copy.applyOverrides = parse_yes(pref.value);
             break;
           case 'assets_min_qod':
-            copy.min_qod = parseInt(pref.value);
+            copy.minQod = parseInt(pref.value);
             break;
           case 'auto_delete':
-            copy.auto_delete =
+            copy.autoDelete =
               pref.value === AUTO_DELETE_KEEP
                 ? AUTO_DELETE_KEEP
                 : AUTO_DELETE_NO;
             break;
           case 'auto_delete_data':
-            const value = parseInt(pref.value);
-            copy.auto_delete_data =
-              value === 0
+            copy.autoDeleteData =
+              pref.value === '0'
                 ? AUTO_DELETE_KEEP_DEFAULT_VALUE
                 : parseInt(pref.value);
             break;
           case 'max_hosts':
+            copy.maxHosts = parseInt(pref.value);
+            delete copy.max_hosts;
+            break;
           case 'max_checks':
-            copy[pref.scanner_name] = parseInt(pref.value);
+            copy.maxChecks = parseInt(pref.value);
+            delete copy.max_checks;
             break;
           case 'source_iface':
-            copy.source_iface = pref.value;
+            copy.sourceIface = pref.value; // is this defined in selene?
+            delete copy.source_iface;
             break;
           default:
-            prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
+            prefs[pref.name] = {value: pref.value, name: pref.name};
             break;
         }
       }
@@ -258,19 +250,30 @@ class Task extends Model {
 
     copy.preferences = prefs;
 
-    if (isDefined(element.average_duration)) {
-      copy.average_duration = parseDuration(element.average_duration);
+    if (isDefined(object.average_duration)) {
+      copy.averageDuration = parseDuration(object.average_duration);
     }
 
+    if (hasValue(object.hostsOrdering)) {
+      copy.hostsOrdering = object.hostsOrdering.toLowerCase();
+    }
     if (
-      copy.hosts_ordering !== HOSTS_ORDERING_RANDOM &&
-      copy.hosts_ordering !== HOSTS_ORDERING_REVERSE &&
-      copy.hosts_ordering !== HOSTS_ORDERING_SEQUENTIAL
+      copy.hostsOrdering !== HOSTS_ORDERING_RANDOM &&
+      copy.hostsOrdering !== HOSTS_ORDERING_REVERSE &&
+      copy.hostsOrdering !== HOSTS_ORDERING_SEQUENTIAL
     ) {
-      delete copy.hosts_ordering;
+      delete copy.hostsOrdering;
     }
 
-    copy.usageType = element.usage_type;
+    copy.usageType = object.usage_type;
+
+    if (hasValue(object.userTags)) {
+      copy.userTags = object.userTags.tags.map(tag => {
+        return Tag.fromObject(tag);
+      });
+    } else {
+      copy.userTags = [];
+    }
 
     return copy;
   }

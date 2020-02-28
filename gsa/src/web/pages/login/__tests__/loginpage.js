@@ -21,10 +21,30 @@ import React from 'react';
 import Logger from 'gmp/log';
 
 import {rendererWith, fireEvent, waitForElement} from 'web/utils/testing';
+import {MockedProvider} from '@apollo/react-testing';
 
-import LoginPage from '../loginpage';
+import LoginPage, {LOGIN} from '../loginpage';
 
 Logger.setDefaultLevel('silent');
+
+const mocks = [
+  {
+    request: {
+      query: LOGIN,
+      variables: {
+        username: 'foo',
+        password: 'bar',
+      },
+    },
+    result: {
+      data: {
+        login: {
+          ok: true,
+        },
+      },
+    },
+  },
+];
 
 describe('LoginPagetests', () => {
   test('should render Loginpage', () => {
@@ -34,7 +54,11 @@ describe('LoginPagetests', () => {
 
     const {render} = rendererWith({gmp, router: true, store: true});
 
-    const {baseElement} = render(<LoginPage />);
+    const {baseElement} = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LoginPage />
+      </MockedProvider>,
+    );
 
     expect(baseElement).toMatchSnapshot();
   });
@@ -60,7 +84,11 @@ describe('LoginPagetests', () => {
     };
     const {render} = rendererWith({gmp, router: true, store: true});
 
-    const {getByName, getByTestId} = render(<LoginPage />);
+    const {getByName, getByTestId} = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LoginPage />
+      </MockedProvider>,
+    );
 
     const usernameField = getByName('username');
     const passwordField = getByName('password');
@@ -84,7 +112,11 @@ describe('LoginPagetests', () => {
     };
     const {render} = rendererWith({gmp, router: true, store: true});
 
-    const {queryByTestId} = render(<LoginPage />);
+    const {queryByTestId} = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LoginPage />
+      </MockedProvider>,
+    );
 
     expect(queryByTestId('guest-login')).not.toBeInTheDocument();
     expect(queryByTestId('guest-login-button')).not.toBeInTheDocument();
@@ -111,7 +143,11 @@ describe('LoginPagetests', () => {
     };
     const {render} = rendererWith({gmp, router: true, store: true});
 
-    const {getByTestId} = render(<LoginPage />);
+    const {getByTestId} = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LoginPage />
+      </MockedProvider>,
+    );
 
     const button = getByTestId('guest-login-button');
     fireEvent.click(button);
@@ -135,7 +171,11 @@ describe('LoginPagetests', () => {
     };
     const {render} = rendererWith({gmp, router: true, store: true});
 
-    const {getByName, getByTestId} = render(<LoginPage />);
+    const {getByName, getByTestId} = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LoginPage />
+      </MockedProvider>,
+    );
 
     const usernameField = getByName('username');
     const passwordField = getByName('password');
@@ -172,7 +212,11 @@ describe('LoginPagetests', () => {
     };
     const {render, history} = rendererWith({gmp, router: true, store: true});
 
-    render(<LoginPage />);
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LoginPage />
+      </MockedProvider>,
+    );
 
     expect(history.location.pathname).toMatch(/^\/$/);
   });

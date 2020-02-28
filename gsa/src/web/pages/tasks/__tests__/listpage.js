@@ -33,8 +33,9 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
 import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
-
+import {MockedProvider} from '@apollo/react-testing';
 import TaskPage, {ToolBarIcons} from '../listpage';
+import gql from 'graphql-tag';
 
 setLocale('en');
 
@@ -121,6 +122,27 @@ const renewSession = jest.fn().mockResolvedValue({
   foo: 'bar',
 });
 
+const FOO = gql`
+  query {
+    bar {
+      lorem
+    }
+  }
+`;
+
+const mocks = [
+  {
+    request: {
+      query: FOO,
+    },
+    result: {
+      data: {
+        ipsum: 'dolor',
+      },
+    },
+  },
+];
+
 describe('TaskPage tests', () => {
   test('should render full TaskPage', async () => {
     const gmp = {
@@ -173,7 +195,11 @@ describe('TaskPage tests', () => {
       entitiesLoadingActions.success([task], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(<TaskPage />);
+    const {baseElement, getAllByTestId} = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <TaskPage />
+      </MockedProvider>,
+    );
 
     await waitForElement(() => baseElement.querySelectorAll('table'));
 
@@ -292,7 +318,11 @@ describe('TaskPage tests', () => {
       entitiesLoadingActions.success([task], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(<TaskPage />);
+    const {baseElement, getAllByTestId} = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <TaskPage />
+      </MockedProvider>,
+    );
 
     await waitForElement(() => baseElement.querySelectorAll('table'));
 

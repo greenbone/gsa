@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2020 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,32 +16,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
 
-import ReactDOM from 'react-dom';
+export const toGraphQL = query => data => {
+  return query({variables: data});
+};
 
-import App from './web/app.js';
-import {ApolloProvider} from 'react-apollo';
-import {ApolloClient} from 'apollo-client';
-import {createHttpLink} from 'apollo-link-http';
-import {InMemoryCache} from 'apollo-cache-inmemory';
-
-const httpLink = createHttpLink({
-  // where the django-graphene server is
-  uri: 'http://127.0.0.1:8000/selene/graphql/',
-  credentials: 'include',
-});
-
-const client = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache(),
-});
-
-ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
-  document.getElementById('app'),
-);
-
-// vim: set ts=2 sw=2 tw=80:
+export const toFruitfulQuery = query => gql => vars => {
+  return query(gql, {variables: vars});
+};

@@ -17,7 +17,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+
+import {useMutation} from '@apollo/react-hooks';
 
 import {connect} from 'react-redux';
 
@@ -56,6 +58,16 @@ import {
 import {isLoggedIn} from 'web/store/usersettings/selectors';
 
 import LoginForm from './loginform';
+
+import gql from 'graphql-tag';
+
+export const LOGIN = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      ok
+    }
+  }
+`;
 
 const log = logger.getLogger('web.login');
 
@@ -108,42 +120,34 @@ const isIE11 = () =>
     ? +navigator.userAgent.match(/Trident\/([\d.]+)/)[1] >= 7
     : false;
 
-class LoginPage extends React.Component {
-  constructor(props) {
-    super(props);
+const LoginPage = props => {
+  const [error, setError] = useState(false);
+  const [loginGql] = useMutation(LOGIN);
+  const handleSubmit = (username, password) => {
+    login(username, password);
+  };
 
-    this.state = {
-      error: false,
-    };
+  const handleGuestLogin = () => {
+    const {gmp} = props;
+    login(gmp.settings.guestUsername, gmp.settings.guestPassword);
+  };
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleGuestLogin = this.handleGuestLogin.bind(this);
-  }
-
-  handleSubmit(username, password) {
-    this.login(username, password);
-  }
-
-  handleGuestLogin() {
-    const {gmp} = this.props;
-    this.login(gmp.settings.guestUsername, gmp.settings.guestPassword);
-  }
-
-  login(username, password) {
-    const {gmp} = this.props;
+  const login = (username, password) => {
+    loginGql({variables: {username: username, password: password}});
+    const {gmp} = props;
 
     gmp.login(username, password).then(
       data => {
         const {locale, timezone, sessionTimeout} = data;
 
-        const {location, history} = this.props;
+        const {location, history} = props;
 
-        this.props.setTimezone(timezone);
-        this.props.setLocale(locale);
-        this.props.setSessionTimeout(sessionTimeout);
-        this.props.setUsername(username);
+        props.setTimezone(timezone);
+        props.setLocale(locale);
+        props.setSessionTimeout(sessionTimeout);
+        props.setUsername(username);
         // must be set before changing the location
-        this.props.setIsLoggedIn(true);
+        props.setIsLoggedIn(true);
 
         if (
           location &&
@@ -158,68 +162,64 @@ class LoginPage extends React.Component {
       },
       rej => {
         log.error(rej);
-        this.setState({error: rej});
+        setError(rej);
       },
     );
-  }
+  };
 
-  componentDidMount() {
-    const {history, isLoggedIn = false} = this.props; // eslint-disable-line no-shadow
+  useEffect(() => {
+    const {history, isLoggedIn = false} = props; // eslint-disable-line no-shadow
 
-    // redirect user to main page if he is already logged in
     if (isLoggedIn) {
       history.replace('/');
     }
-  }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  render() {
-    const {error} = this.state;
-    const {gmp} = this.props;
+  const {gmp} = props;
 
-    let message;
+  let message;
 
-    if (error) {
-      if (error.reason === Rejection.REASON_UNAUTHORIZED) {
-        message = _('Login Failed. Invalid password or username.');
-      } else if (isEmpty(error.message)) {
-        message = _('Unknown error on login.');
-      } else {
-        message = error.message;
-      }
+  if (error) {
+    if (error.reason === Rejection.REASON_UNAUTHORIZED) {
+      message = _('Login Failed. Invalid password or username.');
+    } else if (isEmpty(error.message)) {
+      message = _('Unknown error on login.');
+    } else {
+      message = error.message;
     }
-
-    const showGuestLogin =
-      isDefined(gmp.settings.guestUsername) &&
-      isDefined(gmp.settings.guestPassword);
-
-    const showLogin = !gmp.settings.disableLoginForm;
-    const showProtocolInsecure = window.location.protocol !== 'https:';
-
-    return (
-      <StyledLayout>
-        <LoginHeader />
-        <MenuSpacer />
-        <LoginBox>
-          <LoginSpacer />
-          <LoginLayout flex="column" className="login">
-            <GreenboneLogo />
-            <LoginForm
-              error={message}
-              showGuestLogin={showGuestLogin}
-              showLogin={showLogin}
-              showProtocolInsecure={showProtocolInsecure}
-              isIE11={isIE11()}
-              onGuestLoginClick={this.handleGuestLogin}
-              onSubmit={this.handleSubmit}
-            />
-          </LoginLayout>
-          <LoginSpacer />
-        </LoginBox>
-        <Footer />
-      </StyledLayout>
-    );
   }
-}
+
+  const showGuestLogin =
+    isDefined(gmp.settings.guestUsername) &&
+    isDefined(gmp.settings.guestPassword);
+
+  const showLogin = !gmp.settings.disableLoginForm;
+  const showProtocolInsecure = window.location.protocol !== 'https:';
+
+  return (
+    <StyledLayout>
+      <LoginHeader />
+      <MenuSpacer />
+      <LoginBox>
+        <LoginSpacer />
+        <LoginLayout flex="column" className="login">
+          <GreenboneLogo />
+          <LoginForm
+            error={message}
+            showGuestLogin={showGuestLogin}
+            showLogin={showLogin}
+            showProtocolInsecure={showProtocolInsecure}
+            isIE11={isIE11()}
+            onGuestLoginClick={handleGuestLogin}
+            onSubmit={handleSubmit}
+          />
+        </LoginLayout>
+        <LoginSpacer />
+      </LoginBox>
+      <Footer />
+    </StyledLayout>
+  );
+};
 
 LoginPage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
@@ -248,10 +248,7 @@ const mapStateToProp = (rootState, ownProps) => ({
 export default compose(
   withRouter,
   withGmp,
-  connect(
-    mapStateToProp,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProp, mapDispatchToProps),
 )(LoginPage);
 
 // vim: set ts=2 sw=2 tw=80:

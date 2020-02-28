@@ -37,6 +37,8 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
+import {MockedProvider} from '@apollo/react-testing';
+import gql from 'graphql-tag';
 
 if (!isDefined(window.URL)) {
   window.URL = {};
@@ -302,6 +304,27 @@ const getEntities = jest.fn().mockResolvedValue({
   },
 });
 
+const FOO = gql`
+  query {
+    bar {
+      lorem
+    }
+  }
+`;
+
+const mocks = [
+  {
+    request: {
+      query: FOO,
+    },
+    result: {
+      data: {
+        ipsum: 'dolor',
+      },
+    },
+  },
+];
+
 describe('Task Detailspage tests', () => {
   test('should render full Detailspage', () => {
     const getTask = jest.fn().mockResolvedValue({
@@ -350,7 +373,9 @@ describe('Task Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', task));
 
     const {baseElement, element, getAllByTestId} = render(
-      <Detailspage id="12345" />,
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
     );
 
     expect(element).toMatchSnapshot();
@@ -462,7 +487,11 @@ describe('Task Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task2));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement, element} = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
+    );
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[22]);
 
@@ -516,7 +545,11 @@ describe('Task Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task2));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement, element} = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
+    );
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[24]);
 
@@ -595,7 +628,11 @@ describe('Task Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task5));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    const {getAllByTestId} = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
+    );
 
     const icons = getAllByTestId('svg-icon');
 

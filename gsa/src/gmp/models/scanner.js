@@ -18,7 +18,7 @@
  */
 import {_} from '../locale/lang';
 
-import {isDefined, isString} from '../utils/identity';
+import {isDefined, isString, hasValue} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
@@ -45,6 +45,21 @@ export const openVasScannersFilter = config =>
   config.scannerType === OPENVAS_SCANNER_TYPE;
 export const ospScannersFilter = config =>
   config.scannerType === OSP_SCANNER_TYPE;
+
+export function scannerTypeInt(scannerType) {
+  if (scannerType === 'OSP_SCANNER_TYPE') {
+    return OSP_SCANNER_TYPE;
+  } else if (scannerType === 'OPENVAS_SCANNER_TYPE') {
+    return OPENVAS_SCANNER_TYPE;
+  } else if (scannerType === 'CVE_SCANNER_TYPE') {
+    return CVE_SCANNER_TYPE;
+  } else if (scannerType === 'GMP_SCANNER_TYPE') {
+    return GMP_SCANNER_TYPE;
+  } else if (scannerType === 'GREENBONE_SENSOR_SCANNER_TYPE') {
+    return GREENBONE_SENSOR_SCANNER_TYPE;
+  }
+  return _('Unknown type ({{type}})', {type: scannerType});
+}
 
 export function scannerTypeName(scannerType) {
   scannerType = parseInt(scannerType);
@@ -81,7 +96,15 @@ class Scanner extends Model {
   static parseElement(element) {
     const ret = super.parseElement(element);
 
-    ret.scannerType = parseInt(element.type);
+    if (hasValue(element.uuid) && !hasValue(element.id)) {
+      ret.id = element.uuid;
+    }
+
+    if (hasValue(element.scannerType)) {
+      ret.scannerType = scannerTypeInt(element.scannerType);
+    } else {
+      ret.scannerType = parseInt(element.type);
+    }
 
     ret.credential =
       isDefined(ret.credential) && !isEmpty(ret.credential._id)
