@@ -33,58 +33,11 @@ import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import {hostsFilter} from 'web/components/processmap/processmaploader';
 
+import {getMockProcessMap} from '../__mocks__/mockprocessmap';
+
 import ProcessMap from '../processmap';
 
 setLocale('en');
-
-export const getMockProcessMap = () => {
-  const mockProcessMap = {
-    edges: {'11': {id: '11', source: '21', target: '22', type: 'edge'}},
-    processes: {
-      '21': {
-        color: '#f0a519',
-        comment: 'bar',
-        derivedSeverity: 5,
-        id: '21',
-        name: 'foo',
-        severity: 5,
-        tagId: '31',
-        type: 'process',
-        x: 600,
-        y: 300,
-      },
-      '22': {
-        color: '#f0a519',
-        comment: 'ipsum',
-        derivedSeverity: 5,
-        id: '22',
-        name: 'lorem',
-        severity: undefined,
-        tagId: '32',
-        type: 'process',
-        x: 300,
-        y: 200,
-      },
-      '23': {
-        color: '#c83814',
-        comment: 'world',
-        derivedSeverity: 10,
-        id: '23',
-        name: 'hello',
-        severity: 10,
-        tagId: 33,
-        type: 'process',
-        x: 600,
-        y: 200,
-      },
-    },
-  };
-  return {
-    mockProcessMap,
-    processes: mockProcessMap.processes,
-    edges: mockProcessMap.edges,
-  };
-};
 
 const hostFilter = hostsFilter('31');
 
