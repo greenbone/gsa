@@ -21,7 +21,7 @@ import 'core-js/features/object/values';
 
 import ical from 'ical.js';
 
-import uuid from 'uuid/v4';
+import {v4 as uuid} from 'uuid';
 
 import Logger from 'gmp/log';
 

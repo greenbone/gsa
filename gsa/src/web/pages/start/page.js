@@ -18,7 +18,7 @@
  */
 import React from 'react';
 
-import uuid from 'uuid/v4';
+import {v4 as uuid} from 'uuid';
 
 import memoize from 'memoize-one';
 
@@ -558,10 +558,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(StartPage);
 
 // vim: set ts=2 sw=2 tw=80:
