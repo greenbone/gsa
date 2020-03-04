@@ -110,7 +110,7 @@
   "Always": "Immer",
   "An error occurred during Testing the alert {{name}}": "Es ist ein Fehler während des Tests der Benachrichtigung {{name}} aufgetreten",
   "An error occurred during making the request. Most likely the web server does not respond.": "Es ist ein Fehler während der Anfrage aufgetreten. Höchstwahrscheinlich antwortet der Webserver nicht.",
-  "An error occurred in this chart.": "Es ist ein Fehler in diesem Graphen aufgetreten.",
+  "An error occurred in this chart.": "Es ist ein Fehler in diesem Diagramm aufgetreten.",
   "An error occurred in this dialog.": "Es ist ein Fehler in diesem Dialog aufgetreten.",
   "An error occurred on this dashboard.": "Es ist ein Fehler in diesem Dashboard aufgetreten.",
   "An error occurred on this page": "Es ist ein Fehler auf dieser Seite aufgetreten",
