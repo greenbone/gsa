@@ -26,7 +26,7 @@ import Filter from 'gmp/models/filter';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
-import {getMockProcessMap} from './processmap';
+import {getMockProcessMap} from '../__mocks__/mockprocessmap';
 
 import ProcessPanel from '../processpanel';
 
