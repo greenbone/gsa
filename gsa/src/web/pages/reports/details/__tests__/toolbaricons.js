@@ -26,7 +26,7 @@ import Filter from 'gmp/models/filter';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
-import {getMockReport} from './hoststab';
+import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
 
 import ToolBarIcons from '../toolbaricons';
 
