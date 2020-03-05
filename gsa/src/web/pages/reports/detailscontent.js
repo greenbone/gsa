@@ -563,7 +563,7 @@ PageContent.propTypes = {
   isLoading: PropTypes.bool,
   isLoadingFilters: PropTypes.bool,
   isUpdating: PropTypes.bool,
-  operatingSystemsCounts: PropTypes.object,
+  operatingSystemsCounts: PropTypes.counts,
   pageFilter: PropTypes.filter,
   portsCounts: PropTypes.counts,
   reportError: PropTypes.error,
