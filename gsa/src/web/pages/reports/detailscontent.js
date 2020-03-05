@@ -576,7 +576,7 @@ PageContent.propTypes = {
   showSuccessMessage: PropTypes.func.isRequired,
   sorting: PropTypes.object,
   task: PropTypes.model,
-  tlsCertificatesCounts: PropTypes.object,
+  tlsCertificatesCounts: PropTypes.counts,
   onActivateTab: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
