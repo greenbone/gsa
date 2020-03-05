@@ -565,7 +565,7 @@ PageContent.propTypes = {
   isUpdating: PropTypes.bool,
   operatingSystemsCounts: PropTypes.object,
   pageFilter: PropTypes.filter,
-  portsCounts: PropTypes.object,
+  portsCounts: PropTypes.counts,
   reportError: PropTypes.error,
   reportFilter: PropTypes.filter,
   reportId: PropTypes.id.isRequired,
