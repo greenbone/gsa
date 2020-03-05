@@ -27,7 +27,7 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith} from 'web/utils/testing';
 
-import {getMockReport} from '../details/__tests__/hoststab';
+import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
 
 import DetailsContent from '../detailscontent';
 

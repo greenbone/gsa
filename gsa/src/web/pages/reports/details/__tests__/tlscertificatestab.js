@@ -26,7 +26,7 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
-import {getMockReport} from './hoststab';
+import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
 
 import TLSCertificatesTab from '../tlscertificatestab';
 

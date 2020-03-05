@@ -27,7 +27,7 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith} from 'web/utils/testing';
 
-import {getMockDeltaReport} from '../details/__tests__/deltaresultstab';
+import {getMockDeltaReport} from 'web/pages/reports/__mocks__/mockdeltareport';
 
 import DeltaDetailsContent from '../deltadetailscontent';
 
