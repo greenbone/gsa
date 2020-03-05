@@ -554,7 +554,7 @@ PageContent.propTypes = {
   activeTab: PropTypes.number,
   applicationsCounts: PropTypes.counts,
   closedCvesCounts: PropTypes.counts,
-  cvesCounts: PropTypes.objects,
+  cvesCounts: PropTypes.counts,
   entity: PropTypes.model,
   errorsCounts: PropTypes.object,
   filters: PropTypes.array,
