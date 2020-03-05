@@ -154,6 +154,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.2] - unreleased
 
 ### Added
+- Show passphrase field in credential dialog for cc type [#2006](https://github.com/greenbone/gsa/pull/2006)
 - Display error details at report details page [#1862](https://github.com/greenbone/gsa/pull/1862)
 - Added warnings to content composer if reportResultThreshold is exceeded [#1852](https://github.com/greenbone/gsa/pull/1852)
 - Added parseText to model.js to parse single space summary [#1829](https://github.com/greenbone/gsa/pull/1829)
@@ -211,6 +212,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Lower memory usage when getting a report [#1858](https://github.com/greenbone/gvmd/pull/1858)
 
 ### Fixed
+- Fixed nvt family links not changing the filter [#1997](https://github.com/greenbone/gsa/pull/1997)
 - Use correct capabilities for task icons [#1973](https://github.com/greenbone/gsa/pull/1973)
 - Fixed ProvideViewIcon for tasks is only shown for users but not for groups and roles [#1968](https://github.com/greenbone/gsa/pull/1968)
 - Fixed missing delete button for host identifiers [#1959](https://github.com/greenbone/gsa/pull/1959)

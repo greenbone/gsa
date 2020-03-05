@@ -30,8 +30,6 @@ import EntitiesCommand from 'gmp/commands/entities';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Filter from 'gmp/models/filter';
 import Settings from 'gmp/models/settings';
 
@@ -126,7 +124,13 @@ const stringOrFalse = ReactPropTypes.oneOfType([
   ReactPropTypes.oneOf([false]),
 ]);
 
-const counts = ReactPropTypes.instanceOf(CollectionCounts);
+const counts = ReactPropTypes.shape({
+  all: ReactPropTypes.number.isRequired,
+  filtered: ReactPropTypes.number.isRequired,
+  first: ReactPropTypes.number,
+  length: ReactPropTypes.number,
+  rows: ReactPropTypes.number,
+});
 
 const set = ReactPropTypes.instanceOf(Set);
 

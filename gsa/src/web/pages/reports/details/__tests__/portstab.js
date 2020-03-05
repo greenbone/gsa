@@ -26,7 +26,7 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith} from 'web/utils/testing';
 
-import {getMockReport} from './hoststab';
+import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
 
 import PortsTab from '../portstab';
 

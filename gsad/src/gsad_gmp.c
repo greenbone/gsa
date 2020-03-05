@@ -3190,6 +3190,7 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
       else if (str_equal (type, "cc"))
         {
           CHECK_VARIABLE_INVALID (certificate, "Create Credential");
+          CHECK_VARIABLE_INVALID (passphrase, "Create Credential");
           CHECK_VARIABLE_INVALID (private_key, "Create Credential");
 
           ret = gmpf (
@@ -3201,11 +3202,13 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
             "<certificate>%s</certificate>"
             "<key>"
             "<private>%s</private>"
+            "<phrase>%s</phrase>"
             "</key>"
             "<allow_insecure>%s</allow_insecure>"
             "</create_credential>",
             name, comment ? comment : "", type, certificate ? certificate : "",
-            private_key ? private_key : "", allow_insecure);
+            private_key ? private_key : "", passphrase ? passphrase : "",
+            allow_insecure);
         }
       else if (str_equal (type, "snmp"))
         {
@@ -3677,7 +3680,7 @@ char *
 save_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
                      params_t *params, cmd_response_data_t *response_data)
 {
-  int ret, change_password, change_ssh_passphrase;
+  int ret, change_password, change_ssh_passphrase, change_passphrase;
   int change_community, change_privacy_password;
   gchar *html, *response;
   const char *credential_id, *public_key;
@@ -3797,18 +3800,25 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
     }
   else if (str_equal (type, "cc"))
     {
+      change_passphrase = params_value_bool (params, "change_passphrase");
+
       if ((certificate && strcmp (certificate, "")))
         {
           xml_string_append (command, "<certificate>%s</certificate>",
                              certificate);
         }
 
-      if ((private_key && strcmp (private_key, "")))
+      if ((private_key && strcmp (private_key, "")) || change_passphrase)
         {
           xml_string_append (command, "<key>");
-          xml_string_append (command, "<private>%s</private>", private_key);
+          if (change_passphrase)
+            xml_string_append (command, "<phrase>%s</phrase>", passphrase);
+          if (private_key)
+            xml_string_append (command, "<private>%s</private>", private_key);
           xml_string_append (command, "</key>");
         }
+
+
     }
   else if (str_equal (type, "usk"))
     {
