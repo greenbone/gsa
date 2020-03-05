@@ -282,7 +282,7 @@ export const getMockReport = () => {
     operatingsystems: entity.report.operatingsystems,
     cves: entity.report.cves,
     closedCves: entity.report.closed_cves,
-    tlsCertificates: entity.report.tls_certificates,
+    tlsCertificates: entity.report.tlsCertificates,
     errors: entity.report.errors,
     task: entity.report.task,
   };
