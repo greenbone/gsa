@@ -556,7 +556,7 @@ PageContent.propTypes = {
   closedCvesCounts: PropTypes.counts,
   cvesCounts: PropTypes.counts,
   entity: PropTypes.model,
-  errorsCounts: PropTypes.object,
+  errorsCounts: PropTypes.counts,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
   hostsCounts: PropTypes.counts,
