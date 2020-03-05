@@ -559,7 +559,7 @@ PageContent.propTypes = {
   errorsCounts: PropTypes.object,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
-  hostsCounts: PropTypes.object,
+  hostsCounts: PropTypes.counts,
   isLoading: PropTypes.bool,
   isLoadingFilters: PropTypes.bool,
   isUpdating: PropTypes.bool,
