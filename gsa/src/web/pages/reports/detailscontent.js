@@ -553,7 +553,7 @@ const PageContent = ({
 PageContent.propTypes = {
   activeTab: PropTypes.number,
   applicationsCounts: PropTypes.counts,
-  closedCvesCounts: PropTypes.object,
+  closedCvesCounts: PropTypes.counts,
   cvesCounts: PropTypes.objects,
   entity: PropTypes.model,
   errorsCounts: PropTypes.object,
