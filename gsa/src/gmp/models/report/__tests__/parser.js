@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -89,17 +89,9 @@ describe('report parser tests', () => {
   test('should parse empty hosts', () => {
     const filterString = 'foo=bar';
     const hosts = parseHosts({}, filterString);
-    const counts = {
-      first: 0,
-      all: 0,
-      filtered: 0,
-      length: 0,
-      rows: 0,
-      last: 0,
-    };
 
     expect(hosts.entities.length).toEqual(0);
-    expect(hosts.counts).toEqual(counts);
+    expect(hosts.counts).toBeUndefined();
     expect(hosts.filter).toEqual('foo=bar');
   });
 
@@ -157,18 +149,10 @@ describe('report parser tests', () => {
   test('should parse empty ports', () => {
     const filterString = 'foo=bar';
     const report = {};
-    const counts = {
-      first: 0,
-      all: 0,
-      filtered: 0,
-      length: 0,
-      rows: 0,
-      last: 0,
-    };
     const ports = parsePorts(report, filterString);
 
     expect(ports.entities.length).toEqual(0);
-    expect(ports.counts).toEqual(counts);
+    expect(ports.counts).toBeUndefined();
     expect(ports.filter).toEqual('foo=bar');
   });
 
@@ -318,18 +302,10 @@ describe('report parser tests', () => {
   test('should parse empty apps', () => {
     const filterString = 'foo=bar rows=5';
     const report = {};
-    const counts = {
-      first: 0,
-      all: 0,
-      filtered: 0,
-      length: 0,
-      rows: 0,
-      last: 0,
-    };
     const apps = parseApps(report, filterString);
 
     expect(apps.entities.length).toEqual(0);
-    expect(apps.counts).toEqual(counts);
+    expect(apps.counts).toBeUndefined();
     expect(apps.filter).toEqual('foo=bar rows=5');
   });
 
@@ -453,18 +429,10 @@ describe('report parser tests', () => {
   test('should parse empty operating systems', () => {
     const filterString = 'foo=bar rows=5';
     const report = {};
-    const counts = {
-      first: 0,
-      all: 0,
-      filtered: 0,
-      length: 0,
-      rows: 0,
-      last: 0,
-    };
     const operatingSystems = parseOperatingSystems(report, filterString);
 
     expect(operatingSystems.entities.length).toEqual(0);
-    expect(operatingSystems.counts).toEqual(counts);
+    expect(operatingSystems.counts).toBeUndefined();
     expect(operatingSystems.filter).toEqual('foo=bar rows=5');
   });
 
@@ -566,36 +534,20 @@ describe('report parser tests', () => {
   test('should parse empty tls certificates', () => {
     const filterString = 'foo=bar rows=5';
     const report = {};
-    const counts = {
-      first: 0,
-      all: 0,
-      filtered: 0,
-      length: 0,
-      rows: 0,
-      last: 0,
-    };
     const tlsCerts = parseTlsCertificates(report, filterString);
 
     expect(tlsCerts.entities.length).toEqual(0);
-    expect(tlsCerts.counts).toEqual(counts);
+    expect(tlsCerts.counts).toBeUndefined();
     expect(tlsCerts.filter).toEqual('foo=bar rows=5');
   });
 
   test('should parse empty cves', () => {
     const filterString = 'foo=bar rows=5';
     const report = {};
-    const counts = {
-      first: 0,
-      all: 0,
-      filtered: 0,
-      length: 0,
-      rows: 0,
-      last: 0,
-    };
     const cves = parseCves(report, filterString);
 
     expect(cves.entities.length).toEqual(0);
-    expect(cves.counts).toEqual(counts);
+    expect(cves.counts).toBeUndefined();
     expect(cves.filter).toEqual('foo=bar rows=5');
   });
 
