@@ -570,7 +570,7 @@ PageContent.propTypes = {
   reportFilter: PropTypes.filter,
   reportId: PropTypes.id.isRequired,
   resetFilter: PropTypes.filter,
-  resultsCounts: PropTypes.objects,
+  resultsCounts: PropTypes.counts,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
