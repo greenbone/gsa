@@ -79,22 +79,31 @@ const Span = styled.span`
 
 const PageContent = ({
   activeTab,
+  applicationsCounts,
+  closedCvesCounts,
+  cvesCounts,
   entity,
+  errorsCounts,
   filters,
   gmp,
+  hostsCounts,
   isLoading = true,
   isLoadingFilters = true,
   isUpdating = false,
+  operatingSystemsCounts,
   pageFilter,
+  portsCounts,
   reportError,
   reportFilter,
   reportId,
   resetFilter,
+  resultsCounts,
   sorting,
   showError,
   showErrorMessage,
   showSuccessMessage,
   task,
+  tlsCertificatesCounts,
   onActivateTab,
   onAddToAssetsClick,
   onTlsCertificateDownloadClick,
@@ -235,46 +244,43 @@ const PageContent = ({
               >
                 <Tab>{_('Information')}</Tab>
                 <Tab>
-                  <TabTitle title={_('Results')} counts={results.counts} />
+                  <TabTitle title={_('Results')} counts={resultsCounts} />
                 </Tab>
                 <Tab>
-                  <TabTitle title={_('Hosts')} counts={hosts.counts} />
+                  <TabTitle title={_('Hosts')} counts={hostsCounts} />
                 </Tab>
                 <Tab>
-                  <TabTitle title={_('Ports')} counts={ports.counts} />
+                  <TabTitle title={_('Ports')} counts={portsCounts} />
                 </Tab>
                 <Tab>
                   <TabTitle
                     title={_('Applications')}
-                    counts={applications.counts}
+                    counts={applicationsCounts}
                   />
                 </Tab>
                 <Tab>
                   <TabTitle
                     title={_('Operating Systems')}
-                    counts={operatingsystems.counts}
+                    counts={operatingSystemsCounts}
                   />
                 </Tab>
                 <Tab>
-                  <TabTitle title={_('CVEs')} counts={cves.counts} />
+                  <TabTitle title={_('CVEs')} counts={cvesCounts} />
                 </Tab>
                 <Tab>
                   <TabTitle
                     title={_('Closed CVEs')}
-                    counts={closed_cves.counts}
+                    counts={closedCvesCounts}
                   />
                 </Tab>
                 <Tab>
                   <TabTitle
                     title={_('TLS Certificates')}
-                    counts={tlsCertificates.counts}
+                    counts={tlsCertificatesCounts}
                   />
                 </Tab>
                 <Tab>
-                  <TabTitle
-                    title={_('Error Messages')}
-                    counts={errors.counts}
-                  />
+                  <TabTitle title={_('Error Messages')} counts={errorsCounts} />
                 </Tab>
                 <Tab>
                   <TabTitle title={_('User Tags')} count={userTagsCount} />
@@ -546,22 +552,31 @@ const PageContent = ({
 
 PageContent.propTypes = {
   activeTab: PropTypes.number,
+  applicationsCounts: PropTypes.object,
+  closedCvesCounts: PropTypes.object,
+  cvesCounts: PropTypes.objects,
   entity: PropTypes.model,
+  errorsCounts: PropTypes.object,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
+  hostsCounts: PropTypes.object,
   isLoading: PropTypes.bool,
   isLoadingFilters: PropTypes.bool,
   isUpdating: PropTypes.bool,
+  operatingSystemsCounts: PropTypes.object,
   pageFilter: PropTypes.filter,
+  portsCounts: PropTypes.object,
   reportError: PropTypes.error,
   reportFilter: PropTypes.filter,
   reportId: PropTypes.id.isRequired,
   resetFilter: PropTypes.filter,
+  resultsCounts: PropTypes.objects,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   sorting: PropTypes.object,
   task: PropTypes.model,
+  tlsCertificatesCounts: PropTypes.object,
   onActivateTab: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
