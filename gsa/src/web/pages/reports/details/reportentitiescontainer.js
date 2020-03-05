@@ -69,7 +69,8 @@ class ReportEntitiesContainer extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     const rows = getRows(props.filter, props.counts);
-    const {filtered} = props.counts;
+    const {counts = {}} = props;
+    const {filtered} = counts;
     const last = Math.floor(filtered / rows);
 
     if (state.page > last) {
@@ -162,11 +163,20 @@ class ReportEntitiesContainer extends React.Component {
       entitiesIndex,
       entitiesIndex + rows,
     );
-    const pagedCounts = counts.clone({
-      first: entitiesIndex + 1,
-      length: pagedEntities.length,
-      rows,
-    });
+    let pagedCounts;
+    if (isDefined(counts)) {
+      pagedCounts = counts.clone({
+        first: entitiesIndex + 1,
+        length: pagedEntities.length,
+        rows,
+      });
+    } else {
+      pagedCounts = {
+        first: 1,
+        length: 0,
+        rows,
+      };
+    }
 
     return children({
       entities: pagedEntities,
