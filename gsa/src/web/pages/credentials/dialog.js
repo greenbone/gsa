@@ -320,7 +320,9 @@ class CredentialsDialog extends React.Component {
                 </FormGroup>
               )}
 
-              {state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE && (
+              {(state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
+                state.credential_type ===
+                  CLIENT_CERTIFICATE_CREDENTIAL_TYPE) && (
                 <FormGroup title={_('Passphrase')}>
                   <Divider>
                     {is_edit && (

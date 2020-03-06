@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import uuid from 'uuid/v4';
+import {v4 as uuid} from 'uuid';
 
 import {isDefined} from '../utils/identity';
 
