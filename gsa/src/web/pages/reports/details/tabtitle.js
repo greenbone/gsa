@@ -33,12 +33,11 @@ const TabTitleCounts = styled.span`
   font-size: 0.7em;
 `;
 
-const TabTitle = ({title, counts, count}) => (
+const TabTitle = ({title, counts = {filtered: 0, all: 0}, count}) => (
   <Layout flex="column" align={['center', 'center']}>
     <span>{title}</span>
     <TabTitleCounts>
-      (<i>{isDefined(counts) ? _('{{filtered}} of {{all}}', counts) : count}</i>
-      )
+      (<i>{isDefined(count) ? count : _('{{filtered}} of {{all}}', counts)}</i>)
     </TabTitleCounts>
   </Layout>
 );

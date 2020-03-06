@@ -48,7 +48,6 @@ import {getRefs, hasRefType} from '../nvt';
 const emptyCollectionList = filter => {
   return {
     filter,
-    counts: new CollectionCounts(),
     entities: [],
   };
 };
