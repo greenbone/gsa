@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2019-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -83,10 +83,7 @@ class TestButton extends React.Component {
           text="The light will be switched on!"
         />
       );
-    } else if (
-      this.state.dialog &&
-      this.state.notification === 'Light off'
-    ) {
+    } else if (this.state.dialog && this.state.notification === 'Light off') {
       dialog = (
         <ConfirmationDialog
           title="Light Switch Alarm"

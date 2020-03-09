@@ -23,7 +23,7 @@ exports[`Footer tests should render footer with copyright 1`] = `
 <footer
   class="c0"
 >
-  Greenbone Security Assistant (GSA) Copyright (C) 2009-2019 by Greenbone Networks GmbH, 
+  Greenbone Security Assistant (GSA) Copyright (C) 2009-2020 by Greenbone Networks GmbH, 
   <a
     class="c1"
     href="http://www.greenbone.net"
