@@ -36,6 +36,7 @@ import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
 import {MockedProvider} from '@apollo/react-testing';
 import TaskPage, {ToolBarIcons} from '../listpage';
 import gql from 'graphql-tag';
+import {mock_get_tasks as mocks} from './mocks';
 
 setLocale('en');
 
@@ -122,27 +123,6 @@ const renewSession = jest.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const FOO = gql`
-  query {
-    bar {
-      lorem
-    }
-  }
-`;
-
-const mocks = [
-  {
-    request: {
-      query: FOO,
-    },
-    result: {
-      data: {
-        ipsum: 'dolor',
-      },
-    },
-  },
-];
-
 describe('TaskPage tests', () => {
   test('should render full TaskPage', async () => {
     const gmp = {
@@ -204,10 +184,8 @@ describe('TaskPage tests', () => {
     await waitForElement(() => baseElement.querySelectorAll('table'));
 
     const display = getAllByTestId('grid-item');
-    const icons = getAllByTestId('svg-icon');
+    let icons = getAllByTestId('svg-icon');
     const inputs = baseElement.querySelectorAll('input');
-    const header = baseElement.querySelectorAll('th');
-    const row = baseElement.querySelectorAll('tr');
     const selects = getAllByTestId('select-selected-value');
 
     // Toolbar Icons
@@ -234,6 +212,10 @@ describe('TaskPage tests', () => {
     );
     expect(display[2]).toHaveTextContent('Tasks by Status (Total: 0)');
 
+    await waitForElement(() => baseElement.querySelectorAll('th'));
+
+    const header = baseElement.querySelectorAll('th');
+
     // Table
     expect(header[0]).toHaveTextContent('Name');
     expect(header[1]).toHaveTextContent('Status');
@@ -243,18 +225,26 @@ describe('TaskPage tests', () => {
     expect(header[5]).toHaveTextContent('Trend');
     expect(header[6]).toHaveTextContent('Actions');
 
+    const row = baseElement.querySelectorAll('tr');
+
     expect(row[1]).toHaveTextContent('foo');
     expect(row[1]).toHaveTextContent('(bar)');
     expect(row[1]).toHaveTextContent('Done');
-    expect(row[1]).toHaveTextContent('Sat, Aug 10, 2019 2:51 PM CEST');
+    expect(row[1]).toHaveTextContent('Thu, Feb 27, 2020 2:20 PM CET');
     expect(row[1]).toHaveTextContent('5.0 (Medium)');
 
-    expect(icons[24]).toHaveAttribute('title', 'Start');
-    expect(icons[25]).toHaveAttribute('title', 'Task is not stopped');
-    expect(icons[26]).toHaveAttribute('title', 'Move Task to trashcan');
-    expect(icons[27]).toHaveAttribute('title', 'Edit Task');
-    expect(icons[28]).toHaveAttribute('title', 'Clone Task');
-    expect(icons[29]).toHaveAttribute('title', 'Export Task');
+    icons = getAllByTestId('svg-icon');
+
+    expect(icons[24]).toHaveAttribute(
+      'title',
+      'Task made visible for:\nUsers john, jane\nRoles r1, r2\nGroups g1, g2',
+    );
+    expect(icons[25]).toHaveAttribute('title', 'Start');
+    expect(icons[26]).toHaveAttribute('title', 'Task is not stopped');
+    expect(icons[27]).toHaveAttribute('title', 'Move Task to trashcan');
+    expect(icons[28]).toHaveAttribute('title', 'Edit Task');
+    expect(icons[29]).toHaveAttribute('title', 'Clone Task');
+    expect(icons[30]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should call commands for bulk actions', async () => {
@@ -329,15 +319,15 @@ describe('TaskPage tests', () => {
     const icons = getAllByTestId('svg-icon');
 
     await act(async () => {
-      expect(icons[31]).toHaveAttribute(
+      expect(icons[32]).toHaveAttribute(
         'title',
         'Move page contents to trashcan',
       );
-      fireEvent.click(icons[31]);
+      fireEvent.click(icons[32]);
       expect(deleteByFilter).toHaveBeenCalled();
 
-      expect(icons[32]).toHaveAttribute('title', 'Export page contents');
-      fireEvent.click(icons[32]);
+      expect(icons[33]).toHaveAttribute('title', 'Export page contents');
+      fireEvent.click(icons[33]);
       expect(exportByFilter).toHaveBeenCalled();
     });
   });
