@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -58,7 +58,10 @@ class SubscriptionProvider extends React.Component {
 
     return () => {
       const subscribers = this.getSubscribers(name); // eslint-disable-line no-shadow
-      this.setSubscribers(name, subscribers.filter(item => item !== func));
+      this.setSubscribers(
+        name,
+        subscribers.filter(item => item !== func),
+      );
     };
   }
 

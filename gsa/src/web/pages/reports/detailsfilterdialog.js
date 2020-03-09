@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -122,9 +122,6 @@ const FilterDialog = ({
 
 FilterDialog.propTypes = FilterDialogPropTypes;
 
-export default compose(
-  withCapabilities,
-  withFilterDialog(),
-)(FilterDialog);
+export default compose(withCapabilities, withFilterDialog())(FilterDialog);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -371,9 +371,6 @@ UserSettingsDialog = connect(rootState => {
   };
 })(UserSettingsDialog);
 
-export default compose(
-  withGmp,
-  withCapabilities,
-)(UserSettingsDialog);
+export default compose(withGmp, withCapabilities)(UserSettingsDialog);
 
 // vim: set ts=2 sw=2 tw=80:
