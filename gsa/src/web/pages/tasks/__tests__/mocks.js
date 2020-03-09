@@ -26,7 +26,7 @@ const lastReport = {
   timestamp: '2020-02-27T13:20:45Z',
 };
 
-const mock_task = {
+const mockTask = {
   data: {
     tasks: {
       nodes: [
@@ -90,26 +90,26 @@ const mock_task = {
   },
 };
 
-export const mock_get_tasks = [
+export const mockGetTasks = [
   {
     request: {
       query: GET_TASKS,
       variables: {filterString: 'foo=bar rows=2'},
     },
-    result: mock_task,
+    result: mockTask,
   },
   {
     request: {
       query: GET_TASKS,
       variables: {filterString: ''},
     },
-    result: mock_task,
+    result: mockTask,
   },
   {
     request: {
       query: GET_TASKS,
       variables: {filterString: ''},
     },
-    result: mock_task,
+    result: mockTask,
   },
 ];
