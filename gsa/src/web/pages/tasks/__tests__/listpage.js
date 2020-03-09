@@ -35,7 +35,7 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
 import {MockedProvider} from '@apollo/react-testing';
 import TaskPage, {ToolBarIcons} from '../listpage';
-import {mockGetTasks as mocks} from './mocks';
+import {mockGetTasks as mocks} from 'web/pages/tasks/graphql';
 
 setLocale('en');
 
