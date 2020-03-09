@@ -183,16 +183,11 @@ class ProcessMap extends React.Component {
   zoomIn(px, py) {
     let {scale} = this.state;
 
-    if (scale === MAX_SCALE) {
-      // avoid setting state and rerendering
-      return;
-    }
-
     scale = scale + SCROLL_STEP;
 
-    if (scale > MAX_SCALE) {
-      // limit min scale
-      scale = MAX_SCALE;
+    if (scale >= MAX_SCALE) {
+      // avoid setting state and rerendering
+      return;
     }
 
     this.zoom(px, py, scale);
@@ -201,16 +196,11 @@ class ProcessMap extends React.Component {
   zoomOut(px, py) {
     let {scale} = this.state;
 
-    if (scale === MIN_SCALE) {
-      // avoid setting state and rerendering
-      return;
-    }
-
     scale = scale - SCROLL_STEP;
 
-    if (scale < MIN_SCALE) {
-      // limit scale
-      scale = MIN_SCALE;
+    if (scale <= MIN_SCALE) {
+      // avoid setting state and rerendering
+      return;
     }
 
     this.zoom(px, py, scale);
