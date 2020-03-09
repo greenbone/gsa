@@ -25,7 +25,6 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Filter from 'gmp/models/filter';
-import Task, {TASK_STATUS} from 'gmp/models/task';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {entitiesLoadingActions} from 'web/store/entities/tasks';
@@ -35,32 +34,11 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
 import {MockedProvider} from '@apollo/react-testing';
 import TaskPage, {ToolBarIcons} from '../listpage';
-import {mockGetTasks as mocks} from 'web/pages/tasks/graphql';
+import {mockGetTasks as mocks, mockTask as task} from 'web/pages/tasks/graphql';
 
 setLocale('en');
 
 window.URL.createObjectURL = jest.fn();
-
-const lastReport = {
-  report: {
-    _id: '1234',
-    timestamp: '2019-08-10T12:51:27Z',
-    severity: '5.0',
-  },
-};
-
-const task = Task.fromElement({
-  _id: '1234',
-  owner: {name: 'admin'},
-  name: 'foo',
-  comment: 'bar',
-  status: TASK_STATUS.done,
-  alterable: '0',
-  last_report: lastReport,
-  report_count: {__text: '1'},
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: 'id1', name: 'target1'},
-});
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);

@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import gql from 'graphql-tag';
-import {TASK_STATUS} from 'gmp/models/task';
+import Task, {TASK_STATUS} from 'gmp/models/task';
 
 import {useMutation, useQuery} from '@apollo/react-hooks';
 
@@ -284,7 +284,7 @@ const lastReport = {
   timestamp: '2020-02-27T13:20:45Z',
 };
 
-const mockTask = {
+export const task = {
   data: {
     tasks: {
       nodes: [
@@ -348,26 +348,28 @@ const mockTask = {
   },
 };
 
+export const mockTask = Task.fromObject(task);
+
 export const mockGetTasks = [
   {
     request: {
       query: GET_TASKS,
       variables: {filterString: 'foo=bar rows=2'},
     },
-    result: mockTask,
+    result: task,
   },
   {
     request: {
       query: GET_TASKS,
       variables: {filterString: ''},
     },
-    result: mockTask,
+    result: task,
   },
   {
     request: {
       query: GET_TASKS,
       variables: {filterString: ''},
     },
-    result: mockTask,
+    result: task,
   },
 ];
