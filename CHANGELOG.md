@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)
 
 ### Changed
+- Updated copyright header dates to 2020 [#2019](https://github.com/greenbone/gsa/pull/2020)
 - Updated German translation and fixed parts that were missing after the last merge [#1991](https://github.com/greenbone/gsa/pull/1991)
 - Improved error handling for invalid detailspage links [#1986](https://github.com/greenbone/gsa/pull/1986)
 - Adjusted DEFAULT_OID_VALUE for use with new oid scheme [#1974](https://github.com/greenbone/gsa/pull/1974)
