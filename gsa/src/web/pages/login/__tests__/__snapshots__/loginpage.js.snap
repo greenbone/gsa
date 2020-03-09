@@ -550,7 +550,7 @@ exports[`LoginPagetests should render Loginpage 1`] = `
       <footer
         class="c27"
       >
-        Greenbone Security Assistant (GSA) Copyright (C) 2009-2019 by Greenbone Networks GmbH, 
+        Greenbone Security Assistant (GSA) Copyright (C) 2009-2020 by Greenbone Networks GmbH, 
         <a
           class="c28"
           href="http://www.greenbone.net"
