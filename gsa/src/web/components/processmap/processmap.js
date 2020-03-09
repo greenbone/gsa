@@ -561,10 +561,10 @@ class ProcessMap extends React.Component {
   }
 
   toBackgroundCoords = (x, y) => {
-    const {translateX, translateY} = this.state;
+    const {scale, translateX, translateY} = this.state;
     return {
-      x: x - translateX,
-      y: y - translateY,
+      x: (x - translateX) / scale,
+      y: (y - translateY) / scale,
     };
   };
 
