@@ -19,6 +19,8 @@
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 
+import Task, {TASK_STATUS} from 'gmp/models/task';
+
 import {setLocale} from 'gmp/locale/lang';
 
 import Capabilities from 'gmp/capabilities/capabilities';
@@ -34,11 +36,107 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
 import {MockedProvider} from '@apollo/react-testing';
 import TaskPage, {ToolBarIcons} from '../listpage';
-import {mockGetTasks as mocks, mockTask as task} from 'web/pages/tasks/graphql';
+import {GET_TASKS} from 'web/pages/tasks/graphql';
 
 setLocale('en');
 
 window.URL.createObjectURL = jest.fn();
+
+const lastReport = {
+  uuid: '1234',
+  severity: '5.0',
+  timestamp: '2020-02-27T13:20:45Z',
+};
+
+const mockTask = {
+  data: {
+    tasks: {
+      nodes: [
+        {
+          name: 'foo',
+          uuid: '1234',
+          permissions: [
+            {
+              name: 'Everything',
+            },
+          ],
+          lastReport,
+          reportCount: {
+            total: 1,
+            finished: 1,
+          },
+          status: TASK_STATUS.done,
+          target: {
+            name: 'Target',
+            uuid: 'id1',
+          },
+          trend: null,
+          comment: 'bar',
+          owner: 'admin',
+          preferences: null,
+          schedule: null,
+          alerts: [],
+          scanConfig: {
+            uuid: 'id2',
+            name: 'lorem',
+            trash: false,
+          },
+          scanner: {
+            uuid: 'id3',
+            name: 'ipsum',
+            scannerType: 'dolor',
+          },
+          hostsOrdering: null,
+          observers: {
+            users: ['john', 'jane'],
+            roles: [
+              {
+                name: 'r1',
+              },
+              {
+                name: 'r2',
+              },
+            ],
+            groups: [
+              {
+                name: 'g1',
+              },
+              {
+                name: 'g2',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+};
+
+const task = Task.fromObject(mockTask.data.tasks.nodes[0]);
+
+const mocks = [
+  {
+    request: {
+      query: GET_TASKS,
+      variables: {filterString: 'foo=bar rows=2'},
+    },
+    result: mockTask,
+  },
+  {
+    request: {
+      query: GET_TASKS,
+      variables: {filterString: ''},
+    },
+    result: mockTask,
+  },
+  {
+    request: {
+      query: GET_TASKS,
+      variables: {filterString: ''},
+    },
+    result: mockTask,
+  },
+];
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
