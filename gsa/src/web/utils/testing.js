@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -98,9 +98,10 @@ const withProvider = (name, key = name) => Component => ({
 const TestingGmpPropvider = withProvider('gmp', 'value')(GmpContext.Provider);
 const TestingStoreProvider = withProvider('store')(Provider);
 const TestingRouter = withProvider('history')(Router);
-const TestingCapabilitiesProvider = withProvider('capabilities', 'value')(
-  CapabilitiesContext.Provider,
-);
+const TestingCapabilitiesProvider = withProvider(
+  'capabilities',
+  'value',
+)(CapabilitiesContext.Provider);
 
 export const rendererWith = (
   {capabilities, gmp, store, router} = {

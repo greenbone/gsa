@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -261,7 +261,9 @@ export class Dashboard extends React.Component {
     if (isDefined(error) && !isLoading) {
       return (
         <RowPlaceHolder>
-          {_('Could not load dashboard settings. Reason: {{error}}', {error: error.message})}
+          {_('Could not load dashboard settings. Reason: {{error}}', {
+            error: error.message,
+          })}
         </RowPlaceHolder>
       );
     } else if (!isDefined(rows) && isLoading) {
@@ -376,10 +378,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(Dashboard);
 
 // vim: set ts=2 sw=2 tw=80:

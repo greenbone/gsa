@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -50,12 +50,10 @@ export const loadUserSettingDefaults = gmp => () => (dispatch, getState) => {
 
   dispatch(loadingActions.request());
 
-  return gmp.user
-    .currentSettings()
-    .then(
-      response => dispatch(loadingActions.success(response.data)),
-      err => dispatch(loadingActions.error(err)),
-    );
+  return gmp.user.currentSettings().then(
+    response => dispatch(loadingActions.success(response.data)),
+    err => dispatch(loadingActions.error(err)),
+  );
 };
 
 // vim: set ts=2 sw=2 two=80:

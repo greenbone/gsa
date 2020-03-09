@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -35,7 +35,10 @@ describe('Settings model tests', () => {
     settings.set('foo', 'bar');
     settings.set('lorem', 'ipsum');
 
-    expect(settings.getEntries()).toEqual([['foo', 'bar'], ['lorem', 'ipsum']]);
+    expect(settings.getEntries()).toEqual([
+      ['foo', 'bar'],
+      ['lorem', 'ipsum'],
+    ]);
   });
 
   test('should not have non existing key', () => {

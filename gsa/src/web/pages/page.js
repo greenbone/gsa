@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -111,9 +111,6 @@ Page.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default compose(
-  withGmp,
-  withRouter,
-)(Page);
+export default compose(withGmp, withRouter)(Page);
 
 // vim: set ts=2 sw=2 tw=80:

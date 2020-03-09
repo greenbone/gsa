@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -145,11 +145,9 @@ export const createLoadEntity = ({
 
   dispatch(actions.request(id));
 
-  return gmp[entityType]
-    .get({id})
-    .then(
-      response => dispatch(actions.success(id, response.data)),
-      error => dispatch(actions.error(id, error)),
-    );
+  return gmp[entityType].get({id}).then(
+    response => dispatch(actions.success(id, response.data)),
+    error => dispatch(actions.error(id, error)),
+  );
 };
 // vim: set ts=2 sw=2 tw=80:
