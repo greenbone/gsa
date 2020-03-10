@@ -28,8 +28,8 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith} from 'web/utils/testing';
 
-import {getMockReport} from './hoststab';
-import {getMockDeltaReport} from './deltaresultstab';
+import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
+import {getMockDeltaReport} from 'web/pages/reports/__mocks__/mockdeltareport';
 
 import Summary from '../summary';
 

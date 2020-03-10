@@ -19,7 +19,7 @@
 import 'core-js/features/array/find-index';
 import 'core-js/features/array/find';
 
-import uuid from 'uuid/v4';
+import {v4 as uuid} from 'uuid';
 
 import React from 'react';
 

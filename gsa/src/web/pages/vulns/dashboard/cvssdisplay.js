@@ -41,7 +41,7 @@ export const VulnsCvssDisplay = createDisplay({
 export const VulnsCvssTableDisplay = createDisplay({
   loaderComponent: VulnsSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [_l('Severity'), _l('# of Vulnerabilties')],
+  dataTitles: [_l('Severity'), _l('# of Vulnerabilities')],
   title: ({data: tdata}) =>
     _('Vulnerabilities by CVSS (Total: {{count}})', {count: tdata.total}),
   displayId: 'vuln-by-cvss-table',

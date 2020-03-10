@@ -7,15 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [20.04] - unreleased
 
 ### Added
+- Added German translation for About page [#1998](https://github.com/greenbone/gsa/pull/1998)
 - Added a renew session timeout icon to usermenu [#1966](https://github.com/greenbone/gsa/pull/1966)
-- Added new BPM feature [#1931](https://github.com/greenbone/gsa/pull/1931)
+- Added new BPM feature [#1931](https://github.com/greenbone/gsa/pull/1931) [#2018](https://github.com/greenbone/gsa/pull/2018)
 - Added clean-up-translations script [#1948](https://github.com/greenbone/gsa/pull/1948)
 - Added handling possible undefined trash in case of an error on the trashcanpage [#1908](https://github.com/greenbone/gsa/pull/1908)
 - Added translation using babel-plugin-i18next-extract [#1808](https://github.com/greenbone/gsa/pull/1808)
 - Multistep dialog feature, implemented on scanner dialog [#1725](https://github.com/greenbone/gsa/pull/1725)
 
 ### Changed
-- Changed image, text, and layout of About page [#1993](https://github.com/greenbone/gsa/pull/1993)[#1996](https://github.com/greenbone/gsa/pull/1996)
+- Moved mockprocessmap to separate file to keep tests from running multiple times [#2008](https://github.com/greenbone/gsa/pull/2008)
+- Updated German translation according to the changes made in gsa8 and gsa9 [#2007](https://github.com/greenbone/gsa/pull/2007)
+- Changed image, text, and layout of About page [#1993](https://github.com/greenbone/gsa/pull/1993)[#1996](https://github.com/greenbone/gsa/pull/1996)[#1998](https://github.com/greenbone/gsa/pull/1998)
 - Adjusted multiselect and report listpage to use getDerivedStateFromProps instead of deprecated componentWillReceiveProps [#1935](https://github.com/greenbone/gsa/pull/1935)
 - Updated react-beautiful-dnd to version 12.2.0 and fix dragging into empty row [#1837](https://github.com/greenbone/gsa/pull/1837)
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
@@ -55,6 +58,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Lowered memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
 
 ### Fixed
+- Fixed report DetailsContent counts in tabs [#2004](https://github.com/greenbone/gsa/pull/2004)
 - Fixed auto_delete_value of 0 for tasks and audits [#1987](https://github.com/greenbone/gsa/pull/1987)
 - Fixed bulk tagging by user selection (send IDs as array) [#1985](https://github.com/greenbone/gsa/pull/1985)
 - Fixed pluralizing type 'vulnerability' [#1984](https://github.com/greenbone/gsa/pull/1984)
@@ -182,6 +186,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [8.0.2] - unreleased
 
 ### Added
+- Show passphrase field in credential dialog for cc type [#2006](https://github.com/greenbone/gsa/pull/2006)
 - Display error details at report details page [#1862](https://github.com/greenbone/gsa/pull/1862)
 - Added warnings to content composer if reportResultThreshold is exceeded [#1852](https://github.com/greenbone/gsa/pull/1852)
 - Added parseText to model.js to parse single space summary [#1829](https://github.com/greenbone/gsa/pull/1829)
@@ -239,6 +244,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Lower memory usage when getting a report [#1858](https://github.com/greenbone/gvmd/pull/1858)
 
 ### Fixed
+- Fixed nvt family links not changing the filter [#1997](https://github.com/greenbone/gsa/pull/1997)
 - Use correct capabilities for task icons [#1973](https://github.com/greenbone/gsa/pull/1973)
 - Fixed ProvideViewIcon for tasks is only shown for users but not for groups and roles [#1968](https://github.com/greenbone/gsa/pull/1968)
 - Fixed missing delete button for host identifiers [#1959](https://github.com/greenbone/gsa/pull/1959)

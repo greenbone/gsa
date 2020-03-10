@@ -31,7 +31,7 @@ import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import {hostsFilter} from 'web/components/processmap/processmaploader';
 
-import {getMockProcessMap} from 'web/components/processmap/__tests__/processmap';
+import {getMockProcessMap} from 'web/components/processmap/__mocks__/mockprocessmap';
 
 import ProcessMapsPage from '../processmapspage';
 

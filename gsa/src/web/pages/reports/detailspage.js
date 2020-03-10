@@ -196,8 +196,43 @@ class ReportDetails extends React.Component {
     if (isDefined(props.entity)) {
       // update only if a new report is available to avoid having no report
       // when the filter changes
+      const {report = {}} = props.entity;
+      const {
+        results = {},
+        hosts = {},
+        ports = {},
+        applications = {},
+        operatingSystems = {},
+        cves = {},
+        closedCves = {},
+        tlsCertificates = {},
+        errors = {},
+      } = report;
+
       return {
         entity: props.entity,
+
+        resultsCounts: isDefined(results.counts)
+          ? results.counts
+          : state.resultsCounts,
+        hostsCounts: isDefined(hosts.counts) ? hosts.counts : state.hostsCounts,
+        portsCounts: isDefined(ports.counts) ? ports.counts : state.portsCounts,
+        applicationsCounts: isDefined(applications.counts)
+          ? applications.counts
+          : state.applicationsCounts,
+        operatingSystemsCounts: isDefined(operatingSystems.counts)
+          ? operatingSystems.counts
+          : state.operatingSystemsCounts,
+        cvesCounts: isDefined(cves.counts) ? cves.counts : state.cvesCounts,
+        closedCvesCounts: isDefined(closedCves.counts)
+          ? closedCves.counts
+          : state.closedCvesCounts,
+        tlsCertificatesCounts: isDefined(tlsCertificates.counts)
+          ? tlsCertificates.counts
+          : state.tlsCertificatesCounts,
+        errorsCounts: isDefined(errors.counts)
+          ? errors.counts
+          : state.errorsCounts,
         reportFilter: props.reportFilter,
         isUpdating: false,
       };
@@ -519,13 +554,22 @@ class ReportDetails extends React.Component {
     } = this.props;
     const {
       activeTab,
+      applicationsCounts,
+      cvesCounts,
+      closedCvesCounts,
       entity,
+      errorsCounts,
+      hostsCounts,
       isUpdating = false,
+      operatingSystemsCounts,
+      portsCounts,
       reportFilter,
+      resultsCounts,
       showFilterDialog,
       showDownloadReportDialog,
       sorting,
       storeAsDefault,
+      tlsCertificatesCounts,
     } = this.state;
 
     const report = isDefined(entity) ? entity.report : undefined;
@@ -544,18 +588,27 @@ class ReportDetails extends React.Component {
           {({edit}) => (
             <Page
               activeTab={activeTab}
+              applicationsCounts={applicationsCounts}
+              cvesCounts={cvesCounts}
+              closedCvesCounts={closedCvesCounts}
               entity={entity}
+              errorsCounts={errorsCounts}
               filters={filters}
+              hostsCounts={hostsCounts}
               isLoading={isLoading}
               isLoadingFilters={isLoadingFilters}
               isUpdating={isUpdating}
+              operatingSystemsCounts={operatingSystemsCounts}
               pageFilter={pageFilter}
+              portsCounts={portsCounts}
               reportError={reportError}
               reportFilter={reportFilter}
               reportId={reportId}
               resetFilter={REPORT_RESET_FILTER}
+              resultsCounts={resultsCounts}
               sorting={sorting}
               task={isDefined(report) ? report.task : undefined}
+              tlsCertificatesCounts={tlsCertificatesCounts}
               onActivateTab={this.handleActivateTab}
               onAddToAssetsClick={this.handleAddToAssets}
               onError={this.handleError}
@@ -770,10 +823,7 @@ export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(ReportDetailsWrapper);
 
 // vim: set ts=2 sw=2 tw=80:

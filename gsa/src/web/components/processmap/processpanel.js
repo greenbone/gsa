@@ -40,7 +40,7 @@ import Loading from 'web/components/loading/loading';
 import Pagination from 'web/components/pagination/pagination';
 
 import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
+
 import Theme from 'web/utils/theme';
 import withGmp from 'web/utils/withGmp';
 
@@ -308,7 +308,13 @@ class ProcessPanel extends React.Component {
 
     const {name = _('No process selected'), comment} = element;
 
-    const hostItems = renderSelectItems(allHosts);
+    let hostItems = [];
+    if (isDefined(allHosts)) {
+      hostItems = allHosts.map(host => {
+        const hName = isDefined(host.hostname) ? host.hostname : '';
+        return {label: host.ip + ' ' + hName, value: host.id};
+      });
+    }
 
     const sortedHostList = hostList.sort(compareSeverity);
 

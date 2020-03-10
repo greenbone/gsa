@@ -78,7 +78,7 @@ const EntityBox = ({
             </TableRow>
           )}
           <TableRow>
-            <TableData>{_('Modifed')}</TableData>
+            <TableData>{_('Modified')}</TableData>
             <TableData>{longDate(modified)}</TableData>
           </TableRow>
         </TableBody>

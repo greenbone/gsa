@@ -28,12 +28,15 @@ import uuid from 'uuid/v4';
 
 import {_} from 'gmp/locale/lang';
 
+import logger from 'gmp/log';
+
 import {isDefined} from 'gmp/utils/identity';
 import {exclude} from 'gmp/utils/object';
 
 import Group from 'web/components/chart/group';
 import ToolTip from 'web/components/chart/tooltip';
 import ConfirmationDialog from 'web/components/dialog/confirmationdialog';
+import ErrorDialog from 'web/components/dialog/errordialog';
 import ErrorBoundary from 'web/components/error/errorboundary';
 
 import {selector as hostSelector} from 'web/store/entities/hosts';
@@ -78,6 +81,8 @@ const Map = styled.svg`
   cursor: ${props => props.cursor};
 `;
 
+const log = logger.getLogger('gmp.commands.tags');
+
 class ProcessMap extends React.Component {
   constructor(...args) {
     super(...args);
@@ -87,6 +92,7 @@ class ProcessMap extends React.Component {
       createProcessDialogVisible: false,
       edgeDrawSource: undefined,
       edgeDrawTarget: undefined,
+      tagErrorDialogVisible: false,
       scale: 1.0,
       translateX: 0,
       translateY: 0,
@@ -177,16 +183,11 @@ class ProcessMap extends React.Component {
   zoomIn(px, py) {
     let {scale} = this.state;
 
-    if (scale === MAX_SCALE) {
-      // avoid setting state and rerendering
-      return;
-    }
-
     scale = scale + SCROLL_STEP;
 
-    if (scale > MAX_SCALE) {
-      // limit min scale
-      scale = MAX_SCALE;
+    if (scale >= MAX_SCALE) {
+      // avoid setting state and rerendering
+      return;
     }
 
     this.zoom(px, py, scale);
@@ -195,16 +196,11 @@ class ProcessMap extends React.Component {
   zoomOut(px, py) {
     let {scale} = this.state;
 
-    if (scale === MIN_SCALE) {
-      // avoid setting state and rerendering
-      return;
-    }
-
     scale = scale - SCROLL_STEP;
 
-    if (scale < MIN_SCALE) {
-      // limit scale
-      scale = MIN_SCALE;
+    if (scale <= MIN_SCALE) {
+      // avoid setting state and rerendering
+      return;
     }
 
     this.zoom(px, py, scale);
@@ -359,6 +355,10 @@ class ProcessMap extends React.Component {
     this.setState({confirmDeleteDialogVisible: false});
   }
 
+  closeTagErrorDialog() {
+    this.setState({tagErrorDialogVisible: false});
+  }
+
   handleCloseCreateProcessDialog() {
     this.closeCreateProcessDialog();
   }
@@ -426,9 +426,16 @@ class ProcessMap extends React.Component {
       name: BPM_TAG_PREFIX + this.selectedElement.name,
       tagId: this.selectedElement.tagId,
       gmp: this.props.gmp,
-    }).then(() => {
-      this.props.forceUpdate();
-    });
+    })
+      .then(() => {
+        this.props.forceUpdate();
+      })
+      .catch(err => {
+        if (err.status === 422) {
+          log.error('An error occurred while tagging hosts in BPM', err);
+          this.setState({tagErrorDialogVisible: true});
+        }
+      });
     this.handleInteraction();
   }
 
@@ -554,10 +561,10 @@ class ProcessMap extends React.Component {
   }
 
   toBackgroundCoords = (x, y) => {
-    const {translateX, translateY} = this.state;
+    const {scale, translateX, translateY} = this.state;
     return {
-      x: x - translateX,
-      y: y - translateY,
+      x: (x - translateX) / scale,
+      y: (y - translateY) / scale,
     };
   };
 
@@ -584,6 +591,7 @@ class ProcessMap extends React.Component {
       isDrawingEdge,
       processes = {},
       scale,
+      tagErrorDialogVisible,
       translateX,
       translateY,
     } = this.state;
@@ -734,6 +742,19 @@ class ProcessMap extends React.Component {
               this.handleDeleteElement();
               this.closeConfirmDeleteDialog();
             }}
+          />
+        )}
+        {tagErrorDialogVisible && (
+          <ErrorDialog
+            text={_(
+              'There was an error (422) when trying to add one or more ' +
+                'hosts to this process. This might occur if the name of the ' +
+                'process has invalid characters. Please make sure you are only ' +
+                'using [a-zA-Z], [0-9]',
+            )}
+            title={_('Error While Adding Host(s)')}
+            onClose={() => this.closeTagErrorDialog()}
+            onResumeClick={() => this.closeTagErrorDialog()}
           />
         )}
       </ErrorBoundary>
