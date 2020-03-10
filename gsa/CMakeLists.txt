@@ -37,7 +37,11 @@ if (NOT DATADIR)
 endif (NOT DATADIR)
 
 set (GSA_BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
-set (GSA_DEST_DIR ${DATADIR}/gvm/gsad/web)
+
+if (NOT GSA_DEST_DIR)
+    set (GSA_DEST_DIR ${DATADIR}/gvm/gsad/web)
+endif (NOT GSA_DEST_DIR)
+
 set (GSA_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 set (GSA_PKG_FILES
