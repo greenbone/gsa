@@ -749,8 +749,8 @@ class ProcessMap extends React.Component {
             text={_(
               'There was an error (422) when trying to add one or more ' +
                 'hosts to this process. This might occur if the name of the ' +
-                'process has invalid characters. Please make sure you are only ' +
-                'using [a-zA-Z], [0-9]',
+                'process has invalid characters. Please make sure you are ' +
+                'only using a-z, A-Z and 0-9.',
             )}
             title={_('Error While Adding Host(s)')}
             onClose={() => this.closeTagErrorDialog()}
