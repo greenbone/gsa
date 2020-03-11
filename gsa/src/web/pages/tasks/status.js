@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -20,7 +20,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import {TASK_STATUS} from 'gmp/models/task';
 
@@ -38,10 +38,10 @@ const StyledDetailsLink = styled(DetailsLink)`
 
 const TaskStatus = ({task, links = true}) => {
   let report_id;
-  if (isDefined(task.current_report)) {
-    report_id = task.current_report.id;
-  } else if (isDefined(task.last_report)) {
-    report_id = task.last_report.id;
+  if (hasValue(task.currentReport)) {
+    report_id = task.currentReport.id;
+  } else if (hasValue(task.lastReport)) {
+    report_id = task.lastReport.id;
   } else {
     report_id = '';
     links = false;
