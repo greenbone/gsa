@@ -33,11 +33,11 @@ const caps = new Capabilities(['everything']);
 
 describe('Task Status tests', () => {
   test('should render', () => {
-    const task = Task.fromElement({
+    const task = Task.fromObject({
       status: TASK_STATUS.new,
-      alterable: '0',
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
+      alterable: 0,
+      permissions: [{name: 'everything'}],
+      target: {uuid: 'id', name: 'target'},
     });
 
     const {render} = rendererWith({capabilities: caps});
@@ -56,12 +56,12 @@ describe('Task Status tests', () => {
   });
 
   test('should render with last report', () => {
-    const task = Task.fromElement({
+    const task = Task.fromObject({
       status: TASK_STATUS.done,
-      alterable: '0',
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-      last_report: {report: {_id: '42'}},
+      alterable: 0,
+      permissions: [{name: 'everything'}],
+      target: {uuid: 'id', name: 'target'},
+      lastReport: {uuid: '42'},
     });
 
     const {render} = rendererWith({capabilities: caps, router: true});
@@ -77,13 +77,13 @@ describe('Task Status tests', () => {
   });
 
   test('should render with current report', () => {
-    const task = Task.fromElement({
+    const task = Task.fromObject({
       status: TASK_STATUS.running,
-      alterable: '0',
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-      last_report: {report: {_id: '42'}},
-      current_report: {report: {_id: '1234'}},
+      alterable: 0,
+      permissions: {name: 'everything'},
+      target: {uuid: 'id', name: 'target'},
+      lastReport: {uuid: '42'},
+      currentReport: {uuid: '1234'},
     });
 
     const {render} = rendererWith({capabilities: caps, router: true});
@@ -99,9 +99,9 @@ describe('Task Status tests', () => {
   });
 
   test('should render container', () => {
-    const task = Task.fromElement({
-      permissions: {permission: [{name: 'everything'}]},
-      last_report: {report: {_id: '42'}},
+    const task = Task.fromObject({
+      permissions: {name: 'everything'},
+      lastReport: {uuid: '42'},
     });
 
     const {render} = rendererWith({capabilities: caps, router: true});
