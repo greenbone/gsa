@@ -133,14 +133,33 @@ const LoginPage = props => {
   };
 
   const login = (username, password) => {
-    loginGql({variables: {username: username, password: password}});
+    const {location, history} = props;
+
+    loginGql({variables: {username: username, password: password}})
+      .then(() => {
+        props.setIsLoggedIn(true);
+
+        if (
+          location &&
+          location.state &&
+          location.state.next &&
+          location.state.next !== location.pathname
+        ) {
+          history.replace(location.state.next);
+        } else {
+          history.replace('/');
+        }
+      })
+      .catch(err => {
+        log.error(err);
+        setError(err);
+      });
+
     const {gmp} = props;
 
     gmp.login(username, password).then(
       data => {
         const {locale, timezone, sessionTimeout} = data;
-
-        const {location, history} = props;
 
         props.setTimezone(timezone);
         props.setLocale(locale);
