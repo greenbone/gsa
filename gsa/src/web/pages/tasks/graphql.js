@@ -27,6 +27,8 @@ export const GET_TASK = gql`
     task(taskId: $taskId) {
       name
       uuid
+      creationTime
+      modificationTime
       permissions {
         name
       }
