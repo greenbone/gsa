@@ -57,7 +57,8 @@ import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import Table from './table';
-import {useGetTasks} from './graphql';
+import {useGetTasks, useDeleteTask, useCloneTask} from './graphql';
+import {queryWithRefetch} from 'web/utils/graphql';
 
 export const ToolBarIcons = withCapabilities(
   ({
@@ -122,6 +123,9 @@ const Page = ({
   const query = useGetTasks();
 
   const {data, refetch} = query({filterString: filter.toFilterString()});
+
+  const deleteTask = queryWithRefetch(useDeleteTask())(refetch);
+  const cloneTask = queryWithRefetch(useCloneTask())(refetch);
 
   if (isDefined(data)) {
     props.entities = data.tasks.nodes.map(entity => Task.fromObject(entity));
@@ -202,7 +206,9 @@ const Page = ({
             onInteraction={onInteraction}
             onModifyTaskWizardClick={modifytaskwizard}
             onReportImportClick={reportimport}
+            onTaskCloneClick={cloneTask}
             onTaskCreateClick={create}
+            onTaskDeleteClick={deleteTask}
             onTaskDownloadClick={download}
             onTaskEditClick={edit}
             onTaskResumeClick={resume}
