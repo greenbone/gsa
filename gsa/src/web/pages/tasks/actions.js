@@ -40,8 +40,6 @@ import StopIcon from 'web/pages/tasks/icons/stopicon';
 
 import PropTypes from 'web/utils/proptypes';
 
-import {useCloneTask, useDeleteTask} from './graphql';
-
 const Actions = ({
   entity,
   links,
