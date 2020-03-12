@@ -21,6 +21,8 @@ import React, {useState, useEffect} from 'react';
 
 import {useMutation} from '@apollo/react-hooks';
 
+import gql from 'graphql-tag';
+
 import {connect} from 'react-redux';
 
 import {withRouter} from 'react-router-dom';
@@ -58,8 +60,6 @@ import {
 import {isLoggedIn} from 'web/store/usersettings/selectors';
 
 import LoginForm from './loginform';
-
-import gql from 'graphql-tag';
 
 export const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
