@@ -21,9 +21,11 @@ import React, {useState, useEffect} from 'react';
 
 import {useMutation} from '@apollo/react-hooks';
 
-import {connect} from 'react-redux';
+import gql from 'graphql-tag';
 
-import {withRouter} from 'react-router-dom';
+import {useSelector, useDispatch} from 'react-redux';
+
+import {useHistory, useLocation} from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -36,10 +38,8 @@ import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
 
 import Logo from 'web/components/img/greenbone';
 
@@ -49,17 +49,15 @@ import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 
 import {
-  setSessionTimeout,
-  setUsername,
-  updateTimezone,
-  setIsLoggedIn,
+  setSessionTimeout as setSessionTimeoutAction,
+  setUsername as setUsernameAction,
+  updateTimezone as updateTimezoneAction,
+  setIsLoggedIn as setIsLoggedInAction,
 } from 'web/store/usersettings/actions';
 
-import {isLoggedIn} from 'web/store/usersettings/selectors';
+import {isLoggedIn as isLoggedInSelector} from 'web/store/usersettings/selectors';
 
 import LoginForm from './loginform';
-
-import gql from 'graphql-tag';
 
 export const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
@@ -120,34 +118,45 @@ const isIE11 = () =>
     ? +navigator.userAgent.match(/Trident\/([\d.]+)/)[1] >= 7
     : false;
 
-const LoginPage = props => {
+const LoginPage = () => {
+  const gmp = useGmp();
+  const dispatch = useDispatch();
   const [error, setError] = useState(false);
   const [loginGql] = useMutation(LOGIN);
+  const location = useLocation();
+  const history = useHistory();
+  const isLoggedIn = useSelector(isLoggedInSelector);
+
   const handleSubmit = (username, password) => {
     login(username, password);
   };
 
   const handleGuestLogin = () => {
-    const {gmp} = props;
     login(gmp.settings.guestUsername, gmp.settings.guestPassword);
   };
 
-  const login = (username, password) => {
-    loginGql({variables: {username: username, password: password}});
-    const {gmp} = props;
+  const setLocale = locale => gmp.setLocale(locale);
+  const setTimezone = timezone => dispatch(updateTimezoneAction(gmp)(timezone));
+  const setSessionTimeout = timeout =>
+    dispatch(setSessionTimeoutAction(timeout));
+  const setUsername = username => dispatch(setUsernameAction(username));
+  const setIsLoggedIn = value => dispatch(setIsLoggedInAction(value));
 
-    gmp.login(username, password).then(
-      data => {
+  const login = (username, password) => {
+    gmp
+      .login(username, password)
+      .then(data => {
         const {locale, timezone, sessionTimeout} = data;
 
-        const {location, history} = props;
-
-        props.setTimezone(timezone);
-        props.setLocale(locale);
-        props.setSessionTimeout(sessionTimeout);
-        props.setUsername(username);
+        setTimezone(timezone);
+        setLocale(locale);
+        setSessionTimeout(sessionTimeout);
+        setUsername(username);
+      })
+      .then(() => loginGql({variables: {username, password}}))
+      .then(() => {
         // must be set before changing the location
-        props.setIsLoggedIn(true);
+        setIsLoggedIn(true);
 
         if (
           location &&
@@ -159,23 +168,18 @@ const LoginPage = props => {
         } else {
           history.replace('/');
         }
-      },
-      rej => {
+      })
+      .catch(rej => {
         log.error(rej);
         setError(rej);
-      },
-    );
+      });
   };
 
   useEffect(() => {
-    const {history, isLoggedIn = false} = props; // eslint-disable-line no-shadow
-
     if (isLoggedIn) {
       history.replace('/');
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const {gmp} = props;
 
   let message;
 
@@ -221,34 +225,6 @@ const LoginPage = props => {
   );
 };
 
-LoginPage.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  history: PropTypes.object.isRequired,
-  isLoggedIn: PropTypes.bool,
-  location: PropTypes.object.isRequired,
-  setIsLoggedIn: PropTypes.func.isRequired,
-  setLocale: PropTypes.func.isRequired,
-  setSessionTimeout: PropTypes.func.isRequired,
-  setTimezone: PropTypes.func.isRequired,
-  setUsername: PropTypes.func.isRequired,
-};
-
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  setTimezone: timezone => dispatch(updateTimezone(gmp)(timezone)),
-  setLocale: locale => gmp.setLocale(locale),
-  setSessionTimeout: timeout => dispatch(setSessionTimeout(timeout)),
-  setUsername: username => dispatch(setUsername(username)),
-  setIsLoggedIn: value => dispatch(setIsLoggedIn(value)),
-});
-
-const mapStateToProp = (rootState, ownProps) => ({
-  isLoggedIn: isLoggedIn(rootState),
-});
-
-export default compose(
-  withRouter,
-  withGmp,
-  connect(mapStateToProp, mapDispatchToProps),
-)(LoginPage);
+export default LoginPage;
 
 // vim: set ts=2 sw=2 tw=80:

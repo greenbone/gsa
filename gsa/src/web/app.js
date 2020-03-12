@@ -20,8 +20,15 @@ import React from 'react';
 
 import {Provider as StoreProvider} from 'react-redux';
 
+import {ApolloProvider} from 'react-apollo';
+import {ApolloClient} from 'apollo-client';
+import {createHttpLink} from 'apollo-link-http';
+import {InMemoryCache} from 'apollo-cache-inmemory';
+
 import Gmp from 'gmp';
 import GmpSettings from 'gmp/gmpsettings';
+
+import {buildServerUrl} from 'gmp/http/utils';
 
 import {LOG_LEVEL_DEBUG} from 'gmp/log';
 
@@ -61,6 +68,20 @@ const store = configureStore(
 );
 
 window.gmp = gmp;
+
+const httpLink = createHttpLink({
+  uri: buildServerUrl(
+    settings.graphqlApiServer,
+    settings.graphqlApiLocation,
+    settings.graphqlApiProtocol,
+  ),
+  credentials: 'include',
+});
+
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache(),
+});
 
 const initStore = () => {
   const {timezone, username} = gmp.settings;
@@ -103,13 +124,15 @@ class App extends React.Component {
       <React.Fragment>
         <GlobalStyles />
         <ErrorBoundary message={_('An error occurred on this page')}>
-          <GmpContext.Provider value={gmp}>
-            <StoreProvider store={store}>
-              <LocaleObserver>
-                <Routes />
-              </LocaleObserver>
-            </StoreProvider>
-          </GmpContext.Provider>
+          <ApolloProvider client={client}>
+            <GmpContext.Provider value={gmp}>
+              <StoreProvider store={store}>
+                <LocaleObserver>
+                  <Routes />
+                </LocaleObserver>
+              </StoreProvider>
+            </GmpContext.Provider>
+          </ApolloProvider>
         </ErrorBoundary>
       </React.Fragment>
     );
