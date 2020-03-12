@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2019-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -33,6 +33,11 @@ import {
   DEFAULT_MAX_HOSTS,
 } from 'gmp/models/audit';
 
+import {
+  OPENVAS_SCANNER_TYPE,
+  OPENVAS_DEFAULT_SCANNER_ID,
+} from 'gmp/models/scanner';
+
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
@@ -55,6 +60,44 @@ import Layout from 'web/components/layout/layout';
 import AddResultsToAssetsGroup from 'web/pages/tasks/addresultstoassetsgroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/autodeletereportsgroup';
 
+const getScanner = (scanners, scanner_id) => {
+  if (!isDefined(scanners)) {
+    return undefined;
+  }
+
+  return scanners.find(sc => {
+    return sc.id === scanner_id;
+  });
+};
+
+const ScannerSelect = props => {
+  const {changeAudit, isLoading, scannerId, scanners, onChange} = props;
+
+  return (
+    <FormGroup title={_('Scanner')}>
+      <Select
+        name="scanner_id"
+        value={scannerId}
+        disabled={!changeAudit}
+        items={renderSelectItems(scanners)}
+        isLoading={isLoading}
+        onChange={onChange}
+      />
+    </FormGroup>
+  );
+};
+
+ScannerSelect.propTypes = {
+  changeAudit: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool,
+  policies: PropTypes.shape({
+    [OPENVAS_SCANNER_TYPE]: PropTypes.array,
+  }),
+  scannerId: PropTypes.id.isRequired,
+  scanners: PropTypes.array.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
 const AuditDialog = ({
   alertIds = [],
   alerts = [],
@@ -66,11 +109,19 @@ const AuditDialog = ({
   fromPolicy = false,
   hostsOrdering = HOSTS_ORDERING_SEQUENTIAL,
   in_assets = YES_VALUE,
+  isLoadingScanners = false,
   maxChecks = DEFAULT_MAX_CHECKS,
   maxHosts = DEFAULT_MAX_HOSTS,
   name = _('Unnamed'),
   policies = [],
   policyId,
+  scannerId = OPENVAS_DEFAULT_SCANNER_ID,
+  scanners = [
+    {
+      id: OPENVAS_DEFAULT_SCANNER_ID,
+      scannerType: OPENVAS_SCANNER_TYPE,
+    },
+  ],
   scheduleId = UNSET_VALUE,
   schedulePeriods = NO_VALUE,
   schedules = [],
@@ -84,6 +135,7 @@ const AuditDialog = ({
   onNewScheduleClick,
   onNewTargetClick,
   onSave,
+  onScannerChange,
   onChange,
   ...data
 }) => {
@@ -102,6 +154,9 @@ const AuditDialog = ({
 
   const changeAudit = hasAudit ? audit.isChangeable() : true;
 
+  const scanner = getScanner(scanners, scannerId);
+  const scannerType = isDefined(scanner) ? scanner.scannerType : undefined;
+
   const uncontrolledData = {
     ...data,
     alterable,
@@ -113,6 +168,8 @@ const AuditDialog = ({
     maxChecks,
     maxHosts,
     name,
+    scannerId,
+    scannerType,
     sourceIface,
     audit,
   };
@@ -120,6 +177,8 @@ const AuditDialog = ({
   const controlledData = {
     alertIds,
     policyId,
+    scannerId,
+    scannerType,
     scheduleId,
     targetId,
   };
@@ -243,6 +302,24 @@ const AuditDialog = ({
               onChange={onValueChange}
             />
 
+            <div
+              title={
+                changeAudit
+                  ? null
+                  : _(
+                      'This setting is not alterable once the audit has been run at least once.',
+                    )
+              }
+            >
+              <ScannerSelect
+                scanners={scanners}
+                scannerId={state.scannerId}
+                changeAudit={changeAudit}
+                isLoading={isLoadingScanners}
+                onChange={onScannerChange}
+              />
+            </div>
+
             <Layout flex="column" grow="1">
               <FormGroup titleSize="2" title={_('Policy')}>
                 <Select
@@ -328,11 +405,14 @@ AuditDialog.propTypes = {
   fromPolicy: PropTypes.bool,
   hostsOrdering: PropTypes.oneOf(['sequential', 'random', 'reverse']),
   in_assets: PropTypes.yesno,
+  isLoadingScanners: PropTypes.bool,
   maxChecks: PropTypes.number,
   maxHosts: PropTypes.number,
   name: PropTypes.string,
   policies: PropTypes.arrayOf(PropTypes.model),
   policyId: PropTypes.idOrZero,
+  scannerId: PropTypes.idOrZero,
+  scanners: PropTypes.array,
   scheduleId: PropTypes.idOrZero,
   schedulePeriods: PropTypes.yesno,
   schedules: PropTypes.array,
@@ -346,6 +426,7 @@ AuditDialog.propTypes = {
   onNewScheduleClick: PropTypes.func.isRequired,
   onNewTargetClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  onScannerChange: PropTypes.func.isRequired,
 };
 
 export default withCapabilities(AuditDialog);

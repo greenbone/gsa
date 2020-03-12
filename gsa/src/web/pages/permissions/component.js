@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -290,6 +290,9 @@ PermissionsComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default compose(withGmp, withCapabilities)(PermissionsComponent);
+export default compose(
+  withGmp,
+  withCapabilities,
+)(PermissionsComponent);
 
 // vim: set ts=2 sw=2 tw=80:

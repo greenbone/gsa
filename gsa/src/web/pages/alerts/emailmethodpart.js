@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -247,6 +247,9 @@ EmailMethodPart.propTypes = {
   onNewCredentialClick: PropTypes.func,
 };
 
-export default compose(withCapabilities, withPrefix)(EmailMethodPart);
+export default compose(
+  withCapabilities,
+  withPrefix,
+)(EmailMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

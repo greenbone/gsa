@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -401,7 +401,7 @@ export const parseOperatingSystems = (report, filter) => {
 export const parseHosts = (report, filter) => {
   const {host: hosts, results, hosts: hosts_count} = report;
 
-  if (!isDefined(hosts_count)) {
+  if (!isDefined(hosts)) {
     return emptyCollectionList(filter);
   }
 

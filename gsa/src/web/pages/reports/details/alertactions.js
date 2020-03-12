@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -250,7 +250,10 @@ const mapStateToProps = rootState => {
 export default compose(
   withGmp,
   withCapabilities,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(AlertActions);
 
 // vim: set ts=2 sw=2 tw=80:

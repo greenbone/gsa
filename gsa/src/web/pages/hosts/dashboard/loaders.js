@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -17,10 +17,16 @@
  */
 import React from 'react';
 
+import {isDefined} from 'gmp/utils/identity';
+
+import Filter from 'gmp/models/filter';
+
 import Loader, {
   loadFunc,
   loaderPropTypes,
 } from 'web/store/dashboard/data/loader';
+
+import {MAX_HOSTS} from 'web/components/chart/topology';
 
 export const HOSTS_MODIFIED = 'hosts-modified';
 export const HOSTS_SEVERITY = 'hosts-severity';
@@ -28,6 +34,8 @@ export const HOSTS_TOPOLOGY = 'hosts-topology';
 export const HOSTS_VULN_SCORE = 'hosts-vuln-score';
 
 const HOSTS_MAX_GROUPS = 10;
+
+const DEFAULT_TOPOLOGY_FILTER = Filter.fromString('rows=' + MAX_HOSTS);
 
 export const hostsModifiedLoader = loadFunc(
   ({gmp, filter}) =>
@@ -67,10 +75,12 @@ export const HostsSeverityLoader = ({filter, children}) => (
 
 HostsSeverityLoader.propTypes = loaderPropTypes;
 
-export const hostsTopologyLoader = loadFunc(
-  ({gmp, filter}) => gmp.hosts.getAll({filter}).then(r => r.data),
-  HOSTS_TOPOLOGY,
-);
+export const hostsTopologyLoader = loadFunc(({gmp, filter}) => {
+  filter = isDefined(filter)
+    ? filter.copy().set('rows', MAX_HOSTS)
+    : DEFAULT_TOPOLOGY_FILTER;
+  return gmp.hosts.get({filter}).then(r => r.data);
+}, HOSTS_TOPOLOGY);
 
 export const HostsTopologyLoader = ({filter, children}) => (
   <Loader

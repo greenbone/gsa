@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -278,6 +278,9 @@ PowerFilter.propTypes = {
   onUpdate: PropTypes.func,
 };
 
-export default compose(withCapabilities, withGmp)(PowerFilter);
+export default compose(
+  withCapabilities,
+  withGmp,
+)(PowerFilter);
 
 // vim: set ts=2 sw=2 tw=80:

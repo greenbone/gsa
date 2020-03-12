@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2019-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -877,5 +877,8 @@ const mapDispatchToProp = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   withCapabilities,
-  connect(mapStateToProps, mapDispatchToProp),
+  connect(
+    mapStateToProps,
+    mapDispatchToProp,
+  ),
 )(PolicyComponent);
