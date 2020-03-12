@@ -23,7 +23,7 @@ import {useMutation} from '@apollo/react-hooks';
 
 import gql from 'graphql-tag';
 
-import {connect, useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import {useHistory, useLocation} from 'react-router-dom';
 
@@ -38,11 +38,8 @@ import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 import useGmp from 'web/utils/useGmp';
-import withGmp from 'web/utils/withGmp';
 
 import Logo from 'web/components/img/greenbone';
 
@@ -52,10 +49,10 @@ import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 
 import {
-  setSessionTimeout,
-  setUsername,
-  updateTimezone,
-  setIsLoggedIn,
+  setSessionTimeout as setSessionTimeoutAction,
+  setUsername as setUsernameAction,
+  updateTimezone as updateTimezoneAction,
+  setIsLoggedIn as setIsLoggedInAction,
 } from 'web/store/usersettings/actions';
 
 import {isLoggedIn as isLoggedInSelector} from 'web/store/usersettings/selectors';
@@ -123,6 +120,7 @@ const isIE11 = () =>
 
 const LoginPage = props => {
   const gmp = useGmp();
+  const dispatch = useDispatch();
   const [error, setError] = useState(false);
   const [loginGql] = useMutation(LOGIN);
   const location = useLocation();
@@ -137,21 +135,28 @@ const LoginPage = props => {
     login(gmp.settings.guestUsername, gmp.settings.guestPassword);
   };
 
+  const setLocale = locale => gmp.setLocale(locale);
+  const setTimezone = timezone => dispatch(updateTimezoneAction(gmp)(timezone));
+  const setSessionTimeout = timeout =>
+    dispatch(setSessionTimeoutAction(timeout));
+  const setUsername = username => dispatch(setUsernameAction(username));
+  const setIsLoggedIn = value => dispatch(setIsLoggedInAction(value));
+
   const login = (username, password) => {
     gmp
       .login(username, password)
       .then(data => {
         const {locale, timezone, sessionTimeout} = data;
 
-        props.setTimezone(timezone);
-        props.setLocale(locale);
-        props.setSessionTimeout(sessionTimeout);
-        props.setUsername(username);
+        setTimezone(timezone);
+        setLocale(locale);
+        setSessionTimeout(sessionTimeout);
+        setUsername(username);
       })
       .then(() => loginGql({variables: {username, password}}))
       .then(() => {
         // must be set before changing the location
-        props.setIsLoggedIn(true);
+        setIsLoggedIn(true);
 
         if (
           location &&
@@ -220,29 +225,6 @@ const LoginPage = props => {
   );
 };
 
-LoginPage.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  history: PropTypes.object.isRequired,
-  isLoggedIn: PropTypes.bool,
-  location: PropTypes.object.isRequired,
-  setIsLoggedIn: PropTypes.func.isRequired,
-  setLocale: PropTypes.func.isRequired,
-  setSessionTimeout: PropTypes.func.isRequired,
-  setTimezone: PropTypes.func.isRequired,
-  setUsername: PropTypes.func.isRequired,
-};
-
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  setTimezone: timezone => dispatch(updateTimezone(gmp)(timezone)),
-  setLocale: locale => gmp.setLocale(locale),
-  setSessionTimeout: timeout => dispatch(setSessionTimeout(timeout)),
-  setUsername: username => dispatch(setUsername(username)),
-  setIsLoggedIn: value => dispatch(setIsLoggedIn(value)),
-});
-
-export default compose(
-  withGmp,
-  connect(undefined, mapDispatchToProps),
-)(LoginPage);
+export default LoginPage;
 
 // vim: set ts=2 sw=2 tw=80:
