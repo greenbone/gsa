@@ -133,7 +133,6 @@ class App extends React.Component {
               </StoreProvider>
             </GmpContext.Provider>
           </ApolloProvider>
-          >
         </ErrorBoundary>
       </React.Fragment>
     );
