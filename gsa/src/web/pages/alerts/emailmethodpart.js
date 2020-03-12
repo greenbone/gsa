@@ -248,9 +248,6 @@ EmailMethodPart.propTypes = {
   onNewCredentialClick: PropTypes.func,
 };
 
-export default compose(
-  withCapabilities,
-  withPrefix,
-)(EmailMethodPart);
+export default compose(withCapabilities, withPrefix)(EmailMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

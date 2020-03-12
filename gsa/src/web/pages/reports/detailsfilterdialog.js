@@ -158,9 +158,6 @@ const FilterDialog = ({
 
 FilterDialog.propTypes = FilterDialogPropTypes;
 
-export default compose(
-  withCapabilities,
-  withFilterDialog(),
-)(FilterDialog);
+export default compose(withCapabilities, withFilterDialog())(FilterDialog);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -218,10 +218,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    undefined,
-    mapDispatchToProps,
-  ),
+  connect(undefined, mapDispatchToProps),
 )(RadiusAuthentication);
 
 // vim: set ts=2 sw=2 tw=80:

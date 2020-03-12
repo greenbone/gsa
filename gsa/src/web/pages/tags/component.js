@@ -332,9 +332,6 @@ TagComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default compose(
-  withGmp,
-  withCapabilities,
-)(TagComponent);
+export default compose(withGmp, withCapabilities)(TagComponent);
 
 // vim: set ts=2 sw=2 tw=80:

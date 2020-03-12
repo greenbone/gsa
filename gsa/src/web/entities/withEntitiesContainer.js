@@ -104,10 +104,7 @@ const withEntitiesContainer = (
     withDialogNotification,
     withDownload,
     withGmp,
-    connect(
-      mapStateToProps,
-      mapDispatchToProps,
-    ),
+    connect(mapStateToProps, mapDispatchToProps),
   )(EntitiesContainerWrapper);
 
   return props => {

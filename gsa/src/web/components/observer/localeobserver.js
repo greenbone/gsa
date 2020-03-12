@@ -72,9 +72,6 @@ LocaleObserver.propTypes = {
   setLocale: PropTypes.func.isRequired,
 };
 
-export default connect(
-  undefined,
-  {
-    setLocale,
-  },
-)(LocaleObserver);
+export default connect(undefined, {
+  setLocale,
+})(LocaleObserver);

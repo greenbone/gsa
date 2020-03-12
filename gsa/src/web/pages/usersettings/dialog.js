@@ -375,9 +375,6 @@ UserSettingsDialog = connect(rootState => {
   };
 })(UserSettingsDialog);
 
-export default compose(
-  withGmp,
-  withCapabilities,
-)(UserSettingsDialog);
+export default compose(withGmp, withCapabilities)(UserSettingsDialog);
 
 // vim: set ts=2 sw=2 tw=80:

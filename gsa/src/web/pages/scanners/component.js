@@ -421,10 +421,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(ScannerComponent);
 
 // vim: set ts=2 sw=2 tw=80:

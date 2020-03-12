@@ -115,7 +115,10 @@ class RoleComponent extends React.Component {
         roleId,
         subjectType: 'role',
       })
-      .then(() => this.loadSettings(roleId), error => this.setError(error))
+      .then(
+        () => this.loadSettings(roleId),
+        error => this.setError(error),
+      )
       .then(() => this.setState({isCreatingSuperPermission: false}));
   }
 
@@ -132,7 +135,10 @@ class RoleComponent extends React.Component {
         roleId,
         subjectType: 'role',
       })
-      .then(() => this.loadSettings(roleId), error => this.setError(error))
+      .then(
+        () => this.loadSettings(roleId),
+        error => this.setError(error),
+      )
       .then(() => this.setState({isCreatingPermission: false}));
   }
 
@@ -141,9 +147,10 @@ class RoleComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.permission
-      .delete({id: permissionId})
-      .then(() => this.loadSettings(roleId), error => this.setError(error));
+    return gmp.permission.delete({id: permissionId}).then(
+      () => this.loadSettings(roleId),
+      error => this.setError(error),
+    );
   }
 
   handleErrorClose() {
@@ -322,10 +329,7 @@ const mapDispatchToProp = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   withCapabilities,
-  connect(
-    mapStateToProps,
-    mapDispatchToProp,
-  ),
+  connect(mapStateToProps, mapDispatchToProp),
 )(RoleComponent);
 
 // vim: set ts=2 sw=2 tw=80:

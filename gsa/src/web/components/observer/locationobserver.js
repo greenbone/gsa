@@ -84,12 +84,9 @@ LocationObserver.propTypes = {
 export default compose(
   withGmp,
   withRouter,
-  connect(
-    undefined,
-    (dispatch, {gmp}) => ({
-      renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
-    }),
-  ),
+  connect(undefined, (dispatch, {gmp}) => ({
+    renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
+  })),
 )(LocationObserver);
 
 // vim: set ts=2 sw=2 tw=80:

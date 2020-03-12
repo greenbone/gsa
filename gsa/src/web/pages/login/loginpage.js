@@ -248,10 +248,7 @@ const mapStateToProp = (rootState, ownProps) => ({
 export default compose(
   withRouter,
   withGmp,
-  connect(
-    mapStateToProp,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProp, mapDispatchToProps),
 )(LoginPage);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -408,10 +408,7 @@ const mapStateToProps = (rootState, {gmp}) => {
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(PerformancePage);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -58,7 +58,10 @@ class SubscriptionProvider extends React.Component {
 
     return () => {
       const subscribers = this.getSubscribers(name); // eslint-disable-line no-shadow
-      this.setSubscribers(name, subscribers.filter(item => item !== func));
+      this.setSubscribers(
+        name,
+        subscribers.filter(item => item !== func),
+      );
     };
   }
 

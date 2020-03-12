@@ -439,10 +439,7 @@ export default compose(
     entitySelector: selector,
     load: loadEntity,
   }),
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(Page);
 
 // vim: set ts=2 sw=2 tw=80:

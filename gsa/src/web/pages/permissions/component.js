@@ -291,9 +291,6 @@ PermissionsComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default compose(
-  withGmp,
-  withCapabilities,
-)(PermissionsComponent);
+export default compose(withGmp, withCapabilities)(PermissionsComponent);
 
 // vim: set ts=2 sw=2 tw=80:

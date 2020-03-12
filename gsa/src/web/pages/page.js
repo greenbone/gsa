@@ -111,9 +111,6 @@ Page.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default compose(
-  withGmp,
-  withRouter,
-)(Page);
+export default compose(withGmp, withRouter)(Page);
 
 // vim: set ts=2 sw=2 tw=80:

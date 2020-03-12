@@ -1239,10 +1239,7 @@ const mapStateToProps = rootState => {
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(AlertComponent);
 
 // vim: set ts=2 sw=2 tw=80:

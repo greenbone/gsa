@@ -1045,8 +1045,5 @@ const mapDispatchToProp = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   withCapabilities,
-  connect(
-    mapStateToProps,
-    mapDispatchToProp,
-  ),
+  connect(mapStateToProps, mapDispatchToProp),
 )(TaskComponent);

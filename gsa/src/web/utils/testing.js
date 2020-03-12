@@ -104,9 +104,10 @@ const withProvider = (name, key = name) => Component => ({
 const TestingGmpPropvider = withProvider('gmp', 'value')(GmpContext.Provider);
 const TestingStoreProvider = withProvider('store')(Provider);
 const TestingRouter = withProvider('history')(Router);
-const TestingCapabilitiesProvider = withProvider('capabilities', 'value')(
-  CapabilitiesContext.Provider,
-);
+const TestingCapabilitiesProvider = withProvider(
+  'capabilities',
+  'value',
+)(CapabilitiesContext.Provider);
 
 export const rendererWith = (
   {capabilities, gmp, store, router} = {

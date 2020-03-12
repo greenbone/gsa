@@ -295,10 +295,7 @@ const FALLBACK_REPORT_LIST_FILTER = Filter.fromString(
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   withEntitiesContainer('report', {
     fallbackFilter: FALLBACK_REPORT_LIST_FILTER,
     entitiesSelector,

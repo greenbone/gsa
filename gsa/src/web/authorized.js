@@ -114,10 +114,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(Authorized);
 
 // vim: set ts=2 sw=2 tw=80:

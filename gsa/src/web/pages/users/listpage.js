@@ -271,10 +271,7 @@ export default compose(
     entitiesSelector,
     loadEntities,
   }),
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(UsersPage);
 
 // vim: set ts=2 sw=2 tw=80:

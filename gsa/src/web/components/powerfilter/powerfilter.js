@@ -279,9 +279,6 @@ PowerFilter.propTypes = {
   onUpdate: PropTypes.func,
 };
 
-export default compose(
-  withCapabilities,
-  withGmp,
-)(PowerFilter);
+export default compose(withCapabilities, withGmp)(PowerFilter);
 
 // vim: set ts=2 sw=2 tw=80:
