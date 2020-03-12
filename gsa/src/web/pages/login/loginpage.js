@@ -23,7 +23,7 @@ import {useMutation} from '@apollo/react-hooks';
 
 import gql from 'graphql-tag';
 
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 
 import {useHistory, useLocation} from 'react-router-dom';
 
@@ -58,7 +58,7 @@ import {
   setIsLoggedIn,
 } from 'web/store/usersettings/actions';
 
-import {isLoggedIn} from 'web/store/usersettings/selectors';
+import {isLoggedIn as isLoggedInSelector} from 'web/store/usersettings/selectors';
 
 import LoginForm from './loginform';
 
@@ -127,6 +127,7 @@ const LoginPage = props => {
   const [loginGql] = useMutation(LOGIN);
   const location = useLocation();
   const history = useHistory();
+  const isLoggedIn = useSelector(isLoggedInSelector);
 
   const handleSubmit = (username, password) => {
     login(username, password);
@@ -170,8 +171,6 @@ const LoginPage = props => {
   };
 
   useEffect(() => {
-    const {isLoggedIn = false} = props; // eslint-disable-line no-shadow
-
     if (isLoggedIn) {
       history.replace('/');
     }
@@ -241,13 +240,9 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   setIsLoggedIn: value => dispatch(setIsLoggedIn(value)),
 });
 
-const mapStateToProp = (rootState, ownProps) => ({
-  isLoggedIn: isLoggedIn(rootState),
-});
-
 export default compose(
   withGmp,
-  connect(mapStateToProp, mapDispatchToProps),
+  connect(undefined, mapDispatchToProps),
 )(LoginPage);
 
 // vim: set ts=2 sw=2 tw=80:
