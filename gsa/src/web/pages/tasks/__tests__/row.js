@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -18,18 +18,19 @@
  */
 /* eslint-disable no-console */
 import React from 'react';
+import {MockedProvider} from '@apollo/react-testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
 import Task, {TASK_STATUS} from 'gmp/models/task';
-import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Row from '../row';
+import {GET_TASK, DELETE_TASK, CLONE_TASK} from 'web/pages/tasks/graphql';
 
 setLocale('en');
 
@@ -37,19 +38,116 @@ const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
 
 const lastReport = {
-  report: {
-    _id: '1234',
-    timestamp: '2019-07-10T12:51:27Z',
-    severity: '5.0',
-  },
+  uuid: '1234',
+  severity: '5.0',
+  timestamp: '2019-07-30T13:23:30Z',
+  scanStart: '2019-07-30T13:23:34Z',
+  scanEnd: '2019-07-30T13:25:43Z',
 };
 
 const currentReport = {
-  report: {
-    _id: '5678',
-    timestamp: '2019-07-10T12:51:27Z',
+  uuid: '5678',
+  timestamp: '2019-07-30T13:23:30Z',
+  scanStart: '2019-07-30T13:23:34Z',
+};
+
+const mockTask = {
+  data: {
+    task: {
+      name: 'foo',
+      uuid: '314',
+      creationTime: '2019-07-16T06:31:29Z',
+      modificationTime: '2019-07-16T06:44:55Z',
+      permissions: [
+        {
+          name: 'Everything',
+        },
+      ],
+      lastReport,
+      reportCount: {
+        total: 3,
+        finished: 3,
+      },
+      status: TASK_STATUS.done,
+      target: {
+        name: 'target1',
+        uuid: 'id1',
+      },
+      trend: 'up',
+      comment: 'bar',
+      owner: 'username',
+      alerts: [
+        {
+          name: 'alert1',
+          uuid: '91011',
+        },
+      ],
+      scanner: {
+        uuid: 'id2',
+        name: 'scanner1',
+        scannerType: 'OPENVAS_SCANNER_TYPE',
+      },
+      schedulePeriods: null,
+      hostsOrdering: null,
+      userTags: null,
+      observers: {
+        users: ['john', 'doe'],
+        roles: [
+          {
+            name: 'r1',
+          },
+          {
+            name: 'r2',
+          },
+        ],
+        groups: [
+          {
+            name: 'g1',
+          },
+          {
+            name: 'g2',
+          },
+        ],
+      },
+    },
   },
 };
+
+const mocks = [
+  {
+    request: {
+      query: GET_TASK,
+      variables: {taskId: '314'},
+    },
+    result: mockTask,
+  },
+  {
+    request: {
+      query: DELETE_TASK,
+      variables: {taskId: '314'},
+    },
+    result: {
+      data: {
+        deleteTask: {
+          ok: 'true',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CLONE_TASK,
+      variables: {taskId: '314'},
+    },
+    result: {
+      data: {
+        cloneTask: {
+          taskId: '314',
+        },
+      },
+    },
+  },
+];
 
 describe('Task Row tests', () => {
   // deactivate console.error for tests
@@ -57,20 +155,8 @@ describe('Task Row tests', () => {
   const consoleError = console.error;
   console.error = () => {};
 
-  test('should render', () => {
-    const task = Task.fromElement({
-      _id: '314',
-      owner: {name: 'username'},
-      name: 'foo',
-      comment: 'bar',
-      status: TASK_STATUS.done,
-      alterable: '0',
-      report_count: {__text: '3', finished: '3'},
-      last_report: lastReport,
-      trend: 'up',
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: '5678', name: 'target'},
-    });
+  test('should render', async () => {
+    const task = Task.fromObject(mockTask.data.task);
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -93,19 +179,21 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <Row
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -127,6 +215,7 @@ describe('Task Row tests', () => {
 
     // Reports
     const links = baseElement.querySelectorAll('a');
+
     expect(links[1]).toHaveTextContent('3');
     expect(links[1]).toHaveAttribute(
       'title',
@@ -138,46 +227,81 @@ describe('Task Row tests', () => {
     );
 
     // Last Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity
     expect(bars[1]).toHaveAttribute('title', 'Medium');
     expect(bars[1]).toHaveTextContent('5.0 (Medium)');
 
-    // Trend
     const icons = getAllByTestId('svg-icon');
 
-    expect(icons[0]).toHaveAttribute('title', 'Severity increased');
-    expect(icons[0]).toHaveTextContent('trend_up.svg');
+    // Observer Icon
+    expect(icons[0]).toHaveAttribute(
+      'title',
+      'Task made visible for:\nUsers john, doe\nRoles r1, r2\nGroups g1, g2',
+    );
+    expect(icons[0]).toHaveTextContent('provide_view.svg');
+
+    // Trend
+    expect(icons[1]).toHaveAttribute('title', 'Severity increased');
+    expect(icons[1]).toHaveTextContent('trend_up.svg');
 
     // Actions
 
-    expect(icons[1]).toHaveAttribute('title', 'Start');
-    expect(icons[2]).toHaveAttribute('title', 'Task is not stopped');
-    expect(icons[3]).toHaveAttribute('title', 'Move Task to trashcan');
-    expect(icons[4]).toHaveAttribute('title', 'Edit Task');
-    expect(icons[5]).toHaveAttribute('title', 'Clone Task');
-    expect(icons[6]).toHaveAttribute('title', 'Export Task');
+    expect(icons[2]).toHaveAttribute('title', 'Start');
+    expect(icons[3]).toHaveAttribute('title', 'Task is not stopped');
+    expect(icons[4]).toHaveAttribute('title', 'Move Task to trashcan');
+    expect(icons[5]).toHaveAttribute('title', 'Edit Task');
+    expect(icons[6]).toHaveAttribute('title', 'Clone Task');
+    expect(icons[7]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should render icons', () => {
-    const task = Task.fromElement({
-      _id: '314',
-      owner: {name: 'username'},
+    const task = Task.fromObject({
+      uuid: '314',
       name: 'foo',
+      owner: 'username',
       comment: 'bar',
       status: TASK_STATUS.done,
       alterable: '1',
-      report_count: {__text: '1', finished: '1'},
-      last_report: lastReport,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-      scanner: {_id: 'id', name: 'scanner', type: GMP_SCANNER_TYPE},
+      reportCount: {
+        total: 1,
+        finished: 1,
+      },
+      lastReport,
+      permissions: [
+        {
+          name: 'Everything',
+        },
+      ],
+      target: {
+        uuid: 'id',
+        name: 'target',
+      },
+      scanner: {
+        uuid: 'id2',
+        name: 'scanner',
+        scannerType: 'GMP_SCANNER_TYPE',
+      },
       observers: {
-        __text: 'anon nymous',
-        role: [{name: 'lorem'}],
-        group: [{name: 'ipsum'}, {name: 'dolor'}],
+        users: ['john', 'doe'],
+        roles: [
+          {
+            name: 'r1',
+          },
+          {
+            name: 'r2',
+          },
+        ],
+        groups: [
+          {
+            name: 'g1',
+          },
+          {
+            name: 'g2',
+          },
+        ],
       },
     });
 
@@ -202,19 +326,21 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {getAllByTestId} = render(
-      <Row
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <Row
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -226,21 +352,31 @@ describe('Task Row tests', () => {
     );
     expect(icons[2]).toHaveAttribute(
       'title',
-      'Task made visible for:\nUsers anon, nymous\nRoles lorem\nGroups ipsum, dolor',
+      'Task made visible for:\nUsers john, doe\nRoles r1, r2\nGroups g1, g2',
     );
   });
 
-  test('should call click handlers for new task', () => {
-    const task = Task.fromElement({
-      _id: '314',
-      owner: {name: 'username'},
+  test('should call click handlers for new task', async () => {
+    const task = Task.fromObject({
+      uuid: '314',
+      owner: 'username',
       name: 'foo',
       comment: 'bar',
       status: TASK_STATUS.new,
-      report_count: {__text: '0', finished: '0'},
-      alterable: '0',
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
+      reportCount: {
+        total: 0,
+        finished: 0,
+      },
+      alterable: 0,
+      permissions: [
+        {
+          name: 'Everything',
+        },
+      ],
+      target: {
+        uuid: 'id',
+        name: 'target',
+      },
     });
 
     const handleReportImport = jest.fn();
@@ -264,24 +400,27 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId, queryAllByTestId} = render(
-      <Row
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <Row
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     // Name
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[0]);
+
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
     // Status
@@ -306,7 +445,7 @@ describe('Task Row tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Task is not stopped');
 
     fireEvent.click(icons[2]);
-    expect(handleTaskDelete).toHaveBeenCalledWith(task);
+    expect(handleTaskDelete).toHaveBeenCalledWith({taskId: '314'});
     expect(icons[2]).toHaveAttribute('title', 'Move Task to trashcan');
 
     fireEvent.click(icons[3]);
@@ -314,7 +453,7 @@ describe('Task Row tests', () => {
     expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[4]);
-    expect(handleTaskClone).toHaveBeenCalledWith(task);
+    expect(handleTaskClone).toHaveBeenCalledWith({taskId: '314'});
     expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[5]);
@@ -322,19 +461,29 @@ describe('Task Row tests', () => {
     expect(icons[5]).toHaveAttribute('title', 'Export Task');
   });
 
-  test('should call click handlers for running task', () => {
-    const task = Task.fromElement({
-      _id: '314',
-      owner: {name: 'username'},
+  test('should call click handlers for running task', async () => {
+    const task = Task.fromObject({
+      uuid: '314',
+      owner: 'username',
       name: 'foo',
       comment: 'bar',
-      in_use: true,
+      inUse: true,
       status: TASK_STATUS.running,
-      alterable: '0',
-      report_count: {__text: '1', finished: '0'},
-      current_report: currentReport,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
+      reportCount: {
+        total: 1,
+        finished: 0,
+      },
+      alterable: 0,
+      currentReport,
+      permissions: [
+        {
+          name: 'Everything',
+        },
+      ],
+      target: {
+        uuid: 'id',
+        name: 'target',
+      },
     });
 
     const handleReportImport = jest.fn();
@@ -358,19 +507,21 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <Row
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     // Name
@@ -391,6 +542,7 @@ describe('Task Row tests', () => {
 
     // Reports
     const links = baseElement.querySelectorAll('a');
+
     expect(links[1]).toHaveTextContent('1');
     expect(links[1]).toHaveAttribute(
       'title',
@@ -429,7 +581,7 @@ describe('Task Row tests', () => {
     expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[4]);
-    expect(handleTaskClone).toHaveBeenCalledWith(task);
+    expect(handleTaskClone).toHaveBeenCalledWith({taskId: '314'});
     expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[5]);
@@ -438,18 +590,18 @@ describe('Task Row tests', () => {
   });
 
   test('should call click handlers for stopped task', () => {
-    const task = Task.fromElement({
-      _id: '314',
-      owner: {name: 'username'},
+    const task = Task.fromObject({
+      uuid: '314',
+      owner: 'username',
       name: 'foo',
       comment: 'bar',
       status: TASK_STATUS.stopped,
       alterable: '0',
-      report_count: {__text: '2', finished: '1'},
-      current_report: currentReport,
-      last_report: lastReport,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
+      reportCount: {total: 2, finished: 1},
+      currentReport,
+      lastReport,
+      permissions: [{name: 'everything'}],
+      target: {uuid: 'id', name: 'target'},
     });
 
     const handleReportImport = jest.fn();
@@ -473,19 +625,21 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <Row
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     // Name
@@ -517,7 +671,7 @@ describe('Task Row tests', () => {
     );
 
     // Last Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity
@@ -536,7 +690,7 @@ describe('Task Row tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Resume');
 
     fireEvent.click(icons[2]);
-    expect(handleTaskDelete).toHaveBeenCalledWith(task);
+    expect(handleTaskDelete).toHaveBeenCalledWith({taskId: '314'});
     expect(icons[2]).toHaveAttribute('title', 'Move Task to trashcan');
 
     fireEvent.click(icons[3]);
@@ -544,7 +698,7 @@ describe('Task Row tests', () => {
     expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[4]);
-    expect(handleTaskClone).toHaveBeenCalledWith(task);
+    expect(handleTaskClone).toHaveBeenCalledWith({taskId: '314'});
     expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[5]);
@@ -553,17 +707,17 @@ describe('Task Row tests', () => {
   });
 
   test('should call click handlers for finished task', () => {
-    const task = Task.fromElement({
-      _id: '314',
-      owner: {name: 'username'},
+    const task = Task.fromObject({
+      uuid: '314',
+      owner: 'username',
       name: 'foo',
       comment: 'bar',
       status: TASK_STATUS.done,
       alterable: '0',
-      report_count: {__text: '1', finished: '1'},
-      last_report: lastReport,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
+      reportCount: {total: 1, finished: 1},
+      lastReport,
+      permissions: [{name: 'everything'}],
+      target: {uuid: 'id', name: 'target'},
     });
 
     const handleReportImport = jest.fn();
@@ -587,19 +741,21 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <Row
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     // Name
@@ -631,7 +787,7 @@ describe('Task Row tests', () => {
     );
 
     // Last Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity
@@ -650,7 +806,7 @@ describe('Task Row tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Task is not stopped');
 
     fireEvent.click(icons[2]);
-    expect(handleTaskDelete).toHaveBeenCalledWith(task);
+    expect(handleTaskDelete).toHaveBeenCalledWith({taskId: '314'});
     expect(icons[2]).toHaveAttribute('title', 'Move Task to trashcan');
 
     fireEvent.click(icons[3]);
@@ -658,7 +814,7 @@ describe('Task Row tests', () => {
     expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[4]);
-    expect(handleTaskClone).toHaveBeenCalledWith(task);
+    expect(handleTaskClone).toHaveBeenCalledWith({taskId: '314'});
     expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[5]);
@@ -667,17 +823,17 @@ describe('Task Row tests', () => {
   });
 
   test('should not call click handlers for task without permission', () => {
-    const task = Task.fromElement({
-      _id: '314',
-      owner: {name: 'user'},
+    const task = Task.fromObject({
+      uuid: '314',
+      owner: 'user',
       name: 'foo',
       comment: 'bar',
       status: TASK_STATUS.done,
       alterable: '0',
-      report_count: {__text: '1', finished: '1'},
-      last_report: lastReport,
-      permissions: {permission: [{name: 'get_tasks'}]},
-      target: {_id: 'id', name: 'target'},
+      reportCount: {total: 1, finished: 1},
+      lastReport,
+      permissions: [{name: 'get_tasks'}],
+      target: {uuid: 'id', name: 'target'},
     });
 
     const handleReportImport = jest.fn();
@@ -701,19 +857,21 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <Row
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     // Name
@@ -748,7 +906,7 @@ describe('Task Row tests', () => {
     );
 
     // Last Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity
@@ -779,23 +937,22 @@ describe('Task Row tests', () => {
     expect(icons[4]).toHaveAttribute('title', 'Permission to edit Task denied');
 
     fireEvent.click(icons[5]);
-    expect(handleTaskClone).toHaveBeenCalledWith(task);
+    expect(handleTaskClone).toHaveBeenCalledWith({taskId: '314'});
     expect(icons[5]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[6]);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
     expect(icons[6]).toHaveAttribute('title', 'Export Task');
   });
-
   test('should call click handlers for container task', () => {
-    const task = Task.fromElement({
-      _id: '314',
-      owner: {name: 'username'},
+    const task = Task.fromObject({
+      uuid: '314',
+      owner: 'username',
       name: 'foo',
       comment: 'bar',
-      report_count: {__text: '1', finished: '1'},
-      last_report: lastReport,
-      permissions: {permission: [{name: 'everything'}]},
+      reportCount: {total: 1, finished: 1},
+      lastReport,
+      permissions: [{name: 'everything'}],
     });
 
     const handleReportImport = jest.fn();
@@ -819,19 +976,21 @@ describe('Task Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <Row
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     // Name
@@ -863,7 +1022,7 @@ describe('Task Row tests', () => {
     );
 
     // Last Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity
@@ -883,7 +1042,7 @@ describe('Task Row tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Task is a container');
 
     fireEvent.click(icons[2]);
-    expect(handleTaskDelete).toHaveBeenCalledWith(task);
+    expect(handleTaskDelete).toHaveBeenCalledWith({taskId: '314'});
     expect(icons[2]).toHaveAttribute('title', 'Move Task to trashcan');
 
     fireEvent.click(icons[3]);
@@ -891,7 +1050,7 @@ describe('Task Row tests', () => {
     expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[4]);
-    expect(handleTaskClone).toHaveBeenCalledWith(task);
+    expect(handleTaskClone).toHaveBeenCalledWith({taskId: '314'});
     expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[5]);

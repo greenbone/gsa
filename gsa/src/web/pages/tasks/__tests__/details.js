@@ -35,28 +35,26 @@ import Details from '../details';
 
 setLocale('en');
 
-const config = ScanConfig.fromElement({
-  _id: '314',
+const scanConfig = {
+  uuid: '314',
   name: 'foo',
   comment: 'bar',
-  scanner: {name: 'scanner1', type: '0'},
+  scanner: {name: 'scanner1', scannerType: 0},
   type: OPENVAS_SCAN_CONFIG_TYPE,
-  tasks: {
-    task: [
-      {id: '12345', name: 'foo'},
-      {id: '678910', name: 'task2'},
-    ],
-  },
-});
+};
+
+const parsedConfig = ScanConfig.fromObject(scanConfig);
 
 const lastReport = {
-  report: {
-    _id: '1234',
-    timestamp: '2019-07-30T13:23:30Z',
-    scan_start: '2019-07-30T13:23:34Z',
-    scan_end: '2019-07-30T13:25:43Z',
-  },
+  uuid: '1234',
+  timestamp: '2019-07-30T13:23:30Z',
+  scanStart: '2019-07-30T13:23:34Z',
+  scanEnd: '2019-07-30T13:25:43Z',
 };
+
+const schedule = {uuid: '121314', name: 'schedule1'};
+
+const parsedSchedule = Schedule.fromObject(schedule);
 
 const preferences = {
   preference: [
@@ -88,17 +86,15 @@ const preferences = {
   ],
 };
 
-const schedule = Schedule.fromElement({_id: '121314', name: 'schedule1'});
-
 const getConfig = jest.fn().mockReturnValue(
   Promise.resolve({
-    data: config,
+    data: parsedConfig,
   }),
 );
 
 const getSchedule = jest.fn().mockReturnValue(
   Promise.resolve({
-    data: schedule,
+    data: parsedSchedule,
   }),
 );
 
@@ -113,22 +109,23 @@ const gmp = {
 
 describe('Task Details tests', () => {
   test('should render full task details', () => {
-    const task = Task.fromElement({
-      _id: '12345',
-      owner: {name: 'username'},
+    const task = Task.fromObject({
+      uuid: '12345',
+      owner: 'username',
       name: 'foo',
       comment: 'bar',
       status: TASK_STATUS.done,
-      alterable: '0',
-      last_report: lastReport,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: '5678', name: 'target1'},
-      alert: {_id: '91011', name: 'alert1'},
-      scanner: {_id: '1516', name: 'scanner1', type: '2'},
+      alterable: 0,
+      lastReport,
+      permissions: [{name: 'everything'}],
+      target: {uuid: '5678', name: 'target1'},
+      alerts: [{uuid: '91011', name: 'alert1'}],
+      scanner: {uuid: '1516', name: 'scanner1', type: 2},
       preferences: preferences,
-      schedule: schedule,
-      config: config,
+      schedule: {uuid: '121314', name: 'schedule1'},
+      scanConfig,
     });
+
     const caps = new Capabilities(['everything']);
 
     const {render, store} = rendererWith({
@@ -138,8 +135,8 @@ describe('Task Details tests', () => {
       gmp,
     });
 
-    store.dispatch(scanconfigActions.success('314', config));
-    store.dispatch(scheduleActions.success('121314', schedule));
+    store.dispatch(scanconfigActions.success('314', scanConfig));
+    store.dispatch(scheduleActions.success('121314', parsedSchedule));
 
     const {element, getAllByTestId} = render(<Details entity={task} />);
 
@@ -162,8 +159,14 @@ describe('Task Details tests', () => {
     expect(element).toHaveTextContent('OpenVAS Scanner');
 
     expect(headings[3]).toHaveTextContent('Assets');
+    expect(element).toMatchSnapshot();
 
-    expect(headings[4]).toHaveTextContent('Scan');
+    expect(detailslinks[3]).toHaveAttribute('href', '/scanconfig/314');
+
+    expect(headings[4]).toHaveTextContent('Schedule');
+    expect(detailslinks[4]).toHaveAttribute('href', '/schedule/121314');
+
+    expect(headings[5]).toHaveTextContent('Scan');
     expect(element).toHaveTextContent('2 minutes');
     expect(element).toHaveTextContent('Do not automatically delete reports');
   });

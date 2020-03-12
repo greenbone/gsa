@@ -40,21 +40,18 @@ import StopIcon from 'web/pages/tasks/icons/stopicon';
 
 import PropTypes from 'web/utils/proptypes';
 
-import {useCloneTask, useDeleteTask} from './graphql';
-
 const Actions = ({
   entity,
   links,
-  refetch,
   onReportImportClick,
+  onTaskCloneClick,
+  onTaskDeleteClick,
   onTaskDownloadClick,
   onTaskEditClick,
   onTaskResumeClick,
   onTaskStartClick,
   onTaskStopClick,
 }) => {
-  const deleteTask = useDeleteTask();
-  const cloneTask = useCloneTask();
   return (
     <IconDivider align={['center', 'center']} grow>
       {isDefined(entity.schedule) ? (
@@ -72,13 +69,13 @@ const Actions = ({
       <TrashIcon
         entity={entity}
         name="task"
-        onClick={() => deleteTask({taskId: entity.id}).then(refetch)}
+        onClick={() => onTaskDeleteClick({taskId: entity.id})}
       />
       <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
       <CloneIcon
         entity={entity}
         name="task"
-        onClick={() => cloneTask({taskId: entity.id}).then(refetch)}
+        onClick={() => onTaskCloneClick({taskId: entity.id})}
       />
       <ExportIcon
         value={entity}
@@ -91,7 +88,6 @@ const Actions = ({
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  refetch: PropTypes.func,
   onReportImportClick: PropTypes.func.isRequired,
   onTaskCloneClick: PropTypes.func,
   onTaskDeleteClick: PropTypes.func,

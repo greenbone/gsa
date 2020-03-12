@@ -24,3 +24,7 @@ export const toGraphQL = query => data => {
 export const toFruitfulQuery = query => gql => vars => {
   return query(gql, {variables: vars});
 };
+
+export const queryWithRefetch = query => refetch => vars => {
+  return query(vars).then(refetch());
+};

@@ -316,8 +316,8 @@ TaskDetails.propTypes = {
   links: PropTypes.bool,
   loadScanConfig: PropTypes.func.isRequired,
   loadSchedule: PropTypes.func.isRequired,
-  scanConfig: PropTypes.model,
-  schedule: PropTypes.model,
+  scanConfig: PropTypes.object,
+  schedule: PropTypes.object,
 };
 
 const mapStateToProps = (rootState, {entity = {}}) => {
