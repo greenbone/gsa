@@ -136,7 +136,7 @@ const UserMenuContainer = () => {
   const dispatch = useDispatch();
   const sessionTimeout = useUserSessionTimeout();
   const userTimezone = useUserTimezone();
-  const userName = useUserName();
+  const [userName] = useUserName();
   const gmp = useGmp();
   const history = useHistory();
 
