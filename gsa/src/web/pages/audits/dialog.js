@@ -61,7 +61,7 @@ import Layout from 'web/components/layout/layout';
 import AddResultsToAssetsGroup from 'web/pages/tasks/addresultstoassetsgroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/autodeletereportsgroup';
 
-const get_scanner = (scanners, scanner_id) => {
+const getScanner = (scanners, scanner_id) => {
   if (!isDefined(scanners)) {
     return undefined;
   }
@@ -155,7 +155,7 @@ const AuditDialog = ({
 
   const changeAudit = hasAudit ? audit.isChangeable() : true;
 
-  const scanner = get_scanner(scanners, scannerId);
+  const scanner = getScanner(scanners, scannerId);
   const scannerType = isDefined(scanner) ? scanner.scannerType : undefined;
 
   const uncontrolledData = {
@@ -169,8 +169,8 @@ const AuditDialog = ({
     maxChecks,
     maxHosts,
     name,
-    scanner_id: scannerId,
-    scanner_type: scannerType,
+    scannerId,
+    scannerType,
     sourceIface,
     audit,
   };
@@ -178,8 +178,8 @@ const AuditDialog = ({
   const controlledData = {
     alertIds,
     policyId,
-    scanner_id: scannerId,
-    scanner_type: scannerType,
+    scannerId,
+    scannerType,
     scheduleId,
     targetId,
   };
@@ -314,7 +314,7 @@ const AuditDialog = ({
             >
               <ScannerSelect
                 scanners={scanners}
-                scannerId={state.scanner_id}
+                scannerId={state.scannerId}
                 changeAudit={changeAudit}
                 isLoading={isLoadingScanners}
                 onChange={onScannerChange}
