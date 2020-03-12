@@ -118,7 +118,7 @@ const isIE11 = () =>
     ? +navigator.userAgent.match(/Trident\/([\d.]+)/)[1] >= 7
     : false;
 
-const LoginPage = props => {
+const LoginPage = () => {
   const gmp = useGmp();
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
