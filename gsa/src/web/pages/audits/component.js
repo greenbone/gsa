@@ -37,6 +37,8 @@ import {withRouter} from 'react-router-dom';
 import {
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
+  GMP_SCANNER_TYPE,
+  GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 
 import {
@@ -48,6 +50,11 @@ import {
   loadEntities as loadPolicies,
   selector as policiesSelector,
 } from 'web/store/entities/policies';
+
+import {
+  loadEntities as loadScanners,
+  selector as scannerSelector,
+} from 'web/store/entities/scanners';
 
 import {
   loadEntities as loadSchedules,
@@ -119,6 +126,7 @@ class AuditComponent extends React.Component {
     this.handleInteraction = this.handleInteraction.bind(this);
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleScannerChange = this.handleScannerChange.bind(this);
   }
 
   componentDidMount() {
@@ -198,6 +206,8 @@ class AuditComponent extends React.Component {
     maxChecks,
     maxHosts,
     name,
+    scannerId = OPENVAS_DEFAULT_SCANNER_ID,
+    scannerType = OPENVAS_SCANNER_TYPE,
     scheduleId,
     schedulePeriods,
     sourceIface,
@@ -205,9 +215,6 @@ class AuditComponent extends React.Component {
     audit,
   }) {
     const {gmp} = this.props;
-
-    let scannerId = OPENVAS_DEFAULT_SCANNER_ID;
-    const scannerType = OPENVAS_SCANNER_TYPE;
 
     const tagId = undefined;
     const addTag = NO_VALUE;
@@ -296,6 +303,7 @@ class AuditComponent extends React.Component {
 
     this.props.loadAlerts();
     this.props.loadPolicies();
+    this.props.loadScanners();
     this.props.loadSchedules();
     this.props.loadTargets();
 
@@ -417,11 +425,17 @@ class AuditComponent extends React.Component {
       }, this.handleError);
   }
 
+  handleScannerChange(scannerId) {
+    this.setState({scannerId});
+  }
+
   render() {
     const {
       alerts,
+      isLoadingScanners,
       policies,
       reportFormats = [],
+      scanners,
       schedules,
       targets,
       children,
@@ -449,6 +463,7 @@ class AuditComponent extends React.Component {
       maxChecks,
       maxHosts,
       name,
+      scannerId,
       scheduleId,
       schedulePeriods,
       sourceIface,
@@ -512,10 +527,13 @@ class AuditComponent extends React.Component {
                               hostsOrdering={hostsOrdering}
                               id={id}
                               in_assets={in_assets}
+                              isLoadingScanners={isLoadingScanners}
                               maxChecks={maxChecks}
                               maxHosts={maxHosts}
                               name={name}
                               policies={policies}
+                              scannerId={scannerId}
+                              scanners={scanners}
                               scheduleId={scheduleId}
                               schedulePeriods={schedulePeriods}
                               schedules={schedules}
@@ -530,6 +548,7 @@ class AuditComponent extends React.Component {
                               onChange={this.handleChange}
                               onClose={this.handleCloseAuditDialog}
                               onSave={this.handleSaveAudit}
+                              onScannerChange={this.handleScannerChange}
                             />
                           )}
                         </ScheduleComponent>
@@ -555,15 +574,18 @@ AuditComponent.propTypes = {
   defaultScheduleId: PropTypes.id,
   defaultTargetId: PropTypes.id,
   gmp: PropTypes.gmp.isRequired,
+  isLoadingScanners: PropTypes.bool,
   loadAlerts: PropTypes.func.isRequired,
   loadPolicies: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
+  loadScanners: PropTypes.func.isRequired,
   loadSchedules: PropTypes.func.isRequired,
   loadTargets: PropTypes.func.isRequired,
   loadUserSettingsDefaults: PropTypes.func.isRequired,
   policies: PropTypes.arrayOf(PropTypes.model),
   reportExportFileName: PropTypes.object,
   reportFormats: PropTypes.array,
+  scanners: PropTypes.arrayOf(PropTypes.model),
   schedules: PropTypes.arrayOf(PropTypes.model),
   targets: PropTypes.arrayOf(PropTypes.model),
   username: PropTypes.string,
@@ -591,6 +613,7 @@ const mapStateToProps = (rootState, {match}) => {
   const alertSel = alertSelector(rootState);
   const userDefaults = getUserSettingsDefaults(rootState);
   const policiesSel = policiesSelector(rootState);
+  const scannersSel = scannerSelector(rootState);
   const scheduleSel = scheduleSelector(rootState);
   const targetSel = targetSelector(rootState);
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
@@ -598,16 +621,29 @@ const mapStateToProps = (rootState, {match}) => {
 
   const reportFormatsSel = reportFormatsSelector(rootState);
 
+  const scannerList = scannersSel.getEntities(ALL_FILTER);
+  const scanners = isDefined(scannerList)
+    ? scannerList.filter(
+        scanner =>
+          scanner.scannerType === OPENVAS_SCANNER_TYPE ||
+          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE ||
+          scanner.scannerType === GMP_SCANNER_TYPE,
+      )
+    : undefined;
+
   return {
     alerts: alertSel.getEntities(ALL_FILTER),
     defaultAlertId: userDefaults.getValueByName('defaultalert'),
+    defaultScannerId: userDefaults.getValueByName('defaultopenvasscanner'),
     defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
+    isLoadingScanners: scannersSel.isLoadingAllEntities(ALL_FILTER),
     reportExportFileName: userDefaultsSelector.getValueByName(
       'reportexportfilename',
     ),
     reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
     policies: policiesSel.getEntities(ALL_FILTER),
+    scanners,
     schedules: scheduleSel.getEntities(ALL_FILTER),
     targets: targetSel.getEntities(ALL_FILTER),
     username,
@@ -617,6 +653,7 @@ const mapStateToProps = (rootState, {match}) => {
 const mapDispatchToProp = (dispatch, {gmp}) => ({
   loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
   loadPolicies: () => dispatch(loadPolicies(gmp)(ALL_FILTER)),
+  loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
   loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
   loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
@@ -629,8 +666,5 @@ export default compose(
   withCapabilities,
   withDownload,
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProp,
-  ),
+  connect(mapStateToProps, mapDispatchToProp),
 )(AuditComponent);
