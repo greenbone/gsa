@@ -25,7 +25,7 @@ import gql from 'graphql-tag';
 
 import {connect} from 'react-redux';
 
-import {withRouter} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -125,6 +125,9 @@ const LoginPage = props => {
   const gmp = useGmp();
   const [error, setError] = useState(false);
   const [loginGql] = useMutation(LOGIN);
+  const location = useLocation();
+  const history = useHistory();
+
   const handleSubmit = (username, password) => {
     login(username, password);
   };
@@ -134,8 +137,6 @@ const LoginPage = props => {
   };
 
   const login = (username, password) => {
-    const {location, history} = props;
-
     gmp
       .login(username, password)
       .then(data => {
@@ -171,7 +172,7 @@ const LoginPage = props => {
   };
 
   useEffect(() => {
-    const {history, isLoggedIn = false} = props; // eslint-disable-line no-shadow
+    const {isLoggedIn = false} = props; // eslint-disable-line no-shadow
 
     if (isLoggedIn) {
       history.replace('/');
@@ -247,7 +248,6 @@ const mapStateToProp = (rootState, ownProps) => ({
 });
 
 export default compose(
-  withRouter,
   withGmp,
   connect(mapStateToProp, mapDispatchToProps),
 )(LoginPage);
