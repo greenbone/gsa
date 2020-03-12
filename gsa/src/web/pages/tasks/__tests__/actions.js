@@ -39,11 +39,11 @@ describe('Task Actions tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const task = Task.fromElement({
+    const task = Task.fromObject({
       status: TASK_STATUS.new,
-      alterable: '0',
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
+      alterable: 0,
+      permissions: [{name: 'everything'}],
+      target: {uuid: 'id', name: 'target'},
     });
 
     const handleReportImport = jest.fn();
@@ -75,12 +75,12 @@ describe('Task Actions tests', () => {
   });
 
   test('should call click handlers', () => {
-    const task = Task.fromElement({
+    const task = Task.fromObject({
       status: TASK_STATUS.done,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
+      alterable: 0,
+      lastReport: {uuid: 'id'},
+      permissions: [{name: 'everything'}],
+      target: {uuid: 'id', name: 'target'},
     });
 
     const handleReportImport = jest.fn();
@@ -119,7 +119,7 @@ describe('Task Actions tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Task is not stopped');
 
     fireEvent.click(icons[2]);
-    expect(handleTaskDelete).toHaveBeenCalledWith(task);
+    expect(handleTaskDelete).toHaveBeenCalledWith({taskId: undefined});
     expect(icons[2]).toHaveAttribute('title', 'Move Task to trashcan');
 
     fireEvent.click(icons[3]);
@@ -127,7 +127,7 @@ describe('Task Actions tests', () => {
     expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[4]);
-    expect(handleTaskClone).toHaveBeenCalledWith(task);
+    expect(handleTaskClone).toHaveBeenCalledWith({taskId: undefined});
     expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[5]);
@@ -136,12 +136,12 @@ describe('Task Actions tests', () => {
   });
 
   test('should not call click handlers without permissions', () => {
-    const task = Task.fromElement({
+    const task = Task.fromObject({
       status: TASK_STATUS.done,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'get_tasks'}]},
-      target: {_id: 'id', name: 'target'},
+      alterable: 0,
+      lastReport: {uuid: 'id'},
+      permissions: [{name: 'get_tasks'}],
+      target: {uuid: 'id', name: 'target'},
     });
 
     const handleReportImport = jest.fn();
@@ -183,7 +183,7 @@ describe('Task Actions tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Task is not stopped');
 
     fireEvent.click(icons[2]);
-    expect(handleTaskDelete).not.toHaveBeenCalledWith(task);
+    expect(handleTaskDelete).not.toHaveBeenCalledWith({taskId: undefined});
     expect(icons[2]).toHaveAttribute(
       'title',
       'Permission to move Task to trashcan denied',
@@ -194,7 +194,7 @@ describe('Task Actions tests', () => {
     expect(icons[3]).toHaveAttribute('title', 'Permission to edit Task denied');
 
     fireEvent.click(icons[4]);
-    expect(handleTaskClone).not.toHaveBeenCalledWith(task);
+    expect(handleTaskClone).not.toHaveBeenCalledWith({taskId: undefined});
     expect(icons[4]).toHaveAttribute(
       'title',
       'Permission to clone Task denied',
@@ -206,12 +206,12 @@ describe('Task Actions tests', () => {
   });
 
   test('should call click handlers for running task', () => {
-    const task = Task.fromElement({
+    const task = Task.fromObject({
       status: TASK_STATUS.running,
-      alterable: '0',
-      in_use: true,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
+      alterable: 0,
+      inUse: true,
+      permissions: [{name: 'everything'}],
+      target: {uuid: 'id', name: 'target'},
     });
 
     const handleReportImport = jest.fn();
@@ -250,7 +250,7 @@ describe('Task Actions tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Task is not stopped');
 
     fireEvent.click(icons[2]);
-    expect(handleTaskDelete).not.toHaveBeenCalledWith(task);
+    expect(handleTaskDelete).not.toHaveBeenCalledWith({taskId: undefined});
     expect(icons[2]).toHaveAttribute('title', 'Task is still in use');
 
     fireEvent.click(icons[3]);
@@ -258,7 +258,7 @@ describe('Task Actions tests', () => {
     expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[4]);
-    expect(handleTaskClone).toHaveBeenCalledWith(task);
+    expect(handleTaskClone).toHaveBeenCalledWith({taskId: undefined});
     expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[5]);
@@ -267,12 +267,12 @@ describe('Task Actions tests', () => {
   });
 
   test('should call click handlers for stopped task', () => {
-    const task = Task.fromElement({
+    const task = Task.fromObject({
       status: TASK_STATUS.stopped,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
+      alterable: 0,
+      lastReport: {uuid: 'id'},
+      permissions: [{name: 'everything'}],
+      target: {uuid: 'id', name: 'target'},
     });
 
     const handleReportImport = jest.fn();
@@ -311,7 +311,7 @@ describe('Task Actions tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Resume');
 
     fireEvent.click(icons[2]);
-    expect(handleTaskDelete).toHaveBeenCalledWith(task);
+    expect(handleTaskDelete).toHaveBeenCalledWith({taskId: undefined});
     expect(icons[2]).toHaveAttribute('title', 'Move Task to trashcan');
 
     fireEvent.click(icons[3]);
@@ -319,7 +319,7 @@ describe('Task Actions tests', () => {
     expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[4]);
-    expect(handleTaskClone).toHaveBeenCalledWith(task);
+    expect(handleTaskClone).toHaveBeenCalledWith({taskId: undefined});
     expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[5]);
@@ -328,16 +328,16 @@ describe('Task Actions tests', () => {
   });
 
   test('should render schedule icon if task is scheduled', () => {
-    const task = Task.fromElement({
+    const task = Task.fromObject({
       status: TASK_STATUS.stopped,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
+      alterable: 0,
+      lastReport: {uuid: 'id'},
+      permissions: [{name: 'everything'}],
+      target: {uuid: 'id', name: 'target'},
       schedule: {
-        _id: 'schedule1',
+        uuid: 'schedule1',
         name: 'schedule1',
-        permissions: {permission: [{name: 'everything'}]},
+        permissions: [{name: 'everything'}],
       },
     });
 
@@ -385,8 +385,8 @@ describe('Task Actions tests', () => {
   });
 
   test('should call click handlers for container task', () => {
-    const task = Task.fromElement({
-      permissions: {permission: [{name: 'everything'}]},
+    const task = Task.fromObject({
+      permissions: [{name: 'everything'}],
     });
 
     const handleReportImport = jest.fn();
@@ -426,7 +426,7 @@ describe('Task Actions tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Task is a container');
 
     fireEvent.click(icons[2]);
-    expect(handleTaskDelete).toHaveBeenCalledWith(task);
+    expect(handleTaskDelete).toHaveBeenCalledWith({taskId: undefined});
     expect(icons[2]).toHaveAttribute('title', 'Move Task to trashcan');
 
     fireEvent.click(icons[3]);
@@ -434,7 +434,7 @@ describe('Task Actions tests', () => {
     expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[4]);
-    expect(handleTaskClone).toHaveBeenCalledWith(task);
+    expect(handleTaskClone).toHaveBeenCalledWith({taskId: undefined});
     expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[5]);
