@@ -25,7 +25,7 @@ import useUserTimezone from 'web/utils/useUserTimezone';
 const DateTime = ({formatter = dateTimeWithTimeZone, timezone, date}) => {
   date = ensureDate(date);
 
-  const userTimezone = useUserTimezone();
+  const [userTimezone] = useUserTimezone();
 
   if (!hasValue(timezone)) {
     timezone = userTimezone;

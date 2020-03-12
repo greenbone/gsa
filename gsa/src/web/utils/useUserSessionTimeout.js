@@ -15,10 +15,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import {getSessionTimeout} from 'web/store/usersettings/selectors';
+import {setSessionTimeout} from 'web/store/usersettings/actions';
 
-const useUserSessionTimeout = () => useSelector(getSessionTimeout);
+const useUserSessionTimeout = () => {
+  const dispatch = useDispatch();
+  return [
+    useSelector(getSessionTimeout),
+    timeout => dispatch(setSessionTimeout(timeout)),
+  ];
+};
 
 export default useUserSessionTimeout;

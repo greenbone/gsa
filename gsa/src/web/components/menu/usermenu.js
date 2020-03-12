@@ -17,8 +17,6 @@
  */
 import React from 'react';
 
-import {useDispatch} from 'react-redux';
-
 import {useHistory} from 'react-router-dom';
 
 import styled, {keyframes} from 'styled-components';
@@ -34,8 +32,6 @@ import UserIcon from 'web/components/icon/usericon';
 
 import Divider from 'web/components/layout/divider';
 import Link from 'web/components/link/link';
-
-import {setSessionTimeout} from 'web/store/usersettings/actions';
 
 import Theme from 'web/utils/theme';
 import useGmp from 'web/utils/useGmp';
@@ -133,10 +129,9 @@ const StyledLink = styled(Link)`
 `;
 
 const UserMenuContainer = () => {
-  const dispatch = useDispatch();
-  const sessionTimeout = useUserSessionTimeout();
-  const userTimezone = useUserTimezone();
-  const userName = useUserName();
+  const [sessionTimeout, setSessionTimeout] = useUserSessionTimeout();
+  const [userTimezone] = useUserTimezone();
+  const [userName] = useUserName();
   const gmp = useGmp();
   const history = useHistory();
 
@@ -149,9 +144,7 @@ const UserMenuContainer = () => {
   };
 
   const handleRenewSessionTimeout = () => {
-    gmp.user
-      .renewSession()
-      .then(response => dispatch(setSessionTimeout(response.data)));
+    gmp.user.renewSession().then(response => setSessionTimeout(response.data));
   };
 
   return (

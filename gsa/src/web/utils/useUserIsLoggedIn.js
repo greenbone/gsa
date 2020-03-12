@@ -17,15 +17,15 @@
  */
 import {useSelector, useDispatch} from 'react-redux';
 
-import {getTimezone} from 'web/store/usersettings/selectors';
-import {setTimezone} from 'web/store/usersettings/actions';
+import {isLoggedIn} from 'web/store/usersettings/selectors';
+import {setIsLoggedIn} from 'web/store/usersettings/actions';
 
-const useUserTimezone = () => {
+const useUserIsLoggedIn = () => {
   const dispatch = useDispatch();
   return [
-    useSelector(getTimezone),
-    timezone => dispatch(setTimezone(timezone)),
+    useSelector(isLoggedIn),
+    loggedIn => dispatch(setIsLoggedIn(loggedIn)),
   ];
 };
 
-export default useUserTimezone;
+export default useUserIsLoggedIn;

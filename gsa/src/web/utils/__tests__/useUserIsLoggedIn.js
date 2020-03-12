@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -17,41 +17,43 @@
  */
 import React from 'react';
 
-import {setUsername} from 'web/store/usersettings/actions';
+import {setIsLoggedIn as setIsLoggedInAction} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from '../testing';
 
-import useUserName from '../useUserName';
+import useUserIsLoggedIn from '../useUserIsLoggedIn';
 
-const TestUserName = () => <span>{useUserName()[0]}</span>;
-
-const TestUserName2 = () => {
-  const [name, setUserName] = useUserName();
-  return <span onClick={() => setUserName('bar')}>{name}</span>;
+const TestUserIsLoggedIn = () => {
+  const [isLoggedIn, setIsLoggedIn] = useUserIsLoggedIn();
+  return (
+    <span onClick={() => setIsLoggedIn(false)}>
+      {isLoggedIn ? 'yes' : 'no'}
+    </span>
+  );
 };
 
-describe('useUserName tests', () => {
-  test('should return the users name', () => {
+describe('useUserIsLoggedIn tests', () => {
+  test('should return the users login status', () => {
     const {render, store} = rendererWith({store: true});
 
-    store.dispatch(setUsername('foo'));
+    store.dispatch(setIsLoggedInAction(true));
 
-    const {element} = render(<TestUserName />);
+    const {element} = render(<TestUserIsLoggedIn />);
 
-    expect(element).toHaveTextContent(/^foo$/);
+    expect(element).toHaveTextContent(/^yes$/);
   });
 
-  test('should allow to change the user name', () => {
+  test('should allow to update the users login status', () => {
     const {render, store} = rendererWith({store: true});
 
-    store.dispatch(setUsername('foo'));
+    store.dispatch(setIsLoggedInAction(true));
 
-    const {element} = render(<TestUserName2 />);
+    const {element} = render(<TestUserIsLoggedIn />);
 
-    expect(element).toHaveTextContent(/^foo$/);
+    expect(element).toHaveTextContent(/^yes$/);
 
     fireEvent.click(element);
 
-    expect(element).toHaveTextContent(/^bar$/);
+    expect(element).toHaveTextContent(/^no$/);
   });
 });
