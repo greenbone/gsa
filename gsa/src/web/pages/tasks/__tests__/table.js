@@ -36,65 +36,59 @@ setLocale('en');
 const caps = new Capabilities(['everything']);
 
 const lastReport = {
-  report: {
-    _id: '1234',
-    timestamp: '2019-08-10T12:51:27Z',
-    severity: '5.0',
-  },
+  uuid: '1234',
+  severity: '5.0',
+  timestamp: '2019-08-10T12:51:27Z',
 };
 
 const lastReport2 = {
-  report: {
-    _id: '1234',
-    timestamp: '2019-07-10T12:51:27Z',
-    severity: '10.0',
-  },
+  uuid: '1234',
+  severity: '10.0',
+  timestamp: '2019-07-10T12:51:27Z',
 };
 
 const currentReport = {
-  report: {
-    _id: '5678',
-    timestamp: '2019-07-10T12:51:27Z',
-  },
+  uuid: '5678',
+  timestamp: '2019-07-10T12:51:27Z',
 };
 
-const task = Task.fromElement({
-  _id: '1234',
-  owner: {name: 'admin'},
+const task = Task.fromObject({
+  uuid: '1234',
+  owner: 'admin',
   name: 'foo',
   comment: 'bar',
   status: TASK_STATUS.done,
-  alterable: '0',
-  report_count: {__text: '1', finished: '1'},
-  last_report: lastReport,
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: 'id1', name: 'target1'},
+  alterable: 0,
+  reportCount: {total: 1, finished: 1},
+  lastReport,
+  permissions: [{name: 'everything'}],
+  target: {uuid: 'id1', name: 'target1'},
 });
 
-const task2 = Task.fromElement({
-  _id: '12345',
-  owner: {name: 'user'},
+const task2 = Task.fromObject({
+  uuid: '12345',
+  owner: 'user',
   name: 'lorem',
   comment: 'ipsum',
   status: TASK_STATUS.new,
-  alterable: '0',
-  report_count: {__text: '0', finished: '0'},
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: 'id2', name: 'target2'},
+  alterable: 0,
+  reportCount: {total: 0, finished: 0},
+  permissions: [{name: 'everything'}],
+  target: {uuid: 'id2', name: 'target2'},
 });
 
-const task3 = Task.fromElement({
-  _id: '123456',
-  owner: {name: 'user'},
+const task3 = Task.fromObject({
+  uuid: '123456',
+  owner: 'user',
   name: 'hello',
   comment: 'world',
   status: TASK_STATUS.running,
-  alterable: '0',
-  current_report: currentReport,
-  last_report: lastReport2,
-  report_count: {__text: '2', finished: '1'},
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: 'id2', name: 'target2'},
+  alterable: 0,
+  currentReport,
+  lastReport: lastReport2,
+  reportCount: {total: 2, finished: 1},
+  permissions: [{name: 'everything'}],
+  target: {uuid: 'id2', name: 'target2'},
 });
 
 const counts = new CollectionCounts({
@@ -264,7 +258,7 @@ describe('Tasks table tests', () => {
     expect(icons[6]).toHaveAttribute('title', 'Task is not stopped');
 
     fireEvent.click(icons[7]);
-    expect(handleTaskDelete).toHaveBeenCalledWith(task);
+    expect(handleTaskDelete).toHaveBeenCalledWith({taskId: '1234'});
     expect(icons[7]).toHaveAttribute('title', 'Move Task to trashcan');
 
     fireEvent.click(icons[8]);
@@ -272,7 +266,7 @@ describe('Tasks table tests', () => {
     expect(icons[8]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[9]);
-    expect(handleTaskClone).toHaveBeenCalledWith(task);
+    expect(handleTaskClone).toHaveBeenCalledWith({taskId: '1234'});
     expect(icons[9]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[10]);
