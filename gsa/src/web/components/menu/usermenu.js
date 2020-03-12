@@ -132,7 +132,7 @@ const StyledLink = styled(Link)`
 
 const UserMenuContainer = () => {
   const [sessionTimeout, setSessionTimeout] = useUserSessionTimeout();
-  const userTimezone = useUserTimezone();
+  const [userTimezone] = useUserTimezone();
   const [userName] = useUserName();
   const gmp = useGmp();
   const history = useHistory();

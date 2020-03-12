@@ -17,22 +17,39 @@
  */
 import React from 'react';
 
-import {setTimezone} from 'web/store/usersettings/actions';
+import {setTimezone as setTimezoneAction} from 'web/store/usersettings/actions';
 
-import {rendererWith} from '../testing';
+import {rendererWith, fireEvent} from '../testing';
 
 import useUserTimezone from '../useUserTimezone';
 
-const TestUserTimezone = () => <span>{useUserTimezone()}</span>;
+const TestUserTimezone = () => {
+  const [timezone, setUserTimezone] = useUserTimezone();
+  return <span onClick={() => setUserTimezone('UTC')}>{timezone}</span>;
+};
 
 describe('useUserTimezone tests', () => {
   test('should return the users timezone', () => {
     const {render, store} = rendererWith({store: true});
 
-    store.dispatch(setTimezone('CET'));
+    store.dispatch(setTimezoneAction('CET'));
 
     const {element} = render(<TestUserTimezone />);
 
     expect(element).toHaveTextContent(/^CET$/);
+  });
+
+  test('should allow to update the user timezone', () => {
+    const {render, store} = rendererWith({store: true});
+
+    store.dispatch(setTimezoneAction('CET'));
+
+    const {element} = render(<TestUserTimezone />);
+
+    expect(element).toHaveTextContent(/^CET$/);
+
+    fireEvent.click(element);
+
+    expect(element).toHaveTextContent(/^UTC$/);
   });
 });
