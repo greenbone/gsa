@@ -399,7 +399,7 @@ describe('Task Row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
-    const {baseElement, getAllByTestId, queryAllByTestId, element} = render(
+    const {baseElement, getAllByTestId, queryAllByTestId} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <Row
           entity={task}
@@ -1057,4 +1057,6 @@ describe('Task Row tests', () => {
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
     expect(icons[5]).toHaveAttribute('title', 'Export Task');
   });
+
+  console.warn = consoleError;
 });
