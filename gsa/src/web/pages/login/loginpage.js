@@ -41,6 +41,7 @@ import {isEmpty} from 'gmp/utils/string';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
+import useGmp from 'web/utils/useGmp';
 import withGmp from 'web/utils/withGmp';
 
 import Logo from 'web/components/img/greenbone';
@@ -121,6 +122,7 @@ const isIE11 = () =>
     : false;
 
 const LoginPage = props => {
+  const gmp = useGmp();
   const [error, setError] = useState(false);
   const [loginGql] = useMutation(LOGIN);
   const handleSubmit = (username, password) => {
@@ -128,13 +130,11 @@ const LoginPage = props => {
   };
 
   const handleGuestLogin = () => {
-    const {gmp} = props;
     login(gmp.settings.guestUsername, gmp.settings.guestPassword);
   };
 
   const login = (username, password) => {
     const {location, history} = props;
-    const {gmp} = props;
 
     gmp
       .login(username, password)
@@ -177,8 +177,6 @@ const LoginPage = props => {
       history.replace('/');
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const {gmp} = props;
 
   let message;
 
