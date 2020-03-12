@@ -147,9 +147,7 @@ const LoginPage = props => {
         props.setSessionTimeout(sessionTimeout);
         props.setUsername(username);
       })
-      .then(() =>
-        loginGql({variables: {username: username, password: password}}),
-      )
+      .then(() => loginGql({variables: {username, password}}))
       .then(() => {
         // must be set before changing the location
         props.setIsLoggedIn(true);
