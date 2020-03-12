@@ -109,7 +109,7 @@ const result3 = {
 };
 
 // Hosts
-const host1 = {
+export const host1 = {
   ip: '123.456.78.910',
   asset: {_asset_id: '123'},
   start: '2019-06-03T11:00:22Z',
@@ -153,7 +153,7 @@ const host1 = {
   ],
 };
 
-const host2 = {
+export const host2 = {
   ip: '109.876.54.321',
   start: '2019-06-03T11:15:14Z',
   end: '2019-06-03T11:31:23Z',

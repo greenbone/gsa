@@ -52,7 +52,7 @@ import {setRef} from 'web/utils/render';
 
 import Group from './group';
 
-const MAX_HOSTS = 1000;
+export const MAX_HOSTS = 1000;
 
 const SCANNER_RADIUS = 8;
 const HOST_RADIUS = 5;

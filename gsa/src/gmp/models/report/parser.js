@@ -402,7 +402,7 @@ export const parseOperatingSystems = (report, filter) => {
 export const parseHosts = (report, filter) => {
   const {host: hosts, results, hosts: hosts_count} = report;
 
-  if (!isDefined(hosts_count)) {
+  if (!isDefined(hosts)) {
     return emptyCollectionList(filter);
   }
 

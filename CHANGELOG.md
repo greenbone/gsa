@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)
 
 ### Changed
+- Set filter rows in hostsTopologyLoader to not use rows=-1 [#2026](https://github.com/greenbone/gsa/pull/2026)
 - Updated copyright header dates to 2020 [#2019](https://github.com/greenbone/gsa/pull/2020)
 - Updated German translation and fixed parts that were missing after the last merge [#1991](https://github.com/greenbone/gsa/pull/1991)
 - Improved error handling for invalid detailspage links [#1986](https://github.com/greenbone/gsa/pull/1986)
@@ -27,7 +28,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Lower memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
 
 ### Fixed
-- Fixed report DetailsContent counts in tabs [#2004](https://github.com/greenbone/gsa/pull/2004)
+- Fixed usage of report format %F in generateFilename() [#2021](https://github.com/greenbone/gsa/pull/2021)
+- Fixed report DetailsContent counts in tabs [#2004](https://github.com/greenbone/gsa/pull/2004) [#2023](https://github.com/greenbone/gsa/pull/2023)
 - Fixed auto_delete_value of 0 for tasks and audits [#1987](https://github.com/greenbone/gsa/pull/1987)
 - Fixed bulk tagging by user selection (send IDs as array) [#1985](https://github.com/greenbone/gsa/pull/1985)
 - Fixed pluralizing type 'vulnerability' [#1984](https://github.com/greenbone/gsa/pull/1984)

@@ -373,7 +373,7 @@ class DeltaReportDetails extends React.Component {
           fileNameFormat: reportExportFileName,
           id: entity.id,
           modificationTime: entity.modificationTime,
-          reportFormat: report_format,
+          reportFormat: report_format.name,
           resourceName: entity.task.name,
           resourceType: 'report',
           username,
