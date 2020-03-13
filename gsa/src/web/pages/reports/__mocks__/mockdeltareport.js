@@ -19,6 +19,8 @@ import {setLocale} from 'gmp/locale/lang';
 
 import Report from 'gmp/models/report';
 
+import {host1, host2} from './mockreport';
+
 setLocale('en');
 
 // Task
@@ -99,6 +101,7 @@ export const getMockDeltaReport = () => {
     result_count: {__text: 2, full: 2, filtered: 2},
     results: {result: [result1, result2]},
     hosts: {count: 2},
+    host: [host1, host2],
   };
 
   const entity = Report.fromElement({

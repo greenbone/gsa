@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -296,7 +296,10 @@ const FALLBACK_REPORT_LIST_FILTER = Filter.fromString(
 
 export default compose(
   withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withEntitiesContainer('report', {
     fallbackFilter: FALLBACK_REPORT_LIST_FILTER,
     entitiesSelector,

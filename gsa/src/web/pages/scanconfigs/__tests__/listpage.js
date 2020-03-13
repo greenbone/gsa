@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2019-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -54,10 +54,7 @@ const config = ScanConfig.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [
-      {id: '1234', name: 'task1'},
-      {id: '5678', name: 'task2'},
-    ],
+    task: [{id: '1234', name: 'task1'}, {id: '5678', name: 'task2'}],
   },
   family_count: {
     __text: 2,

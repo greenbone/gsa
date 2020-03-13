@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -83,9 +83,12 @@ LocationObserver.propTypes = {
 export default compose(
   withGmp,
   withRouter,
-  connect(undefined, (dispatch, {gmp}) => ({
-    renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
-  })),
+  connect(
+    undefined,
+    (dispatch, {gmp}) => ({
+      renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
+    }),
+  ),
 )(LocationObserver);
 
 // vim: set ts=2 sw=2 tw=80:
