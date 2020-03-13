@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -71,6 +71,9 @@ LocaleObserver.propTypes = {
   setLocale: PropTypes.func.isRequired,
 };
 
-export default connect(undefined, {
-  setLocale,
-})(LocaleObserver);
+export default connect(
+  undefined,
+  {
+    setLocale,
+  },
+)(LocaleObserver);

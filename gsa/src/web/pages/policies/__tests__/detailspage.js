@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2019-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -130,10 +130,7 @@ const policy = Policy.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [
-      {id: '1234', name: 'audit1'},
-      {id: '5678', name: 'audit2'},
-    ],
+    task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
   },
 });
 
@@ -158,10 +155,7 @@ const policy2 = Policy.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [
-      {id: '1234', name: 'audit1'},
-      {id: '5678', name: 'audit2'},
-    ],
+    task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
   },
 });
 
@@ -182,10 +176,7 @@ const policy3 = Policy.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [
-      {id: '1234', name: 'audit1'},
-      {id: '5678', name: 'audit2'},
-    ],
+    task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
   },
 });
 
@@ -206,10 +197,7 @@ const policy4 = Policy.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [
-      {id: '1234', name: 'audit1'},
-      {id: '5678', name: 'audit2'},
-    ],
+    task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
   },
 });
 

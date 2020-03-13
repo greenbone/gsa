@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -103,7 +103,10 @@ const withEntitiesContainer = (
     withDialogNotification,
     withDownload,
     withGmp,
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(
+      mapStateToProps,
+      mapDispatchToProps,
+    ),
   )(EntitiesContainerWrapper);
 
   return props => {

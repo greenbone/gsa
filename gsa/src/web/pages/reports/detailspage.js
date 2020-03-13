@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -434,7 +434,7 @@ class ReportDetails extends React.Component {
           fileNameFormat: reportExportFileName,
           id: entity.id,
           modificationTime: entity.modificationTime,
-          reportFormat: report_format,
+          reportFormat: report_format.name,
           resourceName: entity.task.name,
           resourceType: 'report',
           username,
@@ -822,7 +822,10 @@ export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(ReportDetailsWrapper);
 
 // vim: set ts=2 sw=2 tw=80:
