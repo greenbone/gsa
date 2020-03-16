@@ -82,22 +82,21 @@ class TlsCertificate extends Model {
     const sourceHosts = new Set();
     const sourcePorts = new Set();
 
+    // in order for the Sets to work properly with unique object values
+    // (Set uses object references, so for our purposes it contains duplicates)
+    // we parse them into a string, put the string into the set (making it
+    // unique) and in the end parse the strings back to objects with the correct
+    // values and keys
     if (isDefined(ret.sources)) {
       forEach(ret.sources.source, source => {
         if (isDefined(source.origin)) {
           if (source.origin.origin_type === 'Report') {
-            sourceReports.add({
-              id: source.origin.origin_id,
-              timestamp: source.origin.report.date,
-            });
+            sourceReports.add(JSON.stringify(source.origin));
           }
         }
         if (isDefined(source.location)) {
           if (isDefined(source.location.host)) {
-            sourceHosts.add({
-              id: source.location.host.asset._id,
-              ip: source.location.host.ip,
-            });
+            sourceHosts.add(JSON.stringify(source.location.host));
           }
           if (isDefined(source.location.port)) {
             sourcePorts.add(source.location.port);
@@ -106,8 +105,20 @@ class TlsCertificate extends Model {
       });
     }
 
-    ret.sourceReports = [...sourceReports];
-    ret.sourceHosts = [...sourceHosts];
+    ret.sourceReports = [...sourceReports].map(report => {
+      const originObject = JSON.parse(report);
+      return {
+        id: originObject.origin_id,
+        timestamp: originObject.report.date,
+      };
+    });
+    ret.sourceHosts = [...sourceHosts].map(host => {
+      const hostObject = JSON.parse(host);
+      return {
+        id: hostObject.asset._id,
+        ip: hostObject.ip,
+      };
+    });
     ret.sourcePorts = [...sourcePorts];
 
     delete ret.sources;
