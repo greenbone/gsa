@@ -211,6 +211,9 @@ class AlertComponent extends React.Component {
             credentials,
           });
         }
+      })
+      .catch(error => {
+        this.setState({credentialError: error.message});
       });
   }
 
@@ -1172,9 +1175,11 @@ class AlertComponent extends React.Component {
             )}
             {credentialDialogVisible && (
               <CredentialsDialog
+                error={this.state.credentialError}
                 title={credentialDialogTitle}
                 types={credentialTypes}
                 onClose={this.handleCloseCredentialDialog}
+                onErrorClose={() => this.setState({credentialError: undefined})}
                 onSave={this.handleCreateCredential}
               />
             )}
