@@ -74,8 +74,8 @@ describe('Report TLS Certificates Tab tests', () => {
     // Headings
     expect(header[0]).toHaveTextContent('DN');
     expect(header[1]).toHaveTextContent('Serial');
-    expect(header[2]).toHaveTextContent('Not Valid Before');
-    expect(header[3]).toHaveTextContent('Not Valid After');
+    expect(header[2]).toHaveTextContent('Activates');
+    expect(header[3]).toHaveTextContent('Expires');
     expect(header[4]).toHaveTextContent('IP');
     expect(header[5]).toHaveTextContent('Hostname');
     expect(header[6]).toHaveTextContent('Port');
