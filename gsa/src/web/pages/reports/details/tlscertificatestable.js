@@ -59,7 +59,7 @@ const Header = ({
           {...sortProps}
           sortBy="dn"
           width={actions ? '35%' : '40%'}
-          title={_('DN')}
+          title={_('Issuer DN')}
         />
         <TableHead
           {...sortProps}
@@ -71,13 +71,13 @@ const Header = ({
           {...sortProps}
           sortBy="notvalidbefore"
           width="10%"
-          title={_('Not Valid Before')}
+          title={_('Activates')}
         />
         <TableHead
           {...sortProps}
           sortBy="notvalidafter"
           width="10%"
-          title={_('Not Valid After')}
+          title={_('Expires')}
         />
         <TableHead {...sortProps} sortBy="ip" width="10%" title={_('IP')} />
         <TableHead
