@@ -78,6 +78,15 @@ class CredentialsDialog extends React.Component {
     this.handleError = this.handleError.bind(this);
   }
 
+  static getDerivedStateFromProps(props, state) {
+    const {error} = props;
+    if (isDefined(error)) {
+      return {
+        error: error,
+      };
+    }
+  }
+
   componentDidMount() {
     const {autogenerate, credential_type} = this.props;
 
@@ -117,6 +126,12 @@ class CredentialsDialog extends React.Component {
   }
 
   handleErrorClose() {
+    const {onErrorClose} = this.props;
+
+    if (isDefined(onErrorClose)) {
+      onErrorClose();
+    }
+
     this.setState({error: undefined});
   }
 
@@ -486,6 +501,7 @@ CredentialsDialog.propTypes = {
   title: PropTypes.string,
   types: PropTypes.arrayOf(pwtypes),
   onClose: PropTypes.func.isRequired,
+  onErrorClose: PropTypes.func,
   onSave: PropTypes.func.isRequired,
 };
 
