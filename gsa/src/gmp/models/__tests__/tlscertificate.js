@@ -305,6 +305,46 @@ describe('TlsCertificate Model tests', () => {
     expect(tlsCertificate.sources).toBeUndefined();
   });
 
+  test('should parse source reports uniquely', () => {
+    const element = {
+      certificate: {
+        __text: 'CERT123',
+      },
+      sources: {
+        source: [
+          {
+            origin: {
+              origin_id: 'ID123',
+              origin_type: 'Report',
+              report: {
+                date: '2019-10-10T11:09:23.022Z',
+              },
+            },
+          },
+          {
+            origin: {
+              origin_id: 'ID123',
+              origin_type: 'Report',
+              report: {
+                date: '2019-10-10T11:09:23.022Z',
+              },
+            },
+          },
+        ],
+      },
+    };
+    const resSourceReports = [
+      {
+        id: 'ID123',
+        timestamp: '2019-10-10T11:09:23.022Z',
+      },
+    ];
+    const tlsCertificate = TlsCertificate.fromElement(element);
+
+    expect(tlsCertificate.sourceReports).toEqual(resSourceReports);
+    expect(tlsCertificate.sources).toBeUndefined();
+  });
+
   test('should parse source hosts', () => {
     const element = {
       certificate: {
@@ -343,6 +383,48 @@ describe('TlsCertificate Model tests', () => {
       {
         id: 'ID456',
         ip: '123.456.789.42',
+      },
+    ];
+    const tlsCertificate = TlsCertificate.fromElement(element);
+
+    expect(tlsCertificate.sourceHosts).toEqual(resSourceHosts);
+    expect(tlsCertificate.sources).toBeUndefined();
+  });
+
+  test('should parse source hosts uniquely', () => {
+    const element = {
+      certificate: {
+        __text: 'CERT123',
+      },
+      sources: {
+        source: [
+          {
+            location: {
+              host: {
+                asset: {
+                  _id: 'ID123',
+                },
+                ip: '123.456.789.0',
+              },
+            },
+          },
+          {
+            location: {
+              host: {
+                asset: {
+                  _id: 'ID123',
+                },
+                ip: '123.456.789.0',
+              },
+            },
+          },
+        ],
+      },
+    };
+    const resSourceHosts = [
+      {
+        id: 'ID123',
+        ip: '123.456.789.0',
       },
     ];
     const tlsCertificate = TlsCertificate.fromElement(element);
