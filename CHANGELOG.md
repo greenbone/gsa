@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)
 
 ### Changed
-- Changed report TlsCertifcate table headers to match TlsCertificate asstes
+- Changed report TlsCertificate table headers to match TlsCertificate assets
 table headers [#2042](https://github.com/greenbone/gsa/pull/2042)
 - Unify source reports and hosts in TlsCertficateModel [#2040](https://github.com/greenbone/gsa/pull/2040)
 - Set filter rows in hostsTopologyLoader to not use rows=-1 [#2026](https://github.com/greenbone/gsa/pull/2026)
