@@ -24,12 +24,13 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
+import Capabilities from 'gmp/capabilities/capabilities';
 
 import TrashIcon from 'web/components/icon/trashicon';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
+import {useGetCaps} from 'web/pages/tasks/graphql';
 
 const EntityTrashIcon = ({
-  capabilities,
   displayName,
   entity,
   name,
@@ -43,6 +44,17 @@ const EntityTrashIcon = ({
 
   if (!isDefined(displayName)) {
     displayName = typeName(name);
+  }
+
+  let capabilities;
+
+  const query = useGetCaps();
+  const {data} = query();
+
+  if (isDefined(data)) {
+    capabilities = new Capabilities(data.capabilities);
+  } else {
+    capabilities = props.capabilities;
   }
 
   const mayDelete =
@@ -77,7 +89,6 @@ const EntityTrashIcon = ({
 };
 
 EntityTrashIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   name: PropTypes.string,
