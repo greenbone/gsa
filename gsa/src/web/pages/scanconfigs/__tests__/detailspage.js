@@ -34,7 +34,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 import {MockedProvider} from '@apollo/react-testing';
-import {GET_CAPS} from 'web/pages/tasks/graphql';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
