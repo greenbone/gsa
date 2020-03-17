@@ -122,15 +122,22 @@ const Page = ({
 }) => {
   const query = useGetTasks();
 
-  const {data, refetch} = query({filterString: filter.toFilterString()});
+  const {data, refetch, error} = query({filterString: filter.toFilterString()});
 
   const deleteTask = queryWithRefetch(useDeleteTask())(refetch);
   const cloneTask = queryWithRefetch(useCloneTask())(refetch);
 
+  let entities;
+
   if (isDefined(data)) {
-    props.entities = data.tasks.nodes.map(entity => Task.fromObject(entity));
-  } else {
-    props.entities = undefined;
+    entities = data.tasks.nodes.map(entity => Task.fromObject(entity));
+  }
+
+  let entitiesError;
+
+  if (isDefined(error)) {
+    console.log(error.networkError);
+    entitiesError = error;
   }
 
   useEffect(() => {
@@ -178,6 +185,8 @@ const Page = ({
           <PageTitle title={_('Tasks')} />
           <EntitiesPage
             {...props}
+            entities={entities}
+            entitiesError={entitiesError}
             dashboard={() => (
               <TaskDashboard
                 filter={filter}

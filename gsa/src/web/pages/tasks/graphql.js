@@ -22,6 +22,16 @@ import {useMutation, useQuery} from '@apollo/react-hooks';
 
 import {toGraphQL, toFruitfulQuery} from 'web/utils/graphql';
 
+export const GET_CAPS = gql`
+  query Capabilities {
+    capabilities
+  }
+`;
+
+export const useGetCaps = () => {
+  return toFruitfulQuery(useQuery)(GET_CAPS);
+};
+
 export const GET_TASK = gql`
   query Task($taskId: UUID!) {
     task(taskId: $taskId) {

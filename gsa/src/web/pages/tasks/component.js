@@ -80,7 +80,6 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 import {UNSET_VALUE} from 'web/utils/render';
 
@@ -96,15 +95,29 @@ import ScheduleComponent from 'web/pages/schedules/component';
 import AlertComponent from 'web/pages/alerts/component';
 import TargetComponent from 'web/pages/targets/component';
 
+import Capabilities from 'gmp/capabilities/capabilities';
 import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
 import {setTimezone} from 'web/store/usersettings/actions';
-import {useModifyTask, useCreateContainerTask, useCreateTask} from './graphql';
+import {
+  useModifyTask,
+  useCreateContainerTask,
+  useCreateTask,
+  useGetCaps,
+} from './graphql';
 
 const TaskComponent = props => {
   const modifyTask = useModifyTask();
   const createTask = useCreateTask();
   const createContainerTask = useCreateContainerTask();
+  const query = useGetCaps();
+  const {data} = query();
+
+  let capabilities;
+
+  if (isDefined(data)) {
+    capabilities = new Capabilities(data.capabilities);
+  }
 
   const {
     defaultPortListId,
@@ -378,8 +391,6 @@ const TaskComponent = props => {
   };
 
   const openStandardTaskDialog = task => {
-    const {capabilities} = props;
-
     props.loadAlerts();
     props.loadScanConfigs();
     props.loadScanners();
@@ -840,7 +851,6 @@ const TaskComponent = props => {
 
 TaskComponent.propTypes = {
   alerts: PropTypes.arrayOf(PropTypes.model),
-  capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
   credentials: PropTypes.arrayOf(PropTypes.model),
   defaultAlertId: PropTypes.id,
@@ -957,6 +967,5 @@ const mapDispatchToProp = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  withCapabilities,
   connect(mapStateToProps, mapDispatchToProp),
 )(TaskComponent);
