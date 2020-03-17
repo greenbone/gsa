@@ -28,6 +28,7 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
+import {MockedProvider} from '@apollo/react-testing';
 
 import Table from '../table';
 
@@ -130,19 +131,21 @@ describe('Audits table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
-      <Table
-        filter={filter}
-        entities={[audit, audit2, audit3]}
-        entitiesCounts={counts}
-        onAuditCloneClick={handleAuditCloneClick}
-        onAuditDeleteClick={handleAuditDeleteClick}
-        onAuditDownloadClick={handleAuditDownloadClick}
-        onAuditEditClick={handleAuditEditClick}
-        onAuditStartClick={handleAuditStartClick}
-        onAuditStopClick={handleAuditStopClick}
-        onAuditResumeClick={handleAuditResumeClick}
-        onReportDownloadClick={handleReportDownloadClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Table
+          filter={filter}
+          entities={[audit, audit2, audit3]}
+          entitiesCounts={counts}
+          onAuditCloneClick={handleAuditCloneClick}
+          onAuditDeleteClick={handleAuditDeleteClick}
+          onAuditDownloadClick={handleAuditDownloadClick}
+          onAuditEditClick={handleAuditEditClick}
+          onAuditStartClick={handleAuditStartClick}
+          onAuditStopClick={handleAuditStopClick}
+          onAuditResumeClick={handleAuditResumeClick}
+          onReportDownloadClick={handleReportDownloadClick}
+        />
+      </MockedProvider>,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -178,19 +181,21 @@ describe('Audits table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {element, getAllByTestId} = render(
-      <Table
-        filter={filter}
-        entities={[audit, audit2, audit3]}
-        entitiesCounts={counts}
-        onAuditCloneClick={handleAuditCloneClick}
-        onAuditDeleteClick={handleAuditDeleteClick}
-        onAuditDownloadClick={handleAuditDownloadClick}
-        onAuditEditClick={handleAuditEditClick}
-        onAuditStartClick={handleAuditStartClick}
-        onAuditStopClick={handleAuditStopClick}
-        onAuditResumeClick={handleAuditResumeClick}
-        onReportDownloadClick={handleReportDownloadClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Table
+          filter={filter}
+          entities={[audit, audit2, audit3]}
+          entitiesCounts={counts}
+          onAuditCloneClick={handleAuditCloneClick}
+          onAuditDeleteClick={handleAuditDeleteClick}
+          onAuditDownloadClick={handleAuditDownloadClick}
+          onAuditEditClick={handleAuditEditClick}
+          onAuditStartClick={handleAuditStartClick}
+          onAuditStopClick={handleAuditStopClick}
+          onAuditResumeClick={handleAuditResumeClick}
+          onReportDownloadClick={handleReportDownloadClick}
+        />
+      </MockedProvider>,
     );
 
     expect(element).not.toHaveTextContent('target1');
@@ -227,20 +232,22 @@ describe('Audits table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {getAllByTestId} = render(
-      <Table
-        filter={filter}
-        entities={[audit, audit2, audit3]}
-        entitiesCounts={counts}
-        gcrFormatDefined={true}
-        onAuditCloneClick={handleAuditCloneClick}
-        onAuditDeleteClick={handleAuditDeleteClick}
-        onAuditDownloadClick={handleAuditDownloadClick}
-        onAuditEditClick={handleAuditEditClick}
-        onAuditStartClick={handleAuditStartClick}
-        onAuditStopClick={handleAuditStopClick}
-        onAuditResumeClick={handleAuditResumeClick}
-        onReportDownloadClick={handleReportDownloadClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Table
+          filter={filter}
+          entities={[audit, audit2, audit3]}
+          entitiesCounts={counts}
+          gcrFormatDefined={true}
+          onAuditCloneClick={handleAuditCloneClick}
+          onAuditDeleteClick={handleAuditDeleteClick}
+          onAuditDownloadClick={handleAuditDownloadClick}
+          onAuditEditClick={handleAuditEditClick}
+          onAuditStartClick={handleAuditStartClick}
+          onAuditStopClick={handleAuditStopClick}
+          onAuditResumeClick={handleAuditResumeClick}
+          onReportDownloadClick={handleReportDownloadClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');

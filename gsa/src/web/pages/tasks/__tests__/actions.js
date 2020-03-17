@@ -23,6 +23,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
+import {MockedProvider} from '@apollo/react-testing';
 
 import Actions from '../actions';
 import Task, {TASK_STATUS} from 'gmp/models/task';
@@ -57,18 +58,20 @@ describe('Task Actions tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
     const {baseElement} = render(
-      <Actions
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Actions
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+        />
+      </MockedProvider>,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -93,19 +96,22 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
+
     const {getAllByTestId} = render(
-      <Actions
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Actions
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -154,19 +160,22 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: wrongCaps});
+
     const {getAllByTestId} = render(
-      <Actions
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Actions
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -224,19 +233,22 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
+
     const {getAllByTestId} = render(
-      <Actions
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Actions
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -285,19 +297,22 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
+
     const {getAllByTestId} = render(
-      <Actions
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Actions
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -355,19 +370,22 @@ describe('Task Actions tests', () => {
       store: true,
       router: true,
     });
+
     const {getAllByTestId} = render(
-      <Actions
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Actions
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+        />
+      </MockedProvider>,
     );
 
     const detailslinks = getAllByTestId('details-link');
@@ -399,19 +417,22 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
+
     const {getAllByTestId} = render(
-      <Actions
-        entity={task}
-        links={true}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Actions
+          entity={task}
+          links={true}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');

@@ -23,6 +23,8 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
+import {MockedProvider} from '@apollo/react-testing';
+
 import Theme from 'web/utils/theme';
 
 import Actions from '../actions';
@@ -59,19 +61,21 @@ describe('Audit Actions tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
     const {baseElement} = render(
-      <Actions
-        entity={audit}
-        gcrFormatDefined={true}
-        links={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Actions
+          entity={audit}
+          gcrFormatDefined={true}
+          links={true}
+          onAuditCloneClick={handleAuditClone}
+          onAuditDeleteClick={handleAuditDelete}
+          onAuditDownloadClick={handleAuditDownload}
+          onAuditEditClick={handleAuditEdit}
+          onAuditResumeClick={handleAuditResume}
+          onAuditStartClick={handleAuditStart}
+          onAuditStopClick={handleAuditStop}
+          onReportDownloadClick={handleReportDownload}
+        />
+      </MockedProvider>,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -96,20 +100,23 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
+
     const {getAllByTestId} = render(
-      <Actions
-        entity={audit}
-        gcrFormatDefined={true}
-        links={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Actions
+          entity={audit}
+          gcrFormatDefined={true}
+          links={true}
+          onAuditCloneClick={handleAuditClone}
+          onAuditDeleteClick={handleAuditDelete}
+          onAuditDownloadClick={handleAuditDownload}
+          onAuditEditClick={handleAuditEdit}
+          onAuditResumeClick={handleAuditResume}
+          onAuditStartClick={handleAuditStart}
+          onAuditStopClick={handleAuditStop}
+          onReportDownloadClick={handleReportDownload}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -165,20 +172,23 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: wrongCaps});
+
     const {getAllByTestId} = render(
-      <Actions
-        entity={audit}
-        gcrFormatDefined={true}
-        links={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Actions
+          entity={audit}
+          gcrFormatDefined={true}
+          links={true}
+          onAuditCloneClick={handleAuditClone}
+          onAuditDeleteClick={handleAuditDelete}
+          onAuditDownloadClick={handleAuditDownload}
+          onAuditEditClick={handleAuditEdit}
+          onAuditResumeClick={handleAuditResume}
+          onAuditStartClick={handleAuditStart}
+          onAuditStopClick={handleAuditStop}
+          onReportDownloadClick={handleReportDownload}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -246,20 +256,23 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
+
     const {getAllByTestId} = render(
-      <Actions
-        entity={audit}
-        gcrFormatDefined={true}
-        links={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Actions
+          entity={audit}
+          gcrFormatDefined={true}
+          links={true}
+          onAuditCloneClick={handleAuditClone}
+          onAuditDeleteClick={handleAuditDelete}
+          onAuditDownloadClick={handleAuditDownload}
+          onAuditEditClick={handleAuditEdit}
+          onAuditResumeClick={handleAuditResume}
+          onAuditStartClick={handleAuditStart}
+          onAuditStopClick={handleAuditStop}
+          onReportDownloadClick={handleReportDownload}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -313,20 +326,23 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
+
     const {getAllByTestId} = render(
-      <Actions
-        entity={audit}
-        gcrFormatDefined={true}
-        links={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Actions
+          entity={audit}
+          gcrFormatDefined={true}
+          links={true}
+          onAuditCloneClick={handleAuditClone}
+          onAuditDeleteClick={handleAuditDelete}
+          onAuditDownloadClick={handleAuditDownload}
+          onAuditEditClick={handleAuditEdit}
+          onAuditResumeClick={handleAuditResume}
+          onAuditStartClick={handleAuditStart}
+          onAuditStopClick={handleAuditStop}
+          onReportDownloadClick={handleReportDownload}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -382,20 +398,23 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
+
     const {getAllByTestId} = render(
-      <Actions
-        entity={audit}
-        gcrFormatDefined={false}
-        links={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Actions
+          entity={audit}
+          gcrFormatDefined={false}
+          links={true}
+          onAuditCloneClick={handleAuditClone}
+          onAuditDeleteClick={handleAuditDelete}
+          onAuditDownloadClick={handleAuditDownload}
+          onAuditEditClick={handleAuditEdit}
+          onAuditResumeClick={handleAuditResume}
+          onAuditStartClick={handleAuditStart}
+          onAuditStopClick={handleAuditStop}
+          onReportDownloadClick={handleReportDownload}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -436,20 +455,23 @@ describe('Audit Actions tests', () => {
       store: true,
       router: true,
     });
+
     const {getAllByTestId} = render(
-      <Actions
-        entity={audit}
-        gcrFormatDefined={false}
-        links={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Actions
+          entity={audit}
+          gcrFormatDefined={false}
+          links={true}
+          onAuditCloneClick={handleAuditClone}
+          onAuditDeleteClick={handleAuditDelete}
+          onAuditDownloadClick={handleAuditDownload}
+          onAuditEditClick={handleAuditEdit}
+          onAuditResumeClick={handleAuditResume}
+          onAuditStartClick={handleAuditStart}
+          onAuditStopClick={handleAuditStop}
+          onReportDownloadClick={handleReportDownload}
+        />
+      </MockedProvider>,
     );
 
     const detailslinks = getAllByTestId('details-link');

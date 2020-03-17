@@ -34,6 +34,7 @@ import {entityLoadingActions} from 'web/store/entities/policies';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
+import {MockedProvider} from '@apollo/react-testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -271,7 +272,9 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element, getAllByTestId} = render(
-      <Detailspage id="12345" />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
     );
 
     expect(element).toMatchSnapshot();
@@ -338,7 +341,9 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element, getAllByTestId} = render(
-      <Detailspage id="12345" />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -424,7 +429,9 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element, getAllByTestId} = render(
-      <Detailspage id="12345" />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -480,8 +487,11 @@ describe('Policy Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', policy));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
-
+    const {baseElement, element} = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
+    );
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[14]);
 
@@ -555,8 +565,11 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', policy));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
-
+    const {getAllByTestId} = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
+    );
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
@@ -649,8 +662,11 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', policy2));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
-
+    const {getAllByTestId} = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
+    );
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
@@ -752,8 +768,11 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', policy3));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
-
+    const {getAllByTestId} = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
+    );
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
@@ -846,8 +865,11 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', policy4));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
-
+    const {getAllByTestId} = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
+    );
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
@@ -891,13 +913,15 @@ describe('Policy ToolBarIcons tests', () => {
     });
 
     const {element, getAllByTestId} = render(
-      <ToolBarIcons
-        entity={policy}
-        onPolicyCloneClick={handlePolicyCloneClick}
-        onPolicyDeleteClick={handlePolicyDeleteClick}
-        onPolicyDownloadClick={handlePolicyDownloadClick}
-        onPolicyEditClick={handlePolicyEditClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          entity={policy}
+          onPolicyCloneClick={handlePolicyCloneClick}
+          onPolicyDeleteClick={handlePolicyDeleteClick}
+          onPolicyDownloadClick={handlePolicyDownloadClick}
+          onPolicyEditClick={handlePolicyEditClick}
+        />
+      </MockedProvider>,
     );
 
     expect(element).toMatchSnapshot();
@@ -930,13 +954,15 @@ describe('Policy ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <ToolBarIcons
-        entity={policy}
-        onPolicyCloneClick={handlePolicyCloneClick}
-        onPolicyDeleteClick={handlePolicyDeleteClick}
-        onPolicyDownloadClick={handlePolicyDownloadClick}
-        onPolicyEditClick={handlePolicyEditClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          entity={policy}
+          onPolicyCloneClick={handlePolicyCloneClick}
+          onPolicyDeleteClick={handlePolicyDeleteClick}
+          onPolicyDownloadClick={handlePolicyDownloadClick}
+          onPolicyEditClick={handlePolicyEditClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -973,13 +999,15 @@ describe('Policy ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <ToolBarIcons
-        entity={policy2}
-        onPolicyCloneClick={handlePolicyCloneClick}
-        onPolicyDeleteClick={handlePolicyDeleteClick}
-        onPolicyDownloadClick={handlePolicyDownloadClick}
-        onPolicyEditClick={handlePolicyEditClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          entity={policy2}
+          onPolicyCloneClick={handlePolicyCloneClick}
+          onPolicyDeleteClick={handlePolicyDeleteClick}
+          onPolicyDownloadClick={handlePolicyDownloadClick}
+          onPolicyEditClick={handlePolicyEditClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -1025,13 +1053,15 @@ describe('Policy ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <ToolBarIcons
-        entity={policy3}
-        onPolicyCloneClick={handlePolicyCloneClick}
-        onPolicyDeleteClick={handlePolicyDeleteClick}
-        onPolicyDownloadClick={handlePolicyDownloadClick}
-        onPolicyEditClick={handlePolicyEditClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          entity={policy3}
+          onPolicyCloneClick={handlePolicyCloneClick}
+          onPolicyDeleteClick={handlePolicyDeleteClick}
+          onPolicyDownloadClick={handlePolicyDownloadClick}
+          onPolicyEditClick={handlePolicyEditClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -1068,13 +1098,15 @@ describe('Policy ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <ToolBarIcons
-        entity={policy4}
-        onPolicyCloneClick={handlePolicyCloneClick}
-        onPolicyDeleteClick={handlePolicyDeleteClick}
-        onPolicyDownloadClick={handlePolicyDownloadClick}
-        onPolicyEditClick={handlePolicyEditClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          entity={policy4}
+          onPolicyCloneClick={handlePolicyCloneClick}
+          onPolicyDeleteClick={handlePolicyDeleteClick}
+          onPolicyDownloadClick={handlePolicyDownloadClick}
+          onPolicyEditClick={handlePolicyEditClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');

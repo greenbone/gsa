@@ -26,6 +26,7 @@ import Policy from 'gmp/models/policy';
 import {setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
+import {MockedProvider} from '@apollo/react-testing';
 
 import Table from '../table';
 
@@ -84,16 +85,18 @@ describe('Policies table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
-      <Table
-        filter={filter}
-        entities={[policy, policy2, policy3]}
-        entitiesCounts={counts}
-        onPolicyCloneClick={handlePolicyCloneClick}
-        onCreateAuditClick={handleCreateAuditClick}
-        onPolicyDeleteClick={handlePolicyDeleteClick}
-        onPolicyDownloadClick={handlePolicyDownloadClick}
-        onPolicyEditClick={handlePolicyEditClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Table
+          filter={filter}
+          entities={[policy, policy2, policy3]}
+          entitiesCounts={counts}
+          onPolicyCloneClick={handlePolicyCloneClick}
+          onCreateAuditClick={handleCreateAuditClick}
+          onPolicyDeleteClick={handlePolicyDeleteClick}
+          onPolicyDownloadClick={handlePolicyDownloadClick}
+          onPolicyEditClick={handlePolicyEditClick}
+        />
+      </MockedProvider>,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -123,16 +126,18 @@ describe('Policies table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {element, getAllByTestId} = render(
-      <Table
-        filter={filter}
-        entities={[policy, policy2, policy3]}
-        entitiesCounts={counts}
-        onPolicyCloneClick={handlePolicyCloneClick}
-        onCreateAuditClick={handleCreateAuditClick}
-        onPolicyDeleteClick={handlePolicyDeleteClick}
-        onPolicyDownloadClick={handlePolicyDownloadClick}
-        onPolicyEditClick={handlePolicyEditClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Table
+          filter={filter}
+          entities={[policy, policy2, policy3]}
+          entitiesCounts={counts}
+          onPolicyCloneClick={handlePolicyCloneClick}
+          onCreateAuditClick={handleCreateAuditClick}
+          onPolicyDeleteClick={handlePolicyDeleteClick}
+          onPolicyDownloadClick={handlePolicyDownloadClick}
+          onPolicyEditClick={handlePolicyEditClick}
+        />
+      </MockedProvider>,
     );
 
     expect(element).not.toHaveTextContent('Comment');
@@ -163,19 +168,20 @@ describe('Policies table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {getAllByTestId} = render(
-      <Table
-        filter={filter}
-        entities={[policy, policy2, policy3]}
-        entitiesCounts={counts}
-        onPolicyCloneClick={handlePolicyCloneClick}
-        onCreateAuditClick={handleCreateAuditClick}
-        onPolicyDeleteClick={handlePolicyDeleteClick}
-        onPolicyDownloadClick={handlePolicyDownloadClick}
-        onPolicyEditClick={handlePolicyEditClick}
-      />,
+    const {element, getAllByTestId} = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Table
+          filter={filter}
+          entities={[policy, policy2, policy3]}
+          entitiesCounts={counts}
+          onPolicyCloneClick={handlePolicyCloneClick}
+          onCreateAuditClick={handleCreateAuditClick}
+          onPolicyDeleteClick={handlePolicyDeleteClick}
+          onPolicyDownloadClick={handlePolicyDownloadClick}
+          onPolicyEditClick={handlePolicyEditClick}
+        />
+      </MockedProvider>,
     );
-
     const icons = getAllByTestId('svg-icon');
 
     fireEvent.click(icons[5]);

@@ -23,6 +23,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Task from 'gmp/models/task';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
+import {MockedProvider} from '@apollo/react-testing';
 
 import Theme from 'web/utils/theme';
 
@@ -39,7 +40,9 @@ describe('Entity TrashIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <TrashIcon entity={entity} onClick={clickHandler} />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <TrashIcon entity={entity} onClick={clickHandler} />
+      </MockedProvider>,
     );
 
     expect(caps.mayDelete('task')).toEqual(true);
@@ -63,7 +66,9 @@ describe('Entity TrashIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <TrashIcon entity={entity} onClick={clickHandler} />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <TrashIcon entity={entity} onClick={clickHandler} />
+      </MockedProvider>,
     );
 
     expect(caps.mayDelete('task')).toEqual(false);
@@ -86,7 +91,9 @@ describe('Entity TrashIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <TrashIcon entity={entity} onClick={clickHandler} />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <TrashIcon entity={entity} onClick={clickHandler} />
+      </MockedProvider>,
     );
 
     expect(caps.mayDelete('task')).toEqual(true);

@@ -36,6 +36,7 @@ import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
+import {MockedProvider} from '@apollo/react-testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -321,7 +322,9 @@ describe('Audit Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', audit));
 
     const {baseElement, element, getAllByTestId} = render(
-      <Detailspage id="12345" />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
     );
 
     expect(element).toMatchSnapshot();
@@ -416,7 +419,12 @@ describe('Audit Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', audit2));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement, element} = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
+    );
+
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[16]);
 
@@ -489,7 +497,11 @@ describe('Audit Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', audit5));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    const {getAllByTestId} = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Detailspage id="12345" />
+      </MockedProvider>,
+    );
 
     const icons = getAllByTestId('svg-icon');
 
@@ -536,16 +548,18 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {element, getAllByTestId} = render(
-      <ToolBarIcons
-        entity={audit}
-        onAuditCloneClick={handleAuditCloneClick}
-        onAuditDeleteClick={handleAuditDeleteClick}
-        onAuditDownloadClick={handleAuditDownloadClick}
-        onAuditEditClick={handleAuditEditClick}
-        onAuditResumeClick={handleAuditResumeClick}
-        onAuditStartClick={handleAuditStartClick}
-        onAuditStopClick={handleAuditStopClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          entity={audit}
+          onAuditCloneClick={handleAuditCloneClick}
+          onAuditDeleteClick={handleAuditDeleteClick}
+          onAuditDownloadClick={handleAuditDownloadClick}
+          onAuditEditClick={handleAuditEditClick}
+          onAuditResumeClick={handleAuditResumeClick}
+          onAuditStartClick={handleAuditStartClick}
+          onAuditStopClick={handleAuditStopClick}
+        />
+      </MockedProvider>,
     );
 
     expect(element).toMatchSnapshot();
@@ -581,16 +595,18 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <ToolBarIcons
-        entity={audit3}
-        onAuditCloneClick={handleAuditCloneClick}
-        onAuditDeleteClick={handleAuditDeleteClick}
-        onAuditDownloadClick={handleAuditDownloadClick}
-        onAuditEditClick={handleAuditEditClick}
-        onAuditResumeClick={handleAuditResumeClick}
-        onAuditStartClick={handleAuditStartClick}
-        onAuditStopClick={handleAuditStopClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          entity={audit3}
+          onAuditCloneClick={handleAuditCloneClick}
+          onAuditDeleteClick={handleAuditDeleteClick}
+          onAuditDownloadClick={handleAuditDownloadClick}
+          onAuditEditClick={handleAuditEditClick}
+          onAuditResumeClick={handleAuditResumeClick}
+          onAuditStartClick={handleAuditStartClick}
+          onAuditStopClick={handleAuditStopClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -648,16 +664,18 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <ToolBarIcons
-        entity={audit4}
-        onAuditCloneClick={handleAuditCloneClick}
-        onAuditDeleteClick={handleAuditDeleteClick}
-        onAuditDownloadClick={handleAuditDownloadClick}
-        onAuditEditClick={handleAuditEditClick}
-        onAuditResumeClick={handleAuditResumeClick}
-        onAuditStartClick={handleAuditStartClick}
-        onAuditStopClick={handleAuditStopClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          entity={audit4}
+          onAuditCloneClick={handleAuditCloneClick}
+          onAuditDeleteClick={handleAuditDeleteClick}
+          onAuditDownloadClick={handleAuditDownloadClick}
+          onAuditEditClick={handleAuditEditClick}
+          onAuditResumeClick={handleAuditResumeClick}
+          onAuditStartClick={handleAuditStartClick}
+          onAuditStopClick={handleAuditStopClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -722,16 +740,18 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <ToolBarIcons
-        entity={audit5}
-        onAuditCloneClick={handleAuditCloneClick}
-        onAuditDeleteClick={handleAuditDeleteClick}
-        onAuditDownloadClick={handleAuditDownloadClick}
-        onAuditEditClick={handleAuditEditClick}
-        onAuditResumeClick={handleAuditResumeClick}
-        onAuditStartClick={handleAuditStartClick}
-        onAuditStopClick={handleAuditStopClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          entity={audit5}
+          onAuditCloneClick={handleAuditCloneClick}
+          onAuditDeleteClick={handleAuditDeleteClick}
+          onAuditDownloadClick={handleAuditDownloadClick}
+          onAuditEditClick={handleAuditEditClick}
+          onAuditResumeClick={handleAuditResumeClick}
+          onAuditStartClick={handleAuditStartClick}
+          onAuditStopClick={handleAuditStopClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -795,16 +815,18 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <ToolBarIcons
-        entity={audit2}
-        onAuditCloneClick={handleAuditCloneClick}
-        onAuditDeleteClick={handleAuditDeleteClick}
-        onAuditDownloadClick={handleAuditDownloadClick}
-        onAuditEditClick={handleAuditEditClick}
-        onAuditResumeClick={handleAuditResumeClick}
-        onAuditStartClick={handleAuditStartClick}
-        onAuditStopClick={handleAuditStopClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          entity={audit2}
+          onAuditCloneClick={handleAuditCloneClick}
+          onAuditDeleteClick={handleAuditDeleteClick}
+          onAuditDownloadClick={handleAuditDownloadClick}
+          onAuditEditClick={handleAuditEditClick}
+          onAuditResumeClick={handleAuditResumeClick}
+          onAuditStartClick={handleAuditStartClick}
+          onAuditStopClick={handleAuditStopClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -868,16 +890,18 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <ToolBarIcons
-        entity={audit6}
-        onAuditCloneClick={handleAuditCloneClick}
-        onAuditDeleteClick={handleAuditDeleteClick}
-        onAuditDownloadClick={handleAuditDownloadClick}
-        onAuditEditClick={handleAuditEditClick}
-        onAuditResumeClick={handleAuditResumeClick}
-        onAuditStartClick={handleAuditStartClick}
-        onAuditStopClick={handleAuditStopClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          entity={audit6}
+          onAuditCloneClick={handleAuditCloneClick}
+          onAuditDeleteClick={handleAuditDeleteClick}
+          onAuditDownloadClick={handleAuditDownloadClick}
+          onAuditEditClick={handleAuditEditClick}
+          onAuditResumeClick={handleAuditResumeClick}
+          onAuditStartClick={handleAuditStartClick}
+          onAuditStopClick={handleAuditStopClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -948,16 +972,18 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <ToolBarIcons
-        entity={audit7}
-        onAuditCloneClick={handleAuditCloneClick}
-        onAuditDeleteClick={handleAuditDeleteClick}
-        onAuditDownloadClick={handleAuditDownloadClick}
-        onAuditEditClick={handleAuditEditClick}
-        onAuditResumeClick={handleAuditResumeClick}
-        onAuditStartClick={handleAuditStartClick}
-        onAuditStopClick={handleAuditStopClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          entity={audit7}
+          onAuditCloneClick={handleAuditCloneClick}
+          onAuditDeleteClick={handleAuditDeleteClick}
+          onAuditDownloadClick={handleAuditDownloadClick}
+          onAuditEditClick={handleAuditEditClick}
+          onAuditResumeClick={handleAuditResumeClick}
+          onAuditStartClick={handleAuditStartClick}
+          onAuditStopClick={handleAuditStopClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');

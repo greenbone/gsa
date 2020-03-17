@@ -27,6 +27,7 @@ import Policy from 'gmp/models/policy';
 import {setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
+import {MockedProvider} from '@apollo/react-testing';
 
 import Row from '../row';
 
@@ -63,15 +64,17 @@ describe('Row tests', () => {
     });
 
     const {baseElement} = render(
-      <Row
-        entity={entity}
-        onToggleDetailsClick={handleToggleDetailsClick}
-        onPolicyCloneClick={handlePolicyClone}
-        onPolicyDeleteClick={handlePolicyDelete}
-        onPolicyDownloadClick={handlePolicyDownload}
-        onPolicyEditClick={handlePolicyEdit}
-        onCreateAuditClick={handleCreateAudit}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Row
+          entity={entity}
+          onToggleDetailsClick={handleToggleDetailsClick}
+          onPolicyCloneClick={handlePolicyClone}
+          onPolicyDeleteClick={handlePolicyDelete}
+          onPolicyDownloadClick={handlePolicyDownload}
+          onPolicyEditClick={handlePolicyEdit}
+          onCreateAuditClick={handleCreateAudit}
+        />
+      </MockedProvider>,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -106,15 +109,17 @@ describe('Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {getAllByTestId} = render(
-      <Row
-        entity={policy}
-        onToggleDetailsClick={handleToggleDetailsClick}
-        onPolicyCloneClick={handlePolicyClone}
-        onPolicyDeleteClick={handlePolicyDelete}
-        onPolicyDownloadClick={handlePolicyDownload}
-        onPolicyEditClick={handlePolicyEdit}
-        onCreateAuditClick={handleCreateAudit}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Row
+          entity={policy}
+          onToggleDetailsClick={handleToggleDetailsClick}
+          onPolicyCloneClick={handlePolicyClone}
+          onPolicyDeleteClick={handlePolicyDelete}
+          onPolicyDownloadClick={handlePolicyDownload}
+          onPolicyEditClick={handlePolicyEdit}
+          onCreateAuditClick={handleCreateAudit}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -136,15 +141,17 @@ describe('Row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={entity}
-        onToggleDetailsClick={handleToggleDetailsClick}
-        onPolicyCloneClick={handlePolicyClone}
-        onPolicyDeleteClick={handlePolicyDelete}
-        onPolicyDownloadClick={handlePolicyDownload}
-        onPolicyEditClick={handlePolicyEdit}
-        onCreateAuditClick={handleCreateAudit}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Row
+          entity={entity}
+          onToggleDetailsClick={handleToggleDetailsClick}
+          onPolicyCloneClick={handlePolicyClone}
+          onPolicyDeleteClick={handlePolicyDelete}
+          onPolicyDownloadClick={handlePolicyDownload}
+          onPolicyEditClick={handlePolicyEdit}
+          onCreateAuditClick={handleCreateAudit}
+        />
+      </MockedProvider>,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -199,15 +206,17 @@ describe('Row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={policy}
-        onToggleDetailsClick={handleToggleDetailsClick}
-        onPolicyCloneClick={handlePolicyClone}
-        onPolicyDeleteClick={handlePolicyDelete}
-        onPolicyDownloadClick={handlePolicyDownload}
-        onPolicyEditClick={handlePolicyEdit}
-        onCreateAuditClick={handleCreateAudit}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Row
+          entity={policy}
+          onToggleDetailsClick={handleToggleDetailsClick}
+          onPolicyCloneClick={handlePolicyClone}
+          onPolicyDeleteClick={handlePolicyDelete}
+          onPolicyDownloadClick={handlePolicyDownload}
+          onPolicyEditClick={handlePolicyEdit}
+          onCreateAuditClick={handleCreateAudit}
+        />
+      </MockedProvider>,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -269,15 +278,17 @@ describe('Row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={policy}
-        onToggleDetailsClick={handleToggleDetailsClick}
-        onPolicyCloneClick={handlePolicyClone}
-        onPolicyDeleteClick={handlePolicyDelete}
-        onPolicyDownloadClick={handlePolicyDownload}
-        onPolicyEditClick={handlePolicyEdit}
-        onCreateAuditClick={handleCreateAudit}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Row
+          entity={policy}
+          onToggleDetailsClick={handleToggleDetailsClick}
+          onPolicyCloneClick={handlePolicyClone}
+          onPolicyDeleteClick={handlePolicyDelete}
+          onPolicyDownloadClick={handlePolicyDownload}
+          onPolicyEditClick={handlePolicyEdit}
+          onCreateAuditClick={handleCreateAudit}
+        />
+      </MockedProvider>,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -331,15 +342,17 @@ describe('Row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={policy}
-        onToggleDetailsClick={handleToggleDetailsClick}
-        onPolicyCloneClick={handlePolicyClone}
-        onPolicyDeleteClick={handlePolicyDelete}
-        onPolicyDownloadClick={handlePolicyDownload}
-        onPolicyEditClick={handlePolicyEdit}
-        onCreateAuditClick={handleCreateAudit}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Row
+          entity={policy}
+          onToggleDetailsClick={handleToggleDetailsClick}
+          onPolicyCloneClick={handlePolicyClone}
+          onPolicyDeleteClick={handlePolicyDelete}
+          onPolicyDownloadClick={handlePolicyDownload}
+          onPolicyEditClick={handlePolicyEdit}
+          onCreateAuditClick={handleCreateAudit}
+        />
+      </MockedProvider>,
     );
 
     const spans = baseElement.querySelectorAll('span');

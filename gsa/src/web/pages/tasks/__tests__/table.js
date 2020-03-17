@@ -28,6 +28,7 @@ import Task, {TASK_STATUS} from 'gmp/models/task';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
+import {MockedProvider} from '@apollo/react-testing';
 
 import Table from '../table';
 
@@ -128,20 +129,22 @@ describe('Tasks table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
-      <Table
-        filter={filter}
-        entities={[task, task2, task3]}
-        entitiesCounts={counts}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Table
+          filter={filter}
+          entities={[task, task2, task3]}
+          entitiesCounts={counts}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -180,20 +183,22 @@ describe('Tasks table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {element, getAllByTestId} = render(
-      <Table
-        filter={filter}
-        entities={[task, task2, task3]}
-        entitiesCounts={counts}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Table
+          filter={filter}
+          entities={[task, task2, task3]}
+          entitiesCounts={counts}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     expect(element).not.toHaveTextContent('target1');
@@ -231,20 +236,22 @@ describe('Tasks table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {getAllByTestId} = render(
-      <Table
-        filter={filter}
-        entities={[task, task2, task3]}
-        entitiesCounts={counts}
-        onReportImportClick={handleReportImport}
-        onTaskCloneClick={handleTaskClone}
-        onTaskDeleteClick={handleTaskDelete}
-        onTaskDownloadClick={handleTaskDownload}
-        onTaskEditClick={handleTaskEdit}
-        onTaskResumeClick={handleTaskResume}
-        onTaskStartClick={handleTaskStart}
-        onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Table
+          filter={filter}
+          entities={[task, task2, task3]}
+          entitiesCounts={counts}
+          onReportImportClick={handleReportImport}
+          onTaskCloneClick={handleTaskClone}
+          onTaskDeleteClick={handleTaskDelete}
+          onTaskDownloadClick={handleTaskDownload}
+          onTaskEditClick={handleTaskEdit}
+          onTaskResumeClick={handleTaskResume}
+          onTaskStartClick={handleTaskStart}
+          onTaskStopClick={handleTaskStop}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');

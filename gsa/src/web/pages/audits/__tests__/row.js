@@ -28,6 +28,7 @@ import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
+import {MockedProvider} from '@apollo/react-testing';
 
 import Row from '../row';
 
@@ -91,20 +92,22 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={audit}
-        links={true}
-        gcrFormatDefined={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Row
+          entity={audit}
+          links={true}
+          gcrFormatDefined={true}
+          onAuditCloneClick={handleAuditClone}
+          onAuditDeleteClick={handleAuditDelete}
+          onAuditDownloadClick={handleAuditDownload}
+          onAuditEditClick={handleAuditEdit}
+          onAuditResumeClick={handleAuditResume}
+          onAuditStartClick={handleAuditStart}
+          onAuditStopClick={handleAuditStop}
+          onReportDownloadClick={handleReportDownload}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -183,20 +186,22 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {getAllByTestId} = render(
-      <Row
-        entity={audit}
-        links={true}
-        gcrFormatDefined={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Row
+          entity={audit}
+          links={true}
+          gcrFormatDefined={true}
+          onAuditCloneClick={handleAuditClone}
+          onAuditDeleteClick={handleAuditDelete}
+          onAuditDownloadClick={handleAuditDownload}
+          onAuditEditClick={handleAuditEdit}
+          onAuditResumeClick={handleAuditResume}
+          onAuditStartClick={handleAuditStart}
+          onAuditStopClick={handleAuditStop}
+          onReportDownloadClick={handleReportDownload}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -245,20 +250,22 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId, queryAllByTestId} = render(
-      <Row
-        entity={audit}
-        links={true}
-        gcrFormatDefined={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Row
+          entity={audit}
+          links={true}
+          gcrFormatDefined={true}
+          onAuditCloneClick={handleAuditClone}
+          onAuditDeleteClick={handleAuditDelete}
+          onAuditDownloadClick={handleAuditDownload}
+          onAuditEditClick={handleAuditEdit}
+          onAuditResumeClick={handleAuditResume}
+          onAuditStartClick={handleAuditStart}
+          onAuditStopClick={handleAuditStop}
+          onReportDownloadClick={handleReportDownload}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     // Name
@@ -347,20 +354,22 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={audit}
-        links={true}
-        gcrFormatDefined={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Row
+          entity={audit}
+          links={true}
+          gcrFormatDefined={true}
+          onAuditCloneClick={handleAuditClone}
+          onAuditDeleteClick={handleAuditDelete}
+          onAuditDownloadClick={handleAuditDownload}
+          onAuditEditClick={handleAuditEdit}
+          onAuditResumeClick={handleAuditResume}
+          onAuditStartClick={handleAuditStart}
+          onAuditStopClick={handleAuditStop}
+          onReportDownloadClick={handleReportDownload}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     // Name
@@ -454,20 +463,22 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={audit}
-        links={true}
-        gcrFormatDefined={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Row
+          entity={audit}
+          links={true}
+          gcrFormatDefined={true}
+          onAuditCloneClick={handleAuditClone}
+          onAuditDeleteClick={handleAuditDelete}
+          onAuditDownloadClick={handleAuditDownload}
+          onAuditEditClick={handleAuditEdit}
+          onAuditResumeClick={handleAuditResume}
+          onAuditStartClick={handleAuditStart}
+          onAuditStopClick={handleAuditStop}
+          onReportDownloadClick={handleReportDownload}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     // Name
@@ -563,20 +574,22 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={audit}
-        links={true}
-        gcrFormatDefined={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Row
+          entity={audit}
+          links={true}
+          gcrFormatDefined={true}
+          onAuditCloneClick={handleAuditClone}
+          onAuditDeleteClick={handleAuditDelete}
+          onAuditDownloadClick={handleAuditDownload}
+          onAuditEditClick={handleAuditEdit}
+          onAuditResumeClick={handleAuditResume}
+          onAuditStartClick={handleAuditStart}
+          onAuditStopClick={handleAuditStop}
+          onReportDownloadClick={handleReportDownload}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     // Name
@@ -672,20 +685,22 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <Row
-        entity={audit}
-        links={true}
-        gcrFormatDefined={true}
-        onAuditCloneClick={handleAuditClone}
-        onAuditDeleteClick={handleAuditDelete}
-        onAuditDownloadClick={handleAuditDownload}
-        onAuditEditClick={handleAuditEdit}
-        onAuditResumeClick={handleAuditResume}
-        onAuditStartClick={handleAuditStart}
-        onAuditStopClick={handleAuditStop}
-        onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Row
+          entity={audit}
+          links={true}
+          gcrFormatDefined={true}
+          onAuditCloneClick={handleAuditClone}
+          onAuditDeleteClick={handleAuditDelete}
+          onAuditDownloadClick={handleAuditDownload}
+          onAuditEditClick={handleAuditEdit}
+          onAuditResumeClick={handleAuditResume}
+          onAuditStartClick={handleAuditStart}
+          onAuditStopClick={handleAuditStop}
+          onReportDownloadClick={handleReportDownload}
+          onToggleDetailsClick={handleToggleDetailsClick}
+        />
+      </MockedProvider>,
     );
 
     // Name
