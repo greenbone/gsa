@@ -136,7 +136,7 @@ class EntitiesContainer extends React.Component {
     // use filter as loadedFilter to show current user filter and not the last
     // loaded filter
     return {
-      isUpdating: true,
+      // isUpdating: true,
       loadedFilter: props.filter,
     };
   }
@@ -638,10 +638,7 @@ const mapDispatchToProps = (dispatch, {gmpname, gmp}) => {
 
 export default compose(
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(EntitiesContainer);
 
 // vim: set ts=2 sw=2 tw=80:
