@@ -21,20 +21,16 @@ import React from 'react';
 import Capabilities from 'gmp/capabilities/capabilities';
 
 import {fireEvent, rendererWith} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
 
 import DetailsLink from '../detailslink';
 
 describe('DetailsLink tests', () => {
   test('should render DetailsLink', () => {
     const {render} = rendererWith({capabilities: true, router: true});
-
     const {element} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <DetailsLink title="Foo" type="foo" id="bar">
-          Foo
-        </DetailsLink>
-      </MockedProvider>,
+      <DetailsLink title="Foo" type="foo" id="bar">
+        Foo
+      </DetailsLink>,
     );
 
     expect(element).toHaveTextContent('Foo');
@@ -45,11 +41,9 @@ describe('DetailsLink tests', () => {
     const {render, history} = rendererWith({capabilities: true, router: true});
 
     const {element} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <DetailsLink title="Foo" type="foo" id="1">
-          Foo
-        </DetailsLink>
-      </MockedProvider>,
+      <DetailsLink title="Foo" type="foo" id="1">
+        Foo
+      </DetailsLink>,
     );
 
     expect(history.location.pathname).toEqual('/');
@@ -63,11 +57,9 @@ describe('DetailsLink tests', () => {
     const {render, history} = rendererWith({capabilities: true, router: true});
 
     const {element} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <DetailsLink title="Foo" type="foo" id="cpe:/a:jenkins:jenkins:2.141">
-          Foo
-        </DetailsLink>
-      </MockedProvider>,
+      <DetailsLink title="Foo" type="foo" id="cpe:/a:jenkins:jenkins:2.141">
+        Foo
+      </DetailsLink>,
     );
 
     expect(history.location.pathname).toEqual('/');
@@ -83,11 +75,9 @@ describe('DetailsLink tests', () => {
     const {render, history} = rendererWith({capabilities: true, router: true});
 
     const {element} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <DetailsLink title="Foo" type="foo" id="1" textOnly={true}>
-          Foo
-        </DetailsLink>
-      </MockedProvider>,
+      <DetailsLink title="Foo" type="foo" id="1" textOnly={true}>
+        Foo
+      </DetailsLink>,
     );
 
     expect(history.location.pathname).toEqual('/');
@@ -102,11 +92,9 @@ describe('DetailsLink tests', () => {
     const {render, history} = rendererWith({capabilities, router: true});
 
     const {element} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <DetailsLink title="Foo" type="foo" id="1">
-          Foo
-        </DetailsLink>
-      </MockedProvider>,
+      <DetailsLink title="Foo" type="foo" id="1">
+        Foo
+      </DetailsLink>,
     );
 
     expect(history.location.pathname).toEqual('/');
