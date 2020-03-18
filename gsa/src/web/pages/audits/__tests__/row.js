@@ -159,7 +159,11 @@ describe('Audit Row tests', () => {
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
       scanner: {_id: 'id', name: 'scanner', type: GMP_SCANNER_TYPE},
-      observers: 'user',
+      observers: {
+        __text: 'anon nymous',
+        role: [{name: 'lorem'}],
+        group: [{name: 'ipsum'}, {name: 'dolor'}],
+      },
     });
 
     const handleAuditClone = jest.fn();
@@ -208,7 +212,7 @@ describe('Audit Row tests', () => {
     );
     expect(icons[2]).toHaveAttribute(
       'title',
-      'Audit made visible for: User user',
+      'Audit made visible for:\nUsers anon, nymous\nRoles lorem\nGroups ipsum, dolor',
     );
   });
 
