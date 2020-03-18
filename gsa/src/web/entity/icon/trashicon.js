@@ -54,7 +54,7 @@ const EntityTrashIcon = ({
   if (isDefined(data)) {
     capabilities = new Capabilities(data.capabilities);
   } else {
-    capabilities = props.capabilities;
+    capabilities = props.capabilities; // fallback to HOC
   }
 
   const mayDelete =
@@ -96,6 +96,10 @@ EntityTrashIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
+// withCapabilities is not necessary technically
+// for the poc I want to keep as much of the code/tests unchanged
+// and getting rid of it will cause many tests to fail
+// hence it stays until graphql can be further integrated
 export default withCapabilities(EntityTrashIcon);
 
 // vim: set ts=2 sw=2 tw=80:
