@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined, isArray} from '../utils/identity';
+import {isDefined, isArray, isString} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 import {normalizeType} from '../utils/entitytype';
@@ -25,6 +25,9 @@ import {
   parseInt,
   parseProgressElement,
   parseYesNo,
+  parseYes,
+  parseIntoArray,
+  parseText,
   parseDuration,
   NO_VALUE,
 } from '../parser';
@@ -48,7 +51,6 @@ import {
   TASK_STATUS as AUDIT_STATUS,
   getTranslatableTaskStatus as getTranslatableAuditStatus,
   isActive,
-  parse_yes,
 } from './task';
 
 export {
@@ -116,6 +118,23 @@ class Audit extends Model {
       copy.report_count.finished = parseInt(report_count.finished);
     }
 
+    if (isDefined(element.observers)) {
+      copy.observers = {};
+      if (isString(element.observers) && element.observers.length > 0) {
+        copy.observers.user = element.observers.split(' ');
+      } else {
+        if (isDefined(element.observers.__text)) {
+          copy.observers.user = parseText(element.observers).split(' ');
+        }
+        if (isDefined(element.observers.role)) {
+          copy.observers.role = parseIntoArray(element.observers.role);
+        }
+        if (isDefined(element.observers.group)) {
+          copy.observers.group = parseIntoArray(element.observers.group);
+        }
+      }
+    }
+
     copy.alterable = parseYesNo(element.alterable);
     copy.result_count = parseInt(element.result_count);
 
@@ -174,10 +193,10 @@ class Audit extends Model {
       for (const pref of element.preferences.preference) {
         switch (pref.scanner_name) {
           case 'in_assets':
-            copy.in_assets = parse_yes(pref.value);
+            copy.in_assets = parseYes(pref.value);
             break;
           case 'assets_apply_overrides':
-            copy.apply_overrides = parse_yes(pref.value);
+            copy.apply_overrides = parseYes(pref.value);
             break;
           case 'assets_min_qod':
             copy.min_qod = parseInt(pref.value);
