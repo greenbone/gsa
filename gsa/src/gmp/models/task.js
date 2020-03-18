@@ -27,10 +27,11 @@ import {
   parseInt,
   parseProgressElement,
   parseYesNo,
+  parseYes,
+  parseIntoArray,
   parseText,
   parseDuration,
   NO_VALUE,
-  YES_VALUE,
 } from '../parser';
 
 import Model, {parseModelFromElement} from '../model';
@@ -82,12 +83,6 @@ const TASK_STATUS_TRANSLATIONS = {
   Done: _l('Done'),
 };
 /* eslint-disable quote-props */
-
-export function parse_yes(value) {
-  return value === 'yes' ? YES_VALUE : NO_VALUE;
-}
-
-export const parseIntoArray = value => (isArray(value) ? value : [value]);
 
 export const getTranslatableTaskStatus = status =>
   `${TASK_STATUS_TRANSLATIONS[status]}`;
@@ -221,10 +216,10 @@ class Task extends Model {
       for (const pref of element.preferences.preference) {
         switch (pref.scanner_name) {
           case 'in_assets':
-            copy.in_assets = parse_yes(pref.value);
+            copy.in_assets = parseYes(pref.value);
             break;
           case 'assets_apply_overrides':
-            copy.apply_overrides = parse_yes(pref.value);
+            copy.apply_overrides = parseYes(pref.value);
             break;
           case 'assets_min_qod':
             copy.min_qod = parseInt(pref.value);

@@ -25,6 +25,8 @@ import {
   parseInt,
   parseProgressElement,
   parseYesNo,
+  parseYes,
+  parseIntoArray,
   parseText,
   parseDuration,
   NO_VALUE,
@@ -49,8 +51,6 @@ import {
   TASK_STATUS as AUDIT_STATUS,
   getTranslatableTaskStatus as getTranslatableAuditStatus,
   isActive,
-  parse_yes,
-  parseIntoArray,
 } from './task';
 
 export {
@@ -193,10 +193,10 @@ class Audit extends Model {
       for (const pref of element.preferences.preference) {
         switch (pref.scanner_name) {
           case 'in_assets':
-            copy.in_assets = parse_yes(pref.value);
+            copy.in_assets = parseYes(pref.value);
             break;
           case 'assets_apply_overrides':
-            copy.apply_overrides = parse_yes(pref.value);
+            copy.apply_overrides = parseYes(pref.value);
             break;
           case 'assets_min_qod':
             copy.min_qod = parseInt(pref.value);
