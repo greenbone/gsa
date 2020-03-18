@@ -19,13 +19,25 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
+import Capabilities from 'gmp/capabilities/capabilities';
+import {useGetCaps} from 'web/pages/tasks/graphql';
 import ImportIcon from 'web/components/icon/importicon';
 
-const ImportReportIcon = ({capabilities, size, task, onClick}) => {
+const ImportReportIcon = ({size, task, onClick, ...props}) => {
+  let capabilities;
+
+  const query = useGetCaps();
+  const {data} = query();
+
+  if (isDefined(data)) {
+    capabilities = new Capabilities(data.capabilities);
+  } else {
+    capabilities = props.capabilities;
+  }
   if (!task.isContainer() || !capabilities.mayCreate('report')) {
     return null;
   }
@@ -42,7 +54,6 @@ const ImportReportIcon = ({capabilities, size, task, onClick}) => {
 };
 
 ImportReportIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
