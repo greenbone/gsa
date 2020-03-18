@@ -19,13 +19,26 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
+import Capabilities from 'gmp/capabilities/capabilities';
+import {useGetCaps} from 'web/pages/tasks/graphql';
 import StopIcon from 'web/components/icon/stopicon';
 
-const TaskStopIcon = ({capabilities, size, task, onClick}) => {
+const TaskStopIcon = ({size, task, onClick, ...props}) => {
+  let capabilities;
+
+  const query = useGetCaps();
+  const {data} = query();
+
+  if (isDefined(data)) {
+    capabilities = new Capabilities(data.capabilities);
+  } else {
+    capabilities = props.capabilities;
+  }
+
   if (task.isRunning() && !task.isContainer()) {
     if (
       !capabilities.mayOp('stop_task') ||
@@ -43,7 +56,6 @@ const TaskStopIcon = ({capabilities, size, task, onClick}) => {
 };
 
 TaskStopIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
