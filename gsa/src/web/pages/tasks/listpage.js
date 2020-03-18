@@ -25,6 +25,8 @@ import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
+import Capabilities from 'gmp/capabilities/capabilities';
+import {useGetCaps} from 'web/pages/tasks/graphql';
 import Task from 'gmp/models/task';
 import {
   loadEntities,
@@ -62,45 +64,57 @@ import {queryWithRefetch} from 'web/utils/graphql';
 
 export const ToolBarIcons = withCapabilities(
   ({
-    capabilities,
     onAdvancedTaskWizardClick,
     onModifyTaskWizardClick,
     onContainerTaskCreateClick,
     onTaskCreateClick,
     onTaskWizardClick,
-  }) => (
-    <IconDivider>
-      <ManualIcon
-        page="scanning"
-        anchor="managing-tasks"
-        title={_('Help: Tasks')}
-      />
-      {capabilities.mayOp('run_wizard') && (
-        <IconMenu icon={<WizardIcon />} onClick={onTaskWizardClick}>
-          {capabilities.mayCreate('task') && (
-            <MenuEntry title={_('Task Wizard')} onClick={onTaskWizardClick} />
-          )}
-          {capabilities.mayCreate('task') && (
-            <MenuEntry
-              title={_('Advanced Task Wizard')}
-              onClick={onAdvancedTaskWizardClick}
-            />
-          )}
-          {capabilities.mayEdit('task') && (
-            <MenuEntry
-              title={_('Modify Task Wizard')}
-              onClick={onModifyTaskWizardClick}
-            />
-          )}
-        </IconMenu>
-      )}
+    ...props
+  }) => {
+    let capabilities;
 
-      <NewIconMenu
-        onNewClick={onTaskCreateClick}
-        onNewContainerClick={onContainerTaskCreateClick}
-      />
-    </IconDivider>
-  ),
+    const query = useGetCaps();
+    const {data} = query();
+
+    if (isDefined(data)) {
+      capabilities = new Capabilities(data.capabilities);
+    } else {
+      capabilities = props.capabilities;
+    }
+    return (
+      <IconDivider>
+        <ManualIcon
+          page="scanning"
+          anchor="managing-tasks"
+          title={_('Help: Tasks')}
+        />
+        {capabilities.mayOp('run_wizard') && (
+          <IconMenu icon={<WizardIcon />} onClick={onTaskWizardClick}>
+            {capabilities.mayCreate('task') && (
+              <MenuEntry title={_('Task Wizard')} onClick={onTaskWizardClick} />
+            )}
+            {capabilities.mayCreate('task') && (
+              <MenuEntry
+                title={_('Advanced Task Wizard')}
+                onClick={onAdvancedTaskWizardClick}
+              />
+            )}
+            {capabilities.mayEdit('task') && (
+              <MenuEntry
+                title={_('Modify Task Wizard')}
+                onClick={onModifyTaskWizardClick}
+              />
+            )}
+          </IconMenu>
+        )}
+
+        <NewIconMenu
+          onNewClick={onTaskCreateClick}
+          onNewContainerClick={onContainerTaskCreateClick}
+        />
+      </IconDivider>
+    );
+  },
 );
 
 ToolBarIcons.propTypes = {
