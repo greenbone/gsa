@@ -150,7 +150,6 @@ const Page = ({
   let entitiesError;
 
   if (isDefined(error)) {
-    console.log(error.networkError);
     entitiesError = error;
   }
 

@@ -427,13 +427,15 @@ describe('TaskPage ToolBarIcons test', () => {
     });
 
     const {element, getAllByTestId} = render(
-      <ToolBarIcons
-        onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onModifyTaskWizardClick={handleModifyTaskWizardClick}
-        onContainerTaskCreateClick={handleContainerTaskCreateClick}
-        onTaskCreateClick={handleTaskCreateClick}
-        onTaskWizardClick={handleTaskWizardClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
+          onModifyTaskWizardClick={handleModifyTaskWizardClick}
+          onContainerTaskCreateClick={handleContainerTaskCreateClick}
+          onTaskCreateClick={handleTaskCreateClick}
+          onTaskWizardClick={handleTaskWizardClick}
+        />
+      </MockedProvider>,
     );
     expect(element).toMatchSnapshot();
 
@@ -465,13 +467,15 @@ describe('TaskPage ToolBarIcons test', () => {
     });
 
     const {baseElement} = render(
-      <ToolBarIcons
-        onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onModifyTaskWizardClick={handleModifyTaskWizardClick}
-        onContainerTaskCreateClick={handleContainerTaskCreateClick}
-        onTaskCreateClick={handleTaskCreateClick}
-        onTaskWizardClick={handleTaskWizardClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
+          onModifyTaskWizardClick={handleModifyTaskWizardClick}
+          onContainerTaskCreateClick={handleContainerTaskCreateClick}
+          onTaskCreateClick={handleTaskCreateClick}
+          onTaskWizardClick={handleTaskWizardClick}
+        />
+      </MockedProvider>,
     );
 
     const divs = baseElement.querySelectorAll('div');
@@ -513,14 +517,17 @@ describe('TaskPage ToolBarIcons test', () => {
       capabilities: wrongCaps,
       router: true,
     });
+
     const {queryAllByTestId} = render(
-      <ToolBarIcons
-        onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-        onModifyTaskWizardClick={handleModifyTaskWizardClick}
-        onContainerTaskCreateClick={handleContainerTaskCreateClick}
-        onTaskCreateClick={handleTaskCreateClick}
-        onTaskWizardClick={handleTaskWizardClick}
-      />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ToolBarIcons
+          onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
+          onModifyTaskWizardClick={handleModifyTaskWizardClick}
+          onContainerTaskCreateClick={handleContainerTaskCreateClick}
+          onTaskCreateClick={handleTaskCreateClick}
+          onTaskWizardClick={handleTaskWizardClick}
+        />
+      </MockedProvider>,
     );
 
     const icons = queryAllByTestId('svg-icon');
