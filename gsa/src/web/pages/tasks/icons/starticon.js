@@ -20,12 +20,26 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
+import Capabilities from 'gmp/capabilities/capabilities';
+import {useGetCaps} from 'web/pages/tasks/graphql';
 import StartIcon from 'web/components/icon/starticon';
 
-const TaskStartIcon = ({capabilities, task, onClick}) => {
+const TaskStartIcon = ({task, onClick, ...props}) => {
+  let capabilities;
+
+  const query = useGetCaps();
+  const {data} = query();
+
+  if (isDefined(data)) {
+    capabilities = new Capabilities(data.capabilities);
+  } else {
+    capabilities = props.capabilities;
+  }
+
   if (task.isRunning() || task.isContainer()) {
     return null;
   }
@@ -46,7 +60,6 @@ const TaskStartIcon = ({capabilities, task, onClick}) => {
 };
 
 TaskStartIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };
