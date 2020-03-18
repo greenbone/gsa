@@ -87,7 +87,7 @@ export function parse_yes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
 }
 
-const parseIntoArray = value => (isArray(value) ? value : [value]);
+export const parseIntoArray = value => (isArray(value) ? value : [value]);
 
 export const getTranslatableTaskStatus = status =>
   `${TASK_STATUS_TRANSLATIONS[status]}`;
