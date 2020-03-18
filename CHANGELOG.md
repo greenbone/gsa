@@ -32,6 +32,7 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Lower memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
 
 ### Fixed
+- Fixed audit listpage observer tooltip [#2048](https://github.com/greenbone/gsa/pull/2048)
 - Fixed showing errors in CredentialDialog when opened from AlertDialog [#2041](https://github.com/greenbone/gsa/pull/2041)
 - Fixed usage of report format %F in generateFilename() [#2021](https://github.com/greenbone/gsa/pull/2021)
 - Fixed report DetailsContent counts in tabs [#2004](https://github.com/greenbone/gsa/pull/2004) [#2023](https://github.com/greenbone/gsa/pull/2023)
