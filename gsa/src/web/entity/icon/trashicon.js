@@ -24,7 +24,7 @@ import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import TrashIcon from 'web/components/icon/trashicon';
+import TrashcanIcon from 'web/components/icon/trashcanicon';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
 const EntityTrashIcon = ({
@@ -65,7 +65,7 @@ const EntityTrashIcon = ({
     }
   }
   return (
-    <TrashIcon
+    <TrashcanIcon
       {...props}
       title={title}
       value={entity}
