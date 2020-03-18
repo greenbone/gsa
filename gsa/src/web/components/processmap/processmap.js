@@ -23,7 +23,7 @@ import styled from 'styled-components';
 
 import {connect} from 'react-redux';
 
-import uuid from 'uuid/v4';
+import {v4 as uuid} from 'uuid';
 
 import {_} from 'gmp/locale/lang';
 
