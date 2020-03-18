@@ -48,6 +48,8 @@ import configureStore from 'web/store';
 
 export * from '@testing-library/react';
 
+import {MockedProvider} from '@apollo/react-testing';
+
 afterEach(cleanup);
 
 export const queryAllByName = (container, name) =>
@@ -104,9 +106,10 @@ const withProvider = (name, key = name) => Component => ({
 const TestingGmpPropvider = withProvider('gmp', 'value')(GmpContext.Provider);
 const TestingStoreProvider = withProvider('store')(Provider);
 const TestingRouter = withProvider('history')(Router);
-const TestingCapabilitiesProvider = withProvider('capabilities', 'value')(
-  CapabilitiesContext.Provider,
-);
+const TestingCapabilitiesProvider = withProvider(
+  'capabilities',
+  'value',
+)(CapabilitiesContext.Provider);
 
 export const rendererWith = (
   {capabilities, gmp, store, router} = {
@@ -142,5 +145,11 @@ export const rendererWith = (
     history,
   };
 };
+
+export const withEmptyMock = children => (
+  <MockedProvider mocks={[]} addTypename={false}>
+    {children}
+  </MockedProvider>
+);
 
 // vim: set ts=2 sw=2 tw=80:
