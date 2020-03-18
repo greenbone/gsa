@@ -23,6 +23,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Task from 'gmp/models/task';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
+import {MockedProvider} from '@apollo/react-testing';
 
 import Theme from 'web/utils/theme';
 
@@ -39,7 +40,9 @@ describe('Entity CloneIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <CloneIcon entity={entity} onClick={clickHandler} />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <CloneIcon entity={entity} onClick={clickHandler} />
+      </MockedProvider>,
     );
 
     expect(entity.userCapabilities.mayAccess('task')).toEqual(true);
@@ -62,7 +65,9 @@ describe('Entity CloneIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <CloneIcon entity={entity} onClick={clickHandler} />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <CloneIcon entity={entity} onClick={clickHandler} />
+      </MockedProvider>,
     );
 
     expect(entity.userCapabilities.mayAccess('task')).toEqual(true);
@@ -84,7 +89,9 @@ describe('Entity CloneIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <CloneIcon entity={entity} onClick={clickHandler} />,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <CloneIcon entity={entity} onClick={clickHandler} />
+      </MockedProvider>,
     );
 
     expect(entity.userCapabilities.mayAccess('task')).toEqual(false);
