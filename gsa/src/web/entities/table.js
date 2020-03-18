@@ -274,11 +274,9 @@ class EntitiesTable extends React.Component {
             isDefined(entities) && entities[0].entityType === 'task'
               ? false
               : isUpdating
-          } // if gsad is killed, then isUpdating will remain true
+          }
         >
-          {' '}
-          // even after task list is returned from graphQL
-          {body} // resulting in transparent table
+          {body}
         </UpdatingStripedTable>
         {footnote ? (
           <Layout align="space-between">
