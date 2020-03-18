@@ -17,13 +17,26 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
+import Capabilities from 'gmp/capabilities/capabilities';
+import {useGetCaps} from 'web/pages/tasks/graphql';
 import Link from './link';
 
-const DetailsLink = ({capabilities, id, type, textOnly = false, ...props}) => {
+const DetailsLink = ({id, type, textOnly = false, ...props}) => {
+  let capabilities;
+
+  const query = useGetCaps();
+  const {data} = query();
+
+  if (isDefined(data)) {
+    capabilities = new Capabilities(data.capabilities);
+  } else {
+    capabilities = props.capabilities;
+  }
+
   textOnly = textOnly || !capabilities.mayAccess(type);
 
   return (
@@ -37,7 +50,6 @@ const DetailsLink = ({capabilities, id, type, textOnly = false, ...props}) => {
 };
 
 DetailsLink.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   id: PropTypes.id.isRequired,
   textOnly: PropTypes.bool,
   type: PropTypes.string.isRequired,
