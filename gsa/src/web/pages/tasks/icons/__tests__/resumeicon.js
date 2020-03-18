@@ -23,6 +23,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
+import {MockedProvider} from '@apollo/react-testing';
 
 import Theme from 'web/utils/theme';
 
@@ -40,8 +41,11 @@ describe('Task ResumeIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<ResumeIcon task={task} onClick={clickHandler} />);
-
+    const {element} = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ResumeIcon task={task} onClick={clickHandler} />
+      </MockedProvider>,
+    );
     expect(caps.mayOp('resume_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('resume_task')).toEqual(true);
 
@@ -65,8 +69,11 @@ describe('Task ResumeIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<ResumeIcon task={task} />);
-
+    const {element} = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ResumeIcon task={task} />
+      </MockedProvider>,
+    );
     expect(caps.mayOp('resume_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('resume_task')).toEqual(false);
 
@@ -93,8 +100,11 @@ describe('Task ResumeIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<ResumeIcon task={task} />);
-
+    const {element} = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ResumeIcon task={task} />
+      </MockedProvider>,
+    );
     expect(caps.mayOp('resume_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('resume_task')).toEqual(true);
 
@@ -121,8 +131,11 @@ describe('Task ResumeIcon component tests', () => {
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
-
-    const {element} = render(<ResumeIcon task={task} />);
+    const {element} = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ResumeIcon task={task} />
+      </MockedProvider>,
+    );
 
     expect(caps.mayOp('resume_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('resume_task')).toEqual(true);
@@ -147,8 +160,11 @@ describe('Task ResumeIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(<ResumeIcon task={task} />);
-
+    const {element} = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ResumeIcon task={task} />
+      </MockedProvider>,
+    );
     expect(caps.mayOp('resume_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('resume_task')).toEqual(true);
 

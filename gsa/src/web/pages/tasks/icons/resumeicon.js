@@ -24,10 +24,22 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
+import Capabilities from 'gmp/capabilities/capabilities';
+import {useGetCaps} from 'web/pages/tasks/graphql';
 import ResumeIcon from 'web/components/icon/resumeicon';
 
-const TaskResumeIcon = ({capabilities, task, onClick}) => {
+const TaskResumeIcon = ({task, onClick, ...props}) => {
+  let capabilities;
+
+  const query = useGetCaps();
+  const {data} = query();
+
+  if (isDefined(data)) {
+    capabilities = new Capabilities(data.capabilities);
+  } else {
+    capabilities = props.capabilities;
+  }
+
   if (task.isContainer()) {
     return (
       <ResumeIcon
@@ -74,7 +86,6 @@ const TaskResumeIcon = ({capabilities, task, onClick}) => {
 };
 
 TaskResumeIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };
