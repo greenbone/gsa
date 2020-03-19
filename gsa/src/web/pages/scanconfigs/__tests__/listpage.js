@@ -202,9 +202,9 @@ describe('ScanConfigsPage tests', () => {
     );
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <ScanConfigsPage />
-      </MockedProvider>,
+      ),
     );
 
     await waitForElement(() => baseElement.querySelectorAll('table'));

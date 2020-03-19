@@ -42,9 +42,9 @@ describe('Task StopIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <StopIcon task={task} onClick={clickHandler} />
-      </MockedProvider>,
+      ),
     );
 
     expect(caps.mayOp('stop_task')).toEqual(true);
@@ -71,9 +71,9 @@ describe('Task StopIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <StopIcon task={task} onClick={clickHandler} />
-      </MockedProvider>,
+      ),
     );
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(false);
@@ -98,9 +98,9 @@ describe('Task StopIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <StopIcon task={task} onClick={clickHandler} />
-      </MockedProvider>,
+      ),
     );
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
@@ -119,9 +119,9 @@ describe('Task StopIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <StopIcon task={task} onClick={clickHandler} />
-      </MockedProvider>,
+      ),
     );
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);

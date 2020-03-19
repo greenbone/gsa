@@ -92,7 +92,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Row
           entity={audit}
           links={true}
@@ -107,7 +107,7 @@ describe('Audit Row tests', () => {
           onReportDownloadClick={handleReportDownload}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -186,7 +186,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Row
           entity={audit}
           links={true}
@@ -201,7 +201,7 @@ describe('Audit Row tests', () => {
           onReportDownloadClick={handleReportDownload}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -250,7 +250,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId, queryAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Row
           entity={audit}
           links={true}
@@ -265,7 +265,7 @@ describe('Audit Row tests', () => {
           onReportDownloadClick={handleReportDownload}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     // Name
@@ -354,7 +354,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Row
           entity={audit}
           links={true}
@@ -369,7 +369,7 @@ describe('Audit Row tests', () => {
           onReportDownloadClick={handleReportDownload}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     // Name
@@ -463,7 +463,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Row
           entity={audit}
           links={true}
@@ -478,7 +478,7 @@ describe('Audit Row tests', () => {
           onReportDownloadClick={handleReportDownload}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     // Name
@@ -574,7 +574,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Row
           entity={audit}
           links={true}
@@ -589,7 +589,7 @@ describe('Audit Row tests', () => {
           onReportDownloadClick={handleReportDownload}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     // Name
@@ -685,7 +685,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Row
           entity={audit}
           links={true}
@@ -700,7 +700,7 @@ describe('Audit Row tests', () => {
           onReportDownloadClick={handleReportDownload}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     // Name

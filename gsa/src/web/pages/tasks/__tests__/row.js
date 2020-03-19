@@ -193,7 +193,7 @@ describe('Task Row tests', () => {
           onTaskStopClick={handleTaskStop}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -340,7 +340,7 @@ describe('Task Row tests', () => {
           onTaskStopClick={handleTaskStop}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -414,7 +414,7 @@ describe('Task Row tests', () => {
           onTaskStopClick={handleTaskStop}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     // Name
@@ -521,7 +521,7 @@ describe('Task Row tests', () => {
           onTaskStopClick={handleTaskStop}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     // Name
@@ -639,7 +639,7 @@ describe('Task Row tests', () => {
           onTaskStopClick={handleTaskStop}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     // Name
@@ -755,7 +755,7 @@ describe('Task Row tests', () => {
           onTaskStopClick={handleTaskStop}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     // Name
@@ -871,7 +871,7 @@ describe('Task Row tests', () => {
           onTaskStopClick={handleTaskStop}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     // Name
@@ -990,7 +990,7 @@ describe('Task Row tests', () => {
           onTaskStopClick={handleTaskStop}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     // Name

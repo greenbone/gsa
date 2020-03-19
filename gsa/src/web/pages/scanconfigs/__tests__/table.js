@@ -115,7 +115,7 @@ describe('Scan Config table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Table
           filter={filter}
           entities={[config, config2, config3]}
@@ -125,7 +125,7 @@ describe('Scan Config table tests', () => {
           onScanConfigDownloadClick={handleScanConfigDownload}
           onScanConfigEditClick={handleScanConfigEdit}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -161,7 +161,7 @@ describe('Scan Config table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Table
           filter={filter}
           entities={[config, config2, config3]}
@@ -171,7 +171,7 @@ describe('Scan Config table tests', () => {
           onScanConfigDownloadClick={handleScanConfigDownload}
           onScanConfigEditClick={handleScanConfigEdit}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(element).not.toHaveTextContent('Comment');
@@ -202,7 +202,7 @@ describe('Scan Config table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Table
           filter={filter}
           entities={[config, config2, config3]}
@@ -212,7 +212,7 @@ describe('Scan Config table tests', () => {
           onScanConfigDownloadClick={handleScanConfigDownload}
           onScanConfigEditClick={handleScanConfigEdit}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');

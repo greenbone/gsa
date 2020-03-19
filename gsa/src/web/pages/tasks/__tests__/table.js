@@ -129,7 +129,7 @@ describe('Tasks table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Table
           filter={filter}
           entities={[task, task2, task3]}
@@ -144,7 +144,7 @@ describe('Tasks table tests', () => {
           onTaskStopClick={handleTaskStop}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -183,7 +183,7 @@ describe('Tasks table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Table
           filter={filter}
           entities={[task, task2, task3]}
@@ -198,7 +198,7 @@ describe('Tasks table tests', () => {
           onTaskStopClick={handleTaskStop}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(element).not.toHaveTextContent('target1');
@@ -236,7 +236,7 @@ describe('Tasks table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Table
           filter={filter}
           entities={[task, task2, task3]}
@@ -251,7 +251,7 @@ describe('Tasks table tests', () => {
           onTaskStopClick={handleTaskStop}
           onToggleDetailsClick={handleToggleDetailsClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');

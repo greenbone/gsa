@@ -195,9 +195,9 @@ describe('PoliciesPage tests', () => {
     );
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <PoliciesPage />
-      </MockedProvider>,
+      ),
     );
 
     await waitForElement(() => baseElement.querySelectorAll('table'));

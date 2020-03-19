@@ -258,7 +258,7 @@ describe('TaskPage tests', () => {
     const {baseElement, getAllByTestId} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <TaskPage />
-      </MockedProvider>,
+      ),
     );
 
     await waitForElement(() => baseElement.querySelectorAll('table'));
@@ -391,7 +391,7 @@ describe('TaskPage tests', () => {
     const {baseElement, getAllByTestId} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <TaskPage />
-      </MockedProvider>,
+      ),
     );
 
     await waitForElement(() => baseElement.querySelectorAll('table'));

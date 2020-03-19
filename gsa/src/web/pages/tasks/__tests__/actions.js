@@ -58,7 +58,7 @@ describe('Task Actions tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
     const {baseElement} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Actions
           entity={task}
           links={true}
@@ -71,7 +71,7 @@ describe('Task Actions tests', () => {
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -98,7 +98,7 @@ describe('Task Actions tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Actions
           entity={task}
           links={true}
@@ -111,7 +111,7 @@ describe('Task Actions tests', () => {
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -162,7 +162,7 @@ describe('Task Actions tests', () => {
     const {render} = rendererWith({capabilities: wrongCaps});
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Actions
           entity={task}
           links={true}
@@ -175,7 +175,7 @@ describe('Task Actions tests', () => {
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -235,7 +235,7 @@ describe('Task Actions tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Actions
           entity={task}
           links={true}
@@ -248,7 +248,7 @@ describe('Task Actions tests', () => {
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -299,7 +299,7 @@ describe('Task Actions tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Actions
           entity={task}
           links={true}
@@ -312,7 +312,7 @@ describe('Task Actions tests', () => {
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -372,7 +372,7 @@ describe('Task Actions tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Actions
           entity={task}
           links={true}
@@ -385,7 +385,7 @@ describe('Task Actions tests', () => {
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
         />
-      </MockedProvider>,
+      ),
     );
 
     const detailslinks = getAllByTestId('details-link');
@@ -419,7 +419,7 @@ describe('Task Actions tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Actions
           entity={task}
           links={true}
@@ -432,7 +432,7 @@ describe('Task Actions tests', () => {
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');

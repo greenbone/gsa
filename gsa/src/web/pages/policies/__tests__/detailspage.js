@@ -274,7 +274,7 @@ describe('Policy Detailspage tests', () => {
     const {baseElement, element, getAllByTestId} = render(
       <MockedProvider mocks={[]} addTypename={false}>
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
 
     expect(element).toMatchSnapshot();
@@ -343,7 +343,7 @@ describe('Policy Detailspage tests', () => {
     const {baseElement, element, getAllByTestId} = render(
       <MockedProvider mocks={[]} addTypename={false}>
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -431,7 +431,7 @@ describe('Policy Detailspage tests', () => {
     const {baseElement, element, getAllByTestId} = render(
       <MockedProvider mocks={[]} addTypename={false}>
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -490,7 +490,7 @@ describe('Policy Detailspage tests', () => {
     const {baseElement, element} = render(
       <MockedProvider mocks={[]} addTypename={false}>
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[14]);
@@ -568,7 +568,7 @@ describe('Policy Detailspage tests', () => {
     const {getAllByTestId} = render(
       <MockedProvider mocks={[]} addTypename={false}>
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
     const icons = getAllByTestId('svg-icon');
 
@@ -665,7 +665,7 @@ describe('Policy Detailspage tests', () => {
     const {getAllByTestId} = render(
       <MockedProvider mocks={[]} addTypename={false}>
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
     const icons = getAllByTestId('svg-icon');
 
@@ -771,7 +771,7 @@ describe('Policy Detailspage tests', () => {
     const {getAllByTestId} = render(
       <MockedProvider mocks={[]} addTypename={false}>
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
     const icons = getAllByTestId('svg-icon');
 
@@ -868,7 +868,7 @@ describe('Policy Detailspage tests', () => {
     const {getAllByTestId} = render(
       <MockedProvider mocks={[]} addTypename={false}>
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
     const icons = getAllByTestId('svg-icon');
 
@@ -921,7 +921,7 @@ describe('Policy ToolBarIcons tests', () => {
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(element).toMatchSnapshot();
@@ -962,7 +962,7 @@ describe('Policy ToolBarIcons tests', () => {
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -1007,7 +1007,7 @@ describe('Policy ToolBarIcons tests', () => {
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -1061,7 +1061,7 @@ describe('Policy ToolBarIcons tests', () => {
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -1106,7 +1106,7 @@ describe('Policy ToolBarIcons tests', () => {
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');

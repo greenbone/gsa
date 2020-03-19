@@ -375,7 +375,7 @@ describe('Task Detailspage tests', () => {
     const {baseElement, element, getAllByTestId} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
 
     expect(element).toMatchSnapshot();
@@ -490,7 +490,7 @@ describe('Task Detailspage tests', () => {
     const {baseElement, element} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[22]);
@@ -548,7 +548,7 @@ describe('Task Detailspage tests', () => {
     const {baseElement, element} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[24]);
@@ -631,7 +631,7 @@ describe('Task Detailspage tests', () => {
     const {getAllByTestId} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');

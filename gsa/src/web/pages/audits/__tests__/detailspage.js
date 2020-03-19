@@ -322,9 +322,9 @@ describe('Audit Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', audit));
 
     const {baseElement, element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
 
     expect(element).toMatchSnapshot();
@@ -420,9 +420,9 @@ describe('Audit Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', audit2));
 
     const {baseElement, element} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -498,9 +498,9 @@ describe('Audit Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', audit5));
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -548,7 +548,7 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={audit}
           onAuditCloneClick={handleAuditCloneClick}
@@ -559,7 +559,7 @@ describe('Audit ToolBarIcons tests', () => {
           onAuditStartClick={handleAuditStartClick}
           onAuditStopClick={handleAuditStopClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(element).toMatchSnapshot();
@@ -595,7 +595,7 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={audit3}
           onAuditCloneClick={handleAuditCloneClick}
@@ -606,7 +606,7 @@ describe('Audit ToolBarIcons tests', () => {
           onAuditStartClick={handleAuditStartClick}
           onAuditStopClick={handleAuditStopClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -664,7 +664,7 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={audit4}
           onAuditCloneClick={handleAuditCloneClick}
@@ -675,7 +675,7 @@ describe('Audit ToolBarIcons tests', () => {
           onAuditStartClick={handleAuditStartClick}
           onAuditStopClick={handleAuditStopClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -740,7 +740,7 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={audit5}
           onAuditCloneClick={handleAuditCloneClick}
@@ -751,7 +751,7 @@ describe('Audit ToolBarIcons tests', () => {
           onAuditStartClick={handleAuditStartClick}
           onAuditStopClick={handleAuditStopClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -815,7 +815,7 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={audit2}
           onAuditCloneClick={handleAuditCloneClick}
@@ -826,7 +826,7 @@ describe('Audit ToolBarIcons tests', () => {
           onAuditStartClick={handleAuditStartClick}
           onAuditStopClick={handleAuditStopClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -890,7 +890,7 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={audit6}
           onAuditCloneClick={handleAuditCloneClick}
@@ -901,7 +901,7 @@ describe('Audit ToolBarIcons tests', () => {
           onAuditStartClick={handleAuditStartClick}
           onAuditStopClick={handleAuditStopClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -972,7 +972,7 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={audit7}
           onAuditCloneClick={handleAuditCloneClick}
@@ -983,7 +983,7 @@ describe('Audit ToolBarIcons tests', () => {
           onAuditStartClick={handleAuditStartClick}
           onAuditStopClick={handleAuditStopClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');

@@ -64,7 +64,7 @@ describe('Row tests', () => {
     });
 
     const {baseElement} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Row
           entity={entity}
           onToggleDetailsClick={handleToggleDetailsClick}
@@ -74,7 +74,7 @@ describe('Row tests', () => {
           onPolicyEditClick={handlePolicyEdit}
           onCreateAuditClick={handleCreateAudit}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -109,7 +109,7 @@ describe('Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Row
           entity={policy}
           onToggleDetailsClick={handleToggleDetailsClick}
@@ -119,7 +119,7 @@ describe('Row tests', () => {
           onPolicyEditClick={handlePolicyEdit}
           onCreateAuditClick={handleCreateAudit}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -141,7 +141,7 @@ describe('Row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Row
           entity={entity}
           onToggleDetailsClick={handleToggleDetailsClick}
@@ -151,7 +151,7 @@ describe('Row tests', () => {
           onPolicyEditClick={handlePolicyEdit}
           onCreateAuditClick={handleCreateAudit}
         />
-      </MockedProvider>,
+      ),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -206,7 +206,7 @@ describe('Row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Row
           entity={policy}
           onToggleDetailsClick={handleToggleDetailsClick}
@@ -216,7 +216,7 @@ describe('Row tests', () => {
           onPolicyEditClick={handlePolicyEdit}
           onCreateAuditClick={handleCreateAudit}
         />
-      </MockedProvider>,
+      ),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -278,7 +278,7 @@ describe('Row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Row
           entity={policy}
           onToggleDetailsClick={handleToggleDetailsClick}
@@ -288,7 +288,7 @@ describe('Row tests', () => {
           onPolicyEditClick={handlePolicyEdit}
           onCreateAuditClick={handleCreateAudit}
         />
-      </MockedProvider>,
+      ),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -342,7 +342,7 @@ describe('Row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Row
           entity={policy}
           onToggleDetailsClick={handleToggleDetailsClick}
@@ -352,7 +352,7 @@ describe('Row tests', () => {
           onPolicyEditClick={handlePolicyEdit}
           onCreateAuditClick={handleCreateAudit}
         />
-      </MockedProvider>,
+      ),
     );
 
     const spans = baseElement.querySelectorAll('span');

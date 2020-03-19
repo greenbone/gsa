@@ -215,9 +215,9 @@ describe('AuditPage tests', () => {
     );
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <AuditPage />
-      </MockedProvider>,
+      ),
     );
 
     await waitForElement(() => baseElement.querySelectorAll('table'));

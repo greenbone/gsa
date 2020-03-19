@@ -272,9 +272,9 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
 
     expect(element).toMatchSnapshot();
@@ -342,9 +342,9 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -428,9 +428,9 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -498,9 +498,9 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -542,9 +542,9 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[18]);
@@ -620,9 +620,9 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
     const icons = getAllByTestId('svg-icon');
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
@@ -721,9 +721,9 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config2));
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
     const icons = getAllByTestId('svg-icon');
 
@@ -832,9 +832,9 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config3));
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
     const icons = getAllByTestId('svg-icon');
 
@@ -934,9 +934,9 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config4));
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <Detailspage id="12345" />
-      </MockedProvider>,
+      ),
     );
     const icons = getAllByTestId('svg-icon');
 
@@ -986,7 +986,7 @@ describe('Scan Config ToolBarIcons tests', () => {
     });
 
     const {element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={config}
           onScanConfigCreateClick={handleScanConfigCreate}
@@ -996,7 +996,7 @@ describe('Scan Config ToolBarIcons tests', () => {
           onScanConfigEditClick={handleScanConfigEdit}
           onScanConfigImportClick={handleScanConfigImport}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(element).toMatchSnapshot();
@@ -1029,7 +1029,7 @@ describe('Scan Config ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={config}
           onScanConfigCreateClick={handleScanConfigCreate}
@@ -1039,7 +1039,7 @@ describe('Scan Config ToolBarIcons tests', () => {
           onScanConfigEditClick={handleScanConfigEdit}
           onScanConfigImportClick={handleScanConfigImport}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -1087,7 +1087,7 @@ describe('Scan Config ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={config2}
           onScanConfigCreateClick={handleScanConfigCreate}
@@ -1097,7 +1097,7 @@ describe('Scan Config ToolBarIcons tests', () => {
           onScanConfigEditClick={handleScanConfigEdit}
           onScanConfigImportClick={handleScanConfigImport}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -1149,7 +1149,7 @@ describe('Scan Config ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={config3}
           onScanConfigCreateClick={handleScanConfigCreate}
@@ -1159,7 +1159,7 @@ describe('Scan Config ToolBarIcons tests', () => {
           onScanConfigEditClick={handleScanConfigEdit}
           onScanConfigImportClick={handleScanConfigImport}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -1207,7 +1207,7 @@ describe('Scan Config ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypeName={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={config4}
           onScanConfigCreateClick={handleScanConfigCreate}
@@ -1217,7 +1217,7 @@ describe('Scan Config ToolBarIcons tests', () => {
           onScanConfigEditClick={handleScanConfigEdit}
           onScanConfigImportClick={handleScanConfigImport}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');

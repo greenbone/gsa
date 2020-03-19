@@ -131,7 +131,7 @@ describe('Audits table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Table
           filter={filter}
           entities={[audit, audit2, audit3]}
@@ -145,7 +145,7 @@ describe('Audits table tests', () => {
           onAuditResumeClick={handleAuditResumeClick}
           onReportDownloadClick={handleReportDownloadClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -181,7 +181,7 @@ describe('Audits table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Table
           filter={filter}
           entities={[audit, audit2, audit3]}
@@ -195,7 +195,7 @@ describe('Audits table tests', () => {
           onAuditResumeClick={handleAuditResumeClick}
           onReportDownloadClick={handleReportDownloadClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(element).not.toHaveTextContent('target1');
@@ -232,7 +232,7 @@ describe('Audits table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Table
           filter={filter}
           entities={[audit, audit2, audit3]}
@@ -247,7 +247,7 @@ describe('Audits table tests', () => {
           onAuditResumeClick={handleAuditResumeClick}
           onReportDownloadClick={handleReportDownloadClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     const icons = getAllByTestId('svg-icon');

@@ -85,7 +85,7 @@ describe('Policies table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Table
           filter={filter}
           entities={[policy, policy2, policy3]}
@@ -96,7 +96,7 @@ describe('Policies table tests', () => {
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -126,7 +126,7 @@ describe('Policies table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Table
           filter={filter}
           entities={[policy, policy2, policy3]}
@@ -137,7 +137,7 @@ describe('Policies table tests', () => {
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
         />
-      </MockedProvider>,
+      ),
     );
 
     expect(element).not.toHaveTextContent('Comment');
@@ -169,7 +169,7 @@ describe('Policies table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <Table
           filter={filter}
           entities={[policy, policy2, policy3]}
@@ -180,7 +180,7 @@ describe('Policies table tests', () => {
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
         />
-      </MockedProvider>,
+      ),
     );
     const icons = getAllByTestId('svg-icon');
 

@@ -40,9 +40,9 @@ describe('Entity EditIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <EditIcon entity={entity} onClick={clickHandler} />
-      </MockedProvider>,
+      ),
     );
 
     expect(entity.userCapabilities.mayEdit('task')).toEqual(true);
@@ -65,9 +65,9 @@ describe('Entity EditIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <EditIcon entity={entity} onClick={clickHandler} />
-      </MockedProvider>,
+      ),
     );
 
     expect(entity.userCapabilities.mayEdit('task')).toEqual(true);
@@ -89,9 +89,9 @@ describe('Entity EditIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <EditIcon entity={entity} onClick={clickHandler} />
-      </MockedProvider>,
+      ),
     );
 
     expect(entity.userCapabilities.mayEdit('task')).toEqual(false);
