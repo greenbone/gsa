@@ -966,6 +966,7 @@ exports[`Tasks table tests should render 1`] = `
                 class="c20"
               >
                 <a
+                  capabilities="[object Object]"
                   class="c23 c24"
                   data-testid="details-link"
                   href="/report/1234"
@@ -1015,6 +1016,7 @@ exports[`Tasks table tests should render 1`] = `
               >
                 <span>
                   <a
+                    capabilities="[object Object]"
                     class="c23"
                     data-testid="details-link"
                     href="/report/1234"
@@ -1364,6 +1366,7 @@ exports[`Tasks table tests should render 1`] = `
                 class="c20"
               >
                 <a
+                  capabilities="[object Object]"
                   class="c23 c24"
                   data-testid="details-link"
                   href="/report/5678"
@@ -1413,6 +1416,7 @@ exports[`Tasks table tests should render 1`] = `
               >
                 <span>
                   <a
+                    capabilities="[object Object]"
                     class="c23"
                     data-testid="details-link"
                     href="/report/1234"

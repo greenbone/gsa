@@ -147,6 +147,7 @@ exports[`Audit Details tests should render full audit details 1`] = `
     </h2>
     <div>
       <a
+        capabilities="[object Object]"
         class="c2"
         data-testid="details-link"
         href="/target/5678"
@@ -171,6 +172,7 @@ exports[`Audit Details tests should render full audit details 1`] = `
         >
           <span>
             <a
+              capabilities="[object Object]"
               class="c2"
               data-testid="details-link"
               href="/alert/91011"
@@ -219,6 +221,7 @@ exports[`Audit Details tests should render full audit details 1`] = `
               >
                 <span>
                   <a
+                    capabilities="[object Object]"
                     class="c2"
                     data-testid="details-link"
                     href="/scanner/1516"

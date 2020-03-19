@@ -904,6 +904,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
                         margin="5px"
                       >
                         <a
+                          capabilities="[object Object]"
                           class="c6"
                           data-testid="details-link"
                           href="/task/1234"
@@ -912,6 +913,7 @@ exports[`Scan Config Detailspage tests should render full Detailspage 1`] = `
                         </a>
                         ,
                         <a
+                          capabilities="[object Object]"
                           class="c6"
                           data-testid="details-link"
                           href="/task/5678"

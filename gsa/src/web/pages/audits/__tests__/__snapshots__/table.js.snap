@@ -888,6 +888,7 @@ exports[`Audits table tests should render 1`] = `
                 class="c18"
               >
                 <a
+                  capabilities="[object Object]"
                   class="c21 c22"
                   data-testid="details-link"
                   href="/report/1234"
@@ -920,6 +921,7 @@ exports[`Audits table tests should render 1`] = `
               >
                 <span>
                   <a
+                    capabilities="[object Object]"
                     class="c21"
                     data-testid="details-link"
                     href="/report/1234"
@@ -1272,6 +1274,7 @@ exports[`Audits table tests should render 1`] = `
                 class="c18"
               >
                 <a
+                  capabilities="[object Object]"
                   class="c21 c22"
                   data-testid="details-link"
                   href="/report/5678"
@@ -1304,6 +1307,7 @@ exports[`Audits table tests should render 1`] = `
               >
                 <span>
                   <a
+                    capabilities="[object Object]"
                     class="c21"
                     data-testid="details-link"
                     href="/report/1234"

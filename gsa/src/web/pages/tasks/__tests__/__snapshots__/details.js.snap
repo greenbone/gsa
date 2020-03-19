@@ -147,6 +147,7 @@ exports[`Task Details tests should render full task details 1`] = `
     </h2>
     <div>
       <a
+        capabilities="[object Object]"
         class="c2"
         data-testid="details-link"
         href="/target/5678"
@@ -171,6 +172,7 @@ exports[`Task Details tests should render full task details 1`] = `
         >
           <span>
             <a
+              capabilities="[object Object]"
               class="c2"
               data-testid="details-link"
               href="/alert/91011"
@@ -219,6 +221,7 @@ exports[`Task Details tests should render full task details 1`] = `
               >
                 <span>
                   <a
+                    capabilities="[object Object]"
                     class="c2"
                     data-testid="details-link"
                     href="/scanner/1516"
@@ -259,6 +262,7 @@ exports[`Task Details tests should render full task details 1`] = `
               >
                 <span>
                   <a
+                    capabilities="[object Object]"
                     class="c2"
                     data-testid="details-link"
                     href="/scanconfig/314"
@@ -353,6 +357,7 @@ exports[`Task Details tests should render full task details 1`] = `
               >
                 <span>
                   <a
+                    capabilities="[object Object]"
                     class="c2"
                     data-testid="details-link"
                     href="/schedule/121314"
@@ -441,6 +446,7 @@ exports[`Task Details tests should render full task details 2`] = `
     </h2>
     <div>
       <a
+        capabilities="[object Object]"
         class="sc-bwzfXH kRiXBr"
         data-testid="details-link"
         href="/target/5678"
@@ -465,6 +471,7 @@ exports[`Task Details tests should render full task details 2`] = `
         >
           <span>
             <a
+              capabilities="[object Object]"
               class="sc-bwzfXH kRiXBr"
               data-testid="details-link"
               href="/alert/91011"
@@ -513,6 +520,7 @@ exports[`Task Details tests should render full task details 2`] = `
               >
                 <span>
                   <a
+                    capabilities="[object Object]"
                     class="sc-bwzfXH kRiXBr"
                     data-testid="details-link"
                     href="/scanner/1516"
@@ -553,6 +561,7 @@ exports[`Task Details tests should render full task details 2`] = `
               >
                 <span>
                   <a
+                    capabilities="[object Object]"
                     class="sc-bwzfXH kRiXBr"
                     data-testid="details-link"
                     href="/scanconfig/314"
@@ -647,6 +656,7 @@ exports[`Task Details tests should render full task details 2`] = `
               >
                 <span>
                   <a
+                    capabilities="[object Object]"
                     class="sc-bwzfXH kRiXBr"
                     data-testid="details-link"
                     href="/schedule/121314"

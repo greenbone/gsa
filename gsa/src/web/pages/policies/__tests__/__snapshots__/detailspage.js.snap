@@ -862,6 +862,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
                         margin="5px"
                       >
                         <a
+                          capabilities="[object Object]"
                           class="c6"
                           data-testid="details-link"
                           href="/audit/1234"
@@ -870,6 +871,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
                         </a>
                         ,
                         <a
+                          capabilities="[object Object]"
                           class="c6"
                           data-testid="details-link"
                           href="/audit/5678"

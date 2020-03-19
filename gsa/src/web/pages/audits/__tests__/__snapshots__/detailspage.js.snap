@@ -820,6 +820,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                 margin="5px"
               >
                 <a
+                  capabilities="[object Object]"
                   class="c6"
                   data-testid="details-link"
                   href="/report/1234"
@@ -1069,6 +1070,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                   class="c28"
                 >
                   <a
+                    capabilities="[object Object]"
                     class="c6 c33"
                     data-testid="details-link"
                     href="/report/1234"
@@ -1109,6 +1111,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             </h2>
             <div>
               <a
+                capabilities="[object Object]"
                 class="c6"
                 data-testid="details-link"
                 href="/target/5678"
@@ -1133,6 +1136,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                 >
                   <span>
                     <a
+                      capabilities="[object Object]"
                       class="c6"
                       data-testid="details-link"
                       href="/alert/91011"
@@ -1181,6 +1185,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                       >
                         <span>
                           <a
+                            capabilities="[object Object]"
                             class="c6"
                             data-testid="details-link"
                             href="/scanner/1516"
@@ -1670,6 +1675,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
             margin="5px"
           >
             <a
+              capabilities="[object Object]"
               class="c4"
               data-testid="details-link"
               href="/report/1234"

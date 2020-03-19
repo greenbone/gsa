@@ -327,6 +327,7 @@ exports[`Audit Row tests should render 1`] = `
           class="c0"
         >
           <a
+            capabilities="[object Object]"
             class="c5 c6"
             data-testid="details-link"
             href="/report/1234"
@@ -359,6 +360,7 @@ exports[`Audit Row tests should render 1`] = `
         >
           <span>
             <a
+              capabilities="[object Object]"
               class="c5"
               data-testid="details-link"
               href="/report/1234"

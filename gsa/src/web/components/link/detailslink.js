@@ -20,9 +20,13 @@ import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
+import {useCapabilities} from 'web/utils/useCapabilities';
+
 import Link from './link';
 
-const DetailsLink = ({capabilities, id, type, textOnly = false, ...props}) => {
+const DetailsLink = ({id, type, textOnly = false, ...props}) => {
+  const capabilities = useCapabilities(props.capabilities);
+
   textOnly = textOnly || !capabilities.mayAccess(type);
 
   return (

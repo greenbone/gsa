@@ -1476,6 +1476,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       class="c42"
                     >
                       <a
+                        capabilities="[object Object]"
                         class="c45 c46"
                         data-testid="details-link"
                         href="/report/1234"
@@ -1508,6 +1509,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                     >
                       <span>
                         <a
+                          capabilities="[object Object]"
                           class="c45"
                           data-testid="details-link"
                           href="/report/1234"

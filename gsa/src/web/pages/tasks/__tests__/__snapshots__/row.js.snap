@@ -377,6 +377,7 @@ Groups g1, g2"
           class="c0"
         >
           <a
+            capabilities="[object Object]"
             class="c6 c7"
             data-testid="details-link"
             href="/report/1234"
@@ -426,6 +427,7 @@ Groups g1, g2"
         >
           <span>
             <a
+              capabilities="[object Object]"
               class="c6"
               data-testid="details-link"
               href="/report/1234"
