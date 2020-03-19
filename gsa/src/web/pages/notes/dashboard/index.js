@@ -30,7 +30,7 @@ import {
   NotesWordCloudTableDisplay,
 } from './wordclouddisplay';
 
-export const NOTES_DASHBOARD_ID = 'ce7b121-c609-47b0-ab57-fd020a0336f4';
+export const NOTES_DASHBOARD_ID = 'ce7b121-c609-47b0-ab57-fd020a0336f4a';
 
 export const NOTES_DISPLAYS = [
   NotesActiveDaysDisplay.displayId,
