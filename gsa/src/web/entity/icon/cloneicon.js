@@ -26,9 +26,9 @@ import PropTypes from 'web/utils/proptypes';
 
 import CloneIcon from 'web/components/icon/cloneicon';
 import withCapabilities from 'web/utils/withCapabilities';
+import {useCapabilities} from 'web/utils/useCapabilities';
 
 const EntityCloneIcon = ({
-  capabilities,
   displayName,
   entity,
   mayClone = true,
@@ -37,6 +37,8 @@ const EntityCloneIcon = ({
   onClick,
   ...props
 }) => {
+  const capabilities = useCapabilities(props.capabilities);
+
   if (!isDefined(name)) {
     name = getEntityType(entity);
   }

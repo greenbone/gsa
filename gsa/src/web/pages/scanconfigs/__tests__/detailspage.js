@@ -518,7 +518,6 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element} = render(<Detailspage id="12345" />);
-
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[18]);
 
@@ -593,7 +592,6 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
-
     const icons = getAllByTestId('svg-icon');
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
     expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
@@ -691,7 +689,6 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config2));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
-
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
@@ -799,7 +796,6 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config3));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
-
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
@@ -898,7 +894,6 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config4));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
-
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');

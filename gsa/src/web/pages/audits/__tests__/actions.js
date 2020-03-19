@@ -22,6 +22,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
+
 import Theme from 'web/utils/theme';
 
 import Actions from '../actions';
@@ -95,6 +96,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
+
     const {getAllByTestId} = render(
       <Actions
         entity={audit}
@@ -164,6 +166,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: wrongCaps});
+
     const {getAllByTestId} = render(
       <Actions
         entity={audit}
@@ -245,6 +248,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
+
     const {getAllByTestId} = render(
       <Actions
         entity={audit}
@@ -312,6 +316,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
+
     const {getAllByTestId} = render(
       <Actions
         entity={audit}
@@ -381,6 +386,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
+
     const {getAllByTestId} = render(
       <Actions
         entity={audit}
@@ -435,6 +441,7 @@ describe('Audit Actions tests', () => {
       store: true,
       router: true,
     });
+
     const {getAllByTestId} = render(
       <Actions
         entity={audit}

@@ -23,10 +23,12 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
+import {useCapabilities} from 'web/utils/useCapabilities';
 import ResumeIcon from 'web/components/icon/resumeicon';
 
-const TaskResumeIcon = ({capabilities, task, onClick}) => {
+const TaskResumeIcon = ({task, onClick, ...props}) => {
+  const capabilities = useCapabilities(props.capabilities);
+
   if (task.isContainer()) {
     return (
       <ResumeIcon

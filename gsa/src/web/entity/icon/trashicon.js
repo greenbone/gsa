@@ -26,9 +26,9 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import TrashIcon from 'web/components/icon/trashicon';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
+import {useCapabilities} from 'web/utils/useCapabilities';
 
 const EntityTrashIcon = ({
-  capabilities,
   displayName,
   entity,
   name,
@@ -43,6 +43,8 @@ const EntityTrashIcon = ({
   if (!isDefined(displayName)) {
     displayName = typeName(name);
   }
+
+  const capabilities = useCapabilities(props.capabilities);
 
   const mayDelete =
     capabilities.mayDelete(name) && entity.userCapabilities.mayDelete(name);
@@ -84,6 +86,10 @@ EntityTrashIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
+// withCapabilities is not necessary technically
+// for the poc I want to keep as much of the code/tests unchanged
+// and getting rid of it will cause many tests to fail
+// hence it stays until graphql can be further integrated
 export default withCapabilities(EntityTrashIcon);
 
 // vim: set ts=2 sw=2 tw=80:

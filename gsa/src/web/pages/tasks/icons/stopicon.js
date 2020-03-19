@@ -21,10 +21,12 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
+import {useCapabilities} from 'web/utils/useCapabilities';
 import StopIcon from 'web/components/icon/stopicon';
 
-const TaskStopIcon = ({capabilities, size, task, onClick}) => {
+const TaskStopIcon = ({size, task, onClick, ...props}) => {
+  const capabilities = useCapabilities(props.capabilities);
+
   if (task.isRunning() && !task.isContainer()) {
     if (
       !capabilities.mayOp('stop_task') ||

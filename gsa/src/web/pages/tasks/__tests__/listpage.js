@@ -34,6 +34,7 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 
 import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
 import {MockedProvider} from '@apollo/react-testing';
+
 import TaskPage, {ToolBarIcons} from '../listpage';
 import {GET_TASKS} from 'web/pages/tasks/graphql';
 
@@ -512,6 +513,7 @@ describe('TaskPage ToolBarIcons test', () => {
       capabilities: wrongCaps,
       router: true,
     });
+
     const {queryAllByTestId} = render(
       <ToolBarIcons
         onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}

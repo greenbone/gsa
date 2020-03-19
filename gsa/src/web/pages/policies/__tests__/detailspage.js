@@ -468,7 +468,6 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element} = render(<Detailspage id="12345" />);
-
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[14]);
 
@@ -543,7 +542,6 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
-
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
@@ -637,7 +635,6 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy2));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
-
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
@@ -740,7 +737,6 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy3));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
-
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
@@ -834,7 +830,6 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy4));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
-
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');

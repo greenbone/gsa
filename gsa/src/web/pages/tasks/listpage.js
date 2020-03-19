@@ -58,48 +58,53 @@ import TaskFilterDialog from './filterdialog';
 import Table from './table';
 import {useGetTasks, useDeleteTask, useCloneTask} from './graphql';
 import {queryWithRefetch} from 'web/utils/graphql';
+import {useCapabilities} from 'web/utils/useCapabilities';
 
 export const ToolBarIcons = withCapabilities(
   ({
-    capabilities,
     onAdvancedTaskWizardClick,
     onModifyTaskWizardClick,
     onContainerTaskCreateClick,
     onTaskCreateClick,
     onTaskWizardClick,
-  }) => (
-    <IconDivider>
-      <ManualIcon
-        page="scanning"
-        anchor="managing-tasks"
-        title={_('Help: Tasks')}
-      />
-      {capabilities.mayOp('run_wizard') && (
-        <IconMenu icon={<WizardIcon />} onClick={onTaskWizardClick}>
-          {capabilities.mayCreate('task') && (
-            <MenuEntry title={_('Task Wizard')} onClick={onTaskWizardClick} />
-          )}
-          {capabilities.mayCreate('task') && (
-            <MenuEntry
-              title={_('Advanced Task Wizard')}
-              onClick={onAdvancedTaskWizardClick}
-            />
-          )}
-          {capabilities.mayEdit('task') && (
-            <MenuEntry
-              title={_('Modify Task Wizard')}
-              onClick={onModifyTaskWizardClick}
-            />
-          )}
-        </IconMenu>
-      )}
+    ...props
+  }) => {
+    const capabilities = useCapabilities(props.capabilities);
 
-      <NewIconMenu
-        onNewClick={onTaskCreateClick}
-        onNewContainerClick={onContainerTaskCreateClick}
-      />
-    </IconDivider>
-  ),
+    return (
+      <IconDivider>
+        <ManualIcon
+          page="scanning"
+          anchor="managing-tasks"
+          title={_('Help: Tasks')}
+        />
+        {capabilities.mayOp('run_wizard') && (
+          <IconMenu icon={<WizardIcon />} onClick={onTaskWizardClick}>
+            {capabilities.mayCreate('task') && (
+              <MenuEntry title={_('Task Wizard')} onClick={onTaskWizardClick} />
+            )}
+            {capabilities.mayCreate('task') && (
+              <MenuEntry
+                title={_('Advanced Task Wizard')}
+                onClick={onAdvancedTaskWizardClick}
+              />
+            )}
+            {capabilities.mayEdit('task') && (
+              <MenuEntry
+                title={_('Modify Task Wizard')}
+                onClick={onModifyTaskWizardClick}
+              />
+            )}
+          </IconMenu>
+        )}
+
+        <NewIconMenu
+          onNewClick={onTaskCreateClick}
+          onNewContainerClick={onContainerTaskCreateClick}
+        />
+      </IconDivider>
+    );
+  },
 );
 
 ToolBarIcons.propTypes = {
@@ -121,15 +126,21 @@ const Page = ({
 }) => {
   const query = useGetTasks();
 
-  const {data, refetch} = query({filterString: filter.toFilterString()});
+  const {data, refetch, error} = query({filterString: filter.toFilterString()});
 
   const deleteTask = queryWithRefetch(useDeleteTask())(refetch);
   const cloneTask = queryWithRefetch(useCloneTask())(refetch);
 
+  let entities;
+
   if (isDefined(data)) {
-    props.entities = data.tasks.nodes.map(entity => Task.fromObject(entity));
-  } else {
-    props.entities = undefined;
+    entities = data.tasks.nodes.map(entity => Task.fromObject(entity));
+  }
+
+  let entitiesError;
+
+  if (isDefined(error)) {
+    entitiesError = error;
   }
 
   useEffect(() => {
@@ -177,6 +188,8 @@ const Page = ({
           <PageTitle title={_('Tasks')} />
           <EntitiesPage
             {...props}
+            entities={entities}
+            entitiesError={entitiesError}
             dashboard={() => (
               <TaskDashboard
                 filter={filter}

@@ -413,6 +413,7 @@ describe('Audit Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', audit2));
 
     const {baseElement, element} = render(<Detailspage id="12345" />);
+
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[16]);
 

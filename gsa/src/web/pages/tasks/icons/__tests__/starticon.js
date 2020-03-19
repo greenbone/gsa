@@ -65,7 +65,6 @@ describe('Task StartIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(<StartIcon task={task} />);
-
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(false);
 
@@ -114,7 +113,6 @@ describe('Task StartIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(<StartIcon task={task} />);
-
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
     expect(element).toEqual(null);
@@ -130,7 +128,6 @@ describe('Task StartIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(<StartIcon task={task} />);
-
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
     expect(element).toEqual(null);

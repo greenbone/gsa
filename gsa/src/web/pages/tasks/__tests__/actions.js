@@ -92,6 +92,7 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
+
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -153,6 +154,7 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: wrongCaps});
+
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -223,6 +225,7 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
+
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -284,6 +287,7 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
+
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -354,6 +358,7 @@ describe('Task Actions tests', () => {
       store: true,
       router: true,
     });
+
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -398,6 +403,7 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
+
     const {getAllByTestId} = render(
       <Actions
         entity={task}

@@ -21,10 +21,12 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
+import {useCapabilities} from 'web/utils/useCapabilities';
 import StartIcon from 'web/components/icon/starticon';
 
-const TaskStartIcon = ({capabilities, task, onClick}) => {
+const TaskStartIcon = ({task, onClick, ...props}) => {
+  const capabilities = useCapabilities(props.capabilities);
+
   if (task.isRunning() || task.isContainer()) {
     return null;
   }

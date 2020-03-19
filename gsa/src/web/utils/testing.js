@@ -44,6 +44,7 @@ import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
 
 import {createQueryHistory} from 'web/routes';
 import configureStore from 'web/store';
+import {MockedProvider} from '@apollo/react-testing';
 
 export * from '@testing-library/react';
 
@@ -103,9 +104,10 @@ const withProvider = (name, key = name) => Component => ({
 const TestingGmpPropvider = withProvider('gmp', 'value')(GmpContext.Provider);
 const TestingStoreProvider = withProvider('store')(Provider);
 const TestingRouter = withProvider('history')(Router);
-const TestingCapabilitiesProvider = withProvider('capabilities', 'value')(
-  CapabilitiesContext.Provider,
-);
+const TestingCapabilitiesProvider = withProvider(
+  'capabilities',
+  'value',
+)(CapabilitiesContext.Provider);
 
 export const rendererWith = (
   {capabilities, gmp, store, router} = {
@@ -131,7 +133,9 @@ export const rendererWith = (
         <TestingGmpPropvider gmp={gmp}>
           <TestingCapabilitiesProvider capabilities={capabilities}>
             <TestingStoreProvider store={store}>
-              <TestingRouter history={history}>{ui}</TestingRouter>
+              <MockedProvider mocks={[]} addTypename={false}>
+                <TestingRouter history={history}>{ui}</TestingRouter>
+              </MockedProvider>
             </TestingStoreProvider>
           </TestingCapabilitiesProvider>
         </TestingGmpPropvider>,

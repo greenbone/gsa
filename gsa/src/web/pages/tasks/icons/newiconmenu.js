@@ -26,8 +26,11 @@ import MenuEntry from 'web/components/menu/menuentry';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
+import {useCapabilities} from 'web/utils/useCapabilities';
 
-const NewIconMenu = ({capabilities, onNewClick, onNewContainerClick}) => {
+const NewIconMenu = ({onNewClick, onNewContainerClick, ...props}) => {
+  const capabilities = useCapabilities(props.capabilities);
+
   if (capabilities.mayCreate('task')) {
     return (
       <IconMenu icon={<NewIcon />} onClick={onNewClick}>

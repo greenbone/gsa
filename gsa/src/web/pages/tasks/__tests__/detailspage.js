@@ -53,7 +53,10 @@ const config = ScanConfig.fromElement({
   scanner: {name: 'scanner1', type: '0'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '12345', name: 'foo'}, {id: '678910', name: 'task2'}],
+    task: [
+      {id: '12345', name: 'foo'},
+      {id: '678910', name: 'task2'},
+    ],
   },
 });
 

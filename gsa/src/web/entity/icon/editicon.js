@@ -24,11 +24,10 @@ import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-
+import {useCapabilities} from 'web/utils/useCapabilities';
 import EditIcon from 'web/components/icon/editicon';
 
 const EntityEditIcon = ({
-  capabilities,
   displayName,
   entity,
   name,
@@ -36,6 +35,8 @@ const EntityEditIcon = ({
   onClick,
   ...props
 }) => {
+  const capabilities = useCapabilities(props.capabilities);
+
   if (!isDefined(name)) {
     name = getEntityType(entity);
   }
