@@ -19,32 +19,8 @@
 import gql from 'graphql-tag';
 
 import {useMutation, useQuery} from '@apollo/react-hooks';
-import {isDefined} from 'gmp/utils/identity';
-
-import Capabilities from 'gmp/capabilities/capabilities';
 
 import {toGraphQL, toFruitfulQuery} from 'web/utils/graphql';
-
-export const GET_CAPS = gql`
-  query Capabilities {
-    capabilities
-  }
-`;
-
-export const useGetCaps = () => {
-  return toFruitfulQuery(useQuery)(GET_CAPS);
-};
-
-export const useCaps = caps => {
-  const query = useGetCaps();
-  const {data} = query();
-
-  if (isDefined(data)) {
-    return new Capabilities(data.capabilities);
-  } else {
-    return caps; // fallback to HOC
-  }
-};
 
 export const GET_TASK = gql`
   query Task($taskId: UUID!) {

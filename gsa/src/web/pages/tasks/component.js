@@ -99,12 +99,8 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
 import {setTimezone} from 'web/store/usersettings/actions';
-import {
-  useModifyTask,
-  useCreateContainerTask,
-  useCreateTask,
-  useGetCaps,
-} from './graphql';
+import {useModifyTask, useCreateContainerTask, useCreateTask} from './graphql';
+import {useGetCaps} from 'web/utils/useCapabilities';
 
 const TaskComponent = props => {
   const modifyTask = useModifyTask();
