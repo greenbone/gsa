@@ -34,12 +34,7 @@ import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {
-  rendererWith,
-  waitForElement,
-  fireEvent,
-  withEmptyMock,
-} from 'web/utils/testing';
+import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
 
 import PoliciesPage, {ToolBarIcons} from '../listpage';
 
@@ -198,9 +193,7 @@ describe('PoliciesPage tests', () => {
       entitiesLoadingActions.success([policy], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(
-      withEmptyMock(<PoliciesPage />),
-    );
+    const {baseElement, getAllByTestId} = render(<PoliciesPage />);
 
     await waitForElement(() => baseElement.querySelectorAll('table'));
 

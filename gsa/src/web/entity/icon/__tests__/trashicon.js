@@ -22,7 +22,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import Task from 'gmp/models/task';
 
-import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Theme from 'web/utils/theme';
 
@@ -39,7 +39,7 @@ describe('Entity TrashIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      withEmptyMock(<TrashIcon entity={entity} onClick={clickHandler} />),
+      <TrashIcon entity={entity} onClick={clickHandler} />,
     );
 
     expect(caps.mayDelete('task')).toEqual(true);
@@ -63,7 +63,7 @@ describe('Entity TrashIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      withEmptyMock(<TrashIcon entity={entity} onClick={clickHandler} />),
+      <TrashIcon entity={entity} onClick={clickHandler} />,
     );
 
     expect(caps.mayDelete('task')).toEqual(false);
@@ -86,7 +86,7 @@ describe('Entity TrashIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      withEmptyMock(<TrashIcon entity={entity} onClick={clickHandler} />),
+      <TrashIcon entity={entity} onClick={clickHandler} />,
     );
 
     expect(caps.mayDelete('task')).toEqual(true);

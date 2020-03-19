@@ -35,12 +35,7 @@ import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {
-  rendererWith,
-  waitForElement,
-  fireEvent,
-  withEmptyMock,
-} from 'web/utils/testing';
+import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
 
 import ScanConfigsPage, {ToolBarIcons} from '../listpage';
 
@@ -205,9 +200,7 @@ describe('ScanConfigsPage tests', () => {
       entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(
-      withEmptyMock(<ScanConfigsPage />),
-    );
+    const {baseElement, getAllByTestId} = render(<ScanConfigsPage />);
 
     await waitForElement(() => baseElement.querySelectorAll('table'));
 

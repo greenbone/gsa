@@ -29,7 +29,7 @@ import ScanConfig, {
 
 import {setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Table from '../table';
 
@@ -114,17 +114,15 @@ describe('Scan Config table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
-      withEmptyMock(
-        <Table
-          filter={filter}
-          entities={[config, config2, config3]}
-          entitiesCounts={counts}
-          onScanConfigCloneClick={handleScanConfigClone}
-          onScanConfigDeleteClick={handleScanConfigDelete}
-          onScanConfigDownloadClick={handleScanConfigDownload}
-          onScanConfigEditClick={handleScanConfigEdit}
-        />,
-      ),
+      <Table
+        filter={filter}
+        entities={[config, config2, config3]}
+        entitiesCounts={counts}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+      />,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -160,17 +158,15 @@ describe('Scan Config table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {element, getAllByTestId} = render(
-      withEmptyMock(
-        <Table
-          filter={filter}
-          entities={[config, config2, config3]}
-          entitiesCounts={counts}
-          onScanConfigCloneClick={handleScanConfigClone}
-          onScanConfigDeleteClick={handleScanConfigDelete}
-          onScanConfigDownloadClick={handleScanConfigDownload}
-          onScanConfigEditClick={handleScanConfigEdit}
-        />,
-      ),
+      <Table
+        filter={filter}
+        entities={[config, config2, config3]}
+        entitiesCounts={counts}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+      />,
     );
 
     expect(element).not.toHaveTextContent('Comment');
@@ -201,17 +197,15 @@ describe('Scan Config table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Table
-          filter={filter}
-          entities={[config, config2, config3]}
-          entitiesCounts={counts}
-          onScanConfigCloneClick={handleScanConfigClone}
-          onScanConfigDeleteClick={handleScanConfigDelete}
-          onScanConfigDownloadClick={handleScanConfigDownload}
-          onScanConfigEditClick={handleScanConfigEdit}
-        />,
-      ),
+      <Table
+        filter={filter}
+        entities={[config, config2, config3]}
+        entitiesCounts={counts}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');

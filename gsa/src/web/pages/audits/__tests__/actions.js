@@ -22,7 +22,7 @@ import React from 'react';
 import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
-import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Theme from 'web/utils/theme';
 
@@ -60,21 +60,19 @@ describe('Audit Actions tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
     const {baseElement} = render(
-      withEmptyMock(
-        <Actions
-          entity={audit}
-          gcrFormatDefined={true}
-          links={true}
-          onAuditCloneClick={handleAuditClone}
-          onAuditDeleteClick={handleAuditDelete}
-          onAuditDownloadClick={handleAuditDownload}
-          onAuditEditClick={handleAuditEdit}
-          onAuditResumeClick={handleAuditResume}
-          onAuditStartClick={handleAuditStart}
-          onAuditStopClick={handleAuditStop}
-          onReportDownloadClick={handleReportDownload}
-        />,
-      ),
+      <Actions
+        entity={audit}
+        gcrFormatDefined={true}
+        links={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+      />,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -101,21 +99,19 @@ describe('Audit Actions tests', () => {
     const {render} = rendererWith({capabilities: true});
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Actions
-          entity={audit}
-          gcrFormatDefined={true}
-          links={true}
-          onAuditCloneClick={handleAuditClone}
-          onAuditDeleteClick={handleAuditDelete}
-          onAuditDownloadClick={handleAuditDownload}
-          onAuditEditClick={handleAuditEdit}
-          onAuditResumeClick={handleAuditResume}
-          onAuditStartClick={handleAuditStart}
-          onAuditStopClick={handleAuditStop}
-          onReportDownloadClick={handleReportDownload}
-        />,
-      ),
+      <Actions
+        entity={audit}
+        gcrFormatDefined={true}
+        links={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -173,21 +169,19 @@ describe('Audit Actions tests', () => {
     const {render} = rendererWith({capabilities: wrongCaps});
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Actions
-          entity={audit}
-          gcrFormatDefined={true}
-          links={true}
-          onAuditCloneClick={handleAuditClone}
-          onAuditDeleteClick={handleAuditDelete}
-          onAuditDownloadClick={handleAuditDownload}
-          onAuditEditClick={handleAuditEdit}
-          onAuditResumeClick={handleAuditResume}
-          onAuditStartClick={handleAuditStart}
-          onAuditStopClick={handleAuditStop}
-          onReportDownloadClick={handleReportDownload}
-        />,
-      ),
+      <Actions
+        entity={audit}
+        gcrFormatDefined={true}
+        links={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -257,21 +251,19 @@ describe('Audit Actions tests', () => {
     const {render} = rendererWith({capabilities: true});
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Actions
-          entity={audit}
-          gcrFormatDefined={true}
-          links={true}
-          onAuditCloneClick={handleAuditClone}
-          onAuditDeleteClick={handleAuditDelete}
-          onAuditDownloadClick={handleAuditDownload}
-          onAuditEditClick={handleAuditEdit}
-          onAuditResumeClick={handleAuditResume}
-          onAuditStartClick={handleAuditStart}
-          onAuditStopClick={handleAuditStop}
-          onReportDownloadClick={handleReportDownload}
-        />,
-      ),
+      <Actions
+        entity={audit}
+        gcrFormatDefined={true}
+        links={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -327,21 +319,19 @@ describe('Audit Actions tests', () => {
     const {render} = rendererWith({capabilities: true});
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Actions
-          entity={audit}
-          gcrFormatDefined={true}
-          links={true}
-          onAuditCloneClick={handleAuditClone}
-          onAuditDeleteClick={handleAuditDelete}
-          onAuditDownloadClick={handleAuditDownload}
-          onAuditEditClick={handleAuditEdit}
-          onAuditResumeClick={handleAuditResume}
-          onAuditStartClick={handleAuditStart}
-          onAuditStopClick={handleAuditStop}
-          onReportDownloadClick={handleReportDownload}
-        />,
-      ),
+      <Actions
+        entity={audit}
+        gcrFormatDefined={true}
+        links={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -399,21 +389,19 @@ describe('Audit Actions tests', () => {
     const {render} = rendererWith({capabilities: true});
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Actions
-          entity={audit}
-          gcrFormatDefined={false}
-          links={true}
-          onAuditCloneClick={handleAuditClone}
-          onAuditDeleteClick={handleAuditDelete}
-          onAuditDownloadClick={handleAuditDownload}
-          onAuditEditClick={handleAuditEdit}
-          onAuditResumeClick={handleAuditResume}
-          onAuditStartClick={handleAuditStart}
-          onAuditStopClick={handleAuditStop}
-          onReportDownloadClick={handleReportDownload}
-        />,
-      ),
+      <Actions
+        entity={audit}
+        gcrFormatDefined={false}
+        links={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -456,21 +444,19 @@ describe('Audit Actions tests', () => {
     });
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Actions
-          entity={audit}
-          gcrFormatDefined={false}
-          links={true}
-          onAuditCloneClick={handleAuditClone}
-          onAuditDeleteClick={handleAuditDelete}
-          onAuditDownloadClick={handleAuditDownload}
-          onAuditEditClick={handleAuditEdit}
-          onAuditResumeClick={handleAuditResume}
-          onAuditStartClick={handleAuditStart}
-          onAuditStopClick={handleAuditStop}
-          onReportDownloadClick={handleReportDownload}
-        />,
-      ),
+      <Actions
+        entity={audit}
+        gcrFormatDefined={false}
+        links={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+      />,
     );
 
     const detailslinks = getAllByTestId('details-link');

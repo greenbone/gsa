@@ -32,7 +32,7 @@ import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -271,7 +271,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element, getAllByTestId} = render(
-      withEmptyMock(<Detailspage id="12345" />),
+      <Detailspage id="12345" />,
     );
 
     expect(element).toMatchSnapshot();
@@ -339,7 +339,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element, getAllByTestId} = render(
-      withEmptyMock(<Detailspage id="12345" />),
+      <Detailspage id="12345" />,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -423,7 +423,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element, getAllByTestId} = render(
-      withEmptyMock(<Detailspage id="12345" />),
+      <Detailspage id="12345" />,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -490,9 +490,7 @@ describe('Scan Config Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', config));
 
-    const {baseElement, element} = render(
-      withEmptyMock(<Detailspage id="12345" />),
-    );
+    const {baseElement, element} = render(<Detailspage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[16]);
@@ -532,9 +530,7 @@ describe('Scan Config Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', config));
 
-    const {baseElement, element} = render(
-      withEmptyMock(<Detailspage id="12345" />),
-    );
+    const {baseElement, element} = render(<Detailspage id="12345" />);
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[18]);
 
@@ -608,7 +604,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', config));
 
-    const {getAllByTestId} = render(withEmptyMock(<Detailspage id="12345" />));
+    const {getAllByTestId} = render(<Detailspage id="12345" />);
     const icons = getAllByTestId('svg-icon');
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
     expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
@@ -705,7 +701,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', config2));
 
-    const {getAllByTestId} = render(withEmptyMock(<Detailspage id="12345" />));
+    const {getAllByTestId} = render(<Detailspage id="12345" />);
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
@@ -812,7 +808,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', config3));
 
-    const {getAllByTestId} = render(withEmptyMock(<Detailspage id="12345" />));
+    const {getAllByTestId} = render(<Detailspage id="12345" />);
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
@@ -910,7 +906,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', config4));
 
-    const {getAllByTestId} = render(withEmptyMock(<Detailspage id="12345" />));
+    const {getAllByTestId} = render(<Detailspage id="12345" />);
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
@@ -959,17 +955,15 @@ describe('Scan Config ToolBarIcons tests', () => {
     });
 
     const {element, getAllByTestId} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          entity={config}
-          onScanConfigCreateClick={handleScanConfigCreate}
-          onScanConfigCloneClick={handleScanConfigClone}
-          onScanConfigDeleteClick={handleScanConfigDelete}
-          onScanConfigDownloadClick={handleScanConfigDownload}
-          onScanConfigEditClick={handleScanConfigEdit}
-          onScanConfigImportClick={handleScanConfigImport}
-        />,
-      ),
+      <ToolBarIcons
+        entity={config}
+        onScanConfigCreateClick={handleScanConfigCreate}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+        onScanConfigImportClick={handleScanConfigImport}
+      />,
     );
 
     expect(element).toMatchSnapshot();
@@ -1002,17 +996,15 @@ describe('Scan Config ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          entity={config}
-          onScanConfigCreateClick={handleScanConfigCreate}
-          onScanConfigCloneClick={handleScanConfigClone}
-          onScanConfigDeleteClick={handleScanConfigDelete}
-          onScanConfigDownloadClick={handleScanConfigDownload}
-          onScanConfigEditClick={handleScanConfigEdit}
-          onScanConfigImportClick={handleScanConfigImport}
-        />,
-      ),
+      <ToolBarIcons
+        entity={config}
+        onScanConfigCreateClick={handleScanConfigCreate}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+        onScanConfigImportClick={handleScanConfigImport}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -1060,17 +1052,15 @@ describe('Scan Config ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          entity={config2}
-          onScanConfigCreateClick={handleScanConfigCreate}
-          onScanConfigCloneClick={handleScanConfigClone}
-          onScanConfigDeleteClick={handleScanConfigDelete}
-          onScanConfigDownloadClick={handleScanConfigDownload}
-          onScanConfigEditClick={handleScanConfigEdit}
-          onScanConfigImportClick={handleScanConfigImport}
-        />,
-      ),
+      <ToolBarIcons
+        entity={config2}
+        onScanConfigCreateClick={handleScanConfigCreate}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+        onScanConfigImportClick={handleScanConfigImport}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -1122,17 +1112,15 @@ describe('Scan Config ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          entity={config3}
-          onScanConfigCreateClick={handleScanConfigCreate}
-          onScanConfigCloneClick={handleScanConfigClone}
-          onScanConfigDeleteClick={handleScanConfigDelete}
-          onScanConfigDownloadClick={handleScanConfigDownload}
-          onScanConfigEditClick={handleScanConfigEdit}
-          onScanConfigImportClick={handleScanConfigImport}
-        />,
-      ),
+      <ToolBarIcons
+        entity={config3}
+        onScanConfigCreateClick={handleScanConfigCreate}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+        onScanConfigImportClick={handleScanConfigImport}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -1180,17 +1168,15 @@ describe('Scan Config ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          entity={config4}
-          onScanConfigCreateClick={handleScanConfigCreate}
-          onScanConfigCloneClick={handleScanConfigClone}
-          onScanConfigDeleteClick={handleScanConfigDelete}
-          onScanConfigDownloadClick={handleScanConfigDownload}
-          onScanConfigEditClick={handleScanConfigEdit}
-          onScanConfigImportClick={handleScanConfigImport}
-        />,
-      ),
+      <ToolBarIcons
+        entity={config4}
+        onScanConfigCreateClick={handleScanConfigCreate}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+        onScanConfigImportClick={handleScanConfigImport}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');

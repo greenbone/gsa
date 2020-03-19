@@ -27,7 +27,7 @@ import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Row from '../row';
 
@@ -91,22 +91,20 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={audit}
-          links={true}
-          gcrFormatDefined={true}
-          onAuditCloneClick={handleAuditClone}
-          onAuditDeleteClick={handleAuditDelete}
-          onAuditDownloadClick={handleAuditDownload}
-          onAuditEditClick={handleAuditEdit}
-          onAuditResumeClick={handleAuditResume}
-          onAuditStartClick={handleAuditStart}
-          onAuditStopClick={handleAuditStop}
-          onReportDownloadClick={handleReportDownload}
-          onToggleDetailsClick={handleToggleDetailsClick}
-        />,
-      ),
+      <Row
+        entity={audit}
+        links={true}
+        gcrFormatDefined={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+        onToggleDetailsClick={handleToggleDetailsClick}
+      />,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -185,22 +183,20 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={audit}
-          links={true}
-          gcrFormatDefined={true}
-          onAuditCloneClick={handleAuditClone}
-          onAuditDeleteClick={handleAuditDelete}
-          onAuditDownloadClick={handleAuditDownload}
-          onAuditEditClick={handleAuditEdit}
-          onAuditResumeClick={handleAuditResume}
-          onAuditStartClick={handleAuditStart}
-          onAuditStopClick={handleAuditStop}
-          onReportDownloadClick={handleReportDownload}
-          onToggleDetailsClick={handleToggleDetailsClick}
-        />,
-      ),
+      <Row
+        entity={audit}
+        links={true}
+        gcrFormatDefined={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+        onToggleDetailsClick={handleToggleDetailsClick}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -249,22 +245,20 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId, queryAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={audit}
-          links={true}
-          gcrFormatDefined={true}
-          onAuditCloneClick={handleAuditClone}
-          onAuditDeleteClick={handleAuditDelete}
-          onAuditDownloadClick={handleAuditDownload}
-          onAuditEditClick={handleAuditEdit}
-          onAuditResumeClick={handleAuditResume}
-          onAuditStartClick={handleAuditStart}
-          onAuditStopClick={handleAuditStop}
-          onReportDownloadClick={handleReportDownload}
-          onToggleDetailsClick={handleToggleDetailsClick}
-        />,
-      ),
+      <Row
+        entity={audit}
+        links={true}
+        gcrFormatDefined={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+        onToggleDetailsClick={handleToggleDetailsClick}
+      />,
     );
 
     // Name
@@ -353,22 +347,20 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={audit}
-          links={true}
-          gcrFormatDefined={true}
-          onAuditCloneClick={handleAuditClone}
-          onAuditDeleteClick={handleAuditDelete}
-          onAuditDownloadClick={handleAuditDownload}
-          onAuditEditClick={handleAuditEdit}
-          onAuditResumeClick={handleAuditResume}
-          onAuditStartClick={handleAuditStart}
-          onAuditStopClick={handleAuditStop}
-          onReportDownloadClick={handleReportDownload}
-          onToggleDetailsClick={handleToggleDetailsClick}
-        />,
-      ),
+      <Row
+        entity={audit}
+        links={true}
+        gcrFormatDefined={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+        onToggleDetailsClick={handleToggleDetailsClick}
+      />,
     );
 
     // Name
@@ -462,22 +454,20 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={audit}
-          links={true}
-          gcrFormatDefined={true}
-          onAuditCloneClick={handleAuditClone}
-          onAuditDeleteClick={handleAuditDelete}
-          onAuditDownloadClick={handleAuditDownload}
-          onAuditEditClick={handleAuditEdit}
-          onAuditResumeClick={handleAuditResume}
-          onAuditStartClick={handleAuditStart}
-          onAuditStopClick={handleAuditStop}
-          onReportDownloadClick={handleReportDownload}
-          onToggleDetailsClick={handleToggleDetailsClick}
-        />,
-      ),
+      <Row
+        entity={audit}
+        links={true}
+        gcrFormatDefined={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+        onToggleDetailsClick={handleToggleDetailsClick}
+      />,
     );
 
     // Name
@@ -573,22 +563,20 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={audit}
-          links={true}
-          gcrFormatDefined={true}
-          onAuditCloneClick={handleAuditClone}
-          onAuditDeleteClick={handleAuditDelete}
-          onAuditDownloadClick={handleAuditDownload}
-          onAuditEditClick={handleAuditEdit}
-          onAuditResumeClick={handleAuditResume}
-          onAuditStartClick={handleAuditStart}
-          onAuditStopClick={handleAuditStop}
-          onReportDownloadClick={handleReportDownload}
-          onToggleDetailsClick={handleToggleDetailsClick}
-        />,
-      ),
+      <Row
+        entity={audit}
+        links={true}
+        gcrFormatDefined={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+        onToggleDetailsClick={handleToggleDetailsClick}
+      />,
     );
 
     // Name
@@ -684,22 +672,20 @@ describe('Audit Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={audit}
-          links={true}
-          gcrFormatDefined={true}
-          onAuditCloneClick={handleAuditClone}
-          onAuditDeleteClick={handleAuditDelete}
-          onAuditDownloadClick={handleAuditDownload}
-          onAuditEditClick={handleAuditEdit}
-          onAuditResumeClick={handleAuditResume}
-          onAuditStartClick={handleAuditStart}
-          onAuditStopClick={handleAuditStop}
-          onReportDownloadClick={handleReportDownload}
-          onToggleDetailsClick={handleToggleDetailsClick}
-        />,
-      ),
+      <Row
+        entity={audit}
+        links={true}
+        gcrFormatDefined={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+        onToggleDetailsClick={handleToggleDetailsClick}
+      />,
     );
 
     // Name

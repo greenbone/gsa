@@ -27,7 +27,7 @@ import Task, {TASK_STATUS} from 'gmp/models/task';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Table from '../table';
 
@@ -128,22 +128,20 @@ describe('Tasks table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
-      withEmptyMock(
-        <Table
-          filter={filter}
-          entities={[task, task2, task3]}
-          entitiesCounts={counts}
-          onReportImportClick={handleReportImport}
-          onTaskCloneClick={handleTaskClone}
-          onTaskDeleteClick={handleTaskDelete}
-          onTaskDownloadClick={handleTaskDownload}
-          onTaskEditClick={handleTaskEdit}
-          onTaskResumeClick={handleTaskResume}
-          onTaskStartClick={handleTaskStart}
-          onTaskStopClick={handleTaskStop}
-          onToggleDetailsClick={handleToggleDetailsClick}
-        />,
-      ),
+      <Table
+        filter={filter}
+        entities={[task, task2, task3]}
+        entitiesCounts={counts}
+        onReportImportClick={handleReportImport}
+        onTaskCloneClick={handleTaskClone}
+        onTaskDeleteClick={handleTaskDelete}
+        onTaskDownloadClick={handleTaskDownload}
+        onTaskEditClick={handleTaskEdit}
+        onTaskResumeClick={handleTaskResume}
+        onTaskStartClick={handleTaskStart}
+        onTaskStopClick={handleTaskStop}
+        onToggleDetailsClick={handleToggleDetailsClick}
+      />,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -182,22 +180,20 @@ describe('Tasks table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {element, getAllByTestId} = render(
-      withEmptyMock(
-        <Table
-          filter={filter}
-          entities={[task, task2, task3]}
-          entitiesCounts={counts}
-          onReportImportClick={handleReportImport}
-          onTaskCloneClick={handleTaskClone}
-          onTaskDeleteClick={handleTaskDelete}
-          onTaskDownloadClick={handleTaskDownload}
-          onTaskEditClick={handleTaskEdit}
-          onTaskResumeClick={handleTaskResume}
-          onTaskStartClick={handleTaskStart}
-          onTaskStopClick={handleTaskStop}
-          onToggleDetailsClick={handleToggleDetailsClick}
-        />,
-      ),
+      <Table
+        filter={filter}
+        entities={[task, task2, task3]}
+        entitiesCounts={counts}
+        onReportImportClick={handleReportImport}
+        onTaskCloneClick={handleTaskClone}
+        onTaskDeleteClick={handleTaskDelete}
+        onTaskDownloadClick={handleTaskDownload}
+        onTaskEditClick={handleTaskEdit}
+        onTaskResumeClick={handleTaskResume}
+        onTaskStartClick={handleTaskStart}
+        onTaskStopClick={handleTaskStop}
+        onToggleDetailsClick={handleToggleDetailsClick}
+      />,
     );
 
     expect(element).not.toHaveTextContent('target1');
@@ -235,22 +231,20 @@ describe('Tasks table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Table
-          filter={filter}
-          entities={[task, task2, task3]}
-          entitiesCounts={counts}
-          onReportImportClick={handleReportImport}
-          onTaskCloneClick={handleTaskClone}
-          onTaskDeleteClick={handleTaskDelete}
-          onTaskDownloadClick={handleTaskDownload}
-          onTaskEditClick={handleTaskEdit}
-          onTaskResumeClick={handleTaskResume}
-          onTaskStartClick={handleTaskStart}
-          onTaskStopClick={handleTaskStop}
-          onToggleDetailsClick={handleToggleDetailsClick}
-        />,
-      ),
+      <Table
+        filter={filter}
+        entities={[task, task2, task3]}
+        entitiesCounts={counts}
+        onReportImportClick={handleReportImport}
+        onTaskCloneClick={handleTaskClone}
+        onTaskDeleteClick={handleTaskDelete}
+        onTaskDownloadClick={handleTaskDownload}
+        onTaskEditClick={handleTaskEdit}
+        onTaskResumeClick={handleTaskResume}
+        onTaskStartClick={handleTaskStart}
+        onTaskStopClick={handleTaskStop}
+        onToggleDetailsClick={handleToggleDetailsClick}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');

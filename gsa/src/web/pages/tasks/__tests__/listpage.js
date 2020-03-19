@@ -33,12 +33,7 @@ import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {
-  rendererWith,
-  waitForElement,
-  fireEvent,
-  withEmptyMock,
-} from 'web/utils/testing';
+import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
 import {MockedProvider} from '@apollo/react-testing';
 
 import TaskPage, {ToolBarIcons} from '../listpage';
@@ -433,15 +428,13 @@ describe('TaskPage ToolBarIcons test', () => {
     });
 
     const {element, getAllByTestId} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-          onModifyTaskWizardClick={handleModifyTaskWizardClick}
-          onContainerTaskCreateClick={handleContainerTaskCreateClick}
-          onTaskCreateClick={handleTaskCreateClick}
-          onTaskWizardClick={handleTaskWizardClick}
-        />,
-      ),
+      <ToolBarIcons
+        onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
+        onModifyTaskWizardClick={handleModifyTaskWizardClick}
+        onContainerTaskCreateClick={handleContainerTaskCreateClick}
+        onTaskCreateClick={handleTaskCreateClick}
+        onTaskWizardClick={handleTaskWizardClick}
+      />,
     );
     expect(element).toMatchSnapshot();
 
@@ -473,15 +466,13 @@ describe('TaskPage ToolBarIcons test', () => {
     });
 
     const {baseElement} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-          onModifyTaskWizardClick={handleModifyTaskWizardClick}
-          onContainerTaskCreateClick={handleContainerTaskCreateClick}
-          onTaskCreateClick={handleTaskCreateClick}
-          onTaskWizardClick={handleTaskWizardClick}
-        />,
-      ),
+      <ToolBarIcons
+        onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
+        onModifyTaskWizardClick={handleModifyTaskWizardClick}
+        onContainerTaskCreateClick={handleContainerTaskCreateClick}
+        onTaskCreateClick={handleTaskCreateClick}
+        onTaskWizardClick={handleTaskWizardClick}
+      />,
     );
 
     const divs = baseElement.querySelectorAll('div');
@@ -525,15 +516,13 @@ describe('TaskPage ToolBarIcons test', () => {
     });
 
     const {queryAllByTestId} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
-          onModifyTaskWizardClick={handleModifyTaskWizardClick}
-          onContainerTaskCreateClick={handleContainerTaskCreateClick}
-          onTaskCreateClick={handleTaskCreateClick}
-          onTaskWizardClick={handleTaskWizardClick}
-        />,
-      ),
+      <ToolBarIcons
+        onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}
+        onModifyTaskWizardClick={handleModifyTaskWizardClick}
+        onContainerTaskCreateClick={handleContainerTaskCreateClick}
+        onTaskCreateClick={handleTaskCreateClick}
+        onTaskWizardClick={handleTaskWizardClick}
+      />,
     );
 
     const icons = queryAllByTestId('svg-icon');

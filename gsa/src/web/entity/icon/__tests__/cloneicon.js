@@ -22,7 +22,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import Task from 'gmp/models/task';
 
-import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Theme from 'web/utils/theme';
 
@@ -39,7 +39,7 @@ describe('Entity CloneIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      withEmptyMock(<CloneIcon entity={entity} onClick={clickHandler} />),
+      <CloneIcon entity={entity} onClick={clickHandler} />,
     );
 
     expect(entity.userCapabilities.mayAccess('task')).toEqual(true);
@@ -62,7 +62,7 @@ describe('Entity CloneIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      withEmptyMock(<CloneIcon entity={entity} onClick={clickHandler} />),
+      <CloneIcon entity={entity} onClick={clickHandler} />,
     );
 
     expect(entity.userCapabilities.mayAccess('task')).toEqual(true);
@@ -84,7 +84,7 @@ describe('Entity CloneIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      withEmptyMock(<CloneIcon entity={entity} onClick={clickHandler} />),
+      <CloneIcon entity={entity} onClick={clickHandler} />,
     );
 
     expect(entity.userCapabilities.mayAccess('task')).toEqual(false);

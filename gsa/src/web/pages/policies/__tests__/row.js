@@ -26,7 +26,7 @@ import Policy from 'gmp/models/policy';
 
 import {setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Row from '../row';
 
@@ -63,17 +63,15 @@ describe('Row tests', () => {
     });
 
     const {baseElement} = render(
-      withEmptyMock(
-        <Row
-          entity={entity}
-          onToggleDetailsClick={handleToggleDetailsClick}
-          onPolicyCloneClick={handlePolicyClone}
-          onPolicyDeleteClick={handlePolicyDelete}
-          onPolicyDownloadClick={handlePolicyDownload}
-          onPolicyEditClick={handlePolicyEdit}
-          onCreateAuditClick={handleCreateAudit}
-        />,
-      ),
+      <Row
+        entity={entity}
+        onToggleDetailsClick={handleToggleDetailsClick}
+        onPolicyCloneClick={handlePolicyClone}
+        onPolicyDeleteClick={handlePolicyDelete}
+        onPolicyDownloadClick={handlePolicyDownload}
+        onPolicyEditClick={handlePolicyEdit}
+        onCreateAuditClick={handleCreateAudit}
+      />,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -108,17 +106,15 @@ describe('Row tests', () => {
     store.dispatch(setUsername('username'));
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={policy}
-          onToggleDetailsClick={handleToggleDetailsClick}
-          onPolicyCloneClick={handlePolicyClone}
-          onPolicyDeleteClick={handlePolicyDelete}
-          onPolicyDownloadClick={handlePolicyDownload}
-          onPolicyEditClick={handlePolicyEdit}
-          onCreateAuditClick={handleCreateAudit}
-        />,
-      ),
+      <Row
+        entity={policy}
+        onToggleDetailsClick={handleToggleDetailsClick}
+        onPolicyCloneClick={handlePolicyClone}
+        onPolicyDeleteClick={handlePolicyDelete}
+        onPolicyDownloadClick={handlePolicyDownload}
+        onPolicyEditClick={handlePolicyEdit}
+        onCreateAuditClick={handleCreateAudit}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -133,24 +129,22 @@ describe('Row tests', () => {
     const handlePolicyEdit = jest.fn();
     const handleCreateAudit = jest.fn();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
     });
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={entity}
-          onToggleDetailsClick={handleToggleDetailsClick}
-          onPolicyCloneClick={handlePolicyClone}
-          onPolicyDeleteClick={handlePolicyDelete}
-          onPolicyDownloadClick={handlePolicyDownload}
-          onPolicyEditClick={handlePolicyEdit}
-          onCreateAuditClick={handleCreateAudit}
-        />,
-      ),
+      <Row
+        entity={entity}
+        onToggleDetailsClick={handleToggleDetailsClick}
+        onPolicyCloneClick={handlePolicyClone}
+        onPolicyDeleteClick={handlePolicyDelete}
+        onPolicyDownloadClick={handlePolicyDownload}
+        onPolicyEditClick={handlePolicyEdit}
+        onCreateAuditClick={handleCreateAudit}
+      />,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -198,24 +192,22 @@ describe('Row tests', () => {
 
     const wrongCaps = new Capabilities(['authenticate']);
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: wrongCaps,
       store: true,
     });
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={policy}
-          onToggleDetailsClick={handleToggleDetailsClick}
-          onPolicyCloneClick={handlePolicyClone}
-          onPolicyDeleteClick={handlePolicyDelete}
-          onPolicyDownloadClick={handlePolicyDownload}
-          onPolicyEditClick={handlePolicyEdit}
-          onCreateAuditClick={handleCreateAudit}
-        />,
-      ),
+      <Row
+        entity={policy}
+        onToggleDetailsClick={handleToggleDetailsClick}
+        onPolicyCloneClick={handlePolicyClone}
+        onPolicyDeleteClick={handlePolicyDelete}
+        onPolicyDownloadClick={handlePolicyDownload}
+        onPolicyEditClick={handlePolicyEdit}
+        onCreateAuditClick={handleCreateAudit}
+      />,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -277,17 +269,15 @@ describe('Row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={policy}
-          onToggleDetailsClick={handleToggleDetailsClick}
-          onPolicyCloneClick={handlePolicyClone}
-          onPolicyDeleteClick={handlePolicyDelete}
-          onPolicyDownloadClick={handlePolicyDownload}
-          onPolicyEditClick={handlePolicyEdit}
-          onCreateAuditClick={handleCreateAudit}
-        />,
-      ),
+      <Row
+        entity={policy}
+        onToggleDetailsClick={handleToggleDetailsClick}
+        onPolicyCloneClick={handlePolicyClone}
+        onPolicyDeleteClick={handlePolicyDelete}
+        onPolicyDownloadClick={handlePolicyDownload}
+        onPolicyEditClick={handlePolicyEdit}
+        onCreateAuditClick={handleCreateAudit}
+      />,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -341,17 +331,15 @@ describe('Row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={policy}
-          onToggleDetailsClick={handleToggleDetailsClick}
-          onPolicyCloneClick={handlePolicyClone}
-          onPolicyDeleteClick={handlePolicyDelete}
-          onPolicyDownloadClick={handlePolicyDownload}
-          onPolicyEditClick={handlePolicyEdit}
-          onCreateAuditClick={handleCreateAudit}
-        />,
-      ),
+      <Row
+        entity={policy}
+        onToggleDetailsClick={handleToggleDetailsClick}
+        onPolicyCloneClick={handlePolicyClone}
+        onPolicyDeleteClick={handlePolicyDelete}
+        onPolicyDownloadClick={handlePolicyDownload}
+        onPolicyEditClick={handlePolicyEdit}
+        onCreateAuditClick={handleCreateAudit}
+      />,
     );
 
     const spans = baseElement.querySelectorAll('span');

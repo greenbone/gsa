@@ -134,7 +134,9 @@ export const rendererWith = (
         <TestingGmpPropvider gmp={gmp}>
           <TestingCapabilitiesProvider capabilities={capabilities}>
             <TestingStoreProvider store={store}>
-              <TestingRouter history={history}>{ui}</TestingRouter>
+              <MockedProvider mocks={[]} addTypename={false}>
+                <TestingRouter history={history}>{ui}</TestingRouter>
+              </MockedProvider>
             </TestingStoreProvider>
           </TestingCapabilitiesProvider>
         </TestingGmpPropvider>,
@@ -144,11 +146,5 @@ export const rendererWith = (
     history,
   };
 };
-
-export const withEmptyMock = children => (
-  <MockedProvider mocks={[]} addTypename={false}>
-    {children}
-  </MockedProvider>
-);
 
 // vim: set ts=2 sw=2 tw=80:

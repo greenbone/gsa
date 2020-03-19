@@ -30,7 +30,7 @@ import ScanConfig, {
 
 import {setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Row from '../row';
 
@@ -75,16 +75,14 @@ describe('Scan Config row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={entity}
-          onToggleDetailsClick={handleToggleDetailsClick}
-          onScanConfigCloneClick={handleScanConfigClone}
-          onScanConfigDeleteClick={handleScanConfigDelete}
-          onScanConfigDownloadClick={handleScanConfigDownload}
-          onScanConfigEditClick={handleScanConfigEdit}
-        />,
-      ),
+      <Row
+        entity={entity}
+        onToggleDetailsClick={handleToggleDetailsClick}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+      />,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -140,16 +138,14 @@ describe('Scan Config row tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={config}
-          onToggleDetailsClick={handleToggleDetailsClick}
-          onScanConfigCloneClick={handleScanConfigClone}
-          onScanConfigDeleteClick={handleScanConfigDelete}
-          onScanConfigDownloadClick={handleScanConfigDownload}
-          onScanConfigEditClick={handleScanConfigEdit}
-        />,
-      ),
+      <Row
+        entity={config}
+        onToggleDetailsClick={handleToggleDetailsClick}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -170,16 +166,14 @@ describe('Scan Config row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={entity}
-          onToggleDetailsClick={handleToggleDetailsClick}
-          onScanConfigCloneClick={handleScanConfigClone}
-          onScanConfigDeleteClick={handleScanConfigDelete}
-          onScanConfigDownloadClick={handleScanConfigDownload}
-          onScanConfigEditClick={handleScanConfigEdit}
-        />,
-      ),
+      <Row
+        entity={entity}
+        onToggleDetailsClick={handleToggleDetailsClick}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+      />,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -236,16 +230,14 @@ describe('Scan Config row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={config}
-          onToggleDetailsClick={handleToggleDetailsClick}
-          onScanConfigCloneClick={handleScanConfigClone}
-          onScanConfigDeleteClick={handleScanConfigDelete}
-          onScanConfigDownloadClick={handleScanConfigDownload}
-          onScanConfigEditClick={handleScanConfigEdit}
-        />,
-      ),
+      <Row
+        entity={config}
+        onToggleDetailsClick={handleToggleDetailsClick}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+      />,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -312,16 +304,14 @@ describe('Scan Config row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={config}
-          onToggleDetailsClick={handleToggleDetailsClick}
-          onScanConfigCloneClick={handleScanConfigClone}
-          onScanConfigDeleteClick={handleScanConfigDelete}
-          onScanConfigDownloadClick={handleScanConfigDownload}
-          onScanConfigEditClick={handleScanConfigEdit}
-        />,
-      ),
+      <Row
+        entity={config}
+        onToggleDetailsClick={handleToggleDetailsClick}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+      />,
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -379,16 +369,14 @@ describe('Scan Config row tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <Row
-          entity={config}
-          onToggleDetailsClick={handleToggleDetailsClick}
-          onScanConfigCloneClick={handleScanConfigClone}
-          onScanConfigDeleteClick={handleScanConfigDelete}
-          onScanConfigDownloadClick={handleScanConfigDownload}
-          onScanConfigEditClick={handleScanConfigEdit}
-        />,
-      ),
+      <Row
+        entity={config}
+        onToggleDetailsClick={handleToggleDetailsClick}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+      />,
     );
 
     const spans = baseElement.querySelectorAll('span');

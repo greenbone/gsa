@@ -35,7 +35,7 @@ import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -321,7 +321,7 @@ describe('Audit Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', audit));
 
     const {baseElement, element, getAllByTestId} = render(
-      withEmptyMock(<Detailspage id="12345" />),
+      <Detailspage id="12345" />,
     );
 
     expect(element).toMatchSnapshot();
@@ -416,9 +416,7 @@ describe('Audit Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', audit2));
 
-    const {baseElement, element} = render(
-      withEmptyMock(<Detailspage id="12345" />),
-    );
+    const {baseElement, element} = render(<Detailspage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[16]);
@@ -492,7 +490,7 @@ describe('Audit Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', audit5));
 
-    const {getAllByTestId} = render(withEmptyMock(<Detailspage id="12345" />));
+    const {getAllByTestId} = render(<Detailspage id="12345" />);
 
     const icons = getAllByTestId('svg-icon');
 
@@ -539,18 +537,16 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {element, getAllByTestId} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          entity={audit}
-          onAuditCloneClick={handleAuditCloneClick}
-          onAuditDeleteClick={handleAuditDeleteClick}
-          onAuditDownloadClick={handleAuditDownloadClick}
-          onAuditEditClick={handleAuditEditClick}
-          onAuditResumeClick={handleAuditResumeClick}
-          onAuditStartClick={handleAuditStartClick}
-          onAuditStopClick={handleAuditStopClick}
-        />,
-      ),
+      <ToolBarIcons
+        entity={audit}
+        onAuditCloneClick={handleAuditCloneClick}
+        onAuditDeleteClick={handleAuditDeleteClick}
+        onAuditDownloadClick={handleAuditDownloadClick}
+        onAuditEditClick={handleAuditEditClick}
+        onAuditResumeClick={handleAuditResumeClick}
+        onAuditStartClick={handleAuditStartClick}
+        onAuditStopClick={handleAuditStopClick}
+      />,
     );
 
     expect(element).toMatchSnapshot();
@@ -586,18 +582,16 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          entity={audit3}
-          onAuditCloneClick={handleAuditCloneClick}
-          onAuditDeleteClick={handleAuditDeleteClick}
-          onAuditDownloadClick={handleAuditDownloadClick}
-          onAuditEditClick={handleAuditEditClick}
-          onAuditResumeClick={handleAuditResumeClick}
-          onAuditStartClick={handleAuditStartClick}
-          onAuditStopClick={handleAuditStopClick}
-        />,
-      ),
+      <ToolBarIcons
+        entity={audit3}
+        onAuditCloneClick={handleAuditCloneClick}
+        onAuditDeleteClick={handleAuditDeleteClick}
+        onAuditDownloadClick={handleAuditDownloadClick}
+        onAuditEditClick={handleAuditEditClick}
+        onAuditResumeClick={handleAuditResumeClick}
+        onAuditStartClick={handleAuditStartClick}
+        onAuditStopClick={handleAuditStopClick}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -655,18 +649,16 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          entity={audit4}
-          onAuditCloneClick={handleAuditCloneClick}
-          onAuditDeleteClick={handleAuditDeleteClick}
-          onAuditDownloadClick={handleAuditDownloadClick}
-          onAuditEditClick={handleAuditEditClick}
-          onAuditResumeClick={handleAuditResumeClick}
-          onAuditStartClick={handleAuditStartClick}
-          onAuditStopClick={handleAuditStopClick}
-        />,
-      ),
+      <ToolBarIcons
+        entity={audit4}
+        onAuditCloneClick={handleAuditCloneClick}
+        onAuditDeleteClick={handleAuditDeleteClick}
+        onAuditDownloadClick={handleAuditDownloadClick}
+        onAuditEditClick={handleAuditEditClick}
+        onAuditResumeClick={handleAuditResumeClick}
+        onAuditStartClick={handleAuditStartClick}
+        onAuditStopClick={handleAuditStopClick}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -731,18 +723,16 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          entity={audit5}
-          onAuditCloneClick={handleAuditCloneClick}
-          onAuditDeleteClick={handleAuditDeleteClick}
-          onAuditDownloadClick={handleAuditDownloadClick}
-          onAuditEditClick={handleAuditEditClick}
-          onAuditResumeClick={handleAuditResumeClick}
-          onAuditStartClick={handleAuditStartClick}
-          onAuditStopClick={handleAuditStopClick}
-        />,
-      ),
+      <ToolBarIcons
+        entity={audit5}
+        onAuditCloneClick={handleAuditCloneClick}
+        onAuditDeleteClick={handleAuditDeleteClick}
+        onAuditDownloadClick={handleAuditDownloadClick}
+        onAuditEditClick={handleAuditEditClick}
+        onAuditResumeClick={handleAuditResumeClick}
+        onAuditStartClick={handleAuditStartClick}
+        onAuditStopClick={handleAuditStopClick}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -806,18 +796,16 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          entity={audit2}
-          onAuditCloneClick={handleAuditCloneClick}
-          onAuditDeleteClick={handleAuditDeleteClick}
-          onAuditDownloadClick={handleAuditDownloadClick}
-          onAuditEditClick={handleAuditEditClick}
-          onAuditResumeClick={handleAuditResumeClick}
-          onAuditStartClick={handleAuditStartClick}
-          onAuditStopClick={handleAuditStopClick}
-        />,
-      ),
+      <ToolBarIcons
+        entity={audit2}
+        onAuditCloneClick={handleAuditCloneClick}
+        onAuditDeleteClick={handleAuditDeleteClick}
+        onAuditDownloadClick={handleAuditDownloadClick}
+        onAuditEditClick={handleAuditEditClick}
+        onAuditResumeClick={handleAuditResumeClick}
+        onAuditStartClick={handleAuditStartClick}
+        onAuditStopClick={handleAuditStopClick}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -881,18 +869,16 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          entity={audit6}
-          onAuditCloneClick={handleAuditCloneClick}
-          onAuditDeleteClick={handleAuditDeleteClick}
-          onAuditDownloadClick={handleAuditDownloadClick}
-          onAuditEditClick={handleAuditEditClick}
-          onAuditResumeClick={handleAuditResumeClick}
-          onAuditStartClick={handleAuditStartClick}
-          onAuditStopClick={handleAuditStopClick}
-        />,
-      ),
+      <ToolBarIcons
+        entity={audit6}
+        onAuditCloneClick={handleAuditCloneClick}
+        onAuditDeleteClick={handleAuditDeleteClick}
+        onAuditDownloadClick={handleAuditDownloadClick}
+        onAuditEditClick={handleAuditEditClick}
+        onAuditResumeClick={handleAuditResumeClick}
+        onAuditStartClick={handleAuditStartClick}
+        onAuditStopClick={handleAuditStopClick}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -963,18 +949,16 @@ describe('Audit ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <ToolBarIcons
-          entity={audit7}
-          onAuditCloneClick={handleAuditCloneClick}
-          onAuditDeleteClick={handleAuditDeleteClick}
-          onAuditDownloadClick={handleAuditDownloadClick}
-          onAuditEditClick={handleAuditEditClick}
-          onAuditResumeClick={handleAuditResumeClick}
-          onAuditStartClick={handleAuditStartClick}
-          onAuditStopClick={handleAuditStopClick}
-        />,
-      ),
+      <ToolBarIcons
+        entity={audit7}
+        onAuditCloneClick={handleAuditCloneClick}
+        onAuditDeleteClick={handleAuditDeleteClick}
+        onAuditDownloadClick={handleAuditDownloadClick}
+        onAuditEditClick={handleAuditEditClick}
+        onAuditResumeClick={handleAuditResumeClick}
+        onAuditStartClick={handleAuditStartClick}
+        onAuditStopClick={handleAuditStopClick}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');

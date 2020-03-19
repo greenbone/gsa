@@ -22,7 +22,7 @@ import React from 'react';
 import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
-import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Actions from '../actions';
 import Task, {TASK_STATUS} from 'gmp/models/task';
@@ -57,20 +57,18 @@ describe('Task Actions tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
     const {baseElement} = render(
-      withEmptyMock(
-        <Actions
-          entity={task}
-          links={true}
-          onReportImportClick={handleReportImport}
-          onTaskCloneClick={handleTaskClone}
-          onTaskDeleteClick={handleTaskDelete}
-          onTaskDownloadClick={handleTaskDownload}
-          onTaskEditClick={handleTaskEdit}
-          onTaskResumeClick={handleTaskResume}
-          onTaskStartClick={handleTaskStart}
-          onTaskStopClick={handleTaskStop}
-        />,
-      ),
+      <Actions
+        entity={task}
+        links={true}
+        onReportImportClick={handleReportImport}
+        onTaskCloneClick={handleTaskClone}
+        onTaskDeleteClick={handleTaskDelete}
+        onTaskDownloadClick={handleTaskDownload}
+        onTaskEditClick={handleTaskEdit}
+        onTaskResumeClick={handleTaskResume}
+        onTaskStartClick={handleTaskStart}
+        onTaskStopClick={handleTaskStop}
+      />,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -97,20 +95,18 @@ describe('Task Actions tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Actions
-          entity={task}
-          links={true}
-          onReportImportClick={handleReportImport}
-          onTaskCloneClick={handleTaskClone}
-          onTaskDeleteClick={handleTaskDelete}
-          onTaskDownloadClick={handleTaskDownload}
-          onTaskEditClick={handleTaskEdit}
-          onTaskResumeClick={handleTaskResume}
-          onTaskStartClick={handleTaskStart}
-          onTaskStopClick={handleTaskStop}
-        />,
-      ),
+      <Actions
+        entity={task}
+        links={true}
+        onReportImportClick={handleReportImport}
+        onTaskCloneClick={handleTaskClone}
+        onTaskDeleteClick={handleTaskDelete}
+        onTaskDownloadClick={handleTaskDownload}
+        onTaskEditClick={handleTaskEdit}
+        onTaskResumeClick={handleTaskResume}
+        onTaskStartClick={handleTaskStart}
+        onTaskStopClick={handleTaskStop}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -161,20 +157,18 @@ describe('Task Actions tests', () => {
     const {render} = rendererWith({capabilities: wrongCaps});
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Actions
-          entity={task}
-          links={true}
-          onReportImportClick={handleReportImport}
-          onTaskCloneClick={handleTaskClone}
-          onTaskDeleteClick={handleTaskDelete}
-          onTaskDownloadClick={handleTaskDownload}
-          onTaskEditClick={handleTaskEdit}
-          onTaskResumeClick={handleTaskResume}
-          onTaskStartClick={handleTaskStart}
-          onTaskStopClick={handleTaskStop}
-        />,
-      ),
+      <Actions
+        entity={task}
+        links={true}
+        onReportImportClick={handleReportImport}
+        onTaskCloneClick={handleTaskClone}
+        onTaskDeleteClick={handleTaskDelete}
+        onTaskDownloadClick={handleTaskDownload}
+        onTaskEditClick={handleTaskEdit}
+        onTaskResumeClick={handleTaskResume}
+        onTaskStartClick={handleTaskStart}
+        onTaskStopClick={handleTaskStop}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -234,20 +228,18 @@ describe('Task Actions tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Actions
-          entity={task}
-          links={true}
-          onReportImportClick={handleReportImport}
-          onTaskCloneClick={handleTaskClone}
-          onTaskDeleteClick={handleTaskDelete}
-          onTaskDownloadClick={handleTaskDownload}
-          onTaskEditClick={handleTaskEdit}
-          onTaskResumeClick={handleTaskResume}
-          onTaskStartClick={handleTaskStart}
-          onTaskStopClick={handleTaskStop}
-        />,
-      ),
+      <Actions
+        entity={task}
+        links={true}
+        onReportImportClick={handleReportImport}
+        onTaskCloneClick={handleTaskClone}
+        onTaskDeleteClick={handleTaskDelete}
+        onTaskDownloadClick={handleTaskDownload}
+        onTaskEditClick={handleTaskEdit}
+        onTaskResumeClick={handleTaskResume}
+        onTaskStartClick={handleTaskStart}
+        onTaskStopClick={handleTaskStop}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -298,20 +290,18 @@ describe('Task Actions tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Actions
-          entity={task}
-          links={true}
-          onReportImportClick={handleReportImport}
-          onTaskCloneClick={handleTaskClone}
-          onTaskDeleteClick={handleTaskDelete}
-          onTaskDownloadClick={handleTaskDownload}
-          onTaskEditClick={handleTaskEdit}
-          onTaskResumeClick={handleTaskResume}
-          onTaskStartClick={handleTaskStart}
-          onTaskStopClick={handleTaskStop}
-        />,
-      ),
+      <Actions
+        entity={task}
+        links={true}
+        onReportImportClick={handleReportImport}
+        onTaskCloneClick={handleTaskClone}
+        onTaskDeleteClick={handleTaskDelete}
+        onTaskDownloadClick={handleTaskDownload}
+        onTaskEditClick={handleTaskEdit}
+        onTaskResumeClick={handleTaskResume}
+        onTaskStartClick={handleTaskStart}
+        onTaskStopClick={handleTaskStop}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -371,20 +361,18 @@ describe('Task Actions tests', () => {
     });
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Actions
-          entity={task}
-          links={true}
-          onReportImportClick={handleReportImport}
-          onTaskCloneClick={handleTaskClone}
-          onTaskDeleteClick={handleTaskDelete}
-          onTaskDownloadClick={handleTaskDownload}
-          onTaskEditClick={handleTaskEdit}
-          onTaskResumeClick={handleTaskResume}
-          onTaskStartClick={handleTaskStart}
-          onTaskStopClick={handleTaskStop}
-        />,
-      ),
+      <Actions
+        entity={task}
+        links={true}
+        onReportImportClick={handleReportImport}
+        onTaskCloneClick={handleTaskClone}
+        onTaskDeleteClick={handleTaskDelete}
+        onTaskDownloadClick={handleTaskDownload}
+        onTaskEditClick={handleTaskEdit}
+        onTaskResumeClick={handleTaskResume}
+        onTaskStartClick={handleTaskStart}
+        onTaskStopClick={handleTaskStop}
+      />,
     );
 
     const detailslinks = getAllByTestId('details-link');
@@ -418,20 +406,18 @@ describe('Task Actions tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Actions
-          entity={task}
-          links={true}
-          onReportImportClick={handleReportImport}
-          onTaskCloneClick={handleTaskClone}
-          onTaskDeleteClick={handleTaskDelete}
-          onTaskDownloadClick={handleTaskDownload}
-          onTaskEditClick={handleTaskEdit}
-          onTaskResumeClick={handleTaskResume}
-          onTaskStartClick={handleTaskStart}
-          onTaskStopClick={handleTaskStop}
-        />,
-      ),
+      <Actions
+        entity={task}
+        links={true}
+        onReportImportClick={handleReportImport}
+        onTaskCloneClick={handleTaskClone}
+        onTaskDeleteClick={handleTaskDelete}
+        onTaskDownloadClick={handleTaskDownload}
+        onTaskEditClick={handleTaskEdit}
+        onTaskResumeClick={handleTaskResume}
+        onTaskStartClick={handleTaskStart}
+        onTaskStopClick={handleTaskStop}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');

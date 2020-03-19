@@ -27,7 +27,7 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Table from '../table';
 
@@ -130,21 +130,19 @@ describe('Audits table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(
-      withEmptyMock(
-        <Table
-          filter={filter}
-          entities={[audit, audit2, audit3]}
-          entitiesCounts={counts}
-          onAuditCloneClick={handleAuditCloneClick}
-          onAuditDeleteClick={handleAuditDeleteClick}
-          onAuditDownloadClick={handleAuditDownloadClick}
-          onAuditEditClick={handleAuditEditClick}
-          onAuditStartClick={handleAuditStartClick}
-          onAuditStopClick={handleAuditStopClick}
-          onAuditResumeClick={handleAuditResumeClick}
-          onReportDownloadClick={handleReportDownloadClick}
-        />,
-      ),
+      <Table
+        filter={filter}
+        entities={[audit, audit2, audit3]}
+        entitiesCounts={counts}
+        onAuditCloneClick={handleAuditCloneClick}
+        onAuditDeleteClick={handleAuditDeleteClick}
+        onAuditDownloadClick={handleAuditDownloadClick}
+        onAuditEditClick={handleAuditEditClick}
+        onAuditStartClick={handleAuditStartClick}
+        onAuditStopClick={handleAuditStopClick}
+        onAuditResumeClick={handleAuditResumeClick}
+        onReportDownloadClick={handleReportDownloadClick}
+      />,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -180,21 +178,19 @@ describe('Audits table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {element, getAllByTestId} = render(
-      withEmptyMock(
-        <Table
-          filter={filter}
-          entities={[audit, audit2, audit3]}
-          entitiesCounts={counts}
-          onAuditCloneClick={handleAuditCloneClick}
-          onAuditDeleteClick={handleAuditDeleteClick}
-          onAuditDownloadClick={handleAuditDownloadClick}
-          onAuditEditClick={handleAuditEditClick}
-          onAuditStartClick={handleAuditStartClick}
-          onAuditStopClick={handleAuditStopClick}
-          onAuditResumeClick={handleAuditResumeClick}
-          onReportDownloadClick={handleReportDownloadClick}
-        />,
-      ),
+      <Table
+        filter={filter}
+        entities={[audit, audit2, audit3]}
+        entitiesCounts={counts}
+        onAuditCloneClick={handleAuditCloneClick}
+        onAuditDeleteClick={handleAuditDeleteClick}
+        onAuditDownloadClick={handleAuditDownloadClick}
+        onAuditEditClick={handleAuditEditClick}
+        onAuditStartClick={handleAuditStartClick}
+        onAuditStopClick={handleAuditStopClick}
+        onAuditResumeClick={handleAuditResumeClick}
+        onReportDownloadClick={handleReportDownloadClick}
+      />,
     );
 
     expect(element).not.toHaveTextContent('target1');
@@ -231,22 +227,20 @@ describe('Audits table tests', () => {
     store.dispatch(setUsername('admin'));
 
     const {getAllByTestId} = render(
-      withEmptyMock(
-        <Table
-          filter={filter}
-          entities={[audit, audit2, audit3]}
-          entitiesCounts={counts}
-          gcrFormatDefined={true}
-          onAuditCloneClick={handleAuditCloneClick}
-          onAuditDeleteClick={handleAuditDeleteClick}
-          onAuditDownloadClick={handleAuditDownloadClick}
-          onAuditEditClick={handleAuditEditClick}
-          onAuditStartClick={handleAuditStartClick}
-          onAuditStopClick={handleAuditStopClick}
-          onAuditResumeClick={handleAuditResumeClick}
-          onReportDownloadClick={handleReportDownloadClick}
-        />,
-      ),
+      <Table
+        filter={filter}
+        entities={[audit, audit2, audit3]}
+        entitiesCounts={counts}
+        gcrFormatDefined={true}
+        onAuditCloneClick={handleAuditCloneClick}
+        onAuditDeleteClick={handleAuditDeleteClick}
+        onAuditDownloadClick={handleAuditDownloadClick}
+        onAuditEditClick={handleAuditEditClick}
+        onAuditStartClick={handleAuditStartClick}
+        onAuditStopClick={handleAuditStopClick}
+        onAuditResumeClick={handleAuditResumeClick}
+        onReportDownloadClick={handleReportDownloadClick}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');

@@ -22,7 +22,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import Task, {TASK_STATUS} from 'gmp/models/task';
 
-import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Theme from 'web/utils/theme';
 
@@ -40,9 +40,7 @@ describe('Task StopIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(
-      withEmptyMock(<StopIcon task={task} onClick={clickHandler} />),
-    );
+    const {element} = render(<StopIcon task={task} onClick={clickHandler} />);
 
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
@@ -67,9 +65,7 @@ describe('Task StopIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(
-      withEmptyMock(<StopIcon task={task} onClick={clickHandler} />),
-    );
+    const {element} = render(<StopIcon task={task} onClick={clickHandler} />);
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(false);
     fireEvent.click(element);
@@ -92,9 +88,7 @@ describe('Task StopIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(
-      withEmptyMock(<StopIcon task={task} onClick={clickHandler} />),
-    );
+    const {element} = render(<StopIcon task={task} onClick={clickHandler} />);
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
 
@@ -111,9 +105,7 @@ describe('Task StopIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(
-      withEmptyMock(<StopIcon task={task} onClick={clickHandler} />),
-    );
+    const {element} = render(<StopIcon task={task} onClick={clickHandler} />);
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
 
