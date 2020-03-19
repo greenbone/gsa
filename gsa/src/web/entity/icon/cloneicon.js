@@ -84,6 +84,7 @@ const EntityCloneIcon = ({
 };
 
 EntityCloneIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   mayClone: PropTypes.bool,

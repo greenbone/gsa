@@ -58,6 +58,7 @@ const NewIconMenu = ({onNewClick, onNewContainerClick, ...props}) => {
 };
 
 NewIconMenu.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   onNewClick: PropTypes.func,
   onNewContainerClick: PropTypes.func,
 };

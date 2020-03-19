@@ -54,6 +54,7 @@ const ImportReportIcon = ({size, task, onClick, ...props}) => {
 };
 
 ImportReportIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,

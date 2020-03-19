@@ -60,6 +60,7 @@ const TaskStartIcon = ({task, onClick, ...props}) => {
 };
 
 TaskStartIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };

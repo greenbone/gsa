@@ -85,6 +85,7 @@ const EntityEditIcon = ({
 };
 
 EntityEditIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   name: PropTypes.string,

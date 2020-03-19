@@ -56,6 +56,7 @@ const TaskStopIcon = ({size, task, onClick, ...props}) => {
 };
 
 TaskStopIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,

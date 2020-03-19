@@ -86,6 +86,7 @@ const TaskResumeIcon = ({task, onClick, ...props}) => {
 };
 
 TaskResumeIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };

@@ -167,7 +167,7 @@ describe('Policies table tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const {element, getAllByTestId} = render(
+    const {getAllByTestId} = render(
       withEmptyMock(
         <Table
           filter={filter}
