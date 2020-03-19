@@ -22,9 +22,10 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isArray} from 'gmp/utils/identity';
 import {forEach} from 'gmp/utils/array';
 import {excludeObjectProps} from 'gmp/utils/object';
+import {getEntityType} from 'gmp/utils/entitytype';
 
 import FootNote from 'web/components/footnote/footnote';
 
@@ -271,7 +272,7 @@ class EntitiesTable extends React.Component {
           header={header}
           footer={footer}
           isUpdating={
-            isDefined(entities) && entities[0].entityType === 'task'
+            isArray(entities) && getEntityType(entities[0]) === 'task'
               ? false
               : isUpdating
           }
