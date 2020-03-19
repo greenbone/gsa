@@ -31,12 +31,12 @@ export const GET_CAPS = gql`
   }
 `;
 
-export const useGetCaps = () => {
+export const useGetCapabilities = () => {
   return toFruitfulQuery(useQuery)(GET_CAPS);
 };
 
 export const useCapabilities = caps => {
-  const query = useGetCaps();
+  const query = useGetCapabilities();
   const {data} = query();
 
   if (isDefined(data)) {
