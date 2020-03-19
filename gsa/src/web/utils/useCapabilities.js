@@ -41,7 +41,6 @@ export const useCapabilities = caps => {
 
   if (isDefined(data)) {
     return new Capabilities(data.capabilities);
-  } else {
-    return caps; // fallback to HOC
   }
+  return caps; // fallback to HOC
 };
