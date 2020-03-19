@@ -25,8 +25,7 @@ import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-import Capabilities from 'gmp/capabilities/capabilities';
-import {useGetCaps} from 'web/pages/tasks/graphql';
+import {useCapabilities} from 'web/utils/useCapabilities';
 import EditIcon from 'web/components/icon/editicon';
 
 const EntityEditIcon = ({
@@ -37,16 +36,7 @@ const EntityEditIcon = ({
   onClick,
   ...props
 }) => {
-  let capabilities;
-
-  const query = useGetCaps();
-  const {data} = query();
-
-  if (isDefined(data)) {
-    capabilities = new Capabilities(data.capabilities);
-  } else {
-    capabilities = props.capabilities;
-  }
+  const capabilities = useCapabilities(props.capabilities);
 
   if (!isDefined(name)) {
     name = getEntityType(entity);

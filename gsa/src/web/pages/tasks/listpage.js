@@ -25,8 +25,6 @@ import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-import Capabilities from 'gmp/capabilities/capabilities';
-import {useGetCaps} from 'web/pages/tasks/graphql';
 import Task from 'gmp/models/task';
 import {
   loadEntities,
@@ -61,6 +59,7 @@ import TaskFilterDialog from './filterdialog';
 import Table from './table';
 import {useGetTasks, useDeleteTask, useCloneTask} from './graphql';
 import {queryWithRefetch} from 'web/utils/graphql';
+import {useCapabilities} from 'web/utils/useCapabilities';
 
 export const ToolBarIcons = withCapabilities(
   ({
@@ -71,16 +70,8 @@ export const ToolBarIcons = withCapabilities(
     onTaskWizardClick,
     ...props
   }) => {
-    let capabilities;
+    const capabilities = useCapabilities(props.capabilities);
 
-    const query = useGetCaps();
-    const {data} = query();
-
-    if (isDefined(data)) {
-      capabilities = new Capabilities(data.capabilities);
-    } else {
-      capabilities = props.capabilities;
-    }
     return (
       <IconDivider>
         <ManualIcon
