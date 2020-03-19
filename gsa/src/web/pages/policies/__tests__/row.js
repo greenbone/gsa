@@ -26,8 +26,7 @@ import Policy from 'gmp/models/policy';
 
 import {setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
+import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
 
 import Row from '../row';
 
@@ -73,7 +72,7 @@ describe('Row tests', () => {
           onPolicyDownloadClick={handlePolicyDownload}
           onPolicyEditClick={handlePolicyEdit}
           onCreateAuditClick={handleCreateAudit}
-        />
+        />,
       ),
     );
 
@@ -118,7 +117,7 @@ describe('Row tests', () => {
           onPolicyDownloadClick={handlePolicyDownload}
           onPolicyEditClick={handlePolicyEdit}
           onCreateAuditClick={handleCreateAudit}
-        />
+        />,
       ),
     );
 
@@ -150,7 +149,7 @@ describe('Row tests', () => {
           onPolicyDownloadClick={handlePolicyDownload}
           onPolicyEditClick={handlePolicyEdit}
           onCreateAuditClick={handleCreateAudit}
-        />
+        />,
       ),
     );
 
@@ -215,7 +214,7 @@ describe('Row tests', () => {
           onPolicyDownloadClick={handlePolicyDownload}
           onPolicyEditClick={handlePolicyEdit}
           onCreateAuditClick={handleCreateAudit}
-        />
+        />,
       ),
     );
 
@@ -287,7 +286,7 @@ describe('Row tests', () => {
           onPolicyDownloadClick={handlePolicyDownload}
           onPolicyEditClick={handlePolicyEdit}
           onCreateAuditClick={handleCreateAudit}
-        />
+        />,
       ),
     );
 
@@ -351,7 +350,7 @@ describe('Row tests', () => {
           onPolicyDownloadClick={handlePolicyDownload}
           onPolicyEditClick={handlePolicyEdit}
           onCreateAuditClick={handleCreateAudit}
-        />
+        />,
       ),
     );
 

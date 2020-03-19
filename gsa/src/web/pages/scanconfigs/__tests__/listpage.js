@@ -35,8 +35,12 @@ import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
+import {
+  rendererWith,
+  waitForElement,
+  fireEvent,
+  withEmptyMock,
+} from 'web/utils/testing';
 
 import ScanConfigsPage, {ToolBarIcons} from '../listpage';
 
@@ -202,9 +206,7 @@ describe('ScanConfigsPage tests', () => {
     );
 
     const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <ScanConfigsPage />
-      ),
+      withEmptyMock(<ScanConfigsPage />),
     );
 
     await waitForElement(() => baseElement.querySelectorAll('table'));

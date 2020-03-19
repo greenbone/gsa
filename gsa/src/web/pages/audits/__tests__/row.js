@@ -27,8 +27,7 @@ import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
+import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
 
 import Row from '../row';
 
@@ -106,7 +105,7 @@ describe('Audit Row tests', () => {
           onAuditStopClick={handleAuditStop}
           onReportDownloadClick={handleReportDownload}
           onToggleDetailsClick={handleToggleDetailsClick}
-        />
+        />,
       ),
     );
 
@@ -200,7 +199,7 @@ describe('Audit Row tests', () => {
           onAuditStopClick={handleAuditStop}
           onReportDownloadClick={handleReportDownload}
           onToggleDetailsClick={handleToggleDetailsClick}
-        />
+        />,
       ),
     );
 
@@ -264,7 +263,7 @@ describe('Audit Row tests', () => {
           onAuditStopClick={handleAuditStop}
           onReportDownloadClick={handleReportDownload}
           onToggleDetailsClick={handleToggleDetailsClick}
-        />
+        />,
       ),
     );
 
@@ -368,7 +367,7 @@ describe('Audit Row tests', () => {
           onAuditStopClick={handleAuditStop}
           onReportDownloadClick={handleReportDownload}
           onToggleDetailsClick={handleToggleDetailsClick}
-        />
+        />,
       ),
     );
 
@@ -477,7 +476,7 @@ describe('Audit Row tests', () => {
           onAuditStopClick={handleAuditStop}
           onReportDownloadClick={handleReportDownload}
           onToggleDetailsClick={handleToggleDetailsClick}
-        />
+        />,
       ),
     );
 
@@ -588,7 +587,7 @@ describe('Audit Row tests', () => {
           onAuditStopClick={handleAuditStop}
           onReportDownloadClick={handleReportDownload}
           onToggleDetailsClick={handleToggleDetailsClick}
-        />
+        />,
       ),
     );
 
@@ -699,7 +698,7 @@ describe('Audit Row tests', () => {
           onAuditStopClick={handleAuditStop}
           onReportDownloadClick={handleReportDownload}
           onToggleDetailsClick={handleToggleDetailsClick}
-        />
+        />,
       ),
     );
 

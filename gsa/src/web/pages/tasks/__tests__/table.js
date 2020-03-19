@@ -27,8 +27,7 @@ import Task, {TASK_STATUS} from 'gmp/models/task';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
+import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
 
 import Table from '../table';
 
@@ -143,7 +142,7 @@ describe('Tasks table tests', () => {
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
           onToggleDetailsClick={handleToggleDetailsClick}
-        />
+        />,
       ),
     );
 
@@ -197,7 +196,7 @@ describe('Tasks table tests', () => {
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
           onToggleDetailsClick={handleToggleDetailsClick}
-        />
+        />,
       ),
     );
 
@@ -250,7 +249,7 @@ describe('Tasks table tests', () => {
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
           onToggleDetailsClick={handleToggleDetailsClick}
-        />
+        />,
       ),
     );
 

@@ -35,8 +35,7 @@ import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
+import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -322,9 +321,7 @@ describe('Audit Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', audit));
 
     const {baseElement, element, getAllByTestId} = render(
-      withEmptyMock(
-        <Detailspage id="12345" />
-      ),
+      withEmptyMock(<Detailspage id="12345" />),
     );
 
     expect(element).toMatchSnapshot();
@@ -420,9 +417,7 @@ describe('Audit Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', audit2));
 
     const {baseElement, element} = render(
-      withEmptyMock(
-        <Detailspage id="12345" />
-      ),
+      withEmptyMock(<Detailspage id="12345" />),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -497,11 +492,7 @@ describe('Audit Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', audit5));
 
-    const {getAllByTestId} = render(
-      withEmptyMock(
-        <Detailspage id="12345" />
-      ),
-    );
+    const {getAllByTestId} = render(withEmptyMock(<Detailspage id="12345" />));
 
     const icons = getAllByTestId('svg-icon');
 
@@ -558,7 +549,7 @@ describe('Audit ToolBarIcons tests', () => {
           onAuditResumeClick={handleAuditResumeClick}
           onAuditStartClick={handleAuditStartClick}
           onAuditStopClick={handleAuditStopClick}
-        />
+        />,
       ),
     );
 
@@ -605,7 +596,7 @@ describe('Audit ToolBarIcons tests', () => {
           onAuditResumeClick={handleAuditResumeClick}
           onAuditStartClick={handleAuditStartClick}
           onAuditStopClick={handleAuditStopClick}
-        />
+        />,
       ),
     );
 
@@ -674,7 +665,7 @@ describe('Audit ToolBarIcons tests', () => {
           onAuditResumeClick={handleAuditResumeClick}
           onAuditStartClick={handleAuditStartClick}
           onAuditStopClick={handleAuditStopClick}
-        />
+        />,
       ),
     );
 
@@ -750,7 +741,7 @@ describe('Audit ToolBarIcons tests', () => {
           onAuditResumeClick={handleAuditResumeClick}
           onAuditStartClick={handleAuditStartClick}
           onAuditStopClick={handleAuditStopClick}
-        />
+        />,
       ),
     );
 
@@ -825,7 +816,7 @@ describe('Audit ToolBarIcons tests', () => {
           onAuditResumeClick={handleAuditResumeClick}
           onAuditStartClick={handleAuditStartClick}
           onAuditStopClick={handleAuditStopClick}
-        />
+        />,
       ),
     );
 
@@ -900,7 +891,7 @@ describe('Audit ToolBarIcons tests', () => {
           onAuditResumeClick={handleAuditResumeClick}
           onAuditStartClick={handleAuditStartClick}
           onAuditStopClick={handleAuditStopClick}
-        />
+        />,
       ),
     );
 
@@ -982,7 +973,7 @@ describe('Audit ToolBarIcons tests', () => {
           onAuditResumeClick={handleAuditResumeClick}
           onAuditStartClick={handleAuditStartClick}
           onAuditStopClick={handleAuditStopClick}
-        />
+        />,
       ),
     );
 

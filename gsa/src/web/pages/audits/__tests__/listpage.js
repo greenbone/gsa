@@ -33,8 +33,12 @@ import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
+import {
+  rendererWith,
+  waitForElement,
+  fireEvent,
+  withEmptyMock,
+} from 'web/utils/testing';
 
 import AuditPage, {ToolBarIcons} from '../listpage';
 
@@ -214,11 +218,7 @@ describe('AuditPage tests', () => {
       entitiesLoadingActions.success([audit], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(
-      withEmptyMock(
-        <AuditPage />
-      ),
-    );
+    const {baseElement, getAllByTestId} = render(withEmptyMock(<AuditPage />));
 
     await waitForElement(() => baseElement.querySelectorAll('table'));
 

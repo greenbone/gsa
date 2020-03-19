@@ -27,8 +27,7 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
+import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
 
 import Table from '../table';
 
@@ -144,7 +143,7 @@ describe('Audits table tests', () => {
           onAuditStopClick={handleAuditStopClick}
           onAuditResumeClick={handleAuditResumeClick}
           onReportDownloadClick={handleReportDownloadClick}
-        />
+        />,
       ),
     );
 
@@ -194,7 +193,7 @@ describe('Audits table tests', () => {
           onAuditStopClick={handleAuditStopClick}
           onAuditResumeClick={handleAuditResumeClick}
           onReportDownloadClick={handleReportDownloadClick}
-        />
+        />,
       ),
     );
 
@@ -246,7 +245,7 @@ describe('Audits table tests', () => {
           onAuditStopClick={handleAuditStopClick}
           onAuditResumeClick={handleAuditResumeClick}
           onReportDownloadClick={handleReportDownloadClick}
-        />
+        />,
       ),
     );
 

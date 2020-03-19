@@ -22,8 +22,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import Task, {TASK_STATUS} from 'gmp/models/task';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
+import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
 
 import Theme from 'web/utils/theme';
 
@@ -42,9 +41,7 @@ describe('Task StartIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(
-      withEmptyMock(
-        <StartIcon task={task} onClick={clickHandler} />
-      ),
+      withEmptyMock(<StartIcon task={task} onClick={clickHandler} />),
     );
 
     expect(caps.mayOp('start_task')).toEqual(true);
@@ -70,11 +67,7 @@ describe('Task StartIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(
-      withEmptyMock(
-        <StartIcon task={task} />
-      ),
-    );
+    const {element} = render(withEmptyMock(<StartIcon task={task} />));
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(false);
 
@@ -98,11 +91,7 @@ describe('Task StartIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(
-      withEmptyMock(
-        <StartIcon task={task} />
-      ),
-    );
+    const {element} = render(withEmptyMock(<StartIcon task={task} />));
 
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
@@ -126,11 +115,7 @@ describe('Task StartIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(
-      withEmptyMock(
-        <StartIcon task={task} />
-      ),
-    );
+    const {element} = render(withEmptyMock(<StartIcon task={task} />));
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
     expect(element).toEqual(null);
@@ -145,11 +130,7 @@ describe('Task StartIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(
-      withEmptyMock(
-        <StartIcon task={task} />
-      ),
-    );
+    const {element} = render(withEmptyMock(<StartIcon task={task} />));
     expect(caps.mayOp('start_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
     expect(element).toEqual(null);

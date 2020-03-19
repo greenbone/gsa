@@ -29,8 +29,7 @@ import ScanConfig, {
 
 import {setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
+import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
 
 import Table from '../table';
 
@@ -124,7 +123,7 @@ describe('Scan Config table tests', () => {
           onScanConfigDeleteClick={handleScanConfigDelete}
           onScanConfigDownloadClick={handleScanConfigDownload}
           onScanConfigEditClick={handleScanConfigEdit}
-        />
+        />,
       ),
     );
 
@@ -170,7 +169,7 @@ describe('Scan Config table tests', () => {
           onScanConfigDeleteClick={handleScanConfigDelete}
           onScanConfigDownloadClick={handleScanConfigDownload}
           onScanConfigEditClick={handleScanConfigEdit}
-        />
+        />,
       ),
     );
 
@@ -211,7 +210,7 @@ describe('Scan Config table tests', () => {
           onScanConfigDeleteClick={handleScanConfigDelete}
           onScanConfigDownloadClick={handleScanConfigDownload}
           onScanConfigEditClick={handleScanConfigEdit}
-        />
+        />,
       ),
     );
 

@@ -32,8 +32,7 @@ import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
+import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -272,9 +271,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element, getAllByTestId} = render(
-      withEmptyMock(
-        <Detailspage id="12345" />
-      ),
+      withEmptyMock(<Detailspage id="12345" />),
     );
 
     expect(element).toMatchSnapshot();
@@ -342,9 +339,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element, getAllByTestId} = render(
-      withEmptyMock(
-        <Detailspage id="12345" />
-      ),
+      withEmptyMock(<Detailspage id="12345" />),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -428,9 +423,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element, getAllByTestId} = render(
-      withEmptyMock(
-        <Detailspage id="12345" />
-      ),
+      withEmptyMock(<Detailspage id="12345" />),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -498,9 +491,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element} = render(
-      withEmptyMock(
-        <Detailspage id="12345" />
-      ),
+      withEmptyMock(<Detailspage id="12345" />),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -542,9 +533,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {baseElement, element} = render(
-      withEmptyMock(
-        <Detailspage id="12345" />
-      ),
+      withEmptyMock(<Detailspage id="12345" />),
     );
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[18]);
@@ -619,11 +608,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', config));
 
-    const {getAllByTestId} = render(
-      withEmptyMock(
-        <Detailspage id="12345" />
-      ),
-    );
+    const {getAllByTestId} = render(withEmptyMock(<Detailspage id="12345" />));
     const icons = getAllByTestId('svg-icon');
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
     expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
@@ -720,11 +705,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', config2));
 
-    const {getAllByTestId} = render(
-      withEmptyMock(
-        <Detailspage id="12345" />
-      ),
-    );
+    const {getAllByTestId} = render(withEmptyMock(<Detailspage id="12345" />));
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
@@ -831,11 +812,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', config3));
 
-    const {getAllByTestId} = render(
-      withEmptyMock(
-        <Detailspage id="12345" />
-      ),
-    );
+    const {getAllByTestId} = render(withEmptyMock(<Detailspage id="12345" />));
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
@@ -933,11 +910,7 @@ describe('Scan Config Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', config4));
 
-    const {getAllByTestId} = render(
-      withEmptyMock(
-        <Detailspage id="12345" />
-      ),
-    );
+    const {getAllByTestId} = render(withEmptyMock(<Detailspage id="12345" />));
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
@@ -995,7 +968,7 @@ describe('Scan Config ToolBarIcons tests', () => {
           onScanConfigDownloadClick={handleScanConfigDownload}
           onScanConfigEditClick={handleScanConfigEdit}
           onScanConfigImportClick={handleScanConfigImport}
-        />
+        />,
       ),
     );
 
@@ -1038,7 +1011,7 @@ describe('Scan Config ToolBarIcons tests', () => {
           onScanConfigDownloadClick={handleScanConfigDownload}
           onScanConfigEditClick={handleScanConfigEdit}
           onScanConfigImportClick={handleScanConfigImport}
-        />
+        />,
       ),
     );
 
@@ -1096,7 +1069,7 @@ describe('Scan Config ToolBarIcons tests', () => {
           onScanConfigDownloadClick={handleScanConfigDownload}
           onScanConfigEditClick={handleScanConfigEdit}
           onScanConfigImportClick={handleScanConfigImport}
-        />
+        />,
       ),
     );
 
@@ -1158,7 +1131,7 @@ describe('Scan Config ToolBarIcons tests', () => {
           onScanConfigDownloadClick={handleScanConfigDownload}
           onScanConfigEditClick={handleScanConfigEdit}
           onScanConfigImportClick={handleScanConfigImport}
-        />
+        />,
       ),
     );
 
@@ -1216,7 +1189,7 @@ describe('Scan Config ToolBarIcons tests', () => {
           onScanConfigDownloadClick={handleScanConfigDownload}
           onScanConfigEditClick={handleScanConfigEdit}
           onScanConfigImportClick={handleScanConfigImport}
-        />
+        />,
       ),
     );
 

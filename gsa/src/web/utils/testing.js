@@ -147,7 +147,7 @@ export const rendererWith = (
 };
 
 export const withEmptyMock = children => (
-  withEmptyMock(
+  <MockedProvider mocks={[]} addTypename={false}>
     {children}
   </MockedProvider>
 );

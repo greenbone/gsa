@@ -54,7 +54,10 @@ const config = ScanConfig.fromElement({
   scanner: {name: 'scanner1', type: '0'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '12345', name: 'foo'}, {id: '678910', name: 'task2'}],
+    task: [
+      {id: '12345', name: 'foo'},
+      {id: '678910', name: 'task2'},
+    ],
   },
 });
 
@@ -375,7 +378,7 @@ describe('Task Detailspage tests', () => {
     const {baseElement, element, getAllByTestId} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <Detailspage id="12345" />
-      ),
+      </MockedProvider>,
     );
 
     expect(element).toMatchSnapshot();
@@ -490,7 +493,7 @@ describe('Task Detailspage tests', () => {
     const {baseElement, element} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <Detailspage id="12345" />
-      ),
+      </MockedProvider>,
     );
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[22]);
@@ -548,7 +551,7 @@ describe('Task Detailspage tests', () => {
     const {baseElement, element} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <Detailspage id="12345" />
-      ),
+      </MockedProvider>,
     );
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[24]);
@@ -631,7 +634,7 @@ describe('Task Detailspage tests', () => {
     const {getAllByTestId} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <Detailspage id="12345" />
-      ),
+      </MockedProvider>,
     );
 
     const icons = getAllByTestId('svg-icon');

@@ -57,7 +57,7 @@ describe('LoginPagetests', () => {
     const {baseElement} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <LoginPage />
-      ),
+      </MockedProvider>,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -87,7 +87,7 @@ describe('LoginPagetests', () => {
     const {getByName, getByTestId} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <LoginPage />
-      ),
+      </MockedProvider>,
     );
 
     const usernameField = getByName('username');
@@ -115,7 +115,7 @@ describe('LoginPagetests', () => {
     const {queryByTestId} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <LoginPage />
-      ),
+      </MockedProvider>,
     );
 
     expect(queryByTestId('guest-login')).not.toBeInTheDocument();
@@ -146,7 +146,7 @@ describe('LoginPagetests', () => {
     const {getByTestId} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <LoginPage />
-      ),
+      </MockedProvider>,
     );
 
     const button = getByTestId('guest-login-button');
@@ -174,7 +174,7 @@ describe('LoginPagetests', () => {
     const {getByName, getByTestId} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <LoginPage />
-      ),
+      </MockedProvider>,
     );
 
     const usernameField = getByName('username');
@@ -215,7 +215,7 @@ describe('LoginPagetests', () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <LoginPage />
-      ),
+      </MockedProvider>,
     );
 
     expect(history.location.pathname).toMatch(/^\/$/);

@@ -33,8 +33,7 @@ import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {entityLoadingActions} from 'web/store/entities/policies';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
+import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -272,9 +271,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <Detailspage id="12345" />
-      ),
+      withEmptyMock(<Detailspage id="12345" />),
     );
 
     expect(element).toMatchSnapshot();
@@ -341,9 +338,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <Detailspage id="12345" />
-      ),
+      withEmptyMock(<Detailspage id="12345" />),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -429,9 +424,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <Detailspage id="12345" />
-      ),
+      withEmptyMock(<Detailspage id="12345" />),
     );
 
     const spans = baseElement.querySelectorAll('span');
@@ -488,9 +481,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <Detailspage id="12345" />
-      ),
+      withEmptyMock(<Detailspage id="12345" />),
     );
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[14]);
@@ -565,11 +556,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', policy));
 
-    const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <Detailspage id="12345" />
-      ),
-    );
+    const {getAllByTestId} = render(withEmptyMock(<Detailspage id="12345" />));
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
@@ -662,11 +649,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', policy2));
 
-    const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <Detailspage id="12345" />
-      ),
-    );
+    const {getAllByTestId} = render(withEmptyMock(<Detailspage id="12345" />));
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
@@ -768,11 +751,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', policy3));
 
-    const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <Detailspage id="12345" />
-      ),
-    );
+    const {getAllByTestId} = render(withEmptyMock(<Detailspage id="12345" />));
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
@@ -865,11 +844,7 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(setUsername('admin'));
     store.dispatch(entityLoadingActions.success('12345', policy4));
 
-    const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <Detailspage id="12345" />
-      ),
-    );
+    const {getAllByTestId} = render(withEmptyMock(<Detailspage id="12345" />));
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
@@ -913,14 +888,14 @@ describe('Policy ToolBarIcons tests', () => {
     });
 
     const {element, getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={policy}
           onPolicyCloneClick={handlePolicyCloneClick}
           onPolicyDeleteClick={handlePolicyDeleteClick}
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
-        />
+        />,
       ),
     );
 
@@ -954,14 +929,14 @@ describe('Policy ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={policy}
           onPolicyCloneClick={handlePolicyCloneClick}
           onPolicyDeleteClick={handlePolicyDeleteClick}
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
-        />
+        />,
       ),
     );
 
@@ -999,14 +974,14 @@ describe('Policy ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={policy2}
           onPolicyCloneClick={handlePolicyCloneClick}
           onPolicyDeleteClick={handlePolicyDeleteClick}
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
-        />
+        />,
       ),
     );
 
@@ -1053,14 +1028,14 @@ describe('Policy ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={policy3}
           onPolicyCloneClick={handlePolicyCloneClick}
           onPolicyDeleteClick={handlePolicyDeleteClick}
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
-        />
+        />,
       ),
     );
 
@@ -1098,14 +1073,14 @@ describe('Policy ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      withEmptyMock(
         <ToolBarIcons
           entity={policy4}
           onPolicyCloneClick={handlePolicyCloneClick}
           onPolicyDeleteClick={handlePolicyDeleteClick}
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
-        />
+        />,
       ),
     );
 

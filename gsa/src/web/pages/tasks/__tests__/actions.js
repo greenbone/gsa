@@ -22,8 +22,7 @@ import React from 'react';
 import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
+import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
 
 import Actions from '../actions';
 import Task, {TASK_STATUS} from 'gmp/models/task';
@@ -70,7 +69,7 @@ describe('Task Actions tests', () => {
           onTaskResumeClick={handleTaskResume}
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
-        />
+        />,
       ),
     );
 
@@ -110,7 +109,7 @@ describe('Task Actions tests', () => {
           onTaskResumeClick={handleTaskResume}
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
-        />
+        />,
       ),
     );
 
@@ -174,7 +173,7 @@ describe('Task Actions tests', () => {
           onTaskResumeClick={handleTaskResume}
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
-        />
+        />,
       ),
     );
 
@@ -247,7 +246,7 @@ describe('Task Actions tests', () => {
           onTaskResumeClick={handleTaskResume}
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
-        />
+        />,
       ),
     );
 
@@ -311,7 +310,7 @@ describe('Task Actions tests', () => {
           onTaskResumeClick={handleTaskResume}
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
-        />
+        />,
       ),
     );
 
@@ -384,7 +383,7 @@ describe('Task Actions tests', () => {
           onTaskResumeClick={handleTaskResume}
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
-        />
+        />,
       ),
     );
 
@@ -431,7 +430,7 @@ describe('Task Actions tests', () => {
           onTaskResumeClick={handleTaskResume}
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
-        />
+        />,
       ),
     );
 

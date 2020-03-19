@@ -25,8 +25,7 @@ import Policy from 'gmp/models/policy';
 
 import {setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
+import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
 
 import Table from '../table';
 
@@ -95,7 +94,7 @@ describe('Policies table tests', () => {
           onPolicyDeleteClick={handlePolicyDeleteClick}
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
-        />
+        />,
       ),
     );
 
@@ -136,7 +135,7 @@ describe('Policies table tests', () => {
           onPolicyDeleteClick={handlePolicyDeleteClick}
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
-        />
+        />,
       ),
     );
 
@@ -179,7 +178,7 @@ describe('Policies table tests', () => {
           onPolicyDeleteClick={handlePolicyDeleteClick}
           onPolicyDownloadClick={handlePolicyDownloadClick}
           onPolicyEditClick={handlePolicyEditClick}
-        />
+        />,
       ),
     );
     const icons = getAllByTestId('svg-icon');

@@ -22,8 +22,7 @@ import React from 'react';
 import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
-import {MockedProvider} from '@apollo/react-testing';
+import {rendererWith, fireEvent, withEmptyMock} from 'web/utils/testing';
 
 import Theme from 'web/utils/theme';
 
@@ -74,7 +73,7 @@ describe('Audit Actions tests', () => {
           onAuditStartClick={handleAuditStart}
           onAuditStopClick={handleAuditStop}
           onReportDownloadClick={handleReportDownload}
-        />
+        />,
       ),
     );
 
@@ -115,7 +114,7 @@ describe('Audit Actions tests', () => {
           onAuditStartClick={handleAuditStart}
           onAuditStopClick={handleAuditStop}
           onReportDownloadClick={handleReportDownload}
-        />
+        />,
       ),
     );
 
@@ -187,7 +186,7 @@ describe('Audit Actions tests', () => {
           onAuditStartClick={handleAuditStart}
           onAuditStopClick={handleAuditStop}
           onReportDownloadClick={handleReportDownload}
-        />
+        />,
       ),
     );
 
@@ -271,7 +270,7 @@ describe('Audit Actions tests', () => {
           onAuditStartClick={handleAuditStart}
           onAuditStopClick={handleAuditStop}
           onReportDownloadClick={handleReportDownload}
-        />
+        />,
       ),
     );
 
@@ -341,7 +340,7 @@ describe('Audit Actions tests', () => {
           onAuditStartClick={handleAuditStart}
           onAuditStopClick={handleAuditStop}
           onReportDownloadClick={handleReportDownload}
-        />
+        />,
       ),
     );
 
@@ -413,7 +412,7 @@ describe('Audit Actions tests', () => {
           onAuditStartClick={handleAuditStart}
           onAuditStopClick={handleAuditStop}
           onReportDownloadClick={handleReportDownload}
-        />
+        />,
       ),
     );
 
@@ -470,7 +469,7 @@ describe('Audit Actions tests', () => {
           onAuditStartClick={handleAuditStart}
           onAuditStopClick={handleAuditStop}
           onReportDownloadClick={handleReportDownload}
-        />
+        />,
       ),
     );
 

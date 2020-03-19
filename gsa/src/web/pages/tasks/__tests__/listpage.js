@@ -40,6 +40,7 @@ import {
   withEmptyMock,
 } from 'web/utils/testing';
 import {MockedProvider} from '@apollo/react-testing';
+
 import TaskPage, {ToolBarIcons} from '../listpage';
 import {GET_TASKS} from 'web/pages/tasks/graphql';
 
@@ -258,7 +259,7 @@ describe('TaskPage tests', () => {
     const {baseElement, getAllByTestId} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <TaskPage />
-      ),
+      </MockedProvider>,
     );
 
     await waitForElement(() => baseElement.querySelectorAll('table'));
@@ -391,7 +392,7 @@ describe('TaskPage tests', () => {
     const {baseElement, getAllByTestId} = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <TaskPage />
-      ),
+      </MockedProvider>,
     );
 
     await waitForElement(() => baseElement.querySelectorAll('table'));
