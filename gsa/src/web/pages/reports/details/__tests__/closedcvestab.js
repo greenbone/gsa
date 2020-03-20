@@ -89,7 +89,10 @@ describe('Report Closed CVEs Tab tests', () => {
     // Row 2
     expect(links[7]).toHaveAttribute('href', '/cve/CVE-2000-5678');
     expect(links[7]).toHaveTextContent('CVE-2000-5678');
-    expect(links[8]).toHaveAttribute('href', '/host/undefined'); // because the host has no asset id
+    expect(links[8]).toHaveAttribute(
+      'href',
+      '/hosts?filter=name%3D109.876.54.321',
+    ); // because the host has no asset id
     expect(links[8]).toHaveTextContent('109.876.54.321');
     expect(links[9]).toHaveAttribute('href', '/nvt/202');
     expect(links[9]).toHaveTextContent('This is another description');

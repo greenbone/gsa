@@ -125,7 +125,6 @@ TlsCertificateComponent.propTypes = {
   children: PropTypes.func.isRequired,
   detailsExportFileName: PropTypes.string,
   gmp: PropTypes.gmp.isRequired,
-  loadEntity: PropTypes.func.isRequired,
   username: PropTypes.string,
   onDeleteError: PropTypes.func,
   onDeleted: PropTypes.func,
@@ -153,10 +152,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(TlsCertificateComponent);
 
 // vim: set ts=2 sw=2 tw=80:

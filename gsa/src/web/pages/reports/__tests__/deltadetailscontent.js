@@ -36,6 +36,13 @@ const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 
+const filterWithName = Filter.fromElement({
+  term:
+    'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
+  name: 'foo',
+  id: '123',
+});
+
 const caps = new Capabilities(['everything']);
 
 const manualUrl = 'test/';
@@ -86,7 +93,7 @@ describe('Delta Report Details Content tests', () => {
 
     const {entity} = getMockDeltaReport();
 
-    const filters = [filter];
+    const filters = [filterWithName];
 
     const gmp = {
       settings: {manualUrl, reportResultsThreshold: 10},
@@ -107,7 +114,7 @@ describe('Delta Report Details Content tests', () => {
       <DeltaDetailsContent
         activeTab={0}
         entity={entity}
-        filter={filter}
+        filter={filterWithName}
         filters={filters}
         isLoading={false}
         isUpdating={false}
@@ -164,7 +171,7 @@ describe('Delta Report Details Content tests', () => {
     expect(icons[12]).toHaveTextContent('help.svg');
     expect(icons[13]).toHaveTextContent('edit.svg');
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    expect(selects[0]).toHaveTextContent('foo');
 
     // Header
     expect(icons[14]).toHaveTextContent('report.svg');
@@ -273,7 +280,7 @@ describe('Delta Report Details Content tests', () => {
 
     const {entity} = getMockDeltaReport();
 
-    const filters = [filter];
+    const filters = [filterWithName];
 
     const gmp = {
       settings: {manualUrl, reportResultsThreshold: 10},
