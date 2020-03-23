@@ -51,7 +51,7 @@
     "moment-timezone": "^0.5.28",
     "prop-types": "^15.6.2",
     "qhistory": "^1.0.3",
-    "qs": "^6.9.1",
+    "qs": "^6.9.2",
     "react": "^16.13.1",
     "react-beautiful-dnd": "^13.0.0",
     "react-datepicker": "^1.8.0",
