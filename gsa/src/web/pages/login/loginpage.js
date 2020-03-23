@@ -19,12 +19,13 @@
 import React, {useState, useEffect} from 'react';
 
 import {useMutation} from '@apollo/react-hooks';
+import moment from 'gmp/models/date';
 
 import gql from 'graphql-tag';
 
 import {useSelector, useDispatch} from 'react-redux';
 
-import {useHistory, useLocation} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -62,6 +63,8 @@ export const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
       ok
+      sessionTimeout
+      timezone
     }
   }
 `;
@@ -122,7 +125,7 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
   const [loginGql] = useMutation(LOGIN);
-  const location = useLocation();
+  // const location = useLocation(); might be needed again later
   const history = useHistory();
   const isLoggedIn = useSelector(isLoggedInSelector);
 
@@ -142,31 +145,22 @@ const LoginPage = () => {
   const setIsLoggedIn = value => dispatch(setIsLoggedInAction(value));
 
   const login = (username, password) => {
-    gmp
-      .login(username, password)
-      .then(data => {
-        const {locale, timezone, sessionTimeout} = data;
+    loginGql({variables: {username, password}}) // todo: convert to toGraphQl?
+      .then(resp => {
+        const {locale, timezone, sessionTimeout} = resp.data.login;
+
+        const dateObj = new Date(sessionTimeout);
 
         setTimezone(timezone);
         setLocale(locale);
-        setSessionTimeout(sessionTimeout);
+        setSessionTimeout(moment(dateObj)); // convert sessionTimeout to Moment instance
         setUsername(username);
       })
-      .then(() => loginGql({variables: {username, password}}))
       .then(() => {
         // must be set before changing the location
         setIsLoggedIn(true);
 
-        if (
-          location &&
-          location.state &&
-          location.state.next &&
-          location.state.next !== location.pathname
-        ) {
-          history.replace(location.state.next);
-        } else {
-          history.replace('/');
-        }
+        history.replace('/tasks'); // always redirect to tasks for demo purposes
       })
       .catch(rej => {
         log.error(rej);
@@ -176,7 +170,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      history.replace('/');
+      history.replace('/tasks');
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
