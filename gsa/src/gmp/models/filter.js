@@ -19,7 +19,7 @@
 import 'core-js/features/array/find-index';
 import 'core-js/features/array/includes';
 
-import {isDefined, isString, hasValue} from '../utils/identity';
+import {isDefined, isString, isArray, hasValue} from '../utils/identity';
 import {forEach, map} from '../utils/array';
 
 import Model, {parseModelFromElement} from '../model.js';
@@ -42,10 +42,29 @@ export const UNKNOWN_FILTER_ID = '0';
 const parseFilterTermsFromString = filterString => {
   const terms = [];
   if (isString(filterString)) {
-    const filterTerms = filterString.split(' ');
+    // replace whitespace between double quotes with placeholders
+    let modifiedFilterString = filterString;
+    const quotes = filterString.match(/".+?"/g); // find all substrings between double quotes
+    if (isArray(quotes)) {
+      for (const quotedString of quotes) {
+        const newQuotedString = quotedString.replace(/\s/g, '####'); // replace all " " with "####"
+        modifiedFilterString = modifiedFilterString.replace(
+          quotedString,
+          newQuotedString,
+        );
+      }
+    }
+
+    // get filter terms by splitting at whitespace
+    const filterTerms = modifiedFilterString.split(' ');
+
     for (let filterTerm of filterTerms) {
       // strip whitespace
       filterTerm = filterTerm.trim();
+
+      // remove placeholders
+      filterTerm = filterTerm.replace(/####/g, ' '); // replace all "####" with " "
+
       if (filterTerm.length > 0 && !filterTerm.startsWith('_')) {
         terms.push(FilterTerm.fromString(filterTerm));
       }
