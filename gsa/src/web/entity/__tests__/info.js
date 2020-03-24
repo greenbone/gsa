@@ -21,6 +21,8 @@ import Model from 'gmp/model';
 
 import Date, {setLocale} from 'gmp/models/date';
 
+import {setTimezone} from 'web/store/usersettings/actions';
+
 import {rendererWith} from 'web/utils/testing';
 
 import EntityInfo from '../info';
@@ -41,7 +43,10 @@ describe('EntityInfo component tests', () => {
       modification_time: date2,
     });
 
-    const {render} = rendererWith({store: true});
+    const {render, store} = rendererWith({store: true});
+
+    store.dispatch(setTimezone('UTC'));
+
     const {element} = render(<EntityInfo entity={entity} />);
 
     const divs = element.querySelectorAll('div');
@@ -50,8 +55,8 @@ describe('EntityInfo component tests', () => {
     expect(divs.length).toEqual(7);
     expect(span.length).toEqual(1);
     expect(element).toHaveTextContent('ID:123');
-    expect(element).toHaveTextContent('Created:Tue, Jan 1, 2019 1:00 PM');
-    expect(element).toHaveTextContent('Modified:Sat, Feb 2, 2019 1:00 PM');
+    expect(element).toHaveTextContent('Created:Tue, Jan 1, 2019 12:00 PM UTC');
+    expect(element).toHaveTextContent('Modified:Sat, Feb 2, 2019 12:00 PM UTC');
     expect(element).toHaveTextContent('Owner:owner');
   });
 
@@ -62,7 +67,10 @@ describe('EntityInfo component tests', () => {
       modification_time: date2,
     });
 
-    const {render} = rendererWith({store: true});
+    const {render, store} = rendererWith({store: true});
+
+    store.dispatch(setTimezone('UTC'));
+
     const {element} = render(<EntityInfo entity={entity} />);
 
     const divs = element.querySelectorAll('div');
@@ -73,8 +81,8 @@ describe('EntityInfo component tests', () => {
     expect(span.length).toEqual(0);
     expect(italic.length).toEqual(1);
     expect(element).toHaveTextContent('ID:123');
-    expect(element).toHaveTextContent('Created:Tue, Jan 1, 2019 1:00 PM');
-    expect(element).toHaveTextContent('Modified:Sat, Feb 2, 2019 1:00 PM');
+    expect(element).toHaveTextContent('Created:Tue, Jan 1, 2019 12:00 PM UTC');
+    expect(element).toHaveTextContent('Modified:Sat, Feb 2, 2019 12:00 PM UTC');
     expect(element).toHaveTextContent('Owner:(Global Object)');
   });
 });

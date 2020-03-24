@@ -44,7 +44,10 @@ const note = Note.fromElement({
 
 describe('NoteBox component tests', () => {
   test('should render with DetailsLink', () => {
-    const {render} = rendererWith({capabilities: caps, router: true});
+    const {render} = rendererWith({
+      capabilities: caps,
+      router: true,
+    });
 
     const {element, getByTestId} = render(
       <NoteBox detailsLink={true} note={note} />,
@@ -56,13 +59,17 @@ describe('NoteBox component tests', () => {
     expect(link).toBeDefined();
     expect(header).toHaveTextContent('Note');
     expect(element).toHaveTextContent('details.svg');
-    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019 1:00 PM');
-    expect(element).toHaveTextContent('Active untilTue, Jan 1, 2019 1:00 PM');
+    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019');
+    expect(element).toHaveTextContent('Active untilTue, Jan 1, 2019');
     expect(element).toHaveTextContent('foo');
   });
 
   test('should render without DetailsLink', () => {
-    const {render} = rendererWith({capabilities: caps, router: true});
+    const {render} = rendererWith({
+      capabilities: caps,
+      router: true,
+      store: true,
+    });
 
     const {element} = render(<NoteBox detailsLink={false} note={note} />);
 
@@ -70,7 +77,9 @@ describe('NoteBox component tests', () => {
 
     expect(link).toEqual(null);
     expect(element).toHaveTextContent('foo');
-    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019 1:00 PM');
+    expect(element).not.toHaveTextContent('details.svg');
+    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019');
+    expect(element).toHaveTextContent('Active untilTue, Jan 1, 2019');
   });
 });
 

@@ -57,8 +57,9 @@ describe('EntityBox component tests', () => {
     expect(element).toHaveTextContent('tool');
     expect(element).toHaveTextContent('foo');
     expect(element).toHaveTextContent('child');
-    expect(element).toHaveTextContent('Active untilTue, Jan 1, 2019 1:00 PM');
-    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019 1:00 PM');
+    expect(element).toHaveTextContent('Active untilTue, Jan 1, 2019');
+    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019');
+    expect(element).toHaveStyleRule('width', '400px');
   });
 });
 
