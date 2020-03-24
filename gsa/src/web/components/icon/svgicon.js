@@ -56,12 +56,12 @@ const Styled = styled.span`
   }
 `;
 
-const useIsMountedRef = () => {
+export const useIsMountedRef = () => {
   const ref = useRef();
   ref.current = true;
   // if the ref changes, which is the case when the component unmounts
   // set the ref.current to false in order to prevent state updates in
-  // useStateWithRefCheck()
+  // useStateWithMountCheck()
   useEffect(() => {
     return () => {
       ref.current = false;
@@ -73,7 +73,7 @@ const useIsMountedRef = () => {
 
 // only update state if the component is mounted
 // use useIsMountedRef() to track mounted status across renders
-const useStateWithMountCheck = (...args) => {
+export const useStateWithMountCheck = (...args) => {
   const isMountedRef = useIsMountedRef();
   const [state, nativeSetState] = useState(...args);
   const setState = (...arg) => {
