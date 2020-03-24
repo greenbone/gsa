@@ -59,6 +59,8 @@ import {isLoggedIn as isLoggedInSelector} from 'web/store/usersettings/selectors
 
 import LoginForm from './loginform';
 
+import {toGraphQL} from 'web/utils/graphql.js';
+
 export const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
@@ -68,6 +70,11 @@ export const LOGIN = gql`
     }
   }
 `;
+
+const useLogin = () => {
+  const [login] = useMutation(LOGIN);
+  return toGraphQL(login);
+};
 
 const log = logger.getLogger('web.login');
 
@@ -124,7 +131,7 @@ const LoginPage = () => {
   const gmp = useGmp();
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
-  const [loginGql] = useMutation(LOGIN);
+  const loginMutation = useLogin();
   // const location = useLocation(); might be needed again later
   const history = useHistory();
   const isLoggedIn = useSelector(isLoggedInSelector);
@@ -145,7 +152,7 @@ const LoginPage = () => {
   const setIsLoggedIn = value => dispatch(setIsLoggedInAction(value));
 
   const login = (username, password) => {
-    loginGql({variables: {username, password}}) // todo: convert to toGraphQl?
+    loginMutation({username, password})
       .then(resp => {
         const {locale, timezone, sessionTimeout} = resp.data.login;
 
