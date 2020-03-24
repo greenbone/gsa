@@ -123,6 +123,30 @@ describe('FilterTerm fromString', () => {
     expect(term2.value).toEqual(1);
     expect(term2.relation).toEqual('>');
   });
+
+  test('should parse value with double quotes', () => {
+    const term = FilterTerm.fromString('foo="abc def"');
+
+    expect(term.keyword).toEqual('foo');
+    expect(term.value).toEqual('"abc def"');
+    expect(term.relation).toEqual('=');
+  });
+
+  test('should parse value with double quotes and special characters', () => {
+    const term = FilterTerm.fromString('foo="abc : def"');
+
+    expect(term.keyword).toEqual('foo');
+    expect(term.value).toEqual('"abc : def"');
+    expect(term.relation).toEqual('=');
+  });
+
+  test('should parse correct relation with double quotes and special characters', () => {
+    const term = FilterTerm.fromString('foo~"abc = def"');
+
+    expect(term.keyword).toEqual('foo');
+    expect(term.value).toEqual('"abc = def"');
+    expect(term.relation).toEqual('~');
+  });
 });
 
 describe('Compound statement parsing', () => {
