@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 
 import styled from 'styled-components';
 
@@ -56,6 +56,34 @@ const Styled = styled.span`
   }
 `;
 
+export const useIsMountedRef = () => {
+  const ref = useRef();
+  ref.current = true;
+  // if the ref changes, which is the case when the component unmounts
+  // set the ref.current to false in order to prevent state updates in
+  // useStateWithMountCheck()
+  useEffect(() => {
+    return () => {
+      ref.current = false;
+    };
+  }, [ref]);
+
+  return ref;
+};
+
+// only update state if the component is mounted
+// use useIsMountedRef() to track mounted status across renders
+export const useStateWithMountCheck = (...args) => {
+  const isMountedRef = useIsMountedRef();
+  const [state, nativeSetState] = useState(...args);
+  const setState = (...arg) => {
+    if (isMountedRef.current) {
+      nativeSetState(...arg);
+    }
+  };
+  return [state, setState];
+};
+
 const SvgIcon = ({
   disabled = false,
   active = !disabled,
@@ -67,7 +95,7 @@ const SvgIcon = ({
   onClick,
   ...other
 }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useStateWithMountCheck(false);
 
   const handleClick = event => {
     event.preventDefault();
