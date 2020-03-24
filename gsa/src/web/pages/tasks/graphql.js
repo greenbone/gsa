@@ -75,6 +75,7 @@ export const GET_TASK = gql`
         uuid
         name
         trash
+        scanConfigType
       }
       scanner {
         uuid
