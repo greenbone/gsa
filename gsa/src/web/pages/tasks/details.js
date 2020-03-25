@@ -82,7 +82,7 @@ class TaskDetails extends React.Component {
   }
 
   render() {
-    const {links = true, entity, schedule} = this.props;
+    const {links = true, entity} = this.props;
     const {
       alerts,
       applyOverrides,
@@ -99,9 +99,8 @@ class TaskDetails extends React.Component {
       target,
       maxChecks,
       maxHosts,
+      schedule,
     } = entity;
-
-    console.log(entity);
 
     const {iface = {}} = preferences;
 
@@ -175,7 +174,7 @@ class TaskDetails extends React.Component {
                         <DetailsLink
                           textOnly={!links}
                           type="scanconfig"
-                          id={config.uuid}
+                          id={config.id}
                         >
                           {config.name}
                         </DetailsLink>
