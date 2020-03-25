@@ -113,7 +113,7 @@ import StopIcon from './icons/stopicon';
 import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
-import {useGetTask, useCloneTask} from './graphql';
+import {useGetTask, useCloneTask, useStartTask} from './graphql';
 
 const goto_task_details = (op, props) => result => {
   const {history} = props;
@@ -183,7 +183,10 @@ export const ToolBarIcons = ({
             links={links}
           />
         )}
-        <StartIcon task={entity} onClick={onTaskStartClick} />
+        <StartIcon
+          task={entity}
+          onClick={() => onTaskStartClick({taskId: entity.id})}
+        />
 
         <ImportReportIcon task={entity} onClick={onReportImportClick} />
 
@@ -337,6 +340,9 @@ const Page = props => {
   const cloneTask = vars =>
     clone(vars).then(goto_task_details('cloneTask', props));
 
+  const start = useStartTask();
+  const startTask = vars => start(vars).then(refetch);
+
   const [entity, setEntity] = useState();
   useEffect(() => {
     if (hasValue(data)) {
@@ -387,7 +393,6 @@ const Page = props => {
         delete: delete_func,
         download,
         edit,
-        start,
         stop,
         resume,
         reportimport,
@@ -410,7 +415,7 @@ const Page = props => {
             onTaskDownloadClick={download}
             onTaskEditClick={edit}
             onTaskResumeClick={resume}
-            onTaskStartClick={start}
+            onTaskStartClick={startTask}
             onTaskStopClick={stop}
           >
             {({activeTab = 0, onActivateTab}) => {
