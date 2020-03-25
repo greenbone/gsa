@@ -338,7 +338,7 @@ Details.propTypes = {
 const Page = props => {
   const {id: taskId} = useParams();
   const query = useGetTask();
-  const {data, refetch} = query({taskId});
+  const {data, refetch, loading} = query({taskId});
 
   const clone = useCloneTask();
   const cloneTask = vars =>
@@ -407,6 +407,7 @@ const Page = props => {
           <EntityPage
             {...props}
             entity={entity}
+            isLoading={loading}
             sectionIcon={<TaskIcon size="large" />}
             title={_('Task')}
             toolBarIcons={ToolBarIcons}
