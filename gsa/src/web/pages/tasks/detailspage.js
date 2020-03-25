@@ -113,7 +113,7 @@ import StopIcon from './icons/stopicon';
 import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
-import {useGetTask, useCloneTask, useStartTask} from './graphql';
+import {useGetTask, useCloneTask, useStartTask, useDeleteTask} from './graphql';
 
 const goto_task_details = (op, props) => result => {
   const {history} = props;
@@ -167,7 +167,11 @@ export const ToolBarIcons = ({
           onClick={() => onTaskCloneClick({taskId: entity.id})}
         />
         <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
-        <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
+        <TrashIcon
+          entity={entity}
+          name="task"
+          onClick={() => onTaskDeleteClick({taskId: entity.id})}
+        />
         <ExportIcon
           value={entity}
           title={_('Export Task as XML')}
@@ -343,6 +347,9 @@ const Page = props => {
   const start = useStartTask();
   const startTask = vars => start(vars).then(refetch);
 
+  const del = useDeleteTask();
+  const deleteTask = vars => del(vars).then(goto_list('tasks', props));
+
   const [entity, setEntity] = useState();
   useEffect(() => {
     if (hasValue(data)) {
@@ -390,7 +397,6 @@ const Page = props => {
       {({
         create,
         createcontainer,
-        delete: delete_func,
         download,
         edit,
         stop,
@@ -411,7 +417,7 @@ const Page = props => {
             onReportImportClick={reportimport}
             onTaskCloneClick={cloneTask} // Clone is special because TaskComponent doesn't define it, so I'm assuming that EntityComponent is passing this method instead
             onTaskCreateClick={create}
-            onTaskDeleteClick={delete_func}
+            onTaskDeleteClick={deleteTask}
             onTaskDownloadClick={download}
             onTaskEditClick={edit}
             onTaskResumeClick={resume}
