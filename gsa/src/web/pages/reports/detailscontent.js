@@ -132,7 +132,7 @@ const PageContent = ({
 
   const {
     applications = {},
-    closed_cves = {},
+    closedCves = {},
     cves = {},
     errors = {},
     hosts = {},
@@ -473,8 +473,8 @@ const PageContent = ({
                       />
                     ) : (
                       <ClosedCvesTab
-                        counts={closed_cves.counts}
-                        closedCves={closed_cves.entities}
+                        counts={closedCves.counts}
+                        closedCves={closedCves.entities}
                         filter={reportFilter}
                         isUpdating={isUpdating}
                         sortField={sorting.closedcves.sortField}

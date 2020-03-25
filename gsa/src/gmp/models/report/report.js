@@ -94,7 +94,7 @@ class ReportReport extends Model {
 
     copy.cves = parseCves(element, filter);
 
-    copy.closed_cves = parseClosedCves(element, filter);
+    copy.closedCves = parseClosedCves(element, filter);
 
     copy.errors = parse_errors(element, filter);
 

@@ -281,7 +281,7 @@ export const getMockReport = () => {
     applications: entity.report.applications,
     operatingsystems: entity.report.operatingsystems,
     cves: entity.report.cves,
-    closedCves: entity.report.closed_cves,
+    closedCves: entity.report.closedCves,
     tlsCertificates: entity.report.tlsCertificates,
     errors: entity.report.errors,
     task: entity.report.task,
