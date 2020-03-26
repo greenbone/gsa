@@ -78,7 +78,7 @@ import {renderYesNo} from 'web/utils/render';
 
 import ResumeIcon from './icons/resumeicon';
 import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
-import StartIcon from './icons/starticon';
+import StartIcon from 'web/pages/tasks/icons/starticon';
 import StopIcon from 'web/pages/tasks/icons/stopicon';
 
 import AuditDetails from './details';
@@ -154,7 +154,11 @@ export const ToolBarIcons = ({
             links={links}
           />
         )}
-        <StartIcon audit={entity} onClick={onAuditStartClick} />
+        <StartIcon
+          task={entity}
+          usageType="audit"
+          onClick={onAuditStartClick}
+        />
 
         <StopIcon task={entity} onClick={onAuditStopClick} />
 
