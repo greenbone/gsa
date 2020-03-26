@@ -45,6 +45,7 @@ describe('Audit Actions tests', () => {
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
+      usage_type: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -83,6 +84,7 @@ describe('Audit Actions tests', () => {
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
+      usage_type: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -152,6 +154,7 @@ describe('Audit Actions tests', () => {
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'authenticate'}]},
       target: {_id: 'id', name: 'target'},
+      usage_type: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -186,7 +189,7 @@ describe('Audit Actions tests', () => {
     expect(handleAuditStart).not.toHaveBeenCalledWith(audit);
     expect(icons[0]).toHaveAttribute(
       'title',
-      'Permission to start Audit denied',
+      'Permission to start audit denied',
     );
 
     fireEvent.click(icons[1]);
@@ -233,6 +236,7 @@ describe('Audit Actions tests', () => {
       in_use: true,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
+      usage_type: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -300,6 +304,7 @@ describe('Audit Actions tests', () => {
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
+      usage_type: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -369,6 +374,7 @@ describe('Audit Actions tests', () => {
       last_report: {report: {_id: 'id'}},
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
+      usage_type: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -419,6 +425,7 @@ describe('Audit Actions tests', () => {
         name: 'schedule1',
         permissions: {permission: [{name: 'everything'}]},
       },
+      usage_type: 'audit',
     });
 
     const handleAuditClone = jest.fn();

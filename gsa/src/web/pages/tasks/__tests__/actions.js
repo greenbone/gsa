@@ -174,7 +174,7 @@ describe('Task Actions tests', () => {
     expect(handleTaskStart).not.toHaveBeenCalledWith(task);
     expect(icons[0]).toHaveAttribute(
       'title',
-      'Permission to start Task denied',
+      'Permission to start task denied',
     );
 
     fireEvent.click(icons[1]);

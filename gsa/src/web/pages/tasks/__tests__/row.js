@@ -759,7 +759,7 @@ describe('Task Row tests', () => {
     expect(handleTaskStart).not.toHaveBeenCalledWith(task);
     expect(icons[1]).toHaveAttribute(
       'title',
-      'Permission to start Task denied',
+      'Permission to start task denied',
     );
 
     fireEvent.click(icons[2]);

@@ -72,7 +72,38 @@ describe('Task StartIcon component tests', () => {
     fireEvent.click(element);
 
     expect(clickHandler).not.toHaveBeenCalled();
-    expect(element).toHaveAttribute('title', 'Permission to start Task denied');
+    expect(element).toHaveAttribute('title', 'Permission to start task denied');
+    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
+      modifier: `svg path`,
+    });
+  });
+
+  test('should render in inactive state if wrong command level permissions for audit are given', () => {
+    const caps = new Capabilities(['everything']);
+    const task = Task.fromElement({
+      status: TASK_STATUS.new,
+      target: {_id: '123'},
+      permissions: {permission: [{name: 'get_task'}]},
+      usage_type: 'audit',
+    });
+    const clickHandler = jest.fn();
+
+    const {render} = rendererWith({capabilities: caps});
+
+    const {element} = render(
+      <StartIcon task={task} usageType={task.usageType} />,
+    );
+
+    expect(caps.mayOp('start_task')).toEqual(true);
+    expect(task.userCapabilities.mayOp('start_task')).toEqual(false);
+
+    fireEvent.click(element);
+
+    expect(clickHandler).not.toHaveBeenCalled();
+    expect(element).toHaveAttribute(
+      'title',
+      'Permission to start audit denied',
+    );
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
       modifier: `svg path`,
     });
