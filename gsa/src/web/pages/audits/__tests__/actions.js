@@ -30,7 +30,7 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 setLocale('en');
 
 const caps = new Capabilities(['everything']);
-const wrongCaps = new Capabilities(['authenticate']);
+const wrongCaps = new Capabilities(['get_task']);
 
 describe('Audit Actions tests', () => {
   // deactivate console.error for tests
@@ -152,7 +152,7 @@ describe('Audit Actions tests', () => {
       status: AUDIT_STATUS.done,
       alterable: '0',
       last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'authenticate'}]},
+      permissions: {permission: [{name: 'get_task'}]},
       target: {_id: 'id', name: 'target'},
       usage_type: 'audit',
     });
@@ -195,6 +195,91 @@ describe('Audit Actions tests', () => {
     fireEvent.click(icons[1]);
     expect(handleAuditResume).not.toHaveBeenCalledWith(audit);
     expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
+
+    fireEvent.click(icons[2]);
+    expect(handleAuditDelete).not.toHaveBeenCalledWith(audit);
+    expect(icons[2]).toHaveAttribute(
+      'title',
+      'Permission to move Audit to trashcan denied',
+    );
+
+    fireEvent.click(icons[3]);
+    expect(handleAuditEdit).not.toHaveBeenCalledWith(audit);
+    expect(icons[3]).toHaveAttribute(
+      'title',
+      'Permission to edit Audit denied',
+    );
+
+    fireEvent.click(icons[4]);
+    expect(handleAuditClone).not.toHaveBeenCalledWith(audit);
+    expect(icons[4]).toHaveAttribute(
+      'title',
+      'Permission to clone Audit denied',
+    );
+
+    fireEvent.click(icons[5]);
+    expect(handleAuditDownload).toHaveBeenCalledWith(audit);
+    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
+
+    fireEvent.click(icons[6]);
+    expect(handleReportDownload).toHaveBeenCalledWith(audit);
+    expect(icons[6]).toHaveAttribute(
+      'title',
+      'Download Greenbone Compliance Report',
+    );
+  });
+
+  test('should not call click handlers for stopped audit without permissions', () => {
+    const audit = Audit.fromElement({
+      status: AUDIT_STATUS.stopped,
+      alterable: '0',
+      last_report: {report: {_id: 'id'}},
+      permissions: {permission: [{name: 'get_task'}]},
+      target: {_id: 'id', name: 'target'},
+      usage_type: 'audit',
+    });
+
+    const handleAuditClone = jest.fn();
+    const handleAuditDelete = jest.fn();
+    const handleAuditDownload = jest.fn();
+    const handleAuditEdit = jest.fn();
+    const handleAuditResume = jest.fn();
+    const handleAuditStart = jest.fn();
+    const handleAuditStop = jest.fn();
+    const handleReportDownload = jest.fn();
+
+    const {render} = rendererWith({capabilities: wrongCaps});
+    const {getAllByTestId} = render(
+      <Actions
+        entity={audit}
+        gcrFormatDefined={true}
+        links={true}
+        onAuditCloneClick={handleAuditClone}
+        onAuditDeleteClick={handleAuditDelete}
+        onAuditDownloadClick={handleAuditDownload}
+        onAuditEditClick={handleAuditEdit}
+        onAuditResumeClick={handleAuditResume}
+        onAuditStartClick={handleAuditStart}
+        onAuditStopClick={handleAuditStop}
+        onReportDownloadClick={handleReportDownload}
+      />,
+    );
+
+    const icons = getAllByTestId('svg-icon');
+
+    fireEvent.click(icons[0]);
+    expect(handleAuditStart).not.toHaveBeenCalledWith(audit);
+    expect(icons[0]).toHaveAttribute(
+      'title',
+      'Permission to start audit denied',
+    );
+
+    fireEvent.click(icons[1]);
+    expect(handleAuditResume).not.toHaveBeenCalledWith(audit);
+    expect(icons[1]).toHaveAttribute(
+      'title',
+      'Permission to resume audit denied',
+    );
 
     fireEvent.click(icons[2]);
     expect(handleAuditDelete).not.toHaveBeenCalledWith(audit);
