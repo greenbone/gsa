@@ -32,7 +32,7 @@ import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 import DownloadIcon from 'web/components/icon/downloadicon';
 
-import ResumeIcon from 'web/pages/audits/icons/resumeicon';
+import ResumeIcon from 'web/pages/tasks/icons/resumeicon';
 import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
 import StartIcon from 'web/pages/tasks/icons/starticon';
 import StopIcon from 'web/pages/tasks/icons/stopicon';
@@ -59,7 +59,7 @@ const Actions = ({
       <StartIcon task={entity} usageType="audit" onClick={onAuditStartClick} />
     )}
     <StopIcon task={entity} onClick={onAuditStopClick} />
-    <ResumeIcon audit={entity} onClick={onAuditResumeClick} />
+    <ResumeIcon task={entity} usageType="audit" onClick={onAuditResumeClick} />
     <TrashIcon
       entity={entity}
       name="task"

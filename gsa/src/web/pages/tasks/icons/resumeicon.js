@@ -22,17 +22,20 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
+import {capitalizeFirstLetter} from 'gmp/utils/string';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import ResumeIcon from 'web/components/icon/resumeicon';
 
-const TaskResumeIcon = ({capabilities, task, onClick}) => {
+const TaskResumeIcon = ({capabilities, task, usageType = 'task', onClick}) => {
   if (task.isContainer()) {
     return (
       <ResumeIcon
         active={false}
         alt={_('Resume')}
-        title={_('Task is a container')}
+        title={_('{{usageType}} is a container', {
+          usageType: capitalizeFirstLetter(usageType),
+        })}
       />
     );
   }
@@ -42,7 +45,9 @@ const TaskResumeIcon = ({capabilities, task, onClick}) => {
       <ResumeIcon
         active={false}
         alt={_('Resume')}
-        title={_('Task is scheduled')}
+        title={_('{{usageType}} is scheduled', {
+          usageType: capitalizeFirstLetter(usageType),
+        })}
       />
     );
   }
@@ -58,7 +63,7 @@ const TaskResumeIcon = ({capabilities, task, onClick}) => {
       <ResumeIcon
         active={false}
         alt={_('Resume')}
-        title={_('Permission to resume task denied')}
+        title={_('Permission to resume {{usageType}} denied', {usageType})}
       />
     );
   }
@@ -67,7 +72,9 @@ const TaskResumeIcon = ({capabilities, task, onClick}) => {
     <ResumeIcon
       active={false}
       alt={_('Resume')}
-      title={_('Task is not stopped')}
+      title={_('{{usageType}} is not stopped', {
+        usageType: capitalizeFirstLetter(usageType),
+      })}
     />
   );
 };
@@ -75,6 +82,7 @@ const TaskResumeIcon = ({capabilities, task, onClick}) => {
 TaskResumeIcon.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   task: PropTypes.model.isRequired,
+  usageType: PropTypes.string,
   onClick: PropTypes.func,
 };
 
