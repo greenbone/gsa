@@ -58,7 +58,7 @@ const Actions = ({
     ) : (
       <StartIcon task={entity} usageType="audit" onClick={onAuditStartClick} />
     )}
-    <StopIcon task={entity} onClick={onAuditStopClick} />
+    <StopIcon task={entity} usageType="audit" onClick={onAuditStopClick} />
     <ResumeIcon task={entity} usageType="audit" onClick={onAuditResumeClick} />
     <TrashIcon
       entity={entity}

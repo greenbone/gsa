@@ -160,7 +160,7 @@ export const ToolBarIcons = ({
           onClick={onAuditStartClick}
         />
 
-        <StopIcon task={entity} onClick={onAuditStopClick} />
+        <StopIcon task={entity} usageType="audit" onClick={onAuditStopClick} />
 
         {!entity.isContainer() && (
           <ResumeIcon
