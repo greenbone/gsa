@@ -82,7 +82,7 @@ class TaskDetails extends React.Component {
   }
 
   render() {
-    const {links = true, entity, scanConfig, schedule} = this.props;
+    const {links = true, entity} = this.props;
     const {
       alerts,
       applyOverrides,
@@ -99,7 +99,9 @@ class TaskDetails extends React.Component {
       target,
       maxChecks,
       maxHosts,
+      schedule,
     } = entity;
+
     const {iface = {}} = preferences;
 
     let dur;
@@ -180,23 +182,23 @@ class TaskDetails extends React.Component {
                     </TableData>
                   </TableRow>
                 )}
-                {hasValue(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+                {hasValue(config) &&
+                  config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
                   hasValue(hostsOrdering) && (
                     <TableRow>
                       <TableData>{_('Order for target hosts')}</TableData>
                       <TableData>{hostsOrdering}</TableData>
                     </TableRow>
                   )}
-                {hasValue(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                {hasValue(config) &&
+                  config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
                     <TableRow>
                       <TableData>{_('Network Source Interface')}</TableData>
                       <TableData>{iface.value}</TableData>
                     </TableRow>
                   )}
-                {hasValue(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+                {hasValue(config) &&
+                  config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
                   hasValue(maxChecks) && (
                     <TableRow>
                       <TableData>
@@ -205,8 +207,8 @@ class TaskDetails extends React.Component {
                       <TableData>{maxChecks}</TableData>
                     </TableRow>
                   )}
-                {hasValue(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+                {hasValue(config) &&
+                  config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
                   hasValue(maxHosts) && (
                     <TableRow>
                       <TableData>

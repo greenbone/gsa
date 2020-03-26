@@ -113,7 +113,7 @@ import StopIcon from './icons/stopicon';
 import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
-import {useGetTask, useCloneTask} from './graphql';
+import {useGetTask, useCloneTask, useStartTask, useDeleteTask} from './graphql';
 
 const goto_task_details = (op, props) => result => {
   const {history} = props;
@@ -167,7 +167,11 @@ export const ToolBarIcons = ({
           onClick={() => onTaskCloneClick({taskId: entity.id})}
         />
         <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
-        <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
+        <TrashIcon
+          entity={entity}
+          name="task"
+          onClick={() => onTaskDeleteClick({taskId: entity.id})}
+        />
         <ExportIcon
           value={entity}
           title={_('Export Task as XML')}
@@ -183,7 +187,10 @@ export const ToolBarIcons = ({
             links={links}
           />
         )}
-        <StartIcon task={entity} onClick={onTaskStartClick} />
+        <StartIcon
+          task={entity}
+          onClick={() => onTaskStartClick({taskId: entity.id})}
+        />
 
         <ImportReportIcon task={entity} onClick={onReportImportClick} />
 
@@ -331,11 +338,17 @@ Details.propTypes = {
 const Page = props => {
   const {id: taskId} = useParams();
   const query = useGetTask();
-  const {data, refetch} = query({taskId});
+  const {data, refetch, loading} = query({taskId});
 
   const clone = useCloneTask();
   const cloneTask = vars =>
     clone(vars).then(goto_task_details('cloneTask', props));
+
+  const start = useStartTask();
+  const startTask = vars => start(vars).then(refetch);
+
+  const del = useDeleteTask();
+  const deleteTask = vars => del(vars).then(goto_list('tasks', props));
 
   const [entity, setEntity] = useState();
   useEffect(() => {
@@ -384,10 +397,8 @@ const Page = props => {
       {({
         create,
         createcontainer,
-        delete: delete_func,
         download,
         edit,
-        start,
         stop,
         resume,
         reportimport,
@@ -396,6 +407,7 @@ const Page = props => {
           <EntityPage
             {...props}
             entity={entity}
+            isLoading={loading}
             sectionIcon={<TaskIcon size="large" />}
             title={_('Task')}
             toolBarIcons={ToolBarIcons}
@@ -406,11 +418,11 @@ const Page = props => {
             onReportImportClick={reportimport}
             onTaskCloneClick={cloneTask} // Clone is special because TaskComponent doesn't define it, so I'm assuming that EntityComponent is passing this method instead
             onTaskCreateClick={create}
-            onTaskDeleteClick={delete_func}
+            onTaskDeleteClick={deleteTask}
             onTaskDownloadClick={download}
             onTaskEditClick={edit}
             onTaskResumeClick={resume}
-            onTaskStartClick={start}
+            onTaskStartClick={startTask}
             onTaskStopClick={stop}
           >
             {({activeTab = 0, onActivateTab}) => {

@@ -75,6 +75,7 @@ export const GET_TASK = gql`
         uuid
         name
         trash
+        scanConfigType
       }
       scanner {
         uuid
@@ -277,4 +278,19 @@ export const CREATE_CONTAINER_TASK = gql`
 export const useCreateContainerTask = () => {
   const [createContainerTask] = useMutation(CREATE_CONTAINER_TASK);
   return toGraphQL(createContainerTask);
+};
+
+export const START_TASK = gql`
+  mutation startTask($taskId: String!) {
+    startTask(taskId: $taskId) {
+      status
+      statusText
+      reportId
+    }
+  }
+`;
+
+export const useStartTask = () => {
+  const [startTask] = useMutation(START_TASK);
+  return toGraphQL(startTask);
 };
