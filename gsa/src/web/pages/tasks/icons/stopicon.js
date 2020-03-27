@@ -28,7 +28,7 @@ const TaskStopIcon = ({
   capabilities,
   size,
   task,
-  usageType = 'task',
+  usageType = _('task'),
   onClick,
 }) => {
   if (task.isRunning() && !task.isContainer()) {

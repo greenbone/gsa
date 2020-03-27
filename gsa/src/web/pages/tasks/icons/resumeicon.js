@@ -27,7 +27,12 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import ResumeIcon from 'web/components/icon/resumeicon';
 
-const TaskResumeIcon = ({capabilities, task, usageType = 'task', onClick}) => {
+const TaskResumeIcon = ({
+  capabilities,
+  task,
+  usageType = _('task'),
+  onClick,
+}) => {
   if (task.isContainer()) {
     return (
       <ResumeIcon

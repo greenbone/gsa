@@ -25,7 +25,12 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import StartIcon from 'web/components/icon/starticon';
 
-const TaskStartIcon = ({capabilities, task, usageType = 'task', onClick}) => {
+const TaskStartIcon = ({
+  capabilities,
+  task,
+  usageType = _('task'),
+  onClick,
+}) => {
   if (task.isRunning() || task.isContainer()) {
     return null;
   }

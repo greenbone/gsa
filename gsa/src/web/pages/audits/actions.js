@@ -56,10 +56,18 @@ const Actions = ({
     {isDefined(entity.schedule) ? (
       <ScheduleIcon schedule={entity.schedule} links={links} />
     ) : (
-      <StartIcon task={entity} usageType="audit" onClick={onAuditStartClick} />
+      <StartIcon
+        task={entity}
+        usageType={_('audit')}
+        onClick={onAuditStartClick}
+      />
     )}
-    <StopIcon task={entity} usageType="audit" onClick={onAuditStopClick} />
-    <ResumeIcon task={entity} usageType="audit" onClick={onAuditResumeClick} />
+    <StopIcon task={entity} usageType={_('audit')} onClick={onAuditStopClick} />
+    <ResumeIcon
+      task={entity}
+      usageType={_('audit')}
+      onClick={onAuditResumeClick}
+    />
     <TrashIcon
       entity={entity}
       name="task"
