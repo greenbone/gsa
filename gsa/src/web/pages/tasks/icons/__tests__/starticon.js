@@ -19,6 +19,7 @@ import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
+import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
@@ -80,8 +81,8 @@ describe('Task StartIcon component tests', () => {
 
   test('should render in inactive state if wrong command level permissions for audit are given', () => {
     const caps = new Capabilities(['everything']);
-    const task = Task.fromElement({
-      status: TASK_STATUS.new,
+    const audit = Audit.fromElement({
+      status: AUDIT_STATUS.new,
       target: {_id: '123'},
       permissions: {permission: [{name: 'get_task'}]},
       usage_type: 'audit',
@@ -90,12 +91,10 @@ describe('Task StartIcon component tests', () => {
 
     const {render} = rendererWith({capabilities: caps});
 
-    const {element} = render(
-      <StartIcon task={task} usageType={task.usageType} />,
-    );
+    const {element} = render(<StartIcon task={audit} usageType="audit" />);
 
     expect(caps.mayOp('start_task')).toEqual(true);
-    expect(task.userCapabilities.mayOp('start_task')).toEqual(false);
+    expect(audit.userCapabilities.mayOp('start_task')).toEqual(false);
 
     fireEvent.click(element);
 
