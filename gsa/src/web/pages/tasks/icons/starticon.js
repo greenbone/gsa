@@ -20,11 +20,17 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
+import {capitalizeFirstLetter} from 'gmp/utils/string';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import StartIcon from 'web/components/icon/starticon';
 
-const TaskStartIcon = ({capabilities, task, onClick}) => {
+const TaskStartIcon = ({
+  capabilities,
+  task,
+  usageType = _('task'),
+  onClick,
+}) => {
   if (task.isRunning() || task.isContainer()) {
     return null;
   }
@@ -34,19 +40,30 @@ const TaskStartIcon = ({capabilities, task, onClick}) => {
     !task.userCapabilities.mayOp('start_task')
   ) {
     return (
-      <StartIcon active={false} title={_('Permission to start Task denied')} />
+      <StartIcon
+        active={false}
+        title={_('Permission to start {{usageType}} denied', {usageType})}
+      />
     );
   }
 
   if (!task.isActive()) {
     return <StartIcon title={_('Start')} value={task} onClick={onClick} />;
   }
-  return <StartIcon active={false} title={_('Task is already active')} />;
+  return (
+    <StartIcon
+      active={false}
+      title={_('{{usageType}} is already active', {
+        usageType: capitalizeFirstLetter(usageType),
+      })}
+    />
+  );
 };
 
 TaskStartIcon.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   task: PropTypes.model.isRequired,
+  usageType: PropTypes.string,
   onClick: PropTypes.func,
 };
 

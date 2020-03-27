@@ -32,9 +32,9 @@ import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 import DownloadIcon from 'web/components/icon/downloadicon';
 
-import ResumeIcon from 'web/pages/audits/icons/resumeicon';
+import ResumeIcon from 'web/pages/tasks/icons/resumeicon';
 import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
-import StartIcon from 'web/pages/audits/icons/starticon';
+import StartIcon from 'web/pages/tasks/icons/starticon';
 import StopIcon from 'web/pages/tasks/icons/stopicon';
 
 import PropTypes from 'web/utils/proptypes';
@@ -56,10 +56,18 @@ const Actions = ({
     {isDefined(entity.schedule) ? (
       <ScheduleIcon schedule={entity.schedule} links={links} />
     ) : (
-      <StartIcon audit={entity} onClick={onAuditStartClick} />
+      <StartIcon
+        task={entity}
+        usageType={_('audit')}
+        onClick={onAuditStartClick}
+      />
     )}
-    <StopIcon task={entity} onClick={onAuditStopClick} />
-    <ResumeIcon audit={entity} onClick={onAuditResumeClick} />
+    <StopIcon task={entity} usageType={_('audit')} onClick={onAuditStopClick} />
+    <ResumeIcon
+      task={entity}
+      usageType={_('audit')}
+      onClick={onAuditResumeClick}
+    />
     <TrashIcon
       entity={entity}
       name="task"

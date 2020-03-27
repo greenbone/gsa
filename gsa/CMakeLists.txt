@@ -689,8 +689,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/audits/details.js
      ${GSA_SRC_DIR}/src/web/pages/audits/detailspage.js
      ${GSA_SRC_DIR}/src/web/pages/audits/dialog.js
-     ${GSA_SRC_DIR}/src/web/pages/audits/icons/resumeicon.js
-     ${GSA_SRC_DIR}/src/web/pages/audits/icons/starticon.js
      ${GSA_SRC_DIR}/src/web/pages/audits/listpage.js
      ${GSA_SRC_DIR}/src/web/pages/audits/row.js
      ${GSA_SRC_DIR}/src/web/pages/audits/table.js

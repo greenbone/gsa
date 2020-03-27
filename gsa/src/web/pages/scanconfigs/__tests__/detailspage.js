@@ -129,7 +129,10 @@ const config = ScanConfig.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'task1'}, {id: '5678', name: 'task2'}],
+    task: [
+      {id: '1234', name: 'task1'},
+      {id: '5678', name: 'task2'},
+    ],
   },
 });
 
@@ -154,7 +157,10 @@ const config2 = ScanConfig.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'task1'}, {id: '5678', name: 'task2'}],
+    task: [
+      {id: '1234', name: 'task1'},
+      {id: '5678', name: 'task2'},
+    ],
   },
 });
 
@@ -175,7 +181,10 @@ const config3 = ScanConfig.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'task1'}, {id: '5678', name: 'task2'}],
+    task: [
+      {id: '1234', name: 'task1'},
+      {id: '5678', name: 'task2'},
+    ],
   },
 });
 
@@ -196,7 +205,10 @@ const config4 = ScanConfig.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'task1'}, {id: '5678', name: 'task2'}],
+    task: [
+      {id: '1234', name: 'task1'},
+      {id: '5678', name: 'task2'},
+    ],
   },
 });
 
@@ -701,7 +713,7 @@ describe('Scan Config Detailspage tests', () => {
 
     await act(async () => {
       fireEvent.click(icons[3]);
-      expect(clone).not.toHaveBeenCalledWith(config2);
+      expect(clone).not.toHaveBeenCalled();
       expect(icons[3]).toHaveAttribute(
         'title',
         'Permission to clone Scan Config denied',
@@ -716,7 +728,7 @@ describe('Scan Config Detailspage tests', () => {
       );
 
       fireEvent.click(icons[5]);
-      expect(deleteFunc).not.toHaveBeenCalledWith(config2);
+      expect(deleteFunc).not.toHaveBeenCalled();
       expect(icons[5]).toHaveAttribute(
         'title',
         'Permission to move Scan Config to trashcan denied',
@@ -818,7 +830,7 @@ describe('Scan Config Detailspage tests', () => {
       expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
 
       fireEvent.click(icons[5]);
-      expect(deleteFunc).not.toHaveBeenCalledWith(config3);
+      expect(deleteFunc).not.toHaveBeenCalled();
       expect(icons[5]).toHaveAttribute('title', 'Scan Config is still in use');
 
       fireEvent.click(icons[6]);
@@ -917,7 +929,7 @@ describe('Scan Config Detailspage tests', () => {
       expect(icons[4]).toHaveAttribute('title', 'Scan Config is not writable');
 
       fireEvent.click(icons[5]);
-      expect(deleteFunc).not.toHaveBeenCalledWith(config4);
+      expect(deleteFunc).not.toHaveBeenCalled();
       expect(icons[5]).toHaveAttribute('title', 'Scan Config is not writable');
 
       fireEvent.click(icons[6]);
@@ -1064,21 +1076,21 @@ describe('Scan Config ToolBarIcons tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
 
     fireEvent.click(icons[2]);
-    expect(handleScanConfigClone).not.toHaveBeenCalledWith(config2);
+    expect(handleScanConfigClone).not.toHaveBeenCalled();
     expect(icons[2]).toHaveAttribute(
       'title',
       'Permission to clone Scan Config denied',
     );
 
     fireEvent.click(icons[3]);
-    expect(handleScanConfigEdit).not.toHaveBeenCalledWith(config2);
+    expect(handleScanConfigEdit).not.toHaveBeenCalled();
     expect(icons[3]).toHaveAttribute(
       'title',
       'Permission to edit Scan Config denied',
     );
 
     fireEvent.click(icons[4]);
-    expect(handleScanConfigDelete).not.toHaveBeenCalledWith(config2);
+    expect(handleScanConfigDelete).not.toHaveBeenCalled();
     expect(icons[4]).toHaveAttribute(
       'title',
       'Permission to move Scan Config to trashcan denied',
@@ -1133,7 +1145,7 @@ describe('Scan Config ToolBarIcons tests', () => {
     expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
 
     fireEvent.click(icons[5]);
-    expect(handleScanConfigDelete).not.toHaveBeenCalledWith(config3);
+    expect(handleScanConfigDelete).not.toHaveBeenCalled();
     expect(icons[5]).toHaveAttribute('title', 'Scan Config is still in use');
 
     fireEvent.click(icons[6]);
@@ -1185,11 +1197,11 @@ describe('Scan Config ToolBarIcons tests', () => {
     expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
 
     fireEvent.click(icons[4]);
-    expect(handleScanConfigEdit).not.toHaveBeenCalledWith(config4);
+    expect(handleScanConfigEdit).not.toHaveBeenCalled();
     expect(icons[4]).toHaveAttribute('title', 'Scan Config is not writable');
 
     fireEvent.click(icons[5]);
-    expect(handleScanConfigDelete).not.toHaveBeenCalledWith(config4);
+    expect(handleScanConfigDelete).not.toHaveBeenCalled();
     expect(icons[5]).toHaveAttribute('title', 'Scan Config is not writable');
 
     fireEvent.click(icons[6]);

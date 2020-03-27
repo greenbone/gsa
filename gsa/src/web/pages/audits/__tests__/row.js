@@ -67,6 +67,7 @@ describe('Audit Row tests', () => {
       last_report: lastReport,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: '5678', name: 'target'},
+      usage_type: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -159,6 +160,7 @@ describe('Audit Row tests', () => {
       target: {_id: 'id', name: 'target'},
       scanner: {_id: 'id', name: 'scanner', type: GMP_SCANNER_TYPE},
       observers: 'user',
+      usage_type: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -221,6 +223,7 @@ describe('Audit Row tests', () => {
       alterable: '0',
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
+      usage_type: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -323,6 +326,7 @@ describe('Audit Row tests', () => {
       current_report: currentReport,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
+      usage_type: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -430,6 +434,7 @@ describe('Audit Row tests', () => {
       last_report: lastReport,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
+      usage_type: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -539,6 +544,7 @@ describe('Audit Row tests', () => {
       last_report: lastReport,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
+      usage_type: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -648,6 +654,7 @@ describe('Audit Row tests', () => {
       last_report: lastReport,
       permissions: {permission: [{name: 'get_tasks'}]},
       target: {_id: 'id', name: 'target'},
+      usage_type: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -716,8 +723,11 @@ describe('Audit Row tests', () => {
 
     // Actions
     fireEvent.click(icons[1]);
-    expect(handleAuditStart).toHaveBeenCalledWith(audit);
-    expect(icons[1]).toHaveAttribute('title', 'Start');
+    expect(handleAuditStart).not.toHaveBeenCalled();
+    expect(icons[1]).toHaveAttribute(
+      'title',
+      'Permission to start audit denied',
+    );
 
     fireEvent.click(icons[2]);
     expect(handleAuditResume).not.toHaveBeenCalled();

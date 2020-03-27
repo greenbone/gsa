@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Multistep dialog feature, implemented on scanner dialog [#1725](https://github.com/greenbone/gsa/pull/1725)
 
 ### Changed
+- Adjusted task icons to use them for both tasks and audits and removed audit icons [#2070](https://github.com/greenbone/gsa/pull/2070)
 - Don't use DetailsLink in ClosedCvesTable if host does not have an ID [#2055](ttps://github.com/greenbone/gsa/pull/2055)
 - Changed NOTES_DASHBOARD_ID to fit [gvmd/#1018](https://github.com/greenbone/gvmd/pull/1018) [#2053](https://github.com/greenbone/gsa/pull/2053)
 - Change license to AGPL-3.0-or-later [#2027](https://github.com/greenbone/gsa/pull/2027)
