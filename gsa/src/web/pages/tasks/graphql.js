@@ -294,3 +294,33 @@ export const useStartTask = () => {
   const [startTask] = useMutation(START_TASK);
   return toGraphQL(startTask);
 };
+
+export const GET_SETTING = gql`
+  query UserSetting($userSettingId: UUID!) {
+    userSetting(userSettingId: $userSettingId) {
+      uuid
+      name
+      value
+      comment
+    }
+  }
+`;
+
+export const useGetSetting = () => {
+  return toFruitfulQuery(useQuery)(GET_SETTING);
+};
+
+export const GET_SETTINGS = gql`
+  query UserSettings($filterString: String) {
+    userSettings(filterString: $filterString) {
+      uuid
+      name
+      value
+      comment
+    }
+  }
+`;
+
+export const useGetSettings = () => {
+  return toFruitfulQuery(useQuery)(GET_SETTINGS);
+};
