@@ -63,7 +63,7 @@ import compose from 'web/utils/compose';
 import {getDisplay} from './registry';
 import {getRows as get_rows} from './utils';
 
-import {useGetSetting} from 'web/pages/tasks/graphql';
+import {useGetSetting} from 'web/utils/useGetSettings';
 import Setting from 'gmp/models/setting';
 import {convertLoadedSettings} from 'gmp/commands/dashboards';
 
