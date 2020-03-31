@@ -18,8 +18,6 @@
 import 'core-js/features/array/find-index';
 import 'core-js/features/object/entries';
 
-import memoize from 'memoize-one';
-
 import React, {useEffect} from 'react';
 
 import {connect} from 'react-redux';
@@ -30,7 +28,10 @@ import _ from 'gmp/locale';
 
 import Logger from 'gmp/log';
 
-import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
+import {
+  DEFAULT_ROW_HEIGHT,
+  convertLoadedSettings,
+} from 'gmp/commands/dashboards';
 
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
@@ -65,7 +66,6 @@ import {getRows as get_rows} from './utils';
 
 import {useGetSetting} from 'web/utils/useGetSettings';
 import Setting from 'gmp/models/setting';
-import {convertLoadedSettings} from 'gmp/commands/dashboards';
 
 const log = Logger.getLogger('web.components.dashboard');
 
@@ -96,7 +96,7 @@ const RowPlaceHolder = styled.div`
 
 export const Dashboard = props => {
   const getSetting = useGetSetting();
-  const {data, error: err} = getSetting({
+  const {data} = getSetting({
     userSettingId: '3d5db3c7-5208-4b47-8c28-48efc621b1e0',
   });
   const {permittedDisplays = []} = props;
@@ -115,7 +115,6 @@ export const Dashboard = props => {
   useEffect(() => {
     const {
       id,
-      permittedDisplays,
       defaultDisplays,
       maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
       maxRows = DEFAULT_MAX_ROWS,
@@ -131,10 +130,9 @@ export const Dashboard = props => {
 
     props.setDefaultSettings(id, defaultDashboardSettings);
     props.loadSettings(id, defaults);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   let dashboardSettings;
-  let rows;
 
   if (isDefined(data)) {
     const setting = Setting.fromElement(data.userSetting);
@@ -142,11 +140,6 @@ export const Dashboard = props => {
     const config = JSON.parse(value);
 
     dashboardSettings = convertLoadedSettings(config, name);
-    dashboardSettings.maxItemsPerRow = maxItemsPerRow;
-    dashboardSettings.permittedDisplays = permittedDisplays;
-    dashboardSettings.maxRows = maxRows;
-
-    rows = dashboardSettings.rows;
   }
 
   const handleItemsChange = (gridItems = []) => {
@@ -157,8 +150,8 @@ export const Dashboard = props => {
     updateRows(convertGridItemsToDisplays(gridItems, displaysById));
   };
 
-  const handleUpdateDisplay = (id, props) => {
-    updateDisplay(id, props);
+  const handleUpdateDisplay = (id, args) => {
+    updateDisplay(id, args);
   };
 
   const handleRemoveDisplay = id => {
@@ -204,9 +197,8 @@ export const Dashboard = props => {
   const getRows = defaultRows => {
     if (isDefined(dashboardSettings)) {
       return get_rows(dashboardSettings, defaultRows);
-    } else {
-      return get_rows(props.settings, defaultRows);
     }
+    return get_rows(props.settings, defaultRows);
   };
 
   const getDisplayState = id => {
@@ -220,7 +212,7 @@ export const Dashboard = props => {
     updateDisplay(id, {state});
   };
 
-  const updateDisplay = (id, props) => {
+  const updateDisplay = (id, args) => {
     const rows = getRows();
 
     const rowIndex = rows.findIndex(row =>
@@ -235,7 +227,7 @@ export const Dashboard = props => {
 
     const newDisplay = {
       ...rowItems[displayIndex],
-      ...props,
+      ...args,
     };
 
     rowItems[displayIndex] = newDisplay;
@@ -270,6 +262,8 @@ export const Dashboard = props => {
     maxRows = DEFAULT_MAX_ROWS,
     ...others
   } = props;
+
+  let rows;
 
   if (isDefined(dashboardSettings)) {
     rows = dashboardSettings.rows;
