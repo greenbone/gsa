@@ -195,9 +195,6 @@ export const Dashboard = props => {
   };
 
   const getRows = defaultRows => {
-    if (isDefined(dashboardSettings)) {
-      return get_rows(dashboardSettings, defaultRows);
-    }
     return get_rows(props.settings, defaultRows);
   };
 
