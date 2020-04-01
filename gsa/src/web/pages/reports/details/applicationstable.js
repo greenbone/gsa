@@ -105,7 +105,15 @@ const Row = ({entity, links = true, onToggleDetailsClick, ...props}) => {
 };
 
 Row.propTypes = {
-  entity: PropTypes.model.isRequired,
+  entity: PropTypes.shape({
+    hosts: PropTypes.object.isRequired,
+    occurrences: PropTypes.shape({
+      total: PropTypes.number,
+    }),
+    id: PropTypes.string,
+    name: PropTypes.string,
+    severity: PropTypes.any,
+  }).isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };

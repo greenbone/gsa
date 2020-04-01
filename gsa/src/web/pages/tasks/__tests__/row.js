@@ -914,10 +914,10 @@ describe('Task Row tests', () => {
 
     // Actions
     fireEvent.click(icons[1]);
-    expect(handleTaskStart).not.toHaveBeenCalledWith(task);
+    expect(handleTaskStart).not.toHaveBeenCalled();
     expect(icons[1]).toHaveAttribute(
       'title',
-      'Permission to start Task denied',
+      'Permission to start task denied',
     );
 
     fireEvent.click(icons[2]);
@@ -1037,7 +1037,7 @@ describe('Task Row tests', () => {
     expect(icons[0]).toHaveAttribute('title', 'Import Report');
 
     fireEvent.click(icons[1]);
-    expect(handleTaskResume).not.toHaveBeenCalledWith(task);
+    expect(handleTaskResume).not.toHaveBeenCalled();
     expect(icons[1]).toHaveAttribute('title', 'Task is a container');
 
     fireEvent.click(icons[2]);

@@ -1193,7 +1193,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(handleTaskStart).not.toHaveBeenCalled();
     expect(icons[7]).toHaveAttribute(
       'title',
-      'Permission to start Task denied',
+      'Permission to start task denied',
     );
 
     fireEvent.click(icons[8]);

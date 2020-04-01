@@ -19,12 +19,15 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import PropTypes from 'web/utils/proptypes';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
 import CveLink from 'web/components/link/cvelink';
 import DetailsLink from 'web/components/link/detailslink';
+import Link from 'web/components/link/link';
 
 import TableData from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
@@ -86,11 +89,17 @@ const Row = ({entity}) => {
         </span>
       </TableData>
       <TableData>
-        <span>
-          <DetailsLink type="host" id={host.id}>
+        {isDefined(host.id) ? (
+          <span>
+            <DetailsLink type="host" id={host.id}>
+              {host.ip}
+            </DetailsLink>
+          </span>
+        ) : (
+          <Link to="hosts" filter={'name=' + host.ip}>
             {host.ip}
-          </DetailsLink>
-        </span>
+          </Link>
+        )}
       </TableData>
       <TableData>
         <span>

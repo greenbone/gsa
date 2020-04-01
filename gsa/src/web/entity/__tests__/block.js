@@ -17,36 +17,25 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {render} from 'web/utils/testing';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
+import DetailsBlock from '../block';
 
-import StartIcon from 'web/components/icon/starticon';
-
-const AuditStartIcon = ({capabilities, audit, onClick}) => {
-  if (audit.isRunning()) {
-    return null;
-  }
-
-  if (!capabilities.mayOp('start_task')) {
-    return (
-      <StartIcon active={false} title={_('Permission to start Audit denied')} />
+describe('Entity Block component tests', () => {
+  test('should render', () => {
+    const {element} = render(
+      <DetailsBlock id="123" title="title">
+        <div>child</div>
+      </DetailsBlock>,
     );
-  }
+    const title = element.querySelectorAll('h2');
+    const divs = element.querySelectorAll('div');
 
-  if (!audit.isActive()) {
-    return <StartIcon title={_('Start')} value={audit} onClick={onClick} />;
-  }
-  return <StartIcon active={false} title={_('Audit is already active')} />;
-};
-
-AuditStartIcon.propTypes = {
-  audit: PropTypes.model.isRequired,
-  capabilities: PropTypes.capabilities.isRequired,
-  onClick: PropTypes.func,
-};
-
-export default withCapabilities(AuditStartIcon);
+    expect(title.length).toEqual(1);
+    expect(divs.length).toEqual(2);
+    expect(element).toHaveTextContent('title');
+    expect(element).toHaveTextContent('child');
+  });
+});
 
 // vim: set ts=2 sw=2 tw=80:

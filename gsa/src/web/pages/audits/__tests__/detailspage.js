@@ -52,7 +52,10 @@ const policy = Policy.fromElement({
   scanner: {name: 'scanner1', type: '0'},
   policy_type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '12345', name: 'foo'}, {id: '678910', name: 'audit2'}],
+    task: [
+      {id: '12345', name: 'foo'},
+      {id: '678910', name: 'audit2'},
+    ],
   },
 });
 
@@ -113,6 +116,7 @@ const audit = Audit.fromElement({
   scanner: {_id: '1516', name: 'scanner1', type: '2'},
   config: policy,
   preferences: preferences,
+  usage_type: 'audit',
 });
 
 const audit2 = Audit.fromElement({
@@ -133,6 +137,7 @@ const audit2 = Audit.fromElement({
   scanner: {_id: '1516', name: 'scanner1', type: '2'},
   config: policy,
   preferences: preferences,
+  usage_type: 'audit',
 });
 
 const audit3 = Audit.fromElement({
@@ -152,6 +157,7 @@ const audit3 = Audit.fromElement({
   scanner: {_id: '1516', name: 'scanner1', type: '2'},
   config: policy,
   preferences: preferences,
+  usage_type: 'audit',
 });
 
 const audit4 = Audit.fromElement({
@@ -173,6 +179,7 @@ const audit4 = Audit.fromElement({
   scanner: {_id: '1516', name: 'scanner1', type: '2'},
   config: policy,
   preferences: preferences,
+  usage_type: 'audit',
 });
 
 const audit5 = Audit.fromElement({
@@ -194,6 +201,7 @@ const audit5 = Audit.fromElement({
   scanner: {_id: '1516', name: 'scanner1', type: '2'},
   config: policy,
   preferences: preferences,
+  usage_type: 'audit',
 });
 
 const audit5Id = {
@@ -218,6 +226,7 @@ const audit6 = Audit.fromElement({
   scanner: {_id: '1516', name: 'scanner1', type: '2'},
   config: policy,
   preferences: preferences,
+  usage_type: 'audit',
 });
 
 const audit7 = Audit.fromElement({
@@ -244,6 +253,7 @@ const audit7 = Audit.fromElement({
   },
   schedule_periods: '1',
   preferences: preferences,
+  usage_type: 'audit',
 });
 
 const caps = new Capabilities(['everything']);
@@ -904,8 +914,11 @@ describe('Audit ToolBarIcons tests', () => {
     expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
 
     fireEvent.click(icons[6]);
-    expect(handleAuditStartClick).toHaveBeenCalledWith(audit6);
-    expect(icons[6]).toHaveAttribute('title', 'Start');
+    expect(handleAuditStartClick).not.toHaveBeenCalled();
+    expect(icons[6]).toHaveAttribute(
+      'title',
+      'Permission to start audit denied',
+    );
 
     fireEvent.click(icons[7]);
     expect(handleAuditResumeClick).not.toHaveBeenCalled();

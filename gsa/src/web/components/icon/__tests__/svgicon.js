@@ -15,12 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect} from 'react';
 import {act} from 'react-dom/test-utils';
 
 import {render, fireEvent} from 'web/utils/testing';
 
 import CloneIcon from '../cloneicon';
+
+import {useStateWithMountCheck, useIsMountedRef} from '../svgicon';
 
 const entity = {name: 'entity'};
 
@@ -67,5 +69,61 @@ describe('SVG icon component tests', () => {
     });
 
     expect(element).toHaveAttribute('title', 'Clone Entity');
+  });
+});
+
+describe('useStateWithMountCheck() hook tests', () => {
+  test('should not update state when component is unmounted', () => {
+    const MockComponent = () => {
+      const [state, setState] = useStateWithMountCheck(true);
+      const handleClick = () => {
+        setState(!state);
+      };
+      return <div onClick={handleClick}>{state.toString()}</div>;
+    };
+
+    const {element, unmount} = render(<MockComponent />);
+
+    expect(element).toHaveTextContent('true');
+    fireEvent.click(element);
+    expect(element).toHaveTextContent('false');
+    unmount();
+    fireEvent.click(element);
+    expect(element).toHaveTextContent('false');
+  });
+});
+describe('useIsMountedRef() hook tests', () => {
+  test('should return false after component is unmounted', () => {
+    const callback = jest.fn();
+
+    const MockComponent = () => {
+      const isMountedRef = useIsMountedRef();
+      useEffect(() => {
+        // we are not referencing a DOM node, therefore we can ignore eslint
+        /* eslint-disable react-hooks/exhaustive-deps */
+        return () => callback(isMountedRef.current);
+        /* eslint-enable */
+      }, [isMountedRef]);
+      return null;
+    };
+
+    const {unmount} = render(<MockComponent />);
+    unmount();
+    expect(callback).toHaveBeenCalledWith(false);
+  });
+
+  test('should return true if component is mounted', () => {
+    const callback = jest.fn();
+
+    const MockComponent = () => {
+      const isMountedRef = useIsMountedRef();
+      useEffect(() => {
+        callback(isMountedRef.current);
+      }, [isMountedRef]);
+      return null;
+    };
+
+    render(<MockComponent />);
+    expect(callback).toHaveBeenCalledWith(true);
   });
 });

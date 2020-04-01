@@ -21,19 +21,25 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-import {useCapabilities} from 'web/utils/useCapabilities';
 import StopIcon from 'web/components/icon/stopicon';
 
-const TaskStopIcon = ({size, task, onClick, ...props}) => {
-  const capabilities = useCapabilities(props.capabilities);
-
+const TaskStopIcon = ({
+  capabilities,
+  size,
+  task,
+  usageType = _('task'),
+  onClick,
+}) => {
   if (task.isRunning() && !task.isContainer()) {
     if (
       !capabilities.mayOp('stop_task') ||
       !task.userCapabilities.mayOp('stop_task')
     ) {
       return (
-        <StopIcon active={false} title={_('Permission to stop Task denied')} />
+        <StopIcon
+          active={false}
+          title={_('Permission to stop {{usageType}} denied', {usageType})}
+        />
       );
     }
     return (
@@ -47,6 +53,7 @@ TaskStopIcon.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
+  usageType: PropTypes.string,
   onClick: PropTypes.func,
 };
 
