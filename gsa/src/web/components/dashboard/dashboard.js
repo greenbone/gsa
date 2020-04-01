@@ -96,7 +96,7 @@ const RowPlaceHolder = styled.div`
 
 export const Dashboard = props => {
   const getSetting = useGetSetting();
-  const {data} = getSetting({
+  const {data, loading} = getSetting({
     userSettingId: '3d5db3c7-5208-4b47-8c28-48efc621b1e0',
   });
   const {permittedDisplays = []} = props;
@@ -267,7 +267,7 @@ export const Dashboard = props => {
   } else {
     rows = getRows();
   }
-  if (isDefined(error) && !isLoading && !isDefined(dashboardSettings)) {
+  if (isDefined(error) && !loading && !isDefined(dashboardSettings)) {
     return (
       <RowPlaceHolder>
         {_('Could not load dashboard settings. Reason: {{error}}', {
@@ -275,7 +275,7 @@ export const Dashboard = props => {
         })}
       </RowPlaceHolder>
     );
-  } else if (!isDefined(rows) && isLoading) {
+  } else if (!isDefined(rows) && loading) {
     return (
       <RowPlaceHolder>
         <Loading />
