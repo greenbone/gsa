@@ -35,6 +35,7 @@ import {
 
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
+import Setting from 'gmp/models/setting';
 
 import {
   loadSettings,
@@ -62,10 +63,9 @@ import withGmp from 'web/utils/withGmp';
 import compose from 'web/utils/compose';
 
 import {getDisplay} from './registry';
-import {getRows as get_rows} from './utils';
+import {getRows as getRowsUtil} from './utils';
 
 import {useGetSetting} from 'web/utils/useGetSettings';
-import Setting from 'gmp/models/setting';
 
 const log = Logger.getLogger('web.components.dashboard');
 
@@ -96,7 +96,7 @@ const RowPlaceHolder = styled.div`
 
 export const Dashboard = props => {
   const getSetting = useGetSetting();
-  const {data, loading} = getSetting({
+  const {data, loading: isLoading} = getSetting({
     userSettingId: '3d5db3c7-5208-4b47-8c28-48efc621b1e0',
   });
   const {permittedDisplays = []} = props;
@@ -195,7 +195,7 @@ export const Dashboard = props => {
   };
 
   const getRows = defaultRows => {
-    return get_rows(props.settings, defaultRows);
+    return getRowsUtil(props.settings, defaultRows);
   };
 
   const getDisplayState = id => {
@@ -254,7 +254,6 @@ export const Dashboard = props => {
 
   const {
     error,
-    isLoading,
     maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
     maxRows = DEFAULT_MAX_ROWS,
     ...others
@@ -267,7 +266,7 @@ export const Dashboard = props => {
   } else {
     rows = getRows();
   }
-  if (isDefined(error) && !loading && !isDefined(dashboardSettings)) {
+  if (isDefined(error) && !isLoading && !isDefined(dashboardSettings)) {
     return (
       <RowPlaceHolder>
         {_('Could not load dashboard settings. Reason: {{error}}', {
@@ -275,7 +274,7 @@ export const Dashboard = props => {
         })}
       </RowPlaceHolder>
     );
-  } else if (!isDefined(rows) && loading) {
+  } else if (!isDefined(rows) && isLoading) {
     return (
       <RowPlaceHolder>
         <Loading />
