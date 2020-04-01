@@ -26,10 +26,10 @@ import MenuEntry from 'web/components/menu/menuentry';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-import {useCapabilities} from 'web/utils/useCapabilities';
+import {useGqlCapabilities} from 'web/utils/useGqlCapabilities';
 
 const NewIconMenu = ({onNewClick, onNewContainerClick, ...props}) => {
-  const capabilities = useCapabilities(props.capabilities);
+  const capabilities = useGqlCapabilities(props.capabilities);
 
   if (capabilities.mayCreate('task')) {
     return (

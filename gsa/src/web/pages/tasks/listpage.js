@@ -58,7 +58,7 @@ import TaskFilterDialog from './filterdialog';
 import Table from './table';
 import {useGetTasks, useDeleteTask, useCloneTask} from './graphql';
 import {queryWithRefetch} from 'web/utils/graphql';
-import {useCapabilities} from 'web/utils/useCapabilities';
+import {useGqlCapabilities} from 'web/utils/useGqlCapabilities';
 
 export const ToolBarIcons = withCapabilities(
   ({
@@ -69,7 +69,7 @@ export const ToolBarIcons = withCapabilities(
     onTaskWizardClick,
     ...props
   }) => {
-    const capabilities = useCapabilities(props.capabilities);
+    const capabilities = useGqlCapabilities(props.capabilities);
 
     return (
       <IconDivider>

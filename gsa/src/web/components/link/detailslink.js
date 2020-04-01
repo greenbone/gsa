@@ -20,7 +20,7 @@ import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import {useCapabilities} from 'web/utils/useCapabilities';
+import {useGqlCapabilities} from 'web/utils/useGqlCapabilities';
 
 import Link from './link';
 
@@ -31,7 +31,7 @@ const DetailsLink = ({
   textOnly = false,
   ...props
 }) => {
-  const capabilities = useCapabilities(caps);
+  const capabilities = useGqlCapabilities(caps);
 
   textOnly = textOnly || !capabilities.mayAccess(type);
 

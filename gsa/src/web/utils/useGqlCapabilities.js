@@ -16,10 +16,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {useContext} from 'react';
+import gql from 'graphql-tag';
 
-import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
+import {useQuery} from '@apollo/react-hooks';
+import {isDefined} from 'gmp/utils/identity';
 
-const useCapabilities = () => useContext(CapabilitiesContext);
+import Capabilities from 'gmp/capabilities/capabilities';
 
-export default useCapabilities;
+import {toFruitfulQuery} from 'web/utils/graphql';
+
+export const GET_CAPS = gql`
+  query Capabilities {
+    capabilities
+  }
+`;
+
+export const useGetCapabilities = () => {
+  return toFruitfulQuery(useQuery)(GET_CAPS);
+};
+
+export const useGqlCapabilities = caps => {
+  const query = useGetCapabilities();
+  const {data} = query();
+
+  if (isDefined(data)) {
+    return new Capabilities(data.capabilities);
+  }
+  return caps; // fallback to HOC
+};
