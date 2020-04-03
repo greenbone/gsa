@@ -26,7 +26,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import CloneIcon from 'web/components/icon/cloneicon';
 import withCapabilities from 'web/utils/withCapabilities';
-import {useCapabilities} from 'web/utils/useCapabilities';
+import {useGqlCapabilities} from 'web/utils/useGqlCapabilities';
 
 const EntityCloneIcon = ({
   displayName,
@@ -37,7 +37,7 @@ const EntityCloneIcon = ({
   onClick,
   ...props
 }) => {
-  const capabilities = useCapabilities(props.capabilities);
+  const capabilities = useGqlCapabilities(props.capabilities);
 
   if (!isDefined(name)) {
     name = getEntityType(entity);

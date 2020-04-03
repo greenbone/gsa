@@ -130,7 +130,10 @@ const policy = Policy.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
+    task: [
+      {id: '1234', name: 'audit1'},
+      {id: '5678', name: 'audit2'},
+    ],
   },
 });
 
@@ -155,7 +158,10 @@ const policy2 = Policy.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
+    task: [
+      {id: '1234', name: 'audit1'},
+      {id: '5678', name: 'audit2'},
+    ],
   },
 });
 
@@ -176,7 +182,10 @@ const policy3 = Policy.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
+    task: [
+      {id: '1234', name: 'audit1'},
+      {id: '5678', name: 'audit2'},
+    ],
   },
 });
 
@@ -197,7 +206,10 @@ const policy4 = Policy.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
+    task: [
+      {id: '1234', name: 'audit1'},
+      {id: '5678', name: 'audit2'},
+    ],
   },
 });
 
@@ -641,7 +653,7 @@ describe('Policy Detailspage tests', () => {
 
     await act(async () => {
       fireEvent.click(icons[2]);
-      expect(clone).not.toHaveBeenCalledWith(policy2);
+      expect(clone).not.toHaveBeenCalled();
       expect(icons[2]).toHaveAttribute(
         'title',
         'Permission to clone Policy denied',
@@ -656,7 +668,7 @@ describe('Policy Detailspage tests', () => {
       );
 
       fireEvent.click(icons[4]);
-      expect(deleteFunc).not.toHaveBeenCalledWith(policy2);
+      expect(deleteFunc).not.toHaveBeenCalled();
       expect(icons[4]).toHaveAttribute(
         'title',
         'Permission to move Policy to trashcan denied',
@@ -752,7 +764,7 @@ describe('Policy Detailspage tests', () => {
       expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
 
       fireEvent.click(icons[4]);
-      expect(deleteFunc).not.toHaveBeenCalledWith(policy3);
+      expect(deleteFunc).not.toHaveBeenCalled();
       expect(icons[4]).toHaveAttribute('title', 'Policy is still in use');
 
       fireEvent.click(icons[5]);
@@ -845,7 +857,7 @@ describe('Policy Detailspage tests', () => {
       expect(icons[3]).toHaveAttribute('title', 'Policy is not writable');
 
       fireEvent.click(icons[4]);
-      expect(deleteFunc).not.toHaveBeenCalledWith(policy4);
+      expect(deleteFunc).not.toHaveBeenCalled();
       expect(icons[4]).toHaveAttribute('title', 'Policy is not writable');
 
       fireEvent.click(icons[5]);
@@ -967,21 +979,21 @@ describe('Policy ToolBarIcons tests', () => {
     const icons = getAllByTestId('svg-icon');
 
     fireEvent.click(icons[2]);
-    expect(handlePolicyCloneClick).not.toHaveBeenCalledWith(policy2);
+    expect(handlePolicyCloneClick).not.toHaveBeenCalled();
     expect(icons[2]).toHaveAttribute(
       'title',
       'Permission to clone Policy denied',
     );
 
     fireEvent.click(icons[3]);
-    expect(handlePolicyEditClick).not.toHaveBeenCalledWith(policy2);
+    expect(handlePolicyEditClick).not.toHaveBeenCalled();
     expect(icons[3]).toHaveAttribute(
       'title',
       'Permission to edit Policy denied',
     );
 
     fireEvent.click(icons[4]);
-    expect(handlePolicyDeleteClick).not.toHaveBeenCalledWith(policy2);
+    expect(handlePolicyDeleteClick).not.toHaveBeenCalled();
     expect(icons[4]).toHaveAttribute(
       'title',
       'Permission to move Policy to trashcan denied',
@@ -1027,7 +1039,7 @@ describe('Policy ToolBarIcons tests', () => {
     expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
 
     fireEvent.click(icons[4]);
-    expect(handlePolicyDeleteClick).not.toHaveBeenCalledWith(policy3);
+    expect(handlePolicyDeleteClick).not.toHaveBeenCalled();
     expect(icons[4]).toHaveAttribute('title', 'Policy is still in use');
 
     fireEvent.click(icons[5]);
@@ -1066,11 +1078,11 @@ describe('Policy ToolBarIcons tests', () => {
     expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
     fireEvent.click(icons[3]);
-    expect(handlePolicyEditClick).not.toHaveBeenCalledWith(policy4);
+    expect(handlePolicyEditClick).not.toHaveBeenCalled();
     expect(icons[3]).toHaveAttribute('title', 'Policy is not writable');
 
     fireEvent.click(icons[4]);
-    expect(handlePolicyDeleteClick).not.toHaveBeenCalledWith(policy4);
+    expect(handlePolicyDeleteClick).not.toHaveBeenCalled();
     expect(icons[4]).toHaveAttribute('title', 'Policy is not writable');
 
     fireEvent.click(icons[5]);

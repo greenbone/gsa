@@ -76,9 +76,9 @@ import {
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 
-import ResumeIcon from './icons/resumeicon';
+import ResumeIcon from 'web/pages/tasks/icons/resumeicon';
 import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
-import StartIcon from './icons/starticon';
+import StartIcon from 'web/pages/tasks/icons/starticon';
 import StopIcon from 'web/pages/tasks/icons/stopicon';
 
 import AuditDetails from './details';
@@ -154,12 +154,24 @@ export const ToolBarIcons = ({
             links={links}
           />
         )}
-        <StartIcon audit={entity} onClick={onAuditStartClick} />
+        <StartIcon
+          task={entity}
+          usageType={_('audit')}
+          onClick={onAuditStartClick}
+        />
 
-        <StopIcon task={entity} onClick={onAuditStopClick} />
+        <StopIcon
+          task={entity}
+          usageType={_('audit')}
+          onClick={onAuditStopClick}
+        />
 
         {!entity.isContainer() && (
-          <ResumeIcon audit={entity} onClick={onAuditResumeClick} />
+          <ResumeIcon
+            task={entity}
+            usageType={_('audit')}
+            onClick={onAuditResumeClick}
+          />
         )}
       </IconDivider>
 

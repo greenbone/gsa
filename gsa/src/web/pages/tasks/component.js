@@ -99,7 +99,7 @@ import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {useModifyTask, useCreateContainerTask, useCreateTask} from './graphql';
-import {useGetCapabilities} from 'web/utils/useCapabilities';
+import {useGetCapabilities} from 'web/utils/useGqlCapabilities';
 
 const TaskComponent = props => {
   const modifyTask = useModifyTask();

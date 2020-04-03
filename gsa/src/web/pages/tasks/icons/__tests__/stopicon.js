@@ -19,6 +19,7 @@ import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
+import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
@@ -70,7 +71,33 @@ describe('Task StopIcon component tests', () => {
     fireEvent.click(element);
 
     expect(clickHandler).not.toHaveBeenCalled();
-    expect(element).toHaveAttribute('title', 'Permission to stop Task denied');
+    expect(element).toHaveAttribute('title', 'Permission to stop task denied');
+    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
+      modifier: `svg path`,
+    });
+  });
+
+  test('should render in inactive state if wrong command level permissions are given for audit', () => {
+    const caps = new Capabilities(['everything']);
+    const audit = Audit.fromElement({
+      status: AUDIT_STATUS.running,
+      target: {_id: '123'},
+      permissions: {permission: [{name: 'get_task'}]},
+    });
+    const clickHandler = jest.fn();
+
+    const {render} = rendererWith({capabilities: caps});
+
+    const {element} = render(
+      <StopIcon task={audit} usageType="audit" onClick={clickHandler} />,
+    );
+
+    expect(caps.mayOp('stop_task')).toEqual(true);
+    expect(audit.userCapabilities.mayOp('stop_task')).toEqual(false);
+    fireEvent.click(element);
+
+    expect(clickHandler).not.toHaveBeenCalled();
+    expect(element).toHaveAttribute('title', 'Permission to stop audit denied');
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
       modifier: `svg path`,
     });

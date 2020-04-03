@@ -36,6 +36,13 @@ const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 
+const filterWithName = Filter.fromElement({
+  term:
+    'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
+  name: 'foo',
+  id: '123',
+});
+
 const resetFilter = Filter.fromString('first=1 sort-reverse=severity');
 
 const caps = new Capabilities(['everything']);
@@ -88,7 +95,7 @@ describe('Report Details Content tests', () => {
 
     const {entity} = getMockReport();
 
-    const filters = [filter];
+    const filters = [filterWithName];
 
     const gmp = {
       settings: {manualUrl, reportResultsThreshold: 10},
@@ -278,7 +285,7 @@ describe('Report Details Content tests', () => {
 
     const {entity} = getMockReport();
 
-    const filters = [filter];
+    const filters = [filterWithName];
 
     const gmp = {
       settings: {manualUrl, reportResultsThreshold: 1},
