@@ -49,6 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)
 
 ### Changed
+- Adjusted parsing of filter strings to deal with strings with double quotes [#2051](https://github.com/greenbone/gsa/pull/2051)
 - Changed report TlsCertificate table headers to match TlsCertificate assets
 table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Unify source reports and hosts in TlsCertficateModel [#2040](https://github.com/greenbone/gsa/pull/2040)
@@ -69,9 +70,10 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Lowered memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
 
 ### Fixed
+- Fixed audit listpage observer tooltip [#2048](https://github.com/greenbone/gsa/pull/2048)
 - Fixed showing errors in CredentialDialog when opened from AlertDialog [#2041](https://github.com/greenbone/gsa/pull/2041)
 - Fixed usage of report format %F in generateFilename() [#2021](https://github.com/greenbone/gsa/pull/2021)
-- Fixed report DetailsContent counts in tabs [#2004](https://github.com/greenbone/gsa/pull/2004) [#2023](https://github.com/greenbone/gsa/pull/2023)
+- Fixed report DetailsContent counts in tabs [#2004](https://github.com/greenbone/gsa/pull/2004) [#2023](https://github.com/greenbone/gsa/pull/2023) [#2067](https://github.com/greenbone/gsa/pull/2067)
 - Fixed auto_delete_value of 0 for tasks and audits [#1987](https://github.com/greenbone/gsa/pull/1987)
 - Fixed bulk tagging by user selection (send IDs as array) [#1985](https://github.com/greenbone/gsa/pull/1985)
 - Fixed pluralizing type 'vulnerability' [#1984](https://github.com/greenbone/gsa/pull/1984)
@@ -217,6 +219,7 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Use = instead of ~ in filter of link in OS row [#2086](https://github.com/greenbone/gsa/pull/2086)
 - Update copyright header dates to 2020 [#2019](https://github.com/greenbone/gsa/pull/2019)
 - Improve text for empty results report and threshold panel [#1900](https://github.com/greenbone/gsa/pull/1900)
 - Load report results with separate requests

@@ -96,7 +96,7 @@ const Row = ({
       <span>
         <Link
           to={'hosts'}
-          filter={'os~"' + entity.name + '"'}
+          filter={'os="' + entity.name + '"'}
           textOnly={!links}
         >
           {entity.hosts.length}
