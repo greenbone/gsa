@@ -1,20 +1,19 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* eslint-disable max-len */
@@ -67,7 +66,7 @@ describe('Ovaldef model tests', () => {
     const ovaldef2 = Ovaldef.fromElement({});
     const ovaldef3 = Ovaldef.fromElement({raw_data: {}});
 
-    expect(ovaldef.short_id).toEqual('123abc');
+    expect(ovaldef.shortId).toEqual('123abc');
     expect(ovaldef.version).toEqual('42');
     expect(ovaldef.class).toEqual('foo');
     expect(ovaldef.deprecation).toEqual('0');
@@ -169,14 +168,14 @@ describe('Ovaldef model tests', () => {
     };
     const ovaldef = Ovaldef.fromElement(elem);
 
-    expect(ovaldef.criterias[0].criterions[0].applicability_check).toEqual(
+    expect(ovaldef.criterias[0].criterions[0].applicabilityCheck).toEqual(
       'foo',
     );
     expect(ovaldef.criterias[0].criterions[0].comment).toEqual('bar');
     expect(ovaldef.criterias[0].criterions[0].negate).toEqual(true);
-    expect(ovaldef.criterias[0].criterions[0].test_ref).toEqual('ref');
+    expect(ovaldef.criterias[0].criterions[0].testRef).toEqual('ref');
     expect(
-      ovaldef.criterias[0].criterias[0].criterions[0].applicability_check,
+      ovaldef.criterias[0].criterias[0].criterions[0].applicabilityCheck,
     ).toEqual('lorem');
     expect(ovaldef.criterias[0].criterias[0].criterions[0].comment).toEqual(
       'ipsum',
@@ -184,7 +183,7 @@ describe('Ovaldef model tests', () => {
     expect(ovaldef.criterias[0].criterias[0].criterions[0].negate).toEqual(
       false,
     );
-    expect(ovaldef.criterias[0].criterias[0].criterions[0].test_ref).toEqual(
+    expect(ovaldef.criterias[0].criterias[0].criterions[0].testRef).toEqual(
       'ref2',
     );
   });
@@ -209,11 +208,11 @@ describe('Ovaldef model tests', () => {
     const ovaldef = Ovaldef.fromElement(elem);
 
     expect(
-      ovaldef.criterias[0].extend_definitions[0].applicability_check,
+      ovaldef.criterias[0].extendDefinitions[0].applicabilityCheck,
     ).toEqual('foo');
-    expect(ovaldef.criterias[0].extend_definitions[0].comment).toEqual('bar');
-    expect(ovaldef.criterias[0].extend_definitions[0].negate).toEqual(false);
-    expect(ovaldef.criterias[0].extend_definitions[0].definition_ref).toEqual(
+    expect(ovaldef.criterias[0].extendDefinitions[0].comment).toEqual('bar');
+    expect(ovaldef.criterias[0].extendDefinitions[0].negate).toEqual(false);
+    expect(ovaldef.criterias[0].extendDefinitions[0].definitionRef).toEqual(
       'ref',
     );
   });

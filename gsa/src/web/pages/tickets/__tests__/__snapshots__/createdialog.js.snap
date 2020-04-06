@@ -1,47 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CreateTicketDialog component tests should render dialog 1`] = `
-.c4 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
 .c8 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
-}
-
-.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -59,25 +19,7 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   align-items: stretch;
 }
 
-.c14 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c18 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -89,27 +31,6 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c25 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
@@ -149,7 +70,7 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   height: 100%;
 }
 
-.c30 {
+.c25 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -158,7 +79,7 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c29 {
+.c24 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -183,7 +104,7 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   border: 1px solid #787878;
 }
 
-.c6 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -209,7 +130,7 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   flex-shrink: 0;
 }
 
-.c6:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
@@ -225,7 +146,7 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   width: inherit;
 }
 
-.c28 {
+.c21 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -245,12 +166,12 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c28:focus,
-.c28:hover {
+.c21:focus,
+.c21:hover {
   border: 1px solid #393637;
 }
 
-.c28:hover {
+.c21:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -258,26 +179,26 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c28[disabled] {
+.c21[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c28 img {
+.c21 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c28:link {
+.c21:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c27 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -295,26 +216,41 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c26 {
+.c23 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c26:hover {
+.c23:hover {
   color: #fff;
   background: #519032;
 }
 
-.c24 {
+.c20 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c8d3d9;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
-}
-
-.c23 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
@@ -322,6 +258,21 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
 }
 
 .c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
@@ -345,7 +296,7 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   cursor: grab;
 }
 
-.c9 {
+.c7 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
@@ -353,12 +304,31 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   max-height: 400px;
 }
 
-.c7 {
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
   overflow: hidden;
   height: 100%;
 }
 
-.c11 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -374,7 +344,7 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   padding-bottom: 10px;
 }
 
-.c12 {
+.c10 {
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
@@ -385,13 +355,28 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   margin-left: 0;
 }
 
-.c13 {
+.c11 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c20 {
+.c16 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -416,18 +401,18 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   cursor: pointer;
 }
 
-.c19 {
+.c17 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c19 * {
+.c17 * {
   height: inherit;
   width: inherit;
 }
 
-.c16 {
+.c13 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -451,7 +436,7 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   font-weight: normal;
 }
 
-.c15 {
+.c12 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -463,7 +448,7 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   width: 180px;
 }
 
-.c17 {
+.c14 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -480,9 +465,10 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   white-space: nowrap;
   overflow: hidden;
   cursor: pointer;
+  cursor: default;
 }
 
-.c22 {
+.c18 {
   display: block;
   height: auto;
   color: #393637;
@@ -493,7 +479,7 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
   padding: 4px 8px;
 }
 
-.c21 {
+.c19 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -534,14 +520,14 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
             class="c2"
           >
             <div
-              class="c3 c4"
+              class="c3"
               data-testid="dialog-title-bar"
             >
               <span>
                 Create new Ticket for Result
               </span>
               <div
-                class="c5 c6"
+                class="c4 c5"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -549,53 +535,57 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c7 c8"
+              class="c6"
             >
               <div
-                class="c9"
+                class="c7"
+                data-testid="save-dialog-content"
               >
                 <div
-                  class="c10"
+                  class="c8"
                 >
                   <div
-                    class="c11"
+                    class="c9"
                   >
                     <label
-                      class="c12"
+                      class="c10"
                       data-testid="formgroup-title"
                     >
                       Assign To User
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c11"
                       data-testid="formgroup-content"
                       size="10"
                     >
                       <div
-                        class="c15"
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        aria-labelledby="downshift-0-label"
+                        class="c12"
+                        role="combobox"
                         width="180px"
                       >
                         <div
-                          aria-expanded="false"
                           aria-haspopup="true"
                           aria-label="open menu"
-                          class="c16"
+                          class="c13"
                           data-toggle="true"
                           role="button"
                           type="button"
                         >
                           <div
-                            class="c17"
+                            class="c14"
                             data-testid="select-selected-value"
                             title="foo"
                           >
                             foo
                           </div>
                           <div
-                            class="c18"
+                            class="c15"
                           >
                             <span
-                              class="c19 c20"
+                              class="c16 c17"
                               data-testid="select-open-button"
                             >
                               ▼
@@ -606,21 +596,21 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c11"
+                    class="c9"
                   >
                     <label
-                      class="c12"
+                      class="c10"
                       data-testid="formgroup-title"
                     >
                       Note
                     </label>
                     <div
-                      class="c13 c14"
+                      class="c11"
                       data-testid="formgroup-content"
                       size="10"
                     >
                       <textarea
-                        class="c21 c22"
+                        class="c18 c19"
                         name="note"
                         rows="5"
                       />
@@ -630,17 +620,17 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c23 c24 c25"
+              class="c20"
             >
               <button
-                class="c26 c27 c28"
+                class="c21 c22 c23"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c26 c27 c28"
+                class="c21 c22 c23"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -649,10 +639,10 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c29"
+            class="c24"
           >
             <div
-              class="c30"
+              class="c25"
             />
           </div>
         </div>

@@ -1,20 +1,19 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import Asset from 'gmp/models/asset';
@@ -139,6 +138,59 @@ describe('Host model tests', () => {
     expect(host.hostname).toEqual('foo');
     expect(host2.hostname).toEqual('bar');
     expect(host3.hostname).toBeUndefined();
+  });
+
+  test('should parse best_os_cpe', () => {
+    const elem1 = {
+      host: {
+        detail: [
+          {
+            name: 'best_os_cpe',
+            value: 'cpe:/foo/bar',
+          },
+        ],
+      },
+    };
+
+    const elem2 = {
+      identifiers: {
+        identifier: [
+          {
+            name: 'OS',
+            value: 'cpe:/foo/bar',
+          },
+        ],
+      },
+    };
+
+    const elem3 = {
+      identifiers: {
+        identifier: [
+          {
+            name: 'notavailable',
+            value: 'no',
+          },
+        ],
+      },
+    };
+
+    const elem4 = {
+      host: {
+        severity: {
+          value: '8.5',
+        },
+      },
+    };
+
+    const host1 = Host.fromElement(elem1);
+    const host2 = Host.fromElement(elem2);
+    const host3 = Host.fromElement(elem3);
+    const host4 = Host.fromElement(elem4);
+
+    expect(host1.os).toEqual('cpe:/foo/bar');
+    expect(host2.os).toEqual('cpe:/foo/bar');
+    expect(host3.os).toBeUndefined();
+    expect(host4.os).toBeUndefined();
   });
 
   test('should return ip identifier', () => {

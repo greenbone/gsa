@@ -1,0 +1,279 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TaskPage ToolBarIcons test should render 1`] = `
+.c8 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c1 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c1 > * {
+  margin-left: 5px;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c2 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c2 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c4 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c5 {
+  position: relative;
+  display: none;
+}
+
+.c3:hover .c5 {
+  display: block;
+}
+
+.c6 {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  list-style: none;
+  font-size: 10px;
+  width: 255px;
+}
+
+.c7 {
+  height: 22px;
+  width: 255px;
+  border-left: 1px solid #787878;
+  border-right: 1px solid #787878;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  background-color: #fff;
+  font-weight: bold;
+  text-indent: 12px;
+  text-align: left;
+}
+
+.c7:first-child {
+  border-top: 1px solid #787878;
+}
+
+.c7:last-child {
+  border-bottom: 1px solid #787878;
+}
+
+.c7:hover {
+  background: #66c430;
+  color: #fff;
+}
+
+.c7 div {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  cursor: pointer;
+}
+
+<div
+  class="c0"
+>
+  <div
+    class="c1"
+    margin="5px"
+  >
+    <a
+      href="test/en/scanning.html#managing-tasks"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      <span
+        class="c2"
+        data-testid="svg-icon"
+        title="Help: Tasks"
+      >
+        <svg
+          title="Help: Tasks"
+        >
+          help.svg
+        </svg>
+      </span>
+    </a>
+    <span
+      class="c3 c4"
+    >
+      <span
+        class="c2"
+        data-testid="svg-icon"
+      >
+        <svg>
+          wizard.svg
+        </svg>
+      </span>
+      <div
+        class="c5"
+      >
+        <ul
+          class="c6"
+        >
+          <li
+            class="c7"
+          >
+            <div
+              class="c8"
+            >
+              Task Wizard
+            </div>
+          </li>
+          <li
+            class="c7"
+          >
+            <div
+              class="c8"
+            >
+              Advanced Task Wizard
+            </div>
+          </li>
+          <li
+            class="c7"
+          >
+            <div
+              class="c8"
+            >
+              Modify Task Wizard
+            </div>
+          </li>
+        </ul>
+      </div>
+    </span>
+    <span
+      class="c3 c4"
+    >
+      <span
+        class="c2"
+        data-testid="svg-icon"
+      >
+        <svg>
+          new.svg
+        </svg>
+      </span>
+      <div
+        class="c5"
+      >
+        <ul
+          class="c6"
+        >
+          <li
+            class="c7"
+          >
+            <div
+              class="c8"
+            >
+              New Task
+            </div>
+          </li>
+          <li
+            class="c7"
+          >
+            <div
+              class="c8"
+            >
+              New Container Task
+            </div>
+          </li>
+        </ul>
+      </div>
+    </span>
+  </div>
+</div>
+`;

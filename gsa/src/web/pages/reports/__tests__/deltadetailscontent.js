@@ -1,20 +1,19 @@
 /* Copyright (C) 2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
@@ -37,6 +36,13 @@ const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 
+const filterWithName = Filter.fromElement({
+  term:
+    'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
+  name: 'foo',
+  id: '123',
+});
+
 const caps = new Capabilities(['everything']);
 
 const manualUrl = 'test/';
@@ -49,8 +55,8 @@ const getReportComposerDefaults = jest.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-describe('Report Details Content tests', () => {
-  test('should render Report Details Content', () => {
+describe('Delta Report Details Content tests', () => {
+  test('should render Delta Report Details Content', () => {
     const onActivateTab = jest.fn();
     const onAddToAssetsClick = jest.fn();
     const onError = jest.fn();
@@ -87,7 +93,7 @@ describe('Report Details Content tests', () => {
 
     const {entity} = getMockDeltaReport();
 
-    const filters = [filter];
+    const filters = [filterWithName];
 
     const gmp = {
       settings: {manualUrl, reportResultsThreshold: 10},
@@ -108,7 +114,7 @@ describe('Report Details Content tests', () => {
       <DeltaDetailsContent
         activeTab={0}
         entity={entity}
-        filter={filter}
+        filter={filterWithName}
         filters={filters}
         isLoading={false}
         isUpdating={false}
@@ -156,20 +162,19 @@ describe('Report Details Content tests', () => {
     expect(icons[6]).toHaveTextContent('vulnerability.svg');
     expect(icons[7]).toHaveTextContent('performance.svg');
     expect(icons[8]).toHaveTextContent('download.svg');
-    expect(icons[9]).toHaveTextContent('start.svg');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[10]).toHaveTextContent('refresh.svg');
-    expect(icons[11]).toHaveTextContent('delete.svg');
-    expect(icons[12]).toHaveTextContent('reset.svg');
-    expect(icons[13]).toHaveTextContent('help.svg');
-    expect(icons[14]).toHaveTextContent('edit.svg');
+    expect(icons[9]).toHaveTextContent('refresh.svg');
+    expect(icons[10]).toHaveTextContent('delete.svg');
+    expect(icons[11]).toHaveTextContent('reset.svg');
+    expect(icons[12]).toHaveTextContent('help.svg');
+    expect(icons[13]).toHaveTextContent('edit.svg');
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    expect(selects[0]).toHaveTextContent('foo');
 
     // Header
-    expect(icons[15]).toHaveTextContent('report.svg');
+    expect(icons[14]).toHaveTextContent('report.svg');
     expect(baseElement).toHaveTextContent(
       'Report:Mon, Jun 3, 2019 1:00 PM CEST',
     );
@@ -275,7 +280,7 @@ describe('Report Details Content tests', () => {
 
     const {entity} = getMockDeltaReport();
 
-    const filters = [filter];
+    const filters = [filterWithName];
 
     const gmp = {
       settings: {manualUrl, reportResultsThreshold: 10},
@@ -344,20 +349,19 @@ describe('Report Details Content tests', () => {
     expect(icons[6]).toHaveTextContent('vulnerability.svg');
     expect(icons[7]).toHaveTextContent('performance.svg');
     expect(icons[8]).toHaveTextContent('download.svg');
-    expect(icons[9]).toHaveTextContent('start.svg');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[10]).toHaveTextContent('refresh.svg');
-    expect(icons[11]).toHaveTextContent('delete.svg');
-    expect(icons[12]).toHaveTextContent('reset.svg');
-    expect(icons[13]).toHaveTextContent('help.svg');
-    expect(icons[14]).toHaveTextContent('edit.svg');
+    expect(icons[9]).toHaveTextContent('refresh.svg');
+    expect(icons[10]).toHaveTextContent('delete.svg');
+    expect(icons[11]).toHaveTextContent('reset.svg');
+    expect(icons[12]).toHaveTextContent('help.svg');
+    expect(icons[13]).toHaveTextContent('edit.svg');
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
     expect(selects[0]).toHaveTextContent('--');
 
     // Header
-    expect(icons[15]).toHaveTextContent('report.svg');
+    expect(icons[14]).toHaveTextContent('report.svg');
     expect(baseElement).toHaveTextContent(
       'Report:Mon, Jun 3, 2019 1:00 PM CEST',
     );

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ErrorContainer tests should render 1`] = `
-.c1 {
+.c0 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -17,9 +17,6 @@ exports[`ErrorContainer tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c0 {
   padding: 15px;
   margin: 15px 15px 15px 15px;
   border: 1px solid #ebccd1;
@@ -28,7 +25,7 @@ exports[`ErrorContainer tests should render 1`] = `
 }
 
 <div
-  class="c0 c1"
+  class="c0"
 >
   <span>
     An error

@@ -1,20 +1,19 @@
 /* Copyright (C) 2009-2019 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -29,7 +28,9 @@
 
 #include "gsad_base.h" /* for set_language_code */
 #include "gsad_credentials.h"
-#include "gsad_http.h" /* for gsad_message */
+#include "gsad_gmp_arguments.h" /* for gmp_arguments_t */
+#include "gsad_gmp_request.h"   /* for gmp_request() */
+#include "gsad_http.h"          /* for gsad_message */
 #include "gsad_i18n.h"
 #include "gsad_params.h"
 #include "gsad_session.h"
@@ -139,7 +140,6 @@ gchar *manager_address = NULL;
  */
 int manager_port = 9390;
 
-
 #define XML_REPORT_FORMAT_ID "a994b278-1f62-11e1-96ac-406186ea4fc5"
 #define ANONXML_REPORT_FORMAT_ID "5057e5cc-b825-11e4-9d0e-28d24461215b"
 
@@ -158,27 +158,7 @@ get_alert (gvm_connection_t *, credentials_t *, params_t *, const char *,
            cmd_response_data_t *);
 
 static char *
-get_alerts (gvm_connection_t *, credentials_t *, params_t *, const char *,
-            cmd_response_data_t *);
-
-static char *
-get_agent (gvm_connection_t *, credentials_t *, params_t *, const char *,
-           cmd_response_data_t *);
-
-static char *
-get_agents (gvm_connection_t *, credentials_t *, params_t *, const char *,
-            cmd_response_data_t *);
-
-static char *
 get_asset (gvm_connection_t *, credentials_t *, params_t *, const char *,
-           cmd_response_data_t *);
-
-static char *
-get_assets (gvm_connection_t *, credentials_t *, params_t *, const char *,
-            cmd_response_data_t *);
-
-static char *
-get_tasks (gvm_connection_t *, credentials_t *, params_t *, const char *,
            cmd_response_data_t *);
 
 static char *
@@ -190,48 +170,20 @@ get_config_family (gvm_connection_t *, credentials_t *, params_t *, int,
                    cmd_response_data_t *);
 
 static char *
-get_config (gvm_connection_t *, credentials_t *, params_t *, const char *, int,
-            cmd_response_data_t *);
-
-static char *
-get_configs (gvm_connection_t *, credentials_t *, params_t *, const char *,
-             cmd_response_data_t *);
-
-static char *
 get_filter (gvm_connection_t *, credentials_t *, params_t *, const char *,
             cmd_response_data_t *);
-
-static char *
-get_filters (gvm_connection_t *, credentials_t *, params_t *, const char *,
-             cmd_response_data_t *);
 
 static char *
 get_group (gvm_connection_t *, credentials_t *, params_t *, const char *,
            cmd_response_data_t *);
 
 static char *
-get_groups (gvm_connection_t *, credentials_t *, params_t *, const char *,
-            cmd_response_data_t *);
-
-static char *
 get_credential (gvm_connection_t *, credentials_t *, params_t *, const char *,
                 cmd_response_data_t *);
 
 static char *
-get_credentials (gvm_connection_t *, credentials_t *, params_t *, const char *,
-                 cmd_response_data_t *);
-
-static char *
-get_notes (gvm_connection_t *, credentials_t *, params_t *, const char *,
-           cmd_response_data_t *);
-
-static char *
 get_note (gvm_connection_t *, credentials_t *, params_t *, const char *,
           cmd_response_data_t *);
-
-static char *
-get_overrides (gvm_connection_t *, credentials_t *, params_t *, const char *,
-               cmd_response_data_t *);
 
 static char *
 get_override (gvm_connection_t *, credentials_t *, params_t *, const char *,
@@ -242,84 +194,36 @@ get_permission (gvm_connection_t *, credentials_t *, params_t *, const char *,
                 cmd_response_data_t *);
 
 static char *
-get_permissions (gvm_connection_t *, credentials_t *, params_t *, const char *,
-                 cmd_response_data_t *);
-
-static char *
 get_port_list (gvm_connection_t *, credentials_t *, params_t *, const char *,
                cmd_response_data_t *);
-
-static char *
-get_port_lists (gvm_connection_t *, credentials_t *, params_t *, const char *,
-                cmd_response_data_t *);
 
 static char *
 get_tag (gvm_connection_t *, credentials_t *, params_t *, const char *,
          cmd_response_data_t *);
 
 static char *
-get_tags (gvm_connection_t *, credentials_t *, params_t *, const char *,
-          cmd_response_data_t *);
-
-static char *
 get_target (gvm_connection_t *, credentials_t *, params_t *, const char *,
             cmd_response_data_t *);
-
-static char *
-get_targets (gvm_connection_t *, credentials_t *, params_t *, const char *,
-             cmd_response_data_t *);
 
 static char *
 get_report_format (gvm_connection_t *, credentials_t *, params_t *,
                    const char *, cmd_response_data_t *);
 
 static char *
-get_report_formats (gvm_connection_t *, credentials_t *, params_t *,
-                    const char *, cmd_response_data_t *);
-
-static char *
-get_reports (gvm_connection_t *, credentials_t *, params_t *, const char *,
-             cmd_response_data_t *);
-
-static char *
-get_results (gvm_connection_t *, credentials_t *, params_t *, const char *,
-             cmd_response_data_t *);
-
-static char *
 get_role (gvm_connection_t *, credentials_t *, params_t *, const char *,
           cmd_response_data_t *);
-
-static char *
-get_roles (gvm_connection_t *, credentials_t *, params_t *, const char *,
-           cmd_response_data_t *);
 
 static char *
 get_scanner (gvm_connection_t *, credentials_t *, params_t *, const char *,
              cmd_response_data_t *);
 
 static char *
-get_scanners (gvm_connection_t *, credentials_t *, params_t *, const char *,
-              cmd_response_data_t *);
-
-static char *
 get_schedule (gvm_connection_t *, credentials_t *, params_t *, const char *,
               cmd_response_data_t *);
 
 static char *
-get_schedules (gvm_connection_t *, credentials_t *, params_t *, const char *,
-               cmd_response_data_t *);
-
-static char *
 get_user (gvm_connection_t *, credentials_t *, params_t *, const char *,
           cmd_response_data_t *);
-
-static char *
-get_users (gvm_connection_t *, credentials_t *, params_t *, const char *,
-           cmd_response_data_t *);
-
-static char *
-get_vulns (gvm_connection_t *, credentials_t *, params_t *, const char *,
-           cmd_response_data_t *);
 
 static char *
 wizard (gvm_connection_t *, credentials_t *, params_t *, const char *,
@@ -442,18 +346,11 @@ envelope_gmp (gvm_connection_t *connection, credentials_t *credentials,
     "<i18n>%s</i18n>"
     "<client_address>%s</client_address>"
     "<backend_operation>%.2f</backend_operation>",
-    GSAD_VERSION,
-    vendor_version_get (),
-    user_get_token (user),
-    ctime_now,
-    timezone ? timezone : "",
-    user_get_username (user),
-    user_get_session_timeout (user),
-    user_get_role (user),
-    user_get_severity (user),
-    credentials_get_language (credentials),
-    user_get_client_address (user),
-    credentials_get_cmd_duration (credentials));
+    GSAD_VERSION, vendor_version_get (), user_get_token (user), ctime_now,
+    timezone ? timezone : "", user_get_username (user),
+    user_get_session_timeout (user), user_get_role (user),
+    user_get_severity (user), credentials_get_language (credentials),
+    user_get_client_address (user), credentials_get_cmd_duration (credentials));
 
   g_string_append (string, res);
   g_free (res);
@@ -555,7 +452,7 @@ check_modify_config (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a config. "
         "It is unclear whether the entire config has been saved. "
         "Diagnostics: Failure to read command to manager daemon.",
@@ -571,7 +468,7 @@ check_modify_config (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a config. "
         "It is unclear whether the entire config has been saved. "
         "Diagnostics: Failure to parse status_text from response.",
@@ -697,116 +594,6 @@ gmp (gvm_connection_t *connection, credentials_t *credentials, gchar **response,
   else
     free_entity (entity);
   return 0;
-}
-
-/**
- * @brief Run a single GMP command, preparing a response even on error.
- *
- * @param[in]  connection         Connection to manager
- * @param[out] message_operation  Operation for error message
- * @param[in]  credentials        Username and password for authentication.
- * @param[out] response           Response.
- * @param[out] response_data      Extra data return for the HTTP response.
- * @param[in]  format             Command.
- * @param[in]  ...                Arguments for format string.
- *
- * @return 0 success, -1 internal error, 1 send error, 2 read error,
- *         3 command failed, 4 connect error.
- */
-static int
-simple_gmpf (gvm_connection_t *connection, const gchar *message_operation,
-             credentials_t *credentials, gchar **response,
-             cmd_response_data_t *response_data, const char *format, ...)
-{
-  int ret;
-  gchar *command;
-  va_list args;
-  entity_t entity;
-
-  va_start (args, format);
-  command = g_markup_vprintf_escaped (format, args);
-  va_end (args);
-
-  ret =
-    gmp (connection, credentials, response, &entity, response_data, command);
-  g_free (command);
-  switch (ret)
-    {
-    case 0:
-      break;
-    case -1:
-      /* 'gmp' set response. */
-      return 4;
-    case 1:
-      if (response_data)
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-      if (response)
-        {
-          gchar *message;
-          message = g_strdup_printf (
-            "An internal error occurred while %s. "
-            " The operation was not started."
-            " Diagnostics: Failure to send command to manager"
-            " daemon.",
-            message_operation ? message_operation : "performing an operation");
-          *response = gsad_message (credentials, "Internal error", __FUNCTION__,
-                                    __LINE__, message, response_data);
-          g_free (message);
-        }
-      return 1;
-    case 2:
-      if (response_data)
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-      if (response)
-        {
-          gchar *message;
-          message = g_strdup_printf (
-            "An internal error occurred while %s."
-            " It is unclear whether the operation succeeded."
-            " Diagnostics: Failure to receive response from manager"
-            " daemon.",
-            message_operation ? message_operation : "performing an operation");
-          *response = gsad_message (credentials, "Internal error", __FUNCTION__,
-                                    __LINE__, message, response_data);
-          g_free (message);
-        }
-      return 2;
-    default:
-      if (response_data)
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-      if (response)
-        {
-          gchar *message;
-          message = g_strdup_printf (
-            "An internal error occurred while %s."
-            " It is unclear whether the operation succeeded."
-            " Diagnostics: Internal Error.",
-            message_operation ? message_operation : "performing an operation");
-          *response = gsad_message (credentials, "Internal error", __FUNCTION__,
-                                    __LINE__, message, response_data);
-          g_free (message);
-        }
-      return -1;
-    }
-
-  switch (gmp_success (entity))
-    {
-    case 0:
-      set_http_status_from_entity (entity, response_data);
-      ret = 3;
-      break;
-    case 1:
-      ret = 0;
-      break;
-    default:
-      ret = -1;
-      break;
-    }
-  free_entity (entity);
-  return ret;
 }
 
 /**
@@ -1012,68 +799,67 @@ response_from_entity (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get one resource, envelope the result.
+ * @brief Get a single entity, envelope the result.
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  type           Type of resource.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[in]  extra_xml      Extra XML to insert inside page element.
- * @param[in]  extra_attribs  Extra attributes for GMP GET command.
+ * @param[in]  arguments      Extra arguments for GMP GET command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
  */
 char *
-get_one (gvm_connection_t *connection, const char *type,
-         credentials_t *credentials, params_t *params, const char *extra_xml,
-         const char *extra_attribs, cmd_response_data_t *response_data)
+get_entity (gvm_connection_t *connection, const char *type,
+            credentials_t *credentials, params_t *params,
+            gmp_arguments_t *arguments, cmd_response_data_t *response_data)
 {
   GString *xml;
-  gchar *id_name;
-  const char *id;
+  gchar *cmd;
   entity_t entity;
 
-  id_name = g_strdup_printf ("%s_id", type);
-  id = params_value (params, id_name);
-  g_free (id_name);
-
-  CHECK_VARIABLE_INVALID (id, "Get")
-
   xml = g_string_new ("");
+
+  if (str_equal (type, "info"))
+    {
+      cmd = g_strdup_printf ("get_%s", type);
+    }
+  else
+    {
+      cmd = g_strdup_printf ("get_%ss", type);
+    }
+
   g_string_append_printf (xml, "<get_%s>", type);
 
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  /* Get the resource. */
-
-  if (gvm_connection_sendf (connection,
-                            "<get_%ss"
-                            " %s_id=\"%s\""
-                            " details=\"1\""
-                            " %s/>",
-                            type, type, id, extra_attribs ? extra_attribs : "")
-      == -1)
+  if (gmp_request (connection, cmd, arguments))
     {
-      g_string_free (xml, TRUE);
+      g_free (cmd);
+
+      gmp_arguments_free (arguments);
+
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting resources list. "
+        credentials, "Internal error", __func__, __LINE__,
+        "An internal error occurred while getting a resource list. "
         "The current list of resources is not available. "
         "Diagnostics: Failure to send command to manager daemon.",
         response_data);
     }
 
+  gmp_arguments_free (arguments);
+
   if (read_entity_and_string_c (connection, &entity, &xml))
     {
       g_string_free (xml, TRUE);
+      g_free (cmd);
+
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting resources list. "
         "The current list of resources is not available. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -1087,18 +873,156 @@ get_one (gvm_connection_t *connection, const char *type,
       set_http_status_from_entity (entity, response_data);
 
       message =
-        gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
+        gsad_message (credentials, "Error", __func__, __LINE__,
                       entity_attribute (entity, "status_text"), response_data);
 
+      g_string_free (xml, TRUE);
+      g_free (cmd);
+      free_entity (entity);
+      return message;
+    }
+
+  g_string_append_printf (xml, "</get_%s>", type);
+
+  g_free (cmd);
+  free_entity (entity);
+
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
+}
+
+/**
+ * @brief Get one resource, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager
+ * @param[in]  type           Type of resource.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
+ * @param[in]  arguments      Extra arguments for GMP GET command.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_one (gvm_connection_t *connection, const char *type,
+         credentials_t *credentials, params_t *params, const char *extra_xml,
+         gmp_arguments_t *arguments, cmd_response_data_t *response_data)
+{
+  gchar *id_name;
+  const gchar *id;
+  const gchar *details;
+
+  id_name = g_strdup_printf ("%s_id", type);
+  id = params_value (params, id_name);
+
+  CHECK_VARIABLE_INVALID (id, "Get")
+
+  details = params_value (params, "details");
+  if (!details)
+    {
+      details = "1";
+    }
+
+  if (arguments == NULL)
+    {
+      arguments = gmp_arguments_new ();
+    }
+
+  gmp_arguments_add (arguments, id_name, id);
+
+  if (details && !str_equal (details, ""))
+    {
+      gmp_arguments_add (arguments, "details", details);
+    }
+
+  g_free (id_name);
+
+  return get_entity (connection, type, credentials, params, arguments,
+                     response_data);
+}
+
+/**
+ * @brief Get all entities of a particular type, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager
+ * @param[in]  type           Entity type.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
+ * @param[in]  arguments      Extra arguments for GMP GET command.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+static char *
+get_entities (gvm_connection_t *connection, const char *type,
+              credentials_t *credentials, params_t *params,
+              gmp_arguments_t *arguments, cmd_response_data_t *response_data)
+{
+  GString *xml;
+  gchar *cmd;
+  entity_t entity;
+
+  cmd = g_strdup_printf ("get_%s", type);
+
+  if (gmp_request (connection, cmd, arguments))
+    {
+      g_free (cmd);
+
+      gmp_arguments_free (arguments);
+
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __func__, __LINE__,
+        "An internal error occurred while getting a resource list. "
+        "The current list of resources is not available. "
+        "Diagnostics: Failure to send command to manager daemon.",
+        response_data);
+    }
+
+  gmp_arguments_free (arguments);
+
+  xml = g_string_new ("");
+  g_string_append_printf (xml, "<%s>", cmd);
+
+  if (read_entity_and_string_c (connection, &entity, &xml))
+    {
+      g_free (cmd);
+      g_string_free (xml, TRUE);
+
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __func__, __LINE__,
+        "An internal error occurred while getting resources list. "
+        "The current list of resources is not available. "
+        "Diagnostics: Failure to receive response from manager daemon.",
+        response_data);
+    }
+
+  if (gmp_success (entity) != 1)
+    {
+      gchar *message;
+
+      set_http_status_from_entity (entity, response_data);
+
+      message =
+        gsad_message (credentials, "Error", __func__, __LINE__,
+                      entity_attribute (entity, "status_text"), response_data);
+
+      g_free (cmd);
       g_string_free (xml, TRUE);
       free_entity (entity);
       return message;
     }
 
-  /* Cleanup, and return transformed XML. */
+  g_string_append_printf (xml, "</%s>", cmd);
+
+  g_free (cmd);
   free_entity (entity);
 
-  g_string_append_printf (xml, "</get_%s>", type);
   return envelope_gmp (connection, credentials, params,
                        g_string_free (xml, FALSE), response_data);
 }
@@ -1107,287 +1031,53 @@ get_one (gvm_connection_t *connection, const char *type,
  * @brief Get all of a particular type of resource, envelope the result.
  *
  * @param[in]  connection     Connection to manager
- * @param[in]  type           Resource type.
+ * @param[in]  type           Resource type in plural form.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
- * @param[in]  extra_xml      Extra XML to insert inside page element.
- * @param[in]  extra_attribs  Extra attributes for GMP GET command.
+ * @param[in]  arguments      Extra arguments for GMP GET command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
  */
 static char *
 get_many (gvm_connection_t *connection, const char *type,
-          credentials_t *credentials, params_t *params, const char *extra_xml,
-          const char *extra_attribs, cmd_response_data_t *response_data)
+          credentials_t *credentials, params_t *params,
+          gmp_arguments_t *arguments, cmd_response_data_t *response_data)
 {
-  GString *xml;
-  GString *type_many; /* The plural form of type */
-  gchar *request, *built_filter;
-  const char *build_filter, *filter_id, *filter, *filter_extra;
-  const char *first, *max, *sort_field, *sort_order, *owner, *permission;
-  const char *replace_task_id;
-  const char *overrides, *autofp, *autofp_value, *min_qod;
-  const char *level_high, *level_medium, *level_low, *level_log;
-  const char *level_false_positive;
-  const char *details;
-  const char *and_report_id;
-  entity_t entity;
+  const gchar *filter_id, *filter;
+  const gchar *details;
 
-  build_filter = params_value (params, "build_filter");
   filter_id = params_value (params, "filter_id");
   filter = params_value (params, "filter");
-  filter_extra = params_value (params, "filter_extra");
-  first = params_value (params, "first");
-  max = params_value (params, "max");
-  replace_task_id = params_value (params, "replace_task_id");
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-  owner = params_value (params, "owner");
-  permission = params_value (params, "permission");
-  overrides = params_value (params, "overrides");
-  autofp = params_value (params, "autofp");
-  autofp_value = params_value (params, "autofp_value");
-  min_qod = params_value (params, "min_qod");
-  level_high = params_value (params, "level_high");
-  level_medium = params_value (params, "level_medium");
-  level_low = params_value (params, "level_low");
-  level_log = params_value (params, "level_log");
-  level_false_positive = params_value (params, "level_false_positive");
   details = params_value (params, "details");
 
-  if (details == NULL || strcmp (details, "") == 0)
-    details = "0";
-
-  /* check if filter still exists */
-  xml = g_string_new ("");
-  type_many = g_string_new (type);
-
-  /* Workaround the fact that info is a non countable noun */
-  if (strcmp (type, "info") != 0)
-    g_string_append (type_many, "s");
-
-  g_string_append_printf (xml, "<get_%s>", type_many->str);
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  built_filter = NULL;
-  if (filter_id == NULL || str_equal (filter_id, "")
-      || str_equal (filter_id, "--"))
+  if (arguments == NULL)
     {
-      if ((build_filter && str_equal (build_filter, "1"))
-          || ((filter == NULL || str_equal (filter, ""))
-              && (filter_extra == NULL || str_equal (filter_extra, ""))))
-        {
-          if (build_filter && (strcmp (build_filter, "1") == 0))
-            {
-              gchar *task;
-              const char *search_phrase, *task_id;
-
-              if (str_equal (type, "report") || str_equal (type, "task"))
-                {
-                  task =
-                    g_strdup_printf ("apply_overrides=%i min_qod=%s ",
-                                     overrides && !str_equal (overrides, "0"),
-                                     min_qod ? min_qod : "");
-                }
-              else if (strcmp (type, "result") == 0)
-                {
-                  gchar *levels = g_strdup_printf (
-                    "%s%s%s%s%s", level_high ? "h" : "",
-                    level_medium ? "m" : "", level_low ? "l" : "",
-                    level_log ? "g" : "", level_false_positive ? "f" : "");
-                  task = g_strdup_printf (
-                    "apply_overrides=%i min_qod=%s"
-                    " autofp=%s levels=%s ",
-                    (overrides && !str_equal (overrides, "0")),
-                    min_qod ? min_qod : "",
-                    (autofp && autofp_value) ? autofp_value : "0", levels);
-                  g_free (levels);
-                }
-              else
-                task = NULL;
-
-              search_phrase = params_value (params, "search_phrase");
-              task_id = params_value (params, "task_id");
-              built_filter = g_strdup_printf (
-                "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
-                task ? task : "", task_id ? "task_id=" : "",
-                task_id ? task_id : "", task_id ? " " : "",
-                first ? "first=" : "", first ? first : "", first ? " " : "",
-                max ? "rows=" : "", max ? max : "", max ? " " : "",
-                sort_field ? ((sort_order && strcmp (sort_order, "ascending"))
-                                ? "sort-reverse="
-                                : "sort=")
-                           : "",
-                sort_field ? sort_field : "", sort_field ? " " : "",
-                permission ? "permission=" : "", permission ? permission : "",
-                permission ? " " : "", owner ? "owner=" : "",
-                owner ? owner : "", owner ? " " : "",
-                (filter && search_phrase) ? " " : "", filter ? filter : "",
-                search_phrase ? " " : "", search_phrase ? search_phrase : "");
-
-              filter_id = FILT_ID_USER_SETTING;
-              g_free (task);
-            }
-          else if (strcmp (type, "info") == 0
-                   && params_value (params, "info_type"))
-            {
-              if (str_equal (params_value (params, "info_type"), "cve"))
-                filter = "sort-reverse=published rows=-2";
-              else if (str_equal (params_value (params, "info_type"), "cpe"))
-                filter = "sort-reverse=modified rows=-2";
-              else
-                filter = "sort-reverse=created rows=-2";
-            }
-          else if (str_equal (type, "user"))
-            filter = "sort=roles rows=-2";
-          else if (str_equal (type, "report"))
-            {
-              const char *task_id;
-              task_id = params_value (params, "task_id");
-              if (task_id)
-                built_filter = g_strdup_printf ("task_id=%s apply_overrides=1"
-                                                " rows=-2 sort-reverse=date",
-                                                task_id);
-              else
-                filter = "apply_overrides=1 rows=-2 sort-reverse=date";
-            }
-          else if (str_equal (type, "result"))
-            {
-              gchar *report_id_filter;
-              and_report_id = params_value (params, "_and_report_id");
-
-              if (and_report_id == NULL || str_equal (and_report_id, ""))
-                {
-                  report_id_filter = g_strdup ("");
-                }
-              else
-                {
-                  report_id_filter =
-                    g_strdup_printf ("_and_report_id=%s", and_report_id);
-                }
-
-              built_filter = g_strdup_printf (
-                "apply_overrides=%d autofp=%s rows=-2"
-                " sort-reverse=created %s",
-                (overrides == NULL || str_equal (overrides, "1")),
-                (autofp && str_equal (autofp, "1")) ? autofp_value : "0",
-                report_id_filter);
-
-              g_free (report_id_filter);
-            }
-          else if (str_equal (type, "note") || str_equal (type, "override"))
-            {
-              filter = "rows=-2 sort=nvt";
-            }
-          else if (!str_equal (type, "task"))
-            filter = "rows=-2";
-          else
-            filter = "apply_overrides=1 rows=-2";
-          if (filter_id && !str_equal (filter_id, ""))
-            /* Request to use "filter" instead. */
-            filter_id = FILT_ID_NONE;
-          else
-            filter_id = FILT_ID_USER_SETTING;
-        }
-      else if (str_equal (filter, "sort=nvt")
-               && (str_equal (type, "note") || str_equal (type, "override")))
-        filter_id = FILT_ID_USER_SETTING;
-      else if (str_equal (filter, "apply_overrides=1")
-               && str_equal (type, "task"))
-        filter_id = FILT_ID_USER_SETTING;
-    }
-  else if (replace_task_id)
-    {
-      const char *task_id;
-      task_id = params_value (params, "task_id");
-      if (task_id)
-        built_filter =
-          g_strdup_printf ("task_id=%s %s", task_id, filter ? filter : "");
+      arguments = gmp_arguments_new ();
     }
 
-  /* Get the list. */
-
-  request = g_markup_printf_escaped (
-    " %sfilt_id=\"%s\""
-    " %sfilter=\"%s%s%s%s\""
-    " filter_replace=\"%s\""
-    " first=\"%s\""
-    " max=\"%s\""
-    " sort_field=\"%s\""
-    " sort_order=\"%s\"",
-    strcmp (type, "report") ? "" : "report_",
-    filter_id ? filter_id : FILT_ID_NONE,
-    strcmp (type, "report") ? "" : "report_",
-    built_filter ? built_filter : (filter ? filter : ""),
-    filter_extra ? " " : "", filter_extra ? filter_extra : "",
-    filter_extra ? " " : "", replace_task_id ? "task_id" : "",
-    first ? first : "1", max ? max : "-2", sort_field ? sort_field : "name",
-    sort_order ? sort_order : "ascending");
-
-  g_free (built_filter);
-  if (gvm_connection_sendf (connection, "<get_%s details=\"%s\" %s %s/>",
-                            type_many->str,
-                            strcmp (type, "report") ? details : "0", request,
-                            extra_attribs ? extra_attribs : "")
-      == -1)
+  if (details && !str_equal (details, ""))
     {
-      g_free (request);
-      g_string_free (xml, TRUE);
-      g_string_free (type_many, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting a resource list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
+      gmp_arguments_add (arguments, "details", details);
     }
 
-  g_free (request);
-
-  if (read_entity_and_string_c (connection, &entity, &xml))
+  if (!filter_id && !filter)
     {
-      g_string_free (xml, TRUE);
-      g_string_free (type_many, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting resources list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
+      filter_id = FILT_ID_USER_SETTING;
     }
 
-  if (gmp_success (entity) != 1)
+  if (filter_id)
     {
-      gchar *message;
-
-      set_http_status_from_entity (entity, response_data);
-
-      g_string_free (xml, TRUE);
-      g_string_free (type_many, TRUE);
-
-      message =
-        gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
-                      entity_attribute (entity, "status_text"), response_data);
-
-      free_entity (entity);
-      return message;
+      gmp_arguments_add (arguments, "filt_id", filter_id);
     }
 
-  free_entity (entity);
+  if (filter)
+    {
+      gmp_arguments_add (arguments, "filter", filter);
+    }
 
-  /* Cleanup, and return transformed XML. */
-  g_string_append_printf (xml, "</get_%s>", type_many->str);
-  g_string_free (type_many, TRUE);
-
-  return envelope_gmp (connection, credentials, params,
-                       g_string_free (xml, FALSE), response_data);
+  return get_entities (connection, type, credentials, params, arguments,
+                       response_data);
 }
 
 /**
@@ -1421,7 +1111,7 @@ edit_resource (gvm_connection_t *connection, const char *type,
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while editing a resource. "
         "The resource remains as it was. "
         "Diagnostics: Required ID parameter was NULL.",
@@ -1440,7 +1130,7 @@ edit_resource (gvm_connection_t *connection, const char *type,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting a resource. "
         "Diagnostics: Failure to send command to manager daemon.",
         response_data);
@@ -1459,7 +1149,7 @@ edit_resource (gvm_connection_t *connection, const char *type,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting a resource. "
         "Diagnostics: Failure to receive response from manager daemon.",
         response_data);
@@ -1611,7 +1301,7 @@ export_resource (gvm_connection_t *connection, const char *type,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting a resource. "
         "The resource could not be delivered. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -1625,7 +1315,7 @@ export_resource (gvm_connection_t *connection, const char *type,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting a resource. "
         "The resource could not be delivered. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -1645,7 +1335,7 @@ export_resource (gvm_connection_t *connection, const char *type,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting a resource. "
         "The resource could not be delivered. "
         "Diagnostics: Failure to receive resource from manager daemon.",
@@ -1665,21 +1355,21 @@ export_resource (gvm_connection_t *connection, const char *type,
         {
         case 1:
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting a setting. "
             "The setting could not be delivered. "
             "Diagnostics: Failure to send command to manager daemon.",
             response_data);
         case 2:
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting a setting. "
             "The setting could not be delivered. "
             "Diagnostics: Failure to receive response from manager daemon.",
             response_data);
         default:
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting a setting. "
             "The setting could not be delivered. "
             "Diagnostics: Internal error.",
@@ -1689,7 +1379,7 @@ export_resource (gvm_connection_t *connection, const char *type,
 
   if (fname_format == NULL)
     {
-      g_warning ("%s : File name format setting not found.", __FUNCTION__);
+      g_warning ("%s : File name format setting not found.", __func__);
       fname_format = "%T-%U";
     }
 
@@ -1753,7 +1443,7 @@ export_many (gvm_connection_t *connection, const char *type,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting a list. "
             "The list could not be delivered. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -1776,7 +1466,7 @@ export_many (gvm_connection_t *connection, const char *type,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting a list. "
             "The list could not be delivered. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -1797,7 +1487,7 @@ export_many (gvm_connection_t *connection, const char *type,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting a list. "
             "The list could not be delivered. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -1812,7 +1502,7 @@ export_many (gvm_connection_t *connection, const char *type,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting a list. "
         "The list could not be delivered. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -1834,21 +1524,21 @@ export_many (gvm_connection_t *connection, const char *type,
         {
         case 1:
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting a setting. "
             "The setting could not be delivered. "
             "Diagnostics: Failure to send command to manager daemon.",
             response_data);
         case 2:
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting a setting. "
             "The setting could not be delivered. "
             "Diagnostics: Failure to receive response from manager daemon.",
             response_data);
         default:
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting a setting. "
             "The setting could not be delivered. "
             "Diagnostics: Internal error.",
@@ -1858,7 +1548,7 @@ export_many (gvm_connection_t *connection, const char *type,
 
   if (fname_format == NULL)
     {
-      g_warning ("%s : File name format setting not found.", __FUNCTION__);
+      g_warning ("%s : File name format setting not found.", __func__);
       fname_format = "%T-%D";
     }
 
@@ -1914,7 +1604,7 @@ delete_resource (gvm_connection_t *connection, const char *type,
       g_free (id_name);
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while deleting a resource. "
         "The resource was not deleted. "
         "Diagnostics: Required parameter resource_id was NULL.",
@@ -1953,7 +1643,7 @@ delete_resource (gvm_connection_t *connection, const char *type,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while deleting a resource. "
         "The resource is not deleted. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -1969,7 +1659,7 @@ delete_resource (gvm_connection_t *connection, const char *type,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while deleting a resource. "
         "It is unclear whether the resource has been deleted or not. "
         "Diagnostics: Failure to read response from manager daemon.",
@@ -2077,8 +1767,8 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
         param_name);
       g_free (param_name);
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      html = gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__, message, response_data);
+      html = gsad_message (credentials, "Internal error", __func__, __LINE__,
+                           message, response_data);
       g_free (message);
       return html;
     }
@@ -2097,7 +1787,7 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while performing an action. "
         "The resource remains the same. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -2106,7 +1796,7 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while performing an action. "
         "It is unclear whether the resource has been affected. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -2115,7 +1805,7 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while performing an action. "
         "It is unclear whether the resource has been affected. "
         "Diagnostics: Internal Error.",
@@ -2162,23 +1852,6 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
  * g_string_append_printf below) must use something like
  * g_markup_printf_escaped or g_markup_escape_text to ensure that any
  * XML special sequences in the string are escaped.
- */
-
-/**
- * @todo Unify the style of page handlers.
- *
- * There are variations in the style of the page handlers that run
- * multiple GMP commands.
- *
- * Some, like delete_credential_gmp, simply run the GMP commands inside
- * one GMP COMMANDS.
- *
- * Others, like create_target_gmp, run each command separately and wrap the
- * responses in a unique page tag.
- *
- * One handler, delete_target_gmp, runs all the commands in a single COMMANDS
- * and also wraps the response in a unique page tag to convey the context to
- * the enveloped XML.  This is probably the way to go.
  */
 
 /**
@@ -2233,81 +1906,36 @@ create_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   entity_t entity;
   int ret;
+  gchar **xml_file_array, *xml_file_escaped;
   gchar *command, *html, *response;
-  const char *task_id, *name, *comment, *xml_file;
-  const char *in_assets;
+  const char *task_id = params_value (params, "task_id"),
+             *xml_file = params_value (params, "xml_file"),
+             *in_assets = params_value (params, "in_assets");
 
-  task_id = params_value (params, "task_id");
-  xml_file = params_value (params, "xml_file");
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
-  in_assets = params_value (params, "in_assets");
-
-  if (task_id == NULL)
-    {
-      CHECK_VARIABLE_INVALID (name, "Create Report");
-      CHECK_VARIABLE_INVALID (comment, "Create Report");
-    }
+  CHECK_VARIABLE_INVALID (task_id, "Create Report");
   CHECK_VARIABLE_INVALID (xml_file, "Create Report");
-
-  if (params_given (params, "in_assets"))
-    CHECK_VARIABLE_INVALID (xml_file, "Create Report");
 
   if (strlen (xml_file) == 0)
     {
-      if (task_id)
-        return message_invalid (connection, credentials, params, response_data,
-                                "Report required", "Create Report");
-
-      /* Create only the container task. */
-
-      command = g_markup_printf_escaped ("<create_task>"
-                                         "<target id=\"0\"/>"
-                                         "<name>%s</name>"
-                                         "<comment>%s</comment>"
-                                         "</create_task>",
-                                         name, comment);
+      return message_invalid (connection, credentials, params, response_data,
+                              "Report required", "Create Report");
     }
+
+  xml_file_array = g_strsplit (xml_file, "%", -1);
+  if (xml_file_array != NULL && xml_file_array[0] != NULL)
+    xml_file_escaped = g_strjoinv ("%%", xml_file_array);
   else
-    {
-      gchar **xml_file_array, *xml_file_escaped;
+    xml_file_escaped = g_strdup (xml_file);
+  g_strfreev (xml_file_array);
 
-      xml_file_array = g_strsplit (xml_file, "%", -1);
-      if (xml_file_array != NULL && xml_file_array[0] != NULL)
-        xml_file_escaped = g_strjoinv ("%%", xml_file_array);
-      else
-        xml_file_escaped = g_strdup (xml_file);
-      g_strfreev (xml_file_array);
-
-      if (task_id)
-        command =
-          g_strdup_printf ("<create_report>"
-                           "<in_assets>%s</in_assets>"
-                           "<task id=\"%s\"/>"
-                           "%s"
-                           "</create_report>",
-                           in_assets ? in_assets : "0", task_id ? task_id : "0",
-                           xml_file_escaped ? xml_file_escaped : "");
-      else
-        {
-          gchar *name_escaped, *comment_escaped;
-          name_escaped = name ? g_markup_escape_text (name, -1) : NULL;
-          comment_escaped = comment ? g_markup_escape_text (comment, -1) : NULL;
-          command = g_strdup_printf ("<create_report>"
-                                     "<in_assets>%s</in_assets>"
-                                     "<task>"
-                                     "<name>%s</name>"
-                                     "<comment>%s</comment>"
-                                     "</task>"
-                                     "%s"
-                                     "</create_report>",
-                                     in_assets ? in_assets : "", name_escaped,
-                                     comment_escaped, xml_file_escaped);
-          g_free (name_escaped);
-          g_free (comment_escaped);
-        }
-      g_free (xml_file_escaped);
-    }
+  command = g_strdup_printf ("<create_report>"
+                             "<in_assets>%s</in_assets>"
+                             "<task id=\"%s\"/>"
+                             "%s"
+                             "</create_report>",
+                             in_assets ? in_assets : "0", task_id,
+                             xml_file_escaped ? xml_file_escaped : "");
+  g_free (xml_file_escaped);
 
   ret =
     gmp (connection, credentials, &response, &entity, response_data, command);
@@ -2324,7 +1952,7 @@ create_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new report. "
         "No new report was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -2333,7 +1961,7 @@ create_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new report. "
         "It is unclear whether the report has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -2342,7 +1970,7 @@ create_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new report. "
         "It is unclear whether the report has been created or not. "
         "Diagnostics: Internal Error.",
@@ -2391,19 +2019,23 @@ create_container_task_gmp (gvm_connection_t *connection,
   entity_t entity;
   int ret;
   gchar *command, *html, *response;
-  const char *name, *comment;
+  const char *name, *comment, *usage_type;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
+  usage_type = params_value (params, "usage_type");
+
   CHECK_VARIABLE_INVALID (name, "Create Container Task");
   CHECK_VARIABLE_INVALID (comment, "Create Container Task");
+  CHECK_VARIABLE_INVALID (usage_type, "Create Container Task");
 
   command = g_markup_printf_escaped ("<create_task>"
                                      "<target id=\"0\"/>"
                                      "<name>%s</name>"
                                      "<comment>%s</comment>"
+                                     "<usage_type>%s</usage_type>"
                                      "</create_task>",
-                                     name, comment);
+                                     name, comment, usage_type);
   ret =
     gmp (connection, credentials, &response, &entity, response_data, command);
   g_free (command);
@@ -2419,7 +2051,7 @@ create_container_task_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a container task. "
         "No task was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -2428,7 +2060,7 @@ create_container_task_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a container task. "
         "It is unclear whether the task has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -2437,7 +2069,7 @@ create_container_task_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a container task. "
         "It is unclear whether the task has been created or not. "
         "Diagnostics: Internal Error.",
@@ -2476,7 +2108,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   const char *max_checks, *max_hosts;
   const char *in_assets, *hosts_ordering, *alterable, *source_iface;
   const char *add_tag, *tag_id, *auto_delete, *auto_delete_data;
-  const char *apply_overrides, *min_qod;
+  const char *apply_overrides, *min_qod, *usage_type;
   gchar *name_escaped, *comment_escaped;
   params_t *alerts;
   GString *alert_element;
@@ -2501,6 +2133,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   source_iface = params_value (params, "source_iface");
   tag_id = params_value (params, "tag_id");
   target_id = params_value (params, "target_id");
+  usage_type = params_value (params, "usage_type");
 
   CHECK_VARIABLE_INVALID (scanner_type, "Create Task");
   if (!strcmp (scanner_type, "1"))
@@ -2521,6 +2154,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   CHECK_VARIABLE_INVALID (name, "Create Task");
   CHECK_VARIABLE_INVALID (comment, "Create Task");
+  CHECK_VARIABLE_INVALID (usage_type, "Create Task");
   CHECK_VARIABLE_INVALID (config_id, "Create Task");
   CHECK_VARIABLE_INVALID (target_id, "Create Task");
   CHECK_VARIABLE_INVALID (hosts_ordering, "Create Task");
@@ -2645,12 +2279,14 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
     "</preference>"
     "</preferences>"
     "<alterable>%i</alterable>"
+    "<usage_type>%s</usage_type>"
     "</create_task>",
     config_id, schedule_periods, schedule_element, alert_element->str,
     target_id, scanner_id, hosts_ordering, name_escaped, comment_escaped,
     max_checks, max_hosts, strcmp (in_assets, "0") ? "yes" : "no",
     strcmp (apply_overrides, "0") ? "yes" : "no", min_qod, source_iface,
-    auto_delete, auto_delete_data, alterable ? strcmp (alterable, "0") : 0);
+    auto_delete, auto_delete_data, alterable ? strcmp (alterable, "0") : 0,
+    usage_type);
 
   g_free (name_escaped);
   g_free (comment_escaped);
@@ -2673,7 +2309,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new task. "
         "No new task was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -2682,7 +2318,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new task. "
         "It is unclear whether the task has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -2691,7 +2327,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new task. "
         "It is unclear whether the task has been created or not. "
         "Diagnostics: Internal Error.",
@@ -2727,7 +2363,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
-                credentials, "Internal error", __FUNCTION__, __LINE__,
+                credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while creating a new tag. "
                 "No new tag was created. "
                 "Diagnostics: Failure to send command to manager daemon.",
@@ -2738,7 +2374,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
-                credentials, "Internal error", __FUNCTION__, __LINE__,
+                credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while creating a new tag. "
                 "It is unclear whether the tag has been created or not. "
                 "Diagnostics: Failure to receive response from manager daemon.",
@@ -2749,7 +2385,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
-                credentials, "Internal error", __FUNCTION__, __LINE__,
+                credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while creating a new task. "
                 "It is unclear whether the tag has been created or not. "
                 "Diagnostics: Internal Error.",
@@ -2997,7 +2633,7 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a task. "
         "The task was not saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -3006,7 +2642,7 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a task. "
         "It is unclear whether the task has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -3015,7 +2651,7 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a task. "
         "It is unclear whether the task has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -3100,7 +2736,7 @@ save_container_task_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a task. "
         "No new task was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -3109,7 +2745,7 @@ save_container_task_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a task. "
         "It is unclear whether the task has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -3118,7 +2754,7 @@ save_container_task_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a task. "
         "It is unclear whether the task has been created or not. "
         "Diagnostics: Internal Error.",
@@ -3263,7 +2899,7 @@ move_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while moving a task. "
         "The task was not moved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -3272,7 +2908,7 @@ move_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while moving a task. "
         "It is unclear whether the task has been moved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -3281,7 +2917,7 @@ move_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while moving a task. "
         "It is unclear whether the task has been moved or not. "
         "Diagnostics: Internal Error.",
@@ -3294,125 +2930,6 @@ move_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   free_entity (entity);
   g_free (response);
   return html;
-}
-
-/**
- * @brief Requests SecInfo.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials    Credentials for the manager connection.
- * @param[in]  params         Request parameters.
- * @param[in]  extra_xml      Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return XML enveloped SecInfo response or error message.
- */
-char *
-get_info (gvm_connection_t *connection, credentials_t *credentials,
-          params_t *params, const char *extra_xml,
-          cmd_response_data_t *response_data)
-{
-  char *ret;
-  GString *extra_attribs, *extra_response;
-  const char *info_type;
-
-  info_type = params_value (params, "info_type");
-  if (info_type == NULL)
-    {
-      param_t *param;
-      param = params_add (params, "info_type", "nvt");
-      param->valid = 1;
-      param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
-      info_type = params_value (params, "info_type");
-    }
-
-  if (strcmp (info_type, "nvt") && strcmp (info_type, "cve")
-      && strcmp (info_type, "cpe") && strcmp (info_type, "ovaldef")
-      && strcmp (info_type, "cert_bund_adv")
-      && strcmp (info_type, "dfn_cert_adv") && strcmp (info_type, "allinfo")
-      && strcmp (info_type, "NVT") && strcmp (info_type, "CVE")
-      && strcmp (info_type, "CPE") && strcmp (info_type, "OVALDEF")
-      && strcmp (info_type, "CERT_BUND_ADV")
-      && strcmp (info_type, "DFN_CERT_ADV") && strcmp (info_type, "ALLINFO"))
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
-                           "An internal error occurred while getting SecInfo. "
-                           "Diagnostics: Invalid info_type parameter value",
-                           response_data);
-    }
-
-  if (params_value (params, "info_name") && params_value (params, "info_id"))
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
-                           "An internal error occurred while getting SecInfo. "
-                           "Diagnostics: Both ID and Name set.",
-                           response_data);
-    }
-  extra_response = g_string_new (extra_xml ? extra_xml : "");
-
-  if (command_enabled (credentials, "GET_NOTES")
-      && (strcasecmp (info_type, "NVT") == 0)
-      && params_value (params, "info_id"))
-    {
-      gchar *response;
-
-      if (simple_gmpf (connection, "getting SecInfo", credentials, &response,
-                       response_data,
-                       "<get_notes"
-                       " nvt_oid=\"%s\""
-                       " sort_field=\"notes.text\"/>",
-                       params_value (params, "info_id")))
-        {
-          g_string_free (extra_response, TRUE);
-          return response;
-        }
-
-      g_string_append (extra_response, response);
-    }
-
-  if (command_enabled (credentials, "GET_OVERRIDES")
-      && (strcasecmp (info_type, "NVT") == 0)
-      && params_value (params, "info_id"))
-    {
-      gchar *response;
-
-      if (simple_gmpf (connection, "getting SecInfo", credentials, &response,
-                       response_data,
-                       "<get_overrides"
-                       " nvt_oid=\"%s\""
-                       " sort_field=\"overrides.text\"/>",
-                       params_value (params, "info_id")))
-        {
-          g_string_free (extra_response, TRUE);
-          return response;
-        }
-
-      g_string_append (extra_response, response);
-    }
-
-  extra_attribs = g_string_new ("");
-  g_string_append_printf (extra_attribs, "type=\"%s\"",
-                          params_value (params, "info_type"));
-  if (params_value (params, "info_name"))
-    g_string_append_printf (extra_attribs, " name=\"%s\"",
-                            params_value (params, "info_name"));
-  else if (params_value (params, "info_id"))
-    g_string_append_printf (extra_attribs, " info_id=\"%s\"",
-                            params_value (params, "info_id"));
-  if (params_value (params, "details"))
-    g_string_append_printf (extra_attribs, " details=\"%s\"",
-                            params_value (params, "details"));
-  ret = get_many (connection, "info", credentials, params, extra_response->str,
-                  extra_attribs->str, response_data);
-
-  g_string_free (extra_response, TRUE);
-  g_string_free (extra_attribs, TRUE);
-
-  return ret;
 }
 
 /**
@@ -3429,43 +2946,42 @@ char *
 get_info_gmp (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, cmd_response_data_t *response_data)
 {
-  return get_info (connection, credentials, params, NULL, response_data);
-}
+  const gchar *info_type;
+  const gchar *info_name;
+  const gchar *info_id;
+  const gchar *details;
 
-/**
- * @brief Get all tasks, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  params            Request parameters.
- * @param[in]  extra_xml         Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_tasks (gvm_connection_t *connection, credentials_t *credentials,
-           params_t *params, const char *extra_xml,
-           cmd_response_data_t *response_data)
-{
-  const char *schedules_only, *ignore_pagination;
-  gchar *extra_attribs, *ret;
+  gmp_arguments_t *arguments;
 
-  schedules_only = params_value (params, "schedules_only");
-  ignore_pagination = params_value (params, "ignore_pagination");
+  info_type = params_value (params, "info_type");
+  info_name = params_value (params, "info_name");
+  info_id = params_value (params, "info_id");
+  details = params_value (params, "details");
 
-  extra_attribs = g_strdup_printf (
-    "%s%s%s"
-    "%s%s%s",
-    schedules_only ? "schedules_only=\"" : "",
-    schedules_only ? schedules_only : "", schedules_only ? "\" " : "",
-    ignore_pagination ? "ignore_pagination=\"" : "",
-    ignore_pagination ? ignore_pagination : "", ignore_pagination ? "\" " : "");
+  CHECK_VARIABLE_INVALID (info_type, "Get SecInfo")
 
-  ret = get_many (connection, "task", credentials, params, extra_xml,
-                  extra_attribs, response_data);
-  g_free (extra_attribs);
-  return ret;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "type", info_type);
+  if (details)
+    {
+      gmp_arguments_add (arguments, "details", details);
+    }
+
+  if (info_id)
+    {
+      gmp_arguments_add (arguments, "info_id", info_id);
+
+      return get_entity (connection, "info", credentials, params, arguments,
+                         response_data);
+    }
+  else if (info_name)
+    {
+      gmp_arguments_add (arguments, "name", info_name);
+    }
+
+  return get_many (connection, "info", credentials, params, arguments,
+                   response_data);
 }
 
 /**
@@ -3482,7 +2998,34 @@ char *
 get_tasks_gmp (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, cmd_response_data_t *response_data)
 {
-  return get_tasks (connection, credentials, params, NULL, response_data);
+  const char *schedules_only, *ignore_pagination, *usage_type;
+  gmp_arguments_t *arguments;
+
+  schedules_only = params_value (params, "schedules_only");
+  ignore_pagination = params_value (params, "ignore_pagination");
+  usage_type = params_value (params, "usage_type");
+  if (params_given (params, "usage_type"))
+    CHECK_VARIABLE_INVALID (usage_type, "Get Tasks");
+
+  arguments = gmp_arguments_new ();
+
+  if (schedules_only)
+    {
+      gmp_arguments_add (arguments, "schedules_only", schedules_only);
+    }
+
+  if (ignore_pagination)
+    {
+      gmp_arguments_add (arguments, "ignore_pargination", ignore_pagination);
+    }
+
+  if (usage_type)
+    {
+      gmp_arguments_add (arguments, "usage_type", usage_type);
+    }
+
+  return get_many (connection, "tasks", credentials, params, arguments,
+                   response_data);
 }
 
 /**
@@ -3746,7 +3289,7 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while creating a new credential. "
             "The credential could not be created. "
             "Diagnostics: Unrecognized credential type.",
@@ -3764,7 +3307,7 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new credential. "
         "It is unclear whether the credential has been created or not. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -3773,7 +3316,7 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new credential. "
         "It is unclear whether the credential has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -3782,7 +3325,7 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new credential. "
         "It is unclear whether the credential has been created or not. "
         "Diagnostics: Internal Error.",
@@ -3814,8 +3357,11 @@ get_credential (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, const char *extra_xml,
                 cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments = gmp_arguments_new ();
+  gmp_arguments_add (arguments, "targets", "1");
+  gmp_arguments_add (arguments, "scanners", "1");
   return get_one (connection, "credential", credentials, params, extra_xml,
-                  "targets=\"1\" scanners=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -3868,7 +3414,7 @@ download_credential_gmp (gvm_connection_t *connection,
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
       *html =
-        gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+        gsad_message (credentials, "Internal error", __func__, __LINE__,
                       "An internal error occurred while getting a credential. "
                       "Diagnostics: Required parameter was NULL.",
                       response_data);
@@ -3885,7 +3431,7 @@ download_credential_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       *html =
-        gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+        gsad_message (credentials, "Internal error", __func__, __LINE__,
                       "An internal error occurred while getting a credential. "
                       "Diagnostics: Failure to send command to manager daemon.",
                       response_data);
@@ -3908,7 +3454,7 @@ download_credential_gmp (gvm_connection_t *connection,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting a credential. "
             "The credential is not available. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -3960,7 +3506,7 @@ download_credential_gmp (gvm_connection_t *connection,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting a credential. "
             "The credential could not be delivered. "
             "Diagnostics: Failure to receive credential from manager daemon.",
@@ -3980,7 +3526,7 @@ download_credential_gmp (gvm_connection_t *connection,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting a credential. "
             "The credential could not be delivered. "
             "Diagnostics: Failure to receive credential from manager daemon.",
@@ -4013,7 +3559,7 @@ download_credential_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       *html = gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting a credential. "
         "The credential could not be delivered. "
         "Diagnostics: Failure to parse credential from manager daemon.",
@@ -4068,27 +3614,6 @@ export_credentials_gmp (gvm_connection_t *connection,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  commands     Extra commands to run before the others when
- *                          credential_id is NULL.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return 0 success, 1 failure.
- */
-static char *
-get_credentials (gvm_connection_t *connection, credentials_t *credentials,
-                 params_t *params, const char *extra_xml,
-                 cmd_response_data_t *response_data)
-{
-  return get_many (connection, "credential", credentials, params, extra_xml,
-                   NULL, response_data);
-}
-
-/**
- * @brief Get one or all credentials, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return 0 success, 1 failure.
@@ -4097,7 +3622,8 @@ char *
 get_credentials_gmp (gvm_connection_t *connection, credentials_t *credentials,
                      params_t *params, cmd_response_data_t *response_data)
 {
-  return get_credentials (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "credentials", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -4332,7 +3858,7 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a Credential. "
         "The Credential was not saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -4341,7 +3867,7 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a Credential. "
         "It is unclear whether the Credential has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -4350,7 +3876,7 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a Credential. "
         "It is unclear whether the Credential has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -4362,587 +3888,6 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
   free_entity (entity);
   g_free (response);
   return html;
-}
-
-/**
- * @brief Create an agent, get all agents, envelope result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials          Username and password for authentication.
- * @param[in]  params               Request parameters.
- * @param[out] response_data        Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-create_agent_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                  params_t *params, cmd_response_data_t *response_data)
-{
-  entity_t entity;
-  gchar *response, *html;
-  const char *name, *comment, *installer, *installer_filename, *installer_sig;
-  const char *howto_install, *howto_use;
-  int installer_size, installer_sig_size, howto_install_size, howto_use_size;
-  int ret;
-  gchar *name_escaped, *comment_escaped;
-  gchar *installer_64, *installer_sig_64, *howto_install_64, *howto_use_64;
-  gchar *command;
-
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
-  installer = params_value (params, "installer");
-  installer_filename = params_filename (params, "installer");
-  installer_size = params_value_size (params, "installer");
-  installer_sig = params_value (params, "installer_sig");
-  installer_sig_size = params_value_size (params, "installer_sig");
-  howto_install = params_value (params, "howto_install");
-  howto_install_size = params_value_size (params, "howto_install");
-  howto_use = params_value (params, "howto_use");
-  howto_use_size = params_value_size (params, "howto_use");
-
-  CHECK_VARIABLE_INVALID (name, "Create Agent");
-  CHECK_VARIABLE_INVALID (comment, "Create Agent");
-
-  /* Create the agent. */
-
-  installer_64 = (installer_size > 0)
-                   ? g_base64_encode ((guchar *) installer, installer_size)
-                   : g_strdup ("");
-
-  installer_sig_64 =
-    (installer_sig_size > 0)
-      ? g_base64_encode ((guchar *) installer_sig, installer_sig_size)
-      : g_strdup ("");
-
-  howto_install_64 =
-    (howto_install_size > 0)
-      ? g_base64_encode ((guchar *) howto_install, howto_install_size)
-      : g_strdup ("");
-
-  howto_use_64 = (howto_use_size > 0)
-                   ? g_base64_encode ((guchar *) howto_use, howto_use_size)
-                   : g_strdup ("");
-
-  name_escaped = name ? g_markup_escape_text (name, -1) : NULL;
-  comment_escaped = comment ? g_markup_escape_text (comment, -1) : NULL;
-
-  command = g_strdup_printf ("<create_agent>"
-                             "<name>%s</name>"
-                             "%s%s%s"
-                             "<installer>"
-                             "%s"
-                             "<signature>%s</signature>"
-                             "<filename>%s</filename>"
-                             "</installer>"
-                             "<howto_install>%s</howto_install>"
-                             "<howto_use>%s</howto_use>"
-                             "</create_agent>",
-                             name_escaped, comment_escaped ? "<comment>" : "",
-                             comment_escaped ? comment_escaped : "",
-                             comment_escaped ? "</comment>" : "", installer_64,
-                             installer_sig_64,
-                             installer_filename ? installer_filename : "",
-                             howto_install_64, howto_use_64);
-
-  ret =
-    gmp (connection, credentials, &response, &entity, response_data, command);
-  g_free (command);
-
-  g_free (installer_64);
-  g_free (howto_install_64);
-  g_free (howto_use_64);
-  g_free (name_escaped);
-  g_free (comment_escaped);
-
-  switch (ret)
-    {
-    case 0:
-      break;
-    case -1:
-      /* 'gmp' set response. */
-      return response;
-    case 1:
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while creating a new agent. "
-        "No new agent was created. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    case 2:
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while creating a new agent. "
-        "It is unclear whether the agent has been created or not. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    default:
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while creating a new agent. "
-        "It is unclear whether the agent has been created or not. "
-        "Diagnostics: Internal Error.",
-        response_data);
-    }
-
-  if (entity_attribute (entity, "id"))
-    params_add (params, "agent_id", entity_attribute (entity, "id"));
-  html = response_from_entity (connection, credentials, params, entity,
-                               "Create Agent", response_data);
-  free_entity (entity);
-  g_free (response);
-  return html;
-}
-
-/**
- * @brief Delete agent, get all agents, envelope result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_agent_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                  params_t *params, cmd_response_data_t *response_data)
-{
-  return move_resource_to_trash (connection, "agent", credentials, params,
-                                 response_data);
-}
-
-/**
- * @brief Get an agent, envelope the result.
- *
- * @param[in]   connection     Connection to manager.
- * @param[in]   credentials    Username and password for authentication.
- * @param[in]   params         Request parameters.
- * @param[out]  html           Result.  Required.
- * @param[out]  filename       Agent filename return.  NULL to skip.  Only set
- *                             on success with agent_id.
- * @param[out]  response_data  Extra data return for the HTTP response.
- *
- * @return 0 success, 1 failure.
- */
-int
-download_agent_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                    params_t *params, char **html, char **filename,
-                    cmd_response_data_t *response_data)
-{
-  entity_t entity;
-  const char *agent_id, *format;
-  gsize result_len = 0;
-
-  agent_id = params_value (params, "agent_id");
-  format = params_value (params, "agent_format");
-
-  if ((agent_id == NULL) || (format == NULL))
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      *html =
-        gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
-                      "An internal error occurred while downloading "
-                      "an agent. "
-                      "Diagnostics: Required parameter was NULL.",
-                      response_data);
-      return 1;
-    }
-
-  /* Send the request. */
-
-  if (gvm_connection_sendf (connection,
-                            "<get_agents agent_id=\"%s\" format=\"%s\"/>",
-                            agent_id, format)
-      == -1)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      *html =
-        gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
-                      "An internal error occurred while getting agent list. "
-                      "The current list of agents is not available. "
-                      "Diagnostics: Failure to send command to manager daemon.",
-                      response_data);
-      return 1;
-    }
-
-  /* Read and handle the response. */
-
-  if (strcmp (format, "installer") == 0 || strcmp (format, "howto_install") == 0
-      || strcmp (format, "howto_use") == 0)
-    {
-      gchar *package_decoded = NULL;
-      entity_t package_entity = NULL, agent_entity;
-
-      /* A base64 encoded package. */
-
-      entity = NULL;
-      if (read_entity_c (connection, &entity))
-        {
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          *html = gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting a agent. "
-            "The agent is not available. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-          return 1;
-        }
-
-      agent_entity = entity_child (entity, "agent");
-      if (agent_entity)
-        package_entity = entity_child (agent_entity, "package");
-      if (package_entity != NULL)
-        {
-          char *package_encoded = entity_text (package_entity);
-          if (strlen (package_encoded))
-            {
-              package_decoded =
-                (gchar *) g_base64_decode (package_encoded, &result_len);
-              if (package_decoded == NULL)
-                {
-                  package_decoded = (gchar *) g_strdup ("");
-                  result_len = 0;
-                }
-            }
-          else
-            {
-              package_decoded = (gchar *) g_strdup ("");
-              result_len = 0;
-            }
-          *html = package_decoded;
-          if (filename)
-            {
-              entity_t filename_entity;
-              filename_entity = entity_child (package_entity, "filename");
-              if (filename_entity)
-                *filename = g_strdup (entity_text (filename_entity));
-              else
-                *filename = NULL;
-              if (!(*filename && strlen (*filename)))
-                {
-                  g_free (*filename);
-                  *filename = g_strdup_printf ("agent-%s-%s", agent_id, format);
-                }
-            }
-          cmd_response_data_set_content_length (response_data, result_len);
-          free_entity (entity);
-          return 0;
-        }
-      else
-        {
-          free_entity (entity);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          *html = gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting a agent. "
-            "The agent could not be delivered. "
-            "Diagnostics: Failure to receive agent from manager daemon.",
-            response_data);
-          return 1;
-        }
-    }
-  else
-    {
-      /* An error. */
-
-      entity = NULL;
-      if (read_entity_c (connection, &entity))
-        {
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          *html = gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting a agent. "
-            "The agent could not be delivered. "
-            "Diagnostics: Failure to receive agent from manager daemon.",
-            response_data);
-          return 1;
-        }
-
-      free_entity (entity);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      *html = gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting a agent. "
-        "The agent could not be delivered. "
-        "Diagnostics: Failure to parse agent from manager daemon.",
-        response_data);
-      return 1;
-    }
-}
-
-/**
- * @brief Modify a agent, get all agents, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-save_agent_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                params_t *params, cmd_response_data_t *response_data)
-{
-  int ret;
-  gchar *html, *response;
-  const char *agent_id, *name, *comment;
-  entity_t entity;
-
-  agent_id = params_value (params, "agent_id");
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
-
-  CHECK_VARIABLE_INVALID (agent_id, "Save Agent");
-  CHECK_VARIABLE_INVALID (name, "Save Agent");
-  CHECK_VARIABLE_INVALID (comment, "Save Agent");
-
-  /* Modify the agent. */
-
-  response = NULL;
-  entity = NULL;
-  ret = gmpf (connection, credentials, &response, &entity, response_data,
-              "<modify_agent agent_id=\"%s\">"
-              "<name>%s</name>"
-              "<comment>%s</comment>"
-              "</modify_agent>",
-              agent_id, name, comment);
-
-  switch (ret)
-    {
-    case 0:
-    case -1:
-      break;
-    case 1:
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while saving a agent. "
-        "The agent was not saved. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    case 2:
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while saving a agent. "
-        "It is unclear whether the agent has been saved or not. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    default:
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while saving a agent. "
-        "It is unclear whether the agent has been saved or not. "
-        "Diagnostics: Internal Error.",
-        response_data);
-    }
-
-  html = response_from_entity (connection, credentials, params, entity,
-                               "Save Agent", response_data);
-  free_entity (entity);
-  g_free (response);
-  return html;
-}
-
-/**
- * @brief Get one agent, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_agent (gvm_connection_t *connection, credentials_t *credentials,
-           params_t *params, const char *extra_xml,
-           cmd_response_data_t *response_data)
-{
-  return get_one (connection, "agent", credentials, params, extra_xml, NULL,
-                  response_data);
-}
-
-/**
- * @brief Get one agent, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_agent_gmp (gvm_connection_t *connection, credentials_t *credentials,
-               params_t *params, cmd_response_data_t *response_data)
-{
-  return get_agent (connection, credentials, params, NULL, response_data);
-}
-
-/**
- * @brief Get all agents, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_agents (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *extra_xml,
-            cmd_response_data_t *response_data)
-{
-  return get_many (connection, "agent", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all agents, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]   credentials  Username and password for authentication.
- * @param[in]   params       Request parameters.
- * @param[out]  response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_agents_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                params_t *params, cmd_response_data_t *response_data)
-{
-  return get_agents (connection, credentials, params, NULL, response_data);
-}
-
-/**
- * @brief Verify agent, get agents, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-verify_agent_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                  params_t *params, cmd_response_data_t *response_data)
-{
-  gchar *html, *response;
-  const char *agent_id;
-  int ret;
-  entity_t entity;
-
-  agent_id = params_value (params, "agent_id");
-  if (agent_id == NULL)
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while verifying an agent. "
-        "Diagnostics: Required parameter was NULL.",
-        response_data);
-    }
-  response = NULL;
-  entity = NULL;
-  ret = gmpf (connection, credentials, &response, &entity, response_data,
-              "<verify_agent agent_id=\"%s\" />", agent_id);
-
-  switch (ret)
-    {
-    case 0:
-    case -1:
-      break;
-    case 1:
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while verifying a agent. "
-        "The agent was not verified. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    case 2:
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while verifying a agent. "
-        "It is unclear whether the agent was verified or not. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    default:
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while verifying a agent. "
-        "It is unclear whether the agent was verified or not. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  html = response_from_entity (connection, credentials, params, entity,
-                               "Verify Agent", response_data);
-  free_entity (entity);
-  g_free (response);
-  return html;
-}
-
-/**
- * @brief Export a agent.
- *
- * @param[in]   connection           Connection to manager.
- * @param[in]   credentials          Username and password for authentication.
- * @param[in]   params               Request parameters.
- * @param[out]  response_data        Extra data return for the HTTP response.
- *
- * @return Agent XML on success.  Enveloped XML on error.
- */
-char *
-export_agent_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                  params_t *params, cmd_response_data_t *response_data)
-{
-  return export_resource (connection, "agent", credentials, params,
-                          response_data);
-}
-
-/**
- * @brief Export a list of agents.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]   credentials          Username and password for authentication.
- * @param[in]   params               Request parameters.
- * @param[out]  response_data        Extra data return for the HTTP response.
- *
- * @return Agents XML on success.  Enveloped XML
- *         on error.
- */
-char *
-export_agents_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                   params_t *params, cmd_response_data_t *response_data)
-{
-  return export_many (connection, "agent", credentials, params, response_data);
 }
 
 /**
@@ -4971,6 +3916,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
   const char *filter, *filter_id;
   const char *first_group, *max_groups;
   const char *mode;
+  const char *usage_type;
   gchar *filter_escaped, *command_escaped, *response;
   entity_t entity;
   GString *xml, *command;
@@ -4990,6 +3936,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
   first_group = params_value (params, "first_group");
   max_groups = params_value (params, "max_groups");
   mode = params_value (params, "aggregate_mode");
+  usage_type = params_value (params, "usage_type");
 
   if (filter && !str_equal (filter, ""))
     filter_escaped = g_markup_escape_text (filter, -1);
@@ -5029,6 +3976,9 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   if (mode && strcmp (mode, ""))
     g_string_append_printf (command, " mode=\"%s\"", mode);
+
+  if (usage_type && strcmp (usage_type, ""))
+    g_string_append_printf (command, " usage_type=\"%s\"", usage_type);
 
   g_string_append (command, ">");
 
@@ -5112,7 +4062,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting aggregates. "
         "Diagnostics: Failure to send command to manager daemon.",
         response_data);
@@ -5120,7 +4070,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting aggregates. "
         "Diagnostics: Failure to receive response from manager daemon.",
         response_data);
@@ -5128,7 +4078,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting aggregates. "
         "Diagnostics: Internal Error.",
         response_data);
@@ -5187,7 +4137,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting Report "
         "Formats for new alert. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -5196,7 +4146,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting Report "
         "Formats for new alert. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -5204,8 +4154,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials,
     default:
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while getting Report "
                            "Formats for new alert. It is unclear whether"
                            " the alert has been saved or not. "
@@ -5230,7 +4179,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting Report "
         "Filters for new alert. "
         "The task was not saved. "
@@ -5240,7 +4189,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting Report "
         "Filters for new alert. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -5248,8 +4197,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials,
     default:
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while getting Report "
                            "Filters for new alert. "
                            "Diagnostics: Internal Error.",
@@ -5275,7 +4223,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting Tasks"
         " for new alert. "
         "The task was not saved. "
@@ -5285,7 +4233,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting Tasks"
         " for new alert. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -5293,8 +4241,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials,
     default:
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while getting Tasks"
                            " for new alert. "
                            "Diagnostics: Internal Error.",
@@ -5320,7 +4267,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting"
         " Credentials for new alert. "
         "The task was not saved. "
@@ -5330,7 +4277,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting"
         " Credentials for new alert. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -5338,8 +4285,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials,
     default:
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while getting"
                            " Credentials for new alert. "
                            "Diagnostics: Internal Error.",
@@ -5727,7 +4673,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new alert. "
         "No new alert was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -5736,7 +4682,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new alert. "
         "It is unclear whether the alert has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -5745,7 +4691,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new alert. "
         "It is unclear whether the alert has been created or not. "
         "Diagnostics: Internal Error.",
@@ -5795,167 +4741,13 @@ get_alert (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t *response_data)
 {
-  gchar *html;
-  GString *extra;
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
 
-  extra = g_string_new ("");
-  if (extra_xml)
-    g_string_append (extra, extra_xml);
-  if (command_enabled (credentials, "GET_REPORT_FORMATS"))
-    {
-      gchar *response;
-      entity_t entity;
+  gmp_arguments_add (arguments, "tasks", "1");
 
-      response = NULL;
-      entity = NULL;
-      switch (gmp (connection, credentials, &response, &entity, response_data,
-                   "<get_report_formats"
-                   " filter=\"rows=-1\"/>"))
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting Report "
-            "Formats for the alert. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting Report "
-            "Formats for the alert. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting Report "
-            "Formats for the alert. "
-            "It is unclear whether the task has been saved or not. "
-            "Diagnostics: Internal Error.",
-            response_data);
-        }
-
-      g_string_append (extra, response);
-
-      free_entity (entity);
-      g_free (response);
-    }
-
-  if (command_enabled (credentials, "GET_TASKS"))
-    {
-      gchar *response;
-      entity_t entity;
-
-      response = NULL;
-      entity = NULL;
-      switch (gmp (connection, credentials, &response, &entity, response_data,
-                   "<get_tasks"
-                   " schedules_only=\"1\""
-                   " filter=\"owner=any permission=start_task rows=-1\"/>"))
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting Tasks "
-            "for the alert. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting Tasks "
-            "for the alert. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials, "Internal error", __FUNCTION__,
-                               __LINE__,
-                               "An internal error occurred while getting Tasks "
-                               "for the alert. "
-                               "Diagnostics: Internal Error.",
-                               response_data);
-        }
-
-      g_string_append (extra, response);
-
-      free_entity (entity);
-      g_free (response);
-    }
-
-  if (command_enabled (credentials, "GET_FILTERS"))
-    {
-      gchar *response;
-      entity_t entity;
-
-      /* Get result filters for condition link. */
-
-      response = NULL;
-      entity = NULL;
-      switch (gmp (connection, credentials, &response, &entity, response_data,
-                   "<get_filters"
-                   " filter=\"type=result rows=-1\"/>"))
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting filters "
-            "for the alert. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting filters "
-            "for the alert. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting filters "
-            "for the alert. "
-            "Diagnostics: Internal Error.",
-            response_data);
-        }
-
-      g_string_append (extra, response);
-
-      free_entity (entity);
-      g_free (response);
-    }
-
-  html = get_one (connection, "alert", credentials, params, extra->str,
-                  "tasks=\"1\"", response_data);
-  g_string_free (extra, TRUE);
-  return html;
+  return get_one (connection, "alert", credentials, params, NULL, arguments,
+                  response_data);
 }
 
 /**
@@ -5981,132 +4773,6 @@ get_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_alerts (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *extra_xml,
-            cmd_response_data_t *response_data)
-{
-  gchar *html;
-  GString *extra;
-
-  extra = g_string_new ("");
-  if (command_enabled (credentials, "GET_TASKS"))
-    {
-      gchar *response;
-      entity_t entity;
-
-      response = NULL;
-      entity = NULL;
-      switch (gmp (connection, credentials, &response, &entity, response_data,
-                   "<get_tasks"
-                   " schedules_only=\"1\""
-                   " filter=\"owner=any permission=start_task rows=-1\"/>"))
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred getting the tasks. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred getting the tasks. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred getting the reports. "
-            "Diagnostics: Internal Error.",
-            response_data);
-        }
-
-      g_string_append (extra, response);
-
-      free_entity (entity);
-      g_free (response);
-    }
-
-  if (command_enabled (credentials, "GET_FILTERS"))
-    {
-      gchar *response;
-      entity_t entity;
-
-      /* Get result filters for condition link. */
-
-      response = NULL;
-      entity = NULL;
-      switch (gmp (connection, credentials, &response, &entity, response_data,
-                   "<get_filters"
-                   " filter=\"type=result rows=-1\"/>"))
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting filters "
-            "for the alerts. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting filters "
-            "for the alerts. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting filters "
-            "for the alerts. "
-            "Diagnostics: Internal Error.",
-            response_data);
-        }
-
-      g_string_append (extra, response);
-
-      free_entity (entity);
-      g_free (response);
-    }
-
-  if (extra_xml)
-    g_string_append (extra, extra_xml);
-  html = get_many (connection, "alert", credentials, params, extra->str, NULL,
-                   response_data);
-  g_string_free (extra, TRUE);
-  return html;
-}
-
-/**
- * @brief Get all alerts, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -6115,7 +4781,8 @@ char *
 get_alerts_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t *response_data)
 {
-  return get_alerts (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "alerts", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -6145,8 +4812,7 @@ edit_alert (gvm_connection_t *connection, credentials_t *credentials,
   if (alert_id == NULL)
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while editing an alert. "
                            "The alert remains as it was. "
                            "Diagnostics: Required parameter alert_id was NULL.",
@@ -6166,7 +4832,7 @@ edit_alert (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting alert info. "
         "Diagnostics: Failure to send command to manager daemon.",
         response_data);
@@ -6192,7 +4858,7 @@ edit_alert (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting alert info. "
         "Diagnostics: Failure to receive response from manager daemon.",
         response_data);
@@ -6210,7 +4876,7 @@ edit_alert (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting report formats. "
             "The current list of report formats is not available. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -6223,7 +4889,7 @@ edit_alert (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting report formats. "
             "The current list of report formats is not available. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -6242,7 +4908,7 @@ edit_alert (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting the list "
             "of filters. "
             "The current list of filters is not available. "
@@ -6256,7 +4922,7 @@ edit_alert (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting the list "
             "of filters. "
             "The current list of filters is not available. "
@@ -6280,7 +4946,7 @@ edit_alert (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting the list "
             "of tasks. "
             "The current list of tasks is not available. "
@@ -6294,7 +4960,7 @@ edit_alert (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting the list "
             "of tasks. "
             "The current list of tasks is not available. "
@@ -6317,7 +4983,7 @@ edit_alert (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting the list "
             "of credentials. "
             "The current list of tasks is not available. "
@@ -6331,7 +4997,7 @@ edit_alert (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting the list "
             "of credentials. "
             "The current list of tasks is not available. "
@@ -6475,7 +5141,7 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a new alert. "
         "No new alert was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -6484,7 +5150,7 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a new alert. "
         "It is unclear whether the alert has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -6493,7 +5159,7 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a new alert. "
         "It is unclear whether the alert has been created or not. "
         "Diagnostics: Internal Error.",
@@ -6531,8 +5197,7 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
     {
       cmd_response_data_set_status_code (response_data,
                                          GSAD_STATUS_INVALID_REQUEST);
-      return gsad_message (credentials, "Invalid request", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Invalid request", __func__, __LINE__,
                            "Missing parameter alert_id."
                            "Diagnostics: Required parameter was NULL.",
                            response_data);
@@ -6547,7 +5212,7 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while testing an alert. "
         "Diagnostics: Failure to send command to manager daemon.",
         response_data);
@@ -6559,7 +5224,7 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while testing an alert. "
         "Diagnostics: Failure to receive response from manager daemon.",
         response_data);
@@ -6775,7 +5440,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new target. "
         "No new target was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -6784,7 +5449,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new target. "
         "It is unclear whether the target has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -6793,7 +5458,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new target. "
         "It is unclear whether the target has been created or not. "
         "Diagnostics: Internal Error.",
@@ -6849,7 +5514,7 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while cloning a resource. "
             "The resource was not cloned. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -6866,7 +5531,7 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while cloning a resource. "
         "The resource was not cloned. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -6879,7 +5544,7 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while cloning a resource. "
         "It is unclear whether the resource has been cloned or not. "
         "Diagnostics: Failure to read response from manager daemon.",
@@ -6952,7 +5617,7 @@ restore_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while restoring a resource. "
         "The resource was not deleted. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -6965,7 +5630,7 @@ restore_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while restoring a resource. "
         "It is unclear whether the resource has been restored or not. "
         "Diagnostics: Failure to read response from manager daemon.",
@@ -7009,7 +5674,7 @@ empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while emptying the trashcan. "
         "Diagnostics: Failure to send command to manager daemon.",
         response_data);
@@ -7021,7 +5686,7 @@ empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while emptying the trashcan. "
         "Diagnostics: Failure to read response from manager daemon.",
         response_data);
@@ -7115,7 +5780,7 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       g_string_free (command, TRUE);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new tag. "
         "No new tag was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -7125,7 +5790,7 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       g_string_free (command, TRUE);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new tag. "
         "It is unclear whether the tag has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -7135,7 +5800,7 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       g_string_free (command, TRUE);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new tag. "
         "It is unclear whether the tag has been created or not. "
         "Diagnostics: Internal Error.",
@@ -7255,8 +5920,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       g_string_free (command, TRUE);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while saving a tag. "
                            "The tag remains the same. "
                            "Diagnostics: Failure to send command to "
@@ -7266,8 +5930,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       g_string_free (command, TRUE);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while saving a tag. "
                            "It is unclear whether the tag has been saved "
                            "or not. "
@@ -7278,8 +5941,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       g_string_free (command, TRUE);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while saving a tag. "
                            "It is unclear whether the tag has been saved "
                            "or not. "
@@ -7376,26 +6038,6 @@ get_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_tags (gvm_connection_t *connection, credentials_t *credentials,
-          params_t *params, const char *extra_xml,
-          cmd_response_data_t *response_data)
-{
-  return get_many (connection, "tag", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all tags, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -7404,7 +6046,8 @@ char *
 get_tags_gmp (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, cmd_response_data_t *response_data)
 {
-  return get_tags (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "tags", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -7442,8 +6085,7 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
     {
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while modifying a tag. "
                            "The tag is not modified. "
                            "Diagnostics: Failure to send command to"
@@ -7456,8 +6098,7 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
     {
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while modifying a tag. "
                            "It is unclear whether the tag has been modified"
                            " or not. "
@@ -7491,8 +6132,13 @@ get_target (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "tasks", "1");
+
   return get_one (connection, "target", credentials, params, extra_xml,
-                  "tasks=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -7518,26 +6164,6 @@ get_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_targets (gvm_connection_t *connection, credentials_t *credentials,
-             params_t *params, const char *extra_xml,
-             cmd_response_data_t *response_data)
-{
-  return get_many (connection, "target", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all targets, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -7546,7 +6172,8 @@ char *
 get_targets_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_targets (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "targets", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -7615,7 +6242,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving a target. "
             "The target remains the same. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -7624,7 +6251,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving a target. "
             "It is unclear whether the target has been saved or not. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -7633,7 +6260,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving a target. "
             "It is unclear whether the target has been saved or not. "
             "Diagnostics: Internal Error.",
@@ -7759,7 +6386,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (
-          credentials, "Internal error", __FUNCTION__, __LINE__,
+          credentials, "Internal error", __func__, __LINE__,
           "An internal error occurred while modifying target. "
           "No target was modified. "
           "Diagnostics: Failure to send command to manager daemon.",
@@ -7772,7 +6399,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (
-          credentials, "Internal error", __FUNCTION__, __LINE__,
+          credentials, "Internal error", __func__, __LINE__,
           "An internal error occurred while modifying a target. "
           "It is unclear whether the target has been modified or not. "
           "Diagnostics: Failure to receive response from manager daemon.",
@@ -7840,16 +6467,18 @@ create_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
                    params_t *params, cmd_response_data_t *response_data)
 {
   gchar *html, *response;
-  const char *name, *comment, *base, *scanner = NULL;
+  const char *name, *comment, *base, *usage_type, *scanner = NULL;
   entity_t entity;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   base = params_value (params, "base");
+  usage_type = params_value (params, "usage_type");
 
   CHECK_VARIABLE_INVALID (name, "New Config");
   CHECK_VARIABLE_INVALID (comment, "New Config");
   CHECK_VARIABLE_INVALID (base, "New Config");
+  CHECK_VARIABLE_INVALID (usage_type, "New Config");
   if (str_equal (base, "0"))
     {
       scanner = params_value (params, "scanner_id");
@@ -7863,8 +6492,9 @@ create_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 "<copy>%s</copy>"
                 "<comment>%s</comment>"
                 "<scanner>%s</scanner>"
+                "<usage_type>%s</usage_type>"
                 "</create_config>",
-                name, base, comment, scanner ?: ""))
+                name, base, comment, scanner ?: "", usage_type))
     {
     case 0:
     case -1:
@@ -7873,7 +6503,7 @@ create_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new config. "
         "No new config was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -7882,7 +6512,7 @@ create_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new config. "
         "It is unclear whether the config has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -7891,7 +6521,7 @@ create_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new config. "
         "It is unclear whether the config has been created or not. "
         "Diagnostics: Internal Error.",
@@ -7946,7 +6576,7 @@ import_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while importing a config. "
         "The schedule remains the same. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -7955,7 +6585,7 @@ import_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while importing a config. "
         "It is unclear whether the schedule has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -7964,7 +6594,7 @@ import_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while importing a config. "
         "It is unclear whether the schedule has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -7986,26 +6616,6 @@ import_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_configs (gvm_connection_t *connection, credentials_t *credentials,
-             params_t *params, const char *extra_xml,
-             cmd_response_data_t *response_data)
-{
-  return get_many (connection, "config", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all scan configs, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -8014,204 +6624,21 @@ char *
 get_configs_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_configs (connection, credentials, params, NULL, response_data);
-}
+  const char *usage_type;
+  gmp_arguments_t *arguments = NULL;
 
-/**
- * @brief Get a config, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[in]  edit         0 for config view page, else config edit page.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_config (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *extra_xml, int edit,
-            cmd_response_data_t *response_data)
-{
-  GString *xml;
-  const char *config_id;
+  usage_type = params_value (params, "usage_type");
+  if (params_given (params, "usage_type"))
+    CHECK_VARIABLE_INVALID (usage_type, "Get Configs")
 
-  config_id = params_value (params, "config_id");
-
-  if (config_id == NULL)
-    return get_configs (connection, credentials, params, extra_xml,
-                        response_data);
-
-  xml = g_string_new ("<get_config_response>");
-  if (edit)
-    g_string_append (xml, "<edit/>");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-  /* Get the config families. */
-
-  if (gvm_connection_sendf (connection,
-                            "<get_configs"
-                            " config_id=\"%s\""
-                            " families=\"1\""
-                            " tasks=\"1\""
-                            " preferences=\"1\"/>",
-                            config_id)
-      == -1)
+  if (usage_type)
     {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the config. "
-        "The config is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
+      arguments = gmp_arguments_new ();
+      gmp_arguments_add (arguments, "usage_type", usage_type);
     }
 
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the config. "
-        "The config is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  /* Get all the families. */
-
-  if (gvm_connection_sendf (connection, "<get_nvt_families/>") == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the config. "
-        "The config is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the config. "
-        "The config is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  if (edit)
-    {
-      /* Get OSP scanners */
-      if (gvm_connection_sendf (connection, "<get_scanners filter=\"type=1\"/>")
-          == -1)
-        {
-          g_string_free (xml, TRUE);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting the config. "
-            "The config is not available. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        }
-
-      if (read_string_c (connection, &xml))
-        {
-          g_string_free (xml, TRUE);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting the config. "
-            "The config is not available. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        }
-    }
-
-  /* Get Credentials */
-  if (gvm_connection_sendf (connection, "<get_credentials/>") == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the config. "
-        "The config is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting the config. "
-        "The config is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  /* Get the permissions */
-
-  g_string_append (xml, "<permissions>");
-
-  if (gvm_connection_sendf (connection,
-                            "<get_permissions"
-                            " filter=\"name:^.*(config)s?$"
-                            "          and resource_uuid=%s"
-                            "          first=1 rows=-1\"/>",
-                            config_id)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting permissions list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting permissions list. "
-        "The current list of resources is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  g_string_append (xml, "</permissions>");
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_config_response>");
-  return envelope_gmp (connection, credentials, params,
-                       g_string_free (xml, FALSE), response_data);
+  return get_many (connection, "configs", credentials, params, arguments,
+                   response_data);
 }
 
 /**
@@ -8228,100 +6655,16 @@ char *
 get_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t *response_data)
 {
-  return get_config (connection, credentials, params, NULL, 0, response_data);
-}
+  gmp_arguments_t *arguments;
 
-/**
- * @brief Get a config, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-edit_config (gvm_connection_t *connection, credentials_t *credentials,
-             params_t *params, const char *extra_xml,
-             cmd_response_data_t *response_data)
-{
-  return get_config (connection, credentials, params, extra_xml, 1,
-                     response_data);
-}
+  arguments = gmp_arguments_new ();
 
-/**
- * @brief Get a config, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-edit_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                 params_t *params, cmd_response_data_t *response_data)
-{
-  return edit_config (connection, credentials, params, NULL, response_data);
-}
+  gmp_arguments_add (arguments, "families", "1");
+  gmp_arguments_add (arguments, "tasks", "1");
+  gmp_arguments_add (arguments, "preferences", "1");
 
-/**
- * @brief Sync config, get configs, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-sync_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                 params_t *params, cmd_response_data_t *response_data)
-{
-  GString *xml;
-  const char *config_id;
-  char *ret;
-
-  config_id = params_value (params, "config_id");
-  CHECK_VARIABLE_INVALID (config_id, "Synchronize Config");
-
-  if (gvm_connection_sendf (connection, "<sync_config config_id=\"%s\"/>",
-                            config_id)
-      == -1)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while synchronizing a config. "
-        "The config is not synchronized. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  xml = g_string_new ("");
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while synchronizing a config. "
-        "It is unclear whether the config has been synchronized or not. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  // TODO return action result
-  ret = get_configs (connection, credentials, params, xml->str, response_data);
-
-  g_string_free (xml, TRUE);
-  return ret;
+  return get_one (connection, "config", credentials, params, NULL, arguments,
+                  response_data);
 }
 
 /**
@@ -8378,7 +6721,7 @@ save_osp_prefs (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving a config. It is"
             " unclear whether the entire config has been saved. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -8448,7 +6791,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a config. "
         "It is unclear whether the entire config has been saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -8495,7 +6838,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
-                credentials, "Internal error", __FUNCTION__, __LINE__,
+                credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while saving a config. "
                 "It is unclear whether the entire config has been saved. "
                 "Diagnostics: Failure to send command to manager daemon.",
@@ -8530,7 +6873,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving a config. "
             "It is unclear whether the entire config has been saved. "
             "Diagnostics: save_osp_prefs returned NULL unexpectedly.",
@@ -8559,7 +6902,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving a config. "
             "It is unclear whether the entire config has been saved. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -8587,7 +6930,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 cmd_response_data_set_status_code (
                   response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (
-                  credentials, "Internal error", __FUNCTION__, __LINE__,
+                  credentials, "Internal error", __func__, __LINE__,
                   "An internal error occurred while saving a config. "
                   "It is unclear whether the entire config has been saved. "
                   "Diagnostics: Failure to send command to manager daemon.",
@@ -8622,7 +6965,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
                   cmd_response_data_set_status_code (
                     response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                   return gsad_message (
-                    credentials, "Internal error", __FUNCTION__, __LINE__,
+                    credentials, "Internal error", __func__, __LINE__,
                     "An internal error occurred while saving a config. "
                     "It is unclear whether the entire config has been saved. "
                     "Diagnostics: Failure to send command to manager daemon.",
@@ -8638,7 +6981,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving a config. "
             "It is unclear whether the entire config has been saved. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -8669,31 +7012,15 @@ get_config_family (gvm_connection_t *connection, credentials_t *credentials,
                    cmd_response_data_t *response_data)
 {
   GString *xml;
-  const char *config_id, *name, *family, *sort_field, *sort_order;
+  const char *config_id, *family, *sort_field, *sort_order;
 
   config_id = params_value (params, "config_id");
-  name = params_value (params, "name");
   family = params_value (params, "family");
 
-  if ((config_id == NULL) || (name == NULL) || (family == NULL))
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting config family. "
-        "Diagnostics: Required parameter was NULL.",
-        response_data);
-    }
+  CHECK_VARIABLE_INVALID (config_id, "Get Scan Config Family")
+  CHECK_VARIABLE_INVALID (family, "Get Scan Config Family")
 
   xml = g_string_new ("<get_config_family_response>");
-  if (edit)
-    g_string_append (xml, "<edit/>");
-  /* @todo Would it be better include this in the get_nvts response? */
-  g_string_append_printf (xml,
-                          "<config id=\"%s\">"
-                          "<name>%s</name><family>%s</family>"
-                          "</config>",
-                          config_id, name, family);
 
   /* Get the details for all NVT's in the config in the family. */
 
@@ -8714,7 +7041,7 @@ get_config_family (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting list of configs. "
         "The current list of configs is not available. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -8727,7 +7054,7 @@ get_config_family (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting list of configs. "
         "The current list of configs is not available. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -8758,7 +7085,7 @@ get_config_family (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting list of configs. "
             "The current list of configs is not available. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -8771,7 +7098,7 @@ get_config_family (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting list of configs. "
             "The current list of configs is not available. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -8858,7 +7185,7 @@ save_config_family_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a config. "
         "It is unclear whether the entire config has been saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -8879,7 +7206,7 @@ save_config_family_gmp (gvm_connection_t *connection,
             cmd_response_data_set_status_code (response_data,
                                                MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (
-              credentials, "Internal error", __FUNCTION__, __LINE__,
+              credentials, "Internal error", __func__, __LINE__,
               "An internal error occurred while saving a config. "
               "It is unclear whether the entire config has been saved. "
               "Diagnostics: Failure to send command to manager daemon.",
@@ -8894,7 +7221,7 @@ save_config_family_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a config. "
         "It is unclear whether the entire config has been saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -8912,37 +7239,25 @@ save_config_family_gmp (gvm_connection_t *connection,
  * @brief Get details of an NVT for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  edit         0 for config view page, else config edit page.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
  */
-static char *
-get_config_nvt (gvm_connection_t *connection, credentials_t *credentials,
-                params_t *params, int edit, cmd_response_data_t *response_data)
+char *
+get_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                    params_t *params, cmd_response_data_t *response_data)
 {
   GString *xml;
-  const char *config_id, *name, *family, *sort_field, *sort_order, *nvt;
+  const char *config_id, *sort_field, *sort_order, *nvt;
 
   config_id = params_value (params, "config_id");
-  name = params_value (params, "name");
-  family = params_value (params, "family");
   nvt = params_value (params, "oid");
 
-  CHECK_VARIABLE_INVALID (name, "Get Config")
   CHECK_VARIABLE_INVALID (config_id, "Get Config")
 
   xml = g_string_new ("<get_config_nvt_response>");
-  if (edit)
-    g_string_append (xml, "<edit/>");
-  /* @todo Would it be better include this in the get_nvts response? */
-  g_string_append_printf (xml,
-                          "<config id=\"%s\">"
-                          "<name>%s</name><family>%s</family>"
-                          "</config>",
-                          config_id, name, family ? family : "");
 
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
@@ -8961,7 +7276,7 @@ get_config_nvt (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting list of configs. "
         "The current list of configs is not available. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -8974,7 +7289,7 @@ get_config_nvt (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting list of configs. "
         "The current list of configs is not available. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -8983,74 +7298,12 @@ get_config_nvt (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (xml, "</get_config_nvt_response>");
 
-  if (gvm_connection_sendf (connection,
-                            "<get_notes"
-                            " nvt_oid=\"%s\""
-                            " sort_field=\"notes.text\"/>",
-                            nvt)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting list of notes. "
-        "The current list of notes is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting list of notes. "
-        "The current list of notes is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
-  if (gvm_connection_sendf (connection,
-                            "<get_overrides"
-                            " nvt_oid=\"%s\""
-                            " sort_field=\"overrides.text\"/>",
-                            nvt)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting list of overrides. "
-        "The current list of overrides is not available. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while getting list of overrides. "
-        "The current list of overrides is not available. "
-        "Diagnostics: Failure to receive response from manager daemon.",
-        response_data);
-    }
-
   return envelope_gmp (connection, credentials, params,
                        g_string_free (xml, FALSE), response_data);
 }
 
 /**
- * @brief Get details of an NVT for a config, envelope the result.
+ * @brief Get all nvt_families, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -9060,27 +7313,11 @@ get_config_nvt (gvm_connection_t *connection, credentials_t *credentials,
  * @return Enveloped XML object.
  */
 char *
-get_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                    params_t *params, cmd_response_data_t *response_data)
+get_nvt_families_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                      params_t *params, cmd_response_data_t *response_data)
 {
-  return get_config_nvt (connection, credentials, params, 0, response_data);
-}
-
-/**
- * @brief Edit details of an NVT for a config, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-edit_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                     params_t *params, cmd_response_data_t *response_data)
-{
-  return get_config_nvt (connection, credentials, params, 1, response_data);
+  return get_entities (connection, "nvt_families", credentials, params, NULL,
+                       response_data);
 }
 
 /**
@@ -9117,8 +7354,8 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
       params_iterator_init (&iter, preferences);
       while (params_iterator_next (&iter, &preference_name, &preference))
         {
-          int type_start, type_end, count, ret, is_timeout = 0;
-          gchar *value;
+          int ret, is_timeout = 0;
+          gchar *value, **splits;
 
           g_free (modify_config_ret);
           modify_config_ret = NULL;
@@ -9127,14 +7364,11 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
            * must be reset.  This works around the need for the Manager to
            * send the actual password or show the actual file. */
 
-          /* LDAPsearch[entry]:Timeout value */
-          count = sscanf (preference_name, "%*[^[][%n%*[^]]%n]:", &type_start,
-                          &type_end);
-          if (count == 0 && type_start > 0 && type_end > 0)
+          /* OID:PrefID:PrefType:PrefName value */
+          splits = g_strsplit (preference_name, ":", 4);
+          if (splits && splits[0] && splits[1] && splits[2] && splits[3])
             {
-              if (strncmp (preference_name + type_start, "password",
-                           type_end - type_start)
-                  == 0)
+              if (!strcmp (splits[2], "password"))
                 {
                   int found = 0;
                   params_t *passwords;
@@ -9156,12 +7390,13 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
                           }
                     }
                   if (found == 0)
-                    /* Skip modifying the password preference. */
-                    continue;
+                    {
+                      /* Skip modifying the password preference. */
+                      g_strfreev (splits);
+                      continue;
+                    }
                 }
-              else if (strncmp (preference_name + type_start, "file",
-                                type_end - type_start)
-                       == 0)
+              else if (!strcmp (splits[2], "file"))
                 {
                   int found = 0;
                   params_t *files;
@@ -9183,17 +7418,19 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
                           }
                     }
                   if (found == 0)
-                    /* Skip modifying the file preference. */
-                    continue;
+                    {
+                      /* Skip modifying the file preference. */
+                      g_strfreev (splits);
+                      continue;
+                    }
                 }
-              else if (strncmp (preference_name + type_start, "scanner",
-                                type_end - type_start)
-                       == 0)
+              else if (!strcmp (splits[2], "scanner"))
                 {
                   /* Presume it's the timeout. */
                   is_timeout = 1;
                 }
             }
+          g_strfreev (splits);
 
           value = preference->value_size
                     ? g_base64_encode ((guchar *) preference->value,
@@ -9213,7 +7450,7 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
                   cmd_response_data_set_status_code (response_data,
                                                      MHD_HTTP_BAD_REQUEST);
                   return gsad_message (
-                    credentials, "Internal error", __FUNCTION__, __LINE__,
+                    credentials, "Internal error", __func__, __LINE__,
                     "An internal error occurred while saving a config. "
                     "It is unclear whether the entire config has been saved. "
                     "Diagnostics: Required parameter was NULL.",
@@ -9273,7 +7510,7 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
-                credentials, "Internal error", __FUNCTION__, __LINE__,
+                credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while saving a config. "
                 "It is unclear whether the entire config has been saved. "
                 "Diagnostics: Failure to send command to manager daemon.",
@@ -9283,7 +7520,7 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
           modify_config_ret = check_modify_config (
             connection, credentials, params, "get_config_nvt",
-            "edit_config_nvt", &success, response_data);
+            "save_config_nvt", &success, response_data);
           if (success == 0)
             {
               return modify_config_ret;
@@ -9507,7 +7744,7 @@ export_preference_file_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting a preference file. "
         "The file could not be delivered. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -9521,7 +7758,7 @@ export_preference_file_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting a preference file. "
         "The file could not be delivered. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -9550,7 +7787,7 @@ export_preference_file_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting a preference file. "
         "The file could not be delivered. "
         "Diagnostics: Failure to receive file from manager daemon.",
@@ -9645,14 +7882,14 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   const char *format_id;
   const char *filter;
   const char *filter_id;
+  gboolean lean, ignore_pagination, details;
   int ret;
-  int details;
-  int ignore_pagination;
   gchar *fname_format;
   const gchar *extension, *requested_content_type;
 
   details = params_value_bool (params, "details");
   ignore_pagination = params_value_bool (params, "ignore_pagination");
+  lean = params_value_bool (params, "lean");
 
   report_id = params_value (params, "report_id");
 
@@ -9664,6 +7901,8 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   filter = params_value (params, "filter");
   filter_id = params_value (params, "filter_id");
 
+  details = params_value_bool (params, "details");
+
   if (filter == NULL || filter_id)
     filter = "";
 
@@ -9672,26 +7911,22 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
     "<get_reports"
     " details=\"%d\""
     " ignore_pagination=\"%d\""
+    " lean=\"%d\""
     " filter=\"%s\""
     " filt_id=\"%s\""
     " report_id=\"%s\""
     " delta_report_id=\"%s\""
     " format_id=\"%s\"/>",
-    details,
-    ignore_pagination,
-    filter,
-    filter_id ? filter_id : FILT_ID_NONE,
-    report_id,
-    delta_report_id ? delta_report_id : "0",
-    format_id ? format_id : ""
-  );
+    details, ignore_pagination, lean, filter,
+    filter_id ? filter_id : FILT_ID_NONE, report_id,
+    delta_report_id ? delta_report_id : "0", format_id ? format_id : "");
 
   if (ret == -1)
     {
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting a report. "
         "The report could not be delivered. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -9710,7 +7945,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
-                credentials, "Internal error", __FUNCTION__, __LINE__,
+                credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while getting a report. "
                 "The report could not be delivered. "
                 "Diagnostics: Failure to receive response from manager daemon.",
@@ -9723,7 +7958,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
-                credentials, "Internal error", __FUNCTION__, __LINE__,
+                credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while getting a report. "
                 "The report could not be delivered. "
                 "Diagnostics: Response from manager daemon did not contain a "
@@ -9746,7 +7981,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
                       cmd_response_data_set_status_code (
                         response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                       return gsad_message (
-                        credentials, "Internal error", __FUNCTION__, __LINE__,
+                        credentials, "Internal error", __func__, __LINE__,
                         "An internal error occurred while getting a setting. "
                         "The setting could not be delivered. "
                         "Diagnostics: Failure to send command to manager "
@@ -9756,7 +7991,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
                       cmd_response_data_set_status_code (
                         response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                       return gsad_message (
-                        credentials, "Internal error", __FUNCTION__, __LINE__,
+                        credentials, "Internal error", __func__, __LINE__,
                         "An internal error occurred while getting a setting. "
                         "The setting could not be delivered. "
                         "Diagnostics: Failure to receive response from manager "
@@ -9766,7 +8001,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
                       cmd_response_data_set_status_code (
                         response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                       return gsad_message (
-                        credentials, "Internal error", __FUNCTION__, __LINE__,
+                        credentials, "Internal error", __func__, __LINE__,
                         "An internal error occurred while getting a setting. "
                         "The setting could not be delivered. "
                         "Diagnostics: Internal error.",
@@ -9777,7 +8012,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
               if (fname_format == NULL)
                 {
                   g_warning ("%s : File name format setting not found.",
-                             __FUNCTION__);
+                             __func__);
                   fname_format = "%T-%U";
                 }
 
@@ -9810,7 +8045,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
-                credentials, "Internal error", __FUNCTION__, __LINE__,
+                credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while getting a report. "
                 "The report could not be delivered. "
                 "Diagnostics: Failure to receive response from manager daemon.",
@@ -9856,8 +8091,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
                           cmd_response_data_set_status_code (
                             response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                           return gsad_message (
-                            credentials, "Internal error", __FUNCTION__,
-                            __LINE__,
+                            credentials, "Internal error", __func__, __LINE__,
                             "An internal error occurred while getting a "
                             "setting. "
                             "The setting could not be delivered. "
@@ -9868,8 +8102,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
                           cmd_response_data_set_status_code (
                             response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                           return gsad_message (
-                            credentials, "Internal error", __FUNCTION__,
-                            __LINE__,
+                            credentials, "Internal error", __func__, __LINE__,
                             "An internal error occurred while getting a "
                             "setting. "
                             "The setting could not be delivered. "
@@ -9880,8 +8113,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
                           cmd_response_data_set_status_code (
                             response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                           return gsad_message (
-                            credentials, "Internal error", __FUNCTION__,
-                            __LINE__,
+                            credentials, "Internal error", __func__, __LINE__,
                             "An internal error occurred while getting a "
                             "setting. "
                             "The setting could not be delivered. "
@@ -9893,7 +8125,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
                   if (fname_format == NULL)
                     {
                       g_warning ("%s : File name format setting not found.",
-                                 __FUNCTION__);
+                                 __func__);
                       fname_format = "%T-%U";
                     }
 
@@ -9923,7 +8155,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
-                credentials, "Internal error", __FUNCTION__, __LINE__,
+                credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while getting a report. "
                 "The report could not be delivered. "
                 "Diagnostics: Failure to receive report from manager daemon.",
@@ -9942,15 +8174,13 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
 
       if (delta_report_id)
         {
-          g_string_append_printf (xml,
-                                  "<delta>%s</delta>",
-                                  delta_report_id);
+          g_string_append_printf (xml, "<delta>%s</delta>", delta_report_id);
 
           entity = NULL;
           if (read_entity_and_string_c (connection, &entity, &xml))
             {
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
+              cmd_response_data_set_status_code (
+                response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
                 credentials, "Internal error", __FUNCTION__, __LINE__,
                 "An internal error occurred while getting a report. "
@@ -9965,9 +8195,9 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
 
               set_http_status_from_entity (entity, response_data);
 
-              message =
-                gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
-                              entity_attribute (entity, "status_text"), response_data);
+              message = gsad_message (
+                credentials, "Error", __FUNCTION__, __LINE__,
+                entity_attribute (entity, "status_text"), response_data);
 
               g_string_free (xml, TRUE);
               free_entity (entity);
@@ -9993,9 +8223,9 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
                 name = NULL;
 
               if (delta_report_id && id && name)
-                g_string_append_printf (xml,
-                                        "<task id=\"%s\"><name>%s</name></task>",
-                                        id, entity_text (name));
+                g_string_append_printf (
+                  xml, "<task id=\"%s\"><name>%s</name></task>", id,
+                  entity_text (name));
 
               free_entity (entity);
             }
@@ -10011,7 +8241,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting a report. "
             "The report could not be delivered. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -10068,7 +8298,7 @@ report_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
   if ((alert_id == NULL) || (report_id == NULL))
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Bad Request", __FUNCTION__, __LINE__,
+      return gsad_message (credentials, "Bad Request", __func__, __LINE__,
                            "Missing parameter alert_id or report_id. "
                            "Diagnostics: Required parameter was NULL.",
                            response_data);
@@ -10095,7 +8325,7 @@ report_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting a report. "
         "The report could not be delivered. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -10106,8 +8336,7 @@ report_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
     {
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while getting a report. "
                            "The report could not be delivered. "
                            "Diagnostics: Failure to receive response from "
@@ -10123,7 +8352,7 @@ report_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting a report. "
         "The report could not be delivered. "
         "Diagnostics: Failure to parse response from manager daemon.",
@@ -10134,7 +8363,7 @@ report_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
       free_entity (entity);
       g_free (response);
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Failed", __FUNCTION__, __LINE__,
+      return gsad_message (credentials, "Failed", __func__, __LINE__,
                            "Running the report alert failed."
                            "The report could not be delivered.",
                            response_data);
@@ -10154,26 +8383,6 @@ report_alert_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_reports (gvm_connection_t *connection, credentials_t *credentials,
-             params_t *params, const char *extra_xml,
-             cmd_response_data_t *response_data)
-{
-  return get_many (connection, "report", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all reports, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -10182,7 +8391,45 @@ char *
 get_reports_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_reports (connection, credentials, params, NULL, response_data);
+  const gchar *filter, *filter_id, *details;
+  gmp_arguments_t *arguments;
+
+  filter = params_value (params, "filter");
+  filter_id = params_value (params, "filter_id");
+  details = params_value (params, "details");
+
+  arguments = gmp_arguments_new ();
+
+  if (!filter && !filter_id)
+    {
+      filter_id = FILT_ID_USER_SETTING;
+    }
+
+  if (filter)
+    {
+      gmp_arguments_add (arguments, "report_filter", filter);
+    }
+
+  if (!filter_id && !filter)
+    {
+      filter_id = FILT_ID_USER_SETTING;
+    }
+
+  if (filter_id)
+    {
+      gmp_arguments_add (arguments, "report_filt_id", filter_id);
+    }
+
+  if (details && !str_equal (details, ""))
+    {
+      gmp_arguments_add (arguments, "details", details);
+    }
+
+  params_remove (params, "filter");
+  params_remove (params, "filter_id");
+
+  return get_entities (connection, "reports", credentials, params, arguments,
+                       response_data);
 }
 
 /**
@@ -10207,8 +8454,7 @@ download_ssl_cert (gvm_connection_t *connection, credentials_t *credentials,
   if (ssl_cert == NULL)
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred."
                            " Diagnostics: ssl_cert was NULL.",
                            response_data);
@@ -10247,8 +8493,7 @@ download_ca_pub (gvm_connection_t *connection, credentials_t *credentials,
   if (ca_pub == NULL)
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred."
                            " Diagnostics: ca_pub was NULL.",
                            response_data);
@@ -10280,8 +8525,7 @@ download_key_pub (gvm_connection_t *connection, credentials_t *credentials,
   if (key_pub == NULL)
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred."
                            " Diagnostics: key_pub was NULL.",
                            response_data);
@@ -10336,31 +8580,6 @@ export_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_results (gvm_connection_t *connection, credentials_t *credentials,
-             params_t *params, const char *extra_xml,
-             cmd_response_data_t *response_data)
-{
-  const gchar *_and_report_id = params_value (params, "_and_report_id");
-  if (params_given (params, "_and_report_id"))
-    {
-      CHECK_VARIABLE_INVALID (_and_report_id, "Get Results");
-    }
-  return get_many (connection, "result", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all results, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -10369,7 +8588,22 @@ char *
 get_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_results (connection, credentials, params, NULL, response_data);
+  const gchar *_and_report_id;
+  gmp_arguments_t *arguments = NULL;
+
+  _and_report_id = params_value (params, "_and_report_id");
+
+  if (params_given (params, "_and_report_id"))
+    {
+      CHECK_VARIABLE_INVALID (_and_report_id, "Get results");
+
+      arguments = gmp_arguments_new ();
+
+      gmp_arguments_add (arguments, "_and_report_id", _and_report_id);
+    }
+
+  return get_many (connection, "results", credentials, params, arguments,
+                   response_data);
 }
 
 /**
@@ -10396,26 +8630,6 @@ get_result_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_notes (gvm_connection_t *connection, credentials_t *credentials,
-           params_t *params, const char *extra_xml,
-           cmd_response_data_t *response_data)
-{
-  return get_many (connection, "note", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all notes, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -10424,7 +8638,8 @@ char *
 get_notes_gmp (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, cmd_response_data_t *response_data)
 {
-  return get_notes (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "notes", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -10443,8 +8658,13 @@ get_note (gvm_connection_t *connection, credentials_t *credentials,
           params_t *params, const char *extra_xml,
           cmd_response_data_t *response_data)
 {
-  return get_one (connection, "note", credentials, params, extra_xml,
-                  "result=\"1\"", response_data);
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "result", "1");
+
+  return get_one (connection, "note", credentials, params, extra_xml, arguments,
+                  response_data);
 }
 
 /**
@@ -10655,7 +8875,7 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new note. "
         "No new note was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -10664,7 +8884,7 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new note. "
         "It is unclear whether the note has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -10673,7 +8893,7 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new note. "
         "It is unclear whether the note has been created or not. "
         "Diagnostics: Internal Error.",
@@ -10774,7 +8994,7 @@ save_note_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a note. "
         "The note remains the same. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -10783,7 +9003,7 @@ save_note_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a note. "
         "It is unclear whether the note has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -10792,7 +9012,7 @@ save_note_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a note. "
         "It is unclear whether the note has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -10813,26 +9033,6 @@ save_note_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_overrides (gvm_connection_t *connection, credentials_t *credentials,
-               params_t *params, const char *extra_xml,
-               cmd_response_data_t *response_data)
-{
-  return get_many (connection, "override", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all overrides, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -10841,7 +9041,8 @@ char *
 get_overrides_gmp (gvm_connection_t *connection, credentials_t *credentials,
                    params_t *params, cmd_response_data_t *response_data)
 {
-  return get_overrides (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "overrides", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -10860,8 +9061,13 @@ get_override (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, const char *extra_xml,
               cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "result", "1");
+
   return get_one (connection, "override", credentials, params, extra_xml,
-                  "result=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -10972,7 +9178,7 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new override. "
         "No new override was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -10981,7 +9187,7 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new override. "
         "It is unclear whether the override has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -10990,7 +9196,7 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new override. "
         "It is unclear whether the override has been created or not. "
         "Diagnostics: Internal Error.",
@@ -11100,7 +9306,7 @@ save_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a override. "
         "The override remains the same. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -11109,7 +9315,7 @@ save_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a override. "
         "It is unclear whether the override has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -11118,7 +9324,7 @@ save_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a override. "
         "It is unclear whether the override has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -11141,26 +9347,6 @@ save_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_scanners (gvm_connection_t *connection, credentials_t *credentials,
-              params_t *params, const char *extra_xml,
-              cmd_response_data_t *response_data)
-{
-  return get_many (connection, "scanner", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all scanners, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -11169,7 +9355,8 @@ char *
 get_scanners_gmp (gvm_connection_t *connection, credentials_t *credentials,
                   params_t *params, cmd_response_data_t *response_data)
 {
-  return get_scanners (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "scanners", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -11279,7 +9466,7 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while verifying a scanner. "
         "The scanner was not verified. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -11288,7 +9475,7 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while verifying a scanner. "
         "It is unclear whether the scanner was verified or not. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -11297,7 +9484,7 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while verifying a scanner. "
         "It is unclear whether the scanner was verified or not. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -11345,7 +9532,6 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
   CHECK_VARIABLE_INVALID (type, "Create Scanner");
   if (params_given (params, "ca_pub"))
     CHECK_VARIABLE_INVALID (ca_pub, "Create Scanner");
-  CHECK_VARIABLE_INVALID (credential_id, "Create Scanner");
 
   if (ca_pub)
     ret = gmpf (connection, credentials, &response, &entity, response_data,
@@ -11355,7 +9541,8 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 "<ca_pub>%s</ca_pub>"
                 "<credential id=\"%s\"/>"
                 "</create_scanner>",
-                name, comment, host, port, type, ca_pub, credential_id);
+                name, comment, host, port, type, ca_pub,
+                credential_id ? credential_id : "");
   else
     ret = gmpf (connection, credentials, &response, &entity, response_data,
                 "<create_scanner>"
@@ -11363,7 +9550,8 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 "<host>%s</host><port>%s</port><type>%s</type>"
                 "<credential id=\"%s\"/>"
                 "</create_scanner>",
-                name, comment, host, port, type, credential_id);
+                name, comment, host, port, type,
+                credential_id ? credential_id : "");
   switch (ret)
     {
     case 0:
@@ -11373,7 +9561,7 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new scanner. "
         "No new scanner was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -11382,7 +9570,7 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new scanner. "
         "It is unclear whether the scanner has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -11391,7 +9579,7 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new scanner. "
         "It is unclear whether the scanner has been created or not. "
         "Diagnostics: Internal Error.",
@@ -11470,7 +9658,6 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
   if (is_unix_socket == 0)
     {
       CHECK_VARIABLE_INVALID (ca_pub, "Edit Scanner");
-      CHECK_VARIABLE_INVALID (credential_id, "Edit Scanner");
       CHECK_VARIABLE_INVALID (which_cert, "Edit Scanner");
     }
 
@@ -11489,30 +9676,30 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
       if (ca_pub == NULL)
         ca_pub = "";
       if (in_use)
-        ret =
-          gmpf (connection, credentials, &response, &entity, response_data,
-                "<modify_scanner scanner_id=\"%s\">"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<ca_pub>%s</ca_pub>"
-                "<credential id=\"%s\"/>"
-                "</modify_scanner>",
-                scanner_id, name, comment ?: "",
-                strcmp (which_cert, "new") == 0 ? ca_pub : "", credential_id);
+        ret = gmpf (connection, credentials, &response, &entity, response_data,
+                    "<modify_scanner scanner_id=\"%s\">"
+                    "<name>%s</name>"
+                    "<comment>%s</comment>"
+                    "<ca_pub>%s</ca_pub>"
+                    "<credential id=\"%s\"/>"
+                    "</modify_scanner>",
+                    scanner_id, name, comment ?: "",
+                    strcmp (which_cert, "new") == 0 ? ca_pub : "",
+                    credential_id ? credential_id : "");
       else
-        ret =
-          gmpf (connection, credentials, &response, &entity, response_data,
-                "<modify_scanner scanner_id=\"%s\">"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<host>%s</host>"
-                "<port>%s</port>"
-                "<type>%s</type>"
-                "<ca_pub>%s</ca_pub>"
-                "<credential id=\"%s\"/>"
-                "</modify_scanner>",
-                scanner_id, name, comment ?: "", host, port, type,
-                strcmp (which_cert, "new") == 0 ? ca_pub : "", credential_id);
+        ret = gmpf (connection, credentials, &response, &entity, response_data,
+                    "<modify_scanner scanner_id=\"%s\">"
+                    "<name>%s</name>"
+                    "<comment>%s</comment>"
+                    "<host>%s</host>"
+                    "<port>%s</port>"
+                    "<type>%s</type>"
+                    "<ca_pub>%s</ca_pub>"
+                    "<credential id=\"%s\"/>"
+                    "</modify_scanner>",
+                    scanner_id, name, comment ?: "", host, port, type,
+                    strcmp (which_cert, "new") == 0 ? ca_pub : "",
+                    credential_id ? credential_id : "");
     }
   else
     {
@@ -11548,7 +9735,7 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a scanner. "
         "The scanner remains the same. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -11557,7 +9744,7 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a scanner. "
         "It is unclear whether the scanner has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -11566,7 +9753,7 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a scanner. "
         "It is unclear whether the scanner has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -11599,8 +9786,13 @@ get_schedule (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, const char *extra_xml,
               cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "tasks", "1");
+
   return get_one (connection, "schedule", credentials, params, extra_xml,
-                  "tasks=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -11626,26 +9818,6 @@ get_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_schedules (gvm_connection_t *connection, credentials_t *credentials,
-               params_t *params, const char *extra_xml,
-               cmd_response_data_t *response_data)
-{
-  return get_many (connection, "schedule", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all schedules, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -11654,7 +9826,8 @@ char *
 get_schedules_gmp (gvm_connection_t *connection, credentials_t *credentials,
                    params_t *params, cmd_response_data_t *response_data)
 {
-  return get_schedules (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "schedules", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -11704,7 +9877,7 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new schedule. "
         "No new schedule was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -11713,7 +9886,7 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new schedule. "
         "It is unclear whether the schedule has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -11722,7 +9895,7 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new schedule. "
         "It is unclear whether the schedule has been created or not. "
         "Diagnostics: Internal Error.",
@@ -11885,7 +10058,7 @@ get_system_reports_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting the system reports. "
         "The current list of system reports is not available. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -11898,7 +10071,7 @@ get_system_reports_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting the system reports. "
         "The current list of system reports is not available. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -11918,7 +10091,7 @@ get_system_reports_gmp (gvm_connection_t *connection,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting the system reports. "
             "The current list of system reports is not available. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -11931,7 +10104,7 @@ get_system_reports_gmp (gvm_connection_t *connection,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while getting the system reports. "
             "The current list of system reports is not available. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -11998,13 +10171,13 @@ get_system_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
           CHECK_VARIABLE_INVALID (start_time, "Get System Report")
           CHECK_VARIABLE_INVALID (end_time, "Get System Report")
 
-          gmp_command = g_markup_printf_escaped (
-            "<get_system_reports"
-            " name=\"%s\""
-            " start_time=\"%s\""
-            " end_time=\"%s\""
-            " slave_id=\"%s\"/>",
-            name, start_time, end_time, slave_id ? slave_id : "0");
+          gmp_command = g_markup_printf_escaped ("<get_system_reports"
+                                                 " name=\"%s\""
+                                                 " start_time=\"%s\""
+                                                 " end_time=\"%s\""
+                                                 " slave_id=\"%s\"/>",
+                                                 name, start_time, end_time,
+                                                 slave_id ? slave_id : "0");
         }
 
       if (gvm_connection_sendf (connection, "%s", gmp_command) == -1)
@@ -12079,8 +10252,14 @@ get_report_format (gvm_connection_t *connection, credentials_t *credentials,
                    params_t *params, const char *extra_xml,
                    cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "alerts", "1");
+  gmp_arguments_add (arguments, "params", "1");
+
   return get_one (connection, "report_format", credentials, params, extra_xml,
-                  "alerts =\"1\" params=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -12107,26 +10286,6 @@ get_report_format_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_report_formats (gvm_connection_t *connection, credentials_t *credentials,
-                    params_t *params, const char *extra_xml,
-                    cmd_response_data_t *response_data)
-{
-  return get_many (connection, "report_format", credentials, params, extra_xml,
-                   NULL, response_data);
-}
-
-/**
- * @brief Get all Report Formats, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -12136,8 +10295,8 @@ get_report_formats_gmp (gvm_connection_t *connection,
                         credentials_t *credentials, params_t *params,
                         cmd_response_data_t *response_data)
 {
-  return get_report_formats (connection, credentials, params, NULL,
-                             response_data);
+  return get_many (connection, "report_formats", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -12198,7 +10357,7 @@ import_report_format_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while importing a report format. "
         "The schedule remains the same. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -12207,7 +10366,7 @@ import_report_format_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while importing a report format. "
         "It is unclear whether the schedule has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -12216,7 +10375,7 @@ import_report_format_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while importing a report format. "
         "It is unclear whether the schedule has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -12344,7 +10503,7 @@ save_report_format_gmp (gvm_connection_t *connection,
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
-                credentials, "Internal error", __FUNCTION__, __LINE__,
+                credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while saving a Report Format. "
                 "The Report Format was not saved. "
                 "Diagnostics: Failure to send command to manager daemon.",
@@ -12353,7 +10512,7 @@ save_report_format_gmp (gvm_connection_t *connection,
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
-                credentials, "Internal error", __FUNCTION__, __LINE__,
+                credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while saving a Report Format. "
                 "It is unclear whether the Report Format has been saved or "
                 "not. "
@@ -12364,7 +10523,7 @@ save_report_format_gmp (gvm_connection_t *connection,
               cmd_response_data_set_status_code (
                 response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
-                credentials, "Internal error", __FUNCTION__, __LINE__,
+                credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while saving a Report Format. "
                 "It is unclear whether the Report Format has been saved or "
                 "not. "
@@ -12392,11 +10551,10 @@ save_report_format_gmp (gvm_connection_t *connection,
       params_iterator_init (&iter, preferences);
       while (params_iterator_next (&iter, &param_name, &param))
         {
-          int type_start, type_end, count;
-          /* LDAPsearch[entry]:Timeout value */
-          count =
-            sscanf (param_name, "%*[^[][%n%*[^]]%n]:", &type_start, &type_end);
-          if (count == 0 && type_start > 0 && type_end > 0)
+          char **splits;
+          /* OID:PrefID:PrefType:PrefName value */
+          splits = g_strsplit (param_name, ":", 4);
+          if (splits && splits[0] && splits[1] && splits[2] && splits[3])
             {
               gchar *value;
 
@@ -12416,7 +10574,7 @@ save_report_format_gmp (gvm_connection_t *connection,
                           "<value>%s</value>"
                           "</param>"
                           "</modify_report_format>",
-                          report_format_id, param_name + type_end + 2, value);
+                          report_format_id, splits[3], value);
               g_free (value);
               switch (ret)
                 {
@@ -12425,8 +10583,9 @@ save_report_format_gmp (gvm_connection_t *connection,
                 case 1:
                   cmd_response_data_set_status_code (
                     response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
+                  g_strfreev (splits);
                   return gsad_message (
-                    credentials, "Internal error", __FUNCTION__, __LINE__,
+                    credentials, "Internal error", __func__, __LINE__,
                     "An internal error occurred while saving a Report Format. "
                     "The Report Format was not saved. "
                     "Diagnostics: Failure to send command to manager daemon.",
@@ -12434,8 +10593,9 @@ save_report_format_gmp (gvm_connection_t *connection,
                 case 2:
                   cmd_response_data_set_status_code (
                     response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
+                  g_strfreev (splits);
                   return gsad_message (
-                    credentials, "Internal error", __FUNCTION__, __LINE__,
+                    credentials, "Internal error", __func__, __LINE__,
                     "An internal error occurred while saving a Report Format. "
                     "It is unclear whether the Report Format has been saved or "
                     "not. "
@@ -12446,8 +10606,9 @@ save_report_format_gmp (gvm_connection_t *connection,
                 default:
                   cmd_response_data_set_status_code (
                     response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
+                  g_strfreev (splits);
                   return gsad_message (
-                    credentials, "Internal error", __FUNCTION__, __LINE__,
+                    credentials, "Internal error", __func__, __LINE__,
                     "An internal error occurred while saving a Report Format. "
                     "It is unclear whether the Report Format has been saved or "
                     "not. "
@@ -12457,6 +10618,7 @@ save_report_format_gmp (gvm_connection_t *connection,
 
               /* TODO Check if succeeded.  response_from_entity_if_failed? */
             }
+          g_strfreev (splits);
         }
     }
 
@@ -12481,7 +10643,7 @@ save_report_format_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a Report Format. "
         "The Report Format was not saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -12490,7 +10652,7 @@ save_report_format_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a Report Format. "
         "It is unclear whether the Report Format has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -12499,7 +10661,7 @@ save_report_format_gmp (gvm_connection_t *connection,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a Report Format. "
         "It is unclear whether the Report Format has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -12545,7 +10707,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials,
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while trying to start a wizard. "
         "Diagnostics: Required parameter 'name' was NULL.",
         response_data);
@@ -12586,7 +10748,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while running a wizard. "
         "The wizard did not start. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -12595,7 +10757,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while running a wizard. "
         "It is unclear whether the wizard started or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -12603,8 +10765,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials,
     default:
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while running a wizard. "
                            "It is unclear whether the wizard started or not. "
                            "Diagnostics: Internal Error.",
@@ -12630,7 +10791,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,                   \
                                              MHD_HTTP_INTERNAL_SERVER_ERROR); \
           return gsad_message (                                               \
-            credentials, "Internal error", __FUNCTION__, __LINE__,            \
+            credentials, "Internal error", __func__, __LINE__,                \
             "An internal error occurred while getting " name                  \
             " list for trash."                                                \
             "Diagnostics: Failure to send command to"                         \
@@ -12644,7 +10805,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,                   \
                                              MHD_HTTP_INTERNAL_SERVER_ERROR); \
           return gsad_message (                                               \
-            credentials, "Internal error", __FUNCTION__, __LINE__,            \
+            credentials, "Internal error", __func__, __LINE__,                \
             "An internal error occurred while getting " name " list."         \
             "Diagnostics: Failure to receive response from"                   \
             " manager daemon.",                                               \
@@ -12674,8 +10835,6 @@ get_trash (gvm_connection_t *connection, credentials_t *credentials,
 
   if (extra_xml)
     g_string_append (xml, extra_xml);
-
-  GET_TRASH_RESOURCE ("GET_AGENTS", "get_agents", "agents");
 
   GET_TRASH_RESOURCE ("GET_CONFIGS", "get_configs", "configs");
 
@@ -12881,7 +11040,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "The settings remains the same. "
             "Diagnostics: Manager closed connection during authenticate.",
@@ -12890,7 +11049,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Invalid Password", __FUNCTION__, __LINE__,
+            credentials, "Invalid Password", __func__, __LINE__,
             "You tried to change your password, but the old"
             " password was not provided or was incorrect. "
             " Please enter the correct old password or remove"
@@ -12901,7 +11060,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "The settings remains the same. "
             "Diagnostics: Internal Error.",
@@ -12922,7 +11081,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -12938,7 +11097,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "Diagnostics: Failure to receive response from manager daemon.",
             response_data);
@@ -12977,7 +11136,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -12993,7 +11152,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "Diagnostics: Failure to receive response from manager daemon.",
             response_data);
@@ -13012,7 +11171,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
           if (setenv ("TZ", timezone, 1) == -1)
             {
-              g_critical ("%s: failed to set TZ\n", __FUNCTION__);
+              g_critical ("%s: failed to set TZ\n", __func__);
               exit (EXIT_FAILURE);
             }
           tzset ();
@@ -13044,7 +11203,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -13061,7 +11220,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -13096,7 +11255,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -13113,7 +11272,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -13147,7 +11306,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -13164,7 +11323,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -13199,7 +11358,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -13216,7 +11375,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -13250,7 +11409,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -13267,7 +11426,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -13295,7 +11454,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving settings. "
         "It is unclear whether all the settings were saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -13311,7 +11470,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving settings. "
         "It is unclear whether all the settings were saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -13341,7 +11500,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -13358,7 +11517,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -13404,7 +11563,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -13421,7 +11580,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -13457,7 +11616,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -13474,7 +11633,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -13512,7 +11671,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to send command to manager daemon.",
@@ -13530,7 +11689,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred while saving settings. "
             "It is unclear whether all the settings were saved. "
             "Diagnostics: Failure to receive response from manager daemon.",
@@ -13598,26 +11757,6 @@ get_group_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_groups (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *extra_xml,
-            cmd_response_data_t *response_data)
-{
-  return get_many (connection, "group", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all groups, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -13626,7 +11765,8 @@ char *
 get_groups_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t *response_data)
 {
-  return get_groups (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "groups", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -13714,7 +11854,7 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new group. "
         "No new group was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -13723,7 +11863,7 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new group. "
         "It is unclear whether the group has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -13732,7 +11872,7 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new group. "
         "It is unclear whether the group has been created or not. "
         "Diagnostics: Internal Error.",
@@ -13834,7 +11974,7 @@ save_group_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a group. "
         "The group was not saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -13843,7 +11983,7 @@ save_group_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a group. "
         "It is unclear whether the group has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -13852,7 +11992,7 @@ save_group_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a group. "
         "It is unclear whether the group has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -13884,8 +12024,13 @@ get_permission (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, const char *extra_xml,
                 cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "alerts", "1");
+
   return get_one (connection, "permission", credentials, params, extra_xml,
-                  "alerts=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -13911,26 +12056,6 @@ get_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_permissions (gvm_connection_t *connection, credentials_t *credentials,
-                 params_t *params, const char *extra_xml,
-                 cmd_response_data_t *response_data)
-{
-  return get_many (connection, "permission", credentials, params, extra_xml,
-                   NULL, response_data);
-}
-
-/**
- * @brief Get all permissions, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -13939,7 +12064,8 @@ char *
 get_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials,
                      params_t *params, cmd_response_data_t *response_data)
 {
-  return get_permissions (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "permissions", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -14028,27 +12154,27 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
       break;
     case 1:
       cmd_response_data_set_status_code (response_data,
-                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a permission. "
         "The permission was not created. "
         "Diagnostics: Failure to send command to manager daemon.",
         response_data);
     case 2:
       cmd_response_data_set_status_code (response_data,
-                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a permission. "
         "It is unclear whether the permission has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
         response_data);
     default:
       cmd_response_data_set_status_code (response_data,
-                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a permission. "
         "It is unclear whether the permission has been created or not. "
         "Diagnostics: Internal Error.",
@@ -14059,7 +12185,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
     params_add (params, "permission_id", entity_attribute (entity, "id"));
 
   html = response_from_entity (connection, credentials, params, entity,
-                                "Create Permission", response_data);
+                               "Create Permission", response_data);
 
   free_entity (entity);
   g_free (response);
@@ -14076,7 +12202,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,                     \
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);   \
       return gsad_message (                                                 \
-        credentials, "Internal error", __FUNCTION__, __LINE__,              \
+        credentials, "Internal error", __func__, __LINE__,                  \
         "An internal error occurred while creating a permission. "          \
         "The permission was not created. "                                  \
         "Diagnostics: Failure to send command to manager daemon.",          \
@@ -14085,7 +12211,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,                     \
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);   \
       return gsad_message (                                                 \
-        credentials, "Internal error", __FUNCTION__, __LINE__,              \
+        credentials, "Internal error", __func__, __LINE__,                  \
         "An internal error occurred while creating a permission. "          \
         "It is unclear whether the permission has been created or not. "    \
         "Diagnostics: Failure to receive response from manager daemon.",    \
@@ -14094,7 +12220,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,                     \
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);   \
       return gsad_message (                                                 \
-        credentials, "Internal error", __FUNCTION__, __LINE__,              \
+        credentials, "Internal error", __func__, __LINE__,                  \
         "An internal error occurred while creating a permission. "          \
         "It is unclear whether the permission has been created or not. "    \
         "Diagnostics: Internal Error.",                                     \
@@ -14297,8 +12423,7 @@ create_permissions_gmp (gvm_connection_t *connection,
               CHECK_GMPF_RET
             }
 
-          if (str_equal (permission_resource_type, "agent")
-              || str_equal (permission_resource_type, "report_format")
+          if (str_equal (permission_resource_type, "report_format")
               || str_equal (permission_resource_type, "scanner"))
             {
               // create verify permission
@@ -14456,8 +12581,7 @@ create_permissions_gmp (gvm_connection_t *connection,
                       CHECK_GMPF_RET
                     }
 
-                  if (str_equal (related_type, "agent")
-                      || str_equal (related_type, "report_format")
+                  if (str_equal (related_type, "report_format")
                       || str_equal (related_type, "scanner"))
                     {
                       response = NULL;
@@ -14601,7 +12725,7 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while modifying a permission. "
         "The permission was not modified. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -14610,7 +12734,7 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while modifying a permission. "
         "It is unclear whether the permission has been modified or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -14619,7 +12743,7 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while modifying a permission. "
         "It is unclear whether the permission has been modified or not. "
         "Diagnostics: Internal Error.",
@@ -14682,7 +12806,7 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new port list. "
         "No new port list was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -14691,7 +12815,7 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new port list. "
         "It is unclear whether the port list has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -14700,7 +12824,7 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new port list. "
         "It is unclear whether the port list has been created or not. "
         "Diagnostics: Internal Error.",
@@ -14767,7 +12891,7 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a Port Range. "
         "The Port Range was not created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -14776,7 +12900,7 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a Port Range. "
         "It is unclear whether the Port Range has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -14785,7 +12909,7 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a Port Range. "
         "It is unclear whether the Port Range has been created or not. "
         "Diagnostics: Internal Error.",
@@ -14815,8 +12939,14 @@ get_port_list (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, const char *extra_xml,
                cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "targets", "1");
+  gmp_arguments_add (arguments, "details", "1");
+
   return get_one (connection, "port_list", credentials, params, extra_xml,
-                  "targets=\"1\" details=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -14837,26 +12967,6 @@ get_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get all Port Lists, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_port_lists (gvm_connection_t *connection, credentials_t *credentials,
-                params_t *params, const char *extra_xml,
-                cmd_response_data_t *response_data)
-{
-  return get_many (connection, "port_list", credentials, params, extra_xml,
-                   NULL, response_data);
-}
-
-/**
  * @brief Get all port_lists, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -14870,7 +12980,8 @@ char *
 get_port_lists_gmp (gvm_connection_t *connection, credentials_t *credentials,
                     params_t *params, cmd_response_data_t *response_data)
 {
-  return get_port_lists (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "port_lists", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -14920,7 +13031,7 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a Port List. "
         "The Port List was not saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -14929,7 +13040,7 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a Port List. "
         "It is unclear whether the Port List has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -14938,7 +13049,7 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a Port List. "
         "It is unclear whether the Port List has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -15026,7 +13137,7 @@ import_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while importing a port_list. "
         "The schedule remains the same. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -15035,7 +13146,7 @@ import_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while importing a port_list. "
         "It is unclear whether the schedule has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -15044,7 +13155,7 @@ import_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while importing a port_list. "
         "It is unclear whether the schedule has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -15124,7 +13235,7 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new role. "
         "No new role was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -15133,7 +13244,7 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new role. "
         "It is unclear whether the role has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -15142,7 +13253,7 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new role. "
         "It is unclear whether the role has been created or not. "
         "Diagnostics: Internal Error.",
@@ -15201,26 +13312,6 @@ get_role_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_roles (gvm_connection_t *connection, credentials_t *credentials,
-           params_t *params, const char *extra_xml,
-           cmd_response_data_t *response_data)
-{
-  return get_many (connection, "role", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all roles, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -15229,7 +13320,8 @@ char *
 get_roles_gmp (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, cmd_response_data_t *response_data)
 {
-  return get_roles (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "roles", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -15318,7 +13410,7 @@ save_role_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a role. "
         "The role was not saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -15327,7 +13419,7 @@ save_role_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a role. "
         "It is unclear whether the role has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -15336,7 +13428,7 @@ save_role_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a role. "
         "It is unclear whether the role has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -15378,7 +13470,7 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting the feed list. "
         "The current list of feeds is not available. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -15390,7 +13482,7 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting the feed. "
         "The current list of feeds is not available. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -15449,8 +13541,8 @@ sync_feed (gvm_connection_t *connection, credentials_t *credentials,
         "Feed synchronization is currently not available. "
         "Diagnostics: Failure to send command to manager daemon.",
         feed_name);
-      html = gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__, msg, response_data);
+      html = gsad_message (credentials, "Internal error", __func__, __LINE__,
+                           msg, response_data);
       g_free (msg);
       return html;
     }
@@ -15465,8 +13557,8 @@ sync_feed (gvm_connection_t *connection, credentials_t *credentials,
         "Feed synchronization is currently not available. "
         "Diagnostics: Failure to receive response from manager daemon.",
         feed_name);
-      html = gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__, msg, response_data);
+      html = gsad_message (credentials, "Internal error", __func__, __LINE__,
+                           msg, response_data);
       g_free (msg);
       return html;
     }
@@ -15549,8 +13641,13 @@ get_filter (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t *response_data)
 {
+  gmp_arguments_t *arguments;
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "alerts", "1");
+
   return get_one (connection, "filter", credentials, params, extra_xml,
-                  "alerts=\"1\"", response_data);
+                  arguments, response_data);
 }
 
 /**
@@ -15576,26 +13673,6 @@ get_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_filters (gvm_connection_t *connection, credentials_t *credentials,
-             params_t *params, const char *extra_xml,
-             cmd_response_data_t *response_data)
-{
-  return get_many (connection, "filter", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Get all filters, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -15604,7 +13681,8 @@ char *
 get_filters_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_filters (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "filters", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -15651,7 +13729,7 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new alert. "
         "No new alert was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -15660,7 +13738,7 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new alert. "
         "It is unclear whether the alert has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -15669,7 +13747,7 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new alert. "
         "It is unclear whether the alert has been created or not. "
         "Diagnostics: Internal Error.",
@@ -15786,7 +13864,7 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (
-          credentials, "Internal error", __FUNCTION__, __LINE__,
+          credentials, "Internal error", __func__, __LINE__,
           "An internal error occurred while modifying a filter. "
           "The filter was not modified. "
           "Diagnostics: Failure to send command to manager daemon.",
@@ -15799,7 +13877,7 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t *credentials,
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (
-          credentials, "Internal error", __FUNCTION__, __LINE__,
+          credentials, "Internal error", __func__, __LINE__,
           "An internal error occurred while modifying a filter. "
           "It is unclear whether the filter has been modified or not. "
           "Diagnostics: Failure to receive response from manager daemon.",
@@ -15905,7 +13983,7 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a schedule. "
         "The schedule remains the same. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -15914,7 +13992,7 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a schedule. "
         "It is unclear whether the schedule has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -15923,7 +14001,7 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a schedule. "
         "It is unclear whether the schedule has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -15996,7 +14074,7 @@ get_user (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred getting the auth list. "
             "Diagnostics: Failure to send command to manager daemon.",
             response_data);
@@ -16004,7 +14082,7 @@ get_user (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred getting the auth list. "
             "Diagnostics: Failure to receive response from manager daemon.",
             response_data);
@@ -16012,7 +14090,7 @@ get_user (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred getting the auth list. "
             "Diagnostics: Internal Error.",
             response_data);
@@ -16052,78 +14130,6 @@ get_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_users (gvm_connection_t *connection, credentials_t *credentials,
-           params_t *params, const char *extra_xml,
-           cmd_response_data_t *response_data)
-{
-  gchar *html;
-  GString *extra;
-
-  extra = g_string_new ("");
-  if (command_enabled (credentials, "DESCRIBE_AUTH"))
-    {
-      gchar *response;
-      entity_t entity;
-
-      response = NULL;
-      entity = NULL;
-      switch (gmp (connection, credentials, &response, &entity, response_data,
-                   "<describe_auth/>"))
-        {
-        case 0:
-        case -1:
-          break;
-        case 1:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred getting the auth list. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        case 2:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred getting the auth list. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        default:
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred getting the auth list. "
-            "Diagnostics: Internal Error.",
-            response_data);
-        }
-
-      g_string_append (extra, response);
-
-      free_entity (entity);
-      g_free (response);
-    }
-  if (extra_xml)
-    g_string_append (extra, extra_xml);
-  html = get_many (connection, "user", credentials, params, extra->str, NULL,
-                   response_data);
-  g_string_free (extra, TRUE);
-  return html;
-}
-
-/**
- * @brief Get all users, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
@@ -16132,7 +14138,8 @@ char *
 get_users_gmp (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, cmd_response_data_t *response_data)
 {
-  return get_users (connection, credentials, params, NULL, response_data);
+  return get_many (connection, "users", credentials, params, NULL,
+                   response_data);
 }
 
 /**
@@ -16273,7 +14280,7 @@ create_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new user. "
         "No new user was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -16282,7 +14289,7 @@ create_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new user. "
         "It is unclear whether the user has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -16291,7 +14298,7 @@ create_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new user. "
         "It is unclear whether the user has been created or not. "
         "Diagnostics: Internal Error.",
@@ -16321,26 +14328,7 @@ char *
 get_vulns_gmp (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, cmd_response_data_t *response_data)
 {
-  return get_vulns (connection, credentials, params, NULL, response_data);
-}
-
-/**
- * @brief Get multiple vulns, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_vulns (gvm_connection_t *connection, credentials_t *credentials,
-           params_t *params, const char *extra_xml,
-           cmd_response_data_t *response_data)
-{
-  return get_many (connection, "vuln", credentials, params, extra_xml, NULL,
+  return get_many (connection, "vulns", credentials, params, NULL,
                    response_data);
 }
 
@@ -16376,7 +14364,7 @@ auth_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred getting the auth list. "
             "Diagnostics: Failure to send command to manager daemon.",
             response_data);
@@ -16384,7 +14372,7 @@ auth_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred getting the auth list. "
             "Diagnostics: Failure to receive response from manager daemon.",
             response_data);
@@ -16392,7 +14380,7 @@ auth_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
+            credentials, "Internal error", __func__, __LINE__,
             "An internal error occurred getting the auth list. "
             "Diagnostics: Internal Error.",
             response_data);
@@ -16599,7 +14587,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a user. "
         "The user was not saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -16608,7 +14596,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a user. "
         "It is unclear whether the user has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -16617,7 +14605,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a user. "
         "It is unclear whether the user has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -16633,7 +14621,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
       cmd_response_data_set_status_code (response_data, MHD_HTTP_UNAUTHORIZED);
       return gsad_message (
-        credentials, "Authentication Required", __FUNCTION__, __LINE__,
+        credentials, "Authentication Required", __func__, __LINE__,
         "Authentication method changed. Please login with ", response_data);
     }
   else
@@ -16848,10 +14836,10 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t *credentials,
                   method, truefalse, radiushost, radiuskey);
     }
   else
-    return get_users (
-      connection, credentials, params,
-      GSAD_MESSAGE_INVALID_PARAM ("Save Authentication Configuration"),
-      response_data);
+    {
+      return message_invalid (connection, credentials, params, response_data,
+                              "Given method was invalid", "Save auth");
+    }
 
   switch (ret)
     {
@@ -16862,7 +14850,7 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving the auth settings. "
         "The settings were not saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -16871,7 +14859,7 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving the auth settings. "
         "It is unclear whether the settings have been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -16880,7 +14868,7 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving the auth settings. "
         "It is unclear whether the settings have been saved or not. "
         "Diagnostics: Internal Error.",
@@ -16941,7 +14929,7 @@ get_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting the settings. "
         "The current list of settings is not available. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -16955,7 +14943,7 @@ get_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting the settings. "
         "The current list of settings is not available. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -17032,7 +15020,7 @@ save_setting_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving settings. "
         "It is unclear whether all the settings were saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -17042,7 +15030,7 @@ save_setting_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving settings. "
         "It is unclear whether all the settings were saved. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -17051,8 +15039,7 @@ save_setting_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while saving settings. "
                            "It is unclear whether all the settings were saved. "
                            "Diagnostics: Internal Error.",
@@ -17081,8 +15068,7 @@ get_setting_gmp (gvm_connection_t *connection, credentials_t *credentials,
       g_string_free (xml, TRUE);
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while getting the "
                            "dashboard settings"
                            "Diagnostics: Failure to send command to manager "
@@ -17095,8 +15081,7 @@ get_setting_gmp (gvm_connection_t *connection, credentials_t *credentials,
       g_string_free (xml, TRUE);
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while getting the "
                            "dashboard settings"
                            "Diagnostics: Failure to receive response from "
@@ -17134,7 +15119,7 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting the wizard. "
         "Given name was invalid",
         response_data);
@@ -17157,7 +15142,7 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting the wizard. "
         "Diagnostics: Failure to send command to manager daemon.",
         response_data);
@@ -17168,8 +15153,7 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
       g_string_free (xml, TRUE);
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while getting the"
                            " wizard."
                            "Diagnostics: Failure to receive response from"
@@ -17188,7 +15172,7 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting the wizard. "
         "Diagnostics: Failure to send command to manager daemon.",
         response_data);
@@ -17200,7 +15184,7 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while the wizard. "
         "Diagnostics: Failure to receive response from manager daemon.",
         response_data);
@@ -17265,7 +15249,7 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while trying to start a wizard. "
         "Diagnostics: Required parameter 'get_name' was NULL.",
         response_data);
@@ -17307,7 +15291,7 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while running a wizard. "
         "The wizard did not start. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -17316,7 +15300,7 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while running a wizard. "
         "It is unclear whether the wizard started or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -17324,8 +15308,7 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
     default:
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while running a wizard. "
                            "It is unclear whether the wizard started or not. "
                            "Diagnostics: Internal Error.",
@@ -17371,21 +15354,16 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
   const char *type;
-  GString *commands_xml;
   params_t *selected_ids;
-  params_iterator_t iter;
-  param_t *param;
-  gchar *param_name;
-  gchar *html, *response;
-  entity_t entity;
   gchar *extra_attribs;
+  int count, fail;
 
   type = params_value (params, "resource_type");
   if (type == NULL)
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while deleting resources. "
         "The resources were not deleted. "
         "Diagnostics: Required parameter 'resource_type' was NULL.",
@@ -17404,62 +15382,88 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t *credentials,
         extra_attribs = g_strdup_printf ("inheritor_id=\"%s\"", inheritor_id);
     }
 
-  commands_xml = g_string_new ("<commands>");
-
+  count = fail = 0;
   selected_ids = params_values (params, "bulk_selected:");
   if (selected_ids)
     {
+      params_iterator_t iter;
+      param_t *param;
+      gchar *param_name;
+
       params_iterator_init (&iter, selected_ids);
       while (params_iterator_next (&iter, &param_name, &param))
         {
-          xml_string_append (commands_xml,
-                             "<delete_%s %s_id=\"%s\" ultimate=\"0\"", type,
-                             type, param_name);
-          if (extra_attribs)
-            g_string_append_printf (commands_xml, " %s/>", extra_attribs);
+          gchar *command, *response;
+          entity_t entity;
+
+          /* Delete the resource. */
+
+          command = g_strdup_printf ("<delete_%s %s_id=\"%s\""
+                                     "           ultimate=\"0\" %s/>",
+                                     type, type, param_name,
+                                     extra_attribs ? extra_attribs : "");
+          if (gvm_connection_sendf_xml (connection, command) == -1)
+            {
+              g_free (command);
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
+              return gsad_message (
+                credentials, "Internal error", __func__, __LINE__,
+                "An internal error occurred while deleting resources. "
+                "The resources were not deleted. "
+                "Diagnostics: Failure to send command to manager daemon.",
+                response_data);
+            }
+          g_free (command);
+
+          entity = NULL;
+          if (read_entity_and_text_c (connection, &entity, &response))
+            {
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
+              return gsad_message (
+                credentials, "Internal error", __func__, __LINE__,
+                "An internal error occurred while deleting resources. "
+                "It is unclear whether the resources have been deleted or not. "
+                "Diagnostics: Failure to read response from manager daemon.",
+                response_data);
+            }
+
+          if (*(entity_attribute (entity, "status")) != '2')
+            fail = 1;
           else
-            g_string_append (commands_xml, "/>");
+            count++;
+
+          free_entity (entity);
+          g_free (response);
         }
     }
 
-  g_string_append (commands_xml, "</commands>");
-
-  /* Delete the resources and get all resources. */
-
-  if (gvm_connection_sendf_xml (connection, commands_xml->str) == -1)
-    {
-      g_string_free (commands_xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while deleting resources. "
-        "The resources were not deleted. "
-        "Diagnostics: Failure to send command to manager daemon.",
-        response_data);
-    }
-  g_string_free (commands_xml, TRUE);
-
-  entity = NULL;
-  if (read_entity_and_text_c (connection, &entity, &response))
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
-        "An internal error occurred while deleting resources. "
-        "It is unclear whether the resources have been deleted or not. "
-        "Diagnostics: Failure to read response from manager daemon.",
-        response_data);
-    }
-
   /* Cleanup, and return transformed XML. */
-  html = response_from_entity (connection, credentials, params, entity,
-                               "Bulk Delete", response_data);
-  g_free (response);
-  free_entity (entity);
 
-  return html;
+  if (fail)
+    {
+      gchar *html, *msg;
+
+      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
+
+      msg = g_strdup_printf
+             ("An error occurred while deleting one or more resources. "
+              "However, %i of the resources %s successfully deleted. "
+              "Diagnostics: At least one DELETE command failed.",
+              count,
+              count > 1 ? "were" : "was");
+
+      html = gsad_message (credentials, "Error", __func__, __LINE__, msg,
+                           response_data);
+      g_free (msg);
+      return html;
+    }
+
+  return action_result (connection, credentials, params, response_data, "Bulk Delete",
+                        "OK",
+                        "",    /* Status details. */
+                        NULL); /* ID. */
 }
 
 /**
@@ -17568,7 +15572,7 @@ create_host_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new host. "
         "No new host was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -17577,7 +15581,7 @@ create_host_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new host. "
         "It is unclear whether the host has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -17586,7 +15590,7 @@ create_host_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a new host. "
         "It is unclear whether the host has been created or not. "
         "Diagnostics: Internal Error.",
@@ -17618,62 +15622,34 @@ get_asset (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t *response_data)
 {
-  char *ret;
-  GString *extra_attribs, *extra_response;
-  const char *asset_type;
+  const gchar *asset_type;
+  gmp_arguments_t *arguments;
 
   asset_type = params_value (params, "asset_type");
-  if (asset_type == NULL)
-    {
-      param_t *param;
-      param = params_add (params, "asset_type", "host");
-      param->valid = 1;
-      param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
-      asset_type = params_value (params, "asset_type");
-    }
 
-  if (strcmp (asset_type, "host") && strcmp (asset_type, "os"))
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
-                           "An internal error occurred while getting an asset. "
-                           "Diagnostics: Invalid asset_type parameter value",
-                           response_data);
-    }
+  CHECK_VARIABLE_INVALID (asset_type, "Get Asset")
 
   if (params_value (params, "asset_name") && params_value (params, "asset_id"))
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
+      return gsad_message (credentials, "Internal error", __func__, __LINE__,
                            "An internal error occurred while getting an asset. "
                            "Diagnostics: Both ID and Name set.",
                            response_data);
     }
 
-  extra_response = g_string_new (extra_xml ? extra_xml : "");
+  arguments = gmp_arguments_new ();
 
-  extra_attribs = g_string_new ("");
-  g_string_append_printf (extra_attribs, "type=\"%s\"",
-                          params_value (params, "asset_type"));
+  gmp_arguments_add (arguments, "type", asset_type);
+
   if (params_value (params, "asset_name"))
-    g_string_append_printf (extra_attribs, " name=\"%s\"",
-                            params_value (params, "asset_name"));
-  else if (params_value (params, "asset_id"))
-    g_string_append_printf (extra_attribs, " asset_id=\"%s\"",
-                            params_value (params, "asset_id"));
-  if (params_value (params, "details"))
-    g_string_append_printf (extra_attribs, " details=\"%s\"",
-                            params_value (params, "details"));
+    {
+      gmp_arguments_add (arguments, "name",
+                         params_value (params, "asset_name"));
+    }
 
-  ret = get_one (connection, "asset", credentials, params, extra_response->str,
-                 extra_attribs->str, response_data);
-
-  g_string_free (extra_response, TRUE);
-  g_string_free (extra_attribs, TRUE);
-
-  return ret;
+  return get_one (connection, "asset", credentials, params, NULL, arguments,
+                  response_data);
 }
 
 /**
@@ -17705,69 +15681,28 @@ get_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @return XML enveloped assets response or error message.
  */
 char *
-get_assets (gvm_connection_t *connection, credentials_t *credentials,
-            params_t *params, const char *extra_xml,
-            cmd_response_data_t *response_data)
-{
-  char *ret;
-  GString *extra_attribs, *extra_response;
-  const char *asset_type;
-
-  asset_type = params_value (params, "asset_type");
-  if (asset_type == NULL)
-    {
-      param_t *param;
-      param = params_add (params, "asset_type", "host");
-      param->valid = 1;
-      param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
-      asset_type = params_value (params, "asset_type");
-    }
-
-  if (strcmp (asset_type, "host") && strcmp (asset_type, "os"))
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials, "Internal error", __FUNCTION__,
-                           __LINE__,
-                           "An internal error occurred while getting Assets. "
-                           "Diagnostics: Invalid asset_type parameter value",
-                           response_data);
-    }
-
-  extra_response = g_string_new (extra_xml ? extra_xml : "");
-
-  extra_attribs = g_string_new ("");
-  g_string_append_printf (extra_attribs, "type=\"%s\" ignore_pagination=\"%s\"",
-                          params_value (params, "asset_type"),
-                          params_value (params, "ignore_pagination")
-                            ? params_value (params, "ignore_pagination")
-                            : "0");
-  if (params_value (params, "details"))
-    g_string_append_printf (extra_attribs, " details=\"%s\"",
-                            params_value (params, "details"));
-  ret = get_many (connection, "asset", credentials, params, extra_response->str,
-                  extra_attribs->str, response_data);
-
-  g_string_free (extra_response, TRUE);
-  g_string_free (extra_attribs, TRUE);
-
-  return ret;
-}
-
-/**
- * @brief Get assets, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
 get_assets_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t *response_data)
 {
-  return get_assets (connection, credentials, params, NULL, response_data);
+  gmp_arguments_t *arguments;
+  const char *asset_type;
+
+  asset_type = params_value (params, "asset_type");
+
+  CHECK_VARIABLE_INVALID (asset_type, "Get Assets");
+
+  arguments = gmp_arguments_new ();
+
+  gmp_arguments_add (arguments, "type", asset_type);
+
+  if (params_value (params, "ignore_pagination"))
+    {
+      gmp_arguments_add (arguments, "ignore_pagination",
+                         params_value (params, "ignore_pagination"));
+    }
+
+  return get_many (connection, "assets", credentials, params, arguments,
+                   response_data);
 }
 
 /**
@@ -17812,7 +15747,7 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating an asset. "
         "No new asset was created. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -17821,7 +15756,7 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating an asset. "
         "It is unclear whether the asset has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -17830,7 +15765,7 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating an asset. "
         "It is unclear whether the asset has been created or not. "
         "Diagnostics: Internal Error.",
@@ -17870,7 +15805,7 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while deleting an asset. "
         "The asset was not deleted. "
         "Diagnostics: Required parameter was NULL.",
@@ -17900,7 +15835,7 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while deleting an asset. "
         "The asset is not deleted. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -17915,7 +15850,7 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while deleting an asset. "
         "It is unclear whether the asset has been deleted or not. "
         "Diagnostics: Failure to read response from manager daemon.",
@@ -18011,7 +15946,7 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving an asset. "
         "The asset was not saved. "
         "Diagnostics: Failure to send command to manager daemon.",
@@ -18020,7 +15955,7 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving an asset. "
         "It is unclear whether the asset has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -18029,7 +15964,7 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving an asset. "
         "It is unclear whether the asset has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -18057,7 +15992,7 @@ char *
 get_tickets_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  return get_many (connection, "ticket", credentials, params, NULL, NULL,
+  return get_many (connection, "tickets", credentials, params, NULL,
                    response_data);
 }
 
@@ -18123,7 +16058,7 @@ create_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a ticket. "
         "Diagnostics: Failure to send command to manager daemon.",
         response_data);
@@ -18131,7 +16066,7 @@ create_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a ticket. "
         "It is unclear whether the ticket has been created or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -18140,7 +16075,7 @@ create_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while creating a ticket. "
         "It is unclear whether the ticket has been created or not. "
         "Diagnostics: Internal Error.",
@@ -18206,7 +16141,7 @@ save_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a ticket. "
         "Diagnostics: Failure to send command to manager daemon.",
         response_data);
@@ -18214,7 +16149,7 @@ save_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a ticket. "
         "It is unclear whether the ticket has been saved or not. "
         "Diagnostics: Failure to receive response from manager daemon.",
@@ -18223,7 +16158,7 @@ save_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while saving a ticket. "
         "It is unclear whether the ticket has been saved or not. "
         "Diagnostics: Internal Error.",
@@ -18254,6 +16189,261 @@ delete_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   return move_resource_to_trash (connection, "ticket", credentials, params,
                                  response_data);
+}
+
+/**
+ * @brief Get all TLS certificates, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_tls_certificates_gmp (gvm_connection_t *connection,
+                          credentials_t *credentials, params_t *params,
+                          cmd_response_data_t *response_data)
+{
+  gmp_arguments_t *arguments = gmp_arguments_new ();
+  const char *include_certificate_data;
+
+  if (params_given (params, "include_certificate_data"))
+    {
+      include_certificate_data =
+        params_value (params, "include_certificate_data");
+      CHECK_VARIABLE_INVALID (include_certificate_data, "Get TLS Certificate");
+      gmp_arguments_add (arguments, "include_certificate_data",
+                         include_certificate_data);
+    }
+
+  return get_many (connection, "tls_certificates", credentials, params,
+                   arguments, response_data);
+}
+
+/**
+ * @brief Get single TLS certificates, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_tls_certificate_gmp (gvm_connection_t *connection,
+                         credentials_t *credentials, params_t *params,
+                         cmd_response_data_t *response_data)
+{
+  gmp_arguments_t *arguments = gmp_arguments_new ();
+  const char *include_certificate_data;
+
+  if (params_given (params, "include_certificate_data"))
+    {
+      include_certificate_data =
+        params_value (params, "include_certificate_data");
+      CHECK_VARIABLE_INVALID (include_certificate_data, "Get TLS Certificate");
+      gmp_arguments_add (arguments, "include_certificate_data",
+                         include_certificate_data);
+    }
+
+  return get_one (connection, "tls_certificate", credentials, params, NULL,
+                  arguments, response_data);
+}
+
+/**
+ * @brief Create a TLS certificate.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+create_tls_certificate_gmp (gvm_connection_t *connection,
+                            credentials_t *credentials, params_t *params,
+                            cmd_response_data_t *response_data)
+{
+  gchar *response = NULL;
+  entity_t entity = NULL;
+  const gchar *name, *comment, *trust, *certificate_bin;
+  size_t certificate_size;
+  gchar *certificate_b64;
+  gchar *ret;
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  trust = params_value (params, "trust");
+  certificate_bin = params_value (params, "certificate_bin");
+  certificate_size = params_value_size (params, "certificate_bin");
+
+  certificate_b64 =
+    (certificate_size > 0)
+      ? g_base64_encode ((guchar *) certificate_bin, certificate_size)
+      : g_strdup ("");
+
+  CHECK_VARIABLE_INVALID (name, "Create TLS Certificate");
+  CHECK_VARIABLE_INVALID (comment, "Create TLS Certificate");
+  CHECK_VARIABLE_INVALID (trust, "Create TLS Certificate");
+
+  switch (gmpf (connection, credentials, &response, &entity, response_data,
+                "<create_tls_certificate>"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<trust>%s</trust>"
+                "<certificate>%s</certificate>"
+                "</create_tls_certificate>",
+                name, comment, trust, certificate_b64))
+    {
+    case 0:
+    case -1:
+      break;
+    case 1:
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __func__, __LINE__,
+        "An internal error occurred while creating a TLS certificate. "
+        "Diagnostics: Failure to send command to manager daemon.",
+        response_data);
+    case 2:
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __func__, __LINE__,
+        "An internal error occurred while creating a TLS certificate. "
+        "It is unclear whether the TLS certificate has been created or not. "
+        "Diagnostics: Failure to receive response from manager daemon.",
+        response_data);
+    default:
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __func__, __LINE__,
+        "An internal error occurred while creating a TLS certificate. "
+        "It is unclear whether the TLS certificate has been created or not. "
+        "Diagnostics: Internal Error.",
+        response_data);
+    }
+
+  ret = response_from_entity (connection, credentials, params, entity,
+                              "Create TLS Certificate", response_data);
+
+  free_entity (entity);
+  g_free (response);
+  g_free (certificate_b64);
+  return ret;
+}
+
+/**
+ * @brief Modify a TLS certificate.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+save_tls_certificate_gmp (gvm_connection_t *connection,
+                          credentials_t *credentials, params_t *params,
+                          cmd_response_data_t *response_data)
+{
+  gchar *response = NULL;
+  entity_t entity = NULL;
+  const gchar *tls_certificate_id, *name, *comment, *trust, *certificate_bin;
+  size_t certificate_size;
+  gchar *certificate_b64;
+  gchar *ret;
+
+  tls_certificate_id = params_value (params, "tls_certificate_id");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  trust = params_value (params, "trust");
+  certificate_bin = params_value (params, "certificate_bin");
+  certificate_size = params_value_size (params, "certificate_bin");
+
+  certificate_b64 =
+    (certificate_size > 0)
+      ? g_base64_encode ((guchar *) certificate_bin, certificate_size)
+      : g_strdup ("");
+
+  CHECK_VARIABLE_INVALID (tls_certificate_id, "Save TLS Certificate");
+  CHECK_VARIABLE_INVALID (name, "Save TLS Certificate");
+  CHECK_VARIABLE_INVALID (comment, "Save TLS Certificate");
+  CHECK_VARIABLE_INVALID (trust, "Save TLS Certificate");
+
+  switch (gmpf (connection, credentials, &response, &entity, response_data,
+                "<modify_tls_certificate tls_certificate_id=\"%s\">"
+                "<name>%s</name>"
+                "<comment>%s</comment>"
+                "<trust>%s</trust>"
+                "<certificate>%s</certificate>"
+                "</modify_tls_certificate>",
+                tls_certificate_id, name, comment, trust, certificate_b64))
+    {
+    case 0:
+    case -1:
+      break;
+    case 1:
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __func__, __LINE__,
+        "An internal error occurred while saving a TLS certificate. "
+        "Diagnostics: Failure to send command to manager daemon.",
+        response_data);
+    case 2:
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __func__, __LINE__,
+        "An internal error occurred while saving a TLS certificate. "
+        "It is unclear whether the TLS certificate has been saved or not. "
+        "Diagnostics: Failure to receive response from manager daemon.",
+        response_data);
+    default:
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __func__, __LINE__,
+        "An internal error occurred while saving a TLS certificate. "
+        "It is unclear whether the TLS certificate has been saved or not. "
+        "Diagnostics: Internal Error.",
+        response_data);
+    }
+
+  ret = response_from_entity (connection, credentials, params, entity,
+                              "Save TLS Certificate", response_data);
+
+  free_entity (entity);
+  g_free (response);
+  g_free (certificate_b64);
+  return ret;
+}
+
+/**
+ * @brief Delete a TLS certificate.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+delete_tls_certificate_gmp (gvm_connection_t *connection,
+                            credentials_t *credentials, params_t *params,
+                            cmd_response_data_t *response_data)
+{
+  return move_resource_to_trash (connection, "tls_certificate", credentials,
+                                 params, response_data);
 }
 
 char *
@@ -18306,7 +16496,7 @@ get_capabilities_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting the user credentials. "
         "Diagnostics: Failure to send command to manager daemon.",
         response_data);
@@ -18322,7 +16512,7 @@ get_capabilities_gmp (gvm_connection_t *connection, credentials_t *credentials,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (
-        credentials, "Internal error", __FUNCTION__, __LINE__,
+        credentials, "Internal error", __func__, __LINE__,
         "An internal error occurred while getting the user credentials. "
         "Diagnostics: Failure to receive response from manager daemon.",
         response_data);
@@ -18335,7 +16525,7 @@ get_capabilities_gmp (gvm_connection_t *connection, credentials_t *credentials,
       set_http_status_from_entity (entity, response_data);
 
       message =
-        gsad_message (credentials, "Error", __FUNCTION__, __LINE__,
+        gsad_message (credentials, "Error", __func__, __LINE__,
                       entity_attribute (entity, "status_text"), response_data);
 
       g_string_free (xml, TRUE);
@@ -18435,7 +16625,7 @@ gvm_connection_open (gvm_connection_t *connection, const gchar *address,
  * @param[out] language      User Interface Language, or NULL.
  * @param[out] pw_warning    Password warning message, NULL if password is OK.
  *
- * @return 0 if valid, 1 failed, 2 manager down, -1 error.
+ * @return 0 if valid, 1 manager down, 2 failed, 3 timeout, -1 error.
  */
 int
 authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
@@ -18448,8 +16638,8 @@ authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
 
   if (gvm_connection_open (&connection, manager_address, manager_port))
     {
-      g_debug ("%s failed to acquire socket!\n", __FUNCTION__);
-      return 2;
+      g_debug ("%s failed to acquire socket!\n", __func__);
+      return 1;
     }
 
   auth_opts = gmp_authenticate_info_opts_defaults;
@@ -18481,7 +16671,7 @@ authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
         case 1:
         case 2:
           gvm_connection_close (&connection);
-          return 2;
+          return 1;
         default:
           gvm_connection_close (&connection);
           return -1;
@@ -18494,7 +16684,7 @@ authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
       if (ret)
         {
           gvm_connection_close (&connection);
-          return 2;
+          return 1;
         }
 
       /* Read the response. */
@@ -18503,7 +16693,7 @@ authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
       if (read_entity_and_text_c (&connection, &entity, &response))
         {
           gvm_connection_close (&connection);
-          return 2;
+          return 1;
         }
 
       /* Check the response. */
@@ -18515,8 +16705,10 @@ authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
           free_entity (entity);
           return -1;
         }
+
       first = status[0];
       free_entity (entity);
+
       if (first == '2')
         {
           *capabilities = response;
@@ -18534,7 +16726,16 @@ authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
   else
     {
       gvm_connection_close (&connection);
-      return 1;
+
+      switch (auth)
+        {
+        case 1: /* manager closed connection */
+        case 2: /* auth failed */
+        case 3: /* timeout */
+          return auth;
+        default:
+          return -1;
+        }
     }
 }
 
@@ -18552,7 +16753,7 @@ int
 login (http_connection_t *con, params_t *params,
        cmd_response_data_t *response_data, const char *client_address)
 {
-  int ret;
+  int ret, status;
   authentication_reason_t auth_reason;
   credentials_t *credentials;
   gchar *timezone;
@@ -18575,19 +16776,26 @@ login (http_connection_t *con, params_t *params,
                               &capabilities, &language, &pw_warning);
       if (ret)
         {
-          int status;
-          if (ret == -1)
-            status = MHD_HTTP_INTERNAL_SERVER_ERROR;
-          if (ret == 2)
-            status = MHD_HTTP_SERVICE_UNAVAILABLE;
-          else
-            status = MHD_HTTP_UNAUTHORIZED;
+          switch (ret)
+            {
+            case 1: /* could not connect to manager */
+            case 3: /* timeout */
+              status = MHD_HTTP_SERVICE_UNAVAILABLE;
+              auth_reason = GMP_SERVICE_DOWN;
+              break;
+            case 2: /* authentication failure */
+              status = MHD_HTTP_UNAUTHORIZED;
+              auth_reason = LOGIN_FAILED;
+              break;
+            default: /* unspecified error */
+              status = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              auth_reason = LOGIN_ERROR;
+              break;
+            }
 
-          auth_reason = ret == 2 ? GMP_SERVICE_DOWN
-                                 : (ret == -1 ? LOGIN_ERROR : LOGIN_FAILED);
-
-          g_warning ("Authentication failure for '%s' from %s", login ?: "",
-                     client_address);
+          g_warning ("Authentication failure for '%s' from %s. "
+                     "Status was %d.",
+                     login ?: "", client_address, ret);
           return handler_send_reauthentication (con, status, auth_reason);
         }
       else
@@ -18637,7 +16845,8 @@ login (http_connection_t *con, params_t *params,
  * @param[out]  connection   Connection to Manager on success.
  * @param[out]  response_data  Extra data return for the HTTP response.
  *
- * @return 0 success, -1 failed to connect, -2 authentication failed.
+ * @return 0 success, 1 if manager closed connection, 2 if auth failed,
+ *         3 on timeout, 4 failed to connect, -1 on error
  */
 int
 manager_connect (credentials_t *credentials, gvm_connection_t *connection,
@@ -18647,20 +16856,21 @@ manager_connect (credentials_t *credentials, gvm_connection_t *connection,
 
   if (gvm_connection_open (connection, manager_address, manager_port))
     {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_SERVICE_UNAVAILABLE);
-      return -1;
+      return 4;
     }
 
   user_t *user = credentials_get_user (credentials);
+
   auth_opts = gmp_authenticate_info_opts_defaults;
   auth_opts.username = user_get_username (user);
   auth_opts.password = user_get_password (user);
-  if (gmp_authenticate_info_ext_c (connection, auth_opts))
+
+  int ret = gmp_authenticate_info_ext_c (connection, auth_opts);
+
+  if (ret)
     {
-      g_debug ("authenticate failed!\n");
       gvm_connection_close (connection);
-      return -2;
+      return ret;
     }
 
 #ifdef DEBUG

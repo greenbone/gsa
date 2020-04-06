@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TextArea tests should render 1`] = `
-.c1 {
+.c0 {
   display: block;
   height: auto;
   color: #393637;
@@ -12,7 +12,7 @@ exports[`TextArea tests should render 1`] = `
   padding: 4px 8px;
 }
 
-.c0 {
+.c1 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -36,7 +36,7 @@ exports[`TextArea tests should render 1`] = `
 `;
 
 exports[`TextArea tests should render in disabled state 1`] = `
-.c1 {
+.c0 {
   display: block;
   height: auto;
   color: #393637;
@@ -50,7 +50,7 @@ exports[`TextArea tests should render in disabled state 1`] = `
   opacity: 0.65;
 }
 
-.c0 {
+.c1 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

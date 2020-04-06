@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import React from 'react';
@@ -39,6 +38,7 @@ import UploadIcon from 'web/components/icon/uploadicon';
 import ReportIcon from 'web/components/icon/reporticon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import {
   USE_DEFAULT_RELOAD_INTERVAL,
@@ -105,9 +105,9 @@ class Page extends React.Component {
     this.openCreateTaskDialog = this.openCreateTaskDialog.bind(this);
   }
 
-  componentWillReceiveProps(next) {
-    const {filter} = next;
-    const {selectedDeltaReport} = this.state;
+  static getDerivedStateFromProps(props, state) {
+    const {filter} = props;
+    const {selectedDeltaReport} = state;
 
     if (
       isDefined(selectedDeltaReport) &&
@@ -115,8 +115,9 @@ class Page extends React.Component {
         filter.get('task_id') !== selectedDeltaReport.task.id)
     ) {
       // filter has changed. reset delta report selection
-      this.setState({selectedDeltaReport: undefined});
+      return {selectedDeltaReport: undefined};
     }
+    return null;
   }
 
   openCreateTaskDialog() {
@@ -193,8 +194,8 @@ class Page extends React.Component {
   }
 
   handleReportDeleteClick(report) {
-    const {gmp, onChanged, onError} = this.props;
-    return gmp.report.delete(report).then(onChanged, onError);
+    const {onDelete} = this.props;
+    return onDelete(report);
   }
 
   handleTaskChange(task_id) {
@@ -211,6 +212,7 @@ class Page extends React.Component {
 
     return (
       <React.Fragment>
+        <PageTitle title={_('Reports')} />
         <EntitiesPage
           {...this.props}
           {...this.state}
@@ -266,6 +268,7 @@ Page.propTypes = {
   loadTasks: PropTypes.func.isRequired,
   tasks: PropTypes.arrayOf(PropTypes.model),
   onChanged: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
@@ -287,6 +290,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadTasks: () => dispatch(loadAllTasks(gmp)(CONTAINER_TASK_FILTER)),
 });
 
+const FALLBACK_REPORT_LIST_FILTER = Filter.fromString(
+  'sort-reverse=date first=1',
+);
+
 export default compose(
   withGmp,
   connect(
@@ -294,6 +301,7 @@ export default compose(
     mapDispatchToProps,
   ),
   withEntitiesContainer('report', {
+    fallbackFilter: FALLBACK_REPORT_LIST_FILTER,
     entitiesSelector,
     loadEntities,
     reloadInterval: reportsReloadInterval,

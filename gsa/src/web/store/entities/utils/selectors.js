@@ -1,20 +1,19 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 
@@ -45,9 +44,31 @@ export class EntitiesSelector {
     this.state = state;
   }
 
+  isLoadingAllEntities(filter) {
+    if (!isDefined(filter)) {
+      return isDefined(this.state.isLoading)
+        ? !!this.state.isLoading[filterIdentifier(ALL_FILTER)]
+        : false;
+    }
+    filter = isDefined(filter.toFilterString)
+      ? filter.all()
+      : Filter.fromString(filter).all();
+    return isDefined(this.state.isLoading)
+      ? !!this.state.isLoading[filterIdentifier(filter)]
+      : false;
+  }
+
   isLoadingEntities(filter) {
     return isDefined(this.state.isLoading)
       ? !!this.state.isLoading[filterIdentifier(filter)]
+      : false;
+  }
+
+  isLoadingAnyEntities() {
+    const loaders = this.state.isLoading;
+    const bools = Object.values(loaders);
+    return isDefined(bools.length > 0)
+      ? !bools.every(bool => bool === false)
       : false;
   }
 
@@ -105,6 +126,14 @@ class Selector {
 
   isLoadingEntities(filter) {
     return this.entitiesSelector.isLoadingEntities(filter);
+  }
+
+  isLoadingAnyEntities() {
+    return this.entitiesSelector.isLoadingAnyEntities();
+  }
+
+  isLoadingAllEntities(filter) {
+    return this.entitiesSelector.isLoadingAllEntities(filter);
   }
 
   getEntitiesError(filter) {

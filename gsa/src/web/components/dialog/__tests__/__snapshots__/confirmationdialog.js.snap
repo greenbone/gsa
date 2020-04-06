@@ -1,67 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ConfirmationDialog component tests should render ConfirmationDialog with text and title 1`] = `
-.c4 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c8 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
-}
-
-.c12 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
 .c1 {
   position: relative;
   display: -webkit-box;
@@ -111,7 +50,7 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   border: 1px solid #787878;
 }
 
-.c6 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -137,7 +76,7 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   flex-shrink: 0;
 }
 
-.c6:hover {
+.c4:hover {
   color: #fff;
   background: #519032;
 }
@@ -153,7 +92,7 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   width: inherit;
 }
 
-.c15 {
+.c9 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -173,12 +112,12 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   z-index: 1;
 }
 
-.c15:focus,
-.c15:hover {
+.c9:focus,
+.c9:hover {
   border: 1px solid #393637;
 }
 
-.c15:hover {
+.c9:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -186,26 +125,26 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   color: #fff;
 }
 
-.c15[disabled] {
+.c9[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c15 img {
+.c9 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c15:link {
+.c9:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c14 {
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -223,26 +162,41 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   align-items: center;
 }
 
-.c13 {
+.c11 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c13:hover {
+.c11:hover {
   color: #fff;
   background: #519032;
 }
 
-.c11 {
+.c8 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c8d3d9;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
-}
-
-.c10 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
@@ -250,6 +204,21 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
 }
 
 .c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
@@ -273,14 +242,33 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   cursor: grab;
 }
 
-.c9 {
+.c7 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
   height: 100%;
 }
 
-.c7 {
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
   overflow: hidden;
   height: 100%;
 }
@@ -304,14 +292,14 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
             class="c2"
           >
             <div
-              class="c3 c4"
+              class="c3"
               data-testid="dialog-title-bar"
             >
               <span>
                 bar
               </span>
               <div
-                class="c5 c6"
+                class="c4 c5"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -319,27 +307,27 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
               </div>
             </div>
             <div
-              class="c7 c8"
+              class="c6"
             >
               <div
-                class="c9"
+                class="c7"
                 data-testid="confirmationdialog-content"
               >
                 foo
               </div>
             </div>
             <div
-              class="c10 c11 c12"
+              class="c8"
             >
               <button
-                class="c13 c14 c15"
+                class="c9 c10 c11"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c13 c14 c15"
+                class="c9 c10 c11"
                 data-testid="dialog-save-button"
                 title="OK"
               >

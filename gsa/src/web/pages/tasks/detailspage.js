@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import React from 'react';
@@ -33,6 +32,7 @@ import Badge from 'web/components/badge/badge';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
@@ -110,7 +110,7 @@ import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
 
-const ToolBarIcons = ({
+export const ToolBarIcons = ({
   entity,
   links,
   notes = [],
@@ -313,121 +313,138 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({
-  entity,
-  permissions = [],
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <TaskComponent
-    onCloned={goto_details('task', props)}
-    onCloneError={onError}
-    onCreated={goto_details('task', props)}
-    onContainerCreated={goto_details('task', props)}
-    onContainerSaved={onChanged}
-    onDeleted={goto_list('tasks', props)}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-    onReportImported={onChanged}
-    onResumed={onChanged}
-    onResumeError={onError}
-    onSaved={onChanged}
-    onStarted={onChanged}
-    onStartError={onError}
-    onStopped={onChanged}
-    onStopError={onError}
-  >
-    {({
-      clone,
-      create,
-      createcontainer,
-      delete: delete_func,
-      download,
-      edit,
-      start,
-      stop,
-      resume,
-      reportimport,
-    }) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<TaskIcon size="large" />}
-        title={_('Task')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onContainerTaskCreateClick={createcontainer}
-        onError={onError}
-        onInteraction={onInteraction}
-        onReportImportClick={reportimport}
-        onTaskCloneClick={clone}
-        onTaskCreateClick={create}
-        onTaskDeleteClick={delete_func}
-        onTaskDownloadClick={download}
-        onTaskEditClick={edit}
-        onTaskResumeClick={resume}
-        onTaskStartClick={start}
-        onTaskStopClick={stop}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <Layout grow="1" flex="column">
-              <TabLayout grow="1" align={['start', 'end']}>
-                <TabList
-                  active={activeTab}
-                  align={['start', 'stretch']}
-                  onActivateTab={onActivateTab}
-                >
-                  <Tab>{_('Information')}</Tab>
-                  <EntitiesTab entities={entity.userTags}>
-                    {_('User Tags')}
-                  </EntitiesTab>
-                  <EntitiesTab entities={permissions}>
-                    {_('Permissions')}
-                  </EntitiesTab>
-                </TabList>
-              </TabLayout>
+class Page extends React.Component {
+  componentDidUpdate() {
+    // eslint-disable-next-line no-unused-vars
+    const {entity, history, ...props} = this.props;
+    if (isDefined(entity) && entity.usageType === 'audit') {
+      return history.replace('/audit/' + entity.id);
+    }
+  }
 
-              <Tabs active={activeTab}>
-                <TabPanels>
-                  <TabPanel>
-                    <Details entity={entity} />
-                  </TabPanel>
-                  <TabPanel>
-                    <EntityTags
-                      entity={entity}
-                      onChanged={onChanged}
-                      onError={onError}
-                      onInteraction={onInteraction}
-                    />
-                  </TabPanel>
-                  <TabPanel>
-                    <TaskPermissions
-                      entity={entity}
-                      permissions={permissions}
-                      onChanged={onChanged}
-                      onDownloaded={onDownloaded}
-                      onInteraction={onInteraction}
-                      onError={onError}
-                    />
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </Layout>
-          );
-        }}
-      </EntityPage>
-    )}
-  </TaskComponent>
-);
+  render() {
+    const {
+      entity,
+      permissions = [],
+      onChanged,
+      onDownloaded,
+      onError,
+      onInteraction,
+      ...props
+    } = this.props;
+    return (
+      <TaskComponent
+        onCloned={goto_details('task', props)}
+        onCloneError={onError}
+        onCreated={goto_details('task', props)}
+        onContainerCreated={goto_details('task', props)}
+        onContainerSaved={onChanged}
+        onDeleted={goto_list('tasks', props)}
+        onDeleteError={onError}
+        onDownloaded={onDownloaded}
+        onDownloadError={onError}
+        onInteraction={onInteraction}
+        onReportImported={onChanged}
+        onResumed={onChanged}
+        onResumeError={onError}
+        onSaved={onChanged}
+        onStarted={onChanged}
+        onStartError={onError}
+        onStopped={onChanged}
+        onStopError={onError}
+      >
+        {({
+          clone,
+          create,
+          createcontainer,
+          delete: delete_func,
+          download,
+          edit,
+          start,
+          stop,
+          resume,
+          reportimport,
+        }) => (
+          <EntityPage
+            {...props}
+            entity={entity}
+            sectionIcon={<TaskIcon size="large" />}
+            title={_('Task')}
+            toolBarIcons={ToolBarIcons}
+            onChanged={onChanged}
+            onContainerTaskCreateClick={createcontainer}
+            onError={onError}
+            onInteraction={onInteraction}
+            onReportImportClick={reportimport}
+            onTaskCloneClick={clone}
+            onTaskCreateClick={create}
+            onTaskDeleteClick={delete_func}
+            onTaskDownloadClick={download}
+            onTaskEditClick={edit}
+            onTaskResumeClick={resume}
+            onTaskStartClick={start}
+            onTaskStopClick={stop}
+          >
+            {({activeTab = 0, onActivateTab}) => {
+              return (
+                <React.Fragment>
+                  <PageTitle title={_('Task: {{name}}', {name: entity.name})} />
+                  <Layout grow="1" flex="column">
+                    <TabLayout grow="1" align={['start', 'end']}>
+                      <TabList
+                        active={activeTab}
+                        align={['start', 'stretch']}
+                        onActivateTab={onActivateTab}
+                      >
+                        <Tab>{_('Information')}</Tab>
+                        <EntitiesTab entities={entity.userTags}>
+                          {_('User Tags')}
+                        </EntitiesTab>
+                        <EntitiesTab entities={permissions}>
+                          {_('Permissions')}
+                        </EntitiesTab>
+                      </TabList>
+                    </TabLayout>
+
+                    <Tabs active={activeTab}>
+                      <TabPanels>
+                        <TabPanel>
+                          <Details entity={entity} />
+                        </TabPanel>
+                        <TabPanel>
+                          <EntityTags
+                            entity={entity}
+                            onChanged={onChanged}
+                            onError={onError}
+                            onInteraction={onInteraction}
+                          />
+                        </TabPanel>
+                        <TabPanel>
+                          <TaskPermissions
+                            entity={entity}
+                            permissions={permissions}
+                            onChanged={onChanged}
+                            onDownloaded={onDownloaded}
+                            onInteraction={onInteraction}
+                            onError={onError}
+                          />
+                        </TabPanel>
+                      </TabPanels>
+                    </Tabs>
+                  </Layout>
+                </React.Fragment>
+              );
+            }}
+          </EntityPage>
+        )}
+      </TaskComponent>
+    );
+  }
+}
 
 Page.propTypes = {
   entity: PropTypes.model,
+  history: PropTypes.object.isRequired,
   permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
@@ -435,7 +452,7 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const TaskPermissions = withComponentDefaults({
+export const TaskPermissions = withComponentDefaults({
   relatedResourcesLoaders: [
     ({entity, gmp}) =>
       isDefined(entity.alerts)
@@ -499,7 +516,7 @@ const load = gmp => {
     ]);
 };
 
-const reloadInterval = ({entity}) => {
+export const reloadInterval = ({entity}) => {
   if (!isDefined(entity) || entity.isContainer()) {
     return NO_RELOAD;
   }

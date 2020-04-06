@@ -1,23 +1,22 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -35,6 +34,8 @@ import SaveDialog from 'web/components/dialog/savedialog';
 import Checkbox from 'web/components/form/checkbox';
 
 import EditIcon from 'web/components/icon/editicon';
+
+import Loading from 'web/components/loading/loading';
 
 import Layout from 'web/components/layout/layout';
 
@@ -61,20 +62,14 @@ class Nvt extends React.Component {
   }
 
   render() {
-    const {
-      config,
-      nvt,
-      selected,
-      onSelectedChange,
-      onEditNvtDetailsClick,
-    } = this.props;
+    const {nvt, selected, onSelectedChange, onEditNvtDetailsClick} = this.props;
 
     let pref_count = nvt.preference_count;
     if (pref_count === '0') {
       pref_count = '';
     }
 
-    const {name, oid, severity, timeout, default_timeout} = nvt;
+    const {name, oid, severity, timeout, defaultTimeout} = nvt;
     return (
       <TableRow>
         <TableData>{name}</TableData>
@@ -84,7 +79,7 @@ class Nvt extends React.Component {
         </TableData>
         <TableData>
           {isEmpty(timeout) ? _('default') : timeout}
-          {isEmpty(default_timeout) ? '' : ' (' + default_timeout + ')'}
+          {isEmpty(defaultTimeout) ? '' : ' (' + defaultTimeout + ')'}
         </TableData>
         <TableData>{pref_count}</TableData>
         <TableData align="center">
@@ -102,7 +97,7 @@ class Nvt extends React.Component {
         <TableData align={['center', 'center']}>
           <EditIcon
             title={_('Select and edit NVT details')}
-            value={{config, nvt}}
+            value={nvt.oid}
             onClick={onEditNvtDetailsClick}
           />
         </TableData>
@@ -112,9 +107,8 @@ class Nvt extends React.Component {
 }
 
 Nvt.propTypes = {
-  config: PropTypes.model.isRequired,
   nvt: PropTypes.object.isRequired,
-  selected: PropTypes.yesno.isRequired,
+  selected: PropTypes.yesno,
   onEditNvtDetailsClick: PropTypes.func,
   onSelectedChange: PropTypes.func,
 };
@@ -126,7 +120,7 @@ const sortFunctions = {
   timeout: makeCompareString('timeout'),
 };
 
-const sortNvts = ({nvts = [], sortBy, sortReverse, selected}) => {
+const sortNvts = (nvts = [], sortBy, sortReverse, selected = {}) => {
   if (sortBy === 'selected') {
     return [...nvts].sort((a, b) => {
       if (selected[a.oid] && !selected[b.oid]) {
@@ -161,78 +155,65 @@ const sortNvts = ({nvts = [], sortBy, sortReverse, selected}) => {
   return [...nvts].sort(compare);
 };
 
-class EditDialogComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
+const EditScanConfigFamilyDialog = ({
+  configId,
+  configName,
+  configNameLabel,
+  familyName,
+  isLoadingFamily = true,
+  nvts,
+  selected,
+  title,
+  onClose,
+  onEditNvtDetailsClick,
+  onSave,
+}) => {
+  const [sortBy, setSortby] = useState('name');
+  const [sortReverse, setSortReverse] = useState(false);
+  const [selectedNvts, setSelectedNvts] = useState(selected);
 
-    this.state = {
-      sortBy: 'name',
-      sortReverse: false,
-      selected: {...this.props.selected},
-    };
+  const handleSortChange = newSortBy => {
+    setSortReverse(sortBy === newSortBy ? !sortReverse : false);
+    setSortby(newSortBy);
+  };
 
-    this.handleSelectedChange = this.handleSelectedChange.bind(this);
-    this.handleSortChange = this.handleSortChange.bind(this);
-  }
-
-  handleSelectedChange(value, name) {
-    const {selected} = this.props;
-
-    selected[name] = value;
-
-    this.setState({selected});
-  }
-
-  handleSortChange(sortBy) {
-    this.setState(({sortBy: prevSortBy, sortReverse: prevSortReverse}) => ({
-      sortBy,
-      sortReverse: prevSortBy === sortBy ? !prevSortReverse : false,
+  const handleSelectedChange = (value, name) => {
+    setSelectedNvts(prevSelectedNvts => ({
+      ...prevSelectedNvts,
+      [name]: value,
     }));
-  }
+  };
 
-  render() {
-    const {sortBy, sortReverse, selected} = this.state;
-    const {
-      config,
-      config_name,
-      family_name,
-      id,
-      title,
-      onClose,
-      onEditNvtDetailsClick,
-      onSave,
-    } = this.props;
+  useEffect(() => {
+    setSelectedNvts(selected);
+  }, [selected]);
 
-    const data = {
-      config,
-      config_name,
-      family_name,
-      id,
-      selected,
-    };
+  const data = {
+    familyName,
+    configId,
+    selected: selectedNvts,
+  };
 
-    const sortDir = sortReverse ? SortBy.DESC : SortBy.ASC;
+  const sortDir = sortReverse ? SortBy.DESC : SortBy.ASC;
 
-    const nvts = sortNvts({
-      nvts: this.props.nvts,
-      sortBy,
-      sortReverse,
-      selected,
-    });
+  const sortedNvts = sortNvts(nvts, sortBy, sortReverse, selectedNvts);
 
-    return (
-      <SaveDialog title={title} onClose={onClose} onSave={onSave} values={data}>
-        {() => (
+  return (
+    <SaveDialog title={title} onClose={onClose} onSave={onSave} values={data}>
+      {() =>
+        isLoadingFamily || !isDefined(selectedNvts) ? (
+          <Loading />
+        ) : (
           <Layout flex="column">
             <SimpleTable>
               <TableBody>
                 <TableRow>
-                  <TableData>{_('Config')}</TableData>
-                  <TableData>{config_name}</TableData>
+                  <TableData>{configNameLabel}</TableData>
+                  <TableData>{configName}</TableData>
                 </TableRow>
                 <TableRow>
                   <TableData>{_('Family')}</TableData>
-                  <TableData>{family_name}</TableData>
+                  <TableData>{familyName}</TableData>
                 </TableRow>
               </TableBody>
             </SimpleTable>
@@ -245,28 +226,28 @@ class EditDialogComponent extends React.Component {
                       currentSortBy={sortBy}
                       currentSortDir={sortDir}
                       sortBy="name"
-                      onSortChange={this.handleSortChange}
+                      onSortChange={handleSortChange}
                       title={_('Name')}
                     />
                     <TableHead
                       currentSortBy={sortBy}
                       currentSortDir={sortDir}
                       sortBy="oid"
-                      onSortChange={this.handleSortChange}
+                      onSortChange={handleSortChange}
                       title={_('OID')}
                     />
                     <TableHead
                       currentSortBy={sortBy}
                       currentSortDir={sortDir}
                       sortBy="severity"
-                      onSortChange={this.handleSortChange}
+                      onSortChange={handleSortChange}
                       title={_('Severity')}
                     />
                     <TableHead
                       currentSortBy={sortBy}
                       currentSortDir={sortDir}
                       sortBy="timeout"
-                      onSortChange={this.handleSortChange}
+                      onSortChange={handleSortChange}
                       title={_('Timeout')}
                     />
                     <TableHead>{_('Prefs')}</TableHead>
@@ -274,7 +255,7 @@ class EditDialogComponent extends React.Component {
                       currentSortBy={sortBy}
                       currentSortDir={sortDir}
                       sortBy="selected"
-                      onSortChange={this.handleSortChange}
+                      onSortChange={handleSortChange}
                       align="center"
                       title={_('Selected')}
                     />
@@ -282,15 +263,14 @@ class EditDialogComponent extends React.Component {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {nvts.map(nvt => {
+                  {sortedNvts.map(nvt => {
                     const {oid} = nvt;
                     return (
                       <Nvt
                         key={oid}
                         nvt={nvt}
-                        config={config}
-                        selected={selected[oid]}
-                        onSelectedChange={this.handleSelectedChange}
+                        selected={selectedNvts[oid]}
+                        onSelectedChange={handleSelectedChange}
                         onEditNvtDetailsClick={onEditNvtDetailsClick}
                       />
                     );
@@ -299,25 +279,26 @@ class EditDialogComponent extends React.Component {
               </Table>
             </Section>
           </Layout>
-        )}
-      </SaveDialog>
-    );
-  }
-}
+        )
+      }
+    </SaveDialog>
+  );
+};
 
-EditDialogComponent.propTypes = {
-  config: PropTypes.model.isRequired,
-  config_name: PropTypes.string,
-  family_name: PropTypes.string,
-  id: PropTypes.string,
-  nvts: PropTypes.array.isRequired,
-  selected: PropTypes.object.isRequired,
+EditScanConfigFamilyDialog.propTypes = {
+  configId: PropTypes.id,
+  configName: PropTypes.string,
+  configNameLabel: PropTypes.string.isRequired,
+  familyName: PropTypes.string,
+  isLoadingFamily: PropTypes.bool,
+  nvts: PropTypes.array,
+  selected: PropTypes.object,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onEditNvtDetailsClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,
 };
 
-export default EditDialogComponent;
+export default EditScanConfigFamilyDialog;
 
 // vim: set ts=2 sw=2 tw=80:

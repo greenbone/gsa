@@ -1,20 +1,20 @@
 # Copyright (C) 2009-2018 Greenbone Networks GmbH
 #
-# SPDX-License-Identifier: GPL-2.0-or-later
+# SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# GNU Affero General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 
 # Needed for 'pkg_check_modules' function
 include (FindPkgConfig)
@@ -84,6 +84,8 @@ add_executable (gsad
                 gsad_cmd.c
                 gsad_credentials.c
                 gsad_gmp.c
+                gsad_gmp_arguments.c
+                gsad_gmp_request.c
                 gsad_http.c
                 gsad_http_handler.c
                 gsad_i18n.c
@@ -111,27 +113,6 @@ set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 if (GSAD_VERSION)
   add_definitions (-DGSAD_VERSION="${GSAD_VERSION}")
 endif (GSAD_VERSION)
-
-if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
-  # If we got GIT_REVISION at configure time,
-  # assume we can get it at build time as well
-  if (GIT_REVISION)
-    # a custom target that is always built
-    add_custom_target (revisiontag ALL)
-
-    # creates gitrevision.h using cmake script
-    add_custom_command (TARGET revisiontag COMMAND ${CMAKE_COMMAND}
-                        -DSOURCE_DIR=${CMAKE_SOURCE_DIR}
-                        -P ${CMAKE_SOURCE_DIR}/cmake/GetGit.cmake)
-
-    # explicitly say that the executable depends on custom target
-    add_dependencies (gsad revisiontag)
-
-    # include the output directory, where the gitrevision.h file is generated
-    include_directories (${CMAKE_CURRENT_BINARY_DIR})
-    add_definitions (-DGIT_REV_AVAILABLE)
-  endif (GIT_REVISION)
-endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
 
 if (GVM_SERVER_CERTIFICATE)
   add_definitions (-DGVM_SERVER_CERTIFICATE="${GVM_SERVER_CERTIFICATE}")

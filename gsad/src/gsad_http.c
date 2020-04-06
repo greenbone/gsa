@@ -1,20 +1,19 @@
 /* Copyright (C) 2016-2018 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -200,7 +199,7 @@ send_redirect_to_uri (http_connection_t *connection, const char *uri,
   if (!response)
     {
       g_warning ("%s: failed to create response, dropping request",
-                 __FUNCTION__);
+                 __func__);
       return MHD_NO;
     }
   ret = MHD_add_response_header (response, MHD_HTTP_HEADER_LOCATION, uri);
@@ -208,14 +207,14 @@ send_redirect_to_uri (http_connection_t *connection, const char *uri,
     {
       MHD_destroy_response (response);
       g_warning ("%s: failed to add location header, dropping request",
-                 __FUNCTION__);
+                 __func__);
       return MHD_NO;
     }
 
   if (attach_remove_sid (response, sid) == MHD_NO)
     {
       MHD_destroy_response (response);
-      g_warning ("%s: failed to attach SID, dropping request", __FUNCTION__);
+      g_warning ("%s: failed to attach SID, dropping request", __func__);
       return MHD_NO;
     }
 
@@ -253,7 +252,7 @@ send_response (http_connection_t *connection, const char *content,
     size = (content_length ? content_length : strlen (content));
   else
     {
-      g_warning ("%s: content is NULL", __FUNCTION__);
+      g_warning ("%s: content is NULL", __func__);
       status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       size = 0;
     }
@@ -464,6 +463,9 @@ handler_send_reauthentication (http_connection_t *connection,
     case LOGOUT:
       msg = "Successfully logged out.";
       break;
+    case UNKOWN_ERROR:
+      msg = "Unknown error.";
+      break;
     default:
       msg = "";
     }
@@ -471,7 +473,7 @@ handler_send_reauthentication (http_connection_t *connection,
   cmd_response_data_t *response_data = cmd_response_data_new ();
   cmd_response_data_set_status_code (response_data, http_status_code);
 
-  gchar *xml = gsad_message (NULL, "Authentication required", __FUNCTION__,
+  gchar *xml = gsad_message (NULL, "Authentication required", __func__,
                              __LINE__, msg, response_data);
 
   return handler_create_response (connection, xml, response_data, REMOVE_SID);
@@ -547,7 +549,7 @@ attach_sid (http_response_t *response, const char *sid)
   tz = getenv ("TZ") ? g_strdup (getenv ("TZ")) : NULL;
   if (setenv ("TZ", "GMT", 1) == -1)
     {
-      g_critical ("%s: failed to set TZ\n", __FUNCTION__);
+      g_critical ("%s: failed to set TZ\n", __func__);
       g_free (tz);
       exit (EXIT_FAILURE);
     }
@@ -575,7 +577,7 @@ attach_sid (http_response_t *response, const char *sid)
     {
       if (setenv ("TZ", tz, 1) == -1)
         {
-          g_warning ("%s: Failed to switch to original TZ", __FUNCTION__);
+          g_warning ("%s: Failed to switch to original TZ", __func__);
           g_free (tz);
           exit (EXIT_FAILURE);
         }
@@ -619,7 +621,7 @@ attach_remove_sid (http_response_t *response, const gchar *sid)
             {
               MHD_destroy_response (response);
               g_warning ("%s: failed to remove SID, dropping request",
-                         __FUNCTION__);
+                         __func__);
               return MHD_NO;
             }
         }
@@ -629,7 +631,7 @@ attach_remove_sid (http_response_t *response, const gchar *sid)
             {
               MHD_destroy_response (response);
               g_warning ("%s: failed to attach SID, dropping request",
-                         __FUNCTION__);
+                         __func__);
               return MHD_NO;
             }
         }
@@ -703,7 +705,7 @@ file_content_response (http_connection_t *connection, const char *url,
   if (stat (path, &buf))
     {
       /* File information could not be retrieved. */
-      g_critical ("%s: file <%s> can not be stat'ed.\n", __FUNCTION__, path);
+      g_critical ("%s: file <%s> can not be stat'ed.\n", __func__, path);
       fclose (file);
       return create_not_found_response (response_data);
     }
@@ -1006,18 +1008,17 @@ gsad_message (credentials_t *credentials, const char *title,
     }
   else
     {
-      xml =
-        g_strdup_printf ("<envelope>"
-                         "<version>%s</version>"
-                         "<vendor_version>%s</vendor_version>"
-                         "<gsad_response>"
-                         "%s"
-                         "<message>%s</message>"
-                         "<token></token>"
-                         "</gsad_response>"
-                         "</envelope>",
-                         GSAD_VERSION, vendor_version_get (),
-                         xmltitle, msg ? msg : "");
+      xml = g_strdup_printf ("<envelope>"
+                             "<version>%s</version>"
+                             "<vendor_version>%s</vendor_version>"
+                             "<gsad_response>"
+                             "%s"
+                             "<message>%s</message>"
+                             "<token></token>"
+                             "</gsad_response>"
+                             "</envelope>",
+                             GSAD_VERSION, vendor_version_get (), xmltitle,
+                             msg ? msg : "");
     }
 
   g_free (xmltitle);

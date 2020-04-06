@@ -1,20 +1,19 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import React from 'react';
@@ -178,6 +177,8 @@ class PowerFilter extends React.Component {
       capabilities,
       filter,
       filters,
+      isLoading = false,
+      isLoadingFilters,
       onEditClick,
       onRemoveClick,
       onResetClick,
@@ -233,7 +234,7 @@ class PowerFilter extends React.Component {
               {onEditClick && (
                 <EditIcon
                   title={_('Edit Filter')}
-                  active={isDefined(filter)}
+                  disabled={!isDefined(filter) || isLoading}
                   onClick={isDefined(filter) ? onEditClick : undefined}
                 />
               )}
@@ -242,6 +243,7 @@ class PowerFilter extends React.Component {
           {capabilities.mayAccess('filters') && (
             <Select
               items={renderSelectItems(filters, DEFAULT_FILTER_ID)}
+              isLoading={isLoadingFilters}
               menuPosition="right"
               toolTipTitle={_('Loaded filter')}
               value={
@@ -265,6 +267,8 @@ PowerFilter.propTypes = {
   filter: PropTypes.filter,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
+  isLoading: PropTypes.bool,
+  isLoadingFilters: PropTypes.bool,
   resetFilter: PropTypes.filter,
   onEditClick: PropTypes.func,
   onError: PropTypes.func,

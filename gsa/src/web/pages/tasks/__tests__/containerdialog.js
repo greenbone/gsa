@@ -1,31 +1,26 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2019-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
 import {render, fireEvent} from 'web/utils/testing';
 
 import ContainerDialog from '../containerdialog';
-import Task, {
-  AUTO_DELETE_KEEP,
-  AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  AUTO_DELETE_NO,
-} from 'gmp/models/task';
+import Task from 'gmp/models/task';
 
 describe('ContainerDialog tests', () => {
   test('should render create dialog', () => {
@@ -75,8 +70,6 @@ describe('ContainerDialog tests', () => {
 
     expect(handleSave).toHaveBeenCalledWith({
       comment: 'lorem',
-      auto_delete: AUTO_DELETE_KEEP,
-      auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
       in_assets: 1,
       id: undefined,
       name: 'ipsum',
@@ -104,12 +97,6 @@ describe('ContainerDialog tests', () => {
     const commentInput = getByName('comment');
     fireEvent.change(commentInput, {target: {value: 'lorem'}});
 
-    const autoDeleteKeepInput = getByName('auto_delete_data');
-    fireEvent.change(autoDeleteKeepInput, {target: {value: '10'}});
-
-    const [autoDeleteNoRadio] = queryAllByName('auto_delete');
-    fireEvent.click(autoDeleteNoRadio);
-
     const [, inAssetsNoRadio] = queryAllByName('in_assets');
     fireEvent.click(inAssetsNoRadio);
 
@@ -118,8 +105,6 @@ describe('ContainerDialog tests', () => {
 
     expect(handleSave).toHaveBeenCalledWith({
       comment: 'lorem',
-      auto_delete: AUTO_DELETE_NO,
-      auto_delete_data: 10,
       in_assets: 0,
       id: 't1',
       name: 'ipsum',

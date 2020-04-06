@@ -1,22 +1,21 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useState} from 'react';
 
 import styled from 'styled-components';
 
@@ -27,8 +26,6 @@ import PropTypes from 'web/utils/proptypes';
 
 import Divider from 'web/components/layout/divider';
 import withLayout from 'web/components/layout/withLayout';
-
-import withChangeHandler from './withChangeHandler';
 
 export const StyledElement = styled.label`
   display: inline-flex;
@@ -64,24 +61,50 @@ export const StyledTitle = styled.span`
   opacity: ${props => (props.disabled ? '0.5' : '1')};
 `;
 
-const RadioComponent = ({title, children, disabled, ...other}) => (
-  <StyledElement disabled={disabled}>
-    <Divider>
-      <StyledInput
-        {...other}
-        disabled={disabled}
-        type="radio"
-        data-testid="radio-input"
-      />
-      {isDefined(title) && (
-        <StyledTitle data-testid="radio-title" disabled={disabled}>
-          {title}
-        </StyledTitle>
-      )}
-      {children}
-    </Divider>
-  </StyledElement>
-);
+const RadioComponent = ({title, children, disabled, ...other}) => {
+  const {value: initVal, convert} = other;
+  const [val, setVal] = useState(initVal);
+
+  const notifyChange = value => {
+    const {name, onChange} = other;
+
+    if (isDefined(onChange) && !disabled) {
+      onChange(value, name);
+    }
+  };
+
+  const handleChange = event => {
+    let newVal;
+    if (isDefined(convert)) {
+      newVal = convert(event.target.value);
+    } else {
+      newVal = event.target.value;
+    }
+    setVal(newVal);
+    notifyChange(newVal);
+  };
+
+  return (
+    <StyledElement disabled={disabled}>
+      <Divider>
+        <StyledInput
+          {...other}
+          disabled={disabled}
+          type="radio"
+          value={val}
+          data-testid="radio-input"
+          onChange={handleChange}
+        />
+        {isDefined(title) && (
+          <StyledTitle data-testid="radio-title" disabled={disabled}>
+            {title}
+          </StyledTitle>
+        )}
+        {children}
+      </Divider>
+    </StyledElement>
+  );
+};
 
 RadioComponent.propTypes = {
   disabled: PropTypes.bool,
@@ -95,7 +118,6 @@ export default compose(
     align: ['start', 'center'],
     flex: 'row',
   }),
-  withChangeHandler(),
 )(RadioComponent);
 
 // vim: set ts=2 sw=2 tw=80:

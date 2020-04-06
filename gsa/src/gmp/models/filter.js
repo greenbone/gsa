@@ -1,25 +1,24 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import 'core-js/fn/array/find-index';
-import 'core-js/fn/array/includes';
+import 'core-js/features/array/find-index';
+import 'core-js/features/array/includes';
 
-import {isDefined, isString} from '../utils/identity';
+import {isDefined, isString, hasValue} from '../utils/identity';
 import {forEach, map} from '../utils/array';
 
 import Model, {parseModelFromElement} from '../model.js';
@@ -204,8 +203,9 @@ class Filter extends Model {
    *
    * @return {Filter} This filter with merged terms.
    */
+
   _mergeExtraKeywords(filter) {
-    if (isDefined(filter)) {
+    if (hasValue(filter)) {
       filter.forEach(term => {
         const {keyword: key} = term;
         if (!isDefined(key) || !EXTRA_KEYWORDS.includes(key) || this.has(key)) {
@@ -224,18 +224,22 @@ class Filter extends Model {
   }
 
   /**
-   * Merges all terms from filter into this Filter
-   *
+   * Merges terms with new keywords from filter into this Filter
    *
    * @private
    *
-   * @param {Filter} filter  Terms from filter to be merged.
+   * @param {Filter} filter  Use extra params terms filter to be merged.
    *
    * @return {Filter} This filter with merged terms.
    */
-  _merge(filter) {
-    if (isDefined(filter)) {
-      this._addTerm(...filter.getAllTerms());
+  _mergeNewKeywords(filter) {
+    if (hasValue(filter)) {
+      filter.forEach(term => {
+        const {keyword: key} = term;
+        if (isDefined(key)) {
+          !this.has(key) && this._addTerm(term);
+        }
+      });
     }
     return this;
   }
@@ -446,7 +450,7 @@ class Filter extends Model {
    * @return {bool} Returns true if this filter equals to the other filter
    */
   equals(filter) {
-    if (!isDefined(filter)) {
+    if (!hasValue(filter)) {
       return false;
     }
 
@@ -616,6 +620,10 @@ class Filter extends Model {
    * @return {Filter} This filter
    */
   and(filter) {
+    if (!hasValue(filter)) {
+      return this;
+    }
+
     const nonExtraTerms = this.getAllTerms().filter(
       term => !EXTRA_KEYWORDS.includes(term.keyword),
     );
@@ -625,7 +633,7 @@ class Filter extends Model {
     }
 
     this._resetFilterId(); // filter has changed
-    return this._merge(filter);
+    return this.merge(filter);
   }
 
   /**
@@ -671,6 +679,37 @@ class Filter extends Model {
   setSortBy(value) {
     const order = this.getSortOrder();
     this.set(order, value);
+    return this;
+  }
+
+  /**
+   * Merges all terms from filter into this Filter
+   *
+   * @param {Filter} filter  Terms from filter to be merged.
+   *
+   * @return {Filter} This filter with merged terms.
+   */
+  merge(filter) {
+    if (hasValue(filter)) {
+      this._addTerm(...filter.getAllTerms());
+    }
+    return this;
+  }
+
+  /**
+   * Merges all new terms from filter into Filter
+   *
+   * @param {Filter} filter  Terms from filter to be merged.
+   *
+   * @return {Filter} This filter with merged terms.
+   */
+
+  mergeKeywords(filter) {
+    if (hasValue(filter)) {
+      this._resetFilterId();
+
+      this._mergeNewKeywords(filter);
+    }
     return this;
   }
 
@@ -723,7 +762,6 @@ class Filter extends Model {
 }
 
 export const ALL_FILTER = new Filter().all();
-export const AGENTS_FILTER_FILTER = Filter.fromString('type=agent');
 export const ALERTS_FILTER_FILTER = Filter.fromString('type=alert');
 export const CERTBUND_FILTER_FILTER = Filter.fromString('type=info');
 export const CPES_FILTER_FILTER = Filter.fromString('type=info');
@@ -754,10 +792,17 @@ export const TARGETS_FILTER_FILTER = Filter.fromString('type=target');
 export const TASKS_FILTER_FILTER = Filter.fromString('type=task');
 export const TAGS_FILTER_FILTER = Filter.fromString('type=tag');
 export const TICKETS_FILTER_FILTER = Filter.fromString('type=ticket');
+export const TLS_CERTIFICATES_FILTER_FILTER = Filter.fromString(
+  'type=tls_certificate',
+);
 export const USERS_FILTER_FILTER = Filter.fromString('type=user');
 export const VULNS_FILTER_FILTER = Filter.fromString('type=vuln');
 
+export const DEFAULT_FALLBACK_FILTER = Filter.fromString('sort=name first=1');
+
 export const RESET_FILTER = Filter.fromString('first=1');
+
+export const DEFAULT_ROWS_PER_PAGE = 50;
 
 export default Filter;
 

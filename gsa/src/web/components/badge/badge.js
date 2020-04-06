@@ -1,23 +1,22 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 
 import styled from 'styled-components';
 
@@ -57,60 +56,50 @@ const BadgeIcon = styled.span`
 
 BadgeIcon.displayName = 'BadgeIcon';
 
-class Badge extends React.Component {
-  constructor(...args) {
-    super(...args);
+const Badge = props => {
+  const icon = useRef();
 
-    this.state = {};
-  }
+  useEffect(() => {
+    calcMargin();
+  }, [props.content]);
 
-  componentDidMount() {
-    this.calcMargin();
-  }
+  const [margin, setMargin] = useState(undefined);
 
-  componentDidUpdate(prev) {
-    if (prev.content !== this.props.content) {
-      this.calcMargin();
+  const calcMargin = () => {
+    if (hasValue(icon.current)) {
+      const {width} = icon.current.getBoundingClientRect();
+      setMargin(width / 2);
     }
-  }
+  };
 
-  calcMargin() {
-    if (hasValue(this.icon)) {
-      const {width} = this.icon.getBoundingClientRect();
-      this.setState({margin: width / 2});
-    }
-  }
+  const {
+    backgroundColor,
+    children,
+    color,
+    content,
+    dynamic = true,
+    position,
+  } = props;
 
-  render() {
-    const {margin} = this.state;
-    const {
-      backgroundColor,
-      children,
-      color,
-      content,
-      dynamic = true,
-      position,
-    } = this.props;
-    return (
-      <BadgeContainer margin={dynamic ? margin : undefined}>
-        {children}
+  return (
+    <BadgeContainer margin={dynamic ? margin : undefined}>
+      {children}
 
-        {isDefined(content) && (
-          <BadgeIcon
-            data-testid="badge-icon"
-            innerRef={ref => (this.icon = ref)}
-            color={color}
-            backgroundColor={backgroundColor}
-            position={position}
-            margin={dynamic ? margin : undefined}
-          >
-            {content}
-          </BadgeIcon>
-        )}
-      </BadgeContainer>
-    );
-  }
-}
+      {isDefined(content) && (
+        <BadgeIcon
+          data-testid="badge-icon"
+          ref={icon}
+          color={color}
+          backgroundColor={backgroundColor}
+          position={position}
+          margin={dynamic ? margin : undefined}
+        >
+          {content}
+        </BadgeIcon>
+      )}
+    </BadgeContainer>
+  );
+};
 
 Badge.propTypes = {
   backgroundColor: PropTypes.string,

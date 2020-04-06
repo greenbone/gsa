@@ -1,26 +1,29 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
+
+import {setLocale} from 'gmp/locale/lang';
 
 import {render, fireEvent} from 'web/utils/testing';
 
 import MultiSelect from '../multiselect.js';
+
+setLocale('en');
 
 const openInputElement = element => {
   const button = element.querySelector('[type="button"]');
@@ -62,6 +65,29 @@ describe('MultiSelect component tests', () => {
     expect(domItems.length).toEqual(2);
     expect(domItems[0]).toHaveTextContent('Bar');
     expect(domItems[1]).toHaveTextContent('Foo');
+  });
+
+  test('should render loading', () => {
+    const items = [
+      {
+        value: '0',
+        label: '--',
+      },
+    ];
+
+    const {element, baseElement} = render(
+      <MultiSelect items={items} isLoading={true} />,
+    );
+
+    expect(element).toHaveTextContent('Loading...');
+
+    let domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(0);
+
+    openInputElement(element);
+
+    domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(0);
   });
 
   test('should call onChange handler', () => {
@@ -192,7 +218,7 @@ describe('MultiSelect component tests', () => {
     expect(domItems.length).toEqual(1);
   });
 
-  test('should remove selected item', () => {
+  test('should call onChange handler to remove selected item', () => {
     const items = [
       {
         value: 'bar',
@@ -210,15 +236,12 @@ describe('MultiSelect component tests', () => {
       <MultiSelect items={items} value={['bar', 'foo']} onChange={onChange} />,
     );
 
-    let selectedItems = getAllByTestId('multiselect-selected-label');
+    const selectedItems = getAllByTestId('multiselect-selected-label');
     expect(selectedItems.length).toEqual(2);
 
     const deleteIcons = getAllByTestId('multiselect-selected-delete');
     expect(deleteIcons.length).toEqual(2);
     fireEvent.click(deleteIcons[0]);
-
-    selectedItems = getAllByTestId('multiselect-selected-label');
-    expect(selectedItems.length).toEqual(1);
 
     expect(onChange).toHaveBeenCalledWith(['foo'], undefined);
   });

@@ -14,10 +14,13 @@ exports[`SolutionTypeIcon component tests should render correct image 1`] = `
 
 <span
   alt="Workaround"
-  class="c0 "
+  class="c0"
+  data-testid="svg-icon"
   title="Workaround"
 >
-  <svg>
+  <svg
+    title="Workaround"
+  >
     st_workaround.svg
   </svg>
 </span>
@@ -39,10 +42,13 @@ exports[`SolutionTypeIcon component tests should render correct image 3`] = `
 
 <span
   alt="None available"
-  class="c0 "
+  class="c0"
+  data-testid="svg-icon"
   title="None available"
 >
-  <svg>
+  <svg
+    title="None available"
+  >
     st_nonavailable.svg
   </svg>
 </span>
@@ -62,10 +68,13 @@ exports[`SolutionTypeIcon component tests should render correct image 4`] = `
 
 <span
   alt="Vendorfix"
-  class="c0 "
+  class="c0"
+  data-testid="svg-icon"
   title="Vendorfix"
 >
-  <svg>
+  <svg
+    title="Vendorfix"
+  >
     st_vendorfix.svg
   </svg>
 </span>
@@ -85,10 +94,13 @@ exports[`SolutionTypeIcon component tests should render correct image 5`] = `
 
 <span
   alt="Will not fix"
-  class="c0 "
+  class="c0"
+  data-testid="svg-icon"
   title="Will not fix"
 >
-  <svg>
+  <svg
+    title="Will not fix"
+  >
     st_willnotfix.svg
   </svg>
 </span>
@@ -108,10 +120,13 @@ exports[`SolutionTypeIcon component tests should render correct image 6`] = `
 
 <span
   alt="Workaround"
-  class="c0 "
+  class="c0"
+  data-testid="svg-icon"
   title="Workaround"
 >
-  <svg>
+  <svg
+    title="Workaround"
+  >
     st_workaround.svg
   </svg>
 </span>
@@ -131,10 +146,13 @@ exports[`SolutionTypeIcon component tests should render correct image 7`] = `
 
 <span
   alt=""
-  class="c0 "
+  class="c0"
+  data-testid="svg-icon"
   title=""
 >
-  <svg>
+  <svg
+    title=""
+  >
     st_unknown.svg
   </svg>
 </span>

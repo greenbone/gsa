@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import React from 'react';
@@ -79,21 +78,31 @@ const Span = styled.span`
 
 const PageContent = ({
   activeTab,
+  applicationsCounts,
+  closedCvesCounts,
+  cvesCounts,
   entity,
+  errorsCounts,
   filters,
   gmp,
+  hostsCounts,
   isLoading = true,
+  isLoadingFilters = true,
   isUpdating = false,
+  operatingSystemsCounts,
   pageFilter,
+  portsCounts,
   reportError,
   reportFilter,
   reportId,
   resetFilter,
+  resultsCounts,
   sorting,
   showError,
   showErrorMessage,
   showSuccessMessage,
   task,
+  tlsCertificatesCounts,
   onActivateTab,
   onAddToAssetsClick,
   onTlsCertificateDownloadClick,
@@ -129,7 +138,7 @@ const PageContent = ({
     operatingsystems = {},
     ports = {},
     results = {},
-    tls_certificates = {},
+    tlsCertificates = {},
     timestamp,
     scan_run_status,
   } = report || {};
@@ -186,6 +195,7 @@ const PageContent = ({
     <Layout grow flex="column" align={['start', 'stretch']}>
       <ToolBar>
         <ToolBarIcons
+          delta={false}
           filter={reportFilter}
           isLoading={showIsLoading}
           report={hasReport ? report : undefined}
@@ -207,6 +217,8 @@ const PageContent = ({
             // use loaded filter from report if available otherwise already show the requested filter
             filter={isDefined(reportFilter) ? reportFilter : pageFilter}
             filters={filters}
+            isLoading={isLoading || isUpdating}
+            isLoadingFilters={isLoadingFilters}
             resetFilter={resetFilter}
             onEditClick={onFilterEditClick}
             onError={onError}
@@ -231,46 +243,43 @@ const PageContent = ({
               >
                 <Tab>{_('Information')}</Tab>
                 <Tab>
-                  <TabTitle title={_('Results')} counts={results.counts} />
+                  <TabTitle title={_('Results')} counts={resultsCounts} />
                 </Tab>
                 <Tab>
-                  <TabTitle title={_('Hosts')} counts={hosts.counts} />
+                  <TabTitle title={_('Hosts')} counts={hostsCounts} />
                 </Tab>
                 <Tab>
-                  <TabTitle title={_('Ports')} counts={ports.counts} />
+                  <TabTitle title={_('Ports')} counts={portsCounts} />
                 </Tab>
                 <Tab>
                   <TabTitle
                     title={_('Applications')}
-                    counts={applications.counts}
+                    counts={applicationsCounts}
                   />
                 </Tab>
                 <Tab>
                   <TabTitle
                     title={_('Operating Systems')}
-                    counts={operatingsystems.counts}
+                    counts={operatingSystemsCounts}
                   />
                 </Tab>
                 <Tab>
-                  <TabTitle title={_('CVEs')} counts={cves.counts} />
+                  <TabTitle title={_('CVEs')} counts={cvesCounts} />
                 </Tab>
                 <Tab>
                   <TabTitle
                     title={_('Closed CVEs')}
-                    counts={closed_cves.counts}
+                    counts={closedCvesCounts}
                   />
                 </Tab>
                 <Tab>
                   <TabTitle
                     title={_('TLS Certificates')}
-                    counts={tls_certificates.counts}
+                    counts={tlsCertificatesCounts}
                   />
                 </Tab>
                 <Tab>
-                  <TabTitle
-                    title={_('Error Messages')}
-                    counts={errors.counts}
-                  />
+                  <TabTitle title={_('Error Messages')} counts={errorsCounts} />
                 </Tab>
                 <Tab>
                   <TabTitle title={_('User Tags')} count={userTagsCount} />
@@ -490,8 +499,8 @@ const PageContent = ({
                       />
                     ) : (
                       <TLSCertificatesTab
-                        counts={tls_certificates.counts}
-                        tlsCertificates={tls_certificates.entities}
+                        counts={tlsCertificates.counts}
+                        tlsCertificates={tlsCertificates.entities}
                         filter={reportFilter}
                         isUpdating={isUpdating}
                         sortField={sorting.tlscerts.sortField}
@@ -542,21 +551,31 @@ const PageContent = ({
 
 PageContent.propTypes = {
   activeTab: PropTypes.number,
+  applicationsCounts: PropTypes.counts,
+  closedCvesCounts: PropTypes.counts,
+  cvesCounts: PropTypes.counts,
   entity: PropTypes.model,
+  errorsCounts: PropTypes.counts,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
+  hostsCounts: PropTypes.counts,
   isLoading: PropTypes.bool,
+  isLoadingFilters: PropTypes.bool,
   isUpdating: PropTypes.bool,
+  operatingSystemsCounts: PropTypes.counts,
   pageFilter: PropTypes.filter,
+  portsCounts: PropTypes.counts,
   reportError: PropTypes.error,
   reportFilter: PropTypes.filter,
   reportId: PropTypes.id.isRequired,
   resetFilter: PropTypes.filter,
+  resultsCounts: PropTypes.counts,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   sorting: PropTypes.object,
   task: PropTypes.model,
+  tlsCertificatesCounts: PropTypes.counts,
   onActivateTab: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,

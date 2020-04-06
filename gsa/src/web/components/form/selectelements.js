@@ -1,22 +1,21 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import 'core-js/fn/string/includes';
+import 'core-js/features/string/includes';
 
 import React from 'react';
 
@@ -157,7 +156,7 @@ const getScrollX = () =>
 const getScrollY = () =>
   isDefined(window.scrollY) ? window.scrollY : window.pageYOffset;
 
-export class Menu extends React.Component {
+class MenuComponent extends React.Component {
   constructor(...args) {
     super(...args);
 
@@ -191,13 +190,13 @@ export class Menu extends React.Component {
   }
 
   render() {
-    const {target, ...props} = this.props;
+    const {target, forwardedRef, ...props} = this.props;
 
-    if (!hasValue(target)) {
+    if (!hasValue(target) || target.current === null) {
       return null;
     }
 
-    const rect = target.getBoundingClientRect();
+    const rect = target.current.getBoundingClientRect();
     const {height, width, right, left, top} = rect;
 
     return (
@@ -205,6 +204,7 @@ export class Menu extends React.Component {
         <MenuContainer
           data-testid="select-menu"
           {...props}
+          ref={forwardedRef}
           right={document.body.clientWidth - right}
           width={width}
           x={left + getScrollX()}
@@ -215,13 +215,19 @@ export class Menu extends React.Component {
   }
 }
 
-Menu.propTypes = {
-  target: PropTypes.object,
+MenuComponent.propTypes = {
+  forwardedRef: PropTypes.ref,
+  target: PropTypes.ref,
 };
+
+export const Menu = React.forwardRef((props, ref) => (
+  <MenuComponent {...props} forwardedRef={ref} />
+));
 
 export const SelectContainer = styled.div`
   display: flex;
   flex-direction: column;
+  flex-grow: ${props => props.grow};
   position: relative;
   width: ${props => props.width};
 `;

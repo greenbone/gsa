@@ -1,26 +1,24 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import 'core-js/shim';
-import 'core-js/library/fn/array/find-index';
-import 'core-js/library/fn/array/find';
+import 'core-js/features/array/find-index';
+import 'core-js/features/array/find';
 
-import uuid from 'uuid/v4';
+import {v4 as uuid} from 'uuid';
 
 import React from 'react';
 
@@ -53,11 +51,13 @@ class Grid extends React.Component {
 
     this.state = {
       isDragging: false,
+      isInteracting: false,
     };
 
     this.handleDragEnd = this.handleDragEnd.bind(this);
     this.handleDragStart = this.handleDragStart.bind(this);
     this.handleRowResize = this.handleRowResize.bind(this);
+    this.handleOnBeforeCapture = this.handleOnBeforeCapture.bind(this);
   }
 
   notifyChange(items) {
@@ -76,6 +76,12 @@ class Grid extends React.Component {
     }
   }
 
+  handleOnBeforeCapture() {
+    this.setState({
+      isInteracting: true,
+    });
+  }
+
   handleDragStart(drag) {
     const {droppableId: rowId} = drag.source;
 
@@ -89,6 +95,7 @@ class Grid extends React.Component {
     this.setState({
       isDragging: false,
       dragSourceRowId: undefined,
+      isInteracting: false,
     });
 
     // dropped outside the list or at same position
@@ -146,7 +153,7 @@ class Grid extends React.Component {
   }
 
   render() {
-    const {isDragging, dragSourceRowId} = this.state;
+    const {isInteracting, isDragging, dragSourceRowId} = this.state;
     const {maxItemsPerRow, maxRows, items = [], children} = this.props;
     const showEmptyRow = !isDefined(maxRows) || items.length < maxRows;
 
@@ -162,10 +169,11 @@ class Grid extends React.Component {
       <DragDropContext
         onDragEnd={this.handleDragEnd}
         onDragStart={this.handleDragStart}
+        onBeforeCapture={this.handleOnBeforeCapture}
       >
         <AutoSize>
           {({width: fullWidth}) => (
-            <Layout flex="column" grow="1">
+            <Layout data-testid="grid" flex="column" grow="1">
               {items.map(row => {
                 let height = getRowHeight(row);
                 if (!isDefined(height)) {
@@ -212,7 +220,7 @@ class Grid extends React.Component {
                 );
               })}
               {showEmptyRow && (
-                <EmptyRow active={isDragging} height={emptyRowHeight} />
+                <EmptyRow active={isInteracting} height={emptyRowHeight} />
               )}
             </Layout>
           )}

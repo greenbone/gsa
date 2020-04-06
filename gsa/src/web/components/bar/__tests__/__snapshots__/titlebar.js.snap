@@ -77,7 +77,7 @@ exports[`Titlebar tests should not render content if user is logged out 1`] = `
         <img
           alt="Greenbone Security Assistant"
           class="c3"
-          src="/img/greenbone.svg"
+          src="greenbone.svg"
         />
         <img
           alt="Greenbone Security Assistant"
@@ -119,51 +119,185 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   display: inline-flex;
 }
 
-.c7 {
+.c14 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   margin-left: -5px;
 }
 
-.c7 > * {
+.c14 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c7 > * {
+.c14 > * {
   margin-left: 5px;
 }
 
-.c6 {
+.c13 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c8 {
-  color: #393637;
+.c16 {
   cursor: pointer;
-  font-weight: bold;
 }
 
-.c8:link,
-.c8:hover,
-.c8:active,
-.c8:visited {
-  color: #393637;
+.c8 {
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+}
+
+.c8 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c15 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c15 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c7 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c10 {
+  position: relative;
+  display: none;
+  -webkit-animation: iKjwYD 0.1s ease-in;
+  animation: iKjwYD 0.1s ease-in;
+}
+
+.c6:hover .c10 {
+  display: block;
+}
+
+.c11 {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  right: 0;
+  top: 0;
+  z-index: 600;
+  list-style: none;
+  font-size: 10px;
+  width: 300px;
+}
+
+.c12 {
+  height: 30px;
+  width: 300px;
+  border-left: 1px solid #787878;
+  border-right: 1px solid #787878;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: #fff;
+  padding-left: 12px;
+}
+
+.c12:hover {
+  background: #66c430;
+  color: #fff;
+  cursor: pointer;
+}
+
+.c12:first-child {
+  border-top: 1px solid #787878;
+  cursor: default;
+  background-color: #eeeeee;
+}
+
+.c12:first-child:hover {
+  color: #000;
+}
+
+.c12:nth-child(2) {
+  cursor: default;
+  background-color: #eeeeee;
+}
+
+.c12:nth-child(2):hover {
+  color: #000;
+}
+
+.c12:last-child {
+  border-top: 1px solid #787878;
+  border-bottom: 1px solid #787878;
 }
 
 .c9 {
-  color: #393637;
-  cursor: pointer;
+  margin-right: 10px;
 }
 
-.c9:link,
-.c9:hover,
-.c9:active,
-.c9:visited {
-  color: #393637;
+.c17 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  width: 100%;
+  height: 100%;
+}
+
+.c17:link,
+.c17:hover,
+.c17:active,
+.c17:visited,
+.c17:hover {
+  color: inherit;
+  -webkit-text-decoration: none;
+  text-decoration: none;
 }
 
 .c4 {
@@ -207,6 +341,12 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   height: 42px;
 }
 
+@media print {
+  .c16 {
+    display: none;
+  }
+}
+
 <body>
   <div
     id="portals"
@@ -229,7 +369,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
           <img
             alt="Greenbone Security Assistant"
             class="c4"
-            src="/img/greenbone.svg"
+            src="greenbone.svg"
           />
           <img
             alt="Greenbone Security Assistant"
@@ -238,33 +378,142 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
           />
         </div>
       </a>
-      <div
-        class="c6 c3"
+      <span
+        class="c6 c7"
+        data-testid="usermenu"
       >
-        <div
-          class="c7 c3"
-          margin="5px"
+        <span
+          class="c8 c9"
+          data-testid="svg-icon"
         >
-          <span>
-            Logged in as 
-          </span>
-          <a
-            class="c8 c2"
-            href="/usersettings"
-            title="Your session will end at "
+          <svg>
+            user.svg
+          </svg>
+        </span>
+        <div
+          class="c10"
+        >
+          <ul
+            class="c11"
           >
-            username
-          </a>
-          <span>
-             | 
-          </span>
-          <a
-            class="c9"
-          >
-            Logout
-          </a>
+            <li
+              class="c12"
+              title="Logged in as: username"
+            >
+              <div
+                class="c13"
+              >
+                <div
+                  class="c14"
+                  margin="5px"
+                >
+                  <span
+                    class="c15"
+                    data-testid="svg-icon"
+                  >
+                    <svg>
+                      user.svg
+                    </svg>
+                  </span>
+                  <span>
+                    username
+                  </span>
+                </div>
+              </div>
+            </li>
+            <li
+              class="c12"
+            >
+              <div
+                class="c13"
+              >
+                <div
+                  class="c14"
+                  margin="5px"
+                >
+                  <span
+                    class="c15"
+                    data-testid="svg-icon"
+                  >
+                    <svg>
+                      schedule.svg
+                    </svg>
+                  </span>
+                  <span>
+                    Session timeout: 
+                  </span>
+                  <span
+                    class="c16 c15"
+                    data-testid="svg-icon"
+                    title="Renew session timeout"
+                  >
+                    <svg
+                      title="Renew session timeout"
+                    >
+                      refresh.svg
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </li>
+            <li
+              class="c12"
+            >
+              <a
+                class="c17"
+                data-testid="usermenu-settings"
+                href="/usersettings"
+              >
+                <div
+                  class="c13"
+                >
+                  <div
+                    class="c14"
+                    margin="5px"
+                  >
+                    <span
+                      class="c15"
+                      data-testid="svg-icon"
+                    >
+                      <svg>
+                        my_setting.svg
+                      </svg>
+                    </span>
+                    <span>
+                      My Settings
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li
+              class="c12"
+              data-testid="usermenu-logout"
+            >
+              <div
+                class="c13"
+              >
+                <div
+                  class="c14"
+                  margin="5px"
+                >
+                  <span
+                    class="c15"
+                    data-testid="svg-icon"
+                  >
+                    <svg>
+                      logout.svg
+                    </svg>
+                  </span>
+                  <span>
+                    Log Out
+                  </span>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
-      </div>
+      </span>
     </div>
   </div>
 </body>

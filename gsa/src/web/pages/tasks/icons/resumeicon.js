@@ -1,20 +1,19 @@
 /* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
@@ -23,17 +22,25 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
+import {capitalizeFirstLetter} from 'gmp/utils/string';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import ResumeIcon from 'web/components/icon/resumeicon';
 
-const TaskResumeIcon = ({capabilities, task, onClick}) => {
+const TaskResumeIcon = ({
+  capabilities,
+  task,
+  usageType = _('task'),
+  onClick,
+}) => {
   if (task.isContainer()) {
     return (
       <ResumeIcon
         active={false}
         alt={_('Resume')}
-        title={_('Task is a container')}
+        title={_('{{usageType}} is a container', {
+          usageType: capitalizeFirstLetter(usageType),
+        })}
       />
     );
   }
@@ -43,7 +50,9 @@ const TaskResumeIcon = ({capabilities, task, onClick}) => {
       <ResumeIcon
         active={false}
         alt={_('Resume')}
-        title={_('Task is scheduled')}
+        title={_('{{usageType}} is scheduled', {
+          usageType: capitalizeFirstLetter(usageType),
+        })}
       />
     );
   }
@@ -59,7 +68,7 @@ const TaskResumeIcon = ({capabilities, task, onClick}) => {
       <ResumeIcon
         active={false}
         alt={_('Resume')}
-        title={_('Permission to resume task denied')}
+        title={_('Permission to resume {{usageType}} denied', {usageType})}
       />
     );
   }
@@ -68,7 +77,9 @@ const TaskResumeIcon = ({capabilities, task, onClick}) => {
     <ResumeIcon
       active={false}
       alt={_('Resume')}
-      title={_('Task is not stopped')}
+      title={_('{{usageType}} is not stopped', {
+        usageType: capitalizeFirstLetter(usageType),
+      })}
     />
   );
 };
@@ -76,6 +87,7 @@ const TaskResumeIcon = ({capabilities, task, onClick}) => {
 TaskResumeIcon.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   task: PropTypes.model.isRequired,
+  usageType: PropTypes.string,
   onClick: PropTypes.func,
 };
 

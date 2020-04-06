@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import {isArray} from '../../utils/identity';
 
@@ -103,6 +102,11 @@ describe('Filter parse from string tests', () => {
 
     filter = Filter.fromString('rows>1');
     expect(filter.toFilterString()).toEqual('rows=1');
+  });
+
+  test('should ignore null as filter argument', () => {
+    const filter = Filter.fromString('foo=1', null);
+    expect(filter.toFilterString()).toEqual('foo=1');
   });
 
   test('should ignore filter terms starting with _', () => {
@@ -388,6 +392,11 @@ describe('Filter equal', () => {
   test('should not equal undefined', () => {
     const filter = Filter.fromString('');
     expect(filter.equals()).toEqual(false);
+  });
+
+  test('should not equal null', () => {
+    const filter = Filter.fromString('');
+    expect(filter.equals(null)).toEqual(false);
   });
 
   test('empty filter should equal itself', () => {
@@ -938,6 +947,26 @@ describe('Filter simple', () => {
 });
 
 describe('Filter merge extra keywords', () => {
+  test('should handle merging undefined filter', () => {
+    const filter1 = Filter.fromString('abc=1');
+    filter1.id = 'f1';
+    const filter2 = filter1.mergeExtraKeywords();
+
+    expect(filter1).not.toBe(filter2);
+    expect(filter2.get('abc')).toEqual('1');
+    expect(filter2.id).toBeUndefined();
+  });
+
+  test('should handle merging null filter', () => {
+    const filter1 = Filter.fromString('abc=1');
+    filter1.id = 'f1';
+    const filter2 = filter1.mergeExtraKeywords(null);
+
+    expect(filter1).not.toBe(filter2);
+    expect(filter2.get('abc')).toEqual('1');
+    expect(filter2.id).toBeUndefined();
+  });
+
   test('should merge extra keywords', () => {
     const filter1 = Filter.fromString('abc=1');
     const filter2 = Filter.fromString(
@@ -961,6 +990,22 @@ describe('Filter merge extra keywords', () => {
     expect(filter3.get('rows')).toBe(10);
     expect(filter3.get('sort')).toBe('name');
     expect(filter3.get('timezone')).toBe('CET');
+  });
+
+  test('should merge new keywords', () => {
+    const filter1 = Filter.fromString('abc=1 autofp=0 trend=more');
+    const filter2 = Filter.fromString(
+      'autofp=1 delta_states=1 severity>3 sort=name',
+    );
+
+    const filter3 = filter2.mergeKeywords(filter1);
+
+    expect(filter3.get('abc')).toBe('1');
+    expect(filter3.get('delta_states')).toBe('1');
+    expect(filter3.get('sort')).toBe('name');
+    expect(filter3.get('severity')).toBe('3');
+    expect(filter3.get('autofp')).toBe(1);
+    expect(filter3.get('trend')).toBe('more');
   });
 
   test('should not merge non extra keywords', () => {
@@ -1043,6 +1088,16 @@ describe('Filter merge extra keywords', () => {
 });
 
 describe('filter and', () => {
+  test('should ignore undefined', () => {
+    const filter = Filter.fromString('foo=1');
+    expect(filter.and().toFilterString()).toEqual('foo=1');
+  });
+
+  test('should ignore null', () => {
+    const filter = Filter.fromString('foo=1');
+    expect(filter.and(null).toFilterString()).toEqual('foo=1');
+  });
+
   test('filters should be concatenated with and', () => {
     const filter1 = Filter.fromString('foo=1');
     const filter2 = Filter.fromString('bar=2');
@@ -1156,6 +1211,97 @@ describe('Filter toFilterExtraString', () => {
   test('should ignore non extra keywords', () => {
     const filter1 = Filter.fromString('foo=bar first=1 rows=66');
     expect(filter1.toFilterExtraString()).toEqual('first=1 rows=66');
+  });
+});
+
+describe('should lower the case of capitalized keywords', () => {
+  test('should lower the case of multiple keywords', () => {
+    const filter = Filter.fromString('sevErIty>3.9 and Qod_MIN=70 RoWs=14');
+    expect(filter.toFilterString()).toEqual(
+      'severity>3.9 and qod_min=70 rows=14',
+    );
+  });
+  test('should do the same for filters from arrays', () => {
+    const element = {
+      keywords: {
+        keyword: [
+          {
+            column: '',
+            relation: '~',
+            value: 'abc',
+          },
+          {
+            column: '',
+            relation: '~',
+            value: 'and',
+          },
+          {
+            column: '',
+            relation: '~',
+            value: 'not',
+          },
+          {
+            column: '',
+            relation: '~',
+            value: 'def',
+          },
+          {
+            column: 'ROWS',
+            relation: '=',
+            value: '10',
+          },
+          {
+            column: 'fiRsT',
+            relation: '=',
+            value: '1',
+          },
+          {
+            column: 'sORt',
+            relation: '=',
+            value: 'name',
+          },
+        ],
+      },
+    };
+    const filter = Filter.fromElement(element);
+    expect(filter.toFilterString()).toEqual(
+      '~abc and not ~def rows=10 first=1 sort=name',
+    );
+  });
+  test('a more wacky scenario', () => {
+    const filter1 = Filter.fromString('~abc SorT=name');
+    expect(filter1.toFilterString()).toEqual('~abc sort=name');
+  });
+  test('just a value', () => {
+    const filter2 = Filter.fromString('~AbC');
+    expect(filter2.toFilterString()).toEqual('~AbC');
+  });
+});
+
+describe('Filter merge', () => {
+  test('should merge undefined', () => {
+    const filter1 = Filter.fromString('foo=bar');
+    const filter2 = filter1.merge();
+
+    expect(filter1).toBe(filter2);
+    expect(filter2.get('foo')).toEqual('bar');
+  });
+
+  test('should merge null', () => {
+    const filter1 = Filter.fromString('foo=bar');
+    const filter2 = filter1.merge(null);
+
+    expect(filter1).toBe(filter2);
+    expect(filter2.get('foo')).toEqual('bar');
+  });
+
+  test('should merge filter', () => {
+    const filter1 = Filter.fromString('foo=bar');
+    const filter2 = Filter.fromString('rows=10 first=1');
+    const filter3 = filter1.merge(filter2);
+
+    expect(filter1).toBe(filter3);
+    expect(filter3.toFilterString()).toEqual('foo=bar rows=10 first=1');
   });
 });
 

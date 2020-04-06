@@ -1,20 +1,19 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import {isFunction} from 'gmp/utils/identity';
 
@@ -24,7 +23,10 @@ import Rejection from 'gmp/http/rejection';
 
 import {filterIdentifier} from 'web/store/utils';
 
-import {createEntitiesActions, createEntityActions} from '../actions';
+import {
+  createEntitiesLoadingActions,
+  createEntityLoadingActions,
+} from '../actions';
 import {createReducer} from '../reducers';
 
 describe('entities reducers test', () => {
@@ -55,7 +57,7 @@ describe('entities reducers test', () => {
   });
 
   test('should not override byId accidentially', () => {
-    const actions = createEntitiesActions('foo');
+    const actions = createEntitiesLoadingActions('foo');
     const reducer = createReducer('foo');
     const filter = Filter.fromString('byId');
     const filterId = filterIdentifier(filter);
@@ -98,7 +100,7 @@ describe('entities reducers test', () => {
   });
 
   test('should not override default accidentially', () => {
-    const actions = createEntitiesActions('foo');
+    const actions = createEntitiesLoadingActions('foo');
     const reducer = createReducer('foo');
     const filter = Filter.fromString('default');
     const filterId = filterIdentifier(filter);
@@ -142,7 +144,7 @@ describe('entities reducers test', () => {
 
   describe('reducing entities loading request actions', () => {
     test('should set isLoading with default filter', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const action = actions.request();
       const reducer = createReducer('foo');
 
@@ -157,7 +159,7 @@ describe('entities reducers test', () => {
     });
 
     test('should set isLoading for filter', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
       const filter = Filter.fromString('name=foo');
       const filterId = filterIdentifier(filter);
@@ -174,7 +176,7 @@ describe('entities reducers test', () => {
     });
 
     test('should set isLoading and not override existing state', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
       const filter = Filter.fromString('name=foo');
       const filterId = filterIdentifier(filter);
@@ -201,7 +203,7 @@ describe('entities reducers test', () => {
     });
 
     test('should set isLoading and not override other properties', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
       const filter = Filter.fromString('name=foo');
       const loadedFilter = Filter.fromString('name=foo rows=10');
@@ -241,7 +243,7 @@ describe('entities reducers test', () => {
 
   describe('reducing entities loading success actions', () => {
     test('should set isLoading with default filter', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
       const action = actions.success([{id: 'foo'}, {id: 'bar'}]);
 
@@ -265,7 +267,7 @@ describe('entities reducers test', () => {
     });
 
     test('should reset other properties with default filter', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
       const action = actions.success([{id: 'foo'}, {id: 'bar'}]);
       const state = {
@@ -298,7 +300,7 @@ describe('entities reducers test', () => {
     });
 
     test('should not override other filters', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
       const filter = Filter.fromString('name=bar');
       const filterId = filterIdentifier(filter);
@@ -358,7 +360,7 @@ describe('entities reducers test', () => {
 
   describe('reducing entities loading error actions', () => {
     test('should set isLoading and error with default filter', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
       const action = actions.error('An error');
 
@@ -375,7 +377,7 @@ describe('entities reducers test', () => {
     });
 
     test('should reset isLoading and error with default filter', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
       const action = actions.error('An error');
       const state = {
@@ -405,7 +407,7 @@ describe('entities reducers test', () => {
     });
 
     test('should not override other filters', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
       const filter = Filter.fromString('name=bar');
       const filterId = filterIdentifier(filter);
@@ -457,7 +459,7 @@ describe('entities reducers test', () => {
     });
 
     test('should not reduce expected errors', () => {
-      const actions = createEntitiesActions('foo');
+      const actions = createEntitiesLoadingActions('foo');
       const reducer = createReducer('foo');
       const filter = Filter.fromString('name=bar');
       const filterId = filterIdentifier(filter);
@@ -512,7 +514,7 @@ describe('entities reducers test', () => {
   describe('reducing entity loading requests', () => {
     test('should set isLoading', () => {
       const id = 'a1';
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const action = actions.request(id);
       const reducer = createReducer('foo');
 
@@ -527,7 +529,7 @@ describe('entities reducers test', () => {
 
     test('should set isLoading and not override other state', () => {
       const id = 'a1';
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const action = actions.request(id);
       const reducer = createReducer('foo');
       const state = {
@@ -580,7 +582,7 @@ describe('entities reducers test', () => {
   describe('reducing entity loading success', () => {
     test('should reduce success action', () => {
       const id = 'a1';
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const data = {
         id: 'bar',
         foo: 'bar',
@@ -604,7 +606,7 @@ describe('entities reducers test', () => {
 
     test('should reset isLoading', () => {
       const id = 'a1';
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const data = {
         id: 'bar',
         foo: 'bar',
@@ -633,7 +635,7 @@ describe('entities reducers test', () => {
 
     test('should reset error', () => {
       const id = 'a1';
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const data = {
         id: 'bar',
         foo: 'bar',
@@ -662,7 +664,7 @@ describe('entities reducers test', () => {
 
     test('should override previous data', () => {
       const id = 'a1';
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const data = {
         id: 'bar',
         foo: 'bar',
@@ -694,7 +696,7 @@ describe('entities reducers test', () => {
 
     test('should not override other state', () => {
       const id = 'a1';
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const data = {
         id: 'bar',
         foo: 'bar',
@@ -741,7 +743,7 @@ describe('entities reducers test', () => {
   describe('reducing entity loading error', () => {
     test('should reduce error action', () => {
       const id = 'a1';
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const action = actions.error(id, 'An error');
       const reducer = createReducer('foo');
 
@@ -758,7 +760,7 @@ describe('entities reducers test', () => {
 
     test('should reset isLoading', () => {
       const id = 'a1';
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const action = actions.error(id, 'An error');
       const reducer = createReducer('foo');
       const state = {
@@ -780,7 +782,7 @@ describe('entities reducers test', () => {
 
     test('should override previous error', () => {
       const id = 'a1';
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const action = actions.error(id, 'An error');
       const reducer = createReducer('foo');
       const state = {
@@ -802,7 +804,7 @@ describe('entities reducers test', () => {
 
     test('should not override other state', () => {
       const id = 'a1';
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const action = actions.error(id, 'An error');
       const reducer = createReducer('foo');
       const state = {
@@ -840,7 +842,7 @@ describe('entities reducers test', () => {
 
     test('should not reduce expected errors', () => {
       const id = 'a1';
-      const actions = createEntityActions('foo');
+      const actions = createEntityLoadingActions('foo');
       const rejection = new Rejection({}, Rejection.REASON_UNAUTHORIZED);
       const action = actions.error(id, rejection);
       const reducer = createReducer('foo');

@@ -1,23 +1,22 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'core-js/fn/object/entries';
+import 'core-js/features/object/entries';
 
 import Model from 'gmp/model';
 
@@ -63,25 +62,6 @@ describe('Task Model parse tests', () => {
     expect(task.hosts_ordering).toEqual(HOSTS_ORDERING_SEQUENTIAL);
   });
 
-  test('should parse first_report', () => {
-    const element = {
-      _id: 't1',
-      first_report: {
-        report: {
-          _id: 'r1',
-        },
-      },
-    };
-
-    const task = Task.fromElement(element);
-
-    expect(task.id).toEqual('t1');
-
-    expect(task.first_report).toBeInstanceOf(Report);
-    expect(task.first_report.id).toEqual('r1');
-    expect(task.first_report.entityType).toEqual('report');
-  });
-
   test('should parse last_report', () => {
     const element = {
       _id: 't1',
@@ -99,25 +79,6 @@ describe('Task Model parse tests', () => {
     expect(task.last_report).toBeInstanceOf(Report);
     expect(task.last_report.id).toEqual('r1');
     expect(task.last_report.entityType).toEqual('report');
-  });
-
-  test('should parse second_last_report', () => {
-    const element = {
-      _id: 't1',
-      second_last_report: {
-        report: {
-          _id: 'r1',
-        },
-      },
-    };
-
-    const task = Task.fromElement(element);
-
-    expect(task.id).toEqual('t1');
-
-    expect(task.second_last_report).toBeInstanceOf(Report);
-    expect(task.second_last_report.id).toEqual('r1');
-    expect(task.second_last_report.entityType).toEqual('report');
   });
 
   test('should parse current_report', () => {
@@ -318,6 +279,89 @@ describe('Task Model parse tests', () => {
       progress: '66',
     });
     expect(task4.progress).toEqual(66);
+  });
+
+  test('should parse preferences', () => {
+    const task1 = Task.fromElement({
+      _id: 't1',
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'in_assets',
+            value: 'yes',
+          },
+          {
+            scanner_name: 'assets_apply_overrides',
+            value: 'yes',
+          },
+          {
+            scanner_name: 'assets_min_qod',
+            value: '70',
+          },
+          {
+            scanner_name: 'auto_delete',
+            value: 'keep',
+          },
+          {
+            scanner_name: 'auto_delete_data',
+            value: 0,
+          },
+          {
+            scanner_name: 'max_hosts',
+            value: '20',
+          },
+          {
+            scanner_name: 'max_checks',
+            value: '4',
+          },
+          {
+            scanner_name: 'source_iface',
+            value: 'eth0',
+          },
+          {
+            scanner_name: 'foo',
+            value: 'bar',
+            name: 'lorem',
+          },
+        ],
+      },
+    });
+    const task2 = Task.fromElement({
+      _id: 't1',
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'in_assets',
+            value: 'no',
+          },
+          {
+            scanner_name: 'assets_apply_overrides',
+            value: 'no',
+          },
+          {
+            scanner_name: 'auto_delete',
+            value: 'no',
+          },
+          {
+            scanner_name: 'auto_delete_data',
+            value: 3,
+          },
+        ],
+      },
+    });
+
+    expect(task1.in_assets).toEqual(1);
+    expect(task1.apply_overrides).toEqual(1);
+    expect(task1.min_qod).toEqual(70);
+    expect(task1.auto_delete).toEqual('keep');
+    expect(task1.max_hosts).toEqual(20);
+    expect(task1.max_checks).toEqual(4);
+    expect(task1.source_iface).toEqual('eth0');
+    expect(task1.preferences).toEqual({foo: {value: 'bar', name: 'lorem'}});
+    expect(task2.in_assets).toEqual(0);
+    expect(task2.apply_overrides).toEqual(0);
+    expect(task2.auto_delete).toEqual('no');
+    expect(task2.auto_delete_data).toEqual(3);
   });
 });
 

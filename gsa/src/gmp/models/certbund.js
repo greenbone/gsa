@@ -1,25 +1,24 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isDefined} from '../utils/identity';
-import {forEach, map} from '../utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import {forEach, map} from 'gmp/utils/array';
 
-import {parseSeverity, parseDate} from '../parser';
+import {parseSeverity, parseDate} from 'gmp/parser';
 
 import Info from './info';
 
@@ -35,7 +34,7 @@ class CertBundAdv extends Info {
     ret.categories = [];
     ret.description = [];
     ret.cves = [];
-    ret.additional_information = [];
+    ret.additionalInformation = [];
 
     if (isDefined(ret.raw_data) && isDefined(ret.raw_data.Advisory)) {
       const {raw_data} = ret;
@@ -45,10 +44,10 @@ class CertBundAdv extends Info {
       ret.software = advisory.Software;
       ret.platform = advisory.Platform;
       ret.effect = advisory.effect;
-      ret.remote_attack = advisory.RemoteAttack;
+      ret.remoteAttack = advisory.RemoteAttack;
       ret.risk = advisory.Risk;
-      ret.reference_source = advisory.Reference_Source;
-      ret.reference_url = advisory.Reference_URL;
+      ret.referenceSource = advisory.Reference_Source;
+      ret.referenceUrl = advisory.Reference_URL;
       ret.categories = map(advisory.CategoryTree, categoryTree => categoryTree);
 
       if (!isDefined(ret.version) && isDefined(advisory.Ref_Num)) {
@@ -63,7 +62,7 @@ class CertBundAdv extends Info {
           if (isDefined(desciptionElement.TextBlock)) {
             ret.description.push(desciptionElement.TextBlock);
           } else if (isDefined(desciptionElement.Infos)) {
-            ret.additional_information = ret.additional_information.concat(
+            ret.additionalInformation = ret.additionalInformation.concat(
               map(desciptionElement.Infos.Info, info => ({
                 issuer: info._Info_Issuer,
                 url: info._Info_URL,
@@ -74,7 +73,7 @@ class CertBundAdv extends Info {
       }
 
       if (isDefined(advisory.RevisionHistory)) {
-        ret.revision_history = map(advisory.RevisionHistory.Revision, rev => ({
+        ret.revisionHistory = map(advisory.RevisionHistory.Revision, rev => ({
           revision: rev.Number,
           description: rev.Description,
           date: parseDate(rev.Date),

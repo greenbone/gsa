@@ -1,34 +1,37 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import 'core-js/fn/string/includes';
+import 'core-js/features/string/includes';
 
 import React from 'react';
 
 import Downshift from 'downshift';
 
+import _ from 'gmp/locale';
+
 import {isDefined, isArray} from 'gmp/utils/identity';
 
-import PropTypes, {mayRequire} from '../../utils/proptypes.js';
+import PropTypes, {mayRequire} from 'web/utils/proptypes';
 
-import ArrowIcon from '../icon/arrowicon';
+import ArrowIcon from 'web/components/icon/arrowicon';
 
-import Layout from '../../components/layout/layout';
+import Layout from 'web/components/layout/layout';
+
+import styled from 'styled-components';
 
 import {
   Box,
@@ -40,6 +43,10 @@ import {
   SelectContainer,
   SelectedValue,
 } from './selectelements.js';
+
+const SingleSelectedValue = styled(SelectedValue)`
+  cursor: default;
+`;
 
 const SelectValueValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
@@ -98,6 +105,9 @@ class Select extends React.Component {
       search: '',
     };
 
+    this.input = React.createRef();
+    this.box = React.createRef();
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
@@ -133,11 +143,12 @@ class Select extends React.Component {
       value,
       toolTipTitle,
       width = DEFAULT_WIDTH,
+      isLoading = false,
     } = this.props;
 
     const {search} = this.state;
 
-    disabled = disabled || !isDefined(items) || items.length === 0;
+    disabled = disabled || !isDefined(items) || items.length === 0 || isLoading;
 
     const displayedItems = isDefined(items)
       ? items.filter(caseInsensitiveFilter(search))
@@ -147,13 +158,27 @@ class Select extends React.Component {
       <Downshift
         selectedItem={value}
         itemToString={itemToString}
+        stateReducer={(state, changes) => {
+          if (isDefined(changes) && isDefined(changes.isOpen)) {
+            return {
+              ...changes,
+              highlightedIndex: displayedItems.findIndex(
+                item => item.value === state.selectedItem,
+              ),
+            };
+          }
+          return changes;
+        }}
         onChange={this.handleChange}
         onSelect={this.handleSelect}
-        render={({
-          getButtonProps,
+      >
+        {({
+          closeMenu,
           getInputProps,
           getItemProps,
+          getMenuProps,
           getRootProps,
+          getToggleButtonProps,
           highlightedIndex,
           inputValue,
           isOpen,
@@ -161,55 +186,64 @@ class Select extends React.Component {
           selectItem,
           selectedItem,
         }) => {
-          const label = find_label(items, selectedItem);
+          const label = isLoading
+            ? _('Loading...')
+            : find_label(items, selectedItem);
           return (
             <SelectContainer
-              {...getRootProps({refKey: 'innerRef'})}
+              {...getRootProps({})}
               className={className}
-              flex="column"
               width={width}
             >
               <Box
-                {...getButtonProps({
+                {...getToggleButtonProps({
                   disabled,
                   onClick: isOpen
-                    ? undefined
+                    ? event => {
+                        closeMenu();
+                      }
                     : event => {
-                        event.preventDefault(); // don't call default handler from downshift
-                        openMenu(
-                          () => isDefined(this.input) && this.input.focus(),
-                        ); // set focus to input field after menu is opened
+                        event.preventDownshiftDefault = true; // don't call default handler from downshift
+                        openMenu(() => {
+                          const {current: input} = this.input;
+                          input !== null && input.focus();
+                        }); // set focus to input field after menu is opened
                       },
                 })}
                 isOpen={isOpen}
                 title={toolTipTitle}
-                innerRef={ref => (this.box = ref)}
+                ref={this.box}
               >
-                <SelectedValue
+                <SingleSelectedValue
                   data-testid="select-selected-value"
                   disabled={disabled}
                   title={toolTipTitle ? toolTipTitle : label}
                 >
                   {label}
-                </SelectedValue>
+                </SingleSelectedValue>
                 <Layout align={['center', 'center']}>
                   <ArrowIcon
                     data-testid="select-open-button"
-                    disabled={disabled}
                     down={!isOpen}
                     size="small"
+                    isLoading={isLoading}
                   />
                 </Layout>
               </Box>
               {isOpen && !disabled && (
-                <Menu position={menuPosition} target={this.box}>
+                <Menu
+                  {...getMenuProps({})}
+                  position={menuPosition}
+                  target={this.box}
+                >
                   <Input
                     {...getInputProps({
                       value: search,
+                      disabled,
                       onChange: this.handleSearch,
                     })}
-                    disabled={disabled}
-                    innerRef={ref => (this.input = ref)}
+                    data-testid="select-search-input"
+                    ref={this.input}
                   />
                   <ItemContainer>
                     {displayedItems.map(
@@ -218,12 +252,17 @@ class Select extends React.Component {
                         i,
                       ) => (
                         <Item
-                          {...getItemProps({item: itemValue})}
+                          {...getItemProps({
+                            item: itemValue,
+                            isSelected: itemValue === selectedItem,
+                            isActive: i === highlightedIndex,
+                            onClick: event => {
+                              event.preventDownshiftDefault = true;
+                              selectItem(itemValue);
+                            },
+                          })}
                           data-testid="select-item"
-                          isSelected={itemValue === selectedItem}
-                          isActive={i === highlightedIndex}
                           key={key}
-                          onMouseDown={() => selectItem(itemValue)}
                         >
                           {React.isValidElement(itemLabel)
                             ? itemLabel
@@ -237,13 +276,14 @@ class Select extends React.Component {
             </SelectContainer>
           );
         }}
-      />
+      </Downshift>
     );
   }
 }
 
 Select.propTypes = {
   disabled: PropTypes.bool,
+  isLoading: PropTypes.bool,
   itemToString: PropTypes.func,
   items: PropTypes.arrayOf(
     PropTypes.shape({

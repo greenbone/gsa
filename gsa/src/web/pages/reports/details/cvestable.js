@@ -1,24 +1,25 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
+
+import {shorten} from 'gmp/utils/string';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -27,6 +28,7 @@ import SeverityBar from 'web/components/bar/severitybar';
 import Divider from 'web/components/layout/divider';
 
 import CveLink from 'web/components/link/cvelink';
+import DetailsLink from 'web/components/link/detailslink';
 
 import TableData from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
@@ -42,30 +44,41 @@ const Header = ({currentSortDir, currentSortBy, sort = true, onSortChange}) => (
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'cve' : false}
-        onSortChange={onSortChange}
         title={_('CVE')}
+        width="50%"
+        onSortChange={onSortChange}
+      />
+      <TableHead
+        currentSortDir={currentSortDir}
+        currentSortBy={currentSortBy}
+        sortBy={sort ? 'nvt' : false}
+        title={_('NVT')}
+        width="30%"
+        onSortChange={onSortChange}
       />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'hosts' : false}
-        onSortChange={onSortChange}
         title={_('Hosts')}
+        width="5%"
+        onSortChange={onSortChange}
       />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'occurrences' : false}
-        onSortChange={onSortChange}
         title={_('Occurrences')}
+        width="5%"
+        onSortChange={onSortChange}
       />
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'severity' : false}
+        title={_('Severity')}
         width="10%"
         onSortChange={onSortChange}
-        title={_('Severity')}
       />
     </TableRow>
   </TableHeader>
@@ -79,7 +92,7 @@ Header.propTypes = {
 };
 
 const Row = ({entity}) => {
-  const {cves, hosts, occurrences, severity} = entity;
+  const {cves, hosts, occurrences, severity, id, nvtName} = entity;
   return (
     <TableRow>
       <TableData>
@@ -88,6 +101,11 @@ const Row = ({entity}) => {
             <CveLink key={cve} id={cve} />
           ))}
         </Divider>
+      </TableData>
+      <TableData>
+        <DetailsLink type="nvt" id={id} title={nvtName}>
+          {shorten(nvtName, 80)}
+        </DetailsLink>
       </TableData>
       <TableData>{hosts.count}</TableData>
       <TableData>{occurrences}</TableData>

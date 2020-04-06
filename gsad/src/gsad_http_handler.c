@@ -1,20 +1,19 @@
 /* Copyright (C) 2016-2018 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -589,7 +588,7 @@ handle_system_report (http_connection_t *connection, const char *method,
     {
       credentials_free (credentials);
       g_warning ("%s: failed to validate slave_id, dropping request",
-                 __FUNCTION__);
+                 __func__);
       return MHD_NO;
     }
 
@@ -598,28 +597,53 @@ handle_system_report (http_connection_t *connection, const char *method,
   /* Connect to manager */
   switch (manager_connect (credentials, &con, response_data))
     {
-    case 0:
+    case 0: /* success */
       res = get_system_report_gmp (&con, credentials,
                                    &url[0] + strlen ("/system_report/"), params,
                                    response_data);
       gvm_connection_close (&con);
       break;
-    case -1:
-      return handler_send_reauthentication (
-        connection, MHD_HTTP_SERVICE_UNAVAILABLE, GMP_SERVICE_DOWN);
+    case 1: /* manager closed connection */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
+                          "An internal error occurred. "
+                          "Diagnostics: Failure to connect to manager daemon. "
+                          "Manager daemon doesn't respond.",
+                          response_data);
+      break;
+    case 2: /* authentication failed */
+      cmd_response_data_free (response_data);
+      credentials_free (credentials);
+      return handler_send_reauthentication (connection, MHD_HTTP_UNAUTHORIZED,
+                                            LOGIN_FAILED);
 
       break;
-    case -2:
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+    case 3: /* timeout */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
-                          "Diagnostics: Could not authenticate to manager "
-                          "daemon.",
+                          "Diagnostics: Failure to connect to manager daemon. "
+                          "Timeout while waiting for manager response.",
+                          response_data);
+      break;
+    case 4: /* failed to connect to manager */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
+                          "An internal error occurred. "
+                          "Diagnostics: Failure to connect to manager daemon. "
+                          "Could not open a connection.",
                           response_data);
       break;
     default:
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
-                          "Diagnostics: Failure to connect to manager daemon.",
+                          "Diagnostics: Failure to connect to manager daemon. "
+                          "Unknown error.",
                           response_data);
       break;
     }
@@ -628,7 +652,7 @@ handle_system_report (http_connection_t *connection, const char *method,
     {
       credentials_free (credentials);
       g_warning ("%s: failed to get system reports, dropping request",
-                 __FUNCTION__);
+                 __func__);
       cmd_response_data_free (response_data);
       return MHD_NO;
     }
@@ -753,7 +777,7 @@ init_http_handlers ()
   url_handler_add_func (url_handlers, "^/robots\\.txt$", handle_static_file);
 
   url_handler_add_func (url_handlers, "^/config\\.*js$", handle_static_config);
-  url_handler_add_func (url_handlers, "^/static/(img|js|css)/.+$",
+  url_handler_add_func (url_handlers, "^/static/(img|js|css|media)/.+$",
                         handle_static_file);
   url_handler_add_func (url_handlers, "^/manual/.+$", handle_static_file);
 

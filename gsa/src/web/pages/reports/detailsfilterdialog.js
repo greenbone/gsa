@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import React from 'react';
@@ -28,7 +27,7 @@ import Layout from 'web/components/layout/layout';
 
 /* eslint-disable max-len */
 
-import ApplyOverridesGroup from 'web/components/powerfilter/applyoverridesgroup';
+import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 import AutoFpGroup from 'web/components/powerfilter/autofpgroup';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
@@ -38,7 +37,9 @@ import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import SeverityLevelsGroup from 'web/components/powerfilter/severitylevelsgroup';
+import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 
 /* eslint-enable */
 
@@ -54,6 +55,7 @@ const FilterDialog = ({
   onFilterChange,
   onFilterStringChange,
   onFilterValueChange,
+  onSearchTermChange,
   capabilities,
   filterName,
   saveNamedFilter,
@@ -76,7 +78,12 @@ const FilterDialog = ({
         />
       )}
 
-      <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange} />
+      <BooleanFilterGroup
+        name="apply_overrides"
+        title={_('Apply Overrides')}
+        filter={filter}
+        onChange={onFilterValueChange}
+      />
 
       <AutoFpGroup filter={filter} onChange={onFilterValueChange} />
 
@@ -102,7 +109,35 @@ const FilterDialog = ({
         onRemove={handleRemoveLevels}
       />
 
+      <SeverityValuesGroup
+        name="severity"
+        title={_('Severity')}
+        filter={filter}
+        onChange={onFilterValueChange}
+      />
+
       <SolutionTypeGroup filter={filter} onChange={onFilterValueChange} />
+
+      <FilterSearchGroup
+        name="vulnerability"
+        filter={filter}
+        title={_('Vulnerability')}
+        onChange={onSearchTermChange}
+      />
+
+      <FilterSearchGroup
+        name="host"
+        filter={filter}
+        title={_('Host (IP)')}
+        onChange={onSearchTermChange}
+      />
+
+      <FilterSearchGroup
+        name="location"
+        filter={filter}
+        title={_('Location (eg. port/protocol)')}
+        onChange={onSearchTermChange}
+      />
 
       <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
 

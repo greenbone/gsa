@@ -1,22 +1,22 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import {
+  createEntityResponse,
   createHttp,
   createActionResultResponse,
   createResponse,
@@ -56,11 +56,11 @@ describe('convertPreferences tests', () => {
     };
 
     expect(convertPreferences(prefenceValues, '1.2.3')).toEqual({
-      'file:1.2.3[file]:foo': 'yes',
-      'password:1.2.3[password]:bar': 'yes',
-      'preference:1.2.3[entry]:foo Username:': 'user',
-      'preference:1.2.3[password]:bar': 'foo',
-      'preference:1.2.3[file]:foo': 'ABC',
+      'file:1.2.3:4:file:foo': 'yes',
+      'password:1.2.3:3:password:bar': 'yes',
+      'preference:1.2.3:2:entry:foo Username:': 'user',
+      'preference:1.2.3:3:password:bar': 'foo',
+      'preference:1.2.3:4:file:foo': 'ABC',
     });
   });
 
@@ -72,15 +72,7 @@ describe('convertPreferences tests', () => {
 
 describe('ScanConfigCommand tests', () => {
   test('should return single config', () => {
-    const response = createResponse({
-      get_config_response: {
-        get_configs_response: {
-          config: {
-            _id: 'foo',
-          },
-        },
-      },
-    });
+    const response = createEntityResponse('config', {_id: 'foo'});
     const fakeHttp = createHttp(response);
 
     expect.hasAssertions();
@@ -125,9 +117,9 @@ describe('ScanConfigCommand tests', () => {
     const cmd = new ScanConfigCommand(fakeHttp);
     return cmd
       .create({
-        base: 'uuid1',
+        baseScanConfig: 'uuid1',
         name: 'foo',
-        scanner_id: 's1',
+        scannerId: 's1',
         comment: 'somecomment',
       })
       .then(() => {
@@ -137,6 +129,7 @@ describe('ScanConfigCommand tests', () => {
             base: 'uuid1',
             comment: 'somecomment',
             name: 'foo',
+            usage_type: 'scan',
             scanner_id: 's1',
           },
         });
@@ -170,7 +163,8 @@ describe('ScanConfigCommand tests', () => {
         comment: 'somecomment',
         trend,
         select,
-        scanner_preference_values: scannerPreferenceValues,
+        scannerId: 's1',
+        scannerPreferenceValues,
       })
       .then(() => {
         expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -179,7 +173,8 @@ describe('ScanConfigCommand tests', () => {
             comment: 'somecomment',
             config_id: 'c1',
             name: 'foo',
-            'preference:scanner[scanner]:foo': 'bar',
+            scanner_id: 's1',
+            'preference:scanner:scanner:scanner:foo': 'bar',
             'select:AIX Local Security Checks': 1,
             'select:Brute force attacks': 1,
             'trend:AIX Local Security Checks': 1,
@@ -205,8 +200,7 @@ describe('ScanConfigCommand tests', () => {
     return cmd
       .saveScanConfigFamily({
         id: 'c1',
-        config_name: 'Foo Config',
-        family_name: 'foo',
+        familyName: 'foo',
         selected,
       })
       .then(() => {
@@ -214,7 +208,6 @@ describe('ScanConfigCommand tests', () => {
           data: {
             cmd: 'save_config_family',
             config_id: 'c1',
-            name: 'Foo Config',
             family: 'foo',
             'nvt:oid:1': 1,
             'nvt:oid:3': 1,
@@ -245,14 +238,10 @@ describe('ScanConfigCommand tests', () => {
     const cmd = new ScanConfigCommand(fakeHttp);
     return cmd
       .saveScanConfigNvt({
-        config_name: 'Foo Config',
-        family_name: 'Foo Family',
         id: 'c1',
-        nvt_name: 'Foo Nvt',
         oid: '1.2.3',
-        manual_timeout: 123,
-        preference_values: preferenceValues,
-        timeout: 1,
+        timeout: 123,
+        preferenceValues,
       })
       .then(() => {
         expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -260,70 +249,13 @@ describe('ScanConfigCommand tests', () => {
             cmd: 'save_config_nvt',
             config_id: 'c1',
             oid: '1.2.3',
-            name: 'Foo Config',
-            family: 'Foo Family',
-            'password:Foo Nvt[password]:Bar': 'yes',
-            'preference:scanner[scanner]:timeout.1.2.3': 123,
-            'preference:Foo Nvt[entry]:Foo': 'bar',
-            'preference:Foo Nvt[password]:Bar': 'foo',
+            'password:1.2.3:2:password:Bar': 'yes',
+            'preference:scanner:0:scanner:timeout.1.2.3': 123,
+            'preference:1.2.3:1:entry:Foo': 'bar',
+            'preference:1.2.3:2:password:Bar': 'foo',
             timeout: 1,
           },
         });
-      });
-  });
-
-  test('should request scan config data', () => {
-    const response = createResponse({
-      get_config_response: {
-        get_configs_response: {
-          config: {
-            _id: 'c1',
-          },
-        },
-        get_nvt_families_response: {
-          families: {
-            family: [
-              {
-                name: 'f1',
-                max_nvt_count: '666',
-              },
-              {
-                name: 'f2',
-                max_nvt_count: '999',
-              },
-            ],
-          },
-        },
-      },
-    });
-
-    const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
-    const cmd = new ScanConfigCommand(fakeHttp);
-    return cmd
-      .editScanConfigSettings({
-        id: 'c1',
-      })
-      .then(resp => {
-        expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-          args: {
-            cmd: 'edit_config',
-            config_id: 'c1',
-          },
-        });
-
-        const {scanconfig, families} = resp.data;
-        expect(scanconfig.id).toEqual('c1');
-        expect(families.length).toEqual(2);
-
-        const [family1, family2] = families;
-        expect(family1.name).toEqual('f1');
-        expect(family1.max).toEqual(666);
-
-        expect(family2.name).toEqual('f2');
-        expect(family2.max).toEqual(999);
       });
   });
 
@@ -340,23 +272,20 @@ describe('ScanConfigCommand tests', () => {
             },
           ],
         },
-        config: {
-          _id: 'c1',
-        },
         all: {
           get_nvts_response: {
             nvt: [
               {
                 _oid: 1,
-                cvss_base: '1.1',
+                cvss_base: 1.1,
               },
               {
                 _oid: 2,
-                cvss_base: '2.2',
+                cvss_base: 2.2,
               },
               {
                 _oid: 3,
-                cvss_base: '3.3',
+                cvss_base: 3.3,
               },
             ],
           },
@@ -369,22 +298,17 @@ describe('ScanConfigCommand tests', () => {
 
     const cmd = new ScanConfigCommand(fakeHttp);
     return cmd
-      .editScanConfigFamilySettings({
-        id: 'foo',
-        family_name: 'bar',
-        config_name: 'foo',
-      })
+      .editScanConfigFamilySettings({id: 'foo', familyName: 'bar'})
       .then(resp => {
         expect(fakeHttp.request).toHaveBeenCalledWith('get', {
           args: {
             cmd: 'edit_config_family',
             config_id: 'foo',
             family: 'bar',
-            name: 'foo',
           },
         });
 
-        const {nvts, config} = resp.data;
+        const {nvts} = resp.data;
         expect(nvts.length).toEqual(3);
         expect(nvts[0].selected).toEqual(YES_VALUE);
         expect(nvts[0].severity).toEqual(1.1);
@@ -392,8 +316,6 @@ describe('ScanConfigCommand tests', () => {
         expect(nvts[1].severity).toEqual(2.2);
         expect(nvts[2].selected).toEqual(NO_VALUE);
         expect(nvts[2].severity).toEqual(3.3);
-
-        expect(config.id).toEqual('c1');
       });
   });
 
@@ -405,31 +327,6 @@ describe('ScanConfigCommand tests', () => {
             _oid: '1.2.3',
           },
         },
-        config: {
-          _id: 'c1',
-        },
-      },
-      get_notes_response: {
-        notes: {
-          _start: '1',
-          _max: '22',
-        },
-        note_count: {
-          page: '10',
-          __text: '33',
-          filtered: '20',
-        },
-      },
-      get_overrides_response: {
-        overrides: {
-          _start: '1',
-          _max: '22',
-        },
-        override_count: {
-          page: '10',
-          __text: '33',
-          filtered: '20',
-        },
       },
     });
     const fakeHttp = createHttp(response);
@@ -438,39 +335,19 @@ describe('ScanConfigCommand tests', () => {
 
     const cmd = new ScanConfigCommand(fakeHttp);
     return cmd
-      .editScanConfigNvtSettings({
-        config_name: 'Foo Config',
-        family_name: 'Foo Family',
-        id: 'foo',
-        oid: '1.2.3',
-      })
+      .editScanConfigNvtSettings({id: 'foo', oid: '1.2.3'})
       .then(resp => {
         expect(fakeHttp.request).toHaveBeenCalledWith('get', {
           args: {
-            cmd: 'edit_config_nvt',
+            cmd: 'get_config_nvt',
             config_id: 'foo',
             oid: '1.2.3',
-            family: 'Foo Family',
-            name: 'Foo Config',
+            name: '',
           },
         });
 
-        const {nvt, config} = resp.data;
+        const {data: nvt} = resp;
         expect(nvt.id).toEqual('1.2.3');
-
-        expect(nvt.notes_counts.first).toEqual('1');
-        expect(nvt.notes_counts.rows).toEqual('22');
-        expect(nvt.notes_counts.length).toEqual('10');
-        expect(nvt.notes_counts.all).toEqual('33');
-        expect(nvt.notes_counts.filtered).toEqual('20');
-
-        expect(nvt.overrides_counts.first).toEqual('1');
-        expect(nvt.overrides_counts.rows).toEqual('22');
-        expect(nvt.overrides_counts.length).toEqual('10');
-        expect(nvt.overrides_counts.all).toEqual('33');
-        expect(nvt.overrides_counts.filtered).toEqual('20');
-
-        expect(config.id).toEqual('c1');
       });
   });
 });

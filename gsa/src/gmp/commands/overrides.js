@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import logger from '../log';
 
@@ -70,10 +69,9 @@ class OverrideCommand extends EntityCommand {
       task_uuid = '',
       text,
       custom_severity = NO_VALUE,
-      new_severity = '',
+      newSeverity = '',
       new_severity_from_list = SEVERITY_FALSE_POSITIVE,
     } = args;
-
     log.debug('Saving override', args);
     return this.action({
       cmd,
@@ -81,7 +79,7 @@ class OverrideCommand extends EntityCommand {
       id,
       active,
       custom_severity,
-      new_severity,
+      new_severity: newSeverity,
       new_severity_from_list,
       days,
       hosts: hosts === MANUAL ? '--' : '',
@@ -101,7 +99,7 @@ class OverrideCommand extends EntityCommand {
 class OverridesCommand extends EntitiesCommand {
   constructor(http) {
     super(http, 'override', Override);
-    this.setParam('details', 1);
+    this.setDefaultParam('details', 1);
   }
 
   getEntitiesResponse(root) {

@@ -9,10 +9,10 @@ exports[`MultiSelect component tests should render 1`] = `
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-flex: 0;
-  -webkit-flex-grow: 0;
-  -ms-flex-positive: 0;
-  flex-grow: 0;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
@@ -26,7 +26,7 @@ exports[`MultiSelect component tests should render 1`] = `
   align-items: center;
 }
 
-.c4 {
+.c3 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -34,21 +34,17 @@ exports[`MultiSelect component tests should render 1`] = `
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
 }
 
-.c6 {
+.c4 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -70,7 +66,7 @@ exports[`MultiSelect component tests should render 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  cursor: pointer;
+  cursor: not-allowed;
 }
 
 .c5 {
@@ -121,16 +117,12 @@ exports[`MultiSelect component tests should render 1`] = `
   width: 250px;
 }
 
-.c3 {
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  cursor: pointer;
-}
-
 <div
+  aria-expanded="false"
+  aria-haspopup="listbox"
+  aria-labelledby="downshift-0-label"
   class="c0"
+  role="combobox"
   width="250px"
 >
   <div
@@ -141,17 +133,16 @@ exports[`MultiSelect component tests should render 1`] = `
       class="c2"
     />
     <div
-      aria-expanded="false"
-      aria-haspopup="true"
-      aria-label="open menu"
-      class="c3 c4"
-      data-toggle="true"
-      disabled=""
-      role="button"
-      type="button"
+      class="c3"
     >
       <span
-        class="c5 c6"
+        aria-haspopup="true"
+        aria-label="open menu"
+        class="c4 c5"
+        data-toggle="true"
+        disabled=""
+        role="button"
+        type="button"
       >
         ▼
       </span>

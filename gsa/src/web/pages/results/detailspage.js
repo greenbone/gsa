@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
@@ -45,6 +44,7 @@ import TicketIcon from 'web/components/icon/ticketicon';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import DetailsLink from 'web/components/link/detailslink';
 import InnerLink from 'web/components/link/innerlink';
@@ -180,96 +180,99 @@ const Details = ({entity, ...props}) => {
   const active_notes = notes.filter(active_filter);
   const active_overrides = overrides.filter(active_filter);
   return (
-    <Layout flex="column">
-      <DetailsBlock title={_('Vulnerability')}>
-        <Layout flex="column">
-          <InfoTable>
-            <colgroup>
-              <Col width="10%" />
-              <Col width="90%" />
-            </colgroup>
-            <TableBody>
-              <TableRow>
-                <TableData>{_('Name')}</TableData>
-                <TableData>{entity.name}</TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('Severity')}</TableData>
-                <TableData align={['center', 'start']}>
-                  <Divider>
-                    <SeverityBar severity={entity.severity} />
-                    {active_overrides.length > 0 && (
-                      <InnerLink to="overrides">
-                        <OverrideIcon title={_('Overrides are applied')} />
-                      </InnerLink>
-                    )}
-                  </Divider>
-                </TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('QoD')}</TableData>
-                <TableData>{qod.value} %</TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('Host')}</TableData>
-                <TableData>
-                  <span>
-                    {isDefined(host.id) ? (
-                      <DetailsLink type="host" id={host.id}>
-                        {host.name}
-                      </DetailsLink>
-                    ) : (
-                      host.name
-                    )}
-                  </span>
-                </TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('Location')}</TableData>
-                <TableData>{entity.port}</TableData>
-              </TableRow>
-            </TableBody>
-          </InfoTable>
-        </Layout>
-      </DetailsBlock>
-
-      {userTags.length > 0 && (
-        <DetailsBlock title={_('Tags')}>
-          <Divider>
-            {userTags.map(tag => {
-              const valueString = isDefined(tag.value) ? '' : '=' + tag.value;
-              return (
-                <DetailsLink key={tag.id} id={tag.id} type="tag">
-                  {tag.name + valueString}
-                </DetailsLink>
-              );
-            })}
-          </Divider>
+    <React.Fragment>
+      <PageTitle title={_('Result: {{name}}', {name: entity.name})} />
+      <Layout flex="column">
+        <DetailsBlock title={_('Vulnerability')}>
+          <Layout flex="column">
+            <InfoTable>
+              <colgroup>
+                <Col width="10%" />
+                <Col width="90%" />
+              </colgroup>
+              <TableBody>
+                <TableRow>
+                  <TableData>{_('Name')}</TableData>
+                  <TableData>{entity.name}</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Severity')}</TableData>
+                  <TableData align={['center', 'start']}>
+                    <Divider>
+                      <SeverityBar severity={entity.severity} />
+                      {active_overrides.length > 0 && (
+                        <InnerLink to="overrides">
+                          <OverrideIcon title={_('Overrides are applied')} />
+                        </InnerLink>
+                      )}
+                    </Divider>
+                  </TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('QoD')}</TableData>
+                  <TableData>{qod.value} %</TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Host')}</TableData>
+                  <TableData>
+                    <span>
+                      {isDefined(host.id) ? (
+                        <DetailsLink type="host" id={host.id}>
+                          {host.name}
+                        </DetailsLink>
+                      ) : (
+                        host.name
+                      )}
+                    </span>
+                  </TableData>
+                </TableRow>
+                <TableRow>
+                  <TableData>{_('Location')}</TableData>
+                  <TableData>{entity.port}</TableData>
+                </TableRow>
+              </TableBody>
+            </InfoTable>
+          </Layout>
         </DetailsBlock>
-      )}
 
-      <ResultDetails entity={entity} {...props} />
+        {userTags.length > 0 && (
+          <DetailsBlock title={_('Tags')}>
+            <Divider>
+              {userTags.map(tag => {
+                const valueString = isDefined(tag.value) ? '' : '=' + tag.value;
+                return (
+                  <DetailsLink key={tag.id} id={tag.id} type="tag">
+                    {tag.name + valueString}
+                  </DetailsLink>
+                );
+              })}
+            </Divider>
+          </DetailsBlock>
+        )}
 
-      {active_overrides.length > 0 && (
-        <DetailsBlock id="overrides" title={_('Overrides')}>
-          <Divider wrap align={['start', 'stretch']} width="15px">
-            {active_overrides.map(override => (
-              <Override key={override.id} override={override} />
-            ))}
-          </Divider>
-        </DetailsBlock>
-      )}
+        <ResultDetails entity={entity} {...props} />
 
-      {active_notes.length > 0 && (
-        <DetailsBlock id="notes" title={_('Notes')}>
-          <Divider wrap align={['start', 'stretch']} width="15px">
-            {active_notes.map(note => (
-              <Note key={note.id} note={note} />
-            ))}
-          </Divider>
-        </DetailsBlock>
-      )}
-    </Layout>
+        {active_overrides.length > 0 && (
+          <DetailsBlock id="overrides" title={_('Overrides')}>
+            <Divider wrap align={['start', 'stretch']} width="15px">
+              {active_overrides.map(override => (
+                <Override key={override.id} override={override} />
+              ))}
+            </Divider>
+          </DetailsBlock>
+        )}
+
+        {active_notes.length > 0 && (
+          <DetailsBlock id="notes" title={_('Notes')}>
+            <Divider wrap align={['start', 'stretch']} width="15px">
+              {active_notes.map(note => (
+                <Note key={note.id} note={note} />
+              ))}
+            </Divider>
+          </DetailsBlock>
+        )}
+      </Layout>
+    </React.Fragment>
   );
 };
 

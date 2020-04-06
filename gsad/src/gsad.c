@@ -1,20 +1,19 @@
-/* Copyright (C) 2009-2018 Greenbone Networks GmbH
+/* Copyright (C) 2009-2019 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -172,9 +171,9 @@
  */
 #define DEFAULT_GSAD_PER_IP_CONNECTION_LIMIT 30
 
-#define COPYRIGHT \
-  "Copyright (C) 2010 - 2019 Greenbone Networks GmbH\n" \
-  "License GPLv2+: GNU GPL version 2 or later\n" \
+#define COPYRIGHT                                                        \
+  "Copyright (C) 2010 - 2020 Greenbone Networks GmbH\n"                  \
+  "License: AGPL-3.0-or-later\n"                                         \
   "This is free software: you are free to change and redistribute it.\n" \
   "There is NO WARRANTY, to the extent permitted by law.\n\n"
 
@@ -249,7 +248,6 @@ init_validator ()
                      "^((bulk_delete)"
                      "|(bulk_export)"
                      "|(clone)"
-                     "|(create_agent)"
                      "|(create_asset)"
                      "|(create_config)"
                      "|(create_container_task)"
@@ -273,9 +271,9 @@ init_validator ()
                      "|(create_target)"
                      "|(create_task)"
                      "|(create_ticket)"
+                     "|(create_tls_certificate)"
                      "|(create_user)"
                      "|(cvss_calculator)"
-                     "|(delete_agent)"
                      "|(delete_asset)"
                      "|(delete_config)"
                      "|(delete_credential)"
@@ -297,20 +295,16 @@ init_validator ()
                      "|(delete_target)"
                      "|(delete_task)"
                      "|(delete_ticket)"
+                     "|(delete_tls_certificate)"
                      "|(delete_user)"
-                     "|(download_agent)"
                      "|(download_credential)"
                      "|(download_ssl_cert)"
                      "|(download_ca_pub)"
                      "|(download_key_pub)"
                      "|(edit_alert)"
-                     "|(edit_config)"
                      "|(edit_config_family)"
-                     "|(edit_config_nvt)"
                      "|(auth_settings)"
                      "|(empty_trashcan)"
-                     "|(export_agent)"
-                     "|(export_agents)"
                      "|(export_alert)"
                      "|(export_alerts)"
                      "|(export_asset)"
@@ -351,8 +345,6 @@ init_validator ()
                      "|(export_tasks)"
                      "|(export_user)"
                      "|(export_users)"
-                     "|(get_agent)"
-                     "|(get_agents)"
                      "|(get_aggregate)"
                      "|(get_alert)"
                      "|(get_alerts)"
@@ -373,6 +365,7 @@ init_validator ()
                      "|(get_info)"
                      "|(get_note)"
                      "|(get_notes)"
+                     "|(get_nvt_families)"
                      "|(get_override)"
                      "|(get_overrides)"
                      "|(get_permission)"
@@ -402,13 +395,14 @@ init_validator ()
                      "|(get_tasks)"
                      "|(get_ticket)"
                      "|(get_tickets)"
+                     "|(get_tls_certificate)"
+                     "|(get_tls_certificates)"
                      "|(get_trash)"
                      "|(get_user)"
                      "|(get_users)"
                      "|(get_vulns)"
                      "|(import_config)"
                      "|(import_port_list)"
-                     "|(import_report)"
                      "|(import_report_format)"
                      "|(login)"
                      "|(move_task)"
@@ -420,7 +414,6 @@ init_validator ()
                      "|(resume_task)"
                      "|(run_wizard)"
                      "|(test_alert)"
-                     "|(save_agent)"
                      "|(save_alert)"
                      "|(save_asset)"
                      "|(save_auth)"
@@ -445,6 +438,7 @@ init_validator ()
                      "|(save_target)"
                      "|(save_task)"
                      "|(save_ticket)"
+                     "|(save_tls_certificate)"
                      "|(save_user)"
                      "|(start_task)"
                      "|(stop_task)"
@@ -453,7 +447,6 @@ init_validator ()
                      "|(sync_cert)"
                      "|(sync_config)"
                      "|(toggle_tag)"
-                     "|(verify_agent)"
                      "|(verify_scanner)"
                      "|(wizard)"
                      "|(wizard_get))$");
@@ -461,15 +454,13 @@ init_validator ()
   gvm_validator_add (validator, "action_message", "(?s)^.*$");
   gvm_validator_add (validator, "action_status", "(?s)^.*$");
   gvm_validator_add (validator, "active", "^(-1|-2|[0-9]+)$");
-  gvm_validator_add (validator, "agent_format", "^(installer)$");
-  gvm_validator_add (validator, "agent_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "aggregate_mode", "^[a-z0-9_]+$");
   gvm_validator_add (
     validator, "aggregate_type",
-    "^(agent|alert|config|credential|filter|group|host|nvt|note|os|override|"
+    "^(alert|config|credential|filter|group|host|nvt|note|os|override|"
     "permission|port_list|report|report_format|result|role|scanner|schedule|"
-    "tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|"
-    "vuln)$");
+    "tag|target|task|user|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|"
+    "vuln|tls_certificate)$");
   gvm_validator_add (
     validator, "alive_tests",
     "^(Scan Config Default|ICMP Ping|TCP-ACK Service Ping|TCP-SYN Service "
@@ -508,8 +499,7 @@ init_validator ()
   gvm_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
   gvm_validator_add (validator, "credential_type",
                      "^(cc|up|usk|smime|pgp|snmp|pw)$");
-  gvm_validator_add (validator, "credential_login",
-                     "^[-_[:alnum:]\\.@\\\\]*$");
+  gvm_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]*$");
   gvm_validator_add (validator, "condition_data:name", "^.*$");
   gvm_validator_add (validator, "condition_data:value", "(?s)^.*$");
   gvm_validator_add (validator, "cvss_av", "^(L|A|N)$");
@@ -548,8 +538,7 @@ init_validator ()
                      "^.*[[0-9abcdefABCDEF\\-]*]:.*$");
   gvm_validator_add (validator, "exclude_file:value", "^yes$");
   gvm_validator_add (validator, "file", "(?s)^.*$");
-  gvm_validator_add (validator, "file:name",
-                     "^.*[[0-9abcdefABCDEF\\-]*]:.*$");
+  gvm_validator_add (validator, "file:name", "^.*[[0-9abcdefABCDEF\\-]*]:.*$");
   gvm_validator_add (validator, "file:value", "^yes$");
   gvm_validator_add (validator, "settings_changed:name", "^.*$");
   gvm_validator_add (validator, "settings_changed:value", "^[a-z0-9\\-]+$");
@@ -624,13 +613,11 @@ init_validator ()
   gvm_validator_add (validator, "password", "^.*$");
   gvm_validator_add (validator, "password:value", "(?s)^.*$");
   gvm_validator_add (validator, "port", "^.*$");
-  gvm_validator_add (validator, "port_range",
-                     "^((default)|([-0-9, TU:]+))$");
+  gvm_validator_add (validator, "port_range", "^((default)|([-0-9, TU:]+))$");
   gvm_validator_add (validator, "port_type", "^(tcp|udp)$");
   /** @todo Better regex. */
   gvm_validator_add (validator, "preference_name", "^.*$");
-  gvm_validator_add (validator, "preference:name",
-                     "^([^[]*\\[[^]]*\\]:.*){0,400}$");
+  gvm_validator_add (validator, "preference:name", "^([^:]*:[^:]*:.*){0,400}$");
   gvm_validator_add (validator, "preference:value", "(?s)^.*$");
   gvm_validator_add (validator, "prev_action", "(?s)^.*$");
   gvm_validator_add (validator, "privacy_algorithm", "^(aes|des|)$");
@@ -663,18 +650,18 @@ init_validator ()
   gvm_validator_add (validator, "port_range_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (
     validator, "resource_type",
-    "^(agent|alert|asset|cert_bund_adv|config|cpe|credential|cve|dfn_cert_adv|"
+    "^(alert|asset|cert_bund_adv|config|cpe|credential|cve|dfn_cert_adv|"
     "filter|group|host|info|nvt|note|os|ovaldef|override|permission|port_list|"
     "report|report_format|result|role|scanner|schedule|tag|target|task|ticket|"
-    "user|vuln|)$");
+    "tls_certificate|user|vuln|)$");
   gvm_validator_add (validator, "resource_id", "^[[:alnum:]-_.:\\/~]*$");
   gvm_validator_add (validator, "resources_action", "^(|add|set|remove)$");
   gvm_validator_add (
     validator, "optional_resource_type",
-    "^(agent|alert|asset|cert_bund_adv|config|cpe|credential|cve|dfn_cert_adv|"
+    "^(alert|asset|cert_bund_adv|config|cpe|credential|cve|dfn_cert_adv|"
     "filter|group|host|info|nvt|note|os|ovaldef|override|permission|port_list|"
     "report|report_format|result|role|scanner|schedule|tag|target|task|ticket|"
-    "user|vuln|)?$");
+    "tls_certificate|user|vuln|)?$");
   gvm_validator_add (validator, "select:value", "^.*$");
   gvm_validator_add (validator, "ssl_cert", "^.*$");
   gvm_validator_add (validator, "method_data:name", "^.*$");
@@ -727,6 +714,7 @@ init_validator ()
                      "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
   gvm_validator_add (validator, "source_iface", "^(.*){1,16}$");
   gvm_validator_add (validator, "uuid", "^[0-9abcdefABCDEF\\-]{1,40}$");
+  gvm_validator_add (validator, "usage_type", "^(audit|policy|scan|)$");
   /* This must be "login" with space and comma. */
   gvm_validator_add (validator, "users", "^[[:alnum:]-_@., ]*$");
   gvm_validator_add (validator, "x_field", "^[\\[\\]_[:alnum:]]+$");
@@ -741,6 +729,7 @@ init_validator ()
   gvm_validator_add (validator, "icalendar", "(?s)^BEGIN:VCALENDAR.+$");
 
   /* Binary data params that should not use no UTF-8 validation */
+  gvm_validator_add_binary (validator, "certificate_bin");
   gvm_validator_add_binary (validator, "installer");
   gvm_validator_add_binary (validator, "method_data:pkcs12:");
 
@@ -811,6 +800,7 @@ init_validator ()
   gvm_validator_alias (validator, "in_assets", "boolean");
   gvm_validator_alias (validator, "in_use", "boolean");
   gvm_validator_alias (validator, "include_related", "number");
+  gvm_validator_alias (validator, "include_certificate_data", "boolean");
   gvm_validator_alias (validator, "inheritor_id", "id");
   gvm_validator_alias (validator, "ignore_pagination", "boolean");
   gvm_validator_alias (validator, "event", "condition");
@@ -821,6 +811,7 @@ init_validator ()
   gvm_validator_alias (validator, "method", "condition");
   gvm_validator_alias (validator, "modify_password", "number");
   gvm_validator_alias (validator, "ldaphost", "hostport");
+  gvm_validator_alias (validator, "lean", "boolean");
   gvm_validator_alias (validator, "level_high", "boolean");
   gvm_validator_alias (validator, "level_medium", "boolean");
   gvm_validator_alias (validator, "level_low", "boolean");
@@ -905,7 +896,9 @@ init_validator ()
   gvm_validator_alias (validator, "task_uuid", "optional_id");
   gvm_validator_alias (validator, "ticket_id", "id");
   gvm_validator_alias (validator, "timeout", "boolean");
+  gvm_validator_alias (validator, "tls_certificate_id", "id");
   gvm_validator_alias (validator, "trend:name", "family");
+  gvm_validator_alias (validator, "trust", "boolean");
   gvm_validator_alias (validator, "user_id", "id");
   gvm_validator_alias (validator, "user_id_optional", "id_optional");
   gvm_validator_alias (validator, "xml", "boolean");
@@ -1310,7 +1303,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
 
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred inside GSA daemon. "
                           "Diagnostics: Invalid command.",
                           response_data);
@@ -1329,12 +1322,12 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
 
       if (params_given (con_info->params, "token") == 0)
-        res = gsad_message (NULL, "Internal error", __FUNCTION__, __LINE__,
+        res = gsad_message (NULL, "Internal error", __func__, __LINE__,
                             "An internal error occurred inside GSA daemon. "
                             "Diagnostics: Token missing.",
                             response_data);
       else
-        res = gsad_message (NULL, "Internal error", __FUNCTION__, __LINE__,
+        res = gsad_message (NULL, "Internal error", __func__, __LINE__,
                             "An internal error occurred inside GSA daemon. "
                             "Diagnostics: Token bad.",
                             response_data);
@@ -1347,7 +1340,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   if (ret == USER_BAD_TOKEN)
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      res = gsad_message (NULL, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (NULL, "Internal error", __func__, __LINE__,
                           "An internal error occurred inside GSA daemon. "
                           "Diagnostics: Bad token.",
                           response_data);
@@ -1361,7 +1354,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
       if (caller && g_utf8_validate (caller, -1, NULL) == FALSE)
         {
           caller = NULL;
-          g_warning ("%s - caller is not valid UTF-8", __FUNCTION__);
+          g_warning ("%s - caller is not valid UTF-8", __func__);
         }
 
       /* @todo Validate caller. */
@@ -1408,7 +1401,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
     {
       if (setenv ("TZ", timezone, 1) == -1)
         {
-          g_critical ("%s: failed to set TZ\n", __FUNCTION__);
+          g_critical ("%s: failed to set TZ\n", __func__);
           exit (EXIT_FAILURE);
         }
       tzset ();
@@ -1419,23 +1412,45 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
     {
     case 0:
       break;
-    case -1:
+    case 1: /* manager closed connection */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
+                          "An internal error occurred. "
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Manager closed the connection.",
+                          response_data);
+      break;
+    case 2: /* auth failed */
       cmd_response_data_free (response_data);
-      return handler_send_reauthentication (con, MHD_HTTP_SERVICE_UNAVAILABLE,
-                                            GMP_SERVICE_DOWN);
-    case -2:
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      return handler_send_reauthentication (con, MHD_HTTP_UNAUTHORIZED,
+                                            LOGIN_FAILED);
+    case 3: /* timeout */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
-                          "Diagnostics: Could not authenticate to manager "
-                          "daemon.",
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Connection timeout.",
                           response_data);
       break;
-    default:
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+    case 4: /* can't connect to manager */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_SERVICE_UNAVAILABLE);
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
-                          "Diagnostics: Failure to connect to manager daemon.",
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Could not open a connection.",
                           response_data);
       break;
+    default: /* unknown error */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
+                          "An internal error occurred. "
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Unknown error.",
+                          response_data);
     }
 
   if (res)
@@ -1454,7 +1469,6 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (bulk_delete)
   ELSE (bulk_export)
   ELSE (clone)
-  ELSE (create_agent)
   ELSE (create_alert)
   ELSE (create_asset)
   ELSE (create_config)
@@ -1476,9 +1490,9 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (create_tag)
   ELSE (create_target)
   ELSE (create_ticket)
+  ELSE (create_tls_certificate)
   ELSE (create_user)
   ELSE (create_role)
-  ELSE (delete_agent)
   ELSE (delete_asset)
   ELSE (delete_alert)
   ELSE (delete_config)
@@ -1500,11 +1514,11 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (delete_target)
   ELSE (delete_task)
   ELSE (delete_ticket)
+  ELSE (delete_tls_certificate)
   ELSE (delete_user)
   ELSE (empty_trashcan)
   ELSE (import_config)
   ELSE (import_port_list)
-  ELSE (import_report)
   ELSE (import_report_format)
   ELSE (move_task)
   ELSE (renew_session)
@@ -1512,7 +1526,6 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (restore)
   ELSE (resume_task)
   ELSE (run_wizard)
-  ELSE (save_agent)
   ELSE (save_alert)
   ELSE (save_asset)
   ELSE (save_auth)
@@ -1541,6 +1554,7 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (save_task)
   ELSE (save_ticket)
   ELSE (save_container_task)
+  ELSE (save_tls_certificate)
   ELSE (save_user)
   ELSE (start_task)
   ELSE (stop_task)
@@ -1549,12 +1563,11 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (sync_cert)
   ELSE (test_alert)
   ELSE (toggle_tag)
-  ELSE (verify_agent)
   ELSE (verify_scanner)
   else
   {
     cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-    res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+    res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                         "An internal error occurred inside GSA daemon. "
                         "Diagnostics: Unknown command.",
                         response_data);
@@ -1767,7 +1780,7 @@ watch_client_connection (void *data)
             {
               watcher_data->connection_closed = 1;
               active = 0;
-              g_debug ("%s: Client connection closed", __FUNCTION__);
+              g_debug ("%s: Client connection closed", __func__);
 
               if (watcher_data->gvm_connection->tls)
                 {
@@ -1838,7 +1851,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   else
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred inside GSA daemon. "
                           "Diagnostics: No valid command for gmp.",
                           response_data);
@@ -1854,7 +1867,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
     {
       if (setenv ("TZ", timezone, 1) == -1)
         {
-          g_critical ("%s: failed to set TZ\n", __FUNCTION__);
+          g_critical ("%s: failed to set TZ\n", __func__);
           exit (EXIT_FAILURE);
         }
       tzset ();
@@ -1865,26 +1878,44 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
     {
     case 0:
       break;
-    case -1:
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+    case 1: /* manager closed connection */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
-                          "Diagnostics: Could not connect to manager "
-                          "daemon.",
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Manager closed the connection.",
                           response_data);
       break;
-
-    case -2:
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+    case 2: /* auth failed */
+      cmd_response_data_free (response_data);
+      return handler_send_reauthentication (con, MHD_HTTP_UNAUTHORIZED,
+                                            LOGIN_FAILED);
+    case 3: /* timeout */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
-                          "Diagnostics: Could not authenticate to manager "
-                          "daemon.",
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Connection timeout.",
                           response_data);
       break;
-    default:
-      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+    case 4: /* can't connect to manager */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_SERVICE_UNAVAILABLE);
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                           "An internal error occurred. "
-                          "Diagnostics: Failure to connect to manager "
-                          "daemon.",
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Could not open a connection.",
+                          response_data);
+      break;
+    default: /* unknown error */
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      res = gsad_message (credentials, "Internal error", __func__, __LINE__,
+                          "An internal error occurred. "
+                          "Diagnostics: Could not connect to manager daemon. "
+                          "Unknown error.",
                           response_data);
     }
 
@@ -1921,11 +1952,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
 
   ELSE (auth_settings)
   ELSE (edit_alert)
-  ELSE (edit_config)
   ELSE (edit_config_family)
-  ELSE (edit_config_nvt)
-  ELSE (export_agent)
-  ELSE (export_agents)
   ELSE (export_alert)
   ELSE (export_alerts)
   ELSE (export_asset)
@@ -2000,25 +2027,8 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (export_tasks)
   ELSE (export_user)
   ELSE (export_users)
-  ELSE (get_agent)
-  ELSE (get_agents)
   ELSE (get_asset)
   ELSE (get_assets)
-
-  else if (!strcmp (cmd, "download_agent"))
-  {
-    char *html, *filename;
-
-    if (download_agent_gmp (&connection, credentials, params, &html, &filename,
-                            response_data))
-      cmd_response_data_set_content_type (response_data,
-                                          GSAD_CONTENT_TYPE_OCTET_STREAM);
-    cmd_response_data_set_content_disposition (
-      response_data, g_strdup_printf ("attachment; filename=%s", filename));
-    g_free (filename);
-
-    res = html;
-  }
 
   else if (!strcmp (cmd, "download_ssl_cert"))
   {
@@ -2071,6 +2081,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (get_info)
   ELSE (get_note)
   ELSE (get_notes)
+  ELSE (get_nvt_families)
   ELSE (get_override)
   ELSE (get_overrides)
   ELSE (get_permission)
@@ -2100,20 +2111,21 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (get_tasks)
   ELSE (get_ticket)
   ELSE (get_tickets)
+  ELSE (get_tls_certificate)
+  ELSE (get_tls_certificates)
   ELSE (get_trash)
   ELSE (get_user)
   ELSE (get_users)
   ELSE (get_vulns)
   ELSE (new_alert)
   ELSE (ping)
-  ELSE (sync_config)
   ELSE (wizard)
   ELSE (wizard_get)
 
   else
   {
     cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-    res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+    res = gsad_message (credentials, "Internal error", __func__, __LINE__,
                         "An internal error occurred inside GSA daemon. "
                         "Diagnostics: Unknown command.",
                         response_data);
@@ -2250,19 +2262,19 @@ drop_privileges (struct passwd *user_pw)
 {
   if (setgroups (0, NULL))
     {
-      g_critical ("%s: failed to set groups: %s\n", __FUNCTION__,
+      g_critical ("%s: failed to set groups: %s\n", __func__,
                   strerror (errno));
       return FALSE;
     }
   if (setgid (user_pw->pw_gid))
     {
-      g_critical ("%s: failed to drop group privileges: %s\n", __FUNCTION__,
+      g_critical ("%s: failed to drop group privileges: %s\n", __func__,
                   strerror (errno));
       return FALSE;
     }
   if (setuid (user_pw->pw_uid))
     {
-      g_critical ("%s: failed to drop user privileges: %s\n", __FUNCTION__,
+      g_critical ("%s: failed to drop user privileges: %s\n", __func__,
                   strerror (errno));
       return FALSE;
     }
@@ -2291,7 +2303,7 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop, const gchar *subdir)
         {
           g_critical ("%s: Failed to drop privileges."
                       "  Could not determine UID and GID for user \"%s\"!\n",
-                      __FUNCTION__, drop);
+                      __func__, drop);
           return 1;
         }
     }
@@ -2304,7 +2316,7 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop, const gchar *subdir)
 
       if (chroot (GSAD_DATA_DIR))
         {
-          g_critical ("%s: Failed to chroot to \"%s\": %s\n", __FUNCTION__,
+          g_critical ("%s: Failed to chroot to \"%s\": %s\n", __func__,
                       GSAD_DATA_DIR, strerror (errno));
           return 1;
         }
@@ -2313,7 +2325,7 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop, const gchar *subdir)
 
   if (user_pw && (drop_privileges (user_pw) == FALSE))
     {
-      g_critical ("%s: Failed to drop privileges\n", __FUNCTION__);
+      g_critical ("%s: Failed to drop privileges\n", __func__);
       return 1;
     }
 
@@ -2323,7 +2335,7 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop, const gchar *subdir)
       if (chdir (root_dir))
         {
           g_critical ("%s: failed change to chroot root directory (%s): %s\n",
-                      __FUNCTION__, root_dir, strerror (errno));
+                      __func__, root_dir, strerror (errno));
           g_free (root_dir);
           return 1;
         }
@@ -2334,7 +2346,7 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop, const gchar *subdir)
       gchar *data_dir = g_build_filename (GSAD_DATA_DIR, subdir, NULL);
       if (chdir (data_dir))
         {
-          g_critical ("%s: failed to change to \"%s\": %s\n", __FUNCTION__,
+          g_critical ("%s: failed to change to \"%s\": %s\n", __func__,
                       data_dir, strerror (errno));
           g_free (data_dir);
           return 1;
@@ -2380,7 +2392,7 @@ gsad_init ()
   /* Check for required files. */
   if (gvm_file_check_is_dir (GSAD_DATA_DIR) < 1)
     {
-      g_critical ("%s: Could not access %s!\n", __FUNCTION__, GSAD_DATA_DIR);
+      g_critical ("%s: Could not access %s!\n", __func__, GSAD_DATA_DIR);
       return MHD_NO;
     }
 
@@ -2396,7 +2408,7 @@ gsad_init ()
    * test. */
   if (!gcry_check_version (NULL))
     {
-      g_critical ("%s: libgcrypt version check failed\n", __FUNCTION__);
+      g_critical ("%s: libgcrypt version check failed\n", __func__);
       return MHD_NO;
     }
 
@@ -2425,7 +2437,7 @@ gsad_init ()
   int ret = gnutls_global_init ();
   if (ret < 0)
     {
-      g_critical ("%s: Failed to initialize GNUTLS.\n", __FUNCTION__);
+      g_critical ("%s: Failed to initialize GNUTLS.\n", __func__);
       return MHD_NO;
     }
 
@@ -2519,7 +2531,7 @@ start_unix_http_daemon (const char *unix_socket_path,
 
   if (unix_socket == -1)
     {
-      g_warning ("%s: Couldn't create UNIX socket", __FUNCTION__);
+      g_warning ("%s: Couldn't create UNIX socket", __func__);
       return NULL;
     }
 
@@ -2537,7 +2549,7 @@ start_unix_http_daemon (const char *unix_socket_path,
   if (bind (unix_socket, (struct sockaddr *) &addr, sizeof (struct sockaddr_un))
       == -1)
     {
-      g_warning ("%s: Error on bind(%s): %s", __FUNCTION__, unix_socket_path,
+      g_warning ("%s: Error on bind(%s): %s", __func__, unix_socket_path,
                  strerror (errno));
       return NULL;
     }
@@ -2545,7 +2557,7 @@ start_unix_http_daemon (const char *unix_socket_path,
     umask (oldmask);
   if (listen (unix_socket, 128) == -1)
     {
-      g_warning ("%s: Error on listen(): %s", __FUNCTION__, strerror (errno));
+      g_warning ("%s: Error on listen(): %s", __func__, strerror (errno));
       return NULL;
     }
 
@@ -2710,7 +2722,7 @@ main (int argc, char **argv)
 
   if (gsad_init () == MHD_NO)
     {
-      g_critical ("%s: Initialization failed!\nExiting...\n", __FUNCTION__);
+      g_critical ("%s: Initialization failed!\nExiting...\n", __func__);
       exit (EXIT_FAILURE);
     }
 
@@ -2829,10 +2841,13 @@ main (int argc, char **argv)
 
   option_context =
     g_option_context_new ("- Greenbone Security Assistant Daemon");
+
+  g_option_context_set_summary (option_context, COPYRIGHT);
+
   g_option_context_add_main_entries (option_context, option_entries, NULL);
   if (!g_option_context_parse (option_context, &argc, &argv, &error))
     {
-      g_critical ("%s: %s\n\n", __FUNCTION__, error->message);
+      g_critical ("%s: %s\n\n", __func__, error->message);
       exit (EXIT_FAILURE);
     }
   g_option_context_free (option_context);
@@ -2873,7 +2888,6 @@ main (int argc, char **argv)
           printf ("gnutls %s\n", gnutls_check_version (NULL));
           printf ("libmicrohttpd %s\n", MHD_get_version ());
         }
-      printf (COPYRIGHT);
       exit (EXIT_SUCCESS);
     }
 
@@ -2887,7 +2901,7 @@ main (int argc, char **argv)
     {
     case 1:
       g_critical ("%s: libxml must be compiled with thread support\n",
-                  __FUNCTION__);
+                  __func__);
       exit (EXIT_FAILURE);
     }
 
@@ -2904,7 +2918,7 @@ main (int argc, char **argv)
 
   if (setenv ("TZ", "utc 0", 1) == -1)
     {
-      g_critical ("%s: failed to set timezone\n", __FUNCTION__);
+      g_critical ("%s: failed to set timezone\n", __func__);
       exit (EXIT_FAILURE);
     }
   tzset ();
@@ -2937,7 +2951,7 @@ main (int argc, char **argv)
 
   if ((timeout < 1) || (timeout > MAX_SESSION_TIMEOUT))
     {
-      g_critical ("%s: Timeout must be a number from 1 to %d\n", __FUNCTION__,
+      g_critical ("%s: Timeout must be a number from 1 to %d\n", __func__,
                   MAX_SESSION_TIMEOUT);
       exit (EXIT_FAILURE);
     }
@@ -2957,7 +2971,7 @@ main (int argc, char **argv)
       if (gsad_port <= 0 || gsad_port >= 65536)
         {
           g_critical ("%s: Port must be a number between 0 and 65536\n",
-                      __FUNCTION__);
+                      __func__);
           exit (EXIT_FAILURE);
         }
     }
@@ -2968,7 +2982,7 @@ main (int argc, char **argv)
       if (gsad_manager_port <= 0 || gsad_manager_port >= 65536)
         {
           g_critical ("%s: Manager port must be a number between 0 and 65536\n",
-                      __FUNCTION__);
+                      __func__);
           exit (EXIT_FAILURE);
         }
     }
@@ -2980,7 +2994,7 @@ main (int argc, char **argv)
         {
           g_critical (
             "%s: Redirect port must be a number between 0 and 65536\n",
-            __FUNCTION__);
+            __func__);
           exit (EXIT_FAILURE);
         }
     }
@@ -2997,7 +3011,7 @@ main (int argc, char **argv)
           break;
         case -1:
           /* Parent when error. */
-          g_critical ("%s: Failed to fork!\n", __FUNCTION__);
+          g_critical ("%s: Failed to fork!\n", __func__);
           exit (EXIT_FAILURE);
           break;
         default:
@@ -3024,12 +3038,12 @@ main (int argc, char **argv)
             g_warning ("%s: Failed to change parent death signal;"
                        " unix socket process will remain if parent is killed:"
                        " %s\n",
-                       __FUNCTION__, strerror (errno));
+                       __func__, strerror (errno));
 #endif
           break;
         case -1:
           /* Parent when error. */
-          g_warning ("%s: Failed to fork for unix socket!\n", __FUNCTION__);
+          g_warning ("%s: Failed to fork for unix socket!\n", __func__);
           exit (EXIT_FAILURE);
           break;
         default:
@@ -3054,13 +3068,13 @@ main (int argc, char **argv)
             g_warning ("%s: Failed to change parent death signal;"
                        " redirect process will remain if parent is killed:"
                        " %s\n",
-                       __FUNCTION__, strerror (errno));
+                       __func__, strerror (errno));
 #endif
           redirect_location = g_strdup_printf ("https://%%s:%i/", gsad_port);
           break;
         case -1:
           /* Parent when error. */
-          g_critical ("%s: Failed to fork for redirect!\n", __FUNCTION__);
+          g_critical ("%s: Failed to fork for redirect!\n", __func__);
           exit (EXIT_FAILURE);
           break;
         default:
@@ -3075,7 +3089,7 @@ main (int argc, char **argv)
 
   if (atexit (&gsad_cleanup))
     {
-      g_critical ("%s: Failed to register cleanup function!\n", __FUNCTION__);
+      g_critical ("%s: Failed to register cleanup function!\n", __func__);
       exit (EXIT_FAILURE);
     }
 
@@ -3083,7 +3097,7 @@ main (int argc, char **argv)
 
   if (pidfile_create ("gsad"))
     {
-      g_critical ("%s: Could not write PID file.\n", __FUNCTION__);
+      g_critical ("%s: Could not write PID file.\n", __func__);
       exit (EXIT_FAILURE);
     }
 
@@ -3114,7 +3128,7 @@ main (int argc, char **argv)
 
       if (gsad_daemon == NULL)
         {
-          g_warning ("%s: start_http_daemon redirect failed !", __FUNCTION__);
+          g_warning ("%s: start_http_daemon redirect failed !", __func__);
           return EXIT_FAILURE;
         }
       else
@@ -3135,7 +3149,7 @@ main (int argc, char **argv)
 
       if (gsad_daemon == NULL)
         {
-          g_warning ("%s: start_unix_http_daemon failed !", __FUNCTION__);
+          g_warning ("%s: start_unix_http_daemon failed !", __func__);
           return EXIT_FAILURE;
         }
       else
@@ -3186,7 +3200,7 @@ main (int argc, char **argv)
                                     NULL, &error))
             {
               g_critical ("%s: Could not load private SSL key from %s: %s\n",
-                          __FUNCTION__, ssl_private_key_filename,
+                          __func__, ssl_private_key_filename,
                           error->message);
               g_error_free (error);
               exit (EXIT_FAILURE);
@@ -3196,7 +3210,7 @@ main (int argc, char **argv)
                                     NULL, &error))
             {
               g_critical ("%s: Could not load SSL certificate from %s: %s\n",
-                          __FUNCTION__, ssl_certificate_filename,
+                          __func__, ssl_certificate_filename,
                           error->message);
               g_error_free (error);
               exit (EXIT_FAILURE);
@@ -3207,7 +3221,7 @@ main (int argc, char **argv)
                                        &error))
             {
               g_critical ("%s: Could not load SSL certificate from %s: %s\n",
-                          __FUNCTION__, dh_params_filename, error->message);
+                          __func__, dh_params_filename, error->message);
               g_error_free (error);
               exit (EXIT_FAILURE);
             }
@@ -3234,7 +3248,7 @@ main (int argc, char **argv)
 
       if (gsad_daemon == NULL)
         {
-          g_critical ("%s: start_https_daemon failed!\n", __FUNCTION__);
+          g_critical ("%s: start_https_daemon failed!\n", __func__);
           return EXIT_FAILURE;
         }
       else
@@ -3249,7 +3263,7 @@ main (int argc, char **argv)
   if (chroot_drop_privileges (do_chroot, drop, DEFAULT_WEB_DIRECTORY))
     {
       g_critical ("%s: Cannot use drop privileges for directory \"%s\"!\n",
-                  __FUNCTION__, DEFAULT_WEB_DIRECTORY);
+                  __func__, DEFAULT_WEB_DIRECTORY);
       exit (EXIT_FAILURE);
     }
 
@@ -3257,12 +3271,12 @@ main (int argc, char **argv)
 
   if (sigfillset (&sigmask_all))
     {
-      g_critical ("%s: Error filling signal set\n", __FUNCTION__);
+      g_critical ("%s: Error filling signal set\n", __func__);
       exit (EXIT_FAILURE);
     }
   if (pthread_sigmask (SIG_BLOCK, &sigmask_all, &sigmask_current))
     {
-      g_critical ("%s: Error setting signal mask\n", __FUNCTION__);
+      g_critical ("%s: Error setting signal mask\n", __func__);
       exit (EXIT_FAILURE);
     }
   while (1)
@@ -3280,7 +3294,7 @@ main (int argc, char **argv)
         {
           if (errno == EINTR)
             continue;
-          g_critical ("%s: pselect: %s\n", __FUNCTION__, strerror (errno));
+          g_critical ("%s: pselect: %s\n", __func__, strerror (errno));
           exit (EXIT_FAILURE);
         }
     }

@@ -1,20 +1,19 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import {isDefined} from '../utils/identity';
@@ -38,9 +37,9 @@ class EntityCommand extends GmpCommand {
     this.transformResponse = this.transformResponse.bind(this);
   }
 
-  getParams(params, extra_params = {}) {
+  getParams(params, extraParams, options) {
     const {id, ...other} = params;
-    const rparams = super.getParams(other, extra_params);
+    const rparams = super.getParams(other, extraParams, options);
 
     if (isDefined(id)) {
       rparams[this.id_name] = id;
@@ -66,7 +65,7 @@ class EntityCommand extends GmpCommand {
   }
 
   clone({id}) {
-    const extra_params = {
+    const extraParams = {
       id, // we need plain 'id' in the submitted form data not 'xyz_id'
     };
     return this.action(
@@ -75,7 +74,7 @@ class EntityCommand extends GmpCommand {
         resource_type: this.name,
       },
       {
-        extra_params,
+        extraParams,
       },
     )
       .then(response => {

@@ -1,45 +1,45 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import compose from '../../utils/compose.js';
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import {StyledElement, StyledInput, StyledTitle} from './radio.js';
+import {StyledElement, StyledInput, StyledTitle} from './radio';
 
-import Divider from '../layout/divider.js';
-import withLayout from '../layout/withLayout.js';
+import Divider from 'web/components/layout/divider';
+import withLayout from 'web/components/layout/withLayout';
 
-import withChangeHandler from './withChangeHandler.js';
-
-const convert_checked = (value, props) => {
+const convertChecked = (value, props) => {
   const {checkedValue, unCheckedValue} = props;
-
+  let val;
   if (value && isDefined(checkedValue)) {
-    value = checkedValue;
+    val = checkedValue;
   } else if (!value && isDefined(unCheckedValue)) {
-    value = unCheckedValue;
+    val = unCheckedValue;
+  } else {
+    val = value;
   }
-  return value;
+  return val;
 };
+
+const valueFunc = event => event.target.checked;
 
 const CheckboxComponent = ({
   title,
@@ -49,19 +49,44 @@ const CheckboxComponent = ({
   toolTipTitle,
   unCheckedValue,
   ...other
-}) => (
-  <StyledElement>
-    <Divider title={toolTipTitle}>
-      <StyledInput {...other} disabled={disabled} type="checkbox" />
-      {isDefined(title) && (
-        <StyledTitle data-testid="checkbox-title" disabled={disabled}>
-          {title}
-        </StyledTitle>
-      )}
-      {children}
-    </Divider>
-  </StyledElement>
-);
+}) => {
+  const notifyChange = val => {
+    const {name, onChange} = other;
+
+    if (isDefined(onChange) && !disabled) {
+      onChange(val, name);
+    }
+  };
+
+  const getCheckboxValues = () => {
+    return {checkedValue, unCheckedValue};
+  };
+
+  const handleChange = event => {
+    const val = convertChecked(valueFunc(event), getCheckboxValues());
+
+    notifyChange(val);
+  };
+
+  return (
+    <StyledElement>
+      <Divider title={toolTipTitle}>
+        <StyledInput
+          {...other}
+          disabled={disabled}
+          type="checkbox"
+          onChange={handleChange}
+        />
+        {isDefined(title) && (
+          <StyledTitle data-testid="checkbox-title" disabled={disabled}>
+            {title}
+          </StyledTitle>
+        )}
+        {children}
+      </Divider>
+    </StyledElement>
+  );
+};
 
 CheckboxComponent.propTypes = {
   checkedValue: PropTypes.any,
@@ -73,12 +98,6 @@ CheckboxComponent.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default compose(
-  withLayout(),
-  withChangeHandler({
-    convert_func: convert_checked,
-    value_func: event => event.target.checked,
-  }),
-)(CheckboxComponent);
+export default withLayout()(CheckboxComponent);
 
 // vim: set ts=2 sw=2 tw=80:

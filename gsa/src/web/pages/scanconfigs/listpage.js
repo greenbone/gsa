@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
@@ -33,6 +32,8 @@ import UploadIcon from 'web/components/icon/uploadicon';
 import NewIcon from 'web/components/icon/newicon';
 import ScanConfigIcon from 'web/components/icon/scanconfigicon';
 
+import PageTitle from 'web/components/layout/pagetitle';
+
 import IconDivider from 'web/components/layout/icondivider';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
@@ -45,7 +46,7 @@ import {
 import ScanConfigComponent from './component';
 import Table, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = withCapabilities(
+export const ToolBarIcons = withCapabilities(
   ({capabilities, onScanConfigCreateClick, onScanConfigImportClick}) => (
     <IconDivider>
       <ManualIcon
@@ -105,23 +106,26 @@ const ScanConfigsPage = ({
       edit,
       import: import_func,
     }) => (
-      <EntitiesPage
-        {...props}
-        filterEditDialog={ScanConfigFilterDialog}
-        filtersFilter={SCANCONFIGS_FILTER_FILTER}
-        sectionIcon={<ScanConfigIcon size="large" />}
-        table={Table}
-        title={_('Scan Configs')}
-        toolBarIcons={ToolBarIcons}
-        onError={onError}
-        onInteraction={onInteraction}
-        onScanConfigImportClick={import_func}
-        onScanConfigCloneClick={clone}
-        onScanConfigCreateClick={create}
-        onScanConfigDeleteClick={delete_func}
-        onScanConfigDownloadClick={download}
-        onScanConfigEditClick={edit}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Scan Configs')} />
+        <EntitiesPage
+          {...props}
+          filterEditDialog={ScanConfigFilterDialog}
+          filtersFilter={SCANCONFIGS_FILTER_FILTER}
+          sectionIcon={<ScanConfigIcon size="large" />}
+          table={Table}
+          title={_('Scan Configs')}
+          toolBarIcons={ToolBarIcons}
+          onError={onError}
+          onInteraction={onInteraction}
+          onScanConfigImportClick={import_func}
+          onScanConfigCloneClick={clone}
+          onScanConfigCreateClick={create}
+          onScanConfigDeleteClick={delete_func}
+          onScanConfigDownloadClick={download}
+          onScanConfigEditClick={edit}
+        />
+      </React.Fragment>
     )}
   </ScanConfigComponent>
 );

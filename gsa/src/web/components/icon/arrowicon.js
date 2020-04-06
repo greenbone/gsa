@@ -1,20 +1,19 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
@@ -22,7 +21,9 @@ import styled from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes.js';
 
-import withIconSize from 'web/components/icon/withIconSize';
+import withIconSize, {
+  ICON_SIZE_SMALL_PIXELS,
+} from 'web/components/icon/withIconSize';
 
 const Styled = styled.span`
   background-color: transparent;
@@ -37,12 +38,19 @@ const Styled = styled.span`
   cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
 `;
 
-const ArrowIcon = ({down = false, ...props}) => (
-  <Styled {...props}>{down ? '▼' : '▲'}</Styled>
+const Loading = styled.span`
+  height: ${ICON_SIZE_SMALL_PIXELS + 'px'};
+  width: ${ICON_SIZE_SMALL_PIXELS + 'px'};
+  background: url(/img/loading.gif) center center no-repeat;
+`;
+
+const ArrowIcon = ({down = false, isLoading = false, ...props}) => (
+  <Styled {...props}>{isLoading ? <Loading /> : down ? '▼' : '▲'}</Styled>
 );
 
 ArrowIcon.propTypes = {
   down: PropTypes.bool,
+  isLoading: PropTypes.bool,
 };
 
 export default withIconSize()(ArrowIcon);

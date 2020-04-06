@@ -1,20 +1,19 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
@@ -40,6 +39,7 @@ import TaskIcon from 'web/components/icon/taskicon';
 import WizardIcon from 'web/components/icon/wizardicon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import {
   USE_DEFAULT_RELOAD_INTERVAL,
@@ -56,7 +56,7 @@ import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import Table from './table';
 
-const ToolBarIcons = withCapabilities(
+export const ToolBarIcons = withCapabilities(
   ({
     capabilities,
     onAdvancedTaskWizardClick,
@@ -154,45 +154,48 @@ const Page = ({
       modifytaskwizard,
       taskwizard,
     }) => (
-      <EntitiesPage
-        {...props}
-        dashboard={() => (
-          <TaskDashboard
-            filter={filter}
-            onFilterChanged={onFilterChanged}
-            onInteraction={onInteraction}
-          />
-        )}
-        dashboardControls={() => (
-          <DashboardControls
-            dashboardId={TASK_DASHBOARD_ID}
-            onInteraction={onInteraction}
-          />
-        )}
-        filter={filter}
-        filterEditDialog={TaskFilterDialog}
-        filtersFilter={TASKS_FILTER_FILTER}
-        sectionIcon={<TaskIcon size="large" />}
-        table={Table}
-        title={_('Tasks')}
-        toolBarIcons={ToolBarIcons}
-        onAdvancedTaskWizardClick={advancedtaskwizard}
-        onContainerTaskCreateClick={createcontainer}
-        onError={onError}
-        onFilterChanged={onFilterChanged}
-        onInteraction={onInteraction}
-        onModifyTaskWizardClick={modifytaskwizard}
-        onReportImportClick={reportimport}
-        onTaskCloneClick={clone}
-        onTaskCreateClick={create}
-        onTaskDeleteClick={delete_func}
-        onTaskDownloadClick={download}
-        onTaskEditClick={edit}
-        onTaskResumeClick={resume}
-        onTaskStartClick={start}
-        onTaskStopClick={stop}
-        onTaskWizardClick={taskwizard}
-      />
+      <React.Fragment>
+        <PageTitle title={_('Tasks')} />
+        <EntitiesPage
+          {...props}
+          dashboard={() => (
+            <TaskDashboard
+              filter={filter}
+              onFilterChanged={onFilterChanged}
+              onInteraction={onInteraction}
+            />
+          )}
+          dashboardControls={() => (
+            <DashboardControls
+              dashboardId={TASK_DASHBOARD_ID}
+              onInteraction={onInteraction}
+            />
+          )}
+          filter={filter}
+          filterEditDialog={TaskFilterDialog}
+          filtersFilter={TASKS_FILTER_FILTER}
+          sectionIcon={<TaskIcon size="large" />}
+          table={Table}
+          title={_('Tasks')}
+          toolBarIcons={ToolBarIcons}
+          onAdvancedTaskWizardClick={advancedtaskwizard}
+          onContainerTaskCreateClick={createcontainer}
+          onError={onError}
+          onFilterChanged={onFilterChanged}
+          onInteraction={onInteraction}
+          onModifyTaskWizardClick={modifytaskwizard}
+          onReportImportClick={reportimport}
+          onTaskCloneClick={clone}
+          onTaskCreateClick={create}
+          onTaskDeleteClick={delete_func}
+          onTaskDownloadClick={download}
+          onTaskEditClick={edit}
+          onTaskResumeClick={resume}
+          onTaskStartClick={start}
+          onTaskStopClick={stop}
+          onTaskWizardClick={taskwizard}
+        />
+      </React.Fragment>
     )}
   </TaskComponent>
 );
@@ -206,7 +209,7 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const taskReloadInterval = ({entities = []}) =>
+export const taskReloadInterval = ({entities = []}) =>
   entities.some(task => task.isActive())
     ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
     : USE_DEFAULT_RELOAD_INTERVAL;

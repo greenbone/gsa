@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Field tests should render 1`] = `
-.c1 {
+.c0 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -15,11 +15,11 @@ exports[`Field tests should render 1`] = `
   padding: 1px 8px;
 }
 
-.c1:-webkit-autofill {
+.c0:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c0 {
+.c1 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -44,7 +44,7 @@ exports[`Field tests should render 1`] = `
 `;
 
 exports[`Field tests should render in disabled state 1`] = `
-.c1 {
+.c0 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -61,11 +61,11 @@ exports[`Field tests should render in disabled state 1`] = `
   opacity: 0.65;
 }
 
-.c1:-webkit-autofill {
+.c0:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c0 {
+.c1 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

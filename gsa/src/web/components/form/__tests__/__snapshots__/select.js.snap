@@ -19,7 +19,7 @@ exports[`Select component tests should render 1`] = `
   align-items: center;
 }
 
-.c5 {
+.c4 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -41,16 +41,16 @@ exports[`Select component tests should render 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  cursor: not-allowed;
+  cursor: pointer;
 }
 
-.c4 {
+.c5 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
@@ -109,14 +109,18 @@ exports[`Select component tests should render 1`] = `
   white-space: nowrap;
   overflow: hidden;
   cursor: default;
+  cursor: default;
 }
 
 <div
+  aria-expanded="false"
+  aria-haspopup="listbox"
+  aria-labelledby="downshift-0-label"
   class="c0"
+  role="combobox"
   width="180px"
 >
   <div
-    aria-expanded="false"
     aria-haspopup="true"
     aria-label="open menu"
     class="c1"
@@ -136,7 +140,6 @@ exports[`Select component tests should render 1`] = `
       <span
         class="c4 c5"
         data-testid="select-open-button"
-        disabled=""
       >
         ▼
       </span>

@@ -1,20 +1,19 @@
 /* Copyright (C) 2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
@@ -36,6 +35,13 @@ setLocale('en');
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
+
+const filterWithName = Filter.fromElement({
+  term:
+    'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
+  name: 'foo',
+  id: '123',
+});
 
 const resetFilter = Filter.fromString('first=1 sort-reverse=severity');
 
@@ -89,7 +95,7 @@ describe('Report Details Content tests', () => {
 
     const {entity} = getMockReport();
 
-    const filters = [filter];
+    const filters = [filterWithName];
 
     const gmp = {
       settings: {manualUrl, reportResultsThreshold: 10},
@@ -109,16 +115,25 @@ describe('Report Details Content tests', () => {
     const {baseElement, getAllByTestId} = render(
       <DetailsContent
         activeTab={0}
+        applicationsCounts={{all: 4, filtered: 4}}
+        closedCvesCounts={{all: 2, filtered: 2}}
+        cvesCounts={{all: 2, filtered: 2}}
         entity={entity}
+        errorsCounts={{all: 2, filtered: 2}}
         filters={filters}
+        hostsCounts={{all: 2, filtered: 2}}
         isLoading={false}
         isUpdating={false}
+        operatingSystemsCounts={{all: 2, filtered: 2}}
         pageFilter={filter}
+        portsCounts={{all: 2, filtered: 2}}
+        resultsCounts={{all: 3, filtered: 2}}
         reportFilter={filter}
         reportId={entity.report.id}
         resetFilter={resetFilter}
         sorting={sorting}
         task={entity.report.task}
+        tlsCertificatesCounts={{all: 2, filtered: 2}}
         onActivateTab={onActivateTab}
         onAddToAssetsClick={onAddToAssetsClick}
         onError={onError}
@@ -158,22 +173,23 @@ describe('Report Details Content tests', () => {
     expect(icons[4]).toHaveTextContent('task.svg');
     expect(icons[5]).toHaveTextContent('result.svg');
     expect(icons[6]).toHaveTextContent('vulnerability.svg');
-    expect(icons[7]).toHaveTextContent('performance.svg');
-    expect(icons[8]).toHaveTextContent('download.svg');
-    expect(icons[9]).toHaveTextContent('start.svg');
+    expect(icons[7]).toHaveTextContent('tlscertificate.svg');
+    expect(icons[8]).toHaveTextContent('performance.svg');
+    expect(icons[9]).toHaveTextContent('download.svg');
+    expect(icons[10]).toHaveTextContent('start.svg');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[10]).toHaveTextContent('refresh.svg');
-    expect(icons[11]).toHaveTextContent('delete.svg');
-    expect(icons[12]).toHaveTextContent('reset.svg');
-    expect(icons[13]).toHaveTextContent('help.svg');
-    expect(icons[14]).toHaveTextContent('edit.svg');
+    expect(icons[11]).toHaveTextContent('refresh.svg');
+    expect(icons[12]).toHaveTextContent('delete.svg');
+    expect(icons[13]).toHaveTextContent('reset.svg');
+    expect(icons[14]).toHaveTextContent('help.svg');
+    expect(icons[15]).toHaveTextContent('edit.svg');
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    expect(selects[0]).toHaveTextContent('Loading...');
 
     // Header
-    expect(icons[15]).toHaveTextContent('report.svg');
+    expect(icons[16]).toHaveTextContent('report.svg');
     expect(baseElement).toHaveTextContent(
       'Report:Mon, Jun 3, 2019 1:00 PM CEST',
     );
@@ -202,7 +218,7 @@ describe('Report Details Content tests', () => {
 
     // Summary
     expect(tableData[0]).toHaveTextContent('Task Name');
-    expect(links[7]).toHaveAttribute('href', '/task/314');
+    expect(links[8]).toHaveAttribute('href', '/task/314');
     expect(tableData[1]).toHaveTextContent('foo');
 
     expect(tableData[2]).toHaveTextContent('Comment');
@@ -269,7 +285,7 @@ describe('Report Details Content tests', () => {
 
     const {entity} = getMockReport();
 
-    const filters = [filter];
+    const filters = [filterWithName];
 
     const gmp = {
       settings: {manualUrl, reportResultsThreshold: 1},
@@ -289,16 +305,25 @@ describe('Report Details Content tests', () => {
     const {baseElement, getAllByTestId} = render(
       <DetailsContent
         activeTab={2}
+        applicationsCounts={{all: 4, filtered: 4}}
+        closedCvesCounts={{all: 2, filtered: 2}}
+        cvesCounts={{all: 2, filtered: 2}}
         entity={entity}
+        errorsCounts={{all: 2, filtered: 2}}
         filters={filters}
+        hostsCounts={{all: 2, filtered: 2}}
         isLoading={false}
         isUpdating={false}
+        operatingSystemsCounts={{all: 2, filtered: 2}}
         pageFilter={filter}
+        portsCounts={{all: 2, filtered: 2}}
         reportFilter={filter}
         reportId={entity.report.id}
         resetFilter={resetFilter}
+        resultsCounts={{all: 3, filtered: 2}}
         sorting={sorting}
         task={entity.report.task}
+        tlsCertificatesCounts={{all: 2, filtered: 2}}
         onActivateTab={onActivateTab}
         onAddToAssetsClick={onAddToAssetsClick}
         onError={onError}
@@ -336,22 +361,23 @@ describe('Report Details Content tests', () => {
     expect(icons[4]).toHaveTextContent('task.svg');
     expect(icons[5]).toHaveTextContent('result.svg');
     expect(icons[6]).toHaveTextContent('vulnerability.svg');
-    expect(icons[7]).toHaveTextContent('performance.svg');
-    expect(icons[8]).toHaveTextContent('download.svg');
-    expect(icons[9]).toHaveTextContent('start.svg');
+    expect(icons[7]).toHaveTextContent('tlscertificate.svg');
+    expect(icons[8]).toHaveTextContent('performance.svg');
+    expect(icons[9]).toHaveTextContent('download.svg');
+    expect(icons[10]).toHaveTextContent('start.svg');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[10]).toHaveTextContent('refresh.svg');
-    expect(icons[11]).toHaveTextContent('delete.svg');
-    expect(icons[12]).toHaveTextContent('reset.svg');
-    expect(icons[13]).toHaveTextContent('help.svg');
-    expect(icons[14]).toHaveTextContent('edit.svg');
+    expect(icons[11]).toHaveTextContent('refresh.svg');
+    expect(icons[12]).toHaveTextContent('delete.svg');
+    expect(icons[13]).toHaveTextContent('reset.svg');
+    expect(icons[14]).toHaveTextContent('help.svg');
+    expect(icons[15]).toHaveTextContent('edit.svg');
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    expect(selects[0]).toHaveTextContent('Loading...');
 
     // Header
-    expect(icons[15]).toHaveTextContent('report.svg');
+    expect(icons[16]).toHaveTextContent('report.svg');
     expect(baseElement).toHaveTextContent(
       'Report:Mon, Jun 3, 2019 1:00 PM CEST',
     );
@@ -388,7 +414,7 @@ describe('Report Details Content tests', () => {
     expect(baseElement).toHaveTextContent(
       'Results with the severity "Low" are currently included.',
     );
-    expect(icons[16]).toHaveTextContent('filter.svg');
+    expect(icons[17]).toHaveTextContent('filter.svg');
     expect(baseElement).toHaveTextContent(
       'Filter out results with the severity "Low".',
     );
@@ -396,7 +422,7 @@ describe('Report Details Content tests', () => {
     expect(baseElement).toHaveTextContent(
       'Results with the severity "Medium" are currently included.',
     );
-    expect(icons[17]).toHaveTextContent('filter.svg');
+    expect(icons[18]).toHaveTextContent('filter.svg');
     expect(baseElement).toHaveTextContent(
       'Filter out results with the severity "Medium".',
     );
@@ -404,7 +430,7 @@ describe('Report Details Content tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your filter settings may be too unrefined.',
     );
-    expect(icons[18]).toHaveTextContent('edit.svg');
+    expect(icons[19]).toHaveTextContent('edit.svg');
     expect(baseElement).toHaveTextContent(
       'Adjust and update your filter settings.',
     );

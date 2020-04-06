@@ -1,25 +1,24 @@
-/* Copyright (C) 2018 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* eslint-disable max-len */
 
-import Nvt from 'gmp/models/nvt';
+import Nvt, {getRefs, hasRefType, getFilteredRefIds} from 'gmp/models/nvt';
 import Info from 'gmp/models/info';
 import {testModelFromElement, testModelMethods} from 'gmp/models/testing';
 
@@ -36,8 +35,8 @@ describe('nvt Model tests', () => {
     expect(nvt1.oid).toEqual('42.1337');
     expect(nvt2.id).toBeUndefined();
     expect(nvt2.oid).toBeUndefined();
-    expect(nvt3.id).toEqual('1.2.3');
     expect(nvt3.oid).toEqual('1.2.3');
+    expect(nvt3.id).toEqual('1.2.3');
   });
 
   test('should not allow to overwrite id', () => {
@@ -55,9 +54,11 @@ describe('nvt Model tests', () => {
   });
 
   test('should parse nvt_type', () => {
-    const nvt = Nvt.fromElement({_type: 'foo'});
+    const nvt1 = Nvt.fromElement({_type: 'foo'});
+    const nvt2 = Nvt.fromElement({nvt: {_type: 'foo'}});
 
-    expect(nvt.nvt_type).toEqual('foo');
+    expect(nvt1.nvtType).toEqual('foo');
+    expect(nvt2.nvtType).toEqual('foo');
   });
 
   test('should parse tags', () => {
@@ -74,52 +75,83 @@ describe('nvt Model tests', () => {
     expect(nvt3.tags).toEqual(res);
   });
 
-  test('should parse cve and cve_id', () => {
-    const nvt1 = Nvt.fromElement({cve: '42', cve_id: '21'});
-    const nvt2 = Nvt.fromElement({cve: '42, 21'});
-    const nvt3 = Nvt.fromElement({cve: ''});
-    const nvt4 = Nvt.fromElement({cve: 'NOCVE'});
-    const nvt5 = Nvt.fromElement({});
-    const nvt6 = Nvt.fromElement({nvt: {cve: '42', cve_id: '21'}});
+  test('should parse refs', () => {
+    const elem = {
+      refs: {
+        ref: [
+          {
+            _id: 'cveId',
+            _type: 'cve',
+          },
+          {
+            _id: 'cve_idId',
+            _type: 'cve_id',
+          },
+          {
+            _id: 'bidId',
+            _type: 'bid',
+          },
+          {
+            _id: 'bugtraq_idId',
+            _type: 'bugtraq_id',
+          },
+          {
+            _id: 'dfn-certId',
+            _type: 'dfn-cert',
+          },
+          {
+            _id: 'DFN-certId',
+            _type: 'DFN-cert',
+          },
+          {
+            _id: 'cert-bundId',
+            _type: 'cert-bund',
+          },
+          {
+            _id: 'customId',
+            _type: 'Custom-type',
+          },
+        ],
+      },
+    };
+    const nvt1 = Nvt.fromElement(elem);
+    const nvt2 = Nvt.fromElement({});
+    const nvt3 = Nvt.fromElement({nvt: elem});
 
-    expect(nvt1.cves).toEqual(['42', '21']);
-    expect(nvt1.cve).toBeUndefined();
-    expect(nvt1.cve_id).toBeUndefined();
-    expect(nvt2.cves).toEqual(['42', '21']);
-    expect(nvt3.cves).toEqual([]);
-    expect(nvt4.cves).toEqual([]);
-    expect(nvt5.cves).toEqual([]);
-    expect(nvt6.cves).toEqual(['42', '21']);
-  });
+    expect(nvt1.cves).toEqual(['cveId', 'cve_idId']);
+    expect(nvt2.cves).toEqual([]);
+    expect(nvt1.bids).toEqual(['bidId', 'bugtraq_idId']);
+    expect(nvt2.bids).toEqual([]);
+    expect(nvt1.certs).toEqual([
+      {id: 'dfn-certId', type: 'dfn-cert'},
+      {id: 'DFN-certId', type: 'dfn-cert'},
+      {id: 'cert-bundId', type: 'cert-bund'},
+    ]);
+    expect(nvt2.certs).toEqual([]);
+    expect(nvt1.xrefs).toEqual([{ref: 'customId', type: 'custom-type'}]);
+    expect(nvt2.xrefs).toEqual([]);
 
-  test('should parse bid and bugtraq_id', () => {
-    const nvt1 = Nvt.fromElement({bid: '42', bugtraq_id: '21'});
-    const nvt2 = Nvt.fromElement({bid: '42, 21'});
-    const nvt3 = Nvt.fromElement({bid: ''});
-    const nvt4 = Nvt.fromElement({bid: 'NOBID'});
-    const nvt5 = Nvt.fromElement({});
-    const nvt6 = Nvt.fromElement({nvt: {bid: '42', bugtraq_id: '21'}});
-
-    expect(nvt1.bids).toEqual(['42', '21']);
-    expect(nvt1.bid).toBeUndefined();
-    expect(nvt1.bugtraq_id).toBeUndefined();
-    expect(nvt2.bids).toEqual(['42', '21']);
-    expect(nvt3.bids).toEqual([]);
-    expect(nvt4.bids).toEqual([]);
-    expect(nvt5.bids).toEqual([]);
-    expect(nvt6.bids).toEqual(['42', '21']);
+    expect(nvt3.cves).toEqual(['cveId', 'cve_idId']);
+    expect(nvt3.bids).toEqual(['bidId', 'bugtraq_idId']);
+    expect(nvt3.certs).toEqual([
+      {id: 'dfn-certId', type: 'dfn-cert'},
+      {id: 'DFN-certId', type: 'dfn-cert'},
+      {id: 'cert-bundId', type: 'cert-bund'},
+    ]);
+    expect(nvt3.xrefs).toEqual([{ref: 'customId', type: 'custom-type'}]);
   });
 
   test('should parse severity', () => {
     const nvt1 = Nvt.fromElement({cvss_base: '8.5'});
     const nvt2 = Nvt.fromElement({cvss_base: ''});
-    const nvt3 = Nvt.fromElement({nvt: {cvss_base: '8.5'}});
+    const nvt3 = Nvt.fromElement({nvt: {cvss_base: '9.5'}});
 
     expect(nvt1.severity).toEqual(8.5);
     expect(nvt1.cvss_base).toBeUndefined();
     expect(nvt2.severity).toBeUndefined();
+    expect(nvt2.cvss_base).toBeUndefined();
     expect(nvt3.cvss_base).toBeUndefined();
-    expect(nvt3.severity).toEqual(8.5);
+    expect(nvt3.severity).toEqual(9.5);
   });
 
   test('should parse preferences', () => {
@@ -149,115 +181,37 @@ describe('nvt Model tests', () => {
     expect(nvt3.preferences).toEqual(res);
   });
 
-  test('should parse cert and cert_refs', () => {
-    const elem2 = {
-      cert: {
-        cert_ref: [
-          {
-            _id: '123',
-            _type: 'foo',
-          },
-          {
-            _id: '456',
-            _type: 'bar',
-          },
-        ],
-      },
-    };
-    const res2 = [
-      {
-        id: '123',
-        type: 'foo',
-      },
-      {
-        id: '456',
-        type: 'bar',
-      },
-    ];
-    const elem3 = {
-      cert_refs: {
-        cert_ref: [
-          {
-            _id: '123',
-            _type: 'foo',
-          },
-        ],
-      },
-    };
-    const res3 = [
-      {
-        id: '123',
-        type: 'foo',
-      },
-    ];
-    const elem4 = {
-      cert: {
-        cert_ref: [
-          {
-            _id: '1',
-            _type: 'foo',
-          },
-        ],
-      },
-      cert_refs: {
-        cert_ref: [
-          {
-            _id: '2',
-            _type: 'bar',
-          },
-        ],
-      },
-    };
-    const res4 = [
-      {
-        id: '1',
-        type: 'foo',
-      },
-      {
-        id: '2',
-        type: 'bar',
-      },
-    ];
-
-    const nvt1 = Nvt.fromElement({});
-    const nvt2 = Nvt.fromElement(elem2);
-    const nvt3 = Nvt.fromElement(elem3);
-    const nvt4 = Nvt.fromElement(elem4);
-    const nvt5 = Nvt.fromElement({nvt: elem4});
-
-    expect(nvt1.certs).toEqual([]);
-    expect(nvt2.cert).toBeUndefined();
-    expect(nvt2.certs).toEqual(res2);
-    expect(nvt3.certs).toEqual(res3);
-    expect(nvt3.cert_refs).toBeUndefined();
-    expect(nvt4.certs).toEqual(res4);
-    expect(nvt5.certs).toEqual(res4);
-  });
-
   test('should parse xrefs with correct protocol', () => {
-    const nvt1 = Nvt.fromElement({xrefs: '42'});
-    const nvt2 = Nvt.fromElement({xrefs: '42, 21'});
-    const nvt3 = Nvt.fromElement({xrefs: 'URL:42'});
-    const nvt4 = Nvt.fromElement({xrefs: 'URL:http://42'});
-    const nvt5 = Nvt.fromElement({xrefs: 'URL:https://42'});
-    const nvt6 = Nvt.fromElement({xrefs: 'URL:ftp://42'});
-    const nvt7 = Nvt.fromElement({xrefs: 'URL:ftps://42'});
-    const nvt8 = Nvt.fromElement({xrefs: 'ftps://42'});
-    const nvt9 = Nvt.fromElement({nvt: {xrefs: 'URL:https://42'}});
+    const nvt1 = Nvt.fromElement({refs: {ref: [{_id: '42'}]}});
+    const nvt2 = Nvt.fromElement({refs: {ref: [{_type: 'URL', _id: '42'}]}});
+    const nvt3 = Nvt.fromElement({
+      refs: {ref: [{_type: 'URL', _id: 'http://42'}]},
+    });
+    const nvt4 = Nvt.fromElement({
+      refs: {ref: [{_type: 'URL', _id: 'https://42'}]},
+    });
+    const nvt5 = Nvt.fromElement({
+      refs: {ref: [{_type: 'URL', _id: 'ftp://42'}]},
+    });
+    const nvt6 = Nvt.fromElement({
+      refs: {ref: [{_type: 'URL', _id: 'ftps://42'}]},
+    });
+    const nvt7 = Nvt.fromElement({refs: {ref: [{_id: 'ftps://42'}]}});
+    const nvt8 = Nvt.fromElement({
+      nvt: {
+        refs: {ref: [{_type: 'URL', _id: 'https://42'}]},
+      },
+    });
 
     expect(nvt1.xrefs).toEqual([{ref: '42', type: 'other'}]);
-    expect(nvt2.xrefs).toEqual([
-      {ref: '42', type: 'other'},
-      {ref: '21', type: 'other'},
-    ]);
-    expect(nvt3.xrefs).toEqual([{ref: 'http://42', type: 'URL'}]);
-    expect(nvt4.xrefs).toEqual([{ref: 'http://42', type: 'URL'}]);
-    expect(nvt5.xrefs).toEqual([{ref: 'https://42', type: 'URL'}]);
-    expect(nvt6.xrefs).toEqual([{ref: 'ftp://42', type: 'URL'}]);
-    expect(nvt7.xrefs).toEqual([{ref: 'ftps://42', type: 'URL'}]);
-    expect(nvt8.xrefs).toEqual([{ref: 'ftps://42', type: 'other'}]);
-    expect(nvt8.xref).toBeUndefined();
-    expect(nvt9.xrefs).toEqual([{ref: 'https://42', type: 'URL'}]);
+    expect(nvt2.xrefs).toEqual([{ref: 'http://42', type: 'url'}]);
+    expect(nvt3.xrefs).toEqual([{ref: 'http://42', type: 'url'}]);
+    expect(nvt4.xrefs).toEqual([{ref: 'https://42', type: 'url'}]);
+    expect(nvt5.xrefs).toEqual([{ref: 'ftp://42', type: 'url'}]);
+    expect(nvt6.xrefs).toEqual([{ref: 'ftps://42', type: 'url'}]);
+    expect(nvt7.xrefs).toEqual([{ref: 'ftps://42', type: 'other'}]);
+    expect(nvt7.xref).toBeUndefined();
+    expect(nvt8.xrefs).toEqual([{ref: 'https://42', type: 'url'}]);
   });
 
   test('should parse qod', () => {
@@ -284,10 +238,12 @@ describe('nvt Model tests', () => {
     const nvt3 = Nvt.fromElement({default_timeout: '123'});
     const nvt4 = Nvt.fromElement({nvt: {default_timeout: '123'}});
 
-    expect(nvt1.default_timeout).toBeUndefined();
-    expect(nvt2.default_timeout).toBeUndefined();
-    expect(nvt3.default_timeout).toEqual(123);
-    expect(nvt4.default_timeout).toEqual(123);
+    expect(nvt1.defaultTimeout).toBeUndefined();
+    expect(nvt2.defaultTimeout).toBeUndefined();
+    expect(nvt3.defaultTimeout).toEqual(123);
+    expect(nvt3.default_timeout).toBeUndefined();
+    expect(nvt4.defaultTimeout).toEqual(123);
+    expect(nvt4.default_timeout).toBeUndefined();
   });
 
   test('should parse timeout', () => {
@@ -301,14 +257,155 @@ describe('nvt Model tests', () => {
     expect(nvt3.timeout).toEqual(123);
     expect(nvt4.timeout).toEqual(123);
   });
+});
 
-  test('should parse nvt type', () => {
-    const nvt1 = Nvt.fromElement({});
-    const nvt2 = Nvt.fromElement({_type: 'foo'});
-    const nvt3 = Nvt.fromElement({nvt: {_type: 'foo'}});
+describe('getRefs tests', () => {
+  test('should return empty array for undefined element', () => {
+    const refs = getRefs();
 
-    expect(nvt1.nvt_type).toBeUndefined();
-    expect(nvt2.nvt_type).toEqual('foo');
-    expect(nvt3.nvt_type).toEqual('foo');
+    expect(refs).toEqual([]);
+  });
+
+  test('should return empty array for empty object', () => {
+    const refs = getRefs({});
+
+    expect(refs).toEqual([]);
+  });
+
+  test('should return empty array for empty refs', () => {
+    const refs = getRefs({refs: {}});
+
+    expect(refs).toEqual([]);
+  });
+
+  test('should return refs ref', () => {
+    const refs = getRefs({
+      refs: {
+        ref: [],
+      },
+    });
+
+    expect(refs).toEqual([]);
+  });
+
+  test('should return array for single ref', () => {
+    const refs = getRefs({
+      refs: {
+        ref: [
+          {
+            foo: 'bar',
+          },
+        ],
+      },
+    });
+
+    expect(refs.length).toEqual(1);
+    expect(refs[0]).toEqual({foo: 'bar'});
+  });
+
+  test('should return all refs', () => {
+    const refs = getRefs({
+      refs: {
+        ref: [
+          {
+            foo: 'bar',
+          },
+          {
+            lorem: 'ipsum',
+          },
+        ],
+      },
+    });
+
+    expect(refs.length).toEqual(2);
+    expect(refs[0]).toEqual({foo: 'bar'});
+    expect(refs[1]).toEqual({lorem: 'ipsum'});
+  });
+});
+
+describe('hasRefType tests', () => {
+  test('should return false for undefined ref', () => {
+    expect(hasRefType('foo')()).toEqual(false);
+  });
+
+  test('should return false for empty ref', () => {
+    expect(hasRefType('foo')({})).toEqual(false);
+  });
+
+  test('should return false for non string type', () => {
+    expect(hasRefType('foo')({_type: 1})).toEqual(false);
+  });
+
+  test('should return false when searching for other type', () => {
+    expect(hasRefType('foo')({_type: 'bar'})).toEqual(false);
+  });
+
+  test('should return true when searching for same type', () => {
+    expect(hasRefType('foo')({_type: 'foo'})).toEqual(true);
+  });
+
+  test('should ignore case for type', () => {
+    expect(hasRefType('foo')({_type: 'Foo'})).toEqual(true);
+    expect(hasRefType('foo')({_type: 'FOO'})).toEqual(true);
+    expect(hasRefType('foo')({_type: 'FoO'})).toEqual(true);
+  });
+});
+
+describe('getFilteredRefIds tests', () => {
+  test('should return empty array for undefined refs', () => {
+    const refs = getFilteredRefIds(undefined, 'foo');
+
+    expect(refs).toEqual([]);
+  });
+
+  test('should return empty array for empty refs', () => {
+    const refs = getFilteredRefIds([], 'foo');
+
+    expect(refs).toEqual([]);
+  });
+
+  test('should return empty array when searching for other ref types', () => {
+    const refs = getFilteredRefIds(
+      [
+        {
+          _type: 'bar',
+          _id: '1',
+        },
+        {
+          _type: 'ipsum',
+          _id: '2',
+        },
+      ],
+      'foo',
+    );
+
+    expect(refs).toEqual([]);
+  });
+
+  test('should return ids of same type only', () => {
+    const refs = getFilteredRefIds(
+      [
+        {
+          _type: 'bar',
+          _id: '1',
+        },
+        {
+          _type: 'foo',
+          _id: '2',
+        },
+        {
+          _type: 'ipsum',
+          _id: '3',
+        },
+        {
+          _type: 'foo',
+          _id: '4',
+        },
+      ],
+      'foo',
+    );
+
+    expect(refs.length).toEqual(2);
+    expect(refs).toEqual(['2', '4']);
   });
 });

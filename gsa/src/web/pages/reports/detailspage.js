@@ -1,23 +1,22 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'core-js/fn/string/includes';
+import 'core-js/features/string/includes';
 
 import React from 'react';
 
@@ -42,7 +41,7 @@ import Reload, {
 
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
 
-import withDefaultFilter from 'web/entities/withDefaultFilter';
+import FilterProvider from 'web/entities/filterprovider';
 
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
 
@@ -67,7 +66,6 @@ import {
 
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/actions';
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 
 import {
@@ -82,6 +80,7 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 import TargetComponent from '../targets/component';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import Page from './detailscontent';
 import FilterDialog from './detailsfilterdialog';
@@ -196,8 +195,43 @@ class ReportDetails extends React.Component {
     if (isDefined(props.entity)) {
       // update only if a new report is available to avoid having no report
       // when the filter changes
+      const {report = {}} = props.entity;
+      const {
+        results = {},
+        hosts = {},
+        ports = {},
+        applications = {},
+        operatingSystems = {},
+        cves = {},
+        closedCves = {},
+        tlsCertificates = {},
+        errors = {},
+      } = report;
+
       return {
         entity: props.entity,
+
+        resultsCounts: isDefined(results.counts)
+          ? results.counts
+          : state.resultsCounts,
+        hostsCounts: isDefined(hosts.counts) ? hosts.counts : state.hostsCounts,
+        portsCounts: isDefined(ports.counts) ? ports.counts : state.portsCounts,
+        applicationsCounts: isDefined(applications.counts)
+          ? applications.counts
+          : state.applicationsCounts,
+        operatingSystemsCounts: isDefined(operatingSystems.counts)
+          ? operatingSystems.counts
+          : state.operatingSystemsCounts,
+        cvesCounts: isDefined(cves.counts) ? cves.counts : state.cvesCounts,
+        closedCvesCounts: isDefined(closedCves.counts)
+          ? closedCves.counts
+          : state.closedCvesCounts,
+        tlsCertificatesCounts: isDefined(tlsCertificates.counts)
+          ? tlsCertificates.counts
+          : state.tlsCertificatesCounts,
+        errorsCounts: isDefined(errors.counts)
+          ? errors.counts
+          : state.errorsCounts,
         reportFilter: props.reportFilter,
         isUpdating: false,
       };
@@ -283,7 +317,11 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterResetClick() {
-    this.handleFilterChange(this.props.resultDefaultFilter);
+    if (hasValue(this.props.resultDefaultFilter)) {
+      this.handleFilterChange(this.props.resultDefaultFilter);
+    } else {
+      this.handleFilterChange(DEFAULT_FILTER);
+    }
   }
 
   handleActivateTab(index) {
@@ -396,7 +434,7 @@ class ReportDetails extends React.Component {
           fileNameFormat: reportExportFileName,
           id: entity.id,
           modificationTime: entity.modificationTime,
-          reportFormat: report_format,
+          reportFormat: report_format.name,
           resourceName: entity.task.name,
           resourceType: 'report',
           username,
@@ -415,6 +453,7 @@ class ReportDetails extends React.Component {
 
     onDownload({
       filename: 'tls-cert-' + serial + '.pem',
+      mimetype: 'application/x-x509-ca-cert',
       data: create_pem_certificate(data),
     });
   }
@@ -501,6 +540,7 @@ class ReportDetails extends React.Component {
       filters = [],
       gmp,
       isLoading,
+      isLoadingFilters,
       pageFilter,
       reportError,
       reportFormats,
@@ -513,13 +553,22 @@ class ReportDetails extends React.Component {
     } = this.props;
     const {
       activeTab,
+      applicationsCounts,
+      cvesCounts,
+      closedCvesCounts,
       entity,
+      errorsCounts,
+      hostsCounts,
       isUpdating = false,
+      operatingSystemsCounts,
+      portsCounts,
       reportFilter,
+      resultsCounts,
       showFilterDialog,
       showDownloadReportDialog,
       sorting,
       storeAsDefault,
+      tlsCertificatesCounts,
     } = this.state;
 
     const report = isDefined(entity) ? entity.report : undefined;
@@ -530,6 +579,7 @@ class ReportDetails extends React.Component {
 
     return (
       <React.Fragment>
+        <PageTitle title={_('Report Details')} />
         <TargetComponent
           onError={this.handleError}
           onInteraction={onInteraction}
@@ -537,17 +587,27 @@ class ReportDetails extends React.Component {
           {({edit}) => (
             <Page
               activeTab={activeTab}
+              applicationsCounts={applicationsCounts}
+              cvesCounts={cvesCounts}
+              closedCvesCounts={closedCvesCounts}
               entity={entity}
+              errorsCounts={errorsCounts}
               filters={filters}
+              hostsCounts={hostsCounts}
               isLoading={isLoading}
+              isLoadingFilters={isLoadingFilters}
               isUpdating={isUpdating}
+              operatingSystemsCounts={operatingSystemsCounts}
               pageFilter={pageFilter}
+              portsCounts={portsCounts}
               reportError={reportError}
               reportFilter={reportFilter}
               reportId={reportId}
               resetFilter={REPORT_RESET_FILTER}
+              resultsCounts={resultsCounts}
               sorting={sorting}
               task={isDefined(report) ? report.task : undefined}
+              tlsCertificatesCounts={tlsCertificatesCounts}
               onActivateTab={this.handleActivateTab}
               onAddToAssetsClick={this.handleAddToAssets}
               onError={this.handleError}
@@ -604,12 +664,12 @@ class ReportDetails extends React.Component {
 }
 
 ReportDetails.propTypes = {
-  defaultFilter: PropTypes.filter.isRequired,
   entity: PropTypes.model,
   filter: PropTypes.filter,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool,
+  isLoadingFilters: PropTypes.bool,
   loadFilters: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
@@ -668,26 +728,29 @@ const load = ({
   return loadReportWithThreshold(reportId, {filter});
 };
 
-const ReportDetailsWrapper = ({defaultFilter, reportFilter, ...props}) => (
-  <Reload
-    name={`report-${props.reportId}`}
-    load={load({...props, defaultFilter})}
-    reload={load({...props, defaultFilter, reportFilter})}
-    reloadInterval={() => reloadInterval(props.entity)}
-  >
-    {({reload}) => (
-      <ReportDetails
-        {...props}
-        defaultFilter={defaultFilter}
-        reportFilter={reportFilter}
-        reload={reload}
-      />
+const ReportDetailsWrapper = ({reportFilter, ...props}) => (
+  <FilterProvider fallbackFilter={DEFAULT_FILTER} gmpname="result">
+    {({filter}) => (
+      <Reload
+        name={`report-${props.reportId}`}
+        load={load({...props, defaultFilter: filter})}
+        reload={load({...props, defaultFilter: filter, reportFilter})}
+        reloadInterval={() => reloadInterval(props.entity)}
+      >
+        {({reload}) => (
+          <ReportDetails
+            {...props}
+            defaultFilter={filter}
+            reportFilter={reportFilter}
+            reload={reload}
+          />
+        )}
+      </Reload>
     )}
-  </Reload>
+  </FilterProvider>
 );
 
 ReportDetailsWrapper.propTypes = {
-  defaultFilter: PropTypes.filter,
   entity: PropTypes.model,
   gmp: PropTypes.gmp.isRequired,
   reportFilter: PropTypes.filter,
@@ -706,8 +769,6 @@ const mapDispatchToProps = (dispatch, {gmp, match}) => ({
   loadReportWithThreshold: (id, options) =>
     dispatch(loadReportWithThreshold(gmp)(id, options)),
   loadReportComposerDefaults: () => dispatch(loadReportComposerDefaults(gmp)()),
-  loadUserSettingDefaultFilter: () =>
-    dispatch(loadUserSettingsDefaultFilter(gmp)('result')),
   saveReportComposerDefaults: reportComposerDefaults =>
     dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
   updateFilter: f =>
@@ -732,12 +793,19 @@ const mapStateToProps = (rootState, {match}) => {
   const entity = reportSel.getEntity(id, pageFilter);
   const isLoading = reportSel.isLoadingEntity(id, pageFilter);
   const reportError = reportSel.getEntityError(id, pageFilter);
+
+  const filters = filterSel.getAllEntities(RESULTS_FILTER_FILTER);
+  const isLoadingFilters = filterSel.isLoadingAllEntities(
+    RESULTS_FILTER_FILTER,
+  );
+
   return {
     entity,
+    filters,
     reportError,
     pageFilter,
-    filters: filterSel.getAllEntities(RESULTS_FILTER_FILTER),
     isLoading,
+    isLoadingFilters,
     reportExportFileName: userDefaultsSelector.getValueByName(
       'reportexportfilename',
     ),
@@ -745,7 +813,7 @@ const mapStateToProps = (rootState, {match}) => {
     reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
     reportId: id,
     reportComposerDefaults: getReportComposerDefaults(rootState),
-    resultDefaultFilter: userDefaultFilterSel.getFilter('result'),
+    resultDefaultFilter: userDefaultFilterSel.getFilter(),
     username,
   };
 };
@@ -754,7 +822,6 @@ export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
-  withDefaultFilter('result'),
   connect(
     mapStateToProps,
     mapDispatchToProps,

@@ -1,24 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FilterStringGroup tests should render 1`] = `
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -47,12 +29,27 @@ exports[`FilterStringGroup tests should render 1`] = `
 }
 
 .c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c5 {
+.c3 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -66,7 +63,7 @@ exports[`FilterStringGroup tests should render 1`] = `
   padding: 1px 8px;
 }
 
-.c5:-webkit-autofill {
+.c3:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
@@ -102,12 +99,12 @@ exports[`FilterStringGroup tests should render 1`] = `
     Filter
   </label>
   <div
-    class="c2 c3"
+    class="c2"
     data-testid="formgroup-content"
     size="10"
   >
     <input
-      class="c4 c5"
+      class="c3 c4"
       name="name"
       size="30"
       type="text"

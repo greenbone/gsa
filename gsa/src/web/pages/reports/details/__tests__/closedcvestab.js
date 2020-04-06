@@ -1,20 +1,19 @@
 /* Copyright (C) 2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
@@ -90,7 +89,10 @@ describe('Report Closed CVEs Tab tests', () => {
     // Row 2
     expect(links[7]).toHaveAttribute('href', '/cve/CVE-2000-5678');
     expect(links[7]).toHaveTextContent('CVE-2000-5678');
-    expect(links[8]).toHaveAttribute('href', '/host/undefined'); // because the host has no asset id
+    expect(links[8]).toHaveAttribute(
+      'href',
+      '/hosts?filter=name%3D109.876.54.321',
+    ); // because the host has no asset id
     expect(links[8]).toHaveTextContent('109.876.54.321');
     expect(links[9]).toHaveAttribute('href', '/nvt/202');
     expect(links[9]).toHaveTextContent('This is another description');

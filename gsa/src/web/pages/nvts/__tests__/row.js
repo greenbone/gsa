@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2019-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -45,8 +45,13 @@ const entity = NVT.fromElement({
   family: 'bar',
   cvss_base: 5,
   qod: {value: 80},
-  cve_id: 'CVE-2020-1234, CVE-2020-5678',
   tags: 'This is a description|solution_type=VendorFix',
+  refs: {
+    ref: [
+      {_type: 'cve', _id: 'CVE-2020-1234'},
+      {_type: 'cve', _id: 'CVE-2020-5678'},
+    ],
+  },
 });
 
 describe('NVT row tests', () => {

@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
@@ -45,10 +44,10 @@ const CertBundAdvDetails = ({entity}) => {
     software,
     platform,
     effect,
-    remote_attack,
+    remoteAttack,
     risk,
-    reference_source,
-    reference_url,
+    referenceSource,
+    referenceUrl,
   } = entity;
   return (
     <Layout flex="column" grow>
@@ -88,10 +87,10 @@ const CertBundAdvDetails = ({entity}) => {
               <TableData>{effect}</TableData>
             </TableRow>
           )}
-          {isDefined(remote_attack) && (
+          {isDefined(remoteAttack) && (
             <TableRow>
               <TableData>{_('Remote Attack')}</TableData>
-              <TableData>{remote_attack}</TableData>
+              <TableData>{remoteAttack}</TableData>
             </TableRow>
           )}
           {isDefined(severity) && (
@@ -108,20 +107,18 @@ const CertBundAdvDetails = ({entity}) => {
               <TableData>{risk}</TableData>
             </TableRow>
           )}
-          {isDefined(reference_source) && (
+          {isDefined(referenceSource) && (
             <TableRow>
               <TableData>{_('Reference Source')}</TableData>
-              <TableData>{reference_source}</TableData>
+              <TableData>{referenceSource}</TableData>
             </TableRow>
           )}
-          {isDefined(reference_url) && (
+          {isDefined(referenceUrl) && (
             <TableRow>
               <TableData>{_('Reference URL')}</TableData>
               <TableData>
                 <span>
-                  <ExternalLink to={reference_url}>
-                    {reference_url}
-                  </ExternalLink>
+                  <ExternalLink to={referenceUrl}>{referenceUrl}</ExternalLink>
                 </span>
               </TableData>
             </TableRow>

@@ -1,20 +1,19 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import logger from '../log';
 
@@ -27,7 +26,6 @@ import Report from '../models/report';
 import {ALL_FILTER} from '../models/filter';
 
 import DefaultTransform from '../http/transform/default';
-import FastXmlTransform from '../http/transform/fastxml';
 
 import {convertBoolean} from './convert';
 import EntitiesCommand from './entities';
@@ -72,16 +70,16 @@ export class ReportsCommand extends EntitiesCommand {
   }
 }
 
-class ReportCommand extends EntityCommand {
+export class ReportCommand extends EntityCommand {
   constructor(http) {
     super(http, 'report', Report);
   }
 
   import(args) {
     const {task_id, in_assets = 1, xml_file} = args;
-    log.debug('Importing report', args);
+    log.debug('Creating report', args);
     return this.httpPost({
-      cmd: 'import_report',
+      cmd: 'create_report',
       task_id,
       in_assets,
       xml_file,
@@ -130,7 +128,7 @@ class ReportCommand extends EntityCommand {
   getDelta(
     {id},
     {id: delta_report_id},
-    {filter, details = 1, ...options} = {},
+    {filter, details = true, ...options} = {},
   ) {
     return this.httpGet(
       {
@@ -138,21 +136,31 @@ class ReportCommand extends EntityCommand {
         delta_report_id,
         filter,
         ignore_pagination: 1,
-        details,
+        details: convertBoolean(details),
       },
-      {...options, transform: FastXmlTransform},
+      options,
     ).then(this.transformResponse);
   }
 
-  get({id}, {filter, details, ...options} = {}) {
+  get(
+    {id},
+    {
+      filter,
+      details = true,
+      ignorePagination = true,
+      lean = true,
+      ...options
+    } = {},
+  ) {
     return this.httpGet(
       {
         id,
         filter,
+        lean: convertBoolean(lean),
+        ignore_pagination: convertBoolean(ignorePagination),
         details: convertBoolean(details),
-        ignore_pagination: 1,
       },
-      {...options, transform: FastXmlTransform},
+      options,
     ).then(this.transformResponse);
   }
 

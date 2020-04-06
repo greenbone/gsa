@@ -1,24 +1,23 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
-import {_l} from 'gmp/locale/lang';
+import {_, _l} from 'gmp/locale/lang';
 
 import Layout from 'web/components/layout/layout';
 
@@ -27,7 +26,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 /* eslint-disable max-len */
 
-import ApplyOverridesGroup from 'web/components/powerfilter/applyoverridesgroup';
+import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
@@ -39,6 +38,8 @@ import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import AutoFpGroup from 'web/components/powerfilter/autofpgroup';
+import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 
 /* eslint-enable */
 
@@ -75,6 +76,10 @@ const SORT_FIELDS = [
     name: 'created',
     displayName: _l('Created'),
   },
+  {
+    name: 'modified',
+    displayName: _l('Modified'),
+  },
 ];
 
 const ResultsFilterDialogComponent = ({
@@ -87,6 +92,7 @@ const ResultsFilterDialogComponent = ({
   onFilterChange,
   onFilterStringChange,
   onFilterValueChange,
+  onSearchTermChange,
   onSortByChange,
   onSortOrderChange,
   onValueChange,
@@ -100,7 +106,12 @@ const ResultsFilterDialogComponent = ({
         onChange={onFilterStringChange}
       />
 
-      <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange} />
+      <BooleanFilterGroup
+        name="apply_overrides"
+        title={_('Apply Overrides')}
+        filter={filter}
+        onChange={onFilterValueChange}
+      />
 
       <AutoFpGroup filter={filter} onChange={onFilterValueChange} />
 
@@ -110,12 +121,47 @@ const ResultsFilterDialogComponent = ({
         onRemove={handleRemoveLevels}
       />
 
+      <SeverityValuesGroup
+        name="cvss_base"
+        filter={filter}
+        title={_('Severity')}
+        onChange={onFilterValueChange}
+      />
+
       <SolutionTypeGroup filter={filter} onChange={onFilterChange} />
 
       <MinQodGroup
         name="min_qod"
         filter={filter}
         onChange={onFilterValueChange}
+      />
+
+      <FilterSearchGroup
+        name="owner"
+        filter={filter}
+        title={_('Owner')}
+        onChange={onSearchTermChange}
+      />
+
+      <FilterSearchGroup
+        name="vulnerability"
+        filter={filter}
+        title={_('Vulnerability')}
+        onChange={onSearchTermChange}
+      />
+
+      <FilterSearchGroup
+        name="host"
+        filter={filter}
+        title={_('Host (IP)')}
+        onChange={onSearchTermChange}
+      />
+
+      <FilterSearchGroup
+        name="location"
+        filter={filter}
+        title={_('Location (eg. port/protocol)')}
+        onChange={onSearchTermChange}
       />
 
       <FirstResultGroup filter={filter} onChange={onFilterValueChange} />

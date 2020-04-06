@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
@@ -26,6 +25,7 @@ import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
+import {createDeleteEntity} from 'web/store/entities/utils/actions';
 
 import compose from 'web/utils/compose';
 
@@ -60,12 +60,11 @@ class EntityComponent extends React.Component {
   }
 
   handleEntityDelete(entity) {
-    const {onDeleted, onDeleteError, gmp, name} = this.props;
-    const cmd = gmp[name];
+    const {deleteEntity, onDeleted, onDeleteError} = this.props;
 
     this.handleInteraction();
 
-    return cmd.delete(entity).then(onDeleted, onDeleteError);
+    return deleteEntity(entity.id).then(onDeleted, onDeleteError);
   }
 
   handleEntityClone(entity) {
@@ -144,6 +143,7 @@ class EntityComponent extends React.Component {
 
 EntityComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  deleteEntity: PropTypes.func.isRequired,
   detailsExportFileName: PropTypes.string,
   gmp: PropTypes.gmp.isRequired,
   loadSettings: PropTypes.func.isRequired,
@@ -174,10 +174,14 @@ const mapStateToProps = rootState => {
   };
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-});
+const mapDispatchToProps = (dispatch, {name, gmp}) => {
+  const deleteEntity = createDeleteEntity({entityType: name});
+  return {
+    deleteEntity: id => dispatch(deleteEntity(gmp)(id)),
+    loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
+    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+  };
+};
 
 export default compose(
   withGmp,

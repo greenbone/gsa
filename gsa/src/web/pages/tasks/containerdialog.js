@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
@@ -23,11 +22,6 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import {YES_VALUE} from 'gmp/parser';
-
-import {
-  AUTO_DELETE_KEEP,
-  AUTO_DELETE_KEEP_DEFAULT_VALUE,
-} from 'gmp/models/task';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -39,11 +33,8 @@ import TextField from '../../components/form/textfield.js';
 import Layout from '../../components/layout/layout.js';
 
 import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
-import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
 
 const ContainerTaskDialog = ({
-  auto_delete = AUTO_DELETE_KEEP,
-  auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   comment = '',
   in_assets = YES_VALUE,
   name = '',
@@ -55,8 +46,6 @@ const ContainerTaskDialog = ({
   const isEdit = isDefined(task);
 
   const data = {
-    auto_delete,
-    auto_delete_data,
     comment,
     in_assets,
     name,
@@ -93,17 +82,10 @@ const ContainerTaskDialog = ({
             </FormGroup>
 
             {isEdit && (
-              <React.Fragment>
-                <AddResultsToAssetsGroup
-                  inAssets={state.in_assets}
-                  onChange={onValueChange}
-                />
-                <AutoDeleteReportsGroup
-                  autoDelete={state.auto_delete}
-                  autoDeleteData={state.auto_delete_data}
-                  onChange={onValueChange}
-                />
-              </React.Fragment>
+              <AddResultsToAssetsGroup
+                inAssets={state.in_assets}
+                onChange={onValueChange}
+              />
             )}
           </Layout>
         );

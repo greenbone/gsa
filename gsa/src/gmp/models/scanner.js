@@ -1,20 +1,19 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import {_} from '../locale/lang';
 
@@ -32,6 +31,7 @@ export const OSP_SCANNER_TYPE = 1;
 export const OPENVAS_SCANNER_TYPE = 2;
 export const CVE_SCANNER_TYPE = 3;
 export const GMP_SCANNER_TYPE = 4;
+export const GREENBONE_SENSOR_SCANNER_TYPE = 5;
 
 export const OPENVAS_DEFAULT_SCANNER_ID =
   '08b69003-5fc2-4037-a479-93b440211c73';
@@ -55,6 +55,8 @@ export function scannerTypeName(scannerType) {
     return _('CVE Scanner');
   } else if (scannerType === GMP_SCANNER_TYPE) {
     return _('GMP Scanner');
+  } else if (scannerType === GREENBONE_SENSOR_SCANNER_TYPE) {
+    return _('Greenbone Sensor');
   }
   return _('Unknown type ({{type}})', {type: scannerType});
 }
@@ -85,23 +87,21 @@ class Scanner extends Model {
         ? Credential.fromElement(ret.credential)
         : undefined;
 
-    if (isEmpty(ret.ca_pub)) {
+    if (isEmpty(element.ca_pub)) {
       delete ret.ca_pub;
     } else {
-      ret.ca_pub = {
-        certificate: ret.ca_pub,
+      ret.caPub = {
+        certificate: element.ca_pub,
       };
 
-      if (isDefined(ret.ca_pub_info)) {
-        ret.ca_pub.info = ret.ca_pub_info;
-        ret.ca_pub.info.activationTime = parseDate(
-          ret.ca_pub.info.activation_time,
+      if (isDefined(element.ca_pub_info)) {
+        ret.caPub.info = element.ca_pub_info;
+        ret.caPub.info.activationTime = parseDate(
+          element.ca_pub_info.activation_time,
         );
-        ret.ca_pub.info.expirationTime = parseDate(
-          ret.ca_pub.info.expiration_time,
+        ret.caPub.info.expirationTime = parseDate(
+          element.ca_pub_info.expiration_time,
         );
-        delete ret.ca_pub.info.activation_time;
-        delete ret.ca_pub.info.expiration_time;
         delete ret.ca_pub_info;
       }
     }
@@ -138,10 +138,11 @@ class Scanner extends Model {
         ret.info.params = map(ret.info.params.param, param => ({
           name: param.name,
           description: param.description,
-          param_type: param.type,
+          paramType: param.type,
           mandatory: parseYesNo(param.mandatory),
           default: param.default,
         }));
+        delete ret.info.params.param;
       }
     }
 

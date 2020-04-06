@@ -1,24 +1,23 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
-import {_l} from 'gmp/locale/lang';
+import {_l, _} from 'gmp/locale/lang';
 
 import Layout from 'web/components/layout/layout';
 
@@ -27,7 +26,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 /* eslint-disable max-len */
 
-import ApplyOverridesGroup from 'web/components/powerfilter/applyoverridesgroup';
+import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
@@ -36,6 +35,9 @@ import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup'
 import SortByGroup from 'web/components/powerfilter/sortbygroup';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
+import TaskTrendGroup from 'web/components/powerfilter/tasktrendgroup';
+import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
+import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 
 /* eslint-enable */
 
@@ -64,6 +66,14 @@ const SORT_FIELDS = [
     name: 'trend',
     displayName: _l('Trend'),
   },
+  {
+    name: 'false_positive',
+    displayName: _l('False Positive'),
+  },
+  {
+    name: 'hosts',
+    displayName: _l('Number of Hosts'),
+  },
 ];
 
 const TaskFilterDialogComponent = ({
@@ -74,6 +84,7 @@ const TaskFilterDialogComponent = ({
   saveNamedFilter,
   onFilterStringChange,
   onFilterValueChange,
+  onSearchTermChange,
   onSortOrderChange,
   onSortByChange,
   onValueChange,
@@ -90,12 +101,47 @@ const TaskFilterDialogComponent = ({
         onChange={onFilterStringChange}
       />
 
-      <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange} />
+      <BooleanFilterGroup
+        name="apply_overrides"
+        title={_('Apply Overrides')}
+        filter={filter}
+        onChange={onFilterValueChange}
+      />
+
+      <FilterSearchGroup
+        name="name"
+        title={_('Task Name')}
+        filter={filter}
+        onChange={onSearchTermChange}
+      />
+
+      <SeverityValuesGroup
+        name="severity"
+        title={_('Severity of Last Report')}
+        filter={filter}
+        onChange={onFilterValueChange}
+      />
 
       <MinQodGroup
         name="min_qod"
         filter={filter}
         onChange={onFilterValueChange}
+      />
+
+      <TaskTrendGroup filter={filter} onChange={onFilterValueChange} />
+
+      <FilterSearchGroup
+        name="schedule"
+        title={_('Schedule')}
+        filter={filter}
+        onChange={onSearchTermChange}
+      />
+
+      <FilterSearchGroup
+        name="comment"
+        title={_('Comment')}
+        filter={filter}
+        onChange={onSearchTermChange}
       />
 
       <FirstResultGroup filter={filter} onChange={onFilterValueChange} />

@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import React from 'react';
@@ -120,8 +119,8 @@ class Dialog extends React.Component {
       access_hosts: accessHosts,
       access_ifaces: accessIfaces,
       auth_method:
-        isEdit && isDefined(user.auth_method)
-          ? user.auth_method
+        isEdit && isDefined(user.authMethod)
+          ? user.authMethod
           : AUTH_METHOD_PASSWORD,
       comment,
       group_ids: groupIds,
@@ -349,7 +348,7 @@ class Dialog extends React.Component {
               </Layout>
               {confirmationDialogVisible && (
                 <ConfirmationDialog
-                  text={_(
+                  content={_(
                     'Please note: You are about to create a user ' +
                       'without a role. This user will not have any ' +
                       'permissions and as a result will not be able to login.',

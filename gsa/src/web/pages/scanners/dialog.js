@@ -1,23 +1,23 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import React from 'react';
+import styled from 'styled-components';
 
 import {connect} from 'react-redux';
 
@@ -32,6 +32,8 @@ import {parseInt} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
+
+import withGmp from 'web/utils/withGmp';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -49,11 +51,19 @@ import NewIcon from 'web/components/icon/newicon';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
+import Tab from 'web/components/tab/tab';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
+import TabLayout from 'web/components/tab/tablayout';
+
 import {getTimezone} from 'web/store/usersettings/selectors';
 
 import {
   OSP_SCANNER_TYPE,
   GMP_SCANNER_TYPE,
+  GREENBONE_SENSOR_SCANNER_TYPE,
   scannerTypeName,
 } from 'gmp/models/scanner';
 
@@ -62,7 +72,9 @@ import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
-const SCANNER_TYPES = [GMP_SCANNER_TYPE, OSP_SCANNER_TYPE];
+const DialogTabLayout = styled(TabLayout)`
+  margin-top: 5px;
+`;
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
@@ -119,16 +131,29 @@ CertStatus.propTypes = {
   info: PropTypes.object.isRequired,
 };
 
-class ScannerDialog extends React.Component {
-  constructor(...args) {
-    super(...args);
+const SCANNER_DIALOG_INITIAL_HEIGHT = '300px';
 
-    this.handleTypeChange = this.handleTypeChange.bind(this);
-  }
-
-  handleTypeChange(value, name) {
-    const {credentials, credential_id, onScannerTypeChange} = this.props;
-
+const ScannerDialog = ({
+  ca_pub,
+  comment = '',
+  scanner,
+  credentials,
+  host = 'localhost',
+  id,
+  name = _('Unnamed'),
+  port = '9391',
+  title = _('New Scanner'),
+  type = OSP_SCANNER_TYPE,
+  which_cert,
+  onClose,
+  onCredentialChange,
+  onNewCredentialClick,
+  onSave,
+  onScannerTypeChange,
+  ...props
+}) => {
+  // eslint-disable-next-line no-shadow
+  const handleTypeChange = (value, name) => {
     if (onScannerTypeChange) {
       value = parseInt(value);
       const scan_credentials = filter_credentials(credentials, value);
@@ -139,202 +164,224 @@ class ScannerDialog extends React.Component {
         'credential_id',
       );
     }
+  };
+
+  const data = {
+    ca_pub,
+    comment,
+    host,
+    id,
+    name,
+    port,
+    which_cert,
+  };
+
+  let SCANNER_TYPES;
+
+  const {gmp} = props;
+
+  if (gmp.settings.enableGreenboneSensor) {
+    SCANNER_TYPES = [
+      GMP_SCANNER_TYPE,
+      OSP_SCANNER_TYPE,
+      GREENBONE_SENSOR_SCANNER_TYPE,
+    ];
+  } else {
+    SCANNER_TYPES = [GMP_SCANNER_TYPE, OSP_SCANNER_TYPE];
   }
 
-  render() {
-    const {
-      ca_pub,
-      comment = '',
-      scanner,
-      credential_id,
-      credentials,
-      host = 'localhost',
-      id,
-      name = _('Unnamed'),
-      port = '9391',
-      title = _('New Scanner'),
-      type = OSP_SCANNER_TYPE,
-      which_cert,
-      onClose,
-      onCredentialChange,
-      onNewCredentialClick,
-      onSave,
-    } = this.props;
+  let {credential_id} = props;
 
-    const data = {
-      ca_pub,
-      comment,
-      host,
-      id,
-      name,
-      port,
-      which_cert,
-    };
+  const scannerTypesOptions = map(SCANNER_TYPES, scannerType => ({
+    label: scannerTypeName(scannerType),
+    value: scannerType,
+  }));
 
-    const scannerTypesOptions = map(SCANNER_TYPES, scannerType => ({
-      label: scannerTypeName(scannerType),
-      value: scannerType,
-    }));
+  const scanner_credentials = filter_credentials(credentials, type);
+  const is_edit = isDefined(scanner);
+  const isInUse = isDefined(scanner) && scanner.isInUse();
+  const show_cred_info =
+    isDefined(scanner) &&
+    isDefined(scanner.credential) &&
+    scanner.credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
 
-    const scanner_credentials = filter_credentials(credentials, type);
-    const is_edit = isDefined(scanner);
-    const isInUse = isDefined(scanner) && scanner.isInUse();
-    const show_cred_info =
-      isDefined(scanner) &&
-      isDefined(scanner.credential) &&
-      scanner.credential.type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
-    const isGmpScannerType = type === GMP_SCANNER_TYPE;
+  const isGreenboneSensorType = type === GREENBONE_SENSOR_SCANNER_TYPE;
+  const isOspScannerType = type === OSP_SCANNER_TYPE;
 
-    return (
-      <SaveDialog
-        title={title}
-        onClose={onClose}
-        onSave={onSave}
-        defaultValues={data}
-        values={{
-          credential_id,
-          type,
-        }}
-      >
-        {({values: state, onValueChange}) => {
-          return (
-            <Layout flex="column">
-              <FormGroup title={_('Name')}>
-                <TextField
-                  name="name"
-                  grow="1"
-                  value={state.name}
-                  size="30"
-                  onChange={onValueChange}
-                />
-              </FormGroup>
+  if (isGreenboneSensorType) {
+    credential_id = '';
+  }
 
-              <FormGroup title={_('Comment')}>
-                <TextField
-                  name="comment"
-                  value={state.comment}
-                  grow="1"
-                  size="30"
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-
-              <FormGroup title={_('Type')}>
-                <Select
-                  name="type"
-                  value={state.type}
-                  items={scannerTypesOptions}
-                  disabled={isInUse}
-                  onChange={this.handleTypeChange}
-                />
-              </FormGroup>
-
-              <FormGroup title={_('Host')}>
-                <TextField
-                  name="host"
-                  value={state.host}
-                  disabled={isInUse}
-                  grow="1"
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-
-              {!isGmpScannerType && (
-                <React.Fragment>
-                  <FormGroup title={_('Port')}>
+  return (
+    <SaveDialog // the dialog current changes sizes based on content. For the future we should somehow fix the size to prevent jumping around.
+      defaultValues={data}
+      initialHeight={SCANNER_DIALOG_INITIAL_HEIGHT}
+      multiStep={1} // the option to switch to the MultiStepFooter. Leaving it out defaults to false
+      title={title}
+      values={{
+        credential_id,
+        type,
+      }}
+      onClose={onClose}
+      onSave={onSave}
+    >
+      {({values: state, currentStep, onStepChange, onValueChange}) => {
+        return (
+          <Layout flex="column">
+            <DialogTabLayout grow="1" align={['start', 'end']}>
+              <TabList
+                active={currentStep}
+                align={['start', 'stretch']}
+                onActivateTab={onStepChange}
+              >
+                <Tab>{_('General')}</Tab>
+                <Tab>{_('Configuration')}</Tab>
+              </TabList>
+            </DialogTabLayout>
+            <Tabs active={currentStep}>
+              <TabPanels>
+                <TabPanel>
+                  <FormGroup title={_('Name')}>
                     <TextField
-                      name="port"
-                      value={state.port}
+                      name="name"
+                      grow="1"
+                      value={state.name}
+                      onChange={onValueChange}
+                    />
+                  </FormGroup>
+
+                  <FormGroup title={_('Comment')}>
+                    <TextField
+                      name="comment"
+                      value={state.comment}
+                      grow="1"
+                      onChange={onValueChange}
+                    />
+                  </FormGroup>
+                  <FormGroup title={_('Type')}>
+                    <Select
+                      name="type"
+                      value={state.type}
+                      items={scannerTypesOptions}
+                      disabled={isInUse}
+                      onChange={handleTypeChange}
+                    />
+                  </FormGroup>
+                </TabPanel>
+                <TabPanel>
+                  <FormGroup title={_('Host')}>
+                    <TextField
+                      name="host"
+                      value={state.host}
                       disabled={isInUse}
                       grow="1"
                       onChange={onValueChange}
                     />
                   </FormGroup>
 
-                  <FormGroup title={_('CA Certificate')} flex="column">
-                    <Layout>
-                      <Divider>
-                        {is_edit && (
-                          <Layout>
-                            {isDefined(state.ca_pub) && (
-                              <Radio
-                                title={_('Existing')}
-                                name="which_cert"
-                                value="existing"
-                                checked={state.which_cert === 'existing'}
-                                onChange={onValueChange}
-                              />
-                            )}
-                            <Radio
-                              title={_('Default')}
-                              name="which_cert"
-                              value="default"
-                              checked={state.which_cert === 'default'}
-                              onChange={onValueChange}
-                            />
-                            <Radio
-                              title={_('New:')}
-                              name="which_cert"
-                              value="new"
-                              checked={state.which_cert === 'new'}
-                              onChange={onValueChange}
-                            />
-                          </Layout>
-                        )}
-                        <FileField
-                          disabled={is_edit && state.which_cert !== 'new'}
-                          name="ca_pub"
+                  {isOspScannerType && (
+                    <React.Fragment>
+                      <FormGroup title={_('Port')}>
+                        <TextField
+                          name="port"
+                          value={state.port}
+                          disabled={isInUse}
+                          grow="1"
                           onChange={onValueChange}
                         />
-                      </Divider>
-                    </Layout>
-                    {is_edit && isDefined(state.ca_pub) && (
-                      <CertStatus info={state.ca_pub.info} />
-                    )}
-                  </FormGroup>
-                </React.Fragment>
-              )}
+                      </FormGroup>
 
-              <FormGroup title={_('Credential')} flex="column">
-                <Divider>
-                  <Select
-                    name="credential_id"
-                    items={renderSelectItems(scanner_credentials)}
-                    value={credential_id}
-                    onChange={onCredentialChange}
-                  />
-                  <Layout>
-                    <NewIcon
-                      value={type}
-                      title={_('Create a new Credential')}
-                      onClick={onNewCredentialClick}
-                    />
-                  </Layout>
-                </Divider>
-                {show_cred_info && (
-                  <CertStatus info={scanner.credential.certificate_info} />
-                )}
-              </FormGroup>
-            </Layout>
-          );
-        }}
-      </SaveDialog>
-    );
-  }
-}
+                      <FormGroup title={_('CA Certificate')} flex="column">
+                        <Layout>
+                          <Divider>
+                            {is_edit && (
+                              <Layout>
+                                {isDefined(state.ca_pub) && (
+                                  <Radio
+                                    title={_('Existing')}
+                                    name="which_cert"
+                                    value="existing"
+                                    checked={state.which_cert === 'existing'}
+                                    onChange={onValueChange}
+                                  />
+                                )}
+                                <Radio
+                                  title={_('Default')}
+                                  name="which_cert"
+                                  value="default"
+                                  checked={state.which_cert === 'default'}
+                                  onChange={onValueChange}
+                                />
+                                <Radio
+                                  title={_('New:')}
+                                  name="which_cert"
+                                  value="new"
+                                  checked={state.which_cert === 'new'}
+                                  onChange={onValueChange}
+                                />
+                              </Layout>
+                            )}
+                            <FileField
+                              disabled={is_edit && state.which_cert !== 'new'}
+                              name="ca_pub"
+                              onChange={onValueChange}
+                            />
+                          </Divider>
+                        </Layout>
+                        {is_edit && isDefined(state.ca_pub) && (
+                          <CertStatus info={state.ca_pub_info} />
+                        )}
+                      </FormGroup>
+                    </React.Fragment>
+                  )}
+
+                  {!isGreenboneSensorType && (
+                    <FormGroup title={_('Credential')} flex="column">
+                      <Divider>
+                        <Select
+                          name="credential_id"
+                          items={renderSelectItems(scanner_credentials)}
+                          value={credential_id}
+                          onChange={onCredentialChange}
+                        />
+                        <Layout>
+                          <NewIcon
+                            value={type}
+                            title={_('Create a new Credential')}
+                            onClick={onNewCredentialClick}
+                          />
+                        </Layout>
+                      </Divider>
+                      {show_cred_info && (
+                        <CertStatus
+                          info={scanner.credential.certificate_info}
+                        />
+                      )}
+                    </FormGroup>
+                  )}
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </Layout>
+        );
+      }}
+    </SaveDialog>
+  );
+};
 
 ScannerDialog.propTypes = {
   ca_pub: PropTypes.string,
   comment: PropTypes.string,
   credential_id: PropTypes.id,
   credentials: PropTypes.array,
+  gmp: PropTypes.gmp,
   host: PropTypes.string,
   id: PropTypes.string,
   name: PropTypes.string,
   port: PropTypes.string,
   scanner: PropTypes.model,
   title: PropTypes.string,
-  type: PropTypes.oneOf(SCANNER_TYPES),
+  type: PropTypes.array,
   which_cert: PropTypes.oneOf(['default', 'existing', 'new']),
   onClose: PropTypes.func.isRequired,
   onCredentialChange: PropTypes.func.isRequired,
@@ -344,6 +391,6 @@ ScannerDialog.propTypes = {
   onValueChange: PropTypes.func,
 };
 
-export default ScannerDialog;
+export default withGmp(ScannerDialog);
 
 // vim: set ts=2 sw=2 tw=80:

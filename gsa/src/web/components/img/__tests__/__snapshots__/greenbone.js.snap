@@ -3,6 +3,6 @@
 exports[`GreenboneLogo tests should render 1`] = `
 <img
   alt="Greenbone Security Assistant"
-  src="/img/greenbone.svg"
+  src="greenbone.svg"
 />
 `;

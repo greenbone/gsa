@@ -1,22 +1,23 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
+
+import {setLocale} from 'gmp/locale/lang';
 
 import {
   render,
@@ -27,19 +28,21 @@ import {
 
 import Select from '../select.js';
 
-const openSelectElement = element => {
+setLocale('en');
+
+export const openSelectElement = element => {
   const openButton = getByTestId(element, 'select-open-button');
   fireEvent.click(openButton);
 };
 
-const getItemElements = baseElement => {
+export const getItemElements = baseElement => {
   const portal = baseElement.querySelector('#portals');
   return queryAllByTestId(portal, 'select-item');
 };
 
-const getInputBox = baseElement => {
+export const getInputBox = baseElement => {
   const portal = baseElement.querySelector('#portals');
-  return portal.querySelector('[role="combobox"]');
+  return getByTestId(portal, 'select-search-input');
 };
 
 describe('Select component tests', () => {
@@ -75,6 +78,29 @@ describe('Select component tests', () => {
     expect(domItems[1]).toHaveTextContent('Foo');
   });
 
+  test('should render loading', () => {
+    const items = [
+      {
+        value: '0',
+        label: '--',
+      },
+    ];
+
+    const {element, baseElement} = render(
+      <Select items={items} isLoading={true} />,
+    );
+
+    expect(element).toHaveTextContent('Loading...');
+
+    let domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(0);
+
+    openSelectElement(element);
+
+    domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(0);
+  });
+
   test('should call onChange handler', () => {
     const items = [
       {
@@ -96,6 +122,8 @@ describe('Select component tests', () => {
     openSelectElement(element);
 
     const domItems = getItemElements(baseElement);
+
+    expect(domItems.length).toEqual(2);
 
     fireEvent.click(domItems[0]);
 

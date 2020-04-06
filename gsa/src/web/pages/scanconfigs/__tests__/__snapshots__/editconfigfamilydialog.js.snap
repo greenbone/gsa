@@ -1,0 +1,1570 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
+.c8 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c14 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c19 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c20 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.c24 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.c30 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c27 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c27 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c27 > * {
+  margin-left: 5px;
+}
+
+.c26 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c31 {
+  cursor: pointer;
+}
+
+.c32 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c32 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c10 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
+  margin: 10px 0px;
+  padding-bottom: 1px;
+  border-bottom: 2px solid #c8d3d9;
+  position: relative;
+}
+
+.c11 {
+  margin: 0 0 1px 0;
+}
+
+.c12 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c13 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
+  word-break: break-all;
+  min-width: 100px;
+}
+
+.c1 {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin: 10% auto;
+  border: 0;
+  outline: 0;
+  width: 800px;
+  height: px;
+}
+
+.c0 {
+  position: fixed;
+  font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+  font-size: 1.1em;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  background: rgba(102,102,102,0.5);
+  z-index: 600;
+  -webkit-transition: opacity 1s ease-in;
+  transition: opacity 1s ease-in;
+  width: 100%;
+  height: 100%;
+}
+
+.c39 {
+  width: 0;
+  height: 0;
+  cursor: nwse-resize;
+  border-right: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-top: 20px solid #fff;
+}
+
+.c38 {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+  background: repeating-linear-gradient( -45deg, transparent, transparent 2px, #000 2px, #000 3px );
+}
+
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: inherit;
+  padding: 0;
+  background: #fff;
+  box-shadow: 5px 5px 10px #787878;
+  border-radius: 3px;
+  border: 1px solid #787878;
+}
+
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  border: 1px solid #519032;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: Verdana,sans-serif;
+  color: #519032;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+.c4:hover {
+  color: #fff;
+  background: #519032;
+}
+
+.c5 {
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+}
+
+.c5 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c35 {
+  display: inline-block;
+  padding: 0 15px;
+  color: #393637;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 30px;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: #fff;
+  border-radius: 2px;
+  border: 1px solid #aaaaaa;
+  cursor: pointer;
+  overflow: visible;
+  z-index: 1;
+}
+
+.c35:focus,
+.c35:hover {
+  border: 1px solid #393637;
+}
+
+.c35:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background: #66c430;
+  font-weight: bold;
+  color: #fff;
+}
+
+.c35[disabled] {
+  cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+.c35 img {
+  height: 32px;
+  width: 32px;
+  margin-top: 5px 10px 5px -10px;
+  vertical-align: middle;
+}
+
+.c35:link {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #393637;
+}
+
+.c36 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c37 {
+  border: 1px solid #787878;
+  color: #519032;
+  background: #87d050;
+}
+
+.c37:hover {
+  color: #fff;
+  background: #519032;
+}
+
+.c34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: #c8d3d9;
+  margin-top: 15px;
+  padding: 10px 20px 10px 20px;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 5px 5px 5px 10px;
+  margin-bottom: 15px;
+  border-radius: 2px 2px 0 0;
+  border-bottom: 1px solid #787878;
+  color: #fff;
+  font-weight: bold;
+  background: #66c430;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+}
+
+.c7 {
+  overflow: auto;
+  padding: 0 15px;
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
+}
+
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+  overflow: hidden;
+  height: 100%;
+}
+
+.c9 {
+  border: 0;
+  border-spacing: 0px;
+  font-size: 12px;
+  text-align: left;
+  table-layout: auto;
+}
+
+.c15 {
+  border: 0;
+  border-spacing: 0px;
+  font-size: 12px;
+  text-align: left;
+  table-layout: auto;
+  width: 100%;
+}
+
+.c15 th,
+.c15 td {
+  padding: 4px 10px;
+  border-bottom: 1px solid #c8d3d9;
+}
+
+.c15 tfoot tr {
+  background: #fff;
+}
+
+.c15 tfoot tr td {
+  border-bottom: 1px solid #c8d3d9;
+}
+
+.c16 a {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #000;
+}
+
+.c16 a:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  color: #000;
+}
+
+.c18 {
+  cursor: pointer;
+}
+
+.c17 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+}
+
+.c25 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.c28 {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  margin-left: 10px;
+  line-height: normal;
+  width: auto;
+  height: auto;
+}
+
+.c29 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c21 {
+  height: 13px;
+  box-sizing: content-box;
+  display: inline-block;
+  width: 100px;
+  background: #393637;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.c23 {
+  z-index: 1;
+  font-weight: bold;
+  color: #fff;
+  font-size: 9px;
+  margin: 0;
+  position: relative;
+  top: -13px;
+  padding-top: 1px;
+}
+
+.c22 {
+  height: 13px;
+  width: 10%;
+  background: #4f91c7;
+}
+
+.c33 {
+  height: 13px;
+  width: 100%;
+  background: #c83814;
+}
+
+@media print {
+  .c31 {
+    display: none;
+  }
+}
+
+@media print {
+  .c9 {
+    border-collapse: collapse;
+  }
+}
+
+@media print {
+  .c15 {
+    border-collapse: collapse;
+  }
+}
+
+@media screen {
+  .c15 > tbody:nth-of-type(even),
+  .c15 > tbody:only-of-type > tr:nth-of-type(even) {
+    background: #eeeeee;
+  }
+
+  .c15 > tbody:not(:only-of-type):hover,
+  .c15 > tbody:only-of-type > tr:hover {
+    background: #c8d3d9;
+  }
+}
+
+@media print {
+  .c16 {
+    border-bottom: 1px solid black;
+  }
+
+  .c16 a,
+  .c16 a:hover {
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    color: #000;
+  }
+}
+
+@media print {
+  .c17 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c21 {
+    background: none;
+    border: 0;
+  }
+}
+
+@media print {
+  .c23 {
+    color: black;
+  }
+}
+
+@media print {
+  .c22 {
+    background: none;
+  }
+}
+
+@media print {
+  .c33 {
+    background: none;
+  }
+}
+
+<body>
+  <div
+    id="portals"
+  >
+    <div>
+      <div
+        class="c0"
+      >
+        <div
+          class="c1"
+          height="px"
+          role="dialog"
+          tabindex="1"
+          width="800px"
+        >
+          <div
+            class="c2"
+          >
+            <div
+              class="c3"
+              data-testid="dialog-title-bar"
+            >
+              <span>
+                Foo title
+              </span>
+              <div
+                class="c4 c5"
+                data-testid="dialog-title-close-button"
+                title="Close"
+              >
+                ×
+              </div>
+            </div>
+            <div
+              class="c6"
+            >
+              <div
+                class="c7"
+                data-testid="save-dialog-content"
+              >
+                <div
+                  class="c8"
+                >
+                  <table
+                    class="c9"
+                  >
+                    <tbody
+                      class=""
+                    >
+                      <tr>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            Config
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            foo
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            Family
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c8"
+                          >
+                            family
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <section>
+                    <div
+                      class="c10 section-header"
+                    >
+                      <h2
+                        class="c11 c12"
+                      >
+                        <div
+                          class="c13"
+                        >
+                          Edit Network Vulnerability Tests
+                        </div>
+                      </h2>
+                      <div
+                        class="c14"
+                      />
+                    </div>
+                    <table
+                      class="c15"
+                    >
+                      <thead
+                        class="c16"
+                      >
+                        <tr>
+                          <th
+                            class="c17"
+                          >
+                            <a
+                              class="c18"
+                            >
+                              <div
+                                class="c19"
+                              >
+                                Name
+                                <span
+                                  title="Sorted In Ascending Order By Name"
+                                >
+                                   ▲
+                                </span>
+                              </div>
+                            </a>
+                          </th>
+                          <th
+                            class="c17"
+                          >
+                            <a
+                              class="c18"
+                            >
+                              <div
+                                class="c19"
+                              >
+                                OID
+                              </div>
+                            </a>
+                          </th>
+                          <th
+                            class="c17"
+                          >
+                            <a
+                              class="c18"
+                            >
+                              <div
+                                class="c19"
+                              >
+                                Severity
+                              </div>
+                            </a>
+                          </th>
+                          <th
+                            class="c17"
+                          >
+                            <a
+                              class="c18"
+                            >
+                              <div
+                                class="c19"
+                              >
+                                Timeout
+                              </div>
+                            </a>
+                          </th>
+                          <th
+                            class="c17"
+                          >
+                            <div
+                              class="c19"
+                            >
+                              Prefs
+                            </div>
+                          </th>
+                          <th
+                            class="c17"
+                          >
+                            <a
+                              class="c18"
+                            >
+                              <div
+                                class="c20"
+                              >
+                                Selected
+                              </div>
+                            </a>
+                          </th>
+                          <th
+                            class="c17"
+                          >
+                            <div
+                              class="c20"
+                            >
+                              Actions
+                            </div>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody
+                        class=""
+                      >
+                        <tr>
+                          <td>
+                            <div
+                              class="c8"
+                            >
+                              nvt
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="c8"
+                            >
+                              1234
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="c8"
+                            >
+                              <div
+                                class="c21"
+                                data-testid="progressbar-box"
+                                title="Low"
+                              >
+                                <div
+                                  class="c22"
+                                  data-testid="progress"
+                                />
+                                <div
+                                  class="c23"
+                                >
+                                  1.0 (Low)
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="c8"
+                            >
+                              default
+                              
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="c8"
+                            >
+                              3
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="c24"
+                            >
+                              <div>
+                                <label
+                                  class="c25"
+                                >
+                                  <div
+                                    class="c26"
+                                  >
+                                    <div
+                                      class="c27"
+                                      margin="5px"
+                                    >
+                                      <input
+                                        class="c28 c29"
+                                        name="1234"
+                                        type="checkbox"
+                                      />
+                                    </div>
+                                  </div>
+                                </label>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="c30"
+                            >
+                              <span
+                                class="c31 c32"
+                                data-testid="svg-icon"
+                                title="Select and edit NVT details"
+                              >
+                                <svg
+                                  title="Select and edit NVT details"
+                                >
+                                  edit.svg
+                                </svg>
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div
+                              class="c8"
+                            >
+                              nvt2
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="c8"
+                            >
+                              5678
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="c8"
+                            >
+                              <div
+                                class="c21"
+                                data-testid="progressbar-box"
+                                title="High"
+                              >
+                                <div
+                                  class="c33"
+                                  data-testid="progress"
+                                />
+                                <div
+                                  class="c23"
+                                >
+                                  10.0 (High)
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="c8"
+                            >
+                              1
+                              
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="c8"
+                            >
+                              4
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="c24"
+                            >
+                              <div>
+                                <label
+                                  class="c25"
+                                >
+                                  <div
+                                    class="c26"
+                                  >
+                                    <div
+                                      class="c27"
+                                      margin="5px"
+                                    >
+                                      <input
+                                        class="c28 c29"
+                                        name="5678"
+                                        type="checkbox"
+                                      />
+                                    </div>
+                                  </div>
+                                </label>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="c30"
+                            >
+                              <span
+                                class="c31 c32"
+                                data-testid="svg-icon"
+                                title="Select and edit NVT details"
+                              >
+                                <svg
+                                  title="Select and edit NVT details"
+                                >
+                                  edit.svg
+                                </svg>
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </section>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c34"
+            >
+              <button
+                class="c35 c36 c37"
+                data-testid="dialog-close-button"
+                title="Cancel"
+              >
+                Cancel
+              </button>
+              <button
+                class="c35 c36 c37"
+                data-testid="dialog-save-button"
+                title="Save"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+          <div
+            class="c38"
+          >
+            <div
+              class="c39"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div />
+</body>
+`;
+
+exports[`EditConfigFamilyDialog component tests should render loading indicator 1`] = `
+<body>
+  <div
+    id="portals"
+  >
+    .c9 {
+  width: 80px;
+  height: 80px;
+  margin: 40px auto;
+  background-image: url(greenbone.svg);
+  background-size: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-animation: fSFzYT 2s infinite ease-in-out;
+  animation: fSFzYT 2s infinite ease-in-out;
+}
+
+.c8 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  width: 100%;
+}
+
+.c1 {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin: 10% auto;
+  border: 0;
+  outline: 0;
+  width: 800px;
+  height: px;
+}
+
+.c0 {
+  position: fixed;
+  font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+  font-size: 1.1em;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  background: rgba(102,102,102,0.5);
+  z-index: 600;
+  -webkit-transition: opacity 1s ease-in;
+  transition: opacity 1s ease-in;
+  width: 100%;
+  height: 100%;
+}
+
+.c15 {
+  width: 0;
+  height: 0;
+  cursor: nwse-resize;
+  border-right: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-top: 20px solid #fff;
+}
+
+.c14 {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+  background: repeating-linear-gradient( -45deg, transparent, transparent 2px, #000 2px, #000 3px );
+}
+
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: inherit;
+  padding: 0;
+  background: #fff;
+  box-shadow: 5px 5px 10px #787878;
+  border-radius: 3px;
+  border: 1px solid #787878;
+}
+
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  border: 1px solid #519032;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: Verdana,sans-serif;
+  color: #519032;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+.c4:hover {
+  color: #fff;
+  background: #519032;
+}
+
+.c5 {
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+}
+
+.c5 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c11 {
+  display: inline-block;
+  padding: 0 15px;
+  color: #393637;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 30px;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: #fff;
+  border-radius: 2px;
+  border: 1px solid #aaaaaa;
+  cursor: pointer;
+  overflow: visible;
+  z-index: 1;
+}
+
+.c11:focus,
+.c11:hover {
+  border: 1px solid #393637;
+}
+
+.c11:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background: #66c430;
+  font-weight: bold;
+  color: #fff;
+}
+
+.c11[disabled] {
+  cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+.c11 img {
+  height: 32px;
+  width: 32px;
+  margin-top: 5px 10px 5px -10px;
+  vertical-align: middle;
+}
+
+.c11:link {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #393637;
+}
+
+.c12 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c13 {
+  border: 1px solid #787878;
+  color: #519032;
+  background: #87d050;
+}
+
+.c13:hover {
+  color: #fff;
+  background: #519032;
+}
+
+.c10 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: #c8d3d9;
+  margin-top: 15px;
+  padding: 10px 20px 10px 20px;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 5px 5px 5px 10px;
+  margin-bottom: 15px;
+  border-radius: 2px 2px 0 0;
+  border-bottom: 1px solid #787878;
+  color: #fff;
+  font-weight: bold;
+  background: #66c430;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+}
+
+.c7 {
+  overflow: auto;
+  padding: 0 15px;
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
+}
+
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+  overflow: hidden;
+  height: 100%;
+}
+
+<div>
+      <div
+        class="c0"
+      >
+        <div
+          class="c1"
+          height="px"
+          role="dialog"
+          tabindex="1"
+          width="800px"
+        >
+          <div
+            class="c2"
+          >
+            <div
+              class="c3"
+              data-testid="dialog-title-bar"
+            >
+              <span>
+                Foo title
+              </span>
+              <div
+                class="c4 c5"
+                data-testid="dialog-title-close-button"
+                title="Close"
+              >
+                ×
+              </div>
+            </div>
+            <div
+              class="c6"
+            >
+              <div
+                class="c7"
+                data-testid="save-dialog-content"
+              >
+                <div
+                  class="c8"
+                  data-testid="loading"
+                >
+                  <div
+                    class="c9"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="c10"
+            >
+              <button
+                class="c11 c12 c13"
+                data-testid="dialog-close-button"
+                title="Cancel"
+              >
+                Cancel
+              </button>
+              <button
+                class="c11 c12 c13"
+                data-testid="dialog-save-button"
+                title="Save"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+          <div
+            class="c14"
+          >
+            <div
+              class="c15"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div />
+</body>
+`;

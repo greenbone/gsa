@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
@@ -29,7 +28,10 @@ import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
-import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
+import {
+  GMP_SCANNER_TYPE,
+  GREENBONE_SENSOR_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
@@ -42,6 +44,7 @@ import WizardIcon from 'web/components/icon/wizardicon';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
 
 import LinkTarget from 'web/components/link/target';
 
@@ -161,8 +164,6 @@ const Selector = withClickHandler()(styled.span`
   }}
 `);
 
-const SLAVE_SCANNER_FILTER = Filter.fromString('type=' + GMP_SCANNER_TYPE);
-
 class PerformancePage extends React.Component {
   constructor(...args) {
     super(...args);
@@ -268,87 +269,96 @@ class PerformancePage extends React.Component {
   }
 
   render() {
-    const {scanners = []} = this.props;
+    const {scanners = [], gmp} = this.props;
     const {duration, reports, scannerId, startDate, endDate} = this.state;
     const sensorId = selectSaveId(scanners, scannerId, 0);
     return (
-      <Layout flex="column">
-        <ToolBar onDurationChangeClick={this.handleDurationChange} />
-        <Section
-          img={<PerformanceIcon size="large" />}
-          title={_('Performance')}
-        >
-          <StartEndTimeSelection
-            endDate={endDate}
-            timezone={this.props.timezone}
-            startDate={startDate}
-            onChanged={this.handleStartEndChange}
-          />
-
-          <FormGroup title={_('Report for Last')}>
-            <Divider>
-              <Selector
-                value="hour"
-                duration={duration}
-                onClick={this.handleDurationChange}
-              >
-                {_('Hour')}
-              </Selector>
-              <Selector
-                value="day"
-                duration={duration}
-                onClick={this.handleDurationChange}
-              >
-                {_('Day')}
-              </Selector>
-              <Selector
-                value="week"
-                duration={duration}
-                onClick={this.handleDurationChange}
-              >
-                {_('Week')}
-              </Selector>
-              <Selector
-                value="month"
-                duration={duration}
-                onClick={this.handleDurationChange}
-              >
-                {_('Month')}
-              </Selector>
-              <Selector
-                value="year"
-                duration={duration}
-                onClick={this.handleDurationChange}
-              >
-                {_('Year')}
-              </Selector>
-            </Divider>
-          </FormGroup>
-
-          <FormGroup title={_('Report for GMP Scanner')}>
-            <Select
-              name="scannerId"
-              value={sensorId}
-              items={renderSelectItems(scanners, 0)}
-              onChange={this.handleValueChange}
+      <React.Fragment>
+        <PageTitle title={_('Performance')} />
+        <Layout flex="column">
+          <ToolBar onDurationChangeClick={this.handleDurationChange} />
+          <Section
+            img={<PerformanceIcon size="large" />}
+            title={_('Performance')}
+          >
+            <StartEndTimeSelection
+              endDate={endDate}
+              timezone={this.props.timezone}
+              startDate={startDate}
+              onChanged={this.handleStartEndChange}
             />
-          </FormGroup>
 
-          {reports.map(report => (
-            <div key={report.name}>
-              <LinkTarget id={report.name} />
-              <h2>{report.title}</h2>
-              <ReportImage
-                name={report.name}
-                duration={duration}
-                scannerId={sensorId}
-                startDate={startDate}
-                endDate={endDate}
+            <FormGroup title={_('Report for Last')}>
+              <Divider>
+                <Selector
+                  value="hour"
+                  duration={duration}
+                  onClick={this.handleDurationChange}
+                >
+                  {_('Hour')}
+                </Selector>
+                <Selector
+                  value="day"
+                  duration={duration}
+                  onClick={this.handleDurationChange}
+                >
+                  {_('Day')}
+                </Selector>
+                <Selector
+                  value="week"
+                  duration={duration}
+                  onClick={this.handleDurationChange}
+                >
+                  {_('Week')}
+                </Selector>
+                <Selector
+                  value="month"
+                  duration={duration}
+                  onClick={this.handleDurationChange}
+                >
+                  {_('Month')}
+                </Selector>
+                <Selector
+                  value="year"
+                  duration={duration}
+                  onClick={this.handleDurationChange}
+                >
+                  {_('Year')}
+                </Selector>
+              </Divider>
+            </FormGroup>
+
+            <FormGroup
+              title={
+                gmp.settings.enableGreenboneSensor
+                  ? _('Report for GMP Scanner or Greenbone Sensor')
+                  : _('Report for GMP Scanner')
+              }
+            >
+              <Select
+                name="scannerId"
+                value={sensorId}
+                items={renderSelectItems(scanners, 0)}
+                onChange={this.handleValueChange}
               />
-            </div>
-          ))}
-        </Section>
-      </Layout>
+            </FormGroup>
+
+            {reports.map(report => (
+              <div key={report.name}>
+                <LinkTarget id={report.name} />
+                <h2>{report.title}</h2>
+                <ReportImage
+                  name={report.name}
+                  duration={duration}
+                  scannerId={sensorId}
+                  startDate={startDate}
+                  endDate={endDate}
+                />
+              </div>
+            ))}
+          </Section>
+        </Layout>
+      </React.Fragment>
     );
   }
 }
@@ -361,12 +371,33 @@ PerformancePage.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-  loadScanners: () => dispatch(loadScanners(gmp)(SLAVE_SCANNER_FILTER)),
-});
+const mapDispatchToProps = (dispatch, {gmp}) => {
+  let SLAVE_SCANNER_FILTER;
 
-const mapStateToProps = rootState => {
+  if (gmp.settings.enableGreenboneSensor) {
+    SLAVE_SCANNER_FILTER = Filter.fromString(
+      'type=' + GMP_SCANNER_TYPE + ' type=' + GREENBONE_SENSOR_SCANNER_TYPE,
+    );
+  } else {
+    SLAVE_SCANNER_FILTER = Filter.fromString('type=' + GMP_SCANNER_TYPE);
+  }
+
+  return {
+    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+    loadScanners: () => dispatch(loadScanners(gmp)(SLAVE_SCANNER_FILTER)),
+  };
+};
+
+const mapStateToProps = (rootState, {gmp}) => {
+  let SLAVE_SCANNER_FILTER;
+
+  if (gmp.settings.enableGreenboneSensor) {
+    SLAVE_SCANNER_FILTER = Filter.fromString(
+      'type=' + GMP_SCANNER_TYPE + ' type=' + GREENBONE_SENSOR_SCANNER_TYPE,
+    );
+  } else {
+    SLAVE_SCANNER_FILTER = Filter.fromString('type=' + GMP_SCANNER_TYPE);
+  }
   const select = scannerSelector(rootState);
   return {
     scanners: select.getEntities(SLAVE_SCANNER_FILTER),

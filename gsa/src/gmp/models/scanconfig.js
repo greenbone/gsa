@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import {isDefined} from '../utils/identity';
@@ -30,6 +29,7 @@ import _ from '../locale';
 export const EMPTY_SCAN_CONFIG_ID = '085569ce-73ed-11df-83c3-002264764cea';
 export const FULL_AND_FAST_SCAN_CONFIG_ID =
   'daba56c8-73ec-11df-a475-002264764cea';
+export const BASE_SCAN_CONFIG_ID = 'd21f6c81-2b88-4ac1-b7b4-a2a9f2ad4663';
 
 export const OSP_SCAN_CONFIG_TYPE = 1;
 export const OPENVAS_SCAN_CONFIG_TYPE = 0;
@@ -43,7 +43,7 @@ export const getTranslatedType = config => {
     : _('OpenVAS');
 };
 
-export const parse_count = count => {
+export const parseCount = count => {
   return !isEmpty(count) && count !== '-1' ? parseInt(count) : undefined;
 };
 
@@ -55,7 +55,7 @@ export const openVasScanConfigsFilter = config =>
 export const ospScanConfigsFilter = config =>
   config.scan_config_type === OSP_SCAN_CONFIG_TYPE;
 
-const parseTrend = parseInt;
+export const parseTrend = parseInt;
 
 class ScanConfig extends Model {
   static entityType = 'scanconfig';
@@ -74,8 +74,8 @@ class ScanConfig extends Model {
           name,
           trend: parseTrend(family.growing),
           nvts: {
-            count: parse_count(family.nvt_count),
-            max: parse_count(family.max_nvt_count),
+            count: parseCount(family.nvt_count),
+            max: parseCount(family.max_nvt_count),
           },
         };
         families[name] = new_family;
@@ -86,7 +86,7 @@ class ScanConfig extends Model {
     }
 
     if (isDefined(ret.family_count)) {
-      families.count = parse_count(ret.family_count.__text);
+      families.count = parseCount(ret.family_count.__text);
       families.trend = parseTrend(ret.family_count.growing);
 
       delete ret.family_count;
@@ -98,19 +98,25 @@ class ScanConfig extends Model {
 
     if (isDefined(ret.nvt_count)) {
       ret.nvts = {
-        count: parse_count(ret.nvt_count.__text),
+        // number of selected nvts
+        count: parseCount(ret.nvt_count.__text),
         trend: parseTrend(ret.nvt_count.growing),
       };
 
       delete ret.nvt_count;
 
       if (isDefined(ret.known_nvt_count)) {
-        ret.nvts.known = parse_count(ret.known_nvt_count);
+        // number of known nvts by the scanner from last sync. should always be
+        // equal or less then nvt_count because only the db may contain nvts not
+        // known nvts by the scanner e.g. an imported scan config contains
+        // private nvts
+        ret.nvts.known = parseCount(ret.known_nvt_count);
         delete ret.known_nvt_count;
       }
 
       if (isDefined(ret.max_nvt_count)) {
-        ret.nvts.max = parse_count(ret.max_nvt_count);
+        // sum of all available nvts of all selected families
+        ret.nvts.max = parseCount(ret.max_nvt_count);
         delete ret.max_nvt_count;
       }
     } else {

@@ -1,20 +1,19 @@
 /* Copyright (C) 2009-2018 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -200,11 +199,11 @@ gvm_validate (validator_t validator, const char *name, const char *value)
 
   if (name != NULL && g_utf8_validate (name, -1, NULL) == FALSE)
     {
-      g_debug ("%s: name is not valid UTF-8", __FUNCTION__);
+      g_debug ("%s: name is not valid UTF-8", __func__);
       return 1;
     }
 
-  g_debug ("%s: name %s value %s", __FUNCTION__, name, value);
+  g_debug ("%s: name %s value %s", __func__, name, value);
 
   if (g_hash_table_lookup_extended (validator, name, &key, &value_rule))
     {
@@ -222,7 +221,7 @@ gvm_validate (validator_t validator, const char *name, const char *value)
 
       if (value != NULL && g_utf8_validate (value, -1, NULL) == FALSE)
         {
-          g_debug ("%s: value is not valid UTF-8", __FUNCTION__);
+          g_debug ("%s: value is not valid UTF-8", __func__);
           return 2;
         }
 
@@ -230,30 +229,30 @@ gvm_validate (validator_t validator, const char *name, const char *value)
         {
           if (value == NULL)
             {
-              g_debug ("%s: matched, regex NULL", __FUNCTION__);
+              g_debug ("%s: matched, regex NULL", __func__);
               return 0;
             }
-          g_debug ("%s: failed to match, regex NULL", __FUNCTION__);
+          g_debug ("%s: failed to match, regex NULL", __func__);
           return 2;
         }
 
       if (value == NULL)
         {
-          g_debug ("%s: failed to match, value NULL", __FUNCTION__);
+          g_debug ("%s: failed to match, value NULL", __func__);
           return 2;
         }
 
       g_debug ("matching <%s> against <%s>: ", (char *) rule->regex, value);
       if (g_regex_match_simple (rule->regex, (const gchar *) value, 0, 0))
         {
-          g_debug ("%s: matched", __FUNCTION__);
+          g_debug ("%s: matched", __func__);
           return 0;
         }
-      g_debug ("%s: failed to match\n", __FUNCTION__);
+      g_debug ("%s: failed to match\n", __func__);
       return 2;
     }
 
-  g_debug ("%s: failed to find name: %s", __FUNCTION__, name);
+  g_debug ("%s: failed to find name: %s", __func__, name);
   return 1;
 }
 

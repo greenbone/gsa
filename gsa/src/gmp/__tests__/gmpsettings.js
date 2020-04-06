@@ -1,20 +1,19 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import GmpSettings, {
   DEFAULT_MANUAL_URL,
@@ -23,6 +22,7 @@ import GmpSettings, {
   DEFAULT_LOG_LEVEL,
   DEFAULT_RELOAD_INTERVAL_ACTIVE,
   DEFAULT_RELOAD_INTERVAL_INACTIVE,
+  DEFAULT_TIMEOUT,
   DEFAULT_REPORT_RESULTS_THRESHOLD,
 } from 'gmp/gmpsettings';
 
@@ -62,7 +62,7 @@ describe('GmpSettings tests', () => {
       DEFAULT_REPORT_RESULTS_THRESHOLD,
     );
     expect(settings.token).toBeUndefined();
-    expect(settings.timeout).toBeUndefined();
+    expect(settings.timeout).toEqual(DEFAULT_TIMEOUT);
     expect(settings.timezone).toBeUndefined();
     expect(settings.username).toBeUndefined();
     expect(settings.vendorVersion).toBeUndefined();
@@ -78,6 +78,7 @@ describe('GmpSettings tests', () => {
       apiProtocol: 'http',
       apiServer: 'localhost',
       disableLoginForm: true,
+      enableGreenboneSensor: true,
       enableStoreDebugLog: true,
       guestUsername: 'guest',
       guestPassword: 'pass',
@@ -103,6 +104,7 @@ describe('GmpSettings tests', () => {
     expect(settings.apiProtocol).toEqual('http');
     expect(settings.apiServer).toEqual('localhost');
     expect(settings.disableLoginForm).toEqual(true);
+    expect(settings.enableGreenboneSensor).toEqual(true);
     expect(settings.enableStoreDebugLog).toEqual(true);
     expect(settings.guestUsername).toEqual('guest');
     expect(settings.guestPassword).toEqual('pass');
@@ -150,6 +152,7 @@ describe('GmpSettings tests', () => {
 
     expect(settings.apiProtocol).toEqual('http');
     expect(settings.apiServer).toEqual('foo');
+    expect(settings.enableGreenboneSensor).toEqual(false);
     expect(settings.enableStoreDebugLog).toEqual(false);
     expect(settings.locale).toEqual('en');
     expect(settings.logLevel).toEqual('error');
@@ -167,7 +170,7 @@ describe('GmpSettings tests', () => {
       DEFAULT_REPORT_RESULTS_THRESHOLD,
     );
     expect(settings.token).toEqual('atoken');
-    expect(settings.timeout).toBeUndefined();
+    expect(settings.timeout).toEqual(DEFAULT_TIMEOUT);
     expect(settings.timezone).toEqual('cet');
     expect(settings.username).toEqual('foo');
 
@@ -293,6 +296,7 @@ describe('GmpSettings tests', () => {
       apiProtocol: 'http',
       apiServer: 'localhost',
       disableLoginForm: true,
+      enableGreenboneSensor: true,
       guestUsername: 'guest',
       guestPassword: 'pass',
       locale: 'en',
@@ -321,6 +325,10 @@ describe('GmpSettings tests', () => {
       settings.disableLoginForm = false;
     }).toThrow();
     expect(settings.disableLoginForm).toEqual(true);
+    expect(() => {
+      settings.enableGreenboneSensor = false;
+    }).toThrow();
+    expect(settings.enableGreenboneSensor).toEqual(true);
     expect(() => {
       settings.guestUsername = 'foo';
     }).toThrow();

@@ -1,20 +1,19 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import {_l} from 'gmp/locale/lang';
 
@@ -46,6 +45,10 @@ export const AUTO_DELETE_KEEP_DEFAULT_VALUE = 5;
 export const HOSTS_ORDERING_SEQUENTIAL = 'sequential';
 export const HOSTS_ORDERING_RANDOM = 'random';
 export const HOSTS_ORDERING_REVERSE = 'reverse';
+
+export const DEFAULT_MAX_CHECKS = 4;
+export const DEFAULT_MAX_HOSTS = 20;
+export const DEFAULT_MIN_QOD = 70;
 
 export const TASK_STATUS = {
   running: 'Running',
@@ -79,7 +82,7 @@ const TASK_STATUS_TRANSLATIONS = {
 };
 /* eslint-disable quote-props */
 
-function parse_yes(value) {
+export function parse_yes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
 }
 
@@ -166,12 +169,7 @@ class Task extends Model {
     copy.alterable = parseYesNo(element.alterable);
     copy.result_count = parseInt(element.result_count);
 
-    const reports = [
-      'first_report',
-      'last_report',
-      'second_last_report',
-      'current_report',
-    ];
+    const reports = ['last_report', 'current_report'];
 
     reports.forEach(name => {
       const report = element[name];
@@ -237,8 +235,9 @@ class Task extends Model {
                 : AUTO_DELETE_NO;
             break;
           case 'auto_delete_data':
+            const value = parseInt(pref.value);
             copy.auto_delete_data =
-              pref.value === '0'
+              value === 0
                 ? AUTO_DELETE_KEEP_DEFAULT_VALUE
                 : parseInt(pref.value);
             break;
@@ -269,6 +268,8 @@ class Task extends Model {
     ) {
       delete copy.hosts_ordering;
     }
+
+    copy.usageType = element.usage_type;
 
     return copy;
   }

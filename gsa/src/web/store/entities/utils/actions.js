@@ -1,20 +1,19 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 
@@ -29,9 +28,10 @@ export const types = {
   ENTITY_LOADING_REQUEST: 'ENTITY_LOADING_REQUEST',
   ENTITY_LOADING_SUCCESS: 'ENTITY_LOADING_SUCCESS',
   ENTITY_LOADING_ERROR: 'ENTITY_LOADING_ERROR',
+  ENTITY_DELETE_SUCCESS: 'ENTITY_DELETE_SUCCESS',
 };
 
-export const createEntitiesActions = entityType => ({
+export const createEntitiesLoadingActions = entityType => ({
   request: filter => ({
     type: types.ENTITIES_LOADING_REQUEST,
     entityType,
@@ -53,7 +53,7 @@ export const createEntitiesActions = entityType => ({
   }),
 });
 
-export const createEntityActions = entityType => ({
+export const createEntityLoadingActions = entityType => ({
   request: id => ({
     type: types.ENTITY_LOADING_REQUEST,
     entityType,
@@ -72,6 +72,14 @@ export const createEntityActions = entityType => ({
     id,
   }),
 });
+
+export const entityDeleteActions = {
+  success: (entityType, id) => ({
+    type: types.ENTITY_DELETE_SUCCESS,
+    entityType,
+    id,
+  }),
+};
 
 export const createLoadEntities = ({
   selector,
@@ -152,4 +160,9 @@ export const createLoadEntity = ({
       error => dispatch(actions.error(id, error)),
     );
 };
+
+export const createDeleteEntity = ({entityType}) => gmp => id => dispatch =>
+  gmp[entityType]
+    .delete({id})
+    .then(() => dispatch(entityDeleteActions.success(entityType, id)));
 // vim: set ts=2 sw=2 tw=80:

@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
@@ -32,41 +31,31 @@ import ExternalLink from 'web/components/link/externallink';
 import ProtocolDocLink from 'web/components/link/protocoldoclink';
 
 import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
+
 import Section from 'web/components/section/section';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-const GSA_VERSION = process.env.REACT_APP_VERSION || '8.0';
+const GSA_VERSION = process.env.REACT_APP_VERSION || '20.04';
 
 const StyledLayout = styled(Layout)`
   margin: 0 auto;
-  max-width: 1100px;
+  max-width: 680px;
 `;
 
 const DivP = styled.div`
   margin-bottom: 10px;
 `;
 
-const TextBlock = styled.div`
-  max-width: 600px;
-  min-width: 400px;
-  margin-right: 30px;
-  text-align: left;
-  @media screen and (max-width: 800px) {
-    margin-right: 0px;
-  }
-`;
-
-const ImageBlock = styled.div`
-  max-width: 400px;
-`;
-
 const About = ({gmp}) => (
-  <Layout flex="column">
-    <Section img={<HelpIcon size="large" />} title={_('About GSA')}>
-      <StyledLayout wrap align="center">
-        <TextBlock>
+  <React.Fragment>
+    <PageTitle title={_('About GSA')} />
+    <Layout flex="column">
+      <Section img={<HelpIcon size="large" />} title={_('About GSA')}>
+        <StyledLayout flex="column" align="center">
+          <Img src="greenbone_banner.jpeg" alt="GSA" width="100%" />
           <h1>Greenbone Security Assistant</h1>
           <h3>
             {isDefined(gmp.settings.vendorVersion)
@@ -74,21 +63,29 @@ const About = ({gmp}) => (
               : _('Version {{version}}', {version: GSA_VERSION})}
           </h3>
           <DivP>
-            The Greenbone Security Assistant (GSA) is the web-based user
-            interface of the Greenbone Vulnerability Manager (GVM).
+            {_(
+              'The Greenbone Security Assistant (GSA) is the web-based ' +
+                'user interface of the Greenbone Vulnerability Manager (GVM).',
+            )}
           </DivP>
           <DivP>
-            GSA connects to GVM via the Greenbone Management Protocol (GMP)
-            making the rich feature set of the GVM backend available, covering
-            vulnerability scanning, vulnerability management, and related
-            activities.
+            {_(
+              'GSA connects to GVM via the Greenbone Management Protocol ' +
+                '(GMP) making the extensive feature set of the GVM backend ' +
+                'available, covering vulnerability scanning, vulnerability ' +
+                'management, and related activities.',
+            )}
           </DivP>
           <DivP>
-            GSA adds various smart features and forms a powerful tool to manage
-            and maintain a high resilience level of the IT infrastructures.
+            {_(
+              'GSA adds various smart features and forms a powerful tool ' +
+                'to manage and maintain a high resilience level of the IT ' +
+                'infrastructures.',
+            )}
+            '
           </DivP>
           <DivP>
-            Copyright (C) 2017-2019 by&nbsp;
+            Copyright (C) 2017-2020 by&nbsp;
             <a
               href="https://www.greenbone.net"
               target="_blank"
@@ -98,29 +95,32 @@ const About = ({gmp}) => (
             </a>
           </DivP>
           <DivP>
-            License: GNU General Public License version 2 or any later version
+            {_(
+              'License: GNU Affero General Public License version 2 or any later' +
+                ' version',
+            )}
             &nbsp;
             <ExternalLink to="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">
-              (full license text)
+              {_('(full license text)')}
             </ExternalLink>
           </DivP>
           <DivP>
-            Cookies: This web application uses cookies to store session
-            information. The cookie is not stored on the server-side hard disk
-            and not submitted anywhere. It is lost when the session is closed or
-            expired. The cookie is also temporarily stored in your browser where
-            you can examine the content.
+            {_(
+              'This web application uses cookies to store session information' +
+                '. The cookies are not stored on the server side hard disk ' +
+                'and not submitted anywhere. They are lost when the session ' +
+                'is closed or expired. The cookies are stored temporarily in ' +
+                'your browser as well where you can examine the content.',
+            )}
           </DivP>
           <DivP>
-            The GMP documentation is available <ProtocolDocLink title="here" />.
+            {_('The GMP documentation is available ')}
+            <ProtocolDocLink title={_('here')} />.
           </DivP>
-        </TextBlock>
-        <ImageBlock>
-          <Img src="gsa_splash.svg" alt="GSA" width="100%" />
-        </ImageBlock>
-      </StyledLayout>
-    </Section>
-  </Layout>
+        </StyledLayout>
+      </Section>
+    </Layout>
+  </React.Fragment>
 );
 
 About.propTypes = {

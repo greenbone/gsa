@@ -19,7 +19,7 @@ exports[`TimezoneSelect tests should render 1`] = `
   align-items: center;
 }
 
-.c5 {
+.c4 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -44,13 +44,13 @@ exports[`TimezoneSelect tests should render 1`] = `
   cursor: pointer;
 }
 
-.c4 {
+.c5 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c4 * {
+.c5 * {
   height: inherit;
   width: inherit;
 }
@@ -108,14 +108,18 @@ exports[`TimezoneSelect tests should render 1`] = `
   white-space: nowrap;
   overflow: hidden;
   cursor: pointer;
+  cursor: default;
 }
 
 <div
+  aria-expanded="false"
+  aria-haspopup="listbox"
+  aria-labelledby="downshift-0-label"
   class="c0"
+  role="combobox"
   width="230px"
 >
   <div
-    aria-expanded="false"
     aria-haspopup="true"
     aria-label="open menu"
     class="c1"

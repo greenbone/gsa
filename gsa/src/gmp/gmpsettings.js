@@ -1,31 +1,31 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import {isDefined} from './utils/identity';
 
 export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
 export const DEFAULT_RELOAD_INTERVAL_ACTIVE = 3 * 1000; // three seconds
 export const DEFAULT_RELOAD_INTERVAL_INACTIVE = 60 * 1000; // one minute
-export const DEFAULT_REPORT_RESULTS_THRESHOLD = 25000;
-export const DEFAULT_MANUAL_URL = 'http://docs.greenbone.net/GSM-Manual/gos-5/';
+export const DEFAULT_MANUAL_URL = 'http://docs.greenbone.net/GSM-Manual/gos-6/';
 export const DEFAULT_PROTOCOLDOC_URL =
-  'https://docs.greenbone.net/API/GMP/gmp-8.0.html';
+  'https://docs.greenbone.net/API/GMP/gmp-9.0.html';
+export const DEFAULT_REPORT_RESULTS_THRESHOLD = 25000;
 export const DEFAULT_LOG_LEVEL = 'warn';
+export const DEFAULT_TIMEOUT = 300000; // 5 minutes
 
 const set = (storage, name, value) => {
   if (isDefined(value)) {
@@ -56,6 +56,7 @@ const warnDeprecatedSetting = (oldName, newName) => {
 class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
+      enableGreenboneSensor = false,
       disableLoginForm = false,
       enableStoreDebugLog,
       guestUsername,
@@ -70,7 +71,7 @@ class GmpSettings {
       reloadIntervalInactive = DEFAULT_RELOAD_INTERVAL_INACTIVE,
       reportResultsThreshold = DEFAULT_REPORT_RESULTS_THRESHOLD,
       server,
-      timeout,
+      timeout = DEFAULT_TIMEOUT,
       vendorVersion,
       vendorLabel,
     } = options;
@@ -120,6 +121,7 @@ class GmpSettings {
     setAndFreeze(this, 'apiProtocol', apiProtocol);
     setAndFreeze(this, 'apiServer', apiServer);
     setAndFreeze(this, 'disableLoginForm', disableLoginForm);
+    setAndFreeze(this, 'enableGreenboneSensor', enableGreenboneSensor);
     setAndFreeze(this, 'guestUsername', guestUsername);
     setAndFreeze(this, 'guestPassword', guestPassword);
     setAndFreeze(this, 'manualUrl', manualUrl);

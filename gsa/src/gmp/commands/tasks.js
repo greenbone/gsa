@@ -1,28 +1,30 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import logger from '../log';
+import logger from 'gmp/log';
 
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 
 import {NO_VALUE} from '../parser';
 
-import Task, {HOSTS_ORDERING_SEQUENTIAL} from '../models/task';
+import Task, {
+  HOSTS_ORDERING_SEQUENTIAL,
+  AUTO_DELETE_KEEP_DEFAULT_VALUE,
+} from 'gmp/models/task';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
@@ -131,6 +133,7 @@ export class TaskCommand extends EntityCommand {
       source_iface,
       tag_id,
       target_id,
+      usage_type: 'scan',
     };
     log.debug('Creating task', args, data);
     return this.action(data);
@@ -141,8 +144,10 @@ export class TaskCommand extends EntityCommand {
     log.debug('Creating container task', args);
     return this.action({
       cmd: 'create_container_task',
+      auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
       name,
       comment,
+      usage_type: 'scan',
     });
   }
 
@@ -191,29 +196,24 @@ export class TaskCommand extends EntityCommand {
       source_iface,
       target_id,
       task_id: id,
+      usage_type: 'scan',
     };
     log.debug('Saving task', args, data);
     return this.action(data);
   }
 
   saveContainer(args) {
-    const {
-      name,
-      comment = '',
-      in_assets = '1',
-      auto_delete = 'no',
-      auto_delete_data,
-      id,
-    } = args;
+    const {name, comment = '', in_assets = '1', id} = args;
     log.debug('Saving container task', args);
     return this.action({
       cmd: 'save_container_task',
       name,
       comment,
       in_assets,
-      auto_delete,
-      auto_delete_data,
+      auto_delete: 'no',
+      auto_delete_data: AUTO_DELETE_KEEP_DEFAULT_VALUE,
       task_id: id,
+      usage_type: 'scan',
     });
   }
 
@@ -231,10 +231,21 @@ class TasksCommand extends EntitiesCommand {
     return root.get_tasks.get_tasks_response;
   }
 
+  get(params, options) {
+    params = {...params, usage_type: 'scan'};
+    return this.httpGet(params, options).then(response => {
+      const {entities, filter, counts} = this.getCollectionListFromRoot(
+        response.data,
+      );
+      return response.set(entities, {filter, counts});
+    });
+  }
+
   getSeverityAggregates({filter} = {}) {
     return this.getAggregates({
       aggregate_type: 'task',
       group_column: 'severity',
+      usage_type: 'scan',
       filter,
     });
   }
@@ -243,6 +254,7 @@ class TasksCommand extends EntitiesCommand {
     return this.getAggregates({
       aggregate_type: 'task',
       group_column: 'status',
+      usage_type: 'scan',
       filter,
     });
   }
@@ -252,6 +264,7 @@ class TasksCommand extends EntitiesCommand {
       filter,
       aggregate_type: 'task',
       group_column: 'uuid',
+      usage_type: 'scan',
       textColumns: ['name', 'high_per_host', 'severity', 'modified'],
       sort: [
         {

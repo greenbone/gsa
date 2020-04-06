@@ -2,7 +2,7 @@ INSTALLATION INSTRUCTIONS FOR GREENBONE SECURITY ASSISTANT
 ==========================================================
 
 Please note: The reference system used by most of the developers is Debian
-GNU/Linux 'Stretch' 9. The build might fail on any other system. Also, it is
+GNU/Linux 'Buster' 10. The build might fail on any other system. Also, it is
 necessary to install dependent development packages.
 
 
@@ -92,31 +92,6 @@ Compiling Greenbone Security Assistant GUI
 Prerequisites for using the GUI:
 * node.js >= 8.0
 * Either yarn >= 1.0 or npm. yarn is faster and more reliable, but younger.
-
-The `nodejs` on Debian Stretch is too old to build GSA. Follow the steps below
-to install a sufficiently new version. Be aware that this will remove your
-current installation of `node.js`, `npm` and related packages.
-
-```sh
-sudo apt-get install apt-transport-https
-```
-
-```sh
-curl --silent --show-error https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-```
-```sh
-curl --silent --show-error https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
-echo "deb https://deb.nodesource.com/node_8.x stretch main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-```
-
-```sh
-sudo apt-get update
-```
-
-```sh
-sudo apt-get install nodejs yarn
-```
 
 
 Developing Greenbone Security Assistant GUI
@@ -213,7 +188,7 @@ To build the translation `.mo` files, you need to have the `gettext` tools like
 `msgfmt` installed. Once the `.mo` files are built, the tools are no longer
 needed.
 (For more information on the creation of translation files, see the
-[i18n-howto.txt](gsad/doc/i18n-howto.txt) file in the GSA source documentation.)
+[i18n-howto.md](gsa/po/i18n-howto.md) file in the GSA source documentation.)
 
 To use the translations, you need to have an English locale with UTF-8 encoding
 installed, for example `en_US.UTF8` or `en_GB.UTF8`.  The name of this locale

@@ -1,29 +1,26 @@
-/* Copyright (C) 2018-2019 Greenbone Networks GmbH
+/* Copyright (C) 2018-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'core-js/library/fn/array/find';
+import 'core-js/features/array/find';
 
 import memoize from 'memoize-one';
 
 import React from 'react';
-
-import {css} from 'glamor';
 
 import styled from 'styled-components';
 
@@ -64,9 +61,9 @@ const MIN_TICK_WIDTH = 75;
 const findX = (timeline, value) => d =>
   timeline ? d.x.isSame(value) : d.x === value;
 
-const lineCss = css({
-  shapeRendering: 'crispEdges',
-});
+const CrispEdgesLine = styled(Line)`
+  shape-rendering: crisp-edges;
+`;
 
 const LINE_HEIGHT = 15;
 
@@ -385,11 +382,7 @@ class LineChart extends React.Component {
     const infoMargin = 20;
     return (
       <Group>
-        <Line
-          from={{x, y: 0}}
-          to={{x, y: maxHeight(height)}}
-          className={`${lineCss}`}
-        />
+        <CrispEdgesLine from={{x, y: 0}} to={{x, y: maxHeight(height)}} />
         <Group left={x + infoMargin} top={mouseY}>
           <rect
             x={0}
@@ -456,11 +449,10 @@ class LineChart extends React.Component {
     const rangeWidth = rightDirection ? endX - startX : startX - endX;
     return (
       <Group>
-        <Line
+        <CrispEdgesLine
           from={{x: startX, y: 0}}
           to={{x: startX, y: maxHeight(height)}}
           stroke={Theme.green}
-          className={`${lineCss}`}
         />
         <rect
           x={rightDirection ? startX : endX}
@@ -503,7 +495,7 @@ class LineChart extends React.Component {
         <Svg
           width={width}
           height={height}
-          innerRef={setRef(svgRef, ref => (this.svg = ref))}
+          ref={setRef(svgRef, ref => (this.svg = ref))}
           onMouseLeave={hasValue ? this.hideInfo : undefined}
           onMouseEnter={hasValue ? this.showInfo : undefined}
           onMouseMove={hasValue ? this.handleMouseMove : undefined}
@@ -591,7 +583,7 @@ class LineChart extends React.Component {
           </Group>
         </Svg>
         {hasLines && showLegend && (
-          <Legend innerRef={this.legendRef} data={[yLine, y2Line]}>
+          <Legend ref={this.legendRef} data={[yLine, y2Line]}>
             {({d, toolTipProps}) => (
               <Item {...toolTipProps}>
                 <LegendLine

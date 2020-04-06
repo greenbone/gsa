@@ -1,22 +1,21 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import 'core-js/fn/array/includes';
+import 'core-js/features/array/includes';
 
 import React from 'react';
 
@@ -86,13 +85,13 @@ class OverrideComponent extends React.Component {
 
       let custom_severity = NO_VALUE;
       let new_severity_from_list;
-      let new_severity;
+      let newSeverity;
 
-      if (SEVERITIES_LIST.includes(override.new_severity)) {
-        new_severity_from_list = override.new_severity;
+      if (SEVERITIES_LIST.includes(override.newSeverity)) {
+        new_severity_from_list = override.newSeverity;
       } else {
         custom_severity = YES_VALUE;
-        new_severity = override.new_severity;
+        newSeverity = override.newSeverity;
       }
 
       const {result, task, nvt, hosts} = override;
@@ -104,7 +103,7 @@ class OverrideComponent extends React.Component {
         custom_severity,
         hosts: hosts.length > 0 ? MANUAL : ANY,
         hosts_manual: hosts.join(' '),
-        new_severity,
+        newSeverity,
         new_severity_from_list,
         nvt_name: isDefined(nvt) ? nvt.name : undefined,
         oid: isDefined(nvt) ? nvt.oid : undefined,
@@ -130,7 +129,7 @@ class OverrideComponent extends React.Component {
         hosts: undefined,
         hosts_manual: undefined,
         id: undefined,
-        new_severity: undefined,
+        newSeverity: undefined,
         nvt_name: undefined,
         oid: undefined,
         override: undefined,
@@ -201,7 +200,7 @@ class OverrideComponent extends React.Component {
       hosts,
       hosts_manual,
       id,
-      new_severity,
+      newSeverity,
       new_severity_from_list,
       nvt_name,
       oid,
@@ -249,7 +248,7 @@ class OverrideComponent extends React.Component {
                 hosts={hosts}
                 hosts_manual={hosts_manual}
                 id={id}
-                new_severity={new_severity}
+                newSeverity={newSeverity}
                 new_severity_from_list={new_severity_from_list}
                 nvt_name={nvt_name}
                 oid={oid}

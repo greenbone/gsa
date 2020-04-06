@@ -1,55 +1,56 @@
-/* Copyright (C) 2016-2019 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import logger from '../log';
+import logger from 'gmp/log';
 
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 
-import {forEach, map} from '../utils/array';
-import {isDefined} from '../utils/identity';
-import {severityValue} from '../utils/number';
+import {forEach, map} from 'gmp/utils/array';
+import {isArray, isDefined} from 'gmp/utils/identity';
+import {severityValue} from 'gmp/utils/number';
 
-import Capabilities from '../capabilities/capabilities';
+import Capabilities from 'gmp/capabilities/capabilities';
 
-import moment from '../models/date';
+import moment from 'gmp/models/date';
 
 import User, {
   AUTH_METHOD_LDAP,
   AUTH_METHOD_NEW_PASSWORD,
   AUTH_METHOD_RADIUS,
-} from '../models/user';
-import Setting from '../models/setting';
-import Settings from '../models/settings';
+} from 'gmp/models/user';
+import Setting from 'gmp/models/setting';
+import Settings from 'gmp/models/settings';
 
-import {parseInt} from '../parser';
+import {parseInt} from 'gmp/parser';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.users');
 
+const BUSINESS_PROCESS_MAPS_SETTING_ID = '3ce2d136-bb52-448a-93f0-20069566f877';
+
 const REPORT_COMPOSER_DEFAULTS_SETTING_ID =
   'b6b449ee-5d90-4ff0-af20-7e838c389d39';
 
+export const ROWS_PER_PAGE_SETTING_ID = '5f5a8712-8017-11e1-8556-406186ea4fc5';
+
 export const DEFAULT_FILTER_SETTINGS = {
-  agent: '4a1334c1-cb93-4a79-8634-103b0a50bdcd',
   alert: 'b833a6f2-dcdc-4535-bfb0-a5154b5b5092',
-  allinfo: 'feefe56b-e2da-4913-81cc-1a6ae3b36e64',
   asset: '0f040d06-abf9-43a2-8f94-9de178b0e978',
   certbund: 'e4cf514a-17e2-4ab9-9c90-336f15e24750',
   cpe: '3414a107-ae46-4dea-872d-5c4479a48e8f',
@@ -77,12 +78,16 @@ export const DEFAULT_FILTER_SETTINGS = {
   target: '236e2e41-9771-4e7a-8124-c432045985e0',
   task: '1c981851-8244-466c-92c4-865ffe05e721',
   ticket: '801544de-f06d-4377-bb77-bbb23369bad4',
+  tlscertificate: '34a176c1-0278-4c29-b84d-3d72117b2169',
   user: 'a33635be-7263-4549-bd80-c04d2dba89b4',
   vulnerability: '17c9d269-95e7-4bfa-b1b2-bc106a2175c7',
 };
 
 const saveDefaultFilterSettingId = entityType =>
   `settings_filter:${DEFAULT_FILTER_SETTINGS[entityType]}`;
+
+export const transformSettingName = name =>
+  name.toLowerCase().replace(/ |-/g, '');
 
 export class UserCommand extends EntityCommand {
   constructor(http) {
@@ -111,7 +116,7 @@ export class UserCommand extends EntityCommand {
 
           forEach(group.auth_conf_setting, setting => {
             if (setting.key === 'enable') {
-              values.enabled = setting.value === 'true';
+              values.enabled = setting.value === true;
             } else {
               values[setting.key] = setting.value;
             }
@@ -134,9 +139,11 @@ export class UserCommand extends EntityCommand {
     }).then(response => {
       const {data} = response;
       const {setting} = data.get_settings.get_settings_response;
-      return response.setData(
-        isDefined(setting) ? new Setting(setting) : undefined,
-      );
+      if (!isDefined(setting)) {
+        return response.setData(undefined);
+      }
+      // used for the rowsPerPage setting which returns two settings with the same id
+      return response.setData(isArray(setting) ? setting[0] : setting);
     });
   }
 
@@ -151,7 +158,7 @@ export class UserCommand extends EntityCommand {
       const {data} = response;
       forEach(data.get_settings.get_settings_response.setting, setting => {
         // set setting keys to lowercase and remove '-'
-        const keyName = setting.name.toLowerCase().replace(/ |-/g, '');
+        const keyName = transformSettingName(setting.name);
         settings[keyName] = new Setting(setting);
       });
       return response.setData(settings);
@@ -299,7 +306,6 @@ export class UserCommand extends EntityCommand {
         data.defaultSchedule,
       'settings_default:23409203-940a-4b4a-b70c-447475f18323':
         data.defaultTarget,
-      [saveDefaultFilterSettingId('agent')]: data.agentsFilter,
       [saveDefaultFilterSettingId('alert')]: data.alertsFilter,
       [saveDefaultFilterSettingId('asset')]: data.assetsFilter,
       [saveDefaultFilterSettingId('scanconfig')]: data.configsFilter,
@@ -324,6 +330,9 @@ export class UserCommand extends EntityCommand {
       [saveDefaultFilterSettingId('target')]: data.targetsFilter,
       [saveDefaultFilterSettingId('task')]: data.tasksFilter,
       [saveDefaultFilterSettingId('ticket')]: data.ticketsFilter,
+      [saveDefaultFilterSettingId(
+        'tlscertificate',
+      )]: data.tlsCertificatesFilter,
       [saveDefaultFilterSettingId('user')]: data.usersFilter,
       [saveDefaultFilterSettingId('vulnerability')]: data.vulnerabilitiesFilter,
       [saveDefaultFilterSettingId('cpe')]: data.cpeFilter,
@@ -332,7 +341,6 @@ export class UserCommand extends EntityCommand {
       [saveDefaultFilterSettingId('ovaldef')]: data.ovalFilter,
       [saveDefaultFilterSettingId('certbund')]: data.certBundFilter,
       [saveDefaultFilterSettingId('dfncert')]: data.dfnCertFilter,
-      [saveDefaultFilterSettingId('allinfo')]: data.secInfoFilter,
       auto_cache_rebuild: data.autoCacheRebuild,
     });
   }
@@ -368,6 +376,39 @@ export class UserCommand extends EntityCommand {
       cmd: 'save_setting',
       setting_id: REPORT_COMPOSER_DEFAULTS_SETTING_ID,
       setting_value: JSON.stringify(defaults),
+    });
+  }
+
+  getBusinessProcessMaps() {
+    return this.httpGet({
+      cmd: 'get_setting',
+      setting_id: BUSINESS_PROCESS_MAPS_SETTING_ID,
+    }).then(response => {
+      const {data} = response;
+      const {setting = {}} = data.get_settings.get_settings_response;
+      const {value} = setting;
+      let processMaps;
+
+      try {
+        processMaps = JSON.parse(value);
+      } catch (e) {
+        log.warn(
+          'Could not parse saved business process map. Returning empty object.',
+        );
+        processMaps = {};
+      }
+
+      return response.setData(processMaps);
+    });
+  }
+
+  saveBusinessProcessMaps(processMaps = {}) {
+    log.debug('Saving business process maps', processMaps);
+
+    return this.action({
+      cmd: 'save_setting',
+      setting_id: BUSINESS_PROCESS_MAPS_SETTING_ID,
+      setting_value: JSON.stringify(processMaps),
     });
   }
 

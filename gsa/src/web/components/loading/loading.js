@@ -1,20 +1,19 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 
@@ -22,19 +21,27 @@ import styled, {keyframes} from 'styled-components';
 
 import Layout from 'web/components/layout/layout';
 
-import Theme from 'web/utils/theme';
+import GbLogo from 'web/components/icon/svg/greenbone.svg';
 
 const Loader = styled.div`
-  border: 12px solid ${Theme.lightGray};
-  border-top: 12px solid ${Theme.green};
-  border-radius: 50%;
   width: 80px;
   height: 80px;
+  margin: 40px auto;
+  background-image: url(${GbLogo});
+  background-size: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
   animation: ${keyframes({
-      '0%': {transform: 'rotate(0deg)'},
-      '100%': {transform: 'rotate(360deg)'},
+      '0%, 100%': {
+        transform: 'scale(0.9)',
+        opacity: 0.2,
+      },
+      '50%': {
+        transform: 'scale(1.0)',
+        opacity: 1,
+      },
     })}
-    2s linear infinite;
+    2s infinite ease-in-out;
 `;
 
 const StyledLayout = styled(Layout)`
@@ -42,7 +49,7 @@ const StyledLayout = styled(Layout)`
 `;
 
 const Loading = () => (
-  <StyledLayout align={['center', 'center']}>
+  <StyledLayout data-testid="loading" align={['center', 'center']}>
     <Loader />
   </StyledLayout>
 );
