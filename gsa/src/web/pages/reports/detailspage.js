@@ -201,7 +201,7 @@ class ReportDetails extends React.Component {
         hosts = {},
         ports = {},
         applications = {},
-        operatingSystems = {},
+        operatingsystems = {},
         cves = {},
         closedCves = {},
         tlsCertificates = {},
@@ -219,8 +219,8 @@ class ReportDetails extends React.Component {
         applicationsCounts: isDefined(applications.counts)
           ? applications.counts
           : state.applicationsCounts,
-        operatingSystemsCounts: isDefined(operatingSystems.counts)
-          ? operatingSystems.counts
+        operatingSystemsCounts: isDefined(operatingsystems.counts)
+          ? operatingsystems.counts
           : state.operatingSystemsCounts,
         cvesCounts: isDefined(cves.counts) ? cves.counts : state.cvesCounts,
         closedCvesCounts: isDefined(closedCves.counts)
