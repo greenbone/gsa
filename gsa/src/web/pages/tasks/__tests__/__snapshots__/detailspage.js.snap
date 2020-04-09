@@ -282,6 +282,15 @@ exports[`Task ToolBarIcons tests should render 1`] = `
   cursor: pointer;
 }
 
+.c16 {
+  position: relative;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  margin-right: px;
+}
+
 .c14 {
   position: relative;
   display: -webkit-inline-box;
@@ -380,17 +389,6 @@ exports[`Task ToolBarIcons tests should render 1`] = `
             </svg>
           </span>
         </a>
-        <span
-          class="c3"
-          data-testid="svg-icon"
-          title="This is an Alterable Task. Reports may not relate to current Scan Config or Target!"
-        >
-          <svg
-            title="This is an Alterable Task. Reports may not relate to current Scan Config or Target!"
-          >
-            alterable.svg
-          </svg>
-        </span>
       </div>
     </div>
     <div
@@ -577,7 +575,7 @@ exports[`Task ToolBarIcons tests should render 1`] = `
           title="Results for Task foo"
         >
           <div
-            class="c14"
+            class="c16"
           >
             <span
               class="c3"
@@ -586,12 +584,6 @@ exports[`Task ToolBarIcons tests should render 1`] = `
               <svg>
                 result.svg
               </svg>
-            </span>
-            <span
-              class="c15"
-              data-testid="badge-icon"
-            >
-              1
             </span>
           </div>
         </a>
