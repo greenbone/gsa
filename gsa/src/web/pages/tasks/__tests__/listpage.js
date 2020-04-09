@@ -18,8 +18,6 @@
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 
-import Task, {TASK_STATUS} from 'gmp/models/task';
-
 import {setLocale} from 'gmp/locale/lang';
 
 import Capabilities from 'gmp/capabilities/capabilities';
@@ -35,84 +33,35 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
 import {MockedProvider} from '@apollo/react-testing';
 
-import TaskPage, {ToolBarIcons} from '../listpage';
+import {
+  getMockTasks,
+  getMockTaskData,
+} from 'web/pages/tasks/__mocks__/mocktasks';
 import {GET_TASKS} from 'web/pages/tasks/graphql';
+
+import TaskPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
 window.URL.createObjectURL = jest.fn();
 
-const lastReport = {
-  uuid: '1234',
-  severity: '5.0',
-  timestamp: '2020-02-27T13:20:45Z',
-};
+const caps = new Capabilities(['everything']);
+const wrongCaps = new Capabilities(['get_config']);
+
+const reloadInterval = 1;
+const manualUrl = 'test/';
+
+// create mock tasks
+const {listMockTask} = getMockTaskData(); // data needed to create the mock requests
+const {listMockTask: task} = getMockTasks(); // mock task
 
 const mockTask = {
   data: {
     tasks: {
-      nodes: [
-        {
-          name: 'foo',
-          uuid: '1234',
-          permissions: [
-            {
-              name: 'Everything',
-            },
-          ],
-          lastReport,
-          reportCount: {
-            total: 1,
-            finished: 1,
-          },
-          status: TASK_STATUS.done,
-          target: {
-            name: 'Target',
-            uuid: 'id1',
-          },
-          trend: null,
-          comment: 'bar',
-          owner: 'admin',
-          preferences: null,
-          schedule: null,
-          alerts: [],
-          scanConfig: {
-            uuid: 'id2',
-            name: 'lorem',
-            trash: false,
-          },
-          scanner: {
-            uuid: 'id3',
-            name: 'ipsum',
-            scannerType: 'dolor',
-          },
-          hostsOrdering: null,
-          observers: {
-            users: ['john', 'jane'],
-            roles: [
-              {
-                name: 'r1',
-              },
-              {
-                name: 'r2',
-              },
-            ],
-            groups: [
-              {
-                name: 'g1',
-              },
-              {
-                name: 'g2',
-              },
-            ],
-          },
-        },
-      ],
+      nodes: [listMockTask],
     },
   },
 };
-
-const task = Task.fromObject(mockTask.data.tasks.nodes[0]);
 
 const mocks = [
   {
@@ -138,14 +87,21 @@ const mocks = [
   },
 ];
 
-const caps = new Capabilities(['everything']);
-const wrongCaps = new Capabilities(['get_config']);
+// mock gmp commands
+const getTasks = jest.fn().mockResolvedValue({
+  data: [task],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
 
-const reloadInterval = 1;
-const manualUrl = 'test/';
-
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
+const getAggregates = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
 });
 
 const getFilters = jest.fn().mockReturnValue(
@@ -158,6 +114,14 @@ const getFilters = jest.fn().mockReturnValue(
   }),
 );
 
+const getReportFormats = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
 const getDashboardSetting = jest.fn().mockResolvedValue({
   data: [],
   meta: {
@@ -166,32 +130,12 @@ const getDashboardSetting = jest.fn().mockResolvedValue({
   },
 });
 
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
+
 const getUserSetting = jest.fn().mockResolvedValue({
   filter: null,
-});
-
-const getAggregates = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getTasks = jest.fn().mockResolvedValue({
-  data: [task],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getReportFormats = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
 });
 
 const renewSession = jest.fn().mockResolvedValue({
@@ -305,21 +249,24 @@ describe('TaskPage tests', () => {
     expect(row[1]).toHaveTextContent('foo');
     expect(row[1]).toHaveTextContent('(bar)');
     expect(row[1]).toHaveTextContent('Done');
-    expect(row[1]).toHaveTextContent('Thu, Feb 27, 2020 2:20 PM CET');
+    expect(row[1]).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
     expect(row[1]).toHaveTextContent('5.0 (Medium)');
 
     icons = getAllByTestId('svg-icon');
 
     expect(icons[24]).toHaveAttribute(
       'title',
-      'Task made visible for:\nUsers john, jane\nRoles r1, r2\nGroups g1, g2',
+      'Task made visible for:\nUsers john, jane\nRoles admin role, user role\nGroups group 1, group 2',
     );
-    expect(icons[25]).toHaveAttribute('title', 'Start');
-    expect(icons[26]).toHaveAttribute('title', 'Task is not stopped');
-    expect(icons[27]).toHaveAttribute('title', 'Move Task to trashcan');
-    expect(icons[28]).toHaveAttribute('title', 'Edit Task');
-    expect(icons[29]).toHaveAttribute('title', 'Clone Task');
-    expect(icons[30]).toHaveAttribute('title', 'Export Task');
+
+    expect(icons[25]).toHaveAttribute('title', 'Severity increased');
+
+    expect(icons[26]).toHaveAttribute('title', 'Start');
+    expect(icons[27]).toHaveAttribute('title', 'Task is not stopped');
+    expect(icons[28]).toHaveAttribute('title', 'Move Task to trashcan');
+    expect(icons[29]).toHaveAttribute('title', 'Edit Task');
+    expect(icons[30]).toHaveAttribute('title', 'Clone Task');
+    expect(icons[31]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should call commands for bulk actions', async () => {
@@ -394,15 +341,15 @@ describe('TaskPage tests', () => {
     const icons = getAllByTestId('svg-icon');
 
     await act(async () => {
-      expect(icons[32]).toHaveAttribute(
+      expect(icons[33]).toHaveAttribute(
         'title',
         'Move page contents to trashcan',
       );
-      fireEvent.click(icons[32]);
+      fireEvent.click(icons[33]);
       expect(deleteByFilter).toHaveBeenCalled();
 
-      expect(icons[33]).toHaveAttribute('title', 'Export page contents');
-      fireEvent.click(icons[33]);
+      expect(icons[34]).toHaveAttribute('title', 'Export page contents');
+      fireEvent.click(icons[34]);
       expect(exportByFilter).toHaveBeenCalled();
     });
   });
