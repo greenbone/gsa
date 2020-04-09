@@ -21,7 +21,6 @@ import {setLocale} from 'gmp/locale/lang';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import Task, {TASK_STATUS} from 'gmp/models/task';
 import Schedule from 'gmp/models/schedule';
 import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
@@ -29,6 +28,8 @@ import {entityLoadingActions as scanconfigActions} from 'web/store/entities/scan
 import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
 
 import {rendererWith} from 'web/utils/testing';
+
+import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 
 import Details from '../details';
 
@@ -41,49 +42,10 @@ const scanConfig = {
   scanner: {name: 'scanner1', scannerType: 0},
   type: OPENVAS_SCAN_CONFIG_TYPE,
 };
-
 const parsedConfig = ScanConfig.fromObject(scanConfig);
 
-const lastReport = {
-  uuid: '1234',
-  timestamp: '2019-07-30T13:23:30Z',
-  scanStart: '2019-07-30T13:23:34Z',
-  scanEnd: '2019-07-30T13:25:43Z',
-};
-
 const schedule = {uuid: '121314', name: 'schedule1'};
-
 const parsedSchedule = Schedule.fromObject(schedule);
-
-const preferences = {
-  preference: [
-    {
-      name: 'Add results to Asset Management',
-      scanner_name: 'in_assets',
-      value: 'yes',
-    },
-    {
-      name: 'Apply Overrides when adding Assets',
-      scanner_name: 'assets_apply_overrides',
-      value: 'yes',
-    },
-    {
-      name: 'Min QOD when adding Assets',
-      scanner_name: 'assets_min_qod',
-      value: '70',
-    },
-    {
-      name: 'Auto Delete Reports',
-      scanner_name: 'auto_delete',
-      value: 'no',
-    },
-    {
-      name: 'Auto Delete Reports Data',
-      scanner_name: 'auto_delete_data',
-      value: '5',
-    },
-  ],
-};
 
 const getConfig = jest.fn().mockReturnValue(
   Promise.resolve({
@@ -108,22 +70,7 @@ const gmp = {
 
 describe('Task Details tests', () => {
   test('should render full task details', () => {
-    const task = Task.fromObject({
-      uuid: '12345',
-      owner: 'username',
-      name: 'foo',
-      comment: 'bar',
-      status: TASK_STATUS.done,
-      alterable: 0,
-      lastReport,
-      permissions: [{name: 'everything'}],
-      target: {uuid: '5678', name: 'target1'},
-      alerts: [{uuid: '91011', name: 'alert1'}],
-      scanner: {uuid: '1516', name: 'scanner1', type: 2},
-      preferences: preferences,
-      schedule: {uuid: '121314', name: 'schedule1'},
-      scanConfig,
-    });
+    const {detailsMockTask: task} = getMockTasks();
 
     const caps = new Capabilities(['everything']);
 
@@ -145,25 +92,28 @@ describe('Task Details tests', () => {
     const detailslinks = getAllByTestId('details-link');
 
     expect(headings[0]).toHaveTextContent('Target');
-    expect(detailslinks[0]).toHaveAttribute('href', '/target/5678');
-    expect(element).toHaveTextContent('target1');
+    expect(detailslinks[0]).toHaveAttribute('href', '/target/159');
+    expect(element).toHaveTextContent('target 1');
 
     expect(headings[1]).toHaveTextContent('Alerts');
-    expect(detailslinks[1]).toHaveAttribute('href', '/alert/91011');
-    expect(element).toHaveTextContent('alert1');
+    expect(detailslinks[1]).toHaveAttribute('href', '/alert/151617');
+    expect(element).toHaveTextContent('alert 1');
 
     expect(headings[2]).toHaveTextContent('Scanner');
-    expect(detailslinks[2]).toHaveAttribute('href', '/scanner/1516');
-    expect(element).toHaveTextContent('scanner1');
+    expect(detailslinks[2]).toHaveAttribute('href', '/scanner/212223');
+    expect(element).toHaveTextContent('scanner 1');
     expect(element).toHaveTextContent('OpenVAS Scanner');
+    expect(element).toHaveTextContent('Scan Configfoo');
+    expect(detailslinks[3]).toHaveAttribute('href', '/scanconfig/314');
 
     expect(headings[3]).toHaveTextContent('Assets');
-    expect(element).toMatchSnapshot();
-
-    expect(detailslinks[3]).toHaveAttribute('href', '/scanconfig/314');
+    expect(element).toHaveTextContent('Add to AssetsYes');
+    expect(element).toHaveTextContent('Apply OverridesYes');
+    expect(element).toHaveTextContent('Min QoD70 %');
 
     expect(headings[4]).toHaveTextContent('Schedule');
     expect(detailslinks[4]).toHaveAttribute('href', '/schedule/121314');
+    expect(element).toHaveTextContent('schedule 1');
 
     expect(headings[5]).toHaveTextContent('Scan');
     expect(element).toHaveTextContent('2 minutes');

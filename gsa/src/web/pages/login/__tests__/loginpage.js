@@ -26,25 +26,6 @@ import LoginPage, {LOGIN} from '../loginpage';
 
 Logger.setDefaultLevel('silent');
 
-const mocks = [
-  {
-    request: {
-      query: LOGIN,
-      variables: {
-        username: 'foo',
-        password: 'bar',
-      },
-    },
-    result: {
-      data: {
-        login: {
-          ok: true,
-        },
-      },
-    },
-  },
-];
-
 describe('LoginPagetests', () => {
   test('should render Loginpage', () => {
     const isLoggedIn = jest.fn().mockReturnValue(false);
@@ -53,16 +34,33 @@ describe('LoginPagetests', () => {
 
     const {render} = rendererWith({gmp, router: true, store: true});
 
-    const {baseElement} = render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <LoginPage />
-      </MockedProvider>,
-    );
+    const {baseElement} = render(<LoginPage />);
 
     expect(baseElement).toMatchSnapshot();
   });
 
   test('should allow to login with username and password', () => {
+    const mocks = [
+      {
+        request: {
+          query: LOGIN,
+          variables: {
+            username: 'foo',
+            password: 'bar',
+          },
+        },
+        newData: jest.fn(() => ({
+          data: {
+            login: {
+              ok: true,
+              timezone: '',
+              sessionTimeout: '',
+            },
+          },
+        })),
+      },
+    ];
+
     const login = jest.fn().mockResolvedValue({
       locale: 'locale',
       username: 'username',
@@ -73,6 +71,7 @@ describe('LoginPagetests', () => {
     const clearToken = jest.fn();
     const setLocale = jest.fn();
     const setTimezone = jest.fn();
+
     const gmp = {
       setTimezone,
       setLocale,
@@ -81,6 +80,7 @@ describe('LoginPagetests', () => {
       clearToken,
       settings: {},
     };
+
     const {render} = rendererWith({gmp, router: true, store: true});
 
     const {getByName, getByTestId} = render(
@@ -98,7 +98,7 @@ describe('LoginPagetests', () => {
     const button = getByTestId('login-button');
     fireEvent.click(button);
 
-    expect(login).toBeCalledWith('foo', 'bar');
+    expect(mocks[0].newData).toHaveBeenCalled();
   });
 
   test('should not display guest login by default', () => {
@@ -111,17 +111,34 @@ describe('LoginPagetests', () => {
     };
     const {render} = rendererWith({gmp, router: true, store: true});
 
-    const {queryByTestId} = render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <LoginPage />
-      </MockedProvider>,
-    );
+    const {queryByTestId} = render(<LoginPage />);
 
     expect(queryByTestId('guest-login')).not.toBeInTheDocument();
     expect(queryByTestId('guest-login-button')).not.toBeInTheDocument();
   });
 
   test('should allow to login as guest', () => {
+    const mocks = [
+      {
+        request: {
+          query: LOGIN,
+          variables: {
+            username: 'foo',
+            password: 'bar',
+          },
+        },
+        newData: jest.fn(() => ({
+          data: {
+            login: {
+              ok: true,
+              timezone: '',
+              sessionTimeout: '',
+            },
+          },
+        })),
+      },
+    ];
+
     const login = jest.fn().mockResolvedValue({
       locale: 'locale',
       username: 'username',
@@ -151,10 +168,25 @@ describe('LoginPagetests', () => {
     const button = getByTestId('guest-login-button');
     fireEvent.click(button);
 
-    expect(login).toBeCalledWith('foo', 'bar');
+    expect(mocks[0].newData).toHaveBeenCalled();
   });
 
   test('should display error message', async () => {
+    const mocks = [
+      {
+        request: {
+          query: LOGIN,
+          variables: {
+            username: 'foo',
+            password: 'bar',
+          },
+        },
+        newData: jest.fn(() => ({
+          errors: [{message: 'Just a test'}],
+        })),
+      },
+    ];
+
     const login = jest.fn().mockRejectedValue({message: 'Just a test'});
     const isLoggedIn = jest.fn().mockReturnValue(false);
     const clearToken = jest.fn();
@@ -184,7 +216,7 @@ describe('LoginPagetests', () => {
 
     const button = getByTestId('login-button');
     fireEvent.click(button);
-    expect(login).toBeCalledWith('foo', 'bar');
+    expect(mocks[0].newData).toHaveBeenCalled();
 
     const error = await waitForElement(() => getByTestId('error'));
     expect(error).toHaveTextContent('Just a test');
@@ -211,11 +243,7 @@ describe('LoginPagetests', () => {
     };
     const {render, history} = rendererWith({gmp, router: true, store: true});
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <LoginPage />
-      </MockedProvider>,
-    );
+    render(<LoginPage />);
 
     expect(history.location.pathname).toMatch(/^\/$/);
   });
