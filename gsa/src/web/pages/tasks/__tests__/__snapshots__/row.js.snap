@@ -332,7 +332,7 @@ exports[`Task Row tests should render 1`] = `
           >
             <span
               class="c2"
-              name="314"
+              name="12345"
             >
               foo
             </span>
@@ -347,15 +347,15 @@ exports[`Task Row tests should render 1`] = `
                   class="c5"
                   data-testid="svg-icon"
                   title="Task made visible for:
-Users john, doe
-Roles r1, r2
-Groups g1, g2"
+Users john, jane
+Roles admin role, user role
+Groups group 1, group 2"
                 >
                   <svg
                     title="Task made visible for:
-Users john, doe
-Roles r1, r2
-Groups g1, g2"
+Users john, jane
+Roles admin role, user role
+Groups group 1, group 2"
                   >
                     provide_view.svg
                   </svg>
@@ -412,10 +412,10 @@ Groups g1, g2"
           >
             <a
               class="c6"
-              href="/reports?filter=task_id%3D314%20sort-reverse%3Ddate"
+              href="/reports?filter=task_id%3D12345%20sort-reverse%3Ddate"
               title="View list of all reports for Task foo, including unfinished ones"
             >
-              3
+              1
             </a>
           </div>
         </div>
