@@ -198,7 +198,9 @@ describe('LoginPagetests', () => {
       login,
       isLoggedIn,
       clearToken,
-      settings: {},
+      settings: {
+        enableHyperionOnly: true,
+      },
     };
     const {render} = rendererWith({gmp, router: true, store: true});
 
