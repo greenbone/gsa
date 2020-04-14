@@ -684,6 +684,8 @@ class ProcessMap extends React.Component {
               Object.entries(processes).length > 1
             }
             showNoProcessHelper={Object.entries(processes).length < 1}
+            maxZoomReached={scale >= MAX_SCALE - SCROLL_STEP}
+            minZoomReached={scale <= MIN_SCALE + SCROLL_STEP}
             onCreateProcessClick={this.handleOpenCreateProcessDialog}
             onDrawEdgeClick={this.handleDrawEdge}
             onDeleteClick={deleteHandler}

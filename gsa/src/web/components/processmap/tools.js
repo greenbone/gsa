@@ -54,11 +54,12 @@ const IconWrapper = styled.div`
   justify-content: space-around;
   padding: 10px 0 10px 0;
   & svg path {
-    fill: ${Theme.black};
+    fill: ${props => (props.inactive ? Theme.inputBorderGray : Theme.black)};
   }
   &:hover {
-    cursor: pointer;
-    background-color: ${Theme.dialogGray};
+    cursor: ${props => (props.inactive ? 'default' : 'pointer')};
+    background-color: ${props =>
+      props.inactive ? undefined : Theme.dialogGray};
   }
   ${props =>
     props.isActive
@@ -127,6 +128,8 @@ const Helper = styled.div`
 const Tools = ({
   applyConditionalColorization,
   drawIsActive,
+  maxZoomReached,
+  minZoomReached,
   showNoEdgeHelper = false,
   showNoProcessHelper = false,
   onCreateProcessClick,
@@ -193,9 +196,10 @@ const Tools = ({
         <hr />
         <Layout flex="column">
           <IconWrapper
+            inactive={maxZoomReached}
             data-testid="bpm-tool-icon-zoomin"
             title={_('Zoom in')}
-            onClick={() => onZoomChangeClick('+')}
+            onClick={maxZoomReached ? undefined : () => onZoomChangeClick('+')}
           >
             <PlusIcon size="medium" />
           </IconWrapper>
@@ -207,9 +211,10 @@ const Tools = ({
             <MagnifierIcon size="medium" />
           </IconWrapper>
           <IconWrapper
+            inactive={minZoomReached}
             data-testid="bpm-tool-icon-zoomout"
             title={_('Zoom out')}
-            onClick={() => onZoomChangeClick('-')}
+            onClick={minZoomReached ? undefined : () => onZoomChangeClick('-')}
           >
             <MinusIcon size="medium" />
           </IconWrapper>
@@ -222,6 +227,8 @@ const Tools = ({
 Tools.propTypes = {
   applyConditionalColorization: PropTypes.bool,
   drawIsActive: PropTypes.bool,
+  maxZoomReached: PropTypes.bool.isRequired,
+  minZoomReached: PropTypes.bool.isRequired,
   showNoEdgeHelper: PropTypes.bool,
   showNoProcessHelper: PropTypes.bool,
   onCreateProcessClick: PropTypes.func,
