@@ -64,8 +64,9 @@ const BPM_TAG_PREFIX = 'myBP:';
 
 const SCROLL_STEP = 0.1;
 
+const DEFAULT_SCALE = 0.7;
 const MAX_SCALE = 1.6;
-const MIN_SCALE = 0.3;
+const MIN_SCALE = 0.2;
 
 const Wrapper = styled.div`
   display: flex;
@@ -94,7 +95,7 @@ class ProcessMap extends React.Component {
       edgeDrawSource: undefined,
       edgeDrawTarget: undefined,
       tagErrorDialogVisible: false,
-      scale: 1.0,
+      scale: DEFAULT_SCALE,
       translateX: 0,
       translateY: 0,
       isDraggingBackground: false,
@@ -236,7 +237,7 @@ class ProcessMap extends React.Component {
     let newScale;
     if (dir === '0') {
       return this.setState({
-        scale: 1,
+        scale: DEFAULT_SCALE,
         translateX: 0,
         translateY: 0,
       });
