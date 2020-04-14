@@ -82,6 +82,7 @@ class GmpSettings {
       apiServer = server,
       graphqlApiProtocol,
       graphqlApiServer,
+      enableHyperionOnly = false, // default to false if not found in config
       logLevel = loglevel,
     } = options;
 
@@ -138,6 +139,7 @@ class GmpSettings {
     setAndFreeze(this, 'graphqlApiLocation', graphqlApiLocation);
     setAndFreeze(this, 'graphqlApiProtocol', graphqlApiProtocol);
     setAndFreeze(this, 'graphqlApiServer', graphqlApiServer);
+    setAndFreeze(this, 'enableHyperionOnly', enableHyperionOnly);
     setAndFreeze(this, 'manualUrl', manualUrl);
     setAndFreeze(this, 'manualLanguageMapping', manualLanguageMapping);
     setAndFreeze(this, 'protocolDocUrl', protocolDocUrl);
