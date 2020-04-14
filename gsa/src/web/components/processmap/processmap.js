@@ -185,7 +185,7 @@ class ProcessMap extends React.Component {
   zoomIn(px, py) {
     let {scale} = this.state;
 
-    scale = scale + SCROLL_STEP;
+    scale = parseFloat((scale + SCROLL_STEP).toFixed(2));
 
     if (scale >= MAX_SCALE) {
       // avoid setting state and rerendering
@@ -198,7 +198,7 @@ class ProcessMap extends React.Component {
   zoomOut(px, py) {
     let {scale} = this.state;
 
-    scale = scale - SCROLL_STEP;
+    scale = parseFloat((scale - SCROLL_STEP).toFixed(2));
 
     if (scale <= MIN_SCALE) {
       // avoid setting state and rerendering
@@ -242,7 +242,7 @@ class ProcessMap extends React.Component {
         translateY: 0,
       });
     }
-    newScale = scale + zoomDir * SCROLL_STEP;
+    newScale = parseFloat((scale + zoomDir * SCROLL_STEP).toFixed(2));
     if (newScale > MAX_SCALE) {
       newScale = MAX_SCALE;
     }

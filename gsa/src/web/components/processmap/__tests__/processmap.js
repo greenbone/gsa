@@ -831,36 +831,36 @@ describe('ProcessMap tests', () => {
     const svgs = element.querySelectorAll('svg');
     let processes = getAllByTestId('process-node-group');
 
-    expect(processes[0]).toHaveAttribute('scale', '1');
-    expect(processes[1]).toHaveAttribute('scale', '1');
+    expect(processes[0]).toHaveAttribute('scale', '0.7');
+    expect(processes[1]).toHaveAttribute('scale', '0.7');
 
     fireEvent.click(zoomInIcon);
 
     processes = getAllByTestId('process-node-group');
 
-    expect(processes[0]).toHaveAttribute('scale', '1.1');
-    expect(processes[1]).toHaveAttribute('scale', '1.1');
-
-    fireEvent.click(zoomOutIcon);
-    fireEvent.click(zoomOutIcon);
-    fireEvent.click(zoomOutIcon);
-
     expect(processes[0]).toHaveAttribute('scale', '0.8');
     expect(processes[1]).toHaveAttribute('scale', '0.8');
 
+    fireEvent.click(zoomOutIcon);
+    fireEvent.click(zoomOutIcon);
+    fireEvent.click(zoomOutIcon);
+
+    expect(processes[0]).toHaveAttribute('scale', '0.5');
+    expect(processes[1]).toHaveAttribute('scale', '0.5');
+
     fireEvent.click(zoomResetIcon);
 
-    expect(processes[0]).toHaveAttribute('scale', '1');
-    expect(processes[1]).toHaveAttribute('scale', '1');
+    expect(processes[0]).toHaveAttribute('scale', '0.7');
+    expect(processes[1]).toHaveAttribute('scale', '0.7');
 
     fireEvent.wheel(zoomInIcon);
 
-    expect(processes[0]).toHaveAttribute('scale', '1');
-    expect(processes[1]).toHaveAttribute('scale', '1');
+    expect(processes[0]).toHaveAttribute('scale', '0.7');
+    expect(processes[1]).toHaveAttribute('scale', '0.7');
 
     fireEvent.wheel(svgs[0]);
 
-    expect(processes[0]).toHaveAttribute('scale', '1.1');
-    expect(processes[1]).toHaveAttribute('scale', '1.1');
+    expect(processes[0]).toHaveAttribute('scale', '0.8');
+    expect(processes[1]).toHaveAttribute('scale', '0.8');
   });
 });
