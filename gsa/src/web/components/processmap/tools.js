@@ -182,7 +182,7 @@ const Tools = ({
         <hr />
         <IconWrapper
           data-testid="bpm-tool-icon-color"
-          isActive={!applyConditionalColorization}
+          isActive={applyConditionalColorization}
           title={applyConditionalColorizationIconTitle}
           onClick={onToggleConditionalColorization}
         >
