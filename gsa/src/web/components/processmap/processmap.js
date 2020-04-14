@@ -56,6 +56,8 @@ import Tools from './tools';
 
 import {createTag, createToolTipContent, deleteTag, editTag} from './utils';
 
+export const MAX_PROCESSES = 50;
+
 const DEFAULT_PROCESS_SIZE = 75;
 
 const BPM_TAG_PREFIX = 'myBP:';
@@ -597,6 +599,8 @@ class ProcessMap extends React.Component {
     const cursorType = isDraggingBackground ? 'move' : 'default';
     const processCursorType = isDraggingProcess ? 'move' : 'grab';
 
+    const numProcesses = Object.keys(processes).length;
+
     const deleteHandler =
       isDefined(this.selectedElement) && this.selectedElement.type === 'process'
         ? this.openConfirmDeleteDialog
@@ -684,6 +688,7 @@ class ProcessMap extends React.Component {
               Object.entries(processes).length > 1
             }
             showNoProcessHelper={Object.entries(processes).length < 1}
+            maxNumProcessesReached={numProcesses >= MAX_PROCESSES}
             maxZoomReached={scale >= MAX_SCALE - SCROLL_STEP}
             minZoomReached={scale <= MIN_SCALE + SCROLL_STEP}
             onCreateProcessClick={this.handleOpenCreateProcessDialog}

@@ -34,6 +34,8 @@ import Layout from 'web/components/layout/layout';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
+import {MAX_PROCESSES} from './processmap';
+
 const Container = styled.div`
   position: absolute;
   top: 0;
@@ -128,6 +130,7 @@ const Helper = styled.div`
 const Tools = ({
   applyConditionalColorization,
   drawIsActive,
+  maxNumProcessesReached,
   maxZoomReached,
   minZoomReached,
   showNoEdgeHelper = false,
@@ -145,9 +148,18 @@ const Tools = ({
     <Container>
       <span>
         <IconWrapper
+          inactive={maxNumProcessesReached}
           data-testid="bpm-tool-icon-new"
-          title={_('Create new process')}
-          onClick={() => onCreateProcessClick()}
+          title={
+            maxNumProcessesReached
+              ? _('Maximum number of {{num}} processes reached', {
+                  num: MAX_PROCESSES.toString(),
+                })
+              : _('Create new process')
+          }
+          onClick={
+            maxNumProcessesReached ? undefined : () => onCreateProcessClick()
+          }
         >
           <NewProcessIcon size="medium" />
           {showNoProcessHelper && (
@@ -227,6 +239,7 @@ const Tools = ({
 Tools.propTypes = {
   applyConditionalColorization: PropTypes.bool,
   drawIsActive: PropTypes.bool,
+  maxNumProcessesReached: PropTypes.bool,
   maxZoomReached: PropTypes.bool.isRequired,
   minZoomReached: PropTypes.bool.isRequired,
   showNoEdgeHelper: PropTypes.bool,
