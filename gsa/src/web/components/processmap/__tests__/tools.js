@@ -36,6 +36,9 @@ describe('Tools tests', () => {
       <Tools
         applyConditionalColorization={true}
         drawIsActive={false}
+        maxNumProcessesReached={false}
+        maxZoomReached={false}
+        minZoomReached={false}
         onCreateProcessClick={handleCreateProcessClick}
         onDeleteClick={handleDeleteClick}
         onDrawEdgeClick={handleDrawEdgeClick}
@@ -62,7 +65,7 @@ describe('Tools tests', () => {
       'title',
       'Turn off conditional colorization',
     );
-    expect(colorIcon).not.toHaveStyleRule('background-color', '#66c430');
+    expect(colorIcon).toHaveStyleRule('background-color', '#66c430');
 
     expect(zoomInIcon).toHaveAttribute('title', 'Zoom in');
     expect(zoomResetIcon).toHaveAttribute('title', 'Reset zoom');
@@ -79,6 +82,9 @@ describe('Tools tests', () => {
       <Tools
         applyConditionalColorization={false}
         drawIsActive={true}
+        maxNumProcessesReached={false}
+        maxZoomReached={false}
+        minZoomReached={false}
         onCreateProcessClick={handleCreateProcessClick}
         onDeleteClick={handleDeleteClick}
         onDrawEdgeClick={handleDrawEdgeClick}
@@ -105,7 +111,7 @@ describe('Tools tests', () => {
       'title',
       'Turn on conditional colorization',
     );
-    expect(colorIcon).toHaveStyleRule('background-color', '#66c430');
+    expect(colorIcon).not.toHaveStyleRule('background-color', '#66c430');
 
     expect(zoomInIcon).not.toHaveStyleRule('background-color', '#66c430');
     expect(zoomResetIcon).not.toHaveStyleRule('background-color', '#66c430');
@@ -123,6 +129,9 @@ describe('Tools tests', () => {
       <Tools
         applyConditionalColorization={true}
         drawIsActive={false}
+        maxNumProcessesReached={false}
+        maxZoomReached={false}
+        minZoomReached={false}
         onCreateProcessClick={handleCreateProcessClick}
         onDeleteClick={handleDeleteClick}
         onDrawEdgeClick={handleDrawEdgeClick}
@@ -169,5 +178,47 @@ describe('Tools tests', () => {
     expect(zoomOutIcon).toHaveAttribute('title', 'Zoom out');
     fireEvent.click(zoomOutIcon);
     expect(handleZoomChangeClick).toHaveBeenCalledWith('-');
+  });
+
+  test('should handle max and min props', () => {
+    const handleCreateProcessClick = jest.fn();
+    const handleDrawEdgeClick = jest.fn();
+    const handleDeleteClick = jest.fn();
+    const handleToggleConditionalColorization = jest.fn();
+    const handleZoomChangeClick = jest.fn();
+
+    const {getByTestId} = render(
+      <Tools
+        applyConditionalColorization={true}
+        drawIsActive={false}
+        maxNumProcessesReached={true}
+        maxZoomReached={true}
+        minZoomReached={true}
+        onCreateProcessClick={handleCreateProcessClick}
+        onDeleteClick={handleDeleteClick}
+        onDrawEdgeClick={handleDrawEdgeClick}
+        onToggleConditionalColorization={handleToggleConditionalColorization}
+        onZoomChangeClick={handleZoomChangeClick}
+      />,
+    );
+
+    const newIcon = getByTestId('bpm-tool-icon-new');
+    const zoomInIcon = getByTestId('bpm-tool-icon-zoomin');
+    const zoomOutIcon = getByTestId('bpm-tool-icon-zoomout');
+
+    expect(newIcon).toHaveAttribute(
+      'title',
+      'Maximum number of 50 processes reached',
+    );
+    fireEvent.click(newIcon);
+    expect(handleCreateProcessClick).not.toHaveBeenCalled();
+
+    expect(zoomInIcon).toHaveAttribute('title', 'Zoom in');
+    fireEvent.click(zoomInIcon);
+    expect(handleZoomChangeClick).not.toHaveBeenCalled();
+
+    expect(zoomOutIcon).toHaveAttribute('title', 'Zoom out');
+    fireEvent.click(zoomOutIcon);
+    expect(handleZoomChangeClick).not.toHaveBeenCalled();
   });
 });
