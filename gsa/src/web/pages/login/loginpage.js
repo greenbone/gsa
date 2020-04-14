@@ -25,7 +25,7 @@ import gql from 'graphql-tag';
 
 import {useSelector, useDispatch} from 'react-redux';
 
-import {useHistory} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -132,7 +132,7 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
   const loginMutation = useLogin();
-  // const location = useLocation(); might be needed again later
+  const location = useLocation();
   const history = useHistory();
   const isLoggedIn = useSelector(isLoggedInSelector);
 
@@ -151,33 +151,69 @@ const LoginPage = () => {
   const setUsername = username => dispatch(setUsernameAction(username));
   const setIsLoggedIn = value => dispatch(setIsLoggedInAction(value));
 
-  const login = (username, password) => {
-    loginMutation({username, password})
-      .then(resp => {
-        const {locale, timezone, sessionTimeout} = resp.data.login;
+  let login;
 
-        const dateObj = new Date(sessionTimeout);
+  if (gmp.settings.enableHyperionOnly) {
+    login = (username, password) => {
+      loginMutation({username, password})
+        .then(resp => {
+          const {locale, timezone, sessionTimeout} = resp.data.login;
 
-        setTimezone(timezone);
-        setLocale(locale);
-        setSessionTimeout(moment(dateObj)); // convert sessionTimeout to Moment instance
-        setUsername(username);
-      })
-      .then(() => {
-        // must be set before changing the location
-        setIsLoggedIn(true);
+          const dateObj = new Date(sessionTimeout);
 
-        history.replace('/tasks'); // always redirect to tasks for demo purposes
-      })
-      .catch(rej => {
-        log.error(rej);
-        setError(rej);
-      });
-  };
+          setTimezone(timezone);
+          setLocale(locale);
+          setSessionTimeout(moment(dateObj)); // convert sessionTimeout to Moment instance
+          setUsername(username);
+
+          // must be set before changing the location
+          setIsLoggedIn(true);
+
+          history.replace('/tasks'); // always redirect to tasks for demo purposes. This should be changed to '/' once hyperion is no longer in demo.
+        })
+        .catch(rej => {
+          log.error(rej);
+          setError(rej);
+        });
+    };
+  } else {
+    login = (username, password) => {
+      gmp
+        .login(username, password) // put gmp.login back into promise chain
+        .then(loginMutation({username, password}))
+        .then(
+          data => {
+            const {locale, timezone, sessionTimeout} = data;
+
+            setTimezone(timezone);
+            setLocale(locale);
+            setSessionTimeout(sessionTimeout);
+            setUsername(username);
+            // must be set before changing the location
+            setIsLoggedIn(true);
+
+            if (
+              location &&
+              location.state &&
+              location.state.next &&
+              location.state.next !== location.pathname
+            ) {
+              history.replace(location.state.next);
+            } else {
+              history.replace('/');
+            }
+          },
+          rej => {
+            log.error(rej);
+            setError(rej);
+          },
+        );
+    };
+  }
 
   useEffect(() => {
     if (isLoggedIn) {
-      history.replace('/tasks');
+      history.replace('/');
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
