@@ -23,19 +23,19 @@ import {TICKET_STATUS, TICKET_STATUS_TRANSLATIONS} from 'gmp/models/ticket';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
-import Layout from 'web/components/layout/layout';
-
+import ErrorBubble from 'web/components/form/errorbubble';
 import FormGroup from 'web/components/form/formgroup';
+import Layout from 'web/components/layout/layout';
 import Select from 'web/components/form/select';
 import TextArea from 'web/components/form/textarea';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
 import useFormValidation, {
   syncVariables,
 } from 'web/components/form/useFormValidation';
+
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+
 import {editTicketRules as validationRules} from './validationrules';
-import ErrorBubble from 'web/components/form/errorbubble';
 
 const STATUS = [TICKET_STATUS.open, TICKET_STATUS.fixed, TICKET_STATUS.closed];
 
