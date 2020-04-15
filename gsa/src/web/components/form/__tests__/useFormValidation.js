@@ -22,14 +22,14 @@ import {
   parseAlias,
   syncVariables,
   testNonEmptyString,
-} from 'web/components/form/useForm';
+} from 'web/components/form/useFormValidation';
 
 /*
- * This suite only tests functions associated with useForm. * The hook itself should be tested with whichever dialog
+ * This suite only tests functions associated with useFormValidation. * The hook itself should be tested with whichever dialog
  * component it is called with.
  */
 
-describe('Testing useForm utilities', () => {
+describe('Testing useFormValidation utilities', () => {
   test('capitalizeFirstLetter tests', () => {
     const word1 = 'foo';
     const word2 = 'Bar';

@@ -26,7 +26,9 @@ import Select from 'web/components/form/select';
 import TextArea from 'web/components/form/textarea';
 import Layout from 'web/components/layout/layout';
 import ErrorBubble from 'web/components/form/errorbubble';
-import useForm, {syncVariables} from 'web/components/form/useForm';
+import useFormValidation, {
+  syncVariables,
+} from 'web/components/form/useFormValidation';
 import {createTicketRules as validationRules} from './validationrules';
 
 import PropTypes from 'web/utils/proptypes';
@@ -51,7 +53,7 @@ const CreateTicketDialog = ({
     handleValueChange,
     formStatus,
     handleSubmit,
-  } = useForm(stateSchema, validationRules, onSave);
+  } = useFormValidation(stateSchema, validationRules, onSave);
 
   return (
     <SaveDialog

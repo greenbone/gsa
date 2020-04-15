@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {testNonEmptyString} from 'web/components/form/useForm';
+import {testNonEmptyString} from 'web/components/form/useFormValidation';
 
 export const editTicketRules = {
   openNote: function(value, dependencies) {

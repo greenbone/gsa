@@ -31,7 +31,9 @@ import TextArea from 'web/components/form/textarea';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
-import useForm, {syncVariables} from 'web/components/form/useForm';
+import useFormValidation, {
+  syncVariables,
+} from 'web/components/form/useFormValidation';
 import {editTicketRules as validationRules} from './validationrules';
 import ErrorBubble from 'web/components/form/errorbubble';
 
@@ -74,7 +76,7 @@ const EditTicketDialog = ({
     handleDependencyChange,
     formStatus,
     handleSubmit,
-  } = useForm(stateSchema, validationRules, onSave, extras);
+  } = useFormValidation(stateSchema, validationRules, onSave, extras);
 
   return (
     <SaveDialog

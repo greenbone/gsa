@@ -19,7 +19,7 @@
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {testNonEmptyString} from 'web/components/form/useForm';
+import {testNonEmptyString} from 'web/components/form/useFormValidation';
 
 const validationRules = {
   name: value => {

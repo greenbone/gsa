@@ -44,7 +44,9 @@ import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
-import useForm, {syncVariables} from 'web/components/form/useForm';
+import useFormValidation, {
+  syncVariables,
+} from 'web/components/form/useFormValidation';
 import validationRules from './validationrules';
 import ErrorBubble from 'web/components/form/errorbubble';
 
@@ -230,7 +232,7 @@ const ScannerDialog = ({
     handleValueChange,
     formStatus,
     handleSubmit,
-  } = useForm(stateSchema, validationRules, onSave);
+  } = useFormValidation(stateSchema, validationRules, onSave);
 
   return (
     <SaveDialog // the dialog current changes sizes based on content. For the future we should somehow fix the size to prevent jumping around.

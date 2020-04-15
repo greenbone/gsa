@@ -40,7 +40,12 @@ export const syncVariables = (values, formState, dependencies = {}) => {
   Object.keys(dependencies).forEach(key => (values[key] = dependencies[key]));
 }; // sync all form states with the values known to SaveDialog
 
-const useForm = (stateSchema, validationRules, callback, extras = {}) => {
+const useFormValidation = (
+  stateSchema,
+  validationRules,
+  callback,
+  extras = {},
+) => {
   const [formState, setFormState] = useState(stateSchema);
   const [dependencies, setDependencies] = useState(extras);
   const [errorMessage, setErrorMessage] = useState('');
@@ -106,4 +111,4 @@ const useForm = (stateSchema, validationRules, callback, extras = {}) => {
 export const testNonEmptyString = string => string.length > 0 && string !== ' ';
 export const testValidPassword = password => password.length > 5;
 
-export default useForm;
+export default useFormValidation;
