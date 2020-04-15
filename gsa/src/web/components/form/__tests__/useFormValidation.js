@@ -18,7 +18,6 @@
  */
 
 import {
-  capitalizeFirstLetter,
   parseAlias,
   syncVariables,
   testNonEmptyString,
