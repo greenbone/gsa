@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {_} from 'gmp/locale/lang';
 
 import {testNonEmptyString} from 'web/components/form/useFormValidation';
 
@@ -27,7 +28,7 @@ export const editTicketRules = {
       validity = testNonEmptyString(value);
       error = validity
         ? ''
-        : 'If changing status to Open, Open Note is required';
+        : _('If changing status to Open, Open Note is required');
     } else {
       validity = true;
       error = '';
@@ -42,7 +43,7 @@ export const editTicketRules = {
       validity = testNonEmptyString(value);
       error = validity
         ? ''
-        : 'If changing status to Closed, Close Note is required';
+        : _('If changing status to Closed, Close Note is required');
     } else {
       validity = true;
       error = '';
@@ -57,7 +58,7 @@ export const editTicketRules = {
       validity = testNonEmptyString(value);
       error = validity
         ? ''
-        : 'If changing status to Fixed, Fixed Note is required';
+        : _('If changing status to Fixed, Fixed Note is required');
     } else {
       validity = true;
       error = '';
@@ -70,7 +71,7 @@ export const editTicketRules = {
 export const createTicketRules = {
   note: value => {
     const validity = testNonEmptyString(value);
-    const error = validity ? '' : 'Ticket note is required.';
+    const error = validity ? '' : _('Ticket note is required.');
     return {validity, error};
   },
 };

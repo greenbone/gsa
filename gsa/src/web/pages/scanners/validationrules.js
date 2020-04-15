@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {_} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -24,24 +25,26 @@ import {testNonEmptyString} from 'web/components/form/useFormValidation';
 const validationRules = {
   name: value => {
     const validity = testNonEmptyString(value);
-    const error = validity ? '' : 'Missing name.';
+    const error = validity ? '' : _('Missing name.');
     return {validity, error};
   },
   credential_id: value => {
     const validity = isDefined(value) && testNonEmptyString(value);
     const error = validity
       ? ''
-      : 'Missing credential id. Choose from the dropdown or create a new credential.';
+      : _(
+          'Missing credential id. Choose from the dropdown or create a new credential.',
+        );
     return {validity, error};
   },
   host: value => {
     const validity = testNonEmptyString(value);
-    const error = validity ? '' : 'Missing or invalid host.';
+    const error = validity ? '' : _('Missing or invalid host.');
     return {validity, error};
   },
   port: value => {
     const validity = testNonEmptyString(value.toString()); // Port is always returned as an integer from the backend.
-    const error = validity ? '' : 'Missing or invalid port.';
+    const error = validity ? '' : _('Missing or invalid port.');
     return {validity, error};
   },
 };
