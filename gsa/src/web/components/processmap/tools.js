@@ -56,12 +56,12 @@ const IconWrapper = styled.div`
   justify-content: space-around;
   padding: 10px 0 10px 0;
   & svg path {
-    fill: ${props => (props.inactive ? Theme.inputBorderGray : Theme.black)};
+    fill: ${props => (props.isInactive ? Theme.inputBorderGray : Theme.black)};
   }
   &:hover {
-    cursor: ${props => (props.inactive ? 'default' : 'pointer')};
+    cursor: ${props => (props.isInactive ? 'default' : 'pointer')};
     background-color: ${props =>
-      props.inactive ? undefined : Theme.dialogGray};
+      props.isInactive ? undefined : Theme.dialogGray};
   }
   ${props =>
     props.isActive
@@ -148,7 +148,7 @@ const Tools = ({
     <Container>
       <span>
         <IconWrapper
-          inactive={maxNumProcessesReached}
+          isInactive={maxNumProcessesReached}
           data-testid="bpm-tool-icon-new"
           title={
             maxNumProcessesReached
@@ -208,7 +208,7 @@ const Tools = ({
         <hr />
         <Layout flex="column">
           <IconWrapper
-            inactive={maxZoomReached}
+            isInactive={maxZoomReached}
             data-testid="bpm-tool-icon-zoomin"
             title={_('Zoom in')}
             onClick={maxZoomReached ? undefined : () => onZoomChangeClick('+')}
@@ -223,7 +223,7 @@ const Tools = ({
             <MagnifierIcon size="medium" />
           </IconWrapper>
           <IconWrapper
-            inactive={minZoomReached}
+            isInactive={minZoomReached}
             data-testid="bpm-tool-icon-zoomout"
             title={_('Zoom out')}
             onClick={minZoomReached ? undefined : () => onZoomChangeClick('-')}
