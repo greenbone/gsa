@@ -21,7 +21,7 @@ import React from 'react';
 
 import {setLocale} from 'gmp/locale/lang';
 
-import {render, fireEvent, queryAllByTestId} from 'web/utils/testing';
+import {rendererWith, fireEvent, queryAllByTestId} from 'web/utils/testing';
 
 import Scanner from 'gmp/models/scanner';
 
@@ -53,6 +53,8 @@ const gmpScanner = {
   port: '2468',
 };
 
+const gmp = {settings: {enableGreenboneSensor: true}};
+
 describe('ScannerDialog component tests', () => {
   test('should render', () => {
     const elem = {_id: 'foo'};
@@ -61,6 +63,8 @@ describe('ScannerDialog component tests', () => {
     const handleCredentialChange = jest.fn();
     const handleSave = jest.fn();
     const handleScannerTypeChange = jest.fn();
+
+    const {render} = rendererWith({gmp});
 
     const {baseElement} = render(
       <ScannerDialog
@@ -80,6 +84,8 @@ describe('ScannerDialog component tests', () => {
     const handleCredentialChange = jest.fn();
     const handleSave = jest.fn();
     const handleScannerTypeChange = jest.fn();
+
+    const {render} = rendererWith({gmp});
 
     const {baseElement} = render(
       <ScannerDialog // using OSP Scanner to render the most amount of fields
@@ -116,6 +122,8 @@ describe('ScannerDialog component tests', () => {
     const handleCredentialChange = jest.fn();
     const handleSave = jest.fn();
     const handleScannerTypeChange = jest.fn();
+
+    const {render} = rendererWith({gmp});
 
     const {baseElement} = render(
       <ScannerDialog // using OSP Scanner to render the most amount of fields
@@ -160,6 +168,8 @@ describe('ScannerDialog component tests', () => {
     const handleSave = jest.fn();
     const handleScannerTypeChange = jest.fn();
 
+    const {render} = rendererWith({gmp});
+
     const {getByTestId} = render(
       <ScannerDialog // using OSP Scanner to render the most amount of fields
         comment={scanner.comment}
@@ -200,6 +210,8 @@ describe('ScannerDialog component tests', () => {
     const handleCredentialChange = jest.fn();
     const handleSave = jest.fn();
     const handleScannerTypeChange = jest.fn();
+
+    const {render} = rendererWith({gmp});
 
     const {baseElement, getByTestId} = render(
       <ScannerDialog // using OSP Scanner to render the most amount of fields
@@ -245,6 +257,8 @@ describe('ScannerDialog component tests', () => {
     const handleCredentialChange = jest.fn();
     const handleSave = jest.fn();
     const handleScannerTypeChange = jest.fn();
+
+    const {render} = rendererWith({gmp});
 
     const {getByTestId} = render(
       <ScannerDialog

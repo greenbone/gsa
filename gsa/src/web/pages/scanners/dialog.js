@@ -186,7 +186,7 @@ const ScannerDialog = ({
 
   const {gmp} = props;
 
-  if (isDefined(gmp) && gmp.settings.enableGreenboneSensor) {
+  if (gmp.settings.enableGreenboneSensor) {
     SCANNER_TYPES = [
       GMP_SCANNER_TYPE,
       OSP_SCANNER_TYPE,
