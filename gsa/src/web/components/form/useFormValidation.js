@@ -18,14 +18,9 @@
  */
 import 'core-js/features/object/keys';
 
-import {useState, useEffect} from 'react';
+import {capitalizeFirstLetter} from 'gmp/utils/string';
 
-export const capitalizeFirstLetter = string => {
-  if (string.length > 0) {
-    return string[0].toUpperCase() + string.slice(1);
-  }
-  return '';
-};
+import {useState, useEffect} from 'react';
 
 export const parseAlias = string => {
   const parsedString = string.replace(/(_)/g, ' ').replace(/([A-Z])/g, ' $1');

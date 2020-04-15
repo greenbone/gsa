@@ -30,17 +30,6 @@ import {
  */
 
 describe('Testing useFormValidation utilities', () => {
-  test('capitalizeFirstLetter tests', () => {
-    const word1 = 'foo';
-    const word2 = 'Bar';
-    const word3 = '0fooBar';
-
-    expect(capitalizeFirstLetter('')).toEqual('');
-    expect(capitalizeFirstLetter(word1)).toEqual('Foo');
-    expect(capitalizeFirstLetter(word2)).toEqual('Bar');
-    expect(capitalizeFirstLetter(word3)).toEqual('0fooBar');
-  });
-
   test('parseAlias tests', () => {
     const word1 = 'foo';
     const word2 = 'Bar';
