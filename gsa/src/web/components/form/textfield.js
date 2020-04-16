@@ -18,9 +18,21 @@
 
 import React from 'react';
 
+import ErrorBubble from 'web/components/form/errorbubble';
+
 import Field from './field.js';
 
-const TextField = props => <Field {...props} type="text" />;
+const TextField = ({warning = false, errorContent = '', ...props}) => {
+  return (
+    <ErrorBubble visible={warning} content={errorContent}>
+      {({targetRef}) => (
+        <div ref={targetRef}>
+          <Field {...props} type="text" />
+        </div>
+      )}
+    </ErrorBubble>
+  );
+};
 
 export default TextField;
 

@@ -270,24 +270,16 @@ const ScannerDialog = ({
             <Tabs active={currentStep}>
               <TabPanels>
                 <TabPanel>
-                  <ErrorBubble
-                    visible={shouldWarn && !formStatus.name.validity} // only show error bubble if BOTH: 1. has error 2. after user hits submit for the rest time.
-                    content={formStatus.name.error}
-                  >
-                    {({targetRef}) => (
-                      <div ref={targetRef}>
-                        <FormGroup title={_('Name')}>
-                          <TextField
-                            name="name"
-                            grow="1"
-                            value={formState.name}
-                            onChange={handleValueChange}
-                          />
-                        </FormGroup>
-                      </div>
-                    )}
-                  </ErrorBubble>
-
+                  <FormGroup title={_('Name')}>
+                    <TextField
+                      errorContent={formStatus.name.error}
+                      name="name"
+                      grow="1"
+                      value={formState.name}
+                      warning={shouldWarn && !formStatus.name.validity}
+                      onChange={handleValueChange}
+                    />
+                  </FormGroup>
                   <FormGroup title={_('Comment')}>
                     <TextField
                       name="comment"
@@ -312,45 +304,30 @@ const ScannerDialog = ({
                   )}
                 </TabPanel>
                 <TabPanel>
-                  <ErrorBubble
-                    visible={shouldWarn && !formStatus.host.validity}
-                    content={formStatus.host.error}
-                  >
-                    {({targetRef}) => (
-                      <div ref={targetRef}>
-                        <FormGroup title={_('Host')}>
-                          <TextField
-                            name="host"
-                            value={formState.host}
-                            disabled={isInUse}
-                            grow="1"
-                            onChange={handleValueChange}
-                          />
-                        </FormGroup>
-                      </div>
-                    )}
-                  </ErrorBubble>
+                  <FormGroup title={_('Host')}>
+                    <TextField
+                      errorContent={formStatus.host.error}
+                      name="host"
+                      value={formState.host}
+                      disabled={isInUse}
+                      grow="1"
+                      warning={shouldWarn && !formStatus.host.validity}
+                      onChange={handleValueChange}
+                    />
+                  </FormGroup>
                   {isOspScannerType && (
                     <React.Fragment>
-                      <ErrorBubble
-                        visible={shouldWarn && !formStatus.port.validity}
-                        content={formStatus.port.error}
-                      >
-                        {({targetRef}) => (
-                          <div ref={targetRef}>
-                            <FormGroup title={_('Port')}>
-                              <TextField
-                                name="port"
-                                value={formState.port}
-                                disabled={isInUse}
-                                grow="1"
-                                onChange={handleValueChange}
-                              />
-                            </FormGroup>
-                          </div>
-                        )}
-                      </ErrorBubble>
-
+                      <FormGroup title={_('Port')}>
+                        <TextField
+                          errorContent={formStatus.port.error}
+                          name="port"
+                          value={formState.port}
+                          disabled={isInUse}
+                          grow="1"
+                          warning={shouldWarn && !formStatus.port.validity}
+                          onChange={handleValueChange}
+                        />
+                      </FormGroup>
                       <FormGroup title={_('CA Certificate')} flex="column">
                         <Layout>
                           <Divider>
