@@ -77,24 +77,17 @@ const CreateTicketDialog = ({
                 onChange={onUserIdChange}
               />
             </FormGroup>
-            <ErrorBubble
-              visible={shouldWarn && !formStatus.note.validity}
-              content={formStatus.note.error}
-            >
-              {({targetRef}) => (
-                <div ref={targetRef}>
-                  <FormGroup title={_('Note')}>
-                    <TextArea
-                      name="note"
-                      grow="1"
-                      rows="5"
-                      value={formState.note}
-                      onChange={handleValueChange}
-                    />
-                  </FormGroup>
-                </div>
-              )}
-            </ErrorBubble>
+            <FormGroup title={_('Note')}>
+              <TextArea
+                warning={shouldWarn && !formStatus.note.validity} // default false if undefined (if we don't want to do validation on this textarea)
+                errorContent={formStatus.note.error}
+                name="note"
+                grow="1"
+                rows="5"
+                value={formState.note}
+                onChange={handleValueChange}
+              />
+            </FormGroup>
           </Layout>
         );
       }}

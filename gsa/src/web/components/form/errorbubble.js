@@ -87,7 +87,7 @@ const ErrorBubble = ({visible, ...props}) => {
     const left = rect.left + 16 + rect.width + window.scrollX;
 
     bubbleRef.style.top = `${top}px`;
-    bubbleRef.style.left = `${left}px`;
+    bubbleRef.style.left = `${left + 10}px`;
   }
 
   useEffect(() => {

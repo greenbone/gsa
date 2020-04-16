@@ -24,6 +24,7 @@ import styled from 'styled-components';
 
 import Theme from 'web/utils/theme';
 
+import ErrorBubble from 'web/components/form/errorbubble';
 import withLayout from 'web/components/layout/withLayout';
 
 import {DISABLED_OPACTIY} from './field';
@@ -42,7 +43,7 @@ const StyledTextArea = styled.textarea`
   opacity: ${props => (props.disabled ? DISABLED_OPACTIY : undefined)};
 `;
 
-const TextArea = props => {
+const TextArea = ({warning = false, errorContent = '', ...props}) => {
   const [value, setValue] = useState(props.value);
   const notifyChange = val => {
     const {name, onChange, disabled = false} = props;
@@ -59,13 +60,23 @@ const TextArea = props => {
     notifyChange(val);
   };
 
-  return <StyledTextArea {...props} value={value} onChange={handleChange} />;
+  return (
+    <ErrorBubble visible={warning} content={errorContent}>
+      {({targetRef}) => (
+        <div ref={targetRef}>
+          <StyledTextArea {...props} value={value} onChange={handleChange} />
+        </div>
+      )}
+    </ErrorBubble>
+  );
 };
 
 TextArea.propTypes = {
   disabled: PropTypes.bool,
+  errorContent: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.string,
+  warning: PropTypes.boolean,
   onChange: PropTypes.func,
 };
 
