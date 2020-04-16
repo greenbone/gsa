@@ -62,7 +62,6 @@ import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 import TabLayout from 'web/components/tab/tablayout';
-import Theme from 'web/utils/theme';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
 
@@ -143,7 +142,7 @@ CertStatus.propTypes = {
   info: PropTypes.object.isRequired,
 };
 
-const SCANNER_DIALOG_INITIAL_HEIGHT = '350px';
+const SCANNER_DIALOG_INITIAL_HEIGHT = '300px';
 
 const ScannerDialog = ({
   ca_pub,
@@ -243,6 +242,7 @@ const ScannerDialog = ({
   return (
     <SaveDialog // the dialog current changes sizes based on content. For the future we should somehow fix the size to prevent jumping around.
       defaultValues={data}
+      error={errorMessage}
       initialHeight={SCANNER_DIALOG_INITIAL_HEIGHT}
       multiStep={1} // the option to switch to the MultiStepFooter. Leaving it out defaults to false
       title={title}
@@ -270,7 +270,7 @@ const ScannerDialog = ({
             <Tabs active={currentStep}>
               <TabPanels>
                 <TabPanel>
-                  <FormGroup title={_('Name')}>
+                  <FormGroup title={_('Name')} align={['start', 'end']}>
                     <TextField
                       errorContent={formStatus.name.error}
                       name="name"
@@ -297,11 +297,6 @@ const ScannerDialog = ({
                       onChange={handleTypeChange}
                     />
                   </FormGroup>
-                  {isDefined(errorMessage) ? (
-                    <h5 style={{color: Theme.warningRed}}>{errorMessage}</h5>
-                  ) : (
-                    ''
-                  )}
                 </TabPanel>
                 <TabPanel>
                   <FormGroup title={_('Host')}>
@@ -371,7 +366,6 @@ const ScannerDialog = ({
                       </FormGroup>
                     </React.Fragment>
                   )}
-
                   {!isGreenboneSensorType && (
                     <ErrorBubble
                       visible={shouldWarn && !formStatus.credential_id.validity}
@@ -404,11 +398,6 @@ const ScannerDialog = ({
                         </div>
                       )}
                     </ErrorBubble>
-                  )}
-                  {isDefined(errorMessage) ? (
-                    <h5 style={{color: Theme.warningRed}}>{errorMessage}</h5>
-                  ) : (
-                    ''
                   )}
                 </TabPanel>
               </TabPanels>

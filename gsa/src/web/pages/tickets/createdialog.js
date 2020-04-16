@@ -25,7 +25,6 @@ import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextArea from 'web/components/form/textarea';
 import Layout from 'web/components/layout/layout';
-import ErrorBubble from 'web/components/form/errorbubble';
 import useFormValidation, {
   syncVariables,
 } from 'web/components/form/useFormValidation';

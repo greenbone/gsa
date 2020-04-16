@@ -18,6 +18,7 @@
  */
 import 'core-js/features/object/keys';
 
+import _ from 'gmp/locale';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 
 import {useState, useEffect} from 'react';
@@ -45,7 +46,7 @@ const useFormValidation = (
 ) => {
   const [formState, setFormState] = useState(stateSchema);
   const [dependencies, setDependencies] = useState(extras);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState();
   const [shouldWarn, setWarn] = useState(false); // shouldWarn is false when first rendered. Only when calling handleSubmit for the first time will this be set to true.
 
   const [formStatus, setFormStatus] = useState(stateSchema); // use the same shape as stateschema
@@ -85,7 +86,9 @@ const useFormValidation = (
     }, []); // checks if any field is invalid
 
     if (hasErrorInState) {
-      setErrorMessage('Error in fields: ' + errorVars.join(', ').toString()); // Outputs an error string containing all errors, or does nothing at all except show error bubbles. This is good for multi step dialogs.
+      setErrorMessage(
+        _('This form has errors. Please check the inputs and submit again.'),
+      );
     } else {
       // eslint-disable-next-line callback-return
       return callback(vals); // if nothing is wrong, call onSave
