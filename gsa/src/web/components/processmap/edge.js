@@ -28,6 +28,7 @@ const StyledG = styled.g`
   }
   &:hover line {
     stroke: ${Theme.mediumBlue};
+    cursor: pointer;
   }
 `;
 
@@ -72,6 +73,16 @@ const Edge = ({cursor, isSelected = false, source, target, onMouseDown}) => {
         y2={target.y}
         fill={Theme.darkGray}
         strokeWidth="4px"
+      />
+      {/* this line is used to increase the clickable area of the edge*/}
+      <line
+        data-testid="bpm-edge-clickline"
+        x1={source.x}
+        y1={source.y}
+        x2={target.x}
+        y2={target.y}
+        strokeOpacity={0}
+        strokeWidth="25px"
       />
       {/* in order to be able to use midMarker this invisible polyline is
           rendered to position the arrow head. The polyline can not be hovered
