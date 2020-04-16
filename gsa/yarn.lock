@@ -5889,10 +5889,10 @@ dotenv@^6.2.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.2.0.tgz#941c0410535d942c8becf28d3f357dbd9d476064"
   integrity sha512-HygQCKUBSFl8wKQZBSemMywRWcEDNidvNbjGVyZu3nbZ8qq9ubiPoGLMdRDpfSrpkkm9BXYFkpKxxFX38o/76w==
 
-downshift@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/downshift/-/downshift-5.1.0.tgz#7e045f908a0c24117f2d183e98f45903edbeb9fa"
-  integrity sha512-trMxb6g6sVfOwq3bN/h7PQcMlfPsTFi2EYKaeOkqMzj5DSkRjKn+NgZRN5VITg2MmC0nWD6rLTFl7wEWZFI0ZQ==
+downshift@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/downshift/-/downshift-5.1.1.tgz#55eae323728d262750858b2a7ff08a6fc1a09ac0"
+  integrity sha512-QlUF0obUybUdvPu2JvKME80d0ecSa90oyq67bcMw4jLmsDkRT3/Dr3SvsEZmEg8pF5wWX+FkHCfIyGicPaQUZQ==
   dependencies:
     "@babel/runtime" "^7.9.1"
     compute-scroll-into-view "^1.0.13"
@@ -7672,10 +7672,10 @@ i18next-xhr-backend@3.2.2:
   dependencies:
     "@babel/runtime" "^7.5.5"
 
-i18next@^19.0.0, i18next@^19.4.1:
-  version "19.4.1"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-19.4.1.tgz#4929d15d3d01e4712350a368d005cefa50ff5455"
-  integrity sha512-dC3ue15jkLebN2je4xEjfjVYd/fSAo+UVK9f+JxvceCJRowkI+S0lGohgKejqU+FYLfvw9IAPylIIEWwR8Djrg==
+i18next@^19.0.0, i18next@^19.4.2:
+  version "19.4.2"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-19.4.2.tgz#5be6ebbef9cfa44a2691ab47b8ccd8cf7179cff5"
+  integrity sha512-gDctWhIgACc92Uub7vb0GTdtLKZTgiDIiBkGExOSPgqhCSyyPOb8svLxixzzSS3yMjC3fduK/BbkRt95JHwvDw==
   dependencies:
     "@babel/runtime" "^7.3.1"
 
