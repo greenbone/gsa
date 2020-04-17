@@ -30,7 +30,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
 import {useGqlCapabilities} from 'web/utils/useGqlCapabilities';
 
