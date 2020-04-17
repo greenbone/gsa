@@ -46,6 +46,8 @@ import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 import Main from 'web/components/structure/main';
 
+import {useGetCapabilities} from 'web/utils/useGqlCapabilities';
+
 const log = logger.getLogger('web.page');
 
 const StyledLayout = styled(Layout)`
@@ -54,22 +56,35 @@ const StyledLayout = styled(Layout)`
 
 const Page = props => {
   const [capabilities, setCapabilities] = useState();
+  const query = useGetCapabilities();
+  const {data, error} = query();
 
   useEffect(() => {
-    const {gmp} = props;
+    if (isDefined(data) && isDefined(data.capabilities)) {
+      setCapabilities(new Capabilities(data.capabilities));
+    } else {
+      log.error(
+        'An error during fetching capabilities from hyperion. Trying gmp...',
+        error,
+      );
+      const {gmp} = props;
 
-    gmp.user
-      .currentCapabilities()
-      .then(response => {
-        const capabilities = response.data;
-        log.debug('User capabilities', capabilities);
-        setCapabilities(capabilities);
-      })
-      .catch(rejection => {
-        log.error('An error occurred during fetching capabilities', rejection);
-        // use empty capabilities
-        setCapabilities(new Capabilities());
-      });
+      gmp.user
+        .currentCapabilities()
+        .then(response => {
+          const capabilities = response.data;
+          log.debug('User capabilities', capabilities);
+          setCapabilities(capabilities);
+        })
+        .catch(rejection => {
+          log.error(
+            'An error occurred during fetching capabilities',
+            rejection,
+          );
+          // use empty capabilities
+          setCapabilities(new Capabilities());
+        });
+    }
   }, []);
 
   const {children, location} = props;
