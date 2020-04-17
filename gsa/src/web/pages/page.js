@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {withRouter} from 'react-router-dom';
 
@@ -52,67 +52,57 @@ const StyledLayout = styled(Layout)`
   height: 100%;
 `;
 
-class Page extends React.Component {
-  constructor(...args) {
-    super(...args);
+const Page = props => {
+  const [capabilities, setCapabilities] = useState();
 
-    this.state = {};
-  }
-
-  componentDidMount() {
-    const {gmp} = this.props;
+  useEffect(() => {
+    const {gmp} = props;
 
     gmp.user
       .currentCapabilities()
       .then(response => {
         const capabilities = response.data;
         log.debug('User capabilities', capabilities);
-        this.setState({capabilities});
+        setCapabilities(capabilities);
       })
       .catch(rejection => {
         log.error('An error occurred during fetching capabilities', rejection);
         // use empty capabilities
-        this.setState({capabilities: new Capabilities()});
+        setCapabilities(new Capabilities());
       });
+  }, []);
+
+  const {children, location} = props;
+
+  if (!isDefined(capabilities)) {
+    // only show content after caps have been loaded
+    // this avoids ugly re-rendering of parts of the ui (e.g. the menu)
+    return null;
   }
 
-  render() {
-    const {children, location} = this.props;
-    const {capabilities} = this.state;
-
-    if (!isDefined(capabilities)) {
-      // only show content after caps have been loaded
-      // this avoids ugly re-rendering of parts of the ui (e.g. the menu)
-      return null;
-    }
-
-    return (
-      <CapabilitiesContext.Provider value={capabilities}>
-        <StyledLayout flex="column" align={['start', 'stretch']}>
-          <MenuBar />
-          <Header />
-          <Main>
-            <ErrorBoundary
-              key={location.pathname}
-              message={_('An error occurred on this page.')}
-            >
-              {children}
-            </ErrorBoundary>
-          </Main>
-          <Footer />
-        </StyledLayout>
-      </CapabilitiesContext.Provider>
-    );
-  }
-}
+  return (
+    <CapabilitiesContext.Provider value={capabilities}>
+      <StyledLayout flex="column" align={['start', 'stretch']}>
+        <MenuBar />
+        <Header />
+        <Main>
+          <ErrorBoundary
+            key={location.pathname}
+            message={_('An error occurred on this page.')}
+          >
+            {children}
+          </ErrorBoundary>
+        </Main>
+        <Footer />
+      </StyledLayout>
+    </CapabilitiesContext.Provider>
+  );
+};
 
 Page.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default compose(
-  withGmp,
-  withRouter,
-)(Page);
+export default compose(withGmp, withRouter)(Page);
 
 // vim: set ts=2 sw=2 tw=80:
