@@ -18,7 +18,7 @@
 
 import React, {useState, useEffect} from 'react';
 
-import {withRouter, useLocation} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -113,10 +113,6 @@ const Page = ({children}) => {
   );
 };
 
-Page.propTypes = {
-  children: PropTypes.func.isRequired,
-};
-
-export default withRouter(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:
