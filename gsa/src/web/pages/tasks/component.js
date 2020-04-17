@@ -81,6 +81,7 @@ import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 import {UNSET_VALUE} from 'web/utils/render';
+import useCapabilities from 'web/utils/useCapabilities';
 
 import EntityComponent from 'web/entity/component';
 
@@ -94,25 +95,17 @@ import ScheduleComponent from 'web/pages/schedules/component';
 import AlertComponent from 'web/pages/alerts/component';
 import TargetComponent from 'web/pages/targets/component';
 
-import Capabilities from 'gmp/capabilities/capabilities';
 import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
 import {setTimezone} from 'web/store/usersettings/actions';
 import {useModifyTask, useCreateContainerTask, useCreateTask} from './graphql';
-import {useGetCapabilities} from 'web/utils/useGqlCapabilities';
 
 const TaskComponent = props => {
   const modifyTask = useModifyTask();
   const createTask = useCreateTask();
   const createContainerTask = useCreateContainerTask();
-  const query = useGetCapabilities();
-  const {data} = query();
 
-  let capabilities;
-
-  if (isDefined(data)) {
-    capabilities = new Capabilities(data.capabilities);
-  }
+  const capabilities = useCapabilities();
 
   const {
     defaultPortListId,
