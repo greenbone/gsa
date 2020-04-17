@@ -107,7 +107,7 @@ describe('Empty Report tests', () => {
     expect(baseElement).toHaveTextContent('Just wait for results to arrive.');
   });
 
-  test('should render reprot for running task', () => {
+  test('should render report for running task', () => {
     const onTargetEditClick = jest.fn();
 
     const {render} = rendererWith({
