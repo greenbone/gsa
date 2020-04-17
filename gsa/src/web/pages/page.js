@@ -46,7 +46,7 @@ import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 import Main from 'web/components/structure/main';
 
-import {useGetCapabilities} from 'web/utils/useGqlCapabilities';
+import {useGqlCapabilities} from 'web/utils/useGqlCapabilities';
 
 const log = logger.getLogger('web.page');
 
@@ -56,7 +56,7 @@ const StyledLayout = styled(Layout)`
 
 const Page = props => {
   const [capabilities, setCapabilities] = useState();
-  const query = useGetCapabilities();
+  const query = useGqlCapabilities();
   const {data, error} = query();
 
   useEffect(() => {
