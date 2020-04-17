@@ -73,9 +73,9 @@ const Page = props => {
       gmp.user
         .currentCapabilities()
         .then(response => {
-          const capabilities = response.data;
-          log.debug('User capabilities', capabilities);
-          setCapabilities(capabilities);
+          const caps = response.data;
+          log.debug('User capabilities', caps);
+          setCapabilities(caps);
         })
         .catch(rejection => {
           log.error(
@@ -86,8 +86,8 @@ const Page = props => {
           setCapabilities(new Capabilities());
         });
     }
-  }, [data]);
-
+  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
+  // if we don't wait for data to become defined, undefined caps will be saved.
   const {children, location} = props;
 
   if (!isDefined(capabilities)) {
