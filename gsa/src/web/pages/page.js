@@ -18,7 +18,7 @@
 
 import React, {useState, useEffect} from 'react';
 
-import {withRouter} from 'react-router-dom';
+import {withRouter, useLocation} from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -31,8 +31,8 @@ import {isDefined} from 'gmp/utils/identity';
 import Capabilities from 'gmp/capabilities/capabilities';
 
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-import compose from 'web/utils/compose';
+import useGmp from 'web/utils/useGmp';
+import {useGqlCapabilities} from 'web/utils/useGqlCapabilities';
 
 import MenuBar from 'web/components/bar/menubar';
 
@@ -46,15 +46,16 @@ import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 import Main from 'web/components/structure/main';
 
-import {useGqlCapabilities} from 'web/utils/useGqlCapabilities';
-
 const log = logger.getLogger('web.page');
 
 const StyledLayout = styled(Layout)`
   height: 100%;
 `;
 
-const Page = props => {
+const Page = ({children}) => {
+  const gmp = useGmp();
+  const location = useLocation();
+
   const [capabilities, setCapabilities] = useState();
   const query = useGqlCapabilities();
   const {data, error} = query();
@@ -67,8 +68,6 @@ const Page = props => {
         'An error during fetching capabilities from hyperion. Trying gmp...',
         error,
       );
-
-      const {gmp} = props;
 
       gmp.user
         .currentCapabilities()
@@ -88,7 +87,6 @@ const Page = props => {
     }
   }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
   // if we don't wait for data to become defined, undefined caps will be saved.
-  const {children, location} = props;
 
   if (!isDefined(capabilities)) {
     // only show content after caps have been loaded
@@ -116,9 +114,9 @@ const Page = props => {
 };
 
 Page.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
+  children: PropTypes.func.isRequired,
 };
 
-export default compose(withGmp, withRouter)(Page);
+export default withRouter(Page);
 
 // vim: set ts=2 sw=2 tw=80:
