@@ -67,6 +67,7 @@ const Page = props => {
         'An error during fetching capabilities from hyperion. Trying gmp...',
         error,
       );
+
       const {gmp} = props;
 
       gmp.user
@@ -85,7 +86,7 @@ const Page = props => {
           setCapabilities(new Capabilities());
         });
     }
-  }, []);
+  }, [data]);
 
   const {children, location} = props;
 
