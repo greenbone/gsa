@@ -18,19 +18,23 @@
 
 import React from 'react';
 
-import ErrorBubble from 'web/components/form/errorbubble';
+import Theme from 'web/utils/theme';
 
 import Field from './field.js';
 
-const TextField = ({warning = false, errorContent = '', ...props}) => {
+const TextField = ({shouldValidate = false, errorContent = '', ...props}) => {
+  const bgColor = shouldValidate ? 'rgb(216, 54, 54, 0.1)' : 'white'; //warningRed at opacity 10%
+  const checkMarkColor = shouldValidate ? Theme.warningRed : 'white';
   return (
-    <ErrorBubble visible={warning} content={errorContent}>
-      {({targetRef}) => (
-        <div ref={targetRef}>
-          <Field {...props} type="text" />
-        </div>
-      )}
-    </ErrorBubble>
+    <React.Fragment>
+      <Field
+        {...props}
+        title={errorContent}
+        style={{background: bgColor}}
+        type="text"
+      />
+      <div style={{color: checkMarkColor}}>&#10008;</div>
+    </React.Fragment>
   );
 };
 

@@ -276,7 +276,7 @@ const ScannerDialog = ({
                       name="name"
                       grow="1"
                       value={formState.name}
-                      warning={shouldWarn && !formStatus.name.validity}
+                      shouldValidate={shouldWarn && !formStatus.name.validity}
                       onChange={handleValueChange}
                     />
                   </FormGroup>
@@ -306,7 +306,8 @@ const ScannerDialog = ({
                       value={formState.host}
                       disabled={isInUse}
                       grow="1"
-                      warning={shouldWarn && !formStatus.host.validity}
+                      title={formStatus.host.error}
+                      needValidation={shouldWarn && !formStatus.host.validity}
                       onChange={handleValueChange}
                     />
                   </FormGroup>
@@ -319,7 +320,9 @@ const ScannerDialog = ({
                           value={formState.port}
                           disabled={isInUse}
                           grow="1"
-                          warning={shouldWarn && !formStatus.port.validity}
+                          shouldValidate={
+                            shouldWarn && !formStatus.port.validity
+                          }
                           onChange={handleValueChange}
                         />
                       </FormGroup>
