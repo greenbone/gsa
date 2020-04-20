@@ -16,9 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
-import {withRouter} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -30,9 +30,8 @@ import {isDefined} from 'gmp/utils/identity';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-import compose from 'web/utils/compose';
+import useGmp from 'web/utils/useGmp';
+import {useGqlCapabilities} from 'web/utils/useGqlCapabilities';
 
 import MenuBar from 'web/components/bar/menubar';
 
@@ -52,67 +51,67 @@ const StyledLayout = styled(Layout)`
   height: 100%;
 `;
 
-class Page extends React.Component {
-  constructor(...args) {
-    super(...args);
+const Page = ({children}) => {
+  const gmp = useGmp();
+  const location = useLocation();
 
-    this.state = {};
-  }
+  const [capabilities, setCapabilities] = useState();
+  const query = useGqlCapabilities();
+  const {data, error} = query();
 
-  componentDidMount() {
-    const {gmp} = this.props;
+  useEffect(() => {
+    if (isDefined(data) && isDefined(data.capabilities)) {
+      setCapabilities(new Capabilities(data.capabilities));
+    } else {
+      log.error(
+        'An error during fetching capabilities from hyperion. Trying gmp...',
+        error,
+      );
 
-    gmp.user
-      .currentCapabilities()
-      .then(response => {
-        const capabilities = response.data;
-        log.debug('User capabilities', capabilities);
-        this.setState({capabilities});
-      })
-      .catch(rejection => {
-        log.error('An error occurred during fetching capabilities', rejection);
-        // use empty capabilities
-        this.setState({capabilities: new Capabilities()});
-      });
-  }
-
-  render() {
-    const {children, location} = this.props;
-    const {capabilities} = this.state;
-
-    if (!isDefined(capabilities)) {
-      // only show content after caps have been loaded
-      // this avoids ugly re-rendering of parts of the ui (e.g. the menu)
-      return null;
+      gmp.user
+        .currentCapabilities()
+        .then(response => {
+          const caps = response.data;
+          log.debug('User capabilities', caps);
+          setCapabilities(caps);
+        })
+        .catch(rejection => {
+          log.error(
+            'An error occurred during fetching capabilities',
+            rejection,
+          );
+          // use empty capabilities
+          setCapabilities(new Capabilities());
+        });
     }
+  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
+  // if we don't wait for data to become defined, undefined caps will be saved.
 
-    return (
-      <CapabilitiesContext.Provider value={capabilities}>
-        <StyledLayout flex="column" align={['start', 'stretch']}>
-          <MenuBar />
-          <Header />
-          <Main>
-            <ErrorBoundary
-              key={location.pathname}
-              message={_('An error occurred on this page.')}
-            >
-              {children}
-            </ErrorBoundary>
-          </Main>
-          <Footer />
-        </StyledLayout>
-      </CapabilitiesContext.Provider>
-    );
+  if (!isDefined(capabilities)) {
+    // only show content after caps have been loaded
+    // this avoids ugly re-rendering of parts of the ui (e.g. the menu)
+    return null;
   }
-}
 
-Page.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
+  return (
+    <CapabilitiesContext.Provider value={capabilities}>
+      <StyledLayout flex="column" align={['start', 'stretch']}>
+        <MenuBar />
+        <Header />
+        <Main>
+          <ErrorBoundary
+            key={location.pathname}
+            message={_('An error occurred on this page.')}
+          >
+            {children}
+          </ErrorBoundary>
+        </Main>
+        <Footer />
+      </StyledLayout>
+    </CapabilitiesContext.Provider>
+  );
 };
 
-export default compose(
-  withGmp,
-  withRouter,
-)(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:

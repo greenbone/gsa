@@ -25,8 +25,7 @@ import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import PropTypes from 'web/utils/proptypes';
 
 import CloneIcon from 'web/components/icon/cloneicon';
-import withCapabilities from 'web/utils/withCapabilities';
-import {useGqlCapabilities} from 'web/utils/useGqlCapabilities';
+import useCapabilities from 'web/utils/useCapabilities';
 
 const EntityCloneIcon = ({
   displayName,
@@ -37,7 +36,7 @@ const EntityCloneIcon = ({
   onClick,
   ...props
 }) => {
-  const capabilities = useGqlCapabilities(props.capabilities);
+  const capabilities = useCapabilities();
 
   if (!isDefined(name)) {
     name = getEntityType(entity);
@@ -73,7 +72,6 @@ const EntityCloneIcon = ({
 };
 
 EntityCloneIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   mayClone: PropTypes.bool,
@@ -82,6 +80,6 @@ EntityCloneIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(EntityCloneIcon);
+export default EntityCloneIcon;
 
 // vim: set ts=2 sw=2 tw=80:

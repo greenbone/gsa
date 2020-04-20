@@ -18,20 +18,12 @@
 import React from 'react';
 
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import {useGqlCapabilities} from 'web/utils/useGqlCapabilities';
+import useCapabilities from 'web/utils/useCapabilities';
 
 import Link from './link';
 
-const DetailsLink = ({
-  capabilities: caps,
-  id,
-  type,
-  textOnly = false,
-  ...props
-}) => {
-  const capabilities = useGqlCapabilities(caps);
+const DetailsLink = ({id, type, textOnly = false, ...props}) => {
+  const capabilities = useCapabilities();
 
   textOnly = textOnly || !capabilities.mayAccess(type);
 
@@ -46,12 +38,11 @@ const DetailsLink = ({
 };
 
 DetailsLink.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   id: PropTypes.id.isRequired,
   textOnly: PropTypes.bool,
   type: PropTypes.string.isRequired,
 };
 
-export default withCapabilities(DetailsLink);
+export default DetailsLink;
 
 // vim: set ts=2 sw=2 tw=80:

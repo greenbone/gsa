@@ -19,9 +19,6 @@
 import gql from 'graphql-tag';
 
 import {useQuery} from '@apollo/react-hooks';
-import {isDefined} from 'gmp/utils/identity';
-
-import Capabilities from 'gmp/capabilities/capabilities';
 
 import {toFruitfulQuery} from 'web/utils/graphql';
 
@@ -31,16 +28,6 @@ export const GET_CAPS = gql`
   }
 `;
 
-export const useGetCapabilities = () => {
+export const useGqlCapabilities = () => {
   return toFruitfulQuery(useQuery)(GET_CAPS);
-};
-
-export const useGqlCapabilities = caps => {
-  const query = useGetCapabilities();
-  const {data} = query();
-
-  if (isDefined(data)) {
-    return new Capabilities(data.capabilities);
-  }
-  return caps; // fallback to HOC
 };

@@ -20,12 +20,11 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import {useGqlCapabilities} from 'web/utils/useGqlCapabilities';
+import useCapabilities from 'web/utils/useCapabilities';
 import ImportIcon from 'web/components/icon/importicon';
 
-const ImportReportIcon = ({size, task, onClick, ...props}) => {
-  const capabilities = useGqlCapabilities(props.capabilities);
+const ImportReportIcon = ({size, task, onClick}) => {
+  const capabilities = useCapabilities();
 
   if (!task.isContainer() || !capabilities.mayCreate('report')) {
     return null;
@@ -43,12 +42,11 @@ const ImportReportIcon = ({size, task, onClick, ...props}) => {
 };
 
 ImportReportIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(ImportReportIcon);
+export default ImportReportIcon;
 
 // vim: set ts=2 sw=2 tw=80:
