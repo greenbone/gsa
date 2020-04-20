@@ -37,6 +37,8 @@ import {
   ospScannersFilter,
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
+  GMP_SCANNER_TYPE,
+  GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 
 import {
@@ -133,6 +135,7 @@ class PolicyComponent extends React.Component {
     this.handleTargetCreated = this.handleTargetCreated.bind(this);
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleScannerChange = this.handleScannerChange.bind(this);
   }
 
   handleChange(value, name) {
@@ -225,6 +228,7 @@ class PolicyComponent extends React.Component {
 
   openCreateAuditDialog(policy) {
     this.props.loadAlerts();
+    this.props.loadScanners();
     this.props.loadSchedules();
     this.props.loadTargets();
 
@@ -277,6 +281,8 @@ class PolicyComponent extends React.Component {
     maxChecks,
     maxHosts,
     name,
+    scannerId = OPENVAS_DEFAULT_SCANNER_ID,
+    scannerType = OPENVAS_SCANNER_TYPE,
     scheduleId,
     schedulePeriods,
     sourceIface,
@@ -284,9 +290,6 @@ class PolicyComponent extends React.Component {
   }) {
     const {gmp} = this.props;
     const {policyId} = this.state;
-
-    const scannerId = OPENVAS_DEFAULT_SCANNER_ID;
-    const scannerType = OPENVAS_SCANNER_TYPE;
 
     const tagId = undefined;
     const addTag = NO_VALUE;
@@ -584,6 +587,10 @@ class PolicyComponent extends React.Component {
     ]);
   }
 
+  handleScannerChange(scannerId) {
+    this.setState({scannerId});
+  }
+
   render() {
     const {
       alerts,
@@ -697,11 +704,14 @@ class PolicyComponent extends React.Component {
                               hostsOrdering={hostsOrdering}
                               id={id}
                               in_assets={in_assets}
+                              isLoadingScanners={this.props.isLoadingScanners}
                               maxChecks={maxChecks}
                               maxHosts={maxHosts}
                               name={name}
                               policies={[{name: policyName, id: policyId}]}
                               policyId={policyId}
+                              scannerId={scannerId}
+                              scanners={this.props.scanners}
                               scheduleId={scheduleId}
                               schedulePeriods={schedulePeriods}
                               schedules={schedules}
@@ -715,6 +725,7 @@ class PolicyComponent extends React.Component {
                               onNewScheduleClick={createschedule}
                               onClose={this.handleCloseCreateAuditDialog}
                               onSave={this.handleSaveAudit}
+                              onScannerChange={this.handleScannerChange}
                             />
                           )}
                         </ScheduleComponent>
@@ -823,10 +834,12 @@ PolicyComponent.propTypes = {
   defaultScheduleId: PropTypes.id,
   defaultTargetId: PropTypes.id,
   gmp: PropTypes.gmp.isRequired,
+  isLoadingScanners: PropTypes.bool,
   loadAlerts: PropTypes.func.isRequired,
   loadScanners: PropTypes.func.isRequired,
   loadSchedules: PropTypes.func.isRequired,
   loadTargets: PropTypes.func.isRequired,
+  scanners: PropTypes.arrayOf(PropTypes.model),
   schedules: PropTypes.arrayOf(PropTypes.model),
   targets: PropTypes.arrayOf(PropTypes.model),
   onCloneError: PropTypes.func,
@@ -850,6 +863,17 @@ const mapStateToProps = rootState => {
   const scannersSel = scannerSelector(rootState);
   const scheduleSel = scheduleSelector(rootState);
   const targetSel = targetSelector(rootState);
+
+  const scannerList = scannersSel.getEntities(ALL_FILTER);
+  const scanners = isDefined(scannerList)
+    ? scannerList.filter(
+        scanner =>
+          scanner.scannerType === OPENVAS_SCANNER_TYPE ||
+          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE ||
+          scanner.scannerType === GMP_SCANNER_TYPE,
+      )
+    : undefined;
+
   return {
     timezone: getTimezone(rootState),
     alerts: alertSel.getEntities(ALL_FILTER),
@@ -861,7 +885,8 @@ const mapStateToProps = rootState => {
     defaultSshCredential: userDefaults.getValueByName('defaultsshcredential'),
     defaultSmbCredential: userDefaults.getValueByName('defaultsmbcredential'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
-    scanners: scannersSel.getEntities(ALL_FILTER),
+    isLoadingScanners: scannersSel.isLoadingAllEntities(ALL_FILTER),
+    scanners,
     schedules: scheduleSel.getEntities(ALL_FILTER),
     targets: targetSel.getEntities(ALL_FILTER),
   };
