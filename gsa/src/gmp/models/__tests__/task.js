@@ -66,7 +66,7 @@ describe('Task Model parse tests', () => {
     const element = {
       _id: 't1',
       lastReport: {
-        uuid: 'r1',
+        id: 'r1',
       },
     };
 
@@ -83,7 +83,7 @@ describe('Task Model parse tests', () => {
     const element = {
       _id: 't1',
       currentReport: {
-        uuid: 'r1',
+        id: 'r1',
       },
     };
 
@@ -176,7 +176,7 @@ describe('Task Model parse tests', () => {
     const element = {
       _id: 't1',
       scanner: {
-        uuid: 's1',
+        id: 's1',
       },
     };
 
@@ -193,7 +193,7 @@ describe('Task Model parse tests', () => {
     const element = {
       _id: 't1',
       schedule: {
-        uuid: 's1',
+        id: 's1',
       },
     };
 
@@ -208,7 +208,7 @@ describe('Task Model parse tests', () => {
 
   test('should parse report counts', () => {
     const element = {
-      uuid: 't1',
+      id: 't1',
       reportCount: {
         total: '13',
         finished: '14',
@@ -498,8 +498,8 @@ describe(`Task Model methods tests`, () => {
       userTags: {
         count: 2,
         tags: [
-          {name: 'foo', uuid: 'bar', value: 'lorem', comment: 'ipsum'},
-          {name: 'foo1', uuid: 'bar1', value: 'lorem1', comment: 'ipsum1'},
+          {name: 'foo', id: 'bar', value: 'lorem', comment: 'ipsum'},
+          {name: 'foo1', id: 'bar1', value: 'lorem1', comment: 'ipsum1'},
         ],
       },
     });
