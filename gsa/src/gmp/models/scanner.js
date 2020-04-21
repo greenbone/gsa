@@ -99,10 +99,12 @@ class Scanner extends Model {
       ret.id = element.uuid;
     }
 
-    if (hasValue(element.scannerType)) {
-      ret.scannerType = scannerTypeInt(element.scannerType);
+    // scanner.type can be one of three formats:
+    // integer 2 (for scanners), '2' (audits) and 'OPENVAS_SCANNER_TYPE' (hyperion)
+    if (isString(element.type) && element.type.length > 2) {
+      ret.scannerType = scannerTypeInt(element.type); // 'OPENVAS_SCANNER_TYPE' -> 2
     } else {
-      ret.scannerType = parseInt(element.type);
+      ret.scannerType = parseInt(element.type); // '2' and 2 maps to 2.
     }
 
     ret.credential =
