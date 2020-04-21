@@ -188,13 +188,13 @@ class Task extends Model {
       delete copy.alerts;
     }
 
-    if (hasValue(object.scanner) && !isEmpty(object.scanner.uuid)) {
+    if (hasValue(object.scanner)) {
       copy.scanner = Scanner.fromElement(object.scanner);
     } else {
       delete copy.scanner;
     }
 
-    if (hasValue(object.schedule) && !isEmpty(object.schedule.uuid)) {
+    if (hasValue(object.schedule)) {
       copy.schedule = Schedule.fromObject(object.schedule);
     } else {
       delete copy.schedule;

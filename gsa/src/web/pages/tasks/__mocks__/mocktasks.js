@@ -24,36 +24,36 @@ setLocale('en');
 
 // Target
 const target = {
-  uuid: '159',
+  id: '159',
   name: 'target 1',
 };
 
 const target2 = {
-  uuid: '265',
+  id: '265',
   name: 'target 2',
 };
 
 const target3 = {
-  uuid: '358',
+  id: '358',
   name: 'target 3',
 };
 
 // Scanner
 const scanner = {
-  uuid: '212223',
+  id: '212223',
   name: 'scanner 1',
-  scannerType: 'OPENVAS_SCANNER_TYPE',
+  type: 'OPENVAS_SCANNER_TYPE',
 };
 
 const gmpScanner = {
-  uuid: '242526',
+  id: '242526',
   name: 'scanner 2',
-  scannerType: 'GMP_SCANNER_TYPE',
+  type: 'GMP_SCANNER_TYPE',
 };
 
 // ScanConfig
 const scanConfig = {
-  uuid: '314',
+  id: '314',
   name: 'foo',
   comment: 'bar',
   trash: false,
@@ -62,14 +62,14 @@ const scanConfig = {
 };
 
 // Schedule
-const schedule = {uuid: '121314', name: 'schedule 1'};
+const schedule = {id: '121314', name: 'schedule 1'};
 
 // Alert
-const alert = {uuid: '151617', name: 'alert 1'};
+const alert = {id: '151617', name: 'alert 1'};
 
 // Reports
 const lastReport = {
-  uuid: '1234',
+  id: '1234',
   severity: '5.0',
   timestamp: '2019-07-30T13:23:30Z',
   scanStart: '2019-07-30T13:23:34Z',
@@ -77,7 +77,7 @@ const lastReport = {
 };
 
 const currentReport = {
-  uuid: '5678',
+  id: '5678',
   timestamp: '2019-08-30T13:23:30Z',
   scanStart: '2019-08-30T13:23:34Z',
 };
@@ -143,7 +143,7 @@ const preferences = [
 
 // Tasks
 const task = {
-  uuid: '12345',
+  id: '12345',
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
@@ -169,7 +169,7 @@ const task = {
 };
 
 const newTask = {
-  uuid: '12345',
+  id: '12345',
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
@@ -184,7 +184,7 @@ const newTask = {
 };
 
 const finishedTask = {
-  uuid: '12345',
+  id: '12345',
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
@@ -199,7 +199,7 @@ const finishedTask = {
 };
 
 const runningTask = {
-  uuid: '12345',
+  id: '12345',
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
@@ -217,7 +217,7 @@ const runningTask = {
 };
 
 const stoppedTask = {
-  uuid: '12345',
+  id: '12345',
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
@@ -234,7 +234,7 @@ const stoppedTask = {
 };
 
 const observedTask = {
-  uuid: '12345',
+  id: '12345',
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
@@ -250,7 +250,7 @@ const observedTask = {
 };
 
 const containerTask = {
-  uuid: '12345',
+  id: '12345',
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
@@ -266,7 +266,7 @@ const containerTask = {
 
 const listMockTask = {
   name: 'foo',
-  uuid: '12345',
+  id: '12345',
   permissions: allPermissions,
   lastReport,
   reportCount: {
@@ -289,7 +289,7 @@ const listMockTask = {
 
 const detailsMockTask = {
   name: 'foo',
-  uuid: '12345',
+  id: '12345',
   creationTime: '2019-07-30T13:00:00Z',
   modificationTime: '2019-08-30T13:23:30Z',
   permissions: allPermissions,

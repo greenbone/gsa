@@ -26,21 +26,21 @@ export const GET_TASK = gql`
   query Task($taskId: UUID!) {
     task(taskId: $taskId) {
       name
-      uuid
+      id
       creationTime
       modificationTime
       permissions {
         name
       }
       lastReport {
-        uuid
+        id
         severity
         timestamp
         scanStart
         scanEnd
       }
       currentReport {
-        uuid
+        id
         scanStart
       }
       reportCount {
@@ -50,7 +50,7 @@ export const GET_TASK = gql`
       status
       target {
         name
-        uuid
+        id
       }
       trend
       comment
@@ -62,25 +62,25 @@ export const GET_TASK = gql`
       }
       schedule {
         name
-        uuid
+        id
         icalendar
         timezone
         duration
       }
       alerts {
         name
-        uuid
+        id
       }
       scanConfig {
-        uuid
+        id
         name
         trash
-        scanConfigType
+        type
       }
       scanner {
-        uuid
+        id
         name
-        scannerType
+        type
       }
       schedulePeriods
       hostsOrdering
@@ -88,7 +88,7 @@ export const GET_TASK = gql`
         count
         tags {
           name
-          uuid
+          id
           value
           comment
         }
@@ -115,12 +115,12 @@ export const GET_TASKS = gql`
     tasks(filterString: $filterString) {
       nodes {
         name
-        uuid
+        id
         permissions {
           name
         }
         lastReport {
-          uuid
+          id
           severity
           timestamp
         }
@@ -131,7 +131,7 @@ export const GET_TASKS = gql`
         status
         target {
           name
-          uuid
+          id
         }
         trend
         comment
@@ -143,24 +143,24 @@ export const GET_TASKS = gql`
         }
         schedule {
           name
-          uuid
+          id
           icalendar
           timezone
           duration
         }
         alerts {
           name
-          uuid
+          id
         }
         scanConfig {
-          uuid
+          id
           name
           trash
         }
         scanner {
-          uuid
+          id
           name
-          scannerType
+          type
         }
         hostsOrdering
         observers {
@@ -226,7 +226,7 @@ export const MODIFY_TASK = gql`
       alterable: $alterable
       comment: $comment
     ) {
-      taskId
+      id
     }
   }
 `;

@@ -134,10 +134,6 @@ class Model {
     const copy = parseDefaultProperties(object);
 
     // use hasValue instead of isDefined for all things graphql related, since no value is null in Django.
-    if (!hasValue(object.id) && hasValue(object.uuid)) {
-      copy.id = object.uuid;
-      delete copy.uuid;
-    }
 
     if (hasValue(object.end_time)) {
       if (object.end_time.length > 0) {
