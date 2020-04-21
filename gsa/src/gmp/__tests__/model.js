@@ -49,7 +49,7 @@ describe('parseModelFromElement tests', () => {
 
 describe('fromObject tests', () => {
   test('Should parse id', () => {
-    const object = {uuid: 'foo'};
+    const object = {id: 'foo'};
     const model = Model.fromObject(object);
 
     expect(model.id).toEqual('foo');
