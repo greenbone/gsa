@@ -25,7 +25,7 @@ import {toFruitfulQuery} from 'web/utils/graphql';
 export const GET_SETTING = gql`
   query UserSetting($userSettingId: UUID!) {
     userSetting(userSettingId: $userSettingId) {
-      uuid
+      id
       name
       value
       comment
@@ -40,7 +40,7 @@ export const useGetSetting = () => {
 export const GET_SETTINGS = gql`
   query UserSettings($filterString: String) {
     userSettings(filterString: $filterString) {
-      uuid
+      id
       name
       value
       comment
