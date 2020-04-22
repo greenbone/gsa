@@ -18,24 +18,29 @@
 
 import React from 'react';
 
-import Theme from 'web/utils/theme';
+import PropTypes from 'web/utils/proptypes';
 
-import Field from './field.js';
+import Field from './field';
+import {Marker} from './useFormValidation';
 
-const TextField = ({shouldValidate = false, errorContent = '', ...props}) => {
-  const bgColor = shouldValidate ? 'rgb(216, 54, 54, 0.1)' : 'white'; //warningRed at opacity 10%
-  const checkMarkColor = shouldValidate ? Theme.warningRed : 'white';
+const TextField = ({hasError = false, errorContent, title, ...props}) => {
   return (
     <React.Fragment>
       <Field
         {...props}
-        title={errorContent}
-        style={{background: bgColor}}
+        hasError={hasError}
+        title={hasError ? errorContent : title}
         type="text"
       />
-      <div style={{color: checkMarkColor}}>&#10008;</div>
+      <Marker isVisible={hasError}>×</Marker>
     </React.Fragment>
   );
+};
+
+TextField.propTypes = {
+  errorContent: PropTypes.string,
+  hasError: PropTypes.bool,
+  title: PropTypes.string,
 };
 
 export default TextField;
