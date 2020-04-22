@@ -18,10 +18,14 @@
  */
 import 'core-js/features/object/keys';
 
+import React, {useState, useEffect} from 'react';
+
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 
-import {useState, useEffect} from 'react';
+import Theme from 'web/utils/theme';
 
 export const parseAlias = string => {
   const parsedString = string.replace(/(_)/g, ' ').replace(/([A-Z])/g, ' $1');
@@ -37,6 +41,18 @@ export const syncVariables = (values, formState, dependencies = {}) => {
   Object.keys(formState).forEach(key => (values[key] = formState[key]));
   Object.keys(dependencies).forEach(key => (values[key] = dependencies[key]));
 }; // sync all form states with the values known to SaveDialog
+
+const StyledMarker = styled.div`
+  color: ${Theme.darkRed};
+  color: ${props => props.color};
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: ${props => (props.isVisible ? 'inline' : 'none')};
+`;
+
+export const Marker = props => <StyledMarker {...props}>×</StyledMarker>;
 
 const useFormValidation = (
   stateSchema,
