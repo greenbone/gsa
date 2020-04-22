@@ -276,7 +276,7 @@ const ScannerDialog = ({
                       name="name"
                       grow="1"
                       value={formState.name}
-                      shouldValidate={shouldWarn && !formStatus.name.validity}
+                      hasError={shouldWarn && !formStatus.name.validity}
                       onChange={handleValueChange}
                     />
                   </FormGroup>
