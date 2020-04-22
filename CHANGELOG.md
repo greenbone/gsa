@@ -7,8 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [9.0.1] - unreleased
 
 ### Added
-- Added scanner selection to audit dialog 
-  [#2031](https://github.com/greenbone/gsa/pull/2031) 
+- Added scanner selection to audit dialog
+  [#2031](https://github.com/greenbone/gsa/pull/2031)
   [#2105](https://github.com/greenbone/gsa/pull/2105)
 - Added base config to create scanconfig dialog, make it new default base for scanconfigs and new base for policies [#1789](https://github.com/greenbone/gsa/pull/1789)
 - Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)
@@ -35,6 +35,7 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Lower memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
 
 ### Fixed
+- Fixed passing threshold prop in AlertActions for ThresholdMessage [#2114](https://github.com/greenbone/gsa/pull/2114)
 - Fixed audit listpage observer tooltip [#2048](https://github.com/greenbone/gsa/pull/2048)
 - Fixed showing errors in CredentialDialog when opened from AlertDialog [#2041](https://github.com/greenbone/gsa/pull/2041)
 - Fixed usage of report format %F in generateFilename() [#2021](https://github.com/greenbone/gsa/pull/2021)
