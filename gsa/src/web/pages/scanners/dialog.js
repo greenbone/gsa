@@ -307,7 +307,7 @@ const ScannerDialog = ({
                       disabled={isInUse}
                       grow="1"
                       title={formStatus.host.error}
-                      needValidation={shouldWarn && !formStatus.host.validity}
+                      hasError={shouldWarn && !formStatus.host.validity}
                       onChange={handleValueChange}
                     />
                   </FormGroup>
