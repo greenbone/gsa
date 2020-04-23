@@ -53,6 +53,7 @@ export const GET_TASK = gql`
         id
       }
       trend
+      alterable
       comment
       owner
       preferences {
@@ -134,6 +135,7 @@ export const GET_TASKS = gql`
           id
         }
         trend
+        alterable
         comment
         owner
         preferences {
