@@ -23,6 +23,8 @@ import ScanConfig, {
   filterEmptyScanConfig,
   openVasScanConfigsFilter,
   ospScanConfigsFilter,
+  OPENVAS_SCAN_CONFIG_TYPE,
+  OSP_SCAN_CONFIG_TYPE,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
 import {testModel} from 'gmp/models/testing';
@@ -262,16 +264,16 @@ describe('ScanConfigs model function test', () => {
   });
 
   test('openVasScanConfigsFilter() should return filter with correct true/false', () => {
-    const config1 = {scanConfigType: 1}; // OSP scanconfig type
-    const config2 = {scanConfigType: 0}; // OpenVAS scanconfig type
+    const config1 = {scanConfigType: OSP_SCAN_CONFIG_TYPE};
+    const config2 = {scanConfigType: OPENVAS_SCAN_CONFIG_TYPE};
 
     expect(openVasScanConfigsFilter(config1)).toEqual(false);
     expect(openVasScanConfigsFilter(config2)).toEqual(true);
   });
 
   test('ospScanConfigsFilter() should return filter with correct true/false', () => {
-    const config1 = {scanConfigType: 1}; // OSP scanconfig type
-    const config2 = {scanConfigType: 0}; // OpenVAS scanconfig type
+    const config1 = {scanConfigType: OSP_SCAN_CONFIG_TYPE};
+    const config2 = {scanConfigType: OPENVAS_SCAN_CONFIG_TYPE};
 
     expect(ospScanConfigsFilter(config1)).toEqual(true);
     expect(ospScanConfigsFilter(config2)).toEqual(false);
