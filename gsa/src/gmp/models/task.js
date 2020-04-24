@@ -177,7 +177,7 @@ class Task extends Model {
     }
 
     if (hasValue(object.scanConfig)) {
-      copy.config = ScanConfig.fromObject(object.scanConfig);
+      copy.config = ScanConfig.fromElement(object.scanConfig);
     }
 
     delete copy.scanConfig;
