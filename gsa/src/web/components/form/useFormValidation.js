@@ -77,8 +77,8 @@ const useFormValidation = (
 
   // eslint-disable-next-line no-shadow
   const validate = (value, name, dependencies) => {
-    setFormStatus(validity => ({
-      ...validity,
+    setFormStatus(prevValidityStatus => ({
+      ...prevValidityStatus,
       [name]: validationRules[name](value, dependencies),
     }));
   };
