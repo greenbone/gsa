@@ -96,7 +96,7 @@ const About = ({gmp}) => (
           </DivP>
           <DivP>
             {_(
-              'License: GNU Affero General Public License version 2 or any later' +
+              'License: GNU Affero General Public License version 3 or any later' +
                 ' version',
             )}
             &nbsp;
