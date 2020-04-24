@@ -52,7 +52,11 @@ const StyledMarker = styled.div`
   display: ${props => (props.isVisible ? 'inline' : 'none')};
 `;
 
-export const Marker = props => <StyledMarker {...props}>×</StyledMarker>;
+export const Marker = props => (
+  <StyledMarker {...props} data-testid="error-marker">
+    ×
+  </StyledMarker>
+);
 
 const useFormValidation = (
   stateSchema,

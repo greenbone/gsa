@@ -26,7 +26,9 @@ import Credential, {
 } from 'gmp/models/credential';
 import Scanner, {OSP_SCANNER_TYPE, GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
-import {rendererWith, fireEvent, queryAllByTestId} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
+import Theme from 'web/utils/theme';
+
 import ScannerDialog from 'web/pages/scanners/dialog';
 
 setLocale('en');
@@ -302,7 +304,7 @@ describe('ScannerDialog component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {baseElement, getByTestId} = render(
+    const {baseElement, element, getByTestId, getAllByTestId} = render(
       <ScannerDialog
         comment={scanner.comment}
         credential_id={'2345'}
@@ -321,20 +323,47 @@ describe('ScannerDialog component tests', () => {
 
     const saveButton = getByTestId('dialog-save-button');
 
+    const inputs = baseElement.querySelectorAll('input');
+    expect(inputs.length).toEqual(2);
+
+    expect(inputs[0]).not.toHaveAttribute('title'); // no error message should display prior to submit
+
     fireEvent.click(saveButton);
 
     expect(handleSave).not.toHaveBeenCalled();
 
-    const errors = queryAllByTestId(baseElement, 'error-bubble');
-    expect(errors[0]).toHaveTextContent('Missing name');
+    expect(baseElement).toMatchSnapshot();
+    expect(element).toMatchSnapshot();
+
+    expect(inputs[0]).toHaveAttribute('title', 'Missing name.');
+    expect(inputs[1]).not.toHaveAttribute('title'); // not-validated fields such as comment should not have title unless set.
+
+    const errorMarkers = getAllByTestId('error-marker');
+
+    expect(errorMarkers.length).toEqual(2);
+
+    const nameMarker = errorMarkers[0];
+    const commentMarker = errorMarkers[1];
+    expect(nameMarker).toHaveStyleRule('color', Theme.darkRed); // field with error should display red mark
+    expect(nameMarker).toHaveStyleRule('display', 'inline');
+    expect(commentMarker).toHaveStyleRule('display', 'none'); // field not needing validation or with no error should not display red mark
 
     const nextButton = baseElement.querySelector('button[title="🠮"]');
 
     fireEvent.click(nextButton);
 
-    const moreErrors = queryAllByTestId(baseElement, 'error-bubble');
-    expect(moreErrors.length).toEqual(1);
-    expect(moreErrors[0]).toHaveTextContent('Missing or invalid host.');
+    const moreInputs = baseElement.querySelectorAll('input');
+
+    expect(moreInputs.length).toEqual(1);
+    expect(moreInputs[0]).toHaveAttribute('title', 'Missing or invalid host.');
+
+    const moreErrorMarkers = getAllByTestId('error-marker');
+
+    expect(moreErrorMarkers.length).toEqual(1);
+
+    const hostMarker = moreErrorMarkers[0];
+    expect(hostMarker).toHaveStyleRule('color', Theme.darkRed);
+    expect(hostMarker).toHaveStyleRule('display', 'inline');
   });
 
   test('should allow to close the dialog', () => {
