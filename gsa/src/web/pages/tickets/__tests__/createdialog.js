@@ -156,9 +156,5 @@ describe('CreateTicketDialog component tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).not.toHaveBeenCalled();
-
-    const errorBubbles = queryAllByTestId(baseElement, 'error-bubble');
-
-    expect(errorBubbles[0]).toHaveTextContent('Ticket note is required.');
   });
 });

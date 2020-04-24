@@ -23,7 +23,6 @@ import {TICKET_STATUS, TICKET_STATUS_TRANSLATIONS} from 'gmp/models/ticket';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
-import ErrorBubble from 'web/components/form/errorbubble';
 import FormGroup from 'web/components/form/formgroup';
 import Layout from 'web/components/layout/layout';
 import Select from 'web/components/form/select';
@@ -71,10 +70,8 @@ const EditTicketDialog = ({
   const {
     formValues,
     dependencies,
-    shouldWarn,
     handleValueChange,
     handleDependencyChange,
-    validityStatus,
     handleSubmit,
   } = useFormValidation(stateSchema, validationRules, onSave, deps);
 
@@ -115,60 +112,33 @@ const EditTicketDialog = ({
                 onChange={onValueChange}
               />
             </FormGroup>
-            <ErrorBubble
-              visible={shouldWarn && !validityStatus.openNote.validity}
-              content={validityStatus.openNote.error}
-            >
-              {({targetRef}) => (
-                <div ref={targetRef}>
-                  <FormGroup title={_('Note for Open')}>
-                    <TextArea
-                      name="openNote"
-                      grow="1"
-                      rows="5"
-                      value={values.openNote}
-                      onChange={handleValueChange}
-                    />
-                  </FormGroup>
-                </div>
-              )}
-            </ErrorBubble>
-            <ErrorBubble
-              visible={shouldWarn && !validityStatus.fixedNote.validity}
-              content={validityStatus.fixedNote.error}
-            >
-              {({targetRef}) => (
-                <div ref={targetRef}>
-                  <FormGroup title={_('Note for Fixed')}>
-                    <TextArea
-                      name="fixedNote"
-                      grow="1"
-                      rows="5"
-                      value={values.fixedNote}
-                      onChange={handleValueChange}
-                    />
-                  </FormGroup>
-                </div>
-              )}
-            </ErrorBubble>
-            <ErrorBubble
-              visible={shouldWarn && !validityStatus.closedNote.validity}
-              content={validityStatus.closedNote.error}
-            >
-              {({targetRef}) => (
-                <div ref={targetRef}>
-                  <FormGroup title={_('Note for Closed')}>
-                    <TextArea
-                      name="closedNote"
-                      grow="1"
-                      rows="5"
-                      value={values.closedNote}
-                      onChange={handleValueChange}
-                    />
-                  </FormGroup>
-                </div>
-              )}
-            </ErrorBubble>
+            <FormGroup title={_('Note for Open')}>
+              <TextArea
+                name="openNote"
+                grow="1"
+                rows="5"
+                value={values.openNote}
+                onChange={handleValueChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('Note for Fixed')}>
+              <TextArea
+                name="fixedNote"
+                grow="1"
+                rows="5"
+                value={values.fixedNote}
+                onChange={handleValueChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('Note for Closed')}>
+              <TextArea
+                name="closedNote"
+                grow="1"
+                rows="5"
+                value={values.closedNote}
+                onChange={handleValueChange}
+              />
+            </FormGroup>
           </Layout>
         );
       }}

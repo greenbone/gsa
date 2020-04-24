@@ -48,7 +48,6 @@ import useFormValidation, {
   syncVariables,
 } from 'web/components/form/useFormValidation';
 import validationRules from './validationrules';
-import ErrorBubble from 'web/components/form/errorbubble';
 
 import KeyIcon from 'web/components/icon/keyicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -370,39 +369,28 @@ const ScannerDialog = ({
                     </React.Fragment>
                   )}
                   {!isGreenboneSensorType && (
-                    <ErrorBubble
-                      visible={
-                        shouldWarn && !validityStatus.credential_id.validity
-                      }
-                      content={validityStatus.credential_id.error}
-                    >
-                      {({targetRef}) => (
-                        <div ref={targetRef}>
-                          <FormGroup title={_('Credential')} flex="column">
-                            <Divider>
-                              <Select
-                                name="credential_id"
-                                items={renderSelectItems(scanner_credentials)}
-                                value={state.credential_id}
-                                onChange={handleValueChange}
-                              />
-                              <Layout>
-                                <NewIcon
-                                  value={type}
-                                  title={_('Create a new Credential')}
-                                  onClick={onNewCredentialClick}
-                                />
-                              </Layout>
-                            </Divider>
-                            {show_cred_info && (
-                              <CertStatus
-                                info={scanner.credential.certificate_info}
-                              />
-                            )}
-                          </FormGroup>
-                        </div>
+                    <FormGroup title={_('Credential')} flex="column">
+                      <Divider>
+                        <Select
+                          name="credential_id"
+                          items={renderSelectItems(scanner_credentials)}
+                          value={state.credential_id}
+                          onChange={handleValueChange}
+                        />
+                        <Layout>
+                          <NewIcon
+                            value={type}
+                            title={_('Create a new Credential')}
+                            onClick={onNewCredentialClick}
+                          />
+                        </Layout>
+                      </Divider>
+                      {show_cred_info && (
+                        <CertStatus
+                          info={scanner.credential.certificate_info}
+                        />
                       )}
-                    </ErrorBubble>
+                    </FormGroup>
                   )}
                 </TabPanel>
               </TabPanels>

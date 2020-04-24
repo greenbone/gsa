@@ -24,7 +24,6 @@ import styled from 'styled-components';
 
 import Theme from 'web/utils/theme';
 
-import ErrorBubble from 'web/components/form/errorbubble';
 import withLayout from 'web/components/layout/withLayout';
 
 import {DISABLED_OPACTIY} from './field';
@@ -60,15 +59,7 @@ const TextArea = ({warning = false, errorContent = '', ...props}) => {
     notifyChange(val);
   };
 
-  return (
-    <ErrorBubble visible={warning} content={errorContent}>
-      {({targetRef}) => (
-        <div ref={targetRef}>
-          <StyledTextArea {...props} value={value} onChange={handleChange} />
-        </div>
-      )}
-    </ErrorBubble>
-  );
+  return <StyledTextArea {...props} value={value} onChange={handleChange} />;
 };
 
 TextArea.propTypes = {

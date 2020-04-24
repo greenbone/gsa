@@ -195,7 +195,7 @@ describe('EditTicketDialog component tests', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
 
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <EditTicketDialog
         openNote="Ticket has been opened."
         status={TICKET_STATUS.closed}
@@ -211,12 +211,6 @@ describe('EditTicketDialog component tests', () => {
     fireEvent.click(saveButton);
 
     expect(handleSave).not.toHaveBeenCalled();
-
-    const errorBubbles = queryAllByTestId(baseElement, 'error-bubble');
-
-    expect(errorBubbles[0]).toHaveTextContent(
-      'If changing status to Closed, Close Note is required',
-    );
   });
 
   test('should allow to close the dialog', () => {
