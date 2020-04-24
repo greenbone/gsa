@@ -226,7 +226,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   align-items: center;
 }
 
-.c18 {
+.c19 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -244,7 +244,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   align-items: center;
 }
 
-.c28 {
+.c29 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -262,7 +262,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   justify-content: space-between;
 }
 
-.c37 {
+.c38 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -280,7 +280,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   align-items: center;
 }
 
-.c41 {
+.c42 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -294,7 +294,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   justify-content: center;
 }
 
-.c42 {
+.c43 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -312,7 +312,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   align-items: stretch;
 }
 
-.c43 {
+.c44 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -326,7 +326,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   justify-content: space-between;
 }
 
-.c54 {
+.c55 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -344,7 +344,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   align-items: center;
 }
 
-.c45 {
+.c46 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -411,7 +411,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   margin-left: 5px;
 }
 
-.c53 {
+.c54 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -434,14 +434,14 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   margin-left: -5px;
 }
 
-.c53 > * {
+.c54 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c53 > * {
+.c54 > * {
   margin-left: 5px;
 }
 
@@ -467,7 +467,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   display: inline-flex;
 }
 
-.c52 {
+.c53 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -497,7 +497,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   cursor: pointer;
 }
 
-.c31 svg path {
+.c32 svg path {
   fill: #aaaaaa;
 }
 
@@ -512,18 +512,18 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   width: inherit;
 }
 
-.c25 {
+.c26 {
   height: 50px;
   width: 50px;
   line-height: 50px;
 }
 
-.c25 * {
+.c26 * {
   height: inherit;
   width: inherit;
 }
 
-.c21 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -545,11 +545,11 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   position: relative;
 }
 
-.c22 {
+.c23 {
   margin: 0 0 1px 0;
 }
 
-.c23 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -567,7 +567,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   align-items: stretch;
 }
 
-.c24 {
+.c25 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -586,7 +586,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   margin-right: 5px;
 }
 
-.c26 {
+.c27 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -606,7 +606,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   min-width: 100px;
 }
 
-.c19 {
+.c20 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -631,18 +631,18 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   cursor: pointer;
 }
 
-.c20 {
+.c21 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c20 * {
+.c21 * {
   height: inherit;
   width: inherit;
 }
 
-.c16 {
+.c17 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -666,7 +666,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   font-weight: normal;
 }
 
-.c15 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -678,7 +678,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   width: 150px;
 }
 
-.c55 {
+.c56 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -690,7 +690,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   width: 180px;
 }
 
-.c17 {
+.c18 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -710,23 +710,23 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   cursor: default;
 }
 
-.c34 a {
+.c35 a {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #000;
 }
 
-.c34 a:hover {
+.c35 a:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #000;
 }
 
-.c36 {
+.c37 {
   cursor: pointer;
 }
 
-.c35 {
+.c36 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -734,7 +734,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   width: 52%;
 }
 
-.c38 {
+.c39 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -742,7 +742,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   width: 8%;
 }
 
-.c39 {
+.c40 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -750,7 +750,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   width: 24%;
 }
 
-.c40 {
+.c41 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -794,6 +794,15 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   align-items: center;
 }
 
+.c15 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c12 {
   margin-right: 5px;
 }
@@ -802,7 +811,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   margin-right: 5px;
 }
 
-.c56 {
+.c57 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -823,11 +832,11 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   text-align: left;
 }
 
-.c32 {
+.c33 {
   margin: 0 3px;
 }
 
-.c30 {
+.c31 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -846,7 +855,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   margin: 2px 3px;
 }
 
-.c33 {
+.c34 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -856,26 +865,26 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   opacity: 1.0;
 }
 
-.c33 th,
-.c33 td {
+.c34 th,
+.c34 td {
   padding: 4px 10px;
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c33 tfoot tr {
+.c34 tfoot tr {
   background: #fff;
 }
 
-.c33 tfoot tr td {
+.c34 tfoot tr td {
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c29 {
+.c30 {
   margin-top: 2px;
   margin-left: 2px;
 }
 
-.c27 {
+.c28 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -898,20 +907,20 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   margin-top: 20px;
 }
 
-.c44 {
+.c45 {
   cursor: pointer;
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #0000ff;
 }
 
-.c44:hover {
+.c45:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #0000ff;
 }
 
-.c47 {
+.c48 {
   height: 13px;
   box-sizing: content-box;
   display: inline-block;
@@ -921,7 +930,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   text-align: center;
 }
 
-.c49 {
+.c50 {
   z-index: 1;
   font-weight: bold;
   color: #fff;
@@ -932,23 +941,23 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   padding-top: 1px;
 }
 
-.c48 {
+.c49 {
   height: 13px;
   width: 100%;
   background: #4f91c7;
 }
 
-.c51 {
+.c52 {
   height: 13px;
   width: 50%;
   background: #c83814;
 }
 
-.c50 {
+.c51 {
   white-space: nowrap;
 }
 
-.c46:hover {
+.c47:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
 }
@@ -960,12 +969,12 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
 }
 
 @media print {
-  .c34 {
+  .c35 {
     border-bottom: 1px solid black;
   }
 
-  .c34 a,
-  .c34 a:hover {
+  .c35 a,
+  .c35 a:hover {
     -webkit-text-decoration: none;
     text-decoration: none;
     color: #000;
@@ -973,16 +982,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
 }
 
 @media print {
-  .c35 {
-    color: #000;
-    font-size: 1.2em;
-    background-color: none;
-    font-weight: bold;
-  }
-}
-
-@media print {
-  .c38 {
+  .c36 {
     color: #000;
     font-size: 1.2em;
     background-color: none;
@@ -1009,56 +1009,65 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
 }
 
 @media print {
-  .c30 svg {
+  .c41 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c31 svg {
     display: none;
   }
 }
 
 @media print {
-  .c33 {
+  .c34 {
     border-collapse: collapse;
   }
 }
 
 @media screen {
-  .c33 > tbody:nth-of-type(even),
-  .c33 > tbody:only-of-type > tr:nth-of-type(even) {
+  .c34 > tbody:nth-of-type(even),
+  .c34 > tbody:only-of-type > tr:nth-of-type(even) {
     background: #eeeeee;
   }
 
-  .c33 > tbody:not(:only-of-type):hover,
-  .c33 > tbody:only-of-type > tr:hover {
+  .c34 > tbody:not(:only-of-type):hover,
+  .c34 > tbody:only-of-type > tr:hover {
     background: #c8d3d9;
   }
 }
 
 @media print {
-  .c44 {
+  .c45 {
     color: #000;
-  }
-}
-
-@media print {
-  .c47 {
-    background: none;
-    border: 0;
-  }
-}
-
-@media print {
-  .c49 {
-    color: black;
   }
 }
 
 @media print {
   .c48 {
     background: none;
+    border: 0;
   }
 }
 
 @media print {
-  .c51 {
+  .c50 {
+    color: black;
+  }
+}
+
+@media print {
+  .c49 {
+    background: none;
+  }
+}
+
+@media print {
+  .c52 {
     background: none;
   }
 }
@@ -1145,6 +1154,12 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       type="text"
                       value=""
                     />
+                    <div
+                      class="c15"
+                      data-testid="error-marker"
+                    >
+                      ×
+                    </div>
                   </div>
                   <div
                     class="c2"
@@ -1211,31 +1226,31 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-labelledby="downshift-0-label"
-                class="c15"
+                class="c16"
                 role="combobox"
                 width="150px"
               >
                 <div
                   aria-haspopup="true"
                   aria-label="open menu"
-                  class="c16"
+                  class="c17"
                   data-toggle="true"
                   role="button"
                   title="Loaded filter"
                   type="button"
                 >
                   <div
-                    class="c17"
+                    class="c18"
                     data-testid="select-selected-value"
                     title="Loaded filter"
                   >
                     --
                   </div>
                   <div
-                    class="c18"
+                    class="c19"
                   >
                     <span
-                      class="c19 c20"
+                      class="c20 c21"
                       data-testid="select-open-button"
                     >
                       ▼
@@ -1251,16 +1266,16 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
         class="entities-section"
       >
         <div
-          class="c21 section-header"
+          class="c22 section-header"
         >
           <h2
-            class="c22 c23"
+            class="c23 c24"
           >
             <div
-              class="c24"
+              class="c25"
             >
               <span
-                class="c25"
+                class="c26"
                 data-testid="svg-icon"
               >
                 <svg>
@@ -1269,7 +1284,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
               </span>
             </div>
             <div
-              class="c26"
+              class="c27"
             >
               Audits 0 of 0
             </div>
@@ -1282,13 +1297,13 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
           class="c0"
         >
           <div
-            class="c27 entities-table"
+            class="c28 entities-table"
           >
             <div
-              class="c28"
+              class="c29"
             >
               <span
-                class="c5 c4 c29"
+                class="c5 c4 c30"
                 data-testid="svg-icon"
                 title="Unfold all details"
               >
@@ -1299,7 +1314,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                 </svg>
               </span>
               <div
-                class="c30"
+                class="c31"
               >
                 <div
                   class="c2"
@@ -1309,7 +1324,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="First"
                     >
@@ -1320,7 +1335,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="Previous"
                     >
@@ -1333,7 +1348,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                   </div>
                 </div>
                 <span
-                  class="c32"
+                  class="c33"
                 >
                   0 - 0 of 0
                 </span>
@@ -1345,7 +1360,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="Next"
                     >
@@ -1356,7 +1371,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="Last"
                     >
@@ -1371,35 +1386,22 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
               </div>
             </div>
             <table
-              class="c33"
+              class="c34"
             >
               <thead
-                class="c34"
+                class="c35"
               >
                 <tr>
                   <th
-                    class="c35"
+                    class="c36"
                   >
                     <a
-                      class="c36"
+                      class="c37"
                     >
                       <div
-                        class="c37"
+                        class="c38"
                       >
                         Name
-                      </div>
-                    </a>
-                  </th>
-                  <th
-                    class="c38"
-                  >
-                    <a
-                      class="c36"
-                    >
-                      <div
-                        class="c37"
-                      >
-                        Status
                       </div>
                     </a>
                   </th>
@@ -1407,29 +1409,42 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                     class="c39"
                   >
                     <a
-                      class="c36"
+                      class="c37"
                     >
                       <div
-                        class="c37"
+                        class="c38"
+                      >
+                        Status
+                      </div>
+                    </a>
+                  </th>
+                  <th
+                    class="c40"
+                  >
+                    <a
+                      class="c37"
+                    >
+                      <div
+                        class="c38"
                       >
                         Report
                       </div>
                     </a>
                   </th>
                   <th
-                    class="c38"
+                    class="c39"
                   >
                     <div
-                      class="c37"
+                      class="c38"
                     >
                       Compliance Status
                     </div>
                   </th>
                   <th
-                    class="c40"
+                    class="c41"
                   >
                     <div
-                      class="c41"
+                      class="c42"
                     >
                       Actions
                     </div>
@@ -1442,13 +1457,13 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                 <tr>
                   <td>
                     <div
-                      class="c42"
+                      class="c43"
                     >
                       <div
-                        class="c43"
+                        class="c44"
                       >
                         <span
-                          class="c44"
+                          class="c45"
                           name="1234"
                         >
                           foo
@@ -1473,27 +1488,27 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                   </td>
                   <td>
                     <div
-                      class="c42"
+                      class="c43"
                     >
                       <a
-                        class="c45 c46"
+                        class="c46 c47"
                         data-testid="details-link"
                         href="/report/1234"
                       >
                         <div
-                          class="c47"
+                          class="c48"
                           data-testid="progressbar-box"
                           title="Done"
                         >
                           <div
-                            class="c48"
+                            class="c49"
                             data-testid="progress"
                           />
                           <div
-                            class="c49"
+                            class="c50"
                           >
                             <span
-                              class="c50"
+                              class="c51"
                             >
                               Done
                             </span>
@@ -1504,11 +1519,11 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                   </td>
                   <td>
                     <div
-                      class="c42"
+                      class="c43"
                     >
                       <span>
                         <a
-                          class="c45"
+                          class="c46"
                           data-testid="details-link"
                           href="/report/1234"
                         >
@@ -1519,19 +1534,19 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                   </td>
                   <td>
                     <div
-                      class="c42"
+                      class="c43"
                     >
                       <div
-                        class="c47"
+                        class="c48"
                         data-testid="progressbar-box"
                         title="50%"
                       >
                         <div
-                          class="c51"
+                          class="c52"
                           data-testid="progress"
                         />
                         <div
-                          class="c49"
+                          class="c50"
                         >
                           50%
                         </div>
@@ -1543,10 +1558,10 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       class="c0"
                     >
                       <div
-                        class="c52"
+                        class="c53"
                       >
                         <div
-                          class="c53"
+                          class="c54"
                           margin="5px"
                         >
                           <span
@@ -1562,7 +1577,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                           </span>
                           <span
                             alt="Resume"
-                            class="c31 c4"
+                            class="c32 c4"
                             data-testid="svg-icon"
                             title="Audit is not stopped"
                           >
@@ -1617,7 +1632,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                             </svg>
                           </span>
                           <span
-                            class="c31 c4"
+                            class="c32 c4"
                             data-testid="svg-icon"
                             title="Report download not available"
                           >
@@ -1639,7 +1654,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                     colspan="5"
                   >
                     <div
-                      class="c54"
+                      class="c55"
                     >
                       <div
                         class="c2"
@@ -1652,30 +1667,30 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                             aria-expanded="false"
                             aria-haspopup="listbox"
                             aria-labelledby="downshift-1-label"
-                            class="c55"
+                            class="c56"
                             role="combobox"
                             width="180px"
                           >
                             <div
                               aria-haspopup="true"
                               aria-label="open menu"
-                              class="c16"
+                              class="c17"
                               data-toggle="true"
                               role="button"
                               type="button"
                             >
                               <div
-                                class="c17"
+                                class="c18"
                                 data-testid="select-selected-value"
                                 title="Apply to page contents"
                               >
                                 Apply to page contents
                               </div>
                               <div
-                                class="c18"
+                                class="c19"
                               >
                                 <span
-                                  class="c19 c20"
+                                  class="c20 c21"
                                   data-testid="select-open-button"
                                 >
                                   ▼
@@ -1722,15 +1737,15 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
               </tfoot>
             </table>
             <div
-              class="c43"
+              class="c44"
             >
               <div
-                class="c56"
+                class="c57"
               >
                 (Applied filter: )
               </div>
               <div
-                class="c30"
+                class="c31"
               >
                 <div
                   class="c2"
@@ -1740,7 +1755,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="First"
                     >
@@ -1751,7 +1766,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="Previous"
                     >
@@ -1764,7 +1779,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                   </div>
                 </div>
                 <span
-                  class="c32"
+                  class="c33"
                 >
                   0 - 0 of 0
                 </span>
@@ -1776,7 +1791,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="Next"
                     >
@@ -1787,7 +1802,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="Last"
                     >

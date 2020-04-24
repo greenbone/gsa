@@ -237,7 +237,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   align-items: center;
 }
 
-.c18 {
+.c19 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -255,7 +255,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   align-items: center;
 }
 
-.c28 {
+.c29 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -273,7 +273,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   justify-content: space-between;
 }
 
-.c37 {
+.c38 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -291,7 +291,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   align-items: center;
 }
 
-.c41 {
+.c42 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -305,7 +305,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   justify-content: center;
 }
 
-.c42 {
+.c43 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -323,7 +323,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   align-items: stretch;
 }
 
-.c43 {
+.c44 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -337,7 +337,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   justify-content: space-between;
 }
 
-.c47 {
+.c48 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -415,7 +415,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   margin-left: 5px;
 }
 
-.c46 {
+.c47 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -438,14 +438,14 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   margin-left: -5px;
 }
 
-.c46 > * {
+.c47 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c46 > * {
+.c47 > * {
   margin-left: 5px;
 }
 
@@ -471,7 +471,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   display: inline-flex;
 }
 
-.c45 {
+.c46 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -501,7 +501,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   cursor: pointer;
 }
 
-.c31 svg path {
+.c32 svg path {
   fill: #aaaaaa;
 }
 
@@ -516,18 +516,18 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   width: inherit;
 }
 
-.c25 {
+.c26 {
   height: 50px;
   width: 50px;
   line-height: 50px;
 }
 
-.c25 * {
+.c26 * {
   height: inherit;
   width: inherit;
 }
 
-.c21 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -549,11 +549,11 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   position: relative;
 }
 
-.c22 {
+.c23 {
   margin: 0 0 1px 0;
 }
 
-.c23 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -571,7 +571,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   align-items: stretch;
 }
 
-.c24 {
+.c25 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -590,7 +590,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   margin-right: 5px;
 }
 
-.c26 {
+.c27 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -610,7 +610,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   min-width: 100px;
 }
 
-.c19 {
+.c20 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -635,18 +635,18 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   cursor: pointer;
 }
 
-.c20 {
+.c21 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c20 * {
+.c21 * {
   height: inherit;
   width: inherit;
 }
 
-.c16 {
+.c17 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -670,7 +670,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   font-weight: normal;
 }
 
-.c15 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -682,7 +682,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   width: 150px;
 }
 
-.c48 {
+.c49 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -694,7 +694,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   width: 180px;
 }
 
-.c17 {
+.c18 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -714,23 +714,23 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   cursor: default;
 }
 
-.c34 a {
+.c35 a {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #000;
 }
 
-.c34 a:hover {
+.c35 a:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #000;
 }
 
-.c36 {
+.c37 {
   cursor: pointer;
 }
 
-.c35 {
+.c36 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -738,7 +738,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   width: 72%;
 }
 
-.c38 {
+.c39 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -746,7 +746,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   width: 5%;
 }
 
-.c39 {
+.c40 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -754,7 +754,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   width: 10%;
 }
 
-.c40 {
+.c41 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -798,6 +798,15 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   align-items: center;
 }
 
+.c15 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c12 {
   margin-right: 5px;
 }
@@ -806,7 +815,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   margin-right: 5px;
 }
 
-.c49 {
+.c50 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -827,11 +836,11 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   text-align: left;
 }
 
-.c32 {
+.c33 {
   margin: 0 3px;
 }
 
-.c30 {
+.c31 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -850,7 +859,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   margin: 2px 3px;
 }
 
-.c33 {
+.c34 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -860,26 +869,26 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   opacity: 1.0;
 }
 
-.c33 th,
-.c33 td {
+.c34 th,
+.c34 td {
   padding: 4px 10px;
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c33 tfoot tr {
+.c34 tfoot tr {
   background: #fff;
 }
 
-.c33 tfoot tr td {
+.c34 tfoot tr td {
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c29 {
+.c30 {
   margin-top: 2px;
   margin-left: 2px;
 }
 
-.c27 {
+.c28 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -902,14 +911,14 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   margin-top: 20px;
 }
 
-.c44 {
+.c45 {
   cursor: pointer;
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #0000ff;
 }
 
-.c44:hover {
+.c45:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #0000ff;
@@ -922,12 +931,12 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
 }
 
 @media print {
-  .c34 {
+  .c35 {
     border-bottom: 1px solid black;
   }
 
-  .c34 a,
-  .c34 a:hover {
+  .c35 a,
+  .c35 a:hover {
     -webkit-text-decoration: none;
     text-decoration: none;
     color: #000;
@@ -935,16 +944,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
 }
 
 @media print {
-  .c35 {
-    color: #000;
-    font-size: 1.2em;
-    background-color: none;
-    font-weight: bold;
-  }
-}
-
-@media print {
-  .c38 {
+  .c36 {
     color: #000;
     font-size: 1.2em;
     background-color: none;
@@ -971,31 +971,40 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
 }
 
 @media print {
-  .c30 svg {
+  .c41 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c31 svg {
     display: none;
   }
 }
 
 @media print {
-  .c33 {
+  .c34 {
     border-collapse: collapse;
   }
 }
 
 @media screen {
-  .c33 > tbody:nth-of-type(even),
-  .c33 > tbody:only-of-type > tr:nth-of-type(even) {
+  .c34 > tbody:nth-of-type(even),
+  .c34 > tbody:only-of-type > tr:nth-of-type(even) {
     background: #eeeeee;
   }
 
-  .c33 > tbody:not(:only-of-type):hover,
-  .c33 > tbody:only-of-type > tr:hover {
+  .c34 > tbody:not(:only-of-type):hover,
+  .c34 > tbody:only-of-type > tr:hover {
     background: #c8d3d9;
   }
 }
 
 @media print {
-  .c44 {
+  .c45 {
     color: #000;
   }
 }
@@ -1093,6 +1102,12 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       type="text"
                       value=""
                     />
+                    <div
+                      class="c15"
+                      data-testid="error-marker"
+                    >
+                      ×
+                    </div>
                   </div>
                   <div
                     class="c2"
@@ -1170,31 +1185,31 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-labelledby="downshift-0-label"
-                class="c15"
+                class="c16"
                 role="combobox"
                 width="150px"
               >
                 <div
                   aria-haspopup="true"
                   aria-label="open menu"
-                  class="c16"
+                  class="c17"
                   data-toggle="true"
                   role="button"
                   title="Loaded filter"
                   type="button"
                 >
                   <div
-                    class="c17"
+                    class="c18"
                     data-testid="select-selected-value"
                     title="Loaded filter"
                   >
                     --
                   </div>
                   <div
-                    class="c18"
+                    class="c19"
                   >
                     <span
-                      class="c19 c20"
+                      class="c20 c21"
                       data-testid="select-open-button"
                     >
                       ▼
@@ -1210,16 +1225,16 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
         class="entities-section"
       >
         <div
-          class="c21 section-header"
+          class="c22 section-header"
         >
           <h2
-            class="c22 c23"
+            class="c23 c24"
           >
             <div
-              class="c24"
+              class="c25"
             >
               <span
-                class="c25"
+                class="c26"
                 data-testid="svg-icon"
               >
                 <svg>
@@ -1228,7 +1243,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
               </span>
             </div>
             <div
-              class="c26"
+              class="c27"
             >
               Scan Configs 0 of 0
             </div>
@@ -1241,13 +1256,13 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
           class="c0"
         >
           <div
-            class="c27 entities-table"
+            class="c28 entities-table"
           >
             <div
-              class="c28"
+              class="c29"
             >
               <span
-                class="c5 c4 c29"
+                class="c5 c4 c30"
                 data-testid="svg-icon"
                 title="Unfold all details"
               >
@@ -1258,7 +1273,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                 </svg>
               </span>
               <div
-                class="c30"
+                class="c31"
               >
                 <div
                   class="c2"
@@ -1268,7 +1283,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="First"
                     >
@@ -1279,7 +1294,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="Previous"
                     >
@@ -1292,7 +1307,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                   </div>
                 </div>
                 <span
-                  class="c32"
+                  class="c33"
                 >
                   0 - 0 of 0
                 </span>
@@ -1304,7 +1319,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="Next"
                     >
@@ -1315,7 +1330,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="Last"
                     >
@@ -1330,66 +1345,66 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
               </div>
             </div>
             <table
-              class="c33"
+              class="c34"
             >
               <thead
-                class="c34"
+                class="c35"
               >
                 <tr>
                   <th
-                    class="c35"
+                    class="c36"
                     rowspan="2"
                   >
                     <a
-                      class="c36"
+                      class="c37"
                     >
                       <div
-                        class="c37"
+                        class="c38"
                       >
                         Name
                       </div>
                     </a>
                   </th>
                   <th
-                    class="c38"
+                    class="c39"
                     rowspan="2"
                   >
                     <a
-                      class="c36"
+                      class="c37"
                     >
                       <div
-                        class="c37"
+                        class="c38"
                       >
                         Type
                       </div>
                     </a>
                   </th>
                   <th
-                    class="c39"
+                    class="c40"
                     colspan="2"
                   >
                     <div
-                      class="c37"
+                      class="c38"
                     >
                       Family
                     </div>
                   </th>
                   <th
-                    class="c39"
+                    class="c40"
                     colspan="2"
                   >
                     <div
-                      class="c37"
+                      class="c38"
                     >
                       NVTs
                     </div>
                   </th>
                   <th
-                    class="c40"
+                    class="c41"
                     rowspan="2"
                   >
                     <div
-                      class="c41"
+                      class="c42"
                     >
                       Actions
                     </div>
@@ -1397,52 +1412,52 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                 </tr>
                 <tr>
                   <th
-                    class="c38"
+                    class="c39"
                   >
                     <a
-                      class="c36"
+                      class="c37"
                     >
                       <div
-                        class="c37"
+                        class="c38"
                       >
                         Total
                       </div>
                     </a>
                   </th>
                   <th
-                    class="c38"
+                    class="c39"
                   >
                     <a
-                      class="c36"
+                      class="c37"
                     >
                       <div
-                        class="c37"
+                        class="c38"
                       >
                         Trend
                       </div>
                     </a>
                   </th>
                   <th
-                    class="c38"
+                    class="c39"
                   >
                     <a
-                      class="c36"
+                      class="c37"
                     >
                       <div
-                        class="c37"
+                        class="c38"
                       >
                         Total
                       </div>
                     </a>
                   </th>
                   <th
-                    class="c38"
+                    class="c39"
                   >
                     <a
-                      class="c36"
+                      class="c37"
                     >
                       <div
-                        class="c37"
+                        class="c38"
                       >
                         Trend
                       </div>
@@ -1456,17 +1471,17 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                 <tr>
                   <td>
                     <div
-                      class="c42"
+                      class="c43"
                     >
                       <div
-                        class="c43"
+                        class="c44"
                       >
                         <div
-                          class="c42"
+                          class="c43"
                         >
                           <span>
                             <span
-                              class="c44"
+                              class="c45"
                               name="12345"
                             >
                               foo
@@ -1485,21 +1500,21 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                   </td>
                   <td>
                     <div
-                      class="c42"
+                      class="c43"
                     >
                       OpenVAS
                     </div>
                   </td>
                   <td>
                     <div
-                      class="c42"
+                      class="c43"
                     >
                       2
                     </div>
                   </td>
                   <td>
                     <div
-                      class="c42"
+                      class="c43"
                     >
                       <span
                         alt="Static"
@@ -1517,14 +1532,14 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                   </td>
                   <td>
                     <div
-                      class="c42"
+                      class="c43"
                     >
                       4
                     </div>
                   </td>
                   <td>
                     <div
-                      class="c42"
+                      class="c43"
                     >
                       <span
                         alt="Dynamic"
@@ -1545,10 +1560,10 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       class="c0"
                     >
                       <div
-                        class="c45"
+                        class="c46"
                       >
                         <div
-                          class="c46"
+                          class="c47"
                           margin="5px"
                         >
                           <span
@@ -1607,7 +1622,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                     colspan="7"
                   >
                     <div
-                      class="c47"
+                      class="c48"
                     >
                       <div
                         class="c2"
@@ -1620,30 +1635,30 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                             aria-expanded="false"
                             aria-haspopup="listbox"
                             aria-labelledby="downshift-1-label"
-                            class="c48"
+                            class="c49"
                             role="combobox"
                             width="180px"
                           >
                             <div
                               aria-haspopup="true"
                               aria-label="open menu"
-                              class="c16"
+                              class="c17"
                               data-toggle="true"
                               role="button"
                               type="button"
                             >
                               <div
-                                class="c17"
+                                class="c18"
                                 data-testid="select-selected-value"
                                 title="Apply to page contents"
                               >
                                 Apply to page contents
                               </div>
                               <div
-                                class="c18"
+                                class="c19"
                               >
                                 <span
-                                  class="c19 c20"
+                                  class="c20 c21"
                                   data-testid="select-open-button"
                                 >
                                   ▼
@@ -1701,15 +1716,15 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
               </tfoot>
             </table>
             <div
-              class="c43"
+              class="c44"
             >
               <div
-                class="c49"
+                class="c50"
               >
                 (Applied filter: )
               </div>
               <div
-                class="c30"
+                class="c31"
               >
                 <div
                   class="c2"
@@ -1719,7 +1734,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="First"
                     >
@@ -1730,7 +1745,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="Previous"
                     >
@@ -1743,7 +1758,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                   </div>
                 </div>
                 <span
-                  class="c32"
+                  class="c33"
                 >
                   0 - 0 of 0
                 </span>
@@ -1755,7 +1770,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                     margin="5px"
                   >
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="Next"
                     >
@@ -1766,7 +1781,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c31 c4"
+                      class="c32 c4"
                       data-testid="svg-icon"
                       title="Last"
                     >

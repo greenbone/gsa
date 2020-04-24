@@ -661,11 +661,14 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                         data-testid="formgroup-content"
                         size="10"
                       >
-                        <textarea
-                          class="c18 c19"
-                          name="openNote"
-                          rows="5"
-                        />
+                        
+                        <div>
+                          <textarea
+                            class="c18 c19"
+                            name="openNote"
+                            rows="5"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -685,11 +688,14 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                         data-testid="formgroup-content"
                         size="10"
                       >
-                        <textarea
-                          class="c18 c19"
-                          name="fixedNote"
-                          rows="5"
-                        />
+                        
+                        <div>
+                          <textarea
+                            class="c18 c19"
+                            name="fixedNote"
+                            rows="5"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -709,11 +715,14 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                         data-testid="formgroup-content"
                         size="10"
                       >
-                        <textarea
-                          class="c18 c19"
-                          name="closedNote"
-                          rows="5"
-                        />
+                        
+                        <div>
+                          <textarea
+                            class="c18 c19"
+                            name="closedNote"
+                            rows="5"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>

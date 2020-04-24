@@ -89,6 +89,15 @@ exports[`FilterStringGroup tests should render 1`] = `
   align-items: center;
 }
 
+.c5 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 <div
   class="c0"
 >
@@ -110,6 +119,12 @@ exports[`FilterStringGroup tests should render 1`] = `
       type="text"
       value=""
     />
+    <div
+      class="c5"
+      data-testid="error-marker"
+    >
+      ×
+    </div>
   </div>
 </div>
 `;

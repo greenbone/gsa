@@ -92,6 +92,15 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
   align-items: center;
 }
 
+.c9 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c3 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
@@ -206,6 +215,12 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
         type="text"
         value=""
       />
+      <div
+        class="c9"
+        data-testid="error-marker"
+      >
+        ×
+      </div>
     </div>
   </div>
 </div>
