@@ -87,7 +87,6 @@ const initStore = () => {
   if (isDefined(username)) {
     store.dispatch(setUsername(username));
   }
-  store.dispatch(setIsLoggedIn(gmp.isLoggedIn()));
 };
 
 class App extends React.Component {
