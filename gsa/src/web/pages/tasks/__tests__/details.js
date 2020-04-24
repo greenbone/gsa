@@ -105,6 +105,12 @@ describe('Task Details tests', () => {
     expect(element).toHaveTextContent('OpenVAS Scanner');
     expect(element).toHaveTextContent('Scan Configfoo');
     expect(detailslinks[3]).toHaveAttribute('href', '/scanconfig/314');
+    expect(element).toHaveTextContent('Order for target hostssequential');
+    expect(element).toHaveTextContent('Network Source Interface');
+    expect(element).toHaveTextContent(
+      'Maximum concurrently executed NVTs per host4',
+    );
+    expect(element).toHaveTextContent('Maximum concurrently scanned hosts20');
 
     expect(headings[3]).toHaveTextContent('Assets');
     expect(element).toHaveTextContent('Add to AssetsYes');

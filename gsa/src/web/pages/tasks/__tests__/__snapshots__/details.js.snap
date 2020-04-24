@@ -269,6 +269,68 @@ exports[`Task Details tests should render full task details 1`] = `
               </div>
             </td>
           </tr>
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Order for target hosts
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              >
+                sequential
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Network Source Interface
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Maximum concurrently executed NVTs per host
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              >
+                4
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Maximum concurrently scanned hosts
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              >
+                20
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

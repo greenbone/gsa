@@ -139,6 +139,16 @@ const preferences = [
     name: 'auto_delete_data',
     value: '5',
   },
+  {
+    description: 'Maximum concurrently executed NVTs per host',
+    name: 'max_checks',
+    value: '4',
+  },
+  {
+    description: 'Maximum concurrently scanned hosts',
+    name: 'max_hosts',
+    value: '20',
+  },
 ];
 
 // Tasks
