@@ -85,13 +85,7 @@ class ReportFormat extends Model {
 
     ret.active = parseYesNo(element.active);
 
-    ret.predefined = parseYesNo(element.predefined);
-
     return ret;
-  }
-
-  isPredefined() {
-    return this.predefined === YES_VALUE;
   }
 
   isActive() {
