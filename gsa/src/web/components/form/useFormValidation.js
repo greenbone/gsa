@@ -37,8 +37,8 @@ export const parseAlias = string => {
   return errorString.trim(); // parse "name" to something human readable. Accepts underscores and camelcase. "credential_id" > "Credential Id", etc.
 };
 
-export const syncVariables = (values, formState, dependencies = {}) => {
-  Object.keys(formState).forEach(key => (values[key] = formState[key]));
+export const syncVariables = (values, formValues, dependencies = {}) => {
+  Object.keys(formValues).forEach(key => (values[key] = formValues[key]));
   Object.keys(dependencies).forEach(key => (values[key] = dependencies[key]));
 }; // sync all form states with the values known to SaveDialog
 
@@ -60,7 +60,7 @@ const useFormValidation = (
   onValidationSuccess,
   deps = {},
 ) => {
-  const [formState, setFormState] = useState(stateSchema);
+  const [formValues, setFormState] = useState(stateSchema);
   const [dependencies, setDependencies] = useState(deps);
   const [errorMessage, setErrorMessage] = useState();
   const [shouldWarn, setShouldWarn] = useState(false); // shouldWarn is false when first rendered. Only when calling handleSubmit for the first time will this be set to true.
@@ -84,20 +84,20 @@ const useFormValidation = (
   };
 
   useEffect(() => {
-    Object.keys(formState).forEach(key => {
-      validate(formState[key], key, dependencies);
+    Object.keys(formValues).forEach(key => {
+      validate(formValues[key], key, dependencies);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formState, dependencies]);
+  }, [formValues, dependencies]);
 
   const handleSubmit = vals => {
     setShouldWarn(true);
     const errorVars = [];
-    Object.keys(formState).forEach(key => {
+    Object.keys(formValues).forEach(key => {
       !validityStatus[key].validity && errorVars.push(parseAlias(key)); // Collects form fields with errors
     });
 
-    const hasErrorInState = Object.keys(formState).some(key => {
+    const hasErrorInState = Object.keys(formValues).some(key => {
       return validityStatus[key].validity === false;
     }, []); // checks if any field is invalid
 
@@ -116,7 +116,7 @@ const useFormValidation = (
     errorMessage,
     shouldWarn,
     validityStatus,
-    formState,
+    formValues,
     handleDependencyChange,
     handleSubmit,
     handleValueChange,

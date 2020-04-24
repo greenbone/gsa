@@ -231,7 +231,7 @@ const ScannerDialog = ({
   };
 
   const {
-    formState,
+    formValues,
     errorMessage,
     shouldWarn,
     handleValueChange,
@@ -254,7 +254,7 @@ const ScannerDialog = ({
       onSave={vals => handleSubmit(vals)}
     >
       {({values: state, currentStep, onStepChange, onValueChange}) => {
-        syncVariables(state, formState); // Set attributes of state to be the same as formState
+        syncVariables(state, formValues); // Set attributes of state to be the same as formValues
         return (
           <Layout flex="column">
             <DialogTabLayout grow="1" align={['start', 'end']}>
@@ -275,7 +275,7 @@ const ScannerDialog = ({
                       errorContent={validityStatus.name.error}
                       name="name"
                       grow="1"
-                      value={formState.name}
+                      value={formValues.name}
                       hasError={shouldWarn && !validityStatus.name.validity}
                       onChange={handleValueChange}
                     />
@@ -303,7 +303,7 @@ const ScannerDialog = ({
                     <TextField
                       errorContent={validityStatus.host.error}
                       name="host"
-                      value={formState.host}
+                      value={formValues.host}
                       disabled={isInUse}
                       grow="1"
                       title={validityStatus.host.error}
@@ -317,7 +317,7 @@ const ScannerDialog = ({
                         <TextField
                           errorContent={validityStatus.port.error}
                           name="port"
-                          value={formState.port}
+                          value={formValues.port}
                           disabled={isInUse}
                           grow="1"
                           shouldValidate={
@@ -383,7 +383,7 @@ const ScannerDialog = ({
                               <Select
                                 name="credential_id"
                                 items={renderSelectItems(scanner_credentials)}
-                                value={formState.credential_id}
+                                value={formValues.credential_id}
                                 onChange={handleValueChange}
                               />
                               <Layout>

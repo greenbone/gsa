@@ -69,7 +69,7 @@ const EditTicketDialog = ({
   };
 
   const {
-    formState,
+    formValues,
     dependencies,
     shouldWarn,
     handleValueChange,
@@ -95,7 +95,7 @@ const EditTicketDialog = ({
       }}
     >
       {({values, onValueChange}) => {
-        syncVariables(values, formState, dependencies);
+        syncVariables(values, formValues, dependencies);
 
         return (
           <Layout flex="column">
@@ -126,7 +126,7 @@ const EditTicketDialog = ({
                       name="openNote"
                       grow="1"
                       rows="5"
-                      value={formState.openNote}
+                      value={formValues.openNote}
                       onChange={handleValueChange}
                     />
                   </FormGroup>
@@ -144,7 +144,7 @@ const EditTicketDialog = ({
                       name="fixedNote"
                       grow="1"
                       rows="5"
-                      value={formState.fixedNote}
+                      value={formValues.fixedNote}
                       onChange={handleValueChange}
                     />
                   </FormGroup>
@@ -162,7 +162,7 @@ const EditTicketDialog = ({
                       name="closedNote"
                       grow="1"
                       rows="5"
-                      value={formState.closedNote}
+                      value={formValues.closedNote}
                       onChange={handleValueChange}
                     />
                   </FormGroup>

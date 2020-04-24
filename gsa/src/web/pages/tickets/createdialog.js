@@ -48,7 +48,7 @@ const CreateTicketDialog = ({
 
   const {
     shouldWarn,
-    formState,
+    formValues,
     handleValueChange,
     validityStatus,
     handleSubmit,
@@ -65,7 +65,7 @@ const CreateTicketDialog = ({
       }}
     >
       {({values, onValueChange}) => {
-        syncVariables(values, formState);
+        syncVariables(values, formValues);
         return (
           <Layout flex="column">
             <FormGroup title={_('Assign To User')}>
@@ -83,7 +83,7 @@ const CreateTicketDialog = ({
                 name="note"
                 grow="1"
                 rows="5"
-                value={formState.note}
+                value={formValues.note}
                 onChange={handleValueChange}
               />
             </FormGroup>
