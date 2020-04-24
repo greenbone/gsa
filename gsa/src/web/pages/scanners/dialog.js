@@ -235,7 +235,7 @@ const ScannerDialog = ({
     errorMessage,
     shouldWarn,
     handleValueChange,
-    formStatus,
+    validityStatus,
     handleSubmit,
   } = useFormValidation(stateSchema, validationRules, onSave);
 
@@ -272,11 +272,11 @@ const ScannerDialog = ({
                 <TabPanel>
                   <FormGroup title={_('Name')} align={['start', 'end']}>
                     <TextField
-                      errorContent={formStatus.name.error}
+                      errorContent={validityStatus.name.error}
                       name="name"
                       grow="1"
                       value={formState.name}
-                      hasError={shouldWarn && !formStatus.name.validity}
+                      hasError={shouldWarn && !validityStatus.name.validity}
                       onChange={handleValueChange}
                     />
                   </FormGroup>
@@ -301,13 +301,13 @@ const ScannerDialog = ({
                 <TabPanel>
                   <FormGroup title={_('Host')}>
                     <TextField
-                      errorContent={formStatus.host.error}
+                      errorContent={validityStatus.host.error}
                       name="host"
                       value={formState.host}
                       disabled={isInUse}
                       grow="1"
-                      title={formStatus.host.error}
-                      hasError={shouldWarn && !formStatus.host.validity}
+                      title={validityStatus.host.error}
+                      hasError={shouldWarn && !validityStatus.host.validity}
                       onChange={handleValueChange}
                     />
                   </FormGroup>
@@ -315,13 +315,13 @@ const ScannerDialog = ({
                     <React.Fragment>
                       <FormGroup title={_('Port')}>
                         <TextField
-                          errorContent={formStatus.port.error}
+                          errorContent={validityStatus.port.error}
                           name="port"
                           value={formState.port}
                           disabled={isInUse}
                           grow="1"
                           shouldValidate={
-                            shouldWarn && !formStatus.port.validity
+                            shouldWarn && !validityStatus.port.validity
                           }
                           onChange={handleValueChange}
                         />
@@ -371,8 +371,10 @@ const ScannerDialog = ({
                   )}
                   {!isGreenboneSensorType && (
                     <ErrorBubble
-                      visible={shouldWarn && !formStatus.credential_id.validity}
-                      content={formStatus.credential_id.error}
+                      visible={
+                        shouldWarn && !validityStatus.credential_id.validity
+                      }
+                      content={validityStatus.credential_id.error}
                     >
                       {({targetRef}) => (
                         <div ref={targetRef}>

@@ -74,7 +74,7 @@ const EditTicketDialog = ({
     shouldWarn,
     handleValueChange,
     handleDependencyChange,
-    formStatus,
+    validityStatus,
     handleSubmit,
   } = useFormValidation(stateSchema, validationRules, onSave, deps);
 
@@ -116,8 +116,8 @@ const EditTicketDialog = ({
               />
             </FormGroup>
             <ErrorBubble
-              visible={shouldWarn && !formStatus.openNote.validity}
-              content={formStatus.openNote.error}
+              visible={shouldWarn && !validityStatus.openNote.validity}
+              content={validityStatus.openNote.error}
             >
               {({targetRef}) => (
                 <div ref={targetRef}>
@@ -134,8 +134,8 @@ const EditTicketDialog = ({
               )}
             </ErrorBubble>
             <ErrorBubble
-              visible={shouldWarn && !formStatus.fixedNote.validity}
-              content={formStatus.fixedNote.error}
+              visible={shouldWarn && !validityStatus.fixedNote.validity}
+              content={validityStatus.fixedNote.error}
             >
               {({targetRef}) => (
                 <div ref={targetRef}>
@@ -152,8 +152,8 @@ const EditTicketDialog = ({
               )}
             </ErrorBubble>
             <ErrorBubble
-              visible={shouldWarn && !formStatus.closedNote.validity}
-              content={formStatus.closedNote.error}
+              visible={shouldWarn && !validityStatus.closedNote.validity}
+              content={validityStatus.closedNote.error}
             >
               {({targetRef}) => (
                 <div ref={targetRef}>

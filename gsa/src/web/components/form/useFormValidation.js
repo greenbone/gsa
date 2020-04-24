@@ -65,7 +65,7 @@ const useFormValidation = (
   const [errorMessage, setErrorMessage] = useState();
   const [shouldWarn, setShouldWarn] = useState(false); // shouldWarn is false when first rendered. Only when calling handleSubmit for the first time will this be set to true.
 
-  const [formStatus, setFormStatus] = useState(stateSchema); // use the same shape as stateschema
+  const [validityStatus, setFormStatus] = useState(stateSchema); // use the same shape as stateschema
 
   const handleValueChange = (value, name) => {
     setFormState(prevValues => ({...prevValues, [name]: value}));
@@ -94,11 +94,11 @@ const useFormValidation = (
     setShouldWarn(true);
     const errorVars = [];
     Object.keys(formState).forEach(key => {
-      !formStatus[key].validity && errorVars.push(parseAlias(key)); // Collects form fields with errors
+      !validityStatus[key].validity && errorVars.push(parseAlias(key)); // Collects form fields with errors
     });
 
     const hasErrorInState = Object.keys(formState).some(key => {
-      return formStatus[key].validity === false;
+      return validityStatus[key].validity === false;
     }, []); // checks if any field is invalid
 
     if (hasErrorInState) {
@@ -115,7 +115,7 @@ const useFormValidation = (
     dependencies,
     errorMessage,
     shouldWarn,
-    formStatus,
+    validityStatus,
     formState,
     handleDependencyChange,
     handleSubmit,
