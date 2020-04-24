@@ -342,8 +342,7 @@ describe('ScannerDialog component tests', () => {
 
     expect(errorMarkers.length).toEqual(2);
 
-    const nameMarker = errorMarkers[0];
-    const commentMarker = errorMarkers[1];
+    const [nameMarker, commentMarker] = errorMarkers;
     expect(nameMarker).toHaveStyleRule('color', Theme.darkRed); // field with error should display red mark
     expect(nameMarker).toHaveStyleRule('display', 'inline');
     expect(commentMarker).toHaveStyleRule('display', 'none'); // field not needing validation or with no error should not display red mark
@@ -361,7 +360,7 @@ describe('ScannerDialog component tests', () => {
 
     expect(moreErrorMarkers.length).toEqual(1);
 
-    const hostMarker = moreErrorMarkers[0];
+    const [hostMarker] = moreErrorMarkers;
     expect(hostMarker).toHaveStyleRule('color', Theme.darkRed);
     expect(hostMarker).toHaveStyleRule('display', 'inline');
   });
