@@ -15,13 +15,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {Router, Route, Switch} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import {useQuery} from '@apollo/react-hooks';
 
 import {createBrowserHistory} from 'history';
 import {stringify, parse} from 'qs';
 import qhistory from 'qhistory';
+import gql from 'graphql-tag';
+
+import {isDefined, hasValue} from 'gmp/utils/identity';
+
+import Loading from 'web/components/loading/loading';
 
 import LocationObserver from 'web/components/observer/locationobserver';
 import SessionObserver from 'web/components/observer/sessionobserver';
@@ -106,6 +113,10 @@ import UserSettingsPage from './pages/usersettings/usersettingspage';
 import UsersPage from './pages/users/listpage';
 import VulnerabilitiesPage from './pages/vulns/listpage';
 
+import {setIsLoggedIn as setIsLoggedInAction} from 'web/store/usersettings/actions';
+
+import {toFruitfulQuery} from 'web/utils/graphql';
+
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
@@ -119,123 +130,178 @@ export const createQueryHistory = (history = createBrowserHistory()) =>
 
 const HISTORY = createQueryHistory();
 
-const Routes = () => (
-  <Router history={HISTORY}>
-    <Switch>
-      <Route path="/login" component={LoginPage} />
-      <Route path="/omp" component={LegacyOmpPage} />
-      <Authorized>
-        <SessionObserver />
-        <LocationObserver>
-          <Page>
-            <Switch>
-              <Route exact path="/" component={StartPage} />
+const GET_AUTHENTICATION_STATUS = gql`
+  query {
+    isAuthenticated
+  }
+`;
 
-              <Route path="/about" component={AboutPage} />
-              <Route path="/alerts" component={AlertsPage} />
-              <Route path="/audits" component={AuditsPage} />
-              <Route path="/certbunds" component={CertBundsPage} />
-              <Route path="/cpes" component={CpesPage} />
-              <Route path="/credentials" component={CredentialsPage} />
-              <Route path="/cvsscalculator" component={CvssCalculatorPage} />
-              <Route path="/cves" component={CvesPage} />
-              <Route path="/dfncerts" component={DfnCertsPage} />
-              <Route path="/feedstatus" component={FeedStatusPage} />
-              <Route path="/filters" component={FiltersPage} />
-              <Route path="/groups" component={GroupsPage} />
-              <Route path="/hosts" component={HostsPage} />
-              <Route path="/ldap" component={LdapPage} />
-              <Route path="/notes" component={NotesPage} />
-              <Route
-                path="/operatingsystems"
-                component={OperatingSystemsPage}
-              />
-              <Route path="/nvts" component={NvtsPage} />
-              <Route path="/ovaldefs" component={OvaldefsPage} />
-              <Route path="/overrides" component={OverridesPage} />
-              <Route path="/performance" component={PerformancePage} />
-              <Route path="/permissions" component={PermissionsPage} />
-              <Route path="/policies" component={PoliciesPage} />
-              <Route path="/portlists" component={PortListsPage} />
-              <Route path="/processmaps" component={ProcessMapsPage} />
-              <Route path="/radius" component={RadiusPage} />
-              <Route path="/reports" component={ReportsPage} />
-              <Route path="/reportformats" component={ReportFormatsPage} />
-              <Route path="/results" component={ResultsPage} />
-              <Route path="/roles" component={RolesPage} />
-              <Route path="/tags" component={TagsPage} />
-              <Route path="/permissions" component={PermissionsPage} />
-              <Route path="/scanners" component={ScannersPage} />
-              <Route path="/scanconfigs" component={ScanConfigsPage} />
-              <Route path="/scanners" component={ScannersPage} />
-              <Route path="/schedules" component={SchedulesPage} />
-              <Route path="/tags" component={TagsPage} />
-              <Route path="/targets" component={TargetsPage} />
-              <Route path="/tasks" component={TasksPage} />
-              <Route path="/tickets" component={TicketsPage} />
-              <Route path="/trashcan" component={TrashcanPage} />
-              <Route path="/tlscertificates" component={TlsCertificatesPage} />
-              <Route path="/users" component={UsersPage} />
-              <Route path="/usersettings" component={UserSettingsPage} />
-              <Route path="/vulnerabilities" component={VulnerabilitiesPage} />
+const useHyperionAuthStatus = () => {
+  return toFruitfulQuery(useQuery)(GET_AUTHENTICATION_STATUS);
+};
 
-              <Route path="/alert/:id" component={AlertDetailsPage} />
-              <Route path="/audit/:id" component={AuditsDetailsPage} />
-              <Route path="/certbund/:id" component={CertBundDetailsPage} />
-              <Route path="/cpe/:id" component={CpeDetailsPage} />
-              <Route path="/credential/:id" component={CredentialDetailsPage} />
-              <Route path="/cve/:id" component={CveDetailsPage} />
-              <Route path="/dfncert/:id" component={DfnCertDetailsPage} />
-              <Route path="/filter/:id" component={FilterDetailsPage} />
-              <Route path="/group/:id" component={GroupDetailsPage} />
-              <Route path="/host/:id" component={HostDetailsPage} />
-              <Route path="/note/:id" component={NoteDetailsPage} />
-              <Route path="/nvt/:id" component={NvtDetailsPage} />
-              <Route path="/portlist/:id" component={PortListDetailsPage} />
-              <Route path="/ovaldef/:id" component={OvaldefDetailsPage} />
-              <Route
-                path="/operatingsystem/:id"
-                component={OperatingSystemDetailsPage}
-              />
-              <Route path="/override/:id" component={OverrideDetailsPage} />
-              <Route path="/permission/:id" component={PermissionDetailsPage} />
-              <Route path="/policy/:id" component={PoliciesDetailsPage} />
-              <Route path="/report/:id" component={ReportDetailsPage} />
-              <Route
-                path="/report/delta/:id/:deltaid"
-                component={DeltaReportDetailsPage}
-              />
-              <Route
-                path="/reportformat/:id"
-                component={ReportFormatDetailsPage}
-              />
-              <Route path="/result/:id" component={ResultDetailsPage} />
-              <Route path="/role/:id" component={RoleDetailsPage} />
-              <Route path="/filter/:id" component={FilterDetailsPage} />
-              <Route path="/tag/:id" component={TagDetailsPage} />
-              <Route path="/permission/:id" component={PermissionDetailsPage} />
-              <Route path="/scanconfig/:id" component={ScanConfigDetailsPage} />
-              <Route path="/scanner/:id" component={ScannerDetailsPage} />
-              <Route path="/schedule/:id" component={ScheduleDetailsPage} />
-              <Route path="/tag/:id" component={TagDetailsPage} />
-              <Route path="/target/:id" component={TargetDetailsPage} />
-              <Route path="/task/:id" component={TaskDetailsPage} />
-              <Route path="/ticket/:id" component={TicketDetailsPage} />
-              <Route
-                path="/tlscertificate/:id"
-                component={TlsCertificateDetailsPage}
-              />
-              <Route path="/user/:id" component={UserDetailsPage} />
+const Routes = () => {
+  const dispatch = useDispatch();
 
-              <Route path="/notfound" component={PageNotFound} />
-              <Route component={PageNotFound} />
-            </Switch>
-          </Page>
-        </LocationObserver>
-      </Authorized>
-    </Switch>
-  </Router>
-);
+  const setIsLoggedIn = value => dispatch(setIsLoggedInAction(value));
+
+  const authStatusQuery = useHyperionAuthStatus();
+  const {data, loading, error} = authStatusQuery();
+
+  const [doNotLoad, setDoNotLoad] = useState(loading);
+
+  useEffect(() => {
+    if (isDefined(data)) {
+      setIsLoggedIn(data.isAuthenticated);
+      setDoNotLoad(false);
+      // set to false ONLY after isLoggedIn has an opportunity to be set
+      // this is to prevent Authorized from mounting, checking isLoggedIn (initialized to false)
+      // then redirecting to loginpage before the variable can be set.
+    }
+  }, [loading]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (doNotLoad && !isDefined(error)) {
+    // to prevent infinite loading if there is an error
+    // upon error Authorized will run and redirect back to loginpage
+    return <Loading />;
+  }
+
+  return (
+    <Router history={HISTORY}>
+      <Switch>
+        <Route path="/login" component={LoginPage} />
+        <Route path="/omp" component={LegacyOmpPage} />
+        <Authorized>
+          <SessionObserver />
+          <LocationObserver>
+            <Page>
+              <Switch>
+                <Route exact path="/" component={StartPage} />
+
+                <Route path="/about" component={AboutPage} />
+                <Route path="/alerts" component={AlertsPage} />
+                <Route path="/audits" component={AuditsPage} />
+                <Route path="/certbunds" component={CertBundsPage} />
+                <Route path="/cpes" component={CpesPage} />
+                <Route path="/credentials" component={CredentialsPage} />
+                <Route path="/cvsscalculator" component={CvssCalculatorPage} />
+                <Route path="/cves" component={CvesPage} />
+                <Route path="/dfncerts" component={DfnCertsPage} />
+                <Route path="/feedstatus" component={FeedStatusPage} />
+                <Route path="/filters" component={FiltersPage} />
+                <Route path="/groups" component={GroupsPage} />
+                <Route path="/hosts" component={HostsPage} />
+                <Route path="/ldap" component={LdapPage} />
+                <Route path="/notes" component={NotesPage} />
+                <Route
+                  path="/operatingsystems"
+                  component={OperatingSystemsPage}
+                />
+                <Route path="/nvts" component={NvtsPage} />
+                <Route path="/ovaldefs" component={OvaldefsPage} />
+                <Route path="/overrides" component={OverridesPage} />
+                <Route path="/performance" component={PerformancePage} />
+                <Route path="/permissions" component={PermissionsPage} />
+                <Route path="/policies" component={PoliciesPage} />
+                <Route path="/portlists" component={PortListsPage} />
+                <Route path="/processmaps" component={ProcessMapsPage} />
+                <Route path="/radius" component={RadiusPage} />
+                <Route path="/reports" component={ReportsPage} />
+                <Route path="/reportformats" component={ReportFormatsPage} />
+                <Route path="/results" component={ResultsPage} />
+                <Route path="/roles" component={RolesPage} />
+                <Route path="/tags" component={TagsPage} />
+                <Route path="/permissions" component={PermissionsPage} />
+                <Route path="/scanners" component={ScannersPage} />
+                <Route path="/scanconfigs" component={ScanConfigsPage} />
+                <Route path="/scanners" component={ScannersPage} />
+                <Route path="/schedules" component={SchedulesPage} />
+                <Route path="/tags" component={TagsPage} />
+                <Route path="/targets" component={TargetsPage} />
+                <Route path="/tasks" component={TasksPage} />
+                <Route path="/tickets" component={TicketsPage} />
+                <Route path="/trashcan" component={TrashcanPage} />
+                <Route
+                  path="/tlscertificates"
+                  component={TlsCertificatesPage}
+                />
+                <Route path="/users" component={UsersPage} />
+                <Route path="/usersettings" component={UserSettingsPage} />
+                <Route
+                  path="/vulnerabilities"
+                  component={VulnerabilitiesPage}
+                />
+
+                <Route path="/alert/:id" component={AlertDetailsPage} />
+                <Route path="/audit/:id" component={AuditsDetailsPage} />
+                <Route path="/certbund/:id" component={CertBundDetailsPage} />
+                <Route path="/cpe/:id" component={CpeDetailsPage} />
+                <Route
+                  path="/credential/:id"
+                  component={CredentialDetailsPage}
+                />
+                <Route path="/cve/:id" component={CveDetailsPage} />
+                <Route path="/dfncert/:id" component={DfnCertDetailsPage} />
+                <Route path="/filter/:id" component={FilterDetailsPage} />
+                <Route path="/group/:id" component={GroupDetailsPage} />
+                <Route path="/host/:id" component={HostDetailsPage} />
+                <Route path="/note/:id" component={NoteDetailsPage} />
+                <Route path="/nvt/:id" component={NvtDetailsPage} />
+                <Route path="/portlist/:id" component={PortListDetailsPage} />
+                <Route path="/ovaldef/:id" component={OvaldefDetailsPage} />
+                <Route
+                  path="/operatingsystem/:id"
+                  component={OperatingSystemDetailsPage}
+                />
+                <Route path="/override/:id" component={OverrideDetailsPage} />
+                <Route
+                  path="/permission/:id"
+                  component={PermissionDetailsPage}
+                />
+                <Route path="/policy/:id" component={PoliciesDetailsPage} />
+                <Route path="/report/:id" component={ReportDetailsPage} />
+                <Route
+                  path="/report/delta/:id/:deltaid"
+                  component={DeltaReportDetailsPage}
+                />
+                <Route
+                  path="/reportformat/:id"
+                  component={ReportFormatDetailsPage}
+                />
+                <Route path="/result/:id" component={ResultDetailsPage} />
+                <Route path="/role/:id" component={RoleDetailsPage} />
+                <Route path="/filter/:id" component={FilterDetailsPage} />
+                <Route path="/tag/:id" component={TagDetailsPage} />
+                <Route
+                  path="/permission/:id"
+                  component={PermissionDetailsPage}
+                />
+                <Route
+                  path="/scanconfig/:id"
+                  component={ScanConfigDetailsPage}
+                />
+                <Route path="/scanner/:id" component={ScannerDetailsPage} />
+                <Route path="/schedule/:id" component={ScheduleDetailsPage} />
+                <Route path="/tag/:id" component={TagDetailsPage} />
+                <Route path="/target/:id" component={TargetDetailsPage} />
+                <Route path="/task/:id" component={TaskDetailsPage} />
+                <Route path="/ticket/:id" component={TicketDetailsPage} />
+                <Route
+                  path="/tlscertificate/:id"
+                  component={TlsCertificateDetailsPage}
+                />
+                <Route path="/user/:id" component={UserDetailsPage} />
+
+                <Route path="/notfound" component={PageNotFound} />
+                <Route component={PageNotFound} />
+              </Switch>
+            </Page>
+          </LocationObserver>
+        </Authorized>
+      </Switch>
+    </Router>
+  );
+};
 
 Routes.propTypes = {
   gmp: PropTypes.gmp.isRequired,

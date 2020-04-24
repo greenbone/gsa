@@ -44,11 +44,7 @@ import LocaleObserver from 'web/components/observer/localeobserver';
 
 import GmpContext from 'web/components/provider/gmpprovider';
 
-import {
-  setUsername,
-  setTimezone,
-  setIsLoggedIn,
-} from 'web/store/usersettings/actions';
+import {setUsername, setTimezone} from 'web/store/usersettings/actions';
 
 import configureStore from './store';
 
