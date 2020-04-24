@@ -20,16 +20,16 @@ import {_} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {testNonEmptyString} from 'web/components/form/useFormValidation';
+import {shouldBeNonEmpty} from 'web/components/form/useFormValidation';
 
 const validationRules = {
   name: value => {
-    const validity = testNonEmptyString(value);
+    const validity = shouldBeNonEmpty(value);
     const error = validity ? '' : _('Missing name.');
     return {validity, error};
   },
   credential_id: value => {
-    const validity = isDefined(value) && testNonEmptyString(value);
+    const validity = isDefined(value) && shouldBeNonEmpty(value);
     const error = validity
       ? ''
       : _(
@@ -38,12 +38,12 @@ const validationRules = {
     return {validity, error};
   },
   host: value => {
-    const validity = testNonEmptyString(value);
+    const validity = shouldBeNonEmpty(value);
     const error = validity ? '' : _('Missing or invalid host.');
     return {validity, error};
   },
   port: value => {
-    const validity = testNonEmptyString(value.toString()); // Port is always returned as an integer from the backend.
+    const validity = shouldBeNonEmpty(value.toString()); // Port is always returned as an integer from the backend.
     const error = validity ? '' : _('Missing or invalid port.');
     return {validity, error};
   },

@@ -18,14 +18,14 @@
  */
 import {_} from 'gmp/locale/lang';
 
-import {testNonEmptyString} from 'web/components/form/useFormValidation';
+import {shouldBeNonEmpty} from 'web/components/form/useFormValidation';
 
 export const editTicketRules = {
-  openNote: function(value, dependencies) {
+  openNote: function (value, dependencies) {
     let validity;
     let error;
     if (dependencies.status === 'Open') {
-      validity = testNonEmptyString(value);
+      validity = shouldBeNonEmpty(value);
       error = validity
         ? ''
         : _('If changing status to Open, Open Note is required');
@@ -36,11 +36,11 @@ export const editTicketRules = {
 
     return {validity, error};
   },
-  closedNote: function(value, dependencies) {
+  closedNote: function (value, dependencies) {
     let validity;
     let error;
     if (dependencies.status === 'Closed') {
-      validity = testNonEmptyString(value);
+      validity = shouldBeNonEmpty(value);
       error = validity
         ? ''
         : _('If changing status to Closed, Close Note is required');
@@ -51,11 +51,11 @@ export const editTicketRules = {
 
     return {validity, error};
   },
-  fixedNote: function(value, dependencies) {
+  fixedNote: function (value, dependencies) {
     let validity;
     let error;
     if (dependencies.status === 'Fixed') {
-      validity = testNonEmptyString(value);
+      validity = shouldBeNonEmpty(value);
       error = validity
         ? ''
         : _('If changing status to Fixed, Fixed Note is required');
@@ -70,7 +70,7 @@ export const editTicketRules = {
 
 export const createTicketRules = {
   note: value => {
-    const validity = testNonEmptyString(value);
+    const validity = shouldBeNonEmpty(value);
     const error = validity ? '' : _('Ticket note is required.');
     return {validity, error};
   },

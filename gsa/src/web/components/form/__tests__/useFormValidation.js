@@ -20,7 +20,7 @@
 import {
   parseAlias,
   syncVariables,
-  testNonEmptyString,
+  shouldBeNonEmpty,
 } from 'web/components/form/useFormValidation';
 
 /*
@@ -79,8 +79,8 @@ describe('Testing useFormValidation utilities', () => {
     const term1 = 'lorem ipsum';
     const term2 = ' ';
 
-    expect(testNonEmptyString(term1)).toBe(true);
-    expect(testNonEmptyString(term2)).toBe(false);
-    expect(testNonEmptyString('')).toBe(false);
+    expect(shouldBeNonEmpty(term1)).toBe(true);
+    expect(shouldBeNonEmpty(term2)).toBe(false);
+    expect(shouldBeNonEmpty('')).toBe(false);
   });
 });

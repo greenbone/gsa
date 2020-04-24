@@ -124,7 +124,7 @@ const useFormValidation = (
 };
 
 // Some common validation rules
-export const testNonEmptyString = (string = '') => string.trim().length > 0;
-export const testValidPassword = (password = '') => password.length > 5;
+export const shouldBeNonEmpty = (string = '') => string.trim().length > 0;
+export const shouldBeValidPassword = (password = '') => password.length > 5;
 
 export default useFormValidation;
