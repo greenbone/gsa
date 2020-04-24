@@ -57,7 +57,7 @@ export const Marker = props => <StyledMarker {...props}>×</StyledMarker>;
 const useFormValidation = (
   stateSchema,
   validationRules,
-  callback,
+  onValidationSuccess,
   extras = {},
 ) => {
   const [formState, setFormState] = useState(stateSchema);
@@ -107,7 +107,7 @@ const useFormValidation = (
       );
     } else {
       // eslint-disable-next-line callback-return
-      return callback(vals); // if nothing is wrong, call onSave
+      return onValidationSuccess(vals); // if nothing is wrong, call onSave
     }
   };
 
