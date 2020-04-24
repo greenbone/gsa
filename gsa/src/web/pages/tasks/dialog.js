@@ -81,7 +81,7 @@ const sort_scan_configs = (scan_configs = []) => {
   scan_configs = scan_configs.filter(filterEmptyScanConfig);
 
   forEach(scan_configs, config => {
-    const type = config.scan_config_type;
+    const type = config.scanConfigType;
     if (!isArray(sorted_scan_configs[type])) {
       sorted_scan_configs[type] = [];
     }
