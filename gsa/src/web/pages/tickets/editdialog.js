@@ -126,7 +126,7 @@ const EditTicketDialog = ({
                       name="openNote"
                       grow="1"
                       rows="5"
-                      value={formValues.openNote}
+                      value={values.openNote}
                       onChange={handleValueChange}
                     />
                   </FormGroup>
@@ -144,7 +144,7 @@ const EditTicketDialog = ({
                       name="fixedNote"
                       grow="1"
                       rows="5"
-                      value={formValues.fixedNote}
+                      value={values.fixedNote}
                       onChange={handleValueChange}
                     />
                   </FormGroup>
@@ -162,7 +162,7 @@ const EditTicketDialog = ({
                       name="closedNote"
                       grow="1"
                       rows="5"
-                      value={formValues.closedNote}
+                      value={values.closedNote}
                       onChange={handleValueChange}
                     />
                   </FormGroup>

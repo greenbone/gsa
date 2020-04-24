@@ -83,7 +83,7 @@ const CreateTicketDialog = ({
                 name="note"
                 grow="1"
                 rows="5"
-                value={formValues.note}
+                value={values.note}
                 onChange={handleValueChange}
               />
             </FormGroup>

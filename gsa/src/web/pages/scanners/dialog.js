@@ -275,7 +275,7 @@ const ScannerDialog = ({
                       errorContent={validityStatus.name.error}
                       name="name"
                       grow="1"
-                      value={formValues.name}
+                      value={state.name}
                       hasError={shouldWarn && !validityStatus.name.validity}
                       onChange={handleValueChange}
                     />
@@ -303,7 +303,7 @@ const ScannerDialog = ({
                     <TextField
                       errorContent={validityStatus.host.error}
                       name="host"
-                      value={formValues.host}
+                      value={state.host}
                       disabled={isInUse}
                       grow="1"
                       title={validityStatus.host.error}
@@ -317,7 +317,7 @@ const ScannerDialog = ({
                         <TextField
                           errorContent={validityStatus.port.error}
                           name="port"
-                          value={formValues.port}
+                          value={state.port}
                           disabled={isInUse}
                           grow="1"
                           shouldValidate={
@@ -383,7 +383,7 @@ const ScannerDialog = ({
                               <Select
                                 name="credential_id"
                                 items={renderSelectItems(scanner_credentials)}
-                                value={formValues.credential_id}
+                                value={state.credential_id}
                                 onChange={handleValueChange}
                               />
                               <Layout>
