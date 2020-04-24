@@ -63,7 +63,7 @@ const EditTicketDialog = ({
     fixedNote,
   };
 
-  const extras = {
+  const deps = {
     // variables not needing validation but needed as dependencies
     status,
   };
@@ -76,7 +76,7 @@ const EditTicketDialog = ({
     handleDependencyChange,
     formStatus,
     handleSubmit,
-  } = useFormValidation(stateSchema, validationRules, onSave, extras);
+  } = useFormValidation(stateSchema, validationRules, onSave, deps);
 
   return (
     <SaveDialog

@@ -58,10 +58,10 @@ const useFormValidation = (
   stateSchema,
   validationRules,
   onValidationSuccess,
-  extras = {},
+  deps = {},
 ) => {
   const [formState, setFormState] = useState(stateSchema);
-  const [dependencies, setDependencies] = useState(extras);
+  const [dependencies, setDependencies] = useState(deps);
   const [errorMessage, setErrorMessage] = useState();
   const [shouldWarn, setWarn] = useState(false); // shouldWarn is false when first rendered. Only when calling handleSubmit for the first time will this be set to true.
 
