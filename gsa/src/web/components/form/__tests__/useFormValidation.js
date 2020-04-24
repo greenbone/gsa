@@ -82,5 +82,6 @@ describe('Testing useFormValidation utilities', () => {
     expect(shouldBeNonEmpty(term1)).toBe(true);
     expect(shouldBeNonEmpty(term2)).toBe(false);
     expect(shouldBeNonEmpty('')).toBe(false);
+    expect(shouldBeNonEmpty()).toBe(false);
   });
 });
