@@ -42,7 +42,9 @@ import {
   Menu,
   SelectContainer,
   SelectedValue,
-} from './selectelements.js';
+} from './selectelements';
+
+import {Marker} from './useFormValidation';
 
 const SingleSelectedValue = styled(SelectedValue)`
   cursor: default;
@@ -137,6 +139,8 @@ class Select extends React.Component {
     let {disabled = false} = this.props;
     const {
       className,
+      errorContent,
+      hasError = false,
       items,
       itemToString,
       menuPosition,
@@ -190,90 +194,94 @@ class Select extends React.Component {
             ? _('Loading...')
             : find_label(items, selectedItem);
           return (
-            <SelectContainer
-              {...getRootProps({})}
-              className={className}
-              width={width}
-            >
-              <Box
-                {...getToggleButtonProps({
-                  disabled,
-                  onClick: isOpen
-                    ? event => {
-                        closeMenu();
-                      }
-                    : event => {
-                        event.preventDownshiftDefault = true; // don't call default handler from downshift
-                        openMenu(() => {
-                          const {current: input} = this.input;
-                          input !== null && input.focus();
-                        }); // set focus to input field after menu is opened
-                      },
-                })}
-                isOpen={isOpen}
-                title={toolTipTitle}
-                ref={this.box}
+            <React.Fragment>
+              <SelectContainer
+                {...getRootProps({})}
+                className={className}
+                width={width}
               >
-                <SingleSelectedValue
-                  data-testid="select-selected-value"
-                  disabled={disabled}
-                  title={toolTipTitle ? toolTipTitle : label}
+                <Box
+                  {...getToggleButtonProps({
+                    disabled,
+                    onClick: isOpen
+                      ? event => {
+                          closeMenu();
+                        }
+                      : event => {
+                          event.preventDownshiftDefault = true; // don't call default handler from downshift
+                          openMenu(() => {
+                            const {current: input} = this.input;
+                            input !== null && input.focus();
+                          }); // set focus to input field after menu is opened
+                        },
+                  })}
+                  hasError={hasError}
+                  isOpen={isOpen}
+                  title={hasError ? errorContent : toolTipTitle}
+                  ref={this.box}
                 >
-                  {label}
-                </SingleSelectedValue>
-                <Layout align={['center', 'center']}>
-                  <ArrowIcon
-                    data-testid="select-open-button"
-                    down={!isOpen}
-                    size="small"
-                    isLoading={isLoading}
-                  />
-                </Layout>
-              </Box>
-              {isOpen && !disabled && (
-                <Menu
-                  {...getMenuProps({})}
-                  position={menuPosition}
-                  target={this.box}
-                >
-                  <Input
-                    {...getInputProps({
-                      value: search,
-                      disabled,
-                      onChange: this.handleSearch,
-                    })}
-                    data-testid="select-search-input"
-                    ref={this.input}
-                  />
-                  <ItemContainer>
-                    {displayedItems.map(
-                      (
-                        {label: itemLabel, value: itemValue, key = itemValue},
-                        i,
-                      ) => (
-                        <Item
-                          {...getItemProps({
-                            item: itemValue,
-                            isSelected: itemValue === selectedItem,
-                            isActive: i === highlightedIndex,
-                            onClick: event => {
-                              event.preventDownshiftDefault = true;
-                              selectItem(itemValue);
-                            },
-                          })}
-                          data-testid="select-item"
-                          key={key}
-                        >
-                          {React.isValidElement(itemLabel)
-                            ? itemLabel
-                            : `${itemLabel}`}
-                        </Item>
-                      ),
-                    )}
-                  </ItemContainer>
-                </Menu>
-              )}
-            </SelectContainer>
+                  <SingleSelectedValue
+                    data-testid="select-selected-value"
+                    disabled={disabled}
+                    title={toolTipTitle ? toolTipTitle : label}
+                  >
+                    {label}
+                  </SingleSelectedValue>
+                  <Layout align={['center', 'center']}>
+                    <ArrowIcon
+                      data-testid="select-open-button"
+                      down={!isOpen}
+                      size="small"
+                      isLoading={isLoading}
+                    />
+                  </Layout>
+                </Box>
+                {isOpen && !disabled && (
+                  <Menu
+                    {...getMenuProps({})}
+                    position={menuPosition}
+                    target={this.box}
+                  >
+                    <Input
+                      {...getInputProps({
+                        value: search,
+                        disabled,
+                        onChange: this.handleSearch,
+                      })}
+                      data-testid="select-search-input"
+                      ref={this.input}
+                    />
+                    <ItemContainer>
+                      {displayedItems.map(
+                        (
+                          {label: itemLabel, value: itemValue, key = itemValue},
+                          i,
+                        ) => (
+                          <Item
+                            {...getItemProps({
+                              item: itemValue,
+                              isSelected: itemValue === selectedItem,
+                              isActive: i === highlightedIndex,
+                              onClick: event => {
+                                event.preventDownshiftDefault = true;
+                                selectItem(itemValue);
+                              },
+                            })}
+                            data-testid="select-item"
+                            key={key}
+                          >
+                            {React.isValidElement(itemLabel)
+                              ? itemLabel
+                              : `${itemLabel}`}
+                          </Item>
+                        ),
+                      )}
+                    </ItemContainer>
+                  </Menu>
+                )}
+              </SelectContainer>
+              <Marker isVisible={hasError}>×</Marker>
+            </React.Fragment>
           );
         }}
       </Downshift>
@@ -283,6 +291,8 @@ class Select extends React.Component {
 
 Select.propTypes = {
   disabled: PropTypes.bool,
+  errorContent: PropTypes.string,
+  hasError: PropTypes.bool,
   isLoading: PropTypes.bool,
   itemToString: PropTypes.func,
   items: PropTypes.arrayOf(
