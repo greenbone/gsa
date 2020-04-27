@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import _ from '../locale';
+
 import {isDefined} from '../utils/identity';
 
 class Rejection {
@@ -23,7 +25,12 @@ class Rejection {
   static REASON_CANCEL = 'cancel';
   static REASON_UNAUTHORIZED = 'unauthorized';
 
-  constructor(xhr, reason = Rejection.REASON_ERROR, message = '', error) {
+  constructor(
+    xhr,
+    reason = Rejection.REASON_ERROR,
+    message = _('Unknown Error'),
+    error,
+  ) {
     this.name = 'Rejection';
     this.message = message;
     this.reason = reason;
