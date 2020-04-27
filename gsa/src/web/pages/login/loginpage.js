@@ -35,7 +35,7 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 import Theme from 'web/utils/theme';
@@ -141,9 +141,9 @@ const getErrorMessage = error => {
   let errors;
   let {message, networkError, graphQLErrors} = error;
 
-  if (isDefined(networkError)) {
-    errors = error.networkError?.result?.errors;
-  } else if (isDefined(graphQLErrors)) {
+  if (hasValue(networkError)) {
+    errors = networkError?.result?.errors;
+  } else if (hasValue(graphQLErrors)) {
     errors = graphQLErrors;
   }
 
