@@ -257,4 +257,28 @@ describe(`Audit Model methods tests`, () => {
     audit = Audit.fromElement({status: AUDIT_STATUS.done, alterable: '1'});
     expect(audit.isChangeable()).toEqual(true);
   });
+
+  test('should parse observer strings', () => {
+    const audit = Audit.fromElement({
+      observers: 'foo bar',
+    });
+
+    const {observers} = audit;
+    expect(observers.user).toEqual(['foo', 'bar']);
+  });
+  test('should parse all observers types', () => {
+    const audit = Audit.fromElement({
+      observers: {
+        __text: 'anon nymous',
+        role: [{name: 'lorem'}],
+        group: [{name: 'ipsum'}, {name: 'dolor'}],
+      },
+    });
+
+    const {observers} = audit;
+
+    expect(observers.user).toEqual(['anon', 'nymous']);
+    expect(observers.role).toEqual([{name: 'lorem'}]);
+    expect(observers.group).toEqual([{name: 'ipsum'}, {name: 'dolor'}]);
+  });
 });

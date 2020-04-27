@@ -64,14 +64,6 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat2.active).toEqual(YES_VALUE);
   });
 
-  test('should parse predefined as yes/no correctly', () => {
-    const reportFormat = ReportFormat.fromElement({predefined: '0'});
-    const reportFormat2 = ReportFormat.fromElement({predefined: '1'});
-
-    expect(reportFormat.predefined).toEqual(NO_VALUE);
-    expect(reportFormat2.predefined).toEqual(YES_VALUE);
-  });
-
   test('should parse alerts', () => {
     const elem = {
       alerts: {
@@ -226,14 +218,6 @@ describe('ReportFormat model tests', () => {
   });
 
   describe('ReportFormat model method tests', () => {
-    test('isPredefined() returns correct true/false', () => {
-      const reportFormat = ReportFormat.fromElement({predefined: '0'});
-      const reportFormat2 = ReportFormat.fromElement({predefined: '1'});
-
-      expect(reportFormat.isPredefined()).toBe(false);
-      expect(reportFormat2.isPredefined()).toBe(true);
-    });
-
     test('isActive() returns correct true/false', () => {
       const reportFormat = ReportFormat.fromElement({active: '0'});
       const reportFormat2 = ReportFormat.fromElement({active: '1'});

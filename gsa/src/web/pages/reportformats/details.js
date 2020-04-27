@@ -83,11 +83,6 @@ const ReportFormatDetails = ({entity, links = true}) => {
           </TableRow>
 
           <TableRow>
-            <TableData>{_('Predefined')}</TableData>
-            <TableData>{renderYesNo(entity.isPredefined())}</TableData>
-          </TableRow>
-
-          <TableRow>
             <TableData>{_('Summary')}</TableData>
             <TableData>{summary}</TableData>
           </TableRow>

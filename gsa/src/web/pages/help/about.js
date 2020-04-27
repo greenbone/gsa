@@ -38,7 +38,7 @@ import Section from 'web/components/section/section';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-const GSA_VERSION = process.env.REACT_APP_VERSION || '20.04';
+const GSA_VERSION = process.env.REACT_APP_VERSION || '20.08';
 
 const StyledLayout = styled(Layout)`
   margin: 0 auto;
@@ -96,7 +96,7 @@ const About = ({gmp}) => (
           </DivP>
           <DivP>
             {_(
-              'License: GNU Affero General Public License version 2 or any later' +
+              'License: GNU Affero General Public License version 3 or any later' +
                 ' version',
             )}
             &nbsp;

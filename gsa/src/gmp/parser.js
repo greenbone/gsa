@@ -18,7 +18,7 @@
 import 'core-js/features/object/entries';
 import 'core-js/features/string/starts-with';
 
-import {isDefined, isString, isNumber} from './utils/identity';
+import {isDefined, isString, isNumber, isArray} from './utils/identity';
 import {isEmpty} from './utils/string';
 
 import date, {duration} from './models/date';
@@ -88,11 +88,17 @@ export const parseFloat = value => {
   return val;
 };
 
+export const parseIntoArray = value => (isArray(value) ? value : [value]);
+
 export const YES_VALUE = 1;
 export const NO_VALUE = 0;
 
 export const parseYesNo = value =>
   value === '1' || value === 1 || value === true ? YES_VALUE : NO_VALUE;
+
+export function parseYes(value) {
+  return value === 'yes' ? YES_VALUE : NO_VALUE;
+}
 
 export const parseCsv = (value = '') => {
   if (!isString(value)) {
