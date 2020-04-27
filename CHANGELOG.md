@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [20.04] - unreleased
+## [20.08] - unreleased
 
 ### Added
 - Added German translation for About page [#1998](https://github.com/greenbone/gsa/pull/1998)
@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Multistep dialog feature, implemented on scanner dialog [#1725](https://github.com/greenbone/gsa/pull/1725)
 
 ### Changed
+- Changed future release version from 20.04 to 20.08 [#2118](https://github.com/greenbone/gsa/pull/2118)
 - Adjusted task icons to use them for both tasks and audits and removed audit icons [#2070](https://github.com/greenbone/gsa/pull/2070)
 - Don't use DetailsLink in ClosedCvesTable if host does not have an ID [#2055](ttps://github.com/greenbone/gsa/pull/2055)
 - Changed NOTES_DASHBOARD_ID to fit [gvmd/#1018](https://github.com/greenbone/gvmd/pull/1018) [#2053](https://github.com/greenbone/gsa/pull/2053)
@@ -28,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
 
 ### Fixed
+- Fixed license information on AboutPage [#2118](https://github.com/greenbone/gsa/pull/2118)
 - Fixed state updates on unmounted SvgIcons [#2063](https://github.com/greenbone/gsa/pull/2063)
 - Fixed parsing xml rejection messages [#1970](https://github.com/greenbone/gsa/pull/1970)
 - Fixed returning bulk_delete response [#1969](https://github.com/greenbone/gsa/pull/1969)
@@ -40,7 +42,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed "All SecInfo" section [#1685](https://github.com/greenbone/gsa/pull/1685) [#1695](https://github.com/greenbone/gsa/pull/1695)
 - Removed agents [#1903](https://github.com/greenbone/gsa/pull/1903)
 
-[20.04]: https://github.com/greenbone/gsa/compare/gsa-9.0...master
+[20.08]: https://github.com/greenbone/gsa/compare/gsa-9.0...master
 
 ### [9.0.1] - unreleased
 
