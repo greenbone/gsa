@@ -26,8 +26,6 @@ import {
   parseProgressElement,
   parseYesNo,
   parseYes,
-  parseIntoArray,
-  parseText,
   parseDuration,
   NO_VALUE,
 } from '../parser';
