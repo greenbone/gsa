@@ -55,7 +55,7 @@ describe('Gmp tests', () => {
 
       const gmp = new Gmp(settings, http);
 
-      return gmp.login('foo', 'bar').then(() => {
+      return gmp.login.login('foo', 'bar').then(data => {
         expect(request).toHaveBeenCalledWith('post', {
           data: {
             cmd: 'login',
@@ -63,7 +63,7 @@ describe('Gmp tests', () => {
             password: 'bar',
           },
         });
-        expect(gmp.isLoggedIn()).toEqual(true);
+        expect(data.token).toEqual('foo');
       });
     });
 
@@ -79,7 +79,7 @@ describe('Gmp tests', () => {
 
       const gmp = new Gmp(settings, http);
 
-      return gmp.login('foo', 'bar').catch(error => {
+      return gmp.login.login('foo', 'bar').catch(error => {
         expect(request).toHaveBeenCalledWith('post', {
           data: {
             cmd: 'login',
