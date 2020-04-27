@@ -78,7 +78,7 @@ const CreateTicketDialog = ({
             </FormGroup>
             <FormGroup title={_('Note')}>
               <TextArea
-                warning={shouldWarn && !validityStatus.note.validity} // default false if undefined (if we don't want to do validation on this textarea)
+                warning={shouldWarn && !validityStatus.note.isValid} // default false if undefined (if we don't want to do validation on this textarea)
                 errorContent={validityStatus.note.error}
                 name="note"
                 grow="1"

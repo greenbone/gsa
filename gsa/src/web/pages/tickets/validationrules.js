@@ -22,56 +22,56 @@ import {shouldBeNonEmpty} from 'web/components/form/useFormValidation';
 
 export const editTicketRules = {
   openNote: function (value, dependencies) {
-    let validity;
+    let isValid;
     let error;
     if (dependencies.status === 'Open') {
-      validity = shouldBeNonEmpty(value);
-      error = validity
+      isValid = shouldBeNonEmpty(value);
+      error = isValid
         ? ''
         : _('If changing status to Open, Open Note is required');
     } else {
-      validity = true;
+      isValid = true;
       error = '';
     }
 
-    return {validity, error};
+    return {isValid, error};
   },
   closedNote: function (value, dependencies) {
-    let validity;
+    let isValid;
     let error;
     if (dependencies.status === 'Closed') {
-      validity = shouldBeNonEmpty(value);
-      error = validity
+      isValid = shouldBeNonEmpty(value);
+      error = isValid
         ? ''
         : _('If changing status to Closed, Close Note is required');
     } else {
-      validity = true;
+      isValid = true;
       error = '';
     }
 
-    return {validity, error};
+    return {isValid, error};
   },
   fixedNote: function (value, dependencies) {
-    let validity;
+    let isValid;
     let error;
     if (dependencies.status === 'Fixed') {
-      validity = shouldBeNonEmpty(value);
-      error = validity
+      isValid = shouldBeNonEmpty(value);
+      error = isValid
         ? ''
         : _('If changing status to Fixed, Fixed Note is required');
     } else {
-      validity = true;
+      isValid = true;
       error = '';
     }
 
-    return {validity, error};
+    return {isValid, error};
   },
 };
 
 export const createTicketRules = {
   note: value => {
-    const validity = shouldBeNonEmpty(value);
-    const error = validity ? '' : _('Ticket note is required.');
-    return {validity, error};
+    const isValid = shouldBeNonEmpty(value);
+    const error = isValid ? '' : _('Ticket note is required.');
+    return {isValid, error};
   },
 };

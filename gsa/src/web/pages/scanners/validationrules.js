@@ -24,28 +24,28 @@ import {shouldBeNonEmpty} from 'web/components/form/useFormValidation';
 
 const validationRules = {
   name: value => {
-    const validity = shouldBeNonEmpty(value);
-    const error = validity ? '' : _('Missing name.');
-    return {validity, error};
+    const isValid = shouldBeNonEmpty(value);
+    const error = isValid ? '' : _('Missing name.');
+    return {isValid, error};
   },
   credential_id: value => {
-    const validity = isDefined(value) && shouldBeNonEmpty(value);
-    const error = validity
+    const isValid = isDefined(value) && shouldBeNonEmpty(value);
+    const error = isValid
       ? ''
       : _(
           'Missing credential id. Choose from the dropdown or create a new credential.',
         );
-    return {validity, error};
+    return {isValid, error};
   },
   host: value => {
-    const validity = shouldBeNonEmpty(value);
-    const error = validity ? '' : _('Missing or invalid host.');
-    return {validity, error};
+    const isValid = shouldBeNonEmpty(value);
+    const error = isValid ? '' : _('Missing or invalid host.');
+    return {isValid, error};
   },
   port: value => {
-    const validity = shouldBeNonEmpty(value.toString()); // Port is always returned as an integer from the backend.
-    const error = validity ? '' : _('Missing or invalid port.');
-    return {validity, error};
+    const isValid = shouldBeNonEmpty(value.toString()); // Port is always returned as an integer from the backend.
+    const error = isValid ? '' : _('Missing or invalid port.');
+    return {isValid, error};
   },
 };
 

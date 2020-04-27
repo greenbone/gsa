@@ -98,11 +98,11 @@ const useFormValidation = (
     setShouldWarn(true);
     const errorVars = [];
     Object.keys(formValues).forEach(key => {
-      !validityStatus[key].validity && errorVars.push(parseAlias(key)); // Collects form fields with errors
+      !validityStatus[key].isValid && errorVars.push(parseAlias(key)); // Collects form fields with errors
     });
 
     const hasErrorInState = Object.keys(formValues).some(key => {
-      return validityStatus[key].validity === false;
+      return validityStatus[key].isValid === false;
     }, []); // checks if any field is invalid
 
     if (hasErrorInState) {
