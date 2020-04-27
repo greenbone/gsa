@@ -206,10 +206,10 @@ class Task extends Model {
       for (const pref of object.preferences) {
         switch (pref.name) {
           case 'in_assets':
-            copy.in_assets = parseYes(pref.value);
+            copy.inAssets = parseYes(pref.value);
             break;
           case 'assets_apply_overrides':
-            copy.apply_overrides = parseYes(pref.value);
+            copy.applyOverrides = parseYes(pref.value);
             break;
           case 'assets_min_qod':
             copy.minQod = parseInt(pref.value);
