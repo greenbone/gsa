@@ -111,7 +111,7 @@ const withProvider = (name, key = name) => Component => ({
     children
   );
 
-const TestingGmpPropvider = withProvider('gmp', 'value')(GmpContext.Provider);
+const TestingGmpProvider = withProvider('gmp', 'value')(GmpContext.Provider);
 const TestingStoreProvider = withProvider('store')(Provider);
 const TestingRouter = withProvider('history')(Router);
 const TestingCapabilitiesProvider = withProvider(
@@ -140,7 +140,7 @@ export const rendererWith = (
   return {
     render: ui =>
       render(
-        <TestingGmpPropvider gmp={gmp}>
+        <TestingGmpProvider gmp={gmp}>
           <TestingCapabilitiesProvider capabilities={capabilities}>
             <TestingStoreProvider store={store}>
               <MockedProvider mocks={[]} addTypename={false}>
@@ -148,7 +148,7 @@ export const rendererWith = (
               </MockedProvider>
             </TestingStoreProvider>
           </TestingCapabilitiesProvider>
-        </TestingGmpPropvider>,
+        </TestingGmpProvider>,
       ),
     gmp,
     store,
