@@ -161,6 +161,10 @@ const LoginPage = () => {
 
           const dateObj = new Date(sessionTimeout);
 
+          gmp.settings.username = username;
+          gmp.settings.timezone = timezone;
+          gmp.settings.locale = locale;
+
           setTimezone(timezone);
           setLocale(locale);
           setSessionTimeout(moment(dateObj)); // convert sessionTimeout to Moment instance
@@ -178,36 +182,45 @@ const LoginPage = () => {
     };
   } else {
     login = (username, password) => {
-      gmp
+      let gmpLoginData;
+      gmp.login
         .login(username, password) // put gmp.login back into promise chain
-        .then(loginMutation({username, password}))
-        .then(
-          data => {
-            const {locale, timezone, sessionTimeout} = data;
+        .then(loginData => {
+          gmpLoginData = loginData;
+          return loginMutation({username, password});
+        })
+        .then(data => {
+          const {locale, timezone, sessionTimeout} = data;
+          const {token} = gmpLoginData;
 
-            setTimezone(timezone);
-            setLocale(locale);
-            setSessionTimeout(sessionTimeout);
-            setUsername(username);
-            // must be set before changing the location
-            setIsLoggedIn(true);
+          // only store settings if both logins have been successfully
+          gmp.settings.username = username;
+          gmp.settings.timezone = timezone;
+          gmp.settings.token = token;
+          gmp.settings.locale = locale;
 
-            if (
-              location &&
-              location.state &&
-              location.state.next &&
-              location.state.next !== location.pathname
-            ) {
-              history.replace(location.state.next);
-            } else {
-              history.replace('/');
-            }
-          },
-          rej => {
-            log.error(rej);
-            setError(rej);
-          },
-        );
+          setTimezone(timezone);
+          setLocale(locale);
+          setSessionTimeout(sessionTimeout);
+          setUsername(username);
+          // must be set before changing the location
+          setIsLoggedIn(true);
+
+          if (
+            location &&
+            location.state &&
+            location.state.next &&
+            location.state.next !== location.pathname
+          ) {
+            history.replace(location.state.next);
+          } else {
+            history.replace('/');
+          }
+        })
+        .catch(rej => {
+          log.error(rej);
+          setError(rej);
+        });
     };
   }
 
