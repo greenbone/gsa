@@ -201,9 +201,9 @@ const LoginPage = () => {
 
           history.replace('/tasks'); // always redirect to tasks for demo purposes. This should be changed to '/' once hyperion is no longer in demo.
         })
-        .catch(rej => {
-          log.error(rej);
-          setError(rej);
+        .catch(err => {
+          log.error(err);
+          setError(err);
         });
     };
   } else {
