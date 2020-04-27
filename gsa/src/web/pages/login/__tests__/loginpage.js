@@ -174,7 +174,7 @@ describe('LoginPageTests', () => {
     expect(mock.newData).toHaveBeenCalled();
   });
 
-  test('should display error message', async () => {
+  test('should display graphql error message', async () => {
     const mocks = [
       {
         request: {
@@ -225,6 +225,66 @@ describe('LoginPageTests', () => {
 
     const error = await waitForElement(() => getByTestId('error'));
     expect(error).toHaveTextContent('Just a test');
+  });
+
+  test('should display network error message', async () => {
+    const error = {
+      message: 'Response not successful: Received status code 500',
+      result: {
+        errors: [{message: 'Foo'}, {message: 'Bar'}],
+      },
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: LOGIN,
+          variables: {
+            username: 'foo',
+            password: 'bar',
+          },
+        },
+        error,
+      },
+    ];
+
+    const login = jest.fn().mockRejectedValue({message: 'Just a test'});
+    const isLoggedIn = jest.fn().mockReturnValue(false);
+    const clearToken = jest.fn();
+    const setLocale = jest.fn();
+    const setTimezone = jest.fn();
+    const gmp = {
+      setTimezone,
+      setLocale,
+      login,
+      isLoggedIn,
+      clearToken,
+      settings: {
+        enableHyperionOnly: true,
+      },
+    };
+    const {render} = rendererWith({gmp, router: true, store: true});
+
+    const {getByName, getByTestId} = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LoginPage />
+      </MockedProvider>,
+    );
+
+    const usernameField = getByName('username');
+    const passwordField = getByName('password');
+
+    fireEvent.change(usernameField, {target: {value: 'foo'}});
+    fireEvent.change(passwordField, {target: {value: 'bar'}});
+
+    const button = getByTestId('login-button');
+    fireEvent.click(button);
+
+    const errorOutput = await waitForElement(() => getByTestId('error'));
+    expect(errorOutput).toHaveTextContent(
+      'Network error: Response not successful: Received status code 500:' +
+        ' Foo. Bar.',
+    );
   });
 
   test('should redirect to main page if already logged in', () => {
