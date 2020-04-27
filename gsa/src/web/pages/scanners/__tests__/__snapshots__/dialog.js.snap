@@ -667,6 +667,24 @@ exports[`ScannerDialog component tests should not save invalid form state 1`] = 
   width: 180px;
 }
 
+.c23 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
+.c20 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: inline;
+}
+
 .c26 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -744,24 +762,6 @@ exports[`ScannerDialog component tests should not save invalid form state 1`] = 
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c23 {
-  color: #a94442;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
-}
-
-.c20 {
-  color: #a94442;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: inline;
 }
 
 .c11 {
@@ -965,6 +965,12 @@ exports[`ScannerDialog component tests should not save invalid form state 1`] = 
                             </span>
                           </div>
                         </div>
+                      </div>
+                      <div
+                        class="c23"
+                        data-testid="error-marker"
+                      >
+                        ×
                       </div>
                     </div>
                   </div>
@@ -1657,6 +1663,15 @@ exports[`ScannerDialog component tests should render 1`] = `
   width: 180px;
 }
 
+.c18 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c22 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -1715,15 +1730,6 @@ exports[`ScannerDialog component tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c18 {
-  color: #a94442;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
 }
 
 .c9 {
@@ -1917,6 +1923,12 @@ exports[`ScannerDialog component tests should render 1`] = `
                             </span>
                           </div>
                         </div>
+                      </div>
+                      <div
+                        class="c18"
+                        data-testid="error-marker"
+                      >
+                        ×
                       </div>
                     </div>
                   </div>

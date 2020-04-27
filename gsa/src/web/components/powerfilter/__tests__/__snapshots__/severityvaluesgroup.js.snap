@@ -339,6 +339,15 @@ exports[`Severity Values Group Tests should render 1`] = `
   width: 180px;
 }
 
+.c11 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c7 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -414,6 +423,12 @@ exports[`Severity Values Group Tests should render 1`] = `
               </span>
             </div>
           </div>
+        </div>
+        <div
+          class="c11"
+          data-testid="error-marker"
+        >
+          ×
         </div>
         <input
           max="10"

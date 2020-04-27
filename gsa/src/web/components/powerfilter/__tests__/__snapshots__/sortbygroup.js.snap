@@ -19,7 +19,7 @@ exports[`SortByGroup tests should render 1`] = `
   align-items: center;
 }
 
-.c11 {
+.c12 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -38,18 +38,18 @@ exports[`SortByGroup tests should render 1`] = `
   margin-left: -5px;
 }
 
-.c11 > * {
+.c12 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c11 > * {
+.c12 > * {
   margin-left: 5px;
 }
 
-.c10 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -191,6 +191,15 @@ exports[`SortByGroup tests should render 1`] = `
   width: 180px;
 }
 
+.c9 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c5 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -211,7 +220,7 @@ exports[`SortByGroup tests should render 1`] = `
   cursor: default;
 }
 
-.c9 {
+.c10 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -227,7 +236,7 @@ exports[`SortByGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c12 {
+.c13 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -238,11 +247,11 @@ exports[`SortByGroup tests should render 1`] = `
   height: auto;
 }
 
-.c14 {
+.c15 {
   opacity: 1;
 }
 
-.c13 {
+.c14 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -306,26 +315,32 @@ exports[`SortByGroup tests should render 1`] = `
         </div>
       </div>
     </div>
-    <label
+    <div
       class="c9"
+      data-testid="error-marker"
+    >
+      ×
+    </div>
+    <label
+      class="c10"
     >
       <div
-        class="c10"
+        class="c11"
       >
         <div
-          class="c11"
+          class="c12"
           margin="5px"
         >
           <input
             checked=""
-            class="c12 c13"
+            class="c13 c14"
             data-testid="radio-input"
             name="sort_order"
             type="radio"
             value="sort"
           />
           <span
-            class="c14"
+            class="c15"
             data-testid="radio-title"
           >
             Ascending
@@ -334,24 +349,24 @@ exports[`SortByGroup tests should render 1`] = `
       </div>
     </label>
     <label
-      class="c9"
+      class="c10"
     >
       <div
-        class="c10"
+        class="c11"
       >
         <div
-          class="c11"
+          class="c12"
           margin="5px"
         >
           <input
-            class="c12 c13"
+            class="c13 c14"
             data-testid="radio-input"
             name="sort_order"
             type="radio"
             value="sort-reverse"
           />
           <span
-            class="c14"
+            class="c15"
             data-testid="radio-title"
           >
             Descending

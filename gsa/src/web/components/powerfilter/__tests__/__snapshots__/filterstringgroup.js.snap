@@ -49,6 +49,15 @@ exports[`FilterStringGroup tests should render 1`] = `
   padding-right: 10px;
 }
 
+.c5 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c3 {
   font-family: inherit;
   font-size: inherit;
@@ -87,15 +96,6 @@ exports[`FilterStringGroup tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c5 {
-  color: #a94442;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
 }
 
 <div

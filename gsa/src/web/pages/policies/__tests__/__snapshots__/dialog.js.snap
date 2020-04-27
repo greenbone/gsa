@@ -358,6 +358,15 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   padding-right: 10px;
 }
 
+.c14 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c12 {
   font-family: inherit;
   font-size: inherit;
@@ -396,15 +405,6 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c14 {
-  color: #a94442;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
 }
 
 <body>

@@ -344,6 +344,15 @@ exports[`Scan Config table tests should render 1`] = `
   width: 180px;
 }
 
+.c31 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c27 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -408,7 +417,7 @@ exports[`Scan Config table tests should render 1`] = `
   width: 8%;
 }
 
-.c31 {
+.c32 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1286,6 +1295,12 @@ exports[`Scan Config table tests should render 1`] = `
                       </div>
                     </div>
                     <div
+                      class="c31"
+                      data-testid="error-marker"
+                    >
+                      ×
+                    </div>
+                    <div
                       class="c6"
                     >
                       <div
@@ -1329,7 +1344,7 @@ exports[`Scan Config table tests should render 1`] = `
         class="c19"
       >
         <div
-          class="c31"
+          class="c32"
         >
           (Applied filter: rows=2)
         </div>

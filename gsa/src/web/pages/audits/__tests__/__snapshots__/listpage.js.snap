@@ -690,6 +690,15 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   width: 180px;
 }
 
+.c15 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c18 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -792,15 +801,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c15 {
-  color: #a94442;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
 }
 
 .c12 {
@@ -1258,6 +1258,12 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                   </div>
                 </div>
               </div>
+              <div
+                class="c15"
+                data-testid="error-marker"
+              >
+                ×
+              </div>
             </div>
           </div>
         </div>
@@ -1697,6 +1703,12 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                                 </span>
                               </div>
                             </div>
+                          </div>
+                          <div
+                            class="c15"
+                            data-testid="error-marker"
+                          >
+                            ×
                           </div>
                           <div
                             class="c2"

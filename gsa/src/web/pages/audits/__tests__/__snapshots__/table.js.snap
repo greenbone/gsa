@@ -351,6 +351,15 @@ exports[`Audits table tests should render 1`] = `
   width: 180px;
 }
 
+.c40 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c36 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -415,7 +424,7 @@ exports[`Audits table tests should render 1`] = `
   width: 10em;
 }
 
-.c40 {
+.c41 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1477,6 +1486,12 @@ exports[`Audits table tests should render 1`] = `
                       </div>
                     </div>
                     <div
+                      class="c40"
+                      data-testid="error-marker"
+                    >
+                      ×
+                    </div>
+                    <div
                       class="c6"
                     >
                       <div
@@ -1512,7 +1527,7 @@ exports[`Audits table tests should render 1`] = `
         class="c19"
       >
         <div
-          class="c40"
+          class="c41"
         >
           (Applied filter: rows=2)
         </div>

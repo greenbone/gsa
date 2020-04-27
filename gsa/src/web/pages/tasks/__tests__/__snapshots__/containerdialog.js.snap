@@ -358,6 +358,15 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   padding-right: 10px;
 }
 
+.c14 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c12 {
   font-family: inherit;
   font-size: inherit;
@@ -396,15 +405,6 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c14 {
-  color: #a94442;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
 }
 
 <body>
@@ -977,6 +977,15 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   padding-right: 10px;
 }
 
+.c14 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c12 {
   font-family: inherit;
   font-size: inherit;
@@ -1015,15 +1024,6 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c14 {
-  color: #a94442;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
 }
 
 .c18 {

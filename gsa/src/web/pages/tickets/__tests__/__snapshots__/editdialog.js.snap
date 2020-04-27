@@ -70,7 +70,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   height: 100%;
 }
 
-.c25 {
+.c26 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -79,7 +79,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c24 {
+.c25 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -146,7 +146,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   width: inherit;
 }
 
-.c21 {
+.c22 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -166,12 +166,12 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c21:focus,
-.c21:hover {
+.c22:focus,
+.c22:hover {
   border: 1px solid #393637;
 }
 
-.c21:hover {
+.c22:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -179,26 +179,26 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c21[disabled] {
+.c22[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c21 img {
+.c22 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c21:link {
+.c22:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c22 {
+.c23 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -216,18 +216,18 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c23 {
+.c24 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c23:hover {
+.c24:hover {
   color: #fff;
   background: #519032;
 }
 
-.c20 {
+.c21 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -448,6 +448,15 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   width: 180px;
 }
 
+.c18 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c14 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -468,7 +477,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   cursor: default;
 }
 
-.c18 {
+.c19 {
   display: block;
   height: auto;
   color: #393637;
@@ -479,7 +488,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   padding: 4px 8px;
 }
 
-.c19 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -593,6 +602,12 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                           </div>
                         </div>
                       </div>
+                      <div
+                        class="c18"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -644,85 +659,92 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div
-                      class="c9"
-                    >
-                      <label
-                        class="c10"
-                        data-testid="formgroup-title"
-                      >
-                        Note for Open
-                      </label>
                       <div
-                        class="c11"
-                        data-testid="formgroup-content"
-                        size="10"
+                        class="c18"
+                        data-testid="error-marker"
                       >
-                        
-                        <div>
-                          <textarea
-                            class="c18 c19"
-                            name="openNote"
-                            rows="5"
-                          />
-                        </div>
+                        ×
                       </div>
                     </div>
                   </div>
-                  
-                  <div>
-                    <div
-                      class="c9"
+                  <div
+                    class="c9"
+                  >
+                    <label
+                      class="c10"
+                      data-testid="formgroup-title"
                     >
-                      <label
-                        class="c10"
-                        data-testid="formgroup-title"
-                      >
-                        Note for Fixed
-                      </label>
+                      Note for Open
+                    </label>
+                    <div
+                      class="c11"
+                      data-testid="formgroup-content"
+                      size="10"
+                    >
+                      <textarea
+                        class="c19 c20"
+                        name="openNote"
+                        rows="5"
+                      />
                       <div
-                        class="c11"
-                        data-testid="formgroup-content"
-                        size="10"
+                        class="c18"
+                        data-testid="error-marker"
                       >
-                        
-                        <div>
-                          <textarea
-                            class="c18 c19"
-                            name="fixedNote"
-                            rows="5"
-                          />
-                        </div>
+                        ×
                       </div>
                     </div>
                   </div>
-                  
-                  <div>
-                    <div
-                      class="c9"
+                  <div
+                    class="c9"
+                  >
+                    <label
+                      class="c10"
+                      data-testid="formgroup-title"
                     >
-                      <label
-                        class="c10"
-                        data-testid="formgroup-title"
-                      >
-                        Note for Closed
-                      </label>
+                      Note for Fixed
+                    </label>
+                    <div
+                      class="c11"
+                      data-testid="formgroup-content"
+                      size="10"
+                    >
+                      <textarea
+                        class="c19 c20"
+                        name="fixedNote"
+                        rows="5"
+                      />
                       <div
-                        class="c11"
-                        data-testid="formgroup-content"
-                        size="10"
+                        class="c18"
+                        data-testid="error-marker"
                       >
-                        
-                        <div>
-                          <textarea
-                            class="c18 c19"
-                            name="closedNote"
-                            rows="5"
-                          />
-                        </div>
+                        ×
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="c9"
+                  >
+                    <label
+                      class="c10"
+                      data-testid="formgroup-title"
+                    >
+                      Note for Closed
+                    </label>
+                    <div
+                      class="c11"
+                      data-testid="formgroup-content"
+                      size="10"
+                    >
+                      <textarea
+                        class="c19 c20"
+                        name="closedNote"
+                        rows="5"
+                      />
+                      <div
+                        class="c18"
+                        data-testid="error-marker"
+                      >
+                        ×
                       </div>
                     </div>
                   </div>
@@ -730,17 +752,17 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c20"
+              class="c21"
             >
               <button
-                class="c21 c22 c23"
+                class="c22 c23 c24"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c21 c22 c23"
+                class="c22 c23 c24"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -749,10 +771,10 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c24"
+            class="c25"
           >
             <div
-              class="c25"
+              class="c26"
             />
           </div>
         </div>

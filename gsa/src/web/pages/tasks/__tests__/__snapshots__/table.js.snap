@@ -365,6 +365,15 @@ exports[`Tasks table tests should render 1`] = `
   width: 180px;
 }
 
+.c44 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c40 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -445,7 +454,7 @@ exports[`Tasks table tests should render 1`] = `
   width: 10em;
 }
 
-.c44 {
+.c45 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1582,6 +1591,12 @@ exports[`Tasks table tests should render 1`] = `
                       </div>
                     </div>
                     <div
+                      class="c44"
+                      data-testid="error-marker"
+                    >
+                      ×
+                    </div>
+                    <div
                       class="c6"
                     >
                       <div
@@ -1625,7 +1640,7 @@ exports[`Tasks table tests should render 1`] = `
         class="c21"
       >
         <div
-          class="c44"
+          class="c45"
         >
           (Applied filter: rows=2)
         </div>

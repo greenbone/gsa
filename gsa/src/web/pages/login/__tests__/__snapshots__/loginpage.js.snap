@@ -259,6 +259,15 @@ exports[`LoginPagetests should render Loginpage 1`] = `
   margin-left: 33.33333333%;
 }
 
+.c23 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c21 {
   font-family: inherit;
   font-size: inherit;
@@ -297,15 +306,6 @@ exports[`LoginPagetests should render Loginpage 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c23 {
-  color: #a94442;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
 }
 
 .c16 {
