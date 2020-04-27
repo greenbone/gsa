@@ -124,7 +124,7 @@ describe('Gmp tests', () => {
       const settings = {token: 'foo'};
       const gmp = new Gmp(settings);
       const handler = jest.fn();
-      const unsub = gmp.subscribeToLogout(handler);
+      const unsubscribe = gmp.subscribeToLogout(handler);
 
       expect(gmp.isLoggedIn()).toEqual(true);
 
@@ -133,14 +133,14 @@ describe('Gmp tests', () => {
       expect(gmp.isLoggedIn()).toEqual(false);
       expect(handler).toHaveBeenCalled();
 
-      unsub();
+      unsubscribe();
     });
 
     test('should call logout handlers if logged out', () => {
       const settings = {};
       const gmp = new Gmp(settings);
       const handler = jest.fn();
-      const unsub = gmp.subscribeToLogout(handler);
+      const unsubscribe = gmp.subscribeToLogout(handler);
 
       expect(gmp.isLoggedIn()).toEqual(false);
 
@@ -149,7 +149,7 @@ describe('Gmp tests', () => {
       expect(gmp.isLoggedIn()).toEqual(false);
       expect(handler).toHaveBeenCalled();
 
-      unsub();
+      unsubscribe();
     });
   });
 
