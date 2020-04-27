@@ -319,9 +319,7 @@ const ScannerDialog = ({
                           value={state.port}
                           disabled={isInUse}
                           grow="1"
-                          shouldValidate={
-                            shouldWarn && !validityStatus.port.isValid
-                          }
+                          hasError={shouldWarn && !validityStatus.port.isValid}
                           onChange={handleValueChange}
                         />
                       </FormGroup>
@@ -372,6 +370,10 @@ const ScannerDialog = ({
                     <FormGroup title={_('Credential')} flex="column">
                       <Divider>
                         <Select
+                          hasError={
+                            shouldWarn && !validityStatus.credential_id.isValid
+                          }
+                          errorContent={validityStatus.credential_id.error}
                           name="credential_id"
                           items={renderSelectItems(scanner_credentials)}
                           value={state.credential_id}
