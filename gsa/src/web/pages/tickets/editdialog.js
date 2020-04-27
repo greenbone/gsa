@@ -68,8 +68,10 @@ const EditTicketDialog = ({
   };
 
   const {
-    formValues,
     dependencies,
+    formValues,
+    shouldWarn,
+    validityStatus,
     handleValueChange,
     handleDependencyChange,
     handleSubmit,
@@ -100,7 +102,7 @@ const EditTicketDialog = ({
               <Select
                 name="status"
                 items={STATUS_ITEMS}
-                value={dependencies.status}
+                value={values.status}
                 onChange={handleDependencyChange}
               />
             </FormGroup>
@@ -114,6 +116,8 @@ const EditTicketDialog = ({
             </FormGroup>
             <FormGroup title={_('Note for Open')}>
               <TextArea
+                hasError={shouldWarn && !validityStatus.openNote.isValid}
+                errorContent={validityStatus.openNote.error}
                 name="openNote"
                 grow="1"
                 rows="5"
@@ -123,6 +127,8 @@ const EditTicketDialog = ({
             </FormGroup>
             <FormGroup title={_('Note for Fixed')}>
               <TextArea
+                hasError={shouldWarn && !validityStatus.fixedNote.isValid}
+                errorContent={validityStatus.fixedNote.error}
                 name="fixedNote"
                 grow="1"
                 rows="5"
@@ -132,6 +138,8 @@ const EditTicketDialog = ({
             </FormGroup>
             <FormGroup title={_('Note for Closed')}>
               <TextArea
+                hasError={shouldWarn && !validityStatus.closedNote.isValid}
+                errorContent={validityStatus.closedNote.error}
                 name="closedNote"
                 grow="1"
                 rows="5"
