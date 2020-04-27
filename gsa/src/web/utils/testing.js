@@ -23,6 +23,7 @@ import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 
 import {
+  act,
   render as reactTestingRender,
   cleanup,
   queryAllByAttribute,
@@ -49,6 +50,15 @@ import {MockedProvider} from '@apollo/react-testing';
 export * from '@testing-library/react';
 
 afterEach(cleanup);
+
+export async function wait(ms = 0) {
+  await act(
+    () =>
+      new Promise(resolve => {
+        setTimeout(resolve, ms);
+      }),
+  );
+}
 
 export const queryAllByName = (container, name) =>
   queryAllByAttribute('name', container, name);
