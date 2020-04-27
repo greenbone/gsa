@@ -99,7 +99,7 @@ class Gmp {
       const instance = new cmd(this.http);
 
       Object.defineProperty(this, name, {
-        get: function() {
+        get: function () {
           return instance;
         },
       });
@@ -109,11 +109,6 @@ class Gmp {
   login(username, password) {
     return this._login.login(username, password).then(login => {
       const {token, timezone, locale, sessionTimeout} = login;
-
-      this.settings.username = username;
-      this.settings.timezone = timezone;
-      this.settings.token = token;
-      this.settings.locale = locale;
 
       return {
         locale: locale === BROWSER_LANGUAGE ? undefined : locale,
