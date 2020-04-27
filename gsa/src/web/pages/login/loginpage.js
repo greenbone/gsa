@@ -148,7 +148,7 @@ const getErrorMessage = error => {
   }
 
   if (isDefined(errors)) {
-    message += ': ' + getErrorsDetails(errors);
+    message += ': ' + getErrorsDetails(errors) + '.';
   }
   return message;
 };
