@@ -23,6 +23,7 @@ import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 
 import {
+  act,
   render as reactTestingRender,
   cleanup,
   queryAllByAttribute,
@@ -49,6 +50,15 @@ import {MockedProvider} from '@apollo/react-testing';
 export * from '@testing-library/react';
 
 afterEach(cleanup);
+
+export async function wait(ms = 0) {
+  await act(
+    () =>
+      new Promise(resolve => {
+        setTimeout(resolve, ms);
+      }),
+  );
+}
 
 export const queryAllByName = (container, name) =>
   queryAllByAttribute('name', container, name);
@@ -101,7 +111,7 @@ const withProvider = (name, key = name) => Component => ({
     children
   );
 
-const TestingGmpPropvider = withProvider('gmp', 'value')(GmpContext.Provider);
+const TestingGmpProvider = withProvider('gmp', 'value')(GmpContext.Provider);
 const TestingStoreProvider = withProvider('store')(Provider);
 const TestingRouter = withProvider('history')(Router);
 const TestingCapabilitiesProvider = withProvider(
@@ -130,7 +140,7 @@ export const rendererWith = (
   return {
     render: ui =>
       render(
-        <TestingGmpPropvider gmp={gmp}>
+        <TestingGmpProvider gmp={gmp}>
           <TestingCapabilitiesProvider capabilities={capabilities}>
             <TestingStoreProvider store={store}>
               <MockedProvider mocks={[]} addTypename={false}>
@@ -138,7 +148,7 @@ export const rendererWith = (
               </MockedProvider>
             </TestingStoreProvider>
           </TestingCapabilitiesProvider>
-        </TestingGmpPropvider>,
+        </TestingGmpProvider>,
       ),
     gmp,
     store,
