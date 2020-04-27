@@ -304,7 +304,7 @@ describe('ScannerDialog component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {baseElement, element, getByTestId, getAllByTestId} = render(
+    const {baseElement, getByTestId, getAllByTestId} = render(
       <ScannerDialog
         comment={scanner.comment}
         credential_id={'2345'}
@@ -332,15 +332,12 @@ describe('ScannerDialog component tests', () => {
 
     expect(handleSave).not.toHaveBeenCalled();
 
-    expect(baseElement).toMatchSnapshot();
-    expect(element).toMatchSnapshot();
-
     expect(inputs[0]).toHaveAttribute('title', 'Missing name.');
     expect(inputs[1]).not.toHaveAttribute('title'); // not-validated fields such as comment should not have title unless set.
 
     const errorMarkers = getAllByTestId('error-marker');
 
-    expect(errorMarkers.length).toEqual(2);
+    expect(errorMarkers.length).toEqual(3);
 
     const [nameMarker, commentMarker] = errorMarkers;
     expect(nameMarker).toHaveStyleRule('color', Theme.darkRed); // field with error should display red mark
@@ -358,7 +355,7 @@ describe('ScannerDialog component tests', () => {
 
     const moreErrorMarkers = getAllByTestId('error-marker');
 
-    expect(moreErrorMarkers.length).toEqual(1);
+    expect(moreErrorMarkers.length).toEqual(2);
 
     const [hostMarker] = moreErrorMarkers;
     expect(hostMarker).toHaveStyleRule('color', Theme.darkRed);
