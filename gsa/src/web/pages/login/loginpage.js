@@ -127,6 +127,32 @@ const isIE11 = () =>
     ? +navigator.userAgent.match(/Trident\/([\d.]+)/)[1] >= 7
     : false;
 
+const getErrorsDetails = (errors = []) => errors.map(e => e.message).join('. ');
+
+const getErrorMessage = error => {
+  if (error.reason === Rejection.REASON_UNAUTHORIZED) {
+    return _('Login Failed. Invalid password or username.');
+  }
+
+  if (isEmpty(error.message)) {
+    return _('Unknown error on login.');
+  }
+
+  let errors;
+  let {message, networkError, graphQLErrors} = error;
+
+  if (isDefined(networkError)) {
+    errors = error.networkError?.result?.errors;
+  } else if (isDefined(graphQLErrors)) {
+    errors = graphQLErrors;
+  }
+
+  if (isDefined(errors)) {
+    message += ': ' + getErrorsDetails(errors);
+  }
+  return message;
+};
+
 const LoginPage = () => {
   const gmp = useGmp();
   const dispatch = useDispatch();
@@ -135,6 +161,8 @@ const LoginPage = () => {
   const location = useLocation();
   const history = useHistory();
   const isLoggedIn = useSelector(isLoggedInSelector);
+
+  let login;
 
   const handleSubmit = (username, password) => {
     login(username, password);
@@ -150,8 +178,6 @@ const LoginPage = () => {
     dispatch(setSessionTimeoutAction(timeout));
   const setUsername = username => dispatch(setUsernameAction(username));
   const setIsLoggedIn = value => dispatch(setIsLoggedInAction(value));
-
-  let login;
 
   if (gmp.settings.enableHyperionOnly) {
     login = (username, password) => {
@@ -230,17 +256,7 @@ const LoginPage = () => {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  let message;
-
-  if (error) {
-    if (error.reason === Rejection.REASON_UNAUTHORIZED) {
-      message = _('Login Failed. Invalid password or username.');
-    } else if (isEmpty(error.message)) {
-      message = _('Unknown error on login.');
-    } else {
-      message = error.message;
-    }
-  }
+  const message = error ? getErrorMessage(error) : undefined;
 
   const showGuestLogin =
     isDefined(gmp.settings.guestUsername) &&
