@@ -26,7 +26,7 @@ import {stringify, parse} from 'qs';
 import qhistory from 'qhistory';
 import gql from 'graphql-tag';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import Loading from 'web/components/loading/loading';
 
