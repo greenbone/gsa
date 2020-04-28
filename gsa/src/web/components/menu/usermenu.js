@@ -130,7 +130,7 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const LOGOUT = gql`
+export const LOGOUT = gql`
   mutation {
     logout {
       ok
@@ -156,8 +156,9 @@ const UserMenuContainer = () => {
           history.push('/login?type=logout');
         });
     } else {
-      logout()
-        .then(gmp.doLogout())
+      gmp
+        .doLogout()
+        .then(logout)
         .then(() => {
           history.push('/login?type=logout');
         });

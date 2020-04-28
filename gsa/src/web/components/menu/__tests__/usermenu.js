@@ -22,9 +22,26 @@ import {longDate} from 'gmp/locale/date';
 
 import {setSessionTimeout, setUsername} from 'web/store/usersettings/actions';
 
-import {fireEvent, rendererWith} from 'web/utils/testing';
+import {fireEvent, rendererWith, wait} from 'web/utils/testing';
+import {MockedProvider} from '@apollo/react-testing';
 
-import UserMenu from '../usermenu';
+import UserMenu, {LOGOUT} from '../usermenu';
+
+const mocks = [
+  {
+    request: {
+      query: LOGOUT,
+      variables: {},
+    },
+    result: {
+      data: {
+        logout: {
+          ok: true,
+        },
+      },
+    },
+  },
+];
 
 describe('UserMenu component tests', () => {
   test('should render UserMenu', () => {
@@ -63,17 +80,26 @@ describe('UserMenu component tests', () => {
     expect(history.location.pathname).toMatch('usersettings');
   });
 
-  test('should logout user on click', () => {
+  test('should logout user on click', async () => {
     const doLogout = jest.fn().mockResolvedValue();
     const gmp = {
+      settings: {
+        enableHyperionOnly: false,
+      },
       doLogout,
     };
     const {render} = rendererWith({gmp, store: true, router: true});
 
-    const {getByTestId} = render(<UserMenu />);
+    const {getByTestId} = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <UserMenu />
+      </MockedProvider>,
+    );
+
     const userSettingsElement = getByTestId('usermenu-logout');
 
     fireEvent.click(userSettingsElement);
+    await wait();
 
     expect(gmp.doLogout).toHaveBeenCalled();
   });
