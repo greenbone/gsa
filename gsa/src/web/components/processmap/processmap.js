@@ -56,14 +56,17 @@ import Tools from './tools';
 
 import {createTag, createToolTipContent, deleteTag, editTag} from './utils';
 
+export const MAX_PROCESSES = 50;
+
 const DEFAULT_PROCESS_SIZE = 75;
 
 const BPM_TAG_PREFIX = 'myBP:';
 
 const SCROLL_STEP = 0.1;
 
+const DEFAULT_SCALE = 0.7;
 const MAX_SCALE = 1.6;
-const MIN_SCALE = 0.3;
+const MIN_SCALE = 0.2;
 
 const Wrapper = styled.div`
   display: flex;
@@ -92,7 +95,7 @@ class ProcessMap extends React.Component {
       edgeDrawSource: undefined,
       edgeDrawTarget: undefined,
       tagErrorDialogVisible: false,
-      scale: 1.0,
+      scale: DEFAULT_SCALE,
       translateX: 0,
       translateY: 0,
       isDraggingBackground: false,
@@ -182,7 +185,7 @@ class ProcessMap extends React.Component {
   zoomIn(px, py) {
     let {scale} = this.state;
 
-    scale = scale + SCROLL_STEP;
+    scale = parseFloat((scale + SCROLL_STEP).toFixed(2));
 
     if (scale >= MAX_SCALE) {
       // avoid setting state and rerendering
@@ -195,7 +198,7 @@ class ProcessMap extends React.Component {
   zoomOut(px, py) {
     let {scale} = this.state;
 
-    scale = scale - SCROLL_STEP;
+    scale = parseFloat((scale - SCROLL_STEP).toFixed(2));
 
     if (scale <= MIN_SCALE) {
       // avoid setting state and rerendering
@@ -234,12 +237,12 @@ class ProcessMap extends React.Component {
     let newScale;
     if (dir === '0') {
       return this.setState({
-        scale: 1,
+        scale: DEFAULT_SCALE,
         translateX: 0,
         translateY: 0,
       });
     }
-    newScale = scale + zoomDir * SCROLL_STEP;
+    newScale = parseFloat((scale + zoomDir * SCROLL_STEP).toFixed(2));
     if (newScale > MAX_SCALE) {
       newScale = MAX_SCALE;
     }
@@ -597,6 +600,8 @@ class ProcessMap extends React.Component {
     const cursorType = isDraggingBackground ? 'move' : 'default';
     const processCursorType = isDraggingProcess ? 'move' : 'grab';
 
+    const numProcesses = Object.keys(processes).length;
+
     const deleteHandler =
       isDefined(this.selectedElement) && this.selectedElement.type === 'process'
         ? this.openConfirmDeleteDialog
@@ -684,6 +689,9 @@ class ProcessMap extends React.Component {
               Object.entries(processes).length > 1
             }
             showNoProcessHelper={Object.entries(processes).length < 1}
+            maxNumProcessesReached={numProcesses >= MAX_PROCESSES}
+            maxZoomReached={scale >= MAX_SCALE - SCROLL_STEP}
+            minZoomReached={scale <= MIN_SCALE + SCROLL_STEP}
             onCreateProcessClick={this.handleOpenCreateProcessDialog}
             onDrawEdgeClick={this.handleDrawEdge}
             onDeleteClick={deleteHandler}

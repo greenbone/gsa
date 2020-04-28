@@ -58,7 +58,7 @@ export const rejection = transform => (rej, options) => {
       }
     }
 
-    return rej.setMessage(_('Unknown Error'));
+    return rej;
   }
 
   return rej;

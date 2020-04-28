@@ -15,14 +15,18 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {setLocale} from 'gmp/locale/lang';
+
 import Rejection from '../rejection';
+
+setLocale('en');
 
 describe('Rejection tests', () => {
   test('should create error rejection by default', () => {
     const rejection = new Rejection();
 
     expect(rejection.reason).toEqual(Rejection.REASON_ERROR);
-    expect(rejection.message).toEqual('');
+    expect(rejection.message).toEqual('Unknown Error');
     expect(rejection.error).toBeUndefined();
     expect(rejection.stack).toBeDefined();
     expect(rejection.isError()).toEqual(true);
@@ -49,10 +53,14 @@ describe('Rejection tests', () => {
 
   test('should create unauthorized rejection', () => {
     const xhr = {status: 123};
-    const rejection = new Rejection(xhr, Rejection.REASON_UNAUTHORIZED);
+    const rejection = new Rejection(
+      xhr,
+      Rejection.REASON_UNAUTHORIZED,
+      'Unauthorized',
+    );
 
     expect(rejection.reason).toEqual(Rejection.REASON_UNAUTHORIZED);
-    expect(rejection.message).toEqual('');
+    expect(rejection.message).toEqual('Unauthorized');
     expect(rejection.error).toBeUndefined();
     expect(rejection.stack).toBeDefined();
     expect(rejection.isError()).toEqual(false);
