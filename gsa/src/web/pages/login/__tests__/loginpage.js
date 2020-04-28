@@ -19,15 +19,15 @@ import React from 'react';
 
 import Logger from 'gmp/log';
 
-import {rendererWith, fireEvent, waitForElement} from 'web/utils/testing';
+import {rendererWith, fireEvent, waitForElement, wait} from 'web/utils/testing';
 import {MockedProvider} from '@apollo/react-testing';
 
 import LoginPage, {LOGIN} from '../loginpage';
 
 Logger.setDefaultLevel('silent');
 
-describe('LoginPagetests', () => {
-  test('should render Loginpage', () => {
+describe('LoginPageTests', () => {
+  test('should render LoginPage', () => {
     const isLoggedIn = jest.fn().mockReturnValue(false);
     const clearToken = jest.fn();
     const gmp = {isLoggedIn, clearToken, settings: {}};
@@ -39,7 +39,7 @@ describe('LoginPagetests', () => {
     expect(baseElement).toMatchSnapshot();
   });
 
-  test('should allow to login with username and password', () => {
+  test('should allow to login with username and password', async () => {
     const mocks = [
       {
         request: {
@@ -75,7 +75,7 @@ describe('LoginPagetests', () => {
     const gmp = {
       setTimezone,
       setLocale,
-      login,
+      login: {login},
       isLoggedIn,
       clearToken,
       settings: {},
@@ -98,6 +98,8 @@ describe('LoginPagetests', () => {
     const button = getByTestId('login-button');
     fireEvent.click(button);
 
+    await wait();
+
     expect(mocks[0].newData).toHaveBeenCalled();
   });
 
@@ -117,27 +119,25 @@ describe('LoginPagetests', () => {
     expect(queryByTestId('guest-login-button')).not.toBeInTheDocument();
   });
 
-  test('should allow to login as guest', () => {
-    const mocks = [
-      {
-        request: {
-          query: LOGIN,
-          variables: {
-            username: 'foo',
-            password: 'bar',
+  test('should allow to login as guest', async () => {
+    const mock = {
+      request: {
+        query: LOGIN,
+        variables: {
+          username: 'foo',
+          password: 'bar',
+        },
+      },
+      newData: jest.fn(() => ({
+        data: {
+          login: {
+            ok: true,
+            timezone: '',
+            sessionTimeout: '',
           },
         },
-        newData: jest.fn(() => ({
-          data: {
-            login: {
-              ok: true,
-              timezone: '',
-              sessionTimeout: '',
-            },
-          },
-        })),
-      },
-    ];
+      })),
+    };
 
     const login = jest.fn().mockResolvedValue({
       locale: 'locale',
@@ -152,7 +152,7 @@ describe('LoginPagetests', () => {
     const gmp = {
       setTimezone,
       setLocale,
-      login,
+      login: {login},
       isLoggedIn,
       clearToken,
       settings: {guestUsername: 'foo', guestPassword: 'bar'},
@@ -160,7 +160,7 @@ describe('LoginPagetests', () => {
     const {render} = rendererWith({gmp, router: true, store: true});
 
     const {getByTestId} = render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={[mock]} addTypename={false}>
         <LoginPage />
       </MockedProvider>,
     );
@@ -168,10 +168,13 @@ describe('LoginPagetests', () => {
     const button = getByTestId('guest-login-button');
     fireEvent.click(button);
 
-    expect(mocks[0].newData).toHaveBeenCalled();
+    await wait();
+
+    expect(login).toHaveBeenCalledWith('foo', 'bar');
+    expect(mock.newData).toHaveBeenCalled();
   });
 
-  test('should display error message', async () => {
+  test('should display graphql error message', async () => {
     const mocks = [
       {
         request: {
@@ -222,6 +225,66 @@ describe('LoginPagetests', () => {
 
     const error = await waitForElement(() => getByTestId('error'));
     expect(error).toHaveTextContent('Just a test');
+  });
+
+  test('should display network error message', async () => {
+    const error = {
+      message: 'Response not successful: Received status code 500',
+      result: {
+        errors: [{message: 'Foo'}, {message: 'Bar'}],
+      },
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: LOGIN,
+          variables: {
+            username: 'foo',
+            password: 'bar',
+          },
+        },
+        error,
+      },
+    ];
+
+    const login = jest.fn().mockRejectedValue({message: 'Just a test'});
+    const isLoggedIn = jest.fn().mockReturnValue(false);
+    const clearToken = jest.fn();
+    const setLocale = jest.fn();
+    const setTimezone = jest.fn();
+    const gmp = {
+      setTimezone,
+      setLocale,
+      login,
+      isLoggedIn,
+      clearToken,
+      settings: {
+        enableHyperionOnly: true,
+      },
+    };
+    const {render} = rendererWith({gmp, router: true, store: true});
+
+    const {getByName, getByTestId} = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LoginPage />
+      </MockedProvider>,
+    );
+
+    const usernameField = getByName('username');
+    const passwordField = getByName('password');
+
+    fireEvent.change(usernameField, {target: {value: 'foo'}});
+    fireEvent.change(passwordField, {target: {value: 'bar'}});
+
+    const button = getByTestId('login-button');
+    fireEvent.click(button);
+
+    const errorOutput = await waitForElement(() => getByTestId('error'));
+    expect(errorOutput).toHaveTextContent(
+      'Network error: Response not successful: Received status code 500:' +
+        ' Foo. Bar.',
+    );
   });
 
   test('should redirect to main page if already logged in', () => {

@@ -35,7 +35,7 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 import Theme from 'web/utils/theme';
@@ -127,6 +127,32 @@ const isIE11 = () =>
     ? +navigator.userAgent.match(/Trident\/([\d.]+)/)[1] >= 7
     : false;
 
+const getErrorsDetails = (errors = []) => errors.map(e => e.message).join('. ');
+
+const getErrorMessage = error => {
+  if (error.reason === Rejection.REASON_UNAUTHORIZED) {
+    return _('Login Failed. Invalid password or username.');
+  }
+
+  if (isEmpty(error.message)) {
+    return _('Unknown error on login.');
+  }
+
+  let errors;
+  let {message, networkError, graphQLErrors} = error;
+
+  if (hasValue(networkError)) {
+    errors = networkError?.result?.errors;
+  } else if (hasValue(graphQLErrors)) {
+    errors = graphQLErrors;
+  }
+
+  if (isDefined(errors)) {
+    message += ': ' + getErrorsDetails(errors) + '.';
+  }
+  return message;
+};
+
 const LoginPage = () => {
   const gmp = useGmp();
   const dispatch = useDispatch();
@@ -135,6 +161,8 @@ const LoginPage = () => {
   const location = useLocation();
   const history = useHistory();
   const isLoggedIn = useSelector(isLoggedInSelector);
+
+  let login;
 
   const handleSubmit = (username, password) => {
     login(username, password);
@@ -151,8 +179,6 @@ const LoginPage = () => {
   const setUsername = username => dispatch(setUsernameAction(username));
   const setIsLoggedIn = value => dispatch(setIsLoggedInAction(value));
 
-  let login;
-
   if (gmp.settings.enableHyperionOnly) {
     login = (username, password) => {
       loginMutation({username, password})
@@ -160,6 +186,10 @@ const LoginPage = () => {
           const {locale, timezone, sessionTimeout} = resp.data.login;
 
           const dateObj = new Date(sessionTimeout);
+
+          gmp.settings.username = username;
+          gmp.settings.timezone = timezone;
+          gmp.settings.locale = locale;
 
           setTimezone(timezone);
           setLocale(locale);
@@ -171,43 +201,52 @@ const LoginPage = () => {
 
           history.replace('/tasks'); // always redirect to tasks for demo purposes. This should be changed to '/' once hyperion is no longer in demo.
         })
-        .catch(rej => {
-          log.error(rej);
-          setError(rej);
+        .catch(err => {
+          log.error(err);
+          setError(err);
         });
     };
   } else {
     login = (username, password) => {
-      gmp
+      let gmpLoginData;
+      gmp.login
         .login(username, password) // put gmp.login back into promise chain
-        .then(loginMutation({username, password}))
-        .then(
-          data => {
-            const {locale, timezone, sessionTimeout} = data;
+        .then(loginData => {
+          gmpLoginData = loginData;
+          return loginMutation({username, password});
+        })
+        .then(data => {
+          const {locale, timezone, sessionTimeout} = data;
+          const {token} = gmpLoginData;
 
-            setTimezone(timezone);
-            setLocale(locale);
-            setSessionTimeout(sessionTimeout);
-            setUsername(username);
-            // must be set before changing the location
-            setIsLoggedIn(true);
+          // only store settings if both logins have been successfully
+          gmp.settings.username = username;
+          gmp.settings.timezone = timezone;
+          gmp.settings.token = token;
+          gmp.settings.locale = locale;
 
-            if (
-              location &&
-              location.state &&
-              location.state.next &&
-              location.state.next !== location.pathname
-            ) {
-              history.replace(location.state.next);
-            } else {
-              history.replace('/');
-            }
-          },
-          rej => {
-            log.error(rej);
-            setError(rej);
-          },
-        );
+          setTimezone(timezone);
+          setLocale(locale);
+          setSessionTimeout(sessionTimeout);
+          setUsername(username);
+          // must be set before changing the location
+          setIsLoggedIn(true);
+
+          if (
+            location &&
+            location.state &&
+            location.state.next &&
+            location.state.next !== location.pathname
+          ) {
+            history.replace(location.state.next);
+          } else {
+            history.replace('/');
+          }
+        })
+        .catch(rej => {
+          log.error(rej);
+          setError(rej);
+        });
     };
   }
 
@@ -217,17 +256,7 @@ const LoginPage = () => {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  let message;
-
-  if (error) {
-    if (error.reason === Rejection.REASON_UNAUTHORIZED) {
-      message = _('Login Failed. Invalid password or username.');
-    } else if (isEmpty(error.message)) {
-      message = _('Unknown error on login.');
-    } else {
-      message = error.message;
-    }
-  }
+  const message = error ? getErrorMessage(error) : undefined;
 
   const showGuestLogin =
     isDefined(gmp.settings.guestUsername) &&

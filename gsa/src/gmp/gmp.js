@@ -36,6 +36,7 @@ import './commands/feedstatus.js';
 import './commands/filters.js';
 import './commands/groups.js';
 import './commands/hosts.js';
+import './commands/login.js';
 import './commands/notes.js';
 import './commands/nvt.js';
 import './commands/nvtfamilies';
@@ -68,10 +69,8 @@ import {buildServerUrl, buildUrlParams} from './http/utils.js';
 import DefaultTransform from './http/transform/default';
 
 import {getCommands} from './command.js';
-import LoginCommand from './commands/login.js';
 
 import {setLocale} from './locale/lang';
-import {BROWSER_LANGUAGE} from './locale/languages';
 
 const log = logger.getLogger('gmp');
 
@@ -87,8 +86,6 @@ class Gmp {
 
     this.http = isDefined(http) ? http : new GmpHttp(this.settings);
 
-    this._login = new LoginCommand(this.http);
-
     this._logoutListeners = [];
 
     this._initCommands();
@@ -99,30 +96,11 @@ class Gmp {
       const instance = new cmd(this.http);
 
       Object.defineProperty(this, name, {
-        get: function() {
+        get: function () {
           return instance;
         },
       });
     }
-  }
-
-  login(username, password) {
-    return this._login.login(username, password).then(login => {
-      const {token, timezone, locale, sessionTimeout} = login;
-
-      this.settings.username = username;
-      this.settings.timezone = timezone;
-      this.settings.token = token;
-      this.settings.locale = locale;
-
-      return {
-        locale: locale === BROWSER_LANGUAGE ? undefined : locale,
-        username,
-        token,
-        timezone,
-        sessionTimeout,
-      };
-    });
   }
 
   doLogout() {

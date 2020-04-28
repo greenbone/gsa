@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LoginPagetests should render Loginpage 1`] = `
+exports[`LoginPageTests should render LoginPage 1`] = `
 .c3 {
   display: -webkit-box;
   display: -webkit-flex;
