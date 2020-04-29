@@ -137,6 +137,9 @@ export const ToolBarIcons = ({
   onTaskResumeClick,
   ...props
 }) => {
+  const reportsCounts = entity.reports.counts;
+  const resultsCounts = entity.results.counts;
+  const {lastReport, currentReport} = entity.reports;
   return (
     <Divider margin="10px">
       <IconDivider align={['start', 'start']}>
@@ -203,26 +206,25 @@ export const ToolBarIcons = ({
 
       <Divider margin="10px">
         <IconDivider>
-          {hasValue(entity.currentReport) && (
+          {hasValue(currentReport) && (
             <DetailsLink
               type="report"
-              id={entity.currentReport.id}
+              id={currentReport.id}
               title={_('Current Report for Task {{- name}} from {{- date}}', {
                 name: entity.name,
-                date: shortDate(entity.currentReport.scanStart),
+                date: shortDate(currentReport.scanStart),
               })}
             >
               <ReportIcon />
             </DetailsLink>
           )}
-
-          {!hasValue(entity.currentReport) && hasValue(entity.lastReport) && (
+          {!hasValue(currentReport) && hasValue(lastReport) && (
             <DetailsLink
               type="report"
-              id={entity.lastReport.id}
+              id={lastReport.id}
               title={_('Last Report for Task {{- name}} from {{- date}}', {
                 name: entity.name,
-                date: shortDate(entity.lastReport.scanStart),
+                date: shortDate(lastReport.scanStart),
               })}
             >
               <ReportIcon />
@@ -234,7 +236,7 @@ export const ToolBarIcons = ({
             filter={'task_id=' + entity.id}
             title={_('Total Reports for Task {{- name}}', entity)}
           >
-            <Badge content={entity.reportCount.total}>
+            <Badge content={reportsCounts.total}>
               <ReportIcon />
             </Badge>
           </Link>
@@ -245,7 +247,7 @@ export const ToolBarIcons = ({
           filter={'task_id=' + entity.id}
           title={_('Results for Task {{- name}}', entity)}
         >
-          <Badge content={entity.result_count}>
+          <Badge content={resultsCounts.current}>
             <ResultIcon />
           </Badge>
         </Link>

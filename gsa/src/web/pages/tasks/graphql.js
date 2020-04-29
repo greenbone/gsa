@@ -32,20 +32,27 @@ export const GET_TASK = gql`
       permissions {
         name
       }
-      lastReport {
-        id
-        severity
-        timestamp
-        scanStart
-        scanEnd
+      reports {
+        lastReport {
+          id
+          severity
+          timestamp
+          scanStart
+          scanEnd
+        }
+        currentReport {
+          id
+          scanStart
+        }
+        counts {
+          total
+          finished
+        }
       }
-      currentReport {
-        id
-        scanStart
-      }
-      reportCount {
-        total
-        finished
+      results {
+        counts {
+          current
+        }
       }
       status
       target {
@@ -120,14 +127,16 @@ export const GET_TASKS = gql`
         permissions {
           name
         }
-        lastReport {
-          id
-          severity
-          timestamp
-        }
-        reportCount {
-          total
-          finished
+        reports {
+          lastReport {
+            id
+            severity
+            timestamp
+          }
+          counts {
+            total
+            finished
+          }
         }
         status
         target {

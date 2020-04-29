@@ -71,7 +71,8 @@ export const renderReport = (report, links) => {
 };
 
 const renderReportTotal = (entity, links) => {
-  if (entity.reportCount.total <= 0) {
+  const total = entity?.reports?.counts?.total;
+  if (!hasValue(total) || total <= 0) {
     return null;
   }
   return (
@@ -84,9 +85,9 @@ const renderReportTotal = (entity, links) => {
             ' including unfinished ones',
           {name: entity.name},
         )}
-        textOnly={!links || entity.reportCount.total === 0}
+        textOnly={!links || total === 0}
       >
-        {entity.reportCount.total}
+        {total}
       </Link>
     </Layout>
   );
@@ -100,7 +101,8 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
-  const {scanner, observers, lastReport} = entity;
+  const {scanner, observers, reports} = entity;
+  const {lastReport} = reports;
   const obs = [];
 
   if (hasValue(observers)) {
