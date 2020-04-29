@@ -78,7 +78,9 @@ const withLayout = (defaults = {}) => Component => {
     wrap: PropTypes.oneOf([true, 'wrap', 'nowrap']),
   };
 
-  return LayoutComponent;
+  return React.forwardRef((props, ref) => {
+    return <LayoutComponent {...props} forwardedRef={ref} />;
+  });
 };
 
 export default withLayout;

@@ -203,13 +203,8 @@ class MultiSelect extends React.Component {
           selectItem,
         }) => {
           return (
-            <React.Fragment>
-              <SelectContainer
-                {...getRootProps({})}
-                className={className}
-                width={width}
-                grow={grow}
-              >
+            <Layout {...getRootProps({})}>
+              <SelectContainer className={className} width={width} grow={grow}>
                 <Box
                   isOpen={isOpen}
                   hasError={hasError}
@@ -282,7 +277,7 @@ class MultiSelect extends React.Component {
                 )}
               </SelectContainer>
               <Marker isVisible={hasError}>×</Marker>
-            </React.Fragment>
+            </Layout>
           );
         }}
       </Downshift>

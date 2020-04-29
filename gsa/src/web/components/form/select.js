@@ -194,12 +194,8 @@ class Select extends React.Component {
             ? _('Loading...')
             : find_label(items, selectedItem);
           return (
-            <React.Fragment>
-              <SelectContainer
-                {...getRootProps({})}
-                className={className}
-                width={width}
-              >
+            <Layout {...getRootProps({})}>
+              <SelectContainer className={className} width={width}>
                 <Box
                   {...getToggleButtonProps({
                     disabled,
@@ -281,7 +277,7 @@ class Select extends React.Component {
                 )}
               </SelectContainer>
               <Marker isVisible={hasError}>×</Marker>
-            </React.Fragment>
+            </Layout>
           );
         }}
       </Downshift>
