@@ -28,7 +28,7 @@ export const editTicketRules = {
       isValid = shouldBeNonEmpty(value);
       error = isValid
         ? ''
-        : _('If changing status to Open, Open Note is required');
+        : _('When changing status to "open", a "Note for Open" is required.');
     } else {
       isValid = true;
       error = '';
@@ -43,7 +43,9 @@ export const editTicketRules = {
       isValid = shouldBeNonEmpty(value);
       error = isValid
         ? ''
-        : _('If changing status to Closed, Close Note is required');
+        : _(
+            'When changing status to "closed", a "Note for Closed" is required.',
+          );
     } else {
       isValid = true;
       error = '';
@@ -58,7 +60,7 @@ export const editTicketRules = {
       isValid = shouldBeNonEmpty(value);
       error = isValid
         ? ''
-        : _('If changing status to Fixed, Fixed Note is required');
+        : _('When changing status to "fixed", a "Note for Fixed" is required.');
     } else {
       isValid = true;
       error = '';
