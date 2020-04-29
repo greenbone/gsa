@@ -260,8 +260,6 @@ class Task extends Model {
       delete copy.hostsOrdering;
     }
 
-    copy.usageType = object.usage_type;
-
     if (hasValue(object.userTags)) {
       copy.userTags = object.userTags.tags.map(tag => {
         return Tag.fromObject(tag);
