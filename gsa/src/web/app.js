@@ -98,6 +98,9 @@ class App extends React.Component {
 
     const logoutLink = onError(({networkError}) => {
       if (networkError.statusCode === 401) {
+        if (!gmp.settings.enableHyperionOnly) {
+          gmp.clearToken(); // remove token for gmp based login
+        }
         this.handleLogout();
       }
     });
