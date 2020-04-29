@@ -23,6 +23,7 @@ import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 
 import Theme from 'web/utils/theme';
@@ -130,5 +131,9 @@ const useFormValidation = (
 // Some common validation rules
 export const shouldBeNonEmpty = (string = '') => string.trim().length > 0;
 export const shouldBeValidPassword = (password = '') => password.length > 5;
-
+export const shouldBeValidName = (string = '') =>
+  string.match(/^[.#\-_ ,/a-z0-9]+$/i) !== null;
+export const VALID_NAME_ERROR_MESSAGE = _l(
+  'The name must include at least one alphanumeric character or one of .,-_# and space.',
+);
 export default useFormValidation;
