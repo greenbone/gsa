@@ -21,6 +21,7 @@ import {Provider as StoreProvider} from 'react-redux';
 
 import {ApolloProvider} from 'react-apollo';
 import {ApolloClient} from 'apollo-client';
+import {onError} from 'apollo-link-error';
 import {createHttpLink} from 'apollo-link-http';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 
@@ -77,11 +78,6 @@ const httpLink = createHttpLink({
   credentials: 'include',
 });
 
-const client = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache(),
-});
-
 const initStore = () => {
   const {timezone, username} = gmp.settings;
 
@@ -99,6 +95,20 @@ class App extends React.Component {
     super(props);
 
     this.handleLogout = this.handleLogout.bind(this);
+
+    const logoutLink = onError(({networkError}) => {
+      if (networkError.statusCode === 401) {
+        if (!gmp.settings.enableHyperionOnly) {
+          gmp.clearToken(); // remove token for gmp based login
+        }
+        this.handleLogout();
+      }
+    });
+
+    this.client = new ApolloClient({
+      link: logoutLink.concat(httpLink),
+      cache: new InMemoryCache(),
+    });
   }
 
   componentDidMount() {
@@ -123,7 +133,7 @@ class App extends React.Component {
       <React.Fragment>
         <GlobalStyles />
         <ErrorBoundary message={_('An error occurred on this page')}>
-          <ApolloProvider client={client}>
+          <ApolloProvider client={this.client}>
             <GmpContext.Provider value={gmp}>
               <StoreProvider store={store}>
                 <LocaleObserver>
