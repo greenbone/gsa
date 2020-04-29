@@ -137,14 +137,6 @@ class Task extends Model {
   static parseObject(object) {
     const copy = super.parseObject(object);
 
-    const {reportCount} = object;
-
-    if (isDefined(reportCount)) {
-      copy.reportCount = {...reportCount};
-      copy.reportCount.total = parseInt(reportCount.total);
-      copy.reportCount.finished = parseInt(reportCount.finished);
-    }
-
     copy.alterable = parseYesNo(object.alterable);
     copy.resultCount = parseInt(object.resultCount); // this doesn't exist in selene yet. Need to add.
     const reports = ['lastReport', 'currentReport'];
