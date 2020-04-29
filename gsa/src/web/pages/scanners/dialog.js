@@ -44,10 +44,6 @@ import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
-import useFormValidation, {
-  syncVariables,
-} from 'web/components/form/useFormValidation';
-import validationRules from './validationrules';
 
 import KeyIcon from 'web/components/icon/keyicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -222,26 +218,9 @@ const ScannerDialog = ({
     credential_id = '';
   }
 
-  const stateSchema = {
-    name,
-    credential_id,
-    host,
-    port,
-  };
-
-  const {
-    formValues,
-    errorMessage,
-    shouldWarn,
-    handleValueChange,
-    validityStatus,
-    handleSubmit,
-  } = useFormValidation(stateSchema, validationRules, onSave);
-
   return (
     <SaveDialog // the dialog current changes sizes based on content. For the future we should somehow fix the size to prevent jumping around.
       defaultValues={data}
-      error={errorMessage}
       initialHeight={SCANNER_DIALOG_INITIAL_HEIGHT}
       multiStep={1} // the option to switch to the MultiStepFooter. Leaving it out defaults to false
       title={title}
@@ -250,10 +229,9 @@ const ScannerDialog = ({
         type,
       }}
       onClose={onClose}
-      onSave={vals => handleSubmit(vals)}
+      onSave={onSave}
     >
       {({values: state, currentStep, onStepChange, onValueChange}) => {
-        syncVariables(state, formValues); // Set attributes of state to be the same as formValues
         return (
           <Layout flex="column">
             <DialogTabLayout grow="1" align={['start', 'end']}>
@@ -271,12 +249,10 @@ const ScannerDialog = ({
                 <TabPanel>
                   <FormGroup title={_('Name')} align={['start', 'end']}>
                     <TextField
-                      errorContent={validityStatus.name.error}
                       name="name"
                       grow="1"
                       value={state.name}
-                      hasError={shouldWarn && !validityStatus.name.isValid}
-                      onChange={handleValueChange}
+                      onChange={onValueChange}
                     />
                   </FormGroup>
                   <FormGroup title={_('Comment')}>
@@ -300,27 +276,22 @@ const ScannerDialog = ({
                 <TabPanel>
                   <FormGroup title={_('Host')}>
                     <TextField
-                      errorContent={validityStatus.host.error}
                       name="host"
                       value={state.host}
                       disabled={isInUse}
                       grow="1"
-                      title={validityStatus.host.error}
-                      hasError={shouldWarn && !validityStatus.host.isValid}
-                      onChange={handleValueChange}
+                      onChange={onValueChange}
                     />
                   </FormGroup>
                   {isOspScannerType && (
                     <React.Fragment>
                       <FormGroup title={_('Port')}>
                         <TextField
-                          errorContent={validityStatus.port.error}
                           name="port"
                           value={state.port}
                           disabled={isInUse}
                           grow="1"
-                          hasError={shouldWarn && !validityStatus.port.isValid}
-                          onChange={handleValueChange}
+                          onChange={onValueChange}
                         />
                       </FormGroup>
                       <FormGroup title={_('CA Certificate')} flex="column">
@@ -370,14 +341,10 @@ const ScannerDialog = ({
                     <FormGroup title={_('Credential')} flex="column">
                       <Divider>
                         <Select
-                          hasError={
-                            shouldWarn && !validityStatus.credential_id.isValid
-                          }
-                          errorContent={validityStatus.credential_id.error}
                           name="credential_id"
                           items={renderSelectItems(scanner_credentials)}
                           value={state.credential_id}
-                          onChange={handleValueChange}
+                          onChange={onValueChange}
                         />
                         <Layout>
                           <NewIcon
