@@ -71,12 +71,14 @@ export const renderReport = (report, links) => {
 };
 
 const renderReportTotal = (entity, links) => {
-  if (entity.reportCount.total <= 0) {
+  const total = entity?.reports?.counts?.total;
+  if (!hasValue(total) || total <= 0) {
     return null;
   }
   return (
     <Layout>
       <Link
+        data-testid="reports-total-link"
         to={'reports'}
         filter={'task_id=' + entity.id + ' sort-reverse=date'}
         title={_(
@@ -84,9 +86,9 @@ const renderReportTotal = (entity, links) => {
             ' including unfinished ones',
           {name: entity.name},
         )}
-        textOnly={!links || entity.reportCount.total === 0}
+        textOnly={!links || total === 0}
       >
-        {entity.reportCount.total}
+        {total}
       </Link>
     </Layout>
   );
@@ -100,7 +102,8 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
-  const {scanner, observers, lastReport} = entity;
+  const {scanner, observers, reports} = entity;
+  const {lastReport} = reports;
   const obs = [];
 
   if (hasValue(observers)) {
@@ -119,9 +122,13 @@ const Row = ({
 
   return (
     <TableRow>
-      <TableData>
+      <TableData data-testid="task-details">
         <Layout align="space-between">
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+          <RowDetailsToggle
+            name={entity.id}
+            onClick={onToggleDetailsClick}
+            data-testid="task-details-toggle"
+          >
             {entity.name}
           </RowDetailsToggle>
           <IconDivider>
@@ -160,20 +167,29 @@ const Row = ({
         </Layout>
         {entity.comment && <Comment>({entity.comment})</Comment>}
       </TableData>
-      <TableData>
+      <TableData data-testid="task-status">
         <TaskStatus task={entity} links={links} />
       </TableData>
-      <TableData>{renderReportTotal(entity, links)}</TableData>
-      <TableData>{renderReport(lastReport, links)}</TableData>
-      <TableData>
+      <TableData data-testid="reports-total">
+        {renderReportTotal(entity, links)}
+      </TableData>
+      <TableData data-testid="last-report">
+        {renderReport(lastReport, links)}
+      </TableData>
+      <TableData data-testid="severity-bar">
         {!entity.isContainer() && hasValue(lastReport) && (
           <SeverityBar severity={lastReport.severity} />
         )}
       </TableData>
-      <TableData align="center">
+      <TableData align="center" data-testid="trend">
         {!entity.isContainer() && <Trend name={entity.trend} />}
       </TableData>
-      <ActionsComponent {...props} links={links} entity={entity} />
+      <ActionsComponent
+        {...props}
+        links={links}
+        entity={entity}
+        data-testid="task-actions"
+      />
     </TableRow>
   );
 };

@@ -249,7 +249,7 @@ describe('Audit Row tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('username'));
 
-    const {baseElement, getAllByTestId, queryAllByTestId} = render(
+    const {baseElement, getAllByTestId} = render(
       <Row
         entity={audit}
         links={true}
@@ -276,10 +276,6 @@ describe('Audit Row tests', () => {
 
     expect(bars[0]).toHaveAttribute('title', AUDIT_STATUS.new);
     expect(bars[0]).toHaveTextContent(AUDIT_STATUS.new);
-
-    const detailsLinks = queryAllByTestId('details-link');
-    expect(detailsLinks.length).toBe(0);
-    // because there are no reports yet
 
     // Compliance Satus
     expect(bars.length).toBe(1);

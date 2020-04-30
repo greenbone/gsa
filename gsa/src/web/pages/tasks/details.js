@@ -92,7 +92,7 @@ class TaskDetails extends React.Component {
       config,
       hostsOrdering,
       inAssets,
-      lastReport = undefined,
+      reports,
       minQod,
       preferences,
       scanner,
@@ -103,6 +103,7 @@ class TaskDetails extends React.Component {
     } = entity;
 
     const {iface = {}} = preferences;
+    const {lastReport} = reports;
 
     let dur;
     const hasDuration = hasValue(lastReport) && hasValue(lastReport.scanStart);

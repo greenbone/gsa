@@ -20,79 +20,81 @@ import {setLocale} from 'gmp/locale/lang';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import Task, {TASK_STATUS} from 'gmp/models/task';
 
+import {deepFreeze} from 'web/utils/testing';
+
 setLocale('en');
 
 // Target
-const target = {
+const target = deepFreeze({
   id: '159',
   name: 'target 1',
-};
+});
 
-const target2 = {
+const target2 = deepFreeze({
   id: '265',
   name: 'target 2',
-};
+});
 
-const target3 = {
+const target3 = deepFreeze({
   id: '358',
   name: 'target 3',
-};
+});
 
 // Scanner
-const scanner = {
+const scanner = deepFreeze({
   id: '212223',
   name: 'scanner 1',
   type: 'OPENVAS_SCANNER_TYPE',
-};
+});
 
-const gmpScanner = {
+const gmpScanner = deepFreeze({
   id: '242526',
   name: 'scanner 2',
   type: 'GMP_SCANNER_TYPE',
-};
+});
 
 // ScanConfig
-const scanConfig = {
+const scanConfig = deepFreeze({
   id: '314',
   name: 'foo',
   comment: 'bar',
   trash: false,
   scanner: scanner,
   type: OPENVAS_SCAN_CONFIG_TYPE,
-};
+});
 
 // Schedule
-const schedule = {id: '121314', name: 'schedule 1'};
+const schedule = deepFreeze({id: '121314', name: 'schedule 1'});
 
 // Alert
-const alert = {id: '151617', name: 'alert 1'};
+const alert = deepFreeze({id: '151617', name: 'alert 1'});
 
 // Reports
-const lastReport = {
+const lastReport = deepFreeze({
   id: '1234',
   severity: '5.0',
   timestamp: '2019-07-30T13:23:30Z',
   scanStart: '2019-07-30T13:23:34Z',
   scanEnd: '2019-07-30T13:25:43Z',
-};
+});
 
-const currentReport = {
+const currentReport = deepFreeze({
   id: '5678',
   timestamp: '2019-08-30T13:23:30Z',
   scanStart: '2019-08-30T13:23:34Z',
-};
+});
 
 // Permissions
-const limitedPermissions = [{name: 'get_tasks'}];
+const limitedPermissions = deepFreeze([{name: 'get_tasks'}]);
 
-const allPermissions = [
+const allPermissions = deepFreeze([
   {
     name: 'Everything',
   },
-];
+]);
 
 // Observers
-const observers = {
+const observers = deepFreeze({
   users: ['john', 'jane'],
   roles: [
     {
@@ -110,10 +112,10 @@ const observers = {
       name: 'group 2',
     },
   ],
-};
+});
 
 // Preferences
-const preferences = [
+const preferences = deepFreeze([
   {
     description: 'Add results to Asset Management',
     name: 'in_assets',
@@ -149,10 +151,10 @@ const preferences = [
     name: 'max_hosts',
     value: '20',
   },
-];
+]);
 
 // Tasks
-const task = {
+const task = deepFreeze({
   id: '12345',
   name: 'foo',
   comment: 'bar',
@@ -161,11 +163,13 @@ const task = {
   creationTime: '2019-07-30T13:00:00Z',
   modificationTime: '2019-08-30T13:23:30Z',
   status: TASK_STATUS.stopped,
-  lastReport: lastReport,
-  currentReport: currentReport,
-  reportCount: {
-    total: 2,
-    finished: 1,
+  reports: {
+    lastReport,
+    currentReport,
+    counts: {
+      total: 2,
+      finished: 1,
+    },
   },
   permissions: allPermissions,
   target: target,
@@ -176,39 +180,43 @@ const task = {
   preferences: preferences,
   hostsOrdering: 'sequential',
   observers: observers,
-};
+});
 
-const newTask = {
+const newTask = deepFreeze({
   id: '12345',
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
   alterable: 0,
   status: TASK_STATUS.new,
-  reportCount: {
-    total: 0,
-    finished: 0,
+  reports: {
+    counts: {
+      total: 0,
+      finished: 0,
+    },
   },
   permissions: allPermissions,
   target: target2,
-};
+});
 
-const finishedTask = {
+const finishedTask = deepFreeze({
   id: '12345',
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
   status: TASK_STATUS.done,
-  lastReport,
-  reportCount: {
-    total: 1,
-    finished: 1,
+  reports: {
+    lastReport,
+    counts: {
+      total: 1,
+      finished: 1,
+    },
   },
   permissions: allPermissions,
   target,
-};
+});
 
-const runningTask = {
+const runningTask = deepFreeze({
   id: '12345',
   name: 'foo',
   comment: 'bar',
@@ -216,72 +224,82 @@ const runningTask = {
   alterable: 0,
   inUse: true,
   status: TASK_STATUS.running,
-  lastReport: lastReport,
-  currentReport: currentReport,
-  reportCount: {
-    total: 2,
-    finished: 1,
+  reports: {
+    lastReport,
+    currentReport,
+    counts: {
+      total: 2,
+      finished: 1,
+    },
   },
   permissions: allPermissions,
   target: target3,
-};
+});
 
-const stoppedTask = {
+const stoppedTask = deepFreeze({
   id: '12345',
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
   alterable: 0,
   status: TASK_STATUS.stopped,
-  lastReport: lastReport,
-  currentReport: currentReport,
-  reportCount: {
-    total: 2,
-    finished: 1,
+  reports: {
+    lastReport,
+    currentReport,
+    counts: {
+      total: 2,
+      finished: 1,
+    },
   },
   permissions: allPermissions,
   target: target,
-};
+});
 
-const observedTask = {
+const observedTask = deepFreeze({
   id: '12345',
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
   alterable: 0,
   status: TASK_STATUS.done,
-  lastReport: lastReport,
-  reportCount: {
-    total: 1,
-    finished: 1,
+  reports: {
+    lastReport,
+    counts: {
+      total: 1,
+      finished: 1,
+    },
   },
   permissions: limitedPermissions,
   target: target,
-};
+});
 
-const containerTask = {
+const containerTask = deepFreeze({
   id: '12345',
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
   alterable: 0,
   status: TASK_STATUS.done,
-  lastReport: lastReport,
-  reportCount: {
-    total: 1,
-    finished: 1,
+  reports: {
+    lastReport,
+    counts: {
+      total: 1,
+      finished: 1,
+    },
   },
   permissions: allPermissions,
-};
+});
 
-const listMockTask = {
+const listMockTask = deepFreeze({
   name: 'foo',
   id: '12345',
   permissions: allPermissions,
-  lastReport,
-  reportCount: {
-    total: 1,
-    finished: 1,
+  reports: {
+    lastReport,
+    counts: {
+      total: 1,
+      finished: 1,
+    },
   },
   status: TASK_STATUS.done,
   target,
@@ -296,19 +314,21 @@ const listMockTask = {
   scanner,
   hostsOrdering: null,
   observers,
-};
+});
 
-const detailsMockTask = {
+const detailsMockTask = deepFreeze({
   name: 'foo',
   id: '12345',
   creationTime: '2019-07-30T13:00:00Z',
   modificationTime: '2019-08-30T13:23:30Z',
   permissions: allPermissions,
-  lastReport,
-  currentReport,
-  reportCount: {
-    total: 1,
-    finished: 1,
+  reports: {
+    lastReport,
+    currentReport,
+    counts: {
+      total: 1,
+      finished: 1,
+    },
   },
   status: TASK_STATUS.stopped,
   target,
@@ -325,7 +345,7 @@ const detailsMockTask = {
   hostsOrdering: 'sequential',
   userTags: null,
   observers,
-};
+});
 
 export const getMockTasks = () => {
   return {

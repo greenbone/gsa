@@ -136,25 +136,21 @@ class Task extends Model {
 
   static parseObject(object) {
     const copy = super.parseObject(object);
-
-    const {reportCount} = object;
-
-    if (isDefined(reportCount)) {
-      copy.reportCount = {...reportCount};
-      copy.reportCount.total = parseInt(reportCount.total);
-      copy.reportCount.finished = parseInt(reportCount.finished);
-    }
+    const {reports} = object;
 
     copy.alterable = parseYesNo(object.alterable);
     copy.resultCount = parseInt(object.resultCount); // this doesn't exist in selene yet. Need to add.
-    const reports = ['lastReport', 'currentReport'];
+    const allReports = ['lastReport', 'currentReport'];
 
-    reports.forEach(name => {
-      const report = object[name];
-      if (hasValue(report)) {
-        copy[name] = Report.fromObject(report);
-      }
-    });
+    if (hasValue(reports)) {
+      copy.reports = {...reports};
+      allReports.forEach(name => {
+        const report = reports[name];
+        if (hasValue(report)) {
+          copy.reports[name] = Report.fromObject(report);
+        }
+      });
+    }
 
     if (hasValue(object.target)) {
       copy.target = Target.fromObject(object.target);
@@ -259,8 +255,6 @@ class Task extends Model {
     ) {
       delete copy.hostsOrdering;
     }
-
-    copy.usageType = object.usage_type;
 
     if (hasValue(object.userTags)) {
       copy.userTags = object.userTags.tags.map(tag => {

@@ -32,7 +32,13 @@ RLink.displayName = 'RouterLink';
 export const withTextOnly = Component => {
   const TextOnly = ({textOnly = false, ...props}) => {
     if (textOnly) {
-      const {className, children, style, title} = props;
+      const {
+        className,
+        children,
+        style,
+        title,
+        'data-testid': dataTestId,
+      } = props;
       return (
         <span
           {...{
@@ -40,6 +46,7 @@ export const withTextOnly = Component => {
             children,
             title,
             style,
+            'data-testid': dataTestId,
           }}
         />
       );
@@ -50,6 +57,7 @@ export const withTextOnly = Component => {
 
   TextOnly.propTypes = {
     className: PropTypes.string,
+    'data-testid': PropTypes.string,
     style: PropTypes.object,
     textOnly: PropTypes.bool,
     title: PropTypes.string,
