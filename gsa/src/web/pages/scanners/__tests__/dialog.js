@@ -27,7 +27,6 @@ import Credential, {
 import Scanner, {OSP_SCANNER_TYPE, GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
-import Theme from 'web/utils/theme';
 
 import ScannerDialog from 'web/pages/scanners/dialog';
 
