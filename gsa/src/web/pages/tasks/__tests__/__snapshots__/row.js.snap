@@ -323,7 +323,9 @@ exports[`Task Row tests should render 1`] = `
   />
   <div>
     <tr>
-      <td>
+      <td
+        data-testid="task-details"
+      >
         <div
           class="c0"
         >
@@ -332,6 +334,7 @@ exports[`Task Row tests should render 1`] = `
           >
             <span
               class="c2"
+              data-testid="task-details-toggle"
               name="12345"
             >
               foo
@@ -372,7 +375,9 @@ Groups group 1, group 2"
           </div>
         </div>
       </td>
-      <td>
+      <td
+        data-testid="task-status"
+      >
         <div
           class="c0"
         >
@@ -403,7 +408,9 @@ Groups group 1, group 2"
           </a>
         </div>
       </td>
-      <td>
+      <td
+        data-testid="reports-total"
+      >
         <div
           class="c0"
         >
@@ -412,6 +419,7 @@ Groups group 1, group 2"
           >
             <a
               class="c6"
+              data-testid="reports-total-link"
               href="/reports?filter=task_id%3D12345%20sort-reverse%3Ddate"
               title="View list of all reports for Task foo, including unfinished ones"
             >
@@ -420,7 +428,9 @@ Groups group 1, group 2"
           </div>
         </div>
       </td>
-      <td>
+      <td
+        data-testid="last-report"
+      >
         <div
           class="c0"
         >
@@ -435,7 +445,9 @@ Groups group 1, group 2"
           </span>
         </div>
       </td>
-      <td>
+      <td
+        data-testid="severity-bar"
+      >
         <div
           class="c0"
         >
@@ -456,7 +468,9 @@ Groups group 1, group 2"
           </div>
         </div>
       </td>
-      <td>
+      <td
+        data-testid="trend"
+      >
         <div
           class="c14"
         >
@@ -474,7 +488,9 @@ Groups group 1, group 2"
           </span>
         </div>
       </td>
-      <td>
+      <td
+        data-testid="task-actions"
+      >
         <div
           class="c15"
         >

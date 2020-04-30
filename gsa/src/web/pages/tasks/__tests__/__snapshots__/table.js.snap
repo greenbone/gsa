@@ -918,7 +918,9 @@ exports[`Tasks table tests should render 1`] = `
           class=""
         >
           <tr>
-            <td>
+            <td
+              data-testid="task-details"
+            >
               <div
                 class="c20"
               >
@@ -927,6 +929,7 @@ exports[`Tasks table tests should render 1`] = `
                 >
                   <span
                     class="c22"
+                    data-testid="task-details-toggle"
                     name="12345"
                   >
                     foo
@@ -949,7 +952,9 @@ exports[`Tasks table tests should render 1`] = `
                 </div>
               </div>
             </td>
-            <td>
+            <td
+              data-testid="task-status"
+            >
               <div
                 class="c20"
               >
@@ -980,7 +985,9 @@ exports[`Tasks table tests should render 1`] = `
                 </a>
               </div>
             </td>
-            <td>
+            <td
+              data-testid="reports-total"
+            >
               <div
                 class="c20"
               >
@@ -989,6 +996,7 @@ exports[`Tasks table tests should render 1`] = `
                 >
                   <a
                     class="c23"
+                    data-testid="reports-total-link"
                     href="/reports?filter=task_id%3D12345%20sort-reverse%3Ddate"
                     title="View list of all reports for Task foo, including unfinished ones"
                   >
@@ -997,7 +1005,9 @@ exports[`Tasks table tests should render 1`] = `
                 </div>
               </div>
             </td>
-            <td>
+            <td
+              data-testid="last-report"
+            >
               <div
                 class="c20"
               >
@@ -1012,7 +1022,9 @@ exports[`Tasks table tests should render 1`] = `
                 </span>
               </div>
             </td>
-            <td>
+            <td
+              data-testid="severity-bar"
+            >
               <div
                 class="c20"
               >
@@ -1033,14 +1045,18 @@ exports[`Tasks table tests should render 1`] = `
                 </div>
               </div>
             </td>
-            <td>
+            <td
+              data-testid="trend"
+            >
               <div
                 class="c30"
               >
                 <span />
               </div>
             </td>
-            <td>
+            <td
+              data-testid="task-actions"
+            >
               <div
                 class="c31"
               >
@@ -1124,7 +1140,9 @@ exports[`Tasks table tests should render 1`] = `
             </td>
           </tr>
           <tr>
-            <td>
+            <td
+              data-testid="task-details"
+            >
               <div
                 class="c20"
               >
@@ -1133,6 +1151,7 @@ exports[`Tasks table tests should render 1`] = `
                 >
                   <span
                     class="c22"
+                    data-testid="task-details-toggle"
                     name="12345"
                   >
                     foo
@@ -1155,12 +1174,15 @@ exports[`Tasks table tests should render 1`] = `
                 </div>
               </div>
             </td>
-            <td>
+            <td
+              data-testid="task-status"
+            >
               <div
                 class="c20"
               >
                 <span
                   class="c23 c24"
+                  data-testid="details-link"
                 >
                   <div
                     class="c25"
@@ -1184,29 +1206,39 @@ exports[`Tasks table tests should render 1`] = `
                 </span>
               </div>
             </td>
-            <td>
+            <td
+              data-testid="reports-total"
+            >
               <div
                 class="c20"
               />
             </td>
-            <td>
+            <td
+              data-testid="last-report"
+            >
               <div
                 class="c20"
               />
             </td>
-            <td>
+            <td
+              data-testid="severity-bar"
+            >
               <div
                 class="c20"
               />
             </td>
-            <td>
+            <td
+              data-testid="trend"
+            >
               <div
                 class="c30"
               >
                 <span />
               </div>
             </td>
-            <td>
+            <td
+              data-testid="task-actions"
+            >
               <div
                 class="c31"
               >
@@ -1290,7 +1322,9 @@ exports[`Tasks table tests should render 1`] = `
             </td>
           </tr>
           <tr>
-            <td>
+            <td
+              data-testid="task-details"
+            >
               <div
                 class="c20"
               >
@@ -1299,6 +1333,7 @@ exports[`Tasks table tests should render 1`] = `
                 >
                   <span
                     class="c22"
+                    data-testid="task-details-toggle"
                     name="12345"
                   >
                     foo
@@ -1321,7 +1356,9 @@ exports[`Tasks table tests should render 1`] = `
                 </div>
               </div>
             </td>
-            <td>
+            <td
+              data-testid="task-status"
+            >
               <div
                 class="c20"
               >
@@ -1352,7 +1389,9 @@ exports[`Tasks table tests should render 1`] = `
                 </a>
               </div>
             </td>
-            <td>
+            <td
+              data-testid="reports-total"
+            >
               <div
                 class="c20"
               >
@@ -1361,6 +1400,7 @@ exports[`Tasks table tests should render 1`] = `
                 >
                   <a
                     class="c23"
+                    data-testid="reports-total-link"
                     href="/reports?filter=task_id%3D12345%20sort-reverse%3Ddate"
                     title="View list of all reports for Task foo, including unfinished ones"
                   >
@@ -1369,7 +1409,9 @@ exports[`Tasks table tests should render 1`] = `
                 </div>
               </div>
             </td>
-            <td>
+            <td
+              data-testid="last-report"
+            >
               <div
                 class="c20"
               >
@@ -1384,7 +1426,9 @@ exports[`Tasks table tests should render 1`] = `
                 </span>
               </div>
             </td>
-            <td>
+            <td
+              data-testid="severity-bar"
+            >
               <div
                 class="c20"
               >
@@ -1405,14 +1449,18 @@ exports[`Tasks table tests should render 1`] = `
                 </div>
               </div>
             </td>
-            <td>
+            <td
+              data-testid="trend"
+            >
               <div
                 class="c30"
               >
                 <span />
               </div>
             </td>
-            <td>
+            <td
+              data-testid="task-actions"
+            >
               <div
                 class="c31"
               >

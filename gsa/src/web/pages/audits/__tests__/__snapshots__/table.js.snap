@@ -1095,6 +1095,7 @@ exports[`Audits table tests should render 1`] = `
               >
                 <span
                   class="c21 c22"
+                  data-testid="details-link"
                 >
                   <div
                     class="c23"
