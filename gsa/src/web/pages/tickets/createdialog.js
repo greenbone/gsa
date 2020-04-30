@@ -42,7 +42,7 @@ const CreateTicketDialog = ({
   onSave,
   onUserIdChange,
 }) => {
-  const stateSchema = {
+  const validationSchema = {
     note: '',
   };
 
@@ -52,7 +52,7 @@ const CreateTicketDialog = ({
     handleValueChange,
     validityStatus,
     handleSubmit,
-  } = useFormValidation(stateSchema, validationRules, onSave);
+  } = useFormValidation(validationSchema, validationRules, onSave);
 
   return (
     <SaveDialog

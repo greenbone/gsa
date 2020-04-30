@@ -55,7 +55,7 @@ const EditTicketDialog = ({
   onClose,
   onSave,
 }) => {
-  const stateSchema = {
+  const validationSchema = {
     // variables needing validation
     openNote,
     closedNote,
@@ -75,7 +75,7 @@ const EditTicketDialog = ({
     handleValueChange,
     handleDependencyChange,
     handleSubmit,
-  } = useFormValidation(stateSchema, validationRules, onSave, deps);
+  } = useFormValidation(validationSchema, validationRules, onSave, deps);
 
   return (
     <SaveDialog
