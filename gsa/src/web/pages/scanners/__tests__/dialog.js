@@ -142,7 +142,7 @@ describe('ScannerDialog component tests', () => {
     expect(pageTwoInputs[0]).toHaveAttribute('value', 'localhost');
 
     expect(pageTwoInputs[1]).toHaveAttribute('name', 'port');
-    expect(pageTwoInputs[1]).toHaveAttribute('value', '22');
+    expect(pageTwoInputs[1]).toHaveAttribute('value', '9391');
   });
 
   test('should display value from props', () => {
@@ -229,7 +229,7 @@ describe('ScannerDialog component tests', () => {
       credential_id: '2345',
       type: 4,
       id: '1234',
-      port: '22',
+      port: '9391',
       which_cert: undefined,
     });
   });
@@ -283,7 +283,7 @@ describe('ScannerDialog component tests', () => {
       credential_id: '2345',
       type: 4,
       id: '1234',
-      port: '22',
+      port: '9391',
       which_cert: undefined,
     });
   });

@@ -147,7 +147,7 @@ const ScannerDialog = ({
   host = 'localhost',
   id,
   name = _('Unnamed'),
-  port = '22',
+  port = '9391',
   title = _('New Scanner'),
   type = OSP_SCANNER_TYPE,
   which_cert,
@@ -196,6 +196,8 @@ const ScannerDialog = ({
     SCANNER_TYPES = [GMP_SCANNER_TYPE, OSP_SCANNER_TYPE];
   }
 
+  let {credential_id} = props;
+
   const scannerTypesOptions = map(SCANNER_TYPES, scannerType => ({
     label: scannerTypeName(scannerType),
     value: scannerType,
@@ -211,8 +213,6 @@ const ScannerDialog = ({
 
   const isGreenboneSensorType = type === GREENBONE_SENSOR_SCANNER_TYPE;
   const isOspScannerType = type === OSP_SCANNER_TYPE;
-
-  let {credential_id = ''} = props;
 
   if (isGreenboneSensorType) {
     credential_id = '';
@@ -247,7 +247,7 @@ const ScannerDialog = ({
             <Tabs active={currentStep}>
               <TabPanels>
                 <TabPanel>
-                  <FormGroup title={_('Name')} align={['start', 'end']}>
+                  <FormGroup title={_('Name')}>
                     <TextField
                       name="name"
                       grow="1"
@@ -255,6 +255,7 @@ const ScannerDialog = ({
                       onChange={onValueChange}
                     />
                   </FormGroup>
+
                   <FormGroup title={_('Comment')}>
                     <TextField
                       name="comment"
@@ -283,6 +284,7 @@ const ScannerDialog = ({
                       onChange={onValueChange}
                     />
                   </FormGroup>
+
                   {isOspScannerType && (
                     <React.Fragment>
                       <FormGroup title={_('Port')}>
@@ -294,6 +296,7 @@ const ScannerDialog = ({
                           onChange={onValueChange}
                         />
                       </FormGroup>
+
                       <FormGroup title={_('CA Certificate')} flex="column">
                         <Layout>
                           <Divider>
@@ -337,14 +340,15 @@ const ScannerDialog = ({
                       </FormGroup>
                     </React.Fragment>
                   )}
+
                   {!isGreenboneSensorType && (
                     <FormGroup title={_('Credential')} flex="column">
                       <Divider>
                         <Select
                           name="credential_id"
                           items={renderSelectItems(scanner_credentials)}
-                          value={state.credential_id}
-                          onChange={onValueChange}
+                          value={credential_id}
+                          onChange={onCredentialChange}
                         />
                         <Layout>
                           <NewIcon
