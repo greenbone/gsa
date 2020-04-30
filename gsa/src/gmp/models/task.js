@@ -257,7 +257,7 @@ class Task extends Model {
     }
 
     if (hasValue(object.userTags)) {
-      copy.userTags = object.userTags.map(tag => {
+      copy.userTags = object.userTags.tags.map(tag => {
         return Tag.fromObject(tag);
       });
     } else {
