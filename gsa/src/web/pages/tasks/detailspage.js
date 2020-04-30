@@ -138,7 +138,7 @@ export const ToolBarIcons = ({
   ...props
 }) => {
   const reportsCounts = entity.reports.counts;
-  const resultsCounts = entity.results.counts;
+  const currentResults = entity.results?.counts?.current;
   const {lastReport, currentReport} = entity.reports;
   return (
     <Divider margin="10px">
@@ -247,7 +247,7 @@ export const ToolBarIcons = ({
           filter={'task_id=' + entity.id}
           title={_('Results for Task {{- name}}', entity)}
         >
-          <Badge content={resultsCounts.current}>
+          <Badge content={currentResults}>
             <ResultIcon />
           </Badge>
         </Link>
