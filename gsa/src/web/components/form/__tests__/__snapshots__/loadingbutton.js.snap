@@ -69,17 +69,20 @@ exports[`LoadingButton tests should render loading 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c2 {
   color: rgba(0,0,0,0.0);
   background: #87d050 url(/img/loading.gif) center center no-repeat;
 }
 
-.c1:hover {
+.c2:hover {
   color: rgba(0,0,0,0.0);
   background: #66c430 url(/img/loading.gif) center center no-repeat;
 }
 
 <button
-  class="c0 c1"
+  class="c0 c1 c2"
 />
 `;
 
@@ -152,16 +155,19 @@ exports[`LoadingButton tests should render non loading 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c2 {
   color: #393637;
   background: #fff;
 }
 
-.c1:hover {
+.c2:hover {
   color: #fff;
   background: #66c430;
 }
 
 <button
-  class="c0 c1"
+  class="c0 c1 c2"
 />
 `;

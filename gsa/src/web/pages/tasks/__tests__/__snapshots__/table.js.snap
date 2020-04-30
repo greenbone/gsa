@@ -1,103 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Tasks table tests should render 1`] = `
-.c1 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-}
-
-.c13 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c18 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-}
-
-.c20 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-}
-
-.c21 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-}
-
-.c30 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-}
-
-.c31 {
+.c0 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -119,7 +23,25 @@ exports[`Tasks table tests should render 1`] = `
   align-items: stretch;
 }
 
-.c37 {
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -137,32 +59,7 @@ exports[`Tasks table tests should render 1`] = `
   align-items: center;
 }
 
-.c41 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c23 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c7 {
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -178,18 +75,66 @@ exports[`Tasks table tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  margin-left: -5px;
 }
 
-.c7 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
+.c20 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 }
 
-.c7 > * {
-  margin-left: 5px;
+.c22 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c23 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c32 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 }
 
 .c33 {
@@ -204,36 +149,6 @@ exports[`Tasks table tests should render 1`] = `
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
   flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-left: -5px;
-}
-
-.c33 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c33 > * {
-  margin-left: 5px;
-}
-
-.c6 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
   -webkit-box-pack: start;
   -webkit-justify-content: start;
   -ms-flex-pack: start;
@@ -242,13 +157,9 @@ exports[`Tasks table tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
 }
 
-.c32 {
+.c34 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -260,40 +171,83 @@ exports[`Tasks table tests should render 1`] = `
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
   flex-grow: 1;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c42 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c25 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c2 {
-  cursor: pointer;
+.c10 {
+  margin-left: -5px;
 }
 
-.c8 svg path {
-  fill: #aaaaaa;
+.c10 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c10 > * {
+  margin-left: 5px;
+}
+
+.c9 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 
 .c3 {
+  cursor: pointer;
+}
+
+.c11 svg path {
+  fill: #aaaaaa;
+}
+
+.c4 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c3 * {
+.c4 * {
   height: inherit;
   width: inherit;
 }
 
-.c42 {
+.c43 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -318,18 +272,18 @@ exports[`Tasks table tests should render 1`] = `
   cursor: pointer;
 }
 
-.c43 {
+.c44 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c43 * {
+.c44 * {
   height: inherit;
   width: inherit;
 }
 
-.c39 {
+.c40 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -353,7 +307,7 @@ exports[`Tasks table tests should render 1`] = `
   font-weight: normal;
 }
 
-.c38 {
+.c39 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -365,7 +319,7 @@ exports[`Tasks table tests should render 1`] = `
   width: 180px;
 }
 
-.c44 {
+.c45 {
   color: #a94442;
   font-weight: bold;
   font-size: 19px;
@@ -374,7 +328,7 @@ exports[`Tasks table tests should render 1`] = `
   display: none;
 }
 
-.c40 {
+.c41 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -394,32 +348,23 @@ exports[`Tasks table tests should render 1`] = `
   cursor: default;
 }
 
-.c11 a {
+.c38 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c14 a {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #000;
 }
 
-.c11 a:hover {
+.c14 a:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #000;
-}
-
-.c12 {
-  background-color: #fff;
-  color: #000;
-  border-top: 1px solid #c8d3d9;
-  font-weight: bold;
-  width: 41%;
-}
-
-.c14 {
-  background-color: #fff;
-  color: #000;
-  border-top: 1px solid #c8d3d9;
-  font-weight: bold;
-  width: 8%;
 }
 
 .c15 {
@@ -427,7 +372,7 @@ exports[`Tasks table tests should render 1`] = `
   color: #000;
   border-top: 1px solid #c8d3d9;
   font-weight: bold;
-  width: 6%;
+  width: 41%;
 }
 
 .c16 {
@@ -435,7 +380,7 @@ exports[`Tasks table tests should render 1`] = `
   color: #000;
   border-top: 1px solid #c8d3d9;
   font-weight: bold;
-  width: 24%;
+  width: 8%;
 }
 
 .c17 {
@@ -443,7 +388,15 @@ exports[`Tasks table tests should render 1`] = `
   color: #000;
   border-top: 1px solid #c8d3d9;
   font-weight: bold;
-  width: 5%;
+  width: 6%;
+}
+
+.c18 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 24%;
 }
 
 .c19 {
@@ -451,54 +404,32 @@ exports[`Tasks table tests should render 1`] = `
   color: #000;
   border-top: 1px solid #c8d3d9;
   font-weight: bold;
+  width: 5%;
+}
+
+.c21 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
   width: 10em;
 }
 
-.c45 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c46 {
   font-size: 10px;
   color: #787878;
   text-align: left;
 }
 
-.c9 {
+.c12 {
   margin: 0 3px;
 }
 
-.c5 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c7 {
   margin: 2px 3px;
 }
 
-.c10 {
+.c13 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -508,62 +439,43 @@ exports[`Tasks table tests should render 1`] = `
   opacity: 1.0;
 }
 
-.c10 th,
-.c10 td {
+.c13 th,
+.c13 td {
   padding: 4px 10px;
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c10 tfoot tr {
+.c13 tfoot tr {
   background: #fff;
 }
 
-.c10 tfoot tr td {
+.c13 tfoot tr td {
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c4 {
+.c5 {
   margin-top: 2px;
   margin-left: 2px;
 }
 
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
+.c1 {
   margin-top: 20px;
 }
 
-.c22 {
+.c24 {
   cursor: pointer;
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #0000ff;
 }
 
-.c22:hover {
+.c24:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #0000ff;
 }
 
-.c25 {
+.c27 {
   height: 13px;
   box-sizing: content-box;
   display: inline-block;
@@ -573,7 +485,7 @@ exports[`Tasks table tests should render 1`] = `
   text-align: center;
 }
 
-.c27 {
+.c29 {
   z-index: 1;
   font-weight: bold;
   color: #fff;
@@ -584,79 +496,61 @@ exports[`Tasks table tests should render 1`] = `
   padding-top: 1px;
 }
 
-.c26 {
+.c28 {
   height: 13px;
   width: 100%;
   background: #4f91c7;
 }
 
-.c29 {
+.c31 {
   height: 13px;
   width: 50%;
   background: #f0a519;
 }
 
-.c34 {
+.c35 {
   height: 13px;
   width: 100%;
   background: #99be48;
 }
 
-.c35 {
+.c36 {
   height: 13px;
   width: 0%;
   background: #70c000;
 }
 
-.c36 {
+.c37 {
   height: 13px;
   width: 100%;
   background: #c83814;
 }
 
-.c28 {
+.c30 {
   white-space: nowrap;
 }
 
-.c24:hover {
+.c26:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
 @media print {
-  .c2 {
+  .c3 {
     display: none;
   }
 }
 
 @media print {
-  .c11 {
+  .c14 {
     border-bottom: 1px solid black;
   }
 
-  .c11 a,
-  .c11 a:hover {
+  .c14 a,
+  .c14 a:hover {
     -webkit-text-decoration: none;
     text-decoration: none;
     color: #000;
-  }
-}
-
-@media print {
-  .c12 {
-    color: #000;
-    font-size: 1.2em;
-    background-color: none;
-    font-weight: bold;
-  }
-}
-
-@media print {
-  .c14 {
-    color: #000;
-    font-size: 1.2em;
-    background-color: none;
-    font-weight: bold;
   }
 }
 
@@ -688,6 +582,15 @@ exports[`Tasks table tests should render 1`] = `
 }
 
 @media print {
+  .c18 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
   .c19 {
     color: #000;
     font-size: 1.2em;
@@ -697,62 +600,65 @@ exports[`Tasks table tests should render 1`] = `
 }
 
 @media print {
-  .c5 svg {
+  .c21 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c7 svg {
     display: none;
   }
 }
 
 @media print {
-  .c10 {
+  .c13 {
     border-collapse: collapse;
   }
 }
 
 @media screen {
-  .c10 > tbody:nth-of-type(even),
-  .c10 > tbody:only-of-type > tr:nth-of-type(even) {
+  .c13 > tbody:nth-of-type(even),
+  .c13 > tbody:only-of-type > tr:nth-of-type(even) {
     background: #eeeeee;
   }
 
-  .c10 > tbody:not(:only-of-type):hover,
-  .c10 > tbody:only-of-type > tr:hover {
+  .c13 > tbody:not(:only-of-type):hover,
+  .c13 > tbody:only-of-type > tr:hover {
     background: #c8d3d9;
   }
 }
 
 @media print {
-  .c22 {
+  .c24 {
     color: #000;
   }
 }
 
 @media print {
-  .c25 {
+  .c27 {
     background: none;
     border: 0;
   }
 }
 
 @media print {
-  .c27 {
+  .c29 {
     color: black;
   }
 }
 
 @media print {
-  .c26 {
+  .c28 {
     background: none;
   }
 }
 
 @media print {
-  .c29 {
-    background: none;
-  }
-}
-
-@media print {
-  .c34 {
+  .c31 {
     background: none;
   }
 }
@@ -769,19 +675,25 @@ exports[`Tasks table tests should render 1`] = `
   }
 }
 
+@media print {
+  .c37 {
+    background: none;
+  }
+}
+
 <body>
   <div
     id="portals"
   />
   <div>
     <div
-      class="c0 entities-table"
+      class="c0 c1 entities-table"
     >
       <div
-        class="c1"
+        class="c2"
       >
         <span
-          class="c2 c3 c4"
+          class="c3 c4 c5"
           data-testid="svg-icon"
           title="Unfold all details"
         >
@@ -792,17 +704,17 @@ exports[`Tasks table tests should render 1`] = `
           </svg>
         </span>
         <div
-          class="c5"
+          class="c6 c7"
         >
           <div
-            class="c6"
+            class="c8 c9"
           >
             <div
-              class="c7"
+              class="c8 c10"
               margin="5px"
             >
               <span
-                class="c8 c3"
+                class="c11 c4"
                 data-testid="svg-icon"
                 title="First"
               >
@@ -813,7 +725,7 @@ exports[`Tasks table tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c3"
+                class="c11 c4"
                 data-testid="svg-icon"
                 title="Previous"
               >
@@ -826,19 +738,19 @@ exports[`Tasks table tests should render 1`] = `
             </div>
           </div>
           <span
-            class="c9"
+            class="c12"
           >
             1 - 1 of 1
           </span>
           <div
-            class="c6"
+            class="c8 c9"
           >
             <div
-              class="c7"
+              class="c8 c10"
               margin="5px"
             >
               <span
-                class="c8 c3"
+                class="c11 c4"
                 data-testid="svg-icon"
                 title="Next"
               >
@@ -849,7 +761,7 @@ exports[`Tasks table tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c3"
+                class="c11 c4"
                 data-testid="svg-icon"
                 title="Last"
               >
@@ -864,71 +776,71 @@ exports[`Tasks table tests should render 1`] = `
         </div>
       </div>
       <table
-        class="c10"
+        class="c13"
       >
         <thead
-          class="c11"
+          class="c14"
         >
           <tr>
-            <th
-              class="c12"
-            >
-              <div
-                class="c13"
-              >
-                Name
-              </div>
-            </th>
-            <th
-              class="c14"
-            >
-              <div
-                class="c13"
-              >
-                Status
-              </div>
-            </th>
             <th
               class="c15"
             >
               <div
-                class="c13"
+                class="c8"
               >
-                Reports
+                Name
               </div>
             </th>
             <th
               class="c16"
             >
               <div
-                class="c13"
+                class="c8"
               >
-                Last Report
-              </div>
-            </th>
-            <th
-              class="c14"
-            >
-              <div
-                class="c13"
-              >
-                Severity
+                Status
               </div>
             </th>
             <th
               class="c17"
             >
               <div
-                class="c18"
+                class="c8"
               >
-                Trend
+                Reports
+              </div>
+            </th>
+            <th
+              class="c18"
+            >
+              <div
+                class="c8"
+              >
+                Last Report
+              </div>
+            </th>
+            <th
+              class="c16"
+            >
+              <div
+                class="c8"
+              >
+                Severity
               </div>
             </th>
             <th
               class="c19"
             >
               <div
-                class="c18"
+                class="c20"
+              >
+                Trend
+              </div>
+            </th>
+            <th
+              class="c21"
+            >
+              <div
+                class="c20"
               >
                 Actions
               </div>
@@ -941,22 +853,22 @@ exports[`Tasks table tests should render 1`] = `
           <tr>
             <td>
               <div
-                class="c20"
+                class="c22"
               >
                 <div
-                  class="c21"
+                  class="c23"
                 >
                   <span
-                    class="c22"
+                    class="c24"
                     name="1234"
                   >
                     foo
                   </span>
                   <div
-                    class="c6"
+                    class="c8 c9"
                   >
                     <div
-                      class="c7"
+                      class="c8 c10"
                       margin="5px"
                     />
                   </div>
@@ -972,27 +884,27 @@ exports[`Tasks table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c20"
+                class="c22"
               >
                 <a
-                  class="c23 c24"
+                  class="c25 c26"
                   data-testid="details-link"
                   href="/report/1234"
                 >
                   <div
-                    class="c25"
+                    class="c27"
                     data-testid="progressbar-box"
                     title="Done"
                   >
                     <div
-                      class="c26"
+                      class="c28"
                       data-testid="progress"
                     />
                     <div
-                      class="c27"
+                      class="c29"
                     >
                       <span
-                        class="c28"
+                        class="c30"
                       >
                         Done
                       </span>
@@ -1003,13 +915,13 @@ exports[`Tasks table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c20"
+                class="c22"
               >
                 <div
-                  class="c13"
+                  class="c8"
                 >
                   <a
-                    class="c23"
+                    class="c25"
                     href="/reports?filter=task_id%3D1234%20sort-reverse%3Ddate"
                     title="View list of all reports for Task foo, including unfinished ones"
                   >
@@ -1020,11 +932,11 @@ exports[`Tasks table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c20"
+                class="c22"
               >
                 <span>
                   <a
-                    class="c23"
+                    class="c25"
                     data-testid="details-link"
                     href="/report/1234"
                   >
@@ -1035,19 +947,19 @@ exports[`Tasks table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c20"
+                class="c22"
               >
                 <div
-                  class="c25"
+                  class="c27"
                   data-testid="progressbar-box"
                   title="Medium"
                 >
                   <div
-                    class="c29"
+                    class="c31"
                     data-testid="progress"
                   />
                   <div
-                    class="c27"
+                    class="c29"
                   >
                     5.0 (Medium)
                   </div>
@@ -1056,24 +968,24 @@ exports[`Tasks table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c30"
+                class="c32"
               >
                 <span />
               </div>
             </td>
             <td>
               <div
-                class="c31"
+                class="c0"
               >
                 <div
-                  class="c32"
+                  class="c33 c9"
                 >
                   <div
-                    class="c33"
+                    class="c34 c10"
                     margin="5px"
                   >
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Start"
                     >
@@ -1085,7 +997,7 @@ exports[`Tasks table tests should render 1`] = `
                     </span>
                     <span
                       alt="Resume"
-                      class="c8 c3"
+                      class="c11 c4"
                       data-testid="svg-icon"
                       title="Task is not stopped"
                     >
@@ -1096,7 +1008,7 @@ exports[`Tasks table tests should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Move Task to trashcan"
                     >
@@ -1107,7 +1019,7 @@ exports[`Tasks table tests should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Edit Task"
                     >
@@ -1118,7 +1030,7 @@ exports[`Tasks table tests should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Clone Task"
                     >
@@ -1129,7 +1041,7 @@ exports[`Tasks table tests should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Export Task"
                     >
@@ -1147,27 +1059,27 @@ exports[`Tasks table tests should render 1`] = `
           <tr>
             <td>
               <div
-                class="c20"
+                class="c22"
               >
                 <div
-                  class="c21"
+                  class="c23"
                 >
                   <span
-                    class="c22"
+                    class="c24"
                     name="12345"
                   >
                     lorem
                   </span>
                   <div
-                    class="c6"
+                    class="c8 c9"
                   >
                     <div
-                      class="c7"
+                      class="c8 c10"
                       margin="5px"
                     >
                       <span
                         alt="Task owned by user"
-                        class="c3"
+                        class="c4"
                         data-testid="svg-icon"
                         title="Task owned by user"
                       >
@@ -1191,25 +1103,25 @@ exports[`Tasks table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c20"
+                class="c22"
               >
                 <span
-                  class="c23 c24"
+                  class="c25 c26"
                 >
                   <div
-                    class="c25"
+                    class="c27"
                     data-testid="progressbar-box"
                     title="New"
                   >
                     <div
-                      class="c34"
+                      class="c35"
                       data-testid="progress"
                     />
                     <div
-                      class="c27"
+                      class="c29"
                     >
                       <span
-                        class="c28"
+                        class="c30"
                       >
                         New
                       </span>
@@ -1220,39 +1132,39 @@ exports[`Tasks table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c20"
+                class="c22"
               />
             </td>
             <td>
               <div
-                class="c20"
+                class="c22"
               />
             </td>
             <td>
               <div
-                class="c20"
+                class="c22"
               />
             </td>
             <td>
               <div
-                class="c30"
+                class="c32"
               >
                 <span />
               </div>
             </td>
             <td>
               <div
-                class="c31"
+                class="c0"
               >
                 <div
-                  class="c32"
+                  class="c33 c9"
                 >
                   <div
-                    class="c33"
+                    class="c34 c10"
                     margin="5px"
                   >
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Start"
                     >
@@ -1264,7 +1176,7 @@ exports[`Tasks table tests should render 1`] = `
                     </span>
                     <span
                       alt="Resume"
-                      class="c8 c3"
+                      class="c11 c4"
                       data-testid="svg-icon"
                       title="Task is not stopped"
                     >
@@ -1275,7 +1187,7 @@ exports[`Tasks table tests should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Move Task to trashcan"
                     >
@@ -1286,7 +1198,7 @@ exports[`Tasks table tests should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Edit Task"
                     >
@@ -1297,7 +1209,7 @@ exports[`Tasks table tests should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Clone Task"
                     >
@@ -1308,7 +1220,7 @@ exports[`Tasks table tests should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Export Task"
                     >
@@ -1326,27 +1238,27 @@ exports[`Tasks table tests should render 1`] = `
           <tr>
             <td>
               <div
-                class="c20"
+                class="c22"
               >
                 <div
-                  class="c21"
+                  class="c23"
                 >
                   <span
-                    class="c22"
+                    class="c24"
                     name="123456"
                   >
                     hello
                   </span>
                   <div
-                    class="c6"
+                    class="c8 c9"
                   >
                     <div
-                      class="c7"
+                      class="c8 c10"
                       margin="5px"
                     >
                       <span
                         alt="Task owned by user"
-                        class="c3"
+                        class="c4"
                         data-testid="svg-icon"
                         title="Task owned by user"
                       >
@@ -1370,27 +1282,27 @@ exports[`Tasks table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c20"
+                class="c22"
               >
                 <a
-                  class="c23 c24"
+                  class="c25 c26"
                   data-testid="details-link"
                   href="/report/5678"
                 >
                   <div
-                    class="c25"
+                    class="c27"
                     data-testid="progressbar-box"
                     title="Running"
                   >
                     <div
-                      class="c35"
+                      class="c36"
                       data-testid="progress"
                     />
                     <div
-                      class="c27"
+                      class="c29"
                     >
                       <span
-                        class="c28"
+                        class="c30"
                       >
                         0 %
                       </span>
@@ -1401,13 +1313,13 @@ exports[`Tasks table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c20"
+                class="c22"
               >
                 <div
-                  class="c13"
+                  class="c8"
                 >
                   <a
-                    class="c23"
+                    class="c25"
                     href="/reports?filter=task_id%3D123456%20sort-reverse%3Ddate"
                     title="View list of all reports for Task hello, including unfinished ones"
                   >
@@ -1418,11 +1330,11 @@ exports[`Tasks table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c20"
+                class="c22"
               >
                 <span>
                   <a
-                    class="c23"
+                    class="c25"
                     data-testid="details-link"
                     href="/report/1234"
                   >
@@ -1433,19 +1345,19 @@ exports[`Tasks table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c20"
+                class="c22"
               >
                 <div
-                  class="c25"
+                  class="c27"
                   data-testid="progressbar-box"
                   title="High"
                 >
                   <div
-                    class="c36"
+                    class="c37"
                     data-testid="progress"
                   />
                   <div
-                    class="c27"
+                    class="c29"
                   >
                     10.0 (High)
                   </div>
@@ -1454,24 +1366,24 @@ exports[`Tasks table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c30"
+                class="c32"
               >
                 <span />
               </div>
             </td>
             <td>
               <div
-                class="c31"
+                class="c0"
               >
                 <div
-                  class="c32"
+                  class="c33 c9"
                 >
                   <div
-                    class="c33"
+                    class="c34 c10"
                     margin="5px"
                   >
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Stop"
                     >
@@ -1483,7 +1395,7 @@ exports[`Tasks table tests should render 1`] = `
                     </span>
                     <span
                       alt="Resume"
-                      class="c8 c3"
+                      class="c11 c4"
                       data-testid="svg-icon"
                       title="Task is not stopped"
                     >
@@ -1494,7 +1406,7 @@ exports[`Tasks table tests should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Move Task to trashcan"
                     >
@@ -1505,7 +1417,7 @@ exports[`Tasks table tests should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Edit Task"
                     >
@@ -1516,7 +1428,7 @@ exports[`Tasks table tests should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Clone Task"
                     >
@@ -1527,7 +1439,7 @@ exports[`Tasks table tests should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c2 c3"
+                      class="c3 c4"
                       data-testid="svg-icon"
                       title="Export Task"
                     >
@@ -1549,13 +1461,13 @@ exports[`Tasks table tests should render 1`] = `
               colspan="10"
             >
               <div
-                class="c37"
+                class="c6"
               >
                 <div
-                  class="c6"
+                  class="c8 c9"
                 >
                   <div
-                    class="c7"
+                    class="c8 c10"
                     margin="5px"
                   >
                     <div
@@ -1564,47 +1476,51 @@ exports[`Tasks table tests should render 1`] = `
                       aria-labelledby="downshift-0-label"
                       class="c38"
                       role="combobox"
-                      width="180px"
                     >
                       <div
-                        aria-haspopup="true"
-                        aria-label="open menu"
                         class="c39"
-                        data-toggle="true"
-                        role="button"
-                        type="button"
+                        width="180px"
                       >
                         <div
+                          aria-haspopup="true"
+                          aria-label="open menu"
                           class="c40"
-                          data-testid="select-selected-value"
-                        />
-                        <div
-                          class="c41"
+                          data-toggle="true"
+                          role="button"
+                          type="button"
                         >
-                          <span
-                            class="c42 c43"
-                            data-testid="select-open-button"
+                          <div
+                            class="c41"
+                            data-testid="select-selected-value"
+                          />
+                          <div
+                            class="c42"
                           >
-                            ▼
-                          </span>
+                            <span
+                              class="c43 c44"
+                              data-testid="select-open-button"
+                            >
+                              ▼
+                            </span>
+                          </div>
                         </div>
+                      </div>
+                      <div
+                        class="c45"
+                        data-testid="error-marker"
+                      >
+                        ×
                       </div>
                     </div>
                     <div
-                      class="c44"
-                      data-testid="error-marker"
-                    >
-                      ×
-                    </div>
-                    <div
-                      class="c6"
+                      class="c8 c9"
                     >
                       <div
-                        class="c7"
+                        class="c8 c10"
                         margin="5px"
                       >
                         <span
-                          class="c3"
+                          class="c4"
                           data-testid="svg-icon"
                         >
                           <svg>
@@ -1612,7 +1528,7 @@ exports[`Tasks table tests should render 1`] = `
                           </svg>
                         </span>
                         <span
-                          class="c3"
+                          class="c4"
                           data-testid="svg-icon"
                         >
                           <svg>
@@ -1620,7 +1536,7 @@ exports[`Tasks table tests should render 1`] = `
                           </svg>
                         </span>
                         <span
-                          class="c3"
+                          class="c4"
                           data-testid="svg-icon"
                         >
                           <svg>
@@ -1637,25 +1553,25 @@ exports[`Tasks table tests should render 1`] = `
         </tfoot>
       </table>
       <div
-        class="c21"
+        class="c23"
       >
         <div
-          class="c45"
+          class="c8 c46"
         >
           (Applied filter: rows=2)
         </div>
         <div
-          class="c5"
+          class="c6 c7"
         >
           <div
-            class="c6"
+            class="c8 c9"
           >
             <div
-              class="c7"
+              class="c8 c10"
               margin="5px"
             >
               <span
-                class="c8 c3"
+                class="c11 c4"
                 data-testid="svg-icon"
                 title="First"
               >
@@ -1666,7 +1582,7 @@ exports[`Tasks table tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c3"
+                class="c11 c4"
                 data-testid="svg-icon"
                 title="Previous"
               >
@@ -1679,19 +1595,19 @@ exports[`Tasks table tests should render 1`] = `
             </div>
           </div>
           <span
-            class="c9"
+            class="c12"
           >
             1 - 1 of 1
           </span>
           <div
-            class="c6"
+            class="c8 c9"
           >
             <div
-              class="c7"
+              class="c8 c10"
               margin="5px"
             >
               <span
-                class="c8 c3"
+                class="c11 c4"
                 data-testid="svg-icon"
                 title="Next"
               >
@@ -1702,7 +1618,7 @@ exports[`Tasks table tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c3"
+                class="c11 c4"
                 data-testid="svg-icon"
                 title="Last"
               >

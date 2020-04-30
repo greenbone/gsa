@@ -33,7 +33,25 @@ exports[`Audit Row tests should render 1`] = `
   justify-content: space-between;
 }
 
-.c12 {
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -55,14 +73,7 @@ exports[`Audit Row tests should render 1`] = `
   align-items: stretch;
 }
 
-.c5 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c4 {
+.c14 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -70,6 +81,10 @@ exports[`Audit Row tests should render 1`] = `
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
   -webkit-box-pack: start;
   -webkit-justify-content: start;
   -ms-flex-pack: start;
@@ -78,21 +93,9 @@ exports[`Audit Row tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  margin-left: -5px;
 }
 
-.c4 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c4 > * {
-  margin-left: 5px;
-}
-
-.c14 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -112,83 +115,52 @@ exports[`Audit Row tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c6 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c5 {
   margin-left: -5px;
 }
 
-.c14 > * {
+.c5 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c14 > * {
+.c5 > * {
   margin-left: 5px;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c4 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
-}
-
-.c13 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c15 {
-  cursor: pointer;
-}
-
-.c17 svg path {
-  fill: #aaaaaa;
 }
 
 .c16 {
+  cursor: pointer;
+}
+
+.c18 svg path {
+  fill: #aaaaaa;
+}
+
+.c17 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c16 * {
+.c17 * {
   height: inherit;
   width: inherit;
 }
@@ -206,7 +178,7 @@ exports[`Audit Row tests should render 1`] = `
   color: #0000ff;
 }
 
-.c7 {
+.c8 {
   height: 13px;
   box-sizing: content-box;
   display: inline-block;
@@ -216,7 +188,7 @@ exports[`Audit Row tests should render 1`] = `
   text-align: center;
 }
 
-.c9 {
+.c10 {
   z-index: 1;
   font-weight: bold;
   color: #fff;
@@ -227,29 +199,29 @@ exports[`Audit Row tests should render 1`] = `
   padding-top: 1px;
 }
 
-.c8 {
+.c9 {
   height: 13px;
   width: 100%;
   background: #4f91c7;
 }
 
-.c11 {
+.c12 {
   height: 13px;
   width: 50%;
   background: #c83814;
 }
 
-.c10 {
+.c11 {
   white-space: nowrap;
 }
 
-.c6:hover {
+.c7:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
 @media print {
-  .c15 {
+  .c16 {
     display: none;
   }
 }
@@ -261,26 +233,26 @@ exports[`Audit Row tests should render 1`] = `
 }
 
 @media print {
-  .c7 {
+  .c8 {
     background: none;
     border: 0;
   }
 }
 
 @media print {
-  .c9 {
+  .c10 {
     color: black;
   }
 }
 
 @media print {
-  .c8 {
+  .c9 {
     background: none;
   }
 }
 
 @media print {
-  .c11 {
+  .c12 {
     background: none;
   }
 }
@@ -305,10 +277,10 @@ exports[`Audit Row tests should render 1`] = `
               foo
             </span>
             <div
-              class="c3"
+              class="c3 c4"
             >
               <div
-                class="c4"
+                class="c3 c5"
                 margin="5px"
               />
             </div>
@@ -327,24 +299,24 @@ exports[`Audit Row tests should render 1`] = `
           class="c0"
         >
           <a
-            class="c5 c6"
+            class="c6 c7"
             data-testid="details-link"
             href="/report/1234"
           >
             <div
-              class="c7"
+              class="c8"
               data-testid="progressbar-box"
               title="Done"
             >
               <div
-                class="c8"
+                class="c9"
                 data-testid="progress"
               />
               <div
-                class="c9"
+                class="c10"
               >
                 <span
-                  class="c10"
+                  class="c11"
                 >
                   Done
                 </span>
@@ -359,7 +331,7 @@ exports[`Audit Row tests should render 1`] = `
         >
           <span>
             <a
-              class="c5"
+              class="c6"
               data-testid="details-link"
               href="/report/1234"
             >
@@ -373,16 +345,16 @@ exports[`Audit Row tests should render 1`] = `
           class="c0"
         >
           <div
-            class="c7"
+            class="c8"
             data-testid="progressbar-box"
             title="50%"
           >
             <div
-              class="c11"
+              class="c12"
               data-testid="progress"
             />
             <div
-              class="c9"
+              class="c10"
             >
               50%
             </div>
@@ -391,17 +363,17 @@ exports[`Audit Row tests should render 1`] = `
       </td>
       <td>
         <div
-          class="c12"
+          class="c13"
         >
           <div
-            class="c13"
+            class="c14 c4"
           >
             <div
-              class="c14"
+              class="c15 c5"
               margin="5px"
             >
               <span
-                class="c15 c16"
+                class="c16 c17"
                 data-testid="svg-icon"
                 title="Start"
               >
@@ -413,7 +385,7 @@ exports[`Audit Row tests should render 1`] = `
               </span>
               <span
                 alt="Resume"
-                class="c17 c16"
+                class="c18 c17"
                 data-testid="svg-icon"
                 title="Audit is not stopped"
               >
@@ -424,7 +396,7 @@ exports[`Audit Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c15 c16"
+                class="c16 c17"
                 data-testid="svg-icon"
                 title="Move Audit to trashcan"
               >
@@ -435,7 +407,7 @@ exports[`Audit Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c15 c16"
+                class="c16 c17"
                 data-testid="svg-icon"
                 title="Edit Audit"
               >
@@ -446,7 +418,7 @@ exports[`Audit Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c15 c16"
+                class="c16 c17"
                 data-testid="svg-icon"
                 title="Clone Audit"
               >
@@ -457,7 +429,7 @@ exports[`Audit Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c15 c16"
+                class="c16 c17"
                 data-testid="svg-icon"
                 title="Export Audit"
               >
@@ -468,7 +440,7 @@ exports[`Audit Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c15 c16"
+                class="c16 c17"
                 data-testid="svg-icon"
                 title="Download Greenbone Compliance Report"
               >

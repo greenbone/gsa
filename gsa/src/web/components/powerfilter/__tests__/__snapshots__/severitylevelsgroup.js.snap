@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SeverityLevelsFilterGroup tests should render 1`] = `
-.c4 {
+.c2 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -17,36 +17,24 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c5 {
   margin-left: -5px;
 }
 
-.c4 > * {
+.c5 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c4 > * {
+.c5 > * {
   margin-left: 5px;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c4 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -80,28 +68,13 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   margin-left: 0;
 }
 
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c3 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c5 {
+.c6 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -117,7 +90,7 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c6 {
+.c7 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -128,7 +101,7 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   height: auto;
 }
 
-.c7 {
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -146,7 +119,7 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   align-items: center;
 }
 
-.c8 {
+.c9 {
   text-align: center;
   font-weight: normal;
   font-style: normal;
@@ -160,7 +133,7 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   border-color: #C83814;
 }
 
-.c9 {
+.c10 {
   text-align: center;
   font-weight: normal;
   font-style: normal;
@@ -174,7 +147,7 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   border-color: #F0A519;
 }
 
-.c10 {
+.c11 {
   text-align: center;
   font-weight: normal;
   font-style: normal;
@@ -188,7 +161,7 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   border-color: #4F91C7;
 }
 
-.c11 {
+.c12 {
   text-align: center;
   font-weight: normal;
   font-style: normal;
@@ -212,35 +185,35 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
     Severity (Class)
   </label>
   <div
-    class="c2"
+    class="c2 c3"
     data-testid="formgroup-content"
     size="10"
   >
     <div
-      class="c3"
+      class="c2 c4"
     >
       <div
-        class="c4"
+        class="c2 c5"
         margin="5px"
       >
         <label
-          class="c5"
+          class="c6"
         >
           <div
-            class="c3"
+            class="c2 c4"
           >
             <div
-              class="c4"
+              class="c2 c5"
               margin="5px"
             >
               <input
                 checked=""
-                class="c6 c7"
+                class="c7 c8"
                 name="h"
                 type="checkbox"
               />
               <div
-                class="c8"
+                class="c9"
               >
                 High
               </div>
@@ -248,22 +221,22 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
           </div>
         </label>
         <label
-          class="c5"
+          class="c6"
         >
           <div
-            class="c3"
+            class="c2 c4"
           >
             <div
-              class="c4"
+              class="c2 c5"
               margin="5px"
             >
               <input
-                class="c6 c7"
+                class="c7 c8"
                 name="m"
                 type="checkbox"
               />
               <div
-                class="c9"
+                class="c10"
               >
                 Medium
               </div>
@@ -271,22 +244,22 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
           </div>
         </label>
         <label
-          class="c5"
+          class="c6"
         >
           <div
-            class="c3"
+            class="c2 c4"
           >
             <div
-              class="c4"
+              class="c2 c5"
               margin="5px"
             >
               <input
-                class="c6 c7"
+                class="c7 c8"
                 name="l"
                 type="checkbox"
               />
               <div
-                class="c10"
+                class="c11"
               >
                 Low
               </div>
@@ -294,22 +267,22 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
           </div>
         </label>
         <label
-          class="c5"
+          class="c6"
         >
           <div
-            class="c3"
+            class="c2 c4"
           >
             <div
-              class="c4"
+              class="c2 c5"
               margin="5px"
             >
               <input
-                class="c6 c7"
+                class="c7 c8"
                 name="g"
                 type="checkbox"
               />
               <div
-                class="c11"
+                class="c12"
               >
                 Log
               </div>
@@ -317,22 +290,22 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
           </div>
         </label>
         <label
-          class="c5"
+          class="c6"
         >
           <div
-            class="c3"
+            class="c2 c4"
           >
             <div
-              class="c4"
+              class="c2 c5"
               margin="5px"
             >
               <input
-                class="c6 c7"
+                class="c7 c8"
                 name="f"
                 type="checkbox"
               />
               <div
-                class="c11"
+                class="c12"
               >
                 False Pos.
               </div>

@@ -1,36 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Radio tests should render radio 1`] = `
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-left: -5px;
-}
-
-.c2 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c2 > * {
-  margin-left: 5px;
-}
-
 .c1 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -47,6 +17,24 @@ exports[`Radio tests should render radio 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c3 {
+  margin-left: -5px;
+}
+
+.c3 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c3 > * {
+  margin-left: 5px;
+}
+
+.c2 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -69,7 +57,7 @@ exports[`Radio tests should render radio 1`] = `
   cursor: pointer;
 }
 
-.c3 {
+.c4 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -80,7 +68,7 @@ exports[`Radio tests should render radio 1`] = `
   height: auto;
 }
 
-.c4 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -102,14 +90,14 @@ exports[`Radio tests should render radio 1`] = `
   class="c0"
 >
   <div
-    class="c1"
+    class="c1 c2"
   >
     <div
-      class="c2"
+      class="c1 c3"
       margin="5px"
     >
       <input
-        class="c3 c4"
+        class="c4 c5"
         data-testid="radio-input"
         type="radio"
         value=""
@@ -120,36 +108,6 @@ exports[`Radio tests should render radio 1`] = `
 `;
 
 exports[`Radio tests should render radio with children 1`] = `
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-left: -5px;
-}
-
-.c2 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c2 > * {
-  margin-left: 5px;
-}
-
 .c1 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -166,6 +124,24 @@ exports[`Radio tests should render radio with children 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c3 {
+  margin-left: -5px;
+}
+
+.c3 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c3 > * {
+  margin-left: 5px;
+}
+
+.c2 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -188,7 +164,7 @@ exports[`Radio tests should render radio with children 1`] = `
   cursor: pointer;
 }
 
-.c3 {
+.c4 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -199,7 +175,7 @@ exports[`Radio tests should render radio with children 1`] = `
   height: auto;
 }
 
-.c4 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -221,14 +197,14 @@ exports[`Radio tests should render radio with children 1`] = `
   class="c0"
 >
   <div
-    class="c1"
+    class="c1 c2"
   >
     <div
-      class="c2"
+      class="c1 c3"
       margin="5px"
     >
       <input
-        class="c3 c4"
+        class="c4 c5"
         data-testid="radio-input"
         type="radio"
         value=""

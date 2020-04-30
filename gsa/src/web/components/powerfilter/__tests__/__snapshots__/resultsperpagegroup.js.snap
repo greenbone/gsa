@@ -1,6 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ResultsPerPageGroup tests should render 1`] = `
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -28,28 +46,13 @@ exports[`ResultsPerPageGroup tests should render 1`] = `
   margin-left: 0;
 }
 
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c3 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c3 {
+.c4 {
   border-radius: 2px;
   border: 1px solid #c8d3d9;
   background-color: #fff;
@@ -61,7 +64,7 @@ exports[`ResultsPerPageGroup tests should render 1`] = `
   vertical-align: middle;
 }
 
-.c4 {
+.c5 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -75,7 +78,7 @@ exports[`ResultsPerPageGroup tests should render 1`] = `
   margin-right: 22px;
 }
 
-.c5 {
+.c6 {
   background-color: #c8d3d9;
   color: #787878;
   border-left: 1px solid #393637;
@@ -101,21 +104,21 @@ exports[`ResultsPerPageGroup tests should render 1`] = `
   top: 0;
 }
 
-.c5:hover {
+.c6:hover {
   background-color: #66c430;
   color: #fff;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c5:active {
+.c6:active {
   background-color: #fff;
   color: #519032;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c6 {
+.c7 {
   background-color: #c8d3d9;
   color: #787878;
   border-left: 1px solid #393637;
@@ -141,14 +144,14 @@ exports[`ResultsPerPageGroup tests should render 1`] = `
   bottom: 0;
 }
 
-.c6:hover {
+.c7:hover {
   background-color: #66c430;
   color: #fff;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c6:active {
+.c7:active {
   background-color: #fff;
   color: #519032;
   -webkit-text-decoration: none;
@@ -165,15 +168,15 @@ exports[`ResultsPerPageGroup tests should render 1`] = `
     Results per page
   </label>
   <div
-    class="c2"
+    class="c2 c3"
     data-testid="formgroup-content"
     size="10"
   >
     <span
-      class="c3"
+      class="c4"
     >
       <input
-        class="c4"
+        class="c5"
         data-testid="spinner-input"
         maxlength="5"
         name="name"
@@ -181,13 +184,13 @@ exports[`ResultsPerPageGroup tests should render 1`] = `
         value="10"
       />
       <span
-        class="c5"
+        class="c6"
         data-testid="spinner-up"
       >
         ▲
       </span>
       <span
-        class="c6"
+        class="c7"
         data-testid="spinner-down"
       >
         ▼

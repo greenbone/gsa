@@ -1,7 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SortByGroup tests should render 1`] = `
-.c6 {
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -19,52 +37,22 @@ exports[`SortByGroup tests should render 1`] = `
   align-items: center;
 }
 
-.c12 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c14 {
   margin-left: -5px;
 }
 
-.c12 > * {
+.c14 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c12 > * {
+.c14 > * {
   margin-left: 5px;
 }
 
-.c11 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c13 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -98,28 +86,13 @@ exports[`SortByGroup tests should render 1`] = `
   margin-left: 0;
 }
 
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c3 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c7 {
+.c9 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -144,18 +117,18 @@ exports[`SortByGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c8 {
+.c10 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c8 * {
+.c10 * {
   height: inherit;
   width: inherit;
 }
 
-.c4 {
+.c6 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -179,7 +152,7 @@ exports[`SortByGroup tests should render 1`] = `
   font-weight: normal;
 }
 
-.c3 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -191,7 +164,7 @@ exports[`SortByGroup tests should render 1`] = `
   width: 180px;
 }
 
-.c9 {
+.c11 {
   color: #a94442;
   font-weight: bold;
   font-size: 19px;
@@ -200,7 +173,7 @@ exports[`SortByGroup tests should render 1`] = `
   display: none;
 }
 
-.c5 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -220,7 +193,14 @@ exports[`SortByGroup tests should render 1`] = `
   cursor: default;
 }
 
-.c10 {
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c12 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -236,7 +216,7 @@ exports[`SortByGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c13 {
+.c15 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -247,11 +227,11 @@ exports[`SortByGroup tests should render 1`] = `
   height: auto;
 }
 
-.c15 {
+.c17 {
   opacity: 1;
 }
 
-.c14 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -279,7 +259,7 @@ exports[`SortByGroup tests should render 1`] = `
     Sort by
   </label>
   <div
-    class="c2"
+    class="c2 c3"
     data-testid="formgroup-content"
     size="10"
   >
@@ -287,60 +267,64 @@ exports[`SortByGroup tests should render 1`] = `
       aria-expanded="false"
       aria-haspopup="listbox"
       aria-labelledby="downshift-0-label"
-      class="c3"
+      class="c4"
       role="combobox"
-      width="180px"
     >
       <div
-        aria-haspopup="true"
-        aria-label="open menu"
-        class="c4"
-        data-toggle="true"
-        role="button"
-        type="button"
+        class="c5"
+        width="180px"
       >
         <div
-          class="c5"
-          data-testid="select-selected-value"
-        />
-        <div
+          aria-haspopup="true"
+          aria-label="open menu"
           class="c6"
+          data-toggle="true"
+          role="button"
+          type="button"
         >
-          <span
-            class="c7 c8"
-            data-testid="select-open-button"
+          <div
+            class="c7"
+            data-testid="select-selected-value"
+          />
+          <div
+            class="c8"
           >
-            ▼
-          </span>
+            <span
+              class="c9 c10"
+              data-testid="select-open-button"
+            >
+              ▼
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-    <div
-      class="c9"
-      data-testid="error-marker"
-    >
-      ×
-    </div>
-    <label
-      class="c10"
-    >
       <div
         class="c11"
+        data-testid="error-marker"
+      >
+        ×
+      </div>
+    </div>
+    <label
+      class="c12"
+    >
+      <div
+        class="c2 c13"
       >
         <div
-          class="c12"
+          class="c2 c14"
           margin="5px"
         >
           <input
             checked=""
-            class="c13 c14"
+            class="c15 c16"
             data-testid="radio-input"
             name="sort_order"
             type="radio"
             value="sort"
           />
           <span
-            class="c15"
+            class="c17"
             data-testid="radio-title"
           >
             Ascending
@@ -349,24 +333,24 @@ exports[`SortByGroup tests should render 1`] = `
       </div>
     </label>
     <label
-      class="c10"
+      class="c12"
     >
       <div
-        class="c11"
+        class="c2 c13"
       >
         <div
-          class="c12"
+          class="c2 c14"
           margin="5px"
         >
           <input
-            class="c13 c14"
+            class="c15 c16"
             data-testid="radio-input"
             name="sort_order"
             type="radio"
             value="sort-reverse"
           />
           <span
-            class="c15"
+            class="c17"
             data-testid="radio-title"
           >
             Descending

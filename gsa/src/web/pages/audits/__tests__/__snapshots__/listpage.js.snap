@@ -1,36 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AuditPage ToolBarIcons test should render 1`] = `
-.c1 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-left: -5px;
-}
-
-.c1 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c1 > * {
-  margin-left: 5px;
-}
-
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -47,38 +17,56 @@ exports[`AuditPage ToolBarIcons test should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c2 {
+  margin-left: -5px;
+}
+
+.c2 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c3 {
+.c2 > * {
+  margin-left: 5px;
+}
+
+.c1 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c4 {
   cursor: pointer;
 }
 
-.c2 {
+.c3 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c2 * {
+.c3 * {
   height: inherit;
   width: inherit;
 }
 
 @media print {
-  .c3 {
+  .c4 {
     display: none;
   }
 }
 
 <div
-  class="c0"
+  class="c0 c1"
 >
   <div
-    class="c1"
+    class="c0 c2"
     margin="5px"
   >
     <a
@@ -87,7 +75,7 @@ exports[`AuditPage ToolBarIcons test should render 1`] = `
       target="_blank"
     >
       <span
-        class="c2"
+        class="c3"
         data-testid="svg-icon"
         title="Help: Audits"
       >
@@ -99,7 +87,7 @@ exports[`AuditPage ToolBarIcons test should render 1`] = `
       </span>
     </a>
     <span
-      class="c3 c2"
+      class="c4 c3"
       data-testid="svg-icon"
       title="New Audit"
     >
@@ -154,7 +142,25 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   align-items: flex-start;
 }
 
-.c6 {
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -172,7 +178,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   justify-content: flex-end;
 }
 
-.c7 {
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -190,197 +196,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   align-items: stetch;
 }
 
-.c8 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c11 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c19 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c29 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-}
-
-.c38 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c42 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-}
-
-.c43 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-}
-
-.c44 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-}
-
-.c55 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c46 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-left: -5px;
-}
-
-.c3 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c3 > * {
-  margin-left: 5px;
-}
-
 .c9 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -389,6 +204,24 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c10 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
   -webkit-box-pack: start;
   -webkit-justify-content: flex-start;
   -ms-flex-pack: start;
@@ -397,21 +230,9 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  margin-left: -5px;
 }
 
-.c9 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c9 > * {
-  margin-left: 5px;
-}
-
-.c54 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -419,10 +240,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   -ms-flex-pack: center;
@@ -431,99 +248,9 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  margin-left: -5px;
 }
 
-.c54 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c54 > * {
-  margin-left: 5px;
-}
-
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c53 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c5 {
-  cursor: pointer;
-}
-
-.c32 svg path {
-  fill: #aaaaaa;
-}
-
-.c4 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c4 * {
-  height: inherit;
-  width: inherit;
-}
-
-.c26 {
-  height: 50px;
-  width: 50px;
-  line-height: 50px;
-}
-
-.c26 * {
-  height: inherit;
-  width: inherit;
-}
-
-.c22 {
+.c23 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -539,51 +266,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   -webkit-box-align: flex-end;
   -ms-flex-align: flex-end;
   align-items: flex-end;
-  margin: 10px 0px;
-  padding-bottom: 1px;
-  border-bottom: 2px solid #c8d3d9;
-  position: relative;
-}
-
-.c23 {
-  margin: 0 0 1px 0;
-}
-
-.c24 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-}
-
-.c25 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: flex-end;
-  -webkit-box-align: flex-end;
-  -ms-flex-align: flex-end;
-  align-items: flex-end;
-  margin-right: 5px;
 }
 
 .c27 {
@@ -602,11 +284,232 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   -webkit-box-align: flex-end;
   -ms-flex-align: flex-end;
   align-items: flex-end;
+}
+
+.c32 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c45 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.c46 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c47 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.c56 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c57 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c49 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c4 {
+  margin-left: -5px;
+}
+
+.c4 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c4 > * {
+  margin-left: 5px;
+}
+
+.c3 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c6 {
+  cursor: pointer;
+}
+
+.c36 svg path {
+  fill: #aaaaaa;
+}
+
+.c5 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c5 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c29 {
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+}
+
+.c29 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c24 {
+  margin: 10px 0px;
+  padding-bottom: 1px;
+  border-bottom: 2px solid #c8d3d9;
+  position: relative;
+}
+
+.c25 {
+  margin: 0 0 1px 0;
+}
+
+.c26 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c28 {
+  margin-right: 5px;
+}
+
+.c30 {
   word-break: break-all;
   min-width: 100px;
 }
 
-.c20 {
+.c21 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -631,18 +534,18 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   cursor: pointer;
 }
 
-.c21 {
+.c22 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c21 * {
+.c22 * {
   height: inherit;
   width: inherit;
 }
 
-.c17 {
+.c18 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -666,7 +569,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   font-weight: normal;
 }
 
-.c16 {
+.c17 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -678,7 +581,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   width: 150px;
 }
 
-.c56 {
+.c58 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -699,7 +602,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   display: none;
 }
 
-.c18 {
+.c19 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -719,36 +622,27 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   cursor: default;
 }
 
-.c35 a {
+.c16 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c39 a {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #000;
 }
 
-.c35 a:hover {
+.c39 a:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #000;
 }
 
-.c37 {
+.c41 {
   cursor: pointer;
-}
-
-.c36 {
-  background-color: #fff;
-  color: #000;
-  border-top: 1px solid #c8d3d9;
-  font-weight: bold;
-  width: 52%;
-}
-
-.c39 {
-  background-color: #fff;
-  color: #000;
-  border-top: 1px solid #c8d3d9;
-  font-weight: bold;
-  width: 8%;
 }
 
 .c40 {
@@ -756,10 +650,26 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   color: #000;
   border-top: 1px solid #c8d3d9;
   font-weight: bold;
+  width: 52%;
+}
+
+.c42 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 8%;
+}
+
+.c43 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
   width: 24%;
 }
 
-.c41 {
+.c44 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -807,55 +717,25 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   margin-right: 5px;
 }
 
-.c10 {
+.c11 {
   margin-right: 5px;
 }
 
-.c57 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c59 {
   font-size: 10px;
   color: #787878;
   text-align: left;
 }
 
-.c33 {
+.c37 {
   margin: 0 3px;
 }
 
-.c31 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c35 {
   margin: 2px 3px;
 }
 
-.c34 {
+.c38 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -865,62 +745,43 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   opacity: 1.0;
 }
 
-.c34 th,
-.c34 td {
+.c38 th,
+.c38 td {
   padding: 4px 10px;
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c34 tfoot tr {
+.c38 tfoot tr {
   background: #fff;
 }
 
-.c34 tfoot tr td {
+.c38 tfoot tr td {
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c30 {
+.c33 {
   margin-top: 2px;
   margin-left: 2px;
 }
 
-.c28 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
+.c31 {
   margin-top: 20px;
 }
 
-.c45 {
+.c48 {
   cursor: pointer;
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #0000ff;
 }
 
-.c45:hover {
+.c48:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #0000ff;
 }
 
-.c48 {
+.c51 {
   height: 13px;
   box-sizing: content-box;
   display: inline-block;
@@ -930,7 +791,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   text-align: center;
 }
 
-.c50 {
+.c53 {
   z-index: 1;
   font-weight: bold;
   color: #fff;
@@ -941,61 +802,43 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   padding-top: 1px;
 }
 
-.c49 {
+.c52 {
   height: 13px;
   width: 100%;
   background: #4f91c7;
 }
 
-.c52 {
+.c55 {
   height: 13px;
   width: 50%;
   background: #c83814;
 }
 
-.c51 {
+.c54 {
   white-space: nowrap;
 }
 
-.c47:hover {
+.c50:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
 @media print {
-  .c5 {
+  .c6 {
     display: none;
   }
 }
 
 @media print {
-  .c35 {
+  .c39 {
     border-bottom: 1px solid black;
   }
 
-  .c35 a,
-  .c35 a:hover {
+  .c39 a,
+  .c39 a:hover {
     -webkit-text-decoration: none;
     text-decoration: none;
     color: #000;
-  }
-}
-
-@media print {
-  .c36 {
-    color: #000;
-    font-size: 1.2em;
-    background-color: none;
-    font-weight: bold;
-  }
-}
-
-@media print {
-  .c39 {
-    color: #000;
-    font-size: 1.2em;
-    background-color: none;
-    font-weight: bold;
   }
 }
 
@@ -1009,7 +852,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
 }
 
 @media print {
-  .c41 {
+  .c42 {
     color: #000;
     font-size: 1.2em;
     background-color: none;
@@ -1018,56 +861,74 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
 }
 
 @media print {
-  .c31 svg {
+  .c43 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c44 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c35 svg {
     display: none;
   }
 }
 
 @media print {
-  .c34 {
+  .c38 {
     border-collapse: collapse;
   }
 }
 
 @media screen {
-  .c34 > tbody:nth-of-type(even),
-  .c34 > tbody:only-of-type > tr:nth-of-type(even) {
+  .c38 > tbody:nth-of-type(even),
+  .c38 > tbody:only-of-type > tr:nth-of-type(even) {
     background: #eeeeee;
   }
 
-  .c34 > tbody:not(:only-of-type):hover,
-  .c34 > tbody:only-of-type > tr:hover {
+  .c38 > tbody:not(:only-of-type):hover,
+  .c38 > tbody:only-of-type > tr:hover {
     background: #c8d3d9;
   }
 }
 
 @media print {
-  .c45 {
+  .c48 {
     color: #000;
   }
 }
 
 @media print {
-  .c48 {
+  .c51 {
     background: none;
     border: 0;
   }
 }
 
 @media print {
-  .c50 {
+  .c53 {
     color: black;
   }
 }
 
 @media print {
-  .c49 {
+  .c52 {
     background: none;
   }
 }
 
 @media print {
-  .c52 {
+  .c55 {
     background: none;
   }
 }
@@ -1084,10 +945,10 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
         class="c1 toolbar"
       >
         <div
-          class="c2"
+          class="c2 c3"
         >
           <div
-            class="c3"
+            class="c2 c4"
             margin="5px"
           >
             <a
@@ -1096,7 +957,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
               target="_blank"
             >
               <span
-                class="c4"
+                class="c5"
                 data-testid="svg-icon"
                 title="Help: Audits"
               >
@@ -1108,7 +969,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
               </span>
             </a>
             <span
-              class="c5 c4"
+              class="c6 c5"
               data-testid="svg-icon"
               title="New Audit"
             >
@@ -1121,23 +982,23 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
           </div>
         </div>
         <div
-          class="c6"
+          class="c7"
         >
           <div
-            class="c7 powerfilter"
+            class="c8 powerfilter"
           >
             <div
-              class="c8"
+              class="c9"
             >
               <div
-                class="c2"
+                class="c2 c3"
               >
                 <div
-                  class="c9 c10"
+                  class="c10 c4 c11"
                   margin="5px"
                 >
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <label
                       class="c12"
@@ -1162,14 +1023,14 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c2"
+                    class="c2 c3"
                   >
                     <div
-                      class="c9"
+                      class="c10 c4"
                       margin="5px"
                     >
                       <span
-                        class="c5 c4"
+                        class="c6 c5"
                         data-testid="svg-icon"
                         title="Update Filter"
                       >
@@ -1180,7 +1041,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                         </svg>
                       </span>
                       <span
-                        class="c5 c4"
+                        class="c6 c5"
                         data-testid="svg-icon"
                         title="Remove Filter"
                       >
@@ -1191,7 +1052,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                         </svg>
                       </span>
                       <span
-                        class="c5 c4"
+                        class="c6 c5"
                         data-testid="svg-icon"
                         title="Reset to Default Filter"
                       >
@@ -1207,7 +1068,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                         target="_blank"
                       >
                         <span
-                          class="c4"
+                          class="c5"
                           data-testid="svg-icon"
                           title="Help: Powerfilter"
                         >
@@ -1228,41 +1089,45 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                 aria-labelledby="downshift-0-label"
                 class="c16"
                 role="combobox"
-                width="150px"
               >
                 <div
-                  aria-haspopup="true"
-                  aria-label="open menu"
                   class="c17"
-                  data-toggle="true"
-                  role="button"
-                  title="Loaded filter"
-                  type="button"
+                  width="150px"
                 >
                   <div
+                    aria-haspopup="true"
+                    aria-label="open menu"
                     class="c18"
-                    data-testid="select-selected-value"
+                    data-toggle="true"
+                    role="button"
                     title="Loaded filter"
+                    type="button"
                   >
-                    --
-                  </div>
-                  <div
-                    class="c19"
-                  >
-                    <span
-                      class="c20 c21"
-                      data-testid="select-open-button"
+                    <div
+                      class="c19"
+                      data-testid="select-selected-value"
+                      title="Loaded filter"
                     >
-                      ▼
-                    </span>
+                      --
+                    </div>
+                    <div
+                      class="c20"
+                    >
+                      <span
+                        class="c21 c22"
+                        data-testid="select-open-button"
+                      >
+                        ▼
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div
-                class="c15"
-                data-testid="error-marker"
-              >
-                ×
+                <div
+                  class="c15"
+                  data-testid="error-marker"
+                >
+                  ×
+                </div>
               </div>
             </div>
           </div>
@@ -1272,16 +1137,16 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
         class="entities-section"
       >
         <div
-          class="c22 section-header"
+          class="c23 c24 section-header"
         >
           <h2
-            class="c23 c24"
+            class="c25 c26"
           >
             <div
-              class="c25"
+              class="c27 c28"
             >
               <span
-                class="c26"
+                class="c29"
                 data-testid="svg-icon"
               >
                 <svg>
@@ -1290,26 +1155,26 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
               </span>
             </div>
             <div
-              class="c27"
+              class="c27 c30"
             >
               Audits 0 of 0
             </div>
           </h2>
           <div
-            class="c8"
+            class="c9"
           />
         </div>
         <div
           class="c0"
         >
           <div
-            class="c28 entities-table"
+            class="c0 c31 entities-table"
           >
             <div
-              class="c29"
+              class="c32"
             >
               <span
-                class="c5 c4 c30"
+                class="c6 c5 c33"
                 data-testid="svg-icon"
                 title="Unfold all details"
               >
@@ -1320,17 +1185,17 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                 </svg>
               </span>
               <div
-                class="c31"
+                class="c34 c35"
               >
                 <div
-                  class="c2"
+                  class="c2 c3"
                 >
                   <div
-                    class="c3"
+                    class="c2 c4"
                     margin="5px"
                   >
                     <span
-                      class="c32 c4"
+                      class="c36 c5"
                       data-testid="svg-icon"
                       title="First"
                     >
@@ -1341,7 +1206,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c32 c4"
+                      class="c36 c5"
                       data-testid="svg-icon"
                       title="Previous"
                     >
@@ -1354,19 +1219,19 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                   </div>
                 </div>
                 <span
-                  class="c33"
+                  class="c37"
                 >
                   0 - 0 of 0
                 </span>
                 <div
-                  class="c2"
+                  class="c2 c3"
                 >
                   <div
-                    class="c3"
+                    class="c2 c4"
                     margin="5px"
                   >
                     <span
-                      class="c32 c4"
+                      class="c36 c5"
                       data-testid="svg-icon"
                       title="Next"
                     >
@@ -1377,7 +1242,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c32 c4"
+                      class="c36 c5"
                       data-testid="svg-icon"
                       title="Last"
                     >
@@ -1392,65 +1257,65 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
               </div>
             </div>
             <table
-              class="c34"
+              class="c38"
             >
               <thead
-                class="c35"
+                class="c39"
               >
                 <tr>
                   <th
-                    class="c36"
+                    class="c40"
                   >
                     <a
-                      class="c37"
+                      class="c41"
                     >
                       <div
-                        class="c38"
+                        class="c2"
                       >
                         Name
                       </div>
                     </a>
                   </th>
                   <th
-                    class="c39"
+                    class="c42"
                   >
                     <a
-                      class="c37"
+                      class="c41"
                     >
                       <div
-                        class="c38"
+                        class="c2"
                       >
                         Status
                       </div>
                     </a>
                   </th>
                   <th
-                    class="c40"
+                    class="c43"
                   >
                     <a
-                      class="c37"
+                      class="c41"
                     >
                       <div
-                        class="c38"
+                        class="c2"
                       >
                         Report
                       </div>
                     </a>
                   </th>
                   <th
-                    class="c39"
+                    class="c42"
                   >
                     <div
-                      class="c38"
+                      class="c2"
                     >
                       Compliance Status
                     </div>
                   </th>
                   <th
-                    class="c41"
+                    class="c44"
                   >
                     <div
-                      class="c42"
+                      class="c45"
                     >
                       Actions
                     </div>
@@ -1463,22 +1328,22 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                 <tr>
                   <td>
                     <div
-                      class="c43"
+                      class="c46"
                     >
                       <div
-                        class="c44"
+                        class="c47"
                       >
                         <span
-                          class="c45"
+                          class="c48"
                           name="1234"
                         >
                           foo
                         </span>
                         <div
-                          class="c2"
+                          class="c2 c3"
                         >
                           <div
-                            class="c3"
+                            class="c2 c4"
                             margin="5px"
                           />
                         </div>
@@ -1494,27 +1359,27 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                   </td>
                   <td>
                     <div
-                      class="c43"
+                      class="c46"
                     >
                       <a
-                        class="c46 c47"
+                        class="c49 c50"
                         data-testid="details-link"
                         href="/report/1234"
                       >
                         <div
-                          class="c48"
+                          class="c51"
                           data-testid="progressbar-box"
                           title="Done"
                         >
                           <div
-                            class="c49"
+                            class="c52"
                             data-testid="progress"
                           />
                           <div
-                            class="c50"
+                            class="c53"
                           >
                             <span
-                              class="c51"
+                              class="c54"
                             >
                               Done
                             </span>
@@ -1525,11 +1390,11 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                   </td>
                   <td>
                     <div
-                      class="c43"
+                      class="c46"
                     >
                       <span>
                         <a
-                          class="c46"
+                          class="c49"
                           data-testid="details-link"
                           href="/report/1234"
                         >
@@ -1540,19 +1405,19 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                   </td>
                   <td>
                     <div
-                      class="c43"
+                      class="c46"
                     >
                       <div
-                        class="c48"
+                        class="c51"
                         data-testid="progressbar-box"
                         title="50%"
                       >
                         <div
-                          class="c52"
+                          class="c55"
                           data-testid="progress"
                         />
                         <div
-                          class="c50"
+                          class="c53"
                         >
                           50%
                         </div>
@@ -1564,14 +1429,14 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       class="c0"
                     >
                       <div
-                        class="c53"
+                        class="c56 c3"
                       >
                         <div
-                          class="c54"
+                          class="c57 c4"
                           margin="5px"
                         >
                           <span
-                            class="c5 c4"
+                            class="c6 c5"
                             data-testid="svg-icon"
                             title="Start"
                           >
@@ -1583,7 +1448,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                           </span>
                           <span
                             alt="Resume"
-                            class="c32 c4"
+                            class="c36 c5"
                             data-testid="svg-icon"
                             title="Audit is not stopped"
                           >
@@ -1594,7 +1459,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                             </svg>
                           </span>
                           <span
-                            class="c5 c4"
+                            class="c6 c5"
                             data-testid="svg-icon"
                             title="Move Audit to trashcan"
                           >
@@ -1605,7 +1470,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                             </svg>
                           </span>
                           <span
-                            class="c5 c4"
+                            class="c6 c5"
                             data-testid="svg-icon"
                             title="Edit Audit"
                           >
@@ -1616,7 +1481,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                             </svg>
                           </span>
                           <span
-                            class="c5 c4"
+                            class="c6 c5"
                             data-testid="svg-icon"
                             title="Clone Audit"
                           >
@@ -1627,7 +1492,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                             </svg>
                           </span>
                           <span
-                            class="c5 c4"
+                            class="c6 c5"
                             data-testid="svg-icon"
                             title="Export Audit"
                           >
@@ -1638,7 +1503,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                             </svg>
                           </span>
                           <span
-                            class="c32 c4"
+                            class="c36 c5"
                             data-testid="svg-icon"
                             title="Report download not available"
                           >
@@ -1660,65 +1525,69 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                     colspan="5"
                   >
                     <div
-                      class="c55"
+                      class="c34"
                     >
                       <div
-                        class="c2"
+                        class="c2 c3"
                       >
                         <div
-                          class="c3"
+                          class="c2 c4"
                           margin="5px"
                         >
                           <div
                             aria-expanded="false"
                             aria-haspopup="listbox"
                             aria-labelledby="downshift-1-label"
-                            class="c56"
+                            class="c16"
                             role="combobox"
-                            width="180px"
                           >
                             <div
-                              aria-haspopup="true"
-                              aria-label="open menu"
-                              class="c17"
-                              data-toggle="true"
-                              role="button"
-                              type="button"
+                              class="c58"
+                              width="180px"
                             >
                               <div
+                                aria-haspopup="true"
+                                aria-label="open menu"
                                 class="c18"
-                                data-testid="select-selected-value"
-                                title="Apply to page contents"
+                                data-toggle="true"
+                                role="button"
+                                type="button"
                               >
-                                Apply to page contents
-                              </div>
-                              <div
-                                class="c19"
-                              >
-                                <span
-                                  class="c20 c21"
-                                  data-testid="select-open-button"
+                                <div
+                                  class="c19"
+                                  data-testid="select-selected-value"
+                                  title="Apply to page contents"
                                 >
-                                  ▼
-                                </span>
+                                  Apply to page contents
+                                </div>
+                                <div
+                                  class="c20"
+                                >
+                                  <span
+                                    class="c21 c22"
+                                    data-testid="select-open-button"
+                                  >
+                                    ▼
+                                  </span>
+                                </div>
                               </div>
+                            </div>
+                            <div
+                              class="c15"
+                              data-testid="error-marker"
+                            >
+                              ×
                             </div>
                           </div>
                           <div
-                            class="c15"
-                            data-testid="error-marker"
-                          >
-                            ×
-                          </div>
-                          <div
-                            class="c2"
+                            class="c2 c3"
                           >
                             <div
-                              class="c3"
+                              class="c2 c4"
                               margin="5px"
                             >
                               <span
-                                class="c5 c4"
+                                class="c6 c5"
                                 data-testid="svg-icon"
                                 title="Move page contents to trashcan"
                               >
@@ -1729,7 +1598,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                                 </svg>
                               </span>
                               <span
-                                class="c5 c4"
+                                class="c6 c5"
                                 data-testid="svg-icon"
                                 title="Export page contents"
                               >
@@ -1749,25 +1618,25 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
               </tfoot>
             </table>
             <div
-              class="c44"
+              class="c47"
             >
               <div
-                class="c57"
+                class="c2 c59"
               >
                 (Applied filter: )
               </div>
               <div
-                class="c31"
+                class="c34 c35"
               >
                 <div
-                  class="c2"
+                  class="c2 c3"
                 >
                   <div
-                    class="c3"
+                    class="c2 c4"
                     margin="5px"
                   >
                     <span
-                      class="c32 c4"
+                      class="c36 c5"
                       data-testid="svg-icon"
                       title="First"
                     >
@@ -1778,7 +1647,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c32 c4"
+                      class="c36 c5"
                       data-testid="svg-icon"
                       title="Previous"
                     >
@@ -1791,19 +1660,19 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                   </div>
                 </div>
                 <span
-                  class="c33"
+                  class="c37"
                 >
                   0 - 0 of 0
                 </span>
                 <div
-                  class="c2"
+                  class="c2 c3"
                 >
                   <div
-                    class="c3"
+                    class="c2 c4"
                     margin="5px"
                   >
                     <span
-                      class="c32 c4"
+                      class="c36 c5"
                       data-testid="svg-icon"
                       title="Next"
                     >
@@ -1814,7 +1683,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c32 c4"
+                      class="c36 c5"
                       data-testid="svg-icon"
                       title="Last"
                     >

@@ -1,87 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DialogTwoButtonFooter tests should render 1`] = `
-.c1 {
-  display: inline-block;
-  padding: 0 15px;
-  color: #393637;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 11px;
-  font-weight: bold;
-  line-height: 30px;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  white-space: nowrap;
-  background-color: #fff;
-  border-radius: 2px;
-  border: 1px solid #aaaaaa;
-  cursor: pointer;
-  overflow: visible;
-  z-index: 1;
-}
-
-.c1:focus,
-.c1:hover {
-  border: 1px solid #393637;
-}
-
-.c1:hover {
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  background: #66c430;
-  font-weight: bold;
-  color: #fff;
-}
-
-.c1[disabled] {
-  cursor: not-allowed;
-  opacity: 0.65;
-  box-shadow: none;
-}
-
-.c1 img {
-  height: 32px;
-  width: 32px;
-  margin-top: 5px 10px 5px -10px;
-  vertical-align: middle;
-}
-
-.c1:link {
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  color: #393637;
-}
-
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c3 {
-  border: 1px solid #787878;
-  color: #519032;
-  background: #87d050;
-}
-
-.c3:hover {
-  color: #fff;
-  background: #519032;
-}
-
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -101,6 +20,90 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c2 {
+  display: inline-block;
+  padding: 0 15px;
+  color: #393637;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 30px;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: #fff;
+  border-radius: 2px;
+  border: 1px solid #aaaaaa;
+  cursor: pointer;
+  overflow: visible;
+  z-index: 1;
+}
+
+.c2:focus,
+.c2:hover {
+  border: 1px solid #393637;
+}
+
+.c2:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background: #66c430;
+  font-weight: bold;
+  color: #fff;
+}
+
+.c2[disabled] {
+  cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+.c2 img {
+  height: 32px;
+  width: 32px;
+  margin-top: 5px 10px 5px -10px;
+  vertical-align: middle;
+}
+
+.c2:link {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #393637;
+}
+
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c4 {
+  border: 1px solid #787878;
+  color: #519032;
+  background: #87d050;
+}
+
+.c4:hover {
+  color: #fff;
+  background: #519032;
+}
+
+.c1 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c8d3d9;
@@ -113,17 +116,17 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
 }
 
 <div
-  class="c0"
+  class="c0 c1"
 >
   <button
-    class="c1 c2 c3"
+    class="c2 c3 c4"
     data-testid="dialog-close-button"
     title="Cancel"
   >
     Cancel
   </button>
   <button
-    class="c1 c2 c3"
+    class="c2 c3 c4"
     data-testid="dialog-save-button"
     title="Foo"
   >
@@ -133,98 +136,6 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
 `;
 
 exports[`DialogTwoButtonFooter tests should render loading and disable cancel button 1`] = `
-.c1 {
-  display: inline-block;
-  padding: 0 15px;
-  color: #393637;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 11px;
-  font-weight: bold;
-  line-height: 30px;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  white-space: nowrap;
-  background-color: #fff;
-  border-radius: 2px;
-  border: 1px solid #aaaaaa;
-  cursor: pointer;
-  overflow: visible;
-  z-index: 1;
-}
-
-.c1:focus,
-.c1:hover {
-  border: 1px solid #393637;
-}
-
-.c1:hover {
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  background: #66c430;
-  font-weight: bold;
-  color: #fff;
-}
-
-.c1[disabled] {
-  cursor: not-allowed;
-  opacity: 0.65;
-  box-shadow: none;
-}
-
-.c1 img {
-  height: 32px;
-  width: 32px;
-  margin-top: 5px 10px 5px -10px;
-  vertical-align: middle;
-}
-
-.c1:link {
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  color: #393637;
-}
-
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c3 {
-  border: 1px solid #787878;
-  color: #519032;
-  background: #87d050;
-}
-
-.c3:hover {
-  color: #fff;
-  background: #519032;
-}
-
-.c4 {
-  border: 1px solid #787878;
-  color: rgba(0,0,0,0.0);
-  background: #87d050 url(/img/loading.gif) center center no-repeat;
-}
-
-.c4:hover {
-  color: rgba(0,0,0,0.0);
-  background: #66c430 url(/img/loading.gif) center center no-repeat;
-}
-
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -244,6 +155,101 @@ exports[`DialogTwoButtonFooter tests should render loading and disable cancel bu
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c2 {
+  display: inline-block;
+  padding: 0 15px;
+  color: #393637;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 30px;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: #fff;
+  border-radius: 2px;
+  border: 1px solid #aaaaaa;
+  cursor: pointer;
+  overflow: visible;
+  z-index: 1;
+}
+
+.c2:focus,
+.c2:hover {
+  border: 1px solid #393637;
+}
+
+.c2:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background: #66c430;
+  font-weight: bold;
+  color: #fff;
+}
+
+.c2[disabled] {
+  cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+.c2 img {
+  height: 32px;
+  width: 32px;
+  margin-top: 5px 10px 5px -10px;
+  vertical-align: middle;
+}
+
+.c2:link {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: #393637;
+}
+
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c4 {
+  border: 1px solid #787878;
+  color: #519032;
+  background: #87d050;
+}
+
+.c4:hover {
+  color: #fff;
+  background: #519032;
+}
+
+.c5 {
+  border: 1px solid #787878;
+  color: rgba(0,0,0,0.0);
+  background: #87d050 url(/img/loading.gif) center center no-repeat;
+}
+
+.c5:hover {
+  color: rgba(0,0,0,0.0);
+  background: #66c430 url(/img/loading.gif) center center no-repeat;
+}
+
+.c1 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c8d3d9;
@@ -256,10 +262,10 @@ exports[`DialogTwoButtonFooter tests should render loading and disable cancel bu
 }
 
 <div
-  class="c0"
+  class="c0 c1"
 >
   <button
-    class="c1 c2 c3"
+    class="c2 c3 c4"
     data-testid="dialog-close-button"
     disabled=""
     title="Cancel"
@@ -267,7 +273,7 @@ exports[`DialogTwoButtonFooter tests should render loading and disable cancel bu
     Cancel
   </button>
   <button
-    class="c1 c2 c4"
+    class="c2 c3 c5"
     data-testid="dialog-save-button"
     title="Foo"
   >

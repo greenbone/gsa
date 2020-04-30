@@ -1,22 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FormGroup tests should render 1`] = `
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  padding-bottom: 10px;
-}
-
 .c1 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -35,17 +19,51 @@ exports[`FormGroup tests should render 1`] = `
   align-items: center;
 }
 
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  padding-bottom: 10px;
+}
+
 <div
   class="c0"
 >
   <div
-    class="c1"
+    class="c1 "
     data-testid="formgroup-content"
   />
 </div>
 `;
 
 exports[`FormGroup tests should render with title 1`] = `
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -73,22 +91,7 @@ exports[`FormGroup tests should render with title 1`] = `
   margin-left: 0;
 }
 
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c3 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
@@ -104,7 +107,7 @@ exports[`FormGroup tests should render with title 1`] = `
     Foo
   </label>
   <div
-    class="c2"
+    class="c2 c3"
     data-testid="formgroup-content"
     size="10"
   />

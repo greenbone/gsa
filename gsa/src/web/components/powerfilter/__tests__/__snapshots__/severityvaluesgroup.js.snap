@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Select component tests should render 1`] = `
-.c3 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -19,7 +19,7 @@ exports[`Select component tests should render 1`] = `
   align-items: center;
 }
 
-.c4 {
+.c5 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -44,18 +44,18 @@ exports[`Select component tests should render 1`] = `
   cursor: pointer;
 }
 
-.c5 {
+.c6 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c5 * {
+.c6 * {
   height: inherit;
   width: inherit;
 }
 
-.c1 {
+.c2 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -80,7 +80,7 @@ exports[`Select component tests should render 1`] = `
   background-color: #eeeeee;
 }
 
-.c0 {
+.c1 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -92,7 +92,16 @@ exports[`Select component tests should render 1`] = `
   width: 180px;
 }
 
-.c2 {
+.c7 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
+.c3 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -112,44 +121,61 @@ exports[`Select component tests should render 1`] = `
   cursor: default;
 }
 
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 <div
   aria-expanded="false"
   aria-haspopup="listbox"
   aria-labelledby="downshift-0-label"
   class="c0"
   role="combobox"
-  width="180px"
 >
   <div
-    aria-haspopup="true"
-    aria-label="open menu"
     class="c1"
-    data-toggle="true"
-    disabled=""
-    role="button"
-    type="button"
+    width="180px"
   >
     <div
+      aria-haspopup="true"
+      aria-label="open menu"
       class="c2"
-      data-testid="select-selected-value"
+      data-toggle="true"
       disabled=""
-    />
-    <div
-      class="c3"
+      role="button"
+      type="button"
     >
-      <span
-        class="c4 c5"
-        data-testid="select-open-button"
+      <div
+        class="c3"
+        data-testid="select-selected-value"
+        disabled=""
+      />
+      <div
+        class="c4"
       >
-        ▼
-      </span>
+        <span
+          class="c5 c6"
+          data-testid="select-open-button"
+        >
+          ▼
+        </span>
+      </div>
     </div>
+  </div>
+  <div
+    class="c7"
+    data-testid="error-marker"
+  >
+    ×
   </div>
 </div>
 `;
 
 exports[`Severity Values Group Tests should render 1`] = `
-.c8 {
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -167,7 +193,7 @@ exports[`Severity Values Group Tests should render 1`] = `
   align-items: center;
 }
 
-.c4 {
+.c2 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -183,36 +209,24 @@ exports[`Severity Values Group Tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c5 {
   margin-left: -5px;
 }
 
-.c4 > * {
+.c5 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c4 > * {
+.c5 > * {
   margin-left: 5px;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c4 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -246,28 +260,13 @@ exports[`Severity Values Group Tests should render 1`] = `
   margin-left: 0;
 }
 
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c3 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c9 {
+.c11 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -292,18 +291,18 @@ exports[`Severity Values Group Tests should render 1`] = `
   cursor: pointer;
 }
 
-.c10 {
+.c12 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c10 * {
+.c12 * {
   height: inherit;
   width: inherit;
 }
 
-.c6 {
+.c8 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -327,7 +326,7 @@ exports[`Severity Values Group Tests should render 1`] = `
   font-weight: normal;
 }
 
-.c5 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -339,7 +338,7 @@ exports[`Severity Values Group Tests should render 1`] = `
   width: 180px;
 }
 
-.c11 {
+.c13 {
   color: #a94442;
   font-weight: bold;
   font-size: 19px;
@@ -348,7 +347,7 @@ exports[`Severity Values Group Tests should render 1`] = `
   display: none;
 }
 
-.c7 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -368,6 +367,13 @@ exports[`Severity Values Group Tests should render 1`] = `
   cursor: default;
 }
 
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 <div
   class="c0"
 >
@@ -378,57 +384,61 @@ exports[`Severity Values Group Tests should render 1`] = `
     foo
   </label>
   <div
-    class="c2"
+    class="c2 c3"
     data-testid="formgroup-content"
     size="10"
   >
     <div
-      class="c3"
+      class="c2 c4"
     >
       <div
-        class="c4"
+        class="c2 c5"
         margin="5px"
       >
         <div
           aria-expanded="false"
           aria-haspopup="listbox"
-          aria-labelledby="downshift-7-label"
-          class="c5"
+          aria-labelledby="downshift-8-label"
+          class="c6"
           role="combobox"
-          width="180px"
         >
           <div
-            aria-haspopup="true"
-            aria-label="open menu"
-            class="c6"
-            data-toggle="true"
-            role="button"
-            type="button"
+            class="c7"
+            width="180px"
           >
             <div
-              class="c7"
-              data-testid="select-selected-value"
-              title="is greater than"
-            >
-              is greater than
-            </div>
-            <div
+              aria-haspopup="true"
+              aria-label="open menu"
               class="c8"
+              data-toggle="true"
+              role="button"
+              type="button"
             >
-              <span
-                class="c9 c10"
-                data-testid="select-open-button"
+              <div
+                class="c9"
+                data-testid="select-selected-value"
+                title="is greater than"
               >
-                ▼
-              </span>
+                is greater than
+              </div>
+              <div
+                class="c10"
+              >
+                <span
+                  class="c11 c12"
+                  data-testid="select-open-button"
+                >
+                  ▼
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-        <div
-          class="c11"
-          data-testid="error-marker"
-        >
-          ×
+          <div
+            class="c13"
+            data-testid="error-marker"
+          >
+            ×
+          </div>
         </div>
         <input
           max="10"

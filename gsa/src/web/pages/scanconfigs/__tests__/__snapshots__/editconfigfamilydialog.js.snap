@@ -1,7 +1,47 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
-.c8 {
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -17,181 +57,6 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   -webkit-box-align: stretch;
   -ms-flex-align: stretch;
   align-items: stretch;
-}
-
-.c14 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c19 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c20 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-}
-
-.c24 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-}
-
-.c30 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c27 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-left: -5px;
-}
-
-.c27 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c27 > * {
-  margin-left: 5px;
-}
-
-.c26 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c31 {
-  cursor: pointer;
-}
-
-.c32 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c32 * {
-  height: inherit;
-  width: inherit;
-}
-
-.c10 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: flex-end;
-  -webkit-box-align: flex-end;
-  -ms-flex-align: flex-end;
-  align-items: flex-end;
-  margin: 10px 0px;
-  padding-bottom: 1px;
-  border-bottom: 2px solid #c8d3d9;
-  position: relative;
-}
-
-.c11 {
-  margin: 0 0 1px 0;
 }
 
 .c12 {
@@ -202,17 +67,17 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
 }
 
-.c13 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -228,6 +93,160 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   -webkit-box-align: flex-end;
   -ms-flex-align: flex-end;
   align-items: flex-end;
+}
+
+.c22 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c23 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.c27 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.c33 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c37 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c30 {
+  margin-left: -5px;
+}
+
+.c30 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c30 > * {
+  margin-left: 5px;
+}
+
+.c29 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c34 {
+  cursor: pointer;
+}
+
+.c35 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c35 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c13 {
+  margin: 10px 0px;
+  padding-bottom: 1px;
+  border-bottom: 2px solid #c8d3d9;
+  position: relative;
+}
+
+.c14 {
+  margin: 0 0 1px 0;
+}
+
+.c15 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c17 {
   word-break: break-all;
   min-width: 100px;
 }
@@ -265,7 +284,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   height: 100%;
 }
 
-.c39 {
+.c43 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -274,7 +293,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c38 {
+.c42 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -299,7 +318,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   border: 1px solid #787878;
 }
 
-.c4 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -325,23 +344,23 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   flex-shrink: 0;
 }
 
-.c4:hover {
+.c5:hover {
   color: #fff;
   background: #519032;
 }
 
-.c5 {
+.c6 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c5 * {
+.c6 * {
   height: inherit;
   width: inherit;
 }
 
-.c35 {
+.c39 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -361,12 +380,12 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c35:focus,
-.c35:hover {
+.c39:focus,
+.c39:hover {
   border: 1px solid #393637;
 }
 
-.c35:hover {
+.c39:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -374,26 +393,26 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c35[disabled] {
+.c39[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c35 img {
+.c39 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c35:link {
+.c39:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c36 {
+.c40 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -411,36 +430,18 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c37 {
+.c41 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c37:hover {
+.c41:hover {
   color: #fff;
   background: #519032;
 }
 
-.c34 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c38 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c8d3d9;
@@ -452,22 +453,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   justify-content: space-between;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c4 {
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
@@ -491,7 +477,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   cursor: grab;
 }
 
-.c7 {
+.c9 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
@@ -499,31 +485,12 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   max-height: 400px;
 }
 
-.c6 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
+.c8 {
   overflow: hidden;
   height: 100%;
 }
 
-.c9 {
+.c11 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -531,7 +498,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   table-layout: auto;
 }
 
-.c15 {
+.c18 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -540,44 +507,44 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   width: 100%;
 }
 
-.c15 th,
-.c15 td {
+.c18 th,
+.c18 td {
   padding: 4px 10px;
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c15 tfoot tr {
+.c18 tfoot tr {
   background: #fff;
 }
 
-.c15 tfoot tr td {
+.c18 tfoot tr td {
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c16 a {
+.c19 a {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #000;
 }
 
-.c16 a:hover {
+.c19 a:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #000;
 }
 
-.c18 {
+.c21 {
   cursor: pointer;
 }
 
-.c17 {
+.c20 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
   font-weight: bold;
 }
 
-.c25 {
+.c28 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -593,7 +560,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   cursor: pointer;
 }
 
-.c28 {
+.c31 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -604,7 +571,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   height: auto;
 }
 
-.c29 {
+.c32 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -622,7 +589,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c21 {
+.c24 {
   height: 13px;
   box-sizing: content-box;
   display: inline-block;
@@ -632,7 +599,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   text-align: center;
 }
 
-.c23 {
+.c26 {
   z-index: 1;
   font-weight: bold;
   color: #fff;
@@ -643,55 +610,55 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   padding-top: 1px;
 }
 
-.c22 {
+.c25 {
   height: 13px;
   width: 10%;
   background: #4f91c7;
 }
 
-.c33 {
+.c36 {
   height: 13px;
   width: 100%;
   background: #c83814;
 }
 
 @media print {
-  .c31 {
+  .c34 {
     display: none;
   }
 }
 
 @media print {
-  .c9 {
+  .c11 {
     border-collapse: collapse;
   }
 }
 
 @media print {
-  .c15 {
+  .c18 {
     border-collapse: collapse;
   }
 }
 
 @media screen {
-  .c15 > tbody:nth-of-type(even),
-  .c15 > tbody:only-of-type > tr:nth-of-type(even) {
+  .c18 > tbody:nth-of-type(even),
+  .c18 > tbody:only-of-type > tr:nth-of-type(even) {
     background: #eeeeee;
   }
 
-  .c15 > tbody:not(:only-of-type):hover,
-  .c15 > tbody:only-of-type > tr:hover {
+  .c18 > tbody:not(:only-of-type):hover,
+  .c18 > tbody:only-of-type > tr:hover {
     background: #c8d3d9;
   }
 }
 
 @media print {
-  .c16 {
+  .c19 {
     border-bottom: 1px solid black;
   }
 
-  .c16 a,
-  .c16 a:hover {
+  .c19 a,
+  .c19 a:hover {
     -webkit-text-decoration: none;
     text-decoration: none;
     color: #000;
@@ -699,7 +666,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
 }
 
 @media print {
-  .c17 {
+  .c20 {
     color: #000;
     font-size: 1.2em;
     background-color: none;
@@ -708,26 +675,26 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
 }
 
 @media print {
-  .c21 {
+  .c24 {
     background: none;
     border: 0;
   }
 }
 
 @media print {
-  .c23 {
+  .c26 {
     color: black;
   }
 }
 
 @media print {
-  .c22 {
+  .c25 {
     background: none;
   }
 }
 
 @media print {
-  .c33 {
+  .c36 {
     background: none;
   }
 }
@@ -751,14 +718,14 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
             class="c2"
           >
             <div
-              class="c3"
+              class="c3 c4"
               data-testid="dialog-title-bar"
             >
               <span>
                 Foo title
               </span>
               <div
-                class="c4 c5"
+                class="c5 c6"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -766,17 +733,17 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c6"
+              class="c7 c8"
             >
               <div
-                class="c7"
+                class="c9"
                 data-testid="save-dialog-content"
               >
                 <div
-                  class="c8"
+                  class="c10"
                 >
                   <table
-                    class="c9"
+                    class="c11"
                   >
                     <tbody
                       class=""
@@ -784,14 +751,14 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                       <tr>
                         <td>
                           <div
-                            class="c8"
+                            class="c10"
                           >
                             Config
                           </div>
                         </td>
                         <td>
                           <div
-                            class="c8"
+                            class="c10"
                           >
                             foo
                           </div>
@@ -800,14 +767,14 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                       <tr>
                         <td>
                           <div
-                            class="c8"
+                            class="c10"
                           >
                             Family
                           </div>
                         </td>
                         <td>
                           <div
-                            class="c8"
+                            class="c10"
                           >
                             family
                           </div>
@@ -817,36 +784,36 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                   </table>
                   <section>
                     <div
-                      class="c10 section-header"
+                      class="c12 c13 section-header"
                     >
                       <h2
-                        class="c11 c12"
+                        class="c14 c15"
                       >
                         <div
-                          class="c13"
+                          class="c16 c17"
                         >
                           Edit Network Vulnerability Tests
                         </div>
                       </h2>
                       <div
-                        class="c14"
+                        class="c3"
                       />
                     </div>
                     <table
-                      class="c15"
+                      class="c18"
                     >
                       <thead
-                        class="c16"
+                        class="c19"
                       >
                         <tr>
                           <th
-                            class="c17"
+                            class="c20"
                           >
                             <a
-                              class="c18"
+                              class="c21"
                             >
                               <div
-                                class="c19"
+                                class="c22"
                               >
                                 Name
                                 <span
@@ -858,71 +825,71 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                             </a>
                           </th>
                           <th
-                            class="c17"
+                            class="c20"
                           >
                             <a
-                              class="c18"
+                              class="c21"
                             >
                               <div
-                                class="c19"
+                                class="c22"
                               >
                                 OID
                               </div>
                             </a>
                           </th>
                           <th
-                            class="c17"
+                            class="c20"
                           >
                             <a
-                              class="c18"
+                              class="c21"
                             >
                               <div
-                                class="c19"
+                                class="c22"
                               >
                                 Severity
                               </div>
                             </a>
                           </th>
                           <th
-                            class="c17"
+                            class="c20"
                           >
                             <a
-                              class="c18"
+                              class="c21"
                             >
                               <div
-                                class="c19"
+                                class="c22"
                               >
                                 Timeout
                               </div>
                             </a>
                           </th>
                           <th
-                            class="c17"
+                            class="c20"
                           >
                             <div
-                              class="c19"
+                              class="c22"
                             >
                               Prefs
                             </div>
                           </th>
                           <th
-                            class="c17"
+                            class="c20"
                           >
                             <a
-                              class="c18"
+                              class="c21"
                             >
                               <div
-                                class="c20"
+                                class="c23"
                               >
                                 Selected
                               </div>
                             </a>
                           </th>
                           <th
-                            class="c17"
+                            class="c20"
                           >
                             <div
-                              class="c20"
+                              class="c23"
                             >
                               Actions
                             </div>
@@ -935,33 +902,33 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                         <tr>
                           <td>
                             <div
-                              class="c8"
+                              class="c10"
                             >
                               nvt
                             </div>
                           </td>
                           <td>
                             <div
-                              class="c8"
+                              class="c10"
                             >
                               1234
                             </div>
                           </td>
                           <td>
                             <div
-                              class="c8"
+                              class="c10"
                             >
                               <div
-                                class="c21"
+                                class="c24"
                                 data-testid="progressbar-box"
                                 title="Low"
                               >
                                 <div
-                                  class="c22"
+                                  class="c25"
                                   data-testid="progress"
                                 />
                                 <div
-                                  class="c23"
+                                  class="c26"
                                 >
                                   1.0 (Low)
                                 </div>
@@ -970,7 +937,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                           </td>
                           <td>
                             <div
-                              class="c8"
+                              class="c10"
                             >
                               default
                               
@@ -978,28 +945,28 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                           </td>
                           <td>
                             <div
-                              class="c8"
+                              class="c10"
                             >
                               3
                             </div>
                           </td>
                           <td>
                             <div
-                              class="c24"
+                              class="c27"
                             >
                               <div>
                                 <label
-                                  class="c25"
+                                  class="c28"
                                 >
                                   <div
-                                    class="c26"
+                                    class="c22 c29"
                                   >
                                     <div
-                                      class="c27"
+                                      class="c22 c30"
                                       margin="5px"
                                     >
                                       <input
-                                        class="c28 c29"
+                                        class="c31 c32"
                                         name="1234"
                                         type="checkbox"
                                       />
@@ -1011,10 +978,10 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                           </td>
                           <td>
                             <div
-                              class="c30"
+                              class="c33"
                             >
                               <span
-                                class="c31 c32"
+                                class="c34 c35"
                                 data-testid="svg-icon"
                                 title="Select and edit NVT details"
                               >
@@ -1030,33 +997,33 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                         <tr>
                           <td>
                             <div
-                              class="c8"
+                              class="c10"
                             >
                               nvt2
                             </div>
                           </td>
                           <td>
                             <div
-                              class="c8"
+                              class="c10"
                             >
                               5678
                             </div>
                           </td>
                           <td>
                             <div
-                              class="c8"
+                              class="c10"
                             >
                               <div
-                                class="c21"
+                                class="c24"
                                 data-testid="progressbar-box"
                                 title="High"
                               >
                                 <div
-                                  class="c33"
+                                  class="c36"
                                   data-testid="progress"
                                 />
                                 <div
-                                  class="c23"
+                                  class="c26"
                                 >
                                   10.0 (High)
                                 </div>
@@ -1065,7 +1032,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                           </td>
                           <td>
                             <div
-                              class="c8"
+                              class="c10"
                             >
                               1
                               
@@ -1073,28 +1040,28 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                           </td>
                           <td>
                             <div
-                              class="c8"
+                              class="c10"
                             >
                               4
                             </div>
                           </td>
                           <td>
                             <div
-                              class="c24"
+                              class="c27"
                             >
                               <div>
                                 <label
-                                  class="c25"
+                                  class="c28"
                                 >
                                   <div
-                                    class="c26"
+                                    class="c22 c29"
                                   >
                                     <div
-                                      class="c27"
+                                      class="c22 c30"
                                       margin="5px"
                                     >
                                       <input
-                                        class="c28 c29"
+                                        class="c31 c32"
                                         name="5678"
                                         type="checkbox"
                                       />
@@ -1106,10 +1073,10 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                           </td>
                           <td>
                             <div
-                              class="c30"
+                              class="c33"
                             >
                               <span
-                                class="c31 c32"
+                                class="c34 c35"
                                 data-testid="svg-icon"
                                 title="Select and edit NVT details"
                               >
@@ -1129,17 +1096,17 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c34"
+              class="c37 c38"
             >
               <button
-                class="c35 c36 c37"
+                class="c39 c40 c41"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c35 c36 c37"
+                class="c39 c40 c41"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -1148,10 +1115,10 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c38"
+            class="c42"
           >
             <div
-              class="c39"
+              class="c43"
             />
           </div>
         </div>
@@ -1167,19 +1134,68 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   <div
     id="portals"
   >
-    .c9 {
-  width: 80px;
-  height: 80px;
-  margin: 40px auto;
-  background-image: url(greenbone.svg);
-  background-size: 90%;
-  background-position: center;
-  background-repeat: no-repeat;
-  -webkit-animation: fSFzYT 2s infinite ease-in-out;
-  animation: fSFzYT 2s infinite ease-in-out;
+    .c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
-.c8 {
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c13 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1195,6 +1211,21 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c12 {
+  width: 80px;
+  height: 80px;
+  margin: 40px auto;
+  background-image: url(greenbone.svg);
+  background-size: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-animation: fSFzYT 2s infinite ease-in-out;
+  animation: fSFzYT 2s infinite ease-in-out;
+}
+
+.c11 {
   width: 100%;
 }
 
@@ -1231,7 +1262,7 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   height: 100%;
 }
 
-.c15 {
+.c19 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -1240,7 +1271,7 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   border-top: 20px solid #fff;
 }
 
-.c14 {
+.c18 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -1265,7 +1296,7 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   border: 1px solid #787878;
 }
 
-.c4 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1291,23 +1322,23 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   flex-shrink: 0;
 }
 
-.c4:hover {
+.c5:hover {
   color: #fff;
   background: #519032;
 }
 
-.c5 {
+.c6 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c5 * {
+.c6 * {
   height: inherit;
   width: inherit;
 }
 
-.c11 {
+.c15 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -1327,12 +1358,12 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   z-index: 1;
 }
 
-.c11:focus,
-.c11:hover {
+.c15:focus,
+.c15:hover {
   border: 1px solid #393637;
 }
 
-.c11:hover {
+.c15:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -1340,26 +1371,26 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   color: #fff;
 }
 
-.c11[disabled] {
+.c15[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c11 img {
+.c15 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c11:link {
+.c15:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c12 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1377,36 +1408,18 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   align-items: center;
 }
 
-.c13 {
+.c17 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c13:hover {
+.c17:hover {
   color: #fff;
   background: #519032;
 }
 
-.c10 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c14 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c8d3d9;
@@ -1418,22 +1431,7 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   justify-content: space-between;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c4 {
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
@@ -1457,7 +1455,7 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   cursor: grab;
 }
 
-.c7 {
+.c9 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
@@ -1465,26 +1463,7 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   max-height: 400px;
 }
 
-.c6 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
+.c8 {
   overflow: hidden;
   height: 100%;
 }
@@ -1504,14 +1483,14 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
             class="c2"
           >
             <div
-              class="c3"
+              class="c3 c4"
               data-testid="dialog-title-bar"
             >
               <span>
                 Foo title
               </span>
               <div
-                class="c4 c5"
+                class="c5 c6"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -1519,34 +1498,34 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
               </div>
             </div>
             <div
-              class="c6"
+              class="c7 c8"
             >
               <div
-                class="c7"
+                class="c9"
                 data-testid="save-dialog-content"
               >
                 <div
-                  class="c8"
+                  class="c10 c11"
                   data-testid="loading"
                 >
                   <div
-                    class="c9"
+                    class="c12"
                   />
                 </div>
               </div>
             </div>
             <div
-              class="c10"
+              class="c13 c14"
             >
               <button
-                class="c11 c12 c13"
+                class="c15 c16 c17"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c11 c12 c13"
+                class="c15 c16 c17"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -1555,10 +1534,10 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
             </div>
           </div>
           <div
-            class="c14"
+            class="c18"
           >
             <div
-              class="c15"
+              class="c19"
             />
           </div>
         </div>

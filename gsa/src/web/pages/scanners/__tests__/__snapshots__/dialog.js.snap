@@ -1,7 +1,47 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ScannerDialog component tests should render 1`] = `
-.c8 {
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -19,7 +59,29 @@ exports[`ScannerDialog component tests should render 1`] = `
   align-items: stretch;
 }
 
-.c10 {
+.c11 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
+}
+
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -37,7 +99,43 @@ exports[`ScannerDialog component tests should render 1`] = `
   align-items: stretch;
 }
 
+.c18 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
+}
+
 .c23 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c28 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -63,51 +161,42 @@ exports[`ScannerDialog component tests should render 1`] = `
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c37 {
   margin-left: -5px;
 }
 
-.c31 > * {
+.c37 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c31 > * {
+.c37 > * {
   margin-left: 5px;
 }
 
-.c30 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c36 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c11 {
+.c14 {
   font-size: 16px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -134,11 +223,11 @@ exports[`ScannerDialog component tests should render 1`] = `
   border-top: 2px solid #87d050;
 }
 
-.c11:first-child {
+.c14:first-child {
   border-left: 1px solid #c8d3d9;
 }
 
-.c12 {
+.c15 {
   font-size: 16px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -162,11 +251,11 @@ exports[`ScannerDialog component tests should render 1`] = `
   border-top: 2px solid #fff;
 }
 
-.c12:hover {
+.c15:hover {
   border-top: 2px solid #c8d3d9;
 }
 
-.c12:first-child {
+.c15:first-child {
   border-left: 1px solid #fff;
 }
 
@@ -203,7 +292,7 @@ exports[`ScannerDialog component tests should render 1`] = `
   height: 100%;
 }
 
-.c34 {
+.c40 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -212,7 +301,7 @@ exports[`ScannerDialog component tests should render 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c33 {
+.c39 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -237,7 +326,7 @@ exports[`ScannerDialog component tests should render 1`] = `
   border: 1px solid #787878;
 }
 
-.c4 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -263,23 +352,23 @@ exports[`ScannerDialog component tests should render 1`] = `
   flex-shrink: 0;
 }
 
-.c4:hover {
+.c5:hover {
   color: #fff;
   background: #519032;
 }
 
-.c5 {
+.c6 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c5 * {
+.c6 * {
   height: inherit;
   width: inherit;
 }
 
-.c27 {
+.c33 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -299,12 +388,12 @@ exports[`ScannerDialog component tests should render 1`] = `
   z-index: 1;
 }
 
-.c27:focus,
-.c27:hover {
+.c33:focus,
+.c33:hover {
   border: 1px solid #393637;
 }
 
-.c27:hover {
+.c33:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -312,26 +401,26 @@ exports[`ScannerDialog component tests should render 1`] = `
   color: #fff;
 }
 
-.c27[disabled] {
+.c33[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c27 img {
+.c33 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c27:link {
+.c33:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c28 {
+.c34 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -349,33 +438,18 @@ exports[`ScannerDialog component tests should render 1`] = `
   align-items: center;
 }
 
-.c29 {
+.c35 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c29:hover {
+.c35:hover {
   color: #fff;
   background: #519032;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c4 {
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
@@ -399,50 +473,17 @@ exports[`ScannerDialog component tests should render 1`] = `
   cursor: grab;
 }
 
-.c32 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c38 {
   color: #393637;
   background: #fff;
 }
 
-.c32:hover {
+.c38:hover {
   color: #fff;
   background: #66c430;
 }
 
-.c26 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c32 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c8d3d9;
@@ -454,38 +495,19 @@ exports[`ScannerDialog component tests should render 1`] = `
   justify-content: space-between;
 }
 
-.c7 {
+.c9 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
   height: 100%;
 }
 
-.c6 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
+.c8 {
   overflow: hidden;
   height: 100%;
 }
 
-.c13 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -501,7 +523,7 @@ exports[`ScannerDialog component tests should render 1`] = `
   padding-bottom: 10px;
 }
 
-.c14 {
+.c17 {
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
@@ -512,49 +534,13 @@ exports[`ScannerDialog component tests should render 1`] = `
   margin-left: 0;
 }
 
-.c15 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: flex-end;
-  -webkit-box-align: flex-end;
-  -ms-flex-align: flex-end;
-  align-items: flex-end;
-  width: 83.33333333%;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
 .c19 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c24 {
+.c29 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -579,18 +565,18 @@ exports[`ScannerDialog component tests should render 1`] = `
   cursor: pointer;
 }
 
-.c25 {
+.c30 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c25 * {
+.c30 * {
   height: inherit;
   width: inherit;
 }
 
-.c21 {
+.c26 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -614,7 +600,7 @@ exports[`ScannerDialog component tests should render 1`] = `
   font-weight: normal;
 }
 
-.c20 {
+.c25 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -626,7 +612,7 @@ exports[`ScannerDialog component tests should render 1`] = `
   width: 180px;
 }
 
-.c18 {
+.c22 {
   color: #a94442;
   font-weight: bold;
   font-size: 19px;
@@ -635,7 +621,7 @@ exports[`ScannerDialog component tests should render 1`] = `
   display: none;
 }
 
-.c22 {
+.c27 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -655,7 +641,14 @@ exports[`ScannerDialog component tests should render 1`] = `
   cursor: default;
 }
 
-.c16 {
+.c24 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c20 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -669,11 +662,11 @@ exports[`ScannerDialog component tests should render 1`] = `
   padding: 1px 8px;
 }
 
-.c16:-webkit-autofill {
+.c20:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c17 {
+.c21 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -695,26 +688,7 @@ exports[`ScannerDialog component tests should render 1`] = `
   align-items: center;
 }
 
-.c9 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: flex-end;
-  -webkit-box-align: flex-end;
-  -ms-flex-align: flex-end;
-  align-items: flex-end;
+.c12 {
   border-bottom: 2px solid #66c430;
   margin-top: 30px;
   margin-bottom: 15px;
@@ -740,14 +714,14 @@ exports[`ScannerDialog component tests should render 1`] = `
             class="c2"
           >
             <div
-              class="c3"
+              class="c3 c4"
               data-testid="dialog-title-bar"
             >
               <span>
                 New Scanner
               </span>
               <div
-                class="c4 c5"
+                class="c5 c6"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -755,55 +729,55 @@ exports[`ScannerDialog component tests should render 1`] = `
               </div>
             </div>
             <div
-              class="c6"
+              class="c7 c8"
             >
               <div
-                class="c7"
+                class="c9"
                 data-testid="save-dialog-content"
               >
                 <div
-                  class="c8"
+                  class="c10"
                 >
                   <div
-                    class="c9"
+                    class="c11 c12"
                   >
                     <div
-                      class="c10"
+                      class="c13"
                     >
                       <div
-                        class="c11"
+                        class="c14"
                       >
                         General
                       </div>
                       <div
-                        class="c12"
+                        class="c15"
                       >
                         Configuration
                       </div>
                     </div>
                   </div>
                   <div
-                    class="c13"
+                    class="c16"
                   >
                     <label
-                      class="c14"
+                      class="c17"
                       data-testid="formgroup-title"
                     >
                       Name
                     </label>
                     <div
-                      class="c15"
+                      class="c18 c19"
                       data-testid="formgroup-content"
                       size="10"
                     >
                       <input
-                        class="c16 c17"
+                        class="c20 c21"
                         name="name"
                         type="text"
                         value="Unnamed"
                       />
                       <div
-                        class="c18"
+                        class="c22"
                         data-testid="error-marker"
                       >
                         ×
@@ -811,27 +785,27 @@ exports[`ScannerDialog component tests should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c13"
+                    class="c16"
                   >
                     <label
-                      class="c14"
+                      class="c17"
                       data-testid="formgroup-title"
                     >
                       Comment
                     </label>
                     <div
-                      class="c19"
+                      class="c23 c19"
                       data-testid="formgroup-content"
                       size="10"
                     >
                       <input
-                        class="c16 c17"
+                        class="c20 c21"
                         name="comment"
                         type="text"
                         value=""
                       />
                       <div
-                        class="c18"
+                        class="c22"
                         data-testid="error-marker"
                       >
                         ×
@@ -839,16 +813,16 @@ exports[`ScannerDialog component tests should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c13"
+                    class="c16"
                   >
                     <label
-                      class="c14"
+                      class="c17"
                       data-testid="formgroup-title"
                     >
                       Type
                     </label>
                     <div
-                      class="c19"
+                      class="c23 c19"
                       data-testid="formgroup-content"
                       size="10"
                     >
@@ -856,42 +830,46 @@ exports[`ScannerDialog component tests should render 1`] = `
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="downshift-0-label"
-                        class="c20"
+                        class="c24"
                         role="combobox"
-                        width="180px"
                       >
                         <div
-                          aria-haspopup="true"
-                          aria-label="open menu"
-                          class="c21"
-                          data-toggle="true"
-                          role="button"
-                          type="button"
+                          class="c25"
+                          width="180px"
                         >
                           <div
-                            class="c22"
-                            data-testid="select-selected-value"
-                            title="OSP Scanner"
+                            aria-haspopup="true"
+                            aria-label="open menu"
+                            class="c26"
+                            data-toggle="true"
+                            role="button"
+                            type="button"
                           >
-                            OSP Scanner
-                          </div>
-                          <div
-                            class="c23"
-                          >
-                            <span
-                              class="c24 c25"
-                              data-testid="select-open-button"
+                            <div
+                              class="c27"
+                              data-testid="select-selected-value"
+                              title="OSP Scanner"
                             >
-                              ▼
-                            </span>
+                              OSP Scanner
+                            </div>
+                            <div
+                              class="c28"
+                            >
+                              <span
+                                class="c29 c30"
+                                data-testid="select-open-button"
+                              >
+                                ▼
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div
-                        class="c18"
-                        data-testid="error-marker"
-                      >
-                        ×
+                        <div
+                          class="c22"
+                          data-testid="error-marker"
+                        >
+                          ×
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -899,24 +877,24 @@ exports[`ScannerDialog component tests should render 1`] = `
               </div>
             </div>
             <div
-              class="c26"
+              class="c31 c32"
             >
               <button
-                class="c27 c28 c29"
+                class="c33 c34 c35"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <div
-                class="c30"
+                class="c23 c36"
               >
                 <div
-                  class="c31"
+                  class="c23 c37"
                   margin="5px"
                 >
                   <button
-                    class="c27 c32"
+                    class="c33 c34 c38"
                     data-testid="dialog-previous-button"
                     disabled=""
                     title="🠬"
@@ -924,14 +902,14 @@ exports[`ScannerDialog component tests should render 1`] = `
                     🠬
                   </button>
                   <button
-                    class="c27 c32"
+                    class="c33 c34 c38"
                     data-testid="dialog-next-button"
                     title="🠮"
                   >
                     🠮
                   </button>
                   <button
-                    class="c27 c28 c29"
+                    class="c33 c34 c35"
                     data-testid="dialog-save-button"
                     title="Save"
                   >
@@ -942,10 +920,10 @@ exports[`ScannerDialog component tests should render 1`] = `
             </div>
           </div>
           <div
-            class="c33"
+            class="c39"
           >
             <div
-              class="c34"
+              class="c40"
             />
           </div>
         </div>

@@ -1,7 +1,47 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CreatePolicyDialog component tests should render dialog 1`] = `
-.c8 {
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -17,6 +57,45 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   -webkit-box-align: stretch;
   -ms-flex-align: stretch;
   align-items: stretch;
+}
+
+.c13 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c18 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
 .c1 {
@@ -52,7 +131,7 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   height: 100%;
 }
 
-.c20 {
+.c24 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -61,7 +140,7 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c19 {
+.c23 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -86,7 +165,7 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   border: 1px solid #787878;
 }
 
-.c4 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -112,23 +191,23 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   flex-shrink: 0;
 }
 
-.c4:hover {
+.c5:hover {
   color: #fff;
   background: #519032;
 }
 
-.c5 {
+.c6 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c5 * {
+.c6 * {
   height: inherit;
   width: inherit;
 }
 
-.c16 {
+.c20 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -148,12 +227,12 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c16:focus,
-.c16:hover {
+.c20:focus,
+.c20:hover {
   border: 1px solid #393637;
 }
 
-.c16:hover {
+.c20:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -161,26 +240,26 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c16[disabled] {
+.c20[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c16 img {
+.c20 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c16:link {
+.c20:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c17 {
+.c21 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -198,36 +277,18 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c18 {
+.c22 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c18:hover {
+.c22:hover {
   color: #fff;
   background: #519032;
 }
 
-.c15 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c19 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c8d3d9;
@@ -239,22 +300,7 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   justify-content: space-between;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c4 {
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
@@ -278,7 +324,7 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   cursor: grab;
 }
 
-.c7 {
+.c9 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
@@ -286,31 +332,12 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   max-height: 400px;
 }
 
-.c6 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
+.c8 {
   overflow: hidden;
   height: 100%;
 }
 
-.c9 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -326,7 +353,7 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   padding-bottom: 10px;
 }
 
-.c10 {
+.c12 {
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
@@ -337,28 +364,13 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   margin-left: 0;
 }
 
-.c11 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c14 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c14 {
+.c17 {
   color: #a94442;
   font-weight: bold;
   font-size: 19px;
@@ -367,7 +379,7 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   display: none;
 }
 
-.c12 {
+.c15 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -381,11 +393,11 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   padding: 1px 8px;
 }
 
-.c12:-webkit-autofill {
+.c15:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c13 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -426,14 +438,14 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
             class="c2"
           >
             <div
-              class="c3"
+              class="c3 c4"
               data-testid="dialog-title-bar"
             >
               <span>
                 New Policy
               </span>
               <div
-                class="c4 c5"
+                class="c5 c6"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -441,38 +453,38 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c6"
+              class="c7 c8"
             >
               <div
-                class="c7"
+                class="c9"
                 data-testid="save-dialog-content"
               >
                 <div
-                  class="c8"
+                  class="c10"
                 >
                   <div
-                    class="c9"
+                    class="c11"
                   >
                     <label
-                      class="c10"
+                      class="c12"
                       data-testid="formgroup-title"
                     >
                       Name
                     </label>
                     <div
-                      class="c11"
+                      class="c13 c14"
                       data-testid="formgroup-content"
                       size="10"
                     >
                       <input
-                        class="c12 c13"
+                        class="c15 c16"
                         name="name"
                         size="30"
                         type="text"
                         value="Unnamed"
                       />
                       <div
-                        class="c14"
+                        class="c17"
                         data-testid="error-marker"
                       >
                         ×
@@ -480,28 +492,28 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c9"
+                    class="c11"
                   >
                     <label
-                      class="c10"
+                      class="c12"
                       data-testid="formgroup-title"
                     >
                       Comment
                     </label>
                     <div
-                      class="c11"
+                      class="c13 c14"
                       data-testid="formgroup-content"
                       size="10"
                     >
                       <input
-                        class="c12 c13"
+                        class="c15 c16"
                         name="comment"
                         size="30"
                         type="text"
                         value=""
                       />
                       <div
-                        class="c14"
+                        class="c17"
                         data-testid="error-marker"
                       >
                         ×
@@ -512,17 +524,17 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c15"
+              class="c18 c19"
             >
               <button
-                class="c16 c17 c18"
+                class="c20 c21 c22"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c16 c17 c18"
+                class="c20 c21 c22"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -531,10 +543,10 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c19"
+            class="c23"
           >
             <div
-              class="c20"
+              class="c24"
             />
           </div>
         </div>
