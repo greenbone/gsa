@@ -33,7 +33,7 @@ import {
   convertLoadedSettings,
 } from 'gmp/commands/dashboards';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 import Setting from 'gmp/models/setting';
 
@@ -134,7 +134,7 @@ export const Dashboard = props => {
 
   let dashboardSettings;
 
-  if (isDefined(data)) {
+  if (hasValue(data?.userSetting)) {
     const setting = Setting.fromElement(data.userSetting);
     const {value, name} = setting;
     const config = JSON.parse(value);
