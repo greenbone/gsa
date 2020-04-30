@@ -22,7 +22,6 @@ import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-import {_l} from 'gmp/locale/lang';
 
 import Theme from 'web/utils/theme';
 
@@ -121,6 +120,6 @@ export const shouldBeValidName = (string = '') =>
   string.match(/^[.#\-_ ,/a-z0-9]+$/i) !== null; // this is analogue to the
 // regex in gsad.c for 'name'
 export const VALID_NAME_ERROR_MESSAGE = _(
-  'The name must include at least one alphanumeric character or one of .,-_# and space.',
+  'The name must include at least one alphanumeric character or one of .,-/_# and space.',
 );
 export default useFormValidation;
