@@ -101,6 +101,20 @@ describe('Select component tests', () => {
     expect(domItems.length).toEqual(0);
   });
 
+  test('should render invalid state', () => {
+    const items = [
+      {
+        value: '0',
+        label: '--',
+      },
+    ];
+
+    const {element} = render(<Select hsaError={true} items={items} />);
+
+    expect(element).toHaveTextContent('×');
+    expect(element).toHaveStyleRule('background-color: #f2dede');
+  });
+
   test('should call onChange handler', () => {
     const items = [
       {
