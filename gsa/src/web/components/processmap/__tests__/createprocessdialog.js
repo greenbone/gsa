@@ -197,4 +197,27 @@ describe('CreateProcessDialog tests', () => {
       name: 'lorem',
     });
   });
+
+  test('should not save invalid form states', () => {
+    const handleClose = jest.fn();
+    const handleCreate = jest.fn();
+    const handleEdit = jest.fn();
+
+    const {getByTestId} = render(
+      <CreateProcessDialog
+        name="invalidChar\ "
+        onClose={handleClose}
+        onCreate={handleCreate}
+        onEdit={handleEdit}
+      />,
+    );
+
+    const saveButton = getByTestId('dialog-save-button');
+    const nameField = getByTestId('create-process-dialog-name');
+    fireEvent.change(nameField, {target: {value: '\\ invalid char'}});
+
+    fireEvent.click(saveButton);
+
+    expect(handleCreate).not.toHaveBeenCalled();
+  });
 });
