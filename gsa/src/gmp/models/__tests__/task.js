@@ -65,8 +65,10 @@ describe('Task Model parse tests', () => {
   test('should parse lastReport', () => {
     const element = {
       _id: 't1',
-      lastReport: {
-        id: 'r1',
+      reports: {
+        lastReport: {
+          id: 'r1',
+        },
       },
     };
 
@@ -74,16 +76,18 @@ describe('Task Model parse tests', () => {
 
     expect(task.id).toEqual('t1');
 
-    expect(task.lastReport).toBeInstanceOf(Report);
-    expect(task.lastReport.id).toEqual('r1');
-    expect(task.lastReport.entityType).toEqual('report');
+    expect(task.reports.lastReport).toBeInstanceOf(Report);
+    expect(task.reports.lastReport.id).toEqual('r1');
+    expect(task.reports.lastReport.entityType).toEqual('report');
   });
 
   test('should parse current_report', () => {
     const element = {
       _id: 't1',
-      currentReport: {
-        id: 'r1',
+      reports: {
+        currentReport: {
+          id: 'r1',
+        },
       },
     };
 
@@ -91,9 +95,9 @@ describe('Task Model parse tests', () => {
 
     expect(task.id).toEqual('t1');
 
-    expect(task.currentReport).toBeInstanceOf(Report);
-    expect(task.currentReport.id).toEqual('r1');
-    expect(task.currentReport.entityType).toEqual('report');
+    expect(task.reports.currentReport).toBeInstanceOf(Report);
+    expect(task.reports.currentReport.id).toEqual('r1');
+    expect(task.reports.currentReport.entityType).toEqual('report');
   });
 
   test('should parse config', () => {
@@ -209,9 +213,11 @@ describe('Task Model parse tests', () => {
   test('should parse report counts', () => {
     const element = {
       id: 't1',
-      reportCount: {
-        total: '13',
-        finished: '14',
+      reports: {
+        counts: {
+          total: 13,
+          finished: 14,
+        },
       },
     };
 
@@ -219,21 +225,25 @@ describe('Task Model parse tests', () => {
 
     expect(task.id).toEqual('t1');
 
-    expect(task.reportCount.total).toEqual(13);
-    expect(task.reportCount.finished).toEqual(14);
+    expect(task.reports.counts.total).toEqual(13);
+    expect(task.reports.counts.finished).toEqual(14);
   });
 
   test('should parse result counts', () => {
     const element = {
       _id: 't1',
-      resultCount: '666',
+      results: {
+        counts: {
+          current: 666,
+        },
+      },
     };
 
     const task = Task.fromObject(element);
 
     expect(task.id).toEqual('t1');
 
-    expect(task.resultCount).toEqual(666);
+    expect(task.results.counts.current).toEqual(666);
   });
 
   test('should parse progress', () => {
