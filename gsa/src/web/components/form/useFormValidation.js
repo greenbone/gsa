@@ -132,7 +132,8 @@ const useFormValidation = (
 export const shouldBeNonEmpty = (string = '') => string.trim().length > 0;
 export const shouldBeValidPassword = (password = '') => password.length > 5;
 export const shouldBeValidName = (string = '') =>
-  string.match(/^[.#\-_ ,/a-z0-9]+$/i) !== null;
+  string.match(/^[.#\-_ ,/a-z0-9]+$/i) !== null; // this is analogue to the
+// regex in gsad.c for 'name'
 export const VALID_NAME_ERROR_MESSAGE = _l(
   'The name must include at least one alphanumeric character or one of .,-_# and space.',
 );
