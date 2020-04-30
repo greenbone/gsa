@@ -143,6 +143,7 @@ class Task extends Model {
     const allReports = ['lastReport', 'currentReport'];
 
     if (hasValue(reports)) {
+      copy.reports = {...reports};
       allReports.forEach(name => {
         const report = reports[name];
         if (hasValue(report)) {
