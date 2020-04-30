@@ -130,14 +130,16 @@ export const createQueryHistory = (history = createBrowserHistory()) =>
 
 const HISTORY = createQueryHistory();
 
-const GET_AUTHENTICATION_STATUS = gql`
+const GET_CURRENT_USER = gql`
   query {
-    isAuthenticated
+    currentUser {
+      isAuthenticated
+    }
   }
 `;
 
-const useHyperionAuthStatus = () => {
-  return toFruitfulQuery(useQuery)(GET_AUTHENTICATION_STATUS);
+const useHyperionCurrentUser = () => {
+  return toFruitfulQuery(useQuery)(GET_CURRENT_USER);
 };
 
 const Routes = () => {
@@ -145,14 +147,14 @@ const Routes = () => {
 
   const setIsLoggedIn = value => dispatch(setIsLoggedInAction(value));
 
-  const authStatusQuery = useHyperionAuthStatus();
-  const {data, loading, error} = authStatusQuery();
+  const currentUserQuery = useHyperionCurrentUser();
+  const {data, loading, error} = currentUserQuery();
 
   const [doNotLoad, setDoNotLoad] = useState(loading);
 
   useEffect(() => {
     if (isDefined(data)) {
-      setIsLoggedIn(data.isAuthenticated);
+      setIsLoggedIn(data.currentUser.isAuthenticated);
       setDoNotLoad(false);
       // set to false ONLY after isLoggedIn has an opportunity to be set
       // this is to prevent Authorized from mounting, checking isLoggedIn (initialized to false)
@@ -162,7 +164,9 @@ const Routes = () => {
 
   if (doNotLoad && !isDefined(error)) {
     // to prevent infinite loading if there is an error
-    // upon error Authorized will run and redirect back to loginpage
+    // upon error Authorized will run
+    // Likely hyperion is down. In which case trying to login
+    // will return the error on loginpage.
     return <Loading />;
   }
 
