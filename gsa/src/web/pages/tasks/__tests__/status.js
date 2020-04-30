@@ -48,7 +48,7 @@ describe('Task Status tests', () => {
     expect(bar).toHaveTextContent(TASK_STATUS.new);
 
     const detailslink = queryByTestId('details-link');
-    expect(detailslink).toBe(null);
+    expect(detailslink).not.toHaveAttribute('href');
   });
 
   test('should render with last report', () => {
