@@ -92,7 +92,9 @@ const useFormValidation = (
 
     if (hasErrorInState) {
       setErrorMessage(
-        _('This form has errors. Please check the inputs and submit again.'),
+        _(
+          'This form received invalid values. Please check the inputs and submit again.',
+        ),
       );
     } else {
       // eslint-disable-next-line callback-return
