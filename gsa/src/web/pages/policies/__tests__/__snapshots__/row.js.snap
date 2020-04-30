@@ -55,6 +55,40 @@ exports[`Row tests should render 1`] = `
   align-items: stretch;
 }
 
+.c5 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c5 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c5 > * {
+  margin-left: 5px;
+}
+
 .c4 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -75,63 +109,23 @@ exports[`Row tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 
 .c6 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c7 {
-  margin-left: -5px;
-}
-
-.c7 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c7 > * {
-  margin-left: 5px;
-}
-
-.c5 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c8 {
   cursor: pointer;
 }
 
-.c9 {
+.c7 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c9 * {
+.c7 * {
   height: inherit;
   width: inherit;
 }
@@ -150,7 +144,7 @@ exports[`Row tests should render 1`] = `
 }
 
 @media print {
-  .c8 {
+  .c6 {
     display: none;
   }
 }
@@ -201,14 +195,14 @@ exports[`Row tests should render 1`] = `
           class="c3"
         >
           <div
-            class="c4 c5"
+            class="c4"
           >
             <div
-              class="c6 c7"
+              class="c5"
               margin="5px"
             >
               <span
-                class="c8 c9"
+                class="c6 c7"
                 data-testid="svg-icon"
                 title="Move Policy to trashcan"
               >
@@ -219,7 +213,7 @@ exports[`Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c9"
+                class="c6 c7"
                 data-testid="svg-icon"
                 title="Edit Policy"
               >
@@ -230,7 +224,7 @@ exports[`Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c9"
+                class="c6 c7"
                 data-testid="svg-icon"
                 title="Clone Policy"
               >
@@ -241,7 +235,7 @@ exports[`Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c9"
+                class="c6 c7"
                 data-testid="svg-icon"
                 title="Create Audit from Policy"
               >
@@ -252,7 +246,7 @@ exports[`Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c9"
+                class="c6 c7"
                 data-testid="svg-icon"
                 title="Export Policy"
               >

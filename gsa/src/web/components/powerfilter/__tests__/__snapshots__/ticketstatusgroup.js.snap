@@ -175,7 +175,7 @@ exports[`Select component tests should render 1`] = `
 `;
 
 exports[`TicketStatusGroup tests should render 1`] = `
-.c8 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -187,24 +187,6 @@ exports[`TicketStatusGroup tests should render 1`] = `
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
@@ -238,13 +220,28 @@ exports[`TicketStatusGroup tests should render 1`] = `
   margin-left: 0;
 }
 
-.c3 {
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c9 {
+.c8 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -269,18 +266,18 @@ exports[`TicketStatusGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c10 {
+.c9 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c10 * {
+.c9 * {
   height: inherit;
   width: inherit;
 }
 
-.c6 {
+.c5 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -304,7 +301,7 @@ exports[`TicketStatusGroup tests should render 1`] = `
   font-weight: normal;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -316,7 +313,7 @@ exports[`TicketStatusGroup tests should render 1`] = `
   width: 180px;
 }
 
-.c11 {
+.c10 {
   color: #a94442;
   font-weight: bold;
   font-size: 19px;
@@ -325,7 +322,7 @@ exports[`TicketStatusGroup tests should render 1`] = `
   display: none;
 }
 
-.c7 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -345,7 +342,7 @@ exports[`TicketStatusGroup tests should render 1`] = `
   cursor: default;
 }
 
-.c4 {
+.c3 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -362,7 +359,7 @@ exports[`TicketStatusGroup tests should render 1`] = `
     Ticket Status
   </label>
   <div
-    class="c2 c3"
+    class="c2"
     data-testid="formgroup-content"
     size="10"
   >
@@ -370,33 +367,33 @@ exports[`TicketStatusGroup tests should render 1`] = `
       aria-expanded="false"
       aria-haspopup="listbox"
       aria-labelledby="downshift-8-label"
-      class="c4"
+      class="c3"
       role="combobox"
     >
       <div
-        class="c5"
+        class="c4"
         width="180px"
       >
         <div
           aria-haspopup="true"
           aria-label="open menu"
-          class="c6"
+          class="c5"
           data-toggle="true"
           role="button"
           type="button"
         >
           <div
-            class="c7"
+            class="c6"
             data-testid="select-selected-value"
             title="Closed"
           >
             Closed
           </div>
           <div
-            class="c8"
+            class="c7"
           >
             <span
-              class="c9 c10"
+              class="c8 c9"
               data-testid="select-open-button"
             >
               ▼
@@ -405,7 +402,7 @@ exports[`TicketStatusGroup tests should render 1`] = `
         </div>
       </div>
       <div
-        class="c11"
+        class="c10"
         data-testid="error-marker"
       >
         ×

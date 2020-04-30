@@ -37,6 +37,211 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   align-items: flex-start;
 }
 
+.c18 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c19 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+}
+
+.c21 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c23 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c26 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c28 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c6 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -10px;
+}
+
+.c3 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c3 > * {
+  margin-left: 10px;
+}
+
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+  margin-left: -5px;
+}
+
+.c4 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c4 > * {
+  margin-left: 5px;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c7 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c7 > * {
+  margin-left: 5px;
+}
+
 .c2 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -53,27 +258,43 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c8 {
+  cursor: pointer;
+}
+
+.c9 svg path {
+  fill: #aaaaaa;
 }
 
 .c5 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
 }
 
-.c13 {
+.c5 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c16 {
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+}
+
+.c16 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c12 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -89,6 +310,51 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   -webkit-box-align: flex-end;
   -ms-flex-align: flex-end;
   align-items: flex-end;
+  margin: 10px 0px;
+  padding-bottom: 1px;
+  border-bottom: 2px solid #c8d3d9;
+  position: relative;
+}
+
+.c13 {
+  margin: 0 0 1px 0;
+}
+
+.c14 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c15 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
+  margin-right: 5px;
 }
 
 .c17 {
@@ -107,251 +373,11 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   -webkit-box-align: flex-end;
   -ms-flex-align: flex-end;
   align-items: flex-end;
-}
-
-.c21 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c22 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-}
-
-.c24 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-}
-
-.c25 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: flex-end;
-  -webkit-box-align: flex-end;
-  -ms-flex-align: flex-end;
-  align-items: flex-end;
-}
-
-.c27 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-}
-
-.c30 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c32 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-}
-
-.c8 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c4 {
-  margin-left: -10px;
-}
-
-.c4 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c4 > * {
-  margin-left: 10px;
-}
-
-.c6 {
-  margin-left: -5px;
-}
-
-.c6 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c6 > * {
-  margin-left: 5px;
-}
-
-.c3 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c9 {
-  cursor: pointer;
-}
-
-.c10 svg path {
-  fill: #aaaaaa;
-}
-
-.c7 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c7 * {
-  height: inherit;
-  width: inherit;
-}
-
-.c19 {
-  height: 50px;
-  width: 50px;
-  line-height: 50px;
-}
-
-.c19 * {
-  height: inherit;
-  width: inherit;
-}
-
-.c14 {
-  margin: 10px 0px;
-  padding-bottom: 1px;
-  border-bottom: 2px solid #c8d3d9;
-  position: relative;
-}
-
-.c15 {
-  margin: 0 0 1px 0;
-}
-
-.c16 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-}
-
-.c18 {
-  margin-right: 5px;
-}
-
-.c20 {
   word-break: break-all;
   min-width: 100px;
 }
 
-.c28 {
+.c24 {
   font-size: 16px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -378,11 +404,11 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   border-top: 2px solid #87d050;
 }
 
-.c28:first-child {
+.c24:first-child {
   border-left: 1px solid #c8d3d9;
 }
 
-.c29 {
+.c25 {
   font-size: 16px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -406,21 +432,40 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   border-top: 2px solid #fff;
 }
 
-.c29:hover {
+.c25:hover {
   border-top: 2px solid #c8d3d9;
 }
 
-.c29:first-child {
+.c25:first-child {
   border-left: 1px solid #fff;
 }
 
-.c26 {
+.c22 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
   border-bottom: 2px solid #66c430;
   margin-top: 30px;
   margin-bottom: 15px;
 }
 
-.c33 {
+.c29 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -428,7 +473,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   table-layout: auto;
 }
 
-.c43 {
+.c39 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -437,46 +482,61 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   width: 100%;
 }
 
-.c42 > *:not(:last-child)::after {
+.c38 > *:not(:last-child)::after {
   content: '•';
   margin-left: 5px;
 }
 
-.c34 td {
+.c30 td {
   padding: 4px 4px 4px 0;
 }
 
-.c34 tr td:first-child {
+.c30 tr td:first-child {
   padding-right: 5px;
 }
 
-.c23 {
+.c20 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   border-spacing: 0px;
   color: #787878;
   font-size: 10px;
 }
 
-.c23 :nth-child(even) {
+.c20 :nth-child(even) {
   margin-left: 3px;
 }
 
-.c23 :nth-child(odd) {
+.c20 :nth-child(odd) {
   margin-left: 30px;
 }
 
-.c35 {
+.c31 {
   width: 10%;
 }
 
-.c36 {
+.c32 {
   width: 90%;
 }
 
-.c31 {
+.c27 {
   font-size: 0.7em;
 }
 
-.c38 {
+.c34 {
   height: 13px;
   box-sizing: content-box;
   display: inline-block;
@@ -486,7 +546,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   text-align: center;
 }
 
-.c40 {
+.c36 {
   z-index: 1;
   font-weight: bold;
   color: #fff;
@@ -497,22 +557,22 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   padding-top: 1px;
 }
 
-.c39 {
+.c35 {
   height: 13px;
   width: 100%;
   background: #4f91c7;
 }
 
-.c41 {
+.c37 {
   white-space: nowrap;
 }
 
-.c37:hover {
+.c33:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c11 {
+.c10 {
   position: relative;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
@@ -521,7 +581,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   margin-right: 0px;
 }
 
-.c12 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -558,38 +618,38 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
 }
 
 @media print {
-  .c9 {
+  .c8 {
     display: none;
   }
 }
 
 @media print {
-  .c33 {
+  .c29 {
     border-collapse: collapse;
   }
 }
 
 @media print {
-  .c43 {
+  .c39 {
     border-collapse: collapse;
   }
 }
 
 @media print {
-  .c38 {
+  .c34 {
     background: none;
     border: 0;
   }
 }
 
 @media print {
-  .c40 {
+  .c36 {
     color: black;
   }
 }
 
 @media print {
-  .c39 {
+  .c35 {
     background: none;
   }
 }
@@ -601,17 +661,17 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
     class="c1 toolbar"
   >
     <div
-      class="c2 c3"
+      class="c2"
     >
       <div
-        class="c2 c4"
+        class="c3"
         margin="10px"
       >
         <div
-          class="c2 c3"
+          class="c2"
         >
           <div
-            class="c5 c6"
+            class="c4"
             margin="5px"
           >
             <a
@@ -620,7 +680,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               target="_blank"
             >
               <span
-                class="c7"
+                class="c5"
                 data-testid="svg-icon"
                 title="Help: Audits"
               >
@@ -632,11 +692,11 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               </span>
             </a>
             <a
-              class="c8"
+              class="c6"
               href="/audits"
             >
               <span
-                class="c7"
+                class="c5"
                 data-testid="svg-icon"
                 title="Audit List"
               >
@@ -648,7 +708,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               </span>
             </a>
             <span
-              class="c7"
+              class="c5"
               data-testid="svg-icon"
               title="This is an Alterable Audit. Reports may not relate to current Policy or Target!"
             >
@@ -661,14 +721,14 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
           </div>
         </div>
         <div
-          class="c2 c3"
+          class="c2"
         >
           <div
-            class="c2 c6"
+            class="c7"
             margin="5px"
           >
             <span
-              class="c9 c7"
+              class="c8 c5"
               data-testid="svg-icon"
               title="Clone Audit"
             >
@@ -679,7 +739,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               </svg>
             </span>
             <span
-              class="c9 c7"
+              class="c8 c5"
               data-testid="svg-icon"
               title="Edit Audit"
             >
@@ -690,7 +750,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               </svg>
             </span>
             <span
-              class="c9 c7"
+              class="c8 c5"
               data-testid="svg-icon"
               title="Move Audit to trashcan"
             >
@@ -701,7 +761,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               </svg>
             </span>
             <span
-              class="c9 c7"
+              class="c8 c5"
               data-testid="svg-icon"
               title="Export Audit as XML"
             >
@@ -714,14 +774,14 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
           </div>
         </div>
         <div
-          class="c2 c3"
+          class="c2"
         >
           <div
-            class="c2 c6"
+            class="c7"
             margin="5px"
           >
             <span
-              class="c9 c7"
+              class="c8 c5"
               data-testid="svg-icon"
               title="Start"
             >
@@ -733,7 +793,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             </span>
             <span
               alt="Resume"
-              class="c10 c7"
+              class="c9 c5"
               data-testid="svg-icon"
               title="Audit is not stopped"
             >
@@ -746,27 +806,27 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
           </div>
         </div>
         <div
-          class="c2 c3"
+          class="c2"
         >
           <div
-            class="c2 c4"
+            class="c3"
             margin="10px"
           >
             <div
-              class="c2 c3"
+              class="c2"
             >
               <div
-                class="c2 c6"
+                class="c7"
                 margin="5px"
               >
                 <a
-                  class="c8"
+                  class="c6"
                   data-testid="details-link"
                   href="/report/1234"
                   title="Last Report for Audit foo from 07/30/2019"
                 >
                   <span
-                    class="c7"
+                    class="c5"
                     data-testid="svg-icon"
                   >
                     <svg>
@@ -775,15 +835,15 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                   </span>
                 </a>
                 <a
-                  class="c8"
+                  class="c6"
                   href="/reports?filter=task_id%3D12345"
                   title="Total Reports for Audit foo"
                 >
                   <div
-                    class="c11"
+                    class="c10"
                   >
                     <span
-                      class="c7"
+                      class="c5"
                       data-testid="svg-icon"
                     >
                       <svg>
@@ -791,7 +851,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c12"
+                      class="c11"
                       data-testid="badge-icon"
                     >
                       1
@@ -801,15 +861,15 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               </div>
             </div>
             <a
-              class="c8"
+              class="c6"
               href="/results?filter=task_id%3D12345"
               title="Results for Audit foo"
             >
               <div
-                class="c11"
+                class="c10"
               >
                 <span
-                  class="c7"
+                  class="c5"
                   data-testid="svg-icon"
                 >
                   <svg>
@@ -817,7 +877,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                   </svg>
                 </span>
                 <span
-                  class="c12"
+                  class="c11"
                   data-testid="badge-icon"
                 >
                   1
@@ -833,16 +893,16 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
     class="entity-section"
   >
     <div
-      class="c13 c14 section-header"
+      class="c12 section-header"
     >
       <h2
-        class="c15 c16"
+        class="c13 c14"
       >
         <div
-          class="c17 c18"
+          class="c15"
         >
           <span
-            class="c19"
+            class="c16"
             data-testid="svg-icon"
           >
             <svg>
@@ -851,19 +911,19 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
           </span>
         </div>
         <div
-          class="c17 c20"
+          class="c17"
         >
           Audit: foo
         </div>
       </h2>
       <div
-        class="c21"
+        class="c18"
       >
         <div
-          class="c22"
+          class="c19"
         >
           <div
-            class="c2 c23"
+            class="c20"
           >
             <div>
               ID:
@@ -894,30 +954,30 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
       </div>
     </div>
     <div
-      class="c24"
+      class="c21"
     >
       <div
-        class="c25 c26"
+        class="c22"
       >
         <div
-          class="c27"
+          class="c23"
         >
           <div
-            class="c28"
+            class="c24"
           >
             Information
           </div>
           <div
-            class="c29"
+            class="c25"
           >
             <div
-              class="c30"
+              class="c26"
             >
               <span>
                 Permissions
               </span>
               <span
-                class="c31"
+                class="c27"
               >
                 (
                 <i>
@@ -930,18 +990,18 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
         </div>
       </div>
       <div
-        class="c32"
+        class="c28"
       >
         <table
-          class="c33 c34"
+          class="c29 c30"
         >
           <colgroup>
             <col
-              class="c35"
+              class="c31"
               width="10%"
             />
             <col
-              class="c36"
+              class="c32"
               width="90%"
             />
           </colgroup>
@@ -951,14 +1011,14 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             <tr>
               <td>
                 <div
-                  class="c32"
+                  class="c28"
                 >
                   Name
                 </div>
               </td>
               <td>
                 <div
-                  class="c32"
+                  class="c28"
                 >
                   foo
                 </div>
@@ -967,14 +1027,14 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             <tr>
               <td>
                 <div
-                  class="c32"
+                  class="c28"
                 >
                   Comment
                 </div>
               </td>
               <td>
                 <div
-                  class="c32"
+                  class="c28"
                 >
                   bar
                 </div>
@@ -983,14 +1043,14 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             <tr>
               <td>
                 <div
-                  class="c32"
+                  class="c28"
                 >
                   Alterable
                 </div>
               </td>
               <td>
                 <div
-                  class="c32"
+                  class="c28"
                 >
                   Yes
                 </div>
@@ -999,34 +1059,34 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             <tr>
               <td>
                 <div
-                  class="c32"
+                  class="c28"
                 >
                   Status
                 </div>
               </td>
               <td>
                 <div
-                  class="c32"
+                  class="c28"
                 >
                   <a
-                    class="c8 c37"
+                    class="c6 c33"
                     data-testid="details-link"
                     href="/report/1234"
                   >
                     <div
-                      class="c38"
+                      class="c34"
                       data-testid="progressbar-box"
                       title="Done"
                     >
                       <div
-                        class="c39"
+                        class="c35"
                         data-testid="progress"
                       />
                       <div
-                        class="c40"
+                        class="c36"
                       >
                         <span
-                          class="c41"
+                          class="c37"
                         >
                           Done
                         </span>
@@ -1039,17 +1099,17 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
           </tbody>
         </table>
         <div
-          class="c24"
+          class="c21"
         >
           <div
-            class="c32"
+            class="c28"
           >
             <h2>
               Target
             </h2>
             <div>
               <a
-                class="c8"
+                class="c6"
                 data-testid="details-link"
                 href="/target/5678"
               >
@@ -1058,22 +1118,22 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             </div>
           </div>
           <div
-            class="c32"
+            class="c28"
           >
             <h2>
               Alerts
             </h2>
             <div>
               <div
-                class="c2 c3"
+                class="c2"
               >
                 <div
-                  class="c2 c6 c42"
+                  class="c7 c38"
                   margin="5px"
                 >
                   <span>
                     <a
-                      class="c8"
+                      class="c6"
                       data-testid="details-link"
                       href="/alert/91011"
                     >
@@ -1085,22 +1145,22 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             </div>
           </div>
           <div
-            class="c32"
+            class="c28"
           >
             <h2>
               Scanner
             </h2>
             <div>
               <table
-                class="c43 c34"
+                class="c39 c30"
               >
                 <colgroup>
                   <col
-                    class="c35"
+                    class="c31"
                     width="10%"
                   />
                   <col
-                    class="c36"
+                    class="c32"
                     width="90%"
                   />
                 </colgroup>
@@ -1110,18 +1170,18 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                   <tr>
                     <td>
                       <div
-                        class="c32"
+                        class="c28"
                       >
                         Name
                       </div>
                     </td>
                     <td>
                       <div
-                        class="c32"
+                        class="c28"
                       >
                         <span>
                           <a
-                            class="c8"
+                            class="c6"
                             data-testid="details-link"
                             href="/scanner/1516"
                           >
@@ -1134,14 +1194,14 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                   <tr>
                     <td>
                       <div
-                        class="c32"
+                        class="c28"
                       >
                         Type
                       </div>
                     </td>
                     <td>
                       <div
-                        class="c32"
+                        class="c28"
                       >
                         OpenVAS Scanner
                       </div>
@@ -1152,22 +1212,22 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             </div>
           </div>
           <div
-            class="c32"
+            class="c28"
           >
             <h2>
               Assets
             </h2>
             <div>
               <table
-                class="c43 c34"
+                class="c39 c30"
               >
                 <colgroup>
                   <col
-                    class="c35"
+                    class="c31"
                     width="10%"
                   />
                   <col
-                    class="c36"
+                    class="c32"
                     width="90%"
                   />
                 </colgroup>
@@ -1177,14 +1237,14 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                   <tr>
                     <td>
                       <div
-                        class="c32"
+                        class="c28"
                       >
                         Add to Assets
                       </div>
                     </td>
                     <td>
                       <div
-                        class="c32"
+                        class="c28"
                       >
                         Yes
                       </div>
@@ -1195,22 +1255,22 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             </div>
           </div>
           <div
-            class="c32"
+            class="c28"
           >
             <h2>
               Scan
             </h2>
             <div>
               <table
-                class="c43 c34"
+                class="c39 c30"
               >
                 <colgroup>
                   <col
-                    class="c35"
+                    class="c31"
                     width="10%"
                   />
                   <col
-                    class="c36"
+                    class="c32"
                     width="90%"
                   />
                 </colgroup>
@@ -1220,14 +1280,14 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                   <tr>
                     <td>
                       <div
-                        class="c32"
+                        class="c28"
                       >
                         Duration of last Scan
                       </div>
                     </td>
                     <td>
                       <div
-                        class="c32"
+                        class="c28"
                       >
                         2 minutes
                       </div>
@@ -1236,14 +1296,14 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                   <tr>
                     <td>
                       <div
-                        class="c32"
+                        class="c28"
                       >
                         Auto delete Reports
                       </div>
                     </td>
                     <td>
                       <div
-                        class="c32"
+                        class="c28"
                       >
                         Do not automatically delete reports
                       </div>
@@ -1261,6 +1321,103 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
 `;
 
 exports[`Audit ToolBarIcons tests should render 1`] = `
+.c4 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -10px;
+}
+
+.c1 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c1 > * {
+  margin-left: 10px;
+}
+
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+  margin-left: -5px;
+}
+
+.c2 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c2 > * {
+  margin-left: 5px;
+}
+
+.c5 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c5 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c5 > * {
+  margin-left: 5px;
+}
+
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -1277,90 +1434,32 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 
 .c6 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c2 {
-  margin-left: -10px;
-}
-
-.c2 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c2 > * {
-  margin-left: 10px;
-}
-
-.c4 {
-  margin-left: -5px;
-}
-
-.c4 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c4 > * {
-  margin-left: 5px;
-}
-
-.c1 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c7 {
   cursor: pointer;
 }
 
-.c8 svg path {
+.c7 svg path {
   fill: #aaaaaa;
 }
 
-.c5 {
+.c3 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c5 * {
+.c3 * {
   height: inherit;
   width: inherit;
 }
 
-.c9 {
+.c8 {
   position: relative;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
@@ -1369,7 +1468,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
   margin-right: 0px;
 }
 
-.c10 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1406,23 +1505,23 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
 }
 
 @media print {
-  .c7 {
+  .c6 {
     display: none;
   }
 }
 
 <div
-  class="c0 c1"
+  class="c0"
 >
   <div
-    class="c0 c2"
+    class="c1"
     margin="10px"
   >
     <div
-      class="c0 c1"
+      class="c0"
     >
       <div
-        class="c3 c4"
+        class="c2"
         margin="5px"
       >
         <a
@@ -1431,7 +1530,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
           target="_blank"
         >
           <span
-            class="c5"
+            class="c3"
             data-testid="svg-icon"
             title="Help: Audits"
           >
@@ -1443,11 +1542,11 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
           </span>
         </a>
         <a
-          class="c6"
+          class="c4"
           href="/audits"
         >
           <span
-            class="c5"
+            class="c3"
             data-testid="svg-icon"
             title="Audit List"
           >
@@ -1459,7 +1558,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
           </span>
         </a>
         <span
-          class="c5"
+          class="c3"
           data-testid="svg-icon"
           title="This is an Alterable Audit. Reports may not relate to current Policy or Target!"
         >
@@ -1472,14 +1571,14 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
       </div>
     </div>
     <div
-      class="c0 c1"
+      class="c0"
     >
       <div
-        class="c0 c4"
+        class="c5"
         margin="5px"
       >
         <span
-          class="c7 c5"
+          class="c6 c3"
           data-testid="svg-icon"
           title="Clone Audit"
         >
@@ -1490,7 +1589,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
           </svg>
         </span>
         <span
-          class="c7 c5"
+          class="c6 c3"
           data-testid="svg-icon"
           title="Edit Audit"
         >
@@ -1501,7 +1600,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
           </svg>
         </span>
         <span
-          class="c7 c5"
+          class="c6 c3"
           data-testid="svg-icon"
           title="Move Audit to trashcan"
         >
@@ -1512,7 +1611,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
           </svg>
         </span>
         <span
-          class="c7 c5"
+          class="c6 c3"
           data-testid="svg-icon"
           title="Export Audit as XML"
         >
@@ -1525,14 +1624,14 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
       </div>
     </div>
     <div
-      class="c0 c1"
+      class="c0"
     >
       <div
-        class="c0 c4"
+        class="c5"
         margin="5px"
       >
         <span
-          class="c7 c5"
+          class="c6 c3"
           data-testid="svg-icon"
           title="Start"
         >
@@ -1544,7 +1643,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
         </span>
         <span
           alt="Resume"
-          class="c8 c5"
+          class="c7 c3"
           data-testid="svg-icon"
           title="Audit is not stopped"
         >
@@ -1557,27 +1656,27 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
       </div>
     </div>
     <div
-      class="c0 c1"
+      class="c0"
     >
       <div
-        class="c0 c2"
+        class="c1"
         margin="10px"
       >
         <div
-          class="c0 c1"
+          class="c0"
         >
           <div
-            class="c0 c4"
+            class="c5"
             margin="5px"
           >
             <a
-              class="c6"
+              class="c4"
               data-testid="details-link"
               href="/report/1234"
               title="Last Report for Audit foo from 07/30/2019"
             >
               <span
-                class="c5"
+                class="c3"
                 data-testid="svg-icon"
               >
                 <svg>
@@ -1586,15 +1685,15 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
               </span>
             </a>
             <a
-              class="c6"
+              class="c4"
               href="/reports?filter=task_id%3D12345"
               title="Total Reports for Audit foo"
             >
               <div
-                class="c9"
+                class="c8"
               >
                 <span
-                  class="c5"
+                  class="c3"
                   data-testid="svg-icon"
                 >
                   <svg>
@@ -1602,7 +1701,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
                   </svg>
                 </span>
                 <span
-                  class="c10"
+                  class="c9"
                   data-testid="badge-icon"
                 >
                   1
@@ -1612,15 +1711,15 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
           </div>
         </div>
         <a
-          class="c6"
+          class="c4"
           href="/results?filter=task_id%3D12345"
           title="Results for Audit foo"
         >
           <div
-            class="c9"
+            class="c8"
           >
             <span
-              class="c5"
+              class="c3"
               data-testid="svg-icon"
             >
               <svg>
@@ -1628,7 +1727,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c10"
+              class="c9"
               data-testid="badge-icon"
             >
               1

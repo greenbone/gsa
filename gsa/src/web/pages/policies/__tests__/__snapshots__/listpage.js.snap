@@ -1,6 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`PoliciesPage ToolBarIcons test should render 1`] = `
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c1 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c1 > * {
+  margin-left: 5px;
+}
+
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -17,56 +47,38 @@ exports[`PoliciesPage ToolBarIcons test should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c2 {
-  margin-left: -5px;
-}
-
-.c2 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
-}
-
-.c2 > * {
-  margin-left: 5px;
-}
-
-.c1 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c4 {
-  cursor: pointer;
 }
 
 .c3 {
+  cursor: pointer;
+}
+
+.c2 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c3 * {
+.c2 * {
   height: inherit;
   width: inherit;
 }
 
 @media print {
-  .c4 {
+  .c3 {
     display: none;
   }
 }
 
 <div
-  class="c0 c1"
+  class="c0"
 >
   <div
-    class="c0 c2"
+    class="c1"
     margin="5px"
   >
     <a
@@ -75,7 +87,7 @@ exports[`PoliciesPage ToolBarIcons test should render 1`] = `
       target="_blank"
     >
       <span
-        class="c3"
+        class="c2"
         data-testid="svg-icon"
         title="Help: Policies"
       >
@@ -87,7 +99,7 @@ exports[`PoliciesPage ToolBarIcons test should render 1`] = `
       </span>
     </a>
     <span
-      class="c4 c3"
+      class="c3 c2"
       data-testid="svg-icon"
       title="New Policy"
     >
@@ -98,7 +110,7 @@ exports[`PoliciesPage ToolBarIcons test should render 1`] = `
       </svg>
     </span>
     <span
-      class="c4 c3"
+      class="c3 c2"
       data-testid="svg-icon"
       title="Import Policy"
     >
@@ -153,25 +165,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   align-items: flex-start;
 }
 
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c7 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -189,7 +183,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   justify-content: flex-end;
 }
 
-.c8 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -207,7 +201,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   align-items: stetch;
 }
 
-.c9 {
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -225,7 +219,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   align-items: center;
 }
 
-.c10 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -261,43 +255,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   align-items: center;
 }
 
-.c23 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: flex-end;
-  -webkit-box-align: flex-end;
-  -ms-flex-align: flex-end;
-  align-items: flex-end;
-}
-
-.c27 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: flex-end;
-  -webkit-box-align: flex-end;
-  -ms-flex-align: flex-end;
-  align-items: flex-end;
-}
-
-.c32 {
+.c30 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -315,7 +273,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   justify-content: space-between;
 }
 
-.c34 {
+.c39 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -323,17 +281,17 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
 }
 
-.c43 {
+.c41 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -347,7 +305,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   justify-content: center;
 }
 
-.c44 {
+.c42 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -365,7 +323,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   align-items: stretch;
 }
 
-.c45 {
+.c43 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -387,10 +345,24 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
   -webkit-box-pack: start;
   -webkit-justify-content: start;
   -ms-flex-pack: start;
@@ -399,9 +371,51 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  margin-left: -5px;
 }
 
-.c48 {
+.c3 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c3 > * {
+  margin-left: 5px;
+}
+
+.c9 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c9 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c9 > * {
+  margin-left: 5px;
+}
+
+.c46 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -421,72 +435,125 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c4 {
   margin-left: -5px;
 }
 
-.c4 > * {
+.c46 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c4 > * {
+.c46 > * {
   margin-left: 5px;
 }
 
-.c3 {
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c6 {
-  cursor: pointer;
-}
-
-.c36 svg path {
-  fill: #aaaaaa;
+.c45 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 
 .c5 {
+  cursor: pointer;
+}
+
+.c33 svg path {
+  fill: #aaaaaa;
+}
+
+.c4 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c5 * {
+.c4 * {
   height: inherit;
   width: inherit;
 }
 
-.c29 {
+.c27 {
   height: 50px;
   width: 50px;
   line-height: 50px;
 }
 
-.c29 * {
+.c27 * {
   height: inherit;
   width: inherit;
 }
 
-.c24 {
+.c23 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
   margin: 10px 0px;
   padding-bottom: 1px;
   border-bottom: 2px solid #c8d3d9;
   position: relative;
 }
 
-.c25 {
+.c24 {
   margin: 0 0 1px 0;
 }
 
-.c26 {
+.c25 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -504,11 +571,41 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   align-items: stretch;
 }
 
-.c28 {
+.c26 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
   margin-right: 5px;
 }
 
-.c30 {
+.c28 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
   word-break: break-all;
   min-width: 100px;
 }
@@ -585,7 +682,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   width: 150px;
 }
 
-.c49 {
+.c48 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -633,23 +730,23 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   display: flex;
 }
 
-.c39 a {
+.c36 a {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #000;
 }
 
-.c39 a:hover {
+.c36 a:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #000;
 }
 
-.c41 {
+.c38 {
   cursor: pointer;
 }
 
-.c40 {
+.c37 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -657,7 +754,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   width: 92%;
 }
 
-.c42 {
+.c40 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -705,25 +802,55 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   margin-right: 5px;
 }
 
-.c11 {
+.c10 {
   margin-right: 5px;
 }
 
-.c50 {
+.c49 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   font-size: 10px;
   color: #787878;
   text-align: left;
 }
 
-.c37 {
+.c34 {
   margin: 0 3px;
 }
 
-.c35 {
+.c32 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   margin: 2px 3px;
 }
 
-.c38 {
+.c35 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -733,58 +860,86 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   opacity: 1.0;
 }
 
-.c38 th,
-.c38 td {
+.c35 th,
+.c35 td {
   padding: 4px 10px;
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c38 tfoot tr {
+.c35 tfoot tr {
   background: #fff;
 }
 
-.c38 tfoot tr td {
+.c35 tfoot tr td {
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c33 {
+.c31 {
   margin-top: 2px;
   margin-left: 2px;
 }
 
-.c31 {
+.c29 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
   margin-top: 20px;
 }
 
-.c46 {
+.c44 {
   cursor: pointer;
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #0000ff;
 }
 
-.c46:hover {
+.c44:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #0000ff;
 }
 
 @media print {
-  .c6 {
+  .c5 {
     display: none;
   }
 }
 
 @media print {
-  .c39 {
+  .c36 {
     border-bottom: 1px solid black;
   }
 
-  .c39 a,
-  .c39 a:hover {
+  .c36 a,
+  .c36 a:hover {
     -webkit-text-decoration: none;
     text-decoration: none;
     color: #000;
+  }
+}
+
+@media print {
+  .c37 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
   }
 }
 
@@ -798,40 +953,31 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
 }
 
 @media print {
-  .c42 {
-    color: #000;
-    font-size: 1.2em;
-    background-color: none;
-    font-weight: bold;
-  }
-}
-
-@media print {
-  .c35 svg {
+  .c32 svg {
     display: none;
   }
 }
 
 @media print {
-  .c38 {
+  .c35 {
     border-collapse: collapse;
   }
 }
 
 @media screen {
-  .c38 > tbody:nth-of-type(even),
-  .c38 > tbody:only-of-type > tr:nth-of-type(even) {
+  .c35 > tbody:nth-of-type(even),
+  .c35 > tbody:only-of-type > tr:nth-of-type(even) {
     background: #eeeeee;
   }
 
-  .c38 > tbody:not(:only-of-type):hover,
-  .c38 > tbody:only-of-type > tr:hover {
+  .c35 > tbody:not(:only-of-type):hover,
+  .c35 > tbody:only-of-type > tr:hover {
     background: #c8d3d9;
   }
 }
 
 @media print {
-  .c46 {
+  .c44 {
     color: #000;
   }
 }
@@ -848,10 +994,10 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
         class="c1 toolbar"
       >
         <div
-          class="c2 c3"
+          class="c2"
         >
           <div
-            class="c2 c4"
+            class="c3"
             margin="5px"
           >
             <a
@@ -860,7 +1006,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
               target="_blank"
             >
               <span
-                class="c5"
+                class="c4"
                 data-testid="svg-icon"
                 title="Help: Policies"
               >
@@ -872,7 +1018,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
               </span>
             </a>
             <span
-              class="c6 c5"
+              class="c5 c4"
               data-testid="svg-icon"
               title="New Policy"
             >
@@ -883,7 +1029,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
               </svg>
             </span>
             <span
-              class="c6 c5"
+              class="c5 c4"
               data-testid="svg-icon"
               title="Import Policy"
             >
@@ -896,23 +1042,23 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
           </div>
         </div>
         <div
-          class="c7"
+          class="c6"
         >
           <div
-            class="c8 powerfilter"
+            class="c7 powerfilter"
           >
             <div
-              class="c9"
+              class="c8"
             >
               <div
-                class="c2 c3"
+                class="c2"
               >
                 <div
-                  class="c10 c4 c11"
+                  class="c9 c10"
                   margin="5px"
                 >
                   <div
-                    class="c10"
+                    class="c11"
                   >
                     <label
                       class="c12"
@@ -937,14 +1083,14 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c2 c3"
+                    class="c2"
                   >
                     <div
-                      class="c10 c4"
+                      class="c9"
                       margin="5px"
                     >
                       <span
-                        class="c6 c5"
+                        class="c5 c4"
                         data-testid="svg-icon"
                         title="Update Filter"
                       >
@@ -955,7 +1101,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                         </svg>
                       </span>
                       <span
-                        class="c6 c5"
+                        class="c5 c4"
                         data-testid="svg-icon"
                         title="Remove Filter"
                       >
@@ -966,7 +1112,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                         </svg>
                       </span>
                       <span
-                        class="c6 c5"
+                        class="c5 c4"
                         data-testid="svg-icon"
                         title="Reset to Default Filter"
                       >
@@ -982,7 +1128,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                         target="_blank"
                       >
                         <span
-                          class="c5"
+                          class="c4"
                           data-testid="svg-icon"
                           title="Help: Powerfilter"
                         >
@@ -1051,16 +1197,16 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
         class="entities-section"
       >
         <div
-          class="c23 c24 section-header"
+          class="c23 section-header"
         >
           <h2
-            class="c25 c26"
+            class="c24 c25"
           >
             <div
-              class="c27 c28"
+              class="c26"
             >
               <span
-                class="c29"
+                class="c27"
                 data-testid="svg-icon"
               >
                 <svg>
@@ -1069,26 +1215,26 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
               </span>
             </div>
             <div
-              class="c27 c30"
+              class="c28"
             >
               Policies 0 of 0
             </div>
           </h2>
           <div
-            class="c9"
+            class="c8"
           />
         </div>
         <div
           class="c0"
         >
           <div
-            class="c0 c31 entities-table"
+            class="c29 entities-table"
           >
             <div
-              class="c32"
+              class="c30"
             >
               <span
-                class="c6 c5 c33"
+                class="c5 c4 c31"
                 data-testid="svg-icon"
                 title="Unfold all details"
               >
@@ -1099,17 +1245,17 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                 </svg>
               </span>
               <div
-                class="c34 c35"
+                class="c32"
               >
                 <div
-                  class="c2 c3"
+                  class="c2"
                 >
                   <div
-                    class="c2 c4"
+                    class="c3"
                     margin="5px"
                   >
                     <span
-                      class="c36 c5"
+                      class="c33 c4"
                       data-testid="svg-icon"
                       title="First"
                     >
@@ -1120,7 +1266,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c36 c5"
+                      class="c33 c4"
                       data-testid="svg-icon"
                       title="Previous"
                     >
@@ -1133,19 +1279,19 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                   </div>
                 </div>
                 <span
-                  class="c37"
+                  class="c34"
                 >
                   0 - 0 of 0
                 </span>
                 <div
-                  class="c2 c3"
+                  class="c2"
                 >
                   <div
-                    class="c2 c4"
+                    class="c3"
                     margin="5px"
                   >
                     <span
-                      class="c36 c5"
+                      class="c33 c4"
                       data-testid="svg-icon"
                       title="Next"
                     >
@@ -1156,7 +1302,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c36 c5"
+                      class="c33 c4"
                       data-testid="svg-icon"
                       title="Last"
                     >
@@ -1171,30 +1317,30 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
               </div>
             </div>
             <table
-              class="c38"
+              class="c35"
             >
               <thead
-                class="c39"
+                class="c36"
               >
                 <tr>
                   <th
-                    class="c40"
+                    class="c37"
                   >
                     <a
-                      class="c41"
+                      class="c38"
                     >
                       <div
-                        class="c2"
+                        class="c39"
                       >
                         Name
                       </div>
                     </a>
                   </th>
                   <th
-                    class="c42"
+                    class="c40"
                   >
                     <div
-                      class="c43"
+                      class="c41"
                     >
                       Actions
                     </div>
@@ -1207,17 +1353,17 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                 <tr>
                   <td>
                     <div
-                      class="c44"
+                      class="c42"
                     >
                       <div
-                        class="c45"
+                        class="c43"
                       >
                         <div
-                          class="c44"
+                          class="c42"
                         >
                           <span>
                             <span
-                              class="c46"
+                              class="c44"
                               name="12345"
                             >
                               foo
@@ -1239,14 +1385,14 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       class="c0"
                     >
                       <div
-                        class="c47 c3"
+                        class="c45"
                       >
                         <div
-                          class="c48 c4"
+                          class="c46"
                           margin="5px"
                         >
                           <span
-                            class="c6 c5"
+                            class="c5 c4"
                             data-testid="svg-icon"
                             title="Move Policy to trashcan"
                           >
@@ -1257,7 +1403,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                             </svg>
                           </span>
                           <span
-                            class="c6 c5"
+                            class="c5 c4"
                             data-testid="svg-icon"
                             title="Edit Policy"
                           >
@@ -1268,7 +1414,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                             </svg>
                           </span>
                           <span
-                            class="c6 c5"
+                            class="c5 c4"
                             data-testid="svg-icon"
                             title="Clone Policy"
                           >
@@ -1279,7 +1425,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                             </svg>
                           </span>
                           <span
-                            class="c6 c5"
+                            class="c5 c4"
                             data-testid="svg-icon"
                             title="Create Audit from Policy"
                           >
@@ -1290,7 +1436,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                             </svg>
                           </span>
                           <span
-                            class="c6 c5"
+                            class="c5 c4"
                             data-testid="svg-icon"
                             title="Export Policy"
                           >
@@ -1312,13 +1458,13 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                     colspan="2"
                   >
                     <div
-                      class="c34"
+                      class="c47"
                     >
                       <div
-                        class="c2 c3"
+                        class="c2"
                       >
                         <div
-                          class="c2 c4"
+                          class="c3"
                           margin="5px"
                         >
                           <div
@@ -1329,7 +1475,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                             role="combobox"
                           >
                             <div
-                              class="c49"
+                              class="c48"
                               width="180px"
                             >
                               <div
@@ -1367,14 +1513,14 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                             </div>
                           </div>
                           <div
-                            class="c2 c3"
+                            class="c2"
                           >
                             <div
-                              class="c2 c4"
+                              class="c3"
                               margin="5px"
                             >
                               <span
-                                class="c6 c5"
+                                class="c5 c4"
                                 data-testid="svg-icon"
                                 title="Move page contents to trashcan"
                               >
@@ -1385,7 +1531,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                                 </svg>
                               </span>
                               <span
-                                class="c6 c5"
+                                class="c5 c4"
                                 data-testid="svg-icon"
                                 title="Export page contents"
                               >
@@ -1405,25 +1551,25 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
               </tfoot>
             </table>
             <div
-              class="c45"
+              class="c43"
             >
               <div
-                class="c2 c50"
+                class="c49"
               >
                 (Applied filter: )
               </div>
               <div
-                class="c34 c35"
+                class="c32"
               >
                 <div
-                  class="c2 c3"
+                  class="c2"
                 >
                   <div
-                    class="c2 c4"
+                    class="c3"
                     margin="5px"
                   >
                     <span
-                      class="c36 c5"
+                      class="c33 c4"
                       data-testid="svg-icon"
                       title="First"
                     >
@@ -1434,7 +1580,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c36 c5"
+                      class="c33 c4"
                       data-testid="svg-icon"
                       title="Previous"
                     >
@@ -1447,19 +1593,19 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                   </div>
                 </div>
                 <span
-                  class="c37"
+                  class="c34"
                 >
                   0 - 0 of 0
                 </span>
                 <div
-                  class="c2 c3"
+                  class="c2"
                 >
                   <div
-                    class="c2 c4"
+                    class="c3"
                     margin="5px"
                   >
                     <span
-                      class="c36 c5"
+                      class="c33 c4"
                       data-testid="svg-icon"
                       title="Next"
                     >
@@ -1470,7 +1616,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c36 c5"
+                      class="c33 c4"
                       data-testid="svg-icon"
                       title="Last"
                     >

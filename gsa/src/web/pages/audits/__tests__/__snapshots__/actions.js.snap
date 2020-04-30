@@ -23,6 +23,40 @@ exports[`Audit Actions tests should render 1`] = `
   align-items: stretch;
 }
 
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c2 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c2 > * {
+  margin-left: 5px;
+}
+
 .c1 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -43,73 +77,33 @@ exports[`Audit Actions tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 
 .c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c4 {
-  margin-left: -5px;
-}
-
-.c4 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c4 > * {
-  margin-left: 5px;
-}
-
-.c2 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c5 {
   cursor: pointer;
 }
 
-.c7 svg path {
+.c5 svg path {
   fill: #aaaaaa;
 }
 
-.c6 {
+.c4 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c6 * {
+.c4 * {
   height: inherit;
   width: inherit;
 }
 
 @media print {
-  .c5 {
+  .c3 {
     display: none;
   }
 }
@@ -124,14 +118,14 @@ exports[`Audit Actions tests should render 1`] = `
         class="c0"
       >
         <div
-          class="c1 c2"
+          class="c1"
         >
           <div
-            class="c3 c4"
+            class="c2"
             margin="5px"
           >
             <span
-              class="c5 c6"
+              class="c3 c4"
               data-testid="svg-icon"
               title="Start"
             >
@@ -143,7 +137,7 @@ exports[`Audit Actions tests should render 1`] = `
             </span>
             <span
               alt="Resume"
-              class="c7 c6"
+              class="c5 c4"
               data-testid="svg-icon"
               title="Audit is not stopped"
             >
@@ -154,7 +148,7 @@ exports[`Audit Actions tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6"
+              class="c3 c4"
               data-testid="svg-icon"
               title="Move Audit to trashcan"
             >
@@ -165,7 +159,7 @@ exports[`Audit Actions tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6"
+              class="c3 c4"
               data-testid="svg-icon"
               title="Edit Audit"
             >
@@ -176,7 +170,7 @@ exports[`Audit Actions tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6"
+              class="c3 c4"
               data-testid="svg-icon"
               title="Clone Audit"
             >
@@ -187,7 +181,7 @@ exports[`Audit Actions tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6"
+              class="c3 c4"
               data-testid="svg-icon"
               title="Export Audit"
             >
@@ -198,7 +192,7 @@ exports[`Audit Actions tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6"
+              class="c3 c4"
               data-testid="svg-icon"
               title="Download Greenbone Compliance Report"
             >

@@ -1,24 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FirstresultGroup tests should render 1`] = `
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -46,13 +28,28 @@ exports[`FirstresultGroup tests should render 1`] = `
   margin-left: 0;
 }
 
-.c3 {
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c4 {
+.c3 {
   border-radius: 2px;
   border: 1px solid #c8d3d9;
   background-color: #fff;
@@ -64,7 +61,7 @@ exports[`FirstresultGroup tests should render 1`] = `
   vertical-align: middle;
 }
 
-.c5 {
+.c4 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -78,7 +75,7 @@ exports[`FirstresultGroup tests should render 1`] = `
   margin-right: 22px;
 }
 
-.c6 {
+.c5 {
   background-color: #c8d3d9;
   color: #787878;
   border-left: 1px solid #393637;
@@ -104,21 +101,21 @@ exports[`FirstresultGroup tests should render 1`] = `
   top: 0;
 }
 
-.c6:hover {
+.c5:hover {
   background-color: #66c430;
   color: #fff;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c6:active {
+.c5:active {
   background-color: #fff;
   color: #519032;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c7 {
+.c6 {
   background-color: #c8d3d9;
   color: #787878;
   border-left: 1px solid #393637;
@@ -144,14 +141,14 @@ exports[`FirstresultGroup tests should render 1`] = `
   bottom: 0;
 }
 
-.c7:hover {
+.c6:hover {
   background-color: #66c430;
   color: #fff;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
-.c7:active {
+.c6:active {
   background-color: #fff;
   color: #519032;
   -webkit-text-decoration: none;
@@ -168,15 +165,15 @@ exports[`FirstresultGroup tests should render 1`] = `
     First result
   </label>
   <div
-    class="c2 c3"
+    class="c2"
     data-testid="formgroup-content"
     size="10"
   >
     <span
-      class="c4"
+      class="c3"
     >
       <input
-        class="c5"
+        class="c4"
         data-testid="spinner-input"
         maxlength="5"
         name="name"
@@ -184,13 +181,13 @@ exports[`FirstresultGroup tests should render 1`] = `
         value="1"
       />
       <span
-        class="c6"
+        class="c5"
         data-testid="spinner-up"
       >
         ▲
       </span>
       <span
-        class="c7"
+        class="c6"
         data-testid="spinner-down"
       >
         ▼

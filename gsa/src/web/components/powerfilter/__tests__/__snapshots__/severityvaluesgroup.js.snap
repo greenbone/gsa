@@ -175,7 +175,7 @@ exports[`Select component tests should render 1`] = `
 `;
 
 exports[`Severity Values Group Tests should render 1`] = `
-.c10 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -193,7 +193,7 @@ exports[`Severity Values Group Tests should render 1`] = `
   align-items: center;
 }
 
-.c2 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -209,24 +209,36 @@ exports[`Severity Values Group Tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c5 {
   margin-left: -5px;
 }
 
-.c5 > * {
+.c4 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c5 > * {
+.c4 > * {
   margin-left: 5px;
 }
 
-.c4 {
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -260,13 +272,28 @@ exports[`Severity Values Group Tests should render 1`] = `
   margin-left: 0;
 }
 
-.c3 {
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c11 {
+.c10 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -291,18 +318,18 @@ exports[`Severity Values Group Tests should render 1`] = `
   cursor: pointer;
 }
 
-.c12 {
+.c11 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c12 * {
+.c11 * {
   height: inherit;
   width: inherit;
 }
 
-.c8 {
+.c7 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -326,7 +353,7 @@ exports[`Severity Values Group Tests should render 1`] = `
   font-weight: normal;
 }
 
-.c7 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -338,7 +365,7 @@ exports[`Severity Values Group Tests should render 1`] = `
   width: 180px;
 }
 
-.c13 {
+.c12 {
   color: #a94442;
   font-weight: bold;
   font-size: 19px;
@@ -347,7 +374,7 @@ exports[`Severity Values Group Tests should render 1`] = `
   display: none;
 }
 
-.c9 {
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -367,7 +394,7 @@ exports[`Severity Values Group Tests should render 1`] = `
   cursor: default;
 }
 
-.c6 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -384,48 +411,48 @@ exports[`Severity Values Group Tests should render 1`] = `
     foo
   </label>
   <div
-    class="c2 c3"
+    class="c2"
     data-testid="formgroup-content"
     size="10"
   >
     <div
-      class="c2 c4"
+      class="c3"
     >
       <div
-        class="c2 c5"
+        class="c4"
         margin="5px"
       >
         <div
           aria-expanded="false"
           aria-haspopup="listbox"
           aria-labelledby="downshift-8-label"
-          class="c6"
+          class="c5"
           role="combobox"
         >
           <div
-            class="c7"
+            class="c6"
             width="180px"
           >
             <div
               aria-haspopup="true"
               aria-label="open menu"
-              class="c8"
+              class="c7"
               data-toggle="true"
               role="button"
               type="button"
             >
               <div
-                class="c9"
+                class="c8"
                 data-testid="select-selected-value"
                 title="is greater than"
               >
                 is greater than
               </div>
               <div
-                class="c10"
+                class="c9"
               >
                 <span
-                  class="c11 c12"
+                  class="c10 c11"
                   data-testid="select-open-button"
                 >
                   ▼
@@ -434,7 +461,7 @@ exports[`Severity Values Group Tests should render 1`] = `
             </div>
           </div>
           <div
-            class="c13"
+            class="c12"
             data-testid="error-marker"
           >
             ×

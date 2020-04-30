@@ -1,6 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`UserMenu component tests should render UserMenu 1`] = `
+.c8 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c8 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c8 > * {
+  margin-left: 5px;
+}
+
 .c7 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -17,31 +47,13 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c9 {
-  margin-left: -5px;
-}
-
-.c9 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c9 > * {
-  margin-left: 5px;
-}
-
-.c8 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c11 {
+.c10 {
   cursor: pointer;
 }
 
@@ -56,13 +68,13 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   width: inherit;
 }
 
-.c10 {
+.c9 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c10 * {
+.c9 * {
   height: inherit;
   width: inherit;
 }
@@ -151,7 +163,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   margin-right: 10px;
 }
 
-.c12 {
+.c11 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -160,18 +172,18 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   height: 100%;
 }
 
-.c12:link,
-.c12:hover,
-.c12:active,
-.c12:visited,
-.c12:hover {
+.c11:link,
+.c11:hover,
+.c11:active,
+.c11:visited,
+.c11:hover {
   color: inherit;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
 @media print {
-  .c11 {
+  .c10 {
     display: none;
   }
 }
@@ -199,14 +211,14 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
         title="Logged in as: "
       >
         <div
-          class="c7 c8"
+          class="c7"
         >
           <div
-            class="c7 c9"
+            class="c8"
             margin="5px"
           >
             <span
-              class="c10"
+              class="c9"
               data-testid="svg-icon"
             >
               <svg>
@@ -221,14 +233,14 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
         class="c6"
       >
         <div
-          class="c7 c8"
+          class="c7"
         >
           <div
-            class="c7 c9"
+            class="c8"
             margin="5px"
           >
             <span
-              class="c10"
+              class="c9"
               data-testid="svg-icon"
             >
               <svg>
@@ -239,7 +251,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
               Session timeout: 
             </span>
             <span
-              class="c11 c10"
+              class="c10 c9"
               data-testid="svg-icon"
               title="Renew session timeout"
             >
@@ -256,19 +268,19 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
         class="c6"
       >
         <a
-          class="c12"
+          class="c11"
           data-testid="usermenu-settings"
           href="/usersettings"
         >
           <div
-            class="c7 c8"
+            class="c7"
           >
             <div
-              class="c7 c9"
+              class="c8"
               margin="5px"
             >
               <span
-                class="c10"
+                class="c9"
                 data-testid="svg-icon"
               >
                 <svg>
@@ -287,14 +299,14 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
         data-testid="usermenu-logout"
       >
         <div
-          class="c7 c8"
+          class="c7"
         >
           <div
-            class="c7 c9"
+            class="c8"
             margin="5px"
           >
             <span
-              class="c10"
+              class="c9"
               data-testid="svg-icon"
             >
               <svg>

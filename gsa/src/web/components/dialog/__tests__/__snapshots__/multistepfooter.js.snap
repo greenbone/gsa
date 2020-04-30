@@ -1,27 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MultiStepFooter tests should render 1`] = `
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
 .c5 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -38,31 +17,43 @@ exports[`MultiStepFooter tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c7 {
   margin-left: -5px;
 }
 
-.c7 > * {
+.c5 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c7 > * {
+.c5 > * {
   margin-left: 5px;
 }
 
-.c6 {
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c2 {
+.c1 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -82,12 +73,12 @@ exports[`MultiStepFooter tests should render 1`] = `
   z-index: 1;
 }
 
-.c2:focus,
-.c2:hover {
+.c1:focus,
+.c1:hover {
   border: 1px solid #393637;
 }
 
-.c2:hover {
+.c1:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -95,26 +86,26 @@ exports[`MultiStepFooter tests should render 1`] = `
   color: #fff;
 }
 
-.c2[disabled] {
+.c1[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c2 img {
+.c1 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c2:link {
+.c1:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c3 {
+.c2 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -132,28 +123,61 @@ exports[`MultiStepFooter tests should render 1`] = `
   align-items: center;
 }
 
-.c4 {
+.c3 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c4:hover {
+.c3:hover {
   color: #fff;
   background: #519032;
 }
 
-.c8 {
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   color: #393637;
   background: #fff;
 }
 
-.c8:hover {
+.c6:hover {
   color: #fff;
   background: #66c430;
 }
 
-.c1 {
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c8d3d9;
@@ -166,38 +190,38 @@ exports[`MultiStepFooter tests should render 1`] = `
 }
 
 <div
-  class="c0 c1"
+  class="c0"
 >
   <button
-    class="c2 c3 c4"
+    class="c1 c2 c3"
     data-testid="dialog-close-button"
     title="Cancel"
   >
     Cancel
   </button>
   <div
-    class="c5 c6"
+    class="c4"
   >
     <div
-      class="c5 c7"
+      class="c5"
       margin="5px"
     >
       <button
-        class="c2 c3 c8"
+        class="c1 c6"
         data-testid="dialog-previous-button"
         title="🠬"
       >
         🠬
       </button>
       <button
-        class="c2 c3 c8"
+        class="c1 c6"
         data-testid="dialog-next-button"
         title="🠮"
       >
         🠮
       </button>
       <button
-        class="c2 c3 c4"
+        class="c1 c2 c3"
         data-testid="dialog-save-button"
         title="Foo"
       >
@@ -209,27 +233,6 @@ exports[`MultiStepFooter tests should render 1`] = `
 `;
 
 exports[`MultiStepFooter tests should render loading and disable cancel button 1`] = `
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
 .c5 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -246,31 +249,43 @@ exports[`MultiStepFooter tests should render loading and disable cancel button 1
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c7 {
   margin-left: -5px;
 }
 
-.c7 > * {
+.c5 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c7 > * {
+.c5 > * {
   margin-left: 5px;
 }
 
-.c6 {
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c2 {
+.c1 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -290,12 +305,12 @@ exports[`MultiStepFooter tests should render loading and disable cancel button 1
   z-index: 1;
 }
 
-.c2:focus,
-.c2:hover {
+.c1:focus,
+.c1:hover {
   border: 1px solid #393637;
 }
 
-.c2:hover {
+.c1:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -303,26 +318,26 @@ exports[`MultiStepFooter tests should render loading and disable cancel button 1
   color: #fff;
 }
 
-.c2[disabled] {
+.c1[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c2 img {
+.c1 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c2:link {
+.c1:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c3 {
+.c2 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -340,39 +355,72 @@ exports[`MultiStepFooter tests should render loading and disable cancel button 1
   align-items: center;
 }
 
-.c4 {
+.c3 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c4:hover {
+.c3:hover {
   color: #fff;
   background: #519032;
 }
 
-.c9 {
+.c7 {
   border: 1px solid #787878;
   color: rgba(0,0,0,0.0);
   background: #87d050 url(/img/loading.gif) center center no-repeat;
 }
 
-.c9:hover {
+.c7:hover {
   color: rgba(0,0,0,0.0);
   background: #66c430 url(/img/loading.gif) center center no-repeat;
 }
 
-.c8 {
+.c6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   color: #393637;
   background: #fff;
 }
 
-.c8:hover {
+.c6:hover {
   color: #fff;
   background: #66c430;
 }
 
-.c1 {
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c8d3d9;
@@ -385,10 +433,10 @@ exports[`MultiStepFooter tests should render loading and disable cancel button 1
 }
 
 <div
-  class="c0 c1"
+  class="c0"
 >
   <button
-    class="c2 c3 c4"
+    class="c1 c2 c3"
     data-testid="dialog-close-button"
     disabled=""
     title="Cancel"
@@ -396,28 +444,28 @@ exports[`MultiStepFooter tests should render loading and disable cancel button 1
     Cancel
   </button>
   <div
-    class="c5 c6"
+    class="c4"
   >
     <div
-      class="c5 c7"
+      class="c5"
       margin="5px"
     >
       <button
-        class="c2 c3 c8"
+        class="c1 c6"
         data-testid="dialog-previous-button"
         title="🠬"
       >
         🠬
       </button>
       <button
-        class="c2 c3 c8"
+        class="c1 c6"
         data-testid="dialog-next-button"
         title="🠮"
       >
         🠮
       </button>
       <button
-        class="c2 c3 c9"
+        class="c1 c2 c7"
         data-testid="dialog-save-button"
         title="Foo"
       >

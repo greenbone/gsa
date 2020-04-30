@@ -1,6 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Loading component tests should render 1`] = `
+.c1 {
+  width: 80px;
+  height: 80px;
+  margin: 40px auto;
+  background-image: url(greenbone.svg);
+  background-size: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-animation: fSFzYT 2s infinite ease-in-out;
+  animation: fSFzYT 2s infinite ease-in-out;
+}
+
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -17,30 +29,15 @@ exports[`Loading component tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c2 {
-  width: 80px;
-  height: 80px;
-  margin: 40px auto;
-  background-image: url(greenbone.svg);
-  background-size: 90%;
-  background-position: center;
-  background-repeat: no-repeat;
-  -webkit-animation: fSFzYT 2s infinite ease-in-out;
-  animation: fSFzYT 2s infinite ease-in-out;
-}
-
-.c1 {
   width: 100%;
 }
 
 <div
-  class="c0 c1"
+  class="c0"
   data-testid="loading"
 >
   <div
-    class="c2"
+    class="c1"
   />
 </div>
 `;

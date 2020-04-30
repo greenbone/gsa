@@ -120,6 +120,21 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
 }
 
 .c14 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   margin-left: -5px;
 }
 
@@ -135,6 +150,21 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
 }
 
 .c13 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -371,10 +401,10 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
               title="Logged in as: username"
             >
               <div
-                class="c3 c13"
+                class="c13"
               >
                 <div
-                  class="c3 c14"
+                  class="c14"
                   margin="5px"
                 >
                   <span
@@ -395,10 +425,10 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
               class="c12"
             >
               <div
-                class="c3 c13"
+                class="c13"
               >
                 <div
-                  class="c3 c14"
+                  class="c14"
                   margin="5px"
                 >
                   <span
@@ -435,10 +465,10 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
                 href="/usersettings"
               >
                 <div
-                  class="c3 c13"
+                  class="c13"
                 >
                   <div
-                    class="c3 c14"
+                    class="c14"
                     margin="5px"
                   >
                     <span
@@ -461,10 +491,10 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
               data-testid="usermenu-logout"
             >
               <div
-                class="c3 c13"
+                class="c13"
               >
                 <div
-                  class="c3 c14"
+                  class="c14"
                   margin="5px"
                 >
                   <span

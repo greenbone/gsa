@@ -33,7 +33,7 @@ exports[`Task Row tests should render 1`] = `
   justify-content: space-between;
 }
 
-.c3 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -87,7 +87,14 @@ exports[`Task Row tests should render 1`] = `
   align-items: stretch;
 }
 
-.c16 {
+.c5 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -95,10 +102,6 @@ exports[`Task Row tests should render 1`] = `
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
   -webkit-box-pack: start;
   -webkit-justify-content: start;
   -ms-flex-pack: start;
@@ -107,6 +110,18 @@ exports[`Task Row tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  margin-left: -5px;
+}
+
+.c4 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c4 > * {
+  margin-left: 5px;
 }
 
 .c17 {
@@ -129,31 +144,62 @@ exports[`Task Row tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c6 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c5 {
   margin-left: -5px;
 }
 
-.c5 > * {
+.c17 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c5 > * {
+.c17 > * {
   margin-left: 5px;
 }
 
-.c4 {
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c16 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -192,7 +238,7 @@ exports[`Task Row tests should render 1`] = `
   color: #0000ff;
 }
 
-.c8 {
+.c7 {
   height: 13px;
   box-sizing: content-box;
   display: inline-block;
@@ -202,7 +248,7 @@ exports[`Task Row tests should render 1`] = `
   text-align: center;
 }
 
-.c10 {
+.c9 {
   z-index: 1;
   font-weight: bold;
   color: #fff;
@@ -213,7 +259,7 @@ exports[`Task Row tests should render 1`] = `
   padding-top: 1px;
 }
 
-.c9 {
+.c8 {
   height: 13px;
   width: 100%;
   background: #4f91c7;
@@ -225,11 +271,11 @@ exports[`Task Row tests should render 1`] = `
   background: #f0a519;
 }
 
-.c11 {
+.c10 {
   white-space: nowrap;
 }
 
-.c7:hover {
+.c6:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
 }
@@ -247,20 +293,20 @@ exports[`Task Row tests should render 1`] = `
 }
 
 @media print {
-  .c8 {
+  .c7 {
     background: none;
     border: 0;
   }
 }
 
 @media print {
-  .c10 {
+  .c9 {
     color: black;
   }
 }
 
 @media print {
-  .c9 {
+  .c8 {
     background: none;
   }
 }
@@ -291,10 +337,10 @@ exports[`Task Row tests should render 1`] = `
               foo
             </span>
             <div
-              class="c3 c4"
+              class="c3"
             >
               <div
-                class="c3 c5"
+                class="c4"
                 margin="5px"
               />
             </div>
@@ -313,24 +359,24 @@ exports[`Task Row tests should render 1`] = `
           class="c0"
         >
           <a
-            class="c6 c7"
+            class="c5 c6"
             data-testid="details-link"
             href="/report/1234"
           >
             <div
-              class="c8"
+              class="c7"
               data-testid="progressbar-box"
               title="Done"
             >
               <div
-                class="c9"
+                class="c8"
                 data-testid="progress"
               />
               <div
-                class="c10"
+                class="c9"
               >
                 <span
-                  class="c11"
+                  class="c10"
                 >
                   Done
                 </span>
@@ -344,10 +390,10 @@ exports[`Task Row tests should render 1`] = `
           class="c0"
         >
           <div
-            class="c3"
+            class="c11"
           >
             <a
-              class="c6"
+              class="c5"
               href="/reports?filter=task_id%3D314%20sort-reverse%3Ddate"
               title="View list of all reports for Task foo, including unfinished ones"
             >
@@ -362,7 +408,7 @@ exports[`Task Row tests should render 1`] = `
         >
           <span>
             <a
-              class="c6"
+              class="c5"
               data-testid="details-link"
               href="/report/1234"
             >
@@ -376,7 +422,7 @@ exports[`Task Row tests should render 1`] = `
           class="c0"
         >
           <div
-            class="c8"
+            class="c7"
             data-testid="progressbar-box"
             title="Medium"
           >
@@ -385,7 +431,7 @@ exports[`Task Row tests should render 1`] = `
               data-testid="progress"
             />
             <div
-              class="c10"
+              class="c9"
             >
               5.0 (Medium)
             </div>
@@ -415,10 +461,10 @@ exports[`Task Row tests should render 1`] = `
           class="c15"
         >
           <div
-            class="c16 c4"
+            class="c16"
           >
             <div
-              class="c17 c5"
+              class="c17"
               margin="5px"
             >
               <span

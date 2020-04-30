@@ -1,25 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SortByGroup tests should render 1`] = `
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c8 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -37,22 +19,52 @@ exports[`SortByGroup tests should render 1`] = `
   align-items: center;
 }
 
-.c14 {
+.c13 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   margin-left: -5px;
 }
 
-.c14 > * {
+.c13 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c14 > * {
+.c13 > * {
   margin-left: 5px;
 }
 
-.c13 {
+.c12 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -86,13 +98,28 @@ exports[`SortByGroup tests should render 1`] = `
   margin-left: 0;
 }
 
-.c3 {
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c9 {
+.c8 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -117,18 +144,18 @@ exports[`SortByGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c10 {
+.c9 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c10 * {
+.c9 * {
   height: inherit;
   width: inherit;
 }
 
-.c6 {
+.c5 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -152,7 +179,7 @@ exports[`SortByGroup tests should render 1`] = `
   font-weight: normal;
 }
 
-.c5 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -164,7 +191,7 @@ exports[`SortByGroup tests should render 1`] = `
   width: 180px;
 }
 
-.c11 {
+.c10 {
   color: #a94442;
   font-weight: bold;
   font-size: 19px;
@@ -173,7 +200,7 @@ exports[`SortByGroup tests should render 1`] = `
   display: none;
 }
 
-.c7 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -193,14 +220,14 @@ exports[`SortByGroup tests should render 1`] = `
   cursor: default;
 }
 
-.c4 {
+.c3 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c12 {
+.c11 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -216,7 +243,7 @@ exports[`SortByGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c15 {
+.c14 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -227,11 +254,11 @@ exports[`SortByGroup tests should render 1`] = `
   height: auto;
 }
 
-.c17 {
+.c16 {
   opacity: 1;
 }
 
-.c16 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -259,7 +286,7 @@ exports[`SortByGroup tests should render 1`] = `
     Sort by
   </label>
   <div
-    class="c2 c3"
+    class="c2"
     data-testid="formgroup-content"
     size="10"
   >
@@ -267,30 +294,30 @@ exports[`SortByGroup tests should render 1`] = `
       aria-expanded="false"
       aria-haspopup="listbox"
       aria-labelledby="downshift-0-label"
-      class="c4"
+      class="c3"
       role="combobox"
     >
       <div
-        class="c5"
+        class="c4"
         width="180px"
       >
         <div
           aria-haspopup="true"
           aria-label="open menu"
-          class="c6"
+          class="c5"
           data-toggle="true"
           role="button"
           type="button"
         >
           <div
-            class="c7"
+            class="c6"
             data-testid="select-selected-value"
           />
           <div
-            class="c8"
+            class="c7"
           >
             <span
-              class="c9 c10"
+              class="c8 c9"
               data-testid="select-open-button"
             >
               ▼
@@ -299,32 +326,32 @@ exports[`SortByGroup tests should render 1`] = `
         </div>
       </div>
       <div
-        class="c11"
+        class="c10"
         data-testid="error-marker"
       >
         ×
       </div>
     </div>
     <label
-      class="c12"
+      class="c11"
     >
       <div
-        class="c2 c13"
+        class="c12"
       >
         <div
-          class="c2 c14"
+          class="c13"
           margin="5px"
         >
           <input
             checked=""
-            class="c15 c16"
+            class="c14 c15"
             data-testid="radio-input"
             name="sort_order"
             type="radio"
             value="sort"
           />
           <span
-            class="c17"
+            class="c16"
             data-testid="radio-title"
           >
             Ascending
@@ -333,24 +360,24 @@ exports[`SortByGroup tests should render 1`] = `
       </div>
     </label>
     <label
-      class="c12"
+      class="c11"
     >
       <div
-        class="c2 c13"
+        class="c12"
       >
         <div
-          class="c2 c14"
+          class="c13"
           margin="5px"
         >
           <input
-            class="c15 c16"
+            class="c14 c15"
             data-testid="radio-input"
             name="sort_order"
             type="radio"
             value="sort-reverse"
           />
           <span
-            class="c17"
+            class="c16"
             data-testid="radio-title"
           >
             Descending
