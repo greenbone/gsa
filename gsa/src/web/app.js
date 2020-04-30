@@ -44,11 +44,7 @@ import LocaleObserver from 'web/components/observer/localeobserver';
 
 import GmpContext from 'web/components/provider/gmpprovider';
 
-import {
-  setUsername,
-  setTimezone,
-  setIsLoggedIn,
-} from 'web/store/usersettings/actions';
+import {setUsername, setTimezone} from 'web/store/usersettings/actions';
 
 import configureStore from './store';
 
@@ -87,7 +83,6 @@ const initStore = () => {
   if (isDefined(username)) {
     store.dispatch(setUsername(username));
   }
-  store.dispatch(setIsLoggedIn(gmp.isLoggedIn()));
 };
 
 class App extends React.Component {
