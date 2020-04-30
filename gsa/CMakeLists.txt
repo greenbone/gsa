@@ -294,6 +294,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/form/textfield.js
      ${GSA_SRC_DIR}/src/web/components/form/timezoneselect.js
      ${GSA_SRC_DIR}/src/web/components/form/togglebutton.js
+     ${GSA_SRC_DIR}/src/web/components/form/useFormValidation.js
      ${GSA_SRC_DIR}/src/web/components/form/withClickHandler.js
      ${GSA_SRC_DIR}/src/web/components/form/withDownload.js
      ${GSA_SRC_DIR}/src/web/components/form/yesnoradio.js
@@ -1049,6 +1050,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/tickets/editdialog.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/listpage.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/table.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/validationrules.js
      ${GSA_SRC_DIR}/src/web/pages/tlscertificates/component.js
      ${GSA_SRC_DIR}/src/web/pages/tlscertificates/details.js
      ${GSA_SRC_DIR}/src/web/pages/tlscertificates/detailspage.js
