@@ -23,19 +23,8 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 import {_l} from 'gmp/locale/lang';
-import {capitalizeFirstLetter} from 'gmp/utils/string';
 
 import Theme from 'web/utils/theme';
-
-export const parseAlias = string => {
-  const parsedString = string.replace(/(_)/g, ' ').replace(/([A-Z])/g, ' $1');
-
-  const words = parsedString.split(' ');
-  let errorString = '';
-
-  words.forEach(word => (errorString += capitalizeFirstLetter(word) + ' '));
-  return errorString.trim(); // parse "name" to something human readable. Accepts underscores and camelcase. "credential_id" > "Credential Id", etc.
-};
 
 export const syncVariables = (values, formValues, dependencies = {}) => {
   Object.keys(formValues).forEach(key => (values[key] = formValues[key]));

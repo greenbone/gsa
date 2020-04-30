@@ -18,7 +18,6 @@
  */
 
 import {
-  parseAlias,
   syncVariables,
   shouldBeNonEmpty,
 } from 'web/components/form/useFormValidation';
@@ -29,25 +28,6 @@ import {
  */
 
 describe('Testing useFormValidation utilities', () => {
-  test('parseAlias tests', () => {
-    const word1 = 'foo';
-    const word2 = 'Bar';
-    const word3 = 'fooBar';
-    const word4 = 'foo_bar';
-    const word5 = '_fooBar';
-    const word6 = ' Foo bar';
-    const word7 = '0fooBar';
-
-    expect(parseAlias('')).toEqual('');
-    expect(parseAlias(word1)).toEqual('Foo');
-    expect(parseAlias(word2)).toEqual('Bar');
-    expect(parseAlias(word3)).toEqual('Foo Bar');
-    expect(parseAlias(word4)).toEqual('Foo Bar');
-    expect(parseAlias(word5)).toEqual('Foo Bar');
-    expect(parseAlias(word6)).toEqual('Foo Bar');
-    expect(parseAlias(word7)).toEqual('0foo Bar');
-  });
-
   test('syncVariables tests', () => {
     const obj1 = {
       key1: 'foo',
