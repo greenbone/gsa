@@ -50,6 +50,10 @@ import {Marker} from './useFormValidation';
 
 const DEFAULT_WIDTH = '250px';
 
+const Div = styled.div`
+  display: flex;
+`;
+
 export const MultiSelectedValue = styled(SelectedValue)`
   display: inline;
   border: 1px solid ${Theme.inputBorderGray};
@@ -203,7 +207,7 @@ class MultiSelect extends React.Component {
           selectItem,
         }) => {
           return (
-            <Layout {...getRootProps({})}>
+            <Div {...getRootProps({})}>
               <SelectContainer className={className} width={width} grow={grow}>
                 <Box
                   isOpen={isOpen}
@@ -277,7 +281,7 @@ class MultiSelect extends React.Component {
                 )}
               </SelectContainer>
               <Marker isVisible={hasError}>×</Marker>
-            </Layout>
+            </Div>
           );
         }}
       </Downshift>

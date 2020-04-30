@@ -50,6 +50,10 @@ const SingleSelectedValue = styled(SelectedValue)`
   cursor: default;
 `;
 
+const Div = styled.div`
+  display: flex;
+`;
+
 const SelectValueValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
   const {items} = props;
@@ -194,7 +198,7 @@ class Select extends React.Component {
             ? _('Loading...')
             : find_label(items, selectedItem);
           return (
-            <Layout {...getRootProps({})}>
+            <Div {...getRootProps({})}>
               <SelectContainer className={className} width={width}>
                 <Box
                   {...getToggleButtonProps({
@@ -277,7 +281,7 @@ class Select extends React.Component {
                 )}
               </SelectContainer>
               <Marker isVisible={hasError}>×</Marker>
-            </Layout>
+            </Div>
           );
         }}
       </Downshift>
