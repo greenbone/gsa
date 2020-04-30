@@ -37,7 +37,7 @@ exports[`LoginPagetests should render Loginpage 1`] = `
   align-items: stretch;
 }
 
-.c24 {
+.c25 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -59,11 +59,11 @@ exports[`LoginPagetests should render Loginpage 1`] = `
   align-items: center;
 }
 
-.c28 {
+.c29 {
   color: #787878;
 }
 
-.c27 {
+.c28 {
   position: fixed;
   bottom: 0;
   right: 0;
@@ -119,7 +119,7 @@ exports[`LoginPagetests should render Loginpage 1`] = `
   height: 42px;
 }
 
-.c25 {
+.c26 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -139,12 +139,12 @@ exports[`LoginPagetests should render Loginpage 1`] = `
   z-index: 1;
 }
 
-.c25:focus,
-.c25:hover {
+.c26:focus,
+.c26:hover {
   border: 1px solid #393637;
 }
 
-.c25:hover {
+.c26:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -152,26 +152,26 @@ exports[`LoginPagetests should render Loginpage 1`] = `
   color: #fff;
 }
 
-.c25[disabled] {
+.c26[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c25 img {
+.c26 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c25:link {
+.c26:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c26 {
+.c27 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -237,7 +237,7 @@ exports[`LoginPagetests should render Loginpage 1`] = `
   padding-right: 10px;
 }
 
-.c23 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -257,6 +257,15 @@ exports[`LoginPagetests should render Loginpage 1`] = `
   padding-left: 10px;
   padding-right: 10px;
   margin-left: 33.33333333%;
+}
+
+.c23 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
 }
 
 .c21 {
@@ -580,6 +589,12 @@ exports[`LoginPagetests should render Loginpage 1`] = `
                         type="text"
                         value=""
                       />
+                      <div
+                        class="c23"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -610,16 +625,16 @@ exports[`LoginPagetests should render Loginpage 1`] = `
                     class="c18"
                   >
                     <div
-                      class="c23"
+                      class="c24"
                       data-testid="formgroup-content"
                       offset="4"
                       size="4"
                     >
                       <div
-                        class="c24"
+                        class="c25"
                       >
                         <button
-                          class="c25 c26"
+                          class="c26 c27"
                           data-testid="login-button"
                           title="Login"
                         >
@@ -638,11 +653,11 @@ exports[`LoginPagetests should render Loginpage 1`] = `
         />
       </div>
       <footer
-        class="c27"
+        class="c28"
       >
         Greenbone Security Assistant (GSA) Copyright (C) 2009-2020 by Greenbone Networks GmbH, 
         <a
-          class="c28"
+          class="c29"
           href="http://www.greenbone.net"
           rel="noopener noreferrer"
           target="_blank"

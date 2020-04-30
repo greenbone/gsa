@@ -25,6 +25,10 @@ import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextArea from 'web/components/form/textarea';
 import Layout from 'web/components/layout/layout';
+import useFormValidation, {
+  syncVariables,
+} from 'web/components/form/useFormValidation';
+import {createTicketRules as validationRules} from './validationrules';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
@@ -37,39 +41,58 @@ const CreateTicketDialog = ({
   onClose,
   onSave,
   onUserIdChange,
-}) => (
-  <SaveDialog
-    title={title}
-    onClose={onClose}
-    onSave={onSave}
-    values={{
-      resultId,
-      userId,
-    }}
-  >
-    {({values, onValueChange}) => (
-      <Layout flex="column">
-        <FormGroup title={_('Assign To User')}>
-          <Select
-            name="userId"
-            value={values.userId}
-            items={renderSelectItems(users)}
-            onChange={onUserIdChange}
-          />
-        </FormGroup>
-        <FormGroup title={_('Note')}>
-          <TextArea
-            name="note"
-            grow="1"
-            rows="5"
-            value={values.note}
-            onChange={onValueChange}
-          />
-        </FormGroup>
-      </Layout>
-    )}
-  </SaveDialog>
-);
+}) => {
+  const stateSchema = {
+    note: '',
+  };
+
+  const {
+    shouldWarn,
+    formValues,
+    handleValueChange,
+    validityStatus,
+    handleSubmit,
+  } = useFormValidation(stateSchema, validationRules, onSave);
+
+  return (
+    <SaveDialog
+      title={title}
+      onClose={onClose}
+      onSave={vals => handleSubmit(vals)}
+      values={{
+        resultId,
+        userId,
+      }}
+    >
+      {({values, onValueChange}) => {
+        syncVariables(values, formValues);
+        return (
+          <Layout flex="column">
+            <FormGroup title={_('Assign To User')}>
+              <Select
+                name="userId"
+                value={values.userId}
+                items={renderSelectItems(users)}
+                onChange={onUserIdChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('Note')}>
+              <TextArea
+                hasError={shouldWarn && !validityStatus.note.isValid} // default false if undefined (if we don't want to do validation on this textarea)
+                errorContent={validityStatus.note.error}
+                name="note"
+                grow="1"
+                rows="5"
+                value={values.note}
+                onChange={handleValueChange}
+              />
+            </FormGroup>
+          </Layout>
+        );
+      }}
+    </SaveDialog>
+  );
+};
 
 CreateTicketDialog.propTypes = {
   resultId: PropTypes.id,

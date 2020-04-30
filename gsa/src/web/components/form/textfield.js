@@ -18,9 +18,30 @@
 
 import React from 'react';
 
-import Field from './field.js';
+import PropTypes from 'web/utils/proptypes';
 
-const TextField = props => <Field {...props} type="text" />;
+import Field from './field';
+import {Marker} from './useFormValidation';
+
+const TextField = ({hasError = false, errorContent, title, ...props}) => {
+  return (
+    <React.Fragment>
+      <Field
+        {...props}
+        hasError={hasError}
+        title={hasError ? errorContent : title}
+        type="text"
+      />
+      <Marker isVisible={hasError}>×</Marker>
+    </React.Fragment>
+  );
+};
+
+TextField.propTypes = {
+  errorContent: PropTypes.string,
+  hasError: PropTypes.bool,
+  title: PropTypes.string,
+};
 
 export default TextField;
 

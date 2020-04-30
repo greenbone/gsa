@@ -137,7 +137,7 @@ exports[`Tasks table tests should render 1`] = `
   align-items: center;
 }
 
-.c41 {
+.c42 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -293,7 +293,7 @@ exports[`Tasks table tests should render 1`] = `
   width: inherit;
 }
 
-.c42 {
+.c43 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -318,18 +318,18 @@ exports[`Tasks table tests should render 1`] = `
   cursor: pointer;
 }
 
-.c43 {
+.c44 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c43 * {
+.c44 * {
   height: inherit;
   width: inherit;
 }
 
-.c39 {
+.c40 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -353,7 +353,7 @@ exports[`Tasks table tests should render 1`] = `
   font-weight: normal;
 }
 
-.c38 {
+.c39 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -365,7 +365,16 @@ exports[`Tasks table tests should render 1`] = `
   width: 180px;
 }
 
-.c40 {
+.c45 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
+.c41 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -383,6 +392,13 @@ exports[`Tasks table tests should render 1`] = `
   overflow: hidden;
   cursor: pointer;
   cursor: default;
+}
+
+.c38 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .c11 a {
@@ -445,7 +461,7 @@ exports[`Tasks table tests should render 1`] = `
   width: 10em;
 }
 
-.c44 {
+.c46 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1555,30 +1571,40 @@ exports[`Tasks table tests should render 1`] = `
                       aria-labelledby="downshift-0-label"
                       class="c38"
                       role="combobox"
-                      width="180px"
                     >
                       <div
-                        aria-haspopup="true"
-                        aria-label="open menu"
                         class="c39"
-                        data-toggle="true"
-                        role="button"
-                        type="button"
+                        width="180px"
                       >
                         <div
+                          aria-haspopup="true"
+                          aria-label="open menu"
                           class="c40"
-                          data-testid="select-selected-value"
-                        />
-                        <div
-                          class="c41"
+                          data-toggle="true"
+                          role="button"
+                          type="button"
                         >
-                          <span
-                            class="c42 c43"
-                            data-testid="select-open-button"
+                          <div
+                            class="c41"
+                            data-testid="select-selected-value"
+                          />
+                          <div
+                            class="c42"
                           >
-                            ▼
-                          </span>
+                            <span
+                              class="c43 c44"
+                              data-testid="select-open-button"
+                            >
+                              ▼
+                            </span>
+                          </div>
                         </div>
+                      </div>
+                      <div
+                        class="c45"
+                        data-testid="error-marker"
+                      >
+                        ×
                       </div>
                     </div>
                     <div
@@ -1625,7 +1651,7 @@ exports[`Tasks table tests should render 1`] = `
         class="c21"
       >
         <div
-          class="c44"
+          class="c46"
         >
           (Applied filter: rows=2)
         </div>
