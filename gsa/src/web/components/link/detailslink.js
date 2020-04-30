@@ -22,7 +22,13 @@ import useCapabilities from 'web/utils/useCapabilities';
 
 import Link from './link';
 
-const DetailsLink = ({id, type, textOnly = false, ...props}) => {
+const DetailsLink = ({
+  id,
+  type,
+  textOnly = false,
+  'data-testid': dataTestId = 'details-link',
+  ...props
+}) => {
   const capabilities = useCapabilities();
 
   textOnly = textOnly || !capabilities.mayAccess(type);
@@ -30,7 +36,7 @@ const DetailsLink = ({id, type, textOnly = false, ...props}) => {
   return (
     <Link
       {...props}
-      data-testid="details-link"
+      data-testid={dataTestId}
       textOnly={textOnly}
       to={`/${type}/${encodeURIComponent(id)}`}
     />
@@ -38,6 +44,7 @@ const DetailsLink = ({id, type, textOnly = false, ...props}) => {
 };
 
 DetailsLink.propTypes = {
+  'data-testid': PropTypes.string,
   id: PropTypes.id.isRequired,
   textOnly: PropTypes.bool,
   type: PropTypes.string.isRequired,
