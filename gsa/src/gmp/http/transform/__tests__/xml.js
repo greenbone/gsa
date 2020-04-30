@@ -117,15 +117,12 @@ describe('xml base transform tests', () => {
     });
     const transform = rejection(fakeTransform);
     const isError = jest.fn().mockReturnValue(true);
-    const setMessage = jest.fn(() => errorRejection);
     const errorRejection = {
       isError,
-      setMessage,
     };
 
     expect(transform(errorRejection)).toBe(errorRejection);
     expect(fakeTransform).toHaveBeenCalledWith(errorRejection);
     expect(isError).toHaveBeenCalled();
-    expect(setMessage).toHaveBeenCalledWith('Unknown Error');
   });
 });

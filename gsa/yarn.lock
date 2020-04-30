@@ -5889,10 +5889,10 @@ dotenv@^6.2.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.2.0.tgz#941c0410535d942c8becf28d3f357dbd9d476064"
   integrity sha512-HygQCKUBSFl8wKQZBSemMywRWcEDNidvNbjGVyZu3nbZ8qq9ubiPoGLMdRDpfSrpkkm9BXYFkpKxxFX38o/76w==
 
-downshift@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/downshift/-/downshift-5.2.0.tgz#00b78531f5ba8518fd6adf5902ec9a2fe829ba95"
-  integrity sha512-gz0HTCkodUBkRs/HH1WsfNWDQcW8oYIQAvHyJKMfBHi+JHO0E6yO9IqzkV8Qm9CeNu+E2tL2KvoGyCPxNN3v7g==
+downshift@^5.2.2:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/downshift/-/downshift-5.2.2.tgz#284e2d66ba314b77617ceaabb8278ad8c812d9ec"
+  integrity sha512-MD1hmc2bBENBJgboAnZl27yJd/1YXjf7LV/EJ1NJ4lw0hOupVvAnXf80N9egJYKt3HQsc926r97qH0K/QeFsvQ==
   dependencies:
     "@babel/runtime" "^7.9.1"
     compute-scroll-into-view "^1.0.13"
@@ -7672,10 +7672,10 @@ i18next-xhr-backend@3.2.2:
   dependencies:
     "@babel/runtime" "^7.5.5"
 
-i18next@^19.0.0, i18next@^19.4.3:
-  version "19.4.3"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-19.4.3.tgz#8eac368daa424e649d9b6d1dd9ab2d2695670738"
-  integrity sha512-mqjfrYnvoqh9s2yVnzUjMfELCOoRuiKbRYzICZozaHYZMpUx17MpWDCW6zC+E42CaveIet/Zh07j22GAo4CFqQ==
+i18next@^19.0.0, i18next@^19.4.4:
+  version "19.4.4"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-19.4.4.tgz#c0a18bc2f2be554da636e67bfbf5200c7948b60d"
+  integrity sha512-ofaHtdsDdX3A5nYur1HWblB7J4hIcjr2ACdnwTAJgc8hTfPbyzZfGX0hVkKpI3vzDIgO6Uzc4v1ffW2W6gG6zw==
   dependencies:
     "@babel/runtime" "^7.3.1"
 
@@ -14506,10 +14506,10 @@ uuid@^3.0.1, uuid@^3.3.2, uuid@^3.3.3:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-uuid@^7.0.3:
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
-  integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
+uuid@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.0.0.tgz#bc6ccf91b5ff0ac07bbcdbf1c7c4e150db4dbb6c"
+  integrity sha512-jOXGuXZAWdsTH7eZLtyXMqUb9EcWMGZNbL9YcGBJl4MH4nrxHmZJhEHvyLFrkxo+28uLb/NYRcStH48fnD0Vzw==
 
 v8-compile-cache@^2.0.3:
   version "2.1.0"
