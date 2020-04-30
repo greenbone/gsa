@@ -36,23 +36,30 @@ const StyledDetailsLink = styled(DetailsLink)`
 `;
 
 const TaskStatus = ({task, links = true}) => {
-  let report_id;
-  if (hasValue(task.currentReport) || hasValue(task.current_report)) {
-    // audits are not yet in the new format
-    report_id =
-      task.entityType === 'task'
-        ? task.currentReport.id
-        : task.current_report.id;
-  } else if (hasValue(task.lastReport) || hasValue(task.last_report)) {
-    report_id =
-      task.entityType === 'task' ? task.lastReport.id : task.last_report.id;
+  let reportId;
+
+  let currentReport;
+  let lastReport;
+  // audits are not yet in the new format
+  if (task.entityType === 'task') {
+    currentReport = task?.reports?.currentReport;
+    lastReport = task?.reports?.lastReport;
   } else {
-    report_id = '';
+    currentReport = task?.current_report;
+    lastReport = task?.last_report;
+  }
+
+  if (hasValue(currentReport)) {
+    reportId = currentReport.id;
+  } else if (hasValue(lastReport)) {
+    reportId = lastReport.id;
+  } else {
+    reportId = '';
     links = false;
   }
 
   return (
-    <StyledDetailsLink type="report" id={report_id} textOnly={!links}>
+    <StyledDetailsLink type="report" id={reportId} textOnly={!links}>
       <StatusBar
         status={task.isContainer() ? TASK_STATUS.container : task.status}
         progress={task.progress}
