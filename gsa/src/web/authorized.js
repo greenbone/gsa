@@ -15,108 +15,82 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
-import {connect} from 'react-redux';
+import {useHistory, useLocation} from 'react-router-dom';
 
-import {withRouter} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
 
-import {isDefined} from 'gmp/utils/identity';
+import {useQuery} from '@apollo/react-hooks';
 
-import {setIsLoggedIn} from './store/usersettings/actions';
-import {isLoggedIn} from 'web/store/usersettings/selectors';
+import gql from 'graphql-tag';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import {hasValue} from 'gmp/utils/identity';
 
-class Authorized extends React.Component {
-  constructor(...args) {
-    super(...args);
+import Loading from 'web/components/loading/loading';
 
-    this.responseError = this.responseError.bind(this);
-  }
+import {setIsLoggedIn} from 'web/store/usersettings/actions';
 
-  componentDidMount() {
-    const {gmp} = this.props;
+import useGmp from 'web/utils/useGmp';
 
-    this.responseError = this.responseError.bind(this);
-
-    this.unsubscribe = gmp.addHttpErrorHandler(this.responseError);
-
-    this.checkIsLoggedIn();
-  }
-
-  componentWillUnmount() {
-    if (isDefined(this.unsubscribe)) {
-      this.unsubscribe();
+const GET_CURRENT_USER = gql`
+  query {
+    currentUser {
+      isAuthenticated
     }
   }
+`;
 
-  componentDidUpdate() {
-    this.checkIsLoggedIn();
-  }
+const useQueryCurrentUser = () =>
+  useQuery(GET_CURRENT_USER, {
+    fetchPolicy: 'no-cache', // never cache the query!
+  });
 
-  responseError(xhr) {
-    const {logout} = this.props;
+const Authorized = ({children}) => {
+  const {data, loading} = useQueryCurrentUser();
+  const [isLoading, setIsLoading] = useState(loading);
 
-    if (xhr.status === 401) {
-      logout();
-      return Promise.resolve(xhr);
-    }
-    return Promise.reject(xhr);
-  }
+  const gmp = useGmp();
+  const location = useLocation();
+  const history = useHistory();
+  const dispatch = useDispatch();
 
-  checkIsLoggedIn() {
-    if (!this.props.isLoggedIn) {
-      this.toLoginPage();
-    }
-  }
-
-  toLoginPage() {
-    const {history, location} = this.props;
-
+  const toLoginPage = () => {
     if (location.pathname === '/login') {
-      // already at login page
+      // already at login page. not sure if that can happen anymore.
       return;
     }
 
     history.replace('/login', {
-      next: this.props.location.pathname,
+      next: location.pathname,
     });
+  };
+
+  useEffect(() => {
+    const unsubscribe = gmp.subscribeToLogout(() => toLoginPage());
+    return unsubscribe;
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (hasValue(data)) {
+      const {isAuthenticated} = data.currentUser;
+
+      dispatch(setIsLoggedIn(isAuthenticated));
+
+      if (!isAuthenticated) {
+        toLoginPage();
+      }
+    }
+    setIsLoading(loading);
+  }, [loading, data]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (isLoading) {
+    return <Loading />;
   }
 
-  render() {
-    return this.props.isLoggedIn ? this.props.children : null;
-  }
-}
-
-Authorized.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  history: PropTypes.object.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
-  location: PropTypes.object.isRequired,
-  logout: PropTypes.func.isRequired,
+  return children;
 };
 
-const mapStateToProps = rootState => ({
-  isLoggedIn: isLoggedIn(rootState),
-});
-
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  logout: () => {
-    gmp.logout();
-    dispatch(setIsLoggedIn(false));
-  },
-});
-
-export default compose(
-  withGmp,
-  withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
-)(Authorized);
+export default Authorized;
 
 // vim: set ts=2 sw=2 tw=80:

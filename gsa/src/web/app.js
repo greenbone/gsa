@@ -89,14 +89,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleLogout = this.handleLogout.bind(this);
+    this.handlePostLogout = this.handlePostLogout.bind(this);
+    this.handleGmpErrorResponse = this.handleGmpErrorResponse.bind(this);
 
     const logoutLink = onError(({networkError}) => {
       if (networkError.statusCode === 401) {
-        if (!gmp.settings.enableHyperionOnly) {
-          gmp.clearToken(); // remove token for gmp based login
-        }
-        this.handleLogout();
+        this.logout();
       }
     });
 
@@ -107,7 +105,10 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.unsubscribeFromLogout = gmp.subscribeToLogout(this.handleLogout);
+    this.unsubscribeFromLogout = gmp.subscribeToLogout(this.handlePostLogout);
+    this.unsubscribeFromErrorHandler = gmp.addHttpErrorHandler(
+      this.handleGmpErrorResponse,
+    );
 
     initStore();
   }
@@ -116,9 +117,24 @@ class App extends React.Component {
     if (isDefined(this.unsubscribeFromLogout)) {
       this.unsubscribeFromLogout();
     }
+    if (isDefined(this.unsubscribeFromErrorHandler)) {
+      this.unsubscribeFromErrorHandler();
+    }
   }
 
-  handleLogout() {
+  handleGmpErrorResponse(xhr) {
+    if (xhr.status === 401) {
+      this.logout();
+      return Promise.resolve(xhr);
+    }
+    return Promise.reject(xhr);
+  }
+
+  logout() {
+    gmp.logout();
+  }
+
+  handlePostLogout() {
     // cleanup store
     clearStore(store.dispatch);
   }
