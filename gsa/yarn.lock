@@ -5889,10 +5889,10 @@ dotenv@^6.2.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.2.0.tgz#941c0410535d942c8becf28d3f357dbd9d476064"
   integrity sha512-HygQCKUBSFl8wKQZBSemMywRWcEDNidvNbjGVyZu3nbZ8qq9ubiPoGLMdRDpfSrpkkm9BXYFkpKxxFX38o/76w==
 
-downshift@^5.2.2:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/downshift/-/downshift-5.2.2.tgz#284e2d66ba314b77617ceaabb8278ad8c812d9ec"
-  integrity sha512-MD1hmc2bBENBJgboAnZl27yJd/1YXjf7LV/EJ1NJ4lw0hOupVvAnXf80N9egJYKt3HQsc926r97qH0K/QeFsvQ==
+downshift@^5.2.4:
+  version "5.2.4"
+  resolved "https://registry.yarnpkg.com/downshift/-/downshift-5.2.4.tgz#d1789afe8e780a47cdf7d8b5fb6fc854e6ea7319"
+  integrity sha512-dpbztk8vXCyu6hGc9ntUdNNwwZ24rLipY5bei6RxFYhGyiVU355wvlcFlG1E4n2j7yitW9BSP6It2hjJPoyGlQ==
   dependencies:
     "@babel/runtime" "^7.9.1"
     compute-scroll-into-view "^1.0.13"
@@ -11940,10 +11940,10 @@ qs@6.7.0:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==
 
-qs@^6.6.0, qs@^6.9.3:
-  version "6.9.3"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.3.tgz#bfadcd296c2d549f1dffa560619132c977f5008e"
-  integrity sha512-EbZYNarm6138UKKq46tdx08Yo/q9ZhFoAXAI1meAFd2GtbRDhbZY2WQSICskT0c5q99aFzLG1D4nvTk9tqfXIw==
+qs@^6.6.0, qs@^6.9.4:
+  version "6.9.4"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.4.tgz#9090b290d1f91728d3c22e54843ca44aea5ab687"
+  integrity sha512-A1kFqHekCTM7cz0udomYUoYNWjBebHm/5wzU/XqrBRBNWectVH0QIiN+NEcZ0Dte5hvzHwbr8+XQmguPhJ6WdQ==
 
 qs@~6.5.2:
   version "6.5.2"

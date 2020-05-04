@@ -47,20 +47,20 @@ export const Marker = props => (
 );
 
 const useFormValidation = (
-  stateSchema,
+  validationSchema,
   validationRules,
   onValidationSuccess,
   deps = {},
 ) => {
-  const [formValues, setFormState] = useState(stateSchema);
+  const [formValues, setFormValues] = useState(validationSchema);
   const [dependencies, setDependencies] = useState(deps);
   const [errorMessage, setErrorMessage] = useState();
   const [shouldWarn, setShouldWarn] = useState(false); // shouldWarn is false when first rendered. Only when calling handleSubmit for the first time will this be set to true.
 
-  const [validityStatus, setFormStatus] = useState(stateSchema); // use the same shape as stateschema
+  const [validityStatus, setValidityStatus] = useState(validationSchema); // use the same shape as stateschema
 
   const handleValueChange = (value, name) => {
-    setFormState(prevValues => ({...prevValues, [name]: value}));
+    setFormValues(prevValues => ({...prevValues, [name]: value}));
   };
 
   const handleDependencyChange = (value, name) => {
@@ -69,7 +69,7 @@ const useFormValidation = (
 
   // eslint-disable-next-line no-shadow
   const validate = (value, name, dependencies) => {
-    setFormStatus(prevValidityStatus => ({
+    setValidityStatus(prevValidityStatus => ({
       ...prevValidityStatus,
       [name]: validationRules[name](value, dependencies),
     }));
