@@ -592,6 +592,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/processmap/tools.js
      ${GSA_SRC_DIR}/src/web/components/processmap/usecolorize.js
      ${GSA_SRC_DIR}/src/web/components/processmap/utils.js
+     ${GSA_SRC_DIR}/src/web/components/processmap/validationrules.js
      ${GSA_SRC_DIR}/src/web/components/provider/capabilitiesprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/gmpprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/iconsizeprovider.js

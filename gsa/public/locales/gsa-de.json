@@ -1655,7 +1655,7 @@
   "The last {{weekday}} every month": "Jeden letzten {{weekday}} jeden Monat",
   "The last {{weekday}} every {{interval}} months": "Jeden letzten {{weekday}} jeden {{interval}}. Monat",
   "The maximum of {{num}} hosts was exceded. If there are more hosts associated with this process, they will not be taken into account.": "Das Maximum von {{num}} Hosts wurde überschritten. Sollten weitere Hosts mit diesem Prozess verknüpft sein, werden sie nicht mitberücksichtigt.",
-  "The name must include at least one alphanumeric character or one of .,-_# and space.": "Der Name muss mindestens ein alphanumerisches Zeichen oder eines von .,-_# sowie Leerzeichen enthalten.",
+  "The name must include at least one alphanumeric character or one of .,-/_# and space.": "Der Name muss mindestens ein alphanumerisches Zeichen oder eines von .,-/_# und Leerzeichen enthalten.",
   "The port range needs numerical values for start and end!": "Der Portbereich benötigt numerische Werte für Start und Ende!",
   "The report is empty. The filter does not match any of the {{all}} results.": "Der Bericht ist leer. Der Filter passt zu keinem der {{all}} Ergebnisse.",
   "The scan did not collect any results": "Der Scan hat keine Ergebnisse gesammelt",
