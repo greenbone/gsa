@@ -43,7 +43,7 @@ const GET_CURRENT_USER = gql`
 
 const useQueryCurrentUser = () =>
   useQuery(GET_CURRENT_USER, {
-    fetchPolicy: 'no-cache',
+    fetchPolicy: 'no-cache', // never cache the query!
   });
 
 const Authorized = ({children}) => {
@@ -57,7 +57,7 @@ const Authorized = ({children}) => {
 
   const toLoginPage = () => {
     if (location.pathname === '/login') {
-      // already at login page
+      // already at login page. not sure if that can happen anymore.
       return;
     }
 
@@ -85,10 +85,6 @@ const Authorized = ({children}) => {
   }, [loading, data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isLoading) {
-    // to prevent infinite loading if there is an error
-    // upon error Authorized will run
-    // Likely hyperion is down. In which case trying to login
-    // will return the error on loginpage.
     return <Loading />;
   }
 
