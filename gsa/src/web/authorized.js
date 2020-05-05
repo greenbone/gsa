@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 
 import {useHistory, useLocation} from 'react-router-dom';
 
@@ -40,7 +40,7 @@ const Authorized = ({children}) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const toLoginPage = () => {
+  const toLoginPage = useCallback(() => {
     if (location.pathname === '/login') {
       // already at login page. not sure if that can happen anymore.
       return;
@@ -49,7 +49,7 @@ const Authorized = ({children}) => {
     history.replace('/login', {
       next: location.pathname,
     });
-  };
+  }, [location, history]);
 
   useEffect(() => {
     const unsubscribe = gmp.subscribeToLogout(() => toLoginPage());
@@ -65,7 +65,7 @@ const Authorized = ({children}) => {
       }
     }
     setIsLoading(loading);
-  }, [loading, isAuthenticated]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loading, isAuthenticated, toLoginPage, dispatch]);
 
   if (isLoading) {
     return <Loading />;
