@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect, useRef, useCallback} from 'react';
 
 import {connect} from 'react-redux';
 
@@ -23,86 +23,87 @@ import Logger from 'gmp/log';
 
 import moment from 'gmp/models/date';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import {getSessionTimeout} from 'web/store/usersettings/selectors';
 
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
+import {useLazyIsAuthenticated} from 'web/graphql/auth';
 
 const log = Logger.getLogger('web.observer.sessionobserver');
 
 const DELAY = 15 * 1000; // 15 seconds in milliseconds
 
-class Ping extends React.Component {
-  constructor(...args) {
-    super(...args);
+const SessionTimeout = ({sessionTimeout}) => {
+  const timerRef = useRef();
+  const gmp = useGmp();
 
-    this.handlePing = this.handlePing.bind(this);
-  }
+  const [getIsAuthenticated, {isAuthenticated}] = useLazyIsAuthenticated();
 
-  componentDidMount() {
-    this.startTimer();
-  }
+  const handleTimer = useCallback(() => {
+    log.debug(
+      'session timer',
+      timerRef.current,
+      'has fired. Checking authentication status.',
+    );
 
-  componentWillUnmount() {
-    this.clearTimer();
-  }
+    timerRef.current = undefined;
 
-  clearTimer() {
-    if (isDefined(this.timer)) {
-      log.debug('clearing ping timer', this.timer);
+    getIsAuthenticated();
+  }, [getIsAuthenticated]);
 
-      global.clearTimeout(this.timer);
-
-      this.timer = undefined;
-    }
-  }
-
-  startTimer() {
-    const {sessionTimeout} = this.props;
-
+  const startTimer = useCallback(() => {
     const timeout = sessionTimeout.diff(moment()) + DELAY;
 
     if (timeout > 0) {
-      this.timer = global.setTimeout(this.handlePing, timeout);
+      timerRef.current = global.setTimeout(handleTimer, timeout);
 
       log.debug(
-        'started ping timer',
-        this.timer,
+        'started session timer',
+        timerRef.current,
         'timeout',
         timeout,
         'milliseconds',
       );
     }
-  }
+  }, [sessionTimeout, handleTimer]);
 
-  handlePing() {
-    const {gmp} = this.props;
+  useEffect(() => {
+    // will be called on mount and if sessionTimeout changes
+    startTimer();
+    return () => {
+      // remove timer if the component is unmounted or sessionTimeout has changed
+      if (hasValue(timerRef.current)) {
+        log.debug('clearing session timer', timerRef.current);
 
-    this.timer = undefined;
+        global.clearTimeout(timerRef.current);
+      }
+    };
+  }, [sessionTimeout, startTimer]);
 
-    gmp.user.ping();
-  }
+  useEffect(() => {
+    if (hasValue(isAuthenticated) && !isAuthenticated) {
+      log.debug('Session has ended.');
 
-  render() {
-    return null;
-  }
-}
+      gmp.logout();
+    }
+  }, [isAuthenticated, gmp]);
 
-Ping.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  sessionTimeout: PropTypes.date.isRequired,
+  return null;
 };
-
-Ping = withGmp(Ping);
 
 const SessionObserver = ({sessionTimeout}) => {
   if (!isDefined(sessionTimeout)) {
     return null;
   }
 
-  return <Ping key={sessionTimeout.unix()} sessionTimeout={sessionTimeout} />;
+  return (
+    <SessionTimeout
+      key={sessionTimeout.unix()}
+      sessionTimeout={sessionTimeout}
+    />
+  );
 };
 
 SessionObserver.propTypes = {
