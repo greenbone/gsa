@@ -33,7 +33,7 @@ import {selectSaveId, hasId} from 'gmp/utils/id';
 
 import date from 'gmp/models/date';
 
-import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
+import ScanConfig, {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 
 import Scanner, {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 
@@ -103,6 +103,7 @@ import {
   useCreateContainerTask,
   useCreateTask,
   useGetScanners,
+  useGetScanConfigs,
 } from './graphql';
 
 const TaskComponent = props => {
@@ -115,6 +116,14 @@ const TaskComponent = props => {
     loadScanners,
     {data: scannerData, loading: isLoadingScanners},
   ] = scannerQuery({
+    filterString: ALL_FILTER.toFilterString(),
+  });
+
+  const scanConfigQuery = useGetScanConfigs();
+  const [
+    loadScanConfigs,
+    {data: scanConfigData, loading: isLoadingConfigs},
+  ] = scanConfigQuery({
     filterString: ALL_FILTER.toFilterString(),
   });
 
@@ -187,10 +196,22 @@ const TaskComponent = props => {
   useEffect(() => {
     if (isDefined(scannerData)) {
       setScanners(
-        scannerData.scanners.nodes.map(scanner => Scanner.fromObject(scanner)),
+        scannerData.scanners.nodes.map(scanner => Scanner.fromElement(scanner)),
       );
     }
   }, [scannerData]);
+
+  const [scanConfigs, setScanConfigs] = useState();
+
+  useEffect(() => {
+    if (isDefined(scanConfigData)) {
+      setScanConfigs(
+        scanConfigData.scanConfigs.nodes.map(scanConfig =>
+          ScanConfig.fromElement(scanConfig),
+        ),
+      );
+    }
+  }, [scanConfigData]);
 
   const {gmp} = props;
 
@@ -403,7 +424,7 @@ const TaskComponent = props => {
 
   const openStandardTaskDialog = task => {
     props.loadAlerts();
-    props.loadScanConfigs();
+    loadScanConfigs();
     loadScanners();
     props.loadSchedules();
     props.loadTargets();
@@ -655,11 +676,9 @@ const TaskComponent = props => {
     alerts,
     credentials,
     isLoadingAlerts,
-    isLoadingConfigs,
     isLoadingSchedules,
     isLoadingTargets,
     isLoadingTags,
-    scanConfigs,
     schedules,
     tags,
     targets,
